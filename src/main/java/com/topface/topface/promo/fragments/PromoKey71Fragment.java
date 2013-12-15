@@ -1,9 +1,10 @@
-package com.topface.topface.ui.fragments.promo;
+package com.topface.topface.promo.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.VisitorsMarkReadedRequest;
@@ -11,7 +12,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
-public class PromoVisitorsPopup extends PromoPopupFragment{
+public class PromoKey71Fragment extends PromoFragment {
 
     private boolean counterUpdated;
 
@@ -27,13 +28,13 @@ public class PromoVisitorsPopup extends PromoPopupFragment{
     }
 
     @Override
-    public Options.PremiumAirEntity getPremiumEntity() {
-        return CacheProfile.getOptions().premium_visitors;
+    public Options.PromoPopupEntity getPremiumEntity() {
+        return CacheProfile.getOptions().premiumVisitors;
     }
 
     @Override
     public String getMainTag() {
-        return "key71";
+        return "promo.key71";
     }
 
     @Override
@@ -45,7 +46,7 @@ public class PromoVisitorsPopup extends PromoPopupFragment{
     protected String getMessage() {
         int count = getPremiumEntity().getCount();
         int guests = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
-        count = guests > 0? guests:count;
+        count = guests > 0 ? guests : count;
         return Utils.getQuantityString(getPluralForm(), count, count);
     }
 

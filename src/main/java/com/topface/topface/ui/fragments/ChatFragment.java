@@ -1275,4 +1275,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+    @Override
+    protected boolean isNeedShowPromoPopup() {
+        return true;
+    }
 }

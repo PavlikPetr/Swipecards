@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.promo;
+package com.topface.topface.promo.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
-public class PromoAdmirationsPopup extends PromoPopupFragment{
+public class PromoKey81Fragment extends PromoFragment {
 
     private boolean counterUpdated;
 
@@ -28,13 +28,13 @@ public class PromoAdmirationsPopup extends PromoPopupFragment{
     }
 
     @Override
-    public Options.PremiumAirEntity getPremiumEntity() {
-        return CacheProfile.getOptions().premium_admirations;
+    public Options.PromoPopupEntity getPremiumEntity() {
+        return CacheProfile.getOptions().premiumAdmirations;
     }
 
     @Override
     public String getMainTag() {
-        return "key81";
+        return "promo.key81";
     }
 
     @Override
@@ -46,7 +46,7 @@ public class PromoAdmirationsPopup extends PromoPopupFragment{
     protected String getMessage() {
         int count = getPremiumEntity().getCount();
         int admirations = CountersManager.getInstance(getActivity()).getCounter(CountersManager.ADMIRATIONS);
-        count = admirations > 0? admirations:count;
+        count = admirations > 0 ? admirations : count;
         return Utils.getQuantityString(getPluralForm(), count, count);
     }
 

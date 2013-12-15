@@ -11,8 +11,7 @@ public class ProfileRequest extends ApiRequest {
     public static final String PROFILE_UPDATE_ACTION = "com.topface.topface.UPDATE_PROFILE";
     public static final String SERVICE = "user.getOwnProfile";
     public int part; // часть профиля, необходимая для загрузки
-    //public String  fields;  //массив интересующих полей профиля
-    // Constants
+
     public static final int P_ALL = 0;
     public static final int P_EMAIL_CONFIRMED = 1;
     public static final int P_BALANCE_COUNTERS = 2;
@@ -31,10 +30,9 @@ public class ProfileRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
 
-        JSONArray fields;
+        JSONArray fields = null;
         switch (part) {
             case P_ALL:
-                fields = null;
                 break;
             case P_EMAIL_CONFIRMED:
                 fields = new JSONArray();
@@ -58,18 +56,13 @@ public class ProfileRequest extends ApiRequest {
                 fields.put("photos");
                 break;
             default:
-                fields = new JSONArray();
                 break;
         }
         if (fields != null) {
-            return new JSONObject()
-                    .put("fields", fields)
-                            //При запросе профиля считаем текущего пользователя "гостем"
-                    .put("visitor", true);
+            return new JSONObject().put("fields", fields);
+        } else {
+            return null;
         }
-        return new JSONObject()
-                //При запросе профиля считаем текущего пользователя "гостем"
-                .put("visitor", true);
     }
 
     @Override

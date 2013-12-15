@@ -1,19 +1,19 @@
-package com.topface.topface.ui.fragments.promo;
+package com.topface.topface.promo.fragments;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-public class AirMessagesFragment extends PromoPopupFragment{
+public class PromoKey31Fragment extends PromoFragment {
     @Override
-    public Options.PremiumAirEntity getPremiumEntity() {
-        return CacheProfile.getOptions().premium_messages;
+    public Options.PromoPopupEntity getPremiumEntity() {
+        return CacheProfile.getOptions().premiumMessages;
     }
 
     @Override
     public String getMainTag() {
-        return "AirMessages";
+        return "promo.key31";
     }
 
     @Override
@@ -35,10 +35,5 @@ public class AirMessagesFragment extends PromoPopupFragment{
     @Override
     protected void deleteMessages() {
 
-    }
-
-    @Override
-    protected String getTagForBuyingFragment() {
-        return "VipDelivery";
     }
 }
