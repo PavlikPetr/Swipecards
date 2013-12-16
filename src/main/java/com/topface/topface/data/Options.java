@@ -508,7 +508,8 @@ public class Options extends AbstractData {
         }
 
         public boolean isClosingsEnabled() {
-            return isLikesAvailable() && isMutualAvailable() && !CacheProfile.premium;
+            return (isLikesAvailable() || isMutualAvailable())
+                    && !CacheProfile.premium;
         }
 
         public boolean isMutualAvailable() {
