@@ -19,6 +19,8 @@ public class DateUtils {
 
     public static final long DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
     public static final long HOUR_IN_MILLISECONDS = 60 * 60 * 1000;
+    public static final long MINUTE_IN_MILLISECONDS = 60 * 1000;
+    public static final long SEC_IN_MILLISECONDS = 1000;
 
     public static void syncTime() {
         Calendar cal = Calendar.getInstance();
