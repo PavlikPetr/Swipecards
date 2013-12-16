@@ -508,13 +508,11 @@ public class Options extends AbstractData {
         }
 
         public boolean isClosingsEnabled() {
-            return (isLikesAvailable() || isMutualAvailable())
-                    && !CacheProfile.premium;
+            return isLikesAvailable() && isMutualAvailable() && !CacheProfile.premium;
         }
 
         public boolean isMutualAvailable() {
             return enabledSympathies
-                    && Math.abs(System.currentTimeMillis() - mutualsClosingLastCallTime) > timeout
                     && CacheProfile.unread_mutual > 0;
         }
 
