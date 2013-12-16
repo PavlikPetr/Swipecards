@@ -41,7 +41,7 @@ public class PromoPopupManager {
         PromoFragment promo = null;
         FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
         if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type))) {
-            promo = getFragmentByType(type, fragmentManager);
+            promo = getFragmentByType(type);
         }
         if (promo != null) {
             //Подписываемся на события закрытия попапа (купить vip или закрыть)
@@ -64,22 +64,21 @@ public class PromoPopupManager {
         return "promo_popup_" + type;
     }
 
-    private PromoFragment getFragmentByType(int type, FragmentManager fragmentManager) {
-        PromoFragment fragment = (PromoFragment) fragmentManager.findFragmentByTag(getTag(type));
+    private PromoFragment getFragmentByType(int type) {
+        PromoFragment fragment = null;
 
-        if (fragment == null) {
-            switch (type) {
-                case Options.PromoPopupEntity.AIR_ADMIRATIONS:
-                    fragment = new PromoKey81Fragment();
-                    break;
-                case Options.PromoPopupEntity.AIR_VISITORS:
-                    fragment = new PromoKey71Fragment();
-                    break;
-                case Options.PromoPopupEntity.AIR_MESSAGES:
-                    fragment = new PromoKey31Fragment();
-                    break;
-            }
+        switch (type) {
+            case Options.PromoPopupEntity.AIR_ADMIRATIONS:
+                fragment = new PromoKey81Fragment();
+                break;
+            case Options.PromoPopupEntity.AIR_VISITORS:
+                fragment = new PromoKey71Fragment();
+                break;
+            case Options.PromoPopupEntity.AIR_MESSAGES:
+                fragment = new PromoKey31Fragment();
+                break;
         }
+
         return fragment;
     }
 

@@ -1266,7 +1266,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     item.setChecked(checked);
                     animateChatActions(!checked, 500);
                 } else {
-                    Toast.makeText(getActivity(),R.string.user_deleted_or_banned,
+                    Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                             Toast.LENGTH_LONG).show();
                 }
                 return true;

@@ -46,6 +46,7 @@ public abstract class CustomTitlesBaseFragmentActivity extends BaseFragmentActiv
 
     /**
      * Specify custom title layout through abstract method
+     *
      * @return resourse id of layout for titles
      */
     protected abstract int getActionBarCustomViewResId();
@@ -53,6 +54,7 @@ public abstract class CustomTitlesBaseFragmentActivity extends BaseFragmentActiv
     /**
      * Can get custom view of actiobar (between logo and menuItem buttons)
      * Custom view for actionbar was inflated onCreate
+     *
      * @return custom view objects
      */
     protected View getCustomActionBarView() {
@@ -61,6 +63,7 @@ public abstract class CustomTitlesBaseFragmentActivity extends BaseFragmentActiv
 
     /**
      * Getting title setter delegate of actionbar whether it custom view or standart actionbar
+     *
      * @return delegate of actionbar to set titles
      */
     public IActionBarTitleSetter getActionBarTitleSetterDelegate() {

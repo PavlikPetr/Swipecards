@@ -27,26 +27,6 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
 
     private OnCloseListener mListener;
 
-    private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Debug.log("Promo: Close fragment after VIP buy");
-            closeFragment();
-            EasyTracker.getTracker().sendEvent(getMainTag(), "VipClose", "CloseAfterBuyVip", 1L);
-        }
-    };
-    private BroadcastReceiver mProfileReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //Если мы узнаем что пользователь премиум после обновления профиля, то закрываем фрагмент
-            if (CacheProfile.premium) {
-                Debug.log("Promo: Close fragment after profile update");
-                closeFragment();
-                EasyTracker.getTracker().sendEvent(getMainTag(), "VipClose", "CloseAfterUpdateProfile", 1L);
-            }
-        }
-    };
-
     public abstract Options.PromoPopupEntity getPremiumEntity();
 
     /**
@@ -69,20 +49,13 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
     public abstract String getMainTag();
 
     @Override
-    public void onResume() {
-        super.onResume();
-        //Отключаем боковое меню
-        FragmentActivity activity = getActivity();
-        if (activity instanceof NavigationActivity) {
-            ((NavigationActivity) activity).setPopupVisible(true);
-            ((NavigationActivity) activity).setMenuEnabled(false);
-        }
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent_NoTitleBar);
+        //Закрыть диалог нельзя
+        setCancelable(false);
+        //По стилю это у нас не диалог, а кастомный дизайн -
+        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
+        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
         //Подписываемся на обновление профиля
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(
@@ -95,6 +68,17 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
                         mVipPurchasedReceiver,
                         new IntentFilter(VipBuyFragment.VIP_PURCHASED_INTENT)
                 );
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Отключаем боковое меню
+        FragmentActivity activity = getActivity();
+        if (activity instanceof NavigationActivity) {
+            ((NavigationActivity) activity).setPopupVisible(true);
+            ((NavigationActivity) activity).setMenuEnabled(false);
+        }
     }
 
     @Override
@@ -116,6 +100,26 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
         EasyTracker.getTracker().sendEvent(getMainTag(), "Show", "", 0L);
         return root;
     }
+
+    private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Debug.log("Promo: Close fragment after VIP buy");
+            closeFragment();
+            EasyTracker.getTracker().sendEvent(getMainTag(), "VipClose", "CloseAfterBuyVip", 1L);
+        }
+    };
+    private BroadcastReceiver mProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //Если мы узнаем что пользователь премиум после обновления профиля, то закрываем фрагмент
+            if (CacheProfile.premium) {
+                Debug.log("Promo: Close fragment after profile update");
+                closeFragment();
+                EasyTracker.getTracker().sendEvent(getMainTag(), "VipClose", "CloseAfterUpdateProfile", 1L);
+            }
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -181,6 +185,17 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
     @Override
     public void setOnCloseListener(OnCloseListener listener) {
         mListener = listener;
+    }
+
+    /**
+     * @see <a href="https://code.google.com/p/android/issues/detail?id=17423">Баг с retainInstance</a>
+     */
+    @Override
+    public void onDestroyView() {
+        if (getDialog() != null && getRetainInstance()) {
+            getDialog().setDismissMessage(null);
+        }
+        super.onDestroyView();
     }
 
 }
