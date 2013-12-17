@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
@@ -19,23 +18,19 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Static;
+import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
-import com.topface.topface.utils.AirManager;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.http.IRequestClient;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
@@ -60,11 +55,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         F_UNDEFINED
     }
 
-    public static final String INVITE_POPUP = "INVITE_POPUP";
+    public static final String INVITE_POPUP_PREF_KEY = "INVITE_POPUP";
     private boolean mNeedTitles = true;
-    private boolean invitePopupShow;
-
-    private static boolean needShowPopup = true;
+    private PromoPopupManager mPromoPopupManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -232,66 +225,30 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected void onLoadProfile() {
         Debug.log(((Object) this).getClass().getSimpleName() + ": onLoadProfile");
+
+        if (isNeedShowPromoPopup()) {
+            showPromoDialog();
+        }
     }
 
-    protected void showPromoDialog() {
+    /**
+     * Показывает различные варианты попапов на старте
+     *
+     * @return удалось ли показать попап
+     */
+    protected boolean showPromoDialog() {
         FragmentActivity activity = getActivity();
-        if (needShowPopup) {
-            showInvitePopup(activity);
-
-            //Показываем рекламу AirMessages только если не показываем инвайты
-            if (!invitePopupShow && !CacheProfile.premium && activity != null) {
-                AirManager manager = new AirManager(activity);
-                if (manager.startFragment(activity.getSupportFragmentManager())) {
-                    needShowPopup = false;
-                }
+        Debug.log("Promo: showPromoDialog");
+        boolean promoPopupResult = false;
+        if (PromoPopupManager.needShowPopup && !CacheProfile.premium && activity != null) {
+            if (mPromoPopupManager == null) {
+                mPromoPopupManager = new PromoPopupManager(activity);
             }
+            promoPopupResult = mPromoPopupManager.startFragment();
+            Debug.log("Promo: startFragment result: " + promoPopupResult);
         }
-    }
 
-    private void showInvitePopup(final FragmentActivity activity) {
-        if (CacheProfile.canInvite && activity != null) {
-            final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-            needShowPopup = false;
-            final ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {
-                @Override
-                public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
-                    if (isAdded()) {
-                        showInvitePopup(contacts);
-                        needShowPopup = false;
-                    }
-                }
-            };
-            new BackgroundThread() {
-
-                @Override
-                public void execute() {
-                    doInvitePopupActions(preferences, activity, handler);
-                }
-            };
-
-        }
-    }
-
-    private void doInvitePopupActions(SharedPreferences preferences, FragmentActivity activity,
-                                      ContactsProvider.GetContactsHandler handler) {
-        long date_start = preferences.getLong(INVITE_POPUP, 1);
-        long date_now = new java.util.Date().getTime();
-
-        if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
-            invitePopupShow = true;
-            preferences.edit().putLong(INVITE_POPUP, date_now).commit();
-            if (activity != null) {
-                ContactsProvider provider = new ContactsProvider(activity);
-                provider.getContacts(-1, 0, handler);
-            }
-        }
-    }
-
-    public void showInvitePopup(ArrayList<ContactsProvider.Contact> data) {
-        EasyTracker.getTracker().sendEvent("InvitesPopup", "Show", "", 0L);
-        InvitesPopup popup = InvitesPopup.newInstance(data);
-        ((BaseFragmentActivity) getActivity()).startFragment(popup);
+        return promoPopupResult;
     }
 
     @Override
@@ -377,5 +334,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
 
         return mTitleSetter;
+    }
+
+    protected boolean isNeedShowPromoPopup() {
+        return false;
     }
 }

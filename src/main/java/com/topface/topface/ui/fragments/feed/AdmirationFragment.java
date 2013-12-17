@@ -12,23 +12,23 @@ import android.widget.ViewFlipper;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
+import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.AirManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-public class AdmirationFragment extends LikesFragment {
+public class AdmirationFragment extends LikesFragment{
 
     private boolean isPopupShowed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        if (!CacheProfile.premium) {
-            AirManager manager = new AirManager(getActivity());
-            isPopupShowed = manager.showPromoPopup(getActivity().getSupportFragmentManager(), Options.PremiumAirEntity.AIR_ADMIRATIONS, false);
+        if (!CacheProfile.premium ) {
+            PromoPopupManager manager = new PromoPopupManager(getActivity());
+            isPopupShowed = manager.showPromoPopup(Options.PromoPopupEntity.AIR_ADMIRATIONS);
 
         }
         return super.onCreateView(inflater, container, saved);
@@ -68,7 +68,7 @@ public class AdmirationFragment extends LikesFragment {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
                 int curCounter = CacheProfile.unread_admirations;
                 if (curCounter == 0) {
-                    curCounter = CacheProfile.getOptions().premium_admirations.getCount();
+                    curCounter = CacheProfile.getOptions().premiumAdmirations.getCount();
                 }
 
                 String title = Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter);
@@ -83,7 +83,7 @@ public class AdmirationFragment extends LikesFragment {
                 inflated.findViewById(R.id.btnRate).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MenuFragment.selectFragment(FragmentId.F_DATING);
+                        NavigationActivity.selectFragment(F_DATING);
                     }
                 });
                 ((ImageViewRemote) inflated.findViewById(R.id.ivOne))

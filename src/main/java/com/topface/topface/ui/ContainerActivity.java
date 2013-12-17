@@ -31,7 +31,7 @@ import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 
-public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements ChatFragment.IUserOnlineListener {
+public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements ChatFragment.IUserOnlineListener{
 
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
@@ -88,9 +88,10 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
             } catch (Exception ex) {
                 Debug.error(ex);
                 finish();
-            } finally {
-                if (App.DEBUG && mCurrentFragmentId <= 0)
-                    throw new IllegalArgumentException("ContainerActivity needs request code, use static ContainerActivity methods to get Intents");
+            }
+
+            if (App.DEBUG && mCurrentFragmentId <= 0) {
+                throw new IllegalArgumentException("ContainerActivity needs request code, use static ContainerActivity methods to get Intents");
             }
         }
     }
@@ -301,10 +302,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         return intent;
     }
 
-    public static Intent getVipBuyIntent(String from) {
-        return getVipBuyIntent(null, from);
-    }
-
     public static Intent getBuyingIntent(String from) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
@@ -325,16 +322,20 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         }
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                if (isTaskRoot()) {
+                    Intent i = new Intent(this, NavigationActivity.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    onBackPressed();
+                }
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
-
-
 }
