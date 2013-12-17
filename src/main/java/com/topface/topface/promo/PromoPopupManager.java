@@ -19,8 +19,8 @@ public class PromoPopupManager {
     }
 
     public boolean startFragment() {
-        //Если в эту сессию показывали промо-попап, то больше не показываем
-        if (!needShowPopup) {
+        //Если в эту сессию показывали промо-попап или он еще показывается, то ничего не делаем
+        if (!needShowPopup || PromoFragment.isPromoVisible()) {
             return false;
         }
 
@@ -52,7 +52,7 @@ public class PromoPopupManager {
                 }
             });
             //Показываем фрагмент, если он еще не показан
-            if (promo.getDialog() == null) {
+            if (!PromoFragment.isPromoVisible() && promo.getDialog() == null) {
                 promo.show(fragmentManager, getTag(type));
             }
             return true;

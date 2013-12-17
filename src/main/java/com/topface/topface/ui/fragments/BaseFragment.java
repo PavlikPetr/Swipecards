@@ -63,6 +63,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     public static final String INVITE_POPUP_PREF_KEY = "INVITE_POPUP";
     private boolean mNeedTitles = true;
+    private PromoPopupManager mPromoPopupManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -237,7 +238,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     /**
-     * Показывает различные варианты
+     * Показывает различные варианты попапов на старте
      *
      * @return удалось ли показать попап
      */
@@ -245,9 +246,11 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         FragmentActivity activity = getActivity();
         Debug.log("Promo: showPromoDialog");
         boolean promoPopupResult = false;
-        //Показываем рекламу AirMessages только если не показываем инвайты
         if (PromoPopupManager.needShowPopup && !CacheProfile.premium && activity != null) {
-            promoPopupResult = new PromoPopupManager(activity).startFragment();
+            if (mPromoPopupManager == null) {
+                mPromoPopupManager = new PromoPopupManager(activity);
+            }
+            promoPopupResult = mPromoPopupManager.startFragment();
             Debug.log("Promo: startFragment result: " + promoPopupResult);
         }
 

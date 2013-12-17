@@ -26,6 +26,10 @@ import com.topface.topface.utils.Debug;
 public abstract class PromoFragment extends BaseDialogFragment implements View.OnClickListener, IPromoPopup {
 
     private OnCloseListener mListener;
+    /**
+     * Общий между всем промо-попапами флаг того, видны ли они в данный момент
+     */
+    private static boolean mPromoIsVisible = false;
 
     public abstract Options.PromoPopupEntity getPremiumEntity();
 
@@ -73,12 +77,20 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
     @Override
     public void onResume() {
         super.onResume();
+        mPromoIsVisible = true;
+
         //Отключаем боковое меню
         FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             ((NavigationActivity) activity).setPopupVisible(true);
             ((NavigationActivity) activity).setMenuEnabled(false);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPromoIsVisible = false;
     }
 
     @Override
@@ -196,6 +208,10 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
             getDialog().setDismissMessage(null);
         }
         super.onDestroyView();
+    }
+
+    public static boolean isPromoVisible() {
+        return mPromoIsVisible;
     }
 
 }
