@@ -34,6 +34,8 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.controllers.IStartAction;
+import com.topface.topface.utils.controllers.StartActionsController;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -62,17 +64,6 @@ public class FullscreenController {
 
     public FullscreenController(Activity activity) {
         mActivity = activity;
-    }
-
-    public void requestFullscreen() {
-        if (!CacheProfile.isEmpty() && isTimePassed()) {
-            Options.Page startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
-            if (startPage != null) {
-                if (startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER)) {
-                    requestFullscreen(startPage.banner);
-                }
-            }
-        }
     }
 
     private void requestLifestreetFullscreen() {
@@ -332,21 +323,25 @@ public class FullscreenController {
 
     public void hideFullscreenBanner(final ViewGroup bannerContainer) {
         Animation animation = AnimationUtils.loadAnimation(App.getContext(), android.R.anim.fade_out);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
+        if (animation != null) {
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                bannerContainer.setVisibility(View.GONE);
-            }
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    bannerContainer.setVisibility(View.GONE);
+                }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        bannerContainer.startAnimation(animation);
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+            bannerContainer.startAnimation(animation);
+        } else {
+            bannerContainer.setVisibility(View.GONE);
+        }
         isFullScreenBannerVisible = false;
     }
 
@@ -378,5 +373,42 @@ public class FullscreenController {
         if (advViewIvengo != null) {
             advViewIvengo.dismiss();
         }
+    }
+
+    public IStartAction createFullscreenStartAction() {
+        return new IStartAction() {
+            Options.Page startPage;
+
+            @Override
+            public void callInBackground() {
+                // no actions in background
+            }
+
+            @Override
+            public void callOnUi() {
+                FullscreenController.this.requestFullscreen(startPage.banner);
+            }
+
+            @Override
+            public boolean isApplicable() {
+                if (CacheProfile.show_ad) {
+                    if (!CacheProfile.isEmpty() && FullscreenController.this.isTimePassed()) {
+                        startPage = CacheProfile.getOptions().pages
+                                .get(Options.PAGE_START);
+                        if (startPage != null) {
+                            if (startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public int getPriority() {
+                return StartActionsController.PRIORITY_HIGH;
+            }
+        };
     }
 }

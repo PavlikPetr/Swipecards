@@ -15,18 +15,18 @@ import com.topface.topface.data.Options;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-public class AdmirationFragment extends LikesFragment{
+public class AdmirationFragment extends LikesFragment {
 
     private boolean isPopupShowed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        if (!CacheProfile.premium ) {
+        if (!CacheProfile.premium) {
             PromoPopupManager manager = new PromoPopupManager(getActivity());
             isPopupShowed = manager.showPromoPopup(Options.PromoPopupEntity.AIR_ADMIRATIONS);
 
@@ -83,7 +83,7 @@ public class AdmirationFragment extends LikesFragment{
                 inflated.findViewById(R.id.btnRate).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        NavigationActivity.selectFragment(F_DATING);
+                        MenuFragment.selectFragment(FragmentId.F_DATING);
                     }
                 });
                 ((ImageViewRemote) inflated.findViewById(R.id.ivOne))

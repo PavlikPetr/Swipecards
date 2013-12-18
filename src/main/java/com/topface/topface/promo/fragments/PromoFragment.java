@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.BaseDialogFragment;
@@ -64,7 +64,7 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(
                         mProfileReceiver,
-                        new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION)
+                        new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION)
                 );
         //Подписываемся на событие покупки VIP
         LocalBroadcastManager.getInstance(getActivity())
@@ -83,7 +83,7 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
         FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             ((NavigationActivity) activity).setPopupVisible(true);
-            ((NavigationActivity) activity).setMenuEnabled(false);
+            ((NavigationActivity) activity).setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
     }
 
@@ -96,12 +96,6 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.promo_popup, container, false);
-        root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Магия для того, чтобы клики не проходили в дэйтинг фрагмент
-            }
-        });
 
         root.findViewById(R.id.buyVip).setOnClickListener(this);
         ((TextView) root.findViewById(R.id.deleteMessages)).setText(getDeleteButtonText());
@@ -162,7 +156,7 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
             FragmentActivity activity = getActivity();
             if (activity instanceof NavigationActivity) {
                 ((NavigationActivity) activity).setPopupVisible(false);
-                ((NavigationActivity) activity).setMenuEnabled(true);
+                ((NavigationActivity) activity).setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
         }
 

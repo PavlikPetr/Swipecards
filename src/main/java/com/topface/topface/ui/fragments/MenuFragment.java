@@ -47,6 +47,7 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.controllers.ClosingsController;
+import com.topface.topface.utils.controllers.IStartAction;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
@@ -556,5 +557,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     public static void onLogout() {
         ClosingsController.onLogout();
         mEditorInitializationForSessionInvoked = false;
+    }
+
+    public IStartAction createClosingsStartAction() {
+        return mClosingsController.createStartAction();
     }
 }

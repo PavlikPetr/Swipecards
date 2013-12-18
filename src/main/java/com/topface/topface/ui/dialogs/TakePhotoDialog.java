@@ -50,13 +50,18 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if (mTakePhotoListener != null) mTakePhotoListener.onDialogClose();
+                if (mTakePhotoListener != null) {
+                    mTakePhotoListener.onDialogClose();
+                }
+
             }
         });
         getDialog().setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                if (mTakePhotoListener != null) mTakePhotoListener.onDialogClose();
+                if (mTakePhotoListener != null) {
+                    mTakePhotoListener.onDialogClose();
+                }
             }
         });
 

@@ -25,6 +25,8 @@ import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.controllers.IStartAction;
+import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -43,6 +45,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private boolean afterOnSaveInstanceState;
+    private StartActionsController mStartActionsController = new StartActionsController(this);
 
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -66,6 +69,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         // из-за которого показывается лоадер в ActionBar
         // этот метод можно использовать только после setContent
         setSupportProgressBarIndeterminateVisibility(false);
+        onRegisterStartActions();
     }
 
     @Override
@@ -135,6 +139,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected void onLoadProfile() {
         if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
             startAuth();
+        } else {
+            mStartActionsController.onLoadProfile();
         }
     }
 
@@ -334,5 +340,23 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+
+    /**
+     * Registration of actions to process on Activity's start
+     *
+     * @param action will be registered and processed after
+     */
+    protected void registerStartAction(IStartAction action) {
+        mStartActionsController.registerAction(action);
+    }
+
+    protected void onRegisterStartActions() {
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mStartActionsController.clear();
     }
 }

@@ -77,8 +77,7 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     public void show() {
-        if (mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) return;
-        if (!CacheProfile.getOptions().closing.isClosingsEnabled()) return;
+        // #1
         ApiRequest likesRequest = getUsersListRequest(FeedRequest.FeedService.LIKES, mContext);
         likesRequest.callback(getDataRequestHandler(FeedRequest.FeedService.LIKES));
         ApiRequest mutualsRequest = getUsersListRequest(FeedRequest.FeedService.MUTUAL, mContext);
@@ -255,7 +254,7 @@ public class ClosingsController implements View.OnClickListener {
         } else {
             switch (v.getId()) {
                 case R.id.btnBuyVipFromClosingsWidget:
-                    mContext.startActivity(ContainerActivity.getVipBuyIntent("Menu"));
+                    mContext.startActivity(ContainerActivity.getVipBuyIntent(null, "Menu"));
                     break;
                 default:
                     break;
@@ -384,5 +383,30 @@ public class ClosingsController implements View.OnClickListener {
             mClosingsPassed = false;
         }
         mLogoutWasInitiated = false;
+    }
+
+    public IStartAction createStartAction() {
+        return new IStartAction() {
+            @Override
+            public void callInBackground() {
+                // #1 - can be places here
+            }
+
+            @Override
+            public void callOnUi() {
+                show();
+            }
+
+            @Override
+            public boolean isApplicable() {
+                return !(mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) &&
+                        CacheProfile.getOptions().closing.isClosingsEnabled();
+            }
+
+            @Override
+            public int getPriority() {
+                return StartActionsController.PRIORITY_HIGH;
+            }
+        };
     }
 }
