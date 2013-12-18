@@ -13,7 +13,6 @@ public class FeedRequest extends ApiRequest {
     public String to;  // идентификатор последнего диалога для отображения. В случае отсутствия параметра диалоги возвращаются от последнего
     public String from;  // идентификатор последнего диалога для запроса новых сообщений после данного идентификатора
     public boolean unread;  // параметр получения только тех диалогов, в которых есть непрочитанные сообщения
-    public int type = -1; // нужен исключительно для избранных - показывает кого подгрузить - избранных или поклонников. Если не указан, подгружаются поклонники
     private FeedService mService;
     public boolean leave; //Оставить сообщения не прочитанными
 
@@ -23,12 +22,6 @@ public class FeedRequest extends ApiRequest {
 
     public FeedRequest(FeedService service, Context context) {
         super(context);
-        //Костыль для избранных
-        if (service == FeedService.BOOKMARKS) {
-            type = 0;
-        } else {
-            type = 1;
-        }
         mService = service;
     }
 
@@ -44,10 +37,6 @@ public class FeedRequest extends ApiRequest {
 
         if (from != null) {
             data.put("from", from);
-        }
-
-        if (type > -1) {
-            data.put("type", type);
         }
 
         return data;
@@ -73,6 +62,8 @@ public class FeedRequest extends ApiRequest {
                 service = "blacklist.getList";
                 break;
             case FANS:
+                service = "fan.getList";
+                break;
             case BOOKMARKS:
                 service = "bookmark.getList";
                 break;
