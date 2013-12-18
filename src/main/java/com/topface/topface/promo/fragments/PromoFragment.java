@@ -17,7 +17,6 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.promo.PromoPopupManager;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.BaseDialogFragment;
