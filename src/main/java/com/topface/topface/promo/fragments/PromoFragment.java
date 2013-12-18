@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.promo.PromoPopupManager;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.BaseDialogFragment;
@@ -26,10 +28,6 @@ import com.topface.topface.utils.Debug;
 public abstract class PromoFragment extends BaseDialogFragment implements View.OnClickListener, IPromoPopup {
 
     private OnCloseListener mListener;
-    /**
-     * Общий между всем промо-попапами флаг того, видны ли они в данный момент
-     */
-    private static boolean mPromoIsVisible = false;
 
     public abstract Options.PromoPopupEntity getPremiumEntity();
 
@@ -77,8 +75,6 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
     @Override
     public void onResume() {
         super.onResume();
-        mPromoIsVisible = true;
-
         //Отключаем боковое меню
         FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
@@ -88,13 +84,8 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mPromoIsVisible = false;
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        PromoPopupManager.isPromoFragmentVisible = true;
         View root = inflater.inflate(R.layout.promo_popup, container, false);
 
         root.findViewById(R.id.buyVip).setOnClickListener(this);
@@ -202,10 +193,6 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
             getDialog().setDismissMessage(null);
         }
         super.onDestroyView();
-    }
-
-    public static boolean isPromoVisible() {
-        return mPromoIsVisible;
     }
 
 }
