@@ -91,8 +91,8 @@ public class ClosingsController implements View.OnClickListener {
                 super.success(response);
                 Options.Closing closings = CacheProfile.getOptions().closing;
 
-                boolean needLikesClosings = mReceivedUnreadLikes > 0;
-                boolean needMutualsClosings = mReceivedUnreadMutuals > 0;
+                boolean needLikesClosings = mReceivedUnreadLikes > 0 && closings.isLikesAvailable();
+                boolean needMutualsClosings = mReceivedUnreadMutuals > 0 && closings.isMutualAvailable();
                 if (needLikesClosings || needMutualsClosings) {
                     mClosingsWidget = getClosingsWidget();
                     mClosingsWidget.setVisibility(View.VISIBLE);
@@ -100,14 +100,14 @@ public class ClosingsController implements View.OnClickListener {
                             .setOnClickListener(ClosingsController.this);
                     likesMenuItem = mClosingsWidget.findViewById(R.id.itemLikesClosings);
                     if (initMenuItem(likesMenuItem, R.string.general_likes, R.drawable.ic_likes_selector,
-                            closings.isLikesAvailable() && needLikesClosings,
+                            needLikesClosings,
                             FragmentId.F_LIKES_CLOSINGS)) {
                         mAdapter.hideItem(FragmentId.F_LIKES);
                         mLikesClosingsActive = true;
                     }
                     mutualsMenuItem = mClosingsWidget.findViewById(R.id.itemMutualsClosings);
                     if (initMenuItem(mutualsMenuItem, R.string.general_mutual, R.drawable.ic_mutual_selector,
-                            closings.isMutualAvailable() && needMutualsClosings,
+                            needMutualsClosings,
                             FragmentId.F_MUTUAL_CLOSINGS)) {
                         mAdapter.hideItem(FragmentId.F_MUTUAL);
                         mMutualClosingsActive = true;
