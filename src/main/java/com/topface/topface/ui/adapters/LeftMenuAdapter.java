@@ -179,8 +179,10 @@ public class LeftMenuAdapter extends BaseAdapter {
         if (item.isHidden()) {
             holder.btnMenu.setVisibility(View.GONE);
             holder.counterBadge.setVisibility(View.GONE);
+            unregisterCounterBadge(item);
         } else {
             holder.btnMenu.setVisibility(View.VISIBLE);
+            registerCounterBadge(item, holder.counterBadge);
         }
         return convertView;
     }
