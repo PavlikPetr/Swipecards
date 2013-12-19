@@ -19,8 +19,6 @@ public class BillingUtils {
      * если же это какая либо другая ошибка, то мы будем до победного отправлять ее на сервер
      */
     public static boolean isExceptedBillingError(int responseCode) {
-        boolean isExcepted;
-
         switch (responseCode) {
             case ErrorCodes.INVALID_TRANSACTION:
             case ErrorCodes.INVALID_PRODUCT:
@@ -29,13 +27,10 @@ public class BillingUtils {
             case ErrorCodes.INVALID_FORMAT:
             case ErrorCodes.UNVERIFIED_SIGNATURE:
             case ErrorCodes.MISSING_REQUIRE_PARAMETER:
-                isExcepted = true;
-                break;
+                return true;
             default:
-                isExcepted = false;
+                return false;
         }
-
-        return isExcepted;
     }
 
     /**

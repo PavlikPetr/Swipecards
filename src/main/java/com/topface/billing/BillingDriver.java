@@ -8,6 +8,8 @@ import android.app.Activity;
  */
 abstract public class BillingDriver {
     private static String mSource;
+    private static String mProductId;
+    private static boolean mIsTestPayments = false;
     private BillingListener mBillingListener;
     private final Activity mActivity;
     protected BillingSupportListener mBillingSupportListener;
@@ -15,6 +17,10 @@ abstract public class BillingDriver {
     public BillingDriver(Activity activity, BillingListener listener) {
         mActivity = activity;
         setBillingListener(listener);
+    }
+
+    public static void setTestPaymentsState(boolean testPaymentsState) {
+        mIsTestPayments = testPaymentsState;
     }
 
     public abstract void onStart();
@@ -57,7 +63,28 @@ abstract public class BillingDriver {
         mSource = source;
     }
 
+    public static void setProductIdForTestPayment(String productId) {
+        mProductId = productId;
+    }
+
+    public static String getProductIdForTestPayment() {
+        return mProductId;
+    }
+
     public static String getSourceValue() {
         return mSource;
     }
+
+    /**
+     * Включен ли режим тестовых покупок
+     */
+    public boolean isTestPurchasesEnabled() {
+        //На всякий случай проверяем, что доступны тестовые платежи
+        return isTestPurchasesAvailable() && mIsTestPayments;
+    }
+
+    /**
+     * Доступны ли тестовые платежи
+     */
+    public abstract boolean isTestPurchasesAvailable();
 }
