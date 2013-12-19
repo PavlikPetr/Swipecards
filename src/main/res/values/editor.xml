@@ -24,6 +24,7 @@
     <string name="editor_reset_banners_settings">Сбросить к серверным</string>
     <string name="editor_on_start_banners_settings">Применять на старте</string>
     <string name="editor_clear_air_messages">Сбросить флаг попапа "Сообщения за VIP"</string>
+    <string name="editor_test_buy">Тестовые покупки</string>
 
     <string-array name="editor_debug_titles">
         <item>Только в debug режиме</item>

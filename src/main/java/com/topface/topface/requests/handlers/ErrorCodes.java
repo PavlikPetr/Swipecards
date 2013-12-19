@@ -10,12 +10,16 @@ public class ErrorCodes {
      * Подробнее: http://tasks.verumnets.ru/projects/topface/wiki/%D0%9A%D0%BE%D0%B4%D1%8B_%D0%BE%D1%88%D0%B8%D0%B1%D0%BE%D0%BA
      */
 
+    public static final int NULL_RESPONSE = -7;
+    public static final int WRONG_RESPONSE = -6;
     public static final int UNCONFIRMED_LOGIN_ACTION = -5;
     public static final int RESULT_DONT_SET = -4;
     public static final int CONNECTION_ERROR = -3;
     public static final int ERRORS_PROCCESED = -2;
     public static final int RESULT_OK = -1;
+
     public static final int INTERNAL_SERVER_ERROR = 0;
+
     public static final int UNKNOWN_SOCIAL_USER = 1;
     public static final int UNKNOWN_PLATFORM = 2;
     public static final int SESSION_NOT_FOUND = 3;
@@ -69,7 +73,4 @@ public class ErrorCodes {
     public static final int UNCONFIRMED_LOGIN = 53;
     public static final int USER_DELETED = 54;
     public static final int BLOCKED_SYMPATHIES = 57;
-    // local
-    public static final int NULL_RESPONSE = 100;
-    public static final int WRONG_RESPONSE = 101;
 }
