@@ -43,7 +43,7 @@
     <string name="general_profile">Profile</string>
     <string name="general_settings">Settings</string>
     <string name="general_chat">Chat</string>
-    <string name="auth_btn_vk">Login with vk.com</string>
+    <string name="auth_btn_vk">Login with VK</string>
     <string name="auth_btn_fb">Login with Facebook</string>
     <string name="auth_retry">Retry</string>
     <string name="auth_vk_name">VK</string>
@@ -220,7 +220,6 @@
     <string name="vip_not_activated">Your VIP-status is not activated</string>
     <string name="vip_privileges">VIP-privileges</string>
     <string name="vip_text_visitors">Find out who was interested in you - look through your guests!</string>
-    <string name="vip_text_adm_unlock">Send admiration\'s for free - maximum express of feelings!</string>
     <string name="vip_rest">You subscribed for VIP</string>
     <string name="vip_invis">Invisible mode</string>
     <string name="vip_messages_bg">Background message</string>
@@ -540,8 +539,8 @@
     <string name="settings_feedback_transaction_number">Order number</string>
     <string name="settings_feedback_transaction_link">Where to find the order number?</string>
     <string name="general_logout_error">Unfortunately, you failed to log out from your account</string>
-    <string name="auth_btn_ok">Login through Odnoklassniki</string>
-    <string name="other_auth">Login through other services</string>
+    <string name="auth_btn_ok">Login with Odnoklassniki</string>
+    <string name="other_auth">Login with other services</string>
     <string name="settings_feedback_transaction_number_hint">Enter order number</string>
     <string name="youve_earned">You\'ve earned %s</string>
     <string name="like_topface">Do you like Topface?</string>

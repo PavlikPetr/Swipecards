@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -78,13 +77,11 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
         FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             ((NavigationActivity) activity).setPopupVisible(true);
-            ((NavigationActivity) activity).setMenuEnabled(false);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        PromoPopupManager.isPromoFragmentVisible = true;
         View root = inflater.inflate(R.layout.promo_popup, container, false);
         root.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +122,6 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
 
     @Override
     public void onClick(View v) {
-        boolean isClicked = false;
         switch (v.getId()) {
             case R.id.buyVip:
                 startActivityForResult(
@@ -138,25 +134,10 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
                 deleteMessages();
                 EasyTracker.getTracker().sendEvent(getMainTag(), "Dismiss", "Delete", 0L);
                 closeFragment();
-                isClicked = true;
                 break;
             default:
 
         }
-
-        if (isClicked) {
-            //Отмечаем время закрытия попапа
-            getPremiumEntity().setPopupShowTime();
-
-            //Включаем боковое меню
-            FragmentActivity activity = getActivity();
-            if (activity instanceof NavigationActivity) {
-                ((NavigationActivity) activity).setPopupVisible(false);
-                ((NavigationActivity) activity).setMenuEnabled(true);
-            }
-        }
-
-
     }
 
     @Override
@@ -175,6 +156,14 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
     private void closeFragment() {
         if (mListener != null) {
             mListener.onClose();
+        }
+
+        //Отмечаем время закрытия попапа
+        getPremiumEntity().setPopupShowTime();
+
+        FragmentActivity activity = getActivity();
+        if (activity instanceof NavigationActivity) {
+            ((NavigationActivity) activity).setPopupVisible(false);
         }
 
         dismissAllowingStateLoss();

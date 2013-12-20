@@ -220,7 +220,6 @@
     <string name="vip_not_activated">Η κατάστασή σας-VIP δεν είναι ενεργοποιημένη</string>
     <string name="vip_privileges">VIP τα προνόμια</string>
     <string name="vip_text_visitors">Μάθετε ποιος είναι ενδιαφέρεται για σας - δείτε τους καλεσμένους σας!</string>
-    <string name="vip_text_adm_unlock">Αποστολή θαυμασμό για δωρεάν - εκφράστε τα συναισθήματά σας στο μέγιστο!</string>
     <string name="vip_rest">Έχετε εγγραφεί στη VIP</string>
     <string name="vip_invis">Αόρατη Λειτουργία</string>
     <string name="vip_messages_bg">Το φόντο μηνυμάτων</string>
@@ -567,4 +566,9 @@
     <string name="locking_screen_button_answer">Απαντήστε</string>
     <string name="locking_screen_advice">Απαντήστε σε όλες τις νέες συμπάθειες</string>
     <string name="locking_screen_advice2">Απαλλαγή από όλους τους περιορισμούς</string>
+    <string name="current_city">Τρέχουσα πόλη</string>
+    <string name="general_say_meow">Πες Meow</string>
+    <string name="general_meow_offer">Παίξτε 3 γύρους με τους φίλους και πάρτε την κατάσταση VIP για 2 ημέρες</string>
+    <string name="not_enough_coins">Δεν υπάρχουν αρκετά κέρματα για να αγοράξετε</string>
+    <string name="general_bonus">Μπόνους</string>
 </resources>

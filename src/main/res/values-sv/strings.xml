@@ -220,7 +220,6 @@
     <string name="vip_not_activated">Din VIP-status är ej aktiverad</string>
     <string name="vip_privileges">VIP-förmåner</string>
     <string name="vip_text_visitors">Ta reda på vem som är intresserad av dig - se dina gäster!</string>
-    <string name="vip_text_adm_unlock">Skicka beundran gratis - visa maximalt dina känslor!</string>
     <string name="vip_rest">Du är prenumererad på VIP</string>
     <string name="vip_invis">\"Osynlig\" funktion</string>
     <string name="vip_messages_bg">Meddelandets bakgrund</string>
@@ -568,4 +567,6 @@
     <string name="current_city">Aktuell stad</string>
     <string name="general_say_meow">SayMeow</string>
     <string name="general_meow_offer">Spela tre rundor med vänner och erhåll VIP för två dagar</string>
+    <string name="not_enough_coins">Du behöver fler mynt för att handla</string>
+    <string name="general_bonus">Bonus</string>
 </resources>

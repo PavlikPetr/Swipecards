@@ -222,7 +222,6 @@
     <string name="vip_not_activated">Vaš VIP status nije aktiviran</string>
     <string name="vip_privileges">VIP privilegija</string>
     <string name="vip_text_visitors">Saznaćete ko se vama interesovao - pogledajte svoje goste!</string>
-    <string name="vip_text_adm_unlock">Šaljite ushićenja besplatno - izražavajte svoja osećanja maksimalno</string>
     <string name="vip_rest">Pretplaćeni ste na VIP</string>
     <string name="vip_invis">Režim nevidljivosti</string>
     <string name="vip_messages_bg">Pozadina poruka</string>
@@ -432,7 +431,8 @@
     </plurals>
     <plurals name="invite_friends_plurals">
         <item quantity="few">Pozovite %1$d prijatelja, kako bi dobili VIP status na %2$d dana</item>
-        <item quantity="other">Pozovite %1$d prijatelja, kako bi dobili VIP status na %2$d dana</item>
+        <item quantity="other">Pozovite %1$d prijatelja, kako bi dobili VIP status na %2$d dana
+        </item>
         <item quantity="one">Pozovite %1$d prijatelja, kako bi dobili VIP status na %2$d dana</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">

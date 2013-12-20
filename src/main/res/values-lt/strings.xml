@@ -223,7 +223,6 @@
     <string name="vip_not_activated">Jūsų VIP-statusas neaktyvuotas</string>
     <string name="vip_privileges">VIP privilegijos</string>
     <string name="vip_text_visitors">Sužinokite, kas jumis domėjosi - peržiūrėkite savo svečius!</string>
-    <string name="vip_text_adm_unlock">Siųskite susižavėjimus nemokamai - maksimaliai išreikškite savo jausmus!</string>
     <string name="vip_rest">Jūs prenumeruojate VIP</string>
     <string name="vip_invis">Nematomas režimas</string>
     <string name="vip_messages_bg">Pranešimų fonas</string>
@@ -585,4 +584,6 @@
     <string name="current_city">Dabartinis miestas</string>
     <string name="general_say_meow">Sakyk Miau</string>
     <string name="general_meow_offer">Sužaiskite 3 raundus su draugais ir gaukite VIP statusą 2 dienoms</string>
+    <string name="not_enough_coins">Nepakanka monetų pirkiniui</string>
+    <string name="general_bonus">Bonus</string>
 </resources>

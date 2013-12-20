@@ -220,7 +220,6 @@
     <string name="vip_not_activated">Ihr VIP-Status ist nicht aktiviert</string>
     <string name="vip_privileges">VIP-Privilegien</string>
     <string name="vip_text_visitors">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre Gäste durch!</string>
-    <string name="vip_text_adm_unlock">Senden Sie Bewunderungen kostenlos - zeigen Sie Ihre Gefühle</string>
     <string name="vip_rest">Sie abonnieren VIP</string>
     <string name="vip_invis">Unsichtbares Regime</string>
     <string name="vip_messages_bg">Nachrichten Hintergrund</string>
@@ -574,4 +573,6 @@
     <string name="current_city">Aktuelle Stadt</string>
     <string name="general_say_meow">Say Meow</string>
     <string name="general_meow_offer">Spielen Sie 3 Runden mit den Freunden und erhalten Sie einen VIP-Status für 2 Tage</string>
+    <string name="not_enough_coins">Nicht genug Coins für den Kauf</string>
+    <string name="general_bonus">Bonus</string>
 </resources>

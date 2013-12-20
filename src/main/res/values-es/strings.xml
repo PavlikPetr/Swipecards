@@ -220,7 +220,6 @@
     <string name="vip_not_activated">Tu estado VIP no está activado</string>
     <string name="vip_privileges">VIP-ventajas</string>
     <string name="vip_text_visitors">Descubra quién se interesó por ti - ¡vea tus visitantes!</string>
-    <string name="vip_text_adm_unlock">Envía admiraciones gratis - ¡expresa tus sentimientos a máximo!</string>
     <string name="vip_rest">Estás suscrito al VIP</string>
     <string name="vip_invis">Modo invisible</string>
     <string name="vip_messages_bg">Fondo de mensajes</string>
@@ -572,4 +571,6 @@
     <string name="current_city">Ciudad actual</string>
     <string name="general_say_meow">Dí Meow</string>
     <string name="general_meow_offer">Juega 3 rondas con tus amigos y recibe el estado VIP para 2 días</string>
+    <string name="not_enough_coins">Insuficientes monedas para comprar</string>
+    <string name="general_bonus">Bonus</string>
 </resources>

@@ -220,7 +220,6 @@
     <string name="vip_not_activated">Il tuo stato VIP non è attivo</string>
     <string name="vip_privileges">Privilegi di essere VIP</string>
     <string name="vip_text_visitors">Scopri chi si è interessato di te, guarda i tuoi visitatori!</string>
-    <string name="vip_text_adm_unlock">Invia le ammirazioni gratis, esprimi i sentimenti al massimo</string>
     <string name="vip_rest">Non hai abbonamento VIP</string>
     <string name="vip_invis">Stato di invisibilità</string>
     <string name="vip_messages_bg">Sfondo dei messaggi</string>
@@ -569,4 +568,6 @@
     <string name="current_city">Città attuale</string>
     <string name="general_say_meow">Say Meow</string>
     <string name="general_meow_offer">Gioca 3 partite con gli amici e ricevi lo stato VIP per 2 giorni</string>
+    <string name="not_enough_coins">Non hai abbastanza monete per l’acquisto</string>
+    <string name="general_bonus">Bonus</string>
 </resources>
