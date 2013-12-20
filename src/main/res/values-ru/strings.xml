@@ -271,6 +271,12 @@
     <string name="buying_store_connect">Запрашиваю iTunes Store</string>
     <string name="buying_store_purchase">Совершаю покупку в iTunes Store</string>
     <string name="buying_tf_ack_sending">Отправляю информацию о покупке в Topface</string>
+    <string name="rate_popup_title">Пожалуйста, оцените наше приложение</string>
+    <string name="rate_popup_set_rate">Поставить оценку</string>
+    <string name="rate_popup_later">Спросить позже</string>
+    <string name="rate_popup_cancel">Нет, спасибо</string>
+    <string name="rate_popup_error">Вы должны указать сколько звезд вы ставите нашему приложению</string>
+    <string name="feedback_popup_title">Вы поставили низкую оценку. Расскажите, что вам не нравится в приложении. Помогите нам стать лучше. Спасибо!</string>
 
     <string name="settings_melody">Мелодия уведомления</string>
 
