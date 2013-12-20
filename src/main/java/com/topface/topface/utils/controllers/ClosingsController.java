@@ -386,4 +386,10 @@ public class ClosingsController implements View.OnClickListener {
         }
         mLogoutWasInitiated = false;
     }
+
+    public void onPremiumObtained() {
+        if (!mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) {
+            removeClosings();
+        }
+    }
 }

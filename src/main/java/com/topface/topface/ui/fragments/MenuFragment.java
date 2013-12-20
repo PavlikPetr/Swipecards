@@ -108,6 +108,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             } else if (action.equals(CacheProfile.PROFILE_UPDATE_ACTION)) {
                 initProfileMenuItem(mHeaderView);
                 initEditor();
+                if (CacheProfile.premium) {
+                    mClosingsController.onPremiumObtained();
+                }
             } else if (action.equals(GooglePlayProducts.INTENT_UPDATE_PRODUCTS)) {
                 if (mBuyWidgetController != null) {
                     mBuyWidgetController.setButtonBackgroundResource(
@@ -306,6 +309,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         initProfileMenuItem(mHeaderView);
         // We need to clean state if there was a logout in other Activity
         mClosingsController.onLogoutWasInitiated();
+        if (CacheProfile.premium) {
+            mClosingsController.onPremiumObtained();
+        }
     }
 
     @Override
