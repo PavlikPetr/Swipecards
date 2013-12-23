@@ -45,6 +45,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.FullscreenController;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -126,7 +127,12 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 }
                 selectMenu(fragmentId);
             } else if (action.equals(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION)) {
-                if (!CacheProfile.premium) mClosingsController.show();
+                if (!CacheProfile.premium) {
+                    if (!mClosingsController.show()) {
+                        if (mFullscreenController != null)
+                            mFullscreenController.requestFullscreen();
+                    }
+                }
             } else if (action.equals(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED)) {
                 mClosingsController.onClosingsProcessed(FeedRequest.FeedService.LIKES);
             } else if (action.equals(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED)) {
@@ -134,6 +140,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             }
         }
     };
+    private FullscreenController mFullscreenController;
 
     private void initEditor() {
         if (mEditorInitializationForSessionInvoked) return;
@@ -506,10 +513,13 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     }
 
     public void onLoadProfile() {
-        // We don't have counters' values from cached data
-        // so we have to make actions after we will receive data from server.
-        // Another call is in BroadcastReceiver of MenuFragment
-        if (!CacheProfile.premium) mClosingsController.show();
+        // We don't have counters' values from cached data so we have to make actions
+        // after we will receive data from server
+        // for this we have another call in BroadcastReceiver in MenuFragment.
+        // This call is for onResume when we already have profile
+        if (!CacheProfile.premium) {
+            mClosingsController.show();
+        }
     }
 
     public boolean isLockedByClosings() {
@@ -528,6 +538,17 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     @Deprecated
     public ClosingsController getClosingsController() {
         return mClosingsController;
+    }
+
+    /**
+     * Костыль, пока нет ротатора, нужно для определения запираний
+     * и блокировки показа фуллскрин рекламы
+     *
+     * @param fullscreenController контроллен фуллскрин рекламы
+     */
+    @Deprecated
+    public void setFullscreenController(FullscreenController fullscreenController) {
+        mFullscreenController = fullscreenController;
     }
 
     public static interface OnFragmentSelectedListener {

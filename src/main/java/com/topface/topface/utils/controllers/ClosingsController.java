@@ -76,9 +76,15 @@ public class ClosingsController implements View.OnClickListener {
         mCacheManager = new UsersListCacheManager(null, null);
     }
 
-    public void show() {
-        if (mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) return;
-        if (!CacheProfile.getOptions().closing.isClosingsEnabled()) return;
+    /**
+     * Initiates show of closings
+     *
+     * @return true if all flags are ready to show closings,
+     * but still after retrieving feeds there can be no closings at all
+     */
+    public boolean show() {
+        if (mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) return false;
+        if (!CacheProfile.getOptions().closing.isClosingsEnabled()) return false;
         ApiRequest likesRequest = getUsersListRequest(FeedRequest.FeedService.LIKES, mContext);
         likesRequest.callback(getDataRequestHandler(FeedRequest.FeedService.LIKES));
         ApiRequest mutualsRequest = getUsersListRequest(FeedRequest.FeedService.MUTUAL, mContext);
@@ -124,6 +130,7 @@ public class ClosingsController implements View.OnClickListener {
                 .addRequest(mutualsRequest)
                 .callback(handler)
                 .exec();
+        return true;
     }
 
     private View getClosingsWidget() {
