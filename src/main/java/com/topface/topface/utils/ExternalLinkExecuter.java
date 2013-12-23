@@ -40,8 +40,12 @@ public class ExternalLinkExecuter {
     }
 
     private boolean checkHost(Uri data) {
-        Pattern topfacePattern = Pattern.compile(".*topface\\.ru|.*topface\\.com");
-        return data != null && topfacePattern.matcher(data.getHost()).matches();
+        String host = data != null ? data.getHost() : null;
+        if (host != null) {
+            Pattern topfacePattern = Pattern.compile(".*topface\\.ru|.*topface\\.com");
+            return topfacePattern.matcher(host).matches();
+        }
+        return false;
     }
 
     private void executeLinkAction(String[] splittedPath) {
