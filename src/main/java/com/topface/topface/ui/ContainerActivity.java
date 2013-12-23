@@ -88,9 +88,10 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
             } catch (Exception ex) {
                 Debug.error(ex);
                 finish();
-            } finally {
-                if (App.DEBUG && mCurrentFragmentId <= 0)
-                    throw new IllegalArgumentException("ContainerActivity needs request code, use static ContainerActivity methods to get Intents");
+            }
+
+            if (App.DEBUG && mCurrentFragmentId <= 0) {
+                throw new IllegalArgumentException("ContainerActivity needs request code, use static ContainerActivity methods to get Intents");
             }
         }
     }
@@ -325,15 +326,21 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         }
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                if (isTaskRoot()) {
+                    Intent i = new Intent(this, NavigationActivity.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    onBackPressed();
+                }
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 
 

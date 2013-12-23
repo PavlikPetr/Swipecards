@@ -5,12 +5,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/popup_invite_background">
+    android:background="@drawable/popup_invite_background"
+    >
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
+        android:layout_marginTop="45dp"
         android:background="@drawable/popup_invite_text_bg">
 
         <TextView
@@ -23,7 +25,8 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:text="@string/general_attention"
-            android:minHeight="50dp" />
+            android:minHeight="50dp"
+            />
 
         <TextView
             android:id="@+id/airMessagesText"
@@ -44,7 +47,8 @@
             android:layout_height="0dp"
             android:layout_width="0dp"
             android:layout_below="@+id/airMessagesText"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            />
 
         <Button
             style="@style/ButtonBlue"
@@ -60,7 +64,8 @@
             android:padding="6dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            />
 
         <Button
             style="@style/ButtonGray"
@@ -76,7 +81,8 @@
             android:padding="6dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            />
 
     </RelativeLayout>
 
@@ -85,6 +91,7 @@
         android:visibility="gone"
         style="@style/LoadingLocker"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        />
 
 </RelativeLayout>

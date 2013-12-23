@@ -20,6 +20,7 @@ import com.topface.topface.requests.AppOptionsRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GooglePlayPurchaseRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.utils.CacheProfile;
 
 /**

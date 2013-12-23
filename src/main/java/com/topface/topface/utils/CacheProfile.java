@@ -25,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -322,8 +321,7 @@ public class CacheProfile {
     }
 
     private static void setProfileUpdateTime() {
-        Calendar calendar = Calendar.getInstance();
-        profileUpdateTime = calendar.getTimeInMillis();
+        profileUpdateTime = System.currentTimeMillis();
     }
 
     public static boolean isLoaded() {

@@ -222,7 +222,6 @@
     <string name="vip_not_activated">Váš VIP status nie je aktivovaný</string>
     <string name="vip_privileges">VIP privilégiá</string>
     <string name="vip_text_visitors">Zistite, kto sa o Vás zaujíma - prezrite si svojich návštevníkov!</string>
-    <string name="vip_text_adm_unlock">Posielajte obdivy zadarmo - Vyjadrujte maximálne svoje pocity</string>
     <string name="vip_rest">Ste prihlásení na odber VIP</string>
     <string name="vip_invis">Neviditeľný režim</string>
     <string name="vip_messages_bg">Pozadie správ</string>
@@ -431,9 +430,9 @@
         <item quantity="one">Získať VIP na %d deň</item>
     </plurals>
     <plurals name="invite_friends_plurals">
-        <item quantity="few">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d dni</item>
-        <item quantity="other">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d dní</item>
-        <item quantity="one">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d deň</item>
+        <item quantity="few">Pozvite %1$d priateľov, aby ste získali VIP status na %2$d dni</item>
+        <item quantity="other">Pozvite %1$d priateľov, aby ste získali VIP status na %2$d dní</item>
+        <item quantity="one">Pozvite %1$d priateľov, aby ste získali VIP status na %2$d deň</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="few">Získaj VIP zadarmo za %d pozvania</item>

@@ -255,7 +255,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
                 break;
             case R.id.EditorClearAirMessages:
-                CacheProfile.getOptions().premium_messages.clearPopupShowTime();
+                CacheProfile.getOptions().premiumMessages.clearPopupShowTime();
                 break;
             default:
                 showError();

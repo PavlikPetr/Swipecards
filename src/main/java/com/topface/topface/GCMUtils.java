@@ -27,7 +27,6 @@ import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -316,9 +315,6 @@ public class GCMUtils {
                 break;
 
             case GCM_TYPE_NOTIFICATION:
-                i = new Intent(context, NavigationActivity.class);
-                break;
-
             default:
                 i = new Intent(context, NavigationActivity.class);
 

@@ -147,9 +147,18 @@ public class Options extends AbstractData {
     public boolean block_chat_not_mutual;
     public Closing closing = new Closing();
     public BlockSympathy blockSympathy = new BlockSympathy();
-    public PremiumAirEntity premium_messages;
-    public PremiumAirEntity premium_visitors;
-    public PremiumAirEntity premium_admirations;
+    /**
+     * Настройки для промо-попапа 3-1
+     */
+    public PromoPopupEntity premiumMessages;
+    /**
+     * Настройки для промо-попапа 7-1
+     */
+    public PromoPopupEntity premiumVisitors;
+    /**
+     * Настройки для промо-попапа 8-1
+     */
+    public PromoPopupEntity premiumAdmirations;
     public GetJar getJar;
     public String gagTypeBanner = BannerBlock.BANNER_ADMOB;
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
@@ -202,27 +211,27 @@ public class Options extends AbstractData {
             }
 
             if (response.has("premiumMessages")) {
-                premium_messages = new PremiumAirEntity(
-                        response.optJSONObject("premiumMessages"), PremiumAirEntity.AIR_MESSAGES
+                premiumMessages = new PromoPopupEntity(
+                        response.optJSONObject("premiumMessages"), PromoPopupEntity.AIR_MESSAGES
                 );
             } else {
-                premium_messages = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_MESSAGES);
+                premiumMessages = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_MESSAGES);
             }
 
-            if (response.has("visitors_popup")) {
-                premium_visitors = new PremiumAirEntity(
-                        response.optJSONObject("visitors_popup"), PremiumAirEntity.AIR_VISITORS
+            if (response.has("visitorsPopup")) {
+                premiumVisitors = new PromoPopupEntity(
+                        response.optJSONObject("visitorsPopup"), PromoPopupEntity.AIR_VISITORS
                 );
             } else {
-                premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_VISITORS);
+                premiumVisitors = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_VISITORS);
             }
 
-            if (response.has("admiration_popup")) {
-                premium_admirations = new PremiumAirEntity(
-                        response.optJSONObject("admiration_popup"), PremiumAirEntity.AIR_ADMIRATIONS
+            if (response.has("admirationPopup")) {
+                premiumAdmirations = new PromoPopupEntity(
+                        response.optJSONObject("admirationPopup"), PromoPopupEntity.AIR_ADMIRATIONS
                 );
             } else {
-                premium_admirations = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_ADMIRATIONS);
+                premiumAdmirations = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_ADMIRATIONS);
             }
 
             if (response.has("links")) {
@@ -315,14 +324,14 @@ public class Options extends AbstractData {
         }
     }
 
-    public PremiumAirEntity getPremiumEntityByType(int type) {
+    public PromoPopupEntity getPremiumEntityByType(int type) {
         switch (type) {
-            case PremiumAirEntity.AIR_ADMIRATIONS:
-                return premium_admirations;
-            case PremiumAirEntity.AIR_VISITORS:
-                return premium_visitors;
-            case PremiumAirEntity.AIR_MESSAGES:
-                return premium_messages;
+            case PromoPopupEntity.AIR_ADMIRATIONS:
+                return premiumAdmirations;
+            case PromoPopupEntity.AIR_VISITORS:
+                return premiumVisitors;
+            case PromoPopupEntity.AIR_MESSAGES:
+                return premiumMessages;
         }
         return null;
     }
@@ -374,7 +383,7 @@ public class Options extends AbstractData {
         return paymentwall;
     }
 
-    public static class PremiumAirEntity {
+    public static class PromoPopupEntity {
         public static final int DEFAULT_COUNT = 10;
         private static final int DEFAULT_TIMEOUT = 1000;
 
@@ -397,7 +406,7 @@ public class Options extends AbstractData {
         public static final int AIR_VISITORS = 2;
         public static final int AIR_ADMIRATIONS = 3;
 
-        public PremiumAirEntity(JSONObject premiumMessages, int airType) {
+        public PromoPopupEntity(JSONObject premiumMessages, int airType) {
             this.airType = airType;
             if (premiumMessages != null) {
                 mEnabled = premiumMessages.optBoolean("enabled");
@@ -406,7 +415,7 @@ public class Options extends AbstractData {
             }
         }
 
-        public PremiumAirEntity(boolean enabled, int count, int timeout, int type) {
+        public PromoPopupEntity(boolean enabled, int count, int timeout, int type) {
             mEnabled = enabled;
             mCount = count;
             mTimeout = timeout;
