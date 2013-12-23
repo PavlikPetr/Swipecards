@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.BaseDialogFragment;
@@ -60,7 +59,7 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(
                         mProfileReceiver,
-                        new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION)
+                        new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION)
                 );
         //Подписываемся на событие покупки VIP
         LocalBroadcastManager.getInstance(getActivity())
