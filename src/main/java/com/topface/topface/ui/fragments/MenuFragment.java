@@ -265,7 +265,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
         if (mProfileButton != null) {
             mProfileButton.setOnClickListener(this);
-            notifyDataSetChanged();
+            notifyDataSetChanged(true);
         }
     }
 
@@ -347,11 +347,16 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         notifyDataSetChanged();
     }
 
+
+    private void notifyDataSetChanged() {
+        notifyDataSetChanged(false);
+    }
+
     /**
      * To change selected state of menu items from Header & Adapter
      */
-    private void notifyDataSetChanged() {
-        if (mAdapter != null) {
+    private void notifyDataSetChanged(boolean updateOnlyHeader) {
+        if (mAdapter != null && !updateOnlyHeader) {
             mAdapter.notifyDataSetChanged();
         }
         if (mProfileButton != null) {

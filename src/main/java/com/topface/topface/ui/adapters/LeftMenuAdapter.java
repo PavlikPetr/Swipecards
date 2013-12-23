@@ -148,6 +148,9 @@ public class LeftMenuAdapter extends BaseAdapter {
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
+            // unregister previous non-visible item from updates
+            unregisterCounterBadge(holder.item);
+            holder.item = item;
         }
         // initiate views' state in holder
         switch (item.getMenuType()) {
@@ -158,11 +161,17 @@ public class LeftMenuAdapter extends BaseAdapter {
                 break;
             case TYPE_MENU_BUTTON_WITH_BADGE:
                 holder.btnMenu.setText(item.getMenuText());
-                registerCounterBadge(item, holder.counterBadge);
+                if (item.isHidden()) {
+                    unregisterCounterBadge(item);
+                    holder.counterBadge.setVisibility(View.GONE);
+                } else {
+                    registerCounterBadge(item, holder.counterBadge);
+                }
                 break;
             default:
                 break;
         }
+        holder.item = item;
         // init button state
         holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(item.getMenuIconResId(), 0, 0, 0);
         holder.btnMenu.setTag(item.getMenuId());
@@ -175,14 +184,10 @@ public class LeftMenuAdapter extends BaseAdapter {
             setAlphaToTextAndDrawable(holder.btnMenu, 102);
             holder.btnMenu.setSelected(mMenuFragment.getCurrentFragmentId() == item.getMenuId());
         }
-
         if (item.isHidden()) {
             holder.btnMenu.setVisibility(View.GONE);
-            holder.counterBadge.setVisibility(View.GONE);
-            unregisterCounterBadge(item);
         } else {
             holder.btnMenu.setVisibility(View.VISIBLE);
-            registerCounterBadge(item, holder.counterBadge);
         }
         return convertView;
     }
@@ -216,13 +221,8 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     public void refreshCounterBadges() {
-        for (ILeftMenuItem item : mItems) {
-            if (item.isHidden()) continue;
-            if (item.getMenuType() == TYPE_MENU_BUTTON_WITH_BADGE) {
-                BaseFragment.FragmentId menuId = item.getMenuId();
-                TextView mCounterBadgeView = mCountersBadgesMap.get(menuId);
-                updateCounterBadge(menuId, mCounterBadgeView);
-            }
+        for (BaseFragment.FragmentId id : mCountersBadgesMap.keySet()) {
+            updateCounterBadge(id, mCountersBadgesMap.get(id));
         }
     }
 
@@ -240,6 +240,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     class ViewHolder {
         Button btnMenu;
         TextView counterBadge;
+        ILeftMenuItem item;
     }
 
     public interface ILeftMenuItem {
@@ -254,5 +255,10 @@ public class LeftMenuAdapter extends BaseAdapter {
         boolean isHidden();
 
         void setHidden(boolean hidden);
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
     }
 }
