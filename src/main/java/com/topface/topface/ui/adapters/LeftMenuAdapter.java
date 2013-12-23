@@ -256,9 +256,4 @@ public class LeftMenuAdapter extends BaseAdapter {
 
         void setHidden(boolean hidden);
     }
-
-    @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
-    }
 }
