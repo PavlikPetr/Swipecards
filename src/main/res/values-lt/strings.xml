@@ -585,5 +585,32 @@
     <string name="general_say_meow">Sakyk Miau</string>
     <string name="general_meow_offer">Sužaiskite 3 raundus su draugais ir gaukite VIP statusą 2 dienoms</string>
     <string name="general_bonus">Bonus</string>
+    <string name="general_get">Gauti</string>
     <string name="not_enough_coins">Nepakanka monetų pirkiniui</string>
+    <string name="pincode_app_blocking">Programos blokavimas</string>
+    <string name="pincode_blocking">Blokavimas</string>
+    <string name="pincode_reset">Atstatyti pradinį PIN-kodą</string>
+    <string name="pincode_set">Nustatyti PIN-kodą</string>
+    <string name="pincode_change">Pakeisti PIN-kodą</string>
+    <string name="pincode_delete">Pašalinti PIN-kodą</string>
+    <string name="pincode_input_label">PIN-kodo įvedimas</string>
+    <string name="pincode_check_label">PIN-kodo patikrinimas</string>
+    <string name="pincode_change_label">PIN-kodo keitimas</string>
+    <string name="pincode_delete_label">PIN-kodo pašalinimas.</string>
+    <string name="pincode_turning_on">Blokavimo įjungimas</string>
+    <string name="pincode_dont_match">PIN-kodai nesutapo. Bandykite dar kartą.</string>
+    <string name="pincode_wrong">Neteisingas PIN-kodas</string>
+    <string name="pincode_input">Įveskite PIN-kodą</string>
+    <string name="pincode_input_previous">Įveskite seną PIN-kodą</string>
+    <string name="pincode_repeat">pakartokite PIN-kodą</string>
+    <string name="pincode_forget">Pamiršote PIN-kodą?</string>
+    <string name="pincode_auth_input">Jums būtina įvesti loginą ir slaptažodį.</string>
+    <string name="pincode_will_be_reset">Sėkmingai autorizavus, visi programos nustatymai bus atstatyti į pradinius.</string>
+    <plurals name="pincode_interval">
+        <item quantity="few">%d min.</item>
+        <item quantity="zero">iškart po uždarymo</item>
+        <item quantity="other">%d min.</item>
+        <item quantity="one">%d min.</item>
+    </plurals>
+    <string name="ok_label">Bendraklasiai</string>
 </resources>

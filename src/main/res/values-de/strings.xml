@@ -205,6 +205,12 @@
     <string name="buying_store_connect">Verbindung mit iTunes Store</string>
     <string name="buying_store_purchase">Verarbeitung der Kauf in iTunes Store</string>
     <string name="buying_tf_ack_sending">Sende die Informationen über den Kauf in Topface</string>
+    <string name="rate_popup_title">Schätzen Sie bitte unsere App ein</string>
+    <string name="rate_popup_set_rate">Note geben</string>
+    <string name="rate_popup_later">Später fragen</string>
+    <string name="rate_popup_cancel">Nein, danke</string>
+    <string name="rate_popup_error">Sie müssen angeben, wie viele Sterne Sie unserer App geben</string>
+    <string name="feedback_popup_title">Sie gaben eine niedrige Note. Erzählen Sie bitte, was Ihnen in unserer App nicht gefällt. Helfen Sie uns besser werden. Danke!</string>
     <string name="settings_melody">Sound-Benachrichtigungen</string>
     <string name="edit_refresh_status">Den Status aktualisieren</string>
     <string name="ban_title">Gratulation! Sie sind gebannt</string>
