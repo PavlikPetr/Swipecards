@@ -572,6 +572,7 @@
     <string name="not_enough_coins">Δεν υπάρχουν αρκετά κέρματα για να αγοράξετε</string>
     <string name="pincode_app_blocking">Κλείδωμα εφαρμογής</string>
     <string name="pincode_blocking">Κλείδωμα</string>
+    <string name="pincode_reset">Επαναφορά του κωδικού PIN</string>
     <string name="pincode_set">Ρυθμίστε έναν κωδικό PIN</string>
     <string name="pincode_change">Αλλάξτε τον κωδικό PIN</string>
     <string name="pincode_delete">Aφαιρέστε τον κωδικό PIN</string>
@@ -579,6 +580,7 @@
     <string name="pincode_check_label">Έλεγχος κωδικού PIN</string>
     <string name="pincode_change_label">Αλλαγή του κωδικού PIN</string>
     <string name="pincode_delete_label">Διαγραφή κωδικού PIN</string>
+    <string name="pincode_turning_on">Μπλοκάρισμα</string>
     <string name="pincode_dont_match">Δεν ταιριάζουν τα PIN.  Παρακαλώ δοκιμάστε ξανά.</string>
     <string name="pincode_wrong">Λάθος κωδικό PIN</string>
     <string name="pincode_input">Καταχωρίστε τον κωδικό PIN</string>

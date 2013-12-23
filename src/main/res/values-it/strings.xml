@@ -205,6 +205,12 @@
     <string name="buying_store_connect">Connessione al iTunes Store</string>
     <string name="buying_store_purchase">Acquisto nell’iTunes Store</string>
     <string name="buying_tf_ack_sending">Invio info sull’acquisto su Topface</string>
+    <string name="rate_popup_title">Per favore, valuta la nostra applicazione</string>
+    <string name="rate_popup_set_rate">Dai un voto</string>
+    <string name="rate_popup_later">Chiedimelo più tardi</string>
+    <string name="rate_popup_cancel">No, grazie</string>
+    <string name="rate_popup_error">Devi indicare quante stelle dai alla nostra applicazione</string>
+    <string name="feedback_popup_title">Hai dato un voto basso. Dicci cosa non ti piace di questa applicazione. Aiutaci a migliorare. Grazie!</string>
     <string name="settings_melody">Suoneria di avviso</string>
     <string name="edit_refresh_status">Aggiornare lo stato</string>
     <string name="ban_title">Congratulazioni! Hai ricevuto ban</string>
