@@ -34,7 +34,7 @@ public class CachableSearchList<T extends FeedUser> extends UsersList<T> {
      * Сохранить в кэш текущего пользователя
      */
     public void saveCurrentInCache() {
-        removeAllUsersExceptCurrent();
+        removeAllUsers();
         log("Save in Cache current user");
         mCache.setCache(this);
     }
