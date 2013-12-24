@@ -103,6 +103,10 @@ public class RetryViewCreator {
         }
     }
 
+    public boolean isVisible() {
+        return mRetryView != null && mRetryView.getVisibility() == View.VISIBLE;
+    }
+
     private static final class InnerButton {
 
         public void setText(String btnText) {

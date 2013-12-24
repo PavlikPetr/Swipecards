@@ -139,12 +139,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
 
-    private OnClickListener mSettingsListener = new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            startDatingFilterActivity();
-        }
-    };
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -193,7 +187,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         initViews(root);
         initActionBar();
-        initEmptySearchDialog(root, mSettingsListener);
+        initEmptySearchDialog(root);
         initImageSwitcher(root);
         return root;
     }
@@ -218,6 +212,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onPause() {
         super.onPause();
+        if (mRetryView.isVisible()) {
+            EasyTracker.getTracker().sendEvent("EmptySearch", "DismissScreen", "", 0L);
+        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mCountersReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileReceiver);
@@ -342,15 +339,29 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         return Static.EMPTY;
     }
 
-    private void initEmptySearchDialog(View view, OnClickListener settingsListener) {
-        String text = getString(R.string.general_search_null_response_error);
-
-        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), text, new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateData(false);
-            }
-        }, getString(R.string.change_filters), settingsListener, LinearLayout.VERTICAL);
+    private void initEmptySearchDialog(View view) {
+        mRetryView = RetryViewCreator.createDefaultRetryView(
+                getActivity(),
+                /* Первая кнопка - "Попробовать еще раз" */
+                getString(R.string.general_search_null_response_error),
+                new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EasyTracker.getTracker().sendEvent("EmptySearch", "ClickTryAgain", "", 0L);
+                        updateData(false);
+                    }
+                },
+                /* Вторая кнопка - "Изменить фильтр" */
+                getString(R.string.change_filters),
+                new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EasyTracker.getTracker().sendEvent("EmptySearch", "ClickChangeFilter", "", 0L);
+                        startDatingFilterActivity();
+                    }
+                },
+                LinearLayout.VERTICAL
+        );
 
         hideEmptySearchDialog();
         ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(mRetryView.getView());
@@ -1108,6 +1119,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void showEmptySearchDialog() {
         Debug.log("Search:: showEmptySearchDialog");
+        EasyTracker.getTracker().sendEvent("EmptySearch", "Show", "", 0L);
         mProgressBar.setVisibility(View.GONE);
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);
