@@ -127,11 +127,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 }
                 selectMenu(fragmentId);
             } else if (action.equals(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION)) {
-                if (!CacheProfile.premium) {
-                    if (!mClosingsController.show()) {
-                        if (mFullscreenController != null)
-                            mFullscreenController.requestFullscreen();
-                    }
+                if (!mClosingsController.show()) {
+                    if (mFullscreenController != null)
+                        mFullscreenController.requestFullscreen();
                 }
             } else if (action.equals(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED)) {
                 mClosingsController.onClosingsProcessed(FeedRequest.FeedService.LIKES);
