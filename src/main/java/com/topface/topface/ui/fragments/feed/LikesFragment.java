@@ -121,7 +121,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             }
         } else {
             if (CacheProfile.unread_likes > 0) {
-                initEmptyScreenOnLikesNeedVip(viewFlipper);
+                if (errorCode == ErrorCodes.PREMIUM_ACCESS_ONLY) {
+                    initEmptyScreenOnLikesNeedVip(viewFlipper);
+                } else {
+                    initEmptyScreenWithoutLikes(viewFlipper);
+                }
             } else {
                 initEmptyScreenWithoutLikes(viewFlipper);
             }

@@ -127,11 +127,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 }
                 selectMenu(fragmentId);
             } else if (action.equals(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION)) {
-                if (!CacheProfile.premium) {
-                    if (!mClosingsController.show()) {
-                        if (mFullscreenController != null)
-                            mFullscreenController.requestFullscreen();
-                    }
+                if (!mClosingsController.show()) {
+                    if (mFullscreenController != null)
+                        mFullscreenController.requestFullscreen();
                 }
             } else if (action.equals(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED)) {
                 mClosingsController.onClosingsProcessed(FeedRequest.FeedService.LIKES);
@@ -314,6 +312,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         filter.addAction(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
         initProfileMenuItem(mHeaderView);
+        if (mBuyWidgetController != null) {
+            mBuyWidgetController.updateBalance();
+        }
         // We need to clean state if there was a logout in other Activity
         mClosingsController.onLogoutWasInitiated();
         if (CacheProfile.premium) {
@@ -517,9 +518,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         // after we will receive data from server
         // for this we have another call in BroadcastReceiver in MenuFragment.
         // This call is for onResume when we already have profile
-        if (!CacheProfile.premium) {
-            mClosingsController.show();
-        }
+        mClosingsController.show();
     }
 
     public boolean isLockedByClosings() {
