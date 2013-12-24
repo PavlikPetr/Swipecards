@@ -273,6 +273,7 @@ public class ClosingsController implements View.OnClickListener {
 
     private void selectMenuItem(FragmentId id) {
         if (id != null) {
+            unlockLeftMenu();
             MenuFragment.selectFragment(id);
         }
         for (View item : menuItemsButtons) {

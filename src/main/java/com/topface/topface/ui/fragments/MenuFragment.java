@@ -517,9 +517,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         // after we will receive data from server
         // for this we have another call in BroadcastReceiver in MenuFragment.
         // This call is for onResume when we already have profile
-        if (!CacheProfile.premium) {
-            mClosingsController.show();
-        }
+        mClosingsController.show();
     }
 
     public boolean isLockedByClosings() {
