@@ -221,7 +221,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         //При выходе из фрагмента сохраняем кэш поиска
         if (mUserSearchList != null) {
             if (LocaleConfig.localeChangeInitiated) {
-                mUserSearchList.saveCurrentInCache();
+                mUserSearchList.removeAllUsers();
+                mUserSearchList.saveCache();
             } else {
                 mUserSearchList.saveCache();
             }

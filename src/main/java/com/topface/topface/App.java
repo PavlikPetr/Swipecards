@@ -261,7 +261,7 @@ public class App extends Application {
         getProfileRequest(ProfileRequest.P_ALL).exec();
     }
 
-    public static ApiRequest getProfileRequest(final int part) {
+    private static ApiRequest getProfileRequest(final int part) {
         mLastProfileUpdate = System.currentTimeMillis();
         return new ProfileRequest(part, App.getContext())
                 .callback(new DataApiHandler<Profile>() {
