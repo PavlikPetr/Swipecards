@@ -301,6 +301,7 @@ public class ClosingsController implements View.OnClickListener {
                     MenuFragment.selectFragment(FragmentId.F_MUTUAL_CLOSINGS);
                 }
             }
+            CacheProfile.getOptions().closing.onStopLikesClosings();
             mLikesClosingsActive = false;
         } else if (service == FeedRequest.FeedService.MUTUAL) {
             if (!mLikesClosingsActive) {
@@ -315,6 +316,7 @@ public class ClosingsController implements View.OnClickListener {
                     MenuFragment.selectFragment(FragmentId.F_LIKES_CLOSINGS);
                 }
             }
+            CacheProfile.getOptions().closing.onStopMutualClosings();
             mMutualClosingsActive = false;
         } else {
             throw new IllegalArgumentException("Only LIKES and MUTUAL services can be passed");
@@ -322,10 +324,6 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     private void removeClosings() {
-        removeClosings(true);
-    }
-
-    private void removeClosings(boolean needToSetClosingsPassedTime) {
         if (mClosingsWidget != null) mClosingsWidget.setVisibility(View.GONE);
         if (mAdapter != null) {
             mAdapter.setEnabled(true);
@@ -338,10 +336,6 @@ public class ClosingsController implements View.OnClickListener {
         mClosingsPassed = true;
         mLikesClosingsActive = false;
         mMutualClosingsActive = false;
-        if (needToSetClosingsPassedTime) {
-            CacheProfile.getOptions().closing.onStopLikesClosings();
-            CacheProfile.getOptions().closing.onStopMutualClosings();
-        }
     }
 
     public static void onLogout() {
@@ -390,7 +384,7 @@ public class ClosingsController implements View.OnClickListener {
 
     public void onLogoutWasInitiated() {
         if (mLogoutWasInitiated) {
-            removeClosings(false);
+            removeClosings();
             mClosingsPassed = false;
         }
         mLogoutWasInitiated = false;
