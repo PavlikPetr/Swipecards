@@ -282,20 +282,14 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         return result;
     }
 
-    protected boolean removeAllUsersExceptCurrent() {
-        int searchPosition = getSearchPosition();
-        if (searchPosition < size()) {
-            try {
-                removeRange(searchPosition + 1, size());
-                removeRange(0, searchPosition);
-                setSearchPosition(0);
-            } catch (Exception ex) {
-                Debug.error("Remove users exception", ex);
-            }
-            return true;
-        } else {
+    public boolean removeAllUsers() {
+        try {
+            clear();
+        } catch (Exception ex) {
+            Debug.error("Remove users exception", ex);
             return false;
         }
+        return true;
     }
 
     public static void log(String message) {
