@@ -150,6 +150,12 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                     .commit();
         }
 
+        //Если активити открыто с указанием фрагмента, который нужно открыть
+        Intent intent = getIntent();
+        if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
+            showFragment(intent);
+        }
+
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
