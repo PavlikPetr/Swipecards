@@ -333,6 +333,7 @@ public class ClosingsController implements View.OnClickListener {
             mAdapter.notifyDataSetChanged();
         }
         // switch to DatingFragment after closings are passed
+        unlockLeftMenu();
         MenuFragment.selectFragment(BaseFragment.FragmentId.F_DATING);
         mClosingsPassed = true;
         mLikesClosingsActive = false;
