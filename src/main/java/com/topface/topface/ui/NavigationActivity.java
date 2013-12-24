@@ -233,7 +233,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         actionsAfterRegistration();
         if (CacheProfile.show_ad) {
             mFullscreenController = new FullscreenController(this);
-            mFullscreenController.requestFullscreen();
+            // MenuFragment will try to show closings and after will try fullscreen
+            mMenuFragment.setFullscreenController(mFullscreenController);
         }
     }
 
