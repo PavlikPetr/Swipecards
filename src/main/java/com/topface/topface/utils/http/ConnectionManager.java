@@ -172,6 +172,7 @@ public class ConnectionManager {
             //Переотправляем запрос, если это возможно
             needResend = resendRequest(apiRequest, apiResponse);
         } else if (apiResponse.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY) && CacheProfile.premium) {
+            // Перезапрашиваем профиль и настройки, т.к. локальный флаг преимиума устарел
             App.sendProfileAndOptionsRequests(new ApiHandler() {
                 @Override
                 public void success(IApiResponse response) {
@@ -180,6 +181,8 @@ public class ConnectionManager {
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
+                    // прокидываем ответ на основной запрос, чтобы не поломать логику в месте вызова
+                    apiRequest.sendHandlerMessage(apiResponse);
                 }
             });
         } else if (!apiRequest.isCanceled()) {
