@@ -312,6 +312,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         filter.addAction(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
         initProfileMenuItem(mHeaderView);
+        if (mBuyWidgetController != null) {
+            mBuyWidgetController.updateBalance();
+        }
         // We need to clean state if there was a logout in other Activity
         mClosingsController.onLogoutWasInitiated();
         if (CacheProfile.premium) {
