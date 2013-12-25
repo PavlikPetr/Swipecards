@@ -42,7 +42,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     private BroadcastReceiver mReauthReceiver;
     protected boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
-    private boolean afterOnSaveInstanceState;
 
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -147,12 +146,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        afterOnSaveInstanceState = false;
-    }
-
     private void registerReauthReceiver() {
         //Если при запросе вернулась ошибка что нет токена, кидается соответствующий интент.
         //здесь он ловится, и открывается фрагмент авторизации
@@ -189,9 +182,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     public void startFragment(Fragment fragment) {
-        if (!afterOnSaveInstanceState) {
-            getSupportFragmentManager().beginTransaction().add(getContentViewCompat(), fragment).addToBackStack(null).commit();
-        }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(getContentViewCompat(), fragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss();
     }
 
     public static int getContentViewCompat() {
@@ -212,12 +207,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected void onCloseFragment() {
 
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        afterOnSaveInstanceState = true;
     }
 
     @Override
