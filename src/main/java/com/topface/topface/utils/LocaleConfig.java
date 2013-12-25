@@ -112,12 +112,12 @@ public class LocaleConfig {
                 @Override
                 public void success(IApiResponse response) {
                     App.sendProfileAndOptionsRequests();
-                    NavigationActivity.restartNavigationActivity(BaseFragment.FragmentId.F_PROFILE);
+                    NavigationActivity.restartNavigationActivity(BaseFragment.FragmentId.F_DATING);
                 }
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT);
+                    Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
