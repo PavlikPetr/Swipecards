@@ -176,7 +176,14 @@ public class ConnectionManager {
             App.sendProfileAndOptionsRequests(new ApiHandler() {
                 @Override
                 public void success(IApiResponse response) {
-                    resendRequest(apiRequest, apiResponse);
+                    // мы были локально премиум и получили ошибку PREMIUM_ACCESS_ONLY при перезапросе
+                    // возвращается что мы премиум, следовательно, прокидываем ошибку чтобы не
+                    // перепосылать запрос и не зацикливаться
+                    if (CacheProfile.premium) {
+                        apiRequest.sendHandlerMessage(apiResponse);
+                    } else {
+                        resendRequest(apiRequest, apiResponse);
+                    }
                 }
 
                 @Override
