@@ -4,10 +4,10 @@
     package="com.topface.topface"
     android:installLocation="auto"
 
-    android:versionCode="97"
-    android:versionName="2.8.4">
+    android:versionCode="98"
+    android:versionName="2.9.0">
 
-    <uses-sdk
+<uses-sdk
         android:minSdkVersion="7"
         android:targetSdkVersion="17" />
 
@@ -78,8 +78,8 @@
             android:name=".ui.NavigationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"
-            android:configChanges="locale">
-            <intent-filter>
+            android:configChanges="locale|screenSize|orientation">
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
 

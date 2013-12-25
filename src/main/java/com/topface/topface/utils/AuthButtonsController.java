@@ -33,7 +33,7 @@ public class AuthButtonsController {
 
     public AuthButtonsController(Context context, final OnButtonsSettingsLoadedHandler listener) {
         mContext = context;
-        getAllSocialsForLocale();
+        initAllSocialsForLocale();
 
         loadButtons(new OnButtonsSettingsLoadedHandler() {
             @Override
@@ -56,14 +56,15 @@ public class AuthButtonsController {
         }
     }
 
-    private void getAllSocialsForLocale() {
+    private void initAllSocialsForLocale() {
+        locale = getLocale();
         Collections.addAll(allSocials, AuthToken.SN_FACEBOOK, AuthToken.SN_VKONTAKTE, AuthToken.SN_ODNOKLASSNIKI);
         allScreenSocials = new LinkedList<HashSet<String>>();
-        allScreenSocials.add(new HashSet<String>(Arrays.asList(AuthToken.SN_FACEBOOK)));
-        allScreenSocials.add(new HashSet<String>(Arrays.asList(AuthToken.SN_FACEBOOK, AuthToken.SN_VKONTAKTE)));
-        locale = getLocale();
         if (locale.equals("Ru")) {
             allScreenSocials.add(new HashSet<String>(Arrays.asList(AuthToken.SN_FACEBOOK, AuthToken.SN_VKONTAKTE, AuthToken.SN_ODNOKLASSNIKI)));
+        } else {
+            allScreenSocials.add(new HashSet<String>(Arrays.asList(AuthToken.SN_FACEBOOK)));
+
         }
     }
 
@@ -132,7 +133,7 @@ public class AuthButtonsController {
                     android.provider.Settings.Secure.ANDROID_ID);
 
             if (android_id == null || android_id.length() == 0) {
-                int number = (new Random(System.currentTimeMillis())).nextInt(allScreenSocials.size());
+                int number = (new Random()).nextInt(allScreenSocials.size());
                 settings = allScreenSocials.get(number);
             } else {
                 int value = android_id.hashCode();
