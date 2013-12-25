@@ -14,9 +14,11 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -149,7 +151,7 @@ public class ConnectionManager {
         }
     }
 
-    private boolean processResponse(IApiRequest apiRequest, IApiResponse apiResponse) {
+    private boolean processResponse(final IApiRequest apiRequest, final IApiResponse apiResponse) {
         boolean needResend = false;
         //Некоторые ошибки обрабатываем дополнительно, не возвращая в клиентский код
         if (apiResponse.isCodeEqual(ErrorCodes.BAN)) {
@@ -169,6 +171,32 @@ public class ConnectionManager {
         } else if (isNeedResend(apiResponse)) {
             //Переотправляем запрос, если это возможно
             needResend = resendRequest(apiRequest, apiResponse);
+        } else if (apiResponse.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY) && CacheProfile.premium) {
+            // Перезапрашиваем профиль и настройки, т.к. локальный флаг преимиума устарел
+            apiRequest.getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    App.sendProfileAndOptionsRequests(new ApiHandler() {
+                        @Override
+                        public void success(IApiResponse response) {
+                            // мы были локально премиум и получили ошибку PREMIUM_ACCESS_ONLY при перезапросе
+                            // возвращается что мы премиум, следовательно, прокидываем ошибку чтобы не
+                            // перепосылать запрос и не зацикливаться
+                            if (CacheProfile.premium) {
+                                apiRequest.sendHandlerMessage(apiResponse);
+                            } else {
+                                resendRequest(apiRequest, apiResponse);
+                            }
+                        }
+
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+                            // прокидываем ответ на основной запрос, чтобы не поломать логику в месте вызова
+                            apiRequest.sendHandlerMessage(apiResponse);
+                        }
+                    });
+                }
+            });
         } else if (!apiRequest.isCanceled()) {
             //Если запрос не отменен и мы обработали все ошибки, то отправляем callback
             apiRequest.sendHandlerMessage(apiResponse);
@@ -320,7 +348,6 @@ public class ConnectionManager {
 
     private IApiResponse executeRequest(IApiRequest apiRequest) {
         IApiResponse response = null;
-        String rawResponse = null;
 
         try {
             //Отправляем запрос и сразу читаем ответ
@@ -360,7 +387,7 @@ public class ConnectionManager {
 
         //Если наш пришли данные от сервера, то логируем их, если нет, то логируем объект запроса
         Debug.logJson(TAG, "RESPONSE <<< Request ID #" + apiRequest.getId(),
-                response != null ? response.toString() : rawResponse
+                response != null ? response.toString() : null
         );
 
         return response;

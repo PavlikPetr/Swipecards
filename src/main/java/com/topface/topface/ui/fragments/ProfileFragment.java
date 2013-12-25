@@ -888,8 +888,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
                     @Override
                     protected void success(SendGiftAnswer data, IApiResponse response) {
-                        CacheProfile.likes = data.likes;
-                        CacheProfile.money = data.money;
                         if (mGiftFragment != null) {
                             mGiftFragment.addGift(sendedGift);
                         } else {
@@ -905,7 +903,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
-                        Utils.showErrorMessage(getContext());
                         if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                             FragmentActivity activity = getActivity();
                             if (activity != null) {
@@ -914,6 +911,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
                                 startActivity(intent);
                             }
+                        } else {
+                            Utils.showErrorMessage(getContext());
                         }
                     }
 

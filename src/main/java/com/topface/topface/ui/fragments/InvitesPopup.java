@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
@@ -146,7 +147,7 @@ public class InvitesPopup extends BaseFragment {
                         Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_LONG).show();
                         CacheProfile.premium = true;
                         CacheProfile.canInvite = false;
-                        CacheProfile.sendUpdateProfileBroadcast();
+                        App.sendProfileAndOptionsRequests();
                         ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
                     }
                 } else {
