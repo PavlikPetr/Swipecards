@@ -173,23 +173,28 @@ public class ConnectionManager {
             needResend = resendRequest(apiRequest, apiResponse);
         } else if (apiResponse.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY) && CacheProfile.premium) {
             // Перезапрашиваем профиль и настройки, т.к. локальный флаг преимиума устарел
-            App.sendProfileAndOptionsRequests(new ApiHandler() {
+            apiRequest.getHandler().post(new Runnable() {
                 @Override
-                public void success(IApiResponse response) {
-                    // мы были локально премиум и получили ошибку PREMIUM_ACCESS_ONLY при перезапросе
-                    // возвращается что мы премиум, следовательно, прокидываем ошибку чтобы не
-                    // перепосылать запрос и не зацикливаться
-                    if (CacheProfile.premium) {
-                        apiRequest.sendHandlerMessage(apiResponse);
-                    } else {
-                        resendRequest(apiRequest, apiResponse);
-                    }
-                }
+                public void run() {
+                    App.sendProfileAndOptionsRequests(new ApiHandler() {
+                        @Override
+                        public void success(IApiResponse response) {
+                            // мы были локально премиум и получили ошибку PREMIUM_ACCESS_ONLY при перезапросе
+                            // возвращается что мы премиум, следовательно, прокидываем ошибку чтобы не
+                            // перепосылать запрос и не зацикливаться
+                            if (CacheProfile.premium) {
+                                apiRequest.sendHandlerMessage(apiResponse);
+                            } else {
+                                resendRequest(apiRequest, apiResponse);
+                            }
+                        }
 
-                @Override
-                public void fail(int codeError, IApiResponse response) {
-                    // прокидываем ответ на основной запрос, чтобы не поломать логику в месте вызова
-                    apiRequest.sendHandlerMessage(apiResponse);
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+                            // прокидываем ответ на основной запрос, чтобы не поломать логику в месте вызова
+                            apiRequest.sendHandlerMessage(apiResponse);
+                        }
+                    });
                 }
             });
         } else if (!apiRequest.isCanceled()) {
