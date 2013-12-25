@@ -117,7 +117,7 @@ public class LocaleConfig {
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT);
+                    Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
