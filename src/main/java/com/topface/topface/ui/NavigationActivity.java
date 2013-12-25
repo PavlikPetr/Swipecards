@@ -151,10 +151,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         }
 
         //Если активити открыто с указанием фрагмента, который нужно открыть
-        Intent intent = getIntent();
+        /*Intent intent = getIntent();
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             showFragment(intent);
-        }
+        }*/
 
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
@@ -240,6 +240,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         if (CacheProfile.show_ad) {
             mFullscreenController = new FullscreenController(this);
             // MenuFragment will try to show closings and after will try fullscreen
+            //noinspection deprecation
             mMenuFragment.setFullscreenController(mFullscreenController);
         }
     }
@@ -386,6 +387,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     public void setMenuLockMode(int lockMode) {
         if (mDrawerLayout != null) {
+            //noinspection deprecation
             if (lockMode == DrawerLayout.LOCK_MODE_UNLOCKED &&
                     mMenuFragment.getClosingsController().isLeftMenuLocked()) {
                 return;

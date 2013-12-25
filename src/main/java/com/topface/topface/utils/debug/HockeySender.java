@@ -1,4 +1,6 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.debug;
+
+import com.topface.topface.utils.CacheProfile;
 
 import org.acra.ACRA;
 import org.acra.ReportField;

@@ -39,10 +39,14 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
-import com.topface.topface.utils.HockeySender;
+import com.topface.topface.utils.debug.DebugEmailSender;
+import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.acra.ACRA;
+import org.acra.ACRAConfiguration;
+import org.acra.ACRAConfigurationException;
+import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
 @ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
@@ -158,6 +162,23 @@ public class App extends Application {
         if (!DEBUG) {
             ACRA.init(this);
             ACRA.getErrorReporter().setReportSender(new HockeySender());
+        } else {
+            //Если дебажим приложение, то показываем диалог и отправляем на email
+            try {
+                //Что бы такая схема работала, сперва выставляем конфиг
+                ACRAConfiguration acraConfig = ACRA.getConfig();
+                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
+                acraConfig.setResDialogText(R.string.crash_dialog_text);
+                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
+                acraConfig.setMode(ReportingInteractionMode.DIALOG);
+                ACRA.setConfig(acraConfig);
+                //Потом инитим
+                ACRA.init(this);
+                //И потом выставляем ReportSender
+                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
+            } catch (ACRAConfigurationException e) {
+                Debug.error("Acra init error", e);
+            }
         }
     }
 
