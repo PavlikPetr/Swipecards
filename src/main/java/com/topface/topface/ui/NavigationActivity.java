@@ -61,6 +61,8 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
+    public static final String BONUS_COUNTER_TAG = "preferences_for_bonus_counter";
+    public static final String BONUS_COUNTER_LAST_SHOW_TIME = "last_show_time";
 
     private FragmentManager mFragmentManager;
     private MenuFragment mMenuFragment;
@@ -127,6 +129,17 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     protected void onCreateAsync() {
         Novice.getInstance(getPreferences()).initNoviceFlags();
+        getBonusCounterConfig();
+    }
+
+    private void getBonusCounterConfig() {
+        SharedPreferences preferences = getSharedPreferences(BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
+        long lastTime = preferences.getLong(BONUS_COUNTER_LAST_SHOW_TIME, 0);
+        if (lastTime < CacheProfile.getOptions().bonus.timestamp) {
+            CacheProfile.NEED_SHOW_BONUS_COUNTER = true;
+        } else {
+            CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
+        }
     }
 
     private void initDrawerLayout() {
