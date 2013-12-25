@@ -224,7 +224,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     @Override
     public void onLoadProfile() {
         super.onLoadProfile();
-        mMenuFragment.onLoadProfile();
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         PopupManager manager = new PopupManager(this);
         manager.showOldVersionPopup(CacheProfile.getOptions().maxVersion);
@@ -255,7 +254,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mMenuFragment.onLoadProfile();
         //restart -> open NavigationActivity
         if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale());
