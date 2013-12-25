@@ -190,9 +190,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         // Locker
         mLoadingBackgroundText = (TextView) root.findViewById(R.id.tvBackgroundText);
-        Drawable drawable = mLoadingBackgroundText.getCompoundDrawables()[0];
-        if (drawable instanceof AnimationDrawable) {
-            mLoadingBackgroundDrawable = (AnimationDrawable) drawable;
+        Drawable[] drawables = mLoadingBackgroundText.getCompoundDrawables();
+        if (drawables != null) {
+            Drawable drawable = mLoadingBackgroundText.getCompoundDrawables()[0];
+            if (drawable instanceof AnimationDrawable) {
+                mLoadingBackgroundDrawable = (AnimationDrawable) drawable;
+            }
         }
 
         // Navigation bar
@@ -931,15 +934,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                Bundle extras = data.getExtras();
-                final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-                final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
-                sendGift(id, price);
-            } else if (requestCode == GeoMapActivity.INTENT_REQUEST_GEO) {
-                Bundle extras = data.getExtras();
-                final Geo geo = extras.getParcelable(GeoMapActivity.INTENT_GEO);
-                sendCoordinates(geo);
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+                    final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+                    final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
+                    sendGift(id, price);
+                } else if (requestCode == GeoMapActivity.INTENT_REQUEST_GEO) {
+                    final Geo geo = extras.getParcelable(GeoMapActivity.INTENT_GEO);
+                    sendCoordinates(geo);
+                }
             }
         }
 
@@ -1015,9 +1019,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
             @Override
             protected void success(SendGiftAnswer data, IApiResponse response) {
-                CacheProfile.likes = data.likes;
-                CacheProfile.money = data.money;
-                Debug.log(getActivity(), "likes:" + data.likes + " money:" + data.money);
                 data.history.target = FeedDialog.OUTPUT_USER_MESSAGE;
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(loaderItem, data.history, mListView.getRefreshableView());
@@ -1247,7 +1248,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onCreateOptionsMenu(menu, inflater);
         mBarAvatar = menu.findItem(R.id.action_profile);
         MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatar).setOnClickListener(this);
-        menu.findItem(R.id.action_profile).setChecked(false);
+        MenuItem item = menu.findItem(R.id.action_profile);
+        if (item != null) {
+            item.setChecked(false);
+        }
         setActionBarAvatar(mUser);
     }
 
