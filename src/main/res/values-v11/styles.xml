@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Стиль для дилогов -->
-    <style name="TopfaceDialog" parent="@android:style/Theme.Holo"/>
-</resources>
