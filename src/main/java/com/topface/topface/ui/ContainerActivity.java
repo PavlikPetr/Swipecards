@@ -39,7 +39,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
 
     private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
-    private static final String TAG_FRAGMENT = "current_fragment";
 
     /**
      * Constant keys for different fragments
@@ -63,11 +62,42 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        if (isNeedAuth() && AuthToken.getInstance().isEmpty()) {
-            finish();
-        }
+        initRequestKey();
+        checkAuth();
         setContentView(R.layout.fragment_frame);
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
+
+        //Сперва пробуем
+        mCurrentFragment = getSupportFragmentManager().findFragmentById(R.id.loFrame);
+        if (mCurrentFragment == null) {
+            mCurrentFragment = getNewFragment(mCurrentFragmentId);
+        }
+
+        if (mCurrentFragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(
+                            R.id.loFrame,
+                            mCurrentFragment
+                    ).commit();
+        }
+    }
+
+    private void checkAuth() {
+        //Если нужно авторизоваться, то возвращаемся на NavigationActivity
+        if (isNeedAuth() && AuthToken.getInstance().isEmpty()) {
+            //Если это последняя активити в таске, то создаем NavigationActivity
+            if (isTaskRoot()) {
+                Intent i = new Intent(this, NavigationActivity.class);
+                startActivity(i);
+            }
+            finish();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRotationMode();
     }
 
     @Override
@@ -97,37 +127,14 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (mCurrentFragment == null) {
-            mCurrentFragment = getFragment(mCurrentFragmentId);
-        }
-        setRotationMode();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        if (mCurrentFragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.loFrame, mCurrentFragment, TAG_FRAGMENT).commit();
-        }
-    }
-
-    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         FragmentManager manager = getSupportFragmentManager();
         if (savedInstanceState != null) {
-            mCurrentFragment = manager.findFragmentByTag(TAG_FRAGMENT);
+            mCurrentFragment = manager.findFragmentById(R.id.loFrame);
         }
     }
 
-    private Fragment getFragment(int id) {
+    private Fragment getNewFragment(int id) {
         Fragment fragment = null;
         Intent intent = getIntent();
 
@@ -199,8 +206,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
             case INTENT_EDITOR_BANNERS:
                 fragment = new EditorBannersFragment();
                 break;
-            default:
-                break;
         }
 
         return fragment;
@@ -233,7 +238,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
 
     @Override
     protected boolean isNeedAuth() {
-        initRequestKey();
         return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT &&
                 mCurrentFragmentId != INTENT_RECOVER_PASSWORD && super.isNeedAuth();
     }

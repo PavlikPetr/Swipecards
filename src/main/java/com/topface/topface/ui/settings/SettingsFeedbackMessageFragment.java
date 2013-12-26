@@ -230,7 +230,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 }
             }).exec();
         } else {
-            Toast.makeText(App.getContext(), R.string.settings_invalid_email, Toast.LENGTH_LONG).show();
+            Toast.makeText(App.getContext(), R.string.settings_invalid_email, Toast.LENGTH_SHORT).show();
             mEditEmail.requestFocus();
         }
     }

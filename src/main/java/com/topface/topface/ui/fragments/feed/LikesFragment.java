@@ -30,7 +30,6 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
-import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
@@ -143,12 +142,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 public void onClick(View v) {
                     Intent intent = ContainerActivity.getVipBuyIntent(null, "Likes");
                     startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                }
-            });
-            currentView.findViewById(R.id.btnRate).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    MenuFragment.selectFragment(FragmentId.F_DATING);
                 }
             });
             initAvatarImagesToEmptyView(currentView);

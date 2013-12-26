@@ -34,7 +34,6 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
-import com.topface.topface.utils.CacheProfile;
 
 import java.util.ArrayList;
 
@@ -52,7 +51,7 @@ public class GiftsFragment extends BaseFragment {
     private Button mBtnInfo;
     private GiftsAdapter mGridAdapter;
     private GridView mGridView;
-    private ProfileFragment.OnGiftReceivedListener listener;
+    private ProfileFragment.OnGiftReceivedListener mGiftReceivedListener;
 
     private Profile mProfile;
     private boolean mIsUpdating = false;
@@ -102,7 +101,7 @@ public class GiftsFragment extends BaseFragment {
                                 FeedGift item = (FeedGift) parent.getItemAtPosition(position);
                                 Intent intent = activity.getIntent();
                                 if (view.getTag() instanceof ViewHolder) {
-                                    if (item.gift.type != Gift.PROFILE && item.gift.type != Gift.SEND_BTN) {
+                                    if (item != null && item.gift.type != Gift.PROFILE && item.gift.type != Gift.SEND_BTN) {
                                         intent.putExtra(GiftsActivity.INTENT_GIFT_ID, item.gift.id);
                                         intent.putExtra(GiftsActivity.INTENT_GIFT_URL, item.gift.link);
                                         intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, item.gift.price);
@@ -133,7 +132,7 @@ public class GiftsFragment extends BaseFragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             if (view.getTag() instanceof ViewHolder) {
                                 FeedGift item = (FeedGift) parent.getItemAtPosition(position);
-                                if (item.gift != null) {
+                                if (item != null && item.gift != null) {
                                     if (item.gift.type == Gift.SEND_BTN) {
                                         sendGift();
                                     }
@@ -175,57 +174,57 @@ public class GiftsFragment extends BaseFragment {
 
     private void sendGift(Intent data) {
         Bundle extras = data.getExtras();
-        final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-        final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
-        final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
+        if (extras != null) {
+            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+            final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
 
-        if (mProfile != null) {
-            final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
-            registerRequest(sendGift);
-            sendGift.giftId = id;
-            sendGift.userId = mProfile.uid;
-            final FeedGift sendedGift = new FeedGift();
-            sendedGift.gift = new Gift(
-                    sendGift.giftId,
-                    Gift.PROFILE_NEW,
-                    url,
-                    0
-            );
-            sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
+            if (mProfile != null) {
+                final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
+                registerRequest(sendGift);
+                sendGift.giftId = id;
+                sendGift.userId = mProfile.uid;
+                final FeedGift sendedGift = new FeedGift();
+                sendedGift.gift = new Gift(
+                        sendGift.giftId,
+                        Gift.PROFILE_NEW,
+                        url,
+                        0
+                );
+                sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
 
-                @Override
-                protected void success(SendGiftAnswer answer, IApiResponse response) {
-                    CacheProfile.likes = answer.likes;
-                    CacheProfile.money = answer.money;
-                    addGift(sendedGift);
-                }
+                    @Override
+                    protected void success(SendGiftAnswer answer, IApiResponse response) {
+                        addGift(sendedGift);
+                    }
 
-                @Override
-                protected SendGiftAnswer parseResponse(ApiResponse response) {
-                    return SendGiftAnswer.parse(response);
-                }
+                    @Override
+                    protected SendGiftAnswer parseResponse(ApiResponse response) {
+                        return SendGiftAnswer.parse(response);
+                    }
 
-                @Override
-                public void fail(int codeError, final IApiResponse response) {
-                    if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                        FragmentActivity activity = getActivity();
-                        if (activity != null) {
-                            Intent intent = ContainerActivity.getBuyingIntent("Dating");
-                            intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                            intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
-                            startActivity(intent);
+                    @Override
+                    public void fail(int codeError, final IApiResponse response) {
+                        if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
+                            FragmentActivity activity = getActivity();
+                            if (activity != null) {
+                                Intent intent = ContainerActivity.getBuyingIntent("Gifts");
+                                intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                                intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                                startActivity(intent);
+                            }
                         }
                     }
-                }
 
-                @Override
-                public void always(IApiResponse response) {
-                    super.always(response);
-                    if (listener != null) {
-                        listener.onReceived();
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        if (mGiftReceivedListener != null) {
+                            mGiftReceivedListener.onReceived();
+                        }
                     }
-                }
-            }).exec();
+                }).exec();
+            }
         }
     }
 
@@ -366,7 +365,7 @@ public class GiftsFragment extends BaseFragment {
     }
 
     public void sendGift(ProfileFragment.OnGiftReceivedListener listener) {
-        this.listener = listener;
+        this.mGiftReceivedListener = listener;
         sendGift();
     }
 

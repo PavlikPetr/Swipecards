@@ -16,6 +16,7 @@ import com.topface.topface.requests.UserSetLocaleRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Locale;
 
@@ -105,24 +106,29 @@ public class LocaleConfig {
         //restart -> open NavigationActivity
         final String locale = LocaleConfig.getServerLocale(activity, selectedLocale);
 
-        UserSetLocaleRequest request = new UserSetLocaleRequest(activity, locale);
-        request.callback(new ApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                App.sendProfileAndOptionsRequests();
-                NavigationActivity.restartNavigationActivity(BaseFragment.FragmentId.F_PROFILE);
-            }
+        if (!AuthToken.getInstance().isEmpty()) {
+            UserSetLocaleRequest request = new UserSetLocaleRequest(activity, locale);
+            request.callback(new ApiHandler() {
+                @Override
+                public void success(IApiResponse response) {
+                    App.sendProfileAndOptionsRequests();
+                    NavigationActivity.restartNavigationActivity(BaseFragment.FragmentId.F_DATING);
+                }
 
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT);
-            }
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                }
 
-            @Override
-            public void always(IApiResponse response) {
-                super.always(response);
-                progress.dismiss();
-            }
-        }).exec();
+                @Override
+                public void always(IApiResponse response) {
+                    super.always(response);
+                    progress.dismiss();
+                }
+            }).exec();
+        } else {
+            progress.dismiss();
+            NavigationActivity.restartNavigationActivity(BaseFragment.FragmentId.F_DATING);
+        }
     }
 }

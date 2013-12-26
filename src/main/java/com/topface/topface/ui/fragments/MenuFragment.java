@@ -526,14 +526,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
     }
 
-    public void onLoadProfile() {
-        // We don't have counters' values from cached data so we have to make actions
-        // after we will receive data from server
-        // for this we have another call in BroadcastReceiver in MenuFragment.
-        // This call is for onResume when we already have profile
-        mClosingsController.show();
-    }
-
     public boolean isLockedByClosings() {
         return mClosingsController.isLeftMenuLocked();
     }

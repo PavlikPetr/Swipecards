@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -163,6 +162,12 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                     .commit();
         }
 
+        //Если активити открыто с указанием фрагмента, который нужно открыть
+        /*Intent intent = getIntent();
+        if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
+            showFragment(intent);
+        }*/
+
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
@@ -238,7 +243,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     @Override
     public void onLoadProfile() {
         super.onLoadProfile();
-        mMenuFragment.onLoadProfile();
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         PopupManager manager = new PopupManager(this);
         manager.showOldVersionPopup(CacheProfile.getOptions().maxVersion);
@@ -247,6 +251,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         if (CacheProfile.show_ad) {
             mFullscreenController = new FullscreenController(this);
             // MenuFragment will try to show closings and after will try fullscreen
+            //noinspection deprecation
             mMenuFragment.setFullscreenController(mFullscreenController);
         }
     }
@@ -269,7 +274,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mMenuFragment.onLoadProfile();
         //restart -> open NavigationActivity
         if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale());
@@ -393,6 +397,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     public void setMenuLockMode(int lockMode) {
         if (mDrawerLayout != null) {
+            //noinspection deprecation
             if (lockMode == DrawerLayout.LOCK_MODE_UNLOCKED &&
                     mMenuFragment.getClosingsController().isLeftMenuLocked()) {
                 return;
@@ -501,10 +506,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             case KeyEvent.KEYCODE_MENU:
                 if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) ==
                         DrawerLayout.LOCK_MODE_UNLOCKED) {
-                    if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
-                        mDrawerLayout.closeDrawer(Gravity.START);
+                    if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
                     } else {
-                        mDrawerLayout.openDrawer(Gravity.START);
+                        mDrawerLayout.openDrawer(GravityCompat.START);
                     }
                 }
                 return true;
