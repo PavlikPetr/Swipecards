@@ -762,7 +762,6 @@
     <string name="not_enough_coins">Недостаточно монет для покупки</string>
 
     <!-- Pin code -->
-    <string name="pincode_app_blocking">Блокировка приложения</string>
     <string name="pincode_blocking_app">Блокировка входа в приложение</string>
     <string name="pincode_blocking">Блокировка</string>
     <string name="pincode_reset">Сбросить PIN-код</string>

@@ -227,7 +227,6 @@
     <string name="vip_not_activated">O seu status-VIP não está ativado</string>
     <string name="vip_privileges">VIP-privilégios</string>
     <string name="vip_text_visitors">Descubra, quem está interessado em você - veja os seus visitantes!</string>
-    <string name="vip_text_adm_unlock">Envie adimirações gratuitamente - manifeste os seus sentimentos ao máximo</string>
     <string name="vip_rest">Você está inscrito para VIP</string>
     <string name="vip_invis">Regime invisível</string>
     <string name="vip_messages_bg">Fundo de mensagens</string>
@@ -544,7 +543,6 @@
     <string name="general_bonus">Bónus</string>
     <string name="general_get">Receber</string>
     <string name="not_enough_coins">Moedas insuficientes para a compra</string>
-    <string name="pincode_app_blocking">Bloqueio de aplicação</string>
     <string name="pincode_blocking">Bloqueio</string>
     <string name="pincode_reset">Mudar o código PIN</string>
     <string name="pincode_set">Instalar o código PIN</string>

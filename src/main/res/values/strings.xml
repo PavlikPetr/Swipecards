@@ -581,7 +581,6 @@
     <string name="general_bonus">Bonus</string>
     <string name="general_get">Get</string>
     <string name="not_enough_coins">Not enough coins to purchase</string>
-    <string name="pincode_app_blocking">Passcode lock</string>
     <string name="pincode_blocking">Blocking</string>
     <string name="pincode_reset">Reset PIN-code</string>
     <string name="pincode_set">Set PIN-code</string>
