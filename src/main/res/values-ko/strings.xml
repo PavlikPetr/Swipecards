@@ -453,7 +453,7 @@
     <string name="general_msg">메세지</string>
     <string name="general_no_notifications">유감스럽게도  통지서 받기 설정을 이용 불가능으로 해놓으셨습니다.</string>
     <plurals name="vip_add_more_friends">
-        <item quantity="other">아직 %d의 친구들을 초대하여 보세요.</item>
+        <item quantity="other">아직  %d의 친구들을 초대하여 보세요.</item>
     </plurals>
     <string name="general_bookmarks_add_short">북마크로</string>
     <string name="black_list_add_short">블랙 리스트로</string>

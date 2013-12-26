@@ -432,12 +432,9 @@
         <item quantity="one">VIP für %d Tag bekommen</item>
     </plurals>
     <plurals name="invite_friends_plurals">
-        <item quantity="zero">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen
-        </item>
-        <item quantity="other">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen
-        </item>
-        <item quantity="one">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen
-        </item>
+        <item quantity="zero">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen</item>
+        <item quantity="other">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen</item>
+        <item quantity="one">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="other">Bekommen Sie VIP kostenlos für %d Einladungen</item>

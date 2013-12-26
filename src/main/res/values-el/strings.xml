@@ -425,10 +425,8 @@
         <item quantity="one">Λάβετε κατάσταση VIP για %d μέρα</item>
     </plurals>
     <plurals name="invite_friends_plurals">
-        <item quantity="other">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρες
-        </item>
-        <item quantity="one">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρα
-        </item>
+        <item quantity="other">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρες</item>
+        <item quantity="one">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρα</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="other">Λάβετε VIP κατάσταση δωρεάν για %d προσκλήσεις</item>
