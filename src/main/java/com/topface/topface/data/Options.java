@@ -164,7 +164,7 @@ public class Options extends AbstractData {
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
     public String helpUrl;
 
-    public boolean bonusEnabled;
+    public Bonus bonus = new Bonus();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -280,7 +280,9 @@ public class Options extends AbstractData {
             gagTypeFullscreen = response.optString("gag_type_fullscreen", BannerBlock.BANNER_NONE);
             JSONObject bonusObject = response.optJSONObject("bonus");
             if (bonusObject != null) {
-                bonusEnabled = bonusObject.optBoolean("enabled");
+                bonus.enabled = bonusObject.optBoolean("enabled");
+                bonus.counter = bonusObject.optInt("counter");
+                bonus.timestamp = bonusObject.optLong("counterTimestamp");
             }
 
             helpUrl = response.optString("helpUrl");
@@ -574,5 +576,12 @@ public class Options extends AbstractData {
 
         public BlockSympathy() {
         }
+    }
+
+    public static class Bonus {
+        public boolean enabled;
+        public int counter;
+        public long timestamp;
+
     }
 }

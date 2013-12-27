@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -28,6 +29,7 @@ import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.BonusFragment;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
@@ -40,6 +42,7 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -208,8 +211,8 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 R.drawable.ic_fans_selector));
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
-        if (CacheProfile.getOptions().bonusEnabled) {
-            menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON,
+        if (CacheProfile.getOptions().bonus.enabled) {
+            menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_bonus_1));
         }
         mAdapter = new LeftMenuAdapter(this, menuItems);
@@ -506,6 +509,16 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         if (getListView().isClickable()) {
             FragmentId id = (FragmentId) v.getTag();
             if (id == F_BONUS) {
+                if (CacheProfile.NEED_SHOW_BONUS_COUNTER) {
+                    new BackgroundThread() {
+                        @Override
+                        public void execute() {
+                            SharedPreferences preferences = getActivity().getSharedPreferences(NavigationActivity.BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
+                            preferences.edit().putLong(NavigationActivity.BONUS_COUNTER_LAST_SHOW_TIME, CacheProfile.getOptions().bonus.timestamp).commit();
+                            CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
+                        }
+                    };
+                }
                 Offerwalls.startOfferwall(getActivity());
             } else {
                 selectMenu(id);
