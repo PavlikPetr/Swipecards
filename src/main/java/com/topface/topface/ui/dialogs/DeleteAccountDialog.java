@@ -23,7 +23,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class DeleteAccountDialog extends DialogFragment implements View.OnClickListener {
+public class DeleteAccountDialog extends BaseDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "com.topface.topface.ui.dialogs.DeleteAccountDialog_TAG";
 

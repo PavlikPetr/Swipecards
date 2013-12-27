@@ -23,12 +23,13 @@
         <item name="actionBarSize">@dimen/default_header_height</item>
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
         <item name="actionButtonStyle">@style/Widget.Topface.ActionBar.Buttons</item>
-        <item name="actionBarItemBackground">@drawable/bg_semitransparent_black</item>
+        <item name="actionBarItemBackground">@drawable/bg_semitransparent_black_selector</item>
 
         <item name="android:actionBarSize">@dimen/default_header_height</item>
         <item name="android:actionBarStyle">@style/Widget.Topface.ActionBar</item>
         <item name="android:actionButtonStyle">@style/Widget.Topface.ActionBar.Buttons</item>
-        <item name="android:actionBarItemBackground">@drawable/bg_semitransparent_black</item>
+        <item name="android:actionBarItemBackground">@drawable/bg_semitransparent_black_selector
+        </item>
 
         <!-- Action Mode (CAB)-->
         <item name="actionModeBackground">@drawable/bg_action_mode</item>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:paddingBottom="50dp"
+    android:background="@color/semitransparent_black">
+
+    <LinearLayout
+        android:id="@+id/loDialog"
+        android:orientation="vertical"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="28dp"
+        android:background="@color/semitransparent_black">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rate_popup_title"
+            android:textSize="16sp"
+            android:gravity="center_horizontal" />
+
+        <Button
+            android:id="@+id/btnRate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/ButtonBlue"
+            android:text="@string/rate_popup_set_rate"
+            android:layout_marginTop="28dp" />
+
+        <Button
+            android:id="@+id/btnAskLater"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/ButtonGray"
+            android:text="@string/rate_popup_later"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnNoThanx"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/ButtonGray"
+            android:text="@string/rate_popup_cancel"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+</LinearLayout>

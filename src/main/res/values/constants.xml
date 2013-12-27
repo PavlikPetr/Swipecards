@@ -40,6 +40,6 @@
 
     <!--цвета-->
     <color name="bg_left_menu">#212121</color>
-    <color name="semitransparent_black">#50000000</color>
+    <color name="semitransparent_black">#80000000</color>
 
 </resources>

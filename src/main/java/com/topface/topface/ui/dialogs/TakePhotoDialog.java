@@ -23,7 +23,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.utils.BitmapUtils;
 
-public class TakePhotoDialog extends DialogFragment implements View.OnClickListener {
+public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "Topface_TakePhotoDialog_Tag";
 
