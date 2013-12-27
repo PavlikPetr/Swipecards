@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
@@ -62,7 +63,7 @@ public class BannersConfig {
         options.pages = new HashMap<String, Options.Page>();
         for (String pageName : Options.PAGES) {
             String str = preferences.getString(pageName, Static.EMPTY);
-            if (!str.isEmpty()) {
+            if (!TextUtils.isEmpty(str)) {
                 options.pages.put(pageName, Options.Page.parseFromString(str));
             }
         }
