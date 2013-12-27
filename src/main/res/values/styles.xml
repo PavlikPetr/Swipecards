@@ -787,4 +787,13 @@
         <item name="android:background">@drawable/btn_sale_selector</item>
         <item name="android:paddingRight">56dp</item>
     </style>
+
+    <style name="Widget.Topface.RatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:numStars">5</item>
+        <item name="android:rating">0</item>
+        <item name="android:stepSize">1</item>
+        <item name="android:progressDrawable">@drawable/topface_ratingbar</item>
+    </style>
 </resources>

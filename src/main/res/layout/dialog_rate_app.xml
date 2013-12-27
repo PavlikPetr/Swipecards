@@ -17,7 +17,8 @@
         android:paddingRight="35dp"
         android:paddingTop="18dp"
         android:paddingBottom="28dp"
-        android:background="@color/semitransparent_black">
+        android:background="@color/semitransparent_black"
+        android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,6 +26,10 @@
             android:text="@string/rate_popup_title"
             android:textSize="16sp"
             android:gravity="center_horizontal" />
+
+        <RatingBar
+            android:layout_width="fill_parent"
+            style="@style/Widget.Topface.RatingBar"/>
 
         <Button
             android:id="@+id/btnRate"
