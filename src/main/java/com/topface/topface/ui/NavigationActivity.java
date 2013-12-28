@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +27,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Photo;
+import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.SettingsRequest;
@@ -51,7 +51,6 @@ import com.topface.topface.utils.controllers.IStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
-import com.topface.topface.utils.social.AuthorizationManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,6 +58,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
+import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_HIGH;
+import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
+import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
@@ -76,12 +78,13 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationBarController mNavBarController;
 
-    BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mNavBarController != null) mNavBarController.refreshNotificators();
         }
     };
+
     private TakePhotoDialog.TakePhotoListener mTakePhotoListener = new TakePhotoDialog.TakePhotoListener() {
         @Override
         public void onPhotoSentSuccess(final Photo photo) {
@@ -164,7 +167,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         }
         initDrawerLayout();
         initFullscreen();
-
         new BackgroundThread() {
             @Override
             public void execute() {
@@ -173,15 +175,24 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         };
     }
 
-    /**
-     * Start actions registration
-     */
     @Override
-    protected void onRegisterStartActions() {
-        super.onRegisterStartActions();
-        registerStartAction(createAfterRegistrationStartAction());
-        registerStartAction(mFullscreenController.createFullscreenStartAction());
-        registerStartAction(mMenuFragment.createClosingsStartAction());
+    protected void onRegisterStartActions(StartActionsController startActionsController) {
+        super.onRegisterStartActions(startActionsController);
+        // Note: actions can be placed in parent for global usage
+
+        // actions after registration
+        startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
+        // closings
+        startActionsController.registerAction(mMenuFragment.createClosingsStartAction(AC_PRIORITY_NORMAL));
+        // promo popups
+        PromoPopupManager promoPopupManager = new PromoPopupManager(this);
+        startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
+        // popups
+        PopupManager popupManager = new PopupManager(this);
+        startActionsController.registerAction(popupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
+        startActionsController.registerAction(popupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
+        // fullscreen
+        startActionsController.registerAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
     }
 
     private void initFullscreen() {
@@ -302,16 +313,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     @Override
-    public void onLoadProfile() {
-        super.onLoadProfile();
-        mMenuFragment.onLoadProfile();
-        AuthorizationManager.extendAccessToken(this);
-        PopupManager manager = new PopupManager(this);
-        manager.showOldVersionPopup(CacheProfile.getOptions().maxVersion);
-        manager.showRatePopup();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         if (mFullscreenController != null) {
@@ -329,7 +330,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mMenuFragment.onLoadProfile();
         //restart -> open NavigationActivity
         if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale());
@@ -364,7 +364,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
      *
      * @return start action object to register
      */
-    private IStartAction createAfterRegistrationStartAction() {
+    private IStartAction createAfterRegistrationStartAction(final int priority) {
         return new IStartAction() {
             private boolean mTakePhotoApplicable = false;
             private boolean mSelectCityApplicable = false;
@@ -396,7 +396,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
             @Override
             public int getPriority() {
-                return StartActionsController.PRIORITY_HIGH;
+                return priority;
             }
         };
     }
@@ -525,10 +525,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             case KeyEvent.KEYCODE_MENU:
                 if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) ==
                         DrawerLayout.LOCK_MODE_UNLOCKED) {
-                    if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
-                        mDrawerLayout.closeDrawer(Gravity.START);
+                    if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
                     } else {
-                        mDrawerLayout.openDrawer(Gravity.START);
+                        mDrawerLayout.openDrawer(GravityCompat.START);
                     }
                 }
                 return true;

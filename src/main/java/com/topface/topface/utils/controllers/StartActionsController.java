@@ -18,9 +18,9 @@ public class StartActionsController {
      */
     private static boolean processedActionForSession = false;
 
-    public static final int PRIORITY_HIGH = 3;
-    public static final int PRIORITY_NORMAL = 2;
-    public static final int PRIORITY_LOW = 1;
+    public static final int AC_PRIORITY_HIGH = 3;
+    public static final int AC_PRIORITY_NORMAL = 2;
+    public static final int AC_PRIORITY_LOW = 1;
     private final Activity mActivity;
 
     private List<IStartAction> mPendingActions;
@@ -30,10 +30,15 @@ public class StartActionsController {
         mActivity = activity;
     }
 
-    public void onLoadProfile() {
-        if (!processedActionForSession) {
-            processedActionForSession = startAction();
-        }
+    public void onProcessAction() {
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                if (!processedActionForSession) {
+                    processedActionForSession = startAction();
+                }
+            }
+        };
     }
 
     /**
@@ -59,18 +64,13 @@ public class StartActionsController {
      */
     private boolean processAction(final IStartAction action) {
         if (action == null) return false;
-        new BackgroundThread() {
+        action.callInBackground();
+        mActivity.runOnUiThread(new Runnable() {
             @Override
-            public void execute() {
-                action.callInBackground();
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        action.callOnUi();
-                    }
-                });
+            public void run() {
+                action.callOnUi();
             }
-        };
+        });
         return true;
     }
 
@@ -90,11 +90,13 @@ public class StartActionsController {
      * @return action from added actions
      */
     private IStartAction getNextAction() {
-        int maxPriority = 0;
+        int maxPriority = -1;
         IStartAction maxAction = null;
         for (IStartAction action : mPendingActions) {
-            if (action.getPriority() > maxPriority) {
+            int priority = action.getPriority();
+            if (priority > maxPriority) {
                 maxAction = action;
+                maxPriority = priority;
             }
         }
         return maxAction;

@@ -25,10 +25,10 @@ import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.controllers.IStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.LinkedList;
 
@@ -39,6 +39,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected boolean needOpenDialog = true;
     private boolean mIndeterminateSupported = false;
+    private boolean mActivityOnRestartInvoked = false;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
@@ -69,7 +70,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         // из-за которого показывается лоадер в ActionBar
         // этот метод можно использовать только после setContent
         setSupportProgressBarIndeterminateVisibility(false);
-        onRegisterStartActions();
+        if (!mActivityOnRestartInvoked) {
+            onRegisterStartActions(mStartActionsController);
+            mActivityOnRestartInvoked = false;
+        }
     }
 
     @Override
@@ -137,10 +141,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     protected void onLoadProfile() {
+        AuthorizationManager.extendAccessToken(this);
         if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
             startAuth();
         } else {
-            mStartActionsController.onLoadProfile();
+            mStartActionsController.onProcessAction();
         }
     }
 
@@ -342,16 +347,13 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    /**
-     * Registration of actions to process on Activity's start
-     *
-     * @param action will be registered and processed after
-     */
-    protected void registerStartAction(IStartAction action) {
-        mStartActionsController.registerAction(action);
+    protected void onRegisterStartActions(StartActionsController startActionsController) {
     }
 
-    protected void onRegisterStartActions() {
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mActivityOnRestartInvoked = true;
     }
 
     @Override

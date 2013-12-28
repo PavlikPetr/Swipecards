@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -14,6 +13,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.views.RatingDialog;
+import com.topface.topface.utils.controllers.IStartAction;
 
 
 public class PopupManager {
@@ -61,70 +61,51 @@ public class PopupManager {
         return false;
     }
 
-    public void showOldVersionPopup(String version) {
-        if (isOldVersion(version) && CAN_SHOW_POPUP) {
-            CAN_SHOW_POPUP = false;
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Utils.goToMarket(mContext);
-                }
-            });
-            builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-            builder.setMessage(R.string.general_version_not_supported);
-            builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    CAN_SHOW_POPUP = true;
-                }
-            });
-            builder.create().show();
-        }
-    }
-
-    public void showRatePopup() {
-        if (!isOldVersion(CacheProfile.getOptions().maxVersion) && App.isOnline() && !mRatingPopupIsShowing && CAN_SHOW_POPUP) {
-            ratingPopup();
-        }
-    }
-
-    private void ratingPopup() {
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                final SharedPreferences preferences = mContext.getSharedPreferences(
-                        Static.PREFERENCES_TAG_SHARED,
-                        Context.MODE_PRIVATE
-                );
-
-                long date_start = preferences.getLong(RATING_POPUP, 1);
-                long date_now = new java.util.Date().getTime();
-
-                if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT) || CacheProfile.getOptions().ratePopupType.equals(OFF_RATE_TYPE)) {
-                    return;
-                } else if (date_start == 1) {
-                    saveRatingPopupStatus(new java.util.Date().getTime());
-                    return;
-                }
-
-                Looper.prepare();
-                showDialog();
-                mRatingPopupIsShowing = true;
-                Looper.loop();
-            }
-        };
-
-    }
-
-    private Dialog showDialog() {
+    private void oldVersionPopup() {
         CAN_SHOW_POPUP = false;
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Utils.goToMarket(mContext);
+            }
+        });
+        builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
+            }
+        });
+        builder.setMessage(R.string.general_version_not_supported);
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                CAN_SHOW_POPUP = true;
+            }
+        });
+        builder.create().show();
+    }
+
+    private boolean canShowRatePopup() {
+        final SharedPreferences preferences = mContext.getSharedPreferences(
+                Static.PREFERENCES_TAG_SHARED,
+                Context.MODE_PRIVATE
+        );
+
+        long date_start = preferences.getLong(RATING_POPUP, 1);
+        long date_now = new java.util.Date().getTime();
+
+        if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT) || CacheProfile.getOptions().ratePopupType.equals(OFF_RATE_TYPE)) {
+            return false;
+        } else if (date_start == 1) {
+            saveRatingPopupStatus(date_now);
+            return false;
+        }
+        return true;
+    }
+
+    private Dialog showRatePopup() {
+        CAN_SHOW_POPUP = false;
         final RatingDialog ratingPopup = new RatingDialog(mContext, CacheProfile.getOptions().ratePopupType);
         ratingPopup.setOnBackClickListener(new View.OnClickListener() {
             @Override
@@ -139,9 +120,7 @@ public class PopupManager {
                 CAN_SHOW_POPUP = true;
             }
         });
-
         ratingPopup.show();
-
         ratingPopup.setOnRateClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,8 +142,8 @@ public class PopupManager {
                 saveRatingPopupStatus(0);
                 ratingPopup.cancel();
             }
-
         });
+        mRatingPopupIsShowing = true;
         return ratingPopup;
     }
 
@@ -181,5 +160,50 @@ public class PopupManager {
         };
     }
 
+    public IStartAction createRatePopupStartAction(final int priority) {
+        return new IStartAction() {
+            @Override
+            public void callInBackground() {
+            }
 
+            @Override
+            public void callOnUi() {
+                showRatePopup();
+            }
+
+            @Override
+            public boolean isApplicable() {
+                return canShowRatePopup() && !isOldVersion(CacheProfile.getOptions().maxVersion) &&
+                        App.isOnline() && !mRatingPopupIsShowing && CAN_SHOW_POPUP;
+            }
+
+            @Override
+            public int getPriority() {
+                return priority;
+            }
+        };
+    }
+
+    public IStartAction createOldVersionPopupStartAction(final int priority) {
+        return new IStartAction() {
+            @Override
+            public void callInBackground() {
+            }
+
+            @Override
+            public void callOnUi() {
+                oldVersionPopup();
+            }
+
+            @Override
+            public boolean isApplicable() {
+                return isOldVersion(CacheProfile.getOptions().maxVersion) && CAN_SHOW_POPUP;
+            }
+
+            @Override
+            public int getPriority() {
+                return priority;
+            }
+        };
+    }
 }

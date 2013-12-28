@@ -9,6 +9,11 @@ import com.topface.topface.promo.fragments.PromoKey31Fragment;
 import com.topface.topface.promo.fragments.PromoKey71Fragment;
 import com.topface.topface.promo.fragments.PromoKey81Fragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.controllers.IStartAction;
+
+import static com.topface.topface.data.Options.PromoPopupEntity.AIR_ADMIRATIONS;
+import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
+import static com.topface.topface.data.Options.PromoPopupEntity.AIR_VISITORS;
 
 public class PromoPopupManager {
     public static final String PROMO_POPUP_TAG = "promo_popup";
@@ -21,18 +26,18 @@ public class PromoPopupManager {
         mActivity = activity;
     }
 
-    public boolean startFragment() {
+    private boolean startFragment() {
         //Если в эту сессию показывали промо-попап или он еще показывается, то ничего не делаем
         if (!needShowPopup) {
             return false;
         }
 
         //Пробуем по очереди показать каждый тип попапа
-        if (showPromoPopup(Options.PromoPopupEntity.AIR_MESSAGES)) {
+        if (showPromoPopup(AIR_MESSAGES)) {
             return true;
-        } else if (showPromoPopup(Options.PromoPopupEntity.AIR_VISITORS)) {
+        } else if (showPromoPopup(AIR_VISITORS)) {
             return true;
-        } else if (showPromoPopup(Options.PromoPopupEntity.AIR_ADMIRATIONS)) {
+        } else if (showPromoPopup(AIR_ADMIRATIONS)) {
             return true;
         } else {
             needShowPopup = false;
@@ -40,7 +45,7 @@ public class PromoPopupManager {
         return false;
     }
 
-    public boolean showPromoPopup(final int type) {
+    private boolean showPromoPopup(final int type) {
 
         FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
         if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type))) {
@@ -81,13 +86,13 @@ public class PromoPopupManager {
         PromoFragment fragment = null;
 
         switch (type) {
-            case Options.PromoPopupEntity.AIR_ADMIRATIONS:
+            case AIR_ADMIRATIONS:
                 fragment = new PromoKey81Fragment();
                 break;
-            case Options.PromoPopupEntity.AIR_VISITORS:
+            case AIR_VISITORS:
                 fragment = new PromoKey71Fragment();
                 break;
-            case Options.PromoPopupEntity.AIR_MESSAGES:
+            case AIR_MESSAGES:
                 fragment = new PromoKey31Fragment();
                 break;
         }
@@ -99,5 +104,30 @@ public class PromoPopupManager {
         return entity != null && entity.isNeedShow();
     }
 
+    public IStartAction createPromoPopupStartAction(final int priority) {
+        return new IStartAction() {
+            @Override
+            public void callInBackground() {
+            }
 
+            @Override
+            public void callOnUi() {
+                startFragment();
+            }
+
+            @Override
+            public boolean isApplicable() {
+                if (!needShowPopup || CacheProfile.premium) return false;
+                Options options = CacheProfile.getOptions();
+                return checkIsNeedShow(options.getPremiumEntityByType(AIR_MESSAGES)) ||
+                        checkIsNeedShow(options.getPremiumEntityByType(AIR_VISITORS)) ||
+                        checkIsNeedShow(options.getPremiumEntityByType(AIR_ADMIRATIONS));
+            }
+
+            @Override
+            public int getPriority() {
+                return priority;
+            }
+        };
+    }
 }

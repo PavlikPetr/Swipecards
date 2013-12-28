@@ -385,7 +385,7 @@ public class ClosingsController implements View.OnClickListener {
         mLogoutWasInitiated = false;
     }
 
-    public IStartAction createStartAction() {
+    public IStartAction createStartAction(final int priority) {
         return new IStartAction() {
             @Override
             public void callInBackground() {
@@ -405,7 +405,7 @@ public class ClosingsController implements View.OnClickListener {
 
             @Override
             public int getPriority() {
-                return StartActionsController.PRIORITY_HIGH;
+                return priority;
             }
         };
     }

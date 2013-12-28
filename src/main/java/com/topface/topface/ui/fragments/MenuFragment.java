@@ -123,8 +123,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                     fragmentId = (FragmentId) extras.getSerializable(SELECTED_FRAGMENT_ID);
                 }
                 selectMenu(fragmentId);
-            } else if (action.equals(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION)) {
-                if (!CacheProfile.premium) mClosingsController.show();
             } else if (action.equals(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED)) {
                 mClosingsController.onClosingsProcessed(FeedRequest.FeedService.LIKES);
             } else if (action.equals(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED)) {
@@ -495,13 +493,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
     }
 
-    public void onLoadProfile() {
-        // We don't have counters' values from cached data
-        // so we have to make actions after we will receive data from server.
-        // Another call is in BroadcastReceiver of MenuFragment
-        if (!CacheProfile.premium) mClosingsController.show();
-    }
-
     public boolean isLockedByClosings() {
         return mClosingsController.isLeftMenuLocked();
     }
@@ -559,7 +550,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         mEditorInitializationForSessionInvoked = false;
     }
 
-    public IStartAction createClosingsStartAction() {
-        return mClosingsController.createStartAction();
+    public IStartAction createClosingsStartAction(int priority) {
+        return mClosingsController.createStartAction(priority);
     }
 }

@@ -2,17 +2,12 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Options;
-import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.MenuFragment;
@@ -23,16 +18,6 @@ import com.topface.topface.utils.Utils;
 public class AdmirationFragment extends LikesFragment {
 
     private boolean isPopupShowed;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        if (!CacheProfile.premium) {
-            PromoPopupManager manager = new PromoPopupManager(getActivity());
-            isPopupShowed = manager.showPromoPopup(Options.PromoPopupEntity.AIR_ADMIRATIONS);
-
-        }
-        return super.onCreateView(inflater, container, saved);
-    }
 
     @Override
     protected String getTitle() {

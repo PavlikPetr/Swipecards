@@ -1129,20 +1129,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    @Override
-    protected boolean isNeedShowPromoPopup() {
-        return true;
-    }
-
-    @Override
-    protected boolean showPromoDialog() {
-        boolean result = super.showPromoDialog();
-        if (!result) {
-            result = showInvitePopup(getActivity());
-        }
-        return result;
-    }
-
+    // TODO : remove after startAction will be ready
     private boolean showInvitePopup(final FragmentActivity activity) {
         if (!mInvitePopupShow && CacheProfile.canInvite && activity != null) {
             final ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {
@@ -1170,7 +1157,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void doInvitePopupActions(SharedPreferences preferences, FragmentActivity activity,
                                       ContactsProvider.GetContactsHandler handler) {
         long date_start = preferences.getLong(INVITE_POPUP_PREF_KEY, 1);
-        long date_now = new java.util.Date().getTime();
+        long date_now = System.currentTimeMillis();
 
         if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
             mInvitePopupShow = true;

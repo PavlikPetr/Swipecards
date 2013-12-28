@@ -25,7 +25,7 @@ public interface IStartAction {
     /**
      * Defined values for priorities from StartActionsController
      *
-     * @return PRIORITY_HIGH, PRIORITY_NORMAL, PRIORITY_LOW;
+     * @return AC_PRIORITY_HIGH, AC_PRIORITY_NORMAL, AC_PRIORITY_LOW;
      */
     int getPriority();
 }
