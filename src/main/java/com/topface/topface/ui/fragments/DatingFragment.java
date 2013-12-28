@@ -74,6 +74,7 @@ import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
@@ -152,7 +153,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
     }
 
-    private boolean moneyDecreased;
+    private AtomicBoolean moneyDecreased = new AtomicBoolean(false);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -522,12 +523,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         return;
                     } else {
                         lockControls();
-                        if (CacheProfile.money > 0) {
-                            CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().priceAdmiration;
-                            moneyDecreased = true;
-                            updateResources();
-                        }
-                        mRateController.onAdmiration(
+                        boolean canSendAdmiration = mRateController.onAdmiration(
                                 mCurrentUser.id,
                                 mCurrentUser.mutual ?
                                         SendLikeRequest.DEFAULT_MUTUAL
@@ -539,15 +535,19 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
                                     @Override
                                     public void onRateFailed() {
-                                        if (moneyDecreased) {
-                                            moneyDecreased = false;
+                                        if (moneyDecreased.get()) {
+                                            moneyDecreased.set(false);
                                             CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
                                             updateResources();
                                         }
                                     }
                                 }
                         );
-
+                        if (canSendAdmiration) {
+                            CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().priceAdmiration;
+                            moneyDecreased.set(true);
+                            updateResources();
+                        }
                         EasyTracker.getTracker().sendEvent("Dating", "Rate",
                                 "AdmirationSend" + (mCurrentUser.mutual ? "mutual" : ""),
                                 (long) CacheProfile.getOptions().priceAdmiration);
@@ -893,7 +893,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void successRate() {
-        moneyDecreased = false;
+        moneyDecreased.set(false);
         if (mCurrentUser != null) {
             mCurrentUser.rated = true;
         }
@@ -903,9 +903,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void failRate() {
         unlockControls();
-        if (moneyDecreased) {
+        if (moneyDecreased.get()) {
             CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
-            moneyDecreased = false;
+            moneyDecreased.set(false);
             updateResources();
         }
     }

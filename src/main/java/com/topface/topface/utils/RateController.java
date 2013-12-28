@@ -25,7 +25,7 @@ public class RateController {
         sendRate(new SendLikeRequest(mContext, userId, mutualId, mPlace), requestListener);
     }
 
-    public void onAdmiration(final int userId, final int mutualId, final OnRateRequestListener requestListener) {
+    public boolean onAdmiration(final int userId, final int mutualId, final OnRateRequestListener requestListener) {
         if (CacheProfile.money < CacheProfile.getOptions().priceAdmiration) {
             mContext.startActivity(ContainerActivity.getBuyingIntent("RateAdmiration"));
             if (mOnRateControllerUiListener != null) {
@@ -34,9 +34,10 @@ public class RateController {
             if (requestListener != null) {
                 requestListener.onRateFailed();
             }
-            return;
+            return false;
         }
         sendRate(new SendAdmirationRequest(mContext, userId, mutualId, mPlace), requestListener);
+        return true;
     }
 
     private void sendRate(SendLikeRequest sendLike, final OnRateRequestListener listener) {

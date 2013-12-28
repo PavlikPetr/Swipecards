@@ -139,7 +139,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         mCityInputView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (mRequestKey == INTENT_CITY_SEARCH_ACTIVITY) {
+                if (mRequestKey != INTENT_CITY_SEARCH_AFTER_REGISTRATION) {
                     if (hasFocus) {
                         mCbMyCity.setVisibility(View.GONE);
                         mMyCityTitle.setVisibility(View.GONE);
