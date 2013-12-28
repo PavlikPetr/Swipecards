@@ -517,6 +517,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     public void onClick(View v) {
         if (getListView().isClickable()) {
             FragmentId id = (FragmentId) v.getTag();
+            //Сделано так, потому что при нажатии на кнопку бонусов не должно открываться нового фрагмента
+            //к тому же тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
+            //его локально, а не серверно, как это происходит с остальными счетчиками.
             if (id == F_BONUS) {
                 CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
                 mAdapter.refreshCounterBadges();
