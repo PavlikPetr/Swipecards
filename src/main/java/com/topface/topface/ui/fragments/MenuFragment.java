@@ -185,6 +185,12 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         mClosingsController = new ClosingsController(getActivity(), mHeaderViewStub, mAdapter);
     }
 
+    public void addBonusTab() {
+        if (CacheProfile.getOptions().bonus.enabled) {
+//            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_1));
+        }
+    }
+
     private void initHeader() {
         mHeaderView = View.inflate(getActivity(), R.layout.layout_left_menu_header, null);
         initProfileMenuItem(mHeaderView);
@@ -211,10 +217,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 R.drawable.ic_fans_selector));
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
-        if (CacheProfile.getOptions().bonus.enabled) {
-            menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                    R.drawable.ic_bonus_1));
-        }
+        LeftMenuAdapter.ILeftMenuItem bonusTab = LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_1);
+
+
         mAdapter = new LeftMenuAdapter(this, menuItems);
         setListAdapter(mAdapter);
     }
@@ -508,18 +513,23 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     public void onClick(View v) {
         if (getListView().isClickable()) {
             FragmentId id = (FragmentId) v.getTag();
+            //Эта штука сделана потому что по клику на бонусы не надо открывать
+            //никаких фрагментов, только стартовать офферволлы.
             if (id == F_BONUS) {
+                Offerwalls.startOfferwall(getActivity());
                 if (CacheProfile.NEED_SHOW_BONUS_COUNTER) {
                     new BackgroundThread() {
                         @Override
                         public void execute() {
                             SharedPreferences preferences = getActivity().getSharedPreferences(NavigationActivity.BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
                             preferences.edit().putLong(NavigationActivity.BONUS_COUNTER_LAST_SHOW_TIME, CacheProfile.getOptions().bonus.timestamp).commit();
-                            CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
                         }
                     };
+                    CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
+                    if (mAdapter != null) {
+                        mAdapter.refreshCounterBadges();
+                    }
                 }
-                Offerwalls.startOfferwall(getActivity());
             } else {
                 selectMenu(id);
             }
