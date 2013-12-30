@@ -47,7 +47,7 @@
                 android:id="@+id/btnSend"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                style="@style/ButtonBlueNormal"
+                style="@style/Widget.Topface.Button.Blue"
                 android:text="@string/general_send_full"
                 android:layout_marginTop="12dp" />
         </LinearLayout>

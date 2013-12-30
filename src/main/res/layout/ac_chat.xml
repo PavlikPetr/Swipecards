@@ -133,7 +133,7 @@
                     android:id="@+id/btnBuyVip"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    style="@style/ButtonBlue"
+                    style="@style/Widget.Topface.Button.Big.Blue"
                     android:text="@string/buying_vip_status"
                     android:textStyle="bold"
                     android:layout_below="@id/tvBuyVipTitle"

@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/buying_vip_status"
-        style="@style/ButtonBlue"
+        style="@style/Widget.Topface.Button.Big.Blue"
         android:layout_marginTop="17dp"
         android:singleLine="true" />
 </LinearLayout>

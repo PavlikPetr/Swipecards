@@ -790,18 +790,18 @@
         <item name="android:textColor">#B8B8B8</item>
     </style>
 
-    <style name="ButtonBlue" parent="Widget.Topface.Button.Big">
-        <item name="android:background">@drawable/btn_blue_selector</item>
+    <style name="Widget.Topface.Button.Big.Blue" parent="Widget.Topface.Button.Big">
+    <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
-    <style name="ButtonBlueNormal" parent="Widget.Topface.Button">
-        <item name="android:background">@drawable/btn_blue_selector</item>
+    <style name="Widget.Topface.Button.Blue" parent="Widget.Topface.Button">
+    <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
-    <style name="ButtonSale" parent="ButtonBlue">
-        <item name="android:background">@drawable/btn_sale_selector</item>
+    <style name="ButtonSale" parent="Widget.Topface.Button.Big.Blue">
+    <item name="android:background">@drawable/btn_sale_selector</item>
         <item name="android:paddingRight">56dp</item>
     </style>
 

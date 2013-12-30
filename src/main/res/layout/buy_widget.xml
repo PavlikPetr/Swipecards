@@ -30,7 +30,7 @@
     <Button
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        style="@style/ButtonBlue"
+        style="@style/Widget.Topface.Button.Big.Blue"
         android:background="@drawable/btn_blue_selector"
         android:text="@string/buy_resources"
         android:layout_below="@id/menuCurLikes"

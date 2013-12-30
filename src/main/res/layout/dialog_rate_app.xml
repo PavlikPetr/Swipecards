@@ -38,7 +38,7 @@
             android:id="@+id/btnRate"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            style="@style/ButtonBlue"
+            style="@style/Widget.Topface.Button.Big.Blue"
             android:text="@string/rate_popup_set_rate"
             android:layout_marginTop="28dp" />
 

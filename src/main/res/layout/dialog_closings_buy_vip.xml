@@ -60,7 +60,7 @@
                 android:layout_weight="1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                style="@style/ButtonBlue"
+                style="@style/Widget.Topface.Button.Big.Blue"
                 android:text="@string/buying_vip_status"
                 android:singleLine="true"
                 android:layout_marginLeft="4dp"

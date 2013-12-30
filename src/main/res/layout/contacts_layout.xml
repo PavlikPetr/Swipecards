@@ -62,7 +62,7 @@
             android:id="@+id/contactsVip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            style="@style/ButtonBlue" />
+            style="@style/Widget.Topface.Button.Big.Blue" />
     </RelativeLayout>
 
     <ListView
