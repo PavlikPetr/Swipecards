@@ -76,7 +76,7 @@
             android:id="@+id/btnOfferwalls"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            style="@style/ButtonGray"
+            style="@style/Widget.Topface.Button.Big.Gray"
             android:text="@string/get_it_for_free"
             android:layout_margin="8dp" />
     </LinearLayout>

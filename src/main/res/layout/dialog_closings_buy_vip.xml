@@ -44,7 +44,7 @@
                 android:layout_weight="1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                style="@style/ButtonGray"
+                style="@style/Widget.Topface.Button.Big.Gray"
                 android:text="@string/locking_popup_button_answer"
                 android:singleLine="true"
                 android:layout_marginRight="4dp"

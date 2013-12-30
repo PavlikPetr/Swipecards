@@ -32,7 +32,6 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.dialogs.RateAppDialog;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.profile.PhotoSwitcherActivity;
@@ -282,9 +281,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-
-        RateAppDialog rateAppDialog = new RateAppDialog();
-        rateAppDialog.show(getSupportFragmentManager(),"Ololo");
     }
 
     private void actionsAfterRegistration() {
