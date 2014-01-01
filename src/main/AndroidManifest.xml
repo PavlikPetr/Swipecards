@@ -270,6 +270,13 @@
             </intent-filter>
         </service>
 
+        <activity
+            android:name="org.acra.CrashReportDialog"
+            android:theme="@style/Theme.Topface.NoActionBar"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:finishOnTaskLaunch="true"/>
+
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
             android:name=".ui.MainActivity"

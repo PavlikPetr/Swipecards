@@ -52,6 +52,8 @@
     <string name="general_profile">Профиль</string>
     <string name="general_settings">Настройки</string>
     <string name="general_chat">Чат</string>
+    <string name="general_allow">Разрешить</string>
+    <string name="notification_popup_title">Разрешите присылать вам уведомления, чтобы вы мгновенно могли узнать о новой симпатии, восхищении или непрочитанном сообщении</string>
 
     <!-- Auth -->
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
@@ -762,7 +764,7 @@
     <string name="not_enough_coins">Недостаточно монет для покупки</string>
 
     <!-- Pin code -->
-    <string name="pincode_app_blocking">Блокировка приложения</string>
+    <string name="pincode_blocking_app">Блокировка входа в приложение</string>
     <string name="pincode_blocking">Блокировка</string>
     <string name="pincode_reset">Сбросить PIN-код</string>
     <string name="pincode_set">Установить PIN-код</string>

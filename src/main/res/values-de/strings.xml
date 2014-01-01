@@ -226,7 +226,6 @@
     <string name="vip_not_activated">Ihr VIP-Status ist nicht aktiviert</string>
     <string name="vip_privileges">VIP-Privilegien</string>
     <string name="vip_text_visitors">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre Gäste durch!</string>
-    <string name="vip_text_adm_unlock">Senden Sie Bewunderungen kostenlos - zeigen Sie Ihre Gefühle</string>
     <string name="vip_rest">Sie abonnieren VIP</string>
     <string name="vip_invis">Unsichtbares Regime</string>
     <string name="vip_messages_bg">Nachrichten Hintergrund</string>
@@ -433,9 +432,12 @@
         <item quantity="one">VIP für %d Tag bekommen</item>
     </plurals>
     <plurals name="invite_friends_plurals">
-        <item quantity="zero">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen</item>
-        <item quantity="other">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen</item>
-        <item quantity="one">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen</item>
+        <item quantity="zero">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen
+        </item>
+        <item quantity="other">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen
+        </item>
+        <item quantity="one">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen
+        </item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="other">Bekommen Sie VIP kostenlos für %d Einladungen</item>
@@ -579,7 +581,6 @@
     <string name="general_bonus">Bonus</string>
     <string name="general_get">Bekommen</string>
     <string name="not_enough_coins">Nicht genug Coins für den Kauf</string>
-    <string name="pincode_app_blocking">App Sperre</string>
     <string name="pincode_blocking">Sperre</string>
     <string name="pincode_reset">Reset PIN-Code</string>
     <string name="pincode_set">Set PIN-Code</string>

@@ -208,6 +208,12 @@
     <string name="buying_store_connect">Kviečiu į Tune Store</string>
     <string name="buying_store_purchase">Perku Tunes Store</string>
     <string name="buying_tf_ack_sending">Siunčiu informaciją apie pirkinį į Topface</string>
+    <string name="rate_popup_title">Prašom, įvertinkite mūsų programą</string>
+    <string name="rate_popup_set_rate">Įvertinti</string>
+    <string name="rate_popup_later">Paklausti vėliau</string>
+    <string name="rate_popup_cancel">Ne, dėkuj</string>
+    <string name="rate_popup_error">Jūs turite nurodyti, kiek žvaigždučių suteikiate mūsų programai</string>
+    <string name="feedback_popup_title">Jūs prastai įvertinote. Papasakokite, kas jums nepatinka programoje. Padėkite mums tapti geresniais. Ačiū!</string>
     <string name="settings_melody">Pranešimo melodija</string>
     <string name="edit_refresh_status">Atnaujinti statusą</string>
     <string name="ban_title">Sveikiname! Jūs užbanintas</string>
@@ -223,7 +229,6 @@
     <string name="vip_not_activated">Jūsų VIP-statusas neaktyvuotas</string>
     <string name="vip_privileges">VIP privilegijos</string>
     <string name="vip_text_visitors">Sužinokite, kas jumis domėjosi - peržiūrėkite savo svečius!</string>
-    <string name="vip_text_adm_unlock">Siųskite susižavėjimus nemokamai - maksimaliai išreikškite savo jausmus!</string>
     <string name="vip_rest">Jūs prenumeruojate VIP</string>
     <string name="vip_invis">Nematomas režimas</string>
     <string name="vip_messages_bg">Pranešimų fonas</string>
@@ -587,7 +592,6 @@
     <string name="general_bonus">Bonus</string>
     <string name="general_get">Gauti</string>
     <string name="not_enough_coins">Nepakanka monetų pirkiniui</string>
-    <string name="pincode_app_blocking">Programos blokavimas</string>
     <string name="pincode_blocking">Blokavimas</string>
     <string name="pincode_reset">Atstatyti pradinį PIN-kodą</string>
     <string name="pincode_set">Nustatyti PIN-kodą</string>

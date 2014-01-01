@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Базовая тема приложения -->
     <style name="Theme.Topface" parent="@style/Theme.AppCompat">
@@ -25,18 +25,23 @@
         <item name="actionButtonStyle">@style/Widget.Topface.ActionBar.Buttons</item>
         <item name="actionBarItemBackground">@drawable/bg_semitransparent_black_selector</item>
 
-        <item name="android:actionBarSize">@dimen/default_header_height</item>
-        <item name="android:actionBarStyle">@style/Widget.Topface.ActionBar</item>
-        <item name="android:actionButtonStyle">@style/Widget.Topface.ActionBar.Buttons</item>
-        <item name="android:actionBarItemBackground">@drawable/bg_semitransparent_black_selector
+        <item name="android:actionBarSize" tools:ignore="NewApi">@dimen/default_header_height</item>
+        <item name="android:actionBarStyle" tools:ignore="NewApi">@style/Widget.Topface.ActionBar
+        </item>
+        <item name="android:actionButtonStyle" tools:ignore="NewApi">
+            @style/Widget.Topface.ActionBar.Buttons
+        </item>
+        <item name="android:actionBarItemBackground" tools:ignore="NewApi">
+            @drawable/bg_semitransparent_black
         </item>
 
         <!-- Action Mode (CAB)-->
         <item name="actionModeBackground">@drawable/bg_action_mode</item>
         <item name="actionModeCloseDrawable">@drawable/ic_check</item>
 
-        <item name="android:actionModeBackground">@drawable/bg_action_mode</item>
-        <item name="android:actionModeCloseDrawable">@drawable/ic_check</item>
+        <item name="android:actionModeBackground" tools:ignore="NewApi">@drawable/bg_action_mode
+        </item>
+        <item name="android:actionModeCloseDrawable" tools:ignore="NewApi">@drawable/ic_check</item>
     </style>
 
     <style name="Widget.Topface.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
@@ -47,10 +52,14 @@
         <item name="subtitleTextStyle">@style/Widget.Topface.ActionBar.Subtitle</item>
 
         <item name="android:background">@drawable/im_bar_header</item>
-        <item name="android:backgroundStacked">@drawable/im_bar_header</item>
-        <item name="android:backgroundSplit">@drawable/im_bar_header</item>
-        <item name="android:titleTextStyle">@style/Widget.Topface.ActionBar.Title</item>
-        <item name="android:subtitleTextStyle">@style/Widget.Topface.ActionBar.Subtitle</item>
+        <item name="android:backgroundStacked" tools:ignore="NewApi">@drawable/im_bar_header</item>
+        <item name="android:backgroundSplit" tools:ignore="NewApi">@drawable/im_bar_header</item>
+        <item name="android:titleTextStyle" tools:ignore="NewApi">
+            @style/Widget.Topface.ActionBar.Title
+        </item>
+        <item name="android:subtitleTextStyle" tools:ignore="NewApi">
+            @style/Widget.Topface.ActionBar.Subtitle
+        </item>
     </style>
 
     <style name="Widget.Topface.ActionBar.Title" parent="ShadowBlackTop">
@@ -77,12 +86,12 @@
     <style name="Theme.Topface.NoActionBar" parent="Theme.Topface">
         <item name="android:windowNoTitle">true</item>
         <!--Action Bar-->
-        <item name="android:windowActionBar">false</item>
+        <item name="android:windowActionBar" tools:ignore="NewApi">false</item>
         <item name="windowActionBar">false</item>
     </style>
 
     <style name="topfaceEditText">
-        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:textCursorDrawable" tools:ignore="NewApi">@null</item>
         <item name="android:cursorVisible">true</item>
         <item name="android:background">@drawable/edittext_selector</item>
         <item name="android:padding">5dp</item>
