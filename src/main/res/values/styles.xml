@@ -32,7 +32,7 @@
             @style/Widget.Topface.ActionBar.Buttons
         </item>
         <item name="android:actionBarItemBackground" tools:ignore="NewApi">
-            @drawable/bg_semitransparent_black
+            @drawable/bg_semitransparent_black_selector
         </item>
 
         <!-- Action Mode (CAB)-->
