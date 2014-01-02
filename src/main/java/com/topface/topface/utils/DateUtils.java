@@ -17,8 +17,10 @@ public class DateUtils {
     private final static SimpleDateFormat mDateFormatDayOfWeek = new SimpleDateFormat("EEEE");
     private final static SimpleDateFormat mDateFormatHours = new SimpleDateFormat("HH:mm");
 
-    public static final long DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
-    public static final long HOUR_IN_MILLISECONDS = 60 * 60 * 1000;
+    public static final long DAY_IN_MILLISECONDS = 86400000; // 24 * 60 * 60 * 1000;
+    public static final long HOUR_IN_MILLISECONDS = 3600000; // 60 * 60 * 1000;
+    public static final long MINUTE_IN_MILLISECONDS = 60000; // 60 * 1000;
+    public static final long SEC_IN_MILLISECONDS = 1000;
 
     public static void syncTime() {
         Calendar cal = Calendar.getInstance();

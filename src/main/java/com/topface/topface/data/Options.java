@@ -118,6 +118,7 @@ public class Options extends AbstractData {
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
     public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
     public static final String PREMIUM_ADMIRATION_POPUP_SHOW_TIME = "premium_admirations_popup_last_show";
+
     /**
      * Настройки для каждого типа страниц
      */
@@ -163,7 +164,7 @@ public class Options extends AbstractData {
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
     public String helpUrl;
 
-    public boolean bonusEnabled;
+    public Bonus bonus = new Bonus();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -247,7 +248,8 @@ public class Options extends AbstractData {
                 closing.enabledSympathies = closingsObj.optBoolean("enabledSympathies");
                 closing.limitMutual = closingsObj.optInt("limitMutual");
                 closing.limitSympathies = closingsObj.optInt("limitSympathies");
-                closing.timeout = closingsObj.optInt("timeout") * DateUtils.HOUR_IN_MILLISECONDS;
+                closing.timeoutSympathies = closingsObj.optInt("timeoutSympathies", Closing.DEFAULT_LIKES_TIMEOUT) * DateUtils.MINUTE_IN_MILLISECONDS;
+                closing.timeoutMutual = closingsObj.optInt("timeoutMutual", Closing.DEFAULT_MUTUALS_TIMEOUT) * DateUtils.MINUTE_IN_MILLISECONDS;
             }
 
             JSONObject ratePopupObject = response.optJSONObject("ratePopup");
@@ -278,7 +280,9 @@ public class Options extends AbstractData {
             gagTypeFullscreen = response.optString("gag_type_fullscreen", BannerBlock.BANNER_NONE);
             JSONObject bonusObject = response.optJSONObject("bonus");
             if (bonusObject != null) {
-                bonusEnabled = bonusObject.optBoolean("enabled");
+                bonus.enabled = bonusObject.optBoolean("enabled");
+                bonus.counter = bonusObject.optInt("counter");
+                bonus.timestamp = bonusObject.optLong("counterTimestamp");
             }
 
             helpUrl = response.optString("helpUrl");
@@ -473,6 +477,9 @@ public class Options extends AbstractData {
 
 
     public static class Closing {
+        private static final int DEFAULT_LIKES_TIMEOUT = 24 * 60;
+        private static final int DEFAULT_MUTUALS_TIMEOUT = 10;
+
         public static final String DATA_FOR_CLOSING_RECEIVED_ACTION = "closings_received_action";
         private static Ssid.ISsidUpdateListener listener;
         private long mutualsClosingLastCallTime;
@@ -481,7 +488,8 @@ public class Options extends AbstractData {
         public boolean enabledMutual;
         public int limitSympathies;
         public int limitMutual;
-        public long timeout;
+        public long timeoutSympathies;
+        public long timeoutMutual;
 
         public Closing() {
             long currentTime = System.currentTimeMillis();
@@ -522,14 +530,14 @@ public class Options extends AbstractData {
         }
 
         public boolean isMutualAvailable() {
-            return enabledSympathies
-                    && Math.abs(System.currentTimeMillis() - mutualsClosingLastCallTime) > timeout
+            return enabledMutual
+                    && Math.abs(System.currentTimeMillis() - mutualsClosingLastCallTime) > timeoutMutual
                     && CacheProfile.unread_mutual > 0;
         }
 
         public boolean isLikesAvailable() {
-            return enabledMutual
-                    && Math.abs(System.currentTimeMillis() - likesClosingLastCallTime) > timeout
+            return enabledSympathies
+                    && Math.abs(System.currentTimeMillis() - likesClosingLastCallTime) > timeoutSympathies
                     && CacheProfile.unread_likes > 0;
         }
     }
@@ -568,5 +576,12 @@ public class Options extends AbstractData {
 
         public BlockSympathy() {
         }
+    }
+
+    public static class Bonus {
+        public boolean enabled;
+        public int counter;
+        public long timestamp;
+
     }
 }

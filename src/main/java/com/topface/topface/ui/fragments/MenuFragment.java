@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -28,6 +29,7 @@ import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.BonusFragment;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
@@ -40,11 +42,13 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.FullscreenController;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.controllers.IStartAction;
@@ -109,6 +113,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             } else if (action.equals(CacheProfile.PROFILE_UPDATE_ACTION)) {
                 initProfileMenuItem(mHeaderView);
                 initEditor();
+                if (CacheProfile.premium) {
+                    mClosingsController.onPremiumObtained();
+                }
             } else if (action.equals(GooglePlayProducts.INTENT_UPDATE_PRODUCTS)) {
                 if (mBuyWidgetController != null) {
                     mBuyWidgetController.setButtonBackgroundResource(
@@ -130,6 +137,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             }
         }
     };
+    private FullscreenController mFullscreenController;
 
     private void initEditor() {
         if (mEditorInitializationForSessionInvoked) return;
@@ -197,12 +205,12 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 R.drawable.ic_star_selector));
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_fans_selector));
-        if (CacheProfile.getOptions().bonusEnabled) {
-            menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON,
-                    R.drawable.ic_bonus_1));
-        }
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
+        if (CacheProfile.getOptions().bonus.enabled) {
+            menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                    R.drawable.ic_bonus_1));
+        }
         mAdapter = new LeftMenuAdapter(this, menuItems);
         setListAdapter(mAdapter);
     }
@@ -261,7 +269,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
         if (mProfileButton != null) {
             mProfileButton.setOnClickListener(this);
-            notifyDataSetChanged();
+            notifyDataSetChanged(true);
         }
     }
 
@@ -303,8 +311,14 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         filter.addAction(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
         initProfileMenuItem(mHeaderView);
+        if (mBuyWidgetController != null) {
+            mBuyWidgetController.updateBalance();
+        }
         // We need to clean state if there was a logout in other Activity
         mClosingsController.onLogoutWasInitiated();
+        if (CacheProfile.premium) {
+            mClosingsController.onPremiumObtained();
+        }
     }
 
     @Override
@@ -340,11 +354,16 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         notifyDataSetChanged();
     }
 
+
+    private void notifyDataSetChanged() {
+        notifyDataSetChanged(false);
+    }
+
     /**
      * To change selected state of menu items from Header & Adapter
      */
-    private void notifyDataSetChanged() {
-        if (mAdapter != null) {
+    private void notifyDataSetChanged(boolean updateOnlyHeader) {
+        if (mAdapter != null && !updateOnlyHeader) {
             mAdapter.notifyDataSetChanged();
         }
         if (mProfileButton != null) {
@@ -486,11 +505,28 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         if (getListView().isClickable()) {
             FragmentId id = (FragmentId) v.getTag();
             if (id == F_BONUS) {
+                if (CacheProfile.NEED_SHOW_BONUS_COUNTER) {
+                    new BackgroundThread() {
+                        @Override
+                        public void execute() {
+                            SharedPreferences preferences = getActivity().getSharedPreferences(NavigationActivity.BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
+                            preferences.edit().putLong(NavigationActivity.BONUS_COUNTER_LAST_SHOW_TIME, CacheProfile.getOptions().bonus.timestamp).commit();
+                            CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
+                        }
+                    };
+                }
                 Offerwalls.startOfferwall(getActivity());
             } else {
                 selectMenu(id);
             }
         }
+    }
+
+    public void onLoadProfile() {
+        // We don't have counters' values from cached data
+        // so we have to make actions after we will receive data from server.
+        // Another call is in BroadcastReceiver of MenuFragment
+        if (!CacheProfile.premium) mClosingsController.show();
     }
 
     public boolean isLockedByClosings() {
@@ -509,6 +545,17 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     @Deprecated
     public ClosingsController getClosingsController() {
         return mClosingsController;
+    }
+
+    /**
+     * Костыль, пока нет ротатора, нужно для определения запираний
+     * и блокировки показа фуллскрин рекламы
+     *
+     * @param fullscreenController контроллен фуллскрин рекламы
+     */
+    @Deprecated
+    public void setFullscreenController(FullscreenController fullscreenController) {
+        mFullscreenController = fullscreenController;
     }
 
     public static interface OnFragmentSelectedListener {

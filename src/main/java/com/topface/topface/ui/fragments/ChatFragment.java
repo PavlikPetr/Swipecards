@@ -1018,9 +1018,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
             @Override
             protected void success(SendGiftAnswer data, IApiResponse response) {
-                CacheProfile.likes = data.likes;
-                CacheProfile.money = data.money;
-                Debug.log(getActivity(), "likes:" + data.likes + " money:" + data.money);
                 data.history.target = FeedDialog.OUTPUT_USER_MESSAGE;
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(loaderItem, data.history, mListView.getRefreshableView());

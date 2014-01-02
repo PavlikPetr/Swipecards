@@ -76,6 +76,12 @@ public class ClosingsController implements View.OnClickListener {
         mCacheManager = new UsersListCacheManager(null, null);
     }
 
+    /**
+     * Initiates show of closings
+     *
+     * @return true if all flags are ready to show closings,
+     * but still after retrieving feeds there can be no closings at all
+     */
     public void show() {
         // #1
         ApiRequest likesRequest = getUsersListRequest(FeedRequest.FeedService.LIKES, mContext);
@@ -90,8 +96,8 @@ public class ClosingsController implements View.OnClickListener {
                 super.success(response);
                 Options.Closing closings = CacheProfile.getOptions().closing;
 
-                boolean needLikesClosings = mReceivedUnreadLikes > 0;
-                boolean needMutualsClosings = mReceivedUnreadMutuals > 0;
+                boolean needLikesClosings = mReceivedUnreadLikes > 0 && closings.isLikesAvailable();
+                boolean needMutualsClosings = mReceivedUnreadMutuals > 0 && closings.isMutualAvailable();
                 if (needLikesClosings || needMutualsClosings) {
                     mClosingsWidget = getClosingsWidget();
                     mClosingsWidget.setVisibility(View.VISIBLE);
@@ -99,14 +105,14 @@ public class ClosingsController implements View.OnClickListener {
                             .setOnClickListener(ClosingsController.this);
                     likesMenuItem = mClosingsWidget.findViewById(R.id.itemLikesClosings);
                     if (initMenuItem(likesMenuItem, R.string.general_likes, R.drawable.ic_likes_selector,
-                            closings.isLikesAvailable() && needLikesClosings,
+                            needLikesClosings,
                             FragmentId.F_LIKES_CLOSINGS)) {
                         mAdapter.hideItem(FragmentId.F_LIKES);
                         mLikesClosingsActive = true;
                     }
                     mutualsMenuItem = mClosingsWidget.findViewById(R.id.itemMutualsClosings);
                     if (initMenuItem(mutualsMenuItem, R.string.general_mutual, R.drawable.ic_mutual_selector,
-                            closings.isMutualAvailable() && needMutualsClosings,
+                            needMutualsClosings,
                             FragmentId.F_MUTUAL_CLOSINGS)) {
                         mAdapter.hideItem(FragmentId.F_MUTUAL);
                         mMutualClosingsActive = true;
@@ -123,6 +129,7 @@ public class ClosingsController implements View.OnClickListener {
                 .addRequest(mutualsRequest)
                 .callback(handler)
                 .exec();
+        return true;
     }
 
     private View getClosingsWidget() {
@@ -191,6 +198,7 @@ public class ClosingsController implements View.OnClickListener {
         FeedRequest request = new FeedRequest(feedType, context);
         request.limit = ViewUsersListFragment.LIMIT;
         request.unread = true;
+        request.leave = true;
         return request;
     }
 
@@ -264,6 +272,7 @@ public class ClosingsController implements View.OnClickListener {
 
     private void selectMenuItem(FragmentId id) {
         if (id != null) {
+            unlockLeftMenu();
             MenuFragment.selectFragment(id);
         }
         for (View item : menuItemsButtons) {
@@ -291,6 +300,7 @@ public class ClosingsController implements View.OnClickListener {
                     MenuFragment.selectFragment(FragmentId.F_MUTUAL_CLOSINGS);
                 }
             }
+            CacheProfile.getOptions().closing.onStopLikesClosings();
             mLikesClosingsActive = false;
         } else if (service == FeedRequest.FeedService.MUTUAL) {
             if (!mLikesClosingsActive) {
@@ -305,6 +315,7 @@ public class ClosingsController implements View.OnClickListener {
                     MenuFragment.selectFragment(FragmentId.F_LIKES_CLOSINGS);
                 }
             }
+            CacheProfile.getOptions().closing.onStopMutualClosings();
             mMutualClosingsActive = false;
         } else {
             throw new IllegalArgumentException("Only LIKES and MUTUAL services can be passed");
@@ -312,10 +323,6 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     private void removeClosings() {
-        removeClosings(true);
-    }
-
-    private void removeClosings(boolean needToSetClosingsPassedTime) {
         if (mClosingsWidget != null) mClosingsWidget.setVisibility(View.GONE);
         if (mAdapter != null) {
             mAdapter.setEnabled(true);
@@ -323,14 +330,11 @@ public class ClosingsController implements View.OnClickListener {
             mAdapter.notifyDataSetChanged();
         }
         // switch to DatingFragment after closings are passed
+        unlockLeftMenu();
         MenuFragment.selectFragment(BaseFragment.FragmentId.F_DATING);
         mClosingsPassed = true;
         mLikesClosingsActive = false;
         mMutualClosingsActive = false;
-        if (needToSetClosingsPassedTime) {
-            CacheProfile.getOptions().closing.onStopLikesClosings();
-            CacheProfile.getOptions().closing.onStopMutualClosings();
-        }
     }
 
     public static void onLogout() {
@@ -379,10 +383,16 @@ public class ClosingsController implements View.OnClickListener {
 
     public void onLogoutWasInitiated() {
         if (mLogoutWasInitiated) {
-            removeClosings(false);
+            removeClosings();
             mClosingsPassed = false;
         }
         mLogoutWasInitiated = false;
+    }
+
+    public void onPremiumObtained() {
+        if (!mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) {
+            removeClosings();
+        }
     }
 
     public IStartAction createStartAction(final int priority) {

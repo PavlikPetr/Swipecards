@@ -52,6 +52,8 @@
     <string name="general_profile">Профиль</string>
     <string name="general_settings">Настройки</string>
     <string name="general_chat">Чат</string>
+    <string name="general_allow">Разрешить</string>
+    <string name="notification_popup_title">Разрешите присылать вам уведомления, чтобы вы мгновенно могли узнать о новой симпатии, восхищении или непрочитанном сообщении</string>
 
     <!-- Auth -->
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
@@ -271,6 +273,12 @@
     <string name="buying_store_connect">Запрашиваю iTunes Store</string>
     <string name="buying_store_purchase">Совершаю покупку в iTunes Store</string>
     <string name="buying_tf_ack_sending">Отправляю информацию о покупке в Topface</string>
+    <string name="rate_popup_title">Пожалуйста, оцените наше приложение</string>
+    <string name="rate_popup_set_rate">Поставить оценку</string>
+    <string name="rate_popup_later">Спросить позже</string>
+    <string name="rate_popup_cancel">Нет, спасибо</string>
+    <string name="rate_popup_error">Вы должны указать сколько звезд вы ставите нашему приложению</string>
+    <string name="feedback_popup_title">Вы поставили низкую оценку. Расскажите, что вам не нравится в приложении. Помогите нам стать лучше. Спасибо!</string>
 
     <string name="settings_melody">Мелодия уведомления</string>
 
@@ -290,7 +298,6 @@
     <string name="vip_not_activated">Ваш VIP-статус не активирован</string>
     <string name="vip_privileges">VIP-привилегии</string>
     <string name="vip_text_visitors">Узнаете, кто вами интересовался - смотрите своих гостей!</string>
-    <string name="vip_text_adm_unlock">Отправляйте восхищения бесплатно - выражайте свои чувства по-максимуму</string>
     <string name="vip_rest">Вы подписаны на VIP</string>
     <string name="vip_invis">Режим невидимки</string>
     <string name="vip_messages_bg">Фон сообщений</string>
@@ -757,7 +764,7 @@
     <string name="not_enough_coins">Недостаточно монет для покупки</string>
 
     <!-- Pin code -->
-    <string name="pincode_app_blocking">Блокировка приложения</string>
+    <string name="pincode_blocking_app">Блокировка входа в приложение</string>
     <string name="pincode_blocking">Блокировка</string>
     <string name="pincode_reset">Сбросить PIN-код</string>
     <string name="pincode_set">Установить PIN-код</string>

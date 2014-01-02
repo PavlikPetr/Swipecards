@@ -13,9 +13,8 @@ public class FeedRequest extends ApiRequest {
     public String to;  // идентификатор последнего диалога для отображения. В случае отсутствия параметра диалоги возвращаются от последнего
     public String from;  // идентификатор последнего диалога для запроса новых сообщений после данного идентификатора
     public boolean unread;  // параметр получения только тех диалогов, в которых есть непрочитанные сообщения
-    private int mType = -1; // нужен исключительно для избранных - показывает кого подгрузить - избранных или поклонников. Если не указан, подгружаются поклонники
     private FeedService mService;
-    //private boolean leave; //Оставить сообщения не прочитанными
+    public boolean leave; //Оставить сообщения не прочитанными
 
     public static enum FeedService {
         DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST, BOOKMARKS, FANS, ADMIRATIONS
@@ -23,17 +22,6 @@ public class FeedRequest extends ApiRequest {
 
     public FeedRequest(FeedService service, Context context) {
         super(context);
-        //Костыль для избранных
-        switch (service) {
-            case BOOKMARKS:
-                mType = 0;
-                break;
-            case FANS:
-                mType = 1;
-                break;
-            default:
-                mType = -1;
-        }
         mService = service;
     }
 
@@ -42,17 +30,13 @@ public class FeedRequest extends ApiRequest {
         JSONObject data = new JSONObject();
         data.put("limit", limit);
         data.put("unread", unread);
-        //data.put("leave", leave);
+        data.put("leave", leave);
         if (to != null) {
             data.put("to", to);
         }
 
         if (from != null) {
             data.put("from", from);
-        }
-
-        if (mType > -1) {
-            data.put("type", mType);
         }
 
         return data;
@@ -78,6 +62,8 @@ public class FeedRequest extends ApiRequest {
                 service = "blacklist.getList";
                 break;
             case FANS:
+                service = "fan.getList";
+                break;
             case BOOKMARKS:
                 service = "bookmark.getList";
                 break;

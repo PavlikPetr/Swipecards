@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="crash_dialog_title">Упс, что-то в Topface сломалось</string>
+    <string name="crash_dialog_text">
+        Приложение было остановлено покажите это сообщение разработчику или отправьте на e-mail
+    </string>
+    <string name="crash_dialog_comment_prompt">Дополнительная информацию об ошибке:</string>
+</resources>

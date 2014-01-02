@@ -18,8 +18,8 @@ import com.topface.topface.data.Verify;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AppOptionsRequest;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.GooglePlayPurchaseRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.VerifyRequest;
 import com.topface.topface.utils.CacheProfile;
 
 /**
@@ -173,10 +173,10 @@ public class ResponseHandler {
      */
     public static void verifyPurchase(final Context context, final String data, final String signature, final String queueId) {
         // Отправлем заказ на сервер
-        final VerifyRequest verifyRequest = new VerifyRequest(context);
-        verifyRequest.data = data;
-        verifyRequest.signature = signature;
-        verifyRequest.callback(new DataApiHandler<Verify>() {
+        final GooglePlayPurchaseRequest purchaseRequest = new GooglePlayPurchaseRequest(context);
+        purchaseRequest.data = data;
+        purchaseRequest.signature = signature;
+        purchaseRequest.callback(new DataApiHandler<Verify>() {
 
             @Override
             protected void success(Verify verify, IApiResponse response) {

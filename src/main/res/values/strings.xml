@@ -43,7 +43,7 @@
     <string name="general_profile">Profile</string>
     <string name="general_settings">Settings</string>
     <string name="general_chat">Chat</string>
-    <string name="auth_btn_vk">Login with vk.com</string>
+    <string name="auth_btn_vk">Login with VK</string>
     <string name="auth_btn_fb">Login with Facebook</string>
     <string name="auth_retry">Retry</string>
     <string name="auth_vk_name">VK</string>
@@ -205,6 +205,12 @@
     <string name="buying_store_connect">Connecting to the iTunes Store</string>
     <string name="buying_store_purchase">Processing the purchase in the iTunes Store</string>
     <string name="buying_tf_ack_sending">Sending purchase info to Topface</string>
+    <string name="rate_popup_title">Please, rate our application</string>
+    <string name="rate_popup_set_rate">Rate</string>
+    <string name="rate_popup_later">Ask again later</string>
+    <string name="rate_popup_cancel">No thanks</string>
+    <string name="rate_popup_error">You should tell us how many stars you rate our application</string>
+    <string name="feedback_popup_title">You gave a low rating. Tell us what you did not like in the application. Help us become better. Thank you!</string>
     <string name="settings_melody">Ringtone notification</string>
     <string name="edit_refresh_status">Update status</string>
     <string name="ban_title">Congratulations! You are banned</string>
@@ -220,7 +226,6 @@
     <string name="vip_not_activated">Your VIP-status is not activated</string>
     <string name="vip_privileges">VIP-privileges</string>
     <string name="vip_text_visitors">Find out who was interested in you - look through your guests!</string>
-    <string name="vip_text_adm_unlock">Send admiration\'s for free - maximum express of feelings!</string>
     <string name="vip_rest">You subscribed for VIP</string>
     <string name="vip_invis">Invisible mode</string>
     <string name="vip_messages_bg">Background message</string>
@@ -540,8 +545,8 @@
     <string name="settings_feedback_transaction_number">Order number</string>
     <string name="settings_feedback_transaction_link">Where to find the order number?</string>
     <string name="general_logout_error">Unfortunately, you failed to log out from your account</string>
-    <string name="auth_btn_ok">Login through Odnoklassniki</string>
-    <string name="other_auth">Login through other services</string>
+    <string name="auth_btn_ok">Login with Odnoklassniki</string>
+    <string name="other_auth">Login with other services</string>
     <string name="settings_feedback_transaction_number_hint">Enter order number</string>
     <string name="youve_earned">You\'ve earned %s</string>
     <string name="like_topface">Do you like Topface?</string>
@@ -576,7 +581,6 @@
     <string name="general_bonus">Bonus</string>
     <string name="general_get">Get</string>
     <string name="not_enough_coins">Not enough coins to purchase</string>
-    <string name="pincode_app_blocking">Application is blocked</string>
     <string name="pincode_blocking">Blocking</string>
     <string name="pincode_reset">Reset PIN-code</string>
     <string name="pincode_set">Set PIN-code</string>

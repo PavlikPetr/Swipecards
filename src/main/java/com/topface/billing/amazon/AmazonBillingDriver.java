@@ -47,5 +47,10 @@ public class AmazonBillingDriver extends BillingDriver {
         PurchasingManager.initiatePurchaseRequest(subscriptionId);
     }
 
+    @Override
+    public boolean isTestPurchasesAvailable() {
+        return false;
+    }
+
 
 }

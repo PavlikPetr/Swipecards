@@ -65,12 +65,37 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
 
     @Override
     public void buyItem(String itemId) {
+        //Если это тестовые покупки, то подменяем id товара
+        itemId = setTestProductId(itemId);
+
         mBillingService.requestPurchase(itemId, Consts.ITEM_TYPE_INAPP, getDeveloperPayload());
     }
 
     @Override
     public void buySubscription(String subscriptionId) {
-        mBillingService.requestPurchase(subscriptionId, Consts.ITEM_TYPE_SUBSCRIPTION, getDeveloperPayload());
+        //Если включены тестовые покупки, то покупаем не подписку, т.к. нет тестовых ключей подписок
+        if (isTestPurchasesEnabled()) {
+            buyItem(subscriptionId);
+        } else {
+            mBillingService.requestPurchase(
+                    subscriptionId,
+                    Consts.ITEM_TYPE_SUBSCRIPTION,
+                    getDeveloperPayload()
+            );
+        }
+    }
+
+    private String setTestProductId(String itemId) {
+        //Тестовые покупки
+        if (isTestPurchasesEnabled()) {
+            //Для проброса данных о тестовой покупке просто сохраняем оригинальный id продукта
+            BillingDriver.setProductIdForTestPayment(itemId);
+            //Заменяем id продукта на тестовый, который позволит нам совершить покупку через GP
+            itemId = "android.test.purchased";
+        } else {
+            BillingDriver.setProductIdForTestPayment(null);
+        }
+        return itemId;
     }
 
     private String getDeveloperPayload() {
@@ -157,4 +182,8 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
 
     }
 
+    @Override
+    public boolean isTestPurchasesAvailable() {
+        return CacheProfile.isEditor();
+    }
 }

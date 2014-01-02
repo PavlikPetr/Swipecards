@@ -67,6 +67,8 @@ public class CacheProfile {
     public final static int NOTIFICATIONS_LIKES = 2;
     public final static int NOTIFICATIONS_VISITOR = 4;
 
+    public static boolean NEED_SHOW_BONUS_COUNTER = false;
+
     public static LinkedList<FormItem> forms;
     protected static String status; // статус пользователя
     public static int background_id;
@@ -432,6 +434,10 @@ public class CacheProfile {
                 return CacheProfile.unread_fans;
             case F_ADMIRATIONS:
                 return CacheProfile.unread_admirations;
+            case F_BONUS:
+                if (NEED_SHOW_BONUS_COUNTER) {
+                    return getOptions().bonus.counter;
+                }
             default:
                 return 0;
         }

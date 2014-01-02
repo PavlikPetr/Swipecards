@@ -58,7 +58,7 @@ public class FloatBlock {
     }
 
     private void initBlock() {
-        String currentFragment = mFragment.getClass().toString();
+        String currentFragment = ((Object) mFragment).getClass().toString();
         if (getActivityMap().containsKey(currentFragment)) {
             String floatType = getActivityMap().get(currentFragment).floatType;
             if (floatType.equals(FLOAT_TYPE_BANNER)) {

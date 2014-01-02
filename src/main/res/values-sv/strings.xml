@@ -205,6 +205,12 @@
     <string name="buying_store_connect">Söker kontakt med iTunes Store</string>
     <string name="buying_store_purchase">Gör ett köp i iTunes Store</string>
     <string name="buying_tf_ack_sending">Skickar information om köpet på Topface</string>
+    <string name="rate_popup_title">Vänligen utvärdera vår app</string>
+    <string name="rate_popup_set_rate">Sätta betyg</string>
+    <string name="rate_popup_later">Fråga senare</string>
+    <string name="rate_popup_cancel">Nej, tack</string>
+    <string name="rate_popup_error">Du behöver ange antal stjärnor du vill sätta för vår app</string>
+    <string name="feedback_popup_title">Du har satt ett lågt betyg. Berätta vad är det du inte gillar i vår app. Hjälp oss att bli bättre. Tackar på förhand!</string>
     <string name="settings_melody">Notifikationsmelodi</string>
     <string name="edit_refresh_status">Förnya status</string>
     <string name="ban_title">Grattis! Du har bannlysts!</string>
@@ -220,7 +226,6 @@
     <string name="vip_not_activated">Din VIP-status är ej aktiverad</string>
     <string name="vip_privileges">VIP-förmåner</string>
     <string name="vip_text_visitors">Ta reda på vem som är intresserad av dig - se dina gäster!</string>
-    <string name="vip_text_adm_unlock">Skicka beundran gratis - visa maximalt dina känslor!</string>
     <string name="vip_rest">Du är prenumererad på VIP</string>
     <string name="vip_invis">\"Osynlig\" funktion</string>
     <string name="vip_messages_bg">Meddelandets bakgrund</string>
@@ -570,7 +575,6 @@
     <string name="general_bonus">Bonus</string>
     <string name="general_get">Erhåll</string>
     <string name="not_enough_coins">Du behöver fler mynt för att handla</string>
-    <string name="pincode_app_blocking">Blockera appen</string>
     <string name="pincode_blocking">Blockera</string>
     <string name="pincode_reset">Återställ PIN-kod</string>
     <string name="pincode_set">Sätta up PIN-kod</string>

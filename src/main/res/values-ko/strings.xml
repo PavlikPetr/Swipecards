@@ -216,7 +216,6 @@
     <string name="vip_not_activated">당신의 VIP 상태가 아직 등록되지 않았습니다.</string>
     <string name="vip_privileges">VIP-특전</string>
     <string name="vip_text_visitors">누가 당신에게 흥미를 보이는지 알아보세요. 자신의 게스트가 누구인지 볼 수 있습니다.</string>
-    <string name="vip_text_adm_unlock">무료로 감정을 전송할 수 있습니다 - 최대한 자신의 감정을 전달해 보세요.</string>
     <string name="vip_rest">당신은 VIP 등급에 가입되셨습니다.</string>
     <string name="vip_invis">투명 모드</string>
     <string name="vip_messages_bg">메세지 배경</string>
@@ -454,7 +453,7 @@
     <string name="general_msg">메세지</string>
     <string name="general_no_notifications">유감스럽게도  통지서 받기 설정을 이용 불가능으로 해놓으셨습니다.</string>
     <plurals name="vip_add_more_friends">
-        <item quantity="other">아직  %d의 친구들을 초대하여 보세요.</item>
+        <item quantity="other">아직 %d의 친구들을 초대하여 보세요.</item>
     </plurals>
     <string name="general_bookmarks_add_short">북마크로</string>
     <string name="black_list_add_short">블랙 리스트로</string>

@@ -64,6 +64,18 @@
                 android:visibility="gone"
                 android:layout_margin="5dp" />
 
+            <ViewStub
+                android:id="@+id/EditorTestStub"
+                android:layout="@layout/fragment_buy_editor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ViewStub
+                android:id="@+id/EditorTestStub"
+                android:layout="@layout/fragment_buy_editor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <LinearLayout
                 android:id="@+id/fbpBtnContainer"
                 android:orientation="vertical"

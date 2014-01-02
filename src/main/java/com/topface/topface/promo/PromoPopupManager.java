@@ -10,6 +10,7 @@ import com.topface.topface.promo.fragments.PromoKey71Fragment;
 import com.topface.topface.promo.fragments.PromoKey81Fragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.controllers.IStartAction;
+import com.topface.topface.utils.Debug;
 
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_ADMIRATIONS;
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
@@ -18,9 +19,7 @@ import static com.topface.topface.data.Options.PromoPopupEntity.AIR_VISITORS;
 public class PromoPopupManager {
     public static final String PROMO_POPUP_TAG = "promo_popup";
     public static boolean needShowPopup = true;
-    public static boolean isPromoFragmentVisible;
     private final FragmentActivity mActivity;
-    private PromoFragment mPromo;
 
     public PromoPopupManager(FragmentActivity activity) {
         mActivity = activity;
@@ -29,6 +28,7 @@ public class PromoPopupManager {
     private boolean startFragment() {
         //Если в эту сессию показывали промо-попап или он еще показывается, то ничего не делаем
         if (!needShowPopup) {
+            Debug.log("Promo: needShowPopup = " + false);
             return false;
         }
 
@@ -45,37 +45,40 @@ public class PromoPopupManager {
         return false;
     }
 
-    private boolean showPromoPopup(final int type) {
-
+    public boolean showPromoPopup(final int type) {
+        PromoFragment promo = null;
         FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
+        Debug.log("Promo: try showPromoPopup #" + type);
         if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type))) {
-            mPromo = (PromoFragment) fragmentManager.findFragmentByTag(PROMO_POPUP_TAG);
+            Debug.log("Promo: need show popup #" + type);
+            promo = (PromoFragment) fragmentManager.findFragmentByTag(PROMO_POPUP_TAG);
             //Проверяем, показывается ли в данный момент попап
-            if (mPromo != null) {
+            if (promo != null) {
+                Debug.log("Promo: promo is already exists #" + type);
                 //Если попап есть, но он не показывается пользователю, то удаляем его
-                if (!mPromo.isAdded() || mPromo.isHidden()) {
-                    mPromo.dismissAllowingStateLoss();
-                    mPromo = null;
-                } else if (mPromo.isAdded() && mPromo.isVisible()) {
+                if (!promo.isAdded() || promo.isHidden()) {
+                    Debug.log("Promo: promo is hidden #" + type);
+                    promo.dismissAllowingStateLoss();
+                } else if (promo.isAdded() && promo.isVisible()) {
                     //Если попап уже показывается, то ничего не делаем
                     return true;
                 }
             }
-            mPromo = getFragmentByType(type);
+            promo = getFragmentByType(type);
         }
         //Если удалось создать новый попап нужного типа, то показываем его
-        if (mPromo != null) {
+        if (promo != null) {
             //Подписываемся на события закрытия попапа (купить vip или закрыть)
-            mPromo.setOnCloseListener(new PromoFragment.OnCloseListener() {
+            promo.setOnCloseListener(new PromoFragment.OnCloseListener() {
                 @Override
                 public void onClose() {
                     needShowPopup = false;
-                    isPromoFragmentVisible = false;
                 }
             });
             //Показываем фрагмент, если он еще не показан
-            if (mPromo.getDialog() == null) {
-                mPromo.show(fragmentManager, PROMO_POPUP_TAG);
+            if (promo.getDialog() == null) {
+                Debug.log("Promo: promo show #" + type);
+                promo.show(fragmentManager, PROMO_POPUP_TAG);
             }
             return true;
         }

@@ -220,7 +220,6 @@
     <string name="vip_not_activated">Η κατάστασή σας-VIP δεν είναι ενεργοποιημένη</string>
     <string name="vip_privileges">VIP τα προνόμια</string>
     <string name="vip_text_visitors">Μάθετε ποιος είναι ενδιαφέρεται για σας - δείτε τους καλεσμένους σας!</string>
-    <string name="vip_text_adm_unlock">Αποστολή θαυμασμό για δωρεάν - εκφράστε τα συναισθήματά σας στο μέγιστο!</string>
     <string name="vip_rest">Έχετε εγγραφεί στη VIP</string>
     <string name="vip_invis">Αόρατη Λειτουργία</string>
     <string name="vip_messages_bg">Το φόντο μηνυμάτων</string>
@@ -426,8 +425,10 @@
         <item quantity="one">Λάβετε κατάσταση VIP για %d μέρα</item>
     </plurals>
     <plurals name="invite_friends_plurals">
-        <item quantity="other">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρες</item>
-        <item quantity="one">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρα</item>
+        <item quantity="other">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρες
+        </item>
+        <item quantity="one">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρα
+        </item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="other">Λάβετε VIP κατάσταση δωρεάν για %d προσκλήσεις</item>
@@ -570,8 +571,8 @@
     <string name="general_bonus">Μπόνους</string>
     <string name="general_get">Αποκτίστε</string>
     <string name="not_enough_coins">Δεν υπάρχουν αρκετά κέρματα για να αγοράξετε</string>
-    <string name="pincode_app_blocking">Κλείδωμα εφαρμογής</string>
     <string name="pincode_blocking">Κλείδωμα</string>
+    <string name="pincode_reset">Επαναφορά του κωδικού PIN</string>
     <string name="pincode_set">Ρυθμίστε έναν κωδικό PIN</string>
     <string name="pincode_change">Αλλάξτε τον κωδικό PIN</string>
     <string name="pincode_delete">Aφαιρέστε τον κωδικό PIN</string>
@@ -579,6 +580,7 @@
     <string name="pincode_check_label">Έλεγχος κωδικού PIN</string>
     <string name="pincode_change_label">Αλλαγή του κωδικού PIN</string>
     <string name="pincode_delete_label">Διαγραφή κωδικού PIN</string>
+    <string name="pincode_turning_on">Μπλοκάρισμα</string>
     <string name="pincode_dont_match">Δεν ταιριάζουν τα PIN.  Παρακαλώ δοκιμάστε ξανά.</string>
     <string name="pincode_wrong">Λάθος κωδικό PIN</string>
     <string name="pincode_input">Καταχωρίστε τον κωδικό PIN</string>
