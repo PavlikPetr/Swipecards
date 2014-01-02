@@ -98,7 +98,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mDatingLovePrice;
     private View mDatingGroup;
     private View mDatingResources;
-    private static boolean mInvitePopupShow;
 
     private RateController mRateController;
     private ImageSwitcher mImageSwitcher;
@@ -1131,7 +1130,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     // TODO : remove after startAction will be ready
     private boolean showInvitePopup(final FragmentActivity activity) {
-        if (!mInvitePopupShow && CacheProfile.canInvite && activity != null) {
+        if (CacheProfile.canInvite && activity != null) {
             final ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {
                 @Override
                 public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
@@ -1160,7 +1159,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         long date_now = System.currentTimeMillis();
 
         if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
-            mInvitePopupShow = true;
             preferences.edit().putLong(INVITE_POPUP_PREF_KEY, date_now).commit();
             if (activity != null) {
                 ContactsProvider provider = new ContactsProvider(activity);

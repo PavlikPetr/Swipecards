@@ -347,6 +347,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
+    /**
+     * Method for overload where you can register start actions
+     * User startActionController argument to register actions
+     * Note: actions can be placed here for global usage in all child activities
+     */
     protected void onRegisterStartActions(StartActionsController startActionsController) {
     }
 

@@ -178,7 +178,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     @Override
     protected void onRegisterStartActions(StartActionsController startActionsController) {
         super.onRegisterStartActions(startActionsController);
-        // Note: actions can be placed in parent for global usage
 
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
