@@ -2,7 +2,10 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 

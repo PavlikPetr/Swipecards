@@ -82,7 +82,7 @@ public class ClosingsController implements View.OnClickListener {
      * @return true if all flags are ready to show closings,
      * but still after retrieving feeds there can be no closings at all
      */
-    public void show() {
+    public boolean show() {
         // #1
         ApiRequest likesRequest = getUsersListRequest(FeedRequest.FeedService.LIKES, mContext);
         likesRequest.callback(getDataRequestHandler(FeedRequest.FeedService.LIKES));
