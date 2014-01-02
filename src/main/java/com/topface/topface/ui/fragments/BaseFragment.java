@@ -52,7 +52,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         F_UNDEFINED
     }
 
-    public static final String INVITE_POPUP_PREF_KEY = "INVITE_POPUP";
+
     private boolean mNeedTitles = true;
 
     @Override

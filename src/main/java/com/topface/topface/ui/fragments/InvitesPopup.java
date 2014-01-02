@@ -1,6 +1,8 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -29,6 +32,8 @@ import com.topface.topface.utils.Utils;
 import java.util.ArrayList;
 
 public class InvitesPopup extends BaseFragment {
+
+    public static final String INVITE_POPUP_PREF_KEY = "INVITE_POPUP";
 
     public static final String CONTACTS = "contacts";
     private ArrayList<ContactsProvider.Contact> contacts;
@@ -171,5 +176,19 @@ public class InvitesPopup extends BaseFragment {
         }).exec();
     }
 
+    public static boolean isApplicable() {
+        if (CacheProfile.canInvite) {
+            final SharedPreferences preferences = App.getContext().getSharedPreferences(
+                    Static.PREFERENCES_TAG_SHARED,
+                    Context.MODE_PRIVATE
+            );
+            long date_start = preferences.getLong(INVITE_POPUP_PREF_KEY, 1);
+            long date_now = System.currentTimeMillis();
 
+            if ((date_now - date_start) >= CacheProfile.getOptions().popup_timeout) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

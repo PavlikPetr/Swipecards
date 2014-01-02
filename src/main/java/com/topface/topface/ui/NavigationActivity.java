@@ -192,6 +192,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         PopupManager popupManager = new PopupManager(this);
         startActionsController.registerAction(popupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(popupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
+        startActionsController.registerAction(popupManager.createInvitePopupStartAction(AC_PRIORITY_LOW));
         // fullscreen
         startActionsController.registerAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
     }
@@ -224,11 +225,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     private void getBonusCounterConfig() {
         SharedPreferences preferences = getSharedPreferences(BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
         long lastTime = preferences.getLong(BONUS_COUNTER_LAST_SHOW_TIME, 0);
-        if (lastTime < CacheProfile.getOptions().bonus.timestamp) {
-            CacheProfile.NEED_SHOW_BONUS_COUNTER = true;
-        } else {
-            CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
-        }
+        CacheProfile.NEED_SHOW_BONUS_COUNTER = lastTime < CacheProfile.getOptions().bonus.timestamp;
     }
 
     private void initDrawerLayout() {

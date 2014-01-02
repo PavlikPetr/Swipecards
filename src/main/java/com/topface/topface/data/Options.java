@@ -124,6 +124,7 @@ public class Options extends AbstractData {
      */
     public HashMap<String, Page> pages = new HashMap<String, Page>();
 
+    // remove if not needed
     public String ratePopupType = PopupManager.OFF_RATE_TYPE;
     private String paymentwall;
 
