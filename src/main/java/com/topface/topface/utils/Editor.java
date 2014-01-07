@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import com.topface.topface.App;
 import com.topface.topface.data.Profile;
+import com.topface.topface.utils.config.AppConfig;
 
 public class Editor {
 

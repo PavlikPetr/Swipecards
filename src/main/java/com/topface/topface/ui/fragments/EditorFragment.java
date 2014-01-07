@@ -20,12 +20,12 @@ import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
-import com.topface.topface.utils.AppConfig;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
 /**
@@ -205,12 +205,18 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
     private void saveApiUrl() {
         try {
-            mConfig.setApiUrl(
-                    (String) mApiUrl.getSelectedItem(),
-                    Integer.parseInt(mApiVersion.getText().toString()),
-                    mApiRevision.getText().toString()
-            );
-            showCompleteMessage();
+            Editable version = mApiVersion.getText();
+            Editable revision = mApiRevision.getText();
+            if (version != null && revision != null) {
+                mConfig.setApiUrl(
+                        (String) mApiUrl.getSelectedItem(),
+                        Integer.parseInt(version.toString()),
+                        revision.toString()
+                );
+                showCompleteMessage();
+            } else {
+                showError();
+            }
         } catch (Exception e) {
             showError();
         }
