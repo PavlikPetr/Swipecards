@@ -2,7 +2,6 @@ package com.topface.topface.utils.controllers;
 
 import android.app.Activity;
 
-import com.topface.topface.App;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 
@@ -53,7 +52,7 @@ public class StartActionsController {
      * @return true if action was processed, false otherwise
      */
     private boolean startAction() {
-        if (App.DEBUG) {
+        if (Debug.isEnabled()) {
             Debug.log(TAG, "===Pending start actions:===");
             for (IStartAction action : mPendingActions) {
                 Debug.log(TAG, action.toString());

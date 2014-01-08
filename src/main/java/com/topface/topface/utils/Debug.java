@@ -196,4 +196,7 @@ public class Debug {
         }
     }
 
+    public static boolean isEnabled() {
+        return mShowDebug;
+    }
 }
