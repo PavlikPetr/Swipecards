@@ -113,6 +113,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             } else if (action.equals(CacheProfile.PROFILE_UPDATE_ACTION)) {
                 initProfileMenuItem(mHeaderView);
                 initEditor();
+                initBonus();
                 if (CacheProfile.premium) {
                     mClosingsController.onPremiumObtained();
                 }
@@ -137,6 +138,14 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             }
         }
     };
+
+    private void initBonus() {
+        if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(F_BONUS)) {
+            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_1));
+            mAdapter.refreshCounterBadges();
+        }
+    }
+
     private FullscreenController mFullscreenController;
 
     private void initEditor() {
@@ -504,15 +513,19 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     public void onClick(View v) {
         if (getListView().isClickable()) {
             FragmentId id = (FragmentId) v.getTag();
+            //Сделано так, потому что при нажатии на кнопку бонусов не должно открываться нового фрагмента
+            //к тому же тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
+            //его локально, а не серверно, как это происходит с остальными счетчиками.
             if (id == F_BONUS) {
+                CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
+                mAdapter.refreshCounterBadges();
                 if (CacheProfile.NEED_SHOW_BONUS_COUNTER) {
                     new BackgroundThread() {
                         @Override
                         public void execute() {
                             SharedPreferences preferences = getActivity().getSharedPreferences(NavigationActivity.BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
                             preferences.edit().putLong(NavigationActivity.BONUS_COUNTER_LAST_SHOW_TIME, CacheProfile.getOptions().bonus.timestamp).commit();
-                            CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
-                        }
+                            }
                     };
                 }
                 Offerwalls.startOfferwall(getActivity());

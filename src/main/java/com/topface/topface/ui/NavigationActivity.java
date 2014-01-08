@@ -219,10 +219,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     protected void onCreateAsync() {
         Novice.getInstance(getPreferences()).initNoviceFlags();
-        getBonusCounterConfig();
+//        initBonusCounterConfig();
     }
 
-    private void getBonusCounterConfig() {
+    private void initBonusCounterConfig() {
         SharedPreferences preferences = getSharedPreferences(BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
         long lastTime = preferences.getLong(BONUS_COUNTER_LAST_SHOW_TIME, 0);
         CacheProfile.NEED_SHOW_BONUS_COUNTER = lastTime < CacheProfile.getOptions().bonus.timestamp;
@@ -372,6 +372,11 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+    }
+
+    @Override
+    protected void onProfileUpdated() {
+        initBonusCounterConfig();
     }
 
     /**
