@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.topface.topface.R;
+import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.settings.SettingsFeedbackMessageFragment;
@@ -80,7 +81,8 @@ public class SendFeedbackDialog extends BaseDialogFragment implements View.OnCli
                         report.setBody(message);
                         report.setEmail(Settings.getInstance().getSocialAccountEmail());
                         SettingsFeedbackMessageFragment.fillVersion(getActivity(), report);
-                        SettingsFeedbackMessageFragment.sendFeedbackRequest(getActivity(), report, handler);
+                        FeedbackReport feedbackRequest = new FeedbackReport(getActivity(), report);
+                        feedbackRequest.callback(handler).exec();
                     }
                 };
                 dismiss();

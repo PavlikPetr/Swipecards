@@ -205,43 +205,34 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             mReport.body = feedbackText;
             mReport.transactionId = Utils.getText(mTransactionIdEditText).trim();
             prepareRequestSend();
-            SettingsFeedbackMessageFragment.sendFeedbackRequest(getActivity(), mReport,
-                    new ApiHandler() {
+            FeedbackReport feedbackRequest = new FeedbackReport(getActivity(), mReport);
+            feedbackRequest.callback(new ApiHandler() {
 
-                        @Override
-                        public void success(IApiResponse response) {
-                            if (isAdded()) {
-                                mReport.body = Static.EMPTY;
-                                finishRequestSend();
+                @Override
+                public void success(IApiResponse response) {
+                    if (isAdded()) {
+                        mReport.body = Static.EMPTY;
+                        finishRequestSend();
 
-                                mEditText.setText(Static.EMPTY);
-                                Toast.makeText(App.getContext(),
-                                        R.string.settings_feedback_success_msg,
-                                        Toast.LENGTH_SHORT).show();
-                                getActivity().finish();
+                        mEditText.setText(Static.EMPTY);
+                        Toast.makeText(App.getContext(),
+                                R.string.settings_feedback_success_msg,
+                                Toast.LENGTH_SHORT).show();
+                        getActivity().finish();
+                    }
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    finishRequestSend();
+                    Toast.makeText(App.getContext(), R.string.general_data_error,
+                            Toast.LENGTH_SHORT).show();
                             }
-                        }
-
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-                            finishRequestSend();
-                            Toast.makeText(App.getContext(), R.string.general_data_error,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            }).exec();
         } else {
             Toast.makeText(App.getContext(), R.string.settings_invalid_email, Toast.LENGTH_SHORT).show();
             mEditEmail.requestFocus();
         }
-    }
-
-    public static void sendFeedbackRequest(Context context, final Report report, ApiHandler handler) {
-        FeedbackReport feedbackRequest = new FeedbackReport(context);
-        feedbackRequest.subject = report.getSubject();
-        feedbackRequest.text = report.getBody();
-        feedbackRequest.extra = report.getExtra();
-        feedbackRequest.email = report.getEmail();
-        feedbackRequest.callback(handler).exec();
     }
 
     private boolean emailConfirmed(String email) {
