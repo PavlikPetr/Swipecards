@@ -417,6 +417,11 @@ public class ClosingsController implements View.OnClickListener {
             public int getPriority() {
                 return priority;
             }
+
+            @Override
+            public String toDebugString() {
+                return "StartAction:Closings:" + getPriority() + ":" + isApplicable();
+            }
         };
     }
 }

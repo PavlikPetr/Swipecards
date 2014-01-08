@@ -408,6 +408,11 @@ public class FullscreenController {
             public int getPriority() {
                 return priority;
             }
+
+            @Override
+            public String toDebugString() {
+                return "StartAction:Fullscreen:" + getPriority() + ":" + isApplicable();
+            }
         };
     }
 }

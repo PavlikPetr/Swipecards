@@ -2,7 +2,9 @@ package com.topface.topface.utils.controllers;
 
 import android.app.Activity;
 
+import com.topface.topface.App;
 import com.topface.topface.utils.BackgroundThread;
+import com.topface.topface.utils.Debug;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.List;
  * Control actions on start: popups, tips, fullscreens, etc
  */
 public class StartActionsController {
+    private static final String TAG = "StartActionController";
     /**
      * Indicates whether some action was processed on start or not.
      * Static field will die with App session
@@ -34,8 +37,11 @@ public class StartActionsController {
         new BackgroundThread() {
             @Override
             public void execute() {
+                Debug.log(TAG, "try to process start action");
                 if (!processedActionForSession) {
                     processedActionForSession = startAction();
+                } else {
+                    Debug.log(TAG, "some action already processed for this session");
                 }
             }
         };
@@ -47,14 +53,19 @@ public class StartActionsController {
      * @return true if action was processed, false otherwise
      */
     private boolean startAction() {
+        if (App.DEBUG) {
+            Debug.log(TAG, "===Pending start actions:===");
+            for (IStartAction action : mPendingActions) {
+                Debug.log(TAG, action.toDebugString());
+            }
+            Debug.log(TAG, "============================");
+        }
         IStartAction action = getNextAction();
         while (action != null && !action.isApplicable()) {
             mPendingActions.remove(action);
             action = getNextAction();
         }
-        boolean result = processAction(action);
-        StartActionsController.processedActionForSession = result;
-        return result;
+        return processAction(action);
     }
 
     /**
@@ -71,6 +82,7 @@ public class StartActionsController {
                 action.callOnUi();
             }
         });
+        Debug.log(TAG, "===>process chosen action - " + action.toDebugString());
         return true;
     }
 
@@ -81,6 +93,7 @@ public class StartActionsController {
      */
     public void registerAction(IStartAction action) {
         mPendingActions.add(action);
+        Debug.log(TAG, "register " + action.toDebugString());
     }
 
     /**

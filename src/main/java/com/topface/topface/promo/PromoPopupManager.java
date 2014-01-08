@@ -9,8 +9,8 @@ import com.topface.topface.promo.fragments.PromoKey31Fragment;
 import com.topface.topface.promo.fragments.PromoKey71Fragment;
 import com.topface.topface.promo.fragments.PromoKey81Fragment;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.controllers.IStartAction;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.controllers.IStartAction;
 
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_ADMIRATIONS;
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
@@ -130,6 +130,11 @@ public class PromoPopupManager {
             @Override
             public int getPriority() {
                 return priority;
+            }
+
+            @Override
+            public String toDebugString() {
+                return "StartAction:PromoPopup:" + getPriority() + ":" + isApplicable();
             }
         };
     }

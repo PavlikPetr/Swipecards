@@ -418,6 +418,11 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             public int getPriority() {
                 return priority;
             }
+
+            @Override
+            public String toDebugString() {
+                return "StartAction:TakePhoto-SelectCity:" + getPriority() + ":" + isApplicable();
+            }
         };
     }
 

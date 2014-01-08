@@ -50,6 +50,11 @@ public class PopupManager {
             public int getPriority() {
                 return priority;
             }
+
+            @Override
+            public String toDebugString() {
+                return "StartAction:OldVersionPopup:" + getPriority() + ":" + isApplicable();
+            }
         };
     }
 
@@ -121,6 +126,11 @@ public class PopupManager {
             public int getPriority() {
                 return priority;
             }
+
+            @Override
+            public String toDebugString() {
+                return "StartAction:RateAppPopup:" + getPriority() + ":" + isApplicable();
+            }
         };
     }
 
@@ -155,6 +165,11 @@ public class PopupManager {
             @Override
             public int getPriority() {
                 return priority;
+            }
+
+            @Override
+            public String toDebugString() {
+                return "StartAction:InviteContactsPopup:" + getPriority() + ":" + isApplicable();
             }
         };
     }
