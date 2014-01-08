@@ -23,7 +23,7 @@
         <item name="actionBarSize">@dimen/default_header_height</item>
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
         <item name="actionButtonStyle">@style/Widget.Topface.ActionBar.Buttons</item>
-        <item name="actionBarItemBackground">@drawable/bg_semitransparent_black</item>
+        <item name="actionBarItemBackground">@drawable/bg_semitransparent_black_selector</item>
 
         <item name="android:actionBarSize" tools:ignore="NewApi">@dimen/default_header_height</item>
         <item name="android:actionBarStyle" tools:ignore="NewApi">@style/Widget.Topface.ActionBar
@@ -32,7 +32,7 @@
             @style/Widget.Topface.ActionBar.Buttons
         </item>
         <item name="android:actionBarItemBackground" tools:ignore="NewApi">
-            @drawable/bg_semitransparent_black
+            @drawable/bg_semitransparent_black_selector
         </item>
 
         <!-- Action Mode (CAB)-->
@@ -774,26 +774,52 @@
         <item name="android:background">@drawable/btn_gray_selector</item>
     </style>
 
-    <style name="ButtonGray" parent="ShadowBlackTop">
+    <style name="Widget.Topface.Button.Big" parent="ShadowBlackTop">
+        <item name="android:minHeight">50dp</item>
         <item name="android:paddingLeft">15dp</item>
         <item name="android:paddingRight">15dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
-        <item name="android:minHeight">50dp</item>
-        <item name="android:background">@drawable/btn_gray_selector</item>
-        <item name="android:textColor">#B8B8B8</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
-
     </style>
 
-    <style name="ButtonBlue" parent="ButtonGray">
-        <item name="android:background">@drawable/btn_blue_selector</item>
+    <style name="Widget.Topface.Button" parent="ShadowBlackTop">
+        <item name="android:minHeight">32dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big">
+        <item name="android:background">@drawable/btn_gray_selector</item>
+        <item name="android:textColor">#B8B8B8</item>
+    </style>
+
+    <style name="Widget.Topface.Button.Big.Blue" parent="Widget.Topface.Button.Big">
+    <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
-    <style name="ButtonSale" parent="ButtonBlue">
-        <item name="android:background">@drawable/btn_sale_selector</item>
+    <style name="Widget.Topface.Button.Blue" parent="Widget.Topface.Button">
+    <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="ButtonSale" parent="Widget.Topface.Button.Big.Blue">
+    <item name="android:background">@drawable/btn_sale_selector</item>
         <item name="android:paddingRight">56dp</item>
+    </style>
+
+    <style name="Widget.Topface.RatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:numStars">5</item>
+        <item name="android:rating">0</item>
+        <item name="android:stepSize">1</item>
+        <item name="android:minHeight">28dip</item>
+        <item name="android:maxHeight">28dip</item>
+        <item name="android:progressDrawable">@drawable/topface_ratingbar</item>
     </style>
 </resources>

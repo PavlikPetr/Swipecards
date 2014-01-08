@@ -163,7 +163,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     private void initEmptyScreenOnBlockedLikes(final View inflated, ViewFlipper viewFlipper, final Options.BlockSympathy blockSympathyOptions) {
         // send stat to google analytics
-        sendBlockSympathyStatictics(blockSympathyOptions);
+        sendBlockSympathyStatistics(blockSympathyOptions);
         // set paid likes view
         viewFlipper.setDisplayedChild(2);
         View currentView = viewFlipper.getChildAt(2);
@@ -224,7 +224,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         startActivity(ContainerActivity.getBuyingIntent("VipPaidSympathies." + group));
     }
 
-    private void sendBlockSympathyStatictics(final Options.BlockSympathy blockSympathyOptions) {
+    private void sendBlockSympathyStatistics(final Options.BlockSympathy blockSympathyOptions) {
         new BackgroundThread() {
             @Override
             public void execute() {

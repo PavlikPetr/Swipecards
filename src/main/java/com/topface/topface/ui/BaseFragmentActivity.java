@@ -25,8 +25,10 @@ import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.LinkedList;
 
@@ -37,11 +39,13 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected boolean needOpenDialog = true;
     private boolean mIndeterminateSupported = false;
+    private boolean mActivityOnRestartInvoked = false;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
     protected boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
+    private StartActionsController mStartActionsController = new StartActionsController(this);
 
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -65,6 +69,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         // из-за которого показывается лоадер в ActionBar
         // этот метод можно использовать только после setContent
         setSupportProgressBarIndeterminateVisibility(false);
+        if (!mActivityOnRestartInvoked) {
+            onRegisterStartActions(mStartActionsController);
+            mActivityOnRestartInvoked = false;
+        }
     }
 
     @Override
@@ -132,8 +140,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     protected void onLoadProfile() {
+        AuthorizationManager.extendAccessToken(this);
         if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
             startAuth();
+        } else {
+            mStartActionsController.onProcessAction();
         }
     }
 
@@ -323,5 +334,25 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+
+    /**
+     * Method for overload where you can register start actions
+     * User startActionController argument to register actions
+     * Note: actions can be placed here for global usage in all child activities
+     */
+    protected void onRegisterStartActions(StartActionsController startActionsController) {
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mActivityOnRestartInvoked = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mStartActionsController.clear();
     }
 }

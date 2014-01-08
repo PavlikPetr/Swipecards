@@ -64,7 +64,6 @@ import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
@@ -73,7 +72,6 @@ import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.social.AuthToken;
 
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
@@ -99,7 +97,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mDatingLovePrice;
     private View mDatingGroup;
     private View mDatingResources;
-    private static boolean mInvitePopupShow;
 
     private RateController mRateController;
     private ImageSwitcher mImageSwitcher;
@@ -1140,64 +1137,5 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected boolean isNeedShowPromoPopup() {
-        return true;
-    }
-
-    @Override
-    protected boolean showPromoDialog() {
-        boolean result = super.showPromoDialog();
-        if (!result) {
-            result = showInvitePopup(getActivity());
-        }
-        return result;
-    }
-
-    private boolean showInvitePopup(final FragmentActivity activity) {
-        if (!mInvitePopupShow && CacheProfile.canInvite && activity != null) {
-            final ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {
-                @Override
-                public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
-                    if (isAdded()) {
-                        showInvitePopup(contacts);
-                    }
-                }
-            };
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    final SharedPreferences preferences = activity.getSharedPreferences(
-                            Static.PREFERENCES_TAG_SHARED,
-                            Context.MODE_PRIVATE
-                    );
-                    doInvitePopupActions(preferences, activity, handler);
-                }
-            };
-        }
-        return true;
-    }
-
-    private void doInvitePopupActions(SharedPreferences preferences, FragmentActivity activity,
-                                      ContactsProvider.GetContactsHandler handler) {
-        long date_start = preferences.getLong(INVITE_POPUP_PREF_KEY, 1);
-        long date_now = new java.util.Date().getTime();
-
-        if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
-            mInvitePopupShow = true;
-            preferences.edit().putLong(INVITE_POPUP_PREF_KEY, date_now).commit();
-            if (activity != null) {
-                ContactsProvider provider = new ContactsProvider(activity);
-                provider.getContacts(-1, 0, handler);
-            }
-        }
-    }
-
-    public void showInvitePopup(ArrayList<ContactsProvider.Contact> data) {
-        EasyTracker.getTracker().sendEvent("InvitesPopup", "Show", "", 0L);
-        InvitesPopup popup = InvitesPopup.newInstance(data);
-        ((BaseFragmentActivity) getActivity()).startFragment(popup);
     }
 }

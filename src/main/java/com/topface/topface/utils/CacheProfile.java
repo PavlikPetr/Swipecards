@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 
 import org.json.JSONException;
@@ -433,7 +435,7 @@ public class CacheProfile {
             case F_ADMIRATIONS:
                 return CacheProfile.unread_admirations;
             case F_BONUS:
-                return NEED_SHOW_BONUS_COUNTER? getOptions().bonus.counter : 0;
+                return NEED_SHOW_BONUS_COUNTER ? getOptions().bonus.counter : 0;
             default:
                 return 0;
         }
@@ -442,5 +444,17 @@ public class CacheProfile {
     public static void sendUpdateProfileBroadcast() {
         LocalBroadcastManager.getInstance(App.getContext())
                 .sendBroadcast(new Intent(PROFILE_UPDATE_ACTION));
+    }
+
+    public static void selectCity(Activity activity) {
+        CacheProfile.wasCityAsked = true;
+        CacheProfile.onCityConfirmed(activity);
+        activity.startActivityForResult(new Intent(activity, CitySearchActivity.class),
+                CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION);
+    }
+
+    public static boolean needToSelectCity(Context context) {
+        return (!CacheProfile.isEmpty() && (CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(context))
+                && !CacheProfile.wasCityAsked);
     }
 }

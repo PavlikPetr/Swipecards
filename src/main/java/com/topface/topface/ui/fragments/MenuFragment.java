@@ -51,6 +51,7 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.FullscreenController;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.controllers.ClosingsController;
+import com.topface.topface.utils.controllers.IStartAction;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
@@ -130,11 +131,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                     fragmentId = (FragmentId) extras.getSerializable(SELECTED_FRAGMENT_ID);
                 }
                 selectMenu(fragmentId);
-            } else if (action.equals(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION)) {
-                if (!mClosingsController.show()) {
-                    if (mFullscreenController != null)
-                        mFullscreenController.requestFullscreen();
-                }
             } else if (action.equals(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED)) {
                 mClosingsController.onClosingsProcessed(FeedRequest.FeedService.LIKES);
             } else if (action.equals(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED)) {
@@ -529,7 +525,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                         public void execute() {
                             SharedPreferences preferences = getActivity().getSharedPreferences(NavigationActivity.BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
                             preferences.edit().putLong(NavigationActivity.BONUS_COUNTER_LAST_SHOW_TIME, CacheProfile.getOptions().bonus.timestamp).commit();
-                            }
+                        }
                     };
                 }
                 Offerwalls.startOfferwall(getActivity());
@@ -537,6 +533,13 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 selectMenu(id);
             }
         }
+    }
+
+    public void onLoadProfile() {
+        // We don't have counters' values from cached data
+        // so we have to make actions after we will receive data from server.
+        // Another call is in BroadcastReceiver of MenuFragment
+        if (!CacheProfile.premium) mClosingsController.show();
     }
 
     public boolean isLockedByClosings() {
@@ -605,5 +608,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     public static void onLogout() {
         ClosingsController.onLogout();
         mEditorInitializationForSessionInvoked = false;
+    }
+
+    public IStartAction createClosingsStartAction(int priority) {
+        return mClosingsController.createStartAction(priority);
     }
 }

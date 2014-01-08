@@ -23,7 +23,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.utils.BitmapUtils;
 
-public class TakePhotoDialog extends DialogFragment implements View.OnClickListener {
+public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "Topface_TakePhotoDialog_Tag";
 
@@ -50,13 +50,18 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if (mTakePhotoListener != null) mTakePhotoListener.onDialogClose();
+                if (mTakePhotoListener != null) {
+                    mTakePhotoListener.onDialogClose();
+                }
+
             }
         });
         getDialog().setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                if (mTakePhotoListener != null) mTakePhotoListener.onDialogClose();
+                if (mTakePhotoListener != null) {
+                    mTakePhotoListener.onDialogClose();
+                }
             }
         });
 

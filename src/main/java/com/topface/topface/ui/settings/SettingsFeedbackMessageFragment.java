@@ -1,6 +1,6 @@
 package com.topface.topface.ui.settings;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -99,22 +99,25 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
         initTextViews(root, mFeedbackType);
 
-        try {
-            PackageInfo pInfo;
-            Activity activity = getActivity();
-            PackageManager pManager = activity.getPackageManager();
-            if (activity != null && pManager != null) {
-                pInfo = pManager.getPackageInfo(activity.getPackageName(), 0);
-                mReport.topface_version = pInfo.versionName;
-                mReport.topface_versionCode = pInfo.versionCode;
-            }
-        } catch (NameNotFoundException e) {
-            Debug.error(e);
-        }
+        SettingsFeedbackMessageFragment.fillVersion(getActivity(), mReport);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         return root;
+    }
+
+    public static void fillVersion(Context context, Report report) {
+        try {
+            PackageInfo pInfo;
+            PackageManager pManager = context.getPackageManager();
+            if (context != null && pManager != null) {
+                pInfo = pManager.getPackageInfo(context.getPackageName(), 0);
+                report.topface_version = pInfo.versionName;
+                report.topface_versionCode = pInfo.versionCode;
+            }
+        } catch (NameNotFoundException e) {
+            Debug.error(e);
+        }
     }
 
     @Override
@@ -202,11 +205,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             mReport.body = feedbackText;
             mReport.transactionId = Utils.getText(mTransactionIdEditText).trim();
             prepareRequestSend();
-            FeedbackReport feedbackRequest = new FeedbackReport(getActivity().getApplicationContext());
-            feedbackRequest.subject = mReport.getSubject();
-            feedbackRequest.text = mReport.getBody();
-            feedbackRequest.extra = mReport.getExtra();
-            feedbackRequest.email = mReport.getEmail();
+            FeedbackReport feedbackRequest = new FeedbackReport(getActivity(), mReport);
             feedbackRequest.callback(new ApiHandler() {
 
                 @Override
@@ -226,8 +225,9 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 @Override
                 public void fail(int codeError, IApiResponse response) {
                     finishRequestSend();
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
-                }
+                    Toast.makeText(App.getContext(), R.string.general_data_error,
+                            Toast.LENGTH_SHORT).show();
+                            }
             }).exec();
         } else {
             Toast.makeText(App.getContext(), R.string.settings_invalid_email, Toast.LENGTH_SHORT).show();
@@ -245,7 +245,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         }
     }
 
-    class Report {
+    public static class Report {
         String email;
         String subject;
         String body = Static.EMPTY;
@@ -300,6 +300,18 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
         public String getEmail() {
             return email;
+        }
+
+        public void setBody(String body) {
+            this.body = body;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public void setSubject(String subject) {
+            this.subject = subject;
         }
     }
 

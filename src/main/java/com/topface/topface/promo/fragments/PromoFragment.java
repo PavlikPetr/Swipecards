@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,12 +83,6 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.promo_popup, container, false);
-        root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Магия для того, чтобы клики не проходили в дэйтинг фрагмент
-            }
-        });
 
         root.findViewById(R.id.buyVip).setOnClickListener(this);
         ((TextView) root.findViewById(R.id.deleteMessages)).setText(getDeleteButtonText());

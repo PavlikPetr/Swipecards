@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -19,7 +18,6 @@ import android.view.Window;
 import android.widget.AdapterView;
 
 import com.topface.topface.Static;
-import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
@@ -34,7 +32,6 @@ import com.topface.topface.utils.http.IRequestClient;
 import java.util.LinkedList;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
-
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
@@ -55,9 +52,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         F_UNDEFINED
     }
 
-    public static final String INVITE_POPUP_PREF_KEY = "INVITE_POPUP";
+
     private boolean mNeedTitles = true;
-    private PromoPopupManager mPromoPopupManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -218,37 +214,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
     protected void onLoadProfile() {
         Debug.log(((Object) this).getClass().getSimpleName() + ": onLoadProfile");
-
-        if (isNeedShowPromoPopup()) {
-            showPromoDialog();
-        }
-    }
-
-    /**
-     * Показывает различные варианты попапов на старте
-     *
-     * @return удалось ли показать попап
-     */
-    protected boolean showPromoDialog() {
-        FragmentActivity activity = getActivity();
-        Debug.log("Promo: showPromoDialog");
-        boolean promoPopupResult = false;
-        if (PromoPopupManager.needShowPopup && !CacheProfile.premium && activity != null) {
-            if (mPromoPopupManager == null) {
-                mPromoPopupManager = new PromoPopupManager(activity);
-            }
-            promoPopupResult = mPromoPopupManager.startFragment();
-            Debug.log("Promo: startFragment result: " + promoPopupResult);
-        }
-
-        return promoPopupResult;
     }
 
     @Override
@@ -334,9 +301,5 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
 
         return mTitleSetter;
-    }
-
-    protected boolean isNeedShowPromoPopup() {
-        return false;
     }
 }

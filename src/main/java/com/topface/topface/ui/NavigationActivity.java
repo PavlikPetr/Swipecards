@@ -27,6 +27,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Photo;
+import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.SettingsRequest;
@@ -46,9 +47,10 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PopupManager;
+import com.topface.topface.utils.controllers.IStartAction;
+import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
-import com.topface.topface.utils.social.AuthorizationManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,6 +58,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
+import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_HIGH;
+import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
+import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
@@ -63,7 +68,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     public static final String BONUS_COUNTER_TAG = "preferences_for_bonus_counter";
     public static final String BONUS_COUNTER_LAST_SHOW_TIME = "last_show_time";
 
-    private FragmentManager mFragmentManager;
     private MenuFragment mMenuFragment;
     private DrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
@@ -76,10 +80,73 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationBarController mNavBarController;
 
-    BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mNavBarController != null) mNavBarController.refreshNotificators();
+        }
+    };
+
+    private TakePhotoDialog.TakePhotoListener mTakePhotoListener = new TakePhotoDialog.TakePhotoListener() {
+        @Override
+        public void onPhotoSentSuccess(final Photo photo) {
+            if (CacheProfile.photos != null) {
+                CacheProfile.photos.add(photo);
+                Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                intent.putExtra(PhotoSwitcherActivity.INTENT_CLEAR, true);
+                intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
+                LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
+            } else {
+                Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                ArrayList<Photo> photos = new ArrayList<Photo>();
+                photos.add(photo);
+                intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
+            }
+            takePhotoDialogStarted = false;
+            PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
+            request.photoid = photo.getId();
+            request.callback(new ApiHandler() {
+
+                @Override
+                public void success(IApiResponse response) {
+                    CacheProfile.photo = photo;
+                    CacheProfile.sendUpdateProfileBroadcast();
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
+                        if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
+                            CacheProfile.photos.remove(photo);
+                        }
+                        Toast.makeText(
+                                NavigationActivity.this,
+                                App.getContext().getString(R.string.general_wrong_photo_upload),
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                }
+
+                @Override
+                public void always(IApiResponse response) {
+                    super.always(response);
+                }
+            }).exec();
+            needOpenDialog = true;
+        }
+
+        @Override
+        public void onPhotoSentFailure() {
+            Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+            needOpenDialog = true;
+        }
+
+        @Override
+        public void onDialogClose() {
+            takePhotoDialogStarted = false;
+            if (CacheProfile.needToSelectCity(NavigationActivity.this)) {
+                CacheProfile.selectCity(NavigationActivity.this);
+            }
         }
     };
 
@@ -100,14 +167,38 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             finish();
             return;
         }
-        mFragmentManager = getSupportFragmentManager();
         initDrawerLayout();
+        initFullscreen();
         new BackgroundThread() {
             @Override
             public void execute() {
                 onCreateAsync();
             }
         };
+    }
+
+    @Override
+    protected void onRegisterStartActions(StartActionsController startActionsController) {
+        super.onRegisterStartActions(startActionsController);
+
+        // actions after registration
+        startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
+        // closings
+        startActionsController.registerAction(mMenuFragment.createClosingsStartAction(AC_PRIORITY_NORMAL));
+        // promo popups
+        PromoPopupManager promoPopupManager = new PromoPopupManager(this);
+        startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
+        // popups
+        PopupManager popupManager = new PopupManager(this);
+        startActionsController.registerAction(popupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
+        startActionsController.registerAction(popupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
+        startActionsController.registerAction(popupManager.createInvitePopupStartAction(AC_PRIORITY_LOW));
+        // fullscreen
+        startActionsController.registerAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
+    }
+
+    private void initFullscreen() {
+        mFullscreenController = new FullscreenController(this);
     }
 
     public boolean getDialogStarted() {
@@ -138,7 +229,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     private void initDrawerLayout() {
-        mMenuFragment = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        mMenuFragment = (MenuFragment) fragmentManager.findFragmentById(R.id.fragment_menu);
         if (mMenuFragment == null) {
             mMenuFragment = new MenuFragment();
         }
@@ -152,7 +244,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             }
         });
         if (!mMenuFragment.isAdded()) {
-            mFragmentManager
+            fragmentManager
                     .beginTransaction()
                     .add(R.id.fragment_menu, mMenuFragment)
                     .commit();
@@ -179,7 +271,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                actionsAfterRegistration();
             }
         };
         // Set the drawer toggle as the DrawerListener
@@ -237,22 +328,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     @Override
-    public void onLoadProfile() {
-        super.onLoadProfile();
-        AuthorizationManager.extendAccessToken(NavigationActivity.this);
-        PopupManager manager = new PopupManager(this);
-        manager.showOldVersionPopup(CacheProfile.getOptions().maxVersion);
-        manager.showRatePopup();
-        actionsAfterRegistration();
-        if (CacheProfile.show_ad) {
-            mFullscreenController = new FullscreenController(this);
-            // MenuFragment will try to show closings and after will try fullscreen
-            //noinspection deprecation
-            mMenuFragment.setFullscreenController(mFullscreenController);
-        }
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         if (mFullscreenController != null) {
@@ -304,82 +379,46 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         initBonusCounterConfig();
     }
 
-    private void actionsAfterRegistration() {
-        if (!AuthToken.getInstance().isEmpty()) {
-            if (CacheProfile.photo == null) {
+    /**
+     * Take photo then select city if profile is empty
+     *
+     * @return start action object to register
+     */
+    private IStartAction createAfterRegistrationStartAction(final int priority) {
+        return new IStartAction() {
+            private boolean mTakePhotoApplicable = false;
+            private boolean mSelectCityApplicable = false;
 
-                takePhoto(new TakePhotoDialog.TakePhotoListener() {
-                    @Override
-                    public void onPhotoSentSuccess(final Photo photo) {
-                        if (CacheProfile.photos != null) {
-                            CacheProfile.photos.add(photo);
-                            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-                            intent.putExtra(PhotoSwitcherActivity.INTENT_CLEAR, true);
-                            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
-                            LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
-                        } else {
-                            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-                            ArrayList<Photo> photos = new ArrayList<Photo>();
-                            photos.add(photo);
-                            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
-                        }
-                        takePhotoDialogStarted = false;
-                        PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
-                        request.photoid = photo.getId();
-                        request.callback(new ApiHandler() {
-
-                            @Override
-                            public void success(IApiResponse response) {
-                                CacheProfile.photo = photo;
-                                CacheProfile.sendUpdateProfileBroadcast();
-                            }
-
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                                if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
-                                    if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
-                                        CacheProfile.photos.remove(photo);
-                                    }
-                                    Toast.makeText(
-                                            NavigationActivity.this,
-                                            App.getContext().getString(R.string.general_wrong_photo_upload),
-                                            Toast.LENGTH_LONG
-                                    ).show();
-                                }
-                            }
-
-                            @Override
-                            public void always(IApiResponse response) {
-                                super.always(response);
-                            }
-                        }).exec();
-                        needOpenDialog = true;
-                    }
-
-                    @Override
-                    public void onPhotoSentFailure() {
-                        Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
-                        needOpenDialog = true;
-                    }
-
-                    @Override
-                    public void onDialogClose() {
-                        takePhotoDialogStarted = false;
-                        if (!CacheProfile.isEmpty() && (CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
-                                && !CacheProfile.wasCityAsked) {
-                            CacheProfile.wasCityAsked = true;
-                            CacheProfile.onCityConfirmed(getApplicationContext());
-                            startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
-                                    CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION);
-                        }
-                    }
-                });
-            } else if ((CacheProfile.city == null || CacheProfile.city.isEmpty()) && !CacheProfile.wasCityAsked) {
-                CacheProfile.wasCityAsked = true;
-                startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
-                        CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+            @Override
+            public void callInBackground() {
             }
-        }
+
+            @Override
+            public void callOnUi() {
+                if (mTakePhotoApplicable) {
+                    takePhoto(mTakePhotoListener);
+                } else if (mSelectCityApplicable) {
+                    CacheProfile.selectCity(NavigationActivity.this);
+                }
+            }
+
+            @Override
+            public boolean isApplicable() {
+                if (!AuthToken.getInstance().isEmpty()) {
+                    if (CacheProfile.photo == null) {
+                        mTakePhotoApplicable = true;
+                        return true;
+                    }
+                }
+                mSelectCityApplicable = CacheProfile.needToSelectCity(NavigationActivity.this);
+                return mTakePhotoApplicable || mSelectCityApplicable;
+            }
+
+            @Override
+            public int getPriority() {
+                return priority;
+            }
+        };
     }
 
     public void setPopupVisible(boolean visibility) {
