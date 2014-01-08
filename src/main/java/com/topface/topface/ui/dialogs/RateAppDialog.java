@@ -14,9 +14,9 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 
 /**
@@ -27,8 +27,6 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
         DialogInterface.OnCancelListener {
     public static final String TAG = "RateAppDialog";
     public static final String RATING_POPUP = "RATING_POPUP";
-
-    public static final long RATE_POPUP_TIMEOUT = DateUtils.DAY_IN_MILLISECONDS;
 
     public static final String OFF_RATE_TYPE = "OFF";
     private RatingBar mRatingBar;
@@ -130,18 +128,21 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
      * @return whether the rate popup is applicable or not
      */
     public static boolean isApplicable() {
+        // need ProfileConfig
         final SharedPreferences preferences = App.getContext().getSharedPreferences(
                 Static.PREFERENCES_TAG_SHARED,
                 Context.MODE_PRIVATE
         );
 
-        long date_start = preferences.getLong(RATING_POPUP, 1);
-        long date_now = new java.util.Date().getTime();
-
-        if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT) || CacheProfile.getOptions().ratePopupType.equals(OFF_RATE_TYPE)) {
+        long date_start = preferences.getLong(RATING_POPUP, 0);
+        long date_now = System.currentTimeMillis();
+        Options options = CacheProfile.getOptions();
+        if (date_start == 0
+                || (date_now - date_start < options.ratePopupTimeout)
+                || options.ratePopupType.equals(OFF_RATE_TYPE)) {
             return false;
-        } else if (date_start == 1) {
-            saveRatingPopupStatus(System.currentTimeMillis());
+        } else {
+            saveRatingPopupStatus(date_now);
         }
         return true;
     }
