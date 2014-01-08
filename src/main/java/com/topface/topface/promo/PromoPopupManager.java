@@ -10,6 +10,7 @@ import com.topface.topface.promo.fragments.PromoKey71Fragment;
 import com.topface.topface.promo.fragments.PromoKey81Fragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_ADMIRATIONS;
@@ -108,7 +109,7 @@ public class PromoPopupManager {
     }
 
     public IStartAction createPromoPopupStartAction(final int priority) {
-        return new IStartAction() {
+        return new AbstractStartAction() {
             @Override
             public void callInBackground() {
             }
@@ -133,8 +134,8 @@ public class PromoPopupManager {
             }
 
             @Override
-            public String toDebugString() {
-                return "StartAction:PromoPopup:" + getPriority() + ":" + isApplicable();
+            public String getActionName() {
+                return "PromoPopup";
             }
         };
     }

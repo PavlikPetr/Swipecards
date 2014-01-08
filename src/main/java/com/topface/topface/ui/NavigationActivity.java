@@ -47,6 +47,7 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PopupManager;
+import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.offerwalls.Offerwalls;
@@ -385,7 +386,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
      * @return start action object to register
      */
     private IStartAction createAfterRegistrationStartAction(final int priority) {
-        return new IStartAction() {
+        return new AbstractStartAction() {
             private boolean mTakePhotoApplicable = false;
             private boolean mSelectCityApplicable = false;
 
@@ -420,8 +421,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             }
 
             @Override
-            public String toDebugString() {
-                return "StartAction:TakePhoto-SelectCity:" + getPriority() + ":" + isApplicable();
+            public String getActionName() {
+                return "TakePhoto-SelectCity";
             }
         };
     }

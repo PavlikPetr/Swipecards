@@ -56,7 +56,7 @@ public class StartActionsController {
         if (App.DEBUG) {
             Debug.log(TAG, "===Pending start actions:===");
             for (IStartAction action : mPendingActions) {
-                Debug.log(TAG, action.toDebugString());
+                Debug.log(TAG, action.toString());
             }
             Debug.log(TAG, "============================");
         }
@@ -82,7 +82,7 @@ public class StartActionsController {
                 action.callOnUi();
             }
         });
-        Debug.log(TAG, "===>process chosen action - " + action.toDebugString());
+        Debug.log(TAG, "===>process chosen action - " + action.toString());
         return true;
     }
 
@@ -93,7 +93,7 @@ public class StartActionsController {
      */
     public void registerAction(IStartAction action) {
         mPendingActions.add(action);
-        Debug.log(TAG, "register " + action.toDebugString());
+        Debug.log(TAG, "register " + action.toString());
     }
 
     /**

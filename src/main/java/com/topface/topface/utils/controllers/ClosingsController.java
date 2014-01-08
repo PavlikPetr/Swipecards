@@ -396,7 +396,7 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     public IStartAction createStartAction(final int priority) {
-        return new IStartAction() {
+        return new AbstractStartAction() {
             @Override
             public void callInBackground() {
                 // #1 - can be places here
@@ -419,8 +419,8 @@ public class ClosingsController implements View.OnClickListener {
             }
 
             @Override
-            public String toDebugString() {
-                return "StartAction:Closings:" + getPriority() + ":" + isApplicable();
+            public String getActionName() {
+                return "Closings";
             }
         };
     }

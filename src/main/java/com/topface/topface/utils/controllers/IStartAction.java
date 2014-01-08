@@ -1,7 +1,8 @@
 package com.topface.topface.utils.controllers;
 
 /**
- * Start action object to pass
+ * Use AbstractStartAction implementation for common Start Actions.
+ * One contains implemented toString() method
  */
 public interface IStartAction {
 
@@ -31,10 +32,5 @@ public interface IStartAction {
      */
     int getPriority();
 
-    /**
-     * Needed for debug purposes
-     *
-     * @return string with format: "StartAction:[understandable action name]:[value of isApplicable()]"
-     */
-    String toDebugString();
+    String getActionName();
 }
