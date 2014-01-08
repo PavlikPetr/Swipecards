@@ -14,6 +14,7 @@ import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.RateAppDialog;
 import com.topface.topface.ui.fragments.InvitesPopup;
+import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class PopupManager {
     }
 
     public IStartAction createOldVersionPopupStartAction(final int priority) {
-        return new IStartAction() {
+        return new AbstractStartAction() {
             @Override
             public void callInBackground() {
             }
@@ -49,6 +50,11 @@ public class PopupManager {
             @Override
             public int getPriority() {
                 return priority;
+            }
+
+            @Override
+            public String getActionName() {
+                return "OldVersionPopup";
             }
         };
     }
@@ -101,7 +107,7 @@ public class PopupManager {
     }
 
     public IStartAction createRatePopupStartAction(final int priority) {
-        return new IStartAction() {
+        return new AbstractStartAction() {
             @Override
             public void callInBackground() {
             }
@@ -121,6 +127,11 @@ public class PopupManager {
             public int getPriority() {
                 return priority;
             }
+
+            @Override
+            public String getActionName() {
+                return "RateAppPopup";
+            }
         };
     }
 
@@ -130,7 +141,7 @@ public class PopupManager {
     }
 
     public IStartAction createInvitePopupStartAction(final int priority) {
-        return new IStartAction() {
+        return new AbstractStartAction() {
             @Override
             public void callInBackground() {
                 SharedPreferences preferences = App.getContext().getSharedPreferences(
@@ -155,6 +166,11 @@ public class PopupManager {
             @Override
             public int getPriority() {
                 return priority;
+            }
+
+            @Override
+            public String getActionName() {
+                return "InviteContactsPopup";
             }
         };
     }

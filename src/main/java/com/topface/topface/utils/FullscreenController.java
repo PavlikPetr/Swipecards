@@ -34,6 +34,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 
 import java.util.Arrays;
@@ -375,7 +376,7 @@ public class FullscreenController {
     }
 
     public IStartAction createFullscreenStartAction(final int priority) {
-        return new IStartAction() {
+        return new AbstractStartAction() {
             Options.Page startPage;
 
             @Override
@@ -407,6 +408,11 @@ public class FullscreenController {
             @Override
             public int getPriority() {
                 return priority;
+            }
+
+            @Override
+            public String getActionName() {
+                return "Fullscreen";
             }
         };
     }

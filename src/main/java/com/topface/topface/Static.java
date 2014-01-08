@@ -78,5 +78,6 @@ public class Static {
     public static final String QUESTION = "?";
     public static final String EQUAL = "=";
     public static final String AMPERSAND = "&";
+    public static final String SEMICOLON = ":";
     public static final String UNKNOWN = "unknown";
 }

@@ -1,7 +1,8 @@
 package com.topface.topface.utils.controllers;
 
 /**
- * Start action object to pass
+ * Use AbstractStartAction implementation for common Start Actions.
+ * One contains implemented toString() method
  */
 public interface IStartAction {
 
@@ -17,6 +18,8 @@ public interface IStartAction {
 
     /**
      * Determines whether the action can be called or not
+     * Note: method realization must not change the state of action applicability, only shows one
+     * You can change state on call-methods
      *
      * @return true if the action can be called
      */
@@ -28,4 +31,6 @@ public interface IStartAction {
      * @return AC_PRIORITY_HIGH, AC_PRIORITY_NORMAL, AC_PRIORITY_LOW;
      */
     int getPriority();
+
+    String getActionName();
 }
