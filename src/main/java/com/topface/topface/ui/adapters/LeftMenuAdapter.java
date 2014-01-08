@@ -2,6 +2,7 @@ package com.topface.topface.ui.adapters;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -25,7 +26,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     public static final int TYPE_MENU_BUTTON_WITH_BADGE = 1;
     private static final int TYPE_COUNT = 2;
     private MenuFragment mMenuFragment;
-    private final List<ILeftMenuItem> mItems;
+    private final SparseArray<ILeftMenuItem> mItems;
 
     private HashMap<BaseFragment.FragmentId, TextView> mCountersBadgesMap = new HashMap<BaseFragment.FragmentId, TextView>();
     private boolean mIsEnabled = true;
@@ -39,7 +40,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         }
     };
 
-    public LeftMenuAdapter(MenuFragment menuFragment, List<ILeftMenuItem> items) {
+    public LeftMenuAdapter(MenuFragment menuFragment, SparseArray<ILeftMenuItem> items) {
         this.mMenuFragment = menuFragment;
         mItems = items;
     }
@@ -90,7 +91,7 @@ public class LeftMenuAdapter extends BaseAdapter {
 
     @Override
     public ILeftMenuItem getItem(int position) {
-        return mItems.get(position);
+        return mItems.valueAt(position);
     }
 
     @Override
@@ -120,30 +121,23 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     private void setItemHidden(BaseFragment.FragmentId id, boolean hidden) {
-        for (ILeftMenuItem item : mItems) {
-            if (item.getMenuId().equals(id)) {
-                item.setHidden(hidden);
-            }
-        }
+        mItems.get(id.number()).setHidden(hidden);
     }
 
     private void setAllItemsHidden(boolean hidden) {
-        for (ILeftMenuItem item : mItems) {
-            item.setHidden(hidden);
+        int key;
+        for (int i = 0; i < mItems.size(); i++) {
+            key = mItems.keyAt(i);
+            mItems.get(key).setHidden(hidden);
         }
     }
 
     public void addItem(ILeftMenuItem item) {
-        mItems.add(item);
+        mItems.put(item.getMenuId().number(), item);
     }
 
     public boolean hasFragment(BaseFragment.FragmentId id) {
-        for (ILeftMenuItem item : mItems) {
-            if (item.getMenuId() == id) {
-                return true;
-            }
-        }
-        return false;
+        return mItems.valueAt(id.number()) != null;
     }
 
     @NotNull
@@ -217,7 +211,7 @@ public class LeftMenuAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        return mItems.get(position).getMenuType();
+        return mItems.valueAt(position).getMenuType();
     }
 
     @Override

@@ -128,7 +128,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     protected void onCreateAsync() {
         Novice.getInstance(getPreferences()).initNoviceFlags();
-//        initBonusCounterConfig();
     }
 
     private void initBonusCounterConfig() {
