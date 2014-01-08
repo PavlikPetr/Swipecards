@@ -44,6 +44,8 @@ public class LeftMenuAdapter extends BaseAdapter {
         mItems = items;
     }
 
+
+
     public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentId menuId, final int menuType,
                                                 final int menuIconResId) {
         return new ILeftMenuItem() {
@@ -129,6 +131,19 @@ public class LeftMenuAdapter extends BaseAdapter {
         for (ILeftMenuItem item : mItems) {
             item.setHidden(hidden);
         }
+    }
+
+    public void addItem(ILeftMenuItem item) {
+        mItems.add(item);
+    }
+
+    public boolean hasFragment(BaseFragment.FragmentId id) {
+        for (ILeftMenuItem item : mItems) {
+            if (item.getMenuId() == id) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @NotNull

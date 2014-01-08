@@ -435,9 +435,7 @@ public class CacheProfile {
             case F_ADMIRATIONS:
                 return CacheProfile.unread_admirations;
             case F_BONUS:
-                if (NEED_SHOW_BONUS_COUNTER) {
-                    return getOptions().bonus.counter;
-                }
+                return NEED_SHOW_BONUS_COUNTER? getOptions().bonus.counter : 0;
             default:
                 return 0;
         }
