@@ -525,7 +525,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                         public void execute() {
                             SharedPreferences preferences = getActivity().getSharedPreferences(NavigationActivity.BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
                             preferences.edit().putLong(NavigationActivity.BONUS_COUNTER_LAST_SHOW_TIME, CacheProfile.getOptions().bonus.timestamp).commit();
-                            }
+                        }
                     };
                 }
                 Offerwalls.startOfferwall(getActivity());
