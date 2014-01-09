@@ -523,8 +523,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             //к тому же тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
             //его локально, а не серверно, как это происходит с остальными счетчиками.
             if (id == F_BONUS) {
-                CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
-                mAdapter.refreshCounterBadges();
                 if (CacheProfile.NEED_SHOW_BONUS_COUNTER) {
                     new BackgroundThread() {
                         @Override
@@ -534,6 +532,8 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                             }
                     };
                 }
+                CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
+                mAdapter.refreshCounterBadges();
                 Offerwalls.startOfferwall(getActivity());
             } else {
                 selectMenu(id);
