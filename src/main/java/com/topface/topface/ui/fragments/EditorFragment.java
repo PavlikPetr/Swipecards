@@ -24,9 +24,16 @@ import com.topface.topface.utils.AppConfig;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
+
+import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_CANCEL_TEST_NETWORK_ERRORS;
+import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS;
+import static com.topface.topface.receivers.TestNotificationsReceiver.createBroadcastPendingIntent;
+import static com.topface.topface.utils.TopfaceNotificationManager.NotificationAction;
+import static com.topface.topface.utils.TopfaceNotificationManager.getInstance;
 
 /**
  * Фрагмент админки. Доступен только для редакторов.
@@ -42,6 +49,10 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private boolean mConfigInited = false;
     private EditSwitcher switcher;
     private long standard_timeout;
+    private EditSwitcher switcherTestNetwork;
+
+    private static int testNetworkNotificationId = TopfaceNotificationManager
+            .getInstance(App.getContext()).newNotificationId();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,9 +80,14 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         rootLayout.findViewById(R.id.EditorClearAirMessages).setOnClickListener(this);
 
         ViewGroup switcherView = (ViewGroup) rootLayout.findViewById(R.id.loPopupSwitcher);
+        ((TextView) switcherView.findViewWithTag("tvTitle")).setText("Показывать попап приглашений");
         switcherView.setOnClickListener(this);
         switcher = new EditSwitcher(switcherView);
-        switcher.setChecked(CacheProfile.canInvite);
+
+        ViewGroup testNetworkSwitcherView = (ViewGroup) rootLayout.findViewById(R.id.loTestNetworkSwitcher);
+        ((TextView) testNetworkSwitcherView.findViewWithTag("tvTitle")).setText("Режим ошибок соединения");
+        testNetworkSwitcherView.setOnClickListener(this);
+        switcherTestNetwork = new EditSwitcher(testNetworkSwitcherView);
 
         standard_timeout = CacheProfile.getOptions().popup_timeout;
 
@@ -254,6 +270,27 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 CacheProfile.canInvite = switcher.isChecked();
 
                 break;
+            case R.id.loTestNetworkSwitcher:
+                switcherTestNetwork.doSwitch();
+                TopfaceNotificationManager notificationManager = getInstance(getActivity());
+                if (switcherTestNetwork.isChecked()) {
+                    mConfig.setTestNetwork(true);
+                    NotificationAction[] actions = new NotificationAction[]{
+                            new NotificationAction(0, "Enable",
+                                    createBroadcastPendingIntent(ACTION_TEST_NETWORK_ERRORS)),
+                            new NotificationAction(0, "Cancel",
+                                    createBroadcastPendingIntent(ACTION_CANCEL_TEST_NETWORK_ERRORS,
+                                            testNetworkNotificationId)),
+                    };
+                    notificationManager.showNotificationWithActions(testNetworkNotificationId,
+                            "Network Errors", "all requests will be returning errors", null,
+                            true,
+                            actions);
+                } else {
+                    mConfig.setTestNetwork(false);
+                    notificationManager.cancelNotification(testNetworkNotificationId);
+                }
+                break;
             case R.id.EditorClearAirMessages:
                 CacheProfile.getOptions().premiumMessages.clearPopupShowTime();
                 break;
@@ -276,6 +313,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mApiUrl.setSelection(mApiUrlsMap.indexOfValue(mConfig.getApiDomain()));
         mEditorModeSpinner.setSelection(mConfig.getEditorMode());
         mDebugModeSpinner.setSelection(mConfig.getDebugMode());
+        switcherTestNetwork.setChecked(mConfig.getTestNetwork());
+        switcher.setChecked(CacheProfile.canInvite);
     }
 
     @Override
