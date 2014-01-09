@@ -1,11 +1,10 @@
 //Константы для сборки приложения. В подмодулях следует использовать именно их, а не хардкодить значения
 def defaultCompileSdkVersion = "Google Inc.:Google APIs:17"
-def defaultBuildToolsVersion = "18.1"
-def supportLibrary = "com.android.support:support-v4:18.0.0"
+def defaultBuildToolsVersion = "19.0.1"
+def supportLibrary = "com.android.support:support-v4:19.0.+"
 
-//TODO нет команды git в окружении
 def getGitHeadSha() {
-    return "git_head_sha";
+    return "git rev-parse --short HEAD'.execute().text.trim()";
 }
 
 def getTimestamp() {
@@ -17,7 +16,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.6.3'
+        classpath 'com.android.tools.build:gradle:0.7.+'
     }
 }
 
@@ -26,12 +25,20 @@ repositories {
 }
 
 apply plugin: 'android'
-apply plugin: 'idea'
+
+//@see https://code.google.com/p/android/issues/detail?id=61573#c14
+android {
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+    }
+}
 
 dependencies {
     //Android Support libs
     compile supportLibrary
-    compile 'com.android.support:appcompat-v7:18.0.0'
+    compile 'com.android.support:appcompat-v7:19.0.+'
 
     //All jar libs
     compile fileTree(dir: 'libs', include: '*.jar', exclude: 'GoogleAdMobAdsSdk.jar')
@@ -67,13 +74,11 @@ android {
     defaultConfig {
         minSdkVersion 7
         targetSdkVersion 17
-        buildConfig """\
-            public static final long BUILD_TIME = ${getTimestamp()}L;
-            public static final String GIT_HEAD_SHA = "${getGitHeadSha()}";
-        """
 
         testPackageName "com.topface.topface.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        buildConfigField "long", "BUILD_TIME", "0L";
+        buildConfigField "String", "GIT_HEAD_SHA", "null";
     }
 
     signingConfigs {
@@ -84,9 +89,14 @@ android {
             keyPassword "Sonetica2012"
         }
     }
+
     buildTypes {
         release {
             signingConfig signingConfigs.release
+        }
+        testbuild {
+            buildConfigField "long", "BUILD_TIME", "${getTimestamp()}L";
+            buildConfigField "String", "GIT_HEAD_SHA", "\"${getGitHeadSha()}\"";
         }
     }
 }
@@ -211,7 +221,3 @@ subprojects {
         buildToolsVersion defaultBuildToolsVersion
     }
 }
-
-//task ('localistPull') {
-//    println "localist pull && localist status -l en".execute().text;
-//}
