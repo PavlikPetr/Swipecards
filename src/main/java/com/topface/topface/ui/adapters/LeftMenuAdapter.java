@@ -96,7 +96,7 @@ public class LeftMenuAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return mItems.get(position).getMenuId().ordinal();
+        return position;
     }
 
     @Override
