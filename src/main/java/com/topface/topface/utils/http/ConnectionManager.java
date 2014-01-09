@@ -51,7 +51,7 @@ public class ConnectionManager {
     private ConnectionManager() {
         mWorker = getNewExecutorService();
         mAuthUpdateFlag = new AtomicBoolean(false);
-        mPendingRequests = new HashMap<String, IApiRequest>();
+        mPendignRequests = new HashMap<>();
     }
 
     private ExecutorService getNewExecutorService() {
@@ -351,22 +351,16 @@ public class ConnectionManager {
         try {
             //Отправляем запрос и сразу читаем ответ
             response = apiRequest.sendRequestAndReadResponse();
-        } catch (UnknownHostException e) {
+        } catch (UnknownHostException | SocketException | SocketTimeoutException e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка соединение, такие запросы мы будем переотправлять
             response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection exception: " + e.toString());
-        } catch (SocketException e) {
-            Debug.error(TAG + "::Exception", e);
-            //Это ошибка подключения, такие запросы мы будем переотправлять
-            response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Socket exception: " + e.toString());
-        } catch (SocketTimeoutException e) {
-            Debug.error(TAG + "::Exception", e);
-            //Это ошибка подключения, такие запросы мы будем переотправлять
-            response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Socket exception: " + e.toString());
         } catch (SSLException e) {
             Debug.error(TAG + "::Exception", e);
-            //Это ошибка соединение, такие запросы мы будем переотправлять
-            response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection exception: " + e.toString());
+            //Это ошибка SSL соединения, возможно у юзера не правильно установлено время на устройсте
+            //такую ошибку следует обрабатывать отдельно, распарсив сообщение об ошибке и уведомив
+            //пользователя
+            response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection SSLException: " + e.toString());
         } catch (Exception e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос
@@ -385,7 +379,7 @@ public class ConnectionManager {
         }
 
         //Если наш пришли данные от сервера, то логируем их, если нет, то логируем объект запроса
-        Debug.logJson(TAG, "RESPONSE <<< Request ID #" + apiRequest.getId(),
+        Debug.logJson(TAG, "RESPONSE <<< ID #" + apiRequest.getId(),
                 response != null ? response.toString() : null
         );
 
