@@ -1,6 +1,7 @@
 package com.topface.topface.ui.dialogs;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -28,6 +29,12 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     private IRespondToLikesListener mWatchSequentialyListener;
     private IWatchListListener mWatchListListener;
 
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        ClosingsBuyVipDialog.opened = false;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,7 +95,6 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     private void closeDialog() {
         final Dialog dialog = getDialog();
         if (dialog != null) dialog.dismiss();
-        ClosingsBuyVipDialog.opened = false;
     }
 
     public static ClosingsBuyVipDialog newInstance(BaseFragment.FragmentId fragmentId) {
