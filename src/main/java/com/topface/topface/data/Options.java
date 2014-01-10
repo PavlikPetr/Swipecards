@@ -13,7 +13,6 @@ import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.PopupManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -122,7 +121,7 @@ public class Options extends AbstractData {
     /**
      * Настройки для каждого типа страниц
      */
-    public HashMap<String, Page> pages = new HashMap<String, Page>();
+    public HashMap<String, Page> pages = new HashMap<>();
 
     public boolean ratePopupEnabled = false;
     public long ratePopupTimeout = DateUtils.DAY_IN_MILLISECONDS;
@@ -528,8 +527,7 @@ public class Options extends AbstractData {
         }
 
         public boolean isClosingsEnabled() {
-            return (isLikesAvailable() || isMutualAvailable())
-                    && !CacheProfile.premium;
+            return (isLikesAvailable() || isMutualAvailable());
         }
 
         public boolean isMutualAvailable() {

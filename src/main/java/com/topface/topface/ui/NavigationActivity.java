@@ -99,7 +99,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                 LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
             } else {
                 Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-                ArrayList<Photo> photos = new ArrayList<Photo>();
+                ArrayList<Photo> photos = new ArrayList<>();
                 photos.add(photo);
                 intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
             }
@@ -441,13 +441,17 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     public void setMenuLockMode(int lockMode) {
         if (mDrawerLayout != null) {
-            //noinspection deprecation
-            if (lockMode == DrawerLayout.LOCK_MODE_UNLOCKED &&
-                    mMenuFragment.getClosingsController().isLeftMenuLocked()) {
+            if (lockMode == DrawerLayout.LOCK_MODE_UNLOCKED && mMenuFragment.isLockedByClosings()) {
                 return;
             }
             mDrawerLayout.setDrawerLockMode(lockMode, GravityCompat.START);
         }
+    }
+
+    @Override
+    protected void onLoadProfile() {
+        super.onLoadProfile();
+        mMenuFragment.onLoadProfile();
     }
 
     @Override

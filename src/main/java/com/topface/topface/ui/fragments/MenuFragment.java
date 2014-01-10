@@ -48,10 +48,8 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.FullscreenController;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.controllers.ClosingsController;
-import com.topface.topface.utils.controllers.IStartAction;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
@@ -60,18 +58,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_ADMIRATIONS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_BONUS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_BOOKMARKS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DATING;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DIALOGS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_FANS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_PROFILE;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_UNDEFINED;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VIP_PROFILE;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITORS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.*;
 
 /**
  * Created by kirussell on 05.11.13.
@@ -104,37 +91,47 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             String action = intent.getAction();
             if (action == null) return;
 
-            if (action.equals(CountersManager.UPDATE_BALANCE_COUNTERS)) {
-                mAdapter.refreshCounterBadges();
-                mBuyWidgetController.updateBalance();
-                if (mClosingsController != null) {
-                    mClosingsController.refreshCounterBadges();
-                }
-            } else if (action.equals(CacheProfile.PROFILE_UPDATE_ACTION)) {
-                initProfileMenuItem(mHeaderView);
-                initEditor();
-                initBonus();
-                if (CacheProfile.premium) {
-                    mClosingsController.onPremiumObtained();
-                }
-            } else if (action.equals(GooglePlayProducts.INTENT_UPDATE_PRODUCTS)) {
-                if (mBuyWidgetController != null) {
-                    mBuyWidgetController.setButtonBackgroundResource(
-                            CacheProfile.getGooglePlayProducts().saleExists ?
-                                    R.drawable.btn_sale_selector : R.drawable.btn_blue_selector
-                    );
-                }
-            } else if (action.equals(SELECT_MENU_ITEM)) {
-                Bundle extras = intent.getExtras();
-                FragmentId fragmentId = null;
-                if (extras != null) {
-                    fragmentId = (FragmentId) extras.getSerializable(SELECTED_FRAGMENT_ID);
-                }
-                selectMenu(fragmentId);
-            } else if (action.equals(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED)) {
-                mClosingsController.onClosingsProcessed(FeedRequest.FeedService.LIKES);
-            } else if (action.equals(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED)) {
-                mClosingsController.onClosingsProcessed(FeedRequest.FeedService.MUTUAL);
+            switch (action) {
+                case CountersManager.UPDATE_BALANCE_COUNTERS:
+                    mAdapter.refreshCounterBadges();
+                    mBuyWidgetController.updateBalance();
+                    if (mClosingsController != null) {
+                        mClosingsController.refreshCounterBadges();
+                    }
+                    break;
+                case CacheProfile.PROFILE_UPDATE_ACTION:
+                    initProfileMenuItem(mHeaderView);
+                    initEditor();
+                    initBonus();
+                    if (CacheProfile.premium) {
+                        mClosingsController.onPremiumObtained();
+                    }
+                    break;
+                case GooglePlayProducts.INTENT_UPDATE_PRODUCTS:
+                    if (mBuyWidgetController != null) {
+                        mBuyWidgetController.setButtonBackgroundResource(
+                                CacheProfile.getGooglePlayProducts().saleExists ?
+                                        R.drawable.btn_sale_selector : R.drawable.btn_blue_selector
+                        );
+                    }
+                    break;
+                case SELECT_MENU_ITEM:
+                    Bundle extras = intent.getExtras();
+                    FragmentId fragmentId = null;
+                    if (extras != null) {
+                        fragmentId = (FragmentId) extras.getSerializable(SELECTED_FRAGMENT_ID);
+                    }
+                    selectMenu(fragmentId);
+                    break;
+                case LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED:
+                    mClosingsController.onClosingsProcessed(FeedRequest.FeedService.LIKES);
+                    break;
+                case MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED:
+                    mClosingsController.onClosingsProcessed(FeedRequest.FeedService.MUTUAL);
+                    break;
+                case Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION:
+                    if (!CacheProfile.premium) mClosingsController.show();
+                    break;
             }
         }
     };
@@ -145,8 +142,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             mAdapter.refreshCounterBadges();
         }
     }
-
-    private FullscreenController mFullscreenController;
 
     private void initEditor() {
         if (mEditorInitializationForSessionInvoked) return;
@@ -198,7 +193,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     }
 
     private void initAdapter() {
-        List<LeftMenuAdapter.ILeftMenuItem> menuItems = new ArrayList<LeftMenuAdapter.ILeftMenuItem>();
+        List<LeftMenuAdapter.ILeftMenuItem> menuItems = new ArrayList<>();
         //- Profile added as part of header
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.drawable.ic_dating_selector));
@@ -546,31 +541,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         return mClosingsController.isLeftMenuLocked();
     }
 
-    /**
-     * !!!Не использовать без критической надобности!!!
-     * Не хочется отрывать доступ к ClosingControler'у для дальнейшего его локального уничтожения
-     * Костыль - нужен для фикса проблемы с непроизвольными появлениями попапов, которые активируют
-     * левое меню при закрытии попапа, при работающих запираниях. После реализации ротатора попапов
-     * все использования будут удалены, ClosingsController спрячу, чтобы не был доступен извне
-     *
-     * @return контроллер запираний
-     */
-    @Deprecated
-    public ClosingsController getClosingsController() {
-        return mClosingsController;
-    }
-
-    /**
-     * Костыль, пока нет ротатора, нужно для определения запираний
-     * и блокировки показа фуллскрин рекламы
-     *
-     * @param fullscreenController контроллен фуллскрин рекламы
-     */
-    @Deprecated
-    public void setFullscreenController(FullscreenController fullscreenController) {
-        mFullscreenController = fullscreenController;
-    }
-
     public static interface OnFragmentSelectedListener {
         public void onFragmentSelected(FragmentId fragmentId);
     }
@@ -608,9 +578,5 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     public static void onLogout() {
         ClosingsController.onLogout();
         mEditorInitializationForSessionInvoked = false;
-    }
-
-    public IStartAction createClosingsStartAction(int priority) {
-        return mClosingsController.createStartAction(priority);
     }
 }

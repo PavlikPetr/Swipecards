@@ -55,7 +55,7 @@ public class ClosingsController implements View.OnClickListener {
     private View mutualsMenuItem;
     private ViewStub mViewStub;
     private View mClosingsWidget;
-    private List<TextView> mCounterBadges = new ArrayList<TextView>();
+    private List<TextView> mCounterBadges = new ArrayList<>();
     private UsersListCacheManager mCacheManager;
 
     private static boolean mClosingsPassed = false; // need flag for session, skip on logout
@@ -64,7 +64,7 @@ public class ClosingsController implements View.OnClickListener {
     private boolean mMutualClosingsActive = false;
     private boolean mLikesClosingsActive = false;
 
-    private List<View> menuItemsButtons = new ArrayList<View>();
+    private List<View> menuItemsButtons = new ArrayList<>();
     private boolean mLeftMenuLocked = false;
     private static boolean mLogoutWasInitiated = false;
 
@@ -77,13 +77,23 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     /**
-     * Initiates show of closings
-     *
-     * @return true if all flags are ready to show closings,
+     * Safe show of closings
+     * It won't show closing if it is not applicable
+     * @return true show of closings initiated successfully,
      * but still after retrieving feeds there can be no closings at all
      */
     public boolean show() {
-        // #1
+        return canShowClosings() ? showInner() : false;
+    }
+
+    /**
+     * Initiates show of closings
+     * Note: first check if you can show closings with {@link this.canShowClosings()}
+     *
+     * @return true show of closings initiated successfully,
+     * but still after retrieving feeds there can be no closings at all
+     */
+    private boolean showInner() {
         ApiRequest likesRequest = getUsersListRequest(FeedRequest.FeedService.LIKES, mContext);
         likesRequest.callback(getDataRequestHandler(FeedRequest.FeedService.LIKES));
         ApiRequest mutualsRequest = getUsersListRequest(FeedRequest.FeedService.MUTUAL, mContext);
@@ -178,8 +188,8 @@ public class ClosingsController implements View.OnClickListener {
 
             @Override
             protected UsersList parseResponse(ApiResponse response) {
-                FeedListData<FeedItem> items = new FeedListData<FeedItem>(response.getJsonResult(), itemClass);
-                UsersList data = new UsersList<FeedUser>(items, FeedUser.class);
+                FeedListData<FeedItem> items = new FeedListData<>(response.getJsonResult(), itemClass);
+                UsersList data = new UsersList<>(items, FeedUser.class);
                 if (data.size() > 0) {
                     mCacheManager.changeCacheKeyTo(cacheKey, itemClass);
                     mCacheManager.setCache(data);
@@ -342,6 +352,10 @@ public class ClosingsController implements View.OnClickListener {
         mLogoutWasInitiated = true;
     }
 
+    /**
+     * Try to show appropriate closings fragment
+     * First try MutualClosings then LikesClosings
+     */
     public void respondToLikes() {
         if (mMutualClosingsActive) {
             selectMenuItem(FragmentId.F_MUTUAL_CLOSINGS);
@@ -395,22 +409,34 @@ public class ClosingsController implements View.OnClickListener {
         }
     }
 
+    /**
+     * Check if you can try to show closings
+     * You can't show closings if:
+     *  - closings are already passed
+     *  - closings are already showing
+     *  - server do not allow to show closings at this time
+     * @return tru if you can show closings now
+     */
+    public boolean canShowClosings() {
+        return !(mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) &&
+                CacheProfile.getOptions().closing.isClosingsEnabled();
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
     public IStartAction createStartAction(final int priority) {
         return new AbstractStartAction() {
             @Override
             public void callInBackground() {
-                // #1 - can be places here
             }
 
             @Override
             public void callOnUi() {
-                show();
+                showInner();
             }
 
             @Override
             public boolean isApplicable() {
-                return !(mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) &&
-                        CacheProfile.getOptions().closing.isClosingsEnabled();
+                return canShowClosings() && !CacheProfile.premium;
             }
 
             @Override
