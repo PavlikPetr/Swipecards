@@ -124,9 +124,9 @@ public class Options extends AbstractData {
      */
     public HashMap<String, Page> pages = new HashMap<String, Page>();
 
-    // remove if not needed
-    public String ratePopupType = PopupManager.OFF_RATE_TYPE;
+    public boolean ratePopupEnabled = false;
     public long ratePopupTimeout = DateUtils.DAY_IN_MILLISECONDS;
+
     private String paymentwall;
 
     public String maxVersion = "2147483647";
@@ -254,10 +254,10 @@ public class Options extends AbstractData {
                 closing.timeoutMutual = closingsObj.optInt("timeoutMutual", Closing.DEFAULT_MUTUALS_TIMEOUT) * DateUtils.MINUTE_IN_MILLISECONDS;
             }
 
-            JSONObject ratePopupObject = response.optJSONObject("ratePopup");
-            if (ratePopupType != null) {
-                ratePopupType = ratePopupObject.optString("type");
-                ratePopupTimeout = ratePopupObject.optInt("timeout") * DateUtils.DAY_IN_MILLISECONDS;
+            JSONObject ratePopupObject = response.optJSONObject("applicationRatePopup");
+            if (ratePopupObject != null) {
+                ratePopupEnabled = ratePopupObject.optBoolean("enabled");
+                ratePopupTimeout = ratePopupObject.optInt("timeout") * DateUtils.HOUR_IN_MILLISECONDS;
             }
 
             JSONObject blockSympathyObj = response.optJSONObject("blockSympathy");

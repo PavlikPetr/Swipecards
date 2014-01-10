@@ -139,7 +139,7 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
         Options options = CacheProfile.getOptions();
         if (date_start == 0
                 || (date_now - date_start < options.ratePopupTimeout)
-                || options.ratePopupType.equals(OFF_RATE_TYPE)) {
+                || !options.ratePopupEnabled) {
             return false;
         } else {
             saveRatingPopupStatus(date_now);
