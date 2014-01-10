@@ -161,6 +161,16 @@
             android:layout_marginTop="20dp"
             layout="@layout/item_edit_form_switch" />
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="left"
+            android:text="@string/editor_network_errors_tip"
+            android:textSize="10sp" />
+
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

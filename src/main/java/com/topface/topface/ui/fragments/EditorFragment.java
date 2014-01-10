@@ -29,12 +29,8 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 
-import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_CANCEL_TEST_NETWORK_ERRORS;
-import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS;
-import static com.topface.topface.receivers.TestNotificationsReceiver.createBroadcastPendingIntent;
-import static com.topface.topface.utils.TopfaceNotificationManager.NotificationAction;
-import static com.topface.topface.utils.TopfaceNotificationManager.getInstance;
-
+import static com.topface.topface.receivers.TestNotificationsReceiver.*;
+import static com.topface.topface.utils.TopfaceNotificationManager.*;
 /**
  * Фрагмент админки. Доступен только для редакторов.
  */
@@ -59,7 +55,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
         mConfig = App.getConfig();
 
-        mApiUrlsMap = new SparseArray<CharSequence>();
+        mApiUrlsMap = new SparseArray<>();
         mApiUrlsMap.put(0, Static.API_URL);
         mApiUrlsMap.put(1, Static.API_ALPHA_URL);
         mApiUrlsMap.put(2, Static.API_BETA_URL);
@@ -277,8 +273,10 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                     mConfig.setTestNetwork(true);
                     NotificationAction[] actions = new NotificationAction[]{
                             new NotificationAction(0, "Enable",
-                                    createBroadcastPendingIntent(ACTION_TEST_NETWORK_ERRORS)),
-                            new NotificationAction(0, "Cancel",
+                                    createBroadcastPendingIntent(ACTION_TEST_NETWORK_ERRORS_ON)),
+                            new NotificationAction(0, "Disable",
+                                    createBroadcastPendingIntent(ACTION_TEST_NETWORK_ERRORS_OFF)),
+                            new NotificationAction(R.drawable.ic_close_dialog, "Cancel",
                                     createBroadcastPendingIntent(ACTION_CANCEL_TEST_NETWORK_ERRORS,
                                             testNetworkNotificationId)),
                     };
