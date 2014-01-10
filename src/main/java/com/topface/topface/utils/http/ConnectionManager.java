@@ -51,7 +51,7 @@ public class ConnectionManager {
     private ConnectionManager() {
         mWorker = getNewExecutorService();
         mAuthUpdateFlag = new AtomicBoolean(false);
-        mPendignRequests = new HashMap<>();
+        mPendingRequests = new HashMap<>();
     }
 
     private ExecutorService getNewExecutorService() {
