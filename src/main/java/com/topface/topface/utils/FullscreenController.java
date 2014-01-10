@@ -30,7 +30,6 @@ import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -228,7 +227,7 @@ public class FullscreenController {
     private Set<String> getFullscreenUrls() {
         String urls = getPreferences().getString(Static.PREFERENCES_FULLSCREEN_URLS_SET, "");
         String[] urlList = TextUtils.split(urls, URL_SEPARATOR);
-        return new HashSet<String>(Arrays.asList(urlList));
+        return new HashSet<>(Arrays.asList(urlList));
     }
 
     private void addLastFullscreenShowedTime() {
@@ -256,18 +255,24 @@ public class FullscreenController {
 
     @SuppressWarnings("UnnecessaryReturnStatement")
     public void requestFullscreen(String type) {
-        if (type.equals(BannerBlock.BANNER_NONE)) {
-            return;
-        } else if (type.equals(BannerBlock.BANNER_ADWIRED)) {
-            requestAdwiredFullscreen();
-        } else if (type.equals(BannerBlock.BANNER_TOPFACE)) {
-            requestTopfaceFullscreen();
-        } else if (type.equals(BannerBlock.BANNER_MOPUB)) {
-            requestMopubFullscreen();
-        } else if (type.equals(BannerBlock.BANNER_IVENGO)) {
-            requestIvengoFullscreen();
-        } else if (type.equals(BannerBlock.BANNER_LIFESTREET)) {
-            requestLifestreetFullscreen();
+        switch (type) {
+            case BannerBlock.BANNER_NONE:
+                return;
+            case BannerBlock.BANNER_ADWIRED:
+                requestAdwiredFullscreen();
+                break;
+            case BannerBlock.BANNER_TOPFACE:
+                requestTopfaceFullscreen();
+                break;
+            case BannerBlock.BANNER_MOPUB:
+                requestMopubFullscreen();
+                break;
+            case BannerBlock.BANNER_IVENGO:
+                requestIvengoFullscreen();
+                break;
+            case BannerBlock.BANNER_LIFESTREET:
+                requestLifestreetFullscreen();
+                break;
         }
     }
 
@@ -360,7 +365,7 @@ public class FullscreenController {
         ViewGroup fullscreenContainer = (ViewGroup) mActivity.findViewById(R.id.loBannerContainer);
         if (fullscreenContainer == null) {
             fullscreenContainer = (ViewGroup) mActivity.getLayoutInflater().inflate(R.layout.layout_fullscreen, null);
-            ((ViewGroup) mActivity.findViewById(BaseFragmentActivity.getContentViewCompat())).addView(fullscreenContainer);
+            ((ViewGroup) mActivity.findViewById(android.R.id.content)).addView(fullscreenContainer);
         }
         return fullscreenContainer;
     }

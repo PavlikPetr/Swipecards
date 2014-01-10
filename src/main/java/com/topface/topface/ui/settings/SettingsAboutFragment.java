@@ -82,7 +82,7 @@ public class SettingsAboutFragment extends BaseFragment {
         versionNumber += "\nBuild time: ";
 
         if (buildTime > 0) {
-            //Пишем время сборки. Если используем время сборки пакета, то добавляем тильду
+            //Пишем время сборки. Если используем время сборки пакет1а, то добавляем тильду
             versionNumber += (fromConstant ? "" : "~~")
                     + SimpleDateFormat.getInstance().format(buildTime);
         } else {
@@ -90,17 +90,8 @@ public class SettingsAboutFragment extends BaseFragment {
         }
 
         //Устанавливаем номер сборки
-        try {
-            String gitHeadSha = (String) BuildConfig.class
-                    .getField("GIT_HEAD_SHA").get(null);
-
-            if (!TextUtils.isEmpty(gitHeadSha)) {
-                versionNumber += "\nCommit: " + gitHeadSha;
-            }
-        } catch (NoSuchFieldException e) {
-            Debug.log("GIT_HEAD_SHA not set");
-        } catch (IllegalAccessException e) {
-            Debug.error("GIT_HEAD_SHA incorrect access modifier");
+        if (!TextUtils.isEmpty(BuildConfig.GIT_HEAD_SHA)) {
+            versionNumber += "\nCommit: " + BuildConfig.GIT_HEAD_SHA;
         }
 
         return versionNumber;
