@@ -16,8 +16,9 @@ import com.topface.topface.utils.TopfaceNotificationManager;
 public class TestNotificationsReceiver extends BroadcastReceiver {
 
     public static final String ACTION_NOTIFY = "com.topface.topface.actions.NOTIFY";
-    public static final String ACTION_TEST_NETWORK_ERRORS = "com.topface.topface.actions.TEST_NETWORK_ERRORS";
-    public static final String ACTION_CANCEL_TEST_NETWORK_ERRORS = "com.topface.topface.actions.CANCEL_TEST_NETWORK_ERRORS";
+    public static final String ACTION_TEST_NETWORK_ERRORS_ON = "com.topface.topface.actions.TEST_NETWORK_ERRORS_ON";
+    public static final String ACTION_TEST_NETWORK_ERRORS_OFF = "com.topface.topface.actions.TEST_NETWORK_ERRORS_OFF";
+    public static final String ACTION_CANCEL_TEST_NETWORK_ERRORS = "com.topface.topface.actions.TEST_NETWORK_ERRORS_CANCEL";
 
     private static final String EXTRA_ACTION_PARAMETER = "extraParameter";
 
@@ -26,20 +27,28 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
         AppConfig config = App.getConfig();
         String action = intent.getAction();
         if (action == null) return;
-        if (action.equals(ACTION_TEST_NETWORK_ERRORS)) {
-            config.setApiUrl(Static.API_500_ERROR_URL, 0, "");
-            Toast.makeText(context, "Now you will receive network errors", Toast.LENGTH_LONG).show();
-        } else if (action.equals(ACTION_CANCEL_TEST_NETWORK_ERRORS)) {
-            int notificationId = intent.getIntExtra(EXTRA_ACTION_PARAMETER, 0);
-            TopfaceNotificationManager.getInstance(App.getContext())
-                    .cancelNotification(notificationId);
-            config.setTestNetwork(false);
-            config.setApiUrl(Static.API_URL, Static.API_VERSION, null);
-            config.saveConfig();
-            Toast.makeText(context, "All requests will be OK. No more errors.", Toast.LENGTH_LONG).show();
-        } else if (action.equals(ACTION_NOTIFY)) {
-            Debug.log("TOPFACE_NOTIFICATION:" + intent.getStringExtra("text"));
-            GCMUtils.showNotification(intent, context);
+        switch (action) {
+            case ACTION_TEST_NETWORK_ERRORS_ON:
+                config.setApiUrl(Static.API_500_ERROR_URL, 0, "");
+                Toast.makeText(context, "Network errors: ON", Toast.LENGTH_LONG).show();
+                break;
+            case ACTION_TEST_NETWORK_ERRORS_OFF:
+                config.setApiUrl(Static.API_URL, Static.API_VERSION, null);
+                Toast.makeText(context, "Network errors: OFF", Toast.LENGTH_LONG).show();
+                break;
+            case ACTION_CANCEL_TEST_NETWORK_ERRORS:
+                int notificationId = intent.getIntExtra(EXTRA_ACTION_PARAMETER, 0);
+                TopfaceNotificationManager.getInstance(App.getContext())
+                        .cancelNotification(notificationId);
+                config.setTestNetwork(false);
+                config.setApiUrl(Static.API_URL, Static.API_VERSION, null);
+                config.saveConfig();
+                Toast.makeText(context, "All requests will be OK. No more errors.", Toast.LENGTH_LONG).show();
+                break;
+            case ACTION_NOTIFY:
+                Debug.log("TOPFACE_NOTIFICATION:" + intent.getStringExtra("text"));
+                GCMUtils.showNotification(intent, context);
+                break;
         }
     }
 
