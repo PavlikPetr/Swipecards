@@ -15,9 +15,9 @@ import com.topface.topface.utils.TopfaceNotificationManager;
 
 public class TestNotificationsReceiver extends BroadcastReceiver {
 
-    public static final String ACTION_NOTIFY = "com.topface.topface.NOTIFY";
-    public static final String ACTION_TEST_NETWORK_ERRORS = "com.topface.topface.text_network_errors";
-    public static final String ACTION_CANCEL_TEST_NETWORK_ERRORS = "com.topface.topface.cancel_test_network_errors";
+    public static final String ACTION_NOTIFY = "com.topface.topface.actions.NOTIFY";
+    public static final String ACTION_TEST_NETWORK_ERRORS = "com.topface.topface.actions.test_network_errors";
+    public static final String ACTION_CANCEL_TEST_NETWORK_ERRORS = "com.topface.topface.actions.cancel_test_network_errors";
 
     private static final String EXTRA_ACTION_PARAMETER = "extraParameter";
 
