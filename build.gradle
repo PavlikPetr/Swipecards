@@ -4,7 +4,7 @@ def defaultBuildToolsVersion = "19.0.1"
 def supportLibrary = "com.android.support:support-v4:19.0.+"
 
 def getGitHeadSha() {
-    return "git rev-parse --short HEAD'.execute().text.trim()";
+    return 'git rev-parse --short HEAD'.execute().text.trim();
 }
 
 def getTimestamp() {
@@ -99,7 +99,8 @@ android {
         release {
             signingConfig signingConfigs.release
         }
-        testbuild {
+        qa.initWith(buildTypes.debug)
+        qa {
             buildConfigField "long", "BUILD_TIME", "${getTimestamp()}L";
             buildConfigField "String", "GIT_HEAD_SHA", "\"${getGitHeadSha()}\"";
         }
