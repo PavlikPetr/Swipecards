@@ -306,8 +306,8 @@
             tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.topface.topface.actions.NOTIFY" />
-                <action android:name="com.topface.topface.actions.test_network_errors" />
-                <action android:name="com.topface.topface.actions.cancel_test_network_errors" />
+                <action android:name="com.topface.topface.actions.TEST_NETWORK_ERRORS" />
+                <action android:name="com.topface.topface.actions.CANCEL_TEST_NETWORK_ERRORS" />
             </intent-filter>
         </receiver>
 
