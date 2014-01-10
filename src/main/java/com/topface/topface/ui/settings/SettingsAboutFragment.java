@@ -1,5 +1,6 @@
 package com.topface.topface.ui.settings;
 
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -10,13 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.Debug;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class SettingsAboutFragment extends BaseFragment {
 
@@ -36,14 +39,8 @@ public class SettingsAboutFragment extends BaseFragment {
             String packageName = activity.getPackageName();
             versionNumber = packageManager.getPackageInfo(packageName, 0).versionName;
 
-            if (App.DEBUG) {
-                versionNumber += "\nBuild time: " + SimpleDateFormat.getInstance().format(
-                        com.topface.topface.BuildConfig.BUILD_TIME
-                );
-                if (!TextUtils.isEmpty(com.topface.topface.BuildConfig.GIT_HEAD_SHA)) {
-                    versionNumber += "\nCommit: " + com.topface.topface.BuildConfig.GIT_HEAD_SHA;
-                }
-            }
+            versionNumber = setDebugData(versionNumber, packageManager, packageName);
+
         } catch (Exception e) {
             versionNumber = "unknown";
             Debug.error(e);
@@ -67,6 +64,55 @@ public class SettingsAboutFragment extends BaseFragment {
         extra.setText(extraText);
 
         return root;
+    }
+
+    /**
+     * Добавляем время сборки версии и SHA коммита
+     */
+    private String setDebugData(String versionNumber, PackageManager packageManager, String packageName) {
+        //Устанавливаем время сборки
+        long buildTime = BuildConfig.BUILD_TIME;
+        boolean fromConstant = true;
+        //Если константа времени сборки не установлена, то пробуем получить из даты сборки пакета
+        if (buildTime == 0) {
+            buildTime = getBuildTimeFromPackage(packageManager, packageName);
+            fromConstant = false;
+        }
+
+        versionNumber += "\nBuild time: ";
+
+        if (buildTime > 0) {
+            //Пишем время сборки. Если используем время сборки пакет1а, то добавляем тильду
+            versionNumber += (fromConstant ? "" : "~~")
+                    + SimpleDateFormat.getInstance().format(buildTime);
+        } else {
+            versionNumber += "Unknown";
+        }
+
+        //Устанавливаем номер сборки
+        if (!TextUtils.isEmpty(BuildConfig.GIT_HEAD_SHA)) {
+            versionNumber += "\nCommit: " + BuildConfig.GIT_HEAD_SHA;
+        }
+
+        return versionNumber;
+    }
+
+    /**
+     * Получаем время сборки из косвенных данных - времени создания dex файла приложения
+     *
+     * @return timestamp времени сборки
+     */
+    private long getBuildTimeFromPackage(PackageManager packageManager, String packageName) {
+        long time = 0;
+        try {
+            ApplicationInfo ai = packageManager.getApplicationInfo(packageName, 0);
+            ZipFile zf = new ZipFile(ai.sourceDir);
+            ZipEntry ze = zf.getEntry("classes.dex");
+            time = ze.getTime();
+        } catch (Exception e) {
+            Debug.error("BUILD_TIME access error", e);
+        }
+        return time;
     }
 
     @Override
