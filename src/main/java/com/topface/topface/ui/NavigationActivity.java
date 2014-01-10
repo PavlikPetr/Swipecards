@@ -54,11 +54,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
-
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String BONUS_COUNTER_TAG = "preferences_for_bonus_counter";
     public static final String BONUS_COUNTER_LAST_SHOW_TIME = "last_show_time";
