@@ -72,13 +72,6 @@ android {
     compileSdkVersion defaultCompileSdkVersion
     buildToolsVersion defaultBuildToolsVersion
 
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
