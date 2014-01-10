@@ -184,8 +184,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
-        // closings
-        startActionsController.registerAction(mMenuFragment.createClosingsStartAction(AC_PRIORITY_NORMAL));
         // promo popups
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
         startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
