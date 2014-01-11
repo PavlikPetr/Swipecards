@@ -35,6 +35,7 @@ public class AppConfig extends AbstractConfig {
     private static final String DATA_API_VERSION = "data_api_version";
     public static final String FLOOD_ENDS_TIME = "flood_ens_time";
     private static final String APP_UNIQUE_ID = "app_unique_id";
+    private static final String DATA_TEST_NETWORK = "data_test_network_mode";
 
     private BannersConfig mBannerConfig;
     private LocaleConfig mLocaleConfig;
@@ -93,19 +94,26 @@ public class AppConfig extends AbstractConfig {
         return uniqueId;
     }
 
+    public void setTestNetwork(boolean value) {
+        getSettingsMap().setField(DATA_TEST_NETWORK, value);
+    }
+
+    public boolean getTestNetwork() {
+        return getSettingsMap().getBooleanField(DATA_TEST_NETWORK);
+    }
+
     @Override
-    protected SettingsMap newSettingsMap() {
-        SettingsMap fields = new SettingsMap();
-        fields.addStringField(DATA_API_URL, Static.API_URL);
-        fields.addIntegerField(DATA_API_VERSION, Static.API_VERSION);
-        fields.addStringField(DATA_API_REVISION, null);
-        fields.addStringField(DATA_AUTH_VK_API, Static.AUTH_VK_ID);
-        fields.addStringField(DATA_AUTH_FB_API, Static.AUTH_FACEBOOK_ID);
-        fields.addIntegerField(DATA_EDITOR_MODE, Editor.MODE_USER_FIELD);
-        fields.addIntegerField(DATA_DEBUG_MODE, Debug.MODE_EDITOR);
-        fields.addLongField(FLOOD_ENDS_TIME, 0l);
-        fields.addStringField(APP_UNIQUE_ID, null);
-        return fields;
+    protected void fillSettingsMap(SettingsMap settingsMap) {
+        settingsMap.addStringField(DATA_API_URL, Static.API_URL);
+        settingsMap.addIntegerField(DATA_API_VERSION, Static.API_VERSION);
+        settingsMap.addStringField(DATA_API_REVISION, null);
+        settingsMap.addStringField(DATA_AUTH_VK_API, Static.AUTH_VK_ID);
+        settingsMap.addStringField(DATA_AUTH_FB_API, Static.AUTH_FACEBOOK_ID);
+        settingsMap.addIntegerField(DATA_EDITOR_MODE, Editor.MODE_USER_FIELD);
+        settingsMap.addIntegerField(DATA_DEBUG_MODE, Debug.MODE_EDITOR);
+        settingsMap.addLongField(FLOOD_ENDS_TIME, 0l);
+        settingsMap.addStringField(APP_UNIQUE_ID, null);
+        settingsMap.addBooleanField(DATA_TEST_NETWORK, false);
     }
 
     public AppConfig(Context context) {
@@ -142,6 +150,7 @@ public class AppConfig extends AbstractConfig {
                 break;
             case Boolean:
                 editor.putBoolean(field.key, (Boolean) field.value);
+                break;
             case Long:
                 editor.putLong(field.key, (Long) field.value);
                 break;
