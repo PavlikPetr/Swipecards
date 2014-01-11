@@ -37,6 +37,7 @@ import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
+import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -70,7 +71,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     public static final String BONUS_COUNTER_LAST_SHOW_TIME = "last_show_time";
 
     private MenuFragment mMenuFragment;
-    private DrawerLayout mDrawerLayout;
+    private HackyDrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
 
     private SharedPreferences mPreferences;
@@ -99,7 +100,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                 LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
             } else {
                 Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-                ArrayList<Photo> photos = new ArrayList<Photo>();
+                ArrayList<Photo> photos = new ArrayList<>();
                 photos.add(photo);
                 intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
             }
@@ -184,8 +185,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
-        // closings
-        startActionsController.registerAction(mMenuFragment.createClosingsStartAction(AC_PRIORITY_NORMAL));
         // promo popups
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
         startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
@@ -258,7 +257,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         }*/
 
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
+        mDrawerLayout = (HackyDrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -267,13 +266,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                 R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
                 R.string.app_name,  /* "open drawer" description */
                 R.string.app_name  /* "close drawer" description */
-        ) {
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
-        };
+        );
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
@@ -435,6 +428,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     public void onBackPressed() {
         if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
             mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
+        } else if (mMenuFragment.isLockedByClosings()) {
+            mMenuFragment.showClosingsDialog();
         } else {
             super.onBackPressed();
             isPopupVisible = false;
@@ -442,14 +437,29 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     public void setMenuLockMode(int lockMode) {
+        setMenuLockMode(lockMode, null);
+    }
+
+    /**
+     * Options for left menu DrawerLayout
+     *
+     * @param lockMode predefined lock modes DrawerLayout.LOCK_MODE_
+     * @param listener additional listener for drawerLayout backPress
+     */
+    public void setMenuLockMode(int lockMode, HackyDrawerLayout.IBackPressedListener listener) {
         if (mDrawerLayout != null) {
-            //noinspection deprecation
-            if (lockMode == DrawerLayout.LOCK_MODE_UNLOCKED &&
-                    mMenuFragment.getClosingsController().isLeftMenuLocked()) {
+            if (lockMode == DrawerLayout.LOCK_MODE_UNLOCKED && mMenuFragment.isLockedByClosings()) {
                 return;
             }
             mDrawerLayout.setDrawerLockMode(lockMode, GravityCompat.START);
+            mDrawerLayout.setBackPressedListener(listener);
         }
+    }
+
+    @Override
+    protected void onLoadProfile() {
+        super.onLoadProfile();
+        mMenuFragment.onLoadProfile();
     }
 
     @Override

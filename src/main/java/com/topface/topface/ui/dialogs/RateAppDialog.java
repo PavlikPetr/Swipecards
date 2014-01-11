@@ -133,17 +133,16 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
                 Static.PREFERENCES_TAG_SHARED,
                 Context.MODE_PRIVATE
         );
-
         long date_start = preferences.getLong(RATING_POPUP, 0);
         long date_now = System.currentTimeMillis();
         Options options = CacheProfile.getOptions();
         if (date_start == 0
                 || (date_now - date_start < options.ratePopupTimeout)
-                || options.ratePopupType.equals(OFF_RATE_TYPE)) {
+                || !options.ratePopupEnabled) {
             return false;
         } else {
             saveRatingPopupStatus(date_now);
+            return true;
         }
-        return true;
     }
 }
