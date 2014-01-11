@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
-import com.topface.topface.utils.AppConfig;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.TopfaceNotificationManager;
 
