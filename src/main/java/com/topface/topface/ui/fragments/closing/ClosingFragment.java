@@ -16,7 +16,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SkipAllClosedRequest;
 import com.topface.topface.requests.SkipClosedRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
@@ -52,9 +51,9 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     protected UsersList<FeedUser> createUsersList() {
         Class<FeedUser> itemsClass = getItemsClass();
         mCacheManager = new UsersListCacheManager(getCacheKey(), itemsClass);
-        UsersList<FeedUser> users = mCacheManager.getCacheAndRemove();
+        @SuppressWarnings("unchecked") UsersList<FeedUser> users = mCacheManager.getCacheAndRemove();
         if (users == null) {
-            users = new UsersList<FeedUser>(itemsClass);
+            users = new UsersList<>(itemsClass);
         }
         return users;
     }
@@ -66,7 +65,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         if (user != null) {
             QuickMessageFragment fragment = QuickMessageFragment.newInstance(user.id, getChatListener());
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.add(BaseFragmentActivity.getContentViewCompat(), fragment, ((Object) fragment).getClass().getName());
+            transaction.add(android.R.id.content, fragment, ((Object) fragment).getClass().getName());
             transaction.addToBackStack(null);
             transaction.commit();
         } else {
@@ -93,7 +92,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             @Override
             public void onMessageSent(String message, final QuickMessageFragment fragment) {
                 //Закрываем чат с задержкой и переключаем пользователя
-                if (ClosingFragment.this != null) {
+                if (isAdded()) {
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
@@ -110,9 +109,9 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             }
 
             private void closeFragment(QuickMessageFragment fragment) {
-                if (ClosingFragment.this != null) {
+                if (isAdded()) {
                     FragmentManager fragmentManager = ClosingFragment.this.getFragmentManager();
-                    if (ClosingFragment.this != null && fragmentManager != null) {
+                    if (fragmentManager != null) {
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                         transaction.remove(fragment);
                         transaction.commitAllowingStateLoss();

@@ -1,3 +1,5 @@
+//Имя проекта. Без этого будет использоваться имя папки
+rootProject.name = 'topface-android'
 //Topface sub projects
 include ':libs:IllustratedTextView'
 //Third part libs

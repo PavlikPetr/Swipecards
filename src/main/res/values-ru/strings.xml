@@ -54,6 +54,7 @@
     <string name="general_chat">Чат</string>
     <string name="general_allow">Разрешить</string>
     <string name="notification_popup_title">Разрешите присылать вам уведомления, чтобы вы мгновенно могли узнать о новой симпатии, восхищении или непрочитанном сообщении</string>
+    <string name="email_successfully_changed">Ваш e-mail успешно изменен</string>
 
     <!-- Auth -->
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
