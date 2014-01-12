@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.SparseArrayCompat;
+import android.text.TextUtils;
 
 import com.topface.topface.App;
 import com.topface.topface.Static;
@@ -20,6 +21,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.config.ProfileConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,11 +77,10 @@ public class CacheProfile {
 
     public static int totalPhotos;
 
-    public static final String PROFILE_CACHE_KEY = "profile_cache";
     public static final String OPTIONS_CACHE_KEY = "options_cache";
     public static final String GP_PRODUCTS_CACHE_KEY = "google_play_products_cache";
 
-    public static ArrayList<Gift> gifts = new ArrayList<Gift>();
+    public static ArrayList<Gift> gifts = new ArrayList<>();
     public static SparseArrayCompat<Profile.TopfaceNotifications> notifications;
 
 
@@ -92,27 +93,20 @@ public class CacheProfile {
     private static boolean editor;
     public static boolean canInvite;
 
-    public static String pinCode;
-
     private static void setProfileCache(final ApiResponse response) {
         //Пишем в SharedPreferences в отдельном потоке
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                if (response != null) {
-                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
-                    editor.putString(PROFILE_CACHE_KEY, response.toJson().toString());
-                    editor.commit();
-                } else {
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.remove(PROFILE_CACHE_KEY);
-                    editor.remove(OPTIONS_CACHE_KEY);
-                    editor.remove(GP_PRODUCTS_CACHE_KEY);
-                    editor.commit();
-                }
-            }
-        };
+        ProfileConfig config = App.getConfig().getProfileConfig();
+        if (response != null) {
+            config.setProfileData(response.toJson().toString());
+            config.saveConfig();
+        } else {
+            config.resetProfileData();
+            config.resetOptionsData();
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.remove(GP_PRODUCTS_CACHE_KEY);
+            editor.commit();
+        }
     }
 
     public static Profile getProfile() {
@@ -148,8 +142,6 @@ public class CacheProfile {
         profile.setEditor(editor);
 
         profile.canInvite = canInvite;
-
-
         return profile;
     }
 
@@ -158,7 +150,6 @@ public class CacheProfile {
     }
 
     public static void setProfile(Profile profile, ApiResponse response, int part) {
-
         switch (part) {
             case ProfileRequest.P_NECESSARY_DATA:
                 gifts = profile.gifts;
@@ -225,10 +216,10 @@ public class CacheProfile {
     public static boolean loadProfile() {
         boolean result = false;
         if (uid == 0) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-            String profileCache = preferences.getString(PROFILE_CACHE_KEY, null);
+            ProfileConfig config = App.getConfig().getProfileConfig();
+            String profileCache = config.getProfileData();
             Profile profile;
-            if (profileCache != null) {
+            if (!TextUtils.isEmpty(profileCache)) {
                 //Получаем опции из кэша
                 try {
                     ApiResponse response = new ApiResponse(
@@ -239,11 +230,7 @@ public class CacheProfile {
                     result = true;
                 } catch (JSONException e) {
                     Debug.error(e);
-                    //Если произошла ошибка, то чистим кэш, т.к. ошибка связана скорее всего с ним
-                    PreferenceManager.getDefaultSharedPreferences(App.getContext())
-                            .edit()
-                            .remove(PROFILE_CACHE_KEY)
-                            .commit();
+                    config.resetAndSaveConfig();
                 }
             }
         }
@@ -262,19 +249,18 @@ public class CacheProfile {
      */
     public static Options getOptions() {
         if (options == null) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-            String optionsCache = preferences.getString(OPTIONS_CACHE_KEY, null);
-            if (optionsCache != null) {
+            ProfileConfig config = App.getConfig().getProfileConfig();
+            String optionsCache = config.getOptionsData();
+            if (!TextUtils.isEmpty(optionsCache)) {
                 //Получаем опции из кэша, причем передаем флаг, что бы эти опции не кешировались повторно
                 try {
                     options = new Options(new JSONObject(optionsCache), false);
                 } catch (JSONException e) {
                     //Если произошла ошибка при парсинге кэша, то скидываем опции
-                    preferences.edit().remove(OPTIONS_CACHE_KEY).commit();
+                    config.resetOptionsData();
                     Debug.error(e);
                 }
             }
-
             if (options == null) {
                 //Если по каким то причинам кэша нет и опции нам в данный момент взять негде.
                 //то просто используем их по умолчанию
@@ -301,7 +287,6 @@ public class CacheProfile {
                     Debug.error(e);
                 }
             }
-
             if (mProducts == null) {
                 //Если по каким то причинам кэша нет и опции нам в данный момент взять негде.
                 //то просто используем их по умолчанию
@@ -315,7 +300,7 @@ public class CacheProfile {
         return city != null && !city.isEmpty() && age != 0 && first_name != null && photo != null;
     }
 
-    public static void clearProfile() {
+    public static void clearProfileAndOptions() {
         clearOptions();
         setProfile(new Profile(), null);
     }
@@ -340,14 +325,9 @@ public class CacheProfile {
         options = newOptions;
         //Каждый раз не забываем кешировать запрос опций, но делаем это в отдельном потоке
         if (response != null) {
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit()
-                            .putString(OPTIONS_CACHE_KEY, response.toString())
-                            .commit();
-                }
-            };
+            ProfileConfig config = App.getConfig().getProfileConfig();
+            config.setOptionsData(response.toString());
+            config.saveConfig();
         }
     }
 
@@ -435,7 +415,7 @@ public class CacheProfile {
             case F_ADMIRATIONS:
                 return CacheProfile.unread_admirations;
             case F_BONUS:
-                return NEED_SHOW_BONUS_COUNTER? getOptions().bonus.counter : 0;
+                return NEED_SHOW_BONUS_COUNTER ? getOptions().bonus.counter : 0;
             default:
                 return 0;
         }

@@ -280,7 +280,7 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     protected String getApiUrl() {
-        return App.getConfig().getApiUrl();
+        return App.getConfig().getAppConfig().getApiUrl();
     }
 
     @Override
@@ -380,7 +380,7 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     protected static String getRevNum() {
-        return App.getConfig().getApiRevision();
+        return App.getConfig().getAppConfig().getApiRevision();
     }
 
     @Override

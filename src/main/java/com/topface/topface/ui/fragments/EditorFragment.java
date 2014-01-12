@@ -38,7 +38,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private Spinner mApiUrl;
     private EditText mApiVersion;
     private EditText mApiRevision;
-    private AppConfig mConfig;
+    private AppConfig mAppConfig;
     private Spinner mDebugModeSpinner;
     private Spinner mEditorModeSpinner;
     private SparseArray<CharSequence> mApiUrlsMap;
@@ -53,7 +53,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mConfig = App.getConfig();
+        mAppConfig = App.getConfig().getAppConfig();
 
         mApiUrlsMap = new SparseArray<>();
         mApiUrlsMap.put(0, Static.API_URL);
@@ -110,9 +110,9 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mEditorModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mConfig.setEditorMode(position);
+                mAppConfig.setEditorMode(position);
                 //Обновляем данные класса редактора
-                Editor.setConfig(mConfig);
+                Editor.setConfig(mAppConfig);
             }
 
             @Override
@@ -134,7 +134,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Записываем данные в конфиг
-                mConfig.setDebugMode(position);
+                mAppConfig.setDebugMode(position);
                 //Обновляем данные в классе дебага, дабы не лазить каждый раз в конфиг
                 Debug.setDebugMode(position);
             }
@@ -159,7 +159,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         setInfoText(
                 rootLayout,
                 R.id.EditorInfoSocialNetwork,
-                Utils.getSocialNetworkLink(authToken.getSocialNet(), authToken.getUserId())
+                Utils.getSocialNetworkLink(authToken.getSocialNet(), authToken.getUserSocialId())
         );
     }
 
@@ -220,7 +220,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             Editable version = mApiVersion.getText();
             Editable revision = mApiRevision.getText();
             if (version != null && revision != null) {
-                mConfig.setApiUrl(
+                mAppConfig.setApiUrl(
                         (String) mApiUrl.getSelectedItem(),
                         Integer.parseInt(version.toString()),
                         revision.toString()
@@ -253,13 +253,13 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.EditorResetSettings:
                 mConfigInited = false;
-                mConfig.resetToDefault();
+                mAppConfig.resetAndSaveConfig();
                 setConfigValues();
                 mConfigInited = true;
                 showCompleteMessage();
                 break;
             case R.id.EditorSaveSettings:
-                mConfig.saveConfig();
+                mAppConfig.saveConfig();
                 showCompleteMessage();
                 break;
             case R.id.loPopupSwitcher:
@@ -276,7 +276,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 switcherTestNetwork.doSwitch();
                 TopfaceNotificationManager notificationManager = getInstance(getActivity());
                 if (switcherTestNetwork.isChecked()) {
-                    mConfig.setTestNetwork(true);
+                    mAppConfig.setTestNetwork(true);
                     NotificationAction[] actions = new NotificationAction[]{
                             new NotificationAction(0, "Enable",
                                     createBroadcastPendingIntent(ACTION_TEST_NETWORK_ERRORS_ON)),
@@ -291,7 +291,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                             true,
                             actions);
                 } else {
-                    mConfig.setTestNetwork(false);
+                    mAppConfig.setTestNetwork(false);
                     notificationManager.cancelNotification(testNetworkNotificationId);
                 }
                 break;
@@ -312,12 +312,12 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setConfigValues() {
-        mApiVersion.setText(Integer.toString(mConfig.getApiVersion()));
-        mApiRevision.setText(mConfig.getApiRevision());
-        mApiUrl.setSelection(mApiUrlsMap.indexOfValue(mConfig.getApiDomain()));
-        mEditorModeSpinner.setSelection(mConfig.getEditorMode());
-        mDebugModeSpinner.setSelection(mConfig.getDebugMode());
-        switcherTestNetwork.setChecked(mConfig.getTestNetwork());
+        mApiVersion.setText(Integer.toString(mAppConfig.getApiVersion()));
+        mApiRevision.setText(mAppConfig.getApiRevision());
+        mApiUrl.setSelection(mApiUrlsMap.indexOfValue(mAppConfig.getApiDomain()));
+        mEditorModeSpinner.setSelection(mAppConfig.getEditorMode());
+        mDebugModeSpinner.setSelection(mAppConfig.getDebugMode());
+        switcherTestNetwork.setChecked(mAppConfig.getTestNetwork());
         switcher.setChecked(CacheProfile.canInvite);
     }
 

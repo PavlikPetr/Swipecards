@@ -136,44 +136,6 @@ public class AppConfig extends AbstractConfig {
         editor.putInt(DATA_APP_CONFIG_VERSION, APP_CONFIG_VERSION);
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public void saveConfigField(String key) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putInt(DATA_APP_CONFIG_VERSION, APP_CONFIG_VERSION);
-        SettingsField field = getSettingsMap().get(key);
-        switch (field.getType()) {
-            case String:
-                editor.putString(field.key, (String) field.value);
-                break;
-            case Integer:
-                editor.putInt(field.key, (Integer) field.value);
-                break;
-            case Boolean:
-                editor.putBoolean(field.key, (Boolean) field.value);
-                break;
-            case Long:
-                editor.putLong(field.key, (Long) field.value);
-                break;
-        }
-        editor.commit();
-        Debug.log("Save AppConfig:" + key + ": " + toString());
-    }
-
-    /**
-     * Удаляет все настройки из SharedPreferences, дабы применились настройки по умолчанию
-     */
-    public void resetToDefault() {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putInt(DATA_APP_CONFIG_VERSION, APP_CONFIG_VERSION);
-        for (SettingsField field : getSettingsMap().values()) {
-            editor.remove(field.key);
-        }
-        editor.commit();
-        //Возвращаем значения по умолчанию
-        resetSettingsMap();
-        Debug.log("Reset AppConfig: " + toString());
-    }
-
     /**
      * Сохраняет все настройки, связаные с доступок к API
      *

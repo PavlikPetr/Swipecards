@@ -38,7 +38,7 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
-import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.Configurations;
 import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
@@ -61,7 +61,7 @@ public class App extends Application {
     private static Intent mConnectionIntent;
     private static ConnectionChangeReceiver mConnectionReceiver;
     private static long mLastProfileUpdate;
-    private static AppConfig mBaseConfig;
+    private static Configurations mBaseConfig;
 
     public static boolean isDebugMode() {
         boolean debug = false;
@@ -90,8 +90,8 @@ public class App extends Application {
         initAcra();
 
         //Базовые настройки приложения, инитим их один раз при старте приложения
-        mBaseConfig = new AppConfig(this);
-        Editor.setConfig(mBaseConfig);
+        mBaseConfig = new Configurations(this);
+        Editor.setConfig(mBaseConfig.getAppConfig());
 
         //Включаем строгий режим, если это Debug версия
         checkStrictMode();
@@ -319,7 +319,7 @@ public class App extends Application {
         }
     }
 
-    public static AppConfig getConfig() {
+    public static Configurations getConfig() {
         return mBaseConfig;
     }
 }

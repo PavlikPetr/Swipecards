@@ -87,7 +87,7 @@ public class AuthorizationManager {
     }
 
     public static Facebook getFacebook() {
-        return new Facebook(App.getConfig().getAuthFbApi());
+        return new Facebook(App.getConfig().getAppConfig().getAuthFbApi());
     }
 
     public static void extendAccessToken(Activity parentActivity) {
@@ -337,9 +337,9 @@ public class AuthorizationManager {
         AuthToken authToken = AuthToken.getInstance();
 
         if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            getFbName(authToken.getUserId(), handler);
+            getFbName(authToken.getUserSocialId(), handler);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            getVkName(authToken.getTokenKey(), authToken.getUserId(), handler);
+            getVkName(authToken.getTokenKey(), authToken.getUserSocialId(), handler);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, authToken.getLogin()));
         }
@@ -378,7 +378,7 @@ public class AuthorizationManager {
     }
 
     public static void getFbName(final String user_id, final Handler handler) {
-        new AsyncFacebookRunner(new Facebook(App.getConfig().getAuthFbApi())).request("/" + user_id, new RequestListener() {
+        new AsyncFacebookRunner(new Facebook(App.getConfig().getAppConfig().getAuthFbApi())).request("/" + user_id, new RequestListener() {
 
             @Override
             public void onComplete(String response, Object state) {
@@ -429,7 +429,7 @@ public class AuthorizationManager {
         }
         authToken.removeToken();
         Settings.getInstance().resetSettings();
-        CacheProfile.clearProfile();
+        CacheProfile.clearProfileAndOptions();
         SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         if (preferences != null) {
             preferences.edit().clear().commit();

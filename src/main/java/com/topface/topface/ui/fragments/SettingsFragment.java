@@ -48,7 +48,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     private Settings mSettings;
     private EditSwitcher mSwitchVibration;
-    private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<String, ProgressBar>();
+    private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<>();
     private CountDownTimer mSendTimer = new CountDownTimer(3000, 3000) {
         @Override
         public void onTick(long l) {
@@ -355,7 +355,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         final String[] locales = getResources().getStringArray(R.array.application_locales);
         final String[] languages = new String[locales.length];
         int selectedLocaleIndex = 0;
-        Locale appLocale = new Locale(App.getConfig().getLocaleConfig().getApplicationLocale());
+        Locale appLocale = new Locale(App.getConfig().getAppConfig().getLocaleConfig().getApplicationLocale());
         for (int i = 0; i < locales.length; i++) {
             Locale locale = new Locale(locales[i]);
             languages[i] = Utils.capitalize(locale.getDisplayName(locale));

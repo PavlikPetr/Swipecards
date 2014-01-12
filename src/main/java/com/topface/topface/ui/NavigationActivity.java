@@ -271,8 +271,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     protected void onResume() {
         super.onResume();
         //restart -> open NavigationActivity
-        if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
-            LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale());
+        if (App.getConfig().getAppConfig().getLocaleConfig().fetchToSystemLocale()) {
+            LocaleConfig.changeLocale(this, App.getConfig().getAppConfig().getLocaleConfig().getApplicationLocale());
             return;
         } else {
             LocaleConfig.localeChangeInitiated = false;

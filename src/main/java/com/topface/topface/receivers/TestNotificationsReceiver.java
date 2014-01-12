@@ -24,7 +24,7 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        AppConfig config = App.getConfig();
+        AppConfig config = App.getConfig().getAppConfig();
         String action = intent.getAction();
         if (action == null) return;
         switch (action) {

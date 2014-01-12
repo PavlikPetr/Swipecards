@@ -49,7 +49,7 @@ public class LocaleConfig {
     public static void updateConfiguration(Context baseContext) {
         Resources res = baseContext.getResources();
         android.content.res.Configuration conf = res.getConfiguration();
-        conf.locale = new Locale(App.getConfig().getLocaleConfig().getApplicationLocale());
+        conf.locale = new Locale(App.getConfig().getAppConfig().getLocaleConfig().getApplicationLocale());
         res.updateConfiguration(conf, res.getDisplayMetrics());
     }
 
@@ -103,7 +103,7 @@ public class LocaleConfig {
 
         LocaleConfig.updateConfiguration(activity.getBaseContext());
         //save application locale to preferences
-        App.getConfig().getLocaleConfig().setApplicationLocale(selectedLocale);
+        App.getConfig().getAppConfig().getLocaleConfig().setApplicationLocale(selectedLocale);
         //restart -> open NavigationActivity
         final String locale = LocaleConfig.getServerLocale(activity, selectedLocale);
 
