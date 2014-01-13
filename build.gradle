@@ -1,6 +1,7 @@
 //Константы для сборки приложения. В подмодулях следует использовать именно их, а не хардкодить значения
 def defaultCompileSdkVersion = "Google Inc.:Google APIs:19"
 def defaultBuildToolsVersion = "19.0.1"
+
 def supportLibrary = "com.android.support:support-v4:19.0.+"
 
 def getGitHeadSha() {
