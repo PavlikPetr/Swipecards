@@ -20,16 +20,11 @@
         <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
 
         <!-- ActionBar  -->
-        <item name="actionBarSize">@dimen/default_header_height</item>
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
-        <item name="actionButtonStyle">@style/Widget.Topface.ActionBar.Buttons</item>
         <item name="actionBarItemBackground">@drawable/bg_semitransparent_black</item>
 
-        <item name="android:actionBarSize" tools:ignore="NewApi">@dimen/default_header_height</item>
-        <item name="android:actionBarStyle" tools:ignore="NewApi">@style/Widget.Topface.ActionBar
-        </item>
-        <item name="android:actionButtonStyle" tools:ignore="NewApi">
-            @style/Widget.Topface.ActionBar.Buttons
+        <item name="android:actionBarStyle" tools:ignore="NewApi">
+            @style/Widget.Topface.ActionBar
         </item>
         <item name="android:actionBarItemBackground" tools:ignore="NewApi">
             @drawable/bg_semitransparent_black
@@ -45,15 +40,15 @@
     </style>
 
     <style name="Widget.Topface.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
-        <item name="background">@drawable/im_bar_header</item>
-        <item name="backgroundStacked">@drawable/im_bar_header</item>
-        <item name="backgroundSplit">@drawable/im_bar_header</item>
+        <item name="background">@color/bg_actionbar</item>
+        <item name="backgroundStacked">@color/bg_actionbar</item>
+        <item name="backgroundSplit">@color/bg_actionbar</item>
         <item name="titleTextStyle">@style/Widget.Topface.ActionBar.Title</item>
         <item name="subtitleTextStyle">@style/Widget.Topface.ActionBar.Subtitle</item>
 
-        <item name="android:background">@drawable/im_bar_header</item>
-        <item name="android:backgroundStacked" tools:ignore="NewApi">@drawable/im_bar_header</item>
-        <item name="android:backgroundSplit" tools:ignore="NewApi">@drawable/im_bar_header</item>
+        <item name="android:background">@color/bg_actionbar</item>
+        <item name="android:backgroundStacked" tools:ignore="NewApi">@color/bg_actionbar</item>
+        <item name="android:backgroundSplit" tools:ignore="NewApi">@color/bg_actionbar</item>
         <item name="android:titleTextStyle" tools:ignore="NewApi">
             @style/Widget.Topface.ActionBar.Title
         </item>
@@ -72,11 +67,6 @@
 
     <style name="Widget.Topface.ActionBar.Subtitle" parent="Widget.Topface.ActionBar.Title">
         <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="Widget.Topface.ActionBar.Buttons" parent="@style/Widget.AppCompat.ActionButton">
-        <item name="android:minWidth">@dimen/default_header_height</item>
-        <item name="android:maxWidth">@dimen/default_header_height</item>
     </style>
 
     <style name="Theme.Topface.NoActionBar.Fullscreen" parent="Theme.Topface.NoActionBar">

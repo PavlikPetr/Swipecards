@@ -43,5 +43,7 @@
 
     <!--flat design-->
     <color name="bg_left_menu">#212121</color>
-
+    <color name="bg_actionbar">#4D4D4D</color>
+    <color name="bg_main">#4D4D4D</color>
+    <color name="bg_leaders_block">#373737</color>
 </resources>

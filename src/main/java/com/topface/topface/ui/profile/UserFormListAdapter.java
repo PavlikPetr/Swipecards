@@ -38,7 +38,7 @@ public class UserFormListAdapter extends BaseAdapter {
 
     public UserFormListAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mUserForms = new LinkedList<FormItem>();
+        mUserForms = new LinkedList<>();
     }
 
     @Override
@@ -96,14 +96,6 @@ public class UserFormListAdapter extends BaseAdapter {
                     break;
             }
 
-            switch (type) {
-                case T_HEADER:
-                    convertView.setBackgroundResource(R.drawable.user_list_title_bg);
-                    break;
-                case T_DATA:
-                    convertView.setBackgroundResource(R.drawable.user_list_cell_bg);
-                    break;
-            }
             if (convertView != null) {
                 convertView.setTag(holder);
             }

@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:id="@+id/leadersCont"
-    android:background="@drawable/bg_main">
+    android:background="@color/bg_main">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -69,7 +69,7 @@
                     app:columnWidth="95"
                     android:stretchMode="columnWidth"
                     android:verticalSpacing="0px"
-                    android:gravity="center"></com.topface.topface.ui.gridlayout.GridLayout>
+                    android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/unusedTitle"

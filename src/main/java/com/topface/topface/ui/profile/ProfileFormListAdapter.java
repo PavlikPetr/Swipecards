@@ -19,7 +19,7 @@ import java.util.LinkedList;
 public class ProfileFormListAdapter extends BaseAdapter {
     // Data
     private LayoutInflater mInflater;
-    private LinkedList<FormItem> mProfileForms = new LinkedList<FormItem>();
+    private LinkedList<FormItem> mProfileForms = new LinkedList<>();
     private View.OnClickListener mOnFillListener;
 
     // Constants
@@ -117,17 +117,6 @@ public class ProfileFormListAdapter extends BaseAdapter {
                     break;
             }
 
-            switch (type) {
-                case T_HEADER:
-                    convertView.setBackgroundResource(R.drawable.user_list_title_bg);
-                    break;
-                case T_DATA:
-                    convertView.setBackgroundResource(R.drawable.user_list_cell_bg);
-                    break;
-                case T_STATUS:
-                    convertView.setBackgroundResource(R.drawable.bg_user_list);
-                    break;
-            }
             if (convertView != null) {
                 convertView.setTag(holder);
             }

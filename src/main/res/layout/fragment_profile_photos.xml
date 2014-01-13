@@ -39,11 +39,6 @@
                 android:columnWidth="110dp"
                 android:verticalSpacing="0px" />
 
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/usedTitle"
-                android:background="@drawable/background_profile_info" />
         </RelativeLayout>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
