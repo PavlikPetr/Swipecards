@@ -23,7 +23,6 @@ public class TopfaceNotificationManager {
     private static TopfaceNotificationManager mInstance;
     public static final int NOTIFICATION_ID = 1312; //Completely random number
 
-
     private NotificationManager notificationManager;
     private Context ctx;
 
@@ -37,7 +36,6 @@ public class TopfaceNotificationManager {
     }
 
     private TopfaceNotificationManager(Context context) {
-
         ctx = context;
         notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
     }
@@ -45,14 +43,18 @@ public class TopfaceNotificationManager {
     /*
         isTextNotification - разворачивать нотификацию как текст - true, как картинку - false
      */
-    public int showNotification(String title, String message, boolean isTextNotification, Bitmap icon, int unread, Intent intent, boolean doNeedReplace) {
+    public int showNotification(String title, String message, boolean isTextNotification,
+                                Bitmap icon, int unread, Intent intent, boolean doNeedReplace) {
+        return showNotification(title, message, isTextNotification, icon, unread, intent,
+                doNeedReplace, false);
+    }
 
-
+    public int showNotification(String title, String message, boolean isTextNotification,
+                                Bitmap icon, int unread, Intent intent, boolean doNeedReplace, boolean ongoing) {
         int id = NOTIFICATION_ID;
         if (doNeedReplace) {
-            id = ++lastId;
+            id = newNotificationId();
         }
-
         TopfaceNotification notification = new TopfaceNotification(ctx);
         notification.setType(TopfaceNotification.Type.STANDARD);
         notification.setImage(icon);
@@ -61,13 +63,48 @@ public class TopfaceNotificationManager {
         notification.setIsTextNotification(isTextNotification);
         notification.setUnread(unread);
         notification.setId(id);
+        notification.setOngoing(ongoing);
 
         notificationManager.notify(id, notification.generate(intent));
         return id;
     }
 
+    public int showNotificationWithActions(String title, String message, Bitmap icon,
+                                           boolean needReplace, boolean ongoing,
+                                           NotificationAction[] actions) {
+        int id = NOTIFICATION_ID;
+        if (needReplace) {
+            id = newNotificationId();
+        }
+        return showNotificationWithActions(id, title, message, icon, ongoing, actions);
+    }
+
+    /**
+     * Notification id which won't be conflicting with previous ids
+     *
+     * @return notification id
+     */
+    public int newNotificationId() {
+        return ++lastId;
+    }
+
+    public int showNotificationWithActions(int id, String title, String message, Bitmap icon,
+                                           boolean ongoing,
+                                           NotificationAction[] actions) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx);
+        builder.setContentTitle(title)
+                .setContentText(message)
+                .setOngoing(ongoing);
+        setNotificationIcon(ctx, builder, icon);
+        for (NotificationAction action : actions) {
+            builder.addAction(action.iconResId, action.text, action.intent);
+        }
+        notificationManager.notify(id, builder.build());
+        return id;
+    }
+
     public int showProgressNotification(String title, Bitmap icon, Intent intent) {
-        int id = ++lastId;
+        int id = newNotificationId();
         try {
             TopfaceNotification not = new TopfaceNotification(ctx);
             not.setType(TopfaceNotification.Type.PROGRESS);
@@ -82,7 +119,7 @@ public class TopfaceNotificationManager {
     }
 
     public int showFailNotification(String title, String msg, Bitmap icon, Intent intent) {
-        int id = ++lastId;
+        int id = newNotificationId();
         try {
             TopfaceNotification not = new TopfaceNotification(ctx);
             not.setType(TopfaceNotification.Type.FAIL);
@@ -99,7 +136,6 @@ public class TopfaceNotificationManager {
     }
 
     public void cancelNotification(int id) {
-
         notificationManager.cancel(id);
     }
 
@@ -121,12 +157,27 @@ public class TopfaceNotificationManager {
         }
     }
 
+    private static void setNotificationIcon(Context context, NotificationCompat.Builder builder, Bitmap image) {
+        builder.setSmallIcon(R.drawable.ic_notification);
+
+        if (image != null) {
+            Bitmap scaledIcon = Utils.clipBitmap(image);
+            if (scaledIcon != null) {
+                builder.setLargeIcon(scaledIcon);
+            }
+        } else {
+            builder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.ic_notification));
+        }
+    }
+
     public static class TopfaceNotification {
         private Bitmap image;
         private String text;
         private String title;
 
         private int id;
+        private boolean ongoing;
 
         public enum Type {PROGRESS, STANDARD, FAIL}
 
@@ -174,8 +225,13 @@ public class TopfaceNotificationManager {
             this.id = id;
         }
 
+        public void setOngoing(boolean ongoing) {
+            this.ongoing = ongoing;
+        }
+
         public Notification generate(Intent intent) {
             notificationBuilder = new NotificationCompat.Builder(context);
+            notificationBuilder.setOngoing(ongoing);
             switch (type) {
                 case PROGRESS:
                     return generateProgress(isVersionOld(), intent);
@@ -193,22 +249,10 @@ public class TopfaceNotificationManager {
 
         @SuppressWarnings("UnusedDeclaration")
         private Notification generateStandard(Intent intent) {
-            notificationBuilder.setSmallIcon(R.drawable.ic_notification);
-
-            if (image != null) {
-                Bitmap scaledIcon = Utils.clippingBitmap(image);
-                if (scaledIcon != null) {
-                    notificationBuilder.setLargeIcon(scaledIcon);
-                }
-            } else {
-                notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.ic_notification));
-            }
+            setNotificationIcon(context, notificationBuilder, image);
             if (Settings.getInstance().isVibrationEnabled()) {
                 notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
-
             }
-
             notificationBuilder.setSound(Settings.getInstance().getRingtone());
             notificationBuilder.setContentTitle(title);
             notificationBuilder.setContentText(text);
@@ -217,16 +261,12 @@ public class TopfaceNotificationManager {
             } else {
                 generateBigPicture();
             }
-
             if (unread > 0) {
                 notificationBuilder.setNumber(unread);
             }
-
             PendingIntent resultPendingIntent = generatePendingIntent(intent);
             notificationBuilder.setAutoCancel(true);
             notificationBuilder.setContentIntent(resultPendingIntent);
-
-
             //noinspection deprecation
             return notificationBuilder.build();
         }
@@ -237,7 +277,7 @@ public class TopfaceNotificationManager {
 
                 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.fail_notification_layout);
                 if (image != null) {
-                    Bitmap scaledIcon = Utils.clippingBitmap(image);
+                    Bitmap scaledIcon = Utils.clipBitmap(image);
                     if (scaledIcon != null) {
                         views.setBitmap(R.id.fnAvatar, "setImageBitmap", image);
                     }
@@ -278,7 +318,7 @@ public class TopfaceNotificationManager {
 
                 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.fail_notification_layout);
                 if (image != null) {
-                    Bitmap scaledIcon = Utils.clippingBitmap(image);
+                    Bitmap scaledIcon = Utils.clipBitmap(image);
                     if (scaledIcon != null) {
                         views.setBitmap(R.id.fnAvatar, "setImageBitmap", image);
                     }
@@ -318,7 +358,7 @@ public class TopfaceNotificationManager {
                 notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_upload);
                 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.notifications_progress_layout);
                 if (image != null) {
-                    Bitmap scaledIcon = Utils.clippingBitmap(image);
+                    Bitmap scaledIcon = Utils.clipBitmap(image);
                     if (scaledIcon != null) {
                         views.setBitmap(R.id.notificationImage, "setImageBitmap", image);
                     }
@@ -406,4 +446,15 @@ public class TopfaceNotificationManager {
         }
     }
 
+    public static class NotificationAction {
+        int iconResId;
+        String text;
+        PendingIntent intent;
+
+        public NotificationAction(int iconResId, String text, PendingIntent intent) {
+            this.iconResId = iconResId;
+            this.text = text;
+            this.intent = intent;
+        }
+    }
 }

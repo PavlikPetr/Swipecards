@@ -50,7 +50,7 @@ public class Utils {
         return (int) (System.currentTimeMillis() / 1000L);
     }
 
-    public static Bitmap clippingBitmap(Bitmap bitmap) {
+    public static Bitmap clipBitmap(Bitmap bitmap) {
         if (bitmap == null || bitmap.getWidth() <= 0 || bitmap.getHeight() <= 0)
             return null;
 
@@ -165,7 +165,7 @@ public class Utils {
 
         Bitmap clippedBitmap;
         if (width == dstWidth && height == dstHeight) {
-            clippedBitmap = clippingBitmap(bitmap);
+            clippedBitmap = clipBitmap(bitmap);
         } else {
             //noinspection SuspiciousNameCombination
             clippedBitmap = clipAndScaleBitmap(bitmap, dstWidth, dstWidth);

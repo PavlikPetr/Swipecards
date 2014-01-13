@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -38,7 +37,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected boolean needOpenDialog = true;
     private boolean mIndeterminateSupported = false;
 
-    private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
+    private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private BroadcastReceiver mReauthReceiver;
     protected boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
@@ -175,7 +174,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             if (authFragment == null) {
                 authFragment = AuthFragment.newInstance();
             }
-            getSupportFragmentManager().beginTransaction().replace(getContentViewCompat(), authFragment, AUTH_TAG).commit();
+            getSupportFragmentManager().beginTransaction().replace(android.R.id.content, authFragment, AUTH_TAG).commit();
             return true;
         }
         return false;
@@ -184,14 +183,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public void startFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(getContentViewCompat(), fragment)
+                .add(android.R.id.content, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss();
-    }
-
-    public static int getContentViewCompat() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH ?
-                android.R.id.content : R.id.action_bar_activity_content;
     }
 
     public void close(Fragment fragment) {
@@ -318,8 +312,12 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public boolean isPackageInstalled(String packagename, Context context) {
         PackageManager pm = context.getPackageManager();
         try {
-            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
-            return true;
+            if (pm != null) {
+                pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+                return true;
+            } else {
+                return false;
+            }
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }

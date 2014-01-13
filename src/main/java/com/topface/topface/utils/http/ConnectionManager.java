@@ -41,17 +41,17 @@ public class ConnectionManager {
      */
     public static final int THREAD_PULL_SIZE = 3;
 
-    private static ConnectionManager mInstanse;
+    private static ConnectionManager mInstance;
     private ExecutorService mWorker;
     private AtomicBoolean mAuthUpdateFlag;
 
     public static final String TAG = "ConnectionManager";
-    private final HashMap<String, IApiRequest> mPendignRequests;
+    private final HashMap<String, IApiRequest> mPendingRequests;
 
     private ConnectionManager() {
         mWorker = getNewExecutorService();
         mAuthUpdateFlag = new AtomicBoolean(false);
-        mPendignRequests = new HashMap<>();
+        mPendingRequests = new HashMap<>();
     }
 
     private ExecutorService getNewExecutorService() {
@@ -59,10 +59,10 @@ public class ConnectionManager {
     }
 
     public static ConnectionManager getInstance() {
-        if (mInstanse == null) {
-            mInstanse = new ConnectionManager();
+        if (mInstance == null) {
+            mInstance = new ConnectionManager();
         }
-        return mInstanse;
+        return mInstance;
     }
 
 
@@ -80,7 +80,6 @@ public class ConnectionManager {
                 runRequest(apiRequest);
             }
         });
-
         return true;
     }
 
@@ -211,9 +210,9 @@ public class ConnectionManager {
      * @param apiRequest запрос к серверу
      */
     private void addToPendign(IApiRequest apiRequest) {
-        synchronized (mPendignRequests) {
+        synchronized (mPendingRequests) {
             Debug.log(String.format("add request %s to pending (canceled: %b)", apiRequest.getId(), apiRequest.isCanceled()));
-            mPendignRequests.put(apiRequest.getId(), apiRequest);
+            mPendingRequests.put(apiRequest.getId(), apiRequest);
         }
     }
 
@@ -435,12 +434,12 @@ public class ConnectionManager {
      * Заново отправляем отложенные запросы
      */
     private void runPendingRequests() {
-        synchronized (mPendignRequests) {
-            if (mPendignRequests.size() > 0) {
-                int size = mPendignRequests.size();
+        synchronized (mPendingRequests) {
+            if (mPendingRequests.size() > 0) {
+                int size = mPendingRequests.size();
                 Debug.log(TAG + "::Run pendign requests " + size);
                 //Перебираем все запросы
-                Iterator<Map.Entry<String, IApiRequest>> iterator = mPendignRequests.entrySet().iterator();
+                Iterator<Map.Entry<String, IApiRequest>> iterator = mPendingRequests.entrySet().iterator();
                 while (iterator.hasNext()) {
                     //Получаем запрос
                     IApiRequest request = iterator.next().getValue();

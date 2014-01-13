@@ -32,6 +32,7 @@ public class AppConfig {
     private static final String DATA_API_VERSION = "data_api_version";
     public static final String FLOOD_ENDS_TIME = "flood_ens_time";
     private static final String APP_UNIQUE_ID = "app_unique_id";
+    private static final String DATA_TEST_NETWORK = "data_test_network_mode";
 
     private BannersConfig mBannerConfig;
     private LocaleConfig mLocaleConfig;
@@ -54,6 +55,10 @@ public class AppConfig {
 
     public void setDebugMode(int position) {
         mFields.setField(DATA_DEBUG_MODE, position);
+    }
+
+    public void setTestNetwork(boolean value) {
+        mFields.setField(DATA_TEST_NETWORK, value);
     }
 
     public int getDebugMode() {
@@ -89,6 +94,10 @@ public class AppConfig {
         return uniqueId;
     }
 
+    public boolean getTestNetwork() {
+        return mFields.getBooleanField(DATA_TEST_NETWORK);
+    }
+
     /**
      * Возможные типы полей настроек
      * Поле с типом Unknown не будет обрабатываться (возникает, если поле имеет неизвестный класс у данных)
@@ -115,6 +124,7 @@ public class AppConfig {
         fields.addIntegerField(DATA_DEBUG_MODE, Debug.MODE_EDITOR);
         fields.addLongField(FLOOD_ENDS_TIME, 0l);
         fields.addStringField(APP_UNIQUE_ID, null);
+        fields.addBooleanField(DATA_TEST_NETWORK, false);
         return fields;
     }
 
@@ -143,6 +153,7 @@ public class AppConfig {
                         break;
                     case Boolean:
                         field.value = preferences.getBoolean(field.key, (Boolean) field.value);
+                        break;
                     case Long:
                         field.value = preferences.getLong(field.key, (Long) field.value);
                         break;
@@ -174,6 +185,7 @@ public class AppConfig {
                     break;
                 case Boolean:
                     editor.putBoolean(field.key, (Boolean) field.value);
+                    break;
                 case Long:
                     editor.putLong(field.key, (Long) field.value);
                     break;
@@ -197,6 +209,7 @@ public class AppConfig {
                 break;
             case Boolean:
                 editor.putBoolean(field.key, (Boolean) field.value);
+                break;
             case Long:
                 editor.putLong(field.key, (Long) field.value);
                 break;
