@@ -19,7 +19,6 @@ import com.topface.topface.utils.ResourcesUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class LeftMenuAdapter extends BaseAdapter {
     public static final int TYPE_MENU_BUTTON = 0;
@@ -121,7 +120,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     private void setItemHidden(BaseFragment.FragmentId id, boolean hidden) {
-        mItems.get(id.number()).setHidden(hidden);
+        mItems.get(id.getId()).setHidden(hidden);
     }
 
     private void setAllItemsHidden(boolean hidden) {
@@ -133,11 +132,11 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     public void addItem(ILeftMenuItem item) {
-        mItems.put(item.getMenuId().number(), item);
+        mItems.put(item.getMenuId().getId(), item);
     }
 
     public boolean hasFragment(BaseFragment.FragmentId id) {
-        return mItems.valueAt(id.number()) != null;
+        return mItems.valueAt(id.getId()) != null;
     }
 
     @NotNull

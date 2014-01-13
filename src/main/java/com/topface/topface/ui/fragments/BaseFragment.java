@@ -60,16 +60,16 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         F_BONUS(12),
         F_EDITOR(13),
         F_SETTINGS(14),
-        F_UNDEFINED(9999);
+        F_UNDEFINED(-1);
 
-        private int number;
+        private int mNumber;
 
         FragmentId(int number) {
-            this.number = number;
+            mNumber = number;
         }
 
-        public int number() {
-            return number;
+        public int getId() {
+            return mNumber;
         }
     }
 
