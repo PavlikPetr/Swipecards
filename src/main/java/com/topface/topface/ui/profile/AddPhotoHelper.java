@@ -1,5 +1,6 @@
 package com.topface.topface.ui.profile;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -60,7 +61,7 @@ public class AddPhotoHelper {
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 100;
     private TopfaceNotificationManager mNotificationManager;
     private File outputFile;
-    private static HashMap<String, File> fileNames = new HashMap<String, File>();
+    private static HashMap<String, File> fileNames = new HashMap<>();
 
 
     public AddPhotoHelper(Fragment fragment, LockerView mLockerView) {
@@ -314,7 +315,7 @@ public class AddPhotoHelper {
                 }
                 listener.onResponseReceived(listener.SUCCESS);
                 if (listener.notificationId != -1) {
-                    Intent intent = new Intent(mActivity, NavigationActivity.class)
+                    @SuppressLint("InlinedApi") Intent intent = new Intent(mActivity, NavigationActivity.class)
                             .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
                             .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

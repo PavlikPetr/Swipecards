@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -251,7 +252,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         String body = Static.EMPTY;
         String topface_version = "unknown";
         int topface_versionCode = 0;
-        String android_SDK = "API" + android.os.Build.VERSION.SDK_INT;
+        String android_SDK = "API " + android.os.Build.VERSION.SDK_INT;
         String android_RELEASE = android.os.Build.VERSION.RELEASE;
         String android_CODENAME = android.os.Build.VERSION.CODENAME;
         String device = android.os.Build.DEVICE;
@@ -290,7 +291,10 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             strBuilder.append("<p>Android version: ").append(android_CODENAME).append("/");
             strBuilder.append(android_RELEASE).append("/").append(android_SDK).append(";</p>\n");
 
-            strBuilder.append("<p>Build type: ").append(Utils.getBuildType()).append(android_SDK).append(";</p>\n");
+            strBuilder.append("<p>Build type: ")
+                    .append(BuildConfig.BILLING_TYPE.getClientType())
+                    .append(android_SDK)
+                    .append(";</p>\n");
             if (transactionId != null) {
                 strBuilder.append("<p>Transaction Id: ").append(transactionId).append(";</p>\n");
             }

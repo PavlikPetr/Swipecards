@@ -2,7 +2,6 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -28,6 +27,7 @@ import android.widget.Toast;
 
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.AuthRequest;
@@ -350,35 +350,16 @@ public class Utils {
     public static Intent getMarketIntent(Context context) {
         String link;
         //Для амазона делаем специальную ссылку, иначе он ругается, хотя и работает
-        if (TextUtils.equals(Utils.getBuildType(), context.getString(R.string.build_amazon))) {
-            link = context.getString(R.string.amazon_market_link);
-        } else {
-            link = context.getString(R.string.default_market_link);
+        switch (BuildConfig.BILLING_TYPE) {
+            case AMAZON:
+                link = context.getString(R.string.amazon_market_link);
+                break;
+            default:
+                link = context.getString(R.string.default_market_link);
+                break;
         }
 
         return new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-    }
-
-    public static String getBuildType() {
-        String type;
-        Context context = App.getContext();
-
-        try {
-            //Получаем мета данные из информации приложения
-            ApplicationInfo info = context.getPackageManager().getApplicationInfo(
-                    context.getPackageName(),
-                    PackageManager.GET_META_DATA
-            );
-            //Получаем тип сборки
-            type = info.metaData.getString(
-                    context.getString(R.string.build_type_key)
-            );
-        } catch (Exception e) {
-            Debug.error("BuildType error", e);
-            type = context.getString(R.string.build_default);
-        }
-
-        return type;
     }
 
     public static String getClientVersion() {

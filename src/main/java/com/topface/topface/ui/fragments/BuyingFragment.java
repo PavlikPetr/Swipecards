@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.billing.BillingFragment;
+import com.topface.billing.BillingType;
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.GooglePlayProducts;
@@ -26,7 +27,6 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 
 import java.util.LinkedList;
@@ -41,7 +41,7 @@ public class BuyingFragment extends BillingFragment {
     public static final int TYPE_DELIGHT = 2;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
 
-    private LinkedList<RelativeLayout> purchaseButtons = new LinkedList<RelativeLayout>();
+    private LinkedList<RelativeLayout> purchaseButtons = new LinkedList<>();
 
     private BroadcastReceiver mReceiver;
 
@@ -206,10 +206,10 @@ public class BuyingFragment extends BillingFragment {
     }
 
     private void initPaymentwallButtons(View root) {
-        //Paymentwall
-        View mobilePayments = root.findViewById(R.id.mobilePayments);
         //Показываем кнопку только на платформе Google Play v2
-        if (TextUtils.equals(Utils.getBuildType(), getString(R.string.build_google_play_v2))) {
+        if (BuildConfig.BILLING_TYPE == BillingType.GOOGLE_PLAY) {
+            //Paymentwall
+            View mobilePayments = root.findViewById(R.id.mobilePayments);
             mobilePayments.setVisibility(View.VISIBLE);
             ViewGroup layout = (ViewGroup) mobilePayments.findViewById(R.id.mobilePaymentsList);
             //Листенер просто открывае
@@ -226,7 +226,7 @@ public class BuyingFragment extends BillingFragment {
                 }
             };
 
-            //На все кнопки навешиваем
+            //На все кнопки навешиваем листенер нажатия
             for (int i = 0; i < layout.getChildCount(); i++) {
                 View child = layout.getChildAt(i);
                 if (child != null) {

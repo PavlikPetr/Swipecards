@@ -3,7 +3,6 @@ package com.topface.billing.amazon;
 import android.content.Context;
 
 import com.topface.billing.BillingQueue;
-import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
 
 import org.json.JSONException;
@@ -28,11 +27,6 @@ public class AmazonQueue extends BillingQueue {
         }
 
         return mInstance;
-    }
-
-    @Override
-    protected String getQueueName() {
-        return mContext.getString(R.string.build_amazon);
     }
 
     @Override

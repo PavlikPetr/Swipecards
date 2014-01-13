@@ -58,6 +58,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_HIGH;
@@ -65,7 +66,6 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
-
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String BONUS_COUNTER_TAG = "preferences_for_bonus_counter";
     public static final String BONUS_COUNTER_LAST_SHOW_TIME = "last_show_time";
@@ -219,7 +219,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     protected void onCreateAsync() {
         Novice.getInstance(getPreferences()).initNoviceFlags();
-//        initBonusCounterConfig();
     }
 
     private void initBonusCounterConfig() {

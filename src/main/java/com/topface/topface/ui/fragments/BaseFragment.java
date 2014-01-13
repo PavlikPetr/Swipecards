@@ -42,14 +42,32 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     private BroadcastReceiver updateCountersReceiver;
 
     public static enum FragmentId {
-        F_VIP_PROFILE, F_PROFILE, F_DATING,
-        F_LIKES, F_ADMIRATIONS, F_MUTUAL,
-        F_LIKES_CLOSINGS, F_MUTUAL_CLOSINGS,
-        F_DIALOGS,
-        F_VISITORS, F_BOOKMARKS, F_FANS,
-        F_BONUS,
-        F_EDITOR, F_SETTINGS,
-        F_UNDEFINED
+        F_VIP_PROFILE(0),
+        F_PROFILE(1),
+        F_DATING(2),
+        F_LIKES(3),
+        F_ADMIRATIONS(4),
+        F_MUTUAL(5),
+        F_LIKES_CLOSINGS(6),
+        F_MUTUAL_CLOSINGS(7),
+        F_DIALOGS(8),
+        F_BOOKMARKS(9),
+        F_FANS(10),
+        F_VISITORS(11),
+        F_BONUS(12),
+        F_EDITOR(13),
+        F_SETTINGS(14),
+        F_UNDEFINED(-1);
+
+        private int mNumber;
+
+        FragmentId(int number) {
+            mNumber = number;
+        }
+
+        public int getId() {
+            return mNumber;
+        }
     }
 
 
