@@ -94,14 +94,11 @@ public class CacheProfile {
     public static boolean canInvite;
 
     private static void setProfileCache(final ApiResponse response) {
-        //Пишем в SharedPreferences в отдельном потоке
         ProfileConfig config = App.getConfig().getProfileConfig();
         if (response != null) {
             config.setProfileData(response.toJson().toString());
             config.saveConfig();
         } else {
-            config.resetProfileData();
-            config.resetOptionsData();
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
             SharedPreferences.Editor editor = preferences.edit();
             editor.remove(GP_PRODUCTS_CACHE_KEY);
@@ -300,6 +297,9 @@ public class CacheProfile {
         return city != null && !city.isEmpty() && age != 0 && first_name != null && photo != null;
     }
 
+    /**
+     * Clears CacheProfile fields (does not affect cached data from ProfileConfig)
+     */
     public static void clearProfileAndOptions() {
         clearOptions();
         setProfile(new Profile(), null);
