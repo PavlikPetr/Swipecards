@@ -331,13 +331,13 @@
     </style>
 
     <style name="LeftMenuButtons" parent="ShadowBlackBottom">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/left_menu_text</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:drawablePadding">12dp</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/navigation_menu_item_selector</item>
+        <item name="android:background">@drawable/bg_left_menu_item_selector</item>
         <item name="android:textSize">16sp</item>
     </style>
 

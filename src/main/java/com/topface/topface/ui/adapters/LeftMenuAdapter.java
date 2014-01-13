@@ -27,7 +27,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     private MenuFragment mMenuFragment;
     private final List<ILeftMenuItem> mItems;
 
-    private HashMap<BaseFragment.FragmentId, TextView> mCountersBadgesMap = new HashMap<BaseFragment.FragmentId, TextView>();
+    private HashMap<BaseFragment.FragmentId, TextView> mCountersBadgesMap = new HashMap<>();
     private boolean mIsEnabled = true;
     private View.OnClickListener mDisabledItemClickListener = new View.OnClickListener() {
         @Override
@@ -43,8 +43,6 @@ public class LeftMenuAdapter extends BaseAdapter {
         this.mMenuFragment = menuFragment;
         mItems = items;
     }
-
-
 
     public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentId menuId, final int menuType,
                                                 final int menuIconResId) {
