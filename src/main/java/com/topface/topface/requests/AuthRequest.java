@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Utils;
@@ -15,7 +16,7 @@ import org.json.JSONObject;
 public class AuthRequest extends ApiRequest {
     // Data
     public static final String SERVICE_NAME = "auth.login";
-    public static final String FALLBACK_CLIENT_VERSION = "2.3.7.1";
+    public static final String FALLBACK_CLIENT_VERSION = "2.9.0.1";
     public static final String FALLBACK_LOCALE = "en_US";
 
     private String sid; // id пользователя в социальной сети
@@ -35,7 +36,7 @@ public class AuthRequest extends ApiRequest {
     private AuthRequest(Context context) {
         super(context);
         doNeedAlert(false);
-        clienttype = Utils.getBuildType();
+        clienttype = BuildConfig.BILLING_TYPE.getClientType();
         locale = getClientLocale(context);
         clientversion = Utils.getClientVersion();
         clientosversion = Utils.getClientOsVersion();
@@ -81,7 +82,7 @@ public class AuthRequest extends ApiRequest {
                 .put("locale", locale)
                 .put("clientType", clienttype)
                 .put("clientVersion", clientversion)
-                .put("clientosVersion", clientosversion)
+                .put("clientOsVersion", clientosversion)
                 .put("clientDevice", clientdevice)
                 .put("clientId", clientid)
                 .put("login", login)

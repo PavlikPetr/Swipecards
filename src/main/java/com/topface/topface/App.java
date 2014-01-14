@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
@@ -53,6 +54,8 @@ import org.acra.ACRAConfiguration;
 import org.acra.ACRAConfigurationException;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
+
+import java.text.SimpleDateFormat;
 
 @ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends Application {
@@ -103,7 +106,14 @@ public class App extends Application {
         //Для Android 2.1 и ниже отключаем Keep-Alive
         checkKeepAlive();
 
-        Debug.log("App", "+onCreate\n" + mBaseConfig.toString());
+        String msg = "+onCreate\n" + mBaseConfig.toString();
+        if (BuildConfig.BUILD_TIME > 0) {
+            msg += "\nBuild Time: " + SimpleDateFormat.getInstance().format(BuildConfig.BUILD_TIME);
+        }
+        if (!TextUtils.isEmpty(BuildConfig.GIT_HEAD_SHA)) {
+            msg += "\nCommit: " + BuildConfig.GIT_HEAD_SHA;
+        }
+        Debug.log("App", msg);
 
         //Начинаем слушать подключение к интернету
         if (mConnectionIntent == null) {

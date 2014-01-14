@@ -1,12 +1,9 @@
 package com.topface.billing;
 
 import android.app.Activity;
-import android.text.TextUtils;
 
-import com.topface.billing.amazon.AmazonBillingDriver;
 import com.topface.billing.googleplay.GooglePlayV2BillingDriver;
-import com.topface.topface.R;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.BuildConfig;
 
 /**
  * Класс возвращающий платежный драйвер согласно окружению и настройкам сборки
@@ -31,20 +28,33 @@ public class BillingDriverManager {
      * Создает новый инстанс основного драйвера платежей, подходящий по типу окружения (Google Play, Amazon и т.п.)
      * (кроме осноного у нас будет еще и дополнительный, с оплатой по смс например)
      */
-    /*public BillingDriver createMainBillingDriver(Activity activity, BillingListener listener) {
-        //TODO: тестовый режим, пока только Google Play
-        return new GooglePlayV2BillingDriver(activity, listener);
-    }*/
     public BillingDriver createMainBillingDriver(Activity activity, BillingListener listener, BillingSupportListener supportListener) {
-        BillingDriver driver;
+        BillingDriver driver = null;
 
-        if (TextUtils.equals(Utils.getBuildType(), activity.getString(R.string.build_amazon))) {
-            driver = new AmazonBillingDriver(activity, listener);
-        } else {
-            driver = new GooglePlayV2BillingDriver(activity, listener);
+        switch (BuildConfig.BILLING_TYPE) {
+            case AMAZON:
+                try {
+                    //мы получаем амазоновский драйвер динамически
+                    Class driverClass = Class.forName("com.topface.billing.amazon.AmazonBillingDriver");
+                    //noinspection unchecked
+                    driver = (BillingDriver) driverClass
+                            .getConstructor(Activity.class, BillingListener.class)
+                            .newInstance(activity, listener);
+                } catch (Exception e) {
+                    com.topface.topface.utils.Debug.error("Amazon library not found", e);
+                }
+                break;
+            case GOOGLE_PLAY:
+            default:
+                driver = new GooglePlayV2BillingDriver(activity, listener);
+
         }
 
-        driver.setBillingSupportListener(supportListener);
+        if (driver != null) {
+            driver.setBillingSupportListener(supportListener);
+        } else {
+            throw new RuntimeException("BillingDriver not found");
+        }
 
         return driver;
     }

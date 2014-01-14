@@ -2,8 +2,8 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
+import com.topface.topface.BuildConfig;
 import com.topface.topface.utils.ClientUtils;
-import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +30,7 @@ public class RegisterRequest extends ApiRequest {
         this.name = name;
         this.birthday = birthday;
         this.sex = sex;
-        this.clientType = Utils.getBuildType();
+        this.clientType = BuildConfig.BILLING_TYPE.getClientType();
         this.locale = ClientUtils.getClientLocale(context);
     }
 

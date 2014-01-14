@@ -12,8 +12,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
@@ -24,6 +24,8 @@ import com.topface.topface.imageloader.MaskClipProcessor;
 import com.topface.topface.imageloader.RoundCornersProcessor;
 import com.topface.topface.imageloader.RoundProcessor;
 import com.topface.topface.utils.Debug;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -144,7 +146,7 @@ public class ImageViewRemote extends ImageView {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NotNull MotionEvent event) {
         return super.onTouchEvent(event);
     }
 
