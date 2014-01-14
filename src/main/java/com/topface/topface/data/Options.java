@@ -2,7 +2,6 @@ package com.topface.topface.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.topface.topface.App;
 import com.topface.topface.Ssid;
@@ -14,6 +13,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PopupManager;
+import com.topface.topface.utils.config.UserConfig;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -122,7 +122,7 @@ public class Options extends AbstractData {
     /**
      * Настройки для каждого типа страниц
      */
-    public HashMap<String, Page> pages = new HashMap<String, Page>();
+    public HashMap<String, Page> pages = new HashMap<>();
 
     public String ratePopupType = PopupManager.OFF_RATE_TYPE;
     private String paymentwall;
@@ -429,49 +429,25 @@ public class Options extends AbstractData {
         }
 
         public boolean isNeedShow() {
-            return mEnabled && (getLashShowTime() + mTimeout * 60 * 60 * 1000) < System.currentTimeMillis();
+            return mEnabled && (getLastShowTime() + mTimeout * 60 * 60 * 1000) < System.currentTimeMillis();
         }
 
         public void setPopupShowTime() {
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    PreferenceManager.getDefaultSharedPreferences(App.getContext())
-                            .edit()
-                            .putLong(getPrefsConstant(), System.currentTimeMillis())
-                            .commit();
-                }
-            };
+            UserConfig config = App.getUserConfig();
+            config.setPromoPopupLastTime(getPopupAirType(), System.currentTimeMillis());
+            config.saveConfig();
         }
 
         public void clearPopupShowTime() {
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    PreferenceManager.getDefaultSharedPreferences(App.getContext())
-                            .edit()
-                            .remove(getPrefsConstant())
-                            .commit();
-                }
-            };
+            App.getUserConfig().resetPromoPopupData(getPopupAirType());
         }
 
-        public String getPrefsConstant() {
-            switch (airType) {
-                case AIR_MESSAGES:
-                    return PREMIUM_MESSAGES_POPUP_SHOW_TIME;
-                case AIR_VISITORS:
-                    return PREMIUM_VISITORS_POPUP_SHOW_TIME;
-                case AIR_ADMIRATIONS:
-                    return PREMIUM_ADMIRATION_POPUP_SHOW_TIME;
-            }
-
-            return PREMIUM_MESSAGES_POPUP_SHOW_TIME;
+        public int getPopupAirType() {
+            return airType;
         }
 
-        private long getLashShowTime() {
-            return PreferenceManager.getDefaultSharedPreferences(App.getContext())
-                    .getLong(getPrefsConstant(), 0);
+        private long getLastShowTime() {
+            return App.getUserConfig().getPromoPopupLastTime(getPopupAirType());
         }
     }
 

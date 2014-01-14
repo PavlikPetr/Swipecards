@@ -35,7 +35,7 @@ public class Editor {
 
     public static void init(Profile profile) {
         mUserFieldEditor = profile.isEditor();
-        Debug.setDebugMode(App.getConfig().getAppConfig().getDebugMode());
+        Debug.setDebugMode(App.getAppConfig().getDebugMode());
     }
 
     public static boolean isEditor() {

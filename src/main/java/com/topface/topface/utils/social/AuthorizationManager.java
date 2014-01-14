@@ -87,7 +87,7 @@ public class AuthorizationManager {
     }
 
     public static Facebook getFacebook() {
-        return new Facebook(App.getConfig().getAppConfig().getAuthFbApi());
+        return new Facebook(App.getAppConfig().getAuthFbApi());
     }
 
     public static void extendAccessToken(Activity parentActivity) {
@@ -378,7 +378,7 @@ public class AuthorizationManager {
     }
 
     public static void getFbName(final String user_id, final Handler handler) {
-        new AsyncFacebookRunner(new Facebook(App.getConfig().getAppConfig().getAuthFbApi())).request("/" + user_id, new RequestListener() {
+        new AsyncFacebookRunner(new Facebook(App.getAppConfig().getAuthFbApi())).request("/" + user_id, new RequestListener() {
 
             @Override
             public void onComplete(String response, Object state) {
@@ -430,6 +430,7 @@ public class AuthorizationManager {
         authToken.removeToken();
         Settings.getInstance().resetSettings();
         CacheProfile.clearProfileAndOptions();
+        App.getConfig().onLogout();
         SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         if (preferences != null) {
             preferences.edit().clear().commit();

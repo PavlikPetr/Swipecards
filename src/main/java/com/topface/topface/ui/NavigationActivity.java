@@ -68,7 +68,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     private DrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
 
-    private SharedPreferences mPreferences;
     private boolean needAnimate = false;
     private boolean isPopupVisible = false;
 
@@ -127,7 +126,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     protected void onCreateAsync() {
-        Novice.getInstance(getPreferences()).initNoviceFlags();
+        Novice.getInstance().initNoviceFlags();
 //        initBonusCounterConfig();
     }
 
@@ -215,13 +214,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         }
     }
 
-    private SharedPreferences getPreferences() {
-        if (mPreferences == null) {
-            mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        }
-        return mPreferences;
-    }
-
     public void showFragment(FragmentId fragmentId) {
         mMenuFragment.selectMenu(fragmentId);
     }
@@ -271,8 +263,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     protected void onResume() {
         super.onResume();
         //restart -> open NavigationActivity
-        if (App.getConfig().getAppConfig().getLocaleConfig().fetchToSystemLocale()) {
-            LocaleConfig.changeLocale(this, App.getConfig().getAppConfig().getLocaleConfig().getApplicationLocale());
+        if (App.getLocaleConfig().fetchToSystemLocale()) {
+            LocaleConfig.changeLocale(this, App.getLocaleConfig().getApplicationLocale());
             return;
         } else {
             LocaleConfig.localeChangeInitiated = false;

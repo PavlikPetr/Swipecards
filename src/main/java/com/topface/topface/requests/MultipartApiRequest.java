@@ -55,7 +55,7 @@ abstract public class MultipartApiRequest extends ApiRequest {
                 ConnectionManager.TAG,
                 "MULTIPART REQUEST >>> " +
                         getApiUrl() +
-                        " rev:" + App.getConfig().getAppConfig().getApiRevision(),
+                        " rev:" + App.getAppConfig().getApiRevision(),
                 requests
         );
 

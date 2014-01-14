@@ -42,7 +42,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     }
 
     private void initOnStartLoadingControls(View root) {
-        final BannersConfig config = App.getConfig().getAppConfig().getBannerConfig();
+        final BannersConfig config = App.getBannerConfig();
         final CheckBox checkBoxOnStart = ((CheckBox) root.findViewById(R.id.cbOnStart));
         checkBoxOnStart.setChecked(config.needLoadOnStart());
         View.OnClickListener listener = new View.OnClickListener() {
@@ -92,11 +92,11 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSaveSettings:
-                App.getConfig().getAppConfig().getBannerConfig().saveBannersSettings();
+                App.getBannerConfig().saveBannersSettings();
                 showCompleteMessage();
                 break;
             case R.id.btnResetSettings:
-                App.getConfig().getAppConfig().getBannerConfig().resetBannersSettings();
+                App.getBannerConfig().resetBannersSettings();
                 clearConfigContainer();
                 initConfigContainer();
                 showCompleteMessage();

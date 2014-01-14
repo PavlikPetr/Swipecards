@@ -5,10 +5,8 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.topface.topface.Static;
-import com.topface.topface.utils.BannersConfig;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.LocaleConfig;
 
 import java.util.UUID;
 
@@ -36,17 +34,6 @@ public class AppConfig extends AbstractConfig {
     public static final String FLOOD_ENDS_TIME = "flood_ens_time";
     private static final String APP_UNIQUE_ID = "app_unique_id";
     private static final String DATA_TEST_NETWORK = "data_test_network_mode";
-
-    private BannersConfig mBannerConfig;
-    private LocaleConfig mLocaleConfig;
-
-    public BannersConfig getBannerConfig() {
-        return mBannerConfig;
-    }
-
-    public LocaleConfig getLocaleConfig() {
-        return mLocaleConfig;
-    }
 
     public String getAuthVkApi() {
         return getSettingsMap().getStringField(DATA_AUTH_VK_API);
@@ -118,8 +105,6 @@ public class AppConfig extends AbstractConfig {
 
     public AppConfig(Context context) {
         super(context);
-        mBannerConfig = new BannersConfig(context);
-        mLocaleConfig = new LocaleConfig(context);
     }
 
     protected SharedPreferences getPreferences() {

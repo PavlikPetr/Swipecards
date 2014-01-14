@@ -3,7 +3,6 @@ package com.topface.topface.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
@@ -21,7 +20,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.config.ProfileConfig;
+import com.topface.topface.utils.config.SessionConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,9 +76,6 @@ public class CacheProfile {
 
     public static int totalPhotos;
 
-    public static final String OPTIONS_CACHE_KEY = "options_cache";
-    public static final String GP_PRODUCTS_CACHE_KEY = "google_play_products_cache";
-
     public static ArrayList<Gift> gifts = new ArrayList<>();
     public static SparseArrayCompat<Profile.TopfaceNotifications> notifications;
 
@@ -94,15 +90,10 @@ public class CacheProfile {
     public static boolean canInvite;
 
     private static void setProfileCache(final ApiResponse response) {
-        ProfileConfig config = App.getConfig().getProfileConfig();
+        SessionConfig config = App.getSessionConfig();
         if (response != null) {
             config.setProfileData(response.toJson().toString());
             config.saveConfig();
-        } else {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.remove(GP_PRODUCTS_CACHE_KEY);
-            editor.commit();
         }
     }
 
@@ -213,21 +204,19 @@ public class CacheProfile {
     public static boolean loadProfile() {
         boolean result = false;
         if (uid == 0) {
-            ProfileConfig config = App.getConfig().getProfileConfig();
+            SessionConfig config = App.getSessionConfig();
             String profileCache = config.getProfileData();
             Profile profile;
             if (!TextUtils.isEmpty(profileCache)) {
                 //Получаем опции из кэша
                 try {
-                    ApiResponse response = new ApiResponse(
-                            new JSONObject(profileCache)
-                    );
+                    ApiResponse response = new ApiResponse(new JSONObject(profileCache));
                     profile = Profile.parse(response);
                     setProfile(profile, response);
                     result = true;
                 } catch (JSONException e) {
+                    config.resetProfileData();
                     Debug.error(e);
-                    config.resetAndSaveConfig();
                 }
             }
         }
@@ -246,7 +235,7 @@ public class CacheProfile {
      */
     public static Options getOptions() {
         if (options == null) {
-            ProfileConfig config = App.getConfig().getProfileConfig();
+            SessionConfig config = App.getSessionConfig();
             String optionsCache = config.getOptionsData();
             if (!TextUtils.isEmpty(optionsCache)) {
                 //Получаем опции из кэша, причем передаем флаг, что бы эти опции не кешировались повторно
@@ -272,8 +261,8 @@ public class CacheProfile {
      */
     public static GooglePlayProducts getGooglePlayProducts() {
         if (mProducts == null) {
-            String productsCache = PreferenceManager.getDefaultSharedPreferences(App.getContext())
-                    .getString(GP_PRODUCTS_CACHE_KEY, null);
+            SessionConfig config = App.getSessionConfig();
+            String productsCache = config.getGoogleProductsData();
             if (productsCache != null) {
                 //Получаем опции из кэша
                 try {
@@ -281,6 +270,7 @@ public class CacheProfile {
                             new JSONObject(productsCache)
                     );
                 } catch (JSONException e) {
+                    config.resetGoogleProductsData();
                     Debug.error(e);
                 }
             }
@@ -325,7 +315,7 @@ public class CacheProfile {
         options = newOptions;
         //Каждый раз не забываем кешировать запрос опций, но делаем это в отдельном потоке
         if (response != null) {
-            ProfileConfig config = App.getConfig().getProfileConfig();
+            SessionConfig config = App.getSessionConfig();
             config.setOptionsData(response.toString());
             config.saveConfig();
         }
@@ -334,15 +324,9 @@ public class CacheProfile {
     public static void setGooglePlayProducts(GooglePlayProducts products, final JSONObject response) {
         mProducts = products;
         //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
+        SessionConfig config = App.getSessionConfig();
         if (response != null) {
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit()
-                            .putString(GP_PRODUCTS_CACHE_KEY, response.toString())
-                            .commit();
-                }
-            };
+            config.setGoogleProductsData(response.toString());
             LocalBroadcastManager.getInstance(App.getContext())
                     .sendBroadcast(new Intent(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
 

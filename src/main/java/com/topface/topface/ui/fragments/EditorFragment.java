@@ -53,7 +53,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAppConfig = App.getConfig().getAppConfig();
+        mAppConfig = App.getAppConfig();
 
         mApiUrlsMap = new SparseArray<>();
         mApiUrlsMap.put(0, Static.API_URL);

@@ -355,7 +355,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         final String[] locales = getResources().getStringArray(R.array.application_locales);
         final String[] languages = new String[locales.length];
         int selectedLocaleIndex = 0;
-        Locale appLocale = new Locale(App.getConfig().getAppConfig().getLocaleConfig().getApplicationLocale());
+        Locale appLocale = new Locale(App.getLocaleConfig().getApplicationLocale());
         for (int i = 0; i < locales.length; i++) {
             Locale locale = new Locale(locales[i]);
             languages[i] = Utils.capitalize(locale.getDisplayName(locale));

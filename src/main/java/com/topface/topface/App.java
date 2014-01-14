@@ -32,13 +32,18 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.utils.BackgroundThread;
+import com.topface.topface.utils.BannersConfig;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
+import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
+import com.topface.topface.utils.config.SessionConfig;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
@@ -321,6 +326,26 @@ public class App extends Application {
 
     public static Configurations getConfig() {
         return mBaseConfig;
+    }
+
+    public static AppConfig getAppConfig() {
+        return getConfig().getAppConfig();
+    }
+
+    public static SessionConfig getSessionConfig() {
+        return getConfig().getSessionConfig();
+    }
+
+    public static UserConfig getUserConfig() {
+        return getConfig().getUserConfig();
+    }
+
+    public static LocaleConfig getLocaleConfig() {
+        return getConfig().getLocaleConfig();
+    }
+
+    public static BannersConfig getBannerConfig() {
+        return getConfig().getBannerConfig();
     }
 }
 

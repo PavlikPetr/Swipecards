@@ -40,7 +40,7 @@ public class AuthRequest extends ApiRequest {
         clientversion = Utils.getClientVersion();
         clientosversion = Utils.getClientOsVersion();
         clientdevice = Utils.getClientDeviceName();
-        clientid = App.getConfig().getAppConfig().getAppUniqueId();
+        clientid = App.getAppConfig().getAppUniqueId();
         tablet = context.getResources().getBoolean(R.bool.is_tablet);
     }
 

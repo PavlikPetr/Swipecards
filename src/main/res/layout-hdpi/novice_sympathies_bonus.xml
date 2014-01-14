@@ -16,7 +16,7 @@
         android:layout_height="51dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:src="@drawable/tip_battery_bonus_mask"
+        android:src="@drawable/tip_sympathies_bonus_mask"
         android:layout_marginTop="22dp" />
 
     <ImageView
@@ -25,7 +25,7 @@
         android:layout_height="284.5dp"
         android:layout_toRightOf="@id/ivMask"
         android:layout_alignParentTop="true"
-        android:src="@drawable/tip_battery_bonus_arrow"
+        android:src="@drawable/tip_sympathies_bonus_arrow"
         android:layout_marginTop="70dp"
         android:layout_marginLeft="-65dp" />
 
@@ -35,7 +35,7 @@
         android:layout_height="175dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/ivArrow"
-        android:background="@drawable/tip_energy_bubble"
+        android:background="@drawable/tip_buy_sympathies_bubble"
         android:gravity="center"
         android:lines="5"
         android:text="@string/novice_sympathies_bonus"
