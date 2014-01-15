@@ -1,6 +1,6 @@
 package com.topface.topface.utils;
 
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;

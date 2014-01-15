@@ -4,14 +4,12 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.text.TextUtils;
-import android.widget.ListView;
 
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.data.Photo;
+import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -33,9 +31,6 @@ import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
@@ -161,7 +156,6 @@ public class GCMUtils {
                                 data,
                                 user,
                                 notificationManager,
-                                getTempImageViewRemote(context),
                                 intent,
                                 title
                         );
@@ -182,13 +176,6 @@ public class GCMUtils {
         }
 
         return result;
-    }
-
-    private static TopfaceNotificationManager.TempImageViewRemote getTempImageViewRemote(Context context) {
-        final TopfaceNotificationManager.TempImageViewRemote fakeImageView = new TopfaceNotificationManager.TempImageViewRemote(context);
-
-        fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
-        return fakeImageView;
     }
 
     private static int getType(Intent extra) {
@@ -230,29 +217,16 @@ public class GCMUtils {
         return title;
     }
 
-    private static void showNotificationWithIcon(final int unread, final String data, final User user, final TopfaceNotificationManager notificationManager, final TopfaceNotificationManager.TempImageViewRemote fakeImageView, final Intent newI, final String finalTitle) {
-        //Устанавливаем таймер - если фотка за 5 секунд не смогла загрузиться, то показываем нотификацию с лого вместо фотки.
-        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-
-        executorService.schedule(new Runnable() {
-            @Override
-            public void run() {
-                notificationManager.showNotification(finalTitle, data, true, null, unread, newI, false);
-            }
-        }, 5000, TimeUnit.MILLISECONDS);
-
-        fakeImageView.setRemoteSrc(user.photoUrl, new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-
-                if (user.id != lastUserId && !executorService.isShutdown()) {
-                    executorService.shutdown();
-                    notificationManager.showNotification(finalTitle, data, true, fakeImageView.getImageBitmap(), unread, newI, false);
-                }
-            }
-        });
-
+    private static void showNotificationWithIcon(final int unread, final String data, final User user, final TopfaceNotificationManager notificationManager, final Intent newIntent, final String finalTitle) {
+        notificationManager.showNotification(
+                finalTitle,
+                data,
+                true,
+                DefaultImageLoader.getInstance().getImageLoader().loadImageSync(user.photoUrl),
+                unread,
+                newIntent,
+                false
+        );
     }
 
     private static int getUnread(Intent extra) {

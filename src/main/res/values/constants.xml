@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--suppress AndroidLintMissingTranslation -->
 <resources>
-
-    <string name="build_type_key">com.topface.topface.build</string>
-    <string name="build_default">@string/build_google_play_v2</string>
-    <string name="build_google_play_v2">google-play-v2</string>
-    <string name="build_google_play_v3">google-play-v3</string>
-    <string name="build_amazon">amazon</string>
-
     <!-- settings -->
     <string name="settings_help_url">http://topface.com/faq-mobile?from=android</string>
     <string name="settings_topface_url">http://topface.com</string>
