@@ -90,8 +90,8 @@ public class CacheProfile {
     public static boolean canInvite;
 
     private static void setProfileCache(final ApiResponse response) {
-        SessionConfig config = App.getSessionConfig();
         if (response != null) {
+            SessionConfig config = App.getSessionConfig();
             config.setProfileData(response.toJson().toString());
             config.saveConfig();
         }
@@ -324,9 +324,8 @@ public class CacheProfile {
     public static void setGooglePlayProducts(GooglePlayProducts products, final JSONObject response) {
         mProducts = products;
         //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
-        SessionConfig config = App.getSessionConfig();
         if (response != null) {
-            config.setGoogleProductsData(response.toString());
+            App.getSessionConfig().setGoogleProductsData(response.toString());
             LocalBroadcastManager.getInstance(App.getContext())
                     .sendBroadcast(new Intent(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
 
