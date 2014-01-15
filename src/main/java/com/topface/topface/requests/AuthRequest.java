@@ -41,7 +41,7 @@ public class AuthRequest extends ApiRequest {
         clientversion = Utils.getClientVersion();
         clientosversion = Utils.getClientOsVersion();
         clientdevice = Utils.getClientDeviceName();
-        clientid = App.getConfig().getAppUniqueId();
+        clientid = App.getAppConfig().getAppUniqueId();
         tablet = context.getResources().getBoolean(R.bool.is_tablet);
     }
 
@@ -52,11 +52,11 @@ public class AuthRequest extends ApiRequest {
             login = authTokenInfo.getLogin();
             password = authTokenInfo.getPassword();
         } else if (TextUtils.equals(platform, AuthToken.SN_ODNOKLASSNIKI)) {
-            sid = authTokenInfo.getUserId();
+            sid = authTokenInfo.getUserSocialId();
             token = authTokenInfo.getTokenKey();
             refresh = authTokenInfo.getExpiresIn();
         } else {
-            sid = authTokenInfo.getUserId();
+            sid = authTokenInfo.getUserSocialId();
             token = authTokenInfo.getTokenKey();
         }
     }

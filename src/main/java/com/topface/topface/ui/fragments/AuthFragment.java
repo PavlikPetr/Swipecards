@@ -405,6 +405,7 @@ public class AuthFragment extends BaseFragment {
 
     private void auth(final AuthToken token) {
         EasyTracker.getTracker().sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
+        App.getConfig().onAuthTokenReceived();
         final AuthRequest authRequest = new AuthRequest(token.getTokenInfo(), getActivity());
         authRequest.callback(new ApiHandler() {
             @Override

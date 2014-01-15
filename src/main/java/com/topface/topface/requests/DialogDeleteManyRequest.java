@@ -22,14 +22,14 @@ public class DialogDeleteManyRequest extends ApiRequest {
 
     public DialogDeleteManyRequest(int userId, Context context) {
         super(context);
-        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> list = new ArrayList<>();
         list.add(userId);
         mUsersIds = list;
     }
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("userId", new JSONArray(mUsersIds)); //TODO clarify parameter: userid=>userids
+        return new JSONObject().put("userIds", new JSONArray(mUsersIds));
     }
 
     @Override
