@@ -28,7 +28,6 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
     public static final String TAG = "RateAppDialog";
     public static final String RATING_POPUP = "RATING_POPUP";
 
-    public static final String OFF_RATE_TYPE = "OFF";
     private RatingBar mRatingBar;
 
     @Override
@@ -136,13 +135,8 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
         long date_start = preferences.getLong(RATING_POPUP, 0);
         long date_now = System.currentTimeMillis();
         Options options = CacheProfile.getOptions();
-        if (date_start == 0
+        return !(date_start == 0
                 || (date_now - date_start < options.ratePopupTimeout)
-                || !options.ratePopupEnabled) {
-            return false;
-        } else {
-            saveRatingPopupStatus(date_now);
-            return true;
-        }
+                || !options.ratePopupEnabled);
     }
 }

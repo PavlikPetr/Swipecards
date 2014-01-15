@@ -282,13 +282,12 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         return true;
     }
 
-    protected void takePhoto(TakePhotoDialog.TakePhotoListener listener) {
+    protected void takePhoto() {
         if (needOpenDialog) {
             if (this instanceof NavigationActivity) {
                 ((NavigationActivity) this).setTakePhotoDialogStarted(true);
             }
             TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
-            newFragment.setOnTakePhotoListener(listener);
             try {
                 newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
             } catch (Exception e) {
