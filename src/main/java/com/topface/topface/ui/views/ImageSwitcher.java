@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.R;
@@ -117,6 +118,7 @@ public class ImageSwitcher extends ViewPager {
             public void onPageSelected(int i) {
                 setSelectedPosition(i);
                 finalListener.onPageSelected(i);
+                mImageSwitcherAdapter.setPhotoToPosition(i, false);
             }
 
             @Override
@@ -163,6 +165,11 @@ public class ImageSwitcher extends ViewPager {
                     }
                 }
 
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                    super.onLoadingFailed(imageUri, view, failReason);
+                    Debug.log("IS: onLoadingFailed " + position);
+                }
             };
         }
 
@@ -192,7 +199,6 @@ public class ImageSwitcher extends ViewPager {
             if (isFirstInstantiate || isLoadedPhoto) {
                 setPhotoToView(position, view, imageView);
                 isFirstInstantiate = false;
-
             }
 
             //Если фото еще не загружено, то пытаемся его загрузить через прелоадер
@@ -225,17 +231,21 @@ public class ImageSwitcher extends ViewPager {
         public void setPhotoToPosition(int position, boolean ifLoaded) {
             if (!ifLoaded || mLoadedPhotos.get(position, false)) {
                 View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG + Integer.toString(position));
+                Debug.log("IS: Photo is loaded " + position);
                 //Этот метод может вызываться до того, как создана страница для этой фотографии
                 if (baseLayout != null) {
                     Debug.log("IS: trySetPhoto " + position);
                     ImageViewRemote imageView = (ImageViewRemote) baseLayout.findViewById(R.id.ivPreView);
                     setPhotoToView(position, baseLayout, imageView);
+                } else {
+                    Debug.log("IS: can't set photo " + position);
                 }
             }
         }
 
         private void setPhotoToView(int position, View baseLayout, ImageViewRemote imageView) {
             Object tag = imageView.getTag(R.string.photo_is_set_tag);
+            Debug.log("IS: setPhotoTag " + tag + " " + position);
             //Проверяем, не установленно ли уже изображение в ImageView
             if (tag == null || !((Boolean) tag)) {
                 Debug.log("IS: setPhoto " + position);
