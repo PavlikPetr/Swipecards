@@ -121,7 +121,10 @@ public class VkAuthActivity extends Activity {
     public class VkAuthClient extends WebViewClient {
         // Data
         private Handler mHandler;
-        private String mUrl = VK_OAUTH_URL + "?client_id=" + App.getConfig().getAuthVkApi() + "&scope=" + VK_PERMISSIONS + "&redirect_uri=" + VK_OUATH_REDIRECT + "&display=touch&response_type=token";
+        private String mUrl = VK_OAUTH_URL + "?client_id=" + App.getAppConfig().getAuthVkApi()
+                + "&scope=" + VK_PERMISSIONS
+                + "&redirect_uri=" + VK_OUATH_REDIRECT
+                + "&display=touch&response_type=token";
 
 
         public VkAuthClient(WebView webView, Handler handler) {

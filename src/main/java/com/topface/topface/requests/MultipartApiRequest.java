@@ -21,7 +21,7 @@ import java.util.Map;
 
 abstract public class MultipartApiRequest extends ApiRequest {
 
-    protected HashMap<String, ApiRequest> mRequests = new HashMap<String, ApiRequest>();
+    protected HashMap<String, ApiRequest> mRequests = new HashMap<>();
 
     public MultipartApiRequest(Context context) {
         super(context);
@@ -55,7 +55,7 @@ abstract public class MultipartApiRequest extends ApiRequest {
                 ConnectionManager.TAG,
                 "MULTIPART REQUEST >>> " +
                         getApiUrl() +
-                        " rev:" + App.getConfig().getApiRevision(),
+                        " rev:" + App.getAppConfig().getApiRevision(),
                 requests
         );
 

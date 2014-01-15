@@ -116,10 +116,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 }
             } else if (action.equals(GooglePlayProducts.INTENT_UPDATE_PRODUCTS)) {
                 if (mBuyWidgetController != null) {
-                    mBuyWidgetController.setButtonBackgroundResource(
-                            CacheProfile.getGooglePlayProducts().saleExists ?
-                                    R.drawable.btn_sale_selector : R.drawable.btn_blue_selector
-                    );
+                    mBuyWidgetController.setSalesEnabled(CacheProfile.getGooglePlayProducts().saleExists);
                 }
             } else if (action.equals(SELECT_MENU_ITEM)) {
                 Bundle extras = intent.getExtras();
@@ -231,6 +228,8 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         mBuyWidgetController = new BuyWidgetController(getActivity(),
                 mFooterView.findViewById(R.id.countersLayout));
         getListView().addFooterView(mFooterView);
+
+        mBuyWidgetController.setSalesEnabled(CacheProfile.getGooglePlayProducts().saleExists);
     }
 
     private void initProfileMenuItem(View headerView) {
@@ -324,12 +323,17 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         initProfileMenuItem(mHeaderView);
         if (mBuyWidgetController != null) {
             mBuyWidgetController.updateBalance();
+            GooglePlayProducts products = CacheProfile.getGooglePlayProducts();
+            if (products.saleExists == !mBuyWidgetController.salesEnabled) {
+                mBuyWidgetController.setSalesEnabled(products.saleExists);
+            }
         }
         // We need to clean state if there was a logout in other Activity
         mClosingsController.onLogoutWasInitiated();
         if (CacheProfile.premium) {
             mClosingsController.onPremiumObtained();
         }
+
     }
 
     @Override

@@ -10,8 +10,10 @@ import com.topface.topface.ui.views.ServicesTextView;
 
 public class BuyWidgetController {
     Button mBuyButton;
+    public boolean salesEnabled = false;
     ServicesTextView mCoins;
     ServicesTextView mLikes;
+
 
     public BuyWidgetController(final Context context, View root) {
         mCoins = (ServicesTextView) root.findViewById(R.id.menuCurCoins);
@@ -31,7 +33,8 @@ public class BuyWidgetController {
         mLikes.setText(Integer.toString(CacheProfile.likes));
     }
 
-    public void setButtonBackgroundResource(int resId) {
-        mBuyButton.setBackgroundResource(resId);
+    public void setSalesEnabled(boolean salesEnabled) {
+        this.salesEnabled = salesEnabled;
+        mBuyButton.setBackgroundResource(salesEnabled?R.drawable.btn_sale_selector: R.drawable.btn_blue_selector);
     }
 }
