@@ -87,26 +87,30 @@ public class ImageSwitcher extends ViewPager {
     public void setOnPageChangeListener(final OnPageChangeListener finalListener) {
         super.setOnPageChangeListener(new OnPageChangeListener() {
 
+            int oldPosition = getCurrentItem();
+
             @Override
             public void onPageScrolled(int i, float v, int i1) {
                 //При WiFi подключении это не нужно, т.к. фотографию мы уже прелоадим заранее, но нужно при 3G
                 //Если показано больше 10% следующей фотографии, то начинаем ее грузить
                 if (v > 0.1 && v < 0.6) {
-                    Debug.log("IS: page_scroll " + i);
-                    if (getCurrentItem() == i) {
+                    Debug.log("IS_page: page_scroll " + i + " " + oldPosition);
+                    if (i > oldPosition) {
                         int next;
                         next = i + 1;
                         //Проверяем, начали ли мы грузить следующую фотографию
                         if (mNext != next) {
                             mNext = next;
-                            Debug.log("IS next: " + mNext + "_" + v);
+                            oldPosition = mNext;
+                            Debug.log("IS_page: next " + mNext + "_" + v);
                             mImageSwitcherAdapter.setPhotoToPosition(mNext, false);
                         }
-                    } else {
+                    } else if (i < oldPosition){
                         //Проверяем, не начали ли мы грузить предыдущую фотографию
                         if (mPrev != i) {
                             mPrev = i;
-                            Debug.log("IS prev: " + mPrev + "_" + v);
+                            Debug.log("IS_page: prev: " + mPrev + "_" + v);
+                            oldPosition = mPrev;
                             mImageSwitcherAdapter.setPhotoToPosition(mPrev, false);
                         }
                     }
@@ -118,7 +122,6 @@ public class ImageSwitcher extends ViewPager {
             public void onPageSelected(int i) {
                 setSelectedPosition(i);
                 finalListener.onPageSelected(i);
-                mImageSwitcherAdapter.setPhotoToPosition(i, false);
             }
 
             @Override
