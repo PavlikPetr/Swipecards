@@ -306,6 +306,7 @@ public class CacheProfile {
                 mProducts = new GooglePlayProducts((JSONObject) null);
             }
         }
+        mProducts.saleExists = true;
         return mProducts;
     }
 
