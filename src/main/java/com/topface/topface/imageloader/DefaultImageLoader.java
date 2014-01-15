@@ -4,13 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -36,7 +35,6 @@ public class DefaultImageLoader {
         if (App.DEBUG) {
             builder.writeDebugLogs();
         }
-        builder.memoryCache(new WeakMemoryCache());
         builder.discCacheSize(DISC_CACHE_SIZE);
         builder.defaultDisplayImageOptions(getDisplayImageConfig().build());
         return builder;

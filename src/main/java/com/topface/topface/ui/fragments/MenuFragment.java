@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -53,9 +54,6 @@ import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.*;
@@ -193,26 +191,26 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     }
 
     private void initAdapter() {
-        List<LeftMenuAdapter.ILeftMenuItem> menuItems = new ArrayList<>();
+        SparseArray<LeftMenuAdapter.ILeftMenuItem> menuItems = new SparseArray<LeftMenuAdapter.ILeftMenuItem>();
         //- Profile added as part of header
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
+        menuItems.put(F_DATING.getId(), LeftMenuAdapter.newLeftMenuItem(F_DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.drawable.ic_dating_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(F_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(F_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_likes_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_ADMIRATIONS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(F_ADMIRATIONS.getId(), LeftMenuAdapter.newLeftMenuItem(F_ADMIRATIONS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_admirations_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(F_MUTUAL.getId(), LeftMenuAdapter.newLeftMenuItem(F_MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_mutual_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(F_DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(F_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_dialog_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(F_BOOKMARKS.getId(), LeftMenuAdapter.newLeftMenuItem(F_BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_star_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(F_FANS.getId(), LeftMenuAdapter.newLeftMenuItem(F_FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_fans_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(F_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
         if (CacheProfile.getOptions().bonus.enabled) {
-            menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+            menuItems.put(F_BONUS.getId(), LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_bonus_1));
         }
         mAdapter = new LeftMenuAdapter(this, menuItems);

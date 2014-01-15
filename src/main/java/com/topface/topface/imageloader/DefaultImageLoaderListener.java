@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.topface.topface.R;
 
 public class DefaultImageLoaderListener extends SimpleImageLoadingListener {

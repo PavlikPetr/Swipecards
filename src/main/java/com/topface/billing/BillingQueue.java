@@ -1,11 +1,11 @@
 package com.topface.billing;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.utils.Debug;
 
 import org.json.JSONArray;
@@ -22,11 +22,11 @@ import java.util.UUID;
  */
 abstract public class BillingQueue {
     public static final String ITEM_ID_KEY = "id";
-    private static BillingQueue mInstance;
-    private Context mContext;
     private SharedPreferences mPreferences;
 
-    protected abstract String getQueueName();
+    protected String getQueueName() {
+        return BuildConfig.BILLING_TYPE.getClientType();
+    }
 
     protected synchronized String addPurchaseToQueue(JSONObject data) {
         JSONArray queue = getQueue();
@@ -129,7 +129,7 @@ abstract public class BillingQueue {
 
     protected static List<JSONObject> getJSONArrayAsList(final JSONArray ja) {
         final int len = ja.length();
-        final ArrayList<JSONObject> result = new ArrayList<JSONObject>(len);
+        final ArrayList<JSONObject> result = new ArrayList<>(len);
         for (int i = 0; i < len; i++) {
             final JSONObject obj = ja.optJSONObject(i);
             if (obj != null) {
