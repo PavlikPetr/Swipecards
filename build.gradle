@@ -240,7 +240,7 @@ subprojects {
     //До лучших времен закоментировал эту строку, пока Idea отказывается делать такие штуки, как папка сборки вне пределов проекта
     //buildDir "../../build/projects/$project.name"
     android {
-        compileSdkVersion "Google Inc.:Google APIs:17"
+        compileSdkVersion defaultCompileSdkVersion
         buildToolsVersion defaultBuildToolsVersion
     }
 }
