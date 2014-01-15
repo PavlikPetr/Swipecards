@@ -24,6 +24,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.dialogs.BaseDialogFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
@@ -31,10 +32,10 @@ import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
-public class InvitesPopup extends BaseFragment {
+public class InvitesPopup extends BaseDialogFragment {
+    public static final java.lang.String TAG = "InvitePopup";
 
     public static final String INVITE_POPUP_PREF_KEY = "INVITE_POPUP";
-
     public static final String CONTACTS = "contacts";
     private ArrayList<ContactsProvider.Contact> contacts;
     private LockerView locker;
@@ -50,7 +51,7 @@ public class InvitesPopup extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
+        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
     }
 
     @Override
