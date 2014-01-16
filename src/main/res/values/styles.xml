@@ -31,10 +31,10 @@
         </item>
 
         <!-- Action Mode (CAB)-->
-        <item name="actionModeBackground">@drawable/bg_action_mode</item>
+        <item name="actionModeBackground">@color/bg_action_mode</item>
         <item name="actionModeCloseDrawable">@drawable/ic_check</item>
 
-        <item name="android:actionModeBackground" tools:ignore="NewApi">@drawable/bg_action_mode
+        <item name="android:actionModeBackground" tools:ignore="NewApi">@color/bg_action_mode
         </item>
         <item name="android:actionModeCloseDrawable" tools:ignore="NewApi">@drawable/ic_check</item>
     </style>

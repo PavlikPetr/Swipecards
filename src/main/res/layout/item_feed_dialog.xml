@@ -5,6 +5,7 @@
     android:background="@drawable/item_list_selector">
 
     <!-- аватар -->
+
     <com.topface.topface.ui.views.ImageViewRemote
         android:id="@+id/ivAvatar"
         style="@style/FeedAvatar" />
@@ -41,8 +42,6 @@
             android:id="@+id/tvTime"
             android:layout_alignBaseline="@id/tvText"
             style="@style/ListTime" />
-
-
     </RelativeLayout>
 
 

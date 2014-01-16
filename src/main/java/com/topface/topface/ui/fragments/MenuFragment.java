@@ -187,6 +187,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         list.setBackgroundColor(getResources().getColor(R.color.bg_left_menu));
         // controller for closings uses ViewStub in header to be inflated
         mClosingsController = new ClosingsController(getActivity(), mHeaderViewStub, mAdapter);
+
     }
 
     private void initHeader() {
