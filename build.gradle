@@ -48,7 +48,7 @@ android {
 
     defaultConfig {
         minSdkVersion 7
-        targetSdkVersion 17
+        targetSdkVersion 19
 
         testPackageName "com.topface.topface.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"

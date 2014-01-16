@@ -43,7 +43,7 @@ public class VirusLike extends AbstractData {
             CacheProfile.sendUpdateProfileBroadcast();
 
         } else {
-            mSocialIdArray = new ArrayList<Long>();
+            mSocialIdArray = new ArrayList<>();
         }
     }
 
@@ -53,7 +53,7 @@ public class VirusLike extends AbstractData {
 
     private ArrayList<Long> parseIdsArray(JSONObject response) {
 
-        ArrayList<Long> socialIdArray = new ArrayList<Long>();
+        ArrayList<Long> socialIdArray = new ArrayList<>();
 
         JSONArray json = response.optJSONArray(FIELD_SOCIAL_IDS);
         if (json != null && json.length() > 0) {
@@ -176,11 +176,11 @@ public class VirusLike extends AbstractData {
         //Получаем индекс первых 50 id из массива
         int maxArrayIndex = Math.min(MAX_USERS_FOR_REQUEST, mSocialIdArray.size());
         //Получаем первые 50
-        ArrayList<Long> result = new ArrayList<Long>(
+        ArrayList<Long> result = new ArrayList<>(
                 mSocialIdArray.subList(0, maxArrayIndex)
         );
         //После этого пересоздаем массив уже без этих id
-        mSocialIdArray = new ArrayList<Long>(
+        mSocialIdArray = new ArrayList<>(
                 mSocialIdArray.subList(maxArrayIndex, mSocialIdArray.size())
         );
 
@@ -195,7 +195,7 @@ public class VirusLike extends AbstractData {
      */
     private void setRequestDataParam(Context context, Bundle params) {
         AuthToken token = AuthToken.getInstance();
-        params.putString("data", "{\"type\":\"invite\",\"page\":\"Dating\",\"ref\":\"likegift:" + token.getUserId() + "\"}");
+        params.putString("data", "{\"type\":\"invite\",\"page\":\"Dating\",\"ref\":\"likegift:" + token.getUserSocialId() + "\"}");
     }
 
     public static class VirusLikeDialogListener implements Facebook.DialogListener {

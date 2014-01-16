@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -72,12 +73,16 @@ public class Offerwalls {
     public static void init(Context context) {
         String offerwall = getOfferWallType();
         if (!TextUtils.isEmpty(offerwall)) {
-            if (offerwall.equals(TAPJOY)) {
-                initTapjoy(context);
-            } else if (offerwall.equals(SPONSORPAY)) {
-                initSponsorpay(context);
-            } else if (offerwall.equals(GETJAR)) {
-                initGetJar(context);
+            switch (offerwall) {
+                case TAPJOY:
+                    initTapjoy(context);
+                    break;
+                case SPONSORPAY:
+                    initSponsorpay(context);
+                    break;
+                case GETJAR:
+                    initGetJar(context);
+                    break;
             }
         }
     }
@@ -91,19 +96,39 @@ public class Offerwalls {
             return;
         }
 
-        if (offerwall.equals(TAPJOY)) {
-            startTapjoy(activity);
-        } else if (offerwall.equals(SPONSORPAY)) {
-            startSponsorpay(activity);
-        } else if (offerwall.equals(CLICKKY)) {
-            startClickky(activity);
-        } else if (offerwall.equals(GETJAR)) {
-            startGetJar(activity);
-        } else if (offerwall.equals(RANDOM)) {
-            startRandomOfferwall(activity);
-        } else {
-            startSponsorpay(activity);
+        switch (offerwall) {
+            case TAPJOY:
+                startTapjoy(activity);
+                break;
+            case SPONSORPAY:
+                startSponsorpay(activity);
+                break;
+            case CLICKKY:
+                //clickky работает только на Android >= 2.2
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ECLAIR_MR1) {
+                    startClickky(activity);
+                } else {
+                    //Если юзер использует более старую версию, то стартуем оффервол по умолчанию
+                    startDefault(activity);
+                }
+                break;
+            case GETJAR:
+                startGetJar(activity);
+                break;
+            case RANDOM:
+                startRandomOfferwall(activity);
+                break;
+            default:
+                startDefault(activity);
+                break;
         }
+    }
+
+    /**
+     * Стартует Offerwall по умолчанию
+     */
+    private static void startDefault(Activity activity) {
+        startSponsorpay(activity);
     }
 
     private static void startRandomOfferwall(Activity activity) {
@@ -119,7 +144,7 @@ public class Offerwalls {
                 startClickky(activity);
                 break;
             default:
-                startSponsorpay(activity);
+                startDefault(activity);
                 break;
         }
     }
@@ -268,8 +293,6 @@ public class Offerwalls {
                         public void fail(int codeError, IApiResponse response) {
                             showToast(R.string.general_server_error);
                         }
-
-
                     }).exec();
                 }
             }
@@ -277,7 +300,7 @@ public class Offerwalls {
     }
 
     public static class ConsumableProductHelper {
-        private ArrayList<Pricing> consumablePricingList = new ArrayList<Pricing>(1);
+        private ArrayList<Pricing> consumablePricingList = new ArrayList<>(1);
         private ConsumableProduct consumableProduct;
         private GetJarContext getJarContext;
 

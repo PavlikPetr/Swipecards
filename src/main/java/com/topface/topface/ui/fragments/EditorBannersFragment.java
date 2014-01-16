@@ -20,6 +20,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
+import com.topface.topface.utils.BannersConfig;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
 
@@ -41,12 +42,13 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     }
 
     private void initOnStartLoadingControls(View root) {
+        final BannersConfig config = App.getBannerConfig();
         final CheckBox checkBoxOnStart = ((CheckBox) root.findViewById(R.id.cbOnStart));
-        checkBoxOnStart.setChecked(App.getConfig().getBannerConfig().needLoadOnStart());
+        checkBoxOnStart.setChecked(config.needLoadOnStart());
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                App.getConfig().getBannerConfig().setLoadOnStart(checkBoxOnStart.isChecked());
+                config.setLoadOnStart(checkBoxOnStart.isChecked());
             }
         };
         checkBoxOnStart.setOnClickListener(listener);
@@ -90,11 +92,11 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSaveSettings:
-                App.getConfig().getBannerConfig().saveBannersSettings();
+                App.getBannerConfig().saveBannersSettings();
                 showCompleteMessage();
                 break;
             case R.id.btnResetSettings:
-                App.getConfig().getBannerConfig().resetBannersSettings();
+                App.getBannerConfig().resetBannersSettings();
                 clearConfigContainer();
                 initConfigContainer();
                 showCompleteMessage();

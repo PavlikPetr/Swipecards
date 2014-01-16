@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
-import com.topface.topface.utils.AppConfig;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.TopfaceNotificationManager;
 
@@ -24,7 +24,7 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        AppConfig config = App.getConfig();
+        AppConfig config = App.getAppConfig();
         String action = intent.getAction();
         if (action == null) return;
         switch (action) {
