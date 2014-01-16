@@ -272,7 +272,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                     changeLoginRequest.callback(new ApiHandler() {
                         @Override
                         public void success(IApiResponse response) {
-                            mToken.saveToken(mToken.getUserId(), email, mToken.getPassword());
+                            mToken.saveToken(mToken.getUserSocialId(), email, mToken.getPassword());
                             setChangeBtnAction(ACTION_RESEND_CONFIRM);
                         }
 

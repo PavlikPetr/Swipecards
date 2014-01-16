@@ -1,7 +1,6 @@
 package com.topface.topface.ui.settings;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,7 +44,6 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_change_password, container, false);
-        final FragmentActivity activity = getActivity();
 
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
@@ -108,7 +106,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
                         public void success(IApiResponse response) {
                             if (response.isCompleted()) {
                                 Toast.makeText(App.getContext(), R.string.passwords_changed, Toast.LENGTH_LONG).show();
-                                mToken.saveToken(mToken.getUserId(), mToken.getLogin(), password);
+                                mToken.saveToken(mToken.getUserSocialId(), mToken.getLogin(), password);
                                 CacheProfile.onPasswordChanged(getContext());
                                 mEdPassword.getText().clear();
                                 mEdPasswordConfirmation.getText().clear();

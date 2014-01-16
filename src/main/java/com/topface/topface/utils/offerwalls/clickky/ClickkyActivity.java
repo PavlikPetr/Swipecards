@@ -1,23 +1,17 @@
 package com.topface.topface.utils.offerwalls.clickky;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.webkit.WebView;
 import android.widget.RelativeLayout;
 
-import com.topface.topface.utils.CacheProfile;
+import com.clickky.banner.library.OfferWebview;
+import com.clickky.banner.library.WallType;
+import com.topface.topface.ui.BaseFragmentActivity;
 
-public class ClickkyActivity extends Activity {
-
-    private final static int SITE_ID = 3382;
-    private final static String API_KEY = "c2441dedd5b0e62a7acadbdb5a43c8d2";
-
+public class ClickkyActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //создаем объект класса OfferWebview
-        WebView mWebView = new ClickkyOfferWebview(this, SITE_ID, API_KEY, Integer.toString(CacheProfile.uid));
-        //создаем layout, на котором будет располагаться WebView
+        OfferWebview mWebView = new OfferWebview(this, WallType.APP_WALL);
         RelativeLayout mRelLayout = new RelativeLayout(this);
         //задаем параметры нашему layout
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(

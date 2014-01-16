@@ -15,7 +15,7 @@ public class AuthToken {
     public static final int AUTH_COMPLETE = 1001;
     public static final int AUTH_ERROR = 0;
     public static final String TOKEN_NETWORK = "sn_type";
-    public static final String TOKEN_USER_ID = "user_id";
+    public static final String TOKEN_USER_SOCIAL_ID = "user_id";
     public static final String TOKEN_TOKEN_KEY = "token_key";
     public static final String TOKEN_EXPIRES = "expires_in";
     public static final String TOKEN_LOGIN = "login";
@@ -52,7 +52,7 @@ public class AuthToken {
 
     public void loadToken() {
         mTokenInfo.mSnType = mPreferences.getString(TOKEN_NETWORK, Static.EMPTY);
-        mTokenInfo.mUserId = mPreferences.getString(TOKEN_USER_ID, Static.EMPTY);
+        mTokenInfo.mUserSocialId = mPreferences.getString(TOKEN_USER_SOCIAL_ID, Static.EMPTY);
         mTokenInfo.mTokenKey = mPreferences.getString(TOKEN_TOKEN_KEY, Static.EMPTY);
         mTokenInfo.mExpiresIn = mPreferences.getString(TOKEN_EXPIRES, Static.EMPTY);
         mTokenInfo.mLogin = mPreferences.getString(TOKEN_LOGIN, Static.EMPTY);
@@ -63,7 +63,7 @@ public class AuthToken {
     public void saveToken(String user_Id, String login, String password) {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(TOKEN_NETWORK, mTokenInfo.mSnType = SN_TOPFACE);
-        editor.putString(TOKEN_USER_ID, mTokenInfo.mUserId = user_Id);
+        editor.putString(TOKEN_USER_SOCIAL_ID, mTokenInfo.mUserSocialId = user_Id);
         editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey = Static.EMPTY);
         editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = Static.EMPTY);
         editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = login);
@@ -74,7 +74,7 @@ public class AuthToken {
     public void saveToken(String sn_type, String user_Id, String token_key, String expires_in) {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(TOKEN_NETWORK, mTokenInfo.mSnType = sn_type);
-        editor.putString(TOKEN_USER_ID, mTokenInfo.mUserId = user_Id);
+        editor.putString(TOKEN_USER_SOCIAL_ID, mTokenInfo.mUserSocialId = user_Id);
         editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey = token_key);
         editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = expires_in);
         editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = Static.EMPTY);
@@ -101,7 +101,7 @@ public class AuthToken {
 
     public AuthToken setTokeInfo(TokenInfo tokenInfo) {
         mTokenInfo.mSnType = tokenInfo.mSnType;
-        mTokenInfo.mUserId = tokenInfo.mUserId;
+        mTokenInfo.mUserSocialId = tokenInfo.mUserSocialId;
         mTokenInfo.mTokenKey = tokenInfo.mTokenKey;
         mTokenInfo.mExpiresIn = tokenInfo.mExpiresIn;
         mTokenInfo.mLogin = tokenInfo.mLogin;
@@ -117,8 +117,8 @@ public class AuthToken {
         return mTokenInfo.getTokenKey();
     }
 
-    public String getUserId() {
-        return mTokenInfo.getUserId();
+    public String getUserSocialId() {
+        return mTokenInfo.getUserSocialId();
     }
 
     public String getLogin() {
@@ -129,9 +129,17 @@ public class AuthToken {
         return mTokenInfo.getPassword();
     }
 
+    @Override
+    public String toString() {
+        return getClass().getName() +
+                Static.AMPERSAND + getSocialNet() +
+                Static.AMPERSAND + getUserSocialId() +
+                Static.AMPERSAND + getTokenKey();
+    }
+
     public static class TokenInfo implements Cloneable {
         private String mSnType;
-        private String mUserId;
+        private String mUserSocialId;
         private String mTokenKey;
         private String mExpiresIn;
 
@@ -140,7 +148,7 @@ public class AuthToken {
 
         private TokenInfo() {
             mSnType = Static.EMPTY;
-            mUserId = Static.EMPTY;
+            mUserSocialId = Static.EMPTY;
             mTokenKey = Static.EMPTY;
             mExpiresIn = Static.EMPTY;
             mLogin = Static.EMPTY;
@@ -159,8 +167,8 @@ public class AuthToken {
             return mSnType;
         }
 
-        public String getUserId() {
-            return mUserId;
+        public String getUserSocialId() {
+            return mUserSocialId;
         }
 
         public String getTokenKey() {
@@ -178,9 +186,10 @@ public class AuthToken {
 
         @Override
         protected TokenInfo clone() throws CloneNotSupportedException {
+            super.clone();
             TokenInfo tokenInfoClone = new TokenInfo();
             tokenInfoClone.mSnType = mSnType;
-            tokenInfoClone.mUserId = mUserId;
+            tokenInfoClone.mUserSocialId = mUserSocialId;
             tokenInfoClone.mTokenKey = mTokenKey;
             tokenInfoClone.mExpiresIn = mExpiresIn;
             tokenInfoClone.mLogin = mLogin;

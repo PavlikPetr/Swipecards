@@ -94,7 +94,7 @@ public class ConfirmEmailDialog extends BaseDialogFragment implements View.OnCli
             @Override
             public void success(IApiResponse response) {
                 AuthToken token = AuthToken.getInstance();
-                token.saveToken(token.getUserId(), email, token.getPassword());
+                token.saveToken(token.getUserSocialId(), email, token.getPassword());
                 Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
                 closeDialog();
             }

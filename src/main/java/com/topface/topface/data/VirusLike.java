@@ -43,17 +43,13 @@ public class VirusLike extends AbstractData {
             CacheProfile.sendUpdateProfileBroadcast();
 
         } else {
-            mSocialIdArray = new ArrayList<Long>();
+            mSocialIdArray = new ArrayList<>();
         }
-    }
-
-    public VirusLike(ArrayList<Long> ids) {
-        mSocialIdArray = ids;
     }
 
     private ArrayList<Long> parseIdsArray(JSONObject response) {
 
-        ArrayList<Long> socialIdArray = new ArrayList<Long>();
+        ArrayList<Long> socialIdArray = new ArrayList<>();
 
         JSONArray json = response.optJSONArray(FIELD_SOCIAL_IDS);
         if (json != null && json.length() > 0) {
@@ -94,7 +90,7 @@ public class VirusLike extends AbstractData {
             //Магический переключатель стиля приглашений
             params.putString("new_style_message", "true");
             //Еще более магический параметр для реквеста
-            setRequestDataParam(context, params);
+            setRequestDataParam(params);
 
             //ID друзей которым мы отправляем реквест
             final ArrayList<Long> socialIdForRequest = getSocialIdForRequest();
@@ -176,11 +172,11 @@ public class VirusLike extends AbstractData {
         //Получаем индекс первых 50 id из массива
         int maxArrayIndex = Math.min(MAX_USERS_FOR_REQUEST, mSocialIdArray.size());
         //Получаем первые 50
-        ArrayList<Long> result = new ArrayList<Long>(
+        ArrayList<Long> result = new ArrayList<>(
                 mSocialIdArray.subList(0, maxArrayIndex)
         );
         //После этого пересоздаем массив уже без этих id
-        mSocialIdArray = new ArrayList<Long>(
+        mSocialIdArray = new ArrayList<>(
                 mSocialIdArray.subList(maxArrayIndex, mSocialIdArray.size())
         );
 
@@ -190,12 +186,11 @@ public class VirusLike extends AbstractData {
     /**
      * Устанавливает поле data в FbDialog, это дополнительные данные, которые получит Topface при клике на ссылку
      *
-     * @param context контекст
      * @param params  Bundle с параметрами диалога
      */
-    private void setRequestDataParam(Context context, Bundle params) {
+    private void setRequestDataParam(Bundle params) {
         AuthToken token = AuthToken.getInstance();
-        params.putString("data", "{\"type\":\"invite\",\"page\":\"Dating\",\"ref\":\"likegift:" + token.getUserId() + "\"}");
+        params.putString("data", "{\"type\":\"invite\",\"page\":\"Dating\",\"ref\":\"likegift:" + token.getUserSocialId() + "\"}");
     }
 
     public static class VirusLikeDialogListener implements Facebook.DialogListener {

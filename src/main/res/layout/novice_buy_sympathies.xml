@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/loParent"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:id="@+id/loParent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/ivBackground"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"/>
 
     <ImageView
         android:id="@+id/ivMask"
@@ -16,18 +16,18 @@
         android:layout_height="51dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:src="@drawable/tip_energy_mask"
-        android:layout_marginTop="22dp" />
+        android:src="@drawable/tip_buy_sympathies_mask"
+        android:layout_marginTop="2dp"/>
 
     <ImageView
         android:id="@+id/ivArrow"
-        android:layout_width="128dp"
-        android:layout_height="236dp"
+        android:layout_width="158dp"
+        android:layout_height="276dp"
         android:layout_toRightOf="@id/ivMask"
         android:layout_alignParentTop="true"
-        android:src="@drawable/tip_energy_arrow"
-        android:layout_marginTop="70dp"
-        android:layout_marginLeft="-20dp" />
+        android:src="@drawable/tip_buy_sympathies_arrow"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="-20dp"/>
 
     <com.topface.topface.ui.views.AutoResizeTextView
         android:id="@+id/ivBubble"
@@ -35,12 +35,16 @@
         android:layout_height="165dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/ivArrow"
-        android:background="@drawable/tip_energy_bubble"
+        android:layout_alignLeft="@id/ivArrow"
+        android:background="@drawable/tip_buy_sympathies_bubble"
         android:gravity="center"
         android:lines="4"
         android:text="@string/novice_buy_sympathies"
         android:textColor="#000000"
-        android:textSize="18sp"
-        android:padding="10dp" />
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"/>
 
 </RelativeLayout>

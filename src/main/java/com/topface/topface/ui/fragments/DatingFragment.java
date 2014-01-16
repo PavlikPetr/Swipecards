@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -155,7 +154,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPreloadManager = new PreloadManager<SearchUser>();
+        mPreloadManager = new PreloadManager<>();
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
         mAlphaAnimation.setDuration(400L);
@@ -172,9 +171,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     protected void inBackroundThread() {
-        SharedPreferences preferences = getActivity().getSharedPreferences(
-                Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        mNovice = Novice.getInstance(preferences);
+        mNovice = Novice.getInstance();
     }
 
     @Override
@@ -470,7 +467,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             //Показываем последнего пользователя
             if (mUserSearchList == null) {
-                mUserSearchList = new CachableSearchList<SearchUser>(SearchUser.class);
+                mUserSearchList = new CachableSearchList<>(SearchUser.class);
             }
             if (mCurrentUser == null) {
                 SearchUser currentUser = mUserSearchList.getCurrentUser();
@@ -763,14 +760,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             ((ViewGroup) getView().findViewById(R.id.ac_dating_container)).addView(mNoviceLayout);
         }
 
-        if (mNovice.isShowEnergyToSympathies()) {
-            mNoviceLayout.setLayoutRes(R.layout.novice_energy_to_sympathies, null,
-                    getResources().getString(CacheProfile.sex == Static.BOY ?
-                            R.string.novice_energy_to_sympathies_message_girls :
-                            R.string.novice_energy_to_sympathies_message_boys));
-            mNoviceLayout.startAnimation(mAlphaAnimation);
-            mNovice.completeShowEnergyToSympathies();
-        } else if (mNovice.isShowSympathy()) {
+        if (mNovice.isShowSympathy()) {
             mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, null);
             mNoviceLayout.startAnimation(mAlphaAnimation);
             mNovice.completeShowSympathy();
@@ -794,7 +784,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         mNoviceLayout.setLayoutRes(R.layout.novice_sympathies_bonus, null,
                                 null, text);
                         mNoviceLayout.startAnimation(mAlphaAnimation);
-                        mNovice.completeShowBatteryBonus();
+                        mNovice.completeShowNoviceSympathiesBonus();
                     }
                 }
 
@@ -809,7 +799,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             }).exec();
         } else if (mNovice.isShowBuySympathies() && hasOneSympathyOrDelight && CacheProfile.likes <= Novice.MIN_LIKES_QUANTITY) {
-            mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
+            mNoviceLayout.setLayoutRes(R.layout.novice_buy_sympathies, new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {

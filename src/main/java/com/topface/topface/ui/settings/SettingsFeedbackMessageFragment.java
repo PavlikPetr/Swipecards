@@ -228,7 +228,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                     finishRequestSend();
                     Toast.makeText(App.getContext(), R.string.general_data_error,
                             Toast.LENGTH_SHORT).show();
-                            }
+                }
             }).exec();
         } else {
             Toast.makeText(App.getContext(), R.string.settings_invalid_email, Toast.LENGTH_SHORT).show();
@@ -262,7 +262,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         private AuthToken authToken = AuthToken.getInstance();
 
         public String getSubject() {
-            return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserId() + "}";
+            return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserSocialId() + "}";
         }
 
         public String getBody() {
@@ -286,7 +286,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append(";</p>\n");
             }
 
-            strBuilder.append("<p>Social id: ").append(authToken.getUserId()).append(";</p>\n");
+            strBuilder.append("<p>Social id: ").append(authToken.getUserSocialId()).append(";</p>\n");
 
             strBuilder.append("<p>Android version: ").append(android_CODENAME).append("/");
             strBuilder.append(android_RELEASE).append("/").append(android_SDK).append(";</p>\n");

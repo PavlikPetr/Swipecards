@@ -229,6 +229,14 @@
             android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
             android:configChanges="orientation"/>
 
+        <!-- Мета-данные для clickky -->
+        <meta-data
+            android:name="CLICKKY_API_KEY"
+            android:value="c2441dedd5b0e62a7acadbdb5a43c8d2"/>
+        <meta-data
+            android:name="CLICKKY_SITE_ID"
+            android:value="3382"/>
+        <!-- Оффервол Clickky -->
         <activity android:name="com.topface.topface.utils.offerwalls.clickky.ClickkyActivity"/>
 
         <activity

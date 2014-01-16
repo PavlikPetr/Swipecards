@@ -43,7 +43,6 @@ public abstract class BackgroundThread extends Thread {
 
     public BackgroundThread() {
         this(DEFAULT_PRIORITY);
-
     }
 
     public BackgroundThread(int priority) {
@@ -59,7 +58,7 @@ public abstract class BackgroundThread extends Thread {
     abstract public void execute();
 
     @Override
-    public synchronized void start() {
+    public final synchronized void start() {
         super.start();
         throw new RuntimeException("BackgroundThread automaticaly start runnable");
     }

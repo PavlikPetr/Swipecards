@@ -56,7 +56,18 @@ import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.*;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_ADMIRATIONS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_BONUS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_BOOKMARKS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DATING;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DIALOGS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_FANS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_PROFILE;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_UNDEFINED;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VIP_PROFILE;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITORS;
 
 /**
  * Created by kirussell on 05.11.13.
@@ -107,10 +118,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                     break;
                 case GooglePlayProducts.INTENT_UPDATE_PRODUCTS:
                     if (mBuyWidgetController != null) {
-                        mBuyWidgetController.setButtonBackgroundResource(
-                                CacheProfile.getGooglePlayProducts().saleExists ?
-                                        R.drawable.btn_sale_selector : R.drawable.btn_blue_selector
-                        );
+                        mBuyWidgetController.setSalesEnabled(CacheProfile.getGooglePlayProducts().saleExists);
                     }
                     break;
                 case SELECT_MENU_ITEM:
@@ -191,7 +199,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     }
 
     private void initAdapter() {
-        SparseArray<LeftMenuAdapter.ILeftMenuItem> menuItems = new SparseArray<LeftMenuAdapter.ILeftMenuItem>();
+        SparseArray<LeftMenuAdapter.ILeftMenuItem> menuItems = new SparseArray<>();
         //- Profile added as part of header
         menuItems.put(F_DATING.getId(), LeftMenuAdapter.newLeftMenuItem(F_DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.drawable.ic_dating_selector));
@@ -222,6 +230,8 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         mBuyWidgetController = new BuyWidgetController(getActivity(),
                 mFooterView.findViewById(R.id.countersLayout));
         getListView().addFooterView(mFooterView);
+
+        mBuyWidgetController.setSalesEnabled(CacheProfile.getGooglePlayProducts().saleExists);
     }
 
     private void initProfileMenuItem(View headerView) {
@@ -315,12 +325,17 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         initProfileMenuItem(mHeaderView);
         if (mBuyWidgetController != null) {
             mBuyWidgetController.updateBalance();
+            GooglePlayProducts products = CacheProfile.getGooglePlayProducts();
+            if (products.saleExists == !mBuyWidgetController.salesEnabled) {
+                mBuyWidgetController.setSalesEnabled(products.saleExists);
+            }
         }
         // We need to clean state if there was a logout in other Activity
         mClosingsController.onLogoutWasInitiated();
         if (CacheProfile.premium) {
             mClosingsController.onPremiumObtained();
         }
+
     }
 
     @Override

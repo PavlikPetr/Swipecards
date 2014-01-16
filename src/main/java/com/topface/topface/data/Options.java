@@ -2,7 +2,6 @@ package com.topface.topface.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.topface.topface.App;
 import com.topface.topface.Ssid;
@@ -13,6 +12,7 @@ import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.config.UserConfig;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -303,28 +303,29 @@ public class Options extends AbstractData {
 
     private static String getPageName(JSONObject page, String key) {
         String name = page.optString(key);
-        if (PAGE_LIKES.equals(name)) {
-            return PAGE_LIKES;
-        } else if (PAGE_MUTUAL.equals(name)) {
-            return PAGE_MUTUAL;
-        } else if (PAGE_MESSAGES.equals(name)) {
-            return PAGE_MESSAGES;
-        } else if (PAGE_VISITORS.equals(name)) {
-            return PAGE_VISITORS;
-        } else if (PAGE_DIALOGS.equals(name)) {
-            return PAGE_DIALOGS;
-        } else if (PAGE_FANS.equals(name)) {
-            return PAGE_FANS;
-        } else if (PAGE_BOOKMARKS.equals(name)) {
-            return PAGE_BOOKMARKS;
-        } else if (PAGE_VIEWS.equals(name)) {
-            return PAGE_VIEWS;
-        } else if (PAGE_START.equals(name)) {
-            return PAGE_START;
-        } else if (PAGE_GAG.equals(name)) {
-            return PAGE_GAG;
-        } else {
-            return PAGE_UNKNOWK + "(" + name + ")";
+        switch (name) {
+            case PAGE_LIKES:
+                return PAGE_LIKES;
+            case PAGE_MUTUAL:
+                return PAGE_MUTUAL;
+            case PAGE_MESSAGES:
+                return PAGE_MESSAGES;
+            case PAGE_VISITORS:
+                return PAGE_VISITORS;
+            case PAGE_DIALOGS:
+                return PAGE_DIALOGS;
+            case PAGE_FANS:
+                return PAGE_FANS;
+            case PAGE_BOOKMARKS:
+                return PAGE_BOOKMARKS;
+            case PAGE_VIEWS:
+                return PAGE_VIEWS;
+            case PAGE_START:
+                return PAGE_START;
+            case PAGE_GAG:
+                return PAGE_GAG;
+            default:
+                return PAGE_UNKNOWK + "(" + name + ")";
         }
     }
 
@@ -368,9 +369,7 @@ public class Options extends AbstractData {
 
         @Override
         public String toString() {
-            return new StringBuilder(name).append(SEPARATOR)
-                    .append(floatType).append(SEPARATOR)
-                    .append(banner).toString();
+            return name + SEPARATOR + floatType + SEPARATOR + banner;
         }
 
         public static Page parseFromString(String str) {
@@ -431,49 +430,25 @@ public class Options extends AbstractData {
         }
 
         public boolean isNeedShow() {
-            return mEnabled && (getLashShowTime() + mTimeout * 60 * 60 * 1000) < System.currentTimeMillis();
+            return mEnabled && (getLastShowTime() + mTimeout * 60 * 60 * 1000) < System.currentTimeMillis();
         }
 
         public void setPopupShowTime() {
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    PreferenceManager.getDefaultSharedPreferences(App.getContext())
-                            .edit()
-                            .putLong(getPrefsConstant(), System.currentTimeMillis())
-                            .commit();
-                }
-            };
+            UserConfig config = App.getUserConfig();
+            config.setPromoPopupLastTime(getPopupAirType(), System.currentTimeMillis());
+            config.saveConfig();
         }
 
         public void clearPopupShowTime() {
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    PreferenceManager.getDefaultSharedPreferences(App.getContext())
-                            .edit()
-                            .remove(getPrefsConstant())
-                            .commit();
-                }
-            };
+            App.getUserConfig().resetPromoPopupData(getPopupAirType());
         }
 
-        public String getPrefsConstant() {
-            switch (airType) {
-                case AIR_MESSAGES:
-                    return PREMIUM_MESSAGES_POPUP_SHOW_TIME;
-                case AIR_VISITORS:
-                    return PREMIUM_VISITORS_POPUP_SHOW_TIME;
-                case AIR_ADMIRATIONS:
-                    return PREMIUM_ADMIRATION_POPUP_SHOW_TIME;
-            }
-
-            return PREMIUM_MESSAGES_POPUP_SHOW_TIME;
+        public int getPopupAirType() {
+            return airType;
         }
 
-        private long getLashShowTime() {
-            return PreferenceManager.getDefaultSharedPreferences(App.getContext())
-                    .getLong(getPrefsConstant(), 0);
+        private long getLastShowTime() {
+            return App.getUserConfig().getPromoPopupLastTime(getPopupAirType());
         }
     }
 
