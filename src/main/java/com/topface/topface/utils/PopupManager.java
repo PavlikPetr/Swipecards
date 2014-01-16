@@ -21,10 +21,6 @@ import java.util.ArrayList;
 
 
 public class PopupManager {
-    public static final String OFF_RATE_TYPE = "OFF";
-    public static final String STANDARD_RATE_TYPE = "STANDARD";
-    public static final String LONG_RATE_TYPE = "LONG";
-
     private BaseFragmentActivity mActivity;
 
     public PopupManager(BaseFragmentActivity activity) {
@@ -181,7 +177,7 @@ public class PopupManager {
             public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
                 EasyTracker.getTracker().sendEvent("InvitesPopup", "Show", "", 0L);
                 InvitesPopup popup = InvitesPopup.newInstance(contacts);
-                mActivity.startFragment(popup);
+                popup.show(mActivity.getSupportFragmentManager(),InvitesPopup.TAG);
             }
         };
 
