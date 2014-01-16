@@ -86,26 +86,27 @@ public class ImageSwitcher extends ViewPager {
     public void setOnPageChangeListener(final OnPageChangeListener finalListener) {
         super.setOnPageChangeListener(new OnPageChangeListener() {
 
+            int oldPosition = getCurrentItem();
+
             @Override
             public void onPageScrolled(int i, float v, int i1) {
                 //При WiFi подключении это не нужно, т.к. фотографию мы уже прелоадим заранее, но нужно при 3G
                 //Если показано больше 10% следующей фотографии, то начинаем ее грузить
                 if (v > 0.1 && v < 0.6) {
-                    Debug.log("IS: page_scroll " + i);
-                    if (getCurrentItem() == i) {
+                    if (i > oldPosition) {
                         int next;
                         next = i + 1;
                         //Проверяем, начали ли мы грузить следующую фотографию
                         if (mNext != next) {
                             mNext = next;
-                            Debug.log("IS next: " + mNext + "_" + v);
+                            oldPosition = mNext;
                             mImageSwitcherAdapter.setPhotoToPosition(mNext, false);
                         }
-                    } else {
+                    } else if (i < oldPosition){
                         //Проверяем, не начали ли мы грузить предыдущую фотографию
                         if (mPrev != i) {
                             mPrev = i;
-                            Debug.log("IS prev: " + mPrev + "_" + v);
+                            oldPosition = mPrev;
                             mImageSwitcherAdapter.setPhotoToPosition(mPrev, false);
                         }
                     }
@@ -156,13 +157,10 @@ public class ImageSwitcher extends ViewPager {
                     super.onLoadingComplete(imageUri, view, loadedImage);
 
                     int currentItem = getCurrentItem();
-                    Debug.log("IS: complete_but_not_set " + position + " " + currentItem);
                     if (currentItem + 1 == position || currentItem - 1 == position) {
-                        Debug.log("IS: onLoadingComplete " + position);
                         setPhotoToPosition(position, true);
                     }
                 }
-
             };
         }
 
@@ -192,13 +190,11 @@ public class ImageSwitcher extends ViewPager {
             if (isFirstInstantiate || isLoadedPhoto) {
                 setPhotoToView(position, view, imageView);
                 isFirstInstantiate = false;
-
             }
 
             //Если фото еще не загружено, то пытаемся его загрузить через прелоадер
             if (!isLoadedPhoto && mPreloadManager.preloadPhoto(mPhotoLinks, position, getListener(position))) {
                 //Добавляем его в список загруженых
-                Debug.log("IS: preloadPhoto " + position);
                 mLoadedPhotos.put(position, true);
             }
 
@@ -227,7 +223,6 @@ public class ImageSwitcher extends ViewPager {
                 View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG + Integer.toString(position));
                 //Этот метод может вызываться до того, как создана страница для этой фотографии
                 if (baseLayout != null) {
-                    Debug.log("IS: trySetPhoto " + position);
                     ImageViewRemote imageView = (ImageViewRemote) baseLayout.findViewById(R.id.ivPreView);
                     setPhotoToView(position, baseLayout, imageView);
                 }
@@ -238,7 +233,6 @@ public class ImageSwitcher extends ViewPager {
             Object tag = imageView.getTag(R.string.photo_is_set_tag);
             //Проверяем, не установленно ли уже изображение в ImageView
             if (tag == null || !((Boolean) tag)) {
-                Debug.log("IS: setPhoto " + position);
                 View progressBar = baseLayout.findViewById(R.id.pgrsAlbum);
                 progressBar.setVisibility(View.VISIBLE);
                 Photo photo = mPhotoLinks.get(position);
