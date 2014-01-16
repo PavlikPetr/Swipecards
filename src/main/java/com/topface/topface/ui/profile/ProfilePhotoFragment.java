@@ -291,7 +291,7 @@ public class ProfilePhotoFragment extends BaseFragment {
             if (clear) {
                 // TODO перенести логику в адаптер
 
-//                newPhotos.addFirst(null);
+                newPhotos.addFirst(null);
                 ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
             } else {
                 ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
