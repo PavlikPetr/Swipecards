@@ -93,7 +93,6 @@ public class ImageSwitcher extends ViewPager {
                 //При WiFi подключении это не нужно, т.к. фотографию мы уже прелоадим заранее, но нужно при 3G
                 //Если показано больше 10% следующей фотографии, то начинаем ее грузить
                 if (v > 0.1 && v < 0.6) {
-                    Debug.log("IS_page: page_scroll " + i + " " + oldPosition);
                     if (i > oldPosition) {
                         int next;
                         next = i + 1;
@@ -101,14 +100,12 @@ public class ImageSwitcher extends ViewPager {
                         if (mNext != next) {
                             mNext = next;
                             oldPosition = mNext;
-                            Debug.log("IS_page: next " + mNext + "_" + v);
                             mImageSwitcherAdapter.setPhotoToPosition(mNext, false);
                         }
                     } else if (i < oldPosition){
                         //Проверяем, не начали ли мы грузить предыдущую фотографию
                         if (mPrev != i) {
                             mPrev = i;
-                            Debug.log("IS_page: prev: " + mPrev + "_" + v);
                             oldPosition = mPrev;
                             mImageSwitcherAdapter.setPhotoToPosition(mPrev, false);
                         }
@@ -160,9 +157,7 @@ public class ImageSwitcher extends ViewPager {
                     super.onLoadingComplete(imageUri, view, loadedImage);
 
                     int currentItem = getCurrentItem();
-                    Debug.log("IS: complete_but_not_set " + position + " " + currentItem);
                     if (currentItem + 1 == position || currentItem - 1 == position) {
-                        Debug.log("IS: onLoadingComplete " + position);
                         setPhotoToPosition(position, true);
                     }
                 }
@@ -200,7 +195,6 @@ public class ImageSwitcher extends ViewPager {
             //Если фото еще не загружено, то пытаемся его загрузить через прелоадер
             if (!isLoadedPhoto && mPreloadManager.preloadPhoto(mPhotoLinks, position, getListener(position))) {
                 //Добавляем его в список загруженых
-                Debug.log("IS: preloadPhoto " + position);
                 mLoadedPhotos.put(position, true);
             }
 
@@ -227,24 +221,18 @@ public class ImageSwitcher extends ViewPager {
         public void setPhotoToPosition(int position, boolean ifLoaded) {
             if (!ifLoaded || mLoadedPhotos.get(position, false)) {
                 View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG + Integer.toString(position));
-                Debug.log("IS: Photo is loaded " + position);
                 //Этот метод может вызываться до того, как создана страница для этой фотографии
                 if (baseLayout != null) {
-                    Debug.log("IS: trySetPhoto " + position);
                     ImageViewRemote imageView = (ImageViewRemote) baseLayout.findViewById(R.id.ivPreView);
                     setPhotoToView(position, baseLayout, imageView);
-                } else {
-                    Debug.log("IS: can't set photo " + position);
                 }
             }
         }
 
         private void setPhotoToView(int position, View baseLayout, ImageViewRemote imageView) {
             Object tag = imageView.getTag(R.string.photo_is_set_tag);
-            Debug.log("IS: setPhotoTag " + tag + " " + position);
             //Проверяем, не установленно ли уже изображение в ImageView
             if (tag == null || !((Boolean) tag)) {
-                Debug.log("IS: setPhoto " + position);
                 View progressBar = baseLayout.findViewById(R.id.pgrsAlbum);
                 progressBar.setVisibility(View.VISIBLE);
                 Photo photo = mPhotoLinks.get(position);
