@@ -42,7 +42,7 @@
 
                         <com.topface.topface.ui.views.ImageViewRemote
                             android:id="@+id/ivPhoto"
-                            android:maxHeight="299dp"
+                            android:maxHeight="320dp"
                             android:adjustViewBounds="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
