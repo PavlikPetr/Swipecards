@@ -100,7 +100,6 @@ public class UserConfig extends AbstractConfig {
      * @param pinCode value
      * @return true on success
      */
-    @SuppressWarnings("UnusedDeclaration")
     public boolean setPinCode(String pinCode) {
         return getSettingsMap().setField(generateKey(DATA_PIN_CODE), pinCode);
     }
@@ -109,7 +108,6 @@ public class UserConfig extends AbstractConfig {
      * Current user pincode
      * @return pincode value
      */
-    @SuppressWarnings("UnusedDeclaration")
     public String getPinCode() {
         return getSettingsMap().getStringField(generateKey(DATA_PIN_CODE));
     }

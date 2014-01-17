@@ -678,8 +678,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
                     String uri = String.format(Locale.getDefault(),
                             "geo:%f,%f",
-                            (float)history.geo.getCoordinates().getLatitude(),
-                            (float)history.geo.getCoordinates().getLongitude());
+                            (float) history.geo.getCoordinates().getLatitude(),
+                            (float) history.geo.getCoordinates().getLongitude());
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                     startActivity(intent);
                 }
