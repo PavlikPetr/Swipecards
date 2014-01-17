@@ -108,6 +108,11 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
         }
     }
 
+    /**
+     * Saves status of rate popup show
+     *
+     * @param value timestamp of last show; 0 - to stop showing
+     */
     private static void saveRatingPopupStatus(final long value) {
         new BackgroundThread() {
             @Override
@@ -132,11 +137,16 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
                 Static.PREFERENCES_TAG_SHARED,
                 Context.MODE_PRIVATE
         );
-        long date_start = preferences.getLong(RATING_POPUP, 0);
+        long date_start = preferences.getLong(RATING_POPUP, -1);
+        // first time do not show rate popup
+        if (date_start == -1) {
+            saveRatingPopupStatus(System.currentTimeMillis());
+            return false;
+        }
         long date_now = System.currentTimeMillis();
         Options options = CacheProfile.getOptions();
-        return !(date_start == 0
-                || (date_now - date_start < options.ratePopupTimeout)
-                || !options.ratePopupEnabled);
+        return (date_start != 0
+                && (date_now - date_start > options.ratePopupTimeout)
+                && options.ratePopupEnabled);
     }
 }
