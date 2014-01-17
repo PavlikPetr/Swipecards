@@ -268,9 +268,6 @@
     <string name="chat_write_message">Üzenet írása</string>
     <string name="buying_sympathies">Szimpátia vásárlás</string>
     <string name="novice_sympathies_bonus">%1$d szimpátiát kaptál\najándékba! Ez azt jelenti, hogy\nbiztosan tetszel az emberek %2$d-nak,\n akikben szimpátiát ébresztesz.</string>
-    <string name="novice_energy_to_sympathies_title">Becserélted az energiád szimpátiákra</string>
-    <string name="novice_energy_to_sympathies_message_boys">Tölts fel a szimpátia egyenleged, és a jelzett\nösszegű szimpátiát meg fogod kapni\na férfiaktól, akiknek tetszel</string>
-    <string name="novice_energy_to_sympathies_message_girls">Tölts fel a szimpátia egyenleged, és a jelzett\nösszegű szimpátiát meg fogod kapni\na nőktől, akiknek tetszel</string>
     <string name="novice_buy_sympathies">Ha biztosan szeretnél \nszimpátiákat kapni, \nvedd meg őket most!</string>
     <string name="general_reconnect_social">A kapcsolódás a közösségi oldalhoz nem lehetséges. Próbáld meg később.</string>
     <string name="general_buying">Vegyél szimpátiát és érméket</string>

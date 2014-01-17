@@ -275,9 +275,6 @@
     <string name="chat_write_message">Napisati poruku</string>
     <string name="buying_sympathies">Kupovina simpatija</string>
     <string name="novice_sympathies_bonus">Dobili ste %1$d simpatija na poklon! To znači da se vi sigurno dopadate %2$d ljudima, koji će vam izraziti svoju simpatiju.</string>
-    <string name="novice_energy_to_sympathies_title">Menjali smo energiju za simpatije</string>
-    <string name="novice_energy_to_sympathies_message_boys">Popunivši zalihe simpatija, dobićete navedeni broj simpatija/momaka, kojima se dopadate</string>
-    <string name="novice_energy_to_sympathies_message_girls">Popunivši zalihe simpatija, dobićete navedeni broj simpatija/devojaka, kojima se dopadate</string>
     <string name="novice_buy_sympathies">Ako želite garantovano da stičete simpatije, steknite ih ovog momenta!</string>
     <string name="general_reconnect_social">Ne može se prikopčati na socijalnu mrežu. Pokušajte ponovo.</string>
     <string name="general_buying">Kupiti simpatije i monete</string>
@@ -314,7 +311,7 @@
     <string name="profile_edit_age_ranges">Godine moraju biti u granicama od 16 do 99. Molimo da unesete korektan broj i pokušate ponovo.</string>
     <string name="sign_in">Ući</string>
     <string name="create_account">Napraviti akaunt</string>
-    <string name="email">E-.mail</string>
+    <string name="email">E-mail</string>
     <string name="password">Lozinka</string>
     <string name="error_login_password">Nepravilan par login/lozinka</string>
     <string name="recover_password">Obnoviti lozinku</string>
@@ -431,8 +428,7 @@
     </plurals>
     <plurals name="invite_friends_plurals">
         <item quantity="few">Pozovite %1$d prijatelja, kako bi dobili VIP status na %2$d dana</item>
-        <item quantity="other">Pozovite %1$d prijatelja, kako bi dobili VIP status na %2$d dana
-        </item>
+        <item quantity="other">Pozovite %1$d prijatelja, kako bi dobili VIP status na %2$d dana</item>
         <item quantity="one">Pozovite %1$d prijatelja, kako bi dobili VIP status na %2$d dana</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
