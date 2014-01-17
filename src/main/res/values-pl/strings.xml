@@ -274,9 +274,6 @@
     <string name="chat_write_message">Napisz wiadomość</string>
     <string name="buying_sympathies">Zakup sympatie</string>
     <string name="novice_sympathies_bonus">Otrzymasz %1$d sympatii\nprezencie! To oznacza, że\nna pewno się spodobasz %2$d osobom,\nktóre wyrażą Ci swoją sympatię</string>
-    <string name="novice_energy_to_sympathies_title">Wymieniliśmy energię na sympatie</string>
-    <string name="novice_energy_to_sympathies_message_boys">Uzupełnij zasób sympatii a zdobędziesz\nzaznaczoną liczbę sympatii\nod mężczyzn, którym na pewno się podobasz</string>
-    <string name="novice_energy_to_sympathies_message_girls">Uzupełnij zasób sympatii a zdobędziesz\nzaznaczoną liczbę sympatii\nod kobiet, którym na pewno się podobasz</string>
     <string name="novice_buy_sympathies">Jeśli chcesz gwarantowanie\notrzymywać sympatie,\nnabywaj je teraz!</string>
     <string name="general_reconnect_social">Nie ma dostępu do sieci socjalnej. Spróbuj ponownie później.</string>
     <string name="general_buying">Kup sympatie i monety</string>

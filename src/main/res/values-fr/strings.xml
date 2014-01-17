@@ -273,9 +273,6 @@
     <string name="chat_write_message">Rédiger un message</string>
     <string name="buying_sympathies">Achat des sympathies</string>
     <string name="novice_sympathies_bonus">Vous recevez %1$d sympathies pour\nun cadeau!Cela signifie que vous\nplairez sûrement à  %2$dpersonnes,\nqui vous exprimeront leurs sympathies.</string>
-    <string name="novice_energy_to_sympathies_title">Nous avons changé l\'énergie aux sympathies</string>
-    <string name="novice_energy_to_sympathies_message_boys">Si vous remplissez la réserve des sympathies, vous recevrez\nla quantité indiquée de sympathies\ndes jeunes hommes à qui vous plairez sûrement</string>
-    <string name="novice_energy_to_sympathies_message_girls">Si vous remplissez la réserve des sympathies, vous recevrez\nla quantité indiquée de sympathies\ndes jeunes filles à qui vous plairez sûrement</string>
     <string name="novice_buy_sympathies">Si vous voulez sûrement\nrecevoir des sympathies,\nachetez-les maintenant!</string>
     <string name="general_reconnect_social">Il est impossible de rejoindre le réseau soial. réessayez plus tard.</string>
     <string name="general_buying">Achter des sympathies et des pièces</string>
@@ -416,7 +413,7 @@
     <string name="invalid_contacts">Quelques contacts étaient incorrects. Veuillez envoyer des contacts corrects</string>
     <string name="general_choose_action">Choisissez l\'action</string>
     <plurals name="vip_status_period">
-        <item quantity="other">Vous avez reçu le statut VIP pour %d jours</item>
+        <item quantity="other">Vous avez reçu le statut VIP pour  %d jours</item>
         <item quantity="one">Vous avez reçu le statut VIP pour %d jour</item>
     </plurals>
     <plurals name="vip_status_period_btn">

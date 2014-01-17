@@ -43,6 +43,8 @@
     <string name="general_profile">Profil</string>
     <string name="general_settings">Inställningar</string>
     <string name="general_chat">Chat</string>
+    <string name="general_allow">Tillåta</string>
+    <string name="notification_popup_title">Tillåta sända dig notifikationer för att du genast kan få veta om ny sympati, beundran eller oläst meddelande.</string>
     <string name="auth_btn_vk">Logga in via VKontakte</string>
     <string name="auth_btn_fb">Logga in via Facebook</string>
     <string name="auth_retry">Försök igen</string>
@@ -280,9 +282,6 @@
     <string name="chat_write_message">Skriv ett meddelande</string>
     <string name="buying_sympathies">Köp sympatier</string>
     <string name="novice_sympathies_bonus">Du får %1$d sympatier i\npresent! Detta innebär, att\n%2$d personer kommer att gilla dig\noch visa sin sympati för dig</string>
-    <string name="novice_energy_to_sympathies_title">Vi har bytt energi mot sympatier</string>
-    <string name="novice_energy_to_sympathies_message_boys">När du fyllt på sympatier, får du\nett angivet antal sympatier\nfrån killar, som säkert gillar dig</string>
-    <string name="novice_energy_to_sympathies_message_girls">När du fyllt på sympatier, får du\nett angivet antal sympatier\nfrån tjejer som säkert gillar dig</string>
     <string name="novice_buy_sympathies">Om du vill garanterat\nfå sympatier,\nköp dem redan nu!</string>
     <string name="general_reconnect_social">Det är omöjligt att ansluta sig till social media. Vänligen försök senare.</string>
     <string name="general_buying">Köp sympatier och mynt</string>
@@ -575,6 +574,7 @@
     <string name="general_bonus">Bonus</string>
     <string name="general_get">Erhåll</string>
     <string name="not_enough_coins">Du behöver fler mynt för att handla</string>
+    <string name="pincode_blocking_app">Inloggningen i appen är blockerad</string>
     <string name="pincode_blocking">Blockera</string>
     <string name="pincode_reset">Återställ PIN-kod</string>
     <string name="pincode_set">Sätta up PIN-kod</string>
