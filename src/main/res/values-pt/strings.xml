@@ -43,6 +43,8 @@
     <string name="general_profile">Perfil</string>
     <string name="general_settings">Definições</string>
     <string name="general_chat">Conversação</string>
+    <string name="general_allow">Permitir</string>
+    <string name="notification_popup_title">Permita-me enviar-lhe uma notificação para que você possa saber de imediato sobre a nova simpatia, admiração ou mensagens não lidas</string>
     <string name="auth_btn_vk">Entrar através de VK</string>
     <string name="auth_btn_fb">Entrar através de Facebook</string>
     <string name="auth_retry">Tentar novamente</string>
@@ -281,9 +283,6 @@
     <string name="chat_write_message">Escrever mensagem</string>
     <string name="buying_sympathies">Compra de simpatias</string>
     <string name="novice_sympathies_bonus">Você recebe %1$d de simpatias em \nprresente! Isto significa que %2$d de pessoas certamente gostam de você, \nque lhe revelam as suas simpatias</string>
-    <string name="novice_energy_to_sympathies_title">Nós substituímos a energia pelas simpatias</string>
-    <string name="novice_energy_to_sympathies_message_boys">Completando a reserva de simpatias, você receberá\n a quantidade de simpatias assinaladas\n de rapazes que certamente gostam de você</string>
-    <string name="novice_energy_to_sympathies_message_girls">Completando a reserva de simpatias, você receberá\n a quantidade de simpatias assinaladas\n de meninas que certamente gostam de você</string>
     <string name="novice_buy_sympathies">Se você quiser garantidamente\nreceber simpatias, \nadquira as mesmo agora!</string>
     <string name="general_reconnect_social">Não é possível conectar-se com a rede social. Tente repetir mais tarde.</string>
     <string name="general_buying">Comprar simpatias e moedas</string>
@@ -515,7 +514,7 @@
     <string name="settings_feedback_transaction_number">Número de encomenda</string>
     <string name="settings_feedback_transaction_link">onde encontrar o número de encomenda?</string>
     <string name="general_logout_error">Infelizmente não foi possível sair de conta</string>
-    <string name="auth_btn_ok">Entrar através de Condiscípulos</string>
+    <string name="auth_btn_ok">Entrar através de Odnoklassniki</string>
     <string name="other_auth">Entrar através de outros serviços</string>
     <string name="settings_feedback_transaction_number_hint">Digite o número de ordem</string>
     <string name="youve_earned">Você ganhou %s</string>
@@ -543,6 +542,7 @@
     <string name="general_bonus">Bónus</string>
     <string name="general_get">Receber</string>
     <string name="not_enough_coins">Moedas insuficientes para a compra</string>
+    <string name="pincode_blocking_app">Bloqueio de entrada de aplicação</string>
     <string name="pincode_blocking">Bloqueio</string>
     <string name="pincode_reset">Mudar o código PIN</string>
     <string name="pincode_set">Instalar o código PIN</string>

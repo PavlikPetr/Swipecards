@@ -269,9 +269,6 @@
     <string name="chat_write_message">메세지 작성하기</string>
     <string name="buying_sympathies">호감도 구입하기</string>
     <string name="novice_sympathies_bonus">%1$d호감도를 선물로 받습니다! 이 선물의 의미는 당신에게 \n자신의 호감을 표현하는 %2$d 사람들이 당신을 \n마음에 들어한다는 의미입니다.</string>
-    <string name="novice_energy_to_sympathies_title">저희 개발팀이 에너지를 호감도로 바꾸어 드렸습니다.</string>
-    <string name="novice_energy_to_sympathies_message_boys">여분의 호감도를 충전하면 \n명시된 양의 호감도를 \n 당신이 마음에 들어하는 남성으로 부터 받으실 수 있습니다.</string>
-    <string name="novice_energy_to_sympathies_message_girls">여분의 호감도를 충전하면 \n명시된 양의 호감도를 \n 당신이 마음에 들어하는 여성으로 부터 받으실 수 있습니다.</string>
     <string name="novice_buy_sympathies">확실하게 \n호감도를 받고\n 싶다면 지금 호감도를 구입하세요!</string>
     <string name="general_reconnect_social">SNS에 연결 할 수 없습니다. 나중에 다시 시도해 주세요.</string>
     <string name="general_buying">호감도와 코인을 구입하기</string>
@@ -453,7 +450,7 @@
     <string name="general_msg">메세지</string>
     <string name="general_no_notifications">유감스럽게도  통지서 받기 설정을 이용 불가능으로 해놓으셨습니다.</string>
     <plurals name="vip_add_more_friends">
-        <item quantity="other">아직 %d의 친구들을 초대하여 보세요.</item>
+        <item quantity="other">아직  %d의 친구들을 초대하여 보세요.</item>
     </plurals>
     <string name="general_bookmarks_add_short">북마크로</string>
     <string name="black_list_add_short">블랙 리스트로</string>
