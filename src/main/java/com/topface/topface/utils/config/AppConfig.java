@@ -34,6 +34,8 @@ public class AppConfig extends AbstractConfig {
     public static final String FLOOD_ENDS_TIME = "flood_ens_time";
     private static final String APP_UNIQUE_ID = "app_unique_id";
     private static final String DATA_TEST_NETWORK = "data_test_network_mode";
+    public static final String DEVICE_LATTITUDE = "lattitude";
+    public static final String DEVICE_LONGITUDE = "longitude";
 
     @Override
     protected void fillSettingsMap(SettingsMap settingsMap) {
@@ -57,6 +59,8 @@ public class AppConfig extends AbstractConfig {
         settingsMap.addStringField(APP_UNIQUE_ID, null);
         // flag for test mode for network errors
         settingsMap.addBooleanField(DATA_TEST_NETWORK, false);
+        settingsMap.addDoubleField(DEVICE_LATTITUDE, 1000d);
+        settingsMap.addDoubleField(DEVICE_LONGITUDE, 1000d);
     }
 
     public AppConfig(Context context) {
@@ -210,6 +214,22 @@ public class AppConfig extends AbstractConfig {
     public String getApiUrl() {
         SettingsMap settingsMap = getSettingsMap();
         return settingsMap.getStringField(DATA_API_URL) + "?v=" + settingsMap.getIntegerField(DATA_API_VERSION);
+    }
+
+    public void setDeviceLattitude(Double lattitude) {
+        getSettingsMap().setField(DEVICE_LATTITUDE, lattitude);
+    }
+
+    public Double getDeviceLattitude() {
+        return getSettingsMap().getDoubleField(DEVICE_LATTITUDE);
+    }
+
+    public void setDeviceLongitude(Double longitude) {
+        getSettingsMap().setField(DEVICE_LONGITUDE, longitude);
+    }
+
+    public Double getDeviceLongitude() {
+        return getSettingsMap().getDoubleField(DEVICE_LONGITUDE);
     }
 
     @Override

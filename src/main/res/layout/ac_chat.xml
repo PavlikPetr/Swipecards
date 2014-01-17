@@ -71,7 +71,7 @@
                 <Button
                     android:id="@+id/btnChatGift"
                     android:layout_width="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     style="@style/ChatButtonsText"
                     android:text="@string/general_gift"
@@ -82,25 +82,11 @@
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp" />
 
-                <Button
-                    android:id="@+id/btnChatPlace"
-                    android:layout_width="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    style="@style/ChatButtonsText"
-                    android:text="@string/general_place"
-                    android:background="@drawable/chat_place_selector"
-                    android:layout_marginLeft="6dp"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp" />
-
 
                 <Button
                     android:id="@+id/btnChatPhoto"
                     android:layout_width="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     style="@style/ChatButtonsText"
                     android:text="@string/general_soon"

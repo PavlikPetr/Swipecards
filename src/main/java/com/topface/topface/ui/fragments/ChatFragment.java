@@ -9,11 +9,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.text.Editable;
@@ -45,10 +43,8 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Coordinates;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.Geo;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.SendGiftAnswer;
@@ -58,7 +54,6 @@ import com.topface.topface.requests.BlackListAddManyRequest;
 import com.topface.topface.requests.BlackListDeleteManyRequest;
 import com.topface.topface.requests.BookmarkAddRequest;
 import com.topface.topface.requests.BookmarkDeleteManyRequest;
-import com.topface.topface.requests.CoordinatesRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteMessagesRequest;
 import com.topface.topface.requests.HistoryRequest;
@@ -71,7 +66,6 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.GeoMapActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -84,8 +78,7 @@ import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.GeoUtils.GeoLocationManager;
-import com.topface.topface.utils.OsmManager;
+
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
 
@@ -93,9 +86,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimerTask;
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener, LocationListener {
+public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     public static final int LIMIT = 50;
 
@@ -151,7 +145,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private boolean isInBlackList = false;
 
     // Managers
-    private GeoLocationManager mGeoManager = null;
     private RelativeLayout mLockScreen;
     private String[] editButtonsSelfNames;
     private ViewGroup chatActions;
@@ -257,15 +250,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         // Gift Button
         root.findViewById(R.id.btnChatGift).setOnClickListener(this);
-
-        // Map Button
-        View chatMap = root.findViewById(R.id.btnChatPlace);
-        if (Utils.isGoogleMapsAvailable()) {
-            chatMap.setOnClickListener(this);
-            chatMap.setVisibility(View.VISIBLE);
-        } else {
-            chatMap.setVisibility(View.GONE);
-        }
 
         // Photo Button
         root.findViewById(R.id.btnChatPhoto).setEnabled(false);
@@ -691,11 +675,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (v instanceof ImageView) {
             if (v.getTag() instanceof History) {
                 History history = (History) v.getTag();
-                if (Utils.isGoogleMapsAvailable() && (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS)) {
-                    Intent intent = new Intent(getActivity(), GeoMapActivity.class);
-                    intent.putExtra(GeoMapActivity.INTENT_GEO, history.geo);
+
+                if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
+                    String uri = String.format(Locale.getDefault(),
+                            "geo:%f,%f",
+                            (float)history.geo.getCoordinates().getLatitude(),
+                            (float)history.geo.getCoordinates().getLongitude());
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                     startActivity(intent);
-                    return;
                 }
             }
         }
@@ -714,13 +701,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 startActivityForResult(new Intent(getActivity(), GiftsActivity.class),
                         GiftsActivity.INTENT_REQUEST_GIFT);
                 EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
-                break;
-            case R.id.btnChatPlace:
-                if (Utils.isGoogleMapsAvailable()) {
-                    startActivityForResult(new Intent(getActivity(), GeoMapActivity.class),
-                            GeoMapActivity.INTENT_REQUEST_GEO);
-                    EasyTracker.getTracker().sendEvent("Chat", "SendMapClick", "§", 1L);
-                }
                 break;
             case R.id.btnBuyVip:
                 startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
@@ -940,9 +920,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
                     final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
                     sendGift(id, price);
-                } else if (requestCode == GeoMapActivity.INTENT_REQUEST_GEO) {
-                    final Geo geo = extras.getParcelable(GeoMapActivity.INTENT_GEO);
-                    sendCoordinates(geo);
                 }
             }
         }
@@ -962,42 +939,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mSwapControl.snapToScreen(!open ? 0 : 1);
         mBtnChatAdd.setSelected(open);
         mIsAddPanelOpened = open;
-    }
-
-    private void sendCoordinates(Geo geo) {
-        final History loaderItem = new History(IListLoader.ItemType.WAITING);
-        mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView());
-
-        final CoordinatesRequest coordRequest = new CoordinatesRequest(getActivity());
-        registerRequest(coordRequest);
-        coordRequest.userid = mUserId;
-        final Coordinates coordinates = geo.getCoordinates();
-        if (coordinates != null) {
-            coordRequest.latitude = coordinates.getLatitude();
-            coordRequest.longitude = coordinates.getLongitude();
-        }
-        coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_PLACE;
-        coordRequest.address = geo.getAddress();
-        coordRequest.callback(new DataApiHandler<History>() {
-            @Override
-            protected void success(History data, IApiResponse response) {
-                data.target = FeedDialog.OUTPUT_USER_MESSAGE;
-                if (mAdapter != null) {
-                    mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
-                }
-            }
-
-            @Override
-            protected History parseResponse(ApiResponse response) {
-                return new History(response);
-            }
-
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                mAdapter.showRetrySendMessage(loaderItem, coordRequest);
-            }
-        }).exec();
     }
 
     private void sendGift(int id, final int price) {
@@ -1089,65 +1030,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         }).exec();
         return true;
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        // Debug.log(this, location.getLatitude() + " / " +
-        // location.getLongitude());
-        final double latitude = location.getLatitude();
-        final double longitude = location.getLongitude();
-        OsmManager.getAddress(latitude, longitude, new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                final History loaderItem = new History(IListLoader.ItemType.WAITING);
-                mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView());
-
-                final CoordinatesRequest coordRequest = new CoordinatesRequest(getActivity());
-                registerRequest(coordRequest);
-                coordRequest.userid = mUserId;
-                coordRequest.latitude = latitude;
-                coordRequest.longitude = longitude;
-                coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_SELF;
-                coordRequest.address = (String) msg.obj;
-
-                coordRequest.callback(new DataApiHandler<History>() {
-                    @Override
-                    protected void success(History data, IApiResponse response) {
-                        toggleAddPanel();
-                        if (mAdapter != null) {
-                            mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
-                        }
-                    }
-
-                    @Override
-                    protected History parseResponse(ApiResponse response) {
-                        return new History(response);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                        mAdapter.showRetrySendMessage(loaderItem, coordRequest);
-                    }
-                }).exec();
-
-            }
-        });
-
-        mGeoManager.removeLocationListener(this);
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
     }
 
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
