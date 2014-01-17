@@ -3,7 +3,6 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.android.maps.GeoPoint;
 import com.topface.topface.utils.Debug;
 
 import org.json.JSONObject;
@@ -12,7 +11,6 @@ public class Coordinates extends AbstractData implements Parcelable {
 
     private double mLatitude;
     private double mLongitude;
-    private GeoPoint mGeoPoint;
 
     public Coordinates(JSONObject jsonObject) throws WrongCoordinatesException {
         this(jsonObject.optDouble("longitude"), jsonObject.optDouble("latitude"));
@@ -79,12 +77,6 @@ public class Coordinates extends AbstractData implements Parcelable {
         }
     };
 
-    public GeoPoint getGeoPoint() {
-        if (mGeoPoint == null) {
-            mGeoPoint = new GeoPoint((int) (mLatitude * 1E6), (int) (mLongitude * 1E6));
-        }
-        return mGeoPoint;
-    }
 
     @Override
     public String toString() {

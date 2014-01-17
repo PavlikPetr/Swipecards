@@ -2,7 +2,6 @@ package com.topface.topface.utils.GeoUtils;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -11,18 +10,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
-import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.OsmManager;
 
@@ -46,7 +35,6 @@ public class GeoLocationManager {
 
     public static enum LocationProviderType {GPS, AGPS, NONE}
 
-    public GeoPoint currentPoint;
     public String currentAddress;
 
     private LocationManager mLocationManager;
@@ -177,12 +165,6 @@ public class GeoLocationManager {
 
     }
 
-    /**
-     * Address by coordinates
-     */
-    public String getLocationAddress(GeoPoint point) {
-        return getLocationAddress(point.getLatitudeE6() / 1E6, point.getLongitudeE6() / 1E6);
-    }
 
     /**
      * Addresses that correlate with user input
@@ -200,140 +182,10 @@ public class GeoLocationManager {
         return result;
     }
 
-    //-------------Static methods---------------
-
-    /**
-     * Set icon on specific location and shift to that location
-     */
-    public void setOverlayItem(Context context, MapView mapView, GeoPoint point, int zoom) {
-        List<Overlay> mapOverlays = mapView.getOverlays();
-        mapOverlays.clear();
-//		mPinHeight = mPinDrawable.getIntrinsicHeight();
-        GeoItemizedOverlay itemizedOverlay = new GeoItemizedOverlay(mPinDrawable, context);
-
-        String address = getLocationAddress(point);
-        OverlayItem overlayitem = new OverlayItem(point, "", address);
-
-        shiftToPoint(mapView, point, zoom);
-        itemizedOverlay.addOverlay(overlayitem, mapView);
-        mapOverlays.add(itemizedOverlay);
-    }
-
 
     public Location getLastKnownLocation() {
         String locationProvider = LocationManager.NETWORK_PROVIDER;
         return mLocationManager.getLastKnownLocation(locationProvider);
-    }
-
-    public static void shiftToPoint(MapView mapView, GeoPoint point, int zoom) {
-        mapView.getController().animateTo(point);
-        if (zoom > mapView.getMaxZoomLevel())
-            mapView.getController().setZoom(mapView.getMaxZoomLevel());
-        else
-            mapView.getController().setZoom(zoom);
-    }
-
-    public static GeoPoint toGeoPoint(Location location) {
-        return new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6));
-    }
-
-    public static GeoPoint toGeoPoint(double latitude, double longitude) {
-        return new GeoPoint((int) (latitude * 1E6), (int) (longitude * 1E6));
-    }
-
-    public void setItemOverlayOnTouch(boolean touchable) {
-        mTouchable = touchable;
-    }
-
-    class GeoItemizedOverlay extends ItemizedOverlay<OverlayItem> {
-        private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
-
-        Context mContext;
-        View mAddressView;
-
-        public GeoItemizedOverlay(Drawable defaultMarker, Context context) {
-            super(boundCenterBottom(defaultMarker));
-            mContext = context;
-            mAddressView = mInflater.inflate(R.layout.item_map_address, null);
-        }
-
-        @Override
-        protected OverlayItem createItem(int i) {
-            return mOverlays.get(i);
-        }
-
-        public void addOverlay(OverlayItem overlay, final MapView mapView) {
-            mOverlays.clear();
-            mOverlays.add(overlay);
-            populate();
-
-            final GeoPoint point = overlay.getPoint();
-
-            mapView.removeAllViewsInLayout();
-            mapView.addView(mAddressView, getTipLayout(mapView, point));
-
-            final TextView tvAddress = (TextView) mAddressView.findViewById(R.id.map_address);
-            tvAddress.setText(Static.EMPTY);
-            final ProgressBar progressBar = (ProgressBar) mAddressView.findViewById(R.id.prsMapAddressLoading);
-            progressBar.setVisibility(View.VISIBLE);
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    final String address = GeoLocationManager.this.getLocationAddress(point.getLatitudeE6() / 1E6, point.getLongitudeE6() / 1E6);
-
-                    tvAddress.post(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            tvAddress.setText(address);
-                            progressBar.setVisibility(View.INVISIBLE);
-                            mapView.invalidate();
-                        }
-                    });
-
-
-                }
-            };
-            currentPoint = point;
-        }
-
-        private MapView.LayoutParams getTipLayout(MapView mapView, GeoPoint point) {
-            Point screenPoint = new Point();
-            mapView.getProjection().toPixels(point, screenPoint);
-            GeoPoint p = mapView.getProjection().fromPixels(screenPoint.x, screenPoint.y - mPinHeight);
-            return new MapView.LayoutParams(
-                    MapView.LayoutParams.WRAP_CONTENT,
-                    MapView.LayoutParams.WRAP_CONTENT,
-                    p,
-                    MapView.LayoutParams.BOTTOM_CENTER
-            );
-        }
-
-        @Override
-        public int size() {
-            return mOverlays.size();
-        }
-
-        @Override
-        public boolean onTap(GeoPoint p, MapView mapView) {
-            //String address = GeoLocationManager.this.getLocationAddress(p.getLatitudeE6()/1E6, p.getLongitudeE6()/1E6);
-            if (mTouchable) {
-                currentPoint = p;
-                addOverlay(new OverlayItem(p, "", ""), mapView);
-
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        @Override
-        public void draw(android.graphics.Canvas canvas, MapView mapView, boolean shadow) {
-            super.draw(canvas, mapView, false);
-            if (!shadow) {
-                mAddressView.setLayoutParams(getTipLayout(mapView, currentPoint));
-            }
-        }
     }
 
 }

@@ -5,26 +5,27 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 
+import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.utils.BackgroundThread;
+import com.topface.topface.utils.config.AppConfig;
 
 public class GeoPreferencesManager {
-    public static String LATITUDE = "latitude";
-    public static String LONGITUDE = "longitude";
+    AppConfig mAppConfig;
 
-    SharedPreferences mPreferences;
     Context context;
 
     public GeoPreferencesManager(Context context) {
         this.context = context;
-        mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_GEO, Context.MODE_PRIVATE);
+        mAppConfig = App.getAppConfig();
     }
 
     @SuppressWarnings("UnusedDeclaration")
     public Location loadLastLocation() {
         final Location location = new Location(LocationManager.NETWORK_PROVIDER);
-        double latitude = mPreferences.getFloat(LATITUDE, 1000);
-        double longitude = mPreferences.getFloat(LONGITUDE, 1000);
+        double latitude = mAppConfig.getDeviceLattitude();
+        double longitude = mAppConfig.getDeviceLongitude();
         location.setLatitude(latitude);
         location.setLongitude(longitude);
         if (location.getLatitude() == 1000 || location.getLongitude() == 1000) {
@@ -34,13 +35,8 @@ public class GeoPreferencesManager {
     }
 
     public void saveLocation(final Location location) {
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                if (location != null) {
-                    mPreferences.edit().putFloat(LATITUDE, (float) location.getLatitude()).putFloat(LONGITUDE, (float) location.getLongitude()).commit();
-                }
-            }
-        };
+        mAppConfig.setDeviceLattitude(location.getLatitude());
+        mAppConfig.setDeviceLongitude(location.getLongitude());
+        mAppConfig.saveConfig();
     }
 }

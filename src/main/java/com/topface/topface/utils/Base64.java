@@ -1480,7 +1480,6 @@ public class Base64 {
                 Debug.log("Write bytes: " + length);
                 output.write(buffer, 0, numBytes);
             }
-
         } finally {
             try {
                 if (bis != null) {
