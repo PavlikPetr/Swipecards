@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Settings;
 
 import java.util.HashMap;
 
@@ -227,6 +228,10 @@ public abstract class AbstractConfig {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
 
+        public SettingsField<Float> addDoubleField(String fieldName, Double defaultValue) {
+            return put(fieldName, new SettingsField<>(fieldName, defaultValue));
+        }
+
         public boolean setField(String fieldName, String value) {
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
@@ -254,6 +259,14 @@ public abstract class AbstractConfig {
 
         @SuppressWarnings("UnusedDeclaration")
         public boolean setField(String fieldName, Boolean value) {
+            if (containsKey(fieldName)) {
+                get(fieldName).value = value;
+                return true;
+            }
+            return false;
+        }
+
+        public boolean setField(String fieldName, Double value) {
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
                 return true;
@@ -295,6 +308,15 @@ public abstract class AbstractConfig {
             SettingsField settingsField = get(fieldName);
             if (settingsField != null) {
                 result = (Long) settingsField.value;
+            }
+            return result;
+        }
+
+        public Double getDoubleField(String fieldName) {
+            Double result = 0d;
+            SettingsField settingsField = get(fieldName);
+            if (settingsField != null) {
+                result = (Double) settingsField.value;
             }
             return result;
         }

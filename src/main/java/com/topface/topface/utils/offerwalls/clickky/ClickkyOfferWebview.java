@@ -17,7 +17,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
-import com.google.android.maps.GeoPoint;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +52,6 @@ public class ClickkyOfferWebview extends WebView implements LocationListener {
     private boolean lastLoc = false;
     private Double myLat, myLong;
     private String mCountry;
-    private GeoPoint mPoint;
     private boolean state;
 
     //for tracking
@@ -144,10 +142,6 @@ public class ClickkyOfferWebview extends WebView implements LocationListener {
         if (!state) {
             myLat = location.getLatitude();
             myLong = location.getLongitude();
-            mPoint = new GeoPoint((int) (Double.parseDouble(String
-                    .valueOf(myLat)) * 1E6), ((int) (Double.parseDouble(String
-                    .valueOf(myLong)) * 1E6)));
-
             geoCoding();
             state = true;
         }

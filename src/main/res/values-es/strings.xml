@@ -43,8 +43,10 @@
     <string name="general_profile">Perfil</string>
     <string name="general_settings">Ajustes</string>
     <string name="general_chat">Chat</string>
-    <string name="auth_btn_vk">Entrar via VK.com</string>
-    <string name="auth_btn_fb">Entrar via facebook</string>
+    <string name="general_allow">Permitir</string>
+    <string name="notification_popup_title">Permitir</string>
+    <string name="auth_btn_vk">Entrar via VK</string>
+    <string name="auth_btn_fb">Entrar via Facebook</string>
     <string name="auth_retry">Intentar de nuevo</string>
     <string name="auth_vk_name">VK.com</string>
     <string name="dating_header_girls">Chicas desde %1$d hasta %2$d</string>
@@ -280,9 +282,6 @@
     <string name="chat_write_message">Escribir mensaje</string>
     <string name="buying_sympathies">Compra de simpatías</string>
     <string name="novice_sympathies_bonus">¡Recibes %1$d simpatías de\nregalo! Esto significa que\nseguro les gustarás a las %2$d prsonas,\nque le mostrarán su simpatía</string>
-    <string name="novice_energy_to_sympathies_title">Hemos cambiado la energía por simpatías</string>
-    <string name="novice_energy_to_sympathies_message_boys">Aumentanto el monto de simpatías, recibirás\nla cantidad indicada de simpatías\nde los chicos a los que seguro les gustas</string>
-    <string name="novice_energy_to_sympathies_message_girls">Aumentanto el monto de simpatías, recibirás\nla cantidad indicada de simpatías\nde las chicas a las que seguro les gustas</string>
     <string name="novice_buy_sympathies">Si quieres\nrecibir simpatías\nde forma garantizada ¡compralas ahora mismo!</string>
     <string name="general_reconnect_social">Imposible de conectar a la red social. Prueba de nuevo más tarde.</string>
     <string name="general_buying">Comprar simpatías y monedas</string>
@@ -543,7 +542,7 @@
     <string name="settings_feedback_transaction_number">Número del pedido</string>
     <string name="settings_feedback_transaction_link">dónde encontrar el número del pedido?</string>
     <string name="general_logout_error">Lamentablemente, no se ha podido sañir de la cuenta</string>
-    <string name="auth_btn_ok">Entrar por medio de Одноклассники</string>
+    <string name="auth_btn_ok">Entrar por medio de Odnoklassniki</string>
     <string name="other_auth">Entrar usando otros servicios</string>
     <string name="settings_feedback_transaction_number_hint">Introduce el número del pedido</string>
     <string name="youve_earned">Has ganado %s</string>
@@ -579,6 +578,7 @@
     <string name="general_bonus">Bonus</string>
     <string name="general_get">Recibir</string>
     <string name="not_enough_coins">Insuficientes monedas para comprar</string>
+    <string name="pincode_blocking_app">Bloqueo de la entrada a la aplicación</string>
     <string name="pincode_blocking">Bloquear</string>
     <string name="pincode_reset">Reiniciar el código PIN</string>
     <string name="pincode_set">Establecer el código PIN</string>
