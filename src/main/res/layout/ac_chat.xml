@@ -71,12 +71,12 @@
                 <Button
                     android:id="@+id/btnChatGift"
                     android:layout_width="wrap_content"
-                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     style="@style/ChatButtonsText"
                     android:text="@string/general_gift"
                     android:background="@drawable/chat_gift_selector"
                     android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:paddingLeft="4dp"
@@ -86,7 +86,6 @@
                 <Button
                     android:id="@+id/btnChatPhoto"
                     android:layout_width="wrap_content"
-                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     style="@style/ChatButtonsText"
                     android:text="@string/general_soon"
