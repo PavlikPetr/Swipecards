@@ -43,7 +43,9 @@
     <string name="general_profile">Profilis</string>
     <string name="general_settings">Nustatymai</string>
     <string name="general_chat">Pokalbis</string>
-    <string name="auth_btn_vk">Įeiti per VKontakte</string>
+    <string name="general_allow">Leisti</string>
+    <string name="notification_popup_title">Laiskite atsiųsti jums pranešimą, kad jūs galėtumėte sužinoti apie naują simpatiją, susižavėjimą ar neperskaitytą pranešimą</string>
+    <string name="auth_btn_vk">Įeiti per VK</string>
     <string name="auth_btn_fb">Įeiti per Facebook</string>
     <string name="auth_retry">Pakartoti bandymą</string>
     <string name="auth_vk_name">VKontakte</string>
@@ -283,9 +285,6 @@
     <string name="chat_write_message">Parašyti pranešimą</string>
     <string name="buying_sympathies">Simpatijų pirkimas</string>
     <string name="novice_sympathies_bonus">Jūs gaunate %1$d simpatijų\ndovanų! Tai reiškia, kad jūs\ntikrai patinkate %2$d žmonių,\nkurie išreikš jums savo simpatiją</string>
-    <string name="novice_energy_to_sympathies_title">Mes iškeitėme energiją į simpatijas</string>
-    <string name="novice_energy_to_sympathies_message_boys">Papildę simpatijų atsargą, jūs gaunate\nnurodytą kiekį simpatijų\nnuo vaikinų, kuriems tikrai patinkate</string>
-    <string name="novice_energy_to_sympathies_message_girls">Papildę simpatijų atsargą, jūs gaunate\nnurodytą kiekį simpatijų\nnuo merginų, kurioms tikrai patinkate</string>
     <string name="novice_buy_sympathies">Jei norite garantuotai\ngauti simpatijų,\nįsigykite jų tiesiog dabar!</string>
     <string name="general_reconnect_social">Neįmanoma prisijungti prie soc. tinklo. Pabandykite vėliau.</string>
     <string name="general_buying">Pirkti simpatijas ir monetas</string>
@@ -554,7 +553,7 @@
     <string name="settings_feedback_transaction_number">Užsakymo numeris</string>
     <string name="settings_feedback_transaction_link">kur rasti užsakymo numerį?</string>
     <string name="general_logout_error">Apgailestaujame, nepavyko išeiti iš paskyros.</string>
-    <string name="auth_btn_ok">Įeiti per Bendraklasius</string>
+    <string name="auth_btn_ok">Įeiti per Odnoklassniki</string>
     <string name="other_auth">Įeiti per kitas svetaines</string>
     <string name="settings_feedback_transaction_number_hint">Įveskite užsakymo numerį</string>
     <string name="youve_earned">Jūs uždirbote %s</string>
@@ -592,6 +591,7 @@
     <string name="general_bonus">Bonus</string>
     <string name="general_get">Gauti</string>
     <string name="not_enough_coins">Nepakanka monetų pirkiniui</string>
+    <string name="pincode_blocking_app">Įėjimo į programą blokavimas</string>
     <string name="pincode_blocking">Blokavimas</string>
     <string name="pincode_reset">Atstatyti pradinį PIN-kodą</string>
     <string name="pincode_set">Nustatyti PIN-kodą</string>

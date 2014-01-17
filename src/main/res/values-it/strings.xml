@@ -43,7 +43,9 @@
     <string name="general_profile">Profilo</string>
     <string name="general_settings">Impostazioni</string>
     <string name="general_chat">Chat</string>
-    <string name="auth_btn_vk">Accedi tramite social network</string>
+    <string name="general_allow">Abilitare</string>
+    <string name="notification_popup_title">Abilitare l’invio di avviso per sapere subito che hai una nuova simpatia, un’ammirazione o un messaggio non letto</string>
+    <string name="auth_btn_vk">Accedi tramite VK</string>
     <string name="auth_btn_fb">Accedi tramite Facebook</string>
     <string name="auth_retry">Riprovare</string>
     <string name="auth_vk_name">Social network</string>
@@ -280,9 +282,6 @@
     <string name="chat_write_message">Scrivi un messaggio</string>
     <string name="buying_sympathies">Acquisto simpatie</string>
     <string name="novice_sympathies_bonus">Riceverai %1$d simpatie in\nregalo! Significa che\ndi sicuro piacerai a %2$d persone\nche ti dimostreranno la loro simpatia</string>
-    <string name="novice_energy_to_sympathies_title">Abbiamo sostituito l’energia con le simpatie</string>
-    <string name="novice_energy_to_sympathies_message_boys">Aggiungendo le simpatie sul tuo conto riceverai\nla quantità indicata di simpatie\ndai ragazzi ai quali piaci di sicuro</string>
-    <string name="novice_energy_to_sympathies_message_girls">Aggiungendo le simpatie sul tuo conto riceverai\nla quantità indicata di simpatie\ndalle ragazze alle quale piaci di sicuro</string>
     <string name="novice_buy_sympathies">Se vuoi ricevere\nle simpatie sicure,\nacquistale ora!</string>
     <string name="general_reconnect_social">Impossibile collegarsi alla rete sociale. Riprova più tardi.</string>
     <string name="general_buying">Compra simpatie e monete</string>
@@ -576,6 +575,7 @@
     <string name="general_bonus">Bonus</string>
     <string name="general_get">Ricevere</string>
     <string name="not_enough_coins">Non hai abbastanza monete per l’acquisto</string>
+    <string name="pincode_blocking_app">Blocco accesso all’applicazione</string>
     <string name="pincode_blocking">Blocco</string>
     <string name="pincode_reset">Azzerare il codice PIN</string>
     <string name="pincode_set">Attivare il codice PIN</string>

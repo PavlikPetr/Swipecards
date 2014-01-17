@@ -43,6 +43,7 @@
     <string name="general_profile">Προφίλ</string>
     <string name="general_settings">Ρυθμίσεις</string>
     <string name="general_chat">Συνομιλία</string>
+    <string name="general_allow">Επιτρέψτε</string>
     <string name="auth_btn_vk">Εισάγετε με Vkontakte</string>
     <string name="auth_btn_fb">Εισάγετε με Facebook</string>
     <string name="auth_retry">Δοκιμάστε ξανά</string>
@@ -205,6 +206,11 @@
     <string name="buying_store_connect">Ζήτώ από το iTunes Store</string>
     <string name="buying_store_purchase">Κάνω καταχώρηση αγοράς από το iTunes Store</string>
     <string name="buying_tf_ack_sending">Στέλνω πληροφορίες σχετικά με την αγορά στο Topface</string>
+    <string name="rate_popup_title">Παρακαλώ, αξιολογήστε την εφαρμογή μας</string>
+    <string name="rate_popup_set_rate">Στείλτε την εκτίμηση</string>
+    <string name="rate_popup_later">Ζητήστε αργότερα</string>
+    <string name="rate_popup_cancel">\'Οχι, eυχαριστώ</string>
+    <string name="feedback_popup_title">Έχετε βάλει μια χαμηλή βαθμολογία. Πείτε μας τι δεν σας αρέσει στην εφαρμογή μας. Βοηθήστε μας να γίνουμε καλύτεροι. Σας ευχαριστώ!</string>
     <string name="settings_melody">Κοινοποίηση τον ήχο κλήσης</string>
     <string name="edit_refresh_status">Κάντε ενημέρωση της κατάστασης</string>
     <string name="ban_title">Συγχαρητήρια! Είστε αποκλεισμένος</string>
@@ -274,9 +280,6 @@
     <string name="chat_write_message">Στείλτε ένα μήνυμα</string>
     <string name="buying_sympathies">Αγορά τις συμπάθειες</string>
     <string name="novice_sympathies_bonus">Παίρνετε %1$d συμπάθειες για\nδωρεάν!  Αυτό σημαίνει ότι, εσέις\n θα αρέσετε ακριβώς για %2$d τους ανθρώπους,\nοποίοι θα εκφράζουν την συμπάθεια για σας</string>
-    <string name="novice_energy_to_sympathies_title">Έχουμε ήδη αντικαταστήσει την ενέργεια για συμπάθειες</string>
-    <string name="novice_energy_to_sympathies_message_boys">Ξαναγεμίστε του απόθεμα τις συμπάθειες, και θα λάβετε \nσυγκεκριμένο ποσό τις συμπάθειες\nαπό τους άνδρες, για ποιόν αρέσετε</string>
-    <string name="novice_energy_to_sympathies_message_girls">Ξαναγεμίστε του απόθεμα τις συμπάθειες, και θα λάβετε \nσυγκεκριμένο ποσό τις συμπάθειες\nαπό τις κοπέλες, για την οποία αρέσετε</string>
     <string name="novice_buy_sympathies">Αν θέλετε να είστε εγγυημένος για\nνα λαμβάνετε συμπάθειες,\nνα τις αγοράσετε τώρα!</string>
     <string name="general_reconnect_social">Δεν είναι δυνατή η σύνδεση με κοινωνικά δίκτυα. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
     <string name="general_buying">Αγοράστε τις συμπάθειες και τα κέρματα</string>
@@ -425,10 +428,8 @@
         <item quantity="one">Λάβετε κατάσταση VIP για %d μέρα</item>
     </plurals>
     <plurals name="invite_friends_plurals">
-        <item quantity="other">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρες
-        </item>
-        <item quantity="one">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρα
-        </item>
+        <item quantity="other">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρες</item>
+        <item quantity="one">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρα</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="other">Λάβετε VIP κατάσταση δωρεάν για %d προσκλήσεις</item>
@@ -571,6 +572,7 @@
     <string name="general_bonus">Μπόνους</string>
     <string name="general_get">Αποκτίστε</string>
     <string name="not_enough_coins">Δεν υπάρχουν αρκετά κέρματα για να αγοράξετε</string>
+    <string name="pincode_blocking_app">Κλείδωμα εφαρμογής</string>
     <string name="pincode_blocking">Κλείδωμα</string>
     <string name="pincode_reset">Επαναφορά του κωδικού PIN</string>
     <string name="pincode_set">Ρυθμίστε έναν κωδικό PIN</string>

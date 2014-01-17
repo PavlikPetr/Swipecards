@@ -275,9 +275,6 @@
     <string name="chat_write_message">Napísať správu</string>
     <string name="buying_sympathies">Nákup sympatií</string>
     <string name="novice_sympathies_bonus">Získavate %1$d sympatií ako \n darček! Znamená to, že sa \nurčite budete páčiť %2$d ľuďom, \n kotrí Vám vyjadria svoju sympatiu</string>
-    <string name="novice_energy_to_sympathies_title">Vymenili sme energiu za sympatie</string>
-    <string name="novice_energy_to_sympathies_message_boys">Keď doplníte zásobu sympatií, získate \nuvedené množstvo sympatií \nod chlapov, ktorým sa určite páčite</string>
-    <string name="novice_energy_to_sympathies_message_girls">Keď doplníte zásobu sympatií, získate \nuvedené množstvo sympatií \nod dievčat, ktorým sa určite páčite</string>
     <string name="novice_buy_sympathies">Ak chcete zaručene \ndostávať sympatie,  \nkúpte ich hneď teraz!</string>
     <string name="general_reconnect_social">Pripojenie k sieti nie je možné. Pokus skúste zopakovať neskôr.</string>
     <string name="general_buying">Kúpiť sympatie a mince</string>
@@ -430,9 +427,9 @@
         <item quantity="one">Získať VIP na %d deň</item>
     </plurals>
     <plurals name="invite_friends_plurals">
-        <item quantity="few">Pozvite %1$d priateľov, aby ste získali VIP status na %2$d dni</item>
-        <item quantity="other">Pozvite %1$d priateľov, aby ste získali VIP status na %2$d dní</item>
-        <item quantity="one">Pozvite %1$d priateľov, aby ste získali VIP status na %2$d deň</item>
+        <item quantity="few">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d dni</item>
+        <item quantity="other">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d dní</item>
+        <item quantity="one">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d deň</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="few">Získaj VIP zadarmo za %d pozvania</item>
