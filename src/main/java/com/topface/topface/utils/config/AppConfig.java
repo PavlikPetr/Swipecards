@@ -35,71 +35,27 @@ public class AppConfig extends AbstractConfig {
     private static final String APP_UNIQUE_ID = "app_unique_id";
     private static final String DATA_TEST_NETWORK = "data_test_network_mode";
 
-    public String getAuthVkApi() {
-        return getSettingsMap().getStringField(DATA_AUTH_VK_API);
-    }
-
-    public String getAuthFbApi() {
-        return getSettingsMap().getStringField(DATA_AUTH_FB_API);
-    }
-
-    public void setDebugMode(int position) {
-        getSettingsMap().setField(DATA_DEBUG_MODE, position);
-    }
-
-    public int getDebugMode() {
-        return getSettingsMap().getIntegerField(DATA_DEBUG_MODE);
-    }
-
-    public void setEditorMode(int position) {
-        getSettingsMap().setField(DATA_EDITOR_MODE, position);
-    }
-
-    public int getEditorMode() {
-        return getSettingsMap().getIntegerField(DATA_EDITOR_MODE);
-    }
-
-    public Integer getApiVersion() {
-        return getSettingsMap().getIntegerField(DATA_API_VERSION);
-    }
-
-    public String getApiDomain() {
-        return getSettingsMap().getStringField(DATA_API_URL);
-    }
-
-    public String getApiRevision() {
-        return getSettingsMap().getStringField(DATA_API_REVISION);
-    }
-
-    public String getAppUniqueId() {
-        SettingsMap settingsMap = getSettingsMap();
-        String uniqueId = settingsMap.getStringField(APP_UNIQUE_ID);
-        if (TextUtils.isEmpty(uniqueId)) {
-            uniqueId = UUID.randomUUID().toString();
-            settingsMap.setField(APP_UNIQUE_ID, uniqueId);
-        }
-        return uniqueId;
-    }
-
-    public void setTestNetwork(boolean value) {
-        getSettingsMap().setField(DATA_TEST_NETWORK, value);
-    }
-
-    public boolean getTestNetwork() {
-        return getSettingsMap().getBooleanField(DATA_TEST_NETWORK);
-    }
-
     @Override
     protected void fillSettingsMap(SettingsMap settingsMap) {
+        // api url: https://api.topface.com/
         settingsMap.addStringField(DATA_API_URL, Static.API_URL);
+        // api version number
         settingsMap.addIntegerField(DATA_API_VERSION, Static.API_VERSION);
+        // api revision for test platforms
         settingsMap.addStringField(DATA_API_REVISION, null);
+        // vk api id
         settingsMap.addStringField(DATA_AUTH_VK_API, Static.AUTH_VK_ID);
+        // fb api id
         settingsMap.addStringField(DATA_AUTH_FB_API, Static.AUTH_FACEBOOK_ID);
+        // editor mode from Editor class
         settingsMap.addIntegerField(DATA_EDITOR_MODE, Editor.MODE_USER_FIELD);
+        // editor mode from Debug class
         settingsMap.addIntegerField(DATA_DEBUG_MODE, Debug.MODE_EDITOR);
+        // date when flood ends
         settingsMap.addLongField(FLOOD_ENDS_TIME, 0l);
+        // unique generated id for current app install
         settingsMap.addStringField(APP_UNIQUE_ID, null);
+        // flag for test mode for network errors
         settingsMap.addBooleanField(DATA_TEST_NETWORK, false);
     }
 
@@ -115,10 +71,122 @@ public class AppConfig extends AbstractConfig {
     }
 
     /**
-     * Сохранет текущее состояние конфига, просто записывая данные из памяти
+     * Saves current version of config to trace relevance
      */
     public void saveConfigAdditional(SharedPreferences.Editor editor) {
         editor.putInt(DATA_APP_CONFIG_VERSION, APP_CONFIG_VERSION);
+    }
+
+    /**
+     * Vk Api key
+     * @return api key
+     */
+    public String getAuthVkApi() {
+        return getSettingsMap().getStringField(DATA_AUTH_VK_API);
+    }
+
+    /**
+     * Fb Api key
+     * @return api key
+     */
+    public String getAuthFbApi() {
+        return getSettingsMap().getStringField(DATA_AUTH_FB_API);
+    }
+
+    /**
+     * Debug mode from Debug class
+     * @param mode {@link com.topface.topface.utils.Debug#MODE_DEBUG},
+     * {@link com.topface.topface.utils.Debug#MODE_EDITOR},
+     * {@link com.topface.topface.utils.Debug#MODE_ALWAYS},
+     * {@link com.topface.topface.utils.Debug#MODE_DISABLE}
+     */
+    public void setDebugMode(int mode) {
+        getSettingsMap().setField(DATA_DEBUG_MODE, mode);
+    }
+
+    /**
+     * Debug mode from Debug class
+     * @return mode: {@link com.topface.topface.utils.Debug#MODE_DEBUG},
+     * {@link com.topface.topface.utils.Debug#MODE_EDITOR},
+     * {@link com.topface.topface.utils.Debug#MODE_ALWAYS},
+     * {@link com.topface.topface.utils.Debug#MODE_DISABLE}
+     */
+    public int getDebugMode() {
+        return getSettingsMap().getIntegerField(DATA_DEBUG_MODE);
+    }
+
+    /**
+     * Editor mode from Editor class
+     * @param mode {@link com.topface.topface.utils.Editor#MODE_USER_FIELD},
+     * {@link com.topface.topface.utils.Editor#MODE_EDITOR},
+     * {@link com.topface.topface.utils.Editor#MODE_NOT_EDITOR}
+     */
+    public void setEditorMode(int mode) {
+        getSettingsMap().setField(DATA_EDITOR_MODE, mode);
+    }
+
+    /**
+     * Editor mode from Editor class
+     * @return mode: {@link com.topface.topface.utils.Editor#MODE_USER_FIELD},
+     * {@link com.topface.topface.utils.Editor#MODE_EDITOR},
+     * {@link com.topface.topface.utils.Editor#MODE_NOT_EDITOR}
+     */
+    public int getEditorMode() {
+        return getSettingsMap().getIntegerField(DATA_EDITOR_MODE);
+    }
+
+    /**
+     * Api version for requests
+     * @return version number
+     */
+    public Integer getApiVersion() {
+        return getSettingsMap().getIntegerField(DATA_API_VERSION);
+    }
+
+    /**
+     * Api url for requests in ConnectionManager
+     * @return url for request
+     */
+    public String getApiDomain() {
+        return getSettingsMap().getStringField(DATA_API_URL);
+    }
+
+    /**
+     * Api revision for test platforms to identify different server code states
+     * @return revision id
+     */
+    public String getApiRevision() {
+        return getSettingsMap().getStringField(DATA_API_REVISION);
+    }
+
+    /**
+     * Unique id for app. Generated once for installation and saved for further use
+     * @return app id
+     */
+    public String getAppUniqueId() {
+        SettingsMap settingsMap = getSettingsMap();
+        String uniqueId = settingsMap.getStringField(APP_UNIQUE_ID);
+        if (TextUtils.isEmpty(uniqueId)) {
+            uniqueId = UUID.randomUUID().toString();
+            settingsMap.setField(APP_UNIQUE_ID, uniqueId);
+        }
+        return uniqueId;
+    }
+
+    /**
+     * Network errors mode
+     * @param value true if need opportunity to switch network errors on and off
+     */
+    public void setTestNetwork(boolean value) {
+        getSettingsMap().setField(DATA_TEST_NETWORK, value);
+    }
+
+    /**
+     * Network errors mode
+     * @return true if network errors mode switched on
+     */
+    public boolean getTestNetwork() {
+        return getSettingsMap().getBooleanField(DATA_TEST_NETWORK);
     }
 
     /**
@@ -135,6 +203,10 @@ public class AppConfig extends AbstractConfig {
         settingsMap.setField(DATA_API_REVISION, revision);
     }
 
+    /**
+     * Url for api request with current saved version
+     * @return url for requests
+     */
     public String getApiUrl() {
         SettingsMap settingsMap = getSettingsMap();
         return settingsMap.getStringField(DATA_API_URL) + "?v=" + settingsMap.getIntegerField(DATA_API_VERSION);

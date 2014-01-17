@@ -206,6 +206,11 @@
     <string name="buying_store_connect">iTunes Store istiyorum</string>
     <string name="buying_store_purchase">iTunes Store’de alış veriş yapıyorum</string>
     <string name="buying_tf_ack_sending">Topface’ye alış veriş hakkında bilgi gönderiyorum</string>
+    <string name="rate_popup_title">Lütfen, uygulamamıza not verin</string>
+    <string name="rate_popup_set_rate">Not vermek</string>
+    <string name="rate_popup_later">Daha sonra yenile</string>
+    <string name="rate_popup_cancel">Hayır, teşekkürler</string>
+    <string name="feedback_popup_title">Siz düşük fiyat koymuşsunuz. Uygulamada neyi beğenip beğenmediğinizi anlatın. Bize daha iyi olmak için yardımcı olun. Teşekkürler!</string>
     <string name="settings_melody">Bildirim sesi</string>
     <string name="edit_refresh_status">Durumu yenilemek</string>
     <string name="ban_title">Tebrikler! Siz ban edildiniz</string>
@@ -275,9 +280,6 @@
     <string name="chat_write_message">Mesaj yazmak</string>
     <string name="buying_sympathies">Sempati satın alımı</string>
     <string name="novice_sympathies_bonus">Siz %1$d \nhediye olarak kazandınız! – Bu demek ki %2$d kişi sizi \nkesinlikle beğenir ve sempatileri size \ngösterir.</string>
-    <string name="novice_energy_to_sympathies_title">Enerji, sempati ile değiştirdik</string>
-    <string name="novice_energy_to_sympathies_message_boys">Sempati deposu doldurarak kesinlikle sizi beğenen erkeklerden\ngösterilmiş olan sempati sayısı\nalırsınız</string>
-    <string name="novice_energy_to_sympathies_message_girls">Sempati deposu doldurarak kesinlikle sizi beğenen kızlardan\ngösterilmiş olan sempati sayısı\nalırsınız</string>
     <string name="novice_buy_sympathies">Sempati garanti olarak\nalmak istiyorsanız hemen şimdi \nsatın alın!</string>
     <string name="general_reconnect_social">Sosyal ağa bağlanamıyor. Daha sonra tekrar deneyin.</string>
     <string name="general_buying">Sempati ve paraları satın almak</string>
@@ -577,4 +579,34 @@
     <string name="locking_screen_button_answer">Cevap vermek</string>
     <string name="locking_screen_advice">Tüm gelen sempatilere cevap verin</string>
     <string name="locking_screen_advice2">Tüm sınırlarınızı kaldırın</string>
+    <string name="current_city">Geçerli şehir</string>
+    <string name="general_say_meow">Miyav söyle</string>
+    <string name="general_meow_offer">Arkadaşlarınızla 3 tur oynayınve 2 günlük VIP durumu alın</string>
+    <string name="general_bonus">Bonus</string>
+    <string name="general_get">Almak</string>
+    <string name="not_enough_coins">Almak için para yetersizdir</string>
+    <string name="pincode_blocking_app">Uygulamaya giriş engellemesi</string>
+    <string name="pincode_blocking">Engelleme</string>
+    <string name="pincode_reset">PIN-kod yenilemek</string>
+    <string name="pincode_set">PIN-kod oluşturmak</string>
+    <string name="pincode_change">PIN-kodu değiştirmek</string>
+    <string name="pincode_delete">PIN-kodu sil</string>
+    <string name="pincode_input_label">PIN-kod girişi</string>
+    <string name="pincode_check_label">PIN-kod kontrolü</string>
+    <string name="pincode_change_label">PIN-kod değiştirmesi</string>
+    <string name="pincode_delete_label">PIN-kod silmesi</string>
+    <string name="pincode_turning_on">Engelleme açması</string>
+    <string name="pincode_dont_match">PIN-kodlar uyuşmadı. Yeniden deneyin</string>
+    <string name="pincode_wrong">PIN-kod yanlış</string>
+    <string name="pincode_input">PIN-koda girin</string>
+    <string name="pincode_input_previous">Eski PIN-koda girin</string>
+    <string name="pincode_repeat">PIN-kod yeniden</string>
+    <string name="pincode_forget">PIN-kod mu unuttunuz?</string>
+    <string name="pincode_auth_input">Login ve parolaya girmelisiniz</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">kapanıştan hemen sonra</item>
+        <item quantity="other">%d dak.</item>
+        <item quantity="one">%d dak.</item>
+    </plurals>
+    <string name="ok_label">Sınıf arkadaşlar</string>
 </resources>

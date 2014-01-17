@@ -275,9 +275,6 @@
     <string name="chat_write_message">Написати повідомлення</string>
     <string name="buying_sympathies">Купівля симпатій</string>
     <string name="novice_sympathies_bonus">- Ви отримуєте %1$d симпатій у\nподарунок! Це означає, що ви\nточно сподобаєтеся %2$d людям, \nякі висловлять вам свою симпатію</string>
-    <string name="novice_energy_to_sympathies_title">Ми замінили енергію на симпатії</string>
-    <string name="novice_energy_to_sympathies_message_boys">Поповнивши запас симпатій, ви отримаєте\nвказану кількість симпатій\nвід хлопців, яким точно подобаєтеся</string>
-    <string name="novice_energy_to_sympathies_message_girls">Поповнивши запас симпатій, ви отримаєте\nвказану кількість симпатій\nвід дівчат, яким точно подобаєтеся</string>
     <string name="novice_buy_sympathies">Якщо ви хочете гарантовано\nотримувати симпатії,\nпридбайте їх прямо зараз!</string>
     <string name="general_reconnect_social">Неможливо підключитися до соцмережі. Повторіть спробу пізніше.</string>
     <string name="general_buying">Купити симпатії та монети</string>
