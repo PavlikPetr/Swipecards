@@ -101,7 +101,8 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
         } else {
             saveRatingPopupStatus(0);
             BaseDialogFragment dialog = SendFeedbackDialog.newInstance(
-                    R.string.feedback_popup_title, getResources().getString(R.string.settings_low_rate_internal)
+                    R.string.feedback_popup_title,
+                    String.format(getResources().getString(R.string.settings_low_rate_internal), (int) rating)
             );
             dialog.show(getActivity().getSupportFragmentManager(), SendFeedbackDialog.TAG);
             dismiss();

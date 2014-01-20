@@ -14,7 +14,7 @@
     <string name="settings_payment_problems_internal">Проблемы с оплатой</string>
     <string name="settings_cooperation_internal">Сотрудничество</string>
     <string name="settings_feedback_internal">Оставить отзыв</string>
-    <string name="settings_low_rate_internal">low_rate</string>
+    <string name="settings_low_rate_internal">low_rate_%d</string>
 
     <string name="photo_is_set_tag">photo_is_set_tag</string>
 
