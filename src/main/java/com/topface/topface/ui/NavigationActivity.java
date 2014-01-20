@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.appsflyer.AppsFlyerLib;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
@@ -100,6 +101,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         }
         mFragmentManager = getSupportFragmentManager();
         initDrawerLayout();
+        initAppsFlyer();
         new BackgroundThread() {
             @Override
             public void execute() {
@@ -230,6 +232,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     @Override
     public void onLoadProfile() {
         super.onLoadProfile();
+        //Интеграция наших id юзера с AppsFlyer
+        if (CacheProfile.uid > 0) {
+            AppsFlyerLib.setAppUserId(Integer.toString(CacheProfile.uid));
+        }
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         PopupManager manager = new PopupManager(this);
         manager.showOldVersionPopup(CacheProfile.getOptions().maxVersion);
@@ -241,6 +247,11 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             //noinspection deprecation
             mMenuFragment.setFullscreenController(mFullscreenController);
         }
+    }
+
+    private void initAppsFlyer() {
+        AppsFlyerLib.setAppsFlyerKey(getString(R.string.appsflyer_dev_key));
+        AppsFlyerLib.sendTracking(getApplicationContext());
     }
 
     @Override
@@ -305,7 +316,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                             LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
                         } else {
                             Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-                            ArrayList<Photo> photos = new ArrayList<Photo>();
+                            ArrayList<Photo> photos = new ArrayList<>();
                             photos.add(photo);
                             intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
                         }
