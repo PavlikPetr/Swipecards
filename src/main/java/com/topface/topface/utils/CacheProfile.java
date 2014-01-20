@@ -263,7 +263,7 @@ public class CacheProfile {
         if (mProducts == null) {
             SessionConfig config = App.getSessionConfig();
             String productsCache = config.getGoogleProductsData();
-            if (productsCache != null) {
+            if (!TextUtils.isEmpty(productsCache)) {
                 //Получаем опции из кэша
                 try {
                     mProducts = new GooglePlayProducts(

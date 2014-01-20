@@ -2,14 +2,10 @@ package com.topface.topface.ui.dialogs;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -28,37 +24,26 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     private IRespondToLikesListener mWatchSequentialyListener;
     private IWatchListListener mWatchListListener;
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_closings_buy_vip, container, false);
-
+    public void initViews(View root) {
+        getDialog().setCanceledOnTouchOutside(false);
         String fragmentName = Static.EMPTY;
         if (getActivity() != null) {
             BaseFragment.FragmentId fragmentId = (BaseFragment.FragmentId) getArguments().getSerializable(ARG_FRAGMENT);
             fragmentName = getString(ResourcesUtils.getFragmentNameResId(fragmentId));
         }
-
-        setTransparentBackground();
-        getDialog().setCanceledOnTouchOutside(false);
-
         root.findViewById(R.id.btnRespondToLikes).setOnClickListener(this);
         root.findViewById(R.id.btnBuyVip).setOnClickListener(this);
-
-
         ((TextView) root.findViewById(R.id.tvTitle))
                 .setText(String.format(getString(R.string.locking_popup_title), fragmentName));
         ((TextView) root.findViewById(R.id.tvMessage))
                 .setText(String.format(getString(R.string.locking_popup_message), fragmentName));
         root.findViewById(R.id.btnClose).setOnClickListener(this);
-        return root;
     }
 
-    private void setTransparentBackground() {
-        ColorDrawable color = new ColorDrawable(Color.BLACK);
-        color.setAlpha(175);
-        getDialog().getWindow().setBackgroundDrawable(color);
+    @Override
+    public int getDialogLayoutRes() {
+        return R.layout.dialog_closings_buy_vip;
     }
 
     @Override

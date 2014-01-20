@@ -1,9 +1,6 @@
 package com.topface.topface.promo.fragments;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
@@ -17,14 +14,13 @@ public class PromoKey71Fragment extends PromoFragment {
     private boolean counterUpdated;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    public void initViews(View root) {
+        super.initViews(root);
         int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
         if (curVisitCounter == 0) {
             CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter + getPremiumEntity().getCount(), true);
             counterUpdated = true;
         }
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override

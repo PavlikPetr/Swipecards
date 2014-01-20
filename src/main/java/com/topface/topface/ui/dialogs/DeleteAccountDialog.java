@@ -4,13 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,16 +18,12 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class DeleteAccountDialog extends DialogFragment implements View.OnClickListener {
+public class DeleteAccountDialog extends BaseDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "com.topface.topface.ui.dialogs.DeleteAccountDialog_TAG";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_delete_account, container, false);
-
-        setTransparentBackground();
+    protected void initViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
 
         root.findViewById(R.id.btnClose).setOnClickListener(this);
@@ -43,13 +34,11 @@ public class DeleteAccountDialog extends DialogFragment implements View.OnClickL
 
         ((TextView) root.findViewById(R.id.tvWarningText)).setText(R.string.delete_account_warning);
 
-        return root;
     }
 
-    private void setTransparentBackground() {
-        ColorDrawable color = new ColorDrawable(Color.BLACK);
-        color.setAlpha(175);
-        getDialog().getWindow().setBackgroundDrawable(color);
+    @Override
+    public int getDialogLayoutRes() {
+        return R.layout.dialog_delete_account;
     }
 
     @Override

@@ -1,13 +1,8 @@
 package com.topface.topface.ui.dialogs;
 
 import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -22,7 +17,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
-public class ConfirmEmailDialog extends DialogFragment implements View.OnClickListener {
+public class ConfirmEmailDialog extends BaseDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "Topface_ConfirmEmailDialog_Tag";
     private EditText mEditEmailText;
@@ -30,11 +25,7 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
     private ProgressBar mProgressBar;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_confirm_email, container, false);
-
-        setTransparentBackground();
+    protected void initViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
 
         root.findViewById(R.id.btnClose).setOnClickListener(this);
@@ -47,8 +38,11 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
         if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             mEditEmailText.setText(token.getLogin());
         }
+    }
 
-        return root;
+    @Override
+    public int getDialogLayoutRes() {
+        return R.layout.dialog_confirm_email;
     }
 
     @Override
@@ -57,12 +51,6 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
         if (!AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             closeDialog();
         }
-    }
-
-    private void setTransparentBackground() {
-        ColorDrawable color = new ColorDrawable(Color.BLACK);
-        color.setAlpha(175);
-        getDialog().getWindow().setBackgroundDrawable(color);
     }
 
     @Override

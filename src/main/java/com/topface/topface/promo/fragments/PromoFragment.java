@@ -7,9 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -52,9 +50,6 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
         super.onCreate(savedInstanceState);
         //Закрыть диалог нельзя
         setCancelable(false);
-        //По стилю это у нас не диалог, а кастомный дизайн -
-        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
         //Подписываемся на обновление профиля
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(
@@ -80,15 +75,13 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.promo_popup, container, false);
-        root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Магия для того, чтобы клики не проходили в дэйтинг фрагмент
-            }
-        });
+    public int getDialogLayoutRes() {
+        return R.layout.promo_popup;
+    }
 
+    @Override
+    public void initViews(View root) {
+        root.setClickable(true);
         root.findViewById(R.id.buyVip).setOnClickListener(this);
         ((TextView) root.findViewById(R.id.deleteMessages)).setText(getDeleteButtonText());
         root.findViewById(R.id.deleteMessages).setOnClickListener(this);
@@ -96,7 +89,6 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
         TextView popupText = (TextView) root.findViewById(R.id.airMessagesText);
         popupText.setText(getMessage());
         EasyTracker.getTracker().sendEvent(getMainTag(), "Show", "", 0L);
-        return root;
     }
 
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {

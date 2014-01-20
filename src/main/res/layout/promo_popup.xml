@@ -4,14 +4,12 @@
     android:id="@+id/loInvitesPopup"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/popup_invite_background">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+<RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:layout_marginTop="45dp"
         android:background="@drawable/popup_invite_text_bg">
 
         <TextView

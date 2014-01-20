@@ -5,11 +5,13 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/loDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:layout_margin="16dp"
-        android:background="@drawable/bg_dialog">
+        android:background="@drawable/bg_dialog"
+        android:layout_centerInParent="true">
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/leaderPhoto"
@@ -82,12 +84,12 @@
     </RelativeLayout>
 
     <ImageButton
-        android:id="@+id/leadersClose"
+        android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignRight="@id/loDialog"
+        android:layout_alignTop="@id/loDialog"
         android:background="@drawable/btn_dialog_close_selector"
-
-        />
+        android:layout_marginTop="-16dp"
+        android:layout_marginRight="-16dp" />
 </RelativeLayout>

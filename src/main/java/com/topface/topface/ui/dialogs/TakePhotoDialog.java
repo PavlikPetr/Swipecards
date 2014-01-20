@@ -4,16 +4,11 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,7 +18,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.utils.BitmapUtils;
 
-public class TakePhotoDialog extends DialogFragment implements View.OnClickListener {
+public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "Topface_TakePhotoDialog_Tag";
 
@@ -42,10 +37,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     private Bitmap scaledBitmap;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_take_photo, container, false);
-        setTransparentBackground();
+    protected void initViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
         getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -77,14 +69,11 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         mBtnSendPhoto.setOnClickListener(this);
 
         root.findViewById(R.id.btnClose).setOnClickListener(this);
-
-        return root;
     }
 
-    private void setTransparentBackground() {
-        ColorDrawable color = new ColorDrawable(Color.BLACK);
-        color.setAlpha(175);
-        getDialog().getWindow().setBackgroundDrawable(color);
+    @Override
+    public int getDialogLayoutRes() {
+        return R.layout.dialog_take_photo;
     }
 
     @Override
@@ -113,7 +102,6 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     public TakePhotoDialog() {
         super();
     }
-
 
     public static TakePhotoDialog newInstance() {
         TakePhotoDialog dialog = new TakePhotoDialog();
