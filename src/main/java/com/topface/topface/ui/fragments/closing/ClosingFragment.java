@@ -144,7 +144,6 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                 skipAllRequest(getSkipAllRequestType());
                 break;
             case R.id.btnSkip:
-                EasyTracker.getTracker().sendEvent(getTrackName(), "Skip", "", 1L);
                 if (CacheProfile.premium || alowSkipForNonPremium()) {
                     if (getCurrentUser() != null) {
                         SkipClosedRequest request = new SkipClosedRequest(getActivity());

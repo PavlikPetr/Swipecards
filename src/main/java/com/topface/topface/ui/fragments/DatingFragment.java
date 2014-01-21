@@ -392,7 +392,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             lockControls();
             hideEmptySearchDialog();
             if (!isAddition) {
-                onUpdateStart(isAddition);
+                onUpdateStart(false);
             }
 
             mUpdateInProcess = true;
@@ -568,9 +568,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                         : SendLikeRequest.DEFAULT_NO_MUTUAL,
                                 null
                         );
-
-                        EasyTracker.getTracker().sendEvent("Dating", "Rate",
-                                "SympathySend" + (mCurrentUser.mutual ? "mutual" : ""), 0L);
                     }
                     //currentSearch.rated = true;
                 }
@@ -580,15 +577,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 skipUser(mCurrentUser);
                 if (mCurrentUser != null) {
                     mCurrentUser.skipped = true;
-
-                    EasyTracker.getTracker().sendEvent("Dating", "Rate", "Skip", 0L);
                 }
                 showNextUser();
             }
             break;
             case R.id.btnDatingPrev: {
                 prevUser();
-                EasyTracker.getTracker().sendEvent("Dating", "Additional", "Prev", 0L);
             }
 
             break;
@@ -609,7 +603,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingSwitchNext: {
                 mViewFlipper.setDisplayedChild(1);
-                EasyTracker.getTracker().sendEvent("Dating", "Additional", "Switch", 1L);
             }
             break;
             case R.id.btnDatingSwitchPrev: {

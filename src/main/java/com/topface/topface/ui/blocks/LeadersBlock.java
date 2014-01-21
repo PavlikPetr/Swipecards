@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedUserListData;
 import com.topface.topface.data.Leader;
@@ -36,7 +35,6 @@ public class LeadersBlock {
     }
 
     public void loadLeaders() {
-        EasyTracker.getTracker().sendEvent("Leaders", "Load", "", 1L);
         LeadersRequest request = new LeadersRequest(mFragment.getActivity().getApplicationContext());
         if (mFragment instanceof BaseFragment) {
             ((BaseFragment) mFragment).registerRequest(request);
@@ -50,7 +48,7 @@ public class LeadersBlock {
 
             @Override
             protected FeedUserListData<Leader> parseResponse(ApiResponse response) {
-                return new FeedUserListData<Leader>(response.jsonResult, Leader.class);
+                return new FeedUserListData<>(response.jsonResult, Leader.class);
             }
 
             @Override
