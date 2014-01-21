@@ -25,6 +25,8 @@ public class UserConfig extends AbstractConfig {
     public static final String DATA_NOVICE_BUY_SYMPATHY = "novice_dating_buy_sympathy";
     public static final String DATA_NOVICE_BUY_SYMPATHY_DATE = "novice_dating_buy_symathy_date_tag";
     public static final String DATA_NOVICE_SYMPATHY = "novice_dating_sympathy";
+    private static final String DATA_LIKE_CLOSING_LAST_TIME = "data_closings_likes_last_date";
+    private static final String DATA_MUTUAL_CLOSING_LAST_TIME = "data_closings_mutual_last_date";
 
     public UserConfig(Context context) {
         super(context);
@@ -46,6 +48,11 @@ public class UserConfig extends AbstractConfig {
         settingsMap.addLongField(generateKey(DATA_NOVICE_BUY_SYMPATHY_DATE), 0L);
         // flag show if "send sympathy hint" is passed
         settingsMap.addBooleanField(generateKey(DATA_NOVICE_SYMPATHY), true);
+        // date of last likes closings processing
+        settingsMap.addLongField(generateKey(DATA_LIKE_CLOSING_LAST_TIME), 0L);
+        // date of last mutual closings processing
+        settingsMap.addLongField(generateKey(DATA_MUTUAL_CLOSING_LAST_TIME), 0L);
+
     }
 
     @Override
@@ -112,7 +119,7 @@ public class UserConfig extends AbstractConfig {
         return getSettingsMap().getStringField(generateKey(DATA_PIN_CODE));
     }
 
-    // PromoPopups
+    // =======================PromoPopups=======================
 
     /**
      * Sets promo popup last date
@@ -141,7 +148,7 @@ public class UserConfig extends AbstractConfig {
         resetAndSaveConfig(generatePromoPopupKey(popupType));
     }
 
-    // Novice
+    // =======================Novice=======================
 
     /**
      * "Send sympathy hint" for novice user
@@ -194,4 +201,43 @@ public class UserConfig extends AbstractConfig {
         return getSettingsMap().setField(generateKey(DATA_NOVICE_BUY_SYMPATHY_DATE), lastTime);
     }
 
+    // =======================Closings=======================
+
+    /**
+     * Sets date of last processing of likes closings
+     *
+     * @param lastTime date in unix time
+     * @return true on success
+     */
+    public boolean setLikesClosingsLastTime(long lastTime) {
+        return getSettingsMap().setField(generateKey(DATA_LIKE_CLOSING_LAST_TIME), lastTime);
+    }
+
+    /**
+     * Date of last processing of likes closings
+     *
+     * @return date in unix time
+     */
+    public long getLikesClosingsLastTime() {
+        return getSettingsMap().getLongField(generateKey(DATA_LIKE_CLOSING_LAST_TIME));
+    }
+
+    /**
+     * Sets date of last processing of mutual closings
+     *
+     * @param lastTime date in unix time
+     * @return true on success
+     */
+    public boolean setMutualClosingsLastTime(long lastTime) {
+        return getSettingsMap().setField(generateKey(DATA_MUTUAL_CLOSING_LAST_TIME), lastTime);
+    }
+
+    /**
+     * Date of last processing of mutual closings
+     *
+     * @return date in unix time
+     */
+    public long getMutualClosingsLastTime() {
+        return getSettingsMap().getLongField(generateKey(DATA_MUTUAL_CLOSING_LAST_TIME));
+    }
 }
