@@ -138,4 +138,8 @@ public class UserPhotoFragment extends BaseFragment {
         mGridAlbum = null;
     }
 
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
 }
