@@ -155,4 +155,9 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
     protected boolean needOptionsMenu() {
         return false;
     }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
 }

@@ -304,5 +304,10 @@ public class ProfilePhotoFragment extends BaseFragment {
     protected boolean needOptionsMenu() {
         return false;
     }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
 }
  
