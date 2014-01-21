@@ -38,10 +38,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:minHeight="115dp"
                 android:gravity="left|top"
                 android:padding="8dp"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:minLines="2"
+                android:maxLines="5"
+                android:linksClickable="false"
+                style="@style/topfaceEditText" />
 
             <Button
                 android:id="@+id/btnSend"

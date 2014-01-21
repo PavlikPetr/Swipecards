@@ -2,6 +2,7 @@ package com.topface.topface.utils.controllers;
 
 import android.app.Activity;
 
+import com.topface.topface.App;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 /**
  * Created by kirussell on 04.12.13.
- * Control actions on start: popups, tips, fullscreens, etc
+ * Control actions on start: popups, fullscreen & etc
  */
 public class StartActionsController {
     private static final String TAG = "StartActionController";
@@ -28,10 +29,14 @@ public class StartActionsController {
     private List<IStartAction> mPendingActions;
 
     public StartActionsController(Activity activity) {
-        mPendingActions = new LinkedList<IStartAction>();
+        mPendingActions = new LinkedList<>();
         mActivity = activity;
     }
 
+    /**
+     * Put this method in place where controller have to start pending actions
+     * For example: onLoadProfile()
+     */
     public void onProcessAction() {
         new BackgroundThread() {
             @Override
@@ -41,6 +46,9 @@ public class StartActionsController {
                     processedActionForSession = startAction();
                 } else {
                     Debug.log(TAG, "some action already processed for this session");
+                }
+                if (App.DEBUG) {
+                    processAction(mDebugAction);
                 }
             }
         };
@@ -52,7 +60,7 @@ public class StartActionsController {
      * @return true if action was processed, false otherwise
      */
     private boolean startAction() {
-        if (Debug.isEnabled()) {
+        if (Debug.isDebugLogsEnabled()) {
             Debug.log(TAG, "===Pending start actions:===");
             for (IStartAction action : mPendingActions) {
                 Debug.log(TAG, action.toString());
@@ -64,11 +72,11 @@ public class StartActionsController {
             mPendingActions.remove(action);
             action = getNextAction();
         }
-        return processAction(action);
+        return true;
     }
 
     /**
-     * Process call-methods for action
+     * Processes call-methods for action
      *
      * @param action chosen action
      */
@@ -78,6 +86,7 @@ public class StartActionsController {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mActivity.isRestricted();
                 action.callOnUi();
             }
         });
@@ -86,7 +95,7 @@ public class StartActionsController {
     }
 
     /**
-     * Adds action to pending list of actions
+     * Adds action to list of pending actions
      *
      * @param action which is needed to be process on start
      */
@@ -114,9 +123,25 @@ public class StartActionsController {
         return maxAction;
     }
 
+    /**
+     * Removes all pending actions
+     */
     public void clear() {
         if (mPendingActions != null && !mPendingActions.isEmpty()) {
             mPendingActions.clear();
+        }
+    }
+
+    private IStartAction mDebugAction;
+
+    /**
+     * Register action to be 100% processed onProcessAction in debug apk
+     *
+     * @param action to be processed
+     */
+    public void registerDebugAction(IStartAction action) {
+        if (App.DEBUG) {
+            mDebugAction = action;
         }
     }
 }
