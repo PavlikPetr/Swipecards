@@ -19,7 +19,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.utils.BitmapUtils;
 
-public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickListener {
+public class TakePhotoDialog extends AbstractModalDialog implements View.OnClickListener {
 
     public static final String TAG = "Topface_TakePhotoDialog_Tag";
 
@@ -45,7 +45,7 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
     }
 
     @Override
-    protected void initViews(View root) {
+    protected void initContentViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
         mAddPhotoHelper = new AddPhotoHelper(this);
         mAddPhotoHelper.setOnResultHandler(mAddPhotoHandler);
@@ -61,12 +61,10 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
         mBtnFromGallery.setOnClickListener(this);
         mBtnSendPhoto = (Button) root.findViewById(R.id.btnSendPhoto);
         mBtnSendPhoto.setOnClickListener(this);
-
-        root.findViewById(R.id.btnClose).setOnClickListener(this);
     }
 
     @Override
-    public int getDialogLayoutRes() {
+    public int getContentLayoutResId() {
         return R.layout.dialog_take_photo;
     }
 
@@ -160,12 +158,6 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
                         dialog.dismiss();
                     }
                     break;
-                case R.id.btnClose:
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
-                    mTakePhotoListener.onTakePhotoDialogDismiss();
-                    break;
                 default:
                     break;
             }
@@ -212,4 +204,15 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
             }
         }
     };
+
+    @Override
+    protected void onCloseButtonClick(View v) {
+        Dialog dialog = getDialog();
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+        if (mTakePhotoListener != null) {
+            mTakePhotoListener.onTakePhotoDialogDismiss();
+        }
+    }
 }

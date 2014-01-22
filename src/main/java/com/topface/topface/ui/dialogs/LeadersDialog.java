@@ -23,7 +23,7 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LeadersDialog extends BaseDialogFragment {
+public class LeadersDialog extends AbstractDialogFragment {
 
     private Leader user;
 

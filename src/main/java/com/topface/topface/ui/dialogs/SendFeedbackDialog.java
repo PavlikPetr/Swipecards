@@ -20,7 +20,7 @@ import com.topface.topface.utils.Utils;
  * Dialog for user feedback with configurable title and feedback subject name
  * Use newInstance(int titleResId, String feedbackSubject) method to create dialog
  */
-public class SendFeedbackDialog extends BaseDialogFragment implements View.OnClickListener {
+public class SendFeedbackDialog extends AbstractDialogFragment implements View.OnClickListener {
 
     private static final String ARG_TITLE_RES_ID = "feedback_dialog_title_res_id";
     private static final String ARG_FEEDBACK_SUBJECT = "feedback_dialog_subject_res_id";
@@ -28,7 +28,7 @@ public class SendFeedbackDialog extends BaseDialogFragment implements View.OnCli
     private EditText mEdMessage;
     private String mSubject;
 
-    public static BaseDialogFragment newInstance(int titleResId, String feedbackSubject) {
+    public static AbstractDialogFragment newInstance(int titleResId, String feedbackSubject) {
         SendFeedbackDialog dialog = new SendFeedbackDialog();
         Bundle args = new Bundle();
         args.putInt(ARG_TITLE_RES_ID, titleResId);

@@ -21,7 +21,7 @@ import com.topface.topface.utils.Utils;
  * Created by kirussell on 25.12.13.
  * User can rate an app through this dialog
  */
-public class RateAppDialog extends BaseDialogFragment implements View.OnClickListener,
+public class RateAppDialog extends AbstractDialogFragment implements View.OnClickListener,
         DialogInterface.OnCancelListener {
     public static final String TAG = "RateAppDialog";
     public static final String RATING_POPUP = "RATING_POPUP";
@@ -98,7 +98,7 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
             dismiss();
         } else {
             saveRatingPopupStatus(0);
-            BaseDialogFragment dialog = SendFeedbackDialog.newInstance(
+            AbstractDialogFragment dialog = SendFeedbackDialog.newInstance(
                     R.string.feedback_popup_title,
                     String.format(getResources().getString(R.string.settings_low_rate_internal), (int) rating)
             );

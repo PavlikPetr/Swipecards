@@ -16,7 +16,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.ResourcesUtils;
 
-public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnClickListener {
+public class ClosingsBuyVipDialog extends AbstractDialogFragment implements View.OnClickListener {
 
     public static boolean opened = false;
 
@@ -31,7 +31,7 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
         ClosingsBuyVipDialog.opened = false;
     }
 
-    @Override    
+    @Override
     public void initViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
         String fragmentName = Static.EMPTY;

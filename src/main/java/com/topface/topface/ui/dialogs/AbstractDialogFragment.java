@@ -16,7 +16,7 @@ import com.topface.topface.ui.analytics.TrackedDialogFragment;
  * with semi-transparent-black background
  * shifted under actionbar
  */
-public abstract class BaseDialogFragment extends TrackedDialogFragment {
+public abstract class AbstractDialogFragment extends TrackedDialogFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

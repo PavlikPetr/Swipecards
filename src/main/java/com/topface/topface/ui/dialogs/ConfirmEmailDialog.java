@@ -17,7 +17,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
-public class ConfirmEmailDialog extends BaseDialogFragment implements View.OnClickListener {
+public class ConfirmEmailDialog extends AbstractDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "Topface_ConfirmEmailDialog_Tag";
     private EditText mEditEmailText;

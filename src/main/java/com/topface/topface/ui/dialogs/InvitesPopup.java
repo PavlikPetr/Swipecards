@@ -26,7 +26,7 @@ import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
-public class InvitesPopup extends BaseDialogFragment implements View.OnClickListener {
+public class InvitesPopup extends AbstractDialogFragment implements View.OnClickListener {
     public static final java.lang.String TAG = "InvitePopup";
 
     public static final String INVITE_POPUP_PREF_KEY = "INVITE_POPUP";

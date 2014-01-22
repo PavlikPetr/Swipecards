@@ -15,12 +15,12 @@ import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.dialogs.BaseDialogFragment;
+import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.fragments.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
-public abstract class PromoDialog extends BaseDialogFragment implements View.OnClickListener, IPromoPopup {
+public abstract class PromoDialog extends AbstractDialogFragment implements View.OnClickListener, IPromoPopup {
 
     private OnCloseListener mListener;
 
