@@ -775,6 +775,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     if (noviceLikes.increment > 0) {
                         Novice.giveNoviceLikesQuantity = noviceLikes.increment;
                         updateResources();
+                        final String text = String.format(
+                                getResources().getString(R.string.novice_sympathies_bonus),
+                                Novice.giveNoviceLikesQuantity,
+                                Novice.giveNoviceLikesQuantity
+                        );
                         OnClickListener completeShowSympathiesBonusListener = new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -784,7 +789,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         mNoviceLayout.setLayoutRes(
                                 R.layout.novice_sympathies_bonus,
                                 completeShowSympathiesBonusListener,
-                                completeShowSympathiesBonusListener
+                                completeShowSympathiesBonusListener,
+                                text
                         );
                         mNoviceLayout.startAnimation(mAlphaAnimation);
                     }
