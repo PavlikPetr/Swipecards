@@ -3,9 +3,9 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.appsflyer.AppsFlyerLib;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
@@ -32,7 +32,7 @@ public class AuthRequest extends ApiRequest {
     private String login;  // логин для нашей авторизации
     private String password; // пароль для нашей авторизации
     private String refresh; // еще один токен для одноклассников
-    private String appsFlyerHash; //ID пользователя в appsflyer
+    private AppsFlyerData appsflyer; //ID пользователя в appsflyer
     private boolean tablet; // является ли данное устройство планшетом
 
     private AuthRequest(Context context) {
@@ -46,7 +46,7 @@ public class AuthRequest extends ApiRequest {
         clientid = App.getConfig().getAppUniqueId();
         tablet = context.getResources().getBoolean(R.bool.is_tablet);
         try {
-            appsFlyerHash = AppsFlyerLib.getAppsFlyerUID(context);
+            appsflyer = new AppsFlyerData(context);
         } catch (Exception e) {
             Debug.error("AppsFlyer exception", e);
         }
@@ -97,8 +97,8 @@ public class AuthRequest extends ApiRequest {
                 .put("refresh", refresh)
                 .put("tablet", tablet);
 
-        if (!TextUtils.isEmpty(appsFlyerHash)) {
-            data.put("appsFlyerHash", appsFlyerHash);
+        if (appsflyer != null) {
+            data.put("appsflyer", appsflyer.toJson());
 
         }
         return data;

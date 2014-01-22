@@ -6,8 +6,14 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONObject;
 
 public class Verify extends AbstractData {
-    public boolean premium; // количество энергии пользователя
-    public double revenue; // выручка в долларах от данной покупки
+    /**
+     * Флаг, является ли пользователь после покупки випом
+     */
+    public boolean premium;
+    /**
+     * выручка в долларах от данной покупки
+     */
+    public double revenue;
 
     public Verify(ApiResponse data) {
         if (data != null) {
@@ -19,7 +25,7 @@ public class Verify extends AbstractData {
         if (data != null) {
             try {
                 premium = data.optBoolean("premium");
-                revenue = data.optDouble("premium");
+                revenue = data.optDouble("revenue");
             } catch (Exception e) {
                 Debug.error("Verify: Wrong response parsing", e);
             }

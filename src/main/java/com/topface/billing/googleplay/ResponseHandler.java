@@ -14,6 +14,7 @@ import com.topface.billing.googleplay.BillingService.RestoreTransactions;
 import com.topface.billing.googleplay.Consts.PurchaseState;
 import com.topface.billing.googleplay.Consts.ResponseCode;
 import com.topface.topface.App;
+import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Verify;
 import com.topface.topface.requests.ApiResponse;
@@ -178,6 +179,7 @@ public class ResponseHandler {
         final GooglePlayPurchaseRequest purchaseRequest = new GooglePlayPurchaseRequest(context);
         purchaseRequest.data = data;
         purchaseRequest.signature = signature;
+        purchaseRequest.appsflyer = new AppsFlyerData(context);
         purchaseRequest.callback(new DataApiHandler<Verify>() {
 
             @Override
