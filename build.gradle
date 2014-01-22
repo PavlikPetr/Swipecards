@@ -99,7 +99,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: '*.jar', exclude: 'GoogleAdMobAdsSdk.jar')
 
     //Для Амазона нужна библиотека для поддержки in-app покупок
-    amazonCompile files('src/amazon/libs/amazon-in-app-purchasing.jar')
+    amazonCompile files('libs/amazon/amazon-in-app-purchasing.jar')
 
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
