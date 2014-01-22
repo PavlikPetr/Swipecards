@@ -12,7 +12,9 @@ import com.topface.topface.Static;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
 
 /**
- * Extend this class if you need DialogFragment with semi-transparent-black background
+ * Extend this class if you need DialogFragment
+ * with semi-transparent-black background
+ * shifted under actionbar
  */
 public abstract class BaseDialogFragment extends TrackedDialogFragment {
 

@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RatingBar;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -41,8 +39,7 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_rate_app, container);
+    protected void initViews(View root) {
         getDialog().setOnCancelListener(this);
 
         mRatingBar = (RatingBar) root.findViewById(R.id.ratingBarStarts);
@@ -52,7 +49,11 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
         root.findViewById(R.id.btnNoThanx).setOnClickListener(this);
 
         EasyTracker.getTracker().sendEvent("RatePopup", "FeaturePopup", "Show", 1L);
-        return root;
+    }
+
+    @Override
+    public int getDialogLayoutRes() {
+        return R.layout.dialog_rate_app;
     }
 
     @Override

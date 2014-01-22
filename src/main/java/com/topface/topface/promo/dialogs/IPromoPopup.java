@@ -1,4 +1,4 @@
-package com.topface.topface.promo.fragments;
+package com.topface.topface.promo.dialogs;
 
 /**
  * Интерфейс для создания промо попапа

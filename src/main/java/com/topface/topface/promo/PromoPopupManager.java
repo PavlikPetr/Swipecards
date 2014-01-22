@@ -4,10 +4,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import com.topface.topface.data.Options;
-import com.topface.topface.promo.fragments.PromoFragment;
-import com.topface.topface.promo.fragments.PromoKey31Fragment;
-import com.topface.topface.promo.fragments.PromoKey71Fragment;
-import com.topface.topface.promo.fragments.PromoKey81Fragment;
+import com.topface.topface.promo.dialogs.PromoFragment;
+import com.topface.topface.promo.dialogs.PromoKey31Fragment;
+import com.topface.topface.promo.dialogs.PromoKey71Fragment;
+import com.topface.topface.promo.dialogs.PromoKey81Fragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.controllers.AbstractStartAction;

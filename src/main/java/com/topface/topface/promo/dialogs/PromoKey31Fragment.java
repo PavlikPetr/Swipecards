@@ -1,4 +1,4 @@
-package com.topface.topface.promo.fragments;
+package com.topface.topface.promo.dialogs;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Options;

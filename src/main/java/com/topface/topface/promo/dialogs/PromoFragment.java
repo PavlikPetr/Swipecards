@@ -1,4 +1,4 @@
-package com.topface.topface.promo.fragments;
+package com.topface.topface.promo.dialogs;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

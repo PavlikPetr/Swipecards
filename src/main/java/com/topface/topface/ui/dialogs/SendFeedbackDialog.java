@@ -2,9 +2,7 @@ package com.topface.topface.ui.dialogs;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -50,8 +48,7 @@ public class SendFeedbackDialog extends BaseDialogFragment implements View.OnCli
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_input, container);
+    protected void initViews(View root) {
         getDialog().setOnCancelListener(this);
         // init views
         TextView titleView = (TextView) root.findViewById(R.id.tvTitle);
@@ -64,7 +61,11 @@ public class SendFeedbackDialog extends BaseDialogFragment implements View.OnCli
             titleView.setText(args.getInt(ARG_TITLE_RES_ID));
             mSubject = args.getString(ARG_FEEDBACK_SUBJECT);
         }
-        return root;
+    }
+
+    @Override
+    public int getDialogLayoutRes() {
+        return R.layout.dialog_input;
     }
 
     @Override
