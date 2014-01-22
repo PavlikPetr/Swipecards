@@ -48,6 +48,12 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_take_photo, container, false);
@@ -206,7 +212,8 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
             super.handleMessage(msg);
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
                 Photo photo = (Photo) msg.obj;
-                if (mTakePhotoListener != null) mTakePhotoListener.onTakePhotoDialogSentSuccess(photo);
+                if (mTakePhotoListener != null)
+                    mTakePhotoListener.onTakePhotoDialogSentSuccess(photo);
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
                 if (mTakePhotoListener != null) mTakePhotoListener.onTakePhotoDialogSentFailure();
             }
