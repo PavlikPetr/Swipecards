@@ -12,6 +12,7 @@ build
 localist.db
 *.DS_Store
 local.properties
+project.properties
 *.swp
 *~
 /gradlew
