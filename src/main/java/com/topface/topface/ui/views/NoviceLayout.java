@@ -26,6 +26,8 @@ import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
+import org.jetbrains.annotations.NotNull;
+
 @SuppressWarnings("UnusedDeclaration")
 public class NoviceLayout extends RelativeLayout {
 
@@ -37,7 +39,6 @@ public class NoviceLayout extends RelativeLayout {
 
     private OnClickListener mMaskListener;
     private OnClickListener mBackgroundListener;
-
 
     public NoviceLayout(Context context) {
         super(context);
@@ -80,7 +81,6 @@ public class NoviceLayout extends RelativeLayout {
                     obs.removeGlobalOnLayoutListener(this);
                 }
             });
-
             mMask.setVisibility(View.INVISIBLE);
         } else {
             mBackground.setBackgroundColor(Color.argb(178, 0, 0, 0));
@@ -92,6 +92,11 @@ public class NoviceLayout extends RelativeLayout {
     public void setLayoutRes(int res, OnClickListener maskListener, String bubbleText) {
         setLayoutRes(res, maskListener);
         if (mBubbleText != null) mBubbleText.setText(bubbleText);
+    }
+
+    public void setLayoutRes(int res, OnClickListener maskListener, OnClickListener backgroundListener) {
+        setLayoutRes(res, maskListener);
+        mBackgroundListener = backgroundListener;
     }
 
     public void setLayoutRes(int res, OnClickListener maskListener, OnClickListener backgroundListener, String bubbleText) {
@@ -127,7 +132,7 @@ public class NoviceLayout extends RelativeLayout {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NotNull MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (mBackgroundListener != null) mBackgroundListener.onClick(this);
 

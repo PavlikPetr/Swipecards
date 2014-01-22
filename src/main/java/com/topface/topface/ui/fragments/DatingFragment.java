@@ -387,7 +387,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             lockControls();
             hideEmptySearchDialog();
             if (!isAddition) {
-                onUpdateStart(isAddition);
+                onUpdateStart(false);
             }
 
             mUpdateInProcess = true;
@@ -562,9 +562,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                         : SendLikeRequest.DEFAULT_NO_MUTUAL,
                                 null
                         );
-
-                        EasyTracker.getTracker().sendEvent("Dating", "Rate",
-                                "SympathySend" + (mCurrentUser.mutual ? "mutual" : ""), 0L);
                     }
                     //currentSearch.rated = true;
                 }
@@ -574,15 +571,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 skipUser(mCurrentUser);
                 if (mCurrentUser != null) {
                     mCurrentUser.skipped = true;
-
-                    EasyTracker.getTracker().sendEvent("Dating", "Rate", "Skip", 0L);
                 }
                 showNextUser();
             }
             break;
             case R.id.btnDatingPrev: {
                 prevUser();
-                EasyTracker.getTracker().sendEvent("Dating", "Additional", "Prev", 0L);
             }
 
             break;
@@ -603,7 +597,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingSwitchNext: {
                 mViewFlipper.setDisplayedChild(1);
-                EasyTracker.getTracker().sendEvent("Dating", "Additional", "Switch", 1L);
             }
             break;
             case R.id.btnDatingSwitchPrev: {
@@ -761,9 +754,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
 
         if (mNovice.isShowSympathy()) {
-            mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, null);
+            OnClickListener completeShowSympathylistener = new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mNovice.completeShowSympathy();
+                }
+            };
+            mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, completeShowSympathylistener,
+                    completeShowSympathylistener);
             mNoviceLayout.startAnimation(mAlphaAnimation);
-            mNovice.completeShowSympathy();
         } else if (mNovice.isShowSympathiesBonus()) {
             mResourcesLikes.setText(getResources().getString(R.string.default_resource_value));
             NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
@@ -775,16 +774,19 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     CacheProfile.likes = noviceLikes.likes;
                     if (noviceLikes.increment > 0) {
                         Novice.giveNoviceLikesQuantity = noviceLikes.increment;
-                        final String text = String.format(
-                                getResources().getString(R.string.novice_sympathies_bonus),
-                                Novice.giveNoviceLikesQuantity,
-                                Novice.giveNoviceLikesQuantity
+                        updateResources();
+                        OnClickListener completeShowSympathiesBonusListener = new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mNovice.completeShowNoviceSympathiesBonus();
+                            }
+                        };
+                        mNoviceLayout.setLayoutRes(
+                                R.layout.novice_sympathies_bonus,
+                                completeShowSympathiesBonusListener,
+                                completeShowSympathiesBonusListener
                         );
-                        mResourcesLikes.setText(Integer.toString(CacheProfile.likes));
-                        mNoviceLayout.setLayoutRes(R.layout.novice_sympathies_bonus, null,
-                                null, text);
                         mNoviceLayout.startAnimation(mAlphaAnimation);
-                        mNovice.completeShowNoviceSympathiesBonus();
                     }
                 }
 
@@ -799,15 +801,22 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             }).exec();
         } else if (mNovice.isShowBuySympathies() && hasOneSympathyOrDelight && CacheProfile.likes <= Novice.MIN_LIKES_QUANTITY) {
-            mNoviceLayout.setLayoutRes(R.layout.novice_buy_sympathies, new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    mDatingResources.performClick();
-                }
-            });
+            mNoviceLayout.setLayoutRes(
+                    R.layout.novice_buy_sympathies,
+                    new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mNovice.completeShowBuySympathies();
+                            mDatingResources.performClick();
+                        }
+                    }, new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mNovice.completeShowBuySympathies();
+                        }
+                    }
+            );
             mNoviceLayout.startAnimation(mAlphaAnimation);
-            mNovice.completeShowBuySympathies();
         }
     }
 

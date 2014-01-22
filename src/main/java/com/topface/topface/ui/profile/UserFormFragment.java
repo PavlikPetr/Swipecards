@@ -142,4 +142,9 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
         }
     }
 
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
 }
