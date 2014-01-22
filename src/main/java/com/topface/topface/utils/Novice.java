@@ -28,12 +28,6 @@ public class Novice {
         mConfig = App.getUserConfig();
     }
 
-    public void initNoviceFlags() {
-        isShowSympathy();
-        isShowBuySympathies();
-    }
-
-
     public boolean isShowSympathy() {
         if (mShowSympathy == null) {
             mShowSympathy = mConfig.getNoviceSympathy();
