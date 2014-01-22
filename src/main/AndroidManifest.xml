@@ -4,8 +4,8 @@
     package="com.topface.topface"
     android:installLocation="auto"
 
-    android:versionCode="99"
-    android:versionName="2.9.1">
+    android:versionCode="100"
+    android:versionName="2.9.2">
 
     <!-- permissions -->
     <permission
@@ -345,6 +345,24 @@
         </receiver>
 
         <receiver
+            android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
+            android:exported="true">
+        <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.google.analytics.tracking.android.CampaignTrackingService" />
+
+        <receiver
+            android:name="com.google.analytics.tracking.android.CampaignTrackingReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver
             android:exported="true"
             android:name="com.sponsorpay.sdk.android.advertiser.InstallReferrerReceiver"
             tools:ignore="ExportedReceiver">
@@ -352,6 +370,7 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

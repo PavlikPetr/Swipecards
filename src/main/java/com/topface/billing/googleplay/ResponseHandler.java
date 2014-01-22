@@ -7,12 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.appsflyer.AppsFlyerLib;
 import com.topface.billing.BillingUtils;
 import com.topface.billing.googleplay.BillingService.RequestPurchase;
 import com.topface.billing.googleplay.BillingService.RestoreTransactions;
 import com.topface.billing.googleplay.Consts.PurchaseState;
 import com.topface.billing.googleplay.Consts.ResponseCode;
 import com.topface.topface.App;
+import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Verify;
 import com.topface.topface.requests.ApiResponse;
@@ -21,6 +23,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GooglePlayPurchaseRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 
 /**
  * This class contains the methods that handle responses from Android Market.  The
@@ -176,20 +179,30 @@ public class ResponseHandler {
         final GooglePlayPurchaseRequest purchaseRequest = new GooglePlayPurchaseRequest(context);
         purchaseRequest.data = data;
         purchaseRequest.signature = signature;
+        purchaseRequest.appsflyer = new AppsFlyerData(context);
         purchaseRequest.callback(new DataApiHandler<Verify>() {
 
             @Override
             protected void success(Verify verify, IApiResponse response) {
                 //Удаляем запрос из очереди запросов
                 GooglePlayV2Queue.getInstance(context).deleteQueueItem(queueId);
-                CacheProfile.likes = verify.likes;
-                CacheProfile.money = verify.money;
                 CacheProfile.premium = verify.premium;
                 //Оповещаем интерфейс о том, что элемент удачно куплен
                 if (sPurchaseObserver != null) {
                     sPurchaseObserver.postVerify(response);
                 }
                 sendOptionsRequest(context);
+                if (verify.revenue > 0) {
+                    try {
+                        AppsFlyerLib.sendTrackingWithEvent(
+                                context,
+                                "purchase",
+                                Double.toString(verify.revenue)
+                        );
+                    } catch (Exception e) {
+                        Debug.error("AppsFlyer exception", e);
+                    }
+                }
             }
 
             @Override
