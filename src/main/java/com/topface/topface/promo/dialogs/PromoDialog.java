@@ -20,7 +20,7 @@ import com.topface.topface.ui.fragments.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
-public abstract class PromoFragment extends BaseDialogFragment implements View.OnClickListener, IPromoPopup {
+public abstract class PromoDialog extends BaseDialogFragment implements View.OnClickListener, IPromoPopup {
 
     private OnCloseListener mListener;
 

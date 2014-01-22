@@ -9,7 +9,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
-public class PromoKey81Fragment extends PromoFragment {
+public class PromoKey81Dialog extends PromoDialog {
 
     private boolean counterUpdated;
 
