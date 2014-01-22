@@ -28,6 +28,7 @@
 
     <string name="tag_header_shadow">ivHeaderShadow</string>
     <string name="transaction_info_link">http://topface.com/faq-mobile?from=android</string>
+    <string name="appsflyer_dev_key">mDUXh3zNggkkNCAgvXASna</string>
     <bool name="needProfileBackground">true</bool>
     <!-- С помощью этого флага определяем, планшет ли данное устройство см. ../values-sw600dp/constants.xml -->
     <bool name="is_tablet">false</bool>

@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.appsflyer.AppsFlyerLib;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
@@ -106,6 +107,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         }
         initDrawerLayout();
         initFullscreen();
+        initAppsFlyer();
         new BackgroundThread() {
             @Override
             public void execute() {
@@ -204,6 +206,15 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         );
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    private void initAppsFlyer() {
+        try {
+            AppsFlyerLib.setAppsFlyerKey(getString(R.string.appsflyer_dev_key));
+            AppsFlyerLib.sendTracking(getApplicationContext());
+        } catch (Exception e) {
+            Debug.error("AppsFlayer exception: ", e);
+        }
     }
 
     @Override
@@ -387,6 +398,14 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     @Override
     protected void onLoadProfile() {
         super.onLoadProfile();
+        //Интеграция наших id юзера с AppsFlyer
+        if (CacheProfile.uid > 0) {
+            try {
+                AppsFlyerLib.setAppUserId(Integer.toString(CacheProfile.uid));
+            } catch (Exception e) {
+                Debug.error(e);
+            }
+        }
         mMenuFragment.onLoadProfile();
     }
 
