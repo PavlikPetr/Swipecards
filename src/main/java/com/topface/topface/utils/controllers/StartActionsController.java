@@ -72,7 +72,7 @@ public class StartActionsController {
             mPendingActions.remove(action);
             action = getNextAction();
         }
-        return true;
+        return processAction(action);
     }
 
     /**
