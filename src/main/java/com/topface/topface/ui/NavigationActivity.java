@@ -39,7 +39,6 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.HackyDrawerLayout;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
@@ -47,7 +46,6 @@ import com.topface.topface.utils.ExternalLinkExecuter;
 import com.topface.topface.utils.FullscreenController;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.NavigationBarController;
-import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
@@ -108,12 +106,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         initDrawerLayout();
         initFullscreen();
         initAppsFlyer();
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                onCreateAsync();
-            }
-        };
     }
 
     @Override
@@ -152,11 +144,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     @Override
     protected int getActionBarCustomViewResId() {
         return R.layout.actionbar_navigation_title_view;
-    }
-
-    protected void onCreateAsync() {
-        Novice.getInstance().initNoviceFlags();
-//        initBonusCounterConfig();
     }
 
     private void initBonusCounterConfig() {

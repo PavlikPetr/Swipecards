@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Settings;
 
 import java.util.HashMap;
 
@@ -33,7 +32,7 @@ public abstract class AbstractConfig {
     protected final void initData() {
         if (canInitData()) {
             SharedPreferences preferences = getPreferences();
-            for (SettingsField field : getSettingsMap().values()) {
+            for (SettingsField field : getSettingsMap(true).values()) {
                 switch (field.getType()) {
                     case String:
                         field.value = preferences.getString(field.key, (String) field.value);
@@ -66,7 +65,11 @@ public abstract class AbstractConfig {
     }
 
     protected SettingsMap getSettingsMap() {
-        if (mSettingsMap == null) {
+        return getSettingsMap(false);
+    }
+
+    private SettingsMap getSettingsMap(boolean onlyNew) {
+        if (mSettingsMap == null || onlyNew) {
             mSettingsMap = newSettingsMap();
         }
         return mSettingsMap;
