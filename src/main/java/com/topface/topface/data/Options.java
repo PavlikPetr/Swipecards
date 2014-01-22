@@ -1,14 +1,11 @@
 package com.topface.topface.data;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.topface.topface.App;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
@@ -469,36 +466,19 @@ public class Options extends AbstractData {
         public long timeoutMutual;
 
         public Closing() {
-            long currentTime = System.currentTimeMillis();
-            SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-            likesClosingLastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME, 0);
-            mutualsClosingLastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, 0);
-        }
-
-        private long setLastCallTime(String key, long time) {
-            SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putLong(key, time);
-            editor.commit();
-            return time;
+            UserConfig config = App.getUserConfig();
+            likesClosingLastCallTime = config.getLikesClosingsLastTime();
+            mutualsClosingLastCallTime = config.getMutualClosingsLastTime();
         }
 
         public void onStopMutualClosings() {
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    mutualsClosingLastCallTime = setLastCallTime(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, System.currentTimeMillis());
-                }
-            };
+            mutualsClosingLastCallTime = System.currentTimeMillis();
+            App.getUserConfig().setLikesClosingsLastTime(mutualsClosingLastCallTime);
         }
 
         public void onStopLikesClosings() {
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    likesClosingLastCallTime = setLastCallTime(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME, System.currentTimeMillis());
-                }
-            };
+            likesClosingLastCallTime = System.currentTimeMillis();
+            App.getUserConfig().setMutualClosingsLastTime(likesClosingLastCallTime);
         }
 
         public boolean isClosingsEnabled() {

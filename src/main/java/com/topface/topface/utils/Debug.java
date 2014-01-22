@@ -38,10 +38,10 @@ public class Debug {
      * Форматировать JSON
      */
     private static final boolean FORMAT_JSON = true;
-    private static boolean mShowDebug = App.DEBUG;
+    private static boolean mShowDebugLogs = App.DEBUG;
 
     public static void log(Object obj, String msg) {
-        if (mShowDebug) {
+        if (mShowDebugLogs) {
             if (obj == null)
                 showChunkedLogInfo(App.TAG, "::" + msg);
             else if (obj instanceof String)
@@ -52,7 +52,7 @@ public class Debug {
     }
 
     public static void debug(Object obj, String msg) {
-        if (mShowDebug) {
+        if (mShowDebugLogs) {
             if (obj == null)
                 showChunkedLogDebug(App.TAG, "::" + msg);
             else if (obj instanceof String)
@@ -111,13 +111,13 @@ public class Debug {
     }
 
     public static void log(String msg) {
-        if (mShowDebug) {
+        if (mShowDebugLogs) {
             showChunkedLogInfo(App.TAG, msg);
         }
     }
 
     public static void error(String msg, Throwable e) {
-        if (mShowDebug) {
+        if (mShowDebugLogs) {
             StringBuilder stack = new StringBuilder("\n");
             for (StackTraceElement st : e.getStackTrace()) {
                 stack.append(st.toString()).append("\n");
@@ -130,7 +130,7 @@ public class Debug {
     }
 
     public static void error(String msg, OutOfMemoryError e) {
-        if (mShowDebug) {
+        if (mShowDebugLogs) {
             StringBuilder stack = new StringBuilder("\n");
             for (StackTraceElement st : e.getStackTrace()) {
                 stack.append(st.toString()).append("\n");
@@ -143,7 +143,7 @@ public class Debug {
     }
 
     public static void error(String msg) {
-        if (mShowDebug) {
+        if (mShowDebugLogs) {
             showChunkedLogError(App.TAG, msg);
         }
     }
@@ -153,7 +153,7 @@ public class Debug {
     }
 
     public static void logJson(String tag, String title, String json) {
-        if (mShowDebug) {
+        if (mShowDebugLogs) {
             if (json != null) {
                 JSONTokener tokener = new JSONTokener(json);
                 JSONObject finalResult;
@@ -181,22 +181,22 @@ public class Debug {
     public static void setDebugMode(int mode) {
         switch (mode) {
             case MODE_EDITOR:
-                mShowDebug = App.DEBUG || Editor.isEditor();
+                mShowDebugLogs = App.DEBUG || Editor.isEditor();
                 break;
             case MODE_ALWAYS:
-                mShowDebug = true;
+                mShowDebugLogs = true;
                 break;
             case MODE_DISABLE:
-                mShowDebug = false;
+                mShowDebugLogs = false;
                 break;
             case MODE_DEBUG:
             default:
-                mShowDebug = App.DEBUG;
+                mShowDebugLogs = App.DEBUG;
                 break;
         }
     }
 
-    public static boolean isEnabled() {
-        return mShowDebug;
+    public static boolean isDebugLogsEnabled() {
+        return mShowDebugLogs;
     }
 }

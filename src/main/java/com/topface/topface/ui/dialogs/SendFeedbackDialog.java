@@ -1,6 +1,7 @@
 package com.topface.topface.ui.dialogs;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.requests.handlers.EmptyApiHandler;
 import com.topface.topface.ui.settings.SettingsFeedbackMessageFragment;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Settings;
@@ -72,17 +73,19 @@ public class SendFeedbackDialog extends BaseDialogFragment implements View.OnCli
             case R.id.btnSend:
                 Utils.hideSoftKeyboard(getActivity(), mEdMessage);
                 final String message = mEdMessage.getText().toString();
-                final ApiHandler handler = new SimpleApiHandler();
+                final ApiHandler handler = new EmptyApiHandler();
                 new BackgroundThread() {
                     @Override
                     public void execute() {
-                        SettingsFeedbackMessageFragment.Report report = new SettingsFeedbackMessageFragment.Report();
-                        report.setSubject(mSubject);
-                        report.setBody(message);
-                        report.setEmail(Settings.getInstance().getSocialAccountEmail());
-                        SettingsFeedbackMessageFragment.fillVersion(getActivity(), report);
-                        FeedbackReport feedbackRequest = new FeedbackReport(getActivity(), report);
-                        feedbackRequest.callback(handler).exec();
+                        if (!TextUtils.isEmpty(message)) {
+                            SettingsFeedbackMessageFragment.Report report = new SettingsFeedbackMessageFragment.Report();
+                            report.setSubject(mSubject);
+                            report.setBody(message);
+                            report.setEmail(Settings.getInstance().getSocialAccountEmail());
+                            SettingsFeedbackMessageFragment.fillVersion(getActivity(), report);
+                            FeedbackReport feedbackRequest = new FeedbackReport(getActivity(), report);
+                            feedbackRequest.callback(handler).exec();
+                        }
                     }
                 };
                 dismiss();

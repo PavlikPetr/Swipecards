@@ -33,7 +33,7 @@ public class DefaultImageLoader {
 
     protected ImageLoaderConfiguration.Builder getConfig() {
         ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(mContext);
-        if (Debug.isEnabled()) {
+        if (Debug.isDebugLogsEnabled()) {
             builder.writeDebugLogs();
         } else {
             L.disableLogging();
