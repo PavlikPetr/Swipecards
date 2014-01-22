@@ -42,9 +42,6 @@ public class SendFeedbackDialog extends BaseDialogFragment implements View.OnCli
         super.onCreate(savedInstanceState);
         //Закрыть диалог можно
         setCancelable(true);
-        //По стилю это у нас не диалог, а кастомный дизайн -
-        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
     }
 
     @Override

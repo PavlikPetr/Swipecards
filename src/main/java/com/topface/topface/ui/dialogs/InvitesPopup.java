@@ -43,12 +43,6 @@ public class InvitesPopup extends BaseDialogFragment implements View.OnClickList
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
-    }
-
-    @Override
     protected void initViews(View root) {
         root.setClickable(true);
         final Activity activity = getActivity();
