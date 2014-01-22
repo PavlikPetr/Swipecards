@@ -234,7 +234,11 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         super.onLoadProfile();
         //Интеграция наших id юзера с AppsFlyer
         if (CacheProfile.uid > 0) {
-            AppsFlyerLib.setAppUserId(Integer.toString(CacheProfile.uid));
+            try {
+                AppsFlyerLib.setAppUserId(Integer.toString(CacheProfile.uid));
+            } catch (Exception e) {
+                Debug.error(e);
+            }
         }
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         PopupManager manager = new PopupManager(this);
@@ -250,8 +254,12 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     private void initAppsFlyer() {
-        AppsFlyerLib.setAppsFlyerKey(getString(R.string.appsflyer_dev_key));
-        AppsFlyerLib.sendTracking(getApplicationContext());
+        try {
+            AppsFlyerLib.setAppsFlyerKey(getString(R.string.appsflyer_dev_key));
+            AppsFlyerLib.sendTracking(getApplicationContext());
+        } catch (Exception e) {
+            Debug.error("AppsFlayer exception: ", e);
+        }
     }
 
     @Override
