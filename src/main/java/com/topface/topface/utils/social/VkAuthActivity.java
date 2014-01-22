@@ -182,7 +182,7 @@ public class VkAuthActivity extends Activity {
 
         public HashMap<String, String> parseQueryString(String query) {
             String[] params = query.split("&");
-            HashMap<String, String> map = new HashMap<String, String>();
+            HashMap<String, String> map = new HashMap<>();
             for (String param : params) {
                 String name = param.split("=")[0];
                 String value = param.split("=")[1];

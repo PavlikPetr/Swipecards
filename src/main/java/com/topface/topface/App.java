@@ -64,6 +64,7 @@ public class App extends Application {
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
     private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 90;
 
+    /// will be false in released apk
     public static boolean DEBUG = false;
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -71,6 +72,11 @@ public class App extends Application {
     private static long mLastProfileUpdate;
     private static Configurations mBaseConfig;
 
+    /**
+     * Can return true in release mode for editors(Админка)
+     *
+     * @return true if Debug mode is on
+     */
     public static boolean isDebugMode() {
         boolean debug = false;
         PackageInfo packageInfo = null;

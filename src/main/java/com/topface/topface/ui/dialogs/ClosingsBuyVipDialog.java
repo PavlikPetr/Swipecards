@@ -1,6 +1,7 @@
 package com.topface.topface.ui.dialogs;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -25,6 +26,12 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     private IWatchListListener mWatchListListener;
 
     @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        ClosingsBuyVipDialog.opened = false;
+    }
+
+    @Override    
     public void initViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
         String fragmentName = Static.EMPTY;
@@ -73,7 +80,6 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     private void closeDialog() {
         final Dialog dialog = getDialog();
         if (dialog != null) dialog.dismiss();
-        ClosingsBuyVipDialog.opened = false;
     }
 
     public static ClosingsBuyVipDialog newInstance(BaseFragment.FragmentId fragmentId) {

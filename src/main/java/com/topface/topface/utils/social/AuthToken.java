@@ -186,6 +186,7 @@ public class AuthToken {
 
         @Override
         protected TokenInfo clone() throws CloneNotSupportedException {
+            super.clone();
             TokenInfo tokenInfoClone = new TokenInfo();
             tokenInfoClone.mSnType = mSnType;
             tokenInfoClone.mUserSocialId = mUserSocialId;

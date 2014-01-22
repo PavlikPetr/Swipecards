@@ -46,7 +46,7 @@
             android:layout_centerHorizontal="true" />
 
         <Button
-            style="@style/ButtonBlue"
+            style="@style/Widget.Topface.Button.Big.Blue"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:layout_alignRight="@id/fakeView"
@@ -62,7 +62,7 @@
             android:textSize="14sp" />
 
         <Button
-            style="@style/ButtonGray"
+            style="@style/Widget.Topface.Button.Big.Gray"
             android:id="@+id/deleteMessages"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"

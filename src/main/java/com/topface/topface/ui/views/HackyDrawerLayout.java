@@ -3,6 +3,7 @@ package com.topface.topface.ui.views;
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 /**
@@ -10,6 +11,8 @@ import android.view.MotionEvent;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class HackyDrawerLayout extends DrawerLayout {
+
+    private IBackPressedListener mBackPressedListener;
 
     public HackyDrawerLayout(Context context) {
         super(context);
@@ -24,6 +27,16 @@ public class HackyDrawerLayout extends DrawerLayout {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mBackPressedListener != null) {
+                mBackPressedListener.onBackPressed();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         try {
             return super.onInterceptTouchEvent(ev);
@@ -31,5 +44,13 @@ public class HackyDrawerLayout extends DrawerLayout {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void setBackPressedListener(IBackPressedListener listener) {
+        mBackPressedListener = listener;
+    }
+
+    public interface IBackPressedListener {
+        void onBackPressed();
     }
 }

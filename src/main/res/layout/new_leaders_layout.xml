@@ -30,7 +30,7 @@
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                style="@style/ButtonBlue" />
+                style="@style/Widget.Topface.Button.Big.Blue" />
         </RelativeLayout>
 
         <ScrollView

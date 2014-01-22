@@ -83,6 +83,7 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Vk Api key
+     *
      * @return api key
      */
     public String getAuthVkApi() {
@@ -91,6 +92,7 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Fb Api key
+     *
      * @return api key
      */
     public String getAuthFbApi() {
@@ -99,10 +101,11 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Debug mode from Debug class
+     *
      * @param mode {@link com.topface.topface.utils.Debug#MODE_DEBUG},
-     * {@link com.topface.topface.utils.Debug#MODE_EDITOR},
-     * {@link com.topface.topface.utils.Debug#MODE_ALWAYS},
-     * {@link com.topface.topface.utils.Debug#MODE_DISABLE}
+     *             {@link com.topface.topface.utils.Debug#MODE_EDITOR},
+     *             {@link com.topface.topface.utils.Debug#MODE_ALWAYS},
+     *             {@link com.topface.topface.utils.Debug#MODE_DISABLE}
      */
     public void setDebugMode(int mode) {
         getSettingsMap().setField(DATA_DEBUG_MODE, mode);
@@ -110,6 +113,7 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Debug mode from Debug class
+     *
      * @return mode: {@link com.topface.topface.utils.Debug#MODE_DEBUG},
      * {@link com.topface.topface.utils.Debug#MODE_EDITOR},
      * {@link com.topface.topface.utils.Debug#MODE_ALWAYS},
@@ -121,9 +125,10 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Editor mode from Editor class
+     *
      * @param mode {@link com.topface.topface.utils.Editor#MODE_USER_FIELD},
-     * {@link com.topface.topface.utils.Editor#MODE_EDITOR},
-     * {@link com.topface.topface.utils.Editor#MODE_NOT_EDITOR}
+     *             {@link com.topface.topface.utils.Editor#MODE_EDITOR},
+     *             {@link com.topface.topface.utils.Editor#MODE_NOT_EDITOR}
      */
     public void setEditorMode(int mode) {
         getSettingsMap().setField(DATA_EDITOR_MODE, mode);
@@ -131,6 +136,7 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Editor mode from Editor class
+     *
      * @return mode: {@link com.topface.topface.utils.Editor#MODE_USER_FIELD},
      * {@link com.topface.topface.utils.Editor#MODE_EDITOR},
      * {@link com.topface.topface.utils.Editor#MODE_NOT_EDITOR}
@@ -141,6 +147,7 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Api version for requests
+     *
      * @return version number
      */
     public Integer getApiVersion() {
@@ -149,6 +156,7 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Api url for requests in ConnectionManager
+     *
      * @return url for request
      */
     public String getApiDomain() {
@@ -157,6 +165,7 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Api revision for test platforms to identify different server code states
+     *
      * @return revision id
      */
     public String getApiRevision() {
@@ -165,6 +174,7 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Unique id for app. Generated once for installation and saved for further use
+     *
      * @return app id
      */
     public String getAppUniqueId() {
@@ -179,6 +189,7 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Network errors mode
+     *
      * @param value true if need opportunity to switch network errors on and off
      */
     public void setTestNetwork(boolean value) {
@@ -187,6 +198,7 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Network errors mode
+     *
      * @return true if network errors mode switched on
      */
     public boolean getTestNetwork() {
@@ -209,6 +221,7 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Url for api request with current saved version
+     *
      * @return url for requests
      */
     public String getApiUrl() {

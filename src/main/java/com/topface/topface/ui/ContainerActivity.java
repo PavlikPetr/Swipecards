@@ -31,7 +31,7 @@ import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 
-public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements ChatFragment.IUserOnlineListener {
+public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements ChatFragment.IUserOnlineListener{
 
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
@@ -306,10 +306,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         return intent;
     }
 
-    public static Intent getVipBuyIntent(String from) {
-        return getVipBuyIntent(null, from);
-    }
-
     public static Intent getBuyingIntent(String from) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
@@ -346,6 +342,4 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

@@ -29,8 +29,13 @@ import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
-import static com.topface.topface.receivers.TestNotificationsReceiver.*;
-import static com.topface.topface.utils.TopfaceNotificationManager.*;
+import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_CANCEL_TEST_NETWORK_ERRORS;
+import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_OFF;
+import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_ON;
+import static com.topface.topface.receivers.TestNotificationsReceiver.createBroadcastPendingIntent;
+import static com.topface.topface.utils.TopfaceNotificationManager.NotificationAction;
+import static com.topface.topface.utils.TopfaceNotificationManager.getInstance;
+
 /**
  * Фрагмент админки. Доступен только для редакторов.
  */

@@ -31,7 +31,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="@string/general_get_dating"
-            style="@style/ButtonGray"
+            style="@style/Widget.Topface.Button.Big.Gray"
             android:singleLine="true"
             android:layout_marginRight="3dp"
             android:minWidth="210dp" />
@@ -42,7 +42,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="@string/buy_resources"
-            style="@style/ButtonBlue"
+            style="@style/Widget.Topface.Button.Big.Blue"
             android:singleLine="true"
             android:layout_marginRight="3dp"
             android:minWidth="210dp" />

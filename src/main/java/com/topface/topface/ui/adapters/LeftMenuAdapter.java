@@ -45,7 +45,6 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
 
-
     public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentId menuId, final int menuType,
                                                 final int menuIconResId) {
         return new ILeftMenuItem() {

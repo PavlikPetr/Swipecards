@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -31,6 +32,7 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
+import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
@@ -47,15 +49,14 @@ public class ClosingsController implements View.OnClickListener {
 
     public static final String LIKES_CACHE_KEY = "likes_cache_key";
     public static final String MUTUALS_CACHE_KEY = "mutuals_cache_key";
-
-    private Context mContext;
+    private final MenuFragment mMenuFragment;
 
     private LeftMenuAdapter mAdapter;
     private View likesMenuItem;
     private View mutualsMenuItem;
     private ViewStub mViewStub;
     private View mClosingsWidget;
-    private List<TextView> mCounterBadges = new ArrayList<TextView>();
+    private List<TextView> mCounterBadges = new ArrayList<>();
     private UsersListCacheManager mCacheManager;
 
     private static boolean mClosingsPassed = false; // need flag for session, skip on logout
@@ -64,12 +65,12 @@ public class ClosingsController implements View.OnClickListener {
     private boolean mMutualClosingsActive = false;
     private boolean mLikesClosingsActive = false;
 
-    private List<View> menuItemsButtons = new ArrayList<View>();
+    private List<View> menuItemsButtons = new ArrayList<>();
     private boolean mLeftMenuLocked = false;
     private static boolean mLogoutWasInitiated = false;
 
-    public ClosingsController(@NotNull final Context context, @NotNull ViewStub mHeaderViewStub, @NotNull LeftMenuAdapter adapter) {
-        mContext = context;
+    public ClosingsController(@NotNull final MenuFragment menuFragment, @NotNull ViewStub mHeaderViewStub, @NotNull LeftMenuAdapter adapter) {
+        mMenuFragment = menuFragment;
         mViewStub = mHeaderViewStub;
         mViewStub.setLayoutResource(R.layout.layout_left_menu_closings_widget);
         mAdapter = adapter;
@@ -77,17 +78,28 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     /**
-     * Initiates show of closings
+     * Safe show of closings
+     * It won't show closing if it is not applicable
      *
-     * @return true if all flags are ready to show closings,
+     * @return true show of closings initiated successfully,
      * but still after retrieving feeds there can be no closings at all
      */
     public boolean show() {
-        if (mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) return false;
-        if (!CacheProfile.getOptions().closing.isClosingsEnabled()) return false;
-        ApiRequest likesRequest = getUsersListRequest(FeedRequest.FeedService.LIKES, mContext);
+        return canShowClosings() ? showInner() : false;
+    }
+
+    /**
+     * Initiates show of closings
+     * Note: first check if you can show closings with {@link this.canShowClosings()}
+     *
+     * @return true show of closings initiated successfully,
+     * but still after retrieving feeds there can be no closings at all
+     */
+    private boolean showInner() {
+        Context context = mMenuFragment.getActivity();
+        ApiRequest likesRequest = getUsersListRequest(FeedRequest.FeedService.LIKES, context);
         likesRequest.callback(getDataRequestHandler(FeedRequest.FeedService.LIKES));
-        ApiRequest mutualsRequest = getUsersListRequest(FeedRequest.FeedService.MUTUAL, mContext);
+        ApiRequest mutualsRequest = getUsersListRequest(FeedRequest.FeedService.MUTUAL, context);
         mutualsRequest.callback(getDataRequestHandler(FeedRequest.FeedService.MUTUAL));
 
         ApiHandler handler = new SimpleApiHandler() {
@@ -179,8 +191,8 @@ public class ClosingsController implements View.OnClickListener {
 
             @Override
             protected UsersList parseResponse(ApiResponse response) {
-                FeedListData<FeedItem> items = new FeedListData<FeedItem>(response.getJsonResult(), itemClass);
-                UsersList data = new UsersList<FeedUser>(items, FeedUser.class);
+                FeedListData<FeedItem> items = new FeedListData<>(response.getJsonResult(), itemClass);
+                UsersList data = new UsersList<>(items, FeedUser.class);
                 if (data.size() > 0) {
                     mCacheManager.changeCacheKeyTo(cacheKey, itemClass);
                     mCacheManager.setCache(data);
@@ -263,7 +275,7 @@ public class ClosingsController implements View.OnClickListener {
         } else {
             switch (v.getId()) {
                 case R.id.btnBuyVipFromClosingsWidget:
-                    mContext.startActivity(ContainerActivity.getVipBuyIntent("Menu"));
+                    mMenuFragment.startActivity(ContainerActivity.getVipBuyIntent(null, "Menu"));
                     break;
                 default:
                     break;
@@ -343,6 +355,10 @@ public class ClosingsController implements View.OnClickListener {
         mLogoutWasInitiated = true;
     }
 
+    /**
+     * Try to show appropriate closings fragment
+     * First try MutualClosings then LikesClosings
+     */
     public void respondToLikes() {
         if (mMutualClosingsActive) {
             selectMenuItem(FragmentId.F_MUTUAL_CLOSINGS);
@@ -357,9 +373,14 @@ public class ClosingsController implements View.OnClickListener {
 
     private void lockLeftMenu() {
         if (!mLeftMenuLocked) {
-            if (mContext instanceof NavigationActivity) {
-                NavigationActivity activity = ((NavigationActivity) mContext);
-                activity.setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+            if (mMenuFragment.getActivity() instanceof  NavigationActivity) {
+                NavigationActivity activity = (NavigationActivity) mMenuFragment.getActivity();
+                activity.setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN, new HackyDrawerLayout.IBackPressedListener() {
+                    @Override
+                    public void onBackPressed() {
+                        mMenuFragment.showClosingsDialog();
+                    }
+                });
                 activity.showContent();
                 activity.getSupportActionBar().setDisplayUseLogoEnabled(false);
             }
@@ -370,8 +391,8 @@ public class ClosingsController implements View.OnClickListener {
     public void unlockLeftMenu() {
         if (mLeftMenuLocked) {
             mLeftMenuLocked = false;
-            if (mContext instanceof NavigationActivity) {
-                NavigationActivity activity = ((NavigationActivity) mContext);
+            if (mMenuFragment.getActivity() instanceof NavigationActivity) {
+                NavigationActivity activity = ((NavigationActivity) mMenuFragment.getActivity());
                 activity.setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 activity.getSupportActionBar().setDisplayUseLogoEnabled(true);
             }
@@ -394,5 +415,48 @@ public class ClosingsController implements View.OnClickListener {
         if (!mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) {
             removeClosings();
         }
+    }
+
+    /**
+     * Check if you can try to show closings
+     * You can't show closings if:
+     * - closings are already passed
+     * - closings are already showing
+     * - server do not allow to show closings at this time
+     *
+     * @return tru if you can show closings now
+     */
+    public boolean canShowClosings() {
+        return !(mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) &&
+                CacheProfile.getOptions().closing.isClosingsEnabled();
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public IStartAction createStartAction(final int priority) {
+        return new AbstractStartAction() {
+            @Override
+            public void callInBackground() {
+            }
+
+            @Override
+            public void callOnUi() {
+                showInner();
+            }
+
+            @Override
+            public boolean isApplicable() {
+                return canShowClosings() && !CacheProfile.premium;
+            }
+
+            @Override
+            public int getPriority() {
+                return priority;
+            }
+
+            @Override
+            public String getActionName() {
+                return "Closings";
+            }
+        };
     }
 }

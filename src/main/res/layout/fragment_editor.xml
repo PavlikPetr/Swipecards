@@ -178,7 +178,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/editor_refresh_profile"
             android:id="@+id/EditorRefreshProfile"
-            style="@style/ButtonGray" />
+            style="@style/Widget.Topface.Button.Big.Gray" />
 
         <Button
             android:layout_width="fill_parent"
@@ -186,7 +186,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/editor_clear_search_cache"
             android:id="@+id/EditorClearSearchCache"
-            style="@style/ButtonGray" />
+            style="@style/Widget.Topface.Button.Big.Gray" />
 
         <Button
             android:layout_width="fill_parent"
@@ -194,7 +194,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/editor_clear_air_messages"
             android:id="@+id/EditorClearAirMessages"
-            style="@style/ButtonGray" />
+            style="@style/Widget.Topface.Button.Big.Gray" />
 
         <Button
             android:layout_width="fill_parent"
@@ -202,7 +202,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/editor_configure_banners"
             android:id="@+id/EditorConfigureBanners"
-            style="@style/ButtonGray" />
+            style="@style/Widget.Topface.Button.Big.Gray" />
 
         <Button
             android:layout_width="fill_parent"
@@ -211,7 +211,7 @@
             android:layout_marginTop="30dp"
             android:text="@string/editor_save_settings"
             android:id="@+id/EditorSaveSettings"
-            style="@style/ButtonGray" />
+            style="@style/Widget.Topface.Button.Big.Gray" />
 
         <Button
             android:layout_width="fill_parent"
@@ -219,7 +219,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/editor_reset_settings"
             android:id="@+id/EditorResetSettings"
-            style="@style/ButtonGray" />
+            style="@style/Widget.Topface.Button.Big.Gray" />
     </LinearLayout>
 
 </ScrollView>

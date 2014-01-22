@@ -35,6 +35,6 @@ public class BuyWidgetController {
 
     public void setSalesEnabled(boolean salesEnabled) {
         this.salesEnabled = salesEnabled;
-        mBuyButton.setBackgroundResource(salesEnabled?R.drawable.btn_sale_selector: R.drawable.btn_blue_selector);
+        mBuyButton.setBackgroundResource(salesEnabled ? R.drawable.btn_sale_selector : R.drawable.btn_blue_selector);
     }
 }

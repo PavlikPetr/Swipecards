@@ -185,9 +185,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mLoadingBackgroundText = (TextView) root.findViewById(R.id.tvBackgroundText);
         Drawable[] drawables = mLoadingBackgroundText.getCompoundDrawables();
         if (drawables != null) {
-            Drawable drawable = mLoadingBackgroundText.getCompoundDrawables()[0];
-            if (drawable instanceof AnimationDrawable) {
-                mLoadingBackgroundDrawable = (AnimationDrawable) drawable;
+            if (drawables[0] instanceof AnimationDrawable) {
+                mLoadingBackgroundDrawable = (AnimationDrawable) drawables[0];
             }
         }
 
@@ -679,8 +678,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
                     String uri = String.format(Locale.getDefault(),
                             "geo:%f,%f",
-                            (float)history.geo.getCoordinates().getLatitude(),
-                            (float)history.geo.getCoordinates().getLongitude());
+                            (float) history.geo.getCoordinates().getLatitude(),
+                            (float) history.geo.getCoordinates().getLongitude());
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                     startActivity(intent);
                 }
@@ -1159,10 +1158,5 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected boolean isNeedShowPromoPopup() {
-        return true;
     }
 }

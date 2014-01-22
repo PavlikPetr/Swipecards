@@ -1,6 +1,8 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +17,14 @@ import android.widget.Toast;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.dialogs.BaseDialogFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
@@ -28,8 +32,10 @@ import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
-public class InvitesPopup extends BaseFragment {
+public class InvitesPopup extends BaseDialogFragment {
+    public static final java.lang.String TAG = "InvitePopup";
 
+    public static final String INVITE_POPUP_PREF_KEY = "INVITE_POPUP";
     public static final String CONTACTS = "contacts";
     private ArrayList<ContactsProvider.Contact> contacts;
     private LockerView locker;
@@ -45,7 +51,7 @@ public class InvitesPopup extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
+        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
     }
 
     @Override
@@ -169,5 +175,21 @@ public class InvitesPopup extends BaseFragment {
                 }
             }
         }).exec();
+    }
+
+    public static boolean isApplicable() {
+        if (CacheProfile.canInvite) {
+            final SharedPreferences preferences = App.getContext().getSharedPreferences(
+                    Static.PREFERENCES_TAG_SHARED,
+                    Context.MODE_PRIVATE
+            );
+            long date_start = preferences.getLong(INVITE_POPUP_PREF_KEY, 1);
+            long date_now = System.currentTimeMillis();
+
+            if ((date_now - date_start) >= CacheProfile.getOptions().popup_timeout) {
+                return true;
+            }
+        }
+        return false;
     }
 }
