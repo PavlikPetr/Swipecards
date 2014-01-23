@@ -329,7 +329,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (CacheProfile.dating != null) {
             String cityString = CacheProfile.dating.city == null || CacheProfile.dating.city.isEmpty() ?
                     getString(R.string.filter_cities_all) : CacheProfile.dating.city.name;
-            String onlineString = DatingFilter.getOnlineField() ? getString(R.string.dating_online_only) : "%s";
+            String onlineString = DatingFilter.getOnlyOnlineField() ? getString(R.string.dating_online_only) : "%s";
             return String.format(onlineString, cityString);
         }
         return Static.EMPTY;
@@ -490,13 +490,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private SearchRequest getSearchRequest() {
         SearchRequest searchRequest = new SearchRequest(getActivity());
         searchRequest.limit = SEARCH_LIMIT;
-        searchRequest.online = getFilterOnline();
+        searchRequest.onlyOnline = getFilterOnlyOnline();
         registerRequest(searchRequest);
         return searchRequest;
     }
 
-    private boolean getFilterOnline() {
-        return DatingFilter.getOnlineField();
+    private boolean getFilterOnlyOnline() {
+        return DatingFilter.getOnlyOnlineField();
     }
 
     @Override
