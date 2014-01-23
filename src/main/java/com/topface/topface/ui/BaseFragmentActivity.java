@@ -38,13 +38,12 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected boolean needOpenDialog = true;
     private boolean mIndeterminateSupported = false;
-    private boolean mActivityOnRestartInvoked = false;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private BroadcastReceiver mReauthReceiver;
     protected boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
-    private StartActionsController mStartActionsController = new StartActionsController(this);
+    private StartActionsController mStartActionsController;
 
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -62,16 +61,19 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mStartActionsController = new StartActionsController(this);
+        onRegisterStartActions(mStartActionsController);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         //Странный глюк на некоторых устройствах (воспроизводится например на HTC One V),
         // из-за которого показывается лоадер в ActionBar
         // этот метод можно использовать только после setContent
         setSupportProgressBarIndeterminateVisibility(false);
-        if (!mActivityOnRestartInvoked) {
-            onRegisterStartActions(mStartActionsController);
-            mActivityOnRestartInvoked = false;
-        }
     }
 
     @Override
@@ -115,25 +117,22 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
                 onLoadProfile();
             } else {
-                startAuth();
-            }
-        } else if (mProfileLoadReceiver == null) {
-            mProfileLoadReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    //Уведомлять о загрузке профиля следует только если мы авторизованы
-                    if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
-                        checkProfileLoad();
-                    }
+                if (mProfileLoadReceiver == null) {
+                    mProfileLoadReceiver = new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context context, Intent intent) {
+                            //Уведомлять о загрузке профиля следует только если мы авторизованы
+                            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+                                checkProfileLoad();
+                            }
+                        }
+                    };
+                    LocalBroadcastManager.getInstance(this).registerReceiver(
+                            mProfileLoadReceiver,
+                            new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
+                    );
                 }
-            };
-            try {
-                LocalBroadcastManager.getInstance(this).registerReceiver(
-                        mProfileLoadReceiver,
-                        new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
-                );
-            } catch (Exception ex) {
-                Debug.error(ex);
+                startAuth();
             }
         }
     }
@@ -339,17 +338,5 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
      * Note: actions can be placed here for global usage in all child activities
      */
     protected void onRegisterStartActions(StartActionsController startActionsController) {
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        mActivityOnRestartInvoked = true;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mStartActionsController.clear();
     }
 }
