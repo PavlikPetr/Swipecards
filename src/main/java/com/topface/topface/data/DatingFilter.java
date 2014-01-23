@@ -16,7 +16,7 @@ import org.json.JSONObject;
  */
 public class DatingFilter extends AbstractData implements Cloneable, Parcelable {
 
-    public static final String DATING_ONLINE_FIELD = "datingOnline";
+    public static final String DATING_ONLY_ONLINE_FIELD = "datingOnline";
 
     public static final int webAbsoluteMaxAge = 99;
     public static final int webAbsoluteMinAge = 16;
@@ -33,7 +33,7 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
     //Эти два параметра имеют одно и тоже значение в базе
     public int breast;
     public int finances;
-    private static Boolean mOnlineDating;
+    private static Boolean mOnlyOnlineDating;
 
     public DatingFilter() {
         city = new City();
@@ -51,22 +51,22 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
      * Поля online нет в списке основных фильтров, т.к. оно не хранится на сервере.
      * Оно хранится в настройках и работать с ним нужно отдельно
      */
-    public static boolean getOnlineField() {
-        if (mOnlineDating == null) {
-            mOnlineDating = PreferenceManager.getDefaultSharedPreferences(App.getContext())
-                    .getBoolean(DATING_ONLINE_FIELD, false);
+    public static boolean getOnlyOnlineField() {
+        if (mOnlyOnlineDating == null) {
+            mOnlyOnlineDating = PreferenceManager.getDefaultSharedPreferences(App.getContext())
+                    .getBoolean(DATING_ONLY_ONLINE_FIELD, false);
         }
 
-        return mOnlineDating;
+        return mOnlyOnlineDating;
     }
 
-    public static void setOnlineField(boolean online) {
+    public static void setOnlyOnlineField(boolean onlyOnline) {
         PreferenceManager.getDefaultSharedPreferences(App.getContext())
                 .edit()
-                .putBoolean(DATING_ONLINE_FIELD, online)
+                .putBoolean(DATING_ONLY_ONLINE_FIELD, onlyOnline)
                 .commit();
 
-        mOnlineDating = online;
+        mOnlyOnlineDating = onlyOnline;
     }
 
     protected void fillData(JSONObject data) {
@@ -154,7 +154,7 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
                 alcohol + "#" +
                 breast + "#" +
                 finances + "#" +
-                DatingFilter.getOnlineField();
+                DatingFilter.getOnlyOnlineField();
     }
 
     @Override

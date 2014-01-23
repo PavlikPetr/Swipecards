@@ -221,7 +221,7 @@ public abstract class AbstractConfig {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
 
-        @SuppressWarnings({"unchecked", "UnusedDeclaration"})
+        @SuppressWarnings({"unchecked"})
         public SettingsField<Integer> addBooleanField(String fieldName, Boolean defaultValue) {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
@@ -231,7 +231,8 @@ public abstract class AbstractConfig {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
 
-        public SettingsField<Float> addDoubleField(String fieldName, Double defaultValue) {
+        @SuppressWarnings("unchecked")
+         public SettingsField<Double> addDoubleField(String fieldName, Double defaultValue) {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
 
@@ -251,7 +252,6 @@ public abstract class AbstractConfig {
             return false;
         }
 
-        @SuppressWarnings("UnusedDeclaration")
         public boolean setField(String fieldName, Long value) {
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
@@ -260,7 +260,6 @@ public abstract class AbstractConfig {
             return false;
         }
 
-        @SuppressWarnings("UnusedDeclaration")
         public boolean setField(String fieldName, Boolean value) {
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
@@ -278,50 +277,43 @@ public abstract class AbstractConfig {
         }
 
         public String getStringField(String fieldName) {
-            String result = null;
             SettingsField settingsField = get(fieldName);
-            if (settingsField != null) {
-                result = (String) settingsField.value;
+            if (settingsField != null && settingsField.value != null) {
+                return (String) settingsField.value;
             }
-            return result;
+            return "";
         }
 
-        public Integer getIntegerField(String fieldName) {
-            Integer result = null;
+        public int getIntegerField(String fieldName) {
             SettingsField settingsField = get(fieldName);
-            if (settingsField != null) {
-                result = (Integer) settingsField.value;
+            if (settingsField != null && settingsField.value != null) {
+                return (Integer) settingsField.value;
             }
-            return result;
+            return 0;
         }
 
-        @SuppressWarnings("UnusedDeclaration")
-        public Boolean getBooleanField(String fieldName) {
-            Boolean result = null;
+        public boolean getBooleanField(String fieldName) {
             SettingsField settingsField = get(fieldName);
-            if (settingsField != null) {
-                result = (Boolean) settingsField.value;
+            if (settingsField != null && settingsField.value != null) {
+                return (Boolean) settingsField.value;
             }
-            return result;
+            return false;
         }
 
-        @SuppressWarnings("UnusedDeclaration")
         public Long getLongField(String fieldName) {
-            Long result = 0l;
             SettingsField settingsField = get(fieldName);
-            if (settingsField != null) {
-                result = (Long) settingsField.value;
+            if (settingsField != null && settingsField.value != null) {
+                return (Long) settingsField.value;
             }
-            return result;
+            return 0L;
         }
 
         public Double getDoubleField(String fieldName) {
-            Double result = 0d;
             SettingsField settingsField = get(fieldName);
-            if (settingsField != null) {
-                result = (Double) settingsField.value;
+            if (settingsField != null && settingsField.value != null) {
+                return (Double) settingsField.value;
             }
-            return result;
+            return 0.0;
         }
     }
 }
