@@ -222,10 +222,11 @@ public class GCMUtils {
                 finalTitle,
                 data,
                 true,
-                DefaultImageLoader.getInstance().getImageLoader().loadImageSync(user.photoUrl),
+                user.photoUrl,
                 unread,
                 newIntent,
-                false
+                false,
+                null
         );
     }
 

@@ -14,7 +14,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.topface.topface.R;
+import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -43,20 +47,60 @@ public class TopfaceNotificationManager {
     /*
         isTextNotification - разворачивать нотификацию как текст - true, как картинку - false
      */
-    public int showNotification(String title, String message, boolean isTextNotification,
+    public int  showNotification(String title, String message, boolean isTextNotification,
                                 Bitmap icon, int unread, Intent intent, boolean doNeedReplace) {
         return showNotification(title, message, isTextNotification, icon, unread, intent,
-                doNeedReplace, false);
+                doNeedReplace, false, TopfaceNotification.Type.STANDARD);
+    }
+
+    public int  showNotification(String title, String message, boolean isTextNotification,
+                                 Bitmap icon, int unread, Intent intent, boolean doNeedReplace, TopfaceNotification.Type type) {
+        return showNotification(title, message, isTextNotification, icon, unread, intent,
+                doNeedReplace, false, type);
+    }
+
+    public void showNotification(final String title, final String message, final boolean isTextNotification,
+                                String uri, final int unread, final Intent intent, final boolean doNeedReplace,
+                                final NotificationImageListener listener) {
+        DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                if (listener != null) {
+                    listener.onFail();
+                }
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                if (listener != null && listener.needShowNotification()) {
+                    listener.onSuccess( showNotification(title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace));
+                } else {
+                    showNotification(title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace);
+                }
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+                if (listener != null) {
+                    listener.onFail();
+                }
+            }
+        });
     }
 
     public int showNotification(String title, String message, boolean isTextNotification,
-                                Bitmap icon, int unread, Intent intent, boolean doNeedReplace, boolean ongoing) {
+                                Bitmap icon, int unread, Intent intent, boolean doNeedReplace,
+                                boolean ongoing, TopfaceNotification.Type type) {
         int id = NOTIFICATION_ID;
         if (doNeedReplace) {
             id = newNotificationId();
         }
         TopfaceNotification notification = new TopfaceNotification(ctx);
-        notification.setType(TopfaceNotification.Type.STANDARD);
+        notification.setType(type);
         notification.setImage(icon);
         notification.setTitle(title);
         notification.setText(message);
@@ -67,16 +111,6 @@ public class TopfaceNotificationManager {
 
         notificationManager.notify(id, notification.generate(intent));
         return id;
-    }
-
-    public int showNotificationWithActions(String title, String message, Bitmap icon,
-                                           boolean needReplace, boolean ongoing,
-                                           NotificationAction[] actions) {
-        int id = NOTIFICATION_ID;
-        if (needReplace) {
-            id = newNotificationId();
-        }
-        return showNotificationWithActions(id, title, message, icon, ongoing, actions);
     }
 
     /**
@@ -103,58 +137,84 @@ public class TopfaceNotificationManager {
         return id;
     }
 
+    public void showProgressNotification(final String title, String uri, final Intent intent, final NotificationImageListener listener) {
+        DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                if (listener != null) {
+                    listener.onFail();
+                }
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                if (listener != null) {
+                    if (listener.needShowNotification()) {
+                        listener.onSuccess(showProgressNotification(title, loadedImage, intent));
+                    }
+                } else {
+                    showProgressNotification(title, loadedImage, intent);
+                }
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+                if (listener != null) {
+                    listener.onFail();
+                }
+            }
+        });
+    }
+
     public int showProgressNotification(String title, Bitmap icon, Intent intent) {
-        int id = newNotificationId();
-        try {
-            TopfaceNotification not = new TopfaceNotification(ctx);
-            not.setType(TopfaceNotification.Type.PROGRESS);
-            not.setImage(icon);
-            not.setTitle(title);
-            not.setId(id);
-            notificationManager.notify(id, not.generate(intent));
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-        return id;
+        return showNotification(title, null, false, icon, 0, intent, false, TopfaceNotification.Type.PROGRESS);
     }
 
     public int showFailNotification(String title, String msg, Bitmap icon, Intent intent) {
-        int id = newNotificationId();
-        try {
-            TopfaceNotification not = new TopfaceNotification(ctx);
-            not.setType(TopfaceNotification.Type.FAIL);
-            not.setTitle(title);
-            not.setText(msg);
-            not.setImage(icon);
-            not.setId(id);
-            //noinspection deprecation
-            notificationManager.notify(id, not.generate(intent));
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-        return id;
+        return showNotification(title, msg, false, icon, 0, intent, false, TopfaceNotification.Type.FAIL);
+    }
+
+    public void showFailNotification(final String title, final String msg, final String iconUri, final Intent intent, final NotificationImageListener listener) {
+        DefaultImageLoader.getInstance().getImageLoader().loadImage(iconUri, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                if (listener != null) {
+                    listener.onFail();
+                }
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                if (listener != null) {
+                    if(listener.needShowNotification()) {
+                        listener.onSuccess(showFailNotification(title, msg, loadedImage, intent));
+                    }
+                } else {
+                    showFailNotification(title, msg, loadedImage, intent);
+                }
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+                if (listener != null) {
+                    listener.onFail();
+                }
+            }
+        });
     }
 
     public void cancelNotification(int id) {
         notificationManager.cancel(id);
-    }
-
-    public static class TempImageViewRemote extends ImageViewRemote {
-        private Bitmap mImageBitmap;
-
-        public TempImageViewRemote(Context context) {
-            super(context);
-        }
-
-        @Override
-        public void setImageBitmap(Bitmap bm) {
-            super.setImageBitmap(bm);
-            mImageBitmap = bm;
-        }
-
-        public Bitmap getImageBitmap() {
-            return mImageBitmap;
-        }
     }
 
     private static void setNotificationIcon(Context context, NotificationCompat.Builder builder, Bitmap image) {
@@ -186,15 +246,10 @@ public class TopfaceNotificationManager {
 
         private int unread = 0;
         private Context context;
-        private float width = 64;
-        private float height = 64;
         private NotificationCompat.Builder notificationBuilder;
 
         public TopfaceNotification(Context context) {
             this.context = context;
-            float scale = context.getResources().getDisplayMetrics().density;
-            width *= scale;
-            height *= scale;
         }
 
         public void setType(Type type) {
@@ -271,47 +326,6 @@ public class TopfaceNotificationManager {
             return notificationBuilder.build();
         }
 
-        private Notification generateSuccess(boolean isOld, Intent intent) {
-            try {
-                notificationBuilder.setSmallIcon(R.drawable.ic_notification);
-
-                RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.fail_notification_layout);
-                if (image != null) {
-                    Bitmap scaledIcon = Utils.clipBitmap(image);
-                    if (scaledIcon != null) {
-                        views.setBitmap(R.id.fnAvatar, "setImageBitmap", image);
-                    }
-                }
-
-                views.setTextViewText(R.id.fnTitle, title);
-                views.setTextViewText(R.id.fnMsg, text);
-                views.setViewVisibility(R.id.fnRetry, View.GONE);
-
-                if (!isOld) {
-                    if (!isTextNotification) {
-                        generateBigPicture();
-                    } else {
-                        generateBigText();
-                    }
-                }
-                notificationBuilder.setSound(Settings.getInstance().getRingtone());
-                if (Settings.getInstance().isVibrationEnabled()) {
-                    notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
-
-                }
-                PendingIntent resultPendingIntent = generatePendingIntent(intent);
-                notificationBuilder.setAutoCancel(true);
-                notificationBuilder.setContentIntent(resultPendingIntent);
-                Notification not = notificationBuilder.build();
-
-                not.contentView = views;
-                return not;
-            } catch (Exception e) {
-                Debug.error(e);
-            }
-            return null;
-        }
-
         private Notification generateFail(boolean isOld, Intent intent) {
             try {
                 notificationBuilder.setSmallIcon(R.drawable.ic_notification);
@@ -386,8 +400,7 @@ public class TopfaceNotificationManager {
         }
 
         private void generateBigPicture() {
-            Bitmap tficon = BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.ic_notification);
+
             NotificationCompat.BigPictureStyle inboxStyle =
                     new NotificationCompat.BigPictureStyle(notificationBuilder.setContentTitle(title));
 
@@ -456,5 +469,14 @@ public class TopfaceNotificationManager {
             this.text = text;
             this.intent = intent;
         }
+    }
+
+    public static interface NotificationImageListener {
+        public void onSuccess(int id);
+        public void onFail();
+        //Нужно, если в каких-то случаях, после асинхронной загрузки фото,
+        //нотификацию показывать уже не надо. Если в любом случае надо, можно
+        //передать этот listener null или поставить у этого метода return true;
+        public boolean needShowNotification();
     }
 }
