@@ -10,18 +10,31 @@ import com.topface.topface.R;
  * Modal Dialog class
  */
 public abstract class AbstractModalDialog extends AbstractDialogFragment {
+
+    private boolean mBtnCloseVisible = true;
+    private View mBtnCloseView;
+
     @Override
     protected final void initViews(View root) {
-        root.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
+        mBtnCloseView = root.findViewById(R.id.btnClose);
+        mBtnCloseView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onCloseButtonClick(v);
             }
         });
+        mBtnCloseView.setVisibility(mBtnCloseVisible ? View.VISIBLE : View.GONE);
         ViewStub stub = (ViewStub) root.findViewById(R.id.vsContent);
         stub.setLayoutResource(getContentLayoutResId());
         View view = stub.inflate();
         initContentViews(view);
+    }
+
+    protected void setCloseButton(boolean visible) {
+        mBtnCloseVisible = visible;
+        if (mBtnCloseView != null) {
+            mBtnCloseView.setVisibility(mBtnCloseVisible ? View.VISIBLE : View.GONE);
+        }
     }
 
     protected abstract void initContentViews(View root);

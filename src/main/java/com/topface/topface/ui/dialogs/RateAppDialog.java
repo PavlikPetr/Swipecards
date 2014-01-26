@@ -21,7 +21,7 @@ import com.topface.topface.utils.Utils;
  * Created by kirussell on 25.12.13.
  * User can rate an app through this dialog
  */
-public class RateAppDialog extends AbstractDialogFragment implements View.OnClickListener,
+public class RateAppDialog extends AbstractModalDialog implements View.OnClickListener,
         DialogInterface.OnCancelListener {
     public static final String TAG = "RateAppDialog";
     public static final String RATING_POPUP = "RATING_POPUP";
@@ -33,24 +33,27 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
         super.onCreate(savedInstanceState);
         //Закрыть диалог можно
         setCancelable(true);
-    }
-
-    @Override
-    protected void initViews(View root) {
-        getDialog().setOnCancelListener(this);
-
-        mRatingBar = (RatingBar) root.findViewById(R.id.ratingBarStarts);
-
-        root.findViewById(R.id.btnRate).setOnClickListener(this);
-        root.findViewById(R.id.btnAskLater).setOnClickListener(this);
-        root.findViewById(R.id.btnNoThanx).setOnClickListener(this);
-
+        setCloseButton(false);
         EasyTracker.getTracker().sendEvent("RatePopup", "FeaturePopup", "Show", 1L);
     }
 
     @Override
-    public int getDialogLayoutRes() {
+    protected void initContentViews(View root) {
+        getDialog().setOnCancelListener(this);
+        mRatingBar = (RatingBar) root.findViewById(R.id.ratingBarStarts);
+        root.findViewById(R.id.btnRate).setOnClickListener(this);
+        root.findViewById(R.id.btnAskLater).setOnClickListener(this);
+        root.findViewById(R.id.btnNoThanx).setOnClickListener(this);
+    }
+
+    @Override
+    protected int getContentLayoutResId() {
         return R.layout.dialog_rate_app;
+    }
+
+    @Override
+    protected final void onCloseButtonClick(View v) {
+        // nothing to do, there is no close button
     }
 
     @Override
