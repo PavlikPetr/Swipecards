@@ -16,14 +16,13 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.ResourcesUtils;
 
-public class ClosingsBuyVipDialog extends AbstractDialogFragment implements View.OnClickListener {
+public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.OnClickListener {
 
     public static boolean opened = false;
 
     public static final String TAG = "com.topface.topface.ui.dialogs.ClosingsBuyVipDialog_TAG";
     private static final String ARG_FRAGMENT = "fragmentId";
     private IRespondToLikesListener mWatchSequentialyListener;
-    private IWatchListListener mWatchListListener;
 
     @Override
     public void onDismiss(DialogInterface dialog) {
@@ -32,7 +31,7 @@ public class ClosingsBuyVipDialog extends AbstractDialogFragment implements View
     }
 
     @Override
-    public void initViews(View root) {
+    public void initContentViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
         String fragmentName = Static.EMPTY;
         if (getActivity() != null) {
@@ -45,12 +44,17 @@ public class ClosingsBuyVipDialog extends AbstractDialogFragment implements View
                 .setText(String.format(getString(R.string.locking_popup_title), fragmentName));
         ((TextView) root.findViewById(R.id.tvMessage))
                 .setText(String.format(getString(R.string.locking_popup_message), fragmentName));
-        root.findViewById(R.id.btnClose).setOnClickListener(this);
     }
 
     @Override
-    public int getDialogLayoutRes() {
+    protected int getContentLayoutResId() {
         return R.layout.dialog_closings_buy_vip;
+    }
+
+    @Override
+    protected void onCloseButtonClick(View v) {
+        EasyTracker.getTracker().sendEvent(getTrackName(), "Close", "", 1L);
+        closeDialog();
     }
 
     @Override
@@ -65,11 +69,6 @@ public class ClosingsBuyVipDialog extends AbstractDialogFragment implements View
                 EasyTracker.getTracker().sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
                 Intent intent = ContainerActivity.getVipBuyIntent(null, "ClosingDialogWatchAsList");
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                if (mWatchListListener != null) mWatchListListener.onWatchList();
-                closeDialog();
-                break;
-            case R.id.btnClose:
-                EasyTracker.getTracker().sendEvent(getTrackName(), "Close", "", 1L);
                 closeDialog();
                 break;
             default:
@@ -103,16 +102,8 @@ public class ClosingsBuyVipDialog extends AbstractDialogFragment implements View
         mWatchSequentialyListener = listener;
     }
 
-    public void setOnWatchListListener(IWatchListListener listener) {
-        mWatchListListener = listener;
-    }
-
     public interface IRespondToLikesListener {
         void onRespondToLikes();
-    }
-
-    public interface IWatchListListener {
-        void onWatchList();
     }
 
     @Override
