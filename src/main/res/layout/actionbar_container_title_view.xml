@@ -16,7 +16,7 @@
         android:layout_marginLeft="2dp"
         android:layout_marginRight="4dp"
         android:src="@drawable/ico_online"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <LinearLayout
         android:orientation="vertical"
