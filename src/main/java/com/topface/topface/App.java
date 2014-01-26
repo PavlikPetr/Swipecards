@@ -41,6 +41,7 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
 import com.topface.topface.utils.config.SessionConfig;
@@ -362,6 +363,10 @@ public class App extends Application {
 
     public static BannersConfig getBannerConfig() {
         return getConfig().getBannerConfig();
+    }
+
+    public static Novice getNovice() {
+        return getConfig().getNovice();
     }
 }
 

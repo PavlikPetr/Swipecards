@@ -13,7 +13,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
-import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
 import org.json.JSONArray;
@@ -46,10 +45,10 @@ public class Profile extends AbstractDataWithPhotos {
 
     protected String status; // статус пользователя
 
-    public LinkedList<FormItem> forms = new LinkedList<FormItem>();
+    public LinkedList<FormItem> forms = new LinkedList<>();
 
-    public ArrayList<Gift> gifts = new ArrayList<Gift>();
-    public SparseArrayCompat<TopfaceNotifications> notifications = new SparseArrayCompat<TopfaceNotifications>();
+    public ArrayList<Gift> gifts = new ArrayList<>();
+    public SparseArrayCompat<TopfaceNotifications> notifications = new SparseArrayCompat<>();
     public boolean email;
     public boolean emailGrabbed;
     public boolean emailConfirmed;
@@ -87,7 +86,7 @@ public class Profile extends AbstractDataWithPhotos {
             //поправим потом, с новой системой парсинга запросво
             //NOTE: Добавлять поля, нужные исключительно для профиля текущего юзера только в это условие!
             if (!(profile instanceof User)) {
-                Novice.giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
+                App.getNovice().giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
                 profile.dating = new DatingFilter(resp.optJSONObject("dating"));
                 profile.email = resp.optBoolean("email");
                 profile.emailGrabbed = resp.optBoolean("emailGrabbed");
