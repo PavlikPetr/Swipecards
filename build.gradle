@@ -1,5 +1,5 @@
 //Константы для сборки приложения. В подмодулях следует использовать именно их, а не хардкодить значения
-def defaultCompileSdkVersion = "Google Inc.:Google APIs:19"
+def defaultCompileSdkVersion = 19
 def defaultBuildToolsVersion = "19.0.1"
 
 def supportLibrary = "com.android.support:support-v4:19.0.+"
@@ -99,7 +99,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: '*.jar', exclude: 'GoogleAdMobAdsSdk.jar')
 
     //Для Амазона нужна библиотека для поддержки in-app покупок
-    amazonCompile files('src/amazon/libs/amazon-in-app-purchasing.jar')
+    compile files('libs/amazon/amazon-in-app-purchasing.jar')
 
     //Topface sub libs
     compile project(':libs:IllustratedTextView')

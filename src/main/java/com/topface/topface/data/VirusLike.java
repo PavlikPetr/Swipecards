@@ -47,10 +47,6 @@ public class VirusLike extends AbstractData {
         }
     }
 
-    public VirusLike(ArrayList<Long> ids) {
-        mSocialIdArray = ids;
-    }
-
     private ArrayList<Long> parseIdsArray(JSONObject response) {
 
         ArrayList<Long> socialIdArray = new ArrayList<>();
@@ -94,7 +90,7 @@ public class VirusLike extends AbstractData {
             //Магический переключатель стиля приглашений
             params.putString("new_style_message", "true");
             //Еще более магический параметр для реквеста
-            setRequestDataParam(context, params);
+            setRequestDataParam(params);
 
             //ID друзей которым мы отправляем реквест
             final ArrayList<Long> socialIdForRequest = getSocialIdForRequest();
@@ -190,10 +186,9 @@ public class VirusLike extends AbstractData {
     /**
      * Устанавливает поле data в FbDialog, это дополнительные данные, которые получит Topface при клике на ссылку
      *
-     * @param context контекст
      * @param params  Bundle с параметрами диалога
      */
-    private void setRequestDataParam(Context context, Bundle params) {
+    private void setRequestDataParam(Bundle params) {
         AuthToken token = AuthToken.getInstance();
         params.putString("data", "{\"type\":\"invite\",\"page\":\"Dating\",\"ref\":\"likegift:" + token.getUserSocialId() + "\"}");
     }

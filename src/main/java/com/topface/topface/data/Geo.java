@@ -25,16 +25,6 @@ public class Geo extends AbstractData implements Parcelable {
         mCoordinates = coordinates;
     }
 
-    public Geo(String address, double longitude, double latitude) {
-        mAddress = address;
-        try {
-            mCoordinates = new Coordinates(longitude, latitude);
-        } catch (Coordinates.WrongCoordinatesException e) {
-            mCoordinates = null;
-            Debug.error(e);
-        }
-    }
-
     protected void fillData(JSONObject data) {
         this.mAddress = "";
         try {

@@ -14,6 +14,7 @@
     <string name="settings_payment_problems_internal">Проблемы с оплатой</string>
     <string name="settings_cooperation_internal">Сотрудничество</string>
     <string name="settings_feedback_internal">Оставить отзыв</string>
+    <string name="settings_low_rate_internal">low_rate_%d</string>
 
     <string name="photo_is_set_tag">photo_is_set_tag</string>
 
@@ -27,6 +28,7 @@
 
     <string name="tag_header_shadow">ivHeaderShadow</string>
     <string name="transaction_info_link">http://topface.com/faq-mobile?from=android</string>
+    <string name="appsflyer_dev_key">mDUXh3zNggkkNCAgvXASna</string>
     <bool name="needProfileBackground">true</bool>
     <!-- С помощью этого флага определяем, планшет ли данное устройство см. ../values-sw600dp/constants.xml -->
     <bool name="is_tablet">false</bool>

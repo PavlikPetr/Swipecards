@@ -33,7 +33,6 @@ public class EditFormItemsFragment extends AbstractEditFragment {
     private String mData;
     private FormInfo mFormInfo;
     private static int mSeletedDataId;
-    private static Profile mProfile;
 
     private ListView mListView;
     private FormCheckingDataAdapter mAdapter;
@@ -75,8 +74,8 @@ public class EditFormItemsFragment extends AbstractEditFragment {
             mData = Static.EMPTY;
         }
 
-        mProfile = CacheProfile.getProfile();
-        mFormInfo = new FormInfo(getActivity(), mProfile.sex, mProfile.getType());
+        Profile profile = CacheProfile.getProfile();
+        mFormInfo = new FormInfo(getActivity(), profile.sex, profile.getType());
     }
 
     private void setSelectedId(int id) {

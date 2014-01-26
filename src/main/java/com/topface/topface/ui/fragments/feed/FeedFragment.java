@@ -906,9 +906,4 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    @Override
-    protected boolean isNeedShowPromoPopup() {
-        return true;
-    }
 }

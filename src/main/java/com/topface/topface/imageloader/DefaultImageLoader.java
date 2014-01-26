@@ -11,6 +11,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
+import com.nostra13.universalimageloader.utils.L;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
@@ -32,8 +33,10 @@ public class DefaultImageLoader {
 
     protected ImageLoaderConfiguration.Builder getConfig() {
         ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(mContext);
-        if (App.DEBUG) {
+        if (Debug.isDebugLogsEnabled()) {
             builder.writeDebugLogs();
+        } else {
+            L.disableLogging();
         }
         builder.discCacheSize(DISC_CACHE_SIZE);
         builder.defaultDisplayImageOptions(getDisplayImageConfig().build());
@@ -62,6 +65,7 @@ public class DefaultImageLoader {
         builder.cacheInMemory(true);
         builder.cacheOnDisc(true);
         builder.resetViewBeforeLoading(true);
+        builder.considerExifParams(true);
         builder.showImageForEmptyUri(R.drawable.im_photo_error);
         return builder;
     }

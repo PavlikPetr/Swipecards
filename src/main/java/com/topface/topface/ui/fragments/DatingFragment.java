@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -64,7 +63,6 @@ import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
@@ -73,7 +71,6 @@ import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.social.AuthToken;
 
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
@@ -99,7 +96,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mDatingLovePrice;
     private View mDatingGroup;
     private View mDatingResources;
-    private static boolean mInvitePopupShow;
 
     private RateController mRateController;
     private ImageSwitcher mImageSwitcher;
@@ -158,7 +154,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPreloadManager = new PreloadManager<SearchUser>();
+        mPreloadManager = new PreloadManager<>();
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
         mAlphaAnimation.setDuration(400L);
@@ -175,7 +171,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     protected void inBackroundThread() {
-        mNovice = Novice.getInstance();
+        mNovice = App.getNovice();
     }
 
     @Override
@@ -333,7 +329,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (CacheProfile.dating != null) {
             String cityString = CacheProfile.dating.city == null || CacheProfile.dating.city.isEmpty() ?
                     getString(R.string.filter_cities_all) : CacheProfile.dating.city.name;
-            String onlineString = DatingFilter.getOnlineField() ? getString(R.string.dating_online_only) : "%s";
+            String onlineString = DatingFilter.getOnlyOnlineField() ? getString(R.string.dating_online_only) : "%s";
             return String.format(onlineString, cityString);
         }
         return Static.EMPTY;
@@ -391,7 +387,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             lockControls();
             hideEmptySearchDialog();
             if (!isAddition) {
-                onUpdateStart(isAddition);
+                onUpdateStart(false);
             }
 
             mUpdateInProcess = true;
@@ -471,7 +467,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             //Показываем последнего пользователя
             if (mUserSearchList == null) {
-                mUserSearchList = new CachableSearchList<SearchUser>(SearchUser.class);
+                mUserSearchList = new CachableSearchList<>(SearchUser.class);
             }
             if (mCurrentUser == null) {
                 SearchUser currentUser = mUserSearchList.getCurrentUser();
@@ -494,13 +490,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private SearchRequest getSearchRequest() {
         SearchRequest searchRequest = new SearchRequest(getActivity());
         searchRequest.limit = SEARCH_LIMIT;
-        searchRequest.online = getFilterOnline();
+        searchRequest.onlyOnline = getFilterOnlyOnline();
         registerRequest(searchRequest);
         return searchRequest;
     }
 
-    private boolean getFilterOnline() {
-        return DatingFilter.getOnlineField();
+    private boolean getFilterOnlyOnline() {
+        return DatingFilter.getOnlyOnlineField();
     }
 
     @Override
@@ -566,9 +562,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                         : SendLikeRequest.DEFAULT_NO_MUTUAL,
                                 null
                         );
-
-                        EasyTracker.getTracker().sendEvent("Dating", "Rate",
-                                "SympathySend" + (mCurrentUser.mutual ? "mutual" : ""), 0L);
                     }
                     //currentSearch.rated = true;
                 }
@@ -578,15 +571,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 skipUser(mCurrentUser);
                 if (mCurrentUser != null) {
                     mCurrentUser.skipped = true;
-
-                    EasyTracker.getTracker().sendEvent("Dating", "Rate", "Skip", 0L);
                 }
                 showNextUser();
             }
             break;
             case R.id.btnDatingPrev: {
                 prevUser();
-                EasyTracker.getTracker().sendEvent("Dating", "Additional", "Prev", 0L);
             }
 
             break;
@@ -607,7 +597,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingSwitchNext: {
                 mViewFlipper.setDisplayedChild(1);
-                EasyTracker.getTracker().sendEvent("Dating", "Additional", "Switch", 1L);
             }
             break;
             case R.id.btnDatingSwitchPrev: {
@@ -765,9 +754,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
 
         if (mNovice.isShowSympathy()) {
-            mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, null);
+            OnClickListener completeShowSympathylistener = new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mNovice.completeShowSympathy();
+                }
+            };
+            mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, completeShowSympathylistener,
+                    completeShowSympathylistener);
             mNoviceLayout.startAnimation(mAlphaAnimation);
-            mNovice.completeShowSympathy();
         } else if (mNovice.isShowSympathiesBonus()) {
             mResourcesLikes.setText(getResources().getString(R.string.default_resource_value));
             NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
@@ -779,16 +774,25 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     CacheProfile.likes = noviceLikes.likes;
                     if (noviceLikes.increment > 0) {
                         Novice.giveNoviceLikesQuantity = noviceLikes.increment;
+                        updateResources();
                         final String text = String.format(
                                 getResources().getString(R.string.novice_sympathies_bonus),
                                 Novice.giveNoviceLikesQuantity,
                                 Novice.giveNoviceLikesQuantity
                         );
-                        mResourcesLikes.setText(Integer.toString(CacheProfile.likes));
-                        mNoviceLayout.setLayoutRes(R.layout.novice_sympathies_bonus, null,
-                                null, text);
+                        OnClickListener completeShowSympathiesBonusListener = new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mNovice.completeShowNoviceSympathiesBonus();
+                            }
+                        };
+                        mNoviceLayout.setLayoutRes(
+                                R.layout.novice_sympathies_bonus,
+                                completeShowSympathiesBonusListener,
+                                completeShowSympathiesBonusListener,
+                                text
+                        );
                         mNoviceLayout.startAnimation(mAlphaAnimation);
-                        mNovice.completeShowNoviceSympathiesBonus();
                     }
                 }
 
@@ -803,15 +807,22 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             }).exec();
         } else if (mNovice.isShowBuySympathies() && hasOneSympathyOrDelight && CacheProfile.likes <= Novice.MIN_LIKES_QUANTITY) {
-            mNoviceLayout.setLayoutRes(R.layout.novice_buy_sympathies, new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    mDatingResources.performClick();
-                }
-            });
+            mNoviceLayout.setLayoutRes(
+                    R.layout.novice_buy_sympathies,
+                    new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mNovice.completeShowBuySympathies();
+                            mDatingResources.performClick();
+                        }
+                    }, new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mNovice.completeShowBuySympathies();
+                        }
+                    }
+            );
             mNoviceLayout.startAnimation(mAlphaAnimation);
-            mNovice.completeShowBuySympathies();
         }
     }
 
@@ -1131,64 +1142,5 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected boolean isNeedShowPromoPopup() {
-        return true;
-    }
-
-    @Override
-    protected boolean showPromoDialog() {
-        boolean result = super.showPromoDialog();
-        if (!result) {
-            result = showInvitePopup(getActivity());
-        }
-        return result;
-    }
-
-    private boolean showInvitePopup(final FragmentActivity activity) {
-        if (!mInvitePopupShow && CacheProfile.canInvite && activity != null) {
-            final ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {
-                @Override
-                public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
-                    if (isAdded()) {
-                        showInvitePopup(contacts);
-                    }
-                }
-            };
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    final SharedPreferences preferences = activity.getSharedPreferences(
-                            Static.PREFERENCES_TAG_SHARED,
-                            Context.MODE_PRIVATE
-                    );
-                    doInvitePopupActions(preferences, activity, handler);
-                }
-            };
-        }
-        return true;
-    }
-
-    private void doInvitePopupActions(SharedPreferences preferences, FragmentActivity activity,
-                                      ContactsProvider.GetContactsHandler handler) {
-        long date_start = preferences.getLong(INVITE_POPUP_PREF_KEY, 1);
-        long date_now = new java.util.Date().getTime();
-
-        if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
-            mInvitePopupShow = true;
-            preferences.edit().putLong(INVITE_POPUP_PREF_KEY, date_now).commit();
-            if (activity != null) {
-                ContactsProvider provider = new ContactsProvider(activity);
-                provider.getContacts(-1, 0, handler);
-            }
-        }
-    }
-
-    public void showInvitePopup(ArrayList<ContactsProvider.Contact> data) {
-        EasyTracker.getTracker().sendEvent("InvitesPopup", "Show", "", 0L);
-        InvitesPopup popup = InvitesPopup.newInstance(data);
-        ((BaseFragmentActivity) getActivity()).startFragment(popup);
     }
 }

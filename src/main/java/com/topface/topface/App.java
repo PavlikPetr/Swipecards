@@ -39,8 +39,8 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
-import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
 import com.topface.topface.utils.config.SessionConfig;
@@ -64,6 +64,7 @@ public class App extends Application {
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
     private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 90;
 
+    /// will be false in released apk
     public static boolean DEBUG = false;
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -71,6 +72,11 @@ public class App extends Application {
     private static long mLastProfileUpdate;
     private static Configurations mBaseConfig;
 
+    /**
+     * Can return true in release mode for editors(Админка)
+     *
+     * @return true if Debug mode is on
+     */
     public static boolean isDebugMode() {
         boolean debug = false;
         PackageInfo packageInfo = null;
@@ -160,12 +166,7 @@ public class App extends Application {
     }
 
     private void sendLocation() {
-        GeoLocationManager locationManager = new GeoLocationManager(App.getContext());
-        Location curLocation = locationManager.getLastKnownLocation();
-
-        GeoPreferencesManager preferencesManager = new GeoPreferencesManager(App.getContext());
-        preferencesManager.saveLocation(curLocation);
-
+        Location curLocation = GeoLocationManager.getLastKnownLocation(mContext);
         if (curLocation != null) {
             SettingsRequest settingsRequest = new SettingsRequest(this);
             settingsRequest.location = curLocation;
@@ -356,6 +357,10 @@ public class App extends Application {
 
     public static BannersConfig getBannerConfig() {
         return getConfig().getBannerConfig();
+    }
+
+    public static Novice getNovice() {
+        return getConfig().getNovice();
     }
 }
 

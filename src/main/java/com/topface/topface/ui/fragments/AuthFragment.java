@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.appsflyer.AppsFlyerLib;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -416,6 +417,12 @@ public class AuthFragment extends BaseFragment {
                 }
                 loadAllProfileData();
                 hasAuthorized = true;
+                //Отправляем статистику в AppsFlyer
+                try {
+                    AppsFlyerLib.sendTrackingWithEvent(App.getContext(), "registration", "");
+                } catch (Exception e) {
+                    Debug.error("AppsFlyer Exception", e);
+                }
             }
 
             @Override
@@ -709,7 +716,7 @@ public class AuthFragment extends BaseFragment {
                 return;
             }
             AuthToken token = AuthToken.getInstance();
-            token.saveToken("", emailLogin, password);
+            token.saveToken(emailLogin, emailLogin, password);
             auth(token);
         }
     }

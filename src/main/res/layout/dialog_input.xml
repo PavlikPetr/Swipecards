@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/semitransparent_black"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/loDialog"
+            android:orientation="vertical"
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="12dp"
+            android:background="@drawable/bg_dialog"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/feedback_popup_title"
+                android:textSize="13sp"
+                android:gravity="center_horizontal"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp" />
+
+            <EditText
+                android:id="@+id/edMessage"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="left|top"
+                android:padding="8dp"
+                android:textSize="15sp"
+                android:minLines="2"
+                android:maxLines="5"
+                android:linksClickable="false"
+                style="@style/topfaceEditText" />
+
+            <Button
+                android:id="@+id/btnSend"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Topface.Button.Blue"
+                android:text="@string/general_send_full"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/loDialog"
+            android:layout_alignTop="@id/loDialog"
+            android:background="@drawable/btn_dialog_close_selector"
+            android:layout_marginTop="-16dp"
+            android:layout_marginRight="-16dp" />
+    </RelativeLayout>
+</ScrollView>

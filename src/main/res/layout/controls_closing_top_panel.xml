@@ -9,7 +9,7 @@
         android:id="@+id/btnWatchAsList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ButtonBlue"
+        style="@style/Widget.Topface.Button.Big.Blue"
         android:paddingLeft="35dp"
         android:paddingRight="35dp"
         android:layout_centerInParent="true"

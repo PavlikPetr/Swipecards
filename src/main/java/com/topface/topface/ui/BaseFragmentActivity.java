@@ -24,8 +24,10 @@ import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.LinkedList;
 
@@ -41,6 +43,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     private BroadcastReceiver mReauthReceiver;
     protected boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
+    private StartActionsController mStartActionsController;
 
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -55,6 +58,13 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         LocaleConfig.updateConfiguration(getBaseContext());
         setWindowOptions();
         initActionBar(getSupportActionBar());
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mStartActionsController = new StartActionsController(this);
+        onRegisterStartActions(mStartActionsController);
     }
 
     @Override
@@ -107,32 +117,32 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
                 onLoadProfile();
             } else {
-                startAuth();
-            }
-        } else if (mProfileLoadReceiver == null) {
-            mProfileLoadReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    //Уведомлять о загрузке профиля следует только если мы авторизованы
-                    if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
-                        checkProfileLoad();
-                    }
+                if (mProfileLoadReceiver == null) {
+                    mProfileLoadReceiver = new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context context, Intent intent) {
+                            //Уведомлять о загрузке профиля следует только если мы авторизованы
+                            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+                                checkProfileLoad();
+                            }
+                        }
+                    };
+                    LocalBroadcastManager.getInstance(this).registerReceiver(
+                            mProfileLoadReceiver,
+                            new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
+                    );
                 }
-            };
-            try {
-                LocalBroadcastManager.getInstance(this).registerReceiver(
-                        mProfileLoadReceiver,
-                        new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
-                );
-            } catch (Exception ex) {
-                Debug.error(ex);
+                startAuth();
             }
         }
     }
 
     protected void onLoadProfile() {
+        AuthorizationManager.extendAccessToken(this);
         if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
             startAuth();
+        } else {
+            mStartActionsController.onProcessAction();
         }
     }
 
@@ -271,13 +281,12 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         return true;
     }
 
-    protected void takePhoto(TakePhotoDialog.TakePhotoListener listener) {
+    protected void takePhoto() {
         if (needOpenDialog) {
             if (this instanceof NavigationActivity) {
                 ((NavigationActivity) this).setTakePhotoDialogStarted(true);
             }
             TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
-            newFragment.setOnTakePhotoListener(listener);
             try {
                 newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
             } catch (Exception e) {
@@ -321,5 +330,13 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+
+    /**
+     * Method for overload where you can register start actions
+     * User startActionController argument to register actions
+     * Note: actions can be placed here for global usage in all child activities
+     */
+    protected void onRegisterStartActions(StartActionsController startActionsController) {
     }
 }

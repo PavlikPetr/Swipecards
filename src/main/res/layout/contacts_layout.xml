@@ -27,7 +27,7 @@
 
             <Button
                 android:id="@+id/addButton"
-                style="@style/ButtonGray"
+                style="@style/Widget.Topface.Button.Big.Gray"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/general_add"
@@ -62,7 +62,7 @@
             android:id="@+id/contactsVip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            style="@style/ButtonBlue" />
+            style="@style/Widget.Topface.Button.Big.Blue" />
     </RelativeLayout>
 
     <ListView

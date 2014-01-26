@@ -62,7 +62,7 @@
             android:tag="btnFragmentProfile"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/left_menu_background_height"
-            android:background="@drawable/bg_semitransparent_black" />
+            android:background="@drawable/bg_semitransparent_black_selector" />
 
         <ImageView
             android:tag="profileInfo"
