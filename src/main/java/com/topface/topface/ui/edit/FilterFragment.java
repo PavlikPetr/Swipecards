@@ -47,9 +47,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ViewGroup mAlcoholFrame;
     private ViewGroup mFinanceFrame;
     private ViewGroup mBreastFrame;
-    private SparseArrayCompat<TextView> hashTextViewByTitleId = new SparseArrayCompat<TextView>();
+    private SparseArrayCompat<TextView> hashTextViewByTitleId = new SparseArrayCompat<>();
 
-    private EditSwitcher mSwitchOnline;
+    private EditSwitcher mSwitchOnlyOnline;
     private EditSwitcher mSwitchBeautifull;
 
     private boolean mExtraSavingPerformed = false;
@@ -75,7 +75,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         try {
             mFilter = CacheProfile.dating.clone();
             mInitFilter = mFilter.clone();
-            mInitFilterOnline = DatingFilter.getOnlineField();
+            mInitFilterOnline = DatingFilter.getOnlyOnlineField();
         } catch (CloneNotSupportedException e) {
             Debug.error(e);
         }
@@ -84,7 +84,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private void saveFilter() {
         try {
             mInitFilter = mFilter.clone();
-            mInitFilterOnline = DatingFilter.getOnlineField();
+            mInitFilterOnline = DatingFilter.getOnlyOnlineField();
         } catch (CloneNotSupportedException e) {
             Debug.error(e);
         }
@@ -127,8 +127,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         ViewGroup loSwitchOnline = (ViewGroup) root.findViewById(R.id.loOnline);
         setBackground(R.drawable.edit_big_btn_top_selector, loSwitchOnline);
         setText(R.string.filter_online, loSwitchOnline);
-        mSwitchOnline = new EditSwitcher(loSwitchOnline);
-        mSwitchOnline.setChecked(DatingFilter.getOnlineField());
+        mSwitchOnlyOnline = new EditSwitcher(loSwitchOnline);
+        mSwitchOnlyOnline.setChecked(DatingFilter.getOnlyOnlineField());
         loSwitchOnline.setOnClickListener(this);
 
         // Beautiful
@@ -275,9 +275,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         if (mFilter.city.id == City.ALL_CITIES) {
             return getResources().getString(R.string.filter_cities_all);
         } else {
-            StringBuilder strBuilder = new StringBuilder();
-            strBuilder.append(getResources().getString(R.string.general_city)).append(" ").append(mFilter.city.name);
-            return strBuilder.toString();
+            return getResources().getString(R.string.general_city) + " " + mFilter.city.name;
         }
     }
 
@@ -289,7 +287,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     @Override
     protected boolean hasChanges() {
-        return !mInitFilter.equals(mFilter) || mInitFilterOnline != DatingFilter.getOnlineField();
+        return !mInitFilter.equals(mFilter) || mInitFilterOnline != DatingFilter.getOnlyOnlineField();
     }
 
     @Override
@@ -337,8 +335,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY);
                 break;
             case R.id.loOnline:
-                mSwitchOnline.doSwitch();
-                DatingFilter.setOnlineField(mSwitchOnline.isChecked());
+                mSwitchOnlyOnline.doSwitch();
+                DatingFilter.setOnlyOnlineField(mSwitchOnlyOnline.isChecked());
                 break;
             case R.id.loBeautiful:
                 mSwitchBeautifull.doSwitch();
@@ -430,7 +428,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoBoys.setEnabled(false);
         mAgeFrame.setEnabled(false);
         mCityFrame.setEnabled(false);
-        mSwitchOnline.setEnabled(false);
+        mSwitchOnlyOnline.setEnabled(false);
         mSwitchBeautifull.setEnabled(false);
         mXStatusFrame.setEnabled(false);
         mMarriageFrame.setEnabled(false);
@@ -446,7 +444,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoBoys.setEnabled(true);
         mAgeFrame.setEnabled(true);
         mCityFrame.setEnabled(true);
-        mSwitchOnline.setEnabled(true);
+        mSwitchOnlyOnline.setEnabled(true);
         mSwitchBeautifull.setEnabled(true);
         mXStatusFrame.setEnabled(true);
         mMarriageFrame.setEnabled(true);

@@ -39,7 +39,6 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.HackyDrawerLayout;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
@@ -47,7 +46,6 @@ import com.topface.topface.utils.ExternalLinkExecuter;
 import com.topface.topface.utils.FullscreenController;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.NavigationBarController;
-import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
@@ -108,12 +106,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         initDrawerLayout();
         initFullscreen();
         initAppsFlyer();
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                onCreateAsync();
-            }
-        };
     }
 
     @Override
@@ -154,11 +146,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         return R.layout.actionbar_navigation_title_view;
     }
 
-    protected void onCreateAsync() {
-        Novice.getInstance().initNoviceFlags();
-//        initBonusCounterConfig();
-    }
-
     private void initBonusCounterConfig() {
         SharedPreferences preferences = getSharedPreferences(BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
         long lastTime = preferences.getLong(BONUS_COUNTER_LAST_SHOW_TIME, 0);
@@ -186,14 +173,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
                     .add(R.id.fragment_menu, mMenuFragment)
                     .commit();
         }
-
-        //Если активити открыто с указанием фрагмента, который нужно открыть
-        /*Intent intent = getIntent();
-        if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
-            showFragment(intent);
-        }*/
-
-
         mDrawerLayout = (HackyDrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
@@ -285,21 +264,16 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         } else {
             LocaleConfig.localeChangeInitiated = false;
         }
-
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
 
         if (needAnimate) {
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
         }
-
         needAnimate = true;
-
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
         new ExternalLinkExecuter(mListener).execute(getIntent());
-
         App.checkProfileUpdate();
-
         if (mNavBarController != null) {
             mNavBarController.refreshNotificators();
         }

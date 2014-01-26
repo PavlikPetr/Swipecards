@@ -77,7 +77,7 @@ public class UserConfig extends AbstractConfig {
     private String generateKey(String name) {
         AuthToken token = AuthToken.getInstance();
         return token.getSocialNet() +
-                Static.AMPERSAND + token.getUserSocialId() +
+                Static.AMPERSAND + token.getUserTokenUniqueId() +
                 Static.AMPERSAND + name;
     }
 
@@ -160,11 +160,11 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets "send sympathy hint" flag for novice user
-     * @param passed true if hint is passed
+     * @param needShow true if hint needs to be shown
      * @return true on success
      */
-    public boolean setNoviceSympathy(boolean passed) {
-        return getSettingsMap().setField(generateKey(DATA_NOVICE_SYMPATHY), passed);
+    public boolean setNoviceSympathy(boolean needShow) {
+        return getSettingsMap().setField(generateKey(DATA_NOVICE_SYMPATHY), needShow);
     }
 
     /**
@@ -177,11 +177,11 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets "buy sympathy hint" flag for novice user
-     * @param passed true if hint is passed
+     * @param needShow true if hint need to be shown
      * @return true on success
      */
-    public boolean setNoviceBuySympathy(boolean passed) {
-        return getSettingsMap().setField(generateKey(DATA_NOVICE_BUY_SYMPATHY), passed);
+    public boolean setNoviceBuySympathy(boolean needShow) {
+        return getSettingsMap().setField(generateKey(DATA_NOVICE_BUY_SYMPATHY), needShow);
     }
 
     /**
