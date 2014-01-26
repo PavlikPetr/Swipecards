@@ -18,33 +18,33 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class DeleteAccountDialog extends AbstractDialogFragment implements View.OnClickListener {
+public class DeleteAccountDialog extends AbstractModalDialog implements View.OnClickListener {
 
     public static final String TAG = "com.topface.topface.ui.dialogs.DeleteAccountDialog_TAG";
 
     @Override
-    protected void initViews(View root) {
+    protected void initContentViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
-
-        root.findViewById(R.id.btnClose).setOnClickListener(this);
         root.findViewById(R.id.btnCancel).setOnClickListener(this);
         root.findViewById(R.id.btnOk).setOnClickListener(this);
         ((ImageViewRemote) root.findViewById(R.id.ivAvatar)).setPhoto(CacheProfile.photo);
         ((TextView) root.findViewById(R.id.tvProfile)).setText(CacheProfile.getUserNameAgeString());
-
         ((TextView) root.findViewById(R.id.tvWarningText)).setText(R.string.delete_account_warning);
-
     }
 
     @Override
-    public int getDialogLayoutRes() {
+    protected int getContentLayoutResId() {
         return R.layout.dialog_delete_account;
+    }
+
+    @Override
+    protected void onCloseButtonClick(View v) {
+        closeDialog();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnClose:
             case R.id.btnCancel:
                 closeDialog();
                 break;

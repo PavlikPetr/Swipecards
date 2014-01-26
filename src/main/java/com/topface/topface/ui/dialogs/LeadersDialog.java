@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -23,7 +22,7 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LeadersDialog extends AbstractDialogFragment {
+public class LeadersDialog extends AbstractModalDialog {
 
     private Leader user;
 
@@ -40,7 +39,7 @@ public class LeadersDialog extends AbstractDialogFragment {
     }
 
     @Override
-    protected void initViews(View root) {
+    protected void initContentViews(View root) {
         Bundle arguments = getArguments();
         String userJsonString = arguments.getString("user");
         try {
@@ -48,31 +47,18 @@ public class LeadersDialog extends AbstractDialogFragment {
             user = new Leader(object);
             ImageViewRemote photo = (ImageViewRemote) root.findViewById(R.id.leaderPhoto);
             photo.setPhoto(user.photo);
-
             TextView name = (TextView) root.findViewById(R.id.leaderName);
             name.setText(user.getNameAndAge());
-
             TextView status = (TextView) root.findViewById(R.id.leaderStatus);
             status.setText(user.getStatus());
-
             TextView city = (TextView) root.findViewById(R.id.leaderCity);
             city.setText(user.city.name);
-
             // установка иконки онлайн
             name.setCompoundDrawablesWithIntrinsicBounds(
                     user.online ? R.drawable.ico_online : 0,
                     0, 0, 0
             );
-
-            ImageButton closeButton = (ImageButton) root.findViewById(R.id.btnClose);
             final Dialog dialog = getDialog();
-            closeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-
             Button profile = (Button) root.findViewById(R.id.leaderProfile);
             profile.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,7 +71,6 @@ public class LeadersDialog extends AbstractDialogFragment {
                     }
                 }
             });
-
             Button message = (Button) root.findViewById(R.id.leaderMessage);
             message.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -100,8 +85,13 @@ public class LeadersDialog extends AbstractDialogFragment {
     }
 
     @Override
-    public int getDialogLayoutRes() {
+    protected int getContentLayoutResId() {
         return R.layout.leaders_dialog;
+    }
+
+    @Override
+    protected void onCloseButtonClick(View v) {
+        getDialog().dismiss();
     }
 
     private void openChat() {

@@ -20,7 +20,7 @@ import com.topface.topface.utils.Utils;
  * Dialog for user feedback with configurable title and feedback subject name
  * Use newInstance(int titleResId, String feedbackSubject) method to create dialog
  */
-public class SendFeedbackDialog extends AbstractDialogFragment implements View.OnClickListener {
+public class SendFeedbackDialog extends AbstractModalDialog implements View.OnClickListener {
 
     private static final String ARG_TITLE_RES_ID = "feedback_dialog_title_res_id";
     private static final String ARG_FEEDBACK_SUBJECT = "feedback_dialog_subject_res_id";
@@ -28,7 +28,7 @@ public class SendFeedbackDialog extends AbstractDialogFragment implements View.O
     private EditText mEdMessage;
     private String mSubject;
 
-    public static AbstractDialogFragment newInstance(int titleResId, String feedbackSubject) {
+    public static SendFeedbackDialog newInstance(int titleResId, String feedbackSubject) {
         SendFeedbackDialog dialog = new SendFeedbackDialog();
         Bundle args = new Bundle();
         args.putInt(ARG_TITLE_RES_ID, titleResId);
@@ -45,12 +45,11 @@ public class SendFeedbackDialog extends AbstractDialogFragment implements View.O
     }
 
     @Override
-    protected void initViews(View root) {
+    protected void initContentViews(View root) {
         getDialog().setOnCancelListener(this);
         // init views
         TextView titleView = (TextView) root.findViewById(R.id.tvTitle);
         root.findViewById(R.id.btnSend).setOnClickListener(this);
-        root.findViewById(R.id.btnClose).setOnClickListener(this);
         mEdMessage = (EditText) root.findViewById(R.id.edMessage);
         // restore arguments
         Bundle args = getArguments();
@@ -61,8 +60,14 @@ public class SendFeedbackDialog extends AbstractDialogFragment implements View.O
     }
 
     @Override
-    public int getDialogLayoutRes() {
+    protected int getContentLayoutResId() {
         return R.layout.dialog_input;
+    }
+
+    @Override
+    protected void onCloseButtonClick(View v) {
+        Utils.hideSoftKeyboard(getActivity(), mEdMessage);
+        getDialog().cancel();
     }
 
     @Override
@@ -87,10 +92,6 @@ public class SendFeedbackDialog extends AbstractDialogFragment implements View.O
                     }
                 };
                 dismiss();
-                break;
-            case R.id.btnClose:
-                Utils.hideSoftKeyboard(getActivity(), mEdMessage);
-                getDialog().cancel();
                 break;
             default:
                 break;

@@ -17,7 +17,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
-public class ConfirmEmailDialog extends AbstractDialogFragment implements View.OnClickListener {
+public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnClickListener {
 
     public static final String TAG = "Topface_ConfirmEmailDialog_Tag";
     private EditText mEditEmailText;
@@ -25,14 +25,11 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
     private ProgressBar mProgressBar;
 
     @Override
-    protected void initViews(View root) {
+    protected void initContentViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
-
-        root.findViewById(R.id.btnClose).setOnClickListener(this);
         mConfirmButton = (Button) root.findViewById(R.id.btnSend);
         mConfirmButton.setOnClickListener(this);
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsLoading);
-
         mEditEmailText = (EditText) root.findViewById(R.id.edEmail);
         AuthToken token = AuthToken.getInstance();
         if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
@@ -41,8 +38,13 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
     }
 
     @Override
-    public int getDialogLayoutRes() {
+    protected int getContentLayoutResId() {
         return R.layout.dialog_confirm_email;
+    }
+
+    @Override
+    protected void onCloseButtonClick(View v) {
+        closeDialog();
     }
 
     @Override
@@ -56,9 +58,6 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnClose:
-                closeDialog();
-                break;
             case R.id.btnSend:
                 final String email = mEditEmailText.getText().toString().trim();
                 if (Utils.isValidEmail(email)) {
