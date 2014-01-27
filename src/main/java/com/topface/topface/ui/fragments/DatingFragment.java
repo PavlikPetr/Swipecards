@@ -171,7 +171,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     protected void inBackroundThread() {
-        mNovice = Novice.getInstance();
+        mNovice = App.getNovice();
     }
 
     @Override

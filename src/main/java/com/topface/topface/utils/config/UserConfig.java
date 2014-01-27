@@ -77,7 +77,7 @@ public class UserConfig extends AbstractConfig {
     private String generateKey(String name) {
         AuthToken token = AuthToken.getInstance();
         return token.getSocialNet() +
-                Static.AMPERSAND + token.getUserSocialId() +
+                Static.AMPERSAND + token.getUserTokenUniqueId() +
                 Static.AMPERSAND + name;
     }
 
