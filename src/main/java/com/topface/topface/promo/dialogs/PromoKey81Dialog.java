@@ -18,7 +18,7 @@ public class PromoKey81Dialog extends PromoDialog {
         super.initViews(root);
         int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.ADMIRATIONS);
         if (curVisitCounter == 0) {
-            CountersManager.getInstance(getActivity()).setCounter(CountersManager.ADMIRATIONS, curVisitCounter + getPremiumEntity().getCount(), true);
+            CountersManager.getInstance(getActivity()).setCounter(CountersManager.ADMIRATIONS, curVisitCounter + getPremiumEntity().getCount());
             counterUpdated = true;
         }
     }
@@ -56,7 +56,7 @@ public class PromoKey81Dialog extends PromoDialog {
         int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.ADMIRATIONS);
         AdmirationsReadedRequest request = new AdmirationsReadedRequest(getActivity());
         if (counterUpdated) {
-            CountersManager.getInstance(getActivity()).setCounter(CountersManager.ADMIRATIONS, curVisitCounter - getPremiumEntity().getCount(), true);
+            CountersManager.getInstance(getActivity()).setCounter(CountersManager.ADMIRATIONS, curVisitCounter - getPremiumEntity().getCount());
         }
         request.exec();
     }

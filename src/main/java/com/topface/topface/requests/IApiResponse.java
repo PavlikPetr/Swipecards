@@ -2,7 +2,6 @@ package com.topface.topface.requests;
 
 import org.json.JSONObject;
 
-@SuppressWarnings("UnusedDeclaration")
 public interface IApiResponse {
 
 

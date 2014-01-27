@@ -54,70 +54,7 @@ public class CountersManager {
         admirationsCounter = CacheProfile.unread_admirations;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public void incrementCounter(int type) {
-        switch (type) {
-            case LIKES:
-                likesCounter++;
-                break;
-            case SYMPATHY:
-                sympathyCounter++;
-                break;
-            case VISITORS:
-                visitorsCounter++;
-                break;
-            case DIALOGS:
-                dialogsCounter++;
-                break;
-            case FANS:
-                fansCounter++;
-                break;
-            case ADMIRATIONS:
-                admirationsCounter++;
-                break;
-        }
-        commitCounters();
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void decrementCounter(int type) {
-        switch (type) {
-            case LIKES:
-                if (likesCounter > 0) {
-                    likesCounter--;
-                }
-                break;
-            case SYMPATHY:
-                if (sympathyCounter > 0) {
-                    sympathyCounter--;
-                }
-                break;
-            case VISITORS:
-                if (visitorsCounter > 0) {
-                    visitorsCounter--;
-                }
-                break;
-            case DIALOGS:
-                if (dialogsCounter > 0) {
-                    dialogsCounter--;
-                }
-                break;
-            case FANS:
-                if (fansCounter > 0) {
-                    fansCounter--;
-                }
-                break;
-            case ADMIRATIONS:
-                if (admirationsCounter > 0) {
-                    admirationsCounter--;
-                }
-                break;
-        }
-        commitCounters();
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void setCounter(int type, int value, boolean doNeedUpdate) {
+    public void setCounter(int type, int value) {
         switch (type) {
             case LIKES:
                 likesCounter = value;
