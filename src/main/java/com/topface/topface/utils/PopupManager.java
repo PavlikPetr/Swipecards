@@ -13,7 +13,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.RateAppDialog;
-import com.topface.topface.ui.fragments.InvitesPopup;
+import com.topface.topface.ui.dialogs.InvitesPopup;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 
@@ -177,7 +177,7 @@ public class PopupManager {
             public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
                 EasyTracker.getTracker().sendEvent("InvitesPopup", "Show", "", 0L);
                 InvitesPopup popup = InvitesPopup.newInstance(contacts);
-                popup.show(mActivity.getSupportFragmentManager(),InvitesPopup.TAG);
+                popup.show(mActivity.getSupportFragmentManager(), InvitesPopup.TAG);
             }
         };
 

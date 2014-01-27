@@ -6,13 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +19,8 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.utils.BitmapUtils;
 
-public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickListener {
+public class TakePhotoDialog extends AbstractModalDialog implements View.OnClickListener {
+
     public static final String TAG = "Topface_TakePhotoDialog_Tag";
 
     private TextView mText;
@@ -38,8 +36,7 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
     private AddPhotoHelper mAddPhotoHelper;
     private Bitmap mBitmap;
     private Bitmap mScaledBitmap;
-
-    @Override
+    
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (activity instanceof ITakePhotoListener) {
@@ -48,15 +45,7 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_take_photo, container, false);
+    protected void initContentViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
         mAddPhotoHelper = new AddPhotoHelper(this);
         mAddPhotoHelper.setOnResultHandler(mAddPhotoHandler);
@@ -72,9 +61,11 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
         mBtnFromGallery.setOnClickListener(this);
         mBtnSendPhoto = (Button) root.findViewById(R.id.btnSendPhoto);
         mBtnSendPhoto.setOnClickListener(this);
+    }
 
-        root.findViewById(R.id.btnClose).setOnClickListener(this);
-        return root;
+    @Override
+    public int getContentLayoutResId() {
+        return R.layout.dialog_take_photo;
     }
 
     @Override
@@ -167,12 +158,6 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
                         dialog.dismiss();
                     }
                     break;
-                case R.id.btnClose:
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
-                    mTakePhotoListener.onTakePhotoDialogDismiss();
-                    break;
                 default:
                     break;
             }
@@ -219,4 +204,15 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
             }
         }
     };
+
+    @Override
+    protected void onCloseButtonClick(View v) {
+        Dialog dialog = getDialog();
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+        if (mTakePhotoListener != null) {
+            mTakePhotoListener.onTakePhotoDialogDismiss();
+        }
+    }
 }

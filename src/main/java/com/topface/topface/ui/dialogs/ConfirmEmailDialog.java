@@ -1,13 +1,8 @@
 package com.topface.topface.ui.dialogs;
 
 import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -22,7 +17,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
-public class ConfirmEmailDialog extends BaseDialogFragment implements View.OnClickListener {
+public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnClickListener {
 
     public static final String TAG = "Topface_ConfirmEmailDialog_Tag";
     private EditText mEditEmailText;
@@ -30,25 +25,26 @@ public class ConfirmEmailDialog extends BaseDialogFragment implements View.OnCli
     private ProgressBar mProgressBar;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_confirm_email, container, false);
-
-        setTransparentBackground();
+    protected void initContentViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
-
-        root.findViewById(R.id.btnClose).setOnClickListener(this);
         mConfirmButton = (Button) root.findViewById(R.id.btnSend);
         mConfirmButton.setOnClickListener(this);
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsLoading);
-
         mEditEmailText = (EditText) root.findViewById(R.id.edEmail);
         AuthToken token = AuthToken.getInstance();
         if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             mEditEmailText.setText(token.getLogin());
         }
+    }
 
-        return root;
+    @Override
+    protected int getContentLayoutResId() {
+        return R.layout.dialog_confirm_email;
+    }
+
+    @Override
+    protected void onCloseButtonClick(View v) {
+        closeDialog();
     }
 
     @Override
@@ -59,18 +55,9 @@ public class ConfirmEmailDialog extends BaseDialogFragment implements View.OnCli
         }
     }
 
-    private void setTransparentBackground() {
-        ColorDrawable color = new ColorDrawable(Color.BLACK);
-        color.setAlpha(175);
-        getDialog().getWindow().setBackgroundDrawable(color);
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnClose:
-                closeDialog();
-                break;
             case R.id.btnSend:
                 final String email = mEditEmailText.getText().toString().trim();
                 if (Utils.isValidEmail(email)) {
