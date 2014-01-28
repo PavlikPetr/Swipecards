@@ -23,11 +23,11 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.notifications.UserNotification;
-import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.notifications.UserNotification;
+import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.social.AuthToken;
 
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_CANCEL_TEST_NETWORK_ERRORS;
@@ -291,7 +291,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                                     createBroadcastPendingIntent(ACTION_CANCEL_TEST_NETWORK_ERRORS,
                                             testNetworkNotificationId)),
                     };
-                    notificationManager.showNotificationWithActions(testNetworkNotificationId,
+                    testNetworkNotificationId = notificationManager.showNotificationWithActions(
                             "Network Errors", "all requests will be returning errors", null,
                             true,
                             actions);

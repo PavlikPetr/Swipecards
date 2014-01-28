@@ -74,6 +74,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
 
     private boolean needAnimate = false;
     private boolean isPopupVisible = false;
+    private boolean needChangeFragment = false;
 
     private static NavigationActivity instance = null;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -106,7 +107,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         initDrawerLayout();
         initFullscreen();
         initAppsFlyer();
-
+        needChangeFragment = true;
     }
 
     @Override
@@ -265,8 +266,11 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         } else {
             LocaleConfig.localeChangeInitiated = false;
         }
-        if (getIntent() != null) {
+        if (getIntent() != null &&
+                getIntent().getSerializableExtra(GCMUtils.NEXT_INTENT) != null &&
+                needChangeFragment) {
             showFragment(getIntent());
+            needChangeFragment = false;
         }
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
