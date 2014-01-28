@@ -18,7 +18,7 @@ public class PromoKey71Dialog extends PromoDialog {
         super.initViews(root);
         int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
         if (curVisitCounter == 0) {
-            CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter + getPremiumEntity().getCount(), true);
+            CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter + getPremiumEntity().getCount());
             counterUpdated = true;
         }
     }
@@ -59,7 +59,7 @@ public class PromoKey71Dialog extends PromoDialog {
         //Откручиваем счетчик назад
         int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
         if (counterUpdated) {
-            CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter - getPremiumEntity().getCount(), true);
+            CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter - getPremiumEntity().getCount());
         }
     }
 }

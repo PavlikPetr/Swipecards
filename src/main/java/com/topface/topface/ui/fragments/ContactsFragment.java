@@ -41,10 +41,10 @@ public class ContactsFragment extends BaseFragment {
     public static final String CONTACTS = "contacts";
     ListView contactsView;
     private Button addButton;
-    private Button contactsVip;
+    private Button mContactsVip;
     private ArrayList<ContactsProvider.Contact> data;
     private LockerView locker;
-    private CheckBox checkBox;
+    private CheckBox mCheckBox;
 
     public static ContactsFragment newInstance(ArrayList<ContactsProvider.Contact> contacts) {
         Bundle args = new Bundle();
@@ -86,10 +86,8 @@ public class ContactsFragment extends BaseFragment {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     ((ContactsListAdapter) contactsView.getAdapter()).getFilter().filter(s);
-                    if (count != 0) {
-                        checkBox.setVisibility(View.GONE);
-                    } else {
-                        checkBox.setVisibility(View.VISIBLE);
+                    if (mCheckBox != null) {
+                        mCheckBox.setVisibility(count != 0 ? View.GONE : View.VISIBLE);
                     }
                 }
 
@@ -111,17 +109,17 @@ public class ContactsFragment extends BaseFragment {
             }
         });
 
-        contactsVip = (Button) root.findViewById(R.id.contactsVip);
+        mContactsVip = (Button) root.findViewById(R.id.contactsVip);
         if (data.size() < CacheProfile.getOptions().contacts_count) {
-            contactsVip.setText(getString(R.string.general_rest_contacts, CacheProfile.getOptions().contacts_count - data.size()));
-            contactsVip.setEnabled(false);
+            mContactsVip.setText(getString(R.string.general_rest_contacts, CacheProfile.getOptions().contacts_count - data.size()));
+            mContactsVip.setEnabled(false);
         } else {
-            contactsVip.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
+            mContactsVip.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
         }
-        contactsVip.setOnClickListener(new View.OnClickListener() {
+        mContactsVip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                contactsVip.setEnabled(false);
+                mContactsVip.setEnabled(false);
                 sendInvitesRequest();
             }
         });
@@ -166,8 +164,8 @@ public class ContactsFragment extends BaseFragment {
                     } else {
                         EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithChecked", "premiumFalse", (long) contacts.size());
                         Toast.makeText(getActivity(), getString(R.string.invalid_contacts), Toast.LENGTH_LONG).show();
-                        if (contactsVip != null) {
-                            contactsVip.setEnabled(true);
+                        if (mContactsVip != null) {
+                            mContactsVip.setEnabled(true);
                         }
                         unlockUi();
                     }
@@ -176,8 +174,8 @@ public class ContactsFragment extends BaseFragment {
                 @Override
                 public void fail(int codeError, IApiResponse response) {
                     EasyTracker.getTracker().sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
-                    if (contactsVip != null) {
-                        contactsVip.setEnabled(true);
+                    if (mContactsVip != null) {
+                        mContactsVip.setEnabled(true);
                     }
                     unlockUi();
                 }
@@ -193,18 +191,18 @@ public class ContactsFragment extends BaseFragment {
 
     class ContactsListAdapter extends BaseAdapter implements Filterable {
 
-        private ArrayList<ContactsProvider.Contact> data;
-        private Context context;
-        private boolean wasChanges = false;
-        private int checkedCount;
+        private ArrayList<ContactsProvider.Contact> mData;
+        private Context mContext;
+        private boolean mWasChanges = false;
+        private int mCheckedCount;
         private ContactsFilter filter = new ContactsFilter();
-        private ArrayList<ContactsProvider.Contact> filteredContacts = new ArrayList<ContactsProvider.Contact>();
+        private ArrayList<ContactsProvider.Contact> filteredContacts = new ArrayList<>();
 
         public ContactsListAdapter(Context context, ArrayList<ContactsProvider.Contact> data) {
-            this.data = data;
+            mData = data;
             filteredContacts = data;
-            this.context = context;
-            checkedCount = data.size();
+            mContext = context;
+            mCheckedCount = data.size();
         }
 
         @Override
@@ -213,14 +211,14 @@ public class ContactsFragment extends BaseFragment {
         }
 
         public void addFirst(ContactsProvider.Contact contact) {
-            data.add(contact);
-            wasChanges = true;
+            mData.add(contact);
+            mWasChanges = true;
             notifyDataSetChanged();
         }
 
         @Override
         public Object getItem(int position) {
-            return data.get(position);
+            return mData.get(position);
         }
 
         @Override
@@ -230,22 +228,20 @@ public class ContactsFragment extends BaseFragment {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.contact_item_layout, parent, false);
-
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.contact_item_layout, parent, false);
+            // text
             TextView text = (TextView) convertView.findViewById(R.id.contactName);
-
             final ContactsProvider.Contact contact = filteredContacts.get(filteredContacts.size() - position - 1);
-
             text.setText(contact.getName());
-
-            final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.contactCheckbox);
-            checkBox.setChecked(contact.isChecked());
+            // checkbox
+            final CheckBox currCheckBox = (CheckBox) convertView.findViewById(R.id.contactCheckbox);
+            currCheckBox.setChecked(contact.isChecked());
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    contact.setChecked(!checkBox.isChecked());
-                    checkBox.setChecked(!checkBox.isChecked());
-                    wasChanges = true;
+                    contact.setChecked(!currCheckBox.isChecked());
+                    currCheckBox.setChecked(!currCheckBox.isChecked());
+                    mWasChanges = true;
                     changeButtonState();
                 }
 
@@ -257,50 +253,47 @@ public class ContactsFragment extends BaseFragment {
         public void changeButtonState() {
             int rest = CacheProfile.getOptions().contacts_count - getCheckedCount();
             if (rest > 0) {
-                contactsVip.setText(context.getString(R.string.general_rest_contacts, rest));
-                contactsVip.setEnabled(false);
+                mContactsVip.setText(mContext.getString(R.string.general_rest_contacts, rest));
+                mContactsVip.setEnabled(false);
             } else {
-                contactsVip.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
-                contactsVip.setEnabled(true);
+                mContactsVip.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
+                mContactsVip.setEnabled(true);
             }
-
-            if (getCheckedCount() < data.size()) {
-                checkBox.setChecked(false);
-            } else {
-                checkBox.setChecked(true);
+            if (mCheckBox != null) {
+                mCheckBox.setChecked(getCheckedCount() >= mData.size());
             }
         }
 
         public void setAllDataChecked(boolean checked) {
-            if (data != null) {
+            if (mData != null) {
                 for (ContactsProvider.Contact contact : filteredContacts) {
                     contact.setChecked(checked);
                 }
-                wasChanges = true;
+                mWasChanges = true;
             }
             notifyDataSetChanged();
         }
 
         public int getCheckedCount() {
-            if (wasChanges) {
-                checkedCount = 0;
-                for (ContactsProvider.Contact contact : data) {
+            if (mWasChanges) {
+                mCheckedCount = 0;
+                for (ContactsProvider.Contact contact : mData) {
                     if (contact.isChecked()) {
-                        checkedCount++;
+                        mCheckedCount++;
                     }
                 }
             }
-            wasChanges = false;
-            return checkedCount;
+            mWasChanges = false;
+            return mCheckedCount;
         }
 
         public ArrayList<ContactsProvider.Contact> getData() {
-            return data;
+            return mData;
         }
 
         public ArrayList<ContactsProvider.Contact> getOnlyChecked() {
-            ArrayList<ContactsProvider.Contact> checked = new ArrayList<ContactsProvider.Contact>();
-            for (ContactsProvider.Contact contact : data) {
+            ArrayList<ContactsProvider.Contact> checked = new ArrayList<>();
+            for (ContactsProvider.Contact contact : mData) {
                 if (contact.isChecked()) {
                     checked.add(contact);
                 }
@@ -320,16 +313,16 @@ public class ContactsFragment extends BaseFragment {
                 FilterResults Result = new FilterResults();
                 // if constraint is empty return the original names
                 if (constraint.length() == 0) {
-                    Result.values = data;
-                    Result.count = data.size();
+                    Result.values = mData;
+                    Result.count = mData.size();
                     return Result;
                 }
 
-                ArrayList<ContactsProvider.Contact> Filtered_Names = new ArrayList<ContactsProvider.Contact>();
+                ArrayList<ContactsProvider.Contact> Filtered_Names = new ArrayList<>();
                 String filterString = constraint.toString().toLowerCase();
                 String filterableString;
 
-                for (ContactsProvider.Contact aData : data) {
+                for (ContactsProvider.Contact aData : mData) {
                     filterableString = aData.getName();
                     if (filterableString.toLowerCase().contains(filterString)) {
                         Filtered_Names.add(aData);
@@ -360,20 +353,20 @@ public class ContactsFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         final MenuItem selectAllMenuItem = menu.findItem(R.id.action_select_all);
-        checkBox = (CheckBox) MenuItemCompat.getActionView(selectAllMenuItem).findViewById(R.id.cbCheckBox);
+        mCheckBox = (CheckBox) MenuItemCompat.getActionView(selectAllMenuItem).findViewById(R.id.cbCheckBox);
         selectAllMenuItem.setChecked(true);
-        checkBox.setChecked(true);
-        checkBox.setOnClickListener(new View.OnClickListener() {
+        mCheckBox.setChecked(true);
+        mCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onOptionsItemSelected(selectAllMenuItem);
             }
         });
-        checkBox.setOnClickListener(new CompoundButton.OnClickListener() {
+        mCheckBox.setOnClickListener(new CompoundButton.OnClickListener() {
             @Override
             public void onClick(View buttonView) {
                 ContactsListAdapter adapter = (ContactsListAdapter) contactsView.getAdapter();
-                adapter.setAllDataChecked(checkBox.isChecked());
+                adapter.setAllDataChecked(mCheckBox.isChecked());
                 adapter.changeButtonState();
             }
         });
