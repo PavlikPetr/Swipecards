@@ -23,7 +23,8 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.TopfaceNotificationManager;
+import com.topface.topface.utils.notifications.UserNotification;
+import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.AppConfig;
@@ -33,8 +34,7 @@ import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_CAN
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_OFF;
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_ON;
 import static com.topface.topface.receivers.TestNotificationsReceiver.createBroadcastPendingIntent;
-import static com.topface.topface.utils.TopfaceNotificationManager.NotificationAction;
-import static com.topface.topface.utils.TopfaceNotificationManager.getInstance;
+import static com.topface.topface.utils.notifications.UserNotificationManager.getInstance;
 
 /**
  * Фрагмент админки. Доступен только для редакторов.
@@ -52,7 +52,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private long standard_timeout;
     private EditSwitcher switcherTestNetwork;
 
-    private static int testNetworkNotificationId = TopfaceNotificationManager
+    private static int testNetworkNotificationId = UserNotificationManager
             .getInstance(App.getContext()).newNotificationId();
 
     @Override
@@ -279,15 +279,15 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.loTestNetworkSwitcher:
                 switcherTestNetwork.doSwitch();
-                TopfaceNotificationManager notificationManager = getInstance(getActivity());
+                UserNotificationManager notificationManager = getInstance(getActivity());
                 if (switcherTestNetwork.isChecked()) {
                     mAppConfig.setTestNetwork(true);
-                    NotificationAction[] actions = new NotificationAction[]{
-                            new NotificationAction(0, "Enable",
+                    UserNotification.NotificationAction[] actions = new UserNotification.NotificationAction[]{
+                            new UserNotification.NotificationAction(0, "Enable",
                                     createBroadcastPendingIntent(ACTION_TEST_NETWORK_ERRORS_ON)),
-                            new NotificationAction(0, "Disable",
+                            new UserNotification.NotificationAction(0, "Disable",
                                     createBroadcastPendingIntent(ACTION_TEST_NETWORK_ERRORS_OFF)),
-                            new NotificationAction(R.drawable.ic_close_dialog, "Cancel",
+                            new UserNotification.NotificationAction(R.drawable.ic_close_dialog, "Cancel",
                                     createBroadcastPendingIntent(ACTION_CANCEL_TEST_NETWORK_ERRORS,
                                             testNetworkNotificationId)),
                     };

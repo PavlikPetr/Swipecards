@@ -2,10 +2,8 @@ package com.topface.topface.ui.profile;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
@@ -29,7 +27,7 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.TopfaceNotificationManager;
+import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.Utils;
 
 import java.io.File;
@@ -56,7 +54,7 @@ public class AddPhotoHelper {
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 101;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 100;
-    private TopfaceNotificationManager mNotificationManager;
+    private UserNotificationManager mNotificationManager;
     private File outputFile;
     private static HashMap<String, File> fileNames = new HashMap<>();
 
@@ -243,14 +241,14 @@ public class AddPhotoHelper {
         }
         Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
         showProgressDialog();
-        mNotificationManager = TopfaceNotificationManager.getInstance(mContext);
+        mNotificationManager = UserNotificationManager.getInstance(mContext);
 
         Intent intent = new Intent(mActivity, NavigationActivity.class)
                 .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
                 .putExtra("PhotoUrl", uri);
         final PhotoNotificationListener notificationListener = new PhotoNotificationListener();
 
-        mNotificationManager.showProgressNotification(
+        mNotificationManager.showProgressNotificationAsync(
                 mContext.getString(R.string.default_photo_upload),
                 uri.toString(), intent, notificationListener
         );
@@ -292,7 +290,7 @@ public class AddPhotoHelper {
                 Intent intent = new Intent(mActivity, NavigationActivity.class)
                         .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
                         .putExtra("PhotoUrl", uri);
-                mNotificationManager.showFailNotification(
+                mNotificationManager.showFailNotificationAsync(
                         mContext.getString(R.string.default_photo_upload_error), "",
                         uri.toString(), intent, null);
             }
@@ -330,7 +328,7 @@ public class AddPhotoHelper {
 
     }
 
-    public static class PhotoNotificationListener implements TopfaceNotificationManager.NotificationImageListener{
+    public static class PhotoNotificationListener implements UserNotificationManager.NotificationImageListener{
         public boolean needShowNotification = true;
         private int id = -1;
 

@@ -106,6 +106,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         initDrawerLayout();
         initFullscreen();
         initAppsFlyer();
+
     }
 
     @Override
@@ -271,6 +272,9 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
             return;
         } else {
             LocaleConfig.localeChangeInitiated = false;
+        }
+        if (getIntent() != null) {
+            showFragment(getIntent());
         }
 
         //Отправляем не обработанные запросы на покупку
