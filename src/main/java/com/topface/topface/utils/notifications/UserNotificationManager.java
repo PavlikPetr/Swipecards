@@ -14,8 +14,8 @@ public class UserNotificationManager {
     private static UserNotificationManager mInstance;
     public static final int NOTIFICATION_ID = 1312; //Completely random number
 
-    private NotificationManager notificationManager;
-    private Context ctx;
+    private NotificationManager mNotificationManager;
+    private Context mContext;
 
     private static int lastId = 1314;
 
@@ -27,28 +27,28 @@ public class UserNotificationManager {
     }
 
     private UserNotificationManager(Context context) {
-        ctx = context;
-        notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+        mContext = context;
+        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     /*
         isTextNotification - разворачивать нотификацию как текст - true, как картинку - false
      */
-    public int  showNotification(String title, String message, boolean isTextNotification,
+    public int showNotification(String title, String message, boolean isTextNotification,
                                 Bitmap icon, int unread, Intent intent, boolean doNeedReplace) {
         return showNotification(title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, false, UserNotification.Type.STANDARD, null);
     }
 
-    public int  showNotification(String title, String message, boolean isTextNotification,
+    private int showNotification(String title, String message, boolean isTextNotification,
                                  Bitmap icon, int unread, Intent intent, boolean doNeedReplace, UserNotification.Type type) {
         return showNotification(title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, false, type, null);
     }
 
     public void showNotification(final String title, final String message, final boolean isTextNotification,
-                                String uri, final int unread, final Intent intent, final boolean doNeedReplace,
-                                final NotificationImageListener listener) {
+                                 String uri, final int unread, final Intent intent, final boolean doNeedReplace,
+                                 final NotificationImageListener listener) {
         DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -64,7 +64,7 @@ public class UserNotificationManager {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 if (listener != null && listener.needShowNotification()) {
-                    listener.onSuccess( showNotification(title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace));
+                    listener.onSuccess(showNotification(title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace));
                 } else {
                     showNotification(title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace);
                 }
@@ -88,7 +88,7 @@ public class UserNotificationManager {
         return ++lastId;
     }
 
-    public int showNotificationWithActions(int id, String title, String message, Bitmap icon,
+    public int showNotificationWithActions(String title, String message, Bitmap icon,
                                            boolean ongoing,
                                            UserNotification.NotificationAction[] actions) {
         return showNotification(title, message, false, icon, 0, null, true, ongoing, UserNotification.Type.ACTIONS, actions);
@@ -154,7 +154,7 @@ public class UserNotificationManager {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 if (listener != null) {
-                    if(listener.needShowNotification()) {
+                    if (listener.needShowNotification()) {
                         listener.onSuccess(showFailNotification(title, msg, loadedImage, intent));
                     }
                 } else {
@@ -178,7 +178,7 @@ public class UserNotificationManager {
         if (doNeedReplace) {
             id = newNotificationId();
         }
-        UserNotification notification = new UserNotification(ctx);
+        UserNotification notification = new UserNotification(mContext);
         notification.setType(type);
         notification.setImage(icon);
         notification.setTitle(title);
@@ -188,18 +188,20 @@ public class UserNotificationManager {
         notification.setId(id);
         notification.setOngoing(ongoing);
 
-        notificationManager.notify(id, notification.generate(intent, actions));
+        mNotificationManager.notify(id, notification.generate(intent, actions));
         return id;
     }
 
     public void cancelNotification(int id) {
-        notificationManager.cancel(id);
+        mNotificationManager.cancel(id);
     }
 
 
     public static interface NotificationImageListener {
         public void onSuccess(int id);
+
         public void onFail();
+
         //Нужно, если в каких-то случаях, после асинхронной загрузки фото,
         //нотификацию показывать уже не надо. Если в любом случае надо, можно
         //передать этот listener null или поставить у этого метода return true;

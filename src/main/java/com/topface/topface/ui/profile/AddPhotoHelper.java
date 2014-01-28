@@ -1,6 +1,5 @@
 package com.topface.topface.ui.profile;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
+
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -27,8 +27,8 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import java.io.File;
 import java.util.HashMap;
@@ -243,14 +243,11 @@ public class AddPhotoHelper {
         showProgressDialog();
         mNotificationManager = UserNotificationManager.getInstance(mContext);
 
-        Intent intent = new Intent(mActivity, NavigationActivity.class)
-                .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
-                .putExtra("PhotoUrl", uri);
         final PhotoNotificationListener notificationListener = new PhotoNotificationListener();
 
         mNotificationManager.showProgressNotificationAsync(
                 mContext.getString(R.string.default_photo_upload),
-                uri.toString(), intent, notificationListener
+                uri.toString(), getIntentForNotification(), notificationListener
         );
 
 
@@ -266,13 +263,9 @@ public class AddPhotoHelper {
                     msg.obj = photo;
                     mHandler.sendMessage(msg);
                 }
-                @SuppressLint("InlinedApi") Intent intent = new Intent(mActivity, NavigationActivity.class)
-                        .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
-                        .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 mNotificationManager.showNotification(
                         mContext.getString(R.string.default_photo_upload_complete), "", false,
-                        uri.toString(), 1, intent, true, null);
+                        uri.toString(), 1, getIntentForNotification(), true, null);
             }
 
             @Override
@@ -287,12 +280,9 @@ public class AddPhotoHelper {
                 }
                 photoAddRequest.cancel();
                 showErrorMessage(codeError);
-                Intent intent = new Intent(mActivity, NavigationActivity.class)
-                        .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
-                        .putExtra("PhotoUrl", uri);
                 mNotificationManager.showFailNotificationAsync(
                         mContext.getString(R.string.default_photo_upload_error), "",
-                        uri.toString(), intent, null);
+                        uri.toString(), getIntentForNotification(), null);
             }
 
             @Override
@@ -328,6 +318,13 @@ public class AddPhotoHelper {
 
     }
 
+    private Intent getIntentForNotification() {
+        return new Intent(mActivity, NavigationActivity.class)
+                .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
+                .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
     public static class PhotoNotificationListener implements UserNotificationManager.NotificationImageListener{
         public boolean needShowNotification = true;
         private int id = -1;
@@ -348,8 +345,7 @@ public class AddPhotoHelper {
         public boolean needShowNotification() {
             return needShowNotification;
         }
-    };
-
+    }
 
 
     private void showErrorMessage(int codeError) {
