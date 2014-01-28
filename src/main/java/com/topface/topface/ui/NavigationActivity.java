@@ -106,7 +106,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         initDrawerLayout();
         initFullscreen();
         initAppsFlyer();
-        needChangeFragment = true;
     }
 
     @Override
