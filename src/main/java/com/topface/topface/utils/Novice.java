@@ -43,19 +43,9 @@ public class Novice {
 
     private boolean getShowBuySympathies() {
         UserConfig config = mConfig;
-        boolean result = config.getNoviceBuySympathy();
-        if (result) return true;
-
-        long todayTime = Utils.unixtimeInSeconds();
+        if (config.getNoviceBuySympathy()) return true;
         long lastTime = config.getNoviceBuySympathyDate();
-
-        if (lastTime > 0) {
-            return (todayTime - lastTime) >= Utils.WEEK_IN_SECONDS;
-        } else {
-            config.setNoviceBuySympathyDate(todayTime);
-            config.saveConfig();
-            return false;
-        }
+        return (lastTime > 0) && (Utils.unixtimeInSeconds() - lastTime) >= Utils.WEEK_IN_SECONDS;
     }
 
     public void completeShowSympathy() {

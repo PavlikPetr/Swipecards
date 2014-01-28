@@ -171,7 +171,7 @@ public class ProfilePhotoFragment extends BaseFragment {
                 switch (which) {
                     case 0:
                         PhotoMainRequest request = new PhotoMainRequest(getActivity());
-                        request.photoid = photo.getId();
+                        request.photoId = photo.getId();
                         request.callback(new SimpleApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
