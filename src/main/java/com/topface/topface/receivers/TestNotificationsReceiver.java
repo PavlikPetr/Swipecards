@@ -10,7 +10,7 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.TopfaceNotificationManager;
+import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.config.AppConfig;
 
 public class TestNotificationsReceiver extends BroadcastReceiver {
@@ -38,7 +38,7 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
                 break;
             case ACTION_CANCEL_TEST_NETWORK_ERRORS:
                 int notificationId = intent.getIntExtra(EXTRA_ACTION_PARAMETER, 0);
-                TopfaceNotificationManager.getInstance(App.getContext())
+                UserNotificationManager.getInstance(App.getContext())
                         .cancelNotification(notificationId);
                 config.setTestNetwork(false);
                 config.setApiUrl(Static.API_URL, Static.API_VERSION, null);

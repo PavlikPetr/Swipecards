@@ -1,11 +1,8 @@
 package com.topface.topface.ui.profile;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
@@ -14,11 +11,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
@@ -32,8 +27,8 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import java.io.File;
 import java.util.HashMap;
@@ -59,10 +54,9 @@ public class AddPhotoHelper {
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 101;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 100;
-    private TopfaceNotificationManager mNotificationManager;
+    private UserNotificationManager mNotificationManager;
     private File outputFile;
     private static HashMap<String, File> fileNames = new HashMap<>();
-
 
     public AddPhotoHelper(Fragment fragment, LockerView mLockerView) {
         this(fragment.getActivity());
@@ -96,6 +90,7 @@ public class AddPhotoHelper {
     public OnClickListener getAddPhotoClickListener() {
         return mOnAddPhotoClickListener;
     }
+
 
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
         @Override
@@ -238,72 +233,27 @@ public class AddPhotoHelper {
      * @param uri фотографии
      */
     public void sendRequest(final Uri uri) {
-        Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
         if (uri == null) {
             if (mHandler != null) {
                 mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
             }
             return;
         }
+        Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
         showProgressDialog();
-        mNotificationManager = TopfaceNotificationManager.getInstance(mContext);
+        mNotificationManager = UserNotificationManager.getInstance(mContext);
 
-        final TopfaceNotificationManager.TempImageViewRemote fakeImageView = new TopfaceNotificationManager.TempImageViewRemote(mContext);
-        fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
-        final OnNotificationListener listener = new OnNotificationListener();
-        fakeImageView.setRemoteSrc(uri.toString(), new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if (listener.isResponseReceived == -1) {
-                    Intent intent = new Intent(mActivity, NavigationActivity.class)
-                            .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
-                            .putExtra("PhotoUrl", uri);
-                    listener.onNotificationIdReceived(
-                            mNotificationManager.showProgressNotification(
-                                    mContext.getString(R.string.default_photo_upload),
-                                    fakeImageView.getImageBitmap(), intent
-                            )
-                    );
-                } else if (listener.isResponseReceived == listener.SUCCESS) {
-                    Intent intent = new Intent(App.getContext(), NavigationActivity.class)
-                            .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE);
-                    mNotificationManager.showNotification(
-                            mContext.getString(R.string.default_photo_upload_complete), "", false,
-                            fakeImageView.getImageBitmap(), 1, intent, true
-                    );
-                } else if (listener.isResponseReceived == listener.FAIL) {
-                    Intent intent = new Intent(mActivity, NavigationActivity.class)
-                            .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
-                            .putExtra("PhotoUrl", uri);
-                    mNotificationManager.showFailNotification(
-                            mContext.getString(R.string.default_photo_upload_error), "",
-                            fakeImageView.getImageBitmap(), intent);
-                }
+        final PhotoNotificationListener notificationListener = new PhotoNotificationListener();
 
-            }
-        });
+        mNotificationManager.showProgressNotificationAsync(
+                mContext.getString(R.string.default_photo_upload),
+                uri.toString(), getIntentForNotification(), notificationListener
+        );
+
 
         final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext);
         //TODO также обрабатывать запросы с id...x, где x-порядковый номер переповтора
         fileNames.put(photoAddRequest.getId(), outputFile);
-
-        final BroadcastReceiver receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                mNotificationManager.cancelNotification(intent.getIntExtra("id", 1));
-                if (!intent.getBooleanExtra("isRetry", false)) {
-                    photoAddRequest.cancel();
-                } else if (intent.getBooleanExtra("isRetry", false)) {
-                    photoAddRequest.cancel();
-                    sendRequest(uri);
-                }
-                mContext.unregisterReceiver(this);
-            }
-        };
-
-        mContext.registerReceiver(receiver, new IntentFilter(CANCEL_NOTIFICATION_RECEIVER + uri));
-
         photoAddRequest.callback(new DataApiHandler<Photo>() {
             @Override
             protected void success(Photo photo, IApiResponse response) {
@@ -313,20 +263,9 @@ public class AddPhotoHelper {
                     msg.obj = photo;
                     mHandler.sendMessage(msg);
                 }
-                listener.onResponseReceived(listener.SUCCESS);
-                if (listener.notificationId != -1) {
-                    @SuppressLint("InlinedApi") Intent intent = new Intent(mActivity, NavigationActivity.class)
-                            .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
-                            .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
-                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    mNotificationManager.showNotification(
-                            mContext.getString(R.string.default_photo_upload_complete), "", false,
-                            fakeImageView.getImageBitmap(), 1, intent, true);
-                }
-                if (mContext != null) {
-                    mContext.unregisterReceiver(receiver);
-                }
-
+                mNotificationManager.showNotification(
+                        mContext.getString(R.string.default_photo_upload_complete), "", false,
+                        uri.toString(), 1, getIntentForNotification(), true, null);
             }
 
             @Override
@@ -341,21 +280,16 @@ public class AddPhotoHelper {
                 }
                 photoAddRequest.cancel();
                 showErrorMessage(codeError);
-                listener.onResponseReceived(listener.FAIL);
-                if (listener.notificationId != -1) {
-                    Intent intent = new Intent(mActivity, NavigationActivity.class)
-                            .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
-                            .putExtra("PhotoUrl", uri);
-                    mNotificationManager.showFailNotification(
-                            mContext.getString(R.string.default_photo_upload_error), "",
-                            fakeImageView.getImageBitmap(), intent);
-                }
+                mNotificationManager.showFailNotificationAsync(
+                        mContext.getString(R.string.default_photo_upload_error), "",
+                        uri.toString(), getIntentForNotification(), null);
             }
 
             @Override
             public void always(final IApiResponse response) {
                 super.always(response);
                 hideProgressDialog();
+                mNotificationManager.cancelNotification(notificationListener.getId());
                 //Удаляем все временные картинки
                 new BackgroundThread() {
                     @Override
@@ -384,6 +318,36 @@ public class AddPhotoHelper {
 
     }
 
+    private Intent getIntentForNotification() {
+        return new Intent(mActivity, NavigationActivity.class)
+                .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
+                .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    public static class PhotoNotificationListener implements UserNotificationManager.NotificationImageListener{
+        public boolean needShowNotification = true;
+        private int id = -1;
+
+        @Override
+        public void onSuccess(int id) {
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public void onFail() {}
+
+        @Override
+        public boolean needShowNotification() {
+            return needShowNotification;
+        }
+    }
+
+
     private void showErrorMessage(int codeError) {
         switch (codeError) {
             case ErrorCodes.INCORRECT_PHOTO_DATA:
@@ -397,34 +361,5 @@ public class AddPhotoHelper {
                 break;
         }
     }
-
-
-    private class OnNotificationListener {
-
-        private int notificationId = -1;
-        private int isResponseReceived = -1;
-
-        private final int SUCCESS = 1;
-        private final int FAIL = 0;
-
-
-        public void onNotificationIdReceived(int id) {
-            if (isResponseReceived != -1) {
-                mNotificationManager.cancelNotification(id);
-            } else {
-                notificationId = id;
-            }
-        }
-
-        public void onResponseReceived(int type) {
-            if (notificationId != -1) {
-                mNotificationManager.cancelNotification(notificationId);
-            } else {
-                isResponseReceived = type;
-            }
-        }
-
-    }
-
 }
 

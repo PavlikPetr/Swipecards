@@ -1480,9 +1480,12 @@ public class Base64 {
                 Debug.log("Write bytes: " + length);
                 output.write(buffer, 0, numBytes);
             }
+            Debug.log("Write bytes ended");
         } finally {
             try {
+                Debug.log("Write bytes finally");
                 if (bis != null) {
+                    Debug.log("Write bytes stream close");
                     bis.close();
                 }
             } catch (Exception e) {
