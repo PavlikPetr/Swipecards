@@ -2,13 +2,10 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.TextUtils;
 
 import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
-
-import java.util.UUID;
 
 /**
  * Класс для хранения в SharedPreferences тех настроек, которые обязательны для работы приложения,
@@ -32,10 +29,7 @@ public class AppConfig extends AbstractConfig {
     private static final String DATA_APP_CONFIG_VERSION = "data_app_config_version";
     private static final String DATA_API_VERSION = "data_api_version";
     public static final String FLOOD_ENDS_TIME = "flood_ens_time";
-    private static final String APP_UNIQUE_ID = "app_unique_id";
     private static final String DATA_TEST_NETWORK = "data_test_network_mode";
-    public static final String DEVICE_LATTITUDE = "lattitude";
-    public static final String DEVICE_LONGITUDE = "longitude";
 
     @Override
     protected void fillSettingsMap(SettingsMap settingsMap) {
@@ -55,12 +49,8 @@ public class AppConfig extends AbstractConfig {
         settingsMap.addIntegerField(DATA_DEBUG_MODE, Debug.MODE_EDITOR);
         // date when flood ends
         settingsMap.addLongField(FLOOD_ENDS_TIME, 0l);
-        // unique generated id for current app install
-        settingsMap.addStringField(APP_UNIQUE_ID, null);
         // flag for test mode for network errors
         settingsMap.addBooleanField(DATA_TEST_NETWORK, false);
-        settingsMap.addDoubleField(DEVICE_LATTITUDE, 1000d);
-        settingsMap.addDoubleField(DEVICE_LONGITUDE, 1000d);
     }
 
     public AppConfig(Context context) {
@@ -173,21 +163,6 @@ public class AppConfig extends AbstractConfig {
     }
 
     /**
-     * Unique id for app. Generated once for installation and saved for further use
-     *
-     * @return app id
-     */
-    public String getAppUniqueId() {
-        SettingsMap settingsMap = getSettingsMap();
-        String uniqueId = settingsMap.getStringField(APP_UNIQUE_ID);
-        if (TextUtils.isEmpty(uniqueId)) {
-            uniqueId = UUID.randomUUID().toString();
-            settingsMap.setField(APP_UNIQUE_ID, uniqueId);
-        }
-        return uniqueId;
-    }
-
-    /**
      * Network errors mode
      *
      * @param value true if need opportunity to switch network errors on and off
@@ -227,22 +202,6 @@ public class AppConfig extends AbstractConfig {
     public String getApiUrl() {
         SettingsMap settingsMap = getSettingsMap();
         return settingsMap.getStringField(DATA_API_URL) + "?v=" + settingsMap.getIntegerField(DATA_API_VERSION);
-    }
-
-    public void setDeviceLattitude(Double lattitude) {
-        getSettingsMap().setField(DEVICE_LATTITUDE, lattitude);
-    }
-
-    public Double getDeviceLattitude() {
-        return getSettingsMap().getDoubleField(DEVICE_LATTITUDE);
-    }
-
-    public void setDeviceLongitude(Double longitude) {
-        getSettingsMap().setField(DEVICE_LONGITUDE, longitude);
-    }
-
-    public Double getDeviceLongitude() {
-        return getSettingsMap().getDoubleField(DEVICE_LONGITUDE);
     }
 
     @Override
