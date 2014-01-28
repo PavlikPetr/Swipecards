@@ -1,9 +1,6 @@
-package com.topface.topface.promo.fragments;
+package com.topface.topface.promo.dialogs;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
@@ -12,19 +9,18 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
-public class PromoKey71Fragment extends PromoFragment {
+public class PromoKey71Dialog extends PromoDialog {
 
     private boolean counterUpdated;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    public void initViews(View root) {
+        super.initViews(root);
         int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
         if (curVisitCounter == 0) {
-            CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter + getPremiumEntity().getCount(), true);
+            CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter + getPremiumEntity().getCount());
             counterUpdated = true;
         }
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -63,7 +59,7 @@ public class PromoKey71Fragment extends PromoFragment {
         //Откручиваем счетчик назад
         int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
         if (counterUpdated) {
-            CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter - getPremiumEntity().getCount(), true);
+            CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter - getPremiumEntity().getCount());
         }
     }
 }

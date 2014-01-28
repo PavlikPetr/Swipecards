@@ -2,9 +2,7 @@ package com.topface.topface.ui.dialogs;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,7 +20,7 @@ import com.topface.topface.utils.Utils;
  * Dialog for user feedback with configurable title and feedback subject name
  * Use newInstance(int titleResId, String feedbackSubject) method to create dialog
  */
-public class SendFeedbackDialog extends BaseDialogFragment implements View.OnClickListener {
+public class SendFeedbackDialog extends AbstractModalDialog implements View.OnClickListener {
 
     private static final String ARG_TITLE_RES_ID = "feedback_dialog_title_res_id";
     private static final String ARG_FEEDBACK_SUBJECT = "feedback_dialog_subject_res_id";
@@ -30,7 +28,7 @@ public class SendFeedbackDialog extends BaseDialogFragment implements View.OnCli
     private EditText mEdMessage;
     private String mSubject;
 
-    public static BaseDialogFragment newInstance(int titleResId, String feedbackSubject) {
+    public static SendFeedbackDialog newInstance(int titleResId, String feedbackSubject) {
         SendFeedbackDialog dialog = new SendFeedbackDialog();
         Bundle args = new Bundle();
         args.putInt(ARG_TITLE_RES_ID, titleResId);
@@ -44,19 +42,14 @@ public class SendFeedbackDialog extends BaseDialogFragment implements View.OnCli
         super.onCreate(savedInstanceState);
         //Закрыть диалог можно
         setCancelable(true);
-        //По стилю это у нас не диалог, а кастомный дизайн -
-        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_input, container);
+    protected void initContentViews(View root) {
         getDialog().setOnCancelListener(this);
         // init views
         TextView titleView = (TextView) root.findViewById(R.id.tvTitle);
         root.findViewById(R.id.btnSend).setOnClickListener(this);
-        root.findViewById(R.id.btnClose).setOnClickListener(this);
         mEdMessage = (EditText) root.findViewById(R.id.edMessage);
         // restore arguments
         Bundle args = getArguments();
@@ -64,7 +57,17 @@ public class SendFeedbackDialog extends BaseDialogFragment implements View.OnCli
             titleView.setText(args.getInt(ARG_TITLE_RES_ID));
             mSubject = args.getString(ARG_FEEDBACK_SUBJECT);
         }
-        return root;
+    }
+
+    @Override
+    protected int getContentLayoutResId() {
+        return R.layout.dialog_input;
+    }
+
+    @Override
+    protected void onCloseButtonClick(View v) {
+        Utils.hideSoftKeyboard(getActivity(), mEdMessage);
+        getDialog().cancel();
     }
 
     @Override
@@ -89,10 +92,6 @@ public class SendFeedbackDialog extends BaseDialogFragment implements View.OnCli
                     }
                 };
                 dismiss();
-                break;
-            case R.id.btnClose:
-                Utils.hideSoftKeyboard(getActivity(), mEdMessage);
-                getDialog().cancel();
                 break;
             default:
                 break;

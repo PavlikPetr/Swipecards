@@ -716,7 +716,7 @@ public class AuthFragment extends BaseFragment {
                 return;
             }
             AuthToken token = AuthToken.getInstance();
-            token.saveToken("", emailLogin, password);
+            token.saveToken(emailLogin, emailLogin, password);
             auth(token);
         }
     }

@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RatingBar;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -23,7 +21,7 @@ import com.topface.topface.utils.Utils;
  * Created by kirussell on 25.12.13.
  * User can rate an app through this dialog
  */
-public class RateAppDialog extends BaseDialogFragment implements View.OnClickListener,
+public class RateAppDialog extends AbstractModalDialog implements View.OnClickListener,
         DialogInterface.OnCancelListener {
     public static final String TAG = "RateAppDialog";
     public static final String RATING_POPUP = "RATING_POPUP";
@@ -35,24 +33,27 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
         super.onCreate(savedInstanceState);
         //Закрыть диалог можно
         setCancelable(true);
-        //По стилю это у нас не диалог, а кастомный дизайн -
-        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
+        setCloseButton(false);
+        EasyTracker.getTracker().sendEvent("RatePopup", "FeaturePopup", "Show", 1L);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_rate_app, container);
+    protected void initContentViews(View root) {
         getDialog().setOnCancelListener(this);
-
         mRatingBar = (RatingBar) root.findViewById(R.id.ratingBarStarts);
-
         root.findViewById(R.id.btnRate).setOnClickListener(this);
         root.findViewById(R.id.btnAskLater).setOnClickListener(this);
         root.findViewById(R.id.btnNoThanx).setOnClickListener(this);
+    }
 
-        EasyTracker.getTracker().sendEvent("RatePopup", "FeaturePopup", "Show", 1L);
-        return root;
+    @Override
+    protected int getContentLayoutResId() {
+        return R.layout.dialog_rate_app;
+    }
+
+    @Override
+    protected final void onCloseButtonClick(View v) {
+        // nothing to do, there is no close button
     }
 
     @Override
@@ -100,7 +101,7 @@ public class RateAppDialog extends BaseDialogFragment implements View.OnClickLis
             dismiss();
         } else {
             saveRatingPopupStatus(0);
-            BaseDialogFragment dialog = SendFeedbackDialog.newInstance(
+            AbstractDialogFragment dialog = SendFeedbackDialog.newInstance(
                     R.string.feedback_popup_title,
                     String.format(getResources().getString(R.string.settings_low_rate_internal), (int) rating)
             );

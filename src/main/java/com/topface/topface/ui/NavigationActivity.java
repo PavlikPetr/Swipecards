@@ -174,14 +174,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
                     .add(R.id.fragment_menu, mMenuFragment)
                     .commit();
         }
-
-        //Если активити открыто с указанием фрагмента, который нужно открыть
-        /*Intent intent = getIntent();
-        if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
-            showFragment(intent);
-        }*/
-
-
         mDrawerLayout = (HackyDrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
@@ -276,21 +268,16 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         if (getIntent() != null) {
             showFragment(getIntent());
         }
-
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
 
         if (needAnimate) {
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
         }
-
         needAnimate = true;
-
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
         new ExternalLinkExecuter(mListener).execute(getIntent());
-
         App.checkProfileUpdate();
-
         if (mNavBarController != null) {
             mNavBarController.refreshNotificators();
         }

@@ -20,7 +20,7 @@ public class PhotoDeleteRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("photoId", getPhotosJson());
+        return new JSONObject().put("photoIds", getPhotosJson());
     }
 
     @Override

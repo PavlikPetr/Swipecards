@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -34,6 +33,7 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +46,7 @@ import java.util.List;
  * Controller for closings. All closings logic here for removing without pain
  */
 public class ClosingsController implements View.OnClickListener {
-
+    public static final String TAG = "Closings";
     public static final String LIKES_CACHE_KEY = "likes_cache_key";
     public static final String MUTUALS_CACHE_KEY = "mutuals_cache_key";
     private final MenuFragment mMenuFragment;
@@ -111,7 +111,10 @@ public class ClosingsController implements View.OnClickListener {
 
                 boolean needLikesClosings = mReceivedUnreadLikes > 0 && closings.isLikesAvailable();
                 boolean needMutualsClosings = mReceivedUnreadMutuals > 0 && closings.isMutualAvailable();
+                Debug.log(ClosingsController.TAG, "has likes=" + needLikesClosings +
+                        " has mutuals=" + needMutualsClosings);
                 if (needLikesClosings || needMutualsClosings) {
+                    Debug.log(ClosingsController.TAG, "all passed to show and lock menu");
                     mClosingsWidget = getClosingsWidget();
                     mClosingsWidget.setVisibility(View.VISIBLE);
                     mClosingsWidget.findViewById(R.id.btnBuyVipFromClosingsWidget)
@@ -133,6 +136,8 @@ public class ClosingsController implements View.OnClickListener {
                     mAdapter.setEnabled(false);
                     mAdapter.notifyDataSetChanged();
                     lockLeftMenu();
+                } else {
+                    Debug.log(ClosingsController.TAG, "no closings");
                 }
             }
         };

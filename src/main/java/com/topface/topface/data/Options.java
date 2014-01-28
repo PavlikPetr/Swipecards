@@ -10,6 +10,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.controllers.ClosingsController;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -456,8 +457,6 @@ public class Options extends AbstractData {
 
         public static final String DATA_FOR_CLOSING_RECEIVED_ACTION = "closings_received_action";
         private static Ssid.ISsidUpdateListener listener;
-        private long mutualsClosingLastCallTime;
-        private long likesClosingLastCallTime;
         public boolean enabledSympathies;
         public boolean enabledMutual;
         public int limitSympathies;
@@ -465,20 +464,16 @@ public class Options extends AbstractData {
         public long timeoutSympathies;
         public long timeoutMutual;
 
-        public Closing() {
-            UserConfig config = App.getUserConfig();
-            likesClosingLastCallTime = config.getLikesClosingsLastTime();
-            mutualsClosingLastCallTime = config.getMutualClosingsLastTime();
-        }
-
         public void onStopMutualClosings() {
-            mutualsClosingLastCallTime = System.currentTimeMillis();
-            App.getUserConfig().setLikesClosingsLastTime(mutualsClosingLastCallTime);
+            UserConfig config = App.getUserConfig();
+            config.setMutualClosingsLastTime(System.currentTimeMillis());
+            config.saveConfig();
         }
 
         public void onStopLikesClosings() {
-            likesClosingLastCallTime = System.currentTimeMillis();
-            App.getUserConfig().setMutualClosingsLastTime(likesClosingLastCallTime);
+            UserConfig config = App.getUserConfig();
+            config.setLikesClosingsLastTime(System.currentTimeMillis());
+            config.saveConfig();
         }
 
         public boolean isClosingsEnabled() {
@@ -486,15 +481,15 @@ public class Options extends AbstractData {
         }
 
         public boolean isMutualAvailable() {
-            return enabledMutual
-                    && Math.abs(System.currentTimeMillis() - mutualsClosingLastCallTime) > timeoutMutual
-                    && CacheProfile.unread_mutual > 0;
+            long diff = Math.abs(System.currentTimeMillis() - App.getUserConfig().getMutualClosingsLastTime());
+            Debug.log(ClosingsController.TAG, "time in sec from last mutuals show = " + diff/1000);
+            return enabledMutual && diff > timeoutMutual && CacheProfile.unread_mutual > 0;
         }
 
         public boolean isLikesAvailable() {
-            return enabledSympathies
-                    && Math.abs(System.currentTimeMillis() - likesClosingLastCallTime) > timeoutSympathies
-                    && CacheProfile.unread_likes > 0;
+            long diff = Math.abs(System.currentTimeMillis() - App.getUserConfig().getLikesClosingsLastTime());
+            Debug.log(ClosingsController.TAG, "time in sec from last likes show = " + diff/1000);
+            return enabledSympathies && diff > timeoutSympathies && CacheProfile.unread_likes > 0;
         }
     }
 

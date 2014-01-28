@@ -15,16 +15,7 @@ public class Novice {
     private Boolean mShowSympathy = null;
     private Boolean mShowBuySympathies = null;
 
-    private static Novice mInstance;
-
-    public static Novice getInstance() {
-        if (mInstance == null) {
-            mInstance = new Novice();
-        }
-        return mInstance;
-    }
-
-    private Novice() {
+    public Novice() {
         mConfig = App.getUserConfig();
     }
 

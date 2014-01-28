@@ -153,7 +153,7 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
 
     @Override
     public boolean isNeedUpdateCounters() {
-        return mIsNeedUpdateCounters;
+        return mIsNeedUpdateCounters && isCompleted();
     }
 
     public void setUpdateCountersFlag(boolean isNeedUpdateCounters) {

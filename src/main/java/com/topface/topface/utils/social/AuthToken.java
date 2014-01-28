@@ -60,10 +60,10 @@ public class AuthToken {
     }
 
 
-    public void saveToken(String user_Id, String login, String password) {
+    public void saveToken(String userSocialId, String login, String password) {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(TOKEN_NETWORK, mTokenInfo.mSnType = SN_TOPFACE);
-        editor.putString(TOKEN_USER_SOCIAL_ID, mTokenInfo.mUserSocialId = user_Id);
+        editor.putString(TOKEN_USER_SOCIAL_ID, mTokenInfo.mUserSocialId = userSocialId);
         editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey = Static.EMPTY);
         editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = Static.EMPTY);
         editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = login);
@@ -71,12 +71,12 @@ public class AuthToken {
         editor.commit();
     }
 
-    public void saveToken(String sn_type, String user_Id, String token_key, String expires_in) {
+    public void saveToken(String snType, String userSocialId, String tokenKey, String expiresIn) {
         SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putString(TOKEN_NETWORK, mTokenInfo.mSnType = sn_type);
-        editor.putString(TOKEN_USER_SOCIAL_ID, mTokenInfo.mUserSocialId = user_Id);
-        editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey = token_key);
-        editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = expires_in);
+        editor.putString(TOKEN_NETWORK, mTokenInfo.mSnType = snType);
+        editor.putString(TOKEN_USER_SOCIAL_ID, mTokenInfo.mUserSocialId = userSocialId);
+        editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey = tokenKey);
+        editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = expiresIn);
         editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = Static.EMPTY);
         editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword = Static.EMPTY);
         editor.commit();
@@ -119,6 +119,10 @@ public class AuthToken {
 
     public String getUserSocialId() {
         return mTokenInfo.getUserSocialId();
+    }
+
+    public String getUserTokenUniqueId() {
+        return mTokenInfo.getUserTokenUniqueId();
     }
 
     public String getLogin() {
@@ -199,6 +203,10 @@ public class AuthToken {
 
         public String getExpiresIn() {
             return mExpiresIn;
+        }
+
+        public String getUserTokenUniqueId() {
+            return mSnType.equals(SN_TOPFACE) ? mLogin : mUserSocialId;
         }
     }
 }
