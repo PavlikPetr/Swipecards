@@ -89,12 +89,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Button mChatBtn;
     private Button mSwitchNextBtn;
     private Button mSwitchPrevBtn;
+    private View mUserInfo;
     private TextView mUserInfoName;
     private TextView mUserInfoCity;
     private TextView mUserInfoStatus;
-    private TextView mCounter;
+    private TextView mDatingCounter;
     private TextView mDatingLovePrice;
-    private View mDatingGroup;
     private View mDatingResources;
 
     private RateController mRateController;
@@ -228,19 +228,19 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
 
-        mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
+        mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfDatingButtons);
 
         // Dating controls
-        mDatingGroup = root.findViewById(R.id.loDatingGroup);
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
         // User Info
-        mUserInfoName = ((TextView) root.findViewById(R.id.tvDatingUserName));
-        mUserInfoCity = ((TextView) root.findViewById(R.id.tvDatingUserCity));
-        mUserInfoStatus = ((TextView) root.findViewById(R.id.tvDatingUserStatus));
+        mUserInfo = root.findViewById(R.id.loUserInfo);
+        mUserInfoName = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserName));
+        mUserInfoCity = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserCity));
+        mUserInfoStatus = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserStatus));
 
         // Counter
-        mCounter = ((TextView) root.findViewById(R.id.tvDatingCounter));
+        mDatingCounter = ((TextView) root.findViewById(R.id.tvDatingCounter));
 
         // Progress
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsDatingLoading);
@@ -806,7 +806,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
 
             }).exec();
-        } else if (mNovice.isShowBuySympathies() && hasOneSympathyOrDelight && CacheProfile.likes <= Novice.MIN_LIKES_QUANTITY) {
+        } else if (hasOneSympathyOrDelight
+                && CacheProfile.likes <= Novice.MIN_LIKES_QUANTITY
+                && mNovice.isShowBuySympathies()) {
             mNoviceLayout.setLayoutRes(
                     R.layout.novice_buy_sympathies,
                     new OnClickListener() {
@@ -828,18 +830,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     public void setCounter(int position) {
         if (mCurrentUser != null) {
-            mCounter.setText((position + 1) + "/" + mCurrentUser.photos.size());
-            mCounter.setVisibility(View.VISIBLE);
+            mDatingCounter.setText((position + 1) + "/" + mCurrentUser.photos.size());
+            mDatingCounter.setVisibility(View.VISIBLE);
         } else {
-            mCounter.setText("-/-");
-            mCounter.setVisibility(View.GONE);
+            mDatingCounter.setText("-/-");
+            mDatingCounter.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void lockControls() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mCounter.setVisibility(View.GONE);
+        mDatingCounter.setVisibility(View.GONE);
         mUserInfoName.setVisibility(View.GONE);
         mUserInfoCity.setVisibility(View.GONE);
         mUserInfoStatus.setVisibility(View.GONE);
@@ -857,7 +859,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void unlockControls() {
         mProgressBar.setVisibility(View.GONE);
-        mCounter.setVisibility(View.VISIBLE);
+        mDatingCounter.setVisibility(View.VISIBLE);
         mUserInfoName.setVisibility(mCurrentUser != null ? View.VISIBLE : View.GONE);
         mUserInfoCity.setVisibility(mCurrentUser != null ? View.VISIBLE : View.GONE);
         mUserInfoStatus.setVisibility(View.VISIBLE);
@@ -883,13 +885,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
-        mDatingGroup.setVisibility(View.VISIBLE);
+        mDatingCounter.setVisibility(View.VISIBLE);
+        mDatingResources.setVisibility(View.VISIBLE);
+        mUserInfo.setVisibility(View.VISIBLE);
         mIsHide = false;
     }
 
     @Override
     public void hideControls() {
-        mDatingGroup.setVisibility(View.GONE);
+        mDatingCounter.setVisibility(View.GONE);
+        mDatingResources.setVisibility(View.GONE);
+        mUserInfo.setVisibility(View.GONE);
         mIsHide = true;
     }
 
