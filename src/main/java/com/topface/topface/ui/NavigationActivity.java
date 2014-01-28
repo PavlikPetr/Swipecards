@@ -509,14 +509,14 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
             intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
         }
         takePhotoDialogStarted = false;
-        PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
-        request.photoid = photo.getId();
+        PhotoMainRequest request = new PhotoMainRequest(this);
+        request.photoId = photo.getId();
         request.callback(new ApiHandler() {
 
             @Override
             public void success(IApiResponse response) {
                 CacheProfile.photo = photo;
-                CacheProfile.sendUpdateProfileBroadcast();
+                App.sendProfileRequest();
             }
 
             @Override

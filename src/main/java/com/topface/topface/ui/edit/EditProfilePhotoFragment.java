@@ -37,7 +37,7 @@ import java.util.ArrayList;
 
 public class EditProfilePhotoFragment extends AbstractEditFragment {
 
-    private ArrayList<Photo> mDeleted = new ArrayList<Photo>();
+    private ArrayList<Photo> mDeleted = new ArrayList<>();
 
     private EditProfileGridAdapter mPhotoGridAdapter;
     private int mLastSelectedAsMainId;
@@ -162,7 +162,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             if (mSelectedAsMainId != mLastSelectedAsMainId) {
                 PhotoMainRequest setAsPhotoMainRequest = new PhotoMainRequest(getActivity());
                 registerRequest(setAsPhotoMainRequest);
-                setAsPhotoMainRequest.photoid = mLastSelectedAsMainId;
+                setAsPhotoMainRequest.photoId = mLastSelectedAsMainId;
                 setAsPhotoMainRequest.callback(new ApiHandler() {
 
                     @Override
