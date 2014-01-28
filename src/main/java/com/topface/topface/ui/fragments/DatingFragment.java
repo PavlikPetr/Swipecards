@@ -806,7 +806,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
 
             }).exec();
-        } else if (mNovice.isShowBuySympathies() && hasOneSympathyOrDelight && CacheProfile.likes <= Novice.MIN_LIKES_QUANTITY) {
+        } else if (hasOneSympathyOrDelight
+                && CacheProfile.likes <= Novice.MIN_LIKES_QUANTITY
+                && mNovice.isShowBuySympathies()) {
             mNoviceLayout.setLayoutRes(
                     R.layout.novice_buy_sympathies,
                     new OnClickListener() {
