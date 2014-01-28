@@ -8,7 +8,8 @@ import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.LeadersRequest;
 
 public class CountersManager {
-    public static final String UPDATE_BALANCE_COUNTERS = "com.topface.topface.UPDATE_BALANCE_COUNTERS";
+    public static final String UPDATE_BALANCE = "com.topface.topface.UPDATE_BALANCE";
+    public final static String UPDATE_COUNTERS = "com.topface.topface.UPDATE_COUNTERS";
     private static int likesCounter;
     private static int sympathyCounter;
     private static int visitorsCounter;
@@ -19,7 +20,6 @@ public class CountersManager {
     private Context mContext;
 
     private final static String[] DeniedMethod = {BannerRequest.SERVICE_NAME, LeadersRequest.SERVICE_NAME};
-    public final static String UPDATE_COUNTERS = "com.topface.topface.UPDATE_COUNTERS";
 
     public final static String NULL_METHOD = "null_method";
     public final static String CHANGED_BY_GCM = "gcm_changed";
@@ -157,7 +157,7 @@ public class CountersManager {
     }
 
     private void updateBalanceCounters() {
-        Intent intent = new Intent(UPDATE_BALANCE_COUNTERS);
+        Intent intent = new Intent(UPDATE_BALANCE);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 

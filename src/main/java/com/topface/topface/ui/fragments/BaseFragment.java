@@ -23,7 +23,6 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
@@ -33,13 +32,11 @@ import java.util.LinkedList;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
 
-    private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
+    private LinkedList<ApiRequest> mRequests = new LinkedList<>();
 
     private IActionBarTitleSetter mTitleSetter;
     private ActionBar mSupportActionBar;
     private BroadcastReceiver mProfileLoadReceiver;
-
-    private BroadcastReceiver updateCountersReceiver;
 
     public static enum FragmentId {
         F_VIP_PROFILE(0),
@@ -111,7 +108,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @Override
     public void onResume() {
-        setUpdateCountersReceiver();
         super.onResume();
         if (mProfileLoadReceiver == null) {
             mProfileLoadReceiver = new BroadcastReceiver() {
@@ -132,10 +128,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onPause() {
         super.onPause();
         removeAllRequests();
-        if (updateCountersReceiver != null) {
-            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateCountersReceiver);
-            updateCountersReceiver = null;
-        }
         if (mProfileLoadReceiver != null) {
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileLoadReceiver);
             mProfileLoadReceiver = null;
@@ -169,28 +161,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
         }
         super.startActivityForResult(intent, requestCode);
-    }
-
-    private void setUpdateCountersReceiver() {
-        if (updateCountersReceiver == null) {
-            updateCountersReceiver = new BroadcastReceiver() {
-
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    onCountersUpdated();
-                }
-            };
-            if (isAdded()) {
-                LocalBroadcastManager.getInstance(getActivity())
-                        .registerReceiver(
-                                updateCountersReceiver,
-                                new IntentFilter(CountersManager.UPDATE_COUNTERS)
-                        );
-            }
-        }
-    }
-
-    protected void onCountersUpdated() {
     }
 
     @Override

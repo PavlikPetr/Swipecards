@@ -1,9 +1,13 @@
 package com.topface.topface.ui.fragments.closing;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -21,6 +25,7 @@ import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
 import java.util.Timer;
@@ -33,6 +38,26 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
 
     public static final int CHAT_CLOSE_DELAY_MILLIS = 1500;
     private UsersListCacheManager mCacheManager;
+    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onCountersUpdated();
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+    }
 
     @Override
     protected void initActionBarControls() {
@@ -208,9 +233,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         return FeedUser.class;
     }
 
-    @Override
     protected void onCountersUpdated() {
-        super.onCountersUpdated();
         if (isAdded()) {
             refreshActionBarTitles();
         }

@@ -101,7 +101,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             if (action == null) return;
 
             switch (action) {
-                case CountersManager.UPDATE_BALANCE_COUNTERS:
+                case CountersManager.UPDATE_BALANCE:
                     mAdapter.refreshCounterBadges();
                     mBuyWidgetController.updateBalance();
                     if (mClosingsController != null) {
@@ -316,7 +316,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         IntentFilter filter = new IntentFilter();
         filter.addAction(CacheProfile.PROFILE_UPDATE_ACTION);
         filter.addAction(GooglePlayProducts.INTENT_UPDATE_PRODUCTS);
-        filter.addAction(CountersManager.UPDATE_BALANCE_COUNTERS);
+        filter.addAction(CountersManager.UPDATE_BALANCE);
         filter.addAction(SELECT_MENU_ITEM);
         filter.addAction(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED);
         filter.addAction(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED);

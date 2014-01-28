@@ -538,13 +538,11 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
                 super.always(response);
             }
         }).exec();
-        needOpenDialog = true;
     }
 
     @Override
     public void onTakePhotoDialogSentFailure() {
         Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
-        needOpenDialog = true;
     }
 
     @Override

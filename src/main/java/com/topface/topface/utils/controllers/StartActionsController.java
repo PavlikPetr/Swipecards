@@ -48,7 +48,9 @@ public class StartActionsController {
                     Debug.log(TAG, "some action already processed for this session");
                 }
                 if (App.DEBUG) {
-                    processAction(mDebugAction);
+                    if (mDebugAction != null) {
+                        processAction(mDebugAction);
+                    }
                 }
             }
         };
