@@ -8,7 +8,7 @@ import com.topface.topface.utils.Novice;
 
 /**
  * Created by kirussell on 11.01.14.
- * Contains all configs
+ * Contains all configs and object that uses shared preferences
  */
 public class Configurations {
 

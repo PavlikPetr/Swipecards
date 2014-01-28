@@ -45,7 +45,7 @@ public class Novice {
         UserConfig config = mConfig;
         if (config.getNoviceBuySympathy()) return true;
         long lastTime = config.getNoviceBuySympathyDate();
-        return (lastTime > 0) && (Utils.unixtimeInSeconds() - lastTime) >= Utils.WEEK_IN_SECONDS;
+        return (Utils.unixtimeInSeconds() - lastTime) >= Utils.WEEK_IN_SECONDS;
     }
 
     public void completeShowSympathy() {

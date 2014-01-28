@@ -34,6 +34,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.cache.SearchCacheManager;
+import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONArray;
@@ -431,6 +432,7 @@ public class AuthorizationManager {
         Settings.getInstance().resetSettings();
         CacheProfile.clearProfileAndOptions();
         App.getConfig().onLogout();
+        StartActionsController.onLogout();
         SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         if (preferences != null) {
             preferences.edit().clear().commit();
