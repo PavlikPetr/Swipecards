@@ -136,7 +136,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
 
-    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mBalanceReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateResources();
@@ -190,9 +190,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mBalanceReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         setHighRatePrice();
         setActionBarTitles(getTitle(), getSubtitle());
         updateResources();
@@ -211,7 +214,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             EasyTracker.getTracker().sendEvent("EmptySearch", "DismissScreen", "", 0L);
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mCountersReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBalanceReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileReceiver);
         //При выходе из фрагмента сохраняем кэш поиска
         if (mUserSearchList != null) {
@@ -771,7 +774,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
                 @Override
                 protected void success(NoviceLikes noviceLikes, IApiResponse response) {
-                    CacheProfile.likes = noviceLikes.likes;
                     if (noviceLikes.increment > 0) {
                         Novice.giveNoviceLikesQuantity = noviceLikes.increment;
                         updateResources();

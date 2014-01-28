@@ -36,7 +36,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public static final String INTENT_PREV_ENTITY = "prev_entity";
     public static final String AUTH_TAG = "AUTH";
 
-    protected boolean needOpenDialog = true;
     private boolean mIndeterminateSupported = false;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
@@ -282,17 +281,14 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     protected void takePhoto() {
-        if (needOpenDialog) {
-            if (this instanceof NavigationActivity) {
-                ((NavigationActivity) this).setTakePhotoDialogStarted(true);
-            }
-            TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
-            try {
-                newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
-            } catch (Exception e) {
-                Debug.error(e);
-            }
-            needOpenDialog = false;
+        if (this instanceof NavigationActivity) {
+            ((NavigationActivity) this).setTakePhotoDialogStarted(true);
+        }
+        TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
+        try {
+            newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 

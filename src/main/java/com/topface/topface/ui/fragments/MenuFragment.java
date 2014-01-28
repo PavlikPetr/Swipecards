@@ -102,7 +102,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             if (action == null) return;
 
             switch (action) {
-                case CountersManager.UPDATE_BALANCE_COUNTERS:
+                case CountersManager.UPDATE_BALANCE:
                     mAdapter.refreshCounterBadges();
                     mBuyWidgetController.updateBalance();
                     if (mClosingsController != null) {
@@ -326,7 +326,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         IntentFilter filter = new IntentFilter();
         filter.addAction(CacheProfile.PROFILE_UPDATE_ACTION);
         filter.addAction(GooglePlayProducts.INTENT_UPDATE_PRODUCTS);
-        filter.addAction(CountersManager.UPDATE_BALANCE_COUNTERS);
+        filter.addAction(CountersManager.UPDATE_BALANCE);
         filter.addAction(SELECT_MENU_ITEM);
         filter.addAction(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED);
         filter.addAction(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED);
@@ -535,7 +535,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             //к тому же тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
             //его локально, а не серверно, как это происходит с остальными счетчиками.
             if (id == F_BONUS) {
-                if (CacheProfile.NEED_SHOW_BONUS_COUNTER) {
+                if (CacheProfile.needShowBonusCounter) {
                     new BackgroundThread() {
                         @Override
                         public void execute() {
@@ -544,7 +544,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                         }
                     };
                 }
-                CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
+                CacheProfile.needShowBonusCounter = false;
                 mAdapter.refreshCounterBadges();
                 Offerwalls.startOfferwall(getActivity());
             } else {

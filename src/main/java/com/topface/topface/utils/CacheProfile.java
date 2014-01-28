@@ -39,57 +39,50 @@ public class CacheProfile {
      */
     public static final String PROFILE_UPDATE_ACTION = "com.topface.topface.UPDATE_PROFILE";
 
-    private static AtomicBoolean mIsLoaded = new AtomicBoolean(false);
-    // Data
-    public static int uid;             // id пользователя в топфейсе
-    public static String first_name;   // имя пользователя
-    public static int age;             // возраст пользователя
-    public static int sex;             // пол пользователя
-    public static int unread_likes;    // количество непрочитанных “понравилось” пользователя
-    public static int unread_messages; // количество непрочитанных сообщений пользователя
-    public static int unread_mutual;   // количество непрочитанных симпатий
-    public static int unread_visitors; // количество непрочитанных гостей
-    public static int unread_fans;     // количество непрочитаных поклонников
-    public static int unread_admirations; // количество непрочитаных восхищений
-    public static City city;           // город пользователя
-    public static int money;           // количество монет у пользователя
-    public static int likes;           // количество симпатий пользователя
-    public static DatingFilter dating; //Фильтр поиска
-
-    public static boolean paid; // признак платящего пользоателя
-    public static boolean show_ad = true; // флаг показа рекламы
-
-    //Premium
-    public static boolean premium;
-    public static boolean invisible;
-
     public final static int NOTIFICATIONS_MESSAGE = 0;
     public final static int NOTIFICATIONS_SYMPATHY = 1;
     public final static int NOTIFICATIONS_LIKES = 2;
     public final static int NOTIFICATIONS_VISITOR = 4;
 
-    public static boolean NEED_SHOW_BONUS_COUNTER = false;
-
-    public static LinkedList<FormItem> forms;
-    protected static String status; // статус пользователя
-    public static int background_id;
-    public static Photos photos;
-    public static Photo photo;
-
-    public static int totalPhotos;
-
-    public static ArrayList<Gift> gifts = new ArrayList<>();
+    // Data
+    public static int uid;                      // id пользователя в топфейсе
+    public static String first_name;            // имя пользователя
+    public static int age;                      // возраст пользователя
+    public static int sex;                      // пол пользователя
+    public static int unread_likes;             // количество непрочитанных “понравилось” пользователя
+    public static int unread_messages;          // количество непрочитанных сообщений пользователя
+    public static int unread_mutual;            // количество непрочитанных симпатий
+    public static int unread_visitors;          // количество непрочитанных гостей
+    public static int unread_fans;              // количество непрочитаных поклонников
+    public static int unread_admirations;       // количество непрочитаных восхищений
+    public static City city;                    // город пользователя
+    public static int money;                    // количество монет у пользователя
+    public static int likes;                    // количество симпатий пользователя
+    public static DatingFilter dating;          //Фильтр поиска
+    public static boolean paid;                 // признак платящего пользоателя
+    public static boolean show_ad = true;       // флаг показа рекламы
+    public static boolean premium;              // показывает есть ли у пользователя Vip статус
+    public static boolean invisible;            // показывает включен ли режим невидимки
+    public static LinkedList<FormItem> forms;   // анкета пользователя
+    public static int background_id;            // идентификатор фона в профиле
+    public static Photos photos;                // список первых 30 фото
+    public static Photo photo;                  // аватарка пользователя
+    public static int totalPhotos;              // общее количество фотографий пользователя
+    public static boolean email;                // присутсвует ли email
+    public static boolean emailGrabbed;         // был ли email введен пользователем
+    public static boolean emailConfirmed;       // подтвержден ли email
+    public static int xstatus;                  //код цели знакомства пользователя, возможные варианты
+    private static boolean editor;              // является ли пользователь редактором
+    private static String status;               // статус пользователя
+    public static boolean canInvite;            // может ли этот пользователь отправлять приглашения контактам
+    public static ArrayList<Gift> gifts = new ArrayList<>(); // массив подарков пользователя
     public static SparseArrayCompat<Profile.TopfaceNotifications> notifications;
 
-
-    public static boolean hasMail;
-    public static boolean emailGrabbed;
-    public static boolean emailConfirmed;
-
-    public static long profileUpdateTime;
-    public static int xstatus;
-    private static boolean editor;
-    public static boolean canInvite;
+    // State
+    public static long profileUpdateTime;               // время последнего вызова setProfile(...)
+    public static boolean wasCityAsked = false;         // был ли показан экран выбора города новичку
+    public static boolean needShowBonusCounter = false;
+    private static AtomicBoolean mIsLoaded = new AtomicBoolean(false);
 
     private static void setProfileCache(final ApiResponse response) {
         if (response != null) {
@@ -107,7 +100,7 @@ public class CacheProfile {
         profile.sex = sex;
 
         profile.notifications = notifications;
-        profile.email = hasMail;
+        profile.email = email;
         profile.emailConfirmed = emailConfirmed;
         profile.emailGrabbed = emailGrabbed;
 
@@ -118,12 +111,12 @@ public class CacheProfile {
 
         profile.dating = dating;
         profile.forms = forms;
-        profile.photos = photos;
         profile.setStatus(status);
-        profile.photo = photo;
         profile.gifts = gifts;
         profile.background = background_id;
 
+        profile.photos = photos;
+        profile.photo = photo;
         profile.photosCount = totalPhotos;
 
         profile.paid = paid;
@@ -158,7 +151,7 @@ public class CacheProfile {
                 city = profile.city;
 
                 notifications = profile.notifications;
-                hasMail = profile.email;
+                email = profile.email;
                 emailConfirmed = profile.emailConfirmed;
                 emailGrabbed = profile.emailGrabbed;
 
@@ -295,6 +288,7 @@ public class CacheProfile {
     public static void clearProfileAndOptions() {
         clearOptions();
         setProfile(new Profile(), null);
+        wasCityAsked = false;
     }
 
     public static void clearOptions() {
@@ -343,9 +337,6 @@ public class CacheProfile {
     private static boolean isAgeOk(int age) {
         return age > 0;
     }
-
-    public static boolean wasCityAsked = false;
-    public static boolean wasAvatarAsked = false;
 
     public static boolean needToChangePassword(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
@@ -400,12 +391,15 @@ public class CacheProfile {
             case F_ADMIRATIONS:
                 return CacheProfile.unread_admirations;
             case F_BONUS:
-                return NEED_SHOW_BONUS_COUNTER ? getOptions().bonus.counter : 0;
+                return needShowBonusCounter ? getOptions().bonus.counter : 0;
             default:
                 return 0;
         }
     }
 
+    /**
+     * Посылаем Broadcast о том, что данные профиля обновлены
+     */
     public static void sendUpdateProfileBroadcast() {
         LocalBroadcastManager.getInstance(App.getContext())
                 .sendBroadcast(new Intent(PROFILE_UPDATE_ACTION));

@@ -461,6 +461,9 @@ public class Profile extends AbstractDataWithPhotos {
         return (this instanceof User) ? ProfileFragment.TYPE_USER_PROFILE : ProfileFragment.TYPE_MY_PROFILE;
     }
 
+    /**
+     *
+     */
     public static class TopfaceNotifications {
         public boolean apns;
         public boolean mail;
