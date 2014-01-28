@@ -149,7 +149,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     private void initBonusCounterConfig() {
         SharedPreferences preferences = getSharedPreferences(BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
         long lastTime = preferences.getLong(BONUS_COUNTER_LAST_SHOW_TIME, 0);
-        CacheProfile.NEED_SHOW_BONUS_COUNTER = lastTime < CacheProfile.getOptions().bonus.timestamp;
+        CacheProfile.needShowBonusCounter = lastTime < CacheProfile.getOptions().bonus.timestamp;
     }
 
     private void initDrawerLayout() {
@@ -392,7 +392,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     @Override
     protected void onDestroy() {
         //Для запроса фото при следующем создании NavigationActivity
-        if (CacheProfile.photo == null) CacheProfile.wasAvatarAsked = false;
         if (mFullscreenController != null) {
             mFullscreenController.onDestroy();
         }
