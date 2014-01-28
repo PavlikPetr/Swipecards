@@ -99,7 +99,6 @@ abstract public class ApiHandler extends Handler {
 
     private void setCounters(IApiResponse response) {
         if (!mNeedCounters || !response.isNeedUpdateCounters()) return;
-        if (response.getResultCode() != ErrorCodes.RESULT_OK) return;
         try {
             JSONObject unread = response.getUnread();
             JSONObject balance = response.getBalance();
