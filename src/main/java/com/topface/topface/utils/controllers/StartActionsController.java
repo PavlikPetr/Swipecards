@@ -67,12 +67,7 @@ public class StartActionsController {
             }
             Debug.log(TAG, "============================");
         }
-        IStartAction action = getNextAction();
-        while (action != null && !action.isApplicable()) {
-            mPendingActions.remove(action);
-            action = getNextAction();
-        }
-        return processAction(action);
+        return processAction(getNextAction());
     }
 
     /**
@@ -81,7 +76,10 @@ public class StartActionsController {
      * @param action chosen action
      */
     private boolean processAction(final IStartAction action) {
-        if (action == null) return false;
+        if (action == null) {
+            Debug.log(TAG, "===>there is no applicable action");
+            return false;
+        }
         action.callInBackground();
         mActivity.runOnUiThread(new Runnable() {
             @Override
@@ -114,10 +112,12 @@ public class StartActionsController {
         int maxPriority = -1;
         IStartAction maxAction = null;
         for (IStartAction action : mPendingActions) {
-            int priority = action.getPriority();
-            if (priority > maxPriority) {
-                maxAction = action;
-                maxPriority = priority;
+            if (action.isApplicable()) {
+                int priority = action.getPriority();
+                if (priority > maxPriority) {
+                    maxAction = action;
+                    maxPriority = priority;
+                }
             }
         }
         return maxAction;
@@ -143,5 +143,9 @@ public class StartActionsController {
         if (App.DEBUG) {
             mDebugAction = action;
         }
+    }
+
+    public static void onLogout() {
+        processedActionForSession = false;
     }
 }

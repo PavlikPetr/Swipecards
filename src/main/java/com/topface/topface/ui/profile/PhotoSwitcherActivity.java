@@ -191,7 +191,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     private void setAsMainRequest(final Photo currentPhoto) {
         PhotoMainRequest request = new PhotoMainRequest(this);
-        request.photoid = currentPhoto.getId();
+        request.photoId = currentPhoto.getId();
         registerRequest(request);
         request.callback(new ApiHandler() {
             @Override
@@ -223,10 +223,10 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 }
                 return arrList;
             } else {
-                return new ArrayList<Photo>();
+                return new ArrayList<>();
             }
         } else {
-            return new ArrayList<Photo>();
+            return new ArrayList<>();
         }
     }
 

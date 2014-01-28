@@ -1,9 +1,9 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.text.TextUtils;
 
-import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.data.AppsFlyerData;
@@ -14,6 +14,8 @@ import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.TimeZone;
 
 public class AuthRequest extends ApiRequest {
     // Data
@@ -29,12 +31,15 @@ public class AuthRequest extends ApiRequest {
     private String clientversion; // версия клиента
     private String clientosversion; // версия операционной системы
     private String clientdevice; // тип устройства клиента
-    private String clientid; // уникальный идентификатор клиентского устройства
     private String login;  // логин для нашей авторизации
     private String password; // пароль для нашей авторизации
     private String refresh; // еще один токен для одноклассников
     private AppsFlyerData appsflyer; //ID пользователя в appsflyer
     private boolean tablet; // является ли данное устройство планшетом
+    /**
+     * Временная зона девайса по умолчанию, отправляем каждый раз на сервер при авторизации
+     */
+    public static final String timezone = TimeZone.getDefault().getID();
 
     private AuthRequest(Context context) {
         super(context);
@@ -44,7 +49,6 @@ public class AuthRequest extends ApiRequest {
         clientversion = Utils.getClientVersion();
         clientosversion = Utils.getClientOsVersion();
         clientdevice = Utils.getClientDeviceName();
-        clientid = App.getAppConfig().getAppUniqueId();
         tablet = context.getResources().getBoolean(R.bool.is_tablet);
         try {
             appsflyer = new AppsFlyerData(context);
@@ -92,15 +96,28 @@ public class AuthRequest extends ApiRequest {
                 .put("clientVersion", clientversion)
                 .put("clientOsVersion", clientosversion)
                 .put("clientDevice", clientdevice)
-                .put("clientId", clientid)
                 .put("login", login)
                 .put("password", password)
                 .put("refresh", refresh)
+                .put("timezone", timezone)
                 .put("tablet", tablet);
+
+        //Устанавливаем clientDeviceId
+        try {
+            String androidId = Settings.Secure.getString(
+                    getContext().getContentResolver(),
+                    Settings.Secure.ANDROID_ID
+            );
+
+            if (!TextUtils.isEmpty(androidId)) {
+                data.put("clientDeviceId", androidId);
+            }
+        } catch (Exception e) {
+            Debug.error(e);
+        }
 
         if (appsflyer != null) {
             data.put("appsflyer", appsflyer.toJson());
-
         }
         return data;
     }
