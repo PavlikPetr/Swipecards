@@ -757,6 +757,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
 
         if (mNovice.isShowSympathy()) {
+            showControls();
             OnClickListener completeShowSympathylistener = new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -775,6 +776,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 @Override
                 protected void success(NoviceLikes noviceLikes, IApiResponse response) {
                     if (noviceLikes.increment > 0) {
+                        showControls();
                         Novice.giveNoviceLikesQuantity = noviceLikes.increment;
                         updateResources();
                         final String text = String.format(
@@ -811,6 +813,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         } else if (hasOneSympathyOrDelight
                 && CacheProfile.likes <= Novice.MIN_LIKES_QUANTITY
                 && mNovice.isShowBuySympathies()) {
+            showControls();
             mNoviceLayout.setLayoutRes(
                     R.layout.novice_buy_sympathies,
                     new OnClickListener() {
@@ -833,7 +836,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void setCounter(int position) {
         if (mCurrentUser != null) {
             mDatingCounter.setText((position + 1) + "/" + mCurrentUser.photos.size());
-            mDatingCounter.setVisibility(View.VISIBLE);
+            if (!mIsHide) mDatingCounter.setVisibility(View.VISIBLE);
         } else {
             mDatingCounter.setText("-/-");
             mDatingCounter.setVisibility(View.GONE);
