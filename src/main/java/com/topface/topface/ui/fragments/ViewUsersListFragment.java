@@ -84,7 +84,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPreloadManager = new PreloadManager<SearchUser>();
+        mPreloadManager = new PreloadManager<>();
     }
 
     @Override
@@ -245,7 +245,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected abstract void onPageSelected(int position);
 
-    private final View.OnClickListener getOnImageSwitcherClickListener() {
+    protected View.OnClickListener getOnImageSwitcherClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -353,7 +353,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         return new UsersList<SearchUser>(response, itemsClass);
                     } else {
                         if (getFeedUserContainerClass() != null) {
-                            FeedListData<FeedItem> items = new FeedListData<FeedItem>(response.getJsonResult(), getFeedUserContainerClass());
+                            FeedListData<FeedItem> items = new FeedListData<>(response.getJsonResult(), getFeedUserContainerClass());
                             more = items.more;
                             mLastFeedItemId = items.items.isEmpty() ? null : items.items.get(items.items.size() - 1).id;
                             return new UsersList<FeedUser>(items, itemsClass);
