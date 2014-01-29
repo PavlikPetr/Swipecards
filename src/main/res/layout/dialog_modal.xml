@@ -18,6 +18,7 @@
             android:paddingRight="16dp"
             android:paddingTop="16dp"
             android:paddingBottom="18dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/bg_dialog"
             android:layout_centerInParent="true"
             android:gravity="center_horizontal">
@@ -35,7 +36,7 @@
             android:layout_alignRight="@id/loDialog"
             android:layout_alignTop="@id/loDialog"
             android:background="@drawable/btn_dialog_close_selector"
-            android:layout_marginTop="-16dp"
-            android:layout_marginRight="-16dp" />
+            android:layout_marginRight="-16dp"
+            android:layout_marginTop="-16dp" />
     </RelativeLayout>
 </ScrollView>
