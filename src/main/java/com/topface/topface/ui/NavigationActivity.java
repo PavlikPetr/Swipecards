@@ -311,12 +311,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
 
             @Override
             public boolean isApplicable() {
-                if (!AuthToken.getInstance().isEmpty()) {
-                    if (CacheProfile.photo == null) {
-                        mTakePhotoApplicable = true;
-                        return true;
-                    }
-                }
+                mTakePhotoApplicable = !AuthToken.getInstance().isEmpty() && (CacheProfile.photo == null);
                 mSelectCityApplicable = CacheProfile.needToSelectCity(NavigationActivity.this);
                 return mTakePhotoApplicable || mSelectCityApplicable;
             }
