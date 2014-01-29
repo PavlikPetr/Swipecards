@@ -291,23 +291,22 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         //Показываем фрагмент только если мы авторизованы
         if (!AuthToken.getInstance().isEmpty()) {
-            FragmentId id = null;
-
             if (savedInstanceState != null) {
                 FragmentId savedId = (FragmentId) savedInstanceState.getSerializable(CURRENT_FRAGMENT_STATE);
                 if (savedId != null) {
-                    id = savedId;
+                    switchFragment(savedId, false);
+                    return;
                 }
             }
-            Intent intent = getActivity().getIntent();
-            if (intent != null &&
-                    intent.getSerializableExtra(GCMUtils.NEXT_INTENT) != null &&
-                    id == null) {
-                id = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
-            } else {
-                id = FragmentId.F_DATING;
+            if (getActivity() != null) {
+                Intent intent = getActivity().getIntent();
+                if (intent != null &&
+                        intent.getSerializableExtra(GCMUtils.NEXT_INTENT) != null) {
+                    switchFragment((FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT), false);
+                    return;
+                }
             }
-            switchFragment(id, false);
+            switchFragment(FragmentId.F_DATING, false);
         }
     }
 
