@@ -28,6 +28,8 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,6 +46,16 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             onCountersUpdated();
         }
     };
+    private List<View> mViewsToHideAndShow = new ArrayList<>();
+
+    /**
+     * Add items to list of views for hide and show purposes on ImageSwitcher click
+     *
+     * @param view from ui
+     */
+    protected void addViewsToHide(View view) {
+        mViewsToHideAndShow.add(view);
+    }
 
     @Override
     public void onResume() {
@@ -248,5 +260,21 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     protected void onNotEmptyDataReturnedOnce() {
         super.onNotEmptyDataReturnedOnce();
         EasyTracker.getTracker().sendView(getTrackName());
+    }
+
+    @Override
+    protected View.OnClickListener getOnImageSwitcherClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (View view : mViewsToHideAndShow) {
+                    if (view != null) {
+                        view.setVisibility(
+                                view.getVisibility() != View.VISIBLE ? View.VISIBLE : View.GONE
+                        );
+                    }
+                }
+            }
+        };
     }
 }
