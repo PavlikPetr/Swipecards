@@ -1,6 +1,7 @@
 package com.topface.topface.ui.dialogs;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,17 +19,25 @@ import com.topface.topface.ui.analytics.TrackedDialogFragment;
  */
 public abstract class AbstractDialogFragment extends TrackedDialogFragment {
 
+    private boolean mNeedActionBarIndent = true;
+    private int mActionBarSize;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //По стилю это у нас не диалог, а кастомный дизайн -
         //закрывает весь экран оверлеем и ниже ActionBar показывает контент
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
+        setStyle(STYLE_NO_FRAME, R.style.Topface_Theme_TranslucentDialog);
+        final TypedArray styledAttributes = getActivity().getTheme().obtainStyledAttributes(
+                new int[]{R.attr.actionBarSize});
+        mActionBarSize = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
     }
 
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_base, container, false);
+        root.setPadding(0, mNeedActionBarIndent ? mActionBarSize : 0, 0, 0);
         ViewStub stub = (ViewStub) root.findViewById(R.id.vsContent);
         stub.setLayoutResource(getDialogLayoutRes());
         View view = stub.inflate();
@@ -53,4 +62,8 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     }
 
     public abstract int getDialogLayoutRes();
+
+    protected final void setNeedActionBarIndent(boolean value) {
+        mNeedActionBarIndent = value;
+    }
 }

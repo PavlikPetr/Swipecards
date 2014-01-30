@@ -1,5 +1,6 @@
 package com.topface.topface.ui.dialogs;
 
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewStub;
 
@@ -13,6 +14,12 @@ public abstract class AbstractModalDialog extends AbstractDialogFragment {
 
     private boolean mBtnCloseVisible = true;
     private View mBtnCloseView;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setNeedActionBarIndent(false);
+    }
 
     @Override
     protected final void initViews(View root) {

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Topface.Theme.TranslucentDialog" parent="@style/Theme.AppCompat.Light">
+        <item name="android:windowBackground">@color/semitransparent_black</item>
+        <item name="android:colorBackground">@color/semitransparent_black</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+</resources>

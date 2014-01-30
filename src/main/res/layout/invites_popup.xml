@@ -70,7 +70,7 @@
             android:src="@drawable/ic_close_dialog"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_margin="5dp" />
+            android:layout_margin="2dp" />
     </RelativeLayout>
 
     <com.topface.topface.ui.views.LockerView
