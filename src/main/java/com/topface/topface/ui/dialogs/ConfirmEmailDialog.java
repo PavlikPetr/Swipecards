@@ -1,6 +1,7 @@
 package com.topface.topface.ui.dialogs;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.Button;
@@ -40,6 +41,12 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
     @Override
     protected int getContentLayoutResId() {
         return R.layout.dialog_confirm_email;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        Utils.hideSoftKeyboard(getActivity(), mEditEmailText);
     }
 
     @Override
