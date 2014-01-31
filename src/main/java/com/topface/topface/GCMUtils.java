@@ -9,7 +9,6 @@ import android.text.TextUtils;
 
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.data.Photo;
-import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -22,7 +21,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
-import com.topface.topface.utils.TopfaceNotificationManager;
+import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
@@ -139,7 +138,7 @@ public class GCMUtils {
                     if (!TextUtils.equals(intent.getComponent().getClassName(), ContainerActivity.class.getName())) {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     }
-                    final TopfaceNotificationManager notificationManager = TopfaceNotificationManager.getInstance(context);
+                    final UserNotificationManager notificationManager = UserNotificationManager.getInstance(context);
                     if (!Ssid.isLoaded()) {
                         if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_NOTIFICATION) {
                             notificationManager.showNotification(
@@ -217,15 +216,16 @@ public class GCMUtils {
         return title;
     }
 
-    private static void showNotificationWithIcon(final int unread, final String data, final User user, final TopfaceNotificationManager notificationManager, final Intent newIntent, final String finalTitle) {
+    private static void showNotificationWithIcon(final int unread, final String data, final User user, final UserNotificationManager notificationManager, final Intent newIntent, final String finalTitle) {
         notificationManager.showNotification(
                 finalTitle,
                 data,
                 true,
-                DefaultImageLoader.getInstance().getImageLoader().loadImageSync(user.photoUrl),
+                user.photoUrl,
                 unread,
                 newIntent,
-                false
+                false,
+                null
         );
     }
 
@@ -323,7 +323,7 @@ public class GCMUtils {
                     if (context != null) {
                         NotificationManager notificationManager =
                                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                        notificationManager.cancel(TopfaceNotificationManager.NOTIFICATION_ID);
+                        notificationManager.cancel(UserNotificationManager.NOTIFICATION_ID);
                     }
                 }
             }

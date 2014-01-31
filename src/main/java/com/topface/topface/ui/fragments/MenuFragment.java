@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.topface.topface.App;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
@@ -290,14 +291,22 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         //Показываем фрагмент только если мы авторизованы
         if (!AuthToken.getInstance().isEmpty()) {
-            FragmentId id = FragmentId.F_DATING;
             if (savedInstanceState != null) {
                 FragmentId savedId = (FragmentId) savedInstanceState.getSerializable(CURRENT_FRAGMENT_STATE);
                 if (savedId != null) {
-                    id = savedId;
+                    switchFragment(savedId, false);
+                    return;
                 }
             }
-            switchFragment(id, false);
+            if (getActivity() != null) {
+                Intent intent = getActivity().getIntent();
+                if (intent != null &&
+                        intent.getSerializableExtra(GCMUtils.NEXT_INTENT) != null) {
+                    switchFragment((FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT), false);
+                    return;
+                }
+            }
+            switchFragment(FragmentId.F_DATING, false);
         }
     }
 

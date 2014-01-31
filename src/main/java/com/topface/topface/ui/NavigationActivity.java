@@ -256,6 +256,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         } else {
             LocaleConfig.localeChangeInitiated = false;
         }
+
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
 

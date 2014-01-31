@@ -18,7 +18,6 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;
 
 public class ImageSwitcher extends ViewPager {
@@ -117,6 +116,7 @@ public class ImageSwitcher extends ViewPager {
             @Override
             public void onPageSelected(int i) {
                 setSelectedPosition(i);
+                mImageSwitcherAdapter.setPhotoToPosition(i, false);
                 finalListener.onPageSelected(i);
             }
 

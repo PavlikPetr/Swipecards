@@ -11,7 +11,6 @@ public class UserRequest extends ApiRequest {
     private static final String SERVICE = "user.getProfile";
 
     private int userId; // массив id пользователя в топфейсе
-    public Boolean visitor = true; // флаг определения текущего пользователя посетителем профилей запрошенных пользователей
 
     public UserRequest(int uid, Context context) {
         super(context);
@@ -23,8 +22,7 @@ public class UserRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
-                .put("userId", userId)
-                .put("visitor", visitor);
+                .put("userId", userId);
     }
 
     @Override
