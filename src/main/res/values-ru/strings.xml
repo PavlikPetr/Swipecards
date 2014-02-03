@@ -32,6 +32,7 @@
     <string name="general_profile_error">Ошибка загрузки профиля</string>
     <string name="general_dbl_all">Все</string>
     <string name="general_dbl_unread">Непрочитанные</string>
+    <string name="general_dbl_new">Новые</string>
 
     <string name="general_edit_button">Ред.</string>
     <string name="general_save_button">Сохр.</string>

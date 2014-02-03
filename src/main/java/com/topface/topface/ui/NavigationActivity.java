@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
@@ -34,8 +35,8 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -44,6 +45,7 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.ExternalLinkExecuter;
 import com.topface.topface.utils.FullscreenController;
+import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.PopupManager;
@@ -63,7 +65,7 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends CustomTitlesBaseFragmentActivity implements TakePhotoDialog.ITakePhotoListener {
+public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String BONUS_COUNTER_TAG = "preferences_for_bonus_counter";
     public static final String BONUS_COUNTER_LAST_SHOW_TIME = "last_show_time";
@@ -85,12 +87,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
             if (mNavBarController != null) mNavBarController.refreshNotificators();
         }
     };
-
-    public void setTakePhotoDialogStarted(boolean takePhotoDialogStarted) {
-        this.takePhotoDialogStarted = takePhotoDialogStarted;
-    }
-
-    private boolean takePhotoDialogStarted;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -128,10 +124,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
 
     private void initFullscreen() {
         mFullscreenController = new FullscreenController(this);
-    }
-
-    public boolean getDialogStarted() {
-        return takePhotoDialogStarted;
     }
 
     @Override
@@ -403,32 +395,40 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION ||
-                    requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
-                if (data != null) {
-                    Bundle extras = data.getExtras();
-                    try {
-                        if (extras != null) {
-                            final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
-                            SettingsRequest request = new SettingsRequest(this);
-                            request.cityid = city.id;
-                            request.callback(new ApiHandler() {
+            switch (requestCode) {
+                case CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION:
+                case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
+                    if (data != null) {
+                        Bundle extras = data.getExtras();
+                        try {
+                            if (extras != null) {
+                                final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
+                                SettingsRequest request = new SettingsRequest(this);
+                                request.cityid = city.id;
+                                request.callback(new ApiHandler() {
 
-                                @Override
-                                public void success(IApiResponse response) {
-                                    CacheProfile.city = city;
-                                    CacheProfile.sendUpdateProfileBroadcast();
-                                }
+                                    @Override
+                                    public void success(IApiResponse response) {
+                                        CacheProfile.city = city;
+                                        CacheProfile.sendUpdateProfileBroadcast();
+                                    }
 
-                                @Override
-                                public void fail(int codeError, IApiResponse response) {
-                                }
-                            }).exec();
+                                    @Override
+                                    public void fail(int codeError, IApiResponse response) {
+                                    }
+                                }).exec();
+                            }
+                        } catch (JSONException e) {
+                            Debug.error(e);
                         }
-                    } catch (JSONException e) {
-                        Debug.error(e);
                     }
-                }
+                    break;
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
+                    AddPhotoHelper helper = getAddPhotoHelper();
+                    helper.showTakePhotoDialog(mPhotoTaker,
+                            helper.processActivityResult(requestCode, resultCode, data, false));
+                    break;
             }
         }
     }
@@ -490,61 +490,94 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         return super.onKeyDown(keycode, e);
     }
 
-    @Override
-    public void onTakePhotoDialogSentSuccess(final Photo photo) {
-        if (CacheProfile.photos != null) {
-            CacheProfile.photos.add(photo);
-            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
-            LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
-        } else {
-            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-            ArrayList<Photo> photos = new ArrayList<>();
-            photos.add(photo);
-            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
+    private AddPhotoHelper mAddPhotoHelper;
+
+    private AddPhotoHelper getAddPhotoHelper() {
+        if (mAddPhotoHelper == null) {
+            mAddPhotoHelper = new AddPhotoHelper(this);
         }
-        takePhotoDialogStarted = false;
-        PhotoMainRequest request = new PhotoMainRequest(this);
-        request.photoId = photo.getId();
-        request.callback(new ApiHandler() {
+        return mAddPhotoHelper;
+    }
 
-            @Override
-            public void success(IApiResponse response) {
-                CacheProfile.photo = photo;
-                App.sendProfileRequest();
+    private IPhotoTakerWithDialog mPhotoTaker = new IPhotoTakerWithDialog() {
+        @Override
+        public void takePhoto() {
+            getAddPhotoHelper().startCamera(true);
+        }
+
+        @Override
+        public void choosePhotoFromGallery() {
+            getAddPhotoHelper().startChooseFromGallery(true);
+        }
+
+        @Override
+        public void onTakePhotoDialogSentSuccess(final Photo photo) {
+            if (CacheProfile.photos != null) {
+                CacheProfile.photos.add(photo);
+                Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
+                LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
+            } else {
+                Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                ArrayList<Photo> photos = new ArrayList<>();
+                photos.add(photo);
+                intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
             }
+            PhotoMainRequest request = new PhotoMainRequest(NavigationActivity.this);
+            request.photoId = photo.getId();
+            request.callback(new ApiHandler() {
 
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
-                    if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
-                        CacheProfile.photos.remove(photo);
-                    }
-                    Toast.makeText(
-                            NavigationActivity.this,
-                            App.getContext().getString(R.string.general_wrong_photo_upload),
-                            Toast.LENGTH_LONG
-                    ).show();
+                @Override
+                public void success(IApiResponse response) {
+                    CacheProfile.photo = photo;
+                    App.sendProfileRequest();
                 }
-            }
 
-            @Override
-            public void always(IApiResponse response) {
-                super.always(response);
-            }
-        }).exec();
-    }
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
+                        if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
+                            CacheProfile.photos.remove(photo);
+                        }
+                        Toast.makeText(
+                                NavigationActivity.this,
+                                App.getContext().getString(R.string.general_wrong_photo_upload),
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                }
 
-    @Override
-    public void onTakePhotoDialogSentFailure() {
-        Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onTakePhotoDialogDismiss() {
-        takePhotoDialogStarted = false;
-        if (CacheProfile.needToSelectCity(NavigationActivity.this)) {
-            CacheProfile.selectCity(NavigationActivity.this);
+                @Override
+                public void always(IApiResponse response) {
+                    super.always(response);
+                }
+            }).exec();
         }
+
+        @Override
+        public void onTakePhotoDialogSentFailure() {
+            Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onTakePhotoDialogDismiss() {
+            if (CacheProfile.needToSelectCity(NavigationActivity.this)) {
+                CacheProfile.selectCity(NavigationActivity.this);
+            }
+        }
+
+        @Override
+        public void sendPhotoRequest(Uri uri) {
+            getAddPhotoHelper().sendRequest(uri);
+        }
+
+        @Override
+        public FragmentManager getActivityFragmentManager() {
+            return getSupportFragmentManager();
+        }
+    };
+
+    private void takePhoto() {
+        getAddPhotoHelper().showTakePhotoDialog(mPhotoTaker, null);
     }
 }

@@ -846,7 +846,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void lockControls() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mDatingCounter.setVisibility(View.GONE);
+        if (!mIsHide) mDatingCounter.setVisibility(View.GONE);
         mUserInfoName.setVisibility(View.GONE);
         mUserInfoCity.setVisibility(View.GONE);
         mUserInfoStatus.setVisibility(View.GONE);
@@ -864,7 +864,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void unlockControls() {
         mProgressBar.setVisibility(View.GONE);
-        mDatingCounter.setVisibility(View.VISIBLE);
+        if (!mIsHide) mDatingCounter.setVisibility(View.VISIBLE);
         mUserInfoName.setVisibility(mCurrentUser != null ? View.VISIBLE : View.GONE);
         mUserInfoCity.setVisibility(mCurrentUser != null ? View.VISIBLE : View.GONE);
         mUserInfoStatus.setVisibility(View.VISIBLE);
