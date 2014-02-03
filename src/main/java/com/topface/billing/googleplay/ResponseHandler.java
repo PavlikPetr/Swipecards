@@ -15,14 +15,11 @@ import com.topface.billing.googleplay.Consts.PurchaseState;
 import com.topface.billing.googleplay.Consts.ResponseCode;
 import com.topface.topface.App;
 import com.topface.topface.data.AppsFlyerData;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Verify;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.AppOptionsRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GooglePlayPurchaseRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
 /**
@@ -186,12 +183,10 @@ public class ResponseHandler {
             protected void success(Verify verify, IApiResponse response) {
                 //Удаляем запрос из очереди запросов
                 GooglePlayV2Queue.getInstance(context).deleteQueueItem(queueId);
-                CacheProfile.premium = verify.premium;
                 //Оповещаем интерфейс о том, что элемент удачно куплен
                 if (sPurchaseObserver != null) {
                     sPurchaseObserver.postVerify(response);
                 }
-                sendOptionsRequest(context);
                 if (verify.revenue > 0) {
                     try {
                         AppsFlyerLib.sendTrackingWithEvent(
@@ -232,27 +227,6 @@ public class ResponseHandler {
                         GooglePlayV2Queue.getInstance(App.getContext()).sendQueueItems();
                     }
                 }, BillingUtils.BILLING_QUEUE_CHECK_DELAY);
-            }
-        }).exec();
-    }
-
-    private static void sendOptionsRequest(Context context) {
-        final AppOptionsRequest request = new AppOptionsRequest(context);
-        request.callback(new DataApiHandler<Options>() {
-
-            @Override
-            protected void success(Options data, IApiResponse response) {
-                CacheProfile.sendUpdateProfileBroadcast();
-            }
-
-            @Override
-            protected Options parseResponse(ApiResponse response) {
-                return new Options(response);
-            }
-
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-
             }
         }).exec();
     }

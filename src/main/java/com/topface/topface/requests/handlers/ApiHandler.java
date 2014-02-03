@@ -124,6 +124,11 @@ abstract public class ApiHandler extends Handler {
                         balance.optInt("likes"),
                         balance.optInt("money")
                 );
+                boolean premiumStatus = balance.optBoolean("premium", CacheProfile.premium);
+                if (premiumStatus != CacheProfile.premium) {
+                    CacheProfile.premium = premiumStatus;
+                    App.sendProfileAndOptionsRequests();
+                }
             }
         } catch (Exception e) {
             Debug.error("api handler exception", e);

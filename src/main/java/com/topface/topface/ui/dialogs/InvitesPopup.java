@@ -111,9 +111,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
                     if (getActivity() != null) {
 
                         Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_LONG).show();
-                        CacheProfile.premium = true;
                         CacheProfile.canInvite = false;
-                        App.sendProfileAndOptionsRequests();
                         ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
                     }
                 } else {

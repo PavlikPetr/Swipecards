@@ -291,12 +291,10 @@ public class BuyingFragment extends BillingFragment {
 
     @Override
     public void onPurchased() {
-        CacheProfile.sendUpdateProfileBroadcast();
     }
 
     @Override
     public void onError() {
-        //TODO: Сделать обработку ошибок
     }
 
     @Override
