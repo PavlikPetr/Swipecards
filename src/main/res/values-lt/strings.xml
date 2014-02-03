@@ -45,6 +45,7 @@
     <string name="general_chat">Pokalbis</string>
     <string name="general_allow">Leisti</string>
     <string name="notification_popup_title">Laiskite atsiųsti jums pranešimą, kad jūs galėtumėte sužinoti apie naują simpatiją, susižavėjimą ar neperskaitytą pranešimą</string>
+    <string name="email_successfully_changed">Jūsų el. paštas sėkmingai pakeistas</string>
     <string name="auth_btn_vk">Įeiti per VK</string>
     <string name="auth_btn_fb">Įeiti per Facebook</string>
     <string name="auth_retry">Pakartoti bandymą</string>
