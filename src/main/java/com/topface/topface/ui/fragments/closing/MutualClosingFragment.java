@@ -49,12 +49,15 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
         mUserName = (TextView) controlsView.findViewById(R.id.tvUserName);
         mUserCity = (TextView) controlsView.findViewById(R.id.tvUserCity);
+        addViewsToHide(mUserCity);
+        addViewsToHide(mUserCity);
         return controlsView;
     }
 
     @Override
     protected void initTopPanel(View topPanelView) {
         topPanelView.findViewById(R.id.btnWatchAsList).setOnClickListener(this);
+        addViewsToHide(topPanelView);
     }
 
     @Override

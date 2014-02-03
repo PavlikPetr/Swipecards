@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.topface.topface.App;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
@@ -101,7 +102,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             if (action == null) return;
 
             switch (action) {
-                case CountersManager.UPDATE_BALANCE_COUNTERS:
+                case CountersManager.UPDATE_BALANCE:
                     mAdapter.refreshCounterBadges();
                     mBuyWidgetController.updateBalance();
                     if (mClosingsController != null) {
@@ -290,14 +291,22 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         //Показываем фрагмент только если мы авторизованы
         if (!AuthToken.getInstance().isEmpty()) {
-            FragmentId id = FragmentId.F_DATING;
             if (savedInstanceState != null) {
                 FragmentId savedId = (FragmentId) savedInstanceState.getSerializable(CURRENT_FRAGMENT_STATE);
                 if (savedId != null) {
-                    id = savedId;
+                    switchFragment(savedId, false);
+                    return;
                 }
             }
-            switchFragment(id, false);
+            if (getActivity() != null) {
+                Intent intent = getActivity().getIntent();
+                if (intent != null &&
+                        intent.getSerializableExtra(GCMUtils.NEXT_INTENT) != null) {
+                    switchFragment((FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT), false);
+                    return;
+                }
+            }
+            switchFragment(FragmentId.F_DATING, false);
         }
     }
 
@@ -316,7 +325,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         IntentFilter filter = new IntentFilter();
         filter.addAction(CacheProfile.PROFILE_UPDATE_ACTION);
         filter.addAction(GooglePlayProducts.INTENT_UPDATE_PRODUCTS);
-        filter.addAction(CountersManager.UPDATE_BALANCE_COUNTERS);
+        filter.addAction(CountersManager.UPDATE_BALANCE);
         filter.addAction(SELECT_MENU_ITEM);
         filter.addAction(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED);
         filter.addAction(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED);
@@ -525,7 +534,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             //к тому же тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
             //его локально, а не серверно, как это происходит с остальными счетчиками.
             if (id == F_BONUS) {
-                if (CacheProfile.NEED_SHOW_BONUS_COUNTER) {
+                if (CacheProfile.needShowBonusCounter) {
                     new BackgroundThread() {
                         @Override
                         public void execute() {
@@ -534,7 +543,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                         }
                     };
                 }
-                CacheProfile.NEED_SHOW_BONUS_COUNTER = false;
+                CacheProfile.needShowBonusCounter = false;
                 mAdapter.refreshCounterBadges();
                 Offerwalls.startOfferwall(getActivity());
             } else {

@@ -19,7 +19,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
-import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -36,7 +35,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public static final String INTENT_PREV_ENTITY = "prev_entity";
     public static final String AUTH_TAG = "AUTH";
 
-    protected boolean needOpenDialog = true;
     private boolean mIndeterminateSupported = false;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
@@ -279,21 +277,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected boolean isNeedAuth() {
         return true;
-    }
-
-    protected void takePhoto() {
-        if (needOpenDialog) {
-            if (this instanceof NavigationActivity) {
-                ((NavigationActivity) this).setTakePhotoDialogStarted(true);
-            }
-            TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
-            try {
-                newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
-            } catch (Exception e) {
-                Debug.error(e);
-            }
-            needOpenDialog = false;
-        }
     }
 
     protected Integer getOptionsMenuRes() {

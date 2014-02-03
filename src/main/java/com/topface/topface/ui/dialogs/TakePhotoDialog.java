@@ -1,28 +1,21 @@
 package com.topface.topface.ui.dialogs;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.topface.topface.R;
-import com.topface.topface.data.Photo;
-import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.utils.BitmapUtils;
+import com.topface.topface.utils.IPhotoTakerWithDialog;
 
-public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickListener {
+public class TakePhotoDialog extends AbstractModalDialog implements View.OnClickListener {
+
     public static final String TAG = "Topface_TakePhotoDialog_Tag";
 
     private TextView mText;
@@ -34,64 +27,51 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
 
     private Uri mPhotoUri = null;
 
-    private ITakePhotoListener mTakePhotoListener;
-    private AddPhotoHelper mAddPhotoHelper;
+    private IPhotoTakerWithDialog mPhotoTaker;
     private Bitmap mBitmap;
     private Bitmap mScaledBitmap;
-
-    @Override
+    
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (activity instanceof ITakePhotoListener) {
-            setOnTakePhotoListener((ITakePhotoListener) activity);
+        if (activity instanceof IPhotoTakerWithDialog) {
+            setPhotoTaker((IPhotoTakerWithDialog) activity);
         }
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_take_photo, container, false);
+    protected void initContentViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
-        mAddPhotoHelper = new AddPhotoHelper(this);
-        mAddPhotoHelper.setOnResultHandler(mAddPhotoHandler);
-
         mText = (TextView) root.findViewById(R.id.tvText);
-
         mPhotoLayout = root.findViewById(R.id.loPhoto);
         mPhoto = (ImageView) mPhotoLayout.findViewById(R.id.ivPhoto);
-
         mBtnTakePhoto = (Button) root.findViewById(R.id.btnTakePhoto);
         mBtnTakePhoto.setOnClickListener(this);
         mBtnFromGallery = (Button) root.findViewById(R.id.btnTakeFormGallery);
         mBtnFromGallery.setOnClickListener(this);
         mBtnSendPhoto = (Button) root.findViewById(R.id.btnSendPhoto);
         mBtnSendPhoto.setOnClickListener(this);
+    }
 
-        root.findViewById(R.id.btnClose).setOnClickListener(this);
-        return root;
+    @Override
+    public int getContentLayoutResId() {
+        return R.layout.dialog_take_photo;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        initButtonsState();
+        refreshViewsState();
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (mTakePhotoListener != null) {
-            mTakePhotoListener.onTakePhotoDialogDismiss();
+        if (mPhotoTaker != null) {
+            mPhotoTaker.onTakePhotoDialogDismiss();
         }
     }
 
-    private void initButtonsState() {
+    private void refreshViewsState() {
         if (mPhotoUri == null) {
             mBtnSendPhoto.setVisibility(View.GONE);
             mBtnFromGallery.setVisibility(View.VISIBLE);
@@ -104,6 +84,7 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
             mPhotoLayout.setVisibility(View.VISIBLE);
             mBtnTakePhoto.setText(R.string.take_another_photo);
             mText.setText(R.string.photo_for_avatar);
+            setPhoto(mPhotoUri);
         }
     }
 
@@ -111,24 +92,19 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
         super();
     }
 
-    public static TakePhotoDialog newInstance() {
+    public static TakePhotoDialog newInstance(Uri uri) {
         TakePhotoDialog dialog = new TakePhotoDialog();
         dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Topface);
+        dialog.setUri(uri);
         return dialog;
     }
 
-    public void setOnTakePhotoListener(ITakePhotoListener listener) {
-        mTakePhotoListener = listener;
+    public void setPhotoTaker(IPhotoTakerWithDialog listener) {
+        mPhotoTaker = listener;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mPhotoUri = mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false);
-        setPhoto(mPhotoUri, mPhoto);
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void setPhoto(Uri uri, ImageView photo) {
+    private void setPhoto(Uri uri) {
+        if (uri == null) return;
         int maxWidth = getResources().getDimensionPixelSize(R.dimen.take_photo_max_width);
         int maxHeight = getResources().getDimensionPixelSize(R.dimen.take_photo_max_height);
         mBitmap = BitmapUtils.getBitmap(getActivity(), uri, maxWidth, maxHeight);
@@ -139,51 +115,43 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
             } else {
                 mScaledBitmap = BitmapUtils.getScaledBitmap(mBitmap, 0, maxHeight);
             }
-            photo.setImageBitmap(mScaledBitmap);
+            mPhoto.setImageBitmap(mScaledBitmap);
         } else {
-            photo.setImageBitmap(mBitmap);
+            mPhoto.setImageBitmap(mBitmap);
         }
     }
 
     @Override
     public void onClick(View v) {
-        Dialog dialog = getDialog();
-        if (mTakePhotoListener != null) {
+        if (mPhotoTaker != null) {
             switch (v.getId()) {
                 case R.id.btnTakePhoto:
                     if (mPhotoUri == null) {
-                        mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
+                        mPhotoTaker.takePhoto();
                     } else {
-                        mPhotoUri = null;
-                        initButtonsState();
+                        setUri(null);
                     }
                     break;
                 case R.id.btnTakeFormGallery:
-                    mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
+                    mPhotoTaker.choosePhotoFromGallery();
                     break;
                 case R.id.btnSendPhoto:
-                    if (mPhotoUri != null && dialog != null) {
+                    if (mPhotoUri != null) {
                         sendRequest(mPhotoUri);
-                        dialog.dismiss();
+                        dismiss();
                     }
-                    break;
-                case R.id.btnClose:
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
-                    mTakePhotoListener.onTakePhotoDialogDismiss();
                     break;
                 default:
                     break;
             }
-        } else if (dialog != null) {
-            dialog.dismiss();
+        } else {
+            dismiss();
         }
     }
 
     private void sendRequest(Uri uri) {
-        if (uri != null) {
-            if (mAddPhotoHelper != null) mAddPhotoHelper.sendRequest(uri);
+        if (uri != null && mPhotoTaker != null) {
+            mPhotoTaker.sendPhotoRequest(uri);
         }
     }
 
@@ -198,25 +166,25 @@ public class TakePhotoDialog extends BaseDialogFragment implements View.OnClickL
         }
     }
 
-    public interface ITakePhotoListener {
-        void onTakePhotoDialogSentSuccess(Photo photo);
-
-        void onTakePhotoDialogSentFailure();
-
-        void onTakePhotoDialogDismiss();
+    @Override
+    protected void onCloseButtonClick(View v) {
+        if (mPhotoTaker != null) {
+            mPhotoTaker.onTakePhotoDialogDismiss();
+        }
+        dismiss();
     }
 
-    private Handler mAddPhotoHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-                Photo photo = (Photo) msg.obj;
-                if (mTakePhotoListener != null)
-                    mTakePhotoListener.onTakePhotoDialogSentSuccess(photo);
-            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
-                if (mTakePhotoListener != null) mTakePhotoListener.onTakePhotoDialogSentFailure();
-            }
+    /**
+     * Sets photo uri and changes state of TakePhotoDialog to represent one
+     * Can be called when fragment is visible to change photo on fly
+     *
+     * @param uri photo to represent, null will change dialog to state in which you can take a photo
+     */
+    public TakePhotoDialog setUri(Uri uri) {
+        mPhotoUri = uri;
+        if (getView() != null) {
+            refreshViewsState();
         }
-    };
+        return this;
+    }
 }

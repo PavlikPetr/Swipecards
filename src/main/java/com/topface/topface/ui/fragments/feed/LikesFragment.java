@@ -1,9 +1,12 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -45,6 +48,27 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     private RateController mRateController;
     protected View mEmptyFeedView;
+
+    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onCountersUpdated();
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+    }
 
     @Override
     protected void init() {
@@ -94,7 +118,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected FeedListData<FeedLike> getFeedList(JSONObject response) {
-        return new FeedListData<FeedLike>(response, FeedLike.class);
+        return new FeedListData<>(response, FeedLike.class);
     }
 
     @Override
@@ -278,9 +302,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return true;
     }
 
-    @Override
     protected void onCountersUpdated() {
-        super.onCountersUpdated();
         if (mEmptyFeedView != null) {
             initEmptyFeedView(mEmptyFeedView);
         }

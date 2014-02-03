@@ -157,7 +157,6 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
 
     public Photo(ApiResponse response) {
         fillData(response.jsonResult.optJSONObject("photo"));
-
     }
 
     public boolean isFake() {

@@ -45,6 +45,7 @@
     <string name="general_chat">Chat</string>
     <string name="general_allow">Permitir</string>
     <string name="notification_popup_title">Permitir</string>
+    <string name="email_successfully_changed">Tu email ha sido cambiado con éxito</string>
     <string name="auth_btn_vk">Entrar via VK</string>
     <string name="auth_btn_fb">Entrar via Facebook</string>
     <string name="auth_retry">Intentar de nuevo</string>
@@ -542,7 +543,7 @@
     <string name="settings_feedback_transaction_number">Número del pedido</string>
     <string name="settings_feedback_transaction_link">dónde encontrar el número del pedido?</string>
     <string name="general_logout_error">Lamentablemente, no se ha podido sañir de la cuenta</string>
-    <string name="auth_btn_ok">Entrar por medio de Odnoklassniki</string>
+    <string name="auth_btn_ok">Entrar via Odnoklassniki</string>
     <string name="other_auth">Entrar usando otros servicios</string>
     <string name="settings_feedback_transaction_number_hint">Introduce el número del pedido</string>
     <string name="youve_earned">Has ganado %s</string>

@@ -17,7 +17,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.+'
+        classpath 'com.android.tools.build:gradle:0.8.+'
     }
 }
 
@@ -60,8 +60,12 @@ android {
     }
 
     signingConfigs {
+        debug {
+            storeFile file("misc/keys/debug.keystore")
+        }
+
         release {
-            storeFile file("misc/topface-apk.key")
+            storeFile file("misc/keys/topface.keystore")
             storePassword "Sonetica2012"
             keyAlias "topface"
             keyPassword "Sonetica2012"

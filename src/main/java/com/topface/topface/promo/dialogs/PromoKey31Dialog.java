@@ -1,11 +1,11 @@
-package com.topface.topface.promo.fragments;
+package com.topface.topface.promo.dialogs;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-public class PromoKey31Fragment extends PromoFragment {
+public class PromoKey31Dialog extends PromoDialog {
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
         return CacheProfile.getOptions().premiumMessages;

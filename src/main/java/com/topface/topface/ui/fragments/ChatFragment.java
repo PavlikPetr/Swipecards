@@ -78,7 +78,6 @@ import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
-
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
 
@@ -676,8 +675,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 History history = (History) v.getTag();
 
                 if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
-                    String uri = String.format(Locale.getDefault(),
-                            "geo:%f,%f",
+                    String uri = String.format(Locale.ENGLISH,
+                            "geo:%f,%f?q=%f,%f" + history.text,
+                            (float) history.geo.getCoordinates().getLatitude(),
+                            (float) history.geo.getCoordinates().getLongitude(),
                             (float) history.geo.getCoordinates().getLatitude(),
                             (float) history.geo.getCoordinates().getLongitude());
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));

@@ -8,7 +8,8 @@ import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.LeadersRequest;
 
 public class CountersManager {
-    public static final String UPDATE_BALANCE_COUNTERS = "com.topface.topface.UPDATE_BALANCE_COUNTERS";
+    public static final String UPDATE_BALANCE = "com.topface.topface.UPDATE_BALANCE";
+    public final static String UPDATE_COUNTERS = "com.topface.topface.UPDATE_COUNTERS";
     private static int likesCounter;
     private static int sympathyCounter;
     private static int visitorsCounter;
@@ -19,7 +20,6 @@ public class CountersManager {
     private Context mContext;
 
     private final static String[] DeniedMethod = {BannerRequest.SERVICE_NAME, LeadersRequest.SERVICE_NAME};
-    public final static String UPDATE_COUNTERS = "com.topface.topface.UPDATE_COUNTERS";
 
     public final static String NULL_METHOD = "null_method";
     public final static String CHANGED_BY_GCM = "gcm_changed";
@@ -54,70 +54,7 @@ public class CountersManager {
         admirationsCounter = CacheProfile.unread_admirations;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public void incrementCounter(int type) {
-        switch (type) {
-            case LIKES:
-                likesCounter++;
-                break;
-            case SYMPATHY:
-                sympathyCounter++;
-                break;
-            case VISITORS:
-                visitorsCounter++;
-                break;
-            case DIALOGS:
-                dialogsCounter++;
-                break;
-            case FANS:
-                fansCounter++;
-                break;
-            case ADMIRATIONS:
-                admirationsCounter++;
-                break;
-        }
-        commitCounters();
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void decrementCounter(int type) {
-        switch (type) {
-            case LIKES:
-                if (likesCounter > 0) {
-                    likesCounter--;
-                }
-                break;
-            case SYMPATHY:
-                if (sympathyCounter > 0) {
-                    sympathyCounter--;
-                }
-                break;
-            case VISITORS:
-                if (visitorsCounter > 0) {
-                    visitorsCounter--;
-                }
-                break;
-            case DIALOGS:
-                if (dialogsCounter > 0) {
-                    dialogsCounter--;
-                }
-                break;
-            case FANS:
-                if (fansCounter > 0) {
-                    fansCounter--;
-                }
-                break;
-            case ADMIRATIONS:
-                if (admirationsCounter > 0) {
-                    admirationsCounter--;
-                }
-                break;
-        }
-        commitCounters();
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void setCounter(int type, int value, boolean doNeedUpdate) {
+    public void setCounter(int type, int value) {
         switch (type) {
             case LIKES:
                 likesCounter = value;
@@ -220,7 +157,7 @@ public class CountersManager {
     }
 
     private void updateBalanceCounters() {
-        Intent intent = new Intent(UPDATE_BALANCE_COUNTERS);
+        Intent intent = new Intent(UPDATE_BALANCE);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 

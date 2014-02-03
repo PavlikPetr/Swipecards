@@ -123,7 +123,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
         boolean mail;
         boolean apns;
-        if (!CacheProfile.hasMail && !GCMUtils.GCM_SUPPORTED) {
+        if (!CacheProfile.email && !GCMUtils.GCM_SUPPORTED) {
             root.findViewById(R.id.tvNoNotification).setVisibility(View.VISIBLE);
             root.findViewById(R.id.loNotificationsHeader).setVisibility(View.GONE);
             root.findViewById(R.id.loLikes).setVisibility(View.GONE);
@@ -140,7 +140,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 mail = false;
                 apns = false;
             }
-            initEditNotificationFrame(CacheProfile.NOTIFICATIONS_LIKES, frame, CacheProfile.hasMail, mail, apns);
+            initEditNotificationFrame(CacheProfile.NOTIFICATIONS_LIKES, frame, CacheProfile.email, mail, apns);
 
             // Mutual
             frame = (ViewGroup) root.findViewById(R.id.loMutual);
@@ -153,7 +153,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 mail = false;
                 apns = false;
             }
-            initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY, frame, CacheProfile.hasMail, mail, apns);
+            initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY, frame, CacheProfile.email, mail, apns);
 
             // Chat
             frame = (ViewGroup) root.findViewById(R.id.loChat);
@@ -166,7 +166,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 mail = false;
                 apns = false;
             }
-            initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE, frame, CacheProfile.hasMail, mail, apns);
+            initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE, frame, CacheProfile.email, mail, apns);
 
             // Guests
             frame = (ViewGroup) root.findViewById(R.id.loGuests);
@@ -179,7 +179,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 mail = false;
                 apns = false;
             }
-            initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR, frame, CacheProfile.hasMail, mail, apns);
+            initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR, frame, CacheProfile.email, mail, apns);
 
             // Vibration
             frame = (ViewGroup) root.findViewById(R.id.loVibration);

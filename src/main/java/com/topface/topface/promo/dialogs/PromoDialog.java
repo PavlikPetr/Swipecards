@@ -1,4 +1,4 @@
-package com.topface.topface.promo.fragments;
+package com.topface.topface.promo.dialogs;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,10 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -18,12 +15,12 @@ import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.dialogs.BaseDialogFragment;
+import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.fragments.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
-public abstract class PromoFragment extends BaseDialogFragment implements View.OnClickListener, IPromoPopup {
+public abstract class PromoDialog extends AbstractDialogFragment implements View.OnClickListener, IPromoPopup {
 
     private OnCloseListener mListener;
 
@@ -53,9 +50,6 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
         super.onCreate(savedInstanceState);
         //Закрыть диалог нельзя
         setCancelable(false);
-        //По стилю это у нас не диалог, а кастомный дизайн -
-        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
-        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Translucent);
         //Подписываемся на обновление профиля
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(
@@ -81,9 +75,13 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.promo_popup, container, false);
+    public int getDialogLayoutRes() {
+        return R.layout.promo_popup;
+    }
 
+    @Override
+    public void initViews(View root) {
+        root.setClickable(true);
         root.findViewById(R.id.buyVip).setOnClickListener(this);
         ((TextView) root.findViewById(R.id.deleteMessages)).setText(getDeleteButtonText());
         root.findViewById(R.id.deleteMessages).setOnClickListener(this);
@@ -91,7 +89,6 @@ public abstract class PromoFragment extends BaseDialogFragment implements View.O
         TextView popupText = (TextView) root.findViewById(R.id.airMessagesText);
         popupText.setText(getMessage());
         EasyTracker.getTracker().sendEvent(getMainTag(), "Show", "", 0L);
-        return root;
     }
 
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
