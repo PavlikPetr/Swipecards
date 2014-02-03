@@ -46,6 +46,12 @@ public class UserNotificationManager {
                 doNeedReplace, false, type, null);
     }
 
+    private int showNotification(String title, String message, boolean isTextNotification,
+                                 Bitmap icon, int unread, Intent intent, boolean doNeedReplace, boolean ongoing, UserNotification.Type type) {
+        return showNotification(title, message, isTextNotification, icon, unread, intent,
+                doNeedReplace, ongoing, type, null);
+    }
+
     public void showNotification(final String title, final String message, final boolean isTextNotification,
                                  String uri, final int unread, final Intent intent, final boolean doNeedReplace,
                                  final NotificationImageListener listener) {
@@ -95,7 +101,7 @@ public class UserNotificationManager {
     }
 
     public int showProgressNotification(String title, Bitmap icon, Intent intent) {
-        return showNotification(title, null, false, icon, 0, intent, false, UserNotification.Type.PROGRESS);
+        return showNotification(title, null, false, icon, 0, intent, false, true, UserNotification.Type.PROGRESS);
     }
 
     public void showProgressNotificationAsync(final String title, String uri, final Intent intent, final NotificationImageListener listener) {
