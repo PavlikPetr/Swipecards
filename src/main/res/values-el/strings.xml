@@ -44,6 +44,8 @@
     <string name="general_settings">Ρυθμίσεις</string>
     <string name="general_chat">Συνομιλία</string>
     <string name="general_allow">Επιτρέψτε</string>
+    <string name="notification_popup_title">Επιτρέψτε μας να σας στείλουμε μια ειδοποίηση, έτσι ώστε να μπορείτε αμέσως να μάθετε για τις νέες συμπάθειες, το θαυμασμό ή τα μη αναγνωσμένα μηνύματα</string>
+    <string name="email_successfully_changed">Το e-mail σας έχει αλλάξει επιτυχώς</string>
     <string name="auth_btn_vk">Εισάγετε με Vkontakte</string>
     <string name="auth_btn_fb">Εισάγετε με Facebook</string>
     <string name="auth_retry">Δοκιμάστε ξανά</string>

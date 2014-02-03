@@ -43,6 +43,9 @@
     <string name="general_profile">Profil</string>
     <string name="general_settings">Ayarlar</string>
     <string name="general_chat">Sohbet</string>
+    <string name="general_allow">İzin vermek</string>
+    <string name="notification_popup_title">Yeni sempatiniz, hayranlık veya okunmamış mesaj hakkında bilgi hemen almak için size bildirim göndermeye izin verin</string>
+    <string name="email_successfully_changed">E-mailiniz başarılıyla değiştirildi</string>
     <string name="auth_btn_vk">Vkontakte’den giriş yapmak</string>
     <string name="auth_btn_fb">Facebook’tan giriş yapmak</string>
     <string name="auth_retry">Tekrar deneyin</string>
@@ -210,6 +213,7 @@
     <string name="rate_popup_set_rate">Not vermek</string>
     <string name="rate_popup_later">Daha sonra yenile</string>
     <string name="rate_popup_cancel">Hayır, teşekkürler</string>
+    <string name="rate_popup_error">Uygulamamıza kaç tane yıldız verdiğini belirtmelisiniz</string>
     <string name="feedback_popup_title">Siz düşük fiyat koymuşsunuz. Uygulamada neyi beğenip beğenmediğinizi anlatın. Bize daha iyi olmak için yardımcı olun. Teşekkürler!</string>
     <string name="settings_melody">Bildirim sesi</string>
     <string name="edit_refresh_status">Durumu yenilemek</string>
@@ -603,6 +607,7 @@
     <string name="pincode_repeat">PIN-kod yeniden</string>
     <string name="pincode_forget">PIN-kod mu unuttunuz?</string>
     <string name="pincode_auth_input">Login ve parolaya girmelisiniz</string>
+    <string name="pincode_will_be_reset">Başarılı üye girişinden sonra uygulamanın tüm ayarları sıfırlanacak.</string>
     <plurals name="pincode_interval">
         <item quantity="zero">kapanıştan hemen sonra</item>
         <item quantity="other">%d dak.</item>

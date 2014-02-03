@@ -45,6 +45,7 @@
     <string name="general_chat">Chat</string>
     <string name="general_allow">Allow</string>
     <string name="notification_popup_title">Allow us to send you a notification, so you can instantly find out about new likes, admirations or unread messages</string>
+    <string name="email_successfully_changed">Your e-mail was successfully changed</string>
     <string name="auth_btn_vk">Login with VK</string>
     <string name="auth_btn_fb">Login with Facebook</string>
     <string name="auth_retry">Retry</string>
@@ -546,11 +547,11 @@
     <string name="general_logout_error">Unfortunately, you failed to log out from your account</string>
     <string name="auth_btn_ok">Login with Odnoklassniki</string>
     <string name="other_auth">Login with other services</string>
-    <string name="settings_feedback_transaction_number_hint">Enter order number</string>
+    <string name="settings_feedback_transaction_number_hint">Enter the order number</string>
     <string name="youve_earned">You\'ve earned %s</string>
     <string name="like_topface">Do you like Topface?</string>
-    <string name="delete_visitors">delete visitors</string>
-    <string name="delete_admirations">delete admirations</string>
+    <string name="delete_visitors">Delete visitors</string>
+    <string name="delete_admirations">Delete admirations</string>
     <string name="general_admirations">Admirations</string>
     <plurals name="popup_vip_admirations">
         <item quantity="other">You have %d admirations</item>
@@ -566,8 +567,8 @@
     <string name="default_ringtone">By default</string>
     <string name="photo_info_deleted">Deleted</string>
     <string name="user_deleted_or_banned">The user is banned or deleted</string>
-    <string name="locking_popup_title">Entering this section is  «%s» restricted!</string>
-    <string name="locking_popup_message">To enter this section «%s» answer all incoming likes or get VIP.</string>
+    <string name="locking_popup_title">Access to the «%s» section is restricted.</string>
+    <string name="locking_popup_message">To gain access to «%s» section, please answer to all incoming likes or get a VIP-status.</string>
     <string name="locking_popup_button_answer">Respond to likes</string>
     <string name="locking_menu_message">Access to certain pages of the application is restricted. To remove these restrictions, answer all incoming likes or get VIP.</string>
     <string name="locking_likes_message">Attention! Access to some of the pages on the application is restricted. To remove these restrictions, answer to all incoming likes or get VIP.</string>
