@@ -54,7 +54,6 @@ import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.profile.AddPhotoHelper;
@@ -90,9 +89,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     public static final String INTENT_CALLING_FRAGMENT = "intent_profile_calling_fragment";
     public static final String ADD_PHOTO_INTENT = "com.topface.topface.ADD_PHOTO_INTENT";
 
-    ArrayList<String> BODY_PAGES_TITLES = new ArrayList<String>();
-    ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<String>();
-    ArrayList<String> HEADER_PAGES_CLASS_NAMES = new ArrayList<String>();
+    ArrayList<String> BODY_PAGES_TITLES = new ArrayList<>();
+    ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<>();
+    ArrayList<String> HEADER_PAGES_CLASS_NAMES = new ArrayList<>();
 
     private HeaderMainFragment mHeaderMainFragment;
     private HeaderStatusFragment mHeaderStatusFragment;
@@ -271,7 +270,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private void initUserActions(View root) {
         mUserActions = (LinearLayout) root.findViewById(R.id.mUserActions);
 
-        ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
+        ArrayList<UserActions.ActionItem> actions = new ArrayList<>();
         actions.add(new UserActions.ActionItem(R.id.acGift, this));
         actions.add(new UserActions.ActionItem(R.id.acSympathy, this));
         actions.add(new UserActions.ActionItem(R.id.acDelight, this));
@@ -847,17 +846,17 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                if (mGiftFragment == null || !mGiftFragment.isAdded()) {
-                    sendGift(data);
-                    return;
-                }
-            }
-            if ((requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA ||
-                    requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) &&
-                    !((NavigationActivity) getActivity()).getDialogStarted()
-                    ) {
-                mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+            switch (requestCode) {
+                case GiftsActivity.INTENT_REQUEST_GIFT:
+                    if (mGiftFragment == null || !mGiftFragment.isAdded()) {
+                        sendGift(data);
+                        return;
+                    }
+                    break;
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY:
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA:
+                    mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+                    break;
             }
             resultToNestedFragments(requestCode, resultCode, data);
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -1014,7 +1013,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
                 // добавляется фото в начало списка
                 CacheProfile.photos.addFirst(photo);
-                ArrayList<Photo> photosForAdd = new ArrayList<Photo>();
+                ArrayList<Photo> photosForAdd = new ArrayList<>();
                 photosForAdd.add(photo);
                 Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
                 intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photosForAdd);

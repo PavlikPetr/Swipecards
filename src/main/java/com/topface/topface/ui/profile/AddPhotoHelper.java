@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -23,10 +24,12 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
@@ -52,7 +55,9 @@ public class AddPhotoHelper {
 
     public static final int ADD_PHOTO_RESULT_OK = 0;
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
-    public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 101;
+    public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG = 103;
+    public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 102;
+    public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG = 101;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 100;
     private UserNotificationManager mNotificationManager;
     private File outputFile;
@@ -62,11 +67,6 @@ public class AddPhotoHelper {
         this(fragment.getActivity());
         mFragment = fragment;
         this.mLockerView = mLockerView;
-    }
-
-    public AddPhotoHelper(Fragment fragment) {
-        this(fragment.getActivity());
-        mFragment = fragment;
     }
 
     public AddPhotoHelper(Activity activity) {
@@ -108,11 +108,18 @@ public class AddPhotoHelper {
         }
     };
 
-    private void startCamera() {
+
+    public void startCamera() {
+        startCamera(false);
+    }
+
+    public void startCamera(final boolean withDialog) {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         new BackgroundThread() {
             @Override
             public void execute() {
+                int requestCode = withDialog ? GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG :
+                        GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA;
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 
                 UUID uuid = UUID.randomUUID();
@@ -139,13 +146,13 @@ public class AddPhotoHelper {
                     if (mFragment != null) {
                         if (mFragment.isAdded()) {
                             if (mFragment instanceof ProfilePhotoFragment) {
-                                mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                                mFragment.getParentFragment().startActivityForResult(intent, requestCode);
                             } else {
-                                mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                                mFragment.startActivityForResult(intent, requestCode);
                             }
                         }
                     } else {
-                        mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                        mActivity.startActivityForResult(intent, requestCode);
                     }
                 }
 
@@ -158,17 +165,23 @@ public class AddPhotoHelper {
         return (mFragment == null) ? mActivity : mFragment.getActivity();
     }
 
-    private void startChooseFromGallery() {
+    public void startChooseFromGallery() {
+        startChooseFromGallery(false);
+    }
+
+    public void startChooseFromGallery(boolean withDialog) {
+        int requestCode = withDialog ? GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG :
+                GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY;
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
         if (mFragment != null) {
             if (mFragment instanceof ProfilePhotoFragment) {
-                mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+                mFragment.getParentFragment().startActivityForResult(intent, requestCode);
             } else {
-                mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+                mFragment.startActivityForResult(intent, requestCode);
             }
         } else {
-            mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+            mActivity.startActivityForResult(intent, requestCode);
         }
     }
 
@@ -195,27 +208,32 @@ public class AddPhotoHelper {
             }
         }
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
-                //Если фотография сделана, то ищем ее во временном файле
-                if (outputFile != null) {
-                    photoUri = Uri.fromFile(outputFile);
-                } else {
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-                    String filename = preferences.getString(FILENAME_CONST, "");
-                    if (!filename.equals("")) {
-                        File outputDirectory = new File(PATH_TO_FILE);
-                        //noinspection ResultOfMethodCallIgnored
-                        if (outputDirectory.exists()) {
-                            outputFile = new File(outputDirectory, filename);
-                            photoUri = Uri.fromFile(outputFile);
-                            preferences.edit().remove(FILENAME_CONST).commit();
-                        }
+            switch (requestCode) {
+                case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA:
+                case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
+                    //Если фотография сделана, то ищем ее во временном файле
+                    if (outputFile != null) {
+                        photoUri = Uri.fromFile(outputFile);
+                    } else {
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+                        String filename = preferences.getString(FILENAME_CONST, "");
+                        if (!filename.equals("")) {
+                            File outputDirectory = new File(PATH_TO_FILE);
+                            //noinspection ResultOfMethodCallIgnored
+                            if (outputDirectory.exists()) {
+                                outputFile = new File(outputDirectory, filename);
+                                photoUri = Uri.fromFile(outputFile);
+                                preferences.edit().remove(FILENAME_CONST).commit();
+                            }
 
+                        }
                     }
-                }
-            } else if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
-                //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
-                photoUri = data.getData();
+                    break;
+                case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY:
+                case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
+                    //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
+                    photoUri = data.getData();
+                    break;
             }
 
             //Отправляем запрос
@@ -361,5 +379,43 @@ public class AddPhotoHelper {
                 break;
         }
     }
+
+    /**
+     * Gets TakePhotoDialog from FragmentManager if it has been created before
+     * or creates new TakePhotoDialog if there is no any in FragmentManager
+     * After it has been obtained or created method shows it
+     *
+     * @param photoTaker object which implement "take photo's" methods
+     * @param photoUri   if we already have photo to show pass it with Uri to show
+     */
+    public void showTakePhotoDialog(final IPhotoTakerWithDialog photoTaker, Uri photoUri) {
+        FragmentManager manager = photoTaker.getActivityFragmentManager();
+        TakePhotoDialog takePhotoDialog = (TakePhotoDialog) manager.findFragmentByTag(TakePhotoDialog.TAG);
+        if (takePhotoDialog == null) {
+            takePhotoDialog = TakePhotoDialog.newInstance(photoUri);
+            takePhotoDialog.setUri(photoUri).show(manager, TakePhotoDialog.TAG);
+        } else {
+            if (takePhotoDialog.isAdded()) {
+                takePhotoDialog.setUri(photoUri);
+            } else {
+                takePhotoDialog.setUri(photoUri).show(manager, TakePhotoDialog.TAG);
+            }
+        }
+        setOnResultHandler(new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
+                    Photo photo = (Photo) msg.obj;
+                    if (photoTaker != null)
+                        photoTaker.onTakePhotoDialogSentSuccess(photo);
+                } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+                    if (photoTaker != null) photoTaker.onTakePhotoDialogSentFailure();
+                }
+            }
+        });
+        takePhotoDialog.setPhotoTaker(photoTaker);
+    }
+
 }
 
