@@ -145,6 +145,7 @@ public class UserNotification {
     }
 
     public android.app.Notification generateWithActions(NotificationAction[] actions) {
+        notificationBuilder.setSmallIcon(R.drawable.ic_notification);
         notificationBuilder.setContentTitle(mTitle)
                 .setContentText(mText)
                 .setOngoing(mOngoing);
