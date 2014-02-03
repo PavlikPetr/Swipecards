@@ -109,6 +109,8 @@ public class UserFormListAdapter extends BaseAdapter {
             case T_HEADER:
                 holder.mHeader.setText(item.title);
                 holder.mState.setImageResource(getHeaderPicture(item));
+                holder.mTitle.setVisibility(View.GONE);
+                holder.mValue.setVisibility(View.GONE);
                 break;
             case T_DATA:
                 holder.mTitle.setText(item.title.toUpperCase());
@@ -117,6 +119,7 @@ public class UserFormListAdapter extends BaseAdapter {
                     holder.mState.setImageResource(R.drawable.user_cell_on);  // GREEN POINT
                 else
                     holder.mState.setImageResource(R.drawable.user_cell);
+                holder.mHeader.setVisibility(View.GONE);
                 break;
         }
 
