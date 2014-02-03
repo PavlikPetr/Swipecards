@@ -308,7 +308,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 mNeedMore = response.getJsonResult().optBoolean("more");
                 int i = -1;
                 for (Photo photo : newPhotos) {
-                    newPhotos.set(mLoadedCount + i, photo);
+                    mPhotoLinks.set(mLoadedCount + i, photo);
                     i++;
                 }
                 mLoadedCount += newPhotos.size();
