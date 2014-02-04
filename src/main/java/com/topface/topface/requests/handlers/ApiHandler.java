@@ -97,6 +97,10 @@ abstract public class ApiHandler extends Handler {
         }
     }
 
+    public void setCancel(boolean value) {
+        mCancel = value;
+    }
+
     private void setCounters(IApiResponse response) {
         if (!mNeedCounters || !response.isNeedUpdateCounters()) return;
         try {
