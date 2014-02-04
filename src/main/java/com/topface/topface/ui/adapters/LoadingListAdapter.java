@@ -41,7 +41,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     public LoadingListAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
-        mData = new FeedList<T>();
+        mData = new FeedList<>();
         if (data != null) {
             mData.addAll(data);
         }
@@ -131,7 +131,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     public FeedList<T> getData() {
         if (mData == null) {
-            mData = new FeedList<T>();
+            mData = new FeedList<>();
         }
         return mData;
     }
@@ -225,7 +225,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     @SuppressWarnings("unchecked")
     protected final T getRetryItem() {
         //noinspection unchecked
-        return (T) getLoaderRetrierCreator().getRetrier();
+        return getLoaderRetrierCreator().getRetrier();
     }
 
     protected void removeLoaderItem() {
