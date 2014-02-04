@@ -119,9 +119,9 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
     }
 
     private void closeDialog() {
-        final Dialog dialog = getDialog();
-        if (dialog != null) dialog.dismiss();
         Utils.hideSoftKeyboard(getActivity(), mEditEmailText);
+        final Dialog dialog = getDialog();
+        if (dialog != null) dismiss();
     }
 
     public static ConfirmEmailDialog newInstance() {
