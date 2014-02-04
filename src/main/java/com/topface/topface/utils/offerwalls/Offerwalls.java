@@ -270,17 +270,9 @@ public class Offerwalls {
                             if (result != null) {
                                 boolean valid = result.optBoolean("valid", false);
                                 if (valid) {
-
                                     String msg = String.format(getContext().getString(R.string.youve_earned),
                                             CacheProfile.getOptions().getJar.getName());
-                                    if (result.has("money")) {
-                                        CacheProfile.money = result.optInt("money", CacheProfile.money);
-                                    }
-                                    if (result.has("likes")) {
-                                        CacheProfile.likes = result.optInt("likes", CacheProfile.likes);
-                                    }
                                     Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-                                    CacheProfile.sendUpdateProfileBroadcast();
                                 } else {
                                     showToast(R.string.general_server_error);
                                 }

@@ -41,7 +41,7 @@ public class LeadersActivity extends BaseFragmentActivity {
     private Photos uselessPhotos;
 
 
-    private LinkedList<LeadersPhoto> mLeadersPhotos = new LinkedList<LeadersPhoto>();
+    private LinkedList<LeadersPhoto> mLeadersPhotos = new LinkedList<>();
     private TextView mUselessTitle;
     private RelativeLayout mContainer;
 
@@ -101,9 +101,6 @@ public class LeadersActivity extends BaseFragmentActivity {
                                 public void success(IApiResponse response) {
                                     mLoadingLocker.setVisibility(View.GONE);
                                     Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
-                                    //Обновляем число монет
-                                    CacheProfile.money = response.getJsonResult().optInt("money", CacheProfile.money);
-                                    CacheProfile.sendUpdateProfileBroadcast();
                                     finish();
                                 }
 
