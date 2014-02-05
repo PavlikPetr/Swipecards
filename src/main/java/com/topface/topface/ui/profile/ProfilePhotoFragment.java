@@ -19,9 +19,12 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.topface.topface.R;
+import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.requests.AlbumRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
@@ -33,8 +36,6 @@ import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -76,16 +77,23 @@ public class ProfilePhotoFragment extends BaseFragment {
                 position + 1,
                 AlbumRequest.MODE_ALBUM
         );
-        request.callback(new SimpleApiHandler() {
+        request.callback(new DataApiHandler<AlbumPhotos>() {
+
             @Override
-            public void success(IApiResponse response) {
+            protected void success(AlbumPhotos data, IApiResponse response) {
                 if (mProfilePhotoGridAdapter != null) {
-                    JSONObject jsonResult = response.getJsonResult();
-                    mProfilePhotoGridAdapter.addData(
-                            Photos.parse(jsonResult.optJSONArray("items")),
-                            jsonResult.optBoolean("more")
-                    );
+                    mProfilePhotoGridAdapter.addData(data, data.more);
                 }
+            }
+
+            @Override
+            protected AlbumPhotos parseResponse(ApiResponse response) {
+                return new AlbumPhotos(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+                Utils.showErrorMessage(getActivity());
             }
         }).exec();
     }

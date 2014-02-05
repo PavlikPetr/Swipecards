@@ -33,6 +33,7 @@ import com.topface.topface.R;
 import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
+import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Photo;
@@ -1068,11 +1069,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             AlbumRequest request = new AlbumRequest(getActivity(), currentSearchUser.id,
                     limit, loadedPosition, AlbumRequest.MODE_SEARCH);
             final int uid = currentSearchUser.id;
-            request.callback(new DataApiHandler<Photos>() {
+            request.callback(new DataApiHandler<AlbumPhotos>() {
                 @Override
-                public void success(Photos newPhotos, IApiResponse response) {
+                public void success(AlbumPhotos newPhotos, IApiResponse response) {
                     if (uid == mUserSearchList.getCurrentUser().id) {
-                        mNeedMore = response.getJsonResult().optBoolean("more");
+                        mNeedMore = newPhotos.more;
                         int i = 0;
                         for (Photo photo : newPhotos) {
                             if (mLoadedCount + i < data.size()) {
@@ -1094,8 +1095,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
 
                 @Override
-                protected Photos parseResponse(ApiResponse response) {
-                    return Photos.parse(response.getJsonResult().optJSONArray("items"));
+                protected AlbumPhotos parseResponse(ApiResponse response) {
+                    return new AlbumPhotos(response);
                 }
 
                 @Override
