@@ -366,8 +366,7 @@
         <item name="border">@drawable/feed_photo_border</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginRight">6dp</item>
-        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:layout_margin">8dp</item>
         <item name="android:layout_width">73dp</item>
         <item name="android:layout_height">73dp</item>
     </style>
@@ -377,7 +376,6 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_alignParentTop">true</item>
-        <item name="android:layout_marginTop">-4dp</item>
         <item name="android:layout_marginRight">6dp</item>
         <item name="android:src">@drawable/list_online_selector</item>
         <item name="android:visibility">invisible</item>
