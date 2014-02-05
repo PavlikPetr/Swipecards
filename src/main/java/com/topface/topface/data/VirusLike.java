@@ -12,7 +12,6 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.VirusLikesRequest;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 public class VirusLike extends AbstractData {
     public static final String FIELD_SOCIAL_IDS = "social_ids";
     public static final String FIELD_REQUEST_TEXT = "text";
-    public static final String FIELD_LIKES = "likes";
     public static final int MAX_USERS_FOR_REQUEST = 50;
     private ArrayList<Long> mSocialIdArray = null;
     private String mRequestText;
@@ -37,11 +35,6 @@ public class VirusLike extends AbstractData {
         if (response != null && response.jsonResult != null) {
             mSocialIdArray = parseIdsArray(response.jsonResult);
             mRequestText = response.jsonResult.optString(FIELD_REQUEST_TEXT);
-            //При парсинге устанавливаем новое количество лайков
-            CacheProfile.likes = response.jsonResult.optInt(FIELD_LIKES, CacheProfile.likes);
-            //И обновляем UI
-            CacheProfile.sendUpdateProfileBroadcast();
-
         } else {
             mSocialIdArray = new ArrayList<>();
         }
@@ -186,7 +179,7 @@ public class VirusLike extends AbstractData {
     /**
      * Устанавливает поле data в FbDialog, это дополнительные данные, которые получит Topface при клике на ссылку
      *
-     * @param params  Bundle с параметрами диалога
+     * @param params Bundle с параметрами диалога
      */
     private void setRequestDataParam(Bundle params) {
         AuthToken token = AuthToken.getInstance();
