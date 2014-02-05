@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryRequestReceiver;
+import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
@@ -35,14 +36,11 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
-
-import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -405,15 +403,14 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             AlbumRequest request = new AlbumRequest(getActivity(), currentUser.id, PHOTOS_LIMIT,
                     position, AlbumRequest.MODE_SEARCH);
             final int uid = currentUser.id;
-            request.callback(new ApiHandler() {
+            request.callback(new DataApiHandler<AlbumPhotos>() {
+
                 @Override
-                public void success(IApiResponse response) {
+                protected void success(AlbumPhotos data, IApiResponse response) {
                     if (uid == usersList.getCurrentUser().id) {
-                        JSONObject jsonResult = response.getJsonResult();
-                        Photos newPhotos = Photos.parse(jsonResult.optJSONArray("items"));
-                        mNeedMore = jsonResult.optBoolean("more");
+                        mNeedMore = data.more;
                         int i = 0;
-                        for (Photo photo : newPhotos) {
+                        for (Photo photo : data) {
                             if (mLoadedCount + i < photos.size()) {
                                 photos.set(mLoadedCount + i, photo);
                                 i++;
@@ -424,6 +421,11 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         }
                     }
                     mCanSendAlbumReq = true;
+                }
+
+                @Override
+                protected AlbumPhotos parseResponse(ApiResponse response) {
+                    return new AlbumPhotos(response);
                 }
 
                 @Override

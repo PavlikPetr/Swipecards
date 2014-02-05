@@ -12,11 +12,12 @@ import java.util.ArrayList;
 public class Photos extends ArrayList<Photo> implements SerializableToJsonArray {
 
     public Photos(JSONArray photos) {
-        this();
+        super();
         addAll(parse(photos));
     }
 
     public Photos(Photos photos) {
+        super();
         for (Photo photo : photos) {
             add(new Photo(photo));
         }

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.requests.AlbumRequest;
@@ -301,11 +302,11 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private void sendAlbumRequest(final Photos data) {
         int position = data.get(mLoadedCount - 2).getPosition() + 1;
         AlbumRequest request = new AlbumRequest(this, mUid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
-        request.callback(new DataApiHandler<Photos>() {
+        request.callback(new DataApiHandler<AlbumPhotos>() {
 
             @Override
-            protected void success(Photos newPhotos, IApiResponse response) {
-                mNeedMore = response.getJsonResult().optBoolean("more");
+            protected void success(AlbumPhotos newPhotos, IApiResponse response) {
+                mNeedMore = newPhotos.more;
                 int i = -1;
                 for (Photo photo : newPhotos) {
                     mPhotoLinks.set(mLoadedCount + i, photo);
@@ -323,8 +324,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             }
 
             @Override
-            protected Photos parseResponse(ApiResponse response) {
-                return Photos.parse(response.jsonResult.optJSONArray("items"));
+            protected AlbumPhotos parseResponse(ApiResponse response) {
+                return new AlbumPhotos(response);
             }
 
             @Override
