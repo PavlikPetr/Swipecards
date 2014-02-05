@@ -32,14 +32,6 @@
         android:columnWidth="110dp"
         android:fadeScrollbars="true" />
 
-    <ImageView
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:layout_below="@id/usedTitle"
-        android:background="@drawable/gradient_photos_bitmap"
-
-        />
-
     <LinearLayout
         android:id="@+id/loInfo"
         android:layout_width="wrap_content"

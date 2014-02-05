@@ -20,40 +20,35 @@
         <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
 
         <!-- ActionBar  -->
-        <item name="actionBarSize">@dimen/default_header_height</item>
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
-        <item name="actionButtonStyle">@style/Widget.Topface.ActionBar.Buttons</item>
         <item name="actionBarItemBackground">@drawable/bg_semitransparent_black_selector</item>
 
-        <item name="android:actionBarSize" tools:ignore="NewApi">@dimen/default_header_height</item>
-        <item name="android:actionBarStyle" tools:ignore="NewApi">@style/Widget.Topface.ActionBar
-        </item>
-        <item name="android:actionButtonStyle" tools:ignore="NewApi">
-            @style/Widget.Topface.ActionBar.Buttons
+        <item name="android:actionBarStyle" tools:ignore="NewApi">
+            @style/Widget.Topface.ActionBar
         </item>
         <item name="android:actionBarItemBackground" tools:ignore="NewApi">
             @drawable/bg_semitransparent_black_selector
         </item>
 
         <!-- Action Mode (CAB)-->
-        <item name="actionModeBackground">@drawable/bg_action_mode</item>
+        <item name="actionModeBackground">@color/bg_action_mode</item>
         <item name="actionModeCloseDrawable">@drawable/ic_check</item>
 
-        <item name="android:actionModeBackground" tools:ignore="NewApi">@drawable/bg_action_mode
+        <item name="android:actionModeBackground" tools:ignore="NewApi">@color/bg_action_mode
         </item>
         <item name="android:actionModeCloseDrawable" tools:ignore="NewApi">@drawable/ic_check</item>
     </style>
 
     <style name="Widget.Topface.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
-        <item name="background">@drawable/im_bar_header</item>
-        <item name="backgroundStacked">@drawable/im_bar_header</item>
-        <item name="backgroundSplit">@drawable/im_bar_header</item>
+        <item name="background">@color/bg_actionbar</item>
+        <item name="backgroundStacked">@color/bg_actionbar</item>
+        <item name="backgroundSplit">@color/bg_actionbar</item>
         <item name="titleTextStyle">@style/Widget.Topface.ActionBar.Title</item>
         <item name="subtitleTextStyle">@style/Widget.Topface.ActionBar.Subtitle</item>
 
-        <item name="android:background">@drawable/im_bar_header</item>
-        <item name="android:backgroundStacked" tools:ignore="NewApi">@drawable/im_bar_header</item>
-        <item name="android:backgroundSplit" tools:ignore="NewApi">@drawable/im_bar_header</item>
+        <item name="android:background">@color/bg_actionbar</item>
+        <item name="android:backgroundStacked" tools:ignore="NewApi">@color/bg_actionbar</item>
+        <item name="android:backgroundSplit" tools:ignore="NewApi">@color/bg_actionbar</item>
         <item name="android:titleTextStyle" tools:ignore="NewApi">
             @style/Widget.Topface.ActionBar.Title
         </item>
@@ -72,11 +67,6 @@
 
     <style name="Widget.Topface.ActionBar.Subtitle" parent="Widget.Topface.ActionBar.Title">
         <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="Widget.Topface.ActionBar.Buttons" parent="@style/Widget.AppCompat.ActionButton">
-        <item name="android:minWidth">@dimen/default_header_height</item>
-        <item name="android:maxWidth">@dimen/default_header_height</item>
     </style>
 
     <style name="Theme.Topface.NoActionBar.Fullscreen" parent="Theme.Topface.NoActionBar">
@@ -210,7 +200,7 @@
         <item name="android:tag">tvTitle</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">16sp</item>
@@ -331,13 +321,13 @@
     </style>
 
     <style name="LeftMenuButtons" parent="ShadowBlackBottom">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/left_menu_text</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:drawablePadding">12dp</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/navigation_menu_item_selector</item>
+        <item name="android:background">@drawable/bg_left_menu_item_selector</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -376,8 +366,7 @@
         <item name="border">@drawable/feed_photo_border</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginRight">6dp</item>
-        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:layout_margin">8dp</item>
         <item name="android:layout_width">73dp</item>
         <item name="android:layout_height">73dp</item>
     </style>
@@ -387,7 +376,6 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_alignParentTop">true</item>
-        <item name="android:layout_marginTop">0dp</item>
         <item name="android:layout_marginRight">6dp</item>
         <item name="android:src">@drawable/list_online_selector</item>
         <item name="android:visibility">invisible</item>

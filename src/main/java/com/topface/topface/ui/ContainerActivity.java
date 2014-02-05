@@ -322,7 +322,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     @Override
     public void setUserOnline(boolean online) {
         if (mOnlineIcon != null) {
-            mOnlineIcon.setVisibility(online ? View.VISIBLE : View.INVISIBLE);
+            mOnlineIcon.setVisibility(online ? View.VISIBLE : View.GONE);
         }
     }
 

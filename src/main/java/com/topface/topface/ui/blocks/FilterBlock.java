@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
-import com.topface.topface.Static;
 import com.topface.topface.utils.SwapAnimation;
 
 /**
@@ -25,8 +24,9 @@ public class FilterBlock {
     }
 
     protected void initFilter() {
+        mControlGroup.setVisibility(View.INVISIBLE);
         mControlGroup.setVisibility(View.VISIBLE);
-        mToolsBar.setVisibility(View.VISIBLE);
+        mToolsBar.setVisibility(View.INVISIBLE);
 
         ViewTreeObserver vto = mToolsBar.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -34,7 +34,6 @@ public class FilterBlock {
             public void onGlobalLayout() {
                 int y = mToolsBar.getMeasuredHeight();
                 if (y != 0) {
-                    y += Static.HEADER_SHADOW_SHIFT;
                     mControlGroup.setPadding(mControlGroup.getPaddingLeft(), -y, mControlGroup.getPaddingRight(), mControlGroup.getPaddingBottom());
                     ViewTreeObserver obs = mControlGroup.getViewTreeObserver();
                     if (Build.VERSION.SDK_INT >= 16) {
