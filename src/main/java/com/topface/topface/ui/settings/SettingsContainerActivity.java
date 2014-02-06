@@ -24,7 +24,7 @@ public class SettingsContainerActivity extends CustomTitlesBaseFragmentActivity 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.fragment_frame);
+        setContentView(R.layout.ac_fragment_frame);
 
         Fragment fragment = null;
 

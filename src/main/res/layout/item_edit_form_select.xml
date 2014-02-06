@@ -21,7 +21,7 @@
         android:layout_alignRight="@id/ivEditBackground"
         android:layout_centerVertical="true"
         android:orientation="vertical"
-        android:gravity="left">
+        android:gravity="left|center_vertical">
 
         <TextView
             android:tag="tvTitle"

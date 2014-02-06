@@ -3,7 +3,6 @@
     android:id="@+id/loControlsGroup"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/bg_main"
     android:orientation="vertical">
 
     <!-- button bar -->
