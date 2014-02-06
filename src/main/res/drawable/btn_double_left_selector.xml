@@ -9,5 +9,4 @@
 
     <item android:state_checked="false" android:state_pressed="true" android:drawable="@drawable/im_btn_double_left_active" />
 
-
 </selector>

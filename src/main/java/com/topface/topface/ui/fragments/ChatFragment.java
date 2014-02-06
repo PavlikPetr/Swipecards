@@ -128,7 +128,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private boolean mIsAddPanelOpened;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
-    private FeedList<History> mHistoryData;
     private FeedUser mUser;
     private EditText mEditBox;
     private TextView mLoadingBackgroundText;
@@ -159,6 +158,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DateUtils.syncTime();
+        setRetainInstance(true);
     }
 
     @Override
@@ -168,6 +168,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             mUserOnlineListener = (IUserOnlineListener) activity;
         } catch (ClassCastException e) {
             Debug.error(e.toString());
+        }
+        // do not recreate Adapter cause of steRetainInstance(true)
+        if (mAdapter == null) {
+            mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
         }
     }
 
@@ -273,44 +277,39 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void restoreData(Bundle savedInstanceState) {
-        if (mHistoryData == null) {
-            if (savedInstanceState != null) {
-                try {
-                    boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
-                    ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
-                    mHistoryData = new FeedList<History>();
-                    if (list != null) {
-                        for (History item : list) {
-                            if (item != null) {
-                                mHistoryData.add(item);
-                            }
+        if (savedInstanceState != null) {
+            try {
+                boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
+                ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
+                FeedList<History> historyData = new FeedList<>();
+                if (list != null) {
+                    for (History item : list) {
+                        if (item != null) {
+                            historyData.add(item);
                         }
                     }
-                    mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
-                    if (!mUser.isEmpty()) {
-                        onUserLoaded(mUser);
-                    }
-
-                    if (was_failed) {
-                        mLockScreen.setVisibility(View.VISIBLE);
-                    } else {
-                        mLockScreen.setVisibility(View.GONE);
-                    }
-                    showLoadingBackground();
-                } catch (Exception e) {
-                    Debug.error(e);
-                } catch (OutOfMemoryError e) {
-                    Debug.error(e);
                 }
-            }
-            if (mHistoryData == null) {
-                mHistoryData = new FeedList<History>();
+                mAdapter.setData(historyData);
+                mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                if (!mUser.isEmpty()) {
+                    onUserLoaded(mUser);
+                }
+
+                if (was_failed) {
+                    mLockScreen.setVisibility(View.VISIBLE);
+                } else {
+                    mLockScreen.setVisibility(View.GONE);
+                }
+                showLoadingBackground();
+            } catch (OutOfMemoryError e) {
+                Debug.error(e);
+            } catch (Exception e) {
+                Debug.error(e);
             }
         }
     }
 
     private void initChatHistory(View root) {
-        mAdapter = new ChatListAdapter(getActivity(), mHistoryData, getUpdaterCallback());
         mAdapter.setUser(mUser);
         mAdapter.setOnAvatarListener(this);
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
@@ -395,9 +394,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (TextUtils.isEmpty(mUserName) && mUserAge == 0) {
             return Static.EMPTY;
         } else {
-            StringBuilder strBuilder = new StringBuilder();
-            strBuilder.append(mUserName).append(", ").append(mUserAge);
-            return strBuilder.toString();
+            return mUserName + ", " + mUserAge;
         }
     }
 
@@ -562,7 +559,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private void removeOutdatedItems(HistoryListData data) {
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
-            ArrayList<History> itemsToDelete = new ArrayList<History>();
+            ArrayList<History> itemsToDelete = new ArrayList<>();
             for (History item : mAdapter.getData()) {
                 for (History newItem : data.items) {
                     if (newItem.id.equals(item.id)) {
@@ -578,7 +575,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
             FeedList<History> items = mAdapter.getData();
             for (History item1 : items) {
-                List<History> itemsToDelete = new ArrayList<History>();
+                List<History> itemsToDelete = new ArrayList<>();
                 for (History item : data.items) {
                     if (item.id.equals(item1.id)) {
                         itemsToDelete.add(item);
@@ -592,7 +589,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private void onUserLoaded(FeedUser user) {
         if (!(user.deleted || user.banned)) {
             // список действий в контекстном меню
-            ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
+            ArrayList<UserActions.ActionItem> actions = new ArrayList<>();
             actions.add(new UserActions.ActionItem(user.sex == 1 ? R.id.acProfile : R.id.acWProfile, this));
             actions.add(new UserActions.ActionItem(R.id.acBlock, this));
             actions.add(new UserActions.ActionItem(R.id.acComplain, this));

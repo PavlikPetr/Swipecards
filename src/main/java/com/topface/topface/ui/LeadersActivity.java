@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
@@ -41,7 +42,7 @@ public class LeadersActivity extends BaseFragmentActivity {
     private Photos uselessPhotos;
 
 
-    private LinkedList<LeadersPhoto> mLeadersPhotos = new LinkedList<LeadersPhoto>();
+    private LinkedList<LeadersPhoto> mLeadersPhotos = new LinkedList<>();
     private TextView mUselessTitle;
     private RelativeLayout mContainer;
 
@@ -101,9 +102,6 @@ public class LeadersActivity extends BaseFragmentActivity {
                                 public void success(IApiResponse response) {
                                     mLoadingLocker.setVisibility(View.GONE);
                                     Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
-                                    //Обновляем число монет
-                                    CacheProfile.money = response.getJsonResult().optInt("money", CacheProfile.money);
-                                    CacheProfile.sendUpdateProfileBroadcast();
                                     finish();
                                 }
 
@@ -124,8 +122,6 @@ public class LeadersActivity extends BaseFragmentActivity {
     private void updateProfileInfo(Profile profile) {
         mLoadingLocker.setVisibility(View.VISIBLE);
         final AlbumRequest request = new AlbumRequest(this, profile.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, AlbumRequest.MODE_LEADER);
-
-
         final RetryViewCreator rv = RetryViewCreator.createDefaultRetryView(this, new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,31 +135,29 @@ public class LeadersActivity extends BaseFragmentActivity {
         request.callback(new DataApiHandler<Photos>() {
 
             @Override
-            public void always(IApiResponse response) {
-                super.always(response);
-                if (mLoadingLocker != null) {
-                    mLoadingLocker.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
             protected void success(Photos data, IApiResponse response) {
                 fillPhotos(data);
                 mLoadingLocker.setVisibility(View.GONE);
                 rv.setVisibility(View.GONE);
-//                mUselessTitle.setVisibility(View.VISIBLE);
             }
 
             @Override
             protected Photos parseResponse(ApiResponse response) {
-                return Photos.parse(response.getJsonResult().optJSONArray("items"));
+                return new AlbumPhotos(response);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
                 mLoadingLocker.setVisibility(View.GONE);
                 rv.setVisibility(View.VISIBLE);
+            }
 
+            @Override
+            public void always(IApiResponse response) {
+                super.always(response);
+                if (mLoadingLocker != null) {
+                    mLoadingLocker.setVisibility(View.GONE);
+                }
             }
         }).exec();
 

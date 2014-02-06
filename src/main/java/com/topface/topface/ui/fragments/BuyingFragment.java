@@ -27,6 +27,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 
 import java.util.LinkedList;
@@ -43,7 +44,12 @@ public class BuyingFragment extends BillingFragment {
 
     private LinkedList<RelativeLayout> purchaseButtons = new LinkedList<>();
 
-    private BroadcastReceiver mReceiver;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateBalanceCounters();
+        }
+    };
 
     public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
     private ServicesTextView mCurCoins;
@@ -94,13 +100,7 @@ public class BuyingFragment extends BillingFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                updateBalanceCounters();
-            }
-        };
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
     }
 
     @Override

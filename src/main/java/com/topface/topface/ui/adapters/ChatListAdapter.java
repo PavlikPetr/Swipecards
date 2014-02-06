@@ -55,7 +55,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         View retrier;
     }
 
-    private static final int T_WAITING = 3;
+    private static final int T_WAIT_OR_RETRY = 3;
     private static final int T_USER = 5;
     private static final int T_FRIEND = 6;
     private static final int T_USER_GIFT = 7;
@@ -67,9 +67,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private static final int T_COUNT = 13;
 
-    private HashMap<History, ApiRequest> mHashRepeatRequests = new HashMap<History, ApiRequest>();
-    private ArrayList<History> mUnrealItems = new ArrayList<History>();
-    private ArrayList<History> mShowDatesList = new ArrayList<History>();
+    private HashMap<History, ApiRequest> mHashRepeatRequests = new HashMap<>();
+    private ArrayList<History> mUnrealItems = new ArrayList<>();
+    private ArrayList<History> mShowDatesList = new ArrayList<>();
     private AddressesCache mAddressesCache = new AddressesCache();
     private View.OnClickListener mOnClickListener;
     private ChatFragment.OnListViewItemLongClickListener mLongClickListener;
@@ -105,7 +105,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         int superType = super.getItemViewType(position);
         History item = getItem(position);
         if (superType == T_OTHER && item != null) {
-            if (item.isWaitingItem() || item.isRepeatItem()) return T_WAITING;
+            if (item.isWaitingItem() || item.isRepeatItem()) return T_WAIT_OR_RETRY;
             return ChatListAdapter.getItemType(item);
         } else {
             return superType;
@@ -141,7 +141,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = inflateConvertView(convertView, holder, type, item);
+            convertView = inflateConvertView(holder, type, item);
             if (convertView != null) {
                 convertView.setTag(holder);
             }
@@ -149,7 +149,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             holder = (ViewHolder) convertView.getTag();
 
         setTypeDifferences(position, holder, type, item);
-        if (type != T_WAITING) {
+        if (type != T_WAIT_OR_RETRY) {
             setViewInfo(holder, item);
             setLongClickListener(position, convertView, holder);
         }
@@ -191,6 +191,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         } else {
             if (mHeaderView != null) mHeaderView.setVisibility(View.GONE);
         }
+    }
+
+    public void setData(FeedList<History> data) {
+        setData(data, getData().size() > ChatFragment.LIMIT);
     }
 
     @Override
@@ -329,7 +333,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         boolean showDate = mShowDatesList.contains(item);
 
         switch (type) {
-            case T_WAITING:
+            case T_WAIT_OR_RETRY:
                 if (item.isRepeatItem()) {
                     holder.loader.setVisibility(View.GONE);
                     holder.retrier.setVisibility(View.VISIBLE);
@@ -337,7 +341,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                         @Override
                         public void onClick(View v) {
                             ApiRequest request = mHashRepeatRequests.get(item);
-                            if (request != null) request.exec();
+                            if (request != null) {
+                                request.canceled = false;
+                                request.getHandler().setCancel(false);
+                                request.exec();
+                            }
                             mHashRepeatRequests.remove(item);
                             item.setLoaderTypeFlags(IListLoader.ItemType.WAITING);
                             notifyDataSetChanged();
@@ -377,10 +385,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         }
     }
 
-    private View inflateConvertView(View convertView, ViewHolder holder, int type, History item) {
+    private View inflateConvertView(ViewHolder holder, int type, History item) {
         boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
-
-        if (type == T_WAITING) {
+        View convertView = null;
+        if (type == T_WAIT_OR_RETRY) {
             convertView = mInflater.inflate(R.layout.item_chat_list_loader_retrier, null, false);
             holder.retrier = convertView.findViewById(R.id.tvLoaderText);
             holder.loader = convertView.findViewById(R.id.prsLoader);
