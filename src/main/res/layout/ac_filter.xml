@@ -41,14 +41,14 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            layout="@layout/item_edit_form_switch" />
+            layout="@layout/editor_form_switch" />
 
         <include
             android:id="@+id/loBeautiful"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            layout="@layout/item_edit_form_switch" />
+            layout="@layout/editor_form_switch" />
 
         <include layout="@layout/item_divider" />
 

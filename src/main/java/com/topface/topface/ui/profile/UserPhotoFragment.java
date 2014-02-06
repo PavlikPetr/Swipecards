@@ -44,7 +44,7 @@ public class UserPhotoFragment extends BaseFragment {
                         @Override
                         protected void success(AlbumPhotos data, IApiResponse response) {
                             if (mGridAlbum != null) {
-                                ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).addData(data, data.more);
+                                ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).addPhotos(data, data.more, false);
                             }
                         }
 

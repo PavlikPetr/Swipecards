@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -95,12 +96,25 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         initNavigationBar();
         initApiUrl(rootLayout);
         initDebugMode(rootLayout);
+        initProfileId(rootLayout);
         initEditorMode(rootLayout);
         initUserInfo(rootLayout);
         //После инита всех элементов заполняем их значениями по умолчанию
         setConfigValues();
         mConfigInited = true;
         return rootLayout;
+    }
+
+    private void initProfileId(View rootLayout) {
+        Button goProfile = (Button) rootLayout.findViewById(R.id.btnGoProfile);
+        final EditText profileId = (EditText) rootLayout.findViewById(R.id.profile_id);
+        goProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = Integer.parseInt(profileId.getText().toString());
+                getActivity().startActivity(ContainerActivity.getProfileIntent(id, EditorFragment.class, getActivity()));
+            }
+        });
     }
 
     private void initEditorMode(View rootLayout) {

@@ -26,6 +26,8 @@
     <string name="editor_clear_air_messages">Сбросить флаг попапа "Сообщения за VIP"</string>
     <string name="editor_test_buy">Тестовые покупки</string>
     <string name="editor_network_errors_tip">вкл.(on) - добавляет уведомление в status bar\nвыкл.(off) - убирает уведомдение из status bar\nУведомление:\nEnable - включает ошибки запросов\nDisable - выключает ошибки запросов\nCancel - удаляет уведомление</string>
+    <string name="editor_profile_id">id профиля</string>
+    <string name="go_profile_text">перейти</string>
 
     <string-array name="editor_debug_titles">
         <item>Только в debug режиме</item>

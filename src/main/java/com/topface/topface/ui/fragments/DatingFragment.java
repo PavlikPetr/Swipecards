@@ -648,7 +648,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             hideEmptySearchDialog();
             fillUserInfo(user);
             unlockControls();
-
             showNovice();
             hasOneSympathyOrDelight = true;
         }

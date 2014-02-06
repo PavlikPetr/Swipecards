@@ -82,7 +82,7 @@ public class ProfilePhotoFragment extends BaseFragment {
             @Override
             protected void success(AlbumPhotos data, IApiResponse response) {
                 if (mProfilePhotoGridAdapter != null) {
-                    mProfilePhotoGridAdapter.addData(data, data.more);
+                    mProfilePhotoGridAdapter.addPhotos(data, data.more, false);
                 }
             }
 
