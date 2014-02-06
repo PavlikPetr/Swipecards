@@ -4,10 +4,10 @@
     package="com.topface.topface"
     android:installLocation="auto"
 
-    android:versionCode="100"
-    android:versionName="2.9.2">
+    android:versionCode="101"
+    android:versionName="2.9.3">
 
-    <!-- permissions -->
+<!-- permissions -->
     <permission
         android:name="com.topface.topface.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
