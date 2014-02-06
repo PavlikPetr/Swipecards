@@ -529,13 +529,21 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 new RateController.OnRateRequestListener() {
                                     @Override
                                     public void onRateCompleted() {
+                                        EasyTracker.getTracker().sendEvent("Dating", "Rate",
+                                                "AdmirationSend" + (mCurrentUser.mutual ? "mutual" : ""),
+                                                (long) CacheProfile.getOptions().priceAdmiration);
                                     }
 
                                     @Override
                                     public void onRateFailed() {
                                         if (moneyDecreased.get()) {
                                             moneyDecreased.set(false);
-                                            CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
+                                            new SendLikeRequest(getActivity(),
+                                                    mCurrentUser.id,
+                                                    mCurrentUser.mutual ?
+                                                            SendLikeRequest.DEFAULT_MUTUAL
+                                                            : SendLikeRequest.DEFAULT_NO_MUTUAL,
+                                                    SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler()).exec();
                                             updateResources();
                                         }
                                     }
@@ -546,9 +554,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             moneyDecreased.set(true);
                             updateResources();
                         }
-                        EasyTracker.getTracker().sendEvent("Dating", "Rate",
-                                "AdmirationSend" + (mCurrentUser.mutual ? "mutual" : ""),
-                                (long) CacheProfile.getOptions().priceAdmiration);
                     }
                 }
             }
