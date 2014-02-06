@@ -528,15 +528,20 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                         : SendLikeRequest.DEFAULT_NO_MUTUAL,
                                 new RateController.OnRateRequestListener() {
                                     @Override
-                                    public void onRateCompleted() {
+                                    public void onRateCompleted(int mutualId) {
+                                        EasyTracker.getTracker().sendEvent("Dating", "Rate",
+                                                "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
+                                                (long) CacheProfile.getOptions().priceAdmiration);
                                     }
 
                                     @Override
-                                    public void onRateFailed() {
+                                    public void onRateFailed(int userId, int mutualId) {
                                         if (moneyDecreased.get()) {
                                             moneyDecreased.set(false);
-                                            CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
-                                            updateResources();
+                                            new SendLikeRequest(getActivity(),
+                                                    userId,
+                                                    mutualId,
+                                                    SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler()).exec();
                                         }
                                     }
                                 }
@@ -546,9 +551,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             moneyDecreased.set(true);
                             updateResources();
                         }
-                        EasyTracker.getTracker().sendEvent("Dating", "Rate",
-                                "AdmirationSend" + (mCurrentUser.mutual ? "mutual" : ""),
-                                (long) CacheProfile.getOptions().priceAdmiration);
                     }
                 }
             }

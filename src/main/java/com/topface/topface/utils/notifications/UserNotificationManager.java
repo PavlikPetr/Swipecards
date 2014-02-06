@@ -101,7 +101,7 @@ public class UserNotificationManager {
     }
 
     public int showProgressNotification(String title, Bitmap icon, Intent intent) {
-        return showNotification(title, null, false, icon, 0, intent, false, true, UserNotification.Type.PROGRESS);
+        return showNotification(title, null, false, icon, 0, intent, false, false, UserNotification.Type.PROGRESS);
     }
 
     public void showProgressNotificationAsync(final String title, String uri, final Intent intent, final NotificationImageListener listener) {
