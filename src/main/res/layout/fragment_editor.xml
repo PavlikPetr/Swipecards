@@ -152,21 +152,21 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            layout="@layout/item_editor_profile" />
+            layout="@layout/editor_goprofile" />
 
         <include
             android:id="@+id/loPopupSwitcher"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            layout="@layout/item_edit_form_switch" />
+            layout="@layout/editor_form_switch" />
 
         <include
             android:id="@+id/loTestNetworkSwitcher"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            layout="@layout/item_edit_form_switch" />
+            layout="@layout/editor_form_switch" />
 
         <TextView
             android:layout_width="fill_parent"

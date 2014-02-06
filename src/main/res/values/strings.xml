@@ -606,5 +606,4 @@
         <item quantity="one">%d min.</item>
     </plurals>
     <string name="ok_label">Odnoklassniki</string>
-    <string name="go_profile_text">перейти</string>
 </resources>
