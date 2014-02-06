@@ -116,7 +116,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
                                 }
 
                                 @Override
-                                public void onRateFailed() {
+                                public void onRateFailed(int userId, int mutualId, SendLikeRequest.Place place) {
                                 }
                             });
                     showNextUser();

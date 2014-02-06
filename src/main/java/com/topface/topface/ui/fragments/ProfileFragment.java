@@ -550,7 +550,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
                                 @SuppressWarnings("ConstantConditions")
                                 @Override
-                                public void onRateFailed() {
+                                public void onRateFailed(int userId, int mutualId, SendLikeRequest.Place place) {
                                     if (v != null && getActivity() != null) {
                                         loader.setVisibility(View.INVISIBLE);
                                         icon.setVisibility(View.VISIBLE);
@@ -598,7 +598,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
                                 @SuppressWarnings("ConstantConditions")
                                 @Override
-                                public void onRateFailed() {
+                                public void onRateFailed(int userId, int mutualId, SendLikeRequest.Place place) {
                                     if (v != null && getActivity() != null) {
                                         Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                         loader.setVisibility(View.INVISIBLE);

@@ -27,6 +27,18 @@ public class SendLikeRequest extends ConfirmedApiRequest {
         }
     }
 
+    public int getUserid() {
+        return userid;
+    }
+
+    public int getMutualid() {
+        return mutualid;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
     // Data
     private int userid; // идентификатор пользователя для оценки
     private int mutualid; // идентификатор сообщения из ленты, на который отправляется взаимная симпатия

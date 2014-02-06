@@ -535,15 +535,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                     }
 
                                     @Override
-                                    public void onRateFailed() {
+                                    public void onRateFailed(int userId, int mutualId, SendLikeRequest.Place place) {
                                         if (moneyDecreased.get()) {
                                             moneyDecreased.set(false);
                                             new SendLikeRequest(getActivity(),
-                                                    mCurrentUser.id,
-                                                    mCurrentUser.mutual ?
-                                                            SendLikeRequest.DEFAULT_MUTUAL
-                                                            : SendLikeRequest.DEFAULT_NO_MUTUAL,
-                                                    SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler()).exec();
+                                                    userId,
+                                                    mutualId,
+                                                    place).callback(new SimpleApiHandler()).exec();
                                         }
                                     }
                                 }
