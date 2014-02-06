@@ -227,7 +227,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     abstract protected int getTypeForCounters();
 
     protected int getLayout() {
-        return R.layout.ac_feed;
+        return R.layout.fragment_feed;
     }
 
     private void initListView(View view) {

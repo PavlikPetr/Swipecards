@@ -41,14 +41,14 @@ public class LeadersActivity extends BaseFragmentActivity {
     private Photos uselessPhotos;
 
 
-    private LinkedList<LeadersPhoto> mLeadersPhotos = new LinkedList<LeadersPhoto>();
+    private LinkedList<LeadersPhoto> mLeadersPhotos = new LinkedList<>();
     private TextView mUselessTitle;
     private RelativeLayout mContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.new_leaders_layout);
+        setContentView(R.layout.ac_leaders_layout);
 
         getSupportActionBar().setTitle(getString(R.string.leaders_go_date));
 

@@ -32,14 +32,4 @@
     <bool name="needProfileBackground">true</bool>
     <!-- С помощью этого флага определяем, планшет ли данное устройство см. ../values-sw600dp/constants.xml -->
     <bool name="is_tablet">false</bool>
-
-    <!--цвета-->
-    <color name="semitransparent_black">#50000000</color>
-
-    <!--flat design-->
-    <color name="bg_left_menu">#212121</color>
-    <color name="bg_actionbar">#4D4D4D</color>
-    <color name="bg_main">#4D4D4D</color>
-    <color name="bg_leaders_block">#373737</color>
-    <color name="bg_action_mode">#373737</color>
 </resources>

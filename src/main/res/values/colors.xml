@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--цвета-->
+    <color name="semitransparent_black">#50000000</color>
+    <!--flat design-->
+    <color name="bg_left_menu">#212121</color>
+    <color name="bg_actionbar">#4D4D4D</color>
+    <color name="bg_main">#4D4D4D</color>
+    <color name="bg_leaders_block">#373737</color>
+    <color name="bg_action_mode">#373737</color>
+</resources>
