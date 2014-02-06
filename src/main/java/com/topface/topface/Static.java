@@ -7,10 +7,10 @@ public class Static {
     public static final int API_VERSION = 7;
     public static final String PLATFORM = "Android";
 
-    public static final String API_ALPHA_URL = "http://api.alpha.stage.tf/";
-    public static final String API_BETA_URL = "http://api.beta.stage.tf/";
-    public static final String API_GAMMA_URL = "http://api.gamma.stage.tf/";
-    public static final String API_DELTA_URL = "http://api.delta.stage.tf/";
+    public static final String API_ALPHA_URL = "https://api.alpha.stage.tf/";
+    public static final String API_BETA_URL = "https://api.beta.stage.tf/";
+    public static final String API_GAMMA_URL = "https://api.gamma.stage.tf/";
+    public static final String API_DELTA_URL = "https://api.delta.stage.tf/";
     public static final String API_URL = "https://api.topface.com/";
     public static final String API_500_ERROR_URL = "http://httpstat.us/500";
 
