@@ -528,20 +528,20 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                         : SendLikeRequest.DEFAULT_NO_MUTUAL,
                                 new RateController.OnRateRequestListener() {
                                     @Override
-                                    public void onRateCompleted() {
+                                    public void onRateCompleted(int mutualId) {
                                         EasyTracker.getTracker().sendEvent("Dating", "Rate",
-                                                "AdmirationSend" + (mCurrentUser.mutual ? "mutual" : ""),
+                                                "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
                                                 (long) CacheProfile.getOptions().priceAdmiration);
                                     }
 
                                     @Override
-                                    public void onRateFailed(int userId, int mutualId, SendLikeRequest.Place place) {
+                                    public void onRateFailed(int userId, int mutualId) {
                                         if (moneyDecreased.get()) {
                                             moneyDecreased.set(false);
                                             new SendLikeRequest(getActivity(),
                                                     userId,
                                                     mutualId,
-                                                    place).callback(new SimpleApiHandler()).exec();
+                                                    SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler()).exec();
                                         }
                                     }
                                 }

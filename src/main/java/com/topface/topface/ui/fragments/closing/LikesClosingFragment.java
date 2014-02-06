@@ -111,12 +111,12 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
                             SendLikeRequest.DEFAULT_MUTUAL,
                             new RateController.OnRateRequestListener() {
                                 @Override
-                                public void onRateCompleted() {
+                                public void onRateCompleted(int mutualId) {
                                     if (isAdded()) refreshActionBarTitles();
                                 }
 
                                 @Override
-                                public void onRateFailed(int userId, int mutualId, SendLikeRequest.Place place) {
+                                public void onRateFailed(int userId, int mutualId) {
                                 }
                             });
                     showNextUser();

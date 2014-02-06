@@ -32,7 +32,7 @@ public class RateController {
                 mOnRateControllerUiListener.failRate();
             }
             if (requestListener != null) {
-                requestListener.onRateFailed(userId, mutualId, mPlace);
+                requestListener.onRateFailed(userId, mutualId);
             }
             return false;
         }
@@ -46,7 +46,7 @@ public class RateController {
             @Override
             protected void success(Rate rate, IApiResponse response) {
                 if (listener != null) {
-                    listener.onRateCompleted();
+                    listener.onRateCompleted(sendLike.getMutualid());
                 }
             }
 
@@ -58,7 +58,7 @@ public class RateController {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (listener != null) {
-                    listener.onRateFailed(sendLike.getUserid(), sendLike.getMutualid(), sendLike.getPlace());
+                    listener.onRateFailed(sendLike.getUserid(), sendLike.getMutualid());
                 }
             }
 
@@ -86,8 +86,8 @@ public class RateController {
      * Interface for api request callbacks
      */
     public interface OnRateRequestListener {
-        public void onRateCompleted();
+        public void onRateCompleted(int mutualId);
 
-        public void onRateFailed(int userId, int mutualId, SendLikeRequest.Place place);
+        public void onRateFailed(int userId, int mutualId);
     }
 }
