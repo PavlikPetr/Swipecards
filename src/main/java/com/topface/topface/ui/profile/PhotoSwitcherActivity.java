@@ -217,7 +217,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             //Удаляем пустые пукнты фотографий
             if (arrList != null) {
                 for (int i = 0; i < arrList.size(); i++) {
-                    if (arrList.get(i) == null) {
+                    if (arrList.get(i) == null || arrList.get(i).isFake()) {
                         arrList.remove(i);
                     }
                 }

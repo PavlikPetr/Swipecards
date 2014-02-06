@@ -148,6 +148,13 @@
         </RelativeLayout>
 
         <include
+            android:id="@+id/loProfileId"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            layout="@layout/item_editor_profile" />
+
+        <include
             android:id="@+id/loPopupSwitcher"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

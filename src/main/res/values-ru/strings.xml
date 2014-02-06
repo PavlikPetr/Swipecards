@@ -787,4 +787,6 @@
     </plurals>
 
     <string name="ok_label">Одноклассники</string>
+    <string name="editor_profile_id">id профиля</string>
+    <string name="go_profile_text">перейти</string>
 </resources>

@@ -81,9 +81,10 @@ public class ProfilePhotoFragment extends BaseFragment {
             public void success(IApiResponse response) {
                 if (mProfilePhotoGridAdapter != null) {
                     JSONObject jsonResult = response.getJsonResult();
-                    mProfilePhotoGridAdapter.addData(
+                    mProfilePhotoGridAdapter.addPhotos(
                             Photos.parse(jsonResult.optJSONArray("items")),
-                            jsonResult.optBoolean("more")
+                            jsonResult.optBoolean("more"),
+                            false
                     );
                 }
             }
