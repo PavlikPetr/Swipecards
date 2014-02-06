@@ -544,7 +544,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                                             SendLikeRequest.DEFAULT_MUTUAL
                                                             : SendLikeRequest.DEFAULT_NO_MUTUAL,
                                                     SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler()).exec();
-                                            updateResources();
                                         }
                                     }
                                 }
