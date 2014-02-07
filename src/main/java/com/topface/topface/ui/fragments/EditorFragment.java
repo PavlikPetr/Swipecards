@@ -15,10 +15,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.App;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
+import com.topface.topface.requests.AuthRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
@@ -80,6 +85,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         rootLayout.findViewById(R.id.EditorResetSettings).setOnClickListener(this);
         rootLayout.findViewById(R.id.EditorSaveSettings).setOnClickListener(this);
         rootLayout.findViewById(R.id.EditorClearAirMessages).setOnClickListener(this);
+        rootLayout.findViewById(R.id.EditorSendGCMToken).setOnClickListener(this);
+        rootLayout.findViewById(R.id.EditorSendAuth).setOnClickListener(this);
 
         ViewGroup switcherView = (ViewGroup) rootLayout.findViewById(R.id.loPopupSwitcher);
         ((TextView) switcherView.findViewWithTag("tvTitle")).setText("Показывать попап приглашений");
@@ -316,6 +323,23 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.EditorClearAirMessages:
                 CacheProfile.getOptions().premiumMessages.clearPopupShowTime();
+                break;
+            case R.id.EditorSendGCMToken:
+                GCMRegistrar.setRegisteredOnServer(getActivity(), false);
+                GCMUtils.init(getActivity());
+                break;
+            case R.id.EditorSendAuth:
+                new AuthRequest(AuthToken.getInstance().getTokenInfo(), getActivity()).callback(new ApiHandler() {
+                    @Override
+                    public void success(IApiResponse response) {
+                        Toast.makeText(getActivity(), R.string.general_ready, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                        Toast.makeText(getActivity(), R.string.general_error, Toast.LENGTH_LONG).show();
+                    }
+                }).exec();
                 break;
             default:
                 showError();

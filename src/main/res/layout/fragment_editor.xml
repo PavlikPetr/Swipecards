@@ -215,6 +215,22 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:text="@string/editor_send_gcm"
+            android:id="@+id/EditorSendGCMToken"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_send_auth"
+            android:id="@+id/EditorSendAuth"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="30dp"
             android:text="@string/editor_save_settings"
             android:id="@+id/EditorSaveSettings"
