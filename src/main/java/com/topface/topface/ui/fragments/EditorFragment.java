@@ -111,8 +111,17 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         goProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int id = Integer.parseInt(profileId.getText().toString());
-                getActivity().startActivity(ContainerActivity.getProfileIntent(id, EditorFragment.class, getActivity()));
+                try {
+                    getActivity().startActivity(
+                            ContainerActivity.getProfileIntent(
+                                    Integer.parseInt(profileId.getText().toString()),
+                                    EditorFragment.class,
+                                    getActivity()
+                            )
+                    );
+                } catch (Exception e) {
+                    Debug.error(e);
+                }
             }
         });
     }

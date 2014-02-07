@@ -75,7 +75,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected FeedListData<FeedDialog> getFeedList(JSONObject data) {
-        return new FeedListData<FeedDialog>(data, FeedDialog.class);
+        return new FeedListData<>(data, FeedDialog.class);
     }
 
     @Override
