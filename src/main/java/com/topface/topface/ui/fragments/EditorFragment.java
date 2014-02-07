@@ -35,6 +35,7 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
 
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_CANCEL_TEST_NETWORK_ERRORS;
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_OFF;
@@ -333,6 +334,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                     @Override
                     public void success(IApiResponse response) {
                         Toast.makeText(getActivity(), R.string.general_ready, Toast.LENGTH_LONG).show();
+                        AuthorizationManager.saveAuthInfo(response);
                     }
 
                     @Override
