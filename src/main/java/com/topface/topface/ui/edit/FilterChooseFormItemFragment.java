@@ -147,11 +147,9 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
                 @Override
                 public void onClick(View v) {
                     notifyDataSetChanged();
-                    Intent intent = getActivity().getIntent();
-                    intent.putExtra(INTENT_TITLE_ID, mTitleId);
-                    intent.putExtra(INTENT_SELECTED_ID, (int) getItemId(position));
-                    getActivity().setResult(Activity.RESULT_OK, intent);
-                    getActivity().finish();
+//                    mSeletedDataId = mLastSelected = (int) getItemId(position - 1);
+                    mLastSelected = position;
+                    mSeletedDataId = (int) getItemId(mLastSelected);
                 }
             });
 
@@ -168,12 +166,18 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
 
     @Override
     protected boolean hasChanges() {
-        return false;
+        return mDataId != mSeletedDataId;
     }
 
     @Override
     protected void saveChanges(Handler handler) {
         handler.sendEmptyMessage(0);
+        mDataId = mSeletedDataId;
+        Intent intent = getActivity().getIntent();
+        intent.putExtra(INTENT_TITLE_ID, mTitleId);
+        intent.putExtra(INTENT_SELECTED_ID, mSeletedDataId);
+        getActivity().setResult(Activity.RESULT_OK, intent);
+
     }
 
     @Override
