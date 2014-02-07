@@ -44,7 +44,6 @@ public class ServicesTextView extends View {
         TypedArray allAttrs = context.getTheme().obtainStyledAttributes(attrs,
                 R.styleable.ServicesTextView,
                 0, 0);
-
         try {
             mMaxChars = allAttrs.getInteger(R.styleable.ServicesTextView_maxChars, 0);
             setCharPadding(allAttrs.getInteger(R.styleable.ServicesTextView_charPadding, 5));
@@ -83,32 +82,25 @@ public class ServicesTextView extends View {
         int textHeight = getTextHeight();
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-
         BitmapFactory.decodeResource(getResources(), R.drawable.ic_cell_counter_free, options);
-
         options.inSampleSize = options.outHeight / textHeight;
         double realScaleCoeff = (double) options.outHeight / (double) textHeight;
         options.inJustDecodeBounds = false;
 
         int outWidth = options.outWidth;
         int outHeight = options.outHeight;
-
         mBackgroundFree = BitmapFactory.decodeResource(getResources(), R.drawable.ic_cell_counter_free, options);
         mBackgroundFull = BitmapFactory.decodeResource(getResources(), R.drawable.ic_cell_counter_full, options);
-
 
         int dstWidth = (int) (outWidth / realScaleCoeff);
         int dstHeight = (int) (outHeight / realScaleCoeff);
         if (dstWidth > 0 && dstHeight > 0) {
             mBackgroundFree = Bitmap.createScaledBitmap(mBackgroundFree, dstWidth, dstHeight, false);
             mBackgroundFull = Bitmap.createScaledBitmap(mBackgroundFull, (int) (outWidth / realScaleCoeff), (int) (outHeight / realScaleCoeff), false);
-
             if (imageId != 0) {
                 mImageBitmap = BitmapFactory.decodeResource(getResources(), imageId);
-//                mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, dstWidth, (int) (dstHeight / 1.5), false);
             }
         }
-
     }
 
     private int getTextHeight() {
@@ -142,8 +134,6 @@ public class ServicesTextView extends View {
                     canvas.drawText(String.valueOf(text.charAt(currentSymbol)), i * mBackgroundFull.getWidth() + mBackgroundFull.getWidth() / 2, textTop, paint);
                     currentSymbol++;
                 }
-
-
             }
             if (textWithoutBackround != null) {
                 paint.setAntiAlias(true);
@@ -153,7 +143,6 @@ public class ServicesTextView extends View {
                 paint.setStyle(Paint.Style.FILL);
                 canvas.drawText(textWithoutBackround, mMaxChars * mBackgroundFull.getWidth() + mBackgroundFull.getWidth() / 2, textTop, paint);
             }
-
             if (imageId != 0) {
                 int left = textWithoutBackround == null ? mMaxChars * mBackgroundFull.getWidth() + mCharPadding : (mMaxChars + 1) * mBackgroundFull.getWidth() + mCharPadding;
                 int top = mBackgroundFull.getHeight() / 2 - mImageBitmap.getHeight() / 2;

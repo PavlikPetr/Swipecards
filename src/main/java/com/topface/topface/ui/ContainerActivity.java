@@ -64,7 +64,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         super.onCreate(bundle);
         initRequestKey();
         checkAuth();
-        setContentView(R.layout.fragment_frame);
+        setContentView(R.layout.ac_fragment_frame);
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
         //Сперва пробуем
@@ -149,7 +149,8 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
             case INTENT_BUYING_FRAGMENT:
                 Bundle extras = getIntent().getExtras();
                 String source = intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE);
-                if (extras.containsKey(BuyingFragment.ARG_ITEM_TYPE) && extras.containsKey(BuyingFragment.ARG_ITEM_PRICE)) {
+                if (extras != null && extras.containsKey(BuyingFragment.ARG_ITEM_TYPE)
+                        && extras.containsKey(BuyingFragment.ARG_ITEM_PRICE)) {
                     fragment = BuyingFragment.newInstance(
                             extras.getInt(BuyingFragment.ARG_ITEM_TYPE),
                             extras.getInt(BuyingFragment.ARG_ITEM_PRICE),
@@ -322,7 +323,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     @Override
     public void setUserOnline(boolean online) {
         if (mOnlineIcon != null) {
-            mOnlineIcon.setVisibility(online ? View.VISIBLE : View.INVISIBLE);
+            mOnlineIcon.setVisibility(online ? View.VISIBLE : View.GONE);
         }
     }
 

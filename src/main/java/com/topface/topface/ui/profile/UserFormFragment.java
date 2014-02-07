@@ -63,7 +63,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
             setUserData(mUser);
         } else {
             mTitle.setText(Utils.getQuantityString(R.plurals.form_matches, 0, 0));
-            mState.setImageResource(R.drawable.user_cell_center);
+            mState.setImageResource(R.drawable.user_cell);
         }
         mTitleLayout.setVisibility(View.VISIBLE);
 
@@ -88,10 +88,10 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
             mEmptyFormLayout.setVisibility(View.VISIBLE);
         } else {
             if (mUser.formMatches > 0) {
-                mState.setImageResource(R.drawable.user_cell_center_on);
+                mState.setImageResource(R.drawable.user_cell_on);
                 mTitleLayout.setOnClickListener(this);
             } else {
-                mState.setImageResource(R.drawable.user_cell_center);
+                mState.setImageResource(R.drawable.user_cell);
             }
         }
     }

@@ -79,7 +79,7 @@
         android:id="@+id/btnProfileLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/navigation_menu_item_selector"
+        android:background="@drawable/bg_left_menu_item_selector"
         android:addStatesFromChildren="true"
         android:layout_below="@id/btnProfileLayoutWithBackground">
 
@@ -97,14 +97,14 @@
 
         <Button
             android:tag="btnFragmentProfile"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:layout_toRightOf="@id/ivMenuAvatar"
             android:layout_centerVertical="true"
-            android:text="@string/general_profile"
-            android:paddingLeft="12dp"
+            style="@style/LeftMenuButtons"
             android:background="@android:color/transparent"
-            style="@style/LeftMenuButtons" />
+            android:paddingLeft="12dp"
+            android:minHeight="24dp"
+            android:text="@string/general_profile"
+            />
 
         <ImageView
             android:tag="profileInfo"

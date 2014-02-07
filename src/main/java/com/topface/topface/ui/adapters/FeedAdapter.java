@@ -195,7 +195,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
         convertView.setTag(holder);
         if (mSelectionController.isSelected(position)) {
-            convertView.setBackgroundResource(R.drawable.feed_bg_selected);
+            convertView.setBackgroundResource(R.drawable.background_list_selected);
         } else {
             if (Build.VERSION.SDK_INT >= 16) {
                 convertView.setBackground(holder.background);
@@ -368,7 +368,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     public List<String> getSelectedFeedIds() {
-        List<String> ids = new ArrayList<String>();
+        List<String> ids = new ArrayList<>();
         if (mSelectionController != null) {
             List<T> selected = mSelectionController.getSelected();
             for (T aSelected : selected) {
@@ -379,7 +379,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     public List<Integer> getSelectedUsersIds() {
-        List<Integer> ids = new ArrayList<Integer>();
+        List<Integer> ids = new ArrayList<>();
         if (mSelectionController != null) {
             List<T> selected = mSelectionController.getSelected();
             for (T aSelected : selected) {
@@ -392,7 +392,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     public List<T> getSelectedItems() {
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
         result.addAll(mSelectionController.getSelected());
         return result;
     }
