@@ -147,7 +147,6 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
                 @Override
                 public void onClick(View v) {
                     notifyDataSetChanged();
-//                    mSeletedDataId = mLastSelected = (int) getItemId(position - 1);
                     mLastSelected = position;
                     mSeletedDataId = (int) getItemId(mLastSelected);
                 }
