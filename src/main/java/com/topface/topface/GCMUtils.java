@@ -21,16 +21,16 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
-import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.notifications.UserNotificationManager;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITORS;
@@ -38,21 +38,25 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITOR
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
 
+    /**
+     * Типы уведомлений с сервера. У разных типов - разные действия
+     */
+
     public static final int GCM_TYPE_UNKNOWN = -1;
     public static final int GCM_TYPE_MESSAGE = 0;
     public static final int GCM_TYPE_SYMPATHY = 1;
     public static final int GCM_TYPE_LIKE = 2;
-    public static final int GCM_TYPE_GUESTS = 3;
-    public static final int GCM_TYPE_DIALOGS = 4;
-
+    public static final int GCM_TYPE_GUESTS = 4;
     public static final int GCM_TYPE_UPDATE = 5;
-    public static final int GCM_TYPE_NOTIFICATION = 6;
+    public static final int GCM_TYPE_PROMO = 6;
+    public static final int GCM_TYPE_GIFT = 7;
+    public static final int GCM_TYPE_DIALOG = 8;
 
     public static final String NEXT_INTENT = "com.topface.topface_next";
 
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;
 
-    public static int lastNotificationType = GCM_TYPE_DIALOGS;
+    public static int lastNotificationType = GCM_TYPE_UNKNOWN;
 
     public static int lastUserId = -1;
 
@@ -101,7 +105,7 @@ public class GCMUtils {
      *
      * @param context контекст приложения
      */
-    public static boolean showNotification(@NotNull final Intent extra, Context context) {
+    public static boolean showNotification(final Intent extra, Context context) {
         boolean result = false;
         //Проверяем, не отключены ли уведомления
         if (!Settings.getInstance().isNotificationEnabled()) {
@@ -140,7 +144,7 @@ public class GCMUtils {
                     }
                     final UserNotificationManager notificationManager = UserNotificationManager.getInstance(context);
                     if (!Ssid.isLoaded()) {
-                        if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_NOTIFICATION) {
+                        if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_PROMO) {
                             notificationManager.showNotification(
                                     title,
                                     data,
@@ -244,6 +248,7 @@ public class GCMUtils {
         Intent i = null;
         switch (type) {
             case GCM_TYPE_MESSAGE:
+            case GCM_TYPE_GIFT:
                 if (showMessage) {
                     if (user.id != 0) {
                         lastNotificationType = GCM_TYPE_MESSAGE;
@@ -288,8 +293,11 @@ public class GCMUtils {
             case GCM_TYPE_UPDATE:
                 i = Utils.getMarketIntent(context);
                 break;
-
-            case GCM_TYPE_NOTIFICATION:
+            case GCM_TYPE_DIALOG:
+                i = new Intent(context, NavigationActivity.class);
+                i.putExtra(NEXT_INTENT, F_DIALOGS);
+                break;
+            case GCM_TYPE_PROMO:
             default:
                 i = new Intent(context, NavigationActivity.class);
 
