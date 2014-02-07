@@ -147,7 +147,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         super.onCreateView(inflater, container, savedInstanceState);
 
         //init views
-        final View root = inflater.inflate(R.layout.ac_profile, null);
+        final View root = inflater.inflate(R.layout.fragment_profile, null);
 
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         final FragmentActivity activity = getActivity();

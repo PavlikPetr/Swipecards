@@ -38,7 +38,7 @@ public class UserFormListAdapter extends BaseAdapter {
 
     public UserFormListAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mUserForms = new LinkedList<FormItem>();
+        mUserForms = new LinkedList<>();
     }
 
     @Override
@@ -96,14 +96,6 @@ public class UserFormListAdapter extends BaseAdapter {
                     break;
             }
 
-            switch (type) {
-                case T_HEADER:
-                    convertView.setBackgroundResource(R.drawable.user_list_title_bg);
-                    break;
-                case T_DATA:
-                    convertView.setBackgroundResource(R.drawable.user_list_cell_bg);
-                    break;
-            }
             if (convertView != null) {
                 convertView.setTag(holder);
             }
@@ -117,6 +109,8 @@ public class UserFormListAdapter extends BaseAdapter {
             case T_HEADER:
                 holder.mHeader.setText(item.title);
                 holder.mState.setImageResource(getHeaderPicture(item));
+                holder.mTitle.setVisibility(View.GONE);
+                holder.mValue.setVisibility(View.GONE);
                 break;
             case T_DATA:
                 holder.mTitle.setText(item.title.toUpperCase());
@@ -125,6 +119,7 @@ public class UserFormListAdapter extends BaseAdapter {
                     holder.mState.setImageResource(R.drawable.user_cell_on);  // GREEN POINT
                 else
                     holder.mState.setImageResource(R.drawable.user_cell);
+                holder.mHeader.setVisibility(View.GONE);
                 break;
         }
 

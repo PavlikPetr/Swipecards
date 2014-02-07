@@ -78,7 +78,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-        View view = inflater.inflate(R.layout.ac_settings, null);
+        View view = inflater.inflate(R.layout.fragment_settings, null);
         mSettings = Settings.getInstance();
 
         // Init settings views

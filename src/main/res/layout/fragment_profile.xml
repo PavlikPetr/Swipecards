@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:focusableInTouchMode="true">
+
+    <!-- header bar -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/loProfileHeader"
+            android:layout_width="fill_parent"
+            android:layout_height="159dp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vpHeaderFragments"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:fadingEdge="none" />
+
+            <com.viewpagerindicator.CirclePageIndicator
+                android:id="@+id/cpiHeaderTabs"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="15dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:gravity="center_horizontal">
+
+            <com.viewpagerindicator.TabPageIndicator
+                android:id="@+id/tpiTabs"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vpFragments"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <include
+        android:id="@+id/mUserActions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        layout="@layout/user_actions_layout" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/bg_main"
+        android:visibility="gone"
+        android:id="@+id/lockScreen" />
+
+    <com.topface.topface.ui.views.LockerView
+        android:id="@+id/llvProfileLoading"
+        style="@style/LoadingLocker"
+        android:visibility="gone" />
+</RelativeLayout>

@@ -4,15 +4,13 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
-import com.topface.topface.Static;
-
 public class SwapAnimation extends Animation {
     private View mAnimatedView;
     private int mStartY, mEndY;
     private boolean mWasEndedAlready = false;
     private static final int DURATION = 200;
 
-    public SwapAnimation(View view, View hiddenView) {
+    public SwapAnimation(final View view,final View hiddenView) {
         setDuration(DURATION);
 
         mAnimatedView = view;
@@ -22,7 +20,27 @@ public class SwapAnimation extends Animation {
         }
 
         mStartY = mAnimatedView.getPaddingTop();
-        mEndY = (mStartY == Static.HEADER_SHADOW_SHIFT ? (0 - hiddenView.getHeight() + Static.HEADER_SHADOW_SHIFT) : Static.HEADER_SHADOW_SHIFT);
+        mEndY = (mStartY == 0 ? (0 - hiddenView.getHeight()) : 0);
+        setAnimationListener(new AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                if (mStartY != 0) {
+                    hiddenView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (mStartY == 0) {
+                    hiddenView.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     @Override

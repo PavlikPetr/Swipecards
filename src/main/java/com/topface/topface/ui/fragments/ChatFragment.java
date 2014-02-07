@@ -178,7 +178,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(R.layout.ac_chat, null);
+        View root = inflater.inflate(R.layout.fragment_chat, null);
         Debug.log(this, "+onCreate");
 
         chatActions = (ViewGroup) root.findViewById(R.id.loChatActions);

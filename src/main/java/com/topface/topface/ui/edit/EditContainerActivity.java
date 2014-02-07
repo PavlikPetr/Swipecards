@@ -40,7 +40,7 @@ public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.fragment_frame);
+        setContentView(R.layout.ac_fragment_frame);
 
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 

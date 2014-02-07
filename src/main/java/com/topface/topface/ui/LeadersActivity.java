@@ -49,7 +49,7 @@ public class LeadersActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.new_leaders_layout);
+        setContentView(R.layout.ac_leaders_layout);
 
         getSupportActionBar().setTitle(getString(R.string.leaders_go_date));
 
