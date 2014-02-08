@@ -37,6 +37,10 @@
         <item name="android:actionModeBackground" tools:ignore="NewApi">@color/bg_action_mode
         </item>
         <item name="android:actionModeCloseDrawable" tools:ignore="NewApi">@drawable/ic_check</item>
+
+        <!-- Custon styles -->
+        <item name="blueButtonStyle">@style/Widget.Topface.Button.Big.Blue</item>
+        <item name="grayButtonStyle">@style/Widget.Topface.Button.Big.Gray</item>
     </style>
 
     <style name="Widget.Topface.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
@@ -770,6 +774,7 @@
         <item name="android:paddingBottom">10dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="Widget.Topface.Button" parent="ShadowBlackTop">
@@ -780,6 +785,7 @@
         <item name="android:paddingBottom">10dp</item>
         <item name="android:textSize">11sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big">

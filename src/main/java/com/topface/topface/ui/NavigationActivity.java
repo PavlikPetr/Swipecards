@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
@@ -67,8 +66,6 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
-    public static final String BONUS_COUNTER_TAG = "preferences_for_bonus_counter";
-    public static final String BONUS_COUNTER_LAST_SHOW_TIME = "last_show_time";
 
     private MenuFragment mMenuFragment;
     private HackyDrawerLayout mDrawerLayout;
@@ -139,8 +136,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     private void initBonusCounterConfig() {
-        SharedPreferences preferences = getSharedPreferences(BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
-        long lastTime = preferences.getLong(BONUS_COUNTER_LAST_SHOW_TIME, 0);
+        long lastTime = App.getUserConfig().getBonusCounterLastShowTime();
         CacheProfile.needShowBonusCounter = lastTime < CacheProfile.getOptions().bonus.timestamp;
     }
 

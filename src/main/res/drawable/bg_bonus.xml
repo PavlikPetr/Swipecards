@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/bg_bonus_light" />
+    <item android:top="46dp">
+        <bitmap
+            android:src="@drawable/bg_bonus_coins"
+            android:gravity="center_horizontal" />
+    </item>
+</layer-list>

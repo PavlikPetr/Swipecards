@@ -88,7 +88,10 @@ public class Offerwalls {
     }
 
     public static void startOfferwall(Activity activity) {
-        String offerwall = getOfferWallType();
+        startOfferwall(activity, getOfferWallType());
+    }
+
+    public static void startOfferwall(Activity activity, String offerwall) {
         offerwall = offerwall == null ? "" : offerwall;
 
         if (CacheProfile.uid <= 0) {
