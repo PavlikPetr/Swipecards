@@ -11,6 +11,10 @@ public class DeleteBlackListRequest extends DeleteAbstractUsersRequest {
         super(ids, context);
     }
 
+    public DeleteBlackListRequest(int id, Context context) {
+        super(Integer.toString(id), context);
+    }
+
     @Override
     public String getServiceName() {
         return SERVICE;

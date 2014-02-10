@@ -37,7 +37,7 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackListAddManyRequest;
+import com.topface.topface.requests.BlackListAddRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -392,7 +392,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void onAddToBlackList(List<Integer> ids, final List<T> items) {
-        new BlackListAddManyRequest(ids, getActivity())
+        new BlackListAddRequest(ids, getActivity())
                 .callback(new VipApiHandler() {
                     @Override
                     public void success(IApiResponse response) {
