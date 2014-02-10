@@ -51,7 +51,7 @@ import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
-import com.topface.topface.utils.offerwalls.Offerwalls;
+import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONException;
@@ -450,7 +450,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
         @Override
         public void onOfferWall() {
-            Offerwalls.startOfferwall(NavigationActivity.this);
+            OfferwallsManager.startOfferwall(NavigationActivity.this);
             getIntent().setData(null);
         }
     };

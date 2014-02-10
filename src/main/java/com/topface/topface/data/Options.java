@@ -15,7 +15,9 @@ import com.topface.topface.utils.controllers.ClosingsController;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Опции приложения
@@ -164,6 +166,7 @@ public class Options extends AbstractData {
     public String helpUrl;
 
     public Bonus bonus = new Bonus();
+    public Offerwalls offerwalls = new Offerwalls();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -283,6 +286,30 @@ public class Options extends AbstractData {
                 bonus.enabled = bonusObject.optBoolean("enabled");
                 bonus.counter = bonusObject.optInt("counter");
                 bonus.timestamp = bonusObject.optLong("counterTimestamp");
+            }
+            // offerwalls for
+            JSONObject offerwallsObject = response.optJSONObject("offerwalls");
+            if (offerwallsObject != null) {
+                offerwalls.mainText = offerwallsObject.optString("mainText");
+                offerwalls.extraText = offerwallsObject.optString("extraText", null);
+                JSONArray offersArrObj = offerwallsObject.optJSONArray("offers");
+                for (int i = 0; i < offersArrObj.length(); i++) {
+                    JSONObject offerObj = offersArrObj.getJSONObject(i);
+                    if (offerObj != null) {
+                        Offerwalls.Offer offer = new Offerwalls.Offer();
+                        offer.text = offerObj.optString("text");
+                        offer.action = offerObj.optString("action");
+                        offer.type = offerObj.optInt("type");
+                        switch (offer.type) {
+                            case Offerwalls.Offer.TYPE_MAIN:
+                                offerwalls.mainOffers.add(offer);
+                                break;
+                            case Offerwalls.Offer.TYPE_EXTRA:
+                                offerwalls.extraOffers.add(offer);
+                                break;
+                        }
+                    }
+                }
             }
 
             helpUrl = response.optString("helpUrl");
@@ -533,6 +560,22 @@ public class Options extends AbstractData {
         public boolean enabled;
         public int counter;
         public long timestamp;
-
     }
+
+    public static class Offerwalls {
+        public String mainText;
+        public String extraText;
+        public List<Offer> mainOffers = new ArrayList<>();
+        public List<Offer> extraOffers = new ArrayList<>();
+
+        public static class Offer {
+            public static final int TYPE_MAIN = 0;
+            public static final int TYPE_EXTRA = 1;
+            public String text;
+            public String action;
+            public int type;
+        }
+    }
+
+
 }

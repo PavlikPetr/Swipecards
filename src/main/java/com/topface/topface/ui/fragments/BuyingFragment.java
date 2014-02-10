@@ -28,7 +28,7 @@ import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.offerwalls.Offerwalls;
+import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import java.util.LinkedList;
 import java.util.Timer;
@@ -81,7 +81,7 @@ public class BuyingFragment extends BillingFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Offerwalls.init(getActivity());
+        OfferwallsManager.init(getActivity());
     }
 
     @Override
@@ -195,7 +195,7 @@ public class BuyingFragment extends BillingFragment {
         offerwall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Offerwalls.startOfferwall(getActivity());
+                OfferwallsManager.startOfferwall(getActivity());
             }
         });
         offerwall.setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);

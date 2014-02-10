@@ -54,7 +54,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.offerwalls.Offerwalls;
+import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -434,12 +434,12 @@ public class BannerBlock {
                 } else if (banner.action.equals(Banner.ACTION_METHOD)) {
                     invokeBannerMethod(banner.parameter);
                 } else if (banner.action.equals(Banner.ACTION_OFFERWALL)) {
-                    if (banner.parameter.equals(Offerwalls.TAPJOY)) {
-                        Offerwalls.startTapjoy();
-                    } else if (banner.parameter.equals(Offerwalls.SPONSORPAY)) {
-                        Offerwalls.startSponsorpay(mFragment.getActivity());
+                    if (banner.parameter.equals(OfferwallsManager.TAPJOY)) {
+                        OfferwallsManager.startTapjoy();
+                    } else if (banner.parameter.equals(OfferwallsManager.SPONSORPAY)) {
+                        OfferwallsManager.startSponsorpay(mFragment.getActivity());
                     } else {
-                        Offerwalls.startOfferwall(mFragment.getActivity());
+                        OfferwallsManager.startOfferwall(mFragment.getActivity());
                     }
                 }
 

@@ -40,7 +40,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Offerwalls {
+public class OfferwallsManager {
 
     /**
      * Идентификаторы для типов офферволлов
@@ -228,7 +228,6 @@ public class Offerwalls {
     }
 
     public static void startGetJar(Activity activity) {
-
         if (mGetJarContext == null || mGetJarHelper == null) {
             ProgressDialog prgs = new ProgressDialog(activity);
             prgs.setTitle(R.string.general_dialog_loading);
@@ -295,30 +294,41 @@ public class Offerwalls {
     }
 
     public static class ConsumableProductHelper {
-        private ArrayList<Pricing> consumablePricingList = new ArrayList<>(1);
-        private ConsumableProduct consumableProduct;
-        private GetJarContext getJarContext;
+        private ArrayList<Pricing> mConsumablePricingList = new ArrayList<>(1);
+        private ConsumableProduct mConsumableProduct;
+        private GetJarContext mGetJarContext;
+        private ProgressDialog mProgressDialog;
 
         ConsumableProductHelper(GetJarContext getJarContext) {
-            this.getJarContext = getJarContext;
+            this.mGetJarContext = getJarContext;
+        }
+
+        private ProgressDialog getProgressDialog() {
+            if (mProgressDialog == null) {
+                mProgressDialog = new ProgressDialog(mGetJarContext.getAndroidContext());
+                mProgressDialog.setTitle(R.string.general_dialog_loading);
+                mProgressDialog.setCancelable(false);
+            }
+            return mProgressDialog;
         }
 
         void buy(String pickAccountTitle, ConsumableProduct consumableProduct) {
             if (consumableProduct == null) {
-                throw new IllegalArgumentException("consumableProduct cannot be null");
+                throw new IllegalArgumentException("mConsumableProduct cannot be null");
             }
-            this.consumableProduct = consumableProduct;
+            this.mConsumableProduct = consumableProduct;
 
             // Ensure user is authenticated
-            UserAuth userAuth = new UserAuth(getJarContext);
+            UserAuth userAuth = new UserAuth(mGetJarContext);
             userAuth.ensureUserAsync(pickAccountTitle,
                     consumableUserAuthListener);
         }
 
         private void startGetJarRewardPage(ConsumableProduct product) {
-            GetJarPage consumablePage = new GetJarPage(getJarContext);
+            GetJarPage consumablePage = new GetJarPage(mGetJarContext);
             consumablePage.setProduct(product);
             consumablePage.showPage();
+            getProgressDialog().dismiss();
         }
 
         private EnsureUserAuthListener consumableUserAuthListener = new EnsureUserAuthListener() {
@@ -327,11 +337,12 @@ public class Offerwalls {
             public void userAuthCompleted(User user) {
                 if (user != null) {
                     Debug.log("consumableUserAuthListener^ success");
-                    Localization localization = new Localization(getJarContext);
-                    if (consumablePricingList.isEmpty()) {
-                        consumablePricingList.add(new Pricing((int) consumableProduct.getAmount(), GETJAT_MAX_DISCOUNT, GETJAT_MAX_MARKUP));
+                    Localization localization = new Localization(mGetJarContext);
+                    if (mConsumablePricingList.isEmpty()) {
+                        mConsumablePricingList.add(new Pricing((int) mConsumableProduct.getAmount(), GETJAT_MAX_DISCOUNT, GETJAT_MAX_MARKUP));
                     }
-                    localization.getRecommendedPricesAsync(consumablePricingList, consumableRecommendedPricesListener);
+                    localization.getRecommendedPricesAsync(mConsumablePricingList, consumableRecommendedPricesListener);
+                    getProgressDialog().show();
                 } else {
                     Debug.log("consumableUserAuthListener: failed");
                 }
@@ -342,10 +353,10 @@ public class Offerwalls {
 
             @Override
             public void recommendedPricesEvent(RecommendedPrices prices) {
-                Debug.log("consumableRecommendedPricesListener: prices:" + (prices.getRecommendedPrice(consumablePricingList.get(0))));
-                consumableProduct = new ConsumableProduct(consumableProduct.getProductId(), consumableProduct.getProductName(),
-                        consumableProduct.getProductDescription(), prices.getRecommendedPrice(consumablePricingList.get(0)));
-                startGetJarRewardPage(consumableProduct);
+                Debug.log("consumableRecommendedPricesListener: prices:" + (prices.getRecommendedPrice(mConsumablePricingList.get(0))));
+                mConsumableProduct = new ConsumableProduct(mConsumableProduct.getProductId(), mConsumableProduct.getProductName(),
+                        mConsumableProduct.getProductDescription(), prices.getRecommendedPrice(mConsumablePricingList.get(0)));
+                startGetJarRewardPage(mConsumableProduct);
             }
         };
     }
