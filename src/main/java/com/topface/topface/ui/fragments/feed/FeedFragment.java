@@ -37,16 +37,11 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackListAddManyRequest;
-import com.topface.topface.requests.BlackListDeleteManyRequest;
-import com.topface.topface.requests.BookmarkDeleteManyRequest;
+import com.topface.topface.requests.BlackListAddRequest;
 import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.DeleteFeedsRequest;
-import com.topface.topface.requests.DeleteVisitorsRequest;
-import com.topface.topface.requests.DialogDeleteManyRequest;
+import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
@@ -362,23 +357,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             boolean result = true;
             FeedAdapter<T> adapter = getListAdapter();
             switch (item.getItemId()) {
-                case R.id.delete_feed:
-                    onDeleteFeedItems(adapter.getSelectedFeedIds(), adapter.getSelectedItems());
+                case R.id.delete_list_item:
+                    onDeleteFeedItems(getSelectedFeedIds(adapter), adapter.getSelectedItems());
                     break;
                 case R.id.add_to_black_list:
                     onAddToBlackList(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
-                    break;
-                case R.id.delete_from_blacklist:
-                    onRemoveFromBlackList(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
-                    break;
-                case R.id.delete_from_bookmarks:
-                    onDeleteBookmarksItems(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
-                    break;
-                case R.id.delete_dialogs:
-                    onDeleteDialogItems(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
-                    break;
-                case R.id.delete_visitors:
-                    onDeleteVisitors(adapter.getSelectedFeedIds(), adapter.getSelectedItems());
                     break;
                 default:
                     result = false;
@@ -397,36 +380,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     };
 
+    /**
+     * В данный момент у нас проблема с id в диалогах, поэтому в DialogsFragment этот метод переопределен
+     */
+    protected List<String> getSelectedFeedIds(FeedAdapter<T> adapter) {
+        return adapter.getSelectedFeedIds();
+    }
+
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu;
     }
 
-    // CAB actions
-    private void onRemoveFromBlackList(List<Integer> usersIds, final List<T> items) {
-        mLockView.setVisibility(View.VISIBLE);
-        new BlackListDeleteManyRequest(usersIds, getActivity())
-                .callback(new VipApiHandler() {
-                    @Override
-                    public void success(IApiResponse response) {
-                        if (isAdded()) {
-                            getListAdapter().removeItems(items);
-                        }
-                    }
-
-                    @Override
-                    public void always(IApiResponse response) {
-                        if (isAdded()) {
-                            if (mLockView != null) {
-                                mLockView.setVisibility(View.GONE);
-                            }
-                        }
-                    }
-
-                }).exec();
-    }
-
     private void onAddToBlackList(List<Integer> ids, final List<T> items) {
-        new BlackListAddManyRequest(ids, getActivity())
+        new BlackListAddRequest(ids, getActivity())
                 .callback(new VipApiHandler() {
                     @Override
                     public void success(IApiResponse response) {
@@ -439,9 +405,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void onDeleteFeedItems(List<String> ids, final List<T> items) {
+        DeleteAbstractRequest dr = getDeleteRequest(ids);
+        //Если удаление не поддерживается данным потомком,
+        //то у нас ошибка с показом меню (есть кнопка там, где удаление не поддерживается)
+        //и нужно сообщить пользователю, что удалить не получится
+        if (dr == null) {
+            Utils.showErrorMessage();
+            return;
+        }
         mLockView.setVisibility(View.VISIBLE);
-        DeleteFeedsRequest dr = getDeleteRequest(ids, getActivity());
-        if (dr == null) return;
         dr.callback(new SimpleApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -451,23 +423,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
 
             @Override
-            public void always(IApiResponse response) {
-                super.always(response);
-                if (mLockView != null) {
-                    mLockView.setVisibility(View.GONE);
+            public void fail(int codeError, IApiResponse response) {
+                if (codeError != ErrorCodes.PREMIUM_ACCESS_ONLY) {
+                    super.fail(codeError, response);
                 }
-            }
-        }).exec();
-    }
-
-    protected abstract DeleteFeedsRequest getDeleteRequest(List<String> ids, Context context);
-
-    private void onDeleteBookmarksItems(final List<Integer> usersIds, final List<T> items) {
-        BookmarkDeleteManyRequest request = new BookmarkDeleteManyRequest(getActivity(), usersIds);
-        request.callback(new SimpleApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                getListAdapter().removeItems(items);
             }
 
             @Override
@@ -480,57 +439,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }).exec();
     }
 
-    protected void onDeleteDialogItems(final List<Integer> usersIds, final List<T> items) {
-        new DialogDeleteManyRequest(usersIds, getActivity())
-                .callback(new ApiHandler() {
-                    @Override
-                    public void success(IApiResponse response) {
-                        getListAdapter().removeItems(items);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-                        Debug.log(response.toString());
-                        if (codeError != ErrorCodes.PREMIUM_ACCESS_ONLY) {
-                            Utils.showErrorMessage(getActivity());
-                        }
-                    }
-
-                    @Override
-                    public void always(IApiResponse response) {
-                        super.always(response);
-                        if (mLockView != null) {
-                            mLockView.setVisibility(View.GONE);
-                        }
-                    }
-                }).exec();
-    }
-
-    private void onDeleteVisitors(List<String> selectedIds, final List<T> selectedItems) {
-        new DeleteVisitorsRequest(selectedIds, getActivity())
-                .callback(new ApiHandler() {
-                    @Override
-                    public void success(IApiResponse response) {
-                        getListAdapter().removeItems(selectedItems);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-                        Debug.log(response.toString());
-                        if (codeError != ErrorCodes.PREMIUM_ACCESS_ONLY) {
-                            Utils.showErrorMessage(getActivity());
-                        }
-                    }
-
-                    @Override
-                    public void always(IApiResponse response) {
-                        super.always(response);
-                        if (mLockView != null) {
-                            mLockView.setVisibility(View.GONE);
-                        }
-                    }
-                }).exec();
-    }
+    protected abstract DeleteAbstractRequest getDeleteRequest(List<String> ids);
 
     protected T getItem(int position) {
         return getListAdapter().getItem(position);
@@ -638,7 +547,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     //Если ошибки обработаны на уровне фрагмента,
                     // то не показываем стандартную ошибку
                     if (!processErrors(codeError)) {
-                        Utils.showErrorMessage(activity);
+                        Utils.showErrorMessage();
                     }
                     onUpdateFail(isPullToRefreshUpdating || isHistoryLoad);
                     mListView.onRefreshComplete();

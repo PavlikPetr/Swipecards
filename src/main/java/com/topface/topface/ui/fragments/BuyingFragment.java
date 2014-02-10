@@ -101,6 +101,7 @@ public class BuyingFragment extends BillingFragment {
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
+        updateBalanceCounters();
     }
 
     @Override

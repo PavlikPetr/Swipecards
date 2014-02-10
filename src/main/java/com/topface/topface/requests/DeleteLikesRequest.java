@@ -4,15 +4,11 @@ import android.content.Context;
 
 import java.util.List;
 
-public class DeleteLikesRequest extends DeleteFeedsRequest {
+public class DeleteLikesRequest extends DeleteAbstractFeedsRequest {
     private static final String SERVICE = "like.delete";
 
     public DeleteLikesRequest(List<String> ids, Context context) {
         super(ids, context);
-    }
-
-    public DeleteLikesRequest(String id, Context context) {
-        super(id, context);
     }
 
     @Override
@@ -20,8 +16,4 @@ public class DeleteLikesRequest extends DeleteFeedsRequest {
         return SERVICE;
     }
 
-    @Override
-    protected String getFeedType() {
-        return "Likes";
-    }
 }

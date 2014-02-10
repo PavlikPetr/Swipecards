@@ -11,11 +11,15 @@ import android.widget.ViewFlipper;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.requests.DeleteAbstractRequest;
+import com.topface.topface.requests.DeleteAdmirationsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+
+import java.util.List;
 
 public class AdmirationFragment extends LikesFragment {
 
@@ -96,5 +100,10 @@ public class AdmirationFragment extends LikesFragment {
     @Override
     protected int getEmptyFeedLayout() {
         return R.layout.layout_empty_admirations;
+    }
+
+    @Override
+    protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
+        return new DeleteAdmirationsRequest(ids, getActivity());
     }
 }
