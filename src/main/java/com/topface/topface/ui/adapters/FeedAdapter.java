@@ -66,7 +66,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         public Button flippedBtn;
         public View dataLayout;
         public Drawable background;
-        public RelativeLayout leftClickArea;
     }
 
     public FeedAdapter(Context context, Updater updateCallback) {

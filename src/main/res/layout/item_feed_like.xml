@@ -49,7 +49,6 @@
         android:outAnimation="@anim/slide_out_right">
 
         <RelativeLayout
-            android:id="@+id/rlClickArea"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
