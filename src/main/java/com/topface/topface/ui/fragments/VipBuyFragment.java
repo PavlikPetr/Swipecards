@@ -46,6 +46,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
+    private TextView mExtraText;
 
 
     /**
@@ -111,18 +112,19 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     }
 
     private void initExtraText(View root) {
-        TextView textView = (TextView) root.findViewById(R.id.tvExtraText);
+        mExtraText = (TextView) root.findViewById(R.id.tvExtraText);
         String text = null;
         if (getArguments() != null) {
             text = getArguments().getString(ARG_TAG_EXRA_TEXT);
-            textView.setText(text);
+            mExtraText.setText(text);
         }
-        textView.setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
+        mExtraText.setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
     }
 
     private void switchLayouts() {
         if (mBuyVipViewsContainer != null && mEditPremiumContainer != null) {
             if (CacheProfile.premium) {
+                mExtraText.setVisibility(View.GONE);
                 mEditPremiumContainer.setVisibility(View.VISIBLE);
                 mBuyVipViewsContainer.setVisibility(View.GONE);
             } else {
