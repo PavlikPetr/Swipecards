@@ -12,6 +12,7 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteBlackListRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.BlackListAdapter;
+import com.topface.topface.ui.adapters.FeedAdapter;
 
 import org.json.JSONObject;
 
@@ -55,6 +56,16 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     @Override
     protected FeedListData<BlackListItem> getFeedList(JSONObject response) {
         return new FeedListData<>(response, BlackListItem.class);
+    }
+
+    /**
+     * Этот метод используется для получения id элементов ленты при удалении.
+     * Но в диалогах у нас работает не так как в остальных лентах
+     * и приходится вручную пробрасывать id юзеров вместо id итема
+     */
+    @Override
+    protected List<String> getSelectedFeedIds(FeedAdapter<BlackListItem> adapter) {
+        return adapter.getSelectedUsersStringIds();
     }
 
     @Override
