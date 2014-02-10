@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -65,6 +66,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         public Button flippedBtn;
         public View dataLayout;
         public Drawable background;
+        public RelativeLayout leftClickArea;
     }
 
     public FeedAdapter(Context context, Updater updateCallback) {
