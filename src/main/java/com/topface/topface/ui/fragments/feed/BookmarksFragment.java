@@ -50,6 +50,17 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
         return new FeedListData<>(response, FeedBookmark.class);
     }
 
+    /**
+     * Этот метод используется для получения id элементов ленты при удалении.
+     * Но в диалогах у нас работает не так как в остальных лентах
+     * и приходится вручную пробрасывать id юзеров вместо id итема
+     */
+    @Override
+    protected List<String> getSelectedFeedIds(FeedAdapter<FeedBookmark> adapter) {
+        return adapter.getSelectedUsersStringIds();
+    }
+
+
     @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.BOOKMARKS;
