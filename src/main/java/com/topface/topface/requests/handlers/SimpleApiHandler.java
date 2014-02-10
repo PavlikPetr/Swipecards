@@ -20,7 +20,7 @@ public class SimpleApiHandler extends ApiHandler {
 
     public void fail(boolean showError) {
         if (showError && hasContext() && getContext() instanceof Activity) {
-            Utils.showErrorMessage(getContext());
+            Utils.showErrorMessage();
         }
     }
 

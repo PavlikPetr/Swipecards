@@ -23,7 +23,7 @@ import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.BuyLikesAccessRequest;
-import com.topface.topface.requests.DeleteFeedsRequest;
+import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
@@ -314,8 +314,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected DeleteFeedsRequest getDeleteRequest(List<String> ids, Context context) {
-        return new DeleteLikesRequest(ids, context);
+    protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
+        return new DeleteLikesRequest(ids, getActivity());
     }
 
     @Override

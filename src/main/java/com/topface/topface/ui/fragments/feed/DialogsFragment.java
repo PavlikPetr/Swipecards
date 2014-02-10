@@ -15,10 +15,12 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.requests.DeleteFeedsRequest;
+import com.topface.topface.requests.DeleteAbstractRequest;
+import com.topface.topface.requests.DeleteDialogsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
+import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
 
@@ -60,7 +62,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected void makeAllItemsRead() {
-
     }
 
     @Override
@@ -100,6 +101,16 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         });
     }
 
+    /**
+     * Этот метод используется для получения id элементов ленты при удалении.
+     * Но в диалогах у нас работает не так как в остальных лентах
+     * и приходится вручную пробрасывать id юзеров вместо id итема
+     */
+    @Override
+    protected List<String> getSelectedFeedIds(FeedAdapter<FeedDialog> adapter) {
+        return adapter.getSelectedUsersStringIds();
+    }
+
     @Override
     protected int getEmptyFeedLayout() {
         return R.layout.layout_empty_dialogs;
@@ -122,12 +133,12 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected int getContextMenuLayoutRes() {
-        return R.menu.feed_context_menu_dialogs;
+        return R.menu.feed_context_menu;
     }
 
     @Override
-    protected DeleteFeedsRequest getDeleteRequest(List<String> ids, Context context) {
-        return null;
+    protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
+        return new DeleteDialogsRequest(ids, getActivity());
     }
 
     @Override

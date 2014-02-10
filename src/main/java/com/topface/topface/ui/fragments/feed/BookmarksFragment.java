@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
@@ -8,7 +7,8 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedBookmark;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.requests.DeleteFeedsRequest;
+import com.topface.topface.requests.DeleteAbstractRequest;
+import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -47,7 +47,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
 
     @Override
     protected FeedListData<FeedBookmark> getFeedList(JSONObject response) {
-        return new FeedListData<FeedBookmark>(response, FeedBookmark.class);
+        return new FeedListData<>(response, FeedBookmark.class);
     }
 
     @Override
@@ -66,11 +66,13 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
 
     @Override
     protected int getContextMenuLayoutRes() {
-        return R.menu.feed_context_menu_bookmarks;
+        //Из избранного нельзя добавить в черный список (вернее можно, но не известно что из этого получится),
+        //поэтому используем AB без соответсвующей кнопк
+        return R.menu.feed_context_menu_blacklist;
     }
 
     @Override
-    protected DeleteFeedsRequest getDeleteRequest(List<String> ids, Context context) {
-        return null;
+    protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
+        return new DeleteBookmarksRequest(ids, getActivity());
     }
 }

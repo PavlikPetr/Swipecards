@@ -40,7 +40,6 @@ import java.util.regex.Pattern;
 public class Utils {
     public static final long DAY = 86400000;
     public static final long WEEK_IN_SECONDS = 604800;
-    public static final long DAY_IN_SECONDS = 86400;
 
     private static PluralResources mPluralResources;
     private static String mClientVersion;
@@ -273,7 +272,8 @@ public class Utils {
         return mPluralResources.getQuantityString(id, quantity, formatArgs);
     }
 
-    public static void showErrorMessage(Context context) {
+    public static void showErrorMessage() {
+        Context context = App.getContext();
         if (context != null) {
             Toast.makeText(
                     context,
@@ -306,22 +306,6 @@ public class Utils {
         } else {
             return false;
         }
-    }
-
-    /**
-     * @return флаг наличия API Google карт
-     */
-    public static boolean isGoogleMapsAvailable() {
-        Class mapClass;
-        try {
-            mapClass = Class.forName("com.google.android.maps.MapActivity");
-        } catch (ClassNotFoundException e) {
-            mapClass = null;
-        } catch (Exception e) {
-            mapClass = null;
-            Debug.error(e);
-        }
-        return mapClass != null;
     }
 
     private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(

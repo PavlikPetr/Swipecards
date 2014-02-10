@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.AbstractThreadTest;
-import com.topface.topface.requests.BlackListDeleteManyRequest;
+import com.topface.topface.requests.DeleteBlackListRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -51,9 +51,9 @@ public class BlackListDeleteTest extends AbstractThreadTest {
         runTestOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ArrayList<Integer> users = new ArrayList<Integer>();
-                users.add(Integer.parseInt(userId));
-                new BlackListDeleteManyRequest(users, getInstrumentation().getContext())
+                ArrayList<String> users = new ArrayList<>();
+                users.add(userId);
+                new DeleteBlackListRequest(users, getInstrumentation().getContext())
                         .callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {

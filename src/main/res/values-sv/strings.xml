@@ -25,6 +25,7 @@
     <string name="general_profile_error">Det har uppstått ett fell vid profiluppladning</string>
     <string name="general_dbl_all">Alla</string>
     <string name="general_dbl_unread">Ej lästa</string>
+    <string name="general_dbl_new">Nya</string>
     <string name="general_edit_button">Redigera</string>
     <string name="general_save_button">Spara</string>
     <string name="general_send_button">Skicka</string>

@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Запрос добавляющий пользователя в черный список
  */
-public class BlackListAddManyRequest extends ApiRequest {
+public class BlackListAddRequest extends ApiRequest {
     public static final String SERVICE_NAME = "blacklist.add";
     /**
      * id пользователя, котогорого нужно добавить в черный список
@@ -24,9 +24,9 @@ public class BlackListAddManyRequest extends ApiRequest {
     /**
      * @param userId пользователя, которого нужно добавить в черный список
      */
-    public BlackListAddManyRequest(int userId, Context context) {
+    public BlackListAddRequest(int userId, Context context) {
         super(context);
-        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> list = new ArrayList<>();
         list.add(userId);
         mUserIds = list;
     }
@@ -34,7 +34,7 @@ public class BlackListAddManyRequest extends ApiRequest {
     /**
      * @param userIds пользователи, которых нужно добавить в черный список
      */
-    public BlackListAddManyRequest(List<Integer> userIds, Context context) {
+    public BlackListAddRequest(List<Integer> userIds, Context context) {
         super(context);
         mUserIds = userIds;
     }
