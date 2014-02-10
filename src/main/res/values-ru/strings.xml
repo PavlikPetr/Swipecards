@@ -52,6 +52,7 @@
     <string name="general_visitors">Гости</string>
     <string name="general_profile">Профиль</string>
     <string name="general_settings">Настройки</string>
+    <string name="general_settings_abbr">Настр.</string>
     <string name="general_chat">Чат</string>
     <string name="general_allow">Разрешить</string>
     <string name="notification_popup_title">Разрешите присылать вам уведомления, чтобы вы мгновенно могли узнать о новой симпатии, восхищении или непрочитанном сообщении</string>
