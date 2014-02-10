@@ -53,8 +53,8 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddManyRequest;
 import com.topface.topface.requests.BlackListDeleteManyRequest;
 import com.topface.topface.requests.BookmarkAddRequest;
-import com.topface.topface.requests.BookmarkDeleteManyRequest;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.DeleteMessagesRequest;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
@@ -301,9 +301,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     mLockScreen.setVisibility(View.GONE);
                 }
                 showLoadingBackground();
-            } catch (OutOfMemoryError e) {
-                Debug.error(e);
-            } catch (Exception e) {
+            } catch (Exception | OutOfMemoryError e) {
                 Debug.error(e);
             }
         }
@@ -443,7 +441,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 Debug.log(response.toString());
-                Utils.showErrorMessage(App.getContext());
+                Utils.showErrorMessage();
             }
         }).exec();
     }
@@ -769,9 +767,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 ApiRequest request;
 
                 if (mUser.bookmarked) {
-                    request = new BookmarkDeleteManyRequest(getActivity(), mUserId);
+                    request = new DeleteBookmarksRequest(mUserId, getActivity());
                 } else {
-                    request = new BookmarkAddRequest(getActivity(), mUserId);
+                    request = new BookmarkAddRequest(mUserId, getActivity());
                 }
 
                 request.callback(new SimpleApiHandler() {

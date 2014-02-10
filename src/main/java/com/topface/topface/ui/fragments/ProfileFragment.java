@@ -42,8 +42,8 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddManyRequest;
 import com.topface.topface.requests.BlackListDeleteManyRequest;
 import com.topface.topface.requests.BookmarkAddRequest;
-import com.topface.topface.requests.BookmarkDeleteManyRequest;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.SendLikeRequest;
@@ -704,9 +704,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 ApiRequest request;
 
                 if (mUserProfile instanceof User && ((User) mUserProfile).bookmarked) {
-                    request = new BookmarkDeleteManyRequest(getActivity(), mUserProfile.uid);
+                    request = new DeleteBookmarksRequest(mUserProfile.uid, getActivity());
                 } else {
-                    request = new BookmarkAddRequest(getActivity(), mUserProfile.uid);
+                    request = new BookmarkAddRequest(mUserProfile.uid, getActivity());
                 }
 
                 request.callback(new SimpleApiHandler() {
@@ -911,7 +911,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 startActivity(intent);
                             }
                         } else {
-                            Utils.showErrorMessage(getContext());
+                            Utils.showErrorMessage();
                         }
                     }
 

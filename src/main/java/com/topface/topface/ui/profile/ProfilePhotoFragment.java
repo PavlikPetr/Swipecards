@@ -93,7 +93,7 @@ public class ProfilePhotoFragment extends BaseFragment {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Utils.showErrorMessage(getActivity());
+                Utils.showErrorMessage();
             }
         }).exec();
     }

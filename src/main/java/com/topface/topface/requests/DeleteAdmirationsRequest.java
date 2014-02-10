@@ -4,10 +4,10 @@ import android.content.Context;
 
 import java.util.List;
 
-public class DeleteMutualsRequest extends DeleteAbstractFeedsRequest {
-    private static final String SERVICE = "mutual.delete";
+public class DeleteAdmirationsRequest extends DeleteAbstractFeedsRequest {
+    private static final String SERVICE = "admiration.delete";
 
-    public DeleteMutualsRequest(List<String> ids, Context context) {
+    public DeleteAdmirationsRequest(List<String> ids, Context context) {
         super(ids, context);
     }
 

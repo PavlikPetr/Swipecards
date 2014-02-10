@@ -672,7 +672,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                     @Override
                     public void fail(int codeError, IApiResponse response) {
                         EasyTracker.getTracker().sendEvent("VirusLike", "Fail", "Chat", 0L);
-                        Utils.showErrorMessage(getContext());
+                        Utils.showErrorMessage();
                     }
 
                     @Override

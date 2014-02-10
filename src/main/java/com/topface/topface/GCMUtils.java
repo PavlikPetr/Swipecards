@@ -50,7 +50,7 @@ public class GCMUtils {
     public static final int GCM_TYPE_UPDATE = 5;
     public static final int GCM_TYPE_PROMO = 6;
     public static final int GCM_TYPE_GIFT = 7;
-    public static final int GCM_TYPE_DIALOG = 8;
+    public static final int GCM_TYPE_DIALOGS = 8;
 
     public static final String NEXT_INTENT = "com.topface.topface_next";
 
@@ -293,7 +293,7 @@ public class GCMUtils {
             case GCM_TYPE_UPDATE:
                 i = Utils.getMarketIntent(context);
                 break;
-            case GCM_TYPE_DIALOG:
+            case GCM_TYPE_DIALOGS:
                 i = new Intent(context, NavigationActivity.class);
                 i.putExtra(NEXT_INTENT, F_DIALOGS);
                 break;

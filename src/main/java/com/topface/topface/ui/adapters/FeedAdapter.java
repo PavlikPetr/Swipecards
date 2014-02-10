@@ -368,7 +368,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     public List<String> getSelectedFeedIds() {
-        List<String> ids = new ArrayList<String>();
+        List<String> ids = new ArrayList<>();
         if (mSelectionController != null) {
             List<T> selected = mSelectionController.getSelected();
             for (T aSelected : selected) {
@@ -379,7 +379,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     public List<Integer> getSelectedUsersIds() {
-        List<Integer> ids = new ArrayList<Integer>();
+        List<Integer> ids = new ArrayList<>();
         if (mSelectionController != null) {
             List<T> selected = mSelectionController.getSelected();
             for (T aSelected : selected) {
@@ -391,8 +391,21 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return ids;
     }
 
+    public List<String> getSelectedUsersStringIds() {
+        List<String> ids = new ArrayList<>();
+        if (mSelectionController != null) {
+            List<T> selected = mSelectionController.getSelected();
+            for (T aSelected : selected) {
+                if (aSelected != null && aSelected.user != null) {
+                    ids.add(Integer.toString(aSelected.user.id));
+                }
+            }
+        }
+        return ids;
+    }
+
     public List<T> getSelectedItems() {
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
         result.addAll(mSelectionController.getSelected());
         return result;
     }

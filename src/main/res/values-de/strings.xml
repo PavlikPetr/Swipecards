@@ -25,6 +25,7 @@
     <string name="general_profile_error">Fehler bei der Ladung des Profils</string>
     <string name="general_dbl_all">Alle</string>
     <string name="general_dbl_unread">Ungelesene</string>
+    <string name="general_dbl_new">Neue</string>
     <string name="general_edit_button">Ändern</string>
     <string name="general_save_button">Speichern</string>
     <string name="general_send_button">Senden</string>
@@ -43,6 +44,9 @@
     <string name="general_profile">Profil</string>
     <string name="general_settings">Einstellungen</string>
     <string name="general_chat">Chat</string>
+    <string name="general_allow">Erlauben</string>
+    <string name="notification_popup_title">Erlauben Sie die Benachrichtigungen, und erfahren Sie sofort über neue Sympathien, Bewunderungen oder Nachrichten</string>
+    <string name="email_successfully_changed">Ihre E-Mail Adresse wurde erfolgreich geändert</string>
     <string name="auth_btn_vk">Via VKontakte einloggen</string>
     <string name="auth_btn_fb">Via Facebook einloggen</string>
     <string name="auth_retry">Nochmal versuchen</string>
@@ -575,6 +579,7 @@
     <string name="general_bonus">Bonus</string>
     <string name="general_get">Bekommen</string>
     <string name="not_enough_coins">Nicht genug Coins für den Kauf</string>
+    <string name="pincode_blocking_app">Sperre der Anmeldung</string>
     <string name="pincode_blocking">Sperre</string>
     <string name="pincode_reset">Reset PIN-Code</string>
     <string name="pincode_set">Set PIN-Code</string>

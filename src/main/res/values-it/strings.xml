@@ -25,6 +25,7 @@
     <string name="general_profile_error">Errore durante il caricamento del profilo</string>
     <string name="general_dbl_all">Tutti</string>
     <string name="general_dbl_unread">Non letti</string>
+    <string name="general_dbl_new">Nuovi</string>
     <string name="general_edit_button">Mod.</string>
     <string name="general_save_button">Salv.</string>
     <string name="general_send_button">Inv.</string>

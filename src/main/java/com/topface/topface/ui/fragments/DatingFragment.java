@@ -770,7 +770,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     completeShowSympathylistener);
             mNoviceLayout.startAnimation(mAlphaAnimation);
         } else if (mNovice.isShowSympathiesBonus()) {
-            mResourcesLikes.setText(getResources().getString(R.string.default_resource_value));
             NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
             registerRequest(noviceLikesRequest);
             noviceLikesRequest.callback(new DataApiHandler<NoviceLikes>() {
