@@ -1,15 +1,13 @@
-package com.topface.topface.utils.offerwalls.supersonic;
+package com.topface.topface.utils.offerwalls.supersonicads;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.widget.RelativeLayout;
+
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.offerwalls.clickky.ClickkyOfferWebview;
 
-import java.util.UUID;
-
-public class SupersonicWallActivity extends Activity{
+public class SupersonicWallActivity extends Activity {
 
     private String url = "http://www.supersonicads.com/delivery/mobilePanel.php";
     private static final String API_KEY = "2cf0ad4d";
@@ -26,11 +24,12 @@ public class SupersonicWallActivity extends Activity{
         mWebView.setLayoutParams(params);
         mRelLayout.addView(mWebView);
         setContentView(mRelLayout);
-        StringBuilder strBuilder = new StringBuilder(url);
-        strBuilder.append("?applicationUserId=").append(CacheProfile.uid)
-                .append("&applicationKey=").append(API_KEY)
-                .append("&deviceOs=android");
-        mWebView.postUrl(strBuilder.toString(), null);
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.postUrl(
+                url + "?applicationUserId=" + CacheProfile.uid +
+                        "&applicationKey=" + API_KEY +
+                        "&deviceOs=android", null
+        );
     }
 
 

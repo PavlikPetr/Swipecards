@@ -34,6 +34,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
+import com.topface.topface.utils.offerwalls.supersonicads.SupersonicWallActivity;
 
 import org.json.JSONObject;
 
@@ -50,12 +51,14 @@ public class Offerwalls {
     public static final String CLICKKY = "CLICKKY";
     public static final String RANDOM = "RANDOM";
     public static final String GETJAR = "GETJAR";
+    public static final String SUPERSONIC = "SUPERSONIC";
     @SuppressWarnings("UnusedDeclaration")
     public final static String[] OFFERWALLS = new String[]{
             TAPJOY,
             SPONSORPAY,
             CLICKKY,
             GETJAR,
+            SUPERSONIC,
             RANDOM
     };
 
@@ -67,7 +70,7 @@ public class Offerwalls {
     private static ConsumableProductHelper mGetJarHelper;
 
     private static String getOfferWallType() {
-        return CacheProfile.getOptions().offerwall;
+        return SUPERSONIC;//CacheProfile.getOptions().offerwall;
     }
 
     public static void init(Context context) {
@@ -114,6 +117,9 @@ public class Offerwalls {
                 break;
             case GETJAR:
                 startGetJar(activity);
+                break;
+            case SUPERSONIC:
+                startSupersonic(activity);
                 break;
             case RANDOM:
                 startRandomOfferwall(activity);
@@ -345,5 +351,9 @@ public class Offerwalls {
                 startGetJarRewardPage(consumableProduct);
             }
         };
+    }
+
+    private static void startSupersonic(Activity activity) {
+        activity.startActivity(new Intent(activity, SupersonicWallActivity.class));
     }
 }
