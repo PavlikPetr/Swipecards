@@ -78,9 +78,6 @@ public class GiftsFragment extends BaseFragment {
         mTextInfo = (TextView) mGroupInfo.findViewById(R.id.tvInfo);
         mBtnInfo = (Button) mGroupInfo.findViewById(R.id.btnInfo);
 
-        if (mProfile != null) {
-            setProfile(mProfile);
-        }
         initViews();
 
         return root;
@@ -275,8 +272,9 @@ public class GiftsFragment extends BaseFragment {
 
                 removeLoaderItem();
                 data.addAll(gifts.items);
-                if (data.isEmpty() && !gifts.items.isEmpty()) {
+                if (!gifts.items.isEmpty()) {
                     mGroupInfo.setVisibility(View.GONE);
+                    mTextInfo.setVisibility(View.GONE);
                 }
 
                 if (gifts.more) {
@@ -331,6 +329,7 @@ public class GiftsFragment extends BaseFragment {
                         });
                     } else {
                         mGroupInfo.setVisibility(View.GONE);
+                        mTextInfo.setVisibility(View.GONE);
                     }
                 }
             }
