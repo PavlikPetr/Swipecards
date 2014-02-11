@@ -6,13 +6,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
+import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -61,6 +66,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        setWindowContentOverlayCompat();
         mStartActionsController = new StartActionsController(this);
         onRegisterStartActions(mStartActionsController);
     }
@@ -321,5 +327,35 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
      * Note: actions can be placed here for global usage in all child activities
      */
     protected void onRegisterStartActions(StartActionsController startActionsController) {
+    }
+
+    /**
+     * Set the window content overlay on device's that don't respect the theme
+     * attribute.
+     */
+    private void setWindowContentOverlayCompat() {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            // Get the content view
+            View contentView = findViewById(android.R.id.content);
+
+            // Make sure it's a valid instance of a FrameLayout
+            if (contentView instanceof FrameLayout) {
+                TypedValue tv = new TypedValue();
+
+                // Get the windowContentOverlay value of the current theme
+                if (getTheme().resolveAttribute(
+                        android.R.attr.windowContentOverlay, tv, true)) {
+
+                    // If it's a valid resource, set it as the foreground drawable
+                    // for the content view
+                    if (tv.resourceId != 0) {
+                        FrameLayout layout = ((FrameLayout) contentView);
+                        layout.setForeground(
+                                getResources().getDrawable(tv.resourceId));
+                        layout.setForegroundGravity(GravityCompat.RELATIVE_HORIZONTAL_GRAVITY_MASK);
+                    }
+                }
+            }
+        }
     }
 }

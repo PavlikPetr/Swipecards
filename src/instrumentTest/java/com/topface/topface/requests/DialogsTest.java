@@ -5,6 +5,9 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DialogsTest extends FeedTest<FeedDialog> {
 
     private String mIdForDelete;
@@ -30,7 +33,9 @@ public class DialogsTest extends FeedTest<FeedDialog> {
         runAsyncTest(new Runnable() {
             @Override
             public void run() {
-                new DialogDeleteManyRequest(0, getContext())
+                List<String> ids = new ArrayList<>();
+                ids.add("0");
+                new DeleteDialogsRequest(ids, getContext())
                         .callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
@@ -50,7 +55,7 @@ public class DialogsTest extends FeedTest<FeedDialog> {
 
     @Override
     protected FeedListData<FeedDialog> getFeedList(ApiResponse response) {
-        return new FeedListData<FeedDialog>(response.jsonResult, FeedDialog.class);
+        return new FeedListData<>(response.jsonResult, FeedDialog.class);
     }
 
     @Override

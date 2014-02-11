@@ -116,7 +116,7 @@ public class ComplainsMessageFragment extends BaseFragment {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (getActivity() != null) {
-                    Utils.showErrorMessage(getActivity());
+                    Utils.showErrorMessage();
                 }
             }
 

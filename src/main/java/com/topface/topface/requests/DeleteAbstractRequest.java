@@ -2,7 +2,6 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.requests.handlers.ErrorCodes;
 
 import org.json.JSONArray;
@@ -12,18 +11,18 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DeleteFeedsRequest extends ApiRequest {
+public abstract class DeleteAbstractRequest extends ApiRequest {
 
     protected List<String> mIds;
 
-    public DeleteFeedsRequest(List<String> ids, Context context) {
+    public DeleteAbstractRequest(List<String> ids, Context context) {
         super(context);
         mIds = ids;
     }
 
-    public DeleteFeedsRequest(String id, Context context) {
+    public DeleteAbstractRequest(String id, Context context) {
         super(context);
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         list.add(id);
         mIds = list;
     }
@@ -35,9 +34,7 @@ public abstract class DeleteFeedsRequest extends ApiRequest {
         return data;
     }
 
-    protected String getKeyForItems() {
-        return "items";
-    }
+    abstract protected String getKeyForItems();
 
     @Override
     public abstract String getServiceName();
@@ -46,11 +43,9 @@ public abstract class DeleteFeedsRequest extends ApiRequest {
     public void exec() {
         if (mIds != null && mIds.size() > 0) {
             super.exec();
-            EasyTracker.getTracker().sendEvent("Feed", "Delete", getFeedType(), 1L);
         } else {
             handleFail(ErrorCodes.ERRORS_PROCCESED, "User list for delete from black list is empty");
         }
     }
 
-    protected abstract String getFeedType();
 }

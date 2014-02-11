@@ -50,11 +50,11 @@ import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackListAddManyRequest;
-import com.topface.topface.requests.BlackListDeleteManyRequest;
+import com.topface.topface.requests.BlackListAddRequest;
 import com.topface.topface.requests.BookmarkAddRequest;
-import com.topface.topface.requests.BookmarkDeleteManyRequest;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.DeleteBlackListRequest;
+import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.DeleteMessagesRequest;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
@@ -301,9 +301,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     mLockScreen.setVisibility(View.GONE);
                 }
                 showLoadingBackground();
-            } catch (OutOfMemoryError e) {
-                Debug.error(e);
-            } catch (Exception e) {
+            } catch (Exception | OutOfMemoryError e) {
                 Debug.error(e);
             }
         }
@@ -443,7 +441,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 Debug.log(response.toString());
-                Utils.showErrorMessage(App.getContext());
+                Utils.showErrorMessage();
             }
         }).exec();
     }
@@ -725,9 +723,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         icon.setVisibility(View.GONE);
                         ApiRequest request;
                         if (mUser.blocked) {
-                            request = new BlackListDeleteManyRequest(mUserId, getActivity());
+                            request = new DeleteBlackListRequest(mUserId, getActivity());
                         } else {
-                            request = new BlackListAddManyRequest(mUserId, getActivity());
+                            request = new BlackListAddRequest(mUserId, getActivity());
                         }
                         request.callback(new VipApiHandler() {
                             @Override
@@ -769,9 +767,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 ApiRequest request;
 
                 if (mUser.bookmarked) {
-                    request = new BookmarkDeleteManyRequest(getActivity(), mUserId);
+                    request = new DeleteBookmarksRequest(mUserId, getActivity());
                 } else {
-                    request = new BookmarkAddRequest(getActivity(), mUserId);
+                    request = new BookmarkAddRequest(mUserId, getActivity());
                 }
 
                 request.callback(new SimpleApiHandler() {
@@ -812,7 +810,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private void removeFromBlackList() {
         if (mUserId > 0) {
-            BlackListDeleteManyRequest deleteBlackListRequest = new BlackListDeleteManyRequest(mUserId, getActivity());
+            DeleteBlackListRequest deleteBlackListRequest = new DeleteBlackListRequest(mUserId, getActivity());
             mAddToBlackList.setEnabled(false);
             deleteBlackListRequest.callback(new VipApiHandler() {
 
@@ -838,7 +836,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private void addToBlackList() {
         if (mUserId > 0) {
-            BlackListAddManyRequest blackListRequest = new BlackListAddManyRequest(mUserId, getActivity());
+            BlackListAddRequest blackListRequest = new BlackListAddRequest(mUserId, getActivity());
             mAddToBlackList.setEnabled(false);
             blackListRequest.callback(new VipApiHandler() {
                 @Override
