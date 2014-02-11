@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RadioGroup
+        android:id="@+id/trplGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/trplLeft"
+            style="@style/ShadowItemFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_triple_left_selector"
+            android:button="@android:color/transparent"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:textScaleX="0.9" />
+
+        <RadioButton
+            android:id="@+id/trplMiddle"
+            style="@style/ShadowItemFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_triple_middle_selector"
+            android:button="@android:color/transparent"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:textScaleX="0.9" />
+
+        <RadioButton
+            android:id="@+id/trplRight"
+            style="@style/ShadowItemFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_triple_right_selector"
+            android:button="@android:color/transparent"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:textScaleX="0.9" />
+    </RadioGroup>
+
+</merge>

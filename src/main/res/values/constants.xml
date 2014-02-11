@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--suppress AndroidLintMissingTranslation -->
+<resources>
+    <!-- settings -->
+    <string name="settings_help_url">http://topface.com/faq-mobile?from=android</string>
+    <string name="settings_topface_url">http://topface.com</string>
+
+    <string name="default_resource_value">0</string>
+
+    <string name="default_market_link">market://details?id=com.topface.topface</string>
+    <string name="amazon_market_link">amzn://apps/android?p=com.topface.topface</string>
+
+    <string name="settings_error_message_internal">Сообщение об ошибке</string>
+    <string name="settings_ask_developer_internal">Вопрос разработчикам</string>
+    <string name="settings_payment_problems_internal">Проблемы с оплатой</string>
+    <string name="settings_cooperation_internal">Сотрудничество</string>
+    <string name="settings_feedback_internal">Оставить отзыв</string>
+    <string name="settings_low_rate_internal">low_rate_%d</string>
+
+    <string name="photo_is_set_tag">photo_is_set_tag</string>
+
+    <string name="default_percent_equation">%d%%</string>
+    <string name="default_ban_time">10:00</string>
+
+    <dimen name="take_photo_max_width">275dp</dimen>
+    <dimen name="take_photo_max_height">320dp</dimen>
+    <dimen name="left_menu_width">256dp</dimen>
+    <dimen name="left_menu_background_height">124dp</dimen>
+
+    <string name="tag_header_shadow">ivHeaderShadow</string>
+    <string name="transaction_info_link">http://topface.com/faq-mobile?from=android</string>
+    <string name="appsflyer_dev_key">mDUXh3zNggkkNCAgvXASna</string>
+    <bool name="needProfileBackground">true</bool>
+    <!-- С помощью этого флага определяем, планшет ли данное устройство см. ../values-sw600dp/constants.xml -->
+    <bool name="is_tablet">false</bool>
+</resources>

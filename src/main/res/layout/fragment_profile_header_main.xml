@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/ivProfileBackground"
+        android:src="@drawable/profile_background_1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY" />
+
+    <com.topface.topface.ui.views.ImageViewRemote
+        android:id="@+id/ivUserAvatar"
+        style="@style/ProfileAvatar"
+        android:layout_marginLeft="8dp" />
+
+    <TextView
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/ivUserAvatar"
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:layout_centerInParent="true"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
+        android:drawablePadding="7dp"
+        android:textSize="18sp" />
+
+
+    <TextView
+        android:id="@+id/tvCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_below="@id/tvName"
+        android:layout_centerHorizontal="true"
+        android:drawablePadding="5dp"
+        android:textColor="#FFFFFF"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textSize="14sp" />
+
+</RelativeLayout>

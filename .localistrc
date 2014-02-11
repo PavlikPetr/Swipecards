@@ -9,4 +9,4 @@ user = topface-mobile
 password = Sonetica2012
 
 [androidxml]
-resource_dir = res
+resource_dir = src/main/res

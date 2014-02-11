@@ -1,0 +1,30 @@
+<resources>
+
+    <style name="ShadowItemFont">
+        <item name="android:shadowColor">#222222</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1</item>
+    </style>
+
+    <style name="ShadowItemFontBottom">
+        <item name="android:shadowColor">#222222</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">1</item>
+    </style>
+
+    <style name="ShadowButtonFont">
+        <item name="android:shadowColor">#222222</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">-1</item>
+    </style>
+
+    <style name="ShadowUserText">
+        <item name="android:shadowColor">#606060</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">1</item>
+    </style>
+</resources>

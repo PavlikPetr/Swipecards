@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/general_edit_profile_message"
+        style="@style/ItemTitleText"
+        android:id="@+id/EditProfileMessage"
+        android:background="@drawable/edit_btn_bottom_selector"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
+        android:textSize="14sp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/loProfilePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="8dp">
+
+            <com.topface.topface.ui.views.ImageViewRemote
+                android:id="@+id/ivProfilePhoto"
+                style="@style/EditAvatar" />
+
+            <TextView
+                android:id="@+id/ivProfilePhotoCover"
+                style="@style/ItemTitleText"
+                android:layout_width="102dp"
+                android:layout_height="102dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/edit_profile_photo"
+                android:textSize="10sp"
+                android:background="@drawable/edit_main_avatar_cover" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/loProfilePhoto"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp">
+
+            <include
+                layout="@layout/item_edit_profile_name_select"
+                android:id="@+id/loProfileName" />
+
+            <!-- Button
+                    android:id="@+id/btnEditName"
+                    style="@style/ItemTitleText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/edit_btn_top_selector"
+                    android:drawableRight="@drawable/im_item_arrow"
+                    android:ellipsize="end"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="5dp"
+                    android:singleLine="true"
+                    android:textSize="14sp"/-->
+
+            <Button
+                android:id="@+id/btnEditCity"
+                style="@style/ItemTitleText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/loProfileName"
+                android:background="@drawable/edit_btn_bottom_selector"
+                android:drawableRight="@drawable/im_item_arrow"
+                android:ellipsize="end"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="5dp"
+                android:singleLine="true"
+                android:textSize="14sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

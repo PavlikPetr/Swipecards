@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loPhotoAlbumControl"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/general_close"
+        style="@style/ButtonWhiteTextMini"
+        android:background="@drawable/btn_alpha_gray_selector"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="16dp" />
+
+    <TextView
+        android:id="@+id/tvPhotoCounter"
+        style="@style/DatingButtonsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:drawablePadding="4dp"
+        android:gravity="center_vertical"
+        android:textSize="10sp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true" />
+
+    <RelativeLayout
+        android:id="@+id/loBottomPanel"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/alpha_gray_panel">
+
+        <Button
+            android:id="@+id/btnSetAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ButtonWhiteText"
+            android:textSize="14sp"
+            android:background="@android:color/transparent"
+            android:text="@string/on_avatar"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:drawablePadding="4dp" />
+
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ico_delete_selector"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY" />
+
+    </RelativeLayout>
+</RelativeLayout>

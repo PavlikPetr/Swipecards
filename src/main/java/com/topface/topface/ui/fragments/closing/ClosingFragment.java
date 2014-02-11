@@ -1,0 +1,280 @@
+package com.topface.topface.ui.fragments.closing;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.View;
+
+import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.topface.R;
+import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.search.UsersList;
+import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.SkipAllClosedRequest;
+import com.topface.topface.requests.SkipClosedRequest;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
+import com.topface.topface.ui.fragments.QuickMessageFragment;
+import com.topface.topface.ui.fragments.ViewUsersListFragment;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.cache.UsersListCacheManager;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+/**
+ * Базовый фрагмент экранов запираний
+ */
+abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> implements View.OnClickListener {
+
+    public static final int CHAT_CLOSE_DELAY_MILLIS = 1500;
+    private UsersListCacheManager mCacheManager;
+    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onCountersUpdated();
+        }
+    };
+    private List<View> mViewsToHideAndShow = new ArrayList<>();
+
+    /**
+     * Add items to list of views for hide and show purposes on ImageSwitcher click
+     *
+     * @param view from ui
+     */
+    protected void addViewsToHide(View view) {
+        mViewsToHideAndShow.add(view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+    }
+
+    @Override
+    protected void initActionBarControls() {
+    }
+
+    @Override
+    public Integer getTopPanelLayoutResId() {
+        return R.layout.controls_closing_top_panel;
+    }
+
+    @Override
+    protected void onPageSelected(int position) {
+    }
+
+    @Override
+    protected UsersList<FeedUser> createUsersList() {
+        Class<FeedUser> itemsClass = getItemsClass();
+        mCacheManager = new UsersListCacheManager(getCacheKey(), itemsClass);
+        @SuppressWarnings("unchecked") UsersList<FeedUser> users = mCacheManager.getCacheAndRemove();
+        if (users == null) {
+            users = new UsersList<>(itemsClass);
+        }
+        return users;
+    }
+
+    protected abstract String getCacheKey();
+
+    public void showChat() {
+        FeedUser user = getCurrentUser();
+        if (user != null) {
+            QuickMessageFragment fragment = QuickMessageFragment.newInstance(user.id, getChatListener());
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.add(android.R.id.content, fragment, ((Object) fragment).getClass().getName());
+            transaction.addToBackStack(null);
+            transaction.commit();
+        } else {
+            showNextUser();
+        }
+    }
+
+    protected void skipAllRequest(int type) {
+        new SkipAllClosedRequest(type, getActivity())
+                .callback(new SimpleApiHandler() {
+                    @Override
+                    public void always(IApiResponse response) {
+                        if (isAdded()) {
+                            refreshActionBarTitles();
+                        }
+                    }
+                }).exec();
+
+        onUsersProcessed();
+    }
+
+    private OnQuickMessageSentListener getChatListener() {
+        return new OnQuickMessageSentListener() {
+            @Override
+            public void onMessageSent(String message, final QuickMessageFragment fragment) {
+                //Закрываем чат с задержкой и переключаем пользователя
+                if (isAdded()) {
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            closeFragment(fragment);
+                            showNextFromUiThread();
+                        }
+                    }, CHAT_CLOSE_DELAY_MILLIS);
+                }
+            }
+
+            @Override
+            public void onCancel(QuickMessageFragment fragment) {
+                closeFragment(fragment);
+            }
+
+            private void closeFragment(QuickMessageFragment fragment) {
+                if (isAdded()) {
+                    FragmentManager fragmentManager = ClosingFragment.this.getFragmentManager();
+                    if (fragmentManager != null) {
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.remove(fragment);
+                        transaction.commitAllowingStateLoss();
+                    }
+                }
+            }
+        };
+    }
+
+    private void showNextFromUiThread() {
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (isAdded()) {
+                        showNextUser();
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnSkipAll:
+                EasyTracker.getTracker().sendEvent(getTrackName(), "SkipAll", "", 1L);
+                skipAllRequest(getSkipAllRequestType());
+                break;
+            case R.id.btnSkip:
+                if (CacheProfile.premium || alowSkipForNonPremium()) {
+                    if (getCurrentUser() != null) {
+                        SkipClosedRequest request = new SkipClosedRequest(getActivity());
+                        request.callback(new SimpleApiHandler() {
+                            @Override
+                            public void always(IApiResponse response) {
+                                if (isAdded()) {
+                                    refreshActionBarTitles();
+                                }
+                            }
+                        });
+                        request.item = getCurrentUser().feedItemId;
+                        request.exec();
+                    }
+                    showNextUser();
+                } else {
+                    Intent intent = ContainerActivity.getVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
+                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                }
+                break;
+            case R.id.btnChat:
+                EasyTracker.getTracker().sendEvent(getTrackName(), "Chat", "", 1L);
+                showChat();
+                break;
+            case R.id.btnWatchAsList:
+                EasyTracker.getTracker().sendEvent(getTrackName(), "WatchAsList", "", 1L);
+                Intent intent = ContainerActivity.getVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
+                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                break;
+            default:
+                break;
+        }
+    }
+
+    protected boolean alowSkipForNonPremium() {
+        return true;
+    }
+
+    protected abstract int getSkipAllRequestType();
+
+    @Override
+    protected void onUsersProcessed() {
+        super.onUsersProcessed();
+        clearUsersList();
+    }
+
+    @Override
+    protected ApiRequest getUsersListRequest() {
+        FeedRequest request = new FeedRequest(getFeedType(), getActivity());
+        request.limit = LIMIT;
+        request.unread = true;
+        request.leave = true;
+        String lastFeedId = getLastFeedId();
+        if (lastFeedId != null)
+            request.to = lastFeedId;
+        return request;
+    }
+
+    abstract protected FeedRequest.FeedService getFeedType();
+
+    @Override
+    public Class<FeedUser> getItemsClass() {
+        return FeedUser.class;
+    }
+
+    protected void onCountersUpdated() {
+        if (isAdded()) {
+            refreshActionBarTitles();
+        }
+    }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
+    @Override
+    protected void onNotEmptyDataReturnedOnce() {
+        super.onNotEmptyDataReturnedOnce();
+        EasyTracker.getTracker().sendView(getTrackName());
+    }
+
+    @Override
+    protected View.OnClickListener getOnImageSwitcherClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (View view : mViewsToHideAndShow) {
+                    if (view != null) {
+                        view.setVisibility(
+                                view.getVisibility() != View.VISIBLE ? View.VISIBLE : View.GONE
+                        );
+                    }
+                }
+            }
+        };
+    }
+}

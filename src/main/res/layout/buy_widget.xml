@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/countersLayout"
+    android:padding="16dp"
+    android:background="@drawable/counters_background">
+
+    <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
+        android:id="@+id/menuCurCoins"
+        stv:maxChars="4"
+        stv:charPadding="7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        stv:fontSize="16"
+        android:layout_alignParentLeft="true"
+        stv:image="@drawable/ic_coins" />
+
+    <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
+        android:id="@+id/menuCurLikes"
+        stv:maxChars="4"
+        stv:charPadding="7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        stv:fontSize="16"
+        android:layout_alignTop="@+id/menuCurCoins"
+        android:layout_alignParentRight="true"
+        stv:image="@drawable/ic_sympathy" />
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        style="@style/Widget.Topface.Button.Big.Blue"
+        android:background="@drawable/btn_blue_selector"
+        android:text="@string/buy_resources"
+        android:layout_below="@id/menuCurLikes"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        android:id="@+id/menuBuyBtn" />
+
+</RelativeLayout>

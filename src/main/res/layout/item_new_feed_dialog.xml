@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_new_list_selector">
+
+    <!-- аватар -->
+
+    <com.topface.topface.ui.views.ImageViewRemote
+        android:id="@+id/ivAvatar"
+        style="@style/FeedAvatar" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/ivAvatar"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp">
+
+        <!-- имя, возраст -->
+        <TextView
+            android:id="@+id/tvName"
+            style="@style/ListName"
+            android:textColor="#CFEDFF" />
+
+        <!-- город -->
+        <TextView
+            android:id="@+id/tvCity"
+            android:layout_toRightOf="@id/tvName"
+            android:layout_alignBaseline="@id/tvName"
+            style="@style/ListCity"
+            android:textColor="#CFEDFF" />
+
+        <LinearLayout
+            android:id="@+id/loText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvName"
+            android:layout_toLeftOf="@+id/tvTime"
+            android:gravity="left|center_vertical"
+            android:orientation="horizontal">
+
+            <!-- счетчик непрочитанных -->
+            <TextView
+                android:id="@+id/tvUnreadCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ico_message_bg"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textColor="#4D4D4D"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_marginRight="5dp" />
+            <!-- текст -->
+            <TextView
+                android:id="@+id/tvText"
+                style="@style/ListMessageText"
+                android:textColor="#CFEDFF" />
+        </LinearLayout>
+
+        <!-- время -->
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_alignBottom="@id/loText"
+            style="@style/ListTime"
+            android:textColor="#CFEDFF" />
+
+    </RelativeLayout>
+
+    <!-- online -->
+    <ImageView
+        android:id="@+id/ivOnline"
+        style="@style/OnlineIndicator" />
+
+</RelativeLayout>
