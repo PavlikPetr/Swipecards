@@ -81,9 +81,6 @@ public class GiftsFragment extends BaseFragment {
         if (mProfile != null) {
             setProfile(mProfile);
         }
-
-//        initViews();
-
         return root;
     }
 
