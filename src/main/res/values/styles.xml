@@ -457,11 +457,12 @@
     </style>
 
     <style name="FeedHeart">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginRight">8dp</item>
         <item name="android:layout_alignParentRight">true</item>
+        <item name="android:scaleType">center</item>
         <item name="android:src">@drawable/im_item_mutual_heart</item>
     </style>
 
