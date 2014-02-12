@@ -25,6 +25,7 @@
     <string name="general_profile_error">Profilio užkrovimo klaida</string>
     <string name="general_dbl_all">Visi</string>
     <string name="general_dbl_unread">Neperskaityti</string>
+    <string name="general_dbl_new">Nauji</string>
     <string name="general_edit_button">Red.</string>
     <string name="general_save_button">Išsaugoti</string>
     <string name="general_send_button">Išsiųsti</string>

@@ -114,7 +114,7 @@ public class BannerBlock {
     private View mBannerView;
     private static boolean mAdcampInitialized = false;
 
-    private Map<String, Character> mAdwiredMap = new HashMap<String, Character>();
+    private Map<String, Character> mAdwiredMap = new HashMap<>();
     private AdInitializer mAdlabInitializer;
 
     public BannerBlock(Fragment fragment, ViewGroup layout) {
@@ -183,24 +183,26 @@ public class BannerBlock {
 
     private View getBannerView(String bannerType) {
         try {
-            if (bannerType.equals(BANNER_TOPFACE) || bannerType.equals(BANNER_GAG)) {
-                return mInflater.inflate(R.layout.banner_topface, mBannerLayout, false);
-            } else if (bannerType.equals(BANNER_ADMOB)) {
-                return mInflater.inflate(R.layout.banner_admob, mBannerLayout, false);
-            } else if (bannerType.equals(BANNER_ADWIRED)) {
-                return mInflater.inflate(R.layout.banner_adwired, mBannerLayout, false);
-            } else if (bannerType.equals(BANNER_MOPUB)) {
-                return mInflater.inflate(R.layout.banner_mopub, mBannerLayout, false);
-            } else if (bannerType.equals(BANNER_ADCAMP)) {
-                return mInflater.inflate(R.layout.banner_adcamp, mBannerLayout, false);
-            } else if (bannerType.equals(BANNER_LIFESTREET)) {
-                return mInflater.inflate(R.layout.banner_lifestreet, mBannerLayout, false);
-            } else if (bannerType.equals(BANNER_ADLAB)) {
-                return mInflater.inflate(R.layout.banner_adlab, null);
-            } else if (bannerType.equals(Options.BANNER_INNERACTIVE)) {
-                return mInflater.inflate(R.layout.banner_inneractive, null);
-            } else {
-                return null;
+            switch (bannerType) {
+                case BANNER_TOPFACE:
+                case BANNER_GAG:
+                    return mInflater.inflate(R.layout.banner_topface, mBannerLayout, false);
+                case BANNER_ADMOB:
+                    return mInflater.inflate(R.layout.banner_admob, mBannerLayout, false);
+                case BANNER_ADWIRED:
+                    return mInflater.inflate(R.layout.banner_adwired, mBannerLayout, false);
+                case BANNER_MOPUB:
+                    return mInflater.inflate(R.layout.banner_mopub, mBannerLayout, false);
+                case BANNER_ADCAMP:
+                    return mInflater.inflate(R.layout.banner_adcamp, mBannerLayout, false);
+                case BANNER_LIFESTREET:
+                    return mInflater.inflate(R.layout.banner_lifestreet, mBannerLayout, false);
+                case BANNER_ADLAB:
+                    return mInflater.inflate(R.layout.banner_adlab, null);
+                case Options.BANNER_INNERACTIVE:
+                    return mInflater.inflate(R.layout.banner_inneractive, null);
+                default:
+                    return null;
             }
         } catch (Exception e) {
             Debug.error(e);
@@ -420,27 +422,36 @@ public class BannerBlock {
             @Override
             public void onClick(View v) {
                 Intent intent = null;
-                if (banner.action.equals(Banner.ACTION_PAGE)) {
-                    EasyTracker.getTracker().sendEvent("Purchase", "Banner", "", 0L);
-                    intent = new Intent(mFragment.getActivity(), ContainerActivity.class);
-                    if (banner.parameter.equals("VIP")) {
-                        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                    } else {
-                        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                    }
-                    intent.putExtra(BillingFragment.ARG_TAG_SOURCE, "Banner_" + banner.name);
-                } else if (banner.action.equals(Banner.ACTION_URL)) {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
-                } else if (banner.action.equals(Banner.ACTION_METHOD)) {
-                    invokeBannerMethod(banner.parameter);
-                } else if (banner.action.equals(Banner.ACTION_OFFERWALL)) {
-                    if (banner.parameter.equals(Offerwalls.TAPJOY)) {
-                        Offerwalls.startTapjoy();
-                    } else if (banner.parameter.equals(Offerwalls.SPONSORPAY)) {
-                        Offerwalls.startSponsorpay(mFragment.getActivity());
-                    } else {
-                        Offerwalls.startOfferwall(mFragment.getActivity());
-                    }
+                switch (banner.action) {
+                    case Banner.ACTION_PAGE:
+                        EasyTracker.getTracker().sendEvent("Purchase", "Banner", "", 0L);
+                        intent = new Intent(mFragment.getActivity(), ContainerActivity.class);
+                        if (banner.parameter.equals("VIP")) {
+                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                        } else {
+                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                        }
+                        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, "Banner_" + banner.name);
+                        break;
+                    case Banner.ACTION_URL:
+                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
+                        break;
+                    case Banner.ACTION_METHOD:
+                        invokeBannerMethod(banner.parameter);
+                        break;
+                    case Banner.ACTION_OFFERWALL:
+                        switch (banner.parameter) {
+                            case Offerwalls.TAPJOY:
+                                Offerwalls.startTapjoy();
+                                break;
+                            case Offerwalls.SPONSORPAY:
+                                Offerwalls.startSponsorpay(mFragment.getActivity());
+                                break;
+                            default:
+                                Offerwalls.startOfferwall(mFragment.getActivity());
+                                break;
+                        }
+                        break;
                 }
 
                 sendStat(getBannerName(banner.url), "click");
@@ -593,7 +604,7 @@ public class BannerBlock {
                 if (response.isCodeEqual(ErrorCodes.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
                     Toast.makeText(getContext(), R.string.virus_error, Toast.LENGTH_LONG).show();
                 } else {
-                    Utils.showErrorMessage(getContext());
+                    Utils.showErrorMessage();
                 }
             }
 

@@ -2,14 +2,8 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import java.util.List;
-
-public class DeleteMessagesRequest extends DeleteFeedsRequest {
+public class DeleteMessagesRequest extends DeleteAbstractFeedsRequest {
     private static final String SERVICE = "message.delete";
-
-    public DeleteMessagesRequest(List<String> ids, Context context) {
-        super(ids, context);
-    }
 
     public DeleteMessagesRequest(String id, Context context) {
         super(id, context);
@@ -20,8 +14,4 @@ public class DeleteMessagesRequest extends DeleteFeedsRequest {
         return SERVICE;
     }
 
-    @Override
-    protected String getFeedType() {
-        return "Messages";
-    }
 }

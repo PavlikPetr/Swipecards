@@ -43,7 +43,7 @@
     <string name="general_profile">Profil</string>
     <string name="general_settings">Setari</string>
     <string name="general_chat">Chat</string>
-    <string name="auth_btn_vk">Intra prin VKontacte</string>
+    <string name="auth_btn_vk">Intra prin VK</string>
     <string name="auth_btn_fb">Intra prin Facebook</string>
     <string name="auth_retry">Mai incercati o data</string>
     <string name="auth_vk_name">VKontacte</string>
@@ -479,4 +479,5 @@
     <string name="restore_of_account">Restabilire acaunt</string>
     <string name="restore">Restabileste</string>
     <string name="admiration_sended">Admirare trimisa</string>
+    <string name="auth_btn_ok">Intra prin Odnoklassniki</string>
 </resources>

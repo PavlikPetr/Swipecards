@@ -5,9 +5,12 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.topface.topface.R;
+import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.utils.CacheProfile;
+
+import java.util.List;
 
 
 public class FansFragment extends BookmarksFragment {
@@ -55,5 +58,16 @@ public class FansFragment extends BookmarksFragment {
     @Override
     protected boolean isForPremium() {
         return true;
+    }
+
+    @Override
+    protected int getContextMenuLayoutRes() {
+        return R.menu.feed_context_menu_fans;
+    }
+
+    @Override
+    protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
+        //Данный тип ленты не поддерживает удаление
+        return null;
     }
 }

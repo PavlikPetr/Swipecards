@@ -25,6 +25,7 @@
     <string name="general_profile_error">Error loading profile</string>
     <string name="general_dbl_all">All</string>
     <string name="general_dbl_unread">Unread</string>
+    <string name="general_dbl_new">New</string>
     <string name="general_edit_button">Edit</string>
     <string name="general_save_button">Save</string>
     <string name="general_send_button">Send</string>
@@ -581,7 +582,7 @@
     <string name="general_bonus">Bonus</string>
     <string name="general_get">Get</string>
     <string name="not_enough_coins">Not enough coins to purchase</string>
-    <string name="pincode_blocking_app">Block the entrance to the application</string>
+    <string name="pincode_blocking_app">Passcode lock</string>
     <string name="pincode_blocking">Blocking</string>
     <string name="pincode_reset">Reset PIN-code</string>
     <string name="pincode_set">Set PIN-code</string>

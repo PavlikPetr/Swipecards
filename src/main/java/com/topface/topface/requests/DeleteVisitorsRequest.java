@@ -4,15 +4,11 @@ import android.content.Context;
 
 import java.util.List;
 
-public class DeleteVisitorsRequest extends DeleteFeedsRequest {
+public class DeleteVisitorsRequest extends DeleteAbstractUsersRequest {
     private static final String SERVICE = "visitor.delete";
 
     public DeleteVisitorsRequest(List<String> ids, Context context) {
         super(ids, context);
-    }
-
-    public DeleteVisitorsRequest(String id, Context context) {
-        super(id, context);
     }
 
     @Override
@@ -23,10 +19,5 @@ public class DeleteVisitorsRequest extends DeleteFeedsRequest {
     @Override
     protected String getKeyForItems() {
         return "ids";
-    }
-
-    @Override
-    protected String getFeedType() {
-        return "Visitor";
     }
 }

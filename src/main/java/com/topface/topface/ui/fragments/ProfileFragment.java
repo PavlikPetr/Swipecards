@@ -39,11 +39,11 @@ import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackListAddManyRequest;
-import com.topface.topface.requests.BlackListDeleteManyRequest;
+import com.topface.topface.requests.BlackListAddRequest;
 import com.topface.topface.requests.BookmarkAddRequest;
-import com.topface.topface.requests.BookmarkDeleteManyRequest;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.DeleteBlackListRequest;
+import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.SendLikeRequest;
@@ -660,9 +660,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         icon.setVisibility(View.GONE);
                         ApiRequest request;
                         if (mUserProfile.inBlackList) {
-                            request = new BlackListDeleteManyRequest(mUserProfile.uid, getActivity());
+                            request = new DeleteBlackListRequest(mUserProfile.uid, getActivity());
                         } else {
-                            request = new BlackListAddManyRequest(mUserProfile.uid, getActivity());
+                            request = new BlackListAddRequest(mUserProfile.uid, getActivity());
                         }
                         request.callback(new VipApiHandler() {
                             @Override
@@ -704,9 +704,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 ApiRequest request;
 
                 if (mUserProfile instanceof User && ((User) mUserProfile).bookmarked) {
-                    request = new BookmarkDeleteManyRequest(getActivity(), mUserProfile.uid);
+                    request = new DeleteBookmarksRequest(mUserProfile.uid, getActivity());
                 } else {
-                    request = new BookmarkAddRequest(getActivity(), mUserProfile.uid);
+                    request = new BookmarkAddRequest(mUserProfile.uid, getActivity());
                 }
 
                 request.callback(new SimpleApiHandler() {
@@ -911,7 +911,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 startActivity(intent);
                             }
                         } else {
-                            Utils.showErrorMessage(getContext());
+                            Utils.showErrorMessage();
                         }
                     }
 
