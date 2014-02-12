@@ -918,7 +918,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void failRate() {
         unlockControls();
         if (moneyDecreased.get()) {
-            CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
             moneyDecreased.set(false);
             updateResources();
         }
