@@ -33,7 +33,7 @@ android {
 
     productFlavors {
         //Основной flavor, в нашем случае работает с Google Play
-        main
+        google
         //flavor для версии приложения для Amazon
         amazon {
             buildConfigField "com.topface.billing.BillingType", "BILLING_TYPE",
