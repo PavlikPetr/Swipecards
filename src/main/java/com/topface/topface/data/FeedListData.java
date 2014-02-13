@@ -25,7 +25,7 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
     }
 
     private <T extends FeedItem> FeedList<T> getList(JSONArray list) {
-        FeedList<T> result = new FeedList<T>();
+        FeedList<T> result = new FeedList<>();
         if (list != null) {
             for (int i = 0; i < list.length(); i++) {
                 JSONObject item = list.optJSONObject(i);
