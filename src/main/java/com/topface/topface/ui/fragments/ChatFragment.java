@@ -146,8 +146,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private RelativeLayout mLockScreen;
     private String[] editButtonsSelfNames;
     private ViewGroup chatActions;
-    private TextView bookmarksTv;
-    private RelativeLayout blockView;
     private String mUserName;
     private int mUserAge;
     private String mUserCity;
@@ -593,8 +591,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             actions.add(new UserActions.ActionItem(R.id.acComplain, this));
             actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
             UserActions userActions = new UserActions(chatActions, actions);
-            bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
-            blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
+            TextView bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
+            RelativeLayout blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
             ((TextView) blockView.findViewById(R.id.blockTV)).setText(user.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
             // ставим значок онлайн в нужное состояние
