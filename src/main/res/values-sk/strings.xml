@@ -511,4 +511,5 @@
         <item quantity="other">%d mince</item>
         <item quantity="one">%d minca</item>
     </plurals>
+    <string name="auth_btn_ok">Prihlásiť sa cez Odnoklassniki</string>
 </resources>

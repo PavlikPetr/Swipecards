@@ -14,7 +14,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="54dp"
         android:layout_toRightOf="@id/ivAvatar">
 
         <!-- имя -->
@@ -41,7 +41,7 @@
 
     <ViewFlipper
         android:id="@+id/vfFlipper"
-        android:layout_width="100dp"
+        android:layout_width="54dp"
         android:layout_height="74dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
