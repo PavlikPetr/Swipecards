@@ -789,9 +789,6 @@
     <string name="ok_label">Одноклассники</string>
     <string name="coins_subscription">Подписка на монеты</string>
     <string name="coins_subscription_explanation">При использовании подписки на монетыс каждым месяцем вы будете получать больше монет</string>
-    <string name="first_month">Первый месяц</string>
-    <string name="second_month">Второй месяц</string>
-    <string name="third_month">Третий месяц</string>
     <plurals name="coins_subscription_bounty">
         <item quantity="zero">+%d монет</item>
         <item quantity="one">+%d монета</item>
