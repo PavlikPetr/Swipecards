@@ -20,7 +20,9 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     @Override
     protected FeedAdapter.FeedViewHolder getEmptyHolder(View convertView, Visitor item) {
         FeedViewHolder holder = super.getEmptyHolder(convertView, item);
+
         holder.time = (TextView) convertView.findViewById(R.id.tvTime);
+        holder.text = (TextView) convertView.findViewById(R.id.tvText);
         return holder;
     }
 
@@ -32,28 +34,29 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
         Visitor visitor = getItem(position);
         holder.time.setText(DateUtils.getFormattedDate(mContext, visitor.created));
         holder.time.setVisibility(View.VISIBLE);
-
+        holder.city.setText(null);
+        holder.text.setText(visitor.user.city.name);
         return convertView;
     }
 
     @Override
     protected int getItemLayout() {
-        return R.layout.item_feed_like;
+        return R.layout.item_feed_dialog;
     }
 
     @Override
     protected int getNewItemLayout() {
-        return R.layout.item_new_feed_like;
+        return R.layout.item_new_feed_dialog;
     }
 
     @Override
     protected int getVipItemLayout() {
-        return R.layout.item_feed_vip_like;
+        return R.layout.item_feed_vip_dialog;
     }
 
     @Override
     protected int getNewVipItemLayout() {
-        return R.layout.item_new_vip_feed_like;
+        return R.layout.item_new_feed_vip_dialog;
     }
 
     @Override
