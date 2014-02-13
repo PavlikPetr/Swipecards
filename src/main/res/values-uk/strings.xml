@@ -482,4 +482,5 @@
     <string name="general_bookmarks_is_deleted">Користувач вилучений з обраних</string>
     <string name="general_blacklist_is_deleted">Користувач вилучений з чорного списку</string>
     <string name="invite_friends_title_short">Запросити всіх друзів в Topface</string>
+    <string name="auth_btn_ok">Увійти через Odnoklassniki</string>
 </resources>

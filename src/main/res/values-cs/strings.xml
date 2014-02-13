@@ -512,4 +512,5 @@
         <item quantity="other">%d mincí</item>
         <item quantity="one">%d mince</item>
     </plurals>
+    <string name="auth_btn_ok">Přihlásit se přes Odnoklassniki</string>
 </resources>
