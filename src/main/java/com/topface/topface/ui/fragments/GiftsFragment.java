@@ -34,6 +34,7 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
+import com.topface.topface.ui.fragments.buy.BuyingFragment;
 
 import java.util.ArrayList;
 
@@ -298,7 +299,7 @@ public class GiftsFragment extends BaseFragment {
 
             @Override
             protected FeedListData<FeedGift> parseResponse(ApiResponse response) {
-                return new FeedListData<FeedGift>(response.jsonResult, FeedGift.class);
+                return new FeedListData<>(response.jsonResult, FeedGift.class);
             }
 
             @Override

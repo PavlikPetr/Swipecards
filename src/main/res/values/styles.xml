@@ -1,44 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Базовая тема приложения -->
-    <style name="Theme.Topface" parent="@style/Theme.AppCompat">
-        <!-- Тема индикаторов для ViewPager -->
-        <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
-        <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
-        <item name="vpiCirclePageIndicatorStyle">@style/TopfaceCirclePageIndicator</item>
-        <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
-        <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
-        <item name="android:textAppearanceSmall">@style/TopfaceTextAppearance.Small</item>
-        <!-- Начертание шрифта -->
-        <item name="android:typeface">sans</item>
-        <!-- Цвет ссылок (для TextView свойства autoLink)  -->
-        <item name="android:textColorLink">#2371B9</item>
-        <item name="android:editTextStyle">@style/topfaceEditText</item>
-        <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
-
-        <!-- ActionBar  -->
-        <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
-        <item name="actionBarItemBackground">@drawable/bg_semitransparent_black_selector</item>
-
-        <item name="android:actionBarStyle" tools:ignore="NewApi">
-            @style/Widget.Topface.ActionBar
-        </item>
-        <item name="android:actionBarItemBackground" tools:ignore="NewApi">
-            @drawable/bg_semitransparent_black_selector
-        </item>
-
-        <!-- Action Mode (CAB)-->
-        <item name="actionModeBackground">@color/bg_action_mode</item>
-        <item name="actionModeCloseDrawable">@drawable/ic_check</item>
-
-        <item name="android:actionModeBackground" tools:ignore="NewApi">@color/bg_action_mode
-        </item>
-        <item name="android:actionModeCloseDrawable" tools:ignore="NewApi">@drawable/ic_check</item>
-    </style>
-
     <style name="Widget.Topface.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="background">@color/bg_actionbar</item>
         <item name="backgroundStacked">@color/bg_actionbar</item>
@@ -67,17 +29,6 @@
 
     <style name="Widget.Topface.ActionBar.Subtitle" parent="Widget.Topface.ActionBar.Title">
         <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="Theme.Topface.NoActionBar.Fullscreen" parent="Theme.Topface.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
-    </style>
-
-    <style name="Theme.Topface.NoActionBar" parent="Theme.Topface">
-        <item name="android:windowNoTitle">true</item>
-        <!--Action Bar-->
-        <item name="android:windowActionBar" tools:ignore="NewApi">false</item>
-        <item name="windowActionBar">false</item>
     </style>
 
     <style name="topfaceEditText">
@@ -649,7 +600,7 @@
         <item name="android:layout_marginRight">6dp</item>
     </style>
 
-    <style name="TopfaceTextAppearance">
+    <style name="TopfaceTextAppearance" parent="ShadowItemFont">
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
@@ -789,17 +740,17 @@
     </style>
 
     <style name="Widget.Topface.Button.Big.Blue" parent="Widget.Topface.Button.Big">
-    <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
     <style name="Widget.Topface.Button.Blue" parent="Widget.Topface.Button">
-    <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
     <style name="ButtonSale" parent="Widget.Topface.Button.Big.Blue">
-    <item name="android:background">@drawable/btn_sale_selector</item>
+        <item name="android:background">@drawable/btn_sale_selector</item>
         <item name="android:paddingRight">56dp</item>
     </style>
 
@@ -810,5 +761,15 @@
         <item name="android:minHeight">28dip</item>
         <item name="android:maxHeight">28dip</item>
         <item name="android:progressDrawable">@drawable/topface_ratingbar</item>
+    </style>
+
+    <style name="CoinsSubscriptionBountyText" parent="TopfaceTextAppearance.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxWidth">100dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:gravity">center</item>
     </style>
 </resources>

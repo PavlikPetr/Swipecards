@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.buy;
 
 
 import android.content.BroadcastReceiver;
@@ -47,7 +47,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
     private TextView mExtraText;
-
 
     /**
      * Создает новый инстанс фрагмента покупки VIP

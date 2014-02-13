@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/loContainer"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/coins_subscription"
+            style="@style/TopfaceTextAppearance.Medium" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/coins_subscription_explanation"
+            style="@style/TopfaceTextAppearance.Small"
+            android:layout_marginTop="16dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvFirstMonth"
+                style="@style/CoinsSubscriptionBountyText"
+                android:drawableTop="@drawable/ic_admirations_selector"
+                android:text="@string/first_month" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_coins" />
+
+            <TextView
+                android:id="@+id/tvSecondMonth"
+                style="@style/CoinsSubscriptionBountyText"
+                android:drawableTop="@drawable/ic_admirations_selector"
+                android:text="@string/second_month" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_coins" />
+
+            <TextView
+                android:id="@+id/tvThirdMonth"
+                style="@style/CoinsSubscriptionBountyText"
+                android:drawableTop="@drawable/ic_admirations_selector"
+                android:text="@string/third_month" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

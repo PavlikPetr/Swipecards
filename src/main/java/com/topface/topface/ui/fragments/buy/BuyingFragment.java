@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.buy;
 
 
 import android.content.BroadcastReceiver;

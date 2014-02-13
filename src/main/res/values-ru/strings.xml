@@ -786,7 +786,19 @@
         <item quantity="few">%d мин.</item>
         <item quantity="other">%d мин.</item>
     </plurals>
-
     <string name="ok_label">Одноклассники</string>
+    <string name="coins_subscription">Подписка на монеты</string>
+    <string name="coins_subscription_explanation">При использовании подписки на монетыс каждым месяцем вы будете получать больше монет</string>
+    <string name="first_month">Первый месяц</string>
+    <string name="second_month">Второй месяц</string>
+    <string name="third_month">Третий месяц</string>
+    <plurals name="coins_subscription_bounty">
+        <item quantity="zero">+%d монет</item>
+        <item quantity="one">+%d монета</item>
+        <item quantity="many">+%d монет</item>
+        <item quantity="few">+%d монет</item>
+        <item quantity="other">+%d монет</item>
+    </plurals>
+
 
 </resources>

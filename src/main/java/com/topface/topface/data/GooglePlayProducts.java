@@ -28,10 +28,11 @@ public class GooglePlayProducts extends AbstractData {
     public static final String INTENT_UPDATE_PRODUCTS = "com.topface.topface.action.UPDATE_PRODUCTS";
     public boolean saleExists = false;
 
-    public LinkedList<BuyButton> coins = new LinkedList<BuyButton>();
-    public LinkedList<BuyButton> likes = new LinkedList<BuyButton>();
-    public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
-    public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
+    public LinkedList<BuyButton> coins = new LinkedList<>();
+    public LinkedList<BuyButton> likes = new LinkedList<>();
+    public LinkedList<BuyButton> premium = new LinkedList<>();
+    public LinkedList<BuyButton> others = new LinkedList<>();
+    public LinkedList<BuyButton> coinsSubscriptions = new LinkedList<>();
 
     public GooglePlayProducts(@NotNull IApiResponse data) {
         fillData(data.getJsonResult());
@@ -45,6 +46,7 @@ public class GooglePlayProducts extends AbstractData {
 
     protected void fillData(JSONObject data) {
         try {
+            fillProductsArray(coinsSubscriptions, data.optJSONArray("coinsSubscription"));
             fillProductsArray(coins, data.optJSONArray("coins"));
             fillProductsArray(likes, data.optJSONArray("likes"));
             fillProductsArray(premium, data.optJSONArray("premium"));
