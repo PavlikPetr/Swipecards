@@ -26,7 +26,7 @@ public class GCMIntentService extends GCMBaseIntentService {
         isOnMessageReceived.set(true);
         if (intent != null) {
             Debug.log("GCM: Try show\n" + intent.getExtras());
-            if (GCMUtils.showNotification(intent, context)) {
+            if (GCMUtils.showNotificationIfNeed(intent, context)) {
                 //Сообщаем о том что есть новое уведомление и нужно обновить список
                 Intent broadcastReceiver = new Intent(GCMUtils.GCM_NOTIFICATION);
                 String user = intent.getStringExtra("user");

@@ -52,9 +52,14 @@ public class UserNotificationManager {
                 doNeedReplace, ongoing, type, null);
     }
 
-    public void showNotification(final String title, final String message, final boolean isTextNotification,
-                                 String uri, final int unread, final Intent intent, final boolean doNeedReplace,
-                                 final NotificationImageListener listener) {
+    public void showNotificationAsync(final String title, final String message, final boolean isTextNotification,
+                                      String uri, final int unread, final Intent intent, final boolean doNeedReplace) {
+        showNotificationAsync(title, message, isTextNotification, uri, unread, intent, doNeedReplace, null);
+    }
+
+    public void showNotificationAsync(final String title, final String message, final boolean isTextNotification,
+                                      String uri, final int unread, final Intent intent, final boolean doNeedReplace,
+                                      final NotificationImageListener listener) {
         DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -83,15 +88,6 @@ public class UserNotificationManager {
                 }
             }
         });
-    }
-
-    /**
-     * Notification id which won't be conflicting with previous ids
-     *
-     * @return notification id
-     */
-    public int newNotificationId() {
-        return ++lastId;
     }
 
     public int showNotificationWithActions(String title, String message, Bitmap icon,
@@ -177,11 +173,11 @@ public class UserNotificationManager {
         });
     }
 
-    public int showNotification(String title, String message, boolean isTextNotification,
-                                Bitmap icon, int unread, Intent intent, boolean doNeedReplace,
-                                boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions) {
+    private int showNotification(String title, String message, boolean isTextNotification,
+                                 Bitmap icon, int unread, Intent intent, boolean createNew,
+                                 boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions) {
         int id = NOTIFICATION_ID;
-        if (doNeedReplace) {
+        if (createNew) {
             id = newNotificationId();
         }
         UserNotification notification = new UserNotification(mContext);
@@ -198,10 +194,19 @@ public class UserNotificationManager {
         return id;
     }
 
+
+    /**
+     * Notification id which won't be conflicting with previous ids
+     *
+     * @return notification id
+     */
+    public int newNotificationId() {
+        return ++lastId;
+    }
+
     public void cancelNotification(int id) {
         mNotificationManager.cancel(id);
     }
-
 
     public static interface NotificationImageListener {
         public void onSuccess(int id);

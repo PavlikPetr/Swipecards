@@ -10,8 +10,8 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.notifications.UserNotificationManager;
 
 public class TestNotificationsReceiver extends BroadcastReceiver {
 
@@ -47,7 +47,7 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
                 break;
             case ACTION_NOTIFY:
                 Debug.log("TOPFACE_NOTIFICATION:" + intent.getStringExtra("text"));
-                GCMUtils.showNotification(intent, context);
+                GCMUtils.showNotificationIfNeed(intent, context);
                 break;
         }
     }
