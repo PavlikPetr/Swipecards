@@ -298,4 +298,5 @@
     <string name="general_soon">Hamarosan</string>
     <string name="black_list_activation">VIP-státusz aktíválása és fekete lista használata</string>
     <string name="profile_edit_age_ranges">Az életkornak 16 és 99 év között kell lennie. Kérjük, add meg a helyes értéket, és próbáld újra.</string>
+    <string name="auth_btn_ok">Bejelentkezés a Odnoklassniki-n</string>
 </resources>

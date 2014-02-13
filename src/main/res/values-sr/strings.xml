@@ -512,4 +512,5 @@
         <item quantity="other">%d moneta</item>
         <item quantity="one">%d moneta</item>
     </plurals>
+    <string name="auth_btn_ok">Ući preko Odnoklassniki</string>
 </resources>
