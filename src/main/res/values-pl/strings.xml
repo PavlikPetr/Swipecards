@@ -490,4 +490,5 @@
     </plurals>
     <string name="to_see_likes_by_vip">Aby natychmiast się dowiedzieć, komu się podobasz, aktywuj VIP-account</string>
     <string name="or">lub</string>
+    <string name="auth_btn_ok">Zaloguj się za pomocą Odnoklassniki</string>
 </resources>
