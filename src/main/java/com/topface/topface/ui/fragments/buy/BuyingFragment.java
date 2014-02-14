@@ -21,8 +21,8 @@ import com.topface.billing.BillingType;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.GooglePlayProducts;
+import com.topface.topface.data.GooglePlayProducts.ProductsInfo.CoinsSubscriptionInfo;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.views.ServicesTextView;
@@ -34,12 +34,10 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-@SuppressWarnings("UnusedDeclaration")
 public class BuyingFragment extends BillingFragment {
 
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_GIFT = 1;
-    public static final int TYPE_DELIGHT = 2;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
 
     private LinkedList<RelativeLayout> purchaseButtons = new LinkedList<>();
@@ -51,10 +49,10 @@ public class BuyingFragment extends BillingFragment {
         }
     };
 
-    public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
     private ServicesTextView mCurCoins;
     private ServicesTextView mCurLikes;
     private TextView mResourcesInfo;
+    private String mFrom;
 
     public static BuyingFragment newInstance(int type, int coins, String from) {
         BuyingFragment fragment = new BuyingFragment();
@@ -82,6 +80,10 @@ public class BuyingFragment extends BillingFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Offerwalls.init(getActivity());
+        Bundle args = getArguments();
+        if (args != null) {
+            mFrom = args.getString(ARG_TAG_SOURCE);
+        }
     }
 
     @Override
@@ -145,25 +147,17 @@ public class BuyingFragment extends BillingFragment {
 
     private void initButtons(View root) {
         LinearLayout likesButtons = (LinearLayout) root.findViewById(R.id.fbLikes);
-
-
-        if (CacheProfile.getGooglePlayProducts().coins.isEmpty()) {
-            root.findViewById(R.id.coins_title).setVisibility(View.GONE);
-        } else {
-            root.findViewById(R.id.coins_title).setVisibility(View.VISIBLE);
+        GooglePlayProducts products = CacheProfile.getGooglePlayProducts();
+        if (products.likes.isEmpty() && products.coins.isEmpty()) {
+            root.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
         }
-
-        if (CacheProfile.getGooglePlayProducts().likes.isEmpty()) {
+        // likes buttons
+        if (products.likes.isEmpty()) {
             root.findViewById(R.id.likes_title).setVisibility(View.GONE);
         } else {
             root.findViewById(R.id.likes_title).setVisibility(View.VISIBLE);
         }
-
-        if (CacheProfile.getGooglePlayProducts().likes.isEmpty() && CacheProfile.getGooglePlayProducts().coins.isEmpty()) {
-            root.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
-        }
-
-        for (GooglePlayProducts.BuyButton curButton : CacheProfile.getGooglePlayProducts().likes) {
+        for (GooglePlayProducts.BuyButton curButton : products.likes) {
             RelativeLayout newButton = GooglePlayProducts.setButton(likesButtons, curButton, getActivity(),
                     new GooglePlayProducts.BuyButtonClickListener() {
                         @Override
@@ -175,10 +169,30 @@ public class BuyingFragment extends BillingFragment {
                 purchaseButtons.add(newButton);
             }
         }
-
-
+        // coins buttons
+        if (products.coins.isEmpty()) {
+            root.findViewById(R.id.coins_title).setVisibility(View.GONE);
+        } else {
+            root.findViewById(R.id.coins_title).setVisibility(View.VISIBLE);
+        }
         LinearLayout coinsButtons = (LinearLayout) root.findViewById(R.id.fbCoins);
-        for (GooglePlayProducts.BuyButton curButton : CacheProfile.getGooglePlayProducts().coins) {
+        if (!products.coinsSubscriptions.isEmpty()) {
+            CoinsSubscriptionInfo info = products.productsInfo.coinsSubscriptionInfo;
+            GooglePlayProducts.BuyButton btn = info.status.active ? info.hasSubscriptionButton : info.noSubscriptionButton;
+            if (info.status.active) {
+                RelativeLayout newButton = GooglePlayProducts.setButton(coinsButtons, btn, getActivity(),
+                        new GooglePlayProducts.BuyButtonClickListener() {
+                            @Override
+                            public void onClick(String id) {
+                                startActivity(ContainerActivity.getCoinsSubscriptionIntent(mFrom));
+                            }
+                        });
+                if (newButton != null) {
+                    purchaseButtons.add(newButton);
+                }
+            }
+        }
+        for (GooglePlayProducts.BuyButton curButton : products.coins) {
             RelativeLayout newButton = GooglePlayProducts.setButton(coinsButtons, curButton, getActivity(),
                     new GooglePlayProducts.BuyButtonClickListener() {
                         @Override
@@ -190,7 +204,6 @@ public class BuyingFragment extends BillingFragment {
                 purchaseButtons.add(newButton);
             }
         }
-
         // Button for offerwalls (Tapjoy and Sponsorpay)
         View offerwall = root.findViewById(R.id.btnOfferwall);
         offerwall.setOnClickListener(new View.OnClickListener() {
@@ -201,9 +214,8 @@ public class BuyingFragment extends BillingFragment {
         });
         offerwall.setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
         root.findViewById(R.id.titleSpecialOffers).setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
-
+        // paymentwall buttons
         initPaymentwallButtons(root);
-
     }
 
     private void initPaymentwallButtons(View root) {
@@ -251,15 +263,8 @@ public class BuyingFragment extends BillingFragment {
                         App.sendProfileRequest();
                     }
                 }, 3000);
-
             }
         }
-    }
-
-    private void goToVipSettings() {
-        Intent intent = ContainerActivity.getVipBuyIntent(null, "BuyingGoToVipSettings");
-        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-        startActivity(intent);
     }
 
     @Override

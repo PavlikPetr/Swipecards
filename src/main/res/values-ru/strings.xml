@@ -788,14 +788,4 @@
     </plurals>
     <string name="ok_label">Одноклассники</string>
     <string name="coins_subscription">Подписка на монеты</string>
-    <string name="coins_subscription_explanation">При использовании подписки на монетыс каждым месяцем вы будете получать больше монет</string>
-    <plurals name="coins_subscription_bounty">
-        <item quantity="zero">+%d монет</item>
-        <item quantity="one">+%d монета</item>
-        <item quantity="many">+%d монет</item>
-        <item quantity="few">+%d монет</item>
-        <item quantity="other">+%d монет</item>
-    </plurals>
-
-
 </resources>

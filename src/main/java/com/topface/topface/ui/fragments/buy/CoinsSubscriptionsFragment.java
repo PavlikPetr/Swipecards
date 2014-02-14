@@ -11,10 +11,13 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
 import com.topface.topface.data.GooglePlayProducts;
+import com.topface.topface.data.GooglePlayProducts.ProductsInfo.CoinsSubscriptionInfo;
+import com.topface.topface.data.GooglePlayProducts.ProductsInfo.CoinsSubscriptionInfo.MonthInfo;
 import com.topface.topface.utils.CacheProfile;
 
 /**
  * Created by kirussell on 12.02.14.
+ *
  */
 public class CoinsSubscriptionsFragment extends BillingFragment {
 
@@ -33,16 +36,19 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_coins_subscription, null);
         mContainer = (LinearLayout) root.findViewById(R.id.loContainer);
+        GooglePlayProducts products = CacheProfile.getGooglePlayProducts();
+        CoinsSubscriptionInfo info = products.productsInfo.coinsSubscriptionInfo;
+        // info text
+        ((TextView) root.findViewById(R.id.tvInfoText)).setText(info.text);
         // icons with coins
-        TextView firstMonth = (TextView) root.findViewById(R.id.tvFirstMonth);
-        firstMonth.setText(getString(R.string.first_month) + "\n+" + 10);
-        TextView secondMonth = (TextView) root.findViewById(R.id.tvSecondMonth);
-        secondMonth.setText(getString(R.string.second_month) + "\n+" + 40);
-        TextView thirdMonth = (TextView) root.findViewById(R.id.tvThirdMonth);
-        thirdMonth.setText(getString(R.string.third_month) + "\n+" + 80);
+        initCoinsIconsViews(root, info);
         // buttons
-        GooglePlayProducts googlePlayProducts = CacheProfile.getGooglePlayProducts();
-        for (GooglePlayProducts.BuyButton curBtn : googlePlayProducts.coinsSubscriptions) {
+        initButtonsViews(products);
+        return root;
+    }
+
+    private void initButtonsViews(GooglePlayProducts products) {
+        for (GooglePlayProducts.BuyButton curBtn : products.coinsSubscriptions) {
             GooglePlayProducts.setButton(mContainer, curBtn, getActivity(),
                     new GooglePlayProducts.BuyButtonClickListener() {
                         @Override
@@ -57,7 +63,26 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                         }
                     });
         }
-        return root;
+    }
+
+    private void initCoinsIconsViews(View root, CoinsSubscriptionInfo info) {
+        TextView textView;
+        View arrowView;
+        int[] monthsResIds = new int[]{R.id.tvFirstMonth, R.id.tvSecondMonth, R.id.tvThirdMonth};
+        int[] monthsArrowsResIds = new int[]{0, R.id.ivSecondMonthArrow, R.id.ivThirdMonthArrow};
+        for (int i = 0; i < monthsResIds.length; i++) {
+            MonthInfo month = info.months.get(i);
+            textView = (TextView) root.findViewById(monthsResIds[i]);
+            arrowView = root.findViewById(monthsArrowsResIds[i]);
+            if (month != null && i < info.months.size()) {
+                textView.setText(month.title + "\n" + month.amount);
+                textView.setVisibility(View.VISIBLE);
+                arrowView.setVisibility(View.VISIBLE);
+            } else {
+                textView.setVisibility(View.GONE);
+                arrowView.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override

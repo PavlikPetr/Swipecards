@@ -1,8 +1,6 @@
 package com.topface.topface.data;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +13,17 @@ import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class GooglePlayProducts extends AbstractData {
 
@@ -33,6 +35,7 @@ public class GooglePlayProducts extends AbstractData {
     public LinkedList<BuyButton> premium = new LinkedList<>();
     public LinkedList<BuyButton> others = new LinkedList<>();
     public LinkedList<BuyButton> coinsSubscriptions = new LinkedList<>();
+    public ProductsInfo productsInfo;
 
     public GooglePlayProducts(@NotNull IApiResponse data) {
         fillData(data.getJsonResult());
@@ -46,6 +49,7 @@ public class GooglePlayProducts extends AbstractData {
 
     protected void fillData(JSONObject data) {
         try {
+            fillProductsInfo(data.optJSONObject("info"));
             fillProductsArray(coinsSubscriptions, data.optJSONArray("coinsSubscription"));
             fillProductsArray(coins, data.optJSONArray("coins"));
             fillProductsArray(likes, data.optJSONArray("likes"));
@@ -56,6 +60,12 @@ public class GooglePlayProducts extends AbstractData {
         }
         //Обновляем кэш
         CacheProfile.setGooglePlayProducts(this, data);
+    }
+
+    private void fillProductsInfo(JSONObject infoJson) throws JSONException {
+        if (infoJson != null) {
+            productsInfo = new ProductsInfo(infoJson);
+        }
     }
 
     private void fillProductsArray(LinkedList<BuyButton> list, JSONArray coinsJSON) {
@@ -76,15 +86,7 @@ public class GooglePlayProducts extends AbstractData {
             if (purchaseItem.optInt("discount") > 0) {
                 saleExists = true;
             }
-            button = new BuyButton(
-                    purchaseItem.optString("id"),
-                    purchaseItem.optString("title"),
-                    purchaseItem.optInt("price"),
-                    purchaseItem.optString("hint"),
-                    purchaseItem.optInt("showType"),
-                    purchaseItem.optString("type"),
-                    purchaseItem.optInt("discount")
-            );
+            button = new BuyButton(purchaseItem);
         }
 
         return button;
@@ -94,49 +96,36 @@ public class GooglePlayProducts extends AbstractData {
         if (context != null && !curBtn.title.equals("")) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_buying_btn, root, false);
-
             RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
-            double density = context.getResources().getDisplayMetrics().density;
-
+            // button background
             int bgResource;
             if (curBtn.discount > 0) {
                 bgResource = R.drawable.btn_sale_selector;
-                container.setPadding((int) (5 * density), (int) (5 * density), (int) (56 * density), (int) (5 * density));
+                int paddingFive = Utils.getPxFromDp(5);
+                container.setPadding(paddingFive, paddingFive, Utils.getPxFromDp(56), paddingFive);
             } else {
                 bgResource = curBtn.showType == 0 ?
                         R.drawable.btn_gray_selector :
                         R.drawable.btn_blue_selector;
             }
             container.setBackgroundResource(bgResource);
-
-
             container.requestLayout();
-
-            String color = curBtn.showType == 0 ? "#B8B8B8" : "#FFFFFF";
-
+            // title text
+            int color = curBtn.showType == 0 ?
+                    context.getResources().getColor(R.color.text_light_gray) :
+                    context.getResources().getColor(R.color.text_white);
             TextView title = (TextView) view.findViewById(R.id.itText);
             title.setText(curBtn.title);
-            title.setTypeface(Typeface.DEFAULT_BOLD);
-            title.setTextColor(Color.parseColor(color));
-
+            title.setTextColor(color);
+            // value text
             TextView value = (TextView) view.findViewById(R.id.itValue);
-
-            value.setText(
-                    String.format(
-                            App.getContext().getString(R.string.default_price_format),
-                            curBtn.price / 100f
-                    )
-            );
-            value.setTextColor(Color.parseColor(color));
+            value.setText(getValueText(curBtn));
+            value.setTextColor(color);
+            // economy text
             TextView economy = (TextView) view.findViewById(R.id.itEconomy);
-            economy.setTextColor(Color.parseColor(color));
-
-            if (!TextUtils.isEmpty(curBtn.hint)) {
-                economy.setText(curBtn.hint);
-            } else {
-                economy.setVisibility(View.GONE);
-            }
-
+            economy.setTextColor(color);
+            setEconomyTextView(curBtn, economy);
+            // click listener
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -148,6 +137,22 @@ public class GooglePlayProducts extends AbstractData {
         } else {
             return null;
         }
+    }
+
+    private static void setEconomyTextView(BuyButton curBtn, TextView economy) {
+        if (!TextUtils.isEmpty(curBtn.hint)) {
+            economy.setText(curBtn.hint);
+        } else {
+            economy.setVisibility(View.GONE);
+        }
+    }
+
+    private static String getValueText(BuyButton curBtn) {
+        String result = String.format(
+                App.getContext().getString(R.string.default_price_format),
+                curBtn.price / 100f
+        );
+        return result;
     }
 
     public interface BuyButtonClickListener {
@@ -163,14 +168,61 @@ public class GooglePlayProducts extends AbstractData {
         public String type;
         public int discount;
 
-        public BuyButton(String id, String title, int price, String hint, int showType, String type, int discount) {
-            this.id = id;
-            this.title = title;
-            this.price = price;
-            this.hint = hint;
-            this.showType = showType;
-            this.type = type;
-            this.discount = discount;
+        public BuyButton(JSONObject json) {
+            id = json.optString("id");
+            title = json.optString("title");
+            price = json.optInt("price");
+            hint = json.optString("hint");
+            showType = json.optInt("showType");
+            type = json.optString("type");
+            discount = json.optInt("discount");
+        }
+    }
+
+    public class ProductsInfo {
+        public CoinsSubscriptionInfo coinsSubscriptionInfo;
+
+        public ProductsInfo(JSONObject infoJson) throws JSONException {
+            coinsSubscriptionInfo = new CoinsSubscriptionInfo(infoJson.optJSONObject("coinsSubscription"));
+        }
+
+        public class CoinsSubscriptionInfo {
+            public List<MonthInfo> months = new ArrayList<>();
+            public String text;
+            public BuyButton hasSubscriptionButton;
+            public BuyButton noSubscriptionButton;
+            public StatusInfo status;
+
+            public CoinsSubscriptionInfo(JSONObject json) throws JSONException {
+                JSONArray arrMonths = json.optJSONArray("months");
+                for (int i = 0; i < arrMonths.length(); i++) {
+                    months.add(new MonthInfo(arrMonths.getJSONObject(i)));
+                }
+                text = json.optString("text");
+                hasSubscriptionButton = new BuyButton(json.optJSONObject("hasSubscriptionButton"));
+                noSubscriptionButton = new BuyButton(json.optJSONObject("noSubscriptionButton"));
+                status = new StatusInfo(json.optJSONObject("status"));
+            }
+
+            public class MonthInfo {
+                public String title;
+                public String amount;
+
+                public MonthInfo(JSONObject json) {
+                    title = json.optString("title");
+                    amount = json.optString("amount");
+                }
+            }
+
+            public class StatusInfo {
+                public boolean active;
+                public boolean until;
+
+                public StatusInfo(JSONObject json) {
+                    active = json.optBoolean("active");
+                    until = json.optBoolean("until");
+                }
+            }
         }
     }
 }

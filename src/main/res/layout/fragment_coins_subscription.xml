@@ -22,9 +22,9 @@
             style="@style/TopfaceTextAppearance.Medium" />
 
         <TextView
+            android:id="@+id/tvInfoText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/coins_subscription_explanation"
             style="@style/TopfaceTextAppearance.Small"
             android:layout_marginTop="16dp" />
 
@@ -42,6 +42,7 @@
                 android:drawableTop="@drawable/icon_coins_first" />
 
             <ImageView
+                android:id="@+id/ivSecondMonthArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_arrow"
@@ -53,6 +54,7 @@
                 android:drawableTop="@drawable/icon_coins_second" />
 
             <ImageView
+                android:id="@+id/ivThirdMonthArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_arrow"
