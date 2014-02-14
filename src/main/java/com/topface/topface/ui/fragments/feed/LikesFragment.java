@@ -67,7 +67,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+                .unregisterReceiver(mCountersReceiver);
     }
 
     @Override

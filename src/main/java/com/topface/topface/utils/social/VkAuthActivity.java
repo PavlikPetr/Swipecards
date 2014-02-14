@@ -1,5 +1,6 @@
 package com.topface.topface.utils.social;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -47,6 +48,7 @@ public class VkAuthActivity extends Activity {
     public static final int INTENT_WEB_AUTH = 101;
 
 
+    @SuppressLint("SetJavaScriptEnabled")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Debug.log(this, "+onCreate");
