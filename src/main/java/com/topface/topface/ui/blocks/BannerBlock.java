@@ -88,6 +88,7 @@ public class BannerBlock {
     public static final String BANNER_ADCAMP = "ADCAMP";
     public static final String BANNER_LIFESTREET = "LIFESTREET";
     public static final String BANNER_ADLAB = "ADLAB";
+    public static final String BANNER_INNERACTIVE = "INNERACTIVE";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
     public final static String[] BANNERS = new String[]{
@@ -199,7 +200,7 @@ public class BannerBlock {
                     return mInflater.inflate(R.layout.banner_lifestreet, mBannerLayout, false);
                 case BANNER_ADLAB:
                     return mInflater.inflate(R.layout.banner_adlab, null);
-                case Options.BANNER_INNERACTIVE:
+                case BANNER_INNERACTIVE:
                     return mInflater.inflate(R.layout.banner_inneractive, null);
                 default:
                     return null;
