@@ -1,5 +1,6 @@
 package com.topface.topface.utils.offerwalls.supersonicads;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
@@ -13,6 +14,7 @@ public class SupersonicWallActivity extends Activity {
     private static final String API_KEY = "2cf0ad4d";
 
     @Override
+    @SuppressLint("SetJavaScriptEnabled")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

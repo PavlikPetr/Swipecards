@@ -70,7 +70,7 @@ public class Offerwalls {
     private static ConsumableProductHelper mGetJarHelper;
 
     private static String getOfferWallType() {
-        return SUPERSONIC;//CacheProfile.getOptions().offerwall;
+        return CacheProfile.getOptions().offerwall;
     }
 
     public static void init(Context context) {
