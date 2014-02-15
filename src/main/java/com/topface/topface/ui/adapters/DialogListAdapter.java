@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.utils.DateUtils;
 
 import java.util.Collections;
 
@@ -30,7 +29,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
         FeedDialog dialog = getItem(position);
         setDialogText(dialog, holder.text);
-        holder.time.setText(DateUtils.getFormattedDate(mContext, dialog.created));
+        holder.time.setText(dialog.createdRelative);
 
         if (getItemViewType(position) == T_NEW) {
             int unreadCounter = getUnreadCounter(dialog);

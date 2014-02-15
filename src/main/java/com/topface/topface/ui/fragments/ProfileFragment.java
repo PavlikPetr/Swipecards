@@ -129,7 +129,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private ProgressBar giftsLoader;
     private ImageView giftsIcon;
     private AddPhotoHelper mAddPhotoHelper;
-    private BroadcastReceiver addPhotoReceiver;
+    private BroadcastReceiver mAddPhotoReceiver;
 
     private OnGiftReceivedListener giftsReceivedListener = new OnGiftReceivedListener() {
         @Override
@@ -186,7 +186,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         });
         mLockScreen.addView(mRetryView.getView());
 
-        if (mProfileType == TYPE_MY_PROFILE) {
+        if (isMyProfile()) {
+            initAddPhotoHelper();
             setActionBarTitles(R.string.profile_header_title);
         } else if (mProfileType == TYPE_USER_PROFILE) {
             setActionBarTitles(R.string.general_profile);
@@ -201,33 +202,38 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (startHeaderPage != -1) {
             mStartHeaderPage = startHeaderPage;
         }
-        mAddPhotoHelper = new AddPhotoHelper(this, null);
-        mAddPhotoHelper.setOnResultHandler(mHandler);
-        addPhotoReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (mAddPhotoHelper != null) {
-                    if (getActivity() != null) {
-
-                        int id = intent.getIntExtra("btn_id", 0);
-
-                        View view = new View(getActivity());
-                        view.setId(id);
-                        mAddPhotoHelper.getAddPhotoClickListener().onClick(view);
-                    }
-                }
-            }
-        };
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(addPhotoReceiver, new IntentFilter(ADD_PHOTO_INTENT));
 
         mHeaderPager.setCurrentItem(mStartHeaderPage);
         mBodyPager.setCurrentItem(mStartBodyPage);
         return root;
     }
 
+    private boolean isMyProfile() {
+        return mProfileType == TYPE_MY_PROFILE;
+    }
+
+    private void initAddPhotoHelper() {
+        mAddPhotoHelper = new AddPhotoHelper(this, null);
+        mAddPhotoHelper.setOnResultHandler(mHandler);
+        mAddPhotoReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                FragmentActivity activity = getActivity();
+                if (activity != null && mAddPhotoHelper != null) {
+                    int id = intent.getIntExtra("btn_id", 0);
+
+                    View view = new View(activity);
+                    view.setId(id);
+                    mAddPhotoHelper.getAddPhotoClickListener().onClick(view);
+                }
+            }
+        };
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mAddPhotoReceiver, new IntentFilter(ADD_PHOTO_INTENT));
+    }
+
     @Override
     protected String getTitle() {
-        if (mProfileType == TYPE_MY_PROFILE) {
+        if (isMyProfile()) {
             return getString(R.string.profile_header_title);
         } else if (mProfileType == TYPE_USER_PROFILE) {
             return getString(R.string.general_profile);
@@ -287,7 +293,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        if (mProfileType == TYPE_MY_PROFILE) {
+        if (isMyProfile()) {
             mUserProfile = CacheProfile.getProfile();
         } else {
             if (mUserProfile == null) getUserProfile();
@@ -296,7 +302,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mUpdateProfileReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (mProfileType == TYPE_MY_PROFILE) {
+                if (isMyProfile()) {
                     mUserProfile = CacheProfile.getProfile();
                     setProfile(mUserProfile);
                 }
@@ -343,6 +349,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        if (isMyProfile()) {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mAddPhotoReceiver);
+        }
 
         if (mTabIndicator != null) {
             mTabIndicator.setOnPageChangeListener(null);
@@ -480,7 +490,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void initBodyPages(View root) {
-        if (mProfileType == TYPE_MY_PROFILE) {
+        if (isMyProfile()) {
             addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
             addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
             addBodyPage(VipBuyFragment.class.getName(), getResources().getString(R.string.vip_status));
@@ -857,7 +867,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     break;
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY:
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA:
-                    mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+                    if (mAddPhotoHelper != null) {
+                        mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+                    }
                     break;
             }
             resultToNestedFragments(requestCode, resultCode, data);
@@ -985,7 +997,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     protected Integer getOptionsMenuRes() {
-        return mProfileType == TYPE_MY_PROFILE ? R.menu.actions_my_profile : R.menu.actions_user_profile;
+        return isMyProfile() ? R.menu.actions_my_profile : R.menu.actions_user_profile;
     }
 
     @Override

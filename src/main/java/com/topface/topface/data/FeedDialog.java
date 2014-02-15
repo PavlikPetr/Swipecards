@@ -52,6 +52,7 @@ public class FeedDialog extends FeedLike {
         super.fillData(item);
         text = item.optString("text");
         link = item.optString("link");
+        createdRelative = getRelativeCreatedDate(created);
         if (type == MAP || type == ADDRESS) {
             geo = new Geo(item);
         }
