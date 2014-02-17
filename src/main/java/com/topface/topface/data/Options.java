@@ -11,6 +11,7 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.ClosingsController;
+import com.topface.topface.utils.offerwalls.Offerwalls;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -57,61 +58,6 @@ public class Options extends AbstractData {
     public final static String INNER_APNS_CONST = "apns";
     public final static String INNER_SEPARATOR = ":";
 
-    /**
-     * Идентификаторы для типов блоков (лидеры, баннеры, не показывать блоки)
-     */
-    public final static String FLOAT_TYPE_BANNER = "BANNER";
-    public final static String FLOAT_TYPE_LEADERS = "LEADERS";
-    public final static String FLOAT_TYPE_NONE = "NONE";
-    public final static String[] FLOAT_TYPES = new String[]{
-            FLOAT_TYPE_BANNER,
-            FLOAT_TYPE_LEADERS,
-            FLOAT_TYPE_NONE
-    };
-
-    /**
-     * Идентификаторы типов баннеров
-     */
-    public final static String BANNER_TOPFACE = "TOPFACE";
-    public final static String BANNER_ADMOB = "ADMOB";
-    public static final String BANNER_ADWIRED = "ADWIRED";
-    public static final String BANNER_MOPUB = "MOPUB";
-    public static final String BANNER_IVENGO = "IVENGO";
-    public static final String BANNER_ADCAMP = "ADCAMP";
-    public static final String BANNER_LIFESTREET = "LIFESTREET";
-    public static final String BANNER_ADLAB = "ADLAB";
-    public static final String BANNER_INNERACTIVE = "INNERACTIVE";
-    public static final String BANNER_GAG = "GAG";
-    public static final String BANNER_NONE = "NONE";
-    public final static String[] BANNERS = new String[]{
-            BANNER_TOPFACE,
-            BANNER_ADMOB,
-            BANNER_ADWIRED,
-            BANNER_MOPUB,
-            BANNER_IVENGO,
-            BANNER_ADCAMP,
-            BANNER_LIFESTREET,
-            BANNER_ADLAB,
-            BANNER_INNERACTIVE,
-            BANNER_GAG,
-            BANNER_NONE
-    };
-
-    /**
-     * Идентификаторы для типов офферволлов
-     */
-    public static final String TAPJOY = "TAPJOY";
-    public static final String SPONSORPAY = "SPONSORPAY";
-    public static final String CLICKKY = "CLICKKY";
-    public static final String RANDOM = "RANDOM";
-    public static final String GETJAR = "GETJAR";
-    public final static String[] OFFERWALLS = new String[]{
-            TAPJOY,
-            SPONSORPAY,
-            CLICKKY,
-            GETJAR,
-            RANDOM
-    };
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
     public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
     public static final String PREMIUM_ADMIRATION_POPUP_SHOW_TIME = "premium_admirations_popup_last_show";
@@ -137,7 +83,7 @@ public class Options extends AbstractData {
     public int priceLeader = 8;
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
-    public String offerwall = SPONSORPAY;
+    public String offerwall = Offerwalls.SPONSORPAY;
 
     public int premium_period;
     public int contacts_count;
@@ -482,13 +428,13 @@ public class Options extends AbstractData {
 
         public boolean isMutualAvailable() {
             long diff = Math.abs(System.currentTimeMillis() - App.getUserConfig().getMutualClosingsLastTime());
-            Debug.log(ClosingsController.TAG, "time in sec from last mutuals show = " + diff/1000);
+            Debug.log(ClosingsController.TAG, "time in sec from last mutuals show = " + diff / 1000);
             return enabledMutual && diff > timeoutMutual && CacheProfile.unread_mutual > 0;
         }
 
         public boolean isLikesAvailable() {
             long diff = Math.abs(System.currentTimeMillis() - App.getUserConfig().getLikesClosingsLastTime());
-            Debug.log(ClosingsController.TAG, "time in sec from last likes show = " + diff/1000);
+            Debug.log(ClosingsController.TAG, "time in sec from last likes show = " + diff / 1000);
             return enabledSympathies && diff > timeoutSympathies && CacheProfile.unread_likes > 0;
         }
     }

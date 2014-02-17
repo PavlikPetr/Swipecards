@@ -1,6 +1,5 @@
 package com.topface.topface;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -105,8 +104,7 @@ public class GCMUtils {
      *
      * @param context контекст приложения
      */
-    public static boolean showNotification(final Intent extra, Context context) {
-        boolean result = false;
+    public static boolean showNotificationIfNeed(final Intent extra, Context context) {
         //Проверяем, не отключены ли уведомления
         if (!Settings.getInstance().isNotificationEnabled()) {
             Debug.log("GCM: notification is disabled");
@@ -116,69 +114,80 @@ public class GCMUtils {
             return false;
         }
         try {
-            String uid = Integer.toString(CacheProfile.uid);
-            String targetUserId = extra.getStringExtra("receiver");
-            targetUserId = targetUserId != null ? targetUserId : uid;
-
-            //Проверяем id адресата GCM, что бы не показывать уведомления, предназначенные
-            //другому пользователю. Такое может произойти, если не было нормального разлогина,
-            //например если удалить приложения будучи залогиненым
-            if (!TextUtils.equals(targetUserId, uid)) {
-                Debug.error("GCM: target id # " + targetUserId + " dont equal current user id " + CacheProfile.uid);
-                return false;
-            }
-
-            final String data = extra.getStringExtra("text");
-            if (data != null) {
-                loadNotificationSettings();
-                setCounters(extra, context);
-                int type = getType(extra);
-                final User user = getUser(extra);
-                String title = getTitle(context, extra.getStringExtra("title"));
-                Intent intent = getIntentByType(context, type, user);
-
-                if (intent != null) {
-                    intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
-                    if (!TextUtils.equals(intent.getComponent().getClassName(), ContainerActivity.class.getName())) {
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    }
-                    final UserNotificationManager notificationManager = UserNotificationManager.getInstance(context);
-                    if (!Ssid.isLoaded()) {
-                        if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_PROMO) {
-                            notificationManager.showNotification(
-                                    title,
-                                    data,
-                                    true, null,
-                                    getUnread(extra),
-                                    intent,
-                                    false);
-                        }
-                    } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
-                        showNotificationWithIcon(
-                                getUnread(extra),
-                                data,
-                                user,
-                                notificationManager,
-                                intent,
-                                title
-                        );
-                    } else {
-                        notificationManager.showNotification(
-                                title,
-                                data,
-                                true, null,
-                                getUnread(extra),
-                                intent,
-                                false);
-                    }
-                    result = true;
-                }
-            }
+            return showNotification(extra, context);
         } catch (Exception e) {
             Debug.error("GCM: Notifcation error", e);
         }
 
-        return result;
+        return false;
+    }
+
+    private static boolean showNotification(final Intent extra, Context context) {
+        String uid = Integer.toString(CacheProfile.uid);
+        String targetUserId = extra.getStringExtra("receiver");
+        targetUserId = targetUserId != null ? targetUserId : uid;
+
+        //Проверяем id адресата GCM, что бы не показывать уведомления, предназначенные
+        //другому пользователю. Такое может произойти, если не было нормального разлогина,
+        //например если удалить приложения будучи залогиненым
+        if (!TextUtils.equals(targetUserId, uid)) {
+            Debug.error("GCM: target id # " + targetUserId + " dont equal current user id " + CacheProfile.uid);
+            return false;
+        }
+
+        final String data = extra.getStringExtra("text");
+        if (data != null) {
+            loadNotificationSettings();
+            setCounters(extra, context);
+            int type = getType(extra);
+            final User user = getUser(extra);
+            String title = getTitle(context, extra.getStringExtra("title"));
+            Intent intent = getIntentByType(context, type, user);
+
+            if (intent != null) {
+                intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
+                if (!TextUtils.equals(intent.getComponent().getClassName(), ContainerActivity.class.getName())) {
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                }
+                showNotificationByType(extra, context, data, type, user, title, intent);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void showNotificationByType(Intent extra, Context context, String data, int type, User user, String title, Intent intent) {
+        final UserNotificationManager notificationManager = UserNotificationManager.getInstance(context);
+        if (!Ssid.isLoaded()) {
+            if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_PROMO) {
+                notificationManager.showNotification(
+                        title,
+                        data,
+                        true, null,
+                        getUnread(extra),
+                        intent,
+                        false);
+            }
+        } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
+
+            notificationManager.showNotificationAsync(
+                    title,
+                    data,
+                    true,
+                    user.photoUrl,
+                    getUnread(extra),
+                    intent,
+                    false
+            );
+        } else {
+            notificationManager.showNotification(
+                    title,
+                    data,
+                    true, null,
+                    getUnread(extra),
+                    intent,
+                    false);
+        }
     }
 
     private static int getType(Intent extra) {
@@ -218,19 +227,6 @@ public class GCMUtils {
             title = context.getString(R.string.app_name);
         }
         return title;
-    }
-
-    private static void showNotificationWithIcon(final int unread, final String data, final User user, final UserNotificationManager notificationManager, final Intent newIntent, final String finalTitle) {
-        notificationManager.showNotification(
-                finalTitle,
-                data,
-                true,
-                user.photoUrl,
-                unread,
-                newIntent,
-                false,
-                null
-        );
     }
 
     private static int getUnread(Intent extra) {
@@ -329,9 +325,8 @@ public class GCMUtils {
             public void run() {
                 if (type == lastNotificationType) {
                     if (context != null) {
-                        NotificationManager notificationManager =
-                                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                        notificationManager.cancel(UserNotificationManager.NOTIFICATION_ID);
+                        int id = type == GCM_TYPE_MESSAGE ? UserNotificationManager.MESSAGES_ID : UserNotificationManager.NOTIFICATION_ID;
+                        UserNotificationManager.getInstance(context).cancelNotification(id);
                     }
                 }
             }

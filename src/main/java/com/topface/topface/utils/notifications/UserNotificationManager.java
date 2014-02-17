@@ -4,18 +4,31 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.topface.topface.App;
+import com.topface.topface.Static;
 import com.topface.topface.imageloader.DefaultImageLoader;
+import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.utils.config.UserConfig;
+
+import java.util.LinkedList;
 
 public class UserNotificationManager {
     private static UserNotificationManager mInstance;
     public static final int NOTIFICATION_ID = 1312; //Completely random number
+    public static final int MESSAGES_ID = 1311;
 
     private NotificationManager mNotificationManager;
     private Context mContext;
+
 
     private static int lastId = 1314;
 
@@ -52,9 +65,14 @@ public class UserNotificationManager {
                 doNeedReplace, ongoing, type, null);
     }
 
-    public void showNotification(final String title, final String message, final boolean isTextNotification,
-                                 String uri, final int unread, final Intent intent, final boolean doNeedReplace,
-                                 final NotificationImageListener listener) {
+    public void showNotificationAsync(final String title, final String message, final boolean isTextNotification,
+                                      String uri, final int unread, final Intent intent, final boolean doNeedReplace) {
+        showNotificationAsync(title, message, isTextNotification, uri, unread, intent, doNeedReplace, null);
+    }
+
+    public void showNotificationAsync(final String title, final String message, final boolean isTextNotification,
+                                      String uri, final int unread, final Intent intent, final boolean doNeedReplace,
+                                      final NotificationImageListener listener) {
         DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -83,15 +101,6 @@ public class UserNotificationManager {
                 }
             }
         });
-    }
-
-    /**
-     * Notification id which won't be conflicting with previous ids
-     *
-     * @return notification id
-     */
-    public int newNotificationId() {
-        return ++lastId;
     }
 
     public int showNotificationWithActions(String title, String message, Bitmap icon,
@@ -177,12 +186,18 @@ public class UserNotificationManager {
         });
     }
 
-    public int showNotification(String title, String message, boolean isTextNotification,
-                                Bitmap icon, int unread, Intent intent, boolean doNeedReplace,
-                                boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions) {
+    private int showNotification(String title, String message, boolean isTextNotification,
+                                 Bitmap icon, int unread, Intent intent, boolean createNew,
+                                 boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions) {
         int id = NOTIFICATION_ID;
-        if (doNeedReplace) {
+        if (createNew) {
             id = newNotificationId();
+        }
+
+        LinkedList<Spannable> messagesStack = new LinkedList<>();
+        if (intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ContainerActivity.INTENT_CHAT_FRAGMENT) {
+            id = MESSAGES_ID;
+            messagesStack = saveMessageStack(intent, title, message);
         }
         UserNotification notification = new UserNotification(mContext);
         notification.setType(type);
@@ -193,15 +208,42 @@ public class UserNotificationManager {
         notification.setUnread(unread);
         notification.setId(id);
         notification.setOngoing(ongoing);
+        notification.setMessages(messagesStack);
 
         mNotificationManager.notify(id, notification.generate(intent, actions));
         return id;
     }
 
-    public void cancelNotification(int id) {
-        mNotificationManager.cancel(id);
+    private LinkedList<Spannable> saveMessageStack(Intent intent, String title, String message) {
+        LinkedList<Spannable> messagesStack = new LinkedList<>();
+        UserConfig config = App.getUserConfig();
+        LinkedList<Spannable> messages = config.getNotificationMessagesStack();
+        if (messages.size() > 0) {
+            messagesStack = messages;
+        }
+        Spannable spanMessage = new SpannableString(title + ": " + message);
+        spanMessage.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        messagesStack.add(spanMessage);
+        config.setNotificationMessagesStack(messagesStack);
+        config.saveConfig();
+        return messagesStack;
     }
 
+    /**
+     * Notification id which won't be conflicting with previous ids
+     *
+     * @return notification id
+     */
+    public int newNotificationId() {
+        return ++lastId;
+    }
+
+    public void cancelNotification(int id) {
+        if (id == MESSAGES_ID) {
+            App.getUserConfig().resetNotificationMessagesStack();
+        }
+        mNotificationManager.cancel(id);
+    }
 
     public static interface NotificationImageListener {
         public void onSuccess(int id);
