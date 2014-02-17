@@ -7,6 +7,8 @@ import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by kirussell on 06.01.14.
@@ -172,7 +174,7 @@ public abstract class AbstractConfig {
      * Types for SettingsField
      */
     public static enum FieldType {
-        String, Integer, Boolean, Long, Unknown
+        String, Integer, Boolean, Long, List, Unknown
     }
 
     /**
@@ -198,6 +200,8 @@ public abstract class AbstractConfig {
                 return FieldType.Boolean;
             } else if (value instanceof Long) {
                 return FieldType.Long;
+            } else if (value instanceof List) {
+                return FieldType.List;
             }
             return FieldType.Unknown;
         }
@@ -236,6 +240,11 @@ public abstract class AbstractConfig {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
 
+        @SuppressWarnings("unchecked")
+        public SettingsField<LinkedList<String>> addListField(String fieldName, List defaultValue) {
+            return put(fieldName, new SettingsField<>(fieldName, defaultValue));
+        }
+
         public boolean setField(String fieldName, String value) {
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
@@ -269,6 +278,14 @@ public abstract class AbstractConfig {
         }
 
         public boolean setField(String fieldName, Double value) {
+            if (containsKey(fieldName)) {
+                get(fieldName).value = value;
+                return true;
+            }
+            return false;
+        }
+
+        public boolean setField(String fieldName, List value) {
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
                 return true;
@@ -314,6 +331,14 @@ public abstract class AbstractConfig {
                 return (Double) settingsField.value;
             }
             return 0.0;
+        }
+
+        public List getListField(String fieldName) {
+            SettingsField settingsField = get(fieldName);
+            if (settingsField != null && settingsField.value != null) {
+                return (List) settingsField.value;
+            }
+            return new LinkedList();
         }
     }
 }
