@@ -54,7 +54,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final int INTENT_SETTINGS_FRAGMENT = 7;
     public static final int INTENT_CONTACTS_FRAGMENT = 8;
     public static final int INTENT_COMPLAIN_FRAGMENT = 9;
-    private static final int INTENT_COINS_SUBSCRIPTION_FRAGMENT = 10;
+    public static final int INTENT_COINS_SUBSCRIPTION_FRAGMENT = 10;
 
     // Id для админки начиная со 101
     public static final int INTENT_EDITOR_BANNERS = 101;
@@ -322,7 +322,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
 
     public static Intent getCoinsSubscriptionIntent(String from) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_COINS_SUBSCRIPTION_FRAGMENT);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
         return intent;
 

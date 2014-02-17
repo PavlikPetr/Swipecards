@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,24 +34,28 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class BuyingFragment extends BillingFragment {
-
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_GIFT = 1;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
 
-    private LinkedList<RelativeLayout> purchaseButtons = new LinkedList<>();
-
+    private LinkedList<View> purchaseButtons = new LinkedList<>();
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateBalanceCounters();
         }
     };
-
     private ServicesTextView mCurCoins;
     private ServicesTextView mCurLikes;
     private TextView mResourcesInfo;
     private String mFrom;
+    private View mCoinsSubscriptionButton;
+    private GooglePlayProducts.BuyButtonClickListener mCoinsSubscriptionClickListener = new GooglePlayProducts.BuyButtonClickListener() {
+        @Override
+        public void onClick(String id) {
+            startActivityForResult(ContainerActivity.getCoinsSubscriptionIntent(mFrom), ContainerActivity.INTENT_COINS_SUBSCRIPTION_FRAGMENT);
+        }
+    };
 
     public static BuyingFragment newInstance(int type, int coins, String from) {
         BuyingFragment fragment = new BuyingFragment();
@@ -102,7 +105,8 @@ public class BuyingFragment extends BillingFragment {
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
         updateBalanceCounters();
     }
 
@@ -158,7 +162,7 @@ public class BuyingFragment extends BillingFragment {
             root.findViewById(R.id.likes_title).setVisibility(View.VISIBLE);
         }
         for (GooglePlayProducts.BuyButton curButton : products.likes) {
-            RelativeLayout newButton = GooglePlayProducts.setButton(likesButtons, curButton, getActivity(),
+            View newButton = GooglePlayProducts.setBuyButton(likesButtons, curButton, getActivity(),
                     new GooglePlayProducts.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
@@ -179,21 +183,15 @@ public class BuyingFragment extends BillingFragment {
         if (!products.coinsSubscriptions.isEmpty()) {
             CoinsSubscriptionInfo info = products.productsInfo.coinsSubscriptionInfo;
             GooglePlayProducts.BuyButton btn = info.status.active ? info.hasSubscriptionButton : info.noSubscriptionButton;
-            if (info.status.active) {
-                RelativeLayout newButton = GooglePlayProducts.setButton(coinsButtons, btn, getActivity(),
-                        new GooglePlayProducts.BuyButtonClickListener() {
-                            @Override
-                            public void onClick(String id) {
-                                startActivity(ContainerActivity.getCoinsSubscriptionIntent(mFrom));
-                            }
-                        });
-                if (newButton != null) {
-                    purchaseButtons.add(newButton);
-                }
+            mCoinsSubscriptionButton = GooglePlayProducts.setOpenButton(coinsButtons, btn,
+                    getActivity(), mCoinsSubscriptionClickListener);
+            if (mCoinsSubscriptionButton != null) {
+                purchaseButtons.add(mCoinsSubscriptionButton);
             }
+
         }
         for (GooglePlayProducts.BuyButton curButton : products.coins) {
-            RelativeLayout newButton = GooglePlayProducts.setButton(coinsButtons, curButton, getActivity(),
+            View newButton = GooglePlayProducts.setBuyButton(coinsButtons, curButton, getActivity(),
                     new GooglePlayProducts.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
@@ -264,12 +262,19 @@ public class BuyingFragment extends BillingFragment {
                     }
                 }, 3000);
             }
+        } else if (requestCode == ContainerActivity.INTENT_COINS_SUBSCRIPTION_FRAGMENT) {
+            if (resultCode == PaymentwallActivity.RESULT_OK) {
+                CoinsSubscriptionInfo coinsSubscriptionInfo = CacheProfile.getGooglePlayProducts()
+                        .productsInfo.coinsSubscriptionInfo;
+                GooglePlayProducts.BuyButton btn = coinsSubscriptionInfo.getSubscriptionButton();
+                GooglePlayProducts.switchOpenButtonTexts(mCoinsSubscriptionButton, btn, mCoinsSubscriptionClickListener);
+            }
         }
     }
 
     @Override
     public void onInAppBillingSupported() {
-        for (RelativeLayout btn : purchaseButtons) {
+        for (View btn : purchaseButtons) {
             btn.setEnabled(true);
         }
     }

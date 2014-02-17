@@ -1,14 +1,17 @@
 package com.topface.topface.ui.fragments.buy;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.billing.BillingFragment;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.GooglePlayProducts.ProductsInfo.CoinsSubscriptionInfo;
@@ -17,10 +20,11 @@ import com.topface.topface.utils.CacheProfile;
 
 /**
  * Created by kirussell on 12.02.14.
+ * Subscriptions on packs of coins.
+ * UI configures based on server options from GooglePlayProducts object
  *
  */
 public class CoinsSubscriptionsFragment extends BillingFragment {
-
     private LinearLayout mContainer;
 
     public static CoinsSubscriptionsFragment newInstance(String from) {
@@ -29,6 +33,12 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
         args.putString(ARG_TAG_SOURCE, from);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivity().setResult(Activity.RESULT_CANCELED);
     }
 
     @Override
@@ -49,7 +59,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
 
     private void initButtonsViews(GooglePlayProducts products) {
         for (GooglePlayProducts.BuyButton curBtn : products.coinsSubscriptions) {
-            GooglePlayProducts.setButton(mContainer, curBtn, getActivity(),
+            GooglePlayProducts.setBuyButton(mContainer, curBtn, getActivity(),
                     new GooglePlayProducts.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
@@ -59,7 +69,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                             if (arguments != null) {
                                 from = "From" + arguments.getString(ARG_TAG_SOURCE);
                             }
-                            EasyTracker.getTracker().sendEvent("Subscription", "ButtonClick" + from, id, 0L);
+                            EasyTracker.getTracker().sendEvent("Coins Subscription", "ButtonClick" + from, id, 0L);
                         }
                     });
         }
@@ -77,17 +87,23 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
             if (month != null && i < info.months.size()) {
                 textView.setText(month.title + "\n" + month.amount);
                 textView.setVisibility(View.VISIBLE);
-                arrowView.setVisibility(View.VISIBLE);
+                if (arrowView != null) {
+                    arrowView.setVisibility(View.VISIBLE);
+                }
             } else {
                 textView.setVisibility(View.GONE);
-                arrowView.setVisibility(View.GONE);
+                if (arrowView != null) {
+                    arrowView.setVisibility(View.GONE);
+                }
             }
         }
     }
 
     @Override
     public void onPurchased() {
-
+        CacheProfile.getGooglePlayProducts().productsInfo.coinsSubscriptionInfo.status.active = true;
+        getActivity().setResult(Activity.RESULT_OK);
+        App.sendProfileAndOptionsRequests();
     }
 
     @Override
@@ -117,6 +133,15 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
 
     @Override
     public void onSubscritionUnsupported() {
+        //Если подписка не поддерживается, сообщаем об этом пользователю
+        if (!CacheProfile.premium) {
+            Toast.makeText(App.getContext(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
 
+    @Override
+    protected String getTitle() {
+        return getString(R.string.coins_subscription);
     }
 }
