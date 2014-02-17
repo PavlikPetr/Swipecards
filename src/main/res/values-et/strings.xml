@@ -422,4 +422,5 @@ Sa oled müksanud.</string>
         <item quantity="other">%d münti</item>
         <item quantity="one">%d münt</item>
     </plurals>
+    <string name="auth_btn_ok">Siseneda Odnoklassniki kaudu</string>
 </resources>

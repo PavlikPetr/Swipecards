@@ -1,7 +1,6 @@
 package com.topface.topface.utils;
 
-import android.content.Context;
-
+import com.topface.topface.App;
 import com.topface.topface.R;
 
 import java.text.SimpleDateFormat;
@@ -20,7 +19,6 @@ public class DateUtils {
     public static final long DAY_IN_MILLISECONDS = 86400000; // 24 * 60 * 60 * 1000;
     public static final long HOUR_IN_MILLISECONDS = 3600000; // 60 * 60 * 1000;
     public static final long MINUTE_IN_MILLISECONDS = 60000; // 60 * 1000;
-    public static final long SEC_IN_MILLISECONDS = 1000;
 
     public static void syncTime() {
         Calendar cal = Calendar.getInstance();
@@ -35,31 +33,17 @@ public class DateUtils {
         DateUtils.current_year = cal.getTimeInMillis();
     }
 
-    public static String getFormattedTitleDate(Context context, long date) {
+    public static String getRelativeDate(long date, boolean withTime) {
         String formattedDate;
 
         if (date > DateUtils.midnight) { // сегодня
-            formattedDate = context.getString(R.string.time_today);
+            if (withTime) {
+                formattedDate = mDateFormatHours.format(date);
+            } else {
+                formattedDate = App.getContext().getString(R.string.time_today);
+            }
         } else if (date > DateUtils.midnight - Utils.DAY) { //вчера
-            formattedDate = context.getString(R.string.time_yesterday);
-        } else if (date > DateUtils.midnight - Utils.DAY * 5) { // день недели
-            formattedDate = mDateFormatDayOfWeek.format(date);
-        } else if (date > DateUtils.current_year) { // неделю назад
-            formattedDate = mDateFormatDay.format(date);
-        } else {
-            formattedDate = mDateFormatDayYear.format(date);
-        }
-
-        return formattedDate;
-    }
-
-    public static String getFormattedDate(Context context, long date) {
-        String formattedDate;
-
-        if (date > DateUtils.midnight) { // сегодня
-            formattedDate = mDateFormatHours.format(date);
-        } else if (date > DateUtils.midnight - Utils.DAY) { //вчера
-            formattedDate = context.getString(R.string.time_yesterday);
+            formattedDate = App.getContext().getString(R.string.time_yesterday);
         } else if (date > DateUtils.midnight - Utils.DAY * 5) { // день недели
             formattedDate = mDateFormatDayOfWeek.format(date);
         } else if (date > DateUtils.current_year) { // неделю назад

@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 
 import org.json.JSONObject;
@@ -15,6 +16,10 @@ public class History extends FeedDialog implements Parcelable {
     private boolean mEmptyWaitingItem = false;
 
     private String mJsonForParse;
+    /**
+     * Форматированное время создания элемента. Форматируется на этапе парсинга данных и затем не изменяется
+     */
+    public String createdFormatted;
 
     public History(ItemType type) {
         super(null);
@@ -33,6 +38,13 @@ public class History extends FeedDialog implements Parcelable {
 
     public History() {
         super(null);
+    }
+
+    @Override
+    public void fillData(JSONObject item) {
+        super.fillData(item);
+        createdRelative = getRelativeCreatedDate(created);
+        createdFormatted = DateUtils.getFormattedTime(created);
     }
 
     public boolean isWaitingItem() {
@@ -98,5 +110,10 @@ public class History extends FeedDialog implements Parcelable {
         }
 
         return false;
+    }
+
+    @Override
+    protected String getRelativeCreatedDate(long date) {
+        return DateUtils.getRelativeDate(date, false).toUpperCase();
     }
 }
