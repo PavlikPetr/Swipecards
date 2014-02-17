@@ -109,6 +109,7 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets current user pincode value
+     *
      * @param pinCode value
      * @return true on success
      */
@@ -118,6 +119,7 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Current user pincode
+     *
      * @return pincode value
      */
     public String getPinCode() {
@@ -128,8 +130,9 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets promo popup last date
+     *
      * @param popupType type of popup (((Options.PromoPopupEntity)someEntity).getPopupAirType())
-     * @param lastTime date of launch
+     * @param lastTime  date of launch
      * @return true on success
      */
     public boolean setPromoPopupLastTime(int popupType, long lastTime) {
@@ -138,6 +141,7 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Last date of promo popup's launch
+     *
      * @param popupType type of popup (((Options.PromoPopupEntity)someEntity).getPopupAirType())
      * @return date
      */
@@ -147,6 +151,7 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Resets last date of promo popup's launch
+     *
      * @param popupType type of popup (((Options.PromoPopupEntity)someEntity).getPopupAirType())
      */
     public void resetPromoPopupData(int popupType) {
@@ -157,6 +162,7 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * "Send sympathy hint" for novice user
+     *
      * @return true if hint needs to be shown
      */
     public boolean getNoviceSympathy() {
@@ -165,6 +171,7 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets "send sympathy hint" flag for novice user
+     *
      * @param needShow true if hint needs to be shown
      * @return true on success
      */
@@ -174,6 +181,7 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * "Buy sympathy hint" flag for novice user
+     *
      * @return true if hint need to be shown
      */
     public boolean getNoviceBuySympathy() {
@@ -182,6 +190,7 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets "buy sympathy hint" flag for novice user
+     *
      * @param needShow true if hint need to be shown
      * @return true on success
      */
@@ -191,6 +200,7 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * First trial to show "Buy sympathy hint" for delay hint purposes
+     *
      * @return time of first trial
      */
     public long getNoviceBuySympathyDate() {
@@ -199,6 +209,7 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets time of first trial to show "Buy sympathy hint" for delay hint purposes
+     *
      * @param lastTime time of show
      * @return true on success
      */
@@ -257,4 +268,6 @@ public class UserConfig extends AbstractConfig {
     public void resetNotificationMessagesStack() {
         resetAndSaveConfig(generateKey(NOTIFICATIONS_MESSAGES_STACK));
     }
+
+    // =====================================================
 }

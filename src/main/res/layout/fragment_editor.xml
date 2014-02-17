@@ -178,6 +178,26 @@
             android:text="@string/editor_network_errors_tip"
             android:textSize="10sp" />
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvOfferwallTitle"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/editor_offerwall_title" />
+
+            <Spinner
+                android:id="@+id/spOfferwall"
+                android:layout_alignTop="@id/tvOfferwallTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
