@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.Spannable;
 import android.text.TextUtils;
 
 import com.topface.topface.R;
@@ -18,14 +19,20 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 
+import java.util.LinkedList;
+
 public class UserNotification {
     public static final int ICON_SIZE = 64;
+    public static final String NOTIFICATION_ID = "notification_id";
     private Bitmap mImage;
     private String mText;
     private String mTitle;
 
     private int mId;
     private boolean mOngoing;
+
+
+    private LinkedList<Spannable> messages;
 
     public enum Type {PROGRESS, STANDARD, FAIL, ACTIONS}
 
@@ -76,6 +83,10 @@ public class UserNotification {
         return (int) (context.getResources().getDisplayMetrics().density * ICON_SIZE);
     }
 
+    public void setMessages(LinkedList<Spannable> messages) {
+        this.messages = messages;
+    }
+
     public android.app.Notification generate(Intent intent, NotificationAction[] actions) {
         try {
             notificationBuilder = new NotificationCompat.Builder(mContext);
@@ -106,7 +117,11 @@ public class UserNotification {
         notificationBuilder.setContentTitle(mTitle);
         notificationBuilder.setContentText(mText);
         if (mIsTextNotification) {
-            generateBigText();
+            if (messages.size() <= 1) {
+                generateBigText();
+            } else {
+                generateInbox();
+            }
         } else {
             generateBigPicture();
         }
@@ -116,6 +131,7 @@ public class UserNotification {
         PendingIntent resultPendingIntent = generatePendingIntent(intent);
         notificationBuilder.setAutoCancel(true);
         notificationBuilder.setContentIntent(resultPendingIntent);
+
         //noinspection deprecation
         return notificationBuilder.build();
     }
@@ -169,15 +185,24 @@ public class UserNotification {
     }
 
     private void generateBigText() {
-        NotificationCompat.BigTextStyle inboxStyle =
+        NotificationCompat.BigTextStyle bigTextStyle =
                 new NotificationCompat.BigTextStyle(notificationBuilder.setContentTitle(mTitle));
 
-        inboxStyle.bigText(mText).build();
+        bigTextStyle.bigText(mText).build();
+    }
+
+    private void generateInbox() {
+        NotificationCompat.InboxStyle inboxStyle =
+                new NotificationCompat.InboxStyle(notificationBuilder.setContentTitle(String.format(mContext.getString(R.string.notification_many_messages), messages.size())));
+        for (Spannable message : messages) {
+            inboxStyle.addLine(message);
+        }
+        inboxStyle.build();
     }
 
     private PendingIntent generatePendingIntent(Intent intent) {
         PendingIntent resultPendingIntent;
-
+        intent.putExtra(NOTIFICATION_ID, mId);
         if (!TextUtils.equals(intent.getComponent().getClassName(), NavigationActivity.class.toString())) {
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
             // Adds the back stack

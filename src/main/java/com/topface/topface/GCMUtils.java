@@ -1,6 +1,5 @@
 package com.topface.topface;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -150,40 +149,45 @@ public class GCMUtils {
                 if (!TextUtils.equals(intent.getComponent().getClassName(), ContainerActivity.class.getName())) {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 }
-                final UserNotificationManager notificationManager = UserNotificationManager.getInstance(context);
-                if (!Ssid.isLoaded()) {
-                    if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_PROMO) {
-                        notificationManager.showNotification(
-                                title,
-                                data,
-                                true, null,
-                                getUnread(extra),
-                                intent,
-                                false);
-                    }
-                } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
-                    notificationManager.showNotificationAsync(
-                            title,
-                            data,
-                            true,
-                            user.photoUrl,
-                            getUnread(extra),
-                            intent,
-                            false
-                    );
-                } else {
-                    notificationManager.showNotification(
-                            title,
-                            data,
-                            true, null,
-                            getUnread(extra),
-                            intent,
-                            false);
-                }
+                showNotificationByType(extra, context, data, type, user, title, intent);
                 return true;
             }
         }
         return false;
+    }
+
+    private static void showNotificationByType(Intent extra, Context context, String data, int type, User user, String title, Intent intent) {
+        final UserNotificationManager notificationManager = UserNotificationManager.getInstance(context);
+        if (!Ssid.isLoaded()) {
+            if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_PROMO) {
+                notificationManager.showNotification(
+                        title,
+                        data,
+                        true, null,
+                        getUnread(extra),
+                        intent,
+                        false);
+            }
+        } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
+
+            notificationManager.showNotificationAsync(
+                    title,
+                    data,
+                    true,
+                    user.photoUrl,
+                    getUnread(extra),
+                    intent,
+                    false
+            );
+        } else {
+            notificationManager.showNotification(
+                    title,
+                    data,
+                    true, null,
+                    getUnread(extra),
+                    intent,
+                    false);
+        }
     }
 
     private static int getType(Intent extra) {
@@ -321,9 +325,8 @@ public class GCMUtils {
             public void run() {
                 if (type == lastNotificationType) {
                     if (context != null) {
-                        NotificationManager notificationManager =
-                                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                        notificationManager.cancel(UserNotificationManager.NOTIFICATION_ID);
+                        int id = type == GCM_TYPE_MESSAGE ? UserNotificationManager.MESSAGES_ID : UserNotificationManager.NOTIFICATION_ID;
+                        UserNotificationManager.getInstance(context).cancelNotification(id);
                     }
                 }
             }

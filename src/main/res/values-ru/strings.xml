@@ -788,5 +788,6 @@
     </plurals>
 
     <string name="ok_label">Одноклассники</string>
+    <string name="notification_many_messages">You have %d messages</string>
 
 </resources>
