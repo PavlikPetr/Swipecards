@@ -194,7 +194,11 @@ public class UserNotificationManager {
             id = newNotificationId();
         }
 
-        LinkedList<Spannable> messagesStack = saveMessageStack(intent, title, message, id);
+        LinkedList<Spannable> messagesStack = new LinkedList<>();
+        if (intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ContainerActivity.INTENT_CHAT_FRAGMENT) {
+            id = MESSAGES_ID;
+            messagesStack = saveMessageStack(intent, title, message);
+        }
         UserNotification notification = new UserNotification(mContext);
         notification.setType(type);
         notification.setImage(icon);
@@ -210,22 +214,18 @@ public class UserNotificationManager {
         return id;
     }
 
-    private LinkedList<Spannable> saveMessageStack(Intent intent, String title, String message, int id) {
+    private LinkedList<Spannable> saveMessageStack(Intent intent, String title, String message) {
         LinkedList<Spannable> messagesStack = new LinkedList<>();
-
-        if (intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ContainerActivity.INTENT_CHAT_FRAGMENT) {
-            id = MESSAGES_ID;
-            UserConfig config = App.getUserConfig();
-            LinkedList<Spannable> messages = config.getNotificationMessagesStack();
-            if (messages.size() > 0) {
-                messagesStack = messages;
-            }
-            Spannable spanMessage = new SpannableString(title + ": " + message);
-            spanMessage.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            messagesStack.add(spanMessage);
-            config.setNotificationMessagesStack(messagesStack);
-            config.saveConfig();
+        UserConfig config = App.getUserConfig();
+        LinkedList<Spannable> messages = config.getNotificationMessagesStack();
+        if (messages.size() > 0) {
+            messagesStack = messages;
         }
+        Spannable spanMessage = new SpannableString(title + ": " + message);
+        spanMessage.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        messagesStack.add(spanMessage);
+        config.setNotificationMessagesStack(messagesStack);
+        config.saveConfig();
         return messagesStack;
     }
 

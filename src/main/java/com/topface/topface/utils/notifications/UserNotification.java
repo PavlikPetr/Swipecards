@@ -193,7 +193,7 @@ public class UserNotification {
 
     private void generateInbox() {
         NotificationCompat.InboxStyle inboxStyle =
-                new NotificationCompat.InboxStyle(notificationBuilder.setContentTitle(String.format(mContext.getString(R.string.notification_many_messages), messages.size())));
+                new NotificationCompat.InboxStyle(notificationBuilder.setContentTitle(Utils.getQuantityString(R.plurals.notification_many_messages, messages.size(), messages.size())));
         for (Spannable message : messages) {
             inboxStyle.addLine(message);
         }
