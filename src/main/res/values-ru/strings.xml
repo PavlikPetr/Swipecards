@@ -787,5 +787,11 @@
         <item quantity="other">%d мин.</item>
     </plurals>
     <string name="ok_label">Одноклассники</string>
+    <plurals name="notification_many_messages">
+        <item quantity="one">У вас %d сообщение</item>
+        <item quantity="many">У вас %d сообщений</item>
+        <item quantity="few">У вас %d сообщения</item>
+        <item quantity="other">У вас %d сообщений</item>
+    </plurals>
     <string name="coins_subscription">Подписка на монеты</string>
 </resources>
