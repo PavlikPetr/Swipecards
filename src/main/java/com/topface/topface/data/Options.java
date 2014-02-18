@@ -11,9 +11,10 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.ClosingsController;
-import com.topface.topface.utils.offerwalls.Offerwalls;
+import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class Options extends AbstractData {
     public int priceLeader = 8;
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
-    public String offerwall = Offerwalls.SPONSORPAY;
+    public String offerwall = OfferwallsManager.SPONSORPAY;
 
     public int premium_period;
     public int contacts_count;
@@ -234,28 +235,12 @@ public class Options extends AbstractData {
                 bonus.timestamp = bonusObject.optLong("counterTimestamp");
             }
             // offerwalls for
-            JSONObject offerwallsObject = response.optJSONObject("offerwalls");
-            if (offerwallsObject != null) {
-                offerwalls.mainText = offerwallsObject.optString("mainText");
-                offerwalls.extraText = offerwallsObject.optString("extraText", null);
-                JSONArray offersArrObj = offerwallsObject.optJSONArray("offers");
-                for (int i = 0; i < offersArrObj.length(); i++) {
-                    JSONObject offerObj = offersArrObj.getJSONObject(i);
-                    if (offerObj != null) {
-                        Offerwalls.Offer offer = new Offerwalls.Offer();
-                        offer.text = offerObj.optString("text");
-                        offer.action = offerObj.optString("action");
-                        offer.type = offerObj.optInt("type");
-                        switch (offer.type) {
-                            case Offerwalls.Offer.TYPE_MAIN:
-                                offerwalls.mainOffers.add(offer);
-                                break;
-                            case Offerwalls.Offer.TYPE_EXTRA:
-                                offerwalls.extraOffers.add(offer);
-                                break;
-                        }
-                    }
-                }
+            JSONObject jsonOfferwalls = response.optJSONObject("offerwalls");
+            if (jsonOfferwalls != null) {
+                offerwalls.mainText = jsonOfferwalls.optString("mainText");
+                offerwalls.extraText = jsonOfferwalls.optString("extraText", null);
+                fillOffers(offerwalls.mainOffers, jsonOfferwalls.optJSONArray("mainOffers"));
+                fillOffers(offerwalls.extraOffers, jsonOfferwalls.optJSONArray("extraOffers"));
             }
 
             helpUrl = response.optString("helpUrl");
@@ -269,6 +254,19 @@ public class Options extends AbstractData {
             Debug.error(cacheToPreferences ? "Options from preferences" : "Options response is null");
         }
 
+    }
+
+    private void fillOffers(List<Offerwalls.Offer> list, JSONArray offersArrObj) throws JSONException {
+        if (offersArrObj == null) return;
+        for (int i = 0; i < offersArrObj.length(); i++) {
+            JSONObject offerObj = offersArrObj.getJSONObject(i);
+            if (offerObj != null) {
+                Offerwalls.Offer offer = new Offerwalls.Offer();
+                offer.text = offerObj.optString("text");
+                offer.action = offerObj.optString("action");
+                list.add(offer);
+            }
+        }
     }
 
 
@@ -515,11 +513,12 @@ public class Options extends AbstractData {
         public List<Offer> extraOffers = new ArrayList<>();
 
         public static class Offer {
-            public static final int TYPE_MAIN = 0;
-            public static final int TYPE_EXTRA = 1;
             public String text;
             public String action;
-            public int type;
+        }
+
+        public boolean hasOffers() {
+            return mainOffers.isEmpty() && extraOffers.isEmpty();
         }
     }
 

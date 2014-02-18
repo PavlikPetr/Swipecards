@@ -50,6 +50,7 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
+import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
@@ -535,8 +536,14 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 }
                 CacheProfile.needShowBonusCounter = false;
                 mAdapter.refreshCounterBadges();
+                if (CacheProfile.getOptions().offerwalls.hasOffers()) {
+                    selectMenu(F_BONUS);
+                } else {
+                    OfferwallsManager.startOfferwall(getActivity());
+                }
+            } else {
+                selectMenu(id);
             }
-            selectMenu(id);
         }
     }
 
