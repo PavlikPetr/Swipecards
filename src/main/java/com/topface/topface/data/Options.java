@@ -513,8 +513,11 @@ public class Options extends AbstractData {
         public List<Offer> extraOffers = new ArrayList<>();
 
         public static class Offer {
+            public static final int TYPE_MAIN = 1;
+            public static final int TYPE_EXTRA = 0;
             public String text;
             public String action;
+            public int type;
         }
 
         public boolean hasOffers() {
