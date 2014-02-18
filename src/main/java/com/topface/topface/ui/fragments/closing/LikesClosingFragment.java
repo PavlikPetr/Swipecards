@@ -31,7 +31,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
 
     @Override
     protected String getTitle() {
-        return getString(R.string.sympathies);
+        return getString(R.string.general_likes);
     }
 
     @Override
