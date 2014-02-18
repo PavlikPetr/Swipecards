@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -31,7 +30,6 @@ import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.BonusFragment;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
@@ -44,7 +42,6 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -53,7 +50,7 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
-import com.topface.topface.utils.offerwalls.Offerwalls;
+import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
@@ -535,17 +532,15 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             //его локально, а не серверно, как это происходит с остальными счетчиками.
             if (id == F_BONUS) {
                 if (CacheProfile.needShowBonusCounter) {
-                    new BackgroundThread() {
-                        @Override
-                        public void execute() {
-                            SharedPreferences preferences = getActivity().getSharedPreferences(NavigationActivity.BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
-                            preferences.edit().putLong(NavigationActivity.BONUS_COUNTER_LAST_SHOW_TIME, CacheProfile.getOptions().bonus.timestamp).commit();
-                        }
-                    };
+                    App.getUserConfig().setBonusCounterLastShowTime(CacheProfile.getOptions().bonus.timestamp);
                 }
                 CacheProfile.needShowBonusCounter = false;
                 mAdapter.refreshCounterBadges();
-                Offerwalls.startOfferwall(getActivity());
+                if (CacheProfile.getOptions().offerwalls.hasOffers()) {
+                    selectMenu(F_BONUS);
+                } else {
+                    OfferwallsManager.startOfferwall(getActivity());
+                }
             } else {
                 selectMenu(id);
             }
