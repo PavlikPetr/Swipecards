@@ -1,5 +1,7 @@
 package com.topface.topface.data;
 
+import com.topface.topface.utils.DateUtils;
+
 import org.json.JSONObject;
 
 /**
@@ -19,6 +21,11 @@ abstract public class FeedItem extends LoaderData {
      * таймстамп отправления события
      */
     public long created;
+    /**
+     * строка с временем отправки события (поле created) относительным времени пользователь (вчера, неделю назад и т.п)
+     * ВАЖНО! для ускорения скорости работы парсится только внутри потомков
+     */
+    public String createdRelative;
     /**
      * направление события в ленте. Возможные занчения: 0 - для исходящего события, 1 - для входящего события
      */
@@ -63,4 +70,13 @@ abstract public class FeedItem extends LoaderData {
         this.unreadCounter = item.optInt("unreadCount");
         this.user = new FeedUser(item.optJSONObject("user"), this);
     }
+
+    /**
+     * Методе для форматирования относительного времени создания элемента для показа в ленте
+     */
+    protected String getRelativeCreatedDate(long date) {
+        return DateUtils.getRelativeDate(date, true);
+    }
+
+
 }

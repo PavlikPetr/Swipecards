@@ -266,6 +266,10 @@
         </service>
 
         <activity
+            android:name=".utils.offerwalls.supersonicads.SupersonicWallActivity"
+            android:theme="@style/Theme.Topface.NoActionBar" />
+
+        <activity
             android:name="org.acra.CrashReportDialog"
             android:theme="@style/Theme.Topface.NoActionBar"
             android:launchMode="singleInstance"

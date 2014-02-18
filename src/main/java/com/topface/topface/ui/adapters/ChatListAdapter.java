@@ -379,7 +379,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
         if (showDate) {
             holder.dateDivider.setVisibility(View.VISIBLE);
-            holder.dateDividerText.setText(DateUtils.getFormattedTitleDate(mContext, item.created).toUpperCase());
+            holder.dateDividerText.setText(item.createdRelative);
         } else {
             holder.dateDivider.setVisibility(View.GONE);
         }
@@ -481,7 +481,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (holder != null) {
             if (holder.message != null)
                 holder.message.setMovementMethod(LinkMovementMethod.getInstance());
-            if (holder.date != null) holder.date.setText(DateUtils.getFormattedTime(item.created));
+            if (holder.date != null) holder.date.setText(item.createdFormatted);
         }
 
     }

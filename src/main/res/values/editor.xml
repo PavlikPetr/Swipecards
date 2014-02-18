@@ -30,6 +30,7 @@
     <string name="go_profile_text">перейти</string>
     <string name="editor_send_gcm">Послать GCM токен</string>
     <string name="editor_send_auth">Перпослать авторизацию</string>
+    <string name="editor_offerwall_title">Offerwall Type:</string>
 
     <string-array name="editor_debug_titles">
         <item>Только в debug режиме</item>

@@ -7,11 +7,8 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Visitor;
-import com.topface.topface.utils.DateUtils;
 
 public class VisitorsListAdapter extends FeedAdapter<Visitor> {
-
-    private boolean allowUpdating = false;
 
     public VisitorsListAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
@@ -32,7 +29,7 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
 
         Visitor visitor = getItem(position);
-        holder.time.setText(DateUtils.getFormattedDate(mContext, visitor.created));
+        holder.time.setText(visitor.createdRelative);
         holder.time.setVisibility(View.VISIBLE);
         holder.city.setText(null);
         holder.text.setText(visitor.user.city.name);
@@ -57,11 +54,6 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     @Override
     protected int getNewVipItemLayout() {
         return R.layout.item_new_feed_vip_dialog;
-    }
-
-    @Override
-    public boolean isNeedUpdate() {
-        return super.isNeedUpdate() && !allowUpdating;
     }
 
     @Override
