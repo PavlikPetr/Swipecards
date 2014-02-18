@@ -32,8 +32,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="8dp"
-            android:layout_marginLeft="48dp"
-            android:layout_marginRight="48dp" />
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp" />
 
         <TextView
             android:id="@+id/tvOfferExtra"
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="8dp"
-            android:layout_marginLeft="48dp"
-            android:layout_marginRight="48dp" />
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp" />
     </LinearLayout>
 </ScrollView>

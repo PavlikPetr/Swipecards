@@ -3,7 +3,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@drawable/bg_bonus_light" />
     <item android:top="30dp">
-    <bitmap
+        <bitmap
             android:src="@drawable/bg_bonus_coins"
             android:gravity="center_horizontal" />
     </item>

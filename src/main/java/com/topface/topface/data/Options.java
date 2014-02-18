@@ -264,6 +264,7 @@ public class Options extends AbstractData {
                 Offerwalls.Offer offer = new Offerwalls.Offer();
                 offer.text = offerObj.optString("text");
                 offer.action = offerObj.optString("action");
+                offer.type = offerObj.optInt("type");
                 list.add(offer);
             }
         }
@@ -521,7 +522,7 @@ public class Options extends AbstractData {
         }
 
         public boolean hasOffers() {
-            return mainOffers.isEmpty() && extraOffers.isEmpty();
+            return !mainOffers.isEmpty() && !extraOffers.isEmpty();
         }
     }
 
