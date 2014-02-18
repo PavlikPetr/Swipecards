@@ -21,6 +21,12 @@
             android:text="@string/coins_subscription"
             style="@style/TopfaceTextAppearance.Medium" />
 
+        <ViewStub
+            android:id="@+id/EditorTestStub"
+            android:layout="@layout/fragment_buy_editor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <TextView
             android:id="@+id/tvInfoText"
             android:layout_width="fill_parent"
