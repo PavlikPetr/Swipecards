@@ -1,7 +1,9 @@
 package com.topface.topface.ui.fragments.buy;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +18,21 @@ import com.topface.topface.R;
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.GooglePlayProducts.ProductsInfo.CoinsSubscriptionInfo;
 import com.topface.topface.data.GooglePlayProducts.ProductsInfo.CoinsSubscriptionInfo.MonthInfo;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kirussell on 12.02.14.
  * Subscriptions on packs of coins.
  * UI configures based on server options from GooglePlayProducts object
- *
  */
 public class CoinsSubscriptionsFragment extends BillingFragment {
     private LinearLayout mContainer;
+    private List<View> mButtonsViews = new ArrayList<>();
 
     public static CoinsSubscriptionsFragment newInstance(String from) {
         CoinsSubscriptionsFragment fragment = new CoinsSubscriptionsFragment();
@@ -57,9 +64,16 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
         return root;
     }
 
+    private void removeAllBuyButtons() {
+        for (View button : mButtonsViews) {
+            mContainer.removeView(button);
+        }
+        mButtonsViews.clear();
+    }
+
     private void initButtonsViews(GooglePlayProducts products) {
         for (GooglePlayProducts.BuyButton curBtn : products.coinsSubscriptions) {
-            GooglePlayProducts.setBuyButton(mContainer, curBtn, getActivity(),
+            mButtonsViews.add(GooglePlayProducts.setBuyButton(mContainer, curBtn, getActivity(),
                     new GooglePlayProducts.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
@@ -71,7 +85,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                             }
                             EasyTracker.getTracker().sendEvent("Coins Subscription", "ButtonClick" + from, id, 0L);
                         }
-                    });
+                    }));
         }
     }
 
@@ -101,9 +115,22 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
 
     @Override
     public void onPurchased() {
-        CacheProfile.getGooglePlayProducts().productsInfo.coinsSubscriptionInfo.status.active = true;
-        getActivity().setResult(Activity.RESULT_OK);
-        App.sendProfileAndOptionsRequests();
+        App.sendProfileAndOptionsRequests(new SimpleApiHandler() {
+            @Override
+            public void success(IApiResponse response) {
+                super.success(response);
+                if (isAdded()) {
+                    removeAllBuyButtons();
+                    initButtonsViews(CacheProfile.getGooglePlayProducts());
+                    Activity activity = getActivity();
+                    if (activity != null) {
+                        activity.setResult(Activity.RESULT_OK);
+                    }
+                }
+                LocalBroadcastManager.getInstance(App.getContext())
+                        .sendBroadcast(new Intent(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
+            }
+        });
     }
 
     @Override

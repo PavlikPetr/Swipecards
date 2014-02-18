@@ -42,9 +42,17 @@ public class BuyingFragment extends BillingFragment {
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateBalanceCounters();
+            switch (intent.getAction()) {
+                case CountersManager.UPDATE_BALANCE:
+                    updateBalanceCounters();
+                    break;
+                case GooglePlayProducts.INTENT_UPDATE_PRODUCTS:
+                    updateCoinsSubscriptionButton();
+                    break;
+            }
         }
     };
+
     private ServicesTextView mCurCoins;
     private ServicesTextView mCurLikes;
     private TextView mResourcesInfo;
@@ -105,8 +113,10 @@ public class BuyingFragment extends BillingFragment {
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CountersManager.UPDATE_BALANCE);
+        filter.addAction(GooglePlayProducts.INTENT_UPDATE_PRODUCTS);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, filter);
         updateBalanceCounters();
     }
 
@@ -147,6 +157,13 @@ public class BuyingFragment extends BillingFragment {
             }
 
         }
+    }
+
+    private void updateCoinsSubscriptionButton() {
+        CoinsSubscriptionInfo coinsSubscriptionInfo = CacheProfile.getGooglePlayProducts()
+                .productsInfo.coinsSubscriptionInfo;
+        GooglePlayProducts.BuyButton btn = coinsSubscriptionInfo.getSubscriptionButton();
+        GooglePlayProducts.switchOpenButtonTexts(mCoinsSubscriptionButton, btn, mCoinsSubscriptionClickListener);
     }
 
     private void initButtons(View root) {
@@ -264,10 +281,7 @@ public class BuyingFragment extends BillingFragment {
             }
         } else if (requestCode == ContainerActivity.INTENT_COINS_SUBSCRIPTION_FRAGMENT) {
             if (resultCode == PaymentwallActivity.RESULT_OK) {
-                CoinsSubscriptionInfo coinsSubscriptionInfo = CacheProfile.getGooglePlayProducts()
-                        .productsInfo.coinsSubscriptionInfo;
-                GooglePlayProducts.BuyButton btn = coinsSubscriptionInfo.getSubscriptionButton();
-                GooglePlayProducts.switchOpenButtonTexts(mCoinsSubscriptionButton, btn, mCoinsSubscriptionClickListener);
+                updateCoinsSubscriptionButton();
             }
         }
     }
