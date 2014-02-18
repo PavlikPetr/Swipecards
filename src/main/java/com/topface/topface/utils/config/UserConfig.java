@@ -2,10 +2,13 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.Spannable;
 
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.social.AuthToken;
+
+import java.util.LinkedList;
 
 /**
  * Created by kirussell on 06.01.14.
@@ -28,6 +31,7 @@ public class UserConfig extends AbstractConfig {
     private static final String DATA_LIKE_CLOSING_LAST_TIME = "data_closings_likes_last_date";
     private static final String DATA_MUTUAL_CLOSING_LAST_TIME = "data_closings_mutual_last_date";
     private static final String DATA_BONUS_LAST_SHOW_TIME = "data_bonus_last_show_time";
+    public static final String NOTIFICATIONS_MESSAGES_STACK = "notifications_messages_stack";
 
     public UserConfig(Context context) {
         super(context);
@@ -53,7 +57,8 @@ public class UserConfig extends AbstractConfig {
         settingsMap.addLongField(generateKey(DATA_LIKE_CLOSING_LAST_TIME), 0L);
         // date of last mutual closings processing
         settingsMap.addLongField(generateKey(DATA_MUTUAL_CLOSING_LAST_TIME), 0L);
-
+        // notification messages stack
+        settingsMap.addListField(generateKey(NOTIFICATIONS_MESSAGES_STACK), new LinkedList<String>());
     }
 
     @Override
@@ -105,7 +110,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets current user pincode value
-     *
      * @param pinCode value
      * @return true on success
      */
@@ -115,7 +119,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Current user pincode
-     *
      * @return pincode value
      */
     public String getPinCode() {
@@ -126,9 +129,8 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets promo popup last date
-     *
      * @param popupType type of popup (((Options.PromoPopupEntity)someEntity).getPopupAirType())
-     * @param lastTime  date of launch
+     * @param lastTime date of launch
      * @return true on success
      */
     public boolean setPromoPopupLastTime(int popupType, long lastTime) {
@@ -137,7 +139,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Last date of promo popup's launch
-     *
      * @param popupType type of popup (((Options.PromoPopupEntity)someEntity).getPopupAirType())
      * @return date
      */
@@ -147,7 +148,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Resets last date of promo popup's launch
-     *
      * @param popupType type of popup (((Options.PromoPopupEntity)someEntity).getPopupAirType())
      */
     public void resetPromoPopupData(int popupType) {
@@ -158,7 +158,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * "Send sympathy hint" for novice user
-     *
      * @return true if hint needs to be shown
      */
     public boolean getNoviceSympathy() {
@@ -167,7 +166,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets "send sympathy hint" flag for novice user
-     *
      * @param needShow true if hint needs to be shown
      * @return true on success
      */
@@ -177,7 +175,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * "Buy sympathy hint" flag for novice user
-     *
      * @return true if hint need to be shown
      */
     public boolean getNoviceBuySympathy() {
@@ -186,7 +183,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets "buy sympathy hint" flag for novice user
-     *
      * @param needShow true if hint need to be shown
      * @return true on success
      */
@@ -196,7 +192,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * First trial to show "Buy sympathy hint" for delay hint purposes
-     *
      * @return time of first trial
      */
     public long getNoviceBuySympathyDate() {
@@ -205,7 +200,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets time of first trial to show "Buy sympathy hint" for delay hint purposes
-     *
      * @param lastTime time of show
      * @return true on success
      */
@@ -270,4 +264,18 @@ public class UserConfig extends AbstractConfig {
     public long getBonusCounterLastShowTime() {
         return getSettingsMap().getLongField(generateKey(DATA_BONUS_LAST_SHOW_TIME));
     }
+
+    public LinkedList<Spannable> getNotificationMessagesStack() {
+        return (LinkedList<Spannable>) getSettingsMap().getListField(generateKey(NOTIFICATIONS_MESSAGES_STACK));
+    }
+
+    public boolean setNotificationMessagesStack(LinkedList<Spannable> messages) {
+        return getSettingsMap().setField(generateKey(NOTIFICATIONS_MESSAGES_STACK), messages);
+    }
+
+    public void resetNotificationMessagesStack() {
+        resetAndSaveConfig(generateKey(NOTIFICATIONS_MESSAGES_STACK));
+    }
+
+    // =====================================================
 }

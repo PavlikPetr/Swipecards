@@ -34,6 +34,7 @@ import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
+import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -48,6 +49,7 @@ import static com.topface.topface.utils.notifications.UserNotificationManager.ge
  */
 public class EditorFragment extends BaseFragment implements View.OnClickListener {
     private Spinner mApiUrl;
+    private Spinner mOfferwallTypeChoose;
     private EditText mApiVersion;
     private EditText mApiRevision;
     private AppConfig mAppConfig;
@@ -79,22 +81,23 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootLayout = inflater.inflate(R.layout.fragment_editor, null);
-        rootLayout.findViewById(R.id.EditorRefreshProfile).setOnClickListener(this);
-        rootLayout.findViewById(R.id.EditorClearSearchCache).setOnClickListener(this);
-        rootLayout.findViewById(R.id.EditorConfigureBanners).setOnClickListener(this);
-        rootLayout.findViewById(R.id.EditorResetSettings).setOnClickListener(this);
-        rootLayout.findViewById(R.id.EditorSaveSettings).setOnClickListener(this);
-        rootLayout.findViewById(R.id.EditorClearAirMessages).setOnClickListener(this);
-        rootLayout.findViewById(R.id.EditorSendGCMToken).setOnClickListener(this);
-        rootLayout.findViewById(R.id.EditorSendAuth).setOnClickListener(this);
-
-        ViewGroup switcherView = (ViewGroup) rootLayout.findViewById(R.id.loPopupSwitcher);
+        View root = inflater.inflate(R.layout.fragment_editor, null);
+        // buttons
+        root.findViewById(R.id.EditorRefreshProfile).setOnClickListener(this);
+        root.findViewById(R.id.EditorClearSearchCache).setOnClickListener(this);
+        root.findViewById(R.id.EditorConfigureBanners).setOnClickListener(this);
+        root.findViewById(R.id.EditorResetSettings).setOnClickListener(this);
+        root.findViewById(R.id.EditorSaveSettings).setOnClickListener(this);
+        root.findViewById(R.id.EditorClearAirMessages).setOnClickListener(this);
+        root.findViewById(R.id.EditorSendGCMToken).setOnClickListener(this);
+        root.findViewById(R.id.EditorSendAuth).setOnClickListener(this);
+        // попап приглашений
+        ViewGroup switcherView = (ViewGroup) root.findViewById(R.id.loPopupSwitcher);
         ((TextView) switcherView.findViewWithTag("tvTitle")).setText("Показывать попап приглашений");
         switcherView.setOnClickListener(this);
         switcher = new EditSwitcher(switcherView);
-
-        ViewGroup testNetworkSwitcherView = (ViewGroup) rootLayout.findViewById(R.id.loTestNetworkSwitcher);
+        // ошиюки соединения
+        ViewGroup testNetworkSwitcherView = (ViewGroup) root.findViewById(R.id.loTestNetworkSwitcher);
         ((TextView) testNetworkSwitcherView.findViewWithTag("tvTitle")).setText("Режим ошибок соединения");
         testNetworkSwitcherView.setOnClickListener(this);
         switcherTestNetwork = new EditSwitcher(testNetworkSwitcherView);
@@ -102,15 +105,39 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         standard_timeout = CacheProfile.getOptions().popup_timeout;
 
         initNavigationBar();
-        initApiUrl(rootLayout);
-        initDebugMode(rootLayout);
-        initProfileId(rootLayout);
-        initEditorMode(rootLayout);
-        initUserInfo(rootLayout);
+        initApiUrl(root);
+        initDebugMode(root);
+        initProfileId(root);
+        initEditorMode(root);
+        initUserInfo(root);
+        initOfferwall(root);
         //После инита всех элементов заполняем их значениями по умолчанию
         setConfigValues();
         mConfigInited = true;
-        return rootLayout;
+        return root;
+    }
+
+    private void initOfferwall(View root) {
+        mOfferwallTypeChoose = (Spinner) root.findViewById(R.id.spOfferwall);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                getActivity(),
+                android.R.layout.simple_spinner_item,
+                Offerwalls.OFFERWALLS
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mOfferwallTypeChoose.setAdapter(adapter);
+        mOfferwallTypeChoose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mConfigInited) {
+                    CacheProfile.getOptions().offerwall = Offerwalls.OFFERWALLS[position];
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     private void initProfileId(View rootLayout) {
@@ -373,10 +400,19 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mDebugModeSpinner.setSelection(mAppConfig.getDebugMode());
         switcherTestNetwork.setChecked(mAppConfig.getTestNetwork());
         switcher.setChecked(CacheProfile.canInvite);
+        mOfferwallTypeChoose.setSelection(getOfferwallIndexInArray(CacheProfile.getOptions().offerwall));
     }
 
     @Override
     protected String getTitle() {
         return getString(R.string.editor_menu_admin);
+    }
+
+    private int getOfferwallIndexInArray(String offerwall) {
+        for (int i = 0; i < Offerwalls.OFFERWALLS.length; i++) {
+            if (offerwall.equals(Offerwalls.OFFERWALLS[i]))
+                return i;
+        }
+        return -1;
     }
 }

@@ -55,6 +55,7 @@ public class GiftsFragment extends BaseFragment {
 
     private Profile mProfile;
     private boolean mIsUpdating = false;
+    private boolean needFeedUpdate = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,12 +78,9 @@ public class GiftsFragment extends BaseFragment {
         mGroupInfo = root.findViewById(R.id.loInfo);
         mTextInfo = (TextView) mGroupInfo.findViewById(R.id.tvInfo);
         mBtnInfo = (Button) mGroupInfo.findViewById(R.id.btnInfo);
-
         if (mProfile != null) {
             setProfile(mProfile);
         }
-        initViews();
-
         return root;
     }
 
@@ -114,13 +112,7 @@ public class GiftsFragment extends BaseFragment {
                             }
                         }
                     });
-                    if (mProfile != null) {
-                        mTitle.setText(R.string.gifts);
-                        mTitle.setVisibility(View.VISIBLE);
-                        if (mGridAdapter.getData().size() == 0) {
-                            onNewFeeds();
-                        }
-                    }
+
                 } else if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
                     if (mGridAdapter.getData().size() > 1)
                         mTitle.setText(R.string.gifts);
@@ -152,8 +144,19 @@ public class GiftsFragment extends BaseFragment {
                         }
                     });
                 }
+                if (mProfile != null) {
+                    mTitle.setText(R.string.gifts);
+                    mTitle.setVisibility(View.VISIBLE);
+                    if (mGridAdapter.getData().size() <= getMinItemsCount() && needFeedUpdate) {
+                        onNewFeeds();
+                    }
+                }
             }
         });
+    }
+
+    private int getMinItemsCount() {
+        return mTag.equals(GIFTS_USER_PROFILE_TAG) ? 1 : 0;
     }
 
     @Override
@@ -165,6 +168,9 @@ public class GiftsFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+                //Этот флаг нужен для того, чтобы, когда нет подарков,
+                //на onResume не кидался запрос на обновление подарков.
+                needFeedUpdate = false;
                 sendGift(data);
             }
         }
@@ -219,6 +225,7 @@ public class GiftsFragment extends BaseFragment {
                     @Override
                     public void always(IApiResponse response) {
                         super.always(response);
+                        needFeedUpdate = true;
                         if (mGiftReceivedListener != null) {
                             mGiftReceivedListener.onReceived();
                         }
@@ -275,8 +282,11 @@ public class GiftsFragment extends BaseFragment {
 
                 removeLoaderItem();
                 data.addAll(gifts.items);
-                if (data.isEmpty() && !gifts.items.isEmpty()) {
+                if (!gifts.items.isEmpty()) {
                     mGroupInfo.setVisibility(View.GONE);
+                    mTextInfo.setVisibility(View.GONE);
+                } else if (mTag.equals(GIFTS_USER_PROFILE_TAG) && mGridAdapter.getData().size() <= getMinItemsCount()) {
+                    mTitle.setText(R.string.user_does_not_have_gifts);
                 }
 
                 if (gifts.more) {
@@ -331,6 +341,7 @@ public class GiftsFragment extends BaseFragment {
                         });
                     } else {
                         mGroupInfo.setVisibility(View.GONE);
+                        mTextInfo.setVisibility(View.GONE);
                     }
                 }
             }

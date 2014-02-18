@@ -1,6 +1,7 @@
 package com.topface.topface.utils.offerwalls;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
+import com.topface.topface.utils.offerwalls.supersonicads.SupersonicWallActivity;
 
 import org.json.JSONObject;
 
@@ -50,12 +52,14 @@ public class OfferwallsManager {
     public static final String CLICKKY = "CLICKKY";
     public static final String RANDOM = "RANDOM";
     public static final String GETJAR = "GETJAR";
+    public static final String SUPERSONIC = "SUPERSONIC";
     @SuppressWarnings("UnusedDeclaration")
     public final static String[] OFFERWALLS = new String[]{
             TAPJOY,
             SPONSORPAY,
             CLICKKY,
             GETJAR,
+            SUPERSONIC,
             RANDOM
     };
 
@@ -65,6 +69,7 @@ public class OfferwallsManager {
 
     private static GetJarContext mGetJarContext;
     private static ConsumableProductHelper mGetJarHelper;
+    private static Dialog mProgressDialog;
 
     private static String getOfferWallType() {
         return CacheProfile.getOptions().offerwall;
@@ -117,6 +122,9 @@ public class OfferwallsManager {
                 break;
             case GETJAR:
                 startGetJar(activity);
+                break;
+            case SUPERSONIC:
+                startSupersonic(activity);
                 break;
             case RANDOM:
                 startRandomOfferwall(activity);
@@ -228,13 +236,9 @@ public class OfferwallsManager {
     }
 
     public static void startGetJar(Activity activity) {
+        showProgressDialog(activity);
         if (mGetJarContext == null || mGetJarHelper == null) {
-            ProgressDialog prgs = new ProgressDialog(activity);
-            prgs.setTitle(R.string.general_dialog_loading);
-            prgs.setCancelable(false);
-            prgs.show();
             initGetJar(activity);
-            prgs.dismiss();
         }
         Options options = CacheProfile.getOptions();
         if (options != null && options.getJar != null) {
@@ -246,7 +250,23 @@ public class OfferwallsManager {
                     R.drawable.ic_coins
             );
             mGetJarHelper.buy(activity.getString(R.string.getjar_auth_title), consumableProduct);
+        } else {
+            hideProgressBar();
         }
+    }
+
+    private static void showProgressDialog(Context context) {
+        mProgressDialog = ProgressDialog.show(
+                context,
+                context.getString(R.string.general_dialog_loading),
+                context.getString(R.string.general_dialog_loading),
+                false,
+                true
+        );
+    }
+
+    private static void hideProgressBar() {
+        if (mProgressDialog != null) mProgressDialog.dismiss();
     }
 
     public static class RewardsReceiver extends ResultReceiver {
@@ -314,7 +334,8 @@ public class OfferwallsManager {
 
         void buy(String pickAccountTitle, ConsumableProduct consumableProduct) {
             if (consumableProduct == null) {
-                throw new IllegalArgumentException("mConsumableProduct cannot be null");
+                hideProgressBar();
+                throw new IllegalArgumentException("consumableProduct cannot be null");
             }
             this.mConsumableProduct = consumableProduct;
 
@@ -328,7 +349,7 @@ public class OfferwallsManager {
             GetJarPage consumablePage = new GetJarPage(mGetJarContext);
             consumablePage.setProduct(product);
             consumablePage.showPage();
-            getProgressDialog().dismiss();
+            hideProgressBar();
         }
 
         private EnsureUserAuthListener consumableUserAuthListener = new EnsureUserAuthListener() {
@@ -345,6 +366,7 @@ public class OfferwallsManager {
                     getProgressDialog().show();
                 } else {
                     Debug.log("consumableUserAuthListener: failed");
+                    hideProgressBar();
                 }
             }
         };
@@ -359,5 +381,9 @@ public class OfferwallsManager {
                 startGetJarRewardPage(mConsumableProduct);
             }
         };
+    }
+
+    private static void startSupersonic(Activity activity) {
+        activity.startActivity(new Intent(activity, SupersonicWallActivity.class));
     }
 }

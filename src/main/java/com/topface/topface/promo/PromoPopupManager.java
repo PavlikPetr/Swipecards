@@ -63,7 +63,11 @@ public class PromoPopupManager {
             //Показываем фрагмент, если он еще не показан
             if (promo.getDialog() == null) {
                 Debug.log("Promo: promo show #" + type);
-                promo.show(fragmentManager, PROMO_POPUP_TAG);
+                try {
+                    promo.show(fragmentManager, PROMO_POPUP_TAG);
+                } catch (Exception e) {
+                    Debug.error("Promo: show ecxeption", e);
+                }
             }
             return true;
         }
