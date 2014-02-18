@@ -120,13 +120,21 @@ public class GooglePlayProducts extends AbstractData {
      */
     public static View createBuyButtonLayout(Context context, BuyButton buyBtn,
                                              final BuyButtonClickListener listener) {
-        String value = String.format(
-                App.getContext().getString(R.string.default_price_format),
-                buyBtn.price / 100f
-        );
+        String value;
+        String economy;
+        if (buyBtn.type == ButtonType.COINS_SUBSCRIPTION && buyBtn.price == 0) {
+            value = buyBtn.hint;
+            economy = null;
+        } else {
+            value = String.format(
+                    App.getContext().getString(R.string.default_price_format),
+                    buyBtn.price / 100f
+            );
+            economy = buyBtn.hint;
+        }
         return createBuyButtonLayout(
                 context, buyBtn.id, buyBtn.title, buyBtn.discount > 0,
-                buyBtn.showType, buyBtn.hint, value, listener
+                buyBtn.showType, economy, value, listener
         );
     }
 
