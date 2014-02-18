@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.Tracker;
+import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -31,6 +32,14 @@ public class TrackedActivity extends Activity {
         tracker.setCustomDimension(4, CacheProfile.emailConfirmed ? "Yes" : "No");
         tracker.setCustomDimension(5, CacheProfile.premium ? "Yes" : "No");
         tracker.setCustomDimension(6, Integer.toString(CacheProfile.age));
+        /**
+         * Абстрактное поле для подсчета статистики экспериментов
+         * Т.е. сервер может прислать любые данные для п
+         */
+        ExperimentTags tags = CacheProfile.getOptions().experimentTags;
+        if (tags != null) {
+            tags.setToStatistics(tracker);
+        }
     }
 
     @Override

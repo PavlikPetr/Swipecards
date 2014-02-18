@@ -108,6 +108,10 @@ public class Options extends AbstractData {
     public String gagTypeBanner = BannerBlock.BANNER_ADMOB;
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
     public String helpUrl;
+    /**
+     * Ключ эксперимента под который попадает данный пользователь (передаем его в GA)
+     */
+    public ExperimentTags experimentTags;
 
     public Bonus bonus = new Bonus();
 
@@ -232,6 +236,10 @@ public class Options extends AbstractData {
             }
 
             helpUrl = response.optString("helpUrl");
+            JSONObject tagsObject = response.optJSONObject("experimentTags");
+            if (tagsObject != null && tagsObject.length() > 0) {
+                experimentTags = new ExperimentTags(tagsObject);
+            }
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
