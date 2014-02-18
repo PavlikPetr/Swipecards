@@ -22,11 +22,15 @@
         <!-- ActionBar  -->
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
         <item name="actionBarItemBackground">@drawable/bg_semitransparent_black_selector</item>
+        <item name="selectableItemBackground">@drawable/bg_semitransparent_black_selector</item>
 
         <item name="android:actionBarStyle" tools:ignore="NewApi">
             @style/Widget.Topface.ActionBar
         </item>
         <item name="android:actionBarItemBackground" tools:ignore="NewApi">
+            @drawable/bg_semitransparent_black_selector
+        </item>
+        <item name="android:selectableItemBackground" tools:ignore="NewApi">
             @drawable/bg_semitransparent_black_selector
         </item>
 
