@@ -317,19 +317,9 @@ public class OfferwallsManager {
         private ArrayList<Pricing> mConsumablePricingList = new ArrayList<>(1);
         private ConsumableProduct mConsumableProduct;
         private GetJarContext mGetJarContext;
-        private ProgressDialog mProgressDialog;
 
         ConsumableProductHelper(GetJarContext getJarContext) {
             this.mGetJarContext = getJarContext;
-        }
-
-        private ProgressDialog getProgressDialog() {
-            if (mProgressDialog == null) {
-                mProgressDialog = new ProgressDialog(mGetJarContext.getAndroidContext());
-                mProgressDialog.setTitle(R.string.general_dialog_loading);
-                mProgressDialog.setCancelable(false);
-            }
-            return mProgressDialog;
         }
 
         void buy(String pickAccountTitle, ConsumableProduct consumableProduct) {
@@ -363,7 +353,6 @@ public class OfferwallsManager {
                         mConsumablePricingList.add(new Pricing((int) mConsumableProduct.getAmount(), GETJAT_MAX_DISCOUNT, GETJAT_MAX_MARKUP));
                     }
                     localization.getRecommendedPricesAsync(mConsumablePricingList, consumableRecommendedPricesListener);
-                    getProgressDialog().show();
                 } else {
                     Debug.log("consumableUserAuthListener: failed");
                     hideProgressBar();
