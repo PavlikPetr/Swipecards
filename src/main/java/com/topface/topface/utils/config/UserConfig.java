@@ -253,7 +253,7 @@ public class UserConfig extends AbstractConfig {
     }
 
     /**
-     * Date of last processing of mutual closingsвче
+     * Date of last processing of mutual closings
      *
      * @return date in unix time
      */
