@@ -18,15 +18,22 @@
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
         <item name="android:windowBackground">@null</item>
         <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
+        <!-- Стилизованные кнопки -->
+        <item name="blueButtonStyle">@style/Widget.Topface.Button.Big.Blue</item>
+        <item name="grayButtonStyle">@style/Widget.Topface.Button.Big.Gray</item>
 
         <!-- ActionBar  -->
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
         <item name="actionBarItemBackground">@drawable/bg_semitransparent_black_selector</item>
+        <item name="selectableItemBackground">@drawable/bg_semitransparent_black_selector</item>
 
         <item name="android:actionBarStyle" tools:ignore="NewApi">
             @style/Widget.Topface.ActionBar
         </item>
         <item name="android:actionBarItemBackground" tools:ignore="NewApi">
+            @drawable/bg_semitransparent_black_selector
+        </item>
+        <item name="android:selectableItemBackground" tools:ignore="NewApi">
             @drawable/bg_semitransparent_black_selector
         </item>
 

@@ -54,7 +54,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.offerwalls.Offerwalls;
+import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -442,14 +442,14 @@ public class BannerBlock {
                         break;
                     case Banner.ACTION_OFFERWALL:
                         switch (banner.parameter) {
-                            case Offerwalls.TAPJOY:
-                                Offerwalls.startTapjoy();
+                            case OfferwallsManager.TAPJOY:
+                                OfferwallsManager.startTapjoy();
                                 break;
-                            case Offerwalls.SPONSORPAY:
-                                Offerwalls.startSponsorpay(mFragment.getActivity());
+                            case OfferwallsManager.SPONSORPAY:
+                                OfferwallsManager.startSponsorpay(mFragment.getActivity());
                                 break;
                             default:
-                                Offerwalls.startOfferwall(mFragment.getActivity());
+                                OfferwallsManager.startOfferwall(mFragment.getActivity());
                                 break;
                         }
                         break;
