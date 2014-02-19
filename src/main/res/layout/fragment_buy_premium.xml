@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:background="@drawable/buying_info"
+            android:background="@drawable/edit_big_btn_selector"
             android:gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
@@ -62,12 +62,6 @@
                 android:text="@string/general_buying_disabled"
                 android:visibility="gone"
                 android:layout_margin="5dp" />
-
-            <ViewStub
-                android:id="@+id/EditorTestStub"
-                android:layout="@layout/fragment_buy_editor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <ViewStub
                 android:id="@+id/EditorTestStub"

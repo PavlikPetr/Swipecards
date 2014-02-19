@@ -283,7 +283,7 @@ public class AddPhotoHelper {
                 }
                 mNotificationManager.showNotificationAsync(
                         mContext.getString(R.string.default_photo_upload_complete), "", false,
-                        uri.toString(), 1, getIntentForNotification(), true, null);
+                        uri.toString(), 1, getIntentForNotification(), true, null, null);
             }
 
             @Override

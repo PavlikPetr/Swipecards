@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -31,9 +30,9 @@ import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.BonusFragment;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
+import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
@@ -44,7 +43,6 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -53,7 +51,7 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
-import com.topface.topface.utils.offerwalls.Offerwalls;
+import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
@@ -92,8 +90,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     private View mEditorItem;
 
     private ClosingsController mClosingsController;
-
-    private static boolean mEditorInitializationForSessionInvoked = false;
 
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -150,23 +146,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
     }
 
-    private void initEditor() {
-        if (mEditorInitializationForSessionInvoked) return;
-        if (mFooterView != null) {
-            if (Editor.isEditor() && mEditorItem == null) {
-                mEditorItem = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
-                Button btnMenu = (Button) mEditorItem.findViewById(R.id.btnMenu);
-                btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.F_EDITOR));
-                btnMenu.setTag(FragmentId.F_EDITOR);
-                btnMenu.setOnClickListener(this);
-                mFooterView.addView(mEditorItem);
-            } else {
-                mFooterView.removeView(mEditorItem);
-            }
-        }
-        mEditorInitializationForSessionInvoked = true;
-    }
-
     public static void selectFragment(FragmentId fragmentId) {
         Intent intent = new Intent();
         intent.setAction(SELECT_MENU_ITEM);
@@ -188,8 +167,29 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         list.setDividerHeight(0);
         list.setDivider(null);
         list.setBackgroundColor(getResources().getColor(R.color.bg_left_menu));
+        list.setVerticalScrollBarEnabled(false);
         // controller for closings uses ViewStub in header to be inflated
         mClosingsController = new ClosingsController(this, mHeaderViewStub, mAdapter);
+    }
+
+    private void initEditor() {
+        if (mFooterView != null) {
+            if (Editor.isEditor()) {
+                if (mEditorItem == null) {
+                    mEditorItem = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
+                    Button btnMenu = (Button) mEditorItem.findViewById(R.id.btnMenu);
+                    btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.F_EDITOR));
+                    btnMenu.setTag(FragmentId.F_EDITOR);
+                    btnMenu.setOnClickListener(this);
+                    mFooterView.addView(mEditorItem);
+                }
+            } else {
+                if (mEditorItem != null) {
+                    mFooterView.removeView(mEditorItem);
+                    mEditorItem = null;
+                }
+            }
+        }
     }
 
     private void initHeader() {
@@ -233,6 +233,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         getListView().addFooterView(mFooterView);
 
         mBuyWidgetController.setSalesEnabled(CacheProfile.getGooglePlayProducts().saleExists);
+        initEditor();
     }
 
     private void initProfileMenuItem(View headerView) {
@@ -535,17 +536,15 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             //его локально, а не серверно, как это происходит с остальными счетчиками.
             if (id == F_BONUS) {
                 if (CacheProfile.needShowBonusCounter) {
-                    new BackgroundThread() {
-                        @Override
-                        public void execute() {
-                            SharedPreferences preferences = getActivity().getSharedPreferences(NavigationActivity.BONUS_COUNTER_TAG, Context.MODE_PRIVATE);
-                            preferences.edit().putLong(NavigationActivity.BONUS_COUNTER_LAST_SHOW_TIME, CacheProfile.getOptions().bonus.timestamp).commit();
-                        }
-                    };
+                    App.getUserConfig().setBonusCounterLastShowTime(CacheProfile.getOptions().bonus.timestamp);
                 }
                 CacheProfile.needShowBonusCounter = false;
                 mAdapter.refreshCounterBadges();
-                Offerwalls.startOfferwall(getActivity());
+                if (CacheProfile.getOptions().offerwalls.hasOffers()) {
+                    selectMenu(F_BONUS);
+                } else {
+                    OfferwallsManager.startOfferwall(getActivity());
+                }
             } else {
                 selectMenu(id);
             }
@@ -599,6 +598,5 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
 
     public static void onLogout() {
         ClosingsController.onLogout();
-        mEditorInitializationForSessionInvoked = false;
     }
 }

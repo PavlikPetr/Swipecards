@@ -166,13 +166,15 @@ public class GCMUtils {
                         true, null,
                         getUnread(extra),
                         intent,
-                        false);
+                        false,
+                        null);
             }
         } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
 
             notificationManager.showNotificationAsync(
                     title,
                     data,
+                    user,
                     true,
                     user.photoUrl,
                     getUnread(extra),
@@ -186,7 +188,8 @@ public class GCMUtils {
                     true, null,
                     getUnread(extra),
                     intent,
-                    false);
+                    false,
+                    null);
         }
     }
 
@@ -363,7 +366,7 @@ public class GCMUtils {
     }
 
 
-    private static class User {
+    public static class User {
         public int id;
         public String name;
         public String photoUrl;

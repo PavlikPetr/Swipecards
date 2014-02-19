@@ -34,7 +34,7 @@ import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
-import com.topface.topface.utils.offerwalls.Offerwalls;
+import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -122,7 +122,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_spinner_item,
-                Offerwalls.OFFERWALLS
+                OfferwallsManager.OFFERWALLS
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mOfferwallTypeChoose.setAdapter(adapter);
@@ -130,7 +130,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (mConfigInited) {
-                    CacheProfile.getOptions().offerwall = Offerwalls.OFFERWALLS[position];
+                    CacheProfile.getOptions().offerwall = OfferwallsManager.OFFERWALLS[position];
                 }
             }
 
@@ -409,8 +409,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     }
 
     private int getOfferwallIndexInArray(String offerwall) {
-        for (int i = 0; i < Offerwalls.OFFERWALLS.length; i++) {
-            if (offerwall.equals(Offerwalls.OFFERWALLS[i]))
+        for (int i = 0; i < OfferwallsManager.OFFERWALLS.length; i++) {
+            if (offerwall.equals(OfferwallsManager.OFFERWALLS[i]))
                 return i;
         }
         return -1;
