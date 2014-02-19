@@ -49,14 +49,15 @@
             </FrameLayout>
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/loAddButtons"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/bg_chat_add_panel"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -93,13 +94,13 @@
                     android:paddingRight="4dp" />
             </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/loAddButtons"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
                 <TextView
                     android:id="@+id/tvBuyVipTitle"
@@ -116,25 +117,22 @@
                     style="@style/Widget.Topface.Button.Big.Blue"
                     android:text="@string/buying_vip_status"
                     android:textStyle="bold"
-                    android:layout_below="@id/tvBuyVipTitle"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp" />
 
                 <Button
                     android:id="@+id/btnAddToBlackList"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:background="@drawable/btn_gray_selector"
                     style="@style/Widget.Topface.Button.Big.Gray"
                     android:text="@string/black_list_add"
-                    android:layout_centerInParent="true"
-                    android:layout_below="@id/tvBuyVipTitle"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp" />
-            </RelativeLayout>
-        </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
     </com.topface.topface.ui.views.SwapControl>
 
     <TextView
