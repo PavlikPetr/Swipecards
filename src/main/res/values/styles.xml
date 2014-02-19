@@ -601,7 +601,7 @@
         <item name="android:layout_marginRight">6dp</item>
     </style>
 
-    <style name="TopfaceTextAppearance">
+    <style name="TopfaceTextAppearance" parent="ShadowItemFont">
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
@@ -764,5 +764,15 @@
         <item name="android:minHeight">28dip</item>
         <item name="android:maxHeight">28dip</item>
         <item name="android:progressDrawable">@drawable/topface_ratingbar</item>
+    </style>
+
+    <style name="CoinsSubscriptionBountyText" parent="TopfaceTextAppearance.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxWidth">100dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:gravity">center</item>
     </style>
 </resources>

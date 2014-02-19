@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.buy;
 
 
 import android.content.BroadcastReceiver;
@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,8 +20,8 @@ import com.topface.billing.BillingType;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.GooglePlayProducts;
+import com.topface.topface.data.GooglePlayProducts.ProductsInfo.CoinsSubscriptionInfo;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.views.ServicesTextView;
@@ -34,27 +33,37 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-@SuppressWarnings("UnusedDeclaration")
 public class BuyingFragment extends BillingFragment {
-
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_GIFT = 1;
-    public static final int TYPE_DELIGHT = 2;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
 
-    private LinkedList<RelativeLayout> purchaseButtons = new LinkedList<>();
-
+    private LinkedList<View> purchaseButtons = new LinkedList<>();
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateBalanceCounters();
+            switch (intent.getAction()) {
+                case CountersManager.UPDATE_BALANCE:
+                    updateBalanceCounters();
+                    break;
+                case GooglePlayProducts.INTENT_UPDATE_PRODUCTS:
+                    updateCoinsSubscriptionButton();
+                    break;
+            }
         }
     };
 
-    public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
     private ServicesTextView mCurCoins;
     private ServicesTextView mCurLikes;
     private TextView mResourcesInfo;
+    private String mFrom;
+    private View mCoinsSubscriptionButton;
+    private GooglePlayProducts.BuyButtonClickListener mCoinsSubscriptionClickListener = new GooglePlayProducts.BuyButtonClickListener() {
+        @Override
+        public void onClick(String id) {
+            startActivityForResult(ContainerActivity.getCoinsSubscriptionIntent(mFrom), ContainerActivity.INTENT_COINS_SUBSCRIPTION_FRAGMENT);
+        }
+    };
 
     public static BuyingFragment newInstance(int type, int coins, String from) {
         BuyingFragment fragment = new BuyingFragment();
@@ -82,6 +91,10 @@ public class BuyingFragment extends BillingFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         OfferwallsManager.init(getActivity());
+        Bundle args = getArguments();
+        if (args != null) {
+            mFrom = args.getString(ARG_TAG_SOURCE);
+        }
     }
 
     @Override
@@ -100,7 +113,10 @@ public class BuyingFragment extends BillingFragment {
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CountersManager.UPDATE_BALANCE);
+        filter.addAction(GooglePlayProducts.INTENT_UPDATE_PRODUCTS);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, filter);
         updateBalanceCounters();
     }
 
@@ -143,28 +159,27 @@ public class BuyingFragment extends BillingFragment {
         }
     }
 
+    private void updateCoinsSubscriptionButton() {
+        CoinsSubscriptionInfo coinsSubscriptionInfo = CacheProfile.getGooglePlayProducts()
+                .productsInfo.coinsSubscriptionInfo;
+        GooglePlayProducts.BuyButton btn = coinsSubscriptionInfo.getSubscriptionButton();
+        GooglePlayProducts.switchOpenButtonTexts(mCoinsSubscriptionButton, btn, mCoinsSubscriptionClickListener);
+    }
+
     private void initButtons(View root) {
         LinearLayout likesButtons = (LinearLayout) root.findViewById(R.id.fbLikes);
-
-
-        if (CacheProfile.getGooglePlayProducts().coins.isEmpty()) {
-            root.findViewById(R.id.coins_title).setVisibility(View.GONE);
-        } else {
-            root.findViewById(R.id.coins_title).setVisibility(View.VISIBLE);
+        GooglePlayProducts products = CacheProfile.getGooglePlayProducts();
+        if (products.likes.isEmpty() && products.coins.isEmpty()) {
+            root.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
         }
-
-        if (CacheProfile.getGooglePlayProducts().likes.isEmpty()) {
+        // likes buttons
+        if (products.likes.isEmpty()) {
             root.findViewById(R.id.likes_title).setVisibility(View.GONE);
         } else {
             root.findViewById(R.id.likes_title).setVisibility(View.VISIBLE);
         }
-
-        if (CacheProfile.getGooglePlayProducts().likes.isEmpty() && CacheProfile.getGooglePlayProducts().coins.isEmpty()) {
-            root.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
-        }
-
-        for (GooglePlayProducts.BuyButton curButton : CacheProfile.getGooglePlayProducts().likes) {
-            RelativeLayout newButton = GooglePlayProducts.setButton(likesButtons, curButton, getActivity(),
+        for (GooglePlayProducts.BuyButton curButton : products.likes) {
+            View newButton = GooglePlayProducts.setBuyButton(likesButtons, curButton, getActivity(),
                     new GooglePlayProducts.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
@@ -175,11 +190,25 @@ public class BuyingFragment extends BillingFragment {
                 purchaseButtons.add(newButton);
             }
         }
-
-
+        // coins buttons
+        if (products.coins.isEmpty()) {
+            root.findViewById(R.id.coins_title).setVisibility(View.GONE);
+        } else {
+            root.findViewById(R.id.coins_title).setVisibility(View.VISIBLE);
+        }
         LinearLayout coinsButtons = (LinearLayout) root.findViewById(R.id.fbCoins);
-        for (GooglePlayProducts.BuyButton curButton : CacheProfile.getGooglePlayProducts().coins) {
-            RelativeLayout newButton = GooglePlayProducts.setButton(coinsButtons, curButton, getActivity(),
+        if (!products.coinsSubscriptions.isEmpty()) {
+            CoinsSubscriptionInfo info = products.productsInfo.coinsSubscriptionInfo;
+            GooglePlayProducts.BuyButton btn = info.status.active ? info.hasSubscriptionButton : info.noSubscriptionButton;
+            mCoinsSubscriptionButton = GooglePlayProducts.setOpenButton(coinsButtons, btn,
+                    getActivity(), mCoinsSubscriptionClickListener);
+            if (mCoinsSubscriptionButton != null) {
+                purchaseButtons.add(mCoinsSubscriptionButton);
+            }
+
+        }
+        for (GooglePlayProducts.BuyButton curButton : products.coins) {
+            View newButton = GooglePlayProducts.setBuyButton(coinsButtons, curButton, getActivity(),
                     new GooglePlayProducts.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
@@ -190,7 +219,6 @@ public class BuyingFragment extends BillingFragment {
                 purchaseButtons.add(newButton);
             }
         }
-
         // Button for offerwalls (Tapjoy and Sponsorpay)
         View offerwall = root.findViewById(R.id.btnOfferwall);
         offerwall.setOnClickListener(new View.OnClickListener() {
@@ -201,9 +229,8 @@ public class BuyingFragment extends BillingFragment {
         });
         offerwall.setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
         root.findViewById(R.id.titleSpecialOffers).setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
-
+        // paymentwall buttons
         initPaymentwallButtons(root);
-
     }
 
     private void initPaymentwallButtons(View root) {
@@ -251,20 +278,17 @@ public class BuyingFragment extends BillingFragment {
                         App.sendProfileRequest();
                     }
                 }, 3000);
-
+            }
+        } else if (requestCode == ContainerActivity.INTENT_COINS_SUBSCRIPTION_FRAGMENT) {
+            if (resultCode == PaymentwallActivity.RESULT_OK) {
+                updateCoinsSubscriptionButton();
             }
         }
     }
 
-    private void goToVipSettings() {
-        Intent intent = ContainerActivity.getVipBuyIntent(null, "BuyingGoToVipSettings");
-        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-        startActivity(intent);
-    }
-
     @Override
     public void onInAppBillingSupported() {
-        for (RelativeLayout btn : purchaseButtons) {
+        for (View btn : purchaseButtons) {
             btn.setEnabled(true);
         }
     }
