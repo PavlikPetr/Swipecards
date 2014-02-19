@@ -45,17 +45,6 @@ public class GCMIntentService extends GCMBaseIntentService {
         }
     }
 
-    private String getUserName(String user) {
-        String name = "";
-        try {
-            JSONObject userJSON = new JSONObject(user);
-            name = userJSON.optString("name");
-        } catch (JSONException e) {
-            Debug.error(e);
-        }
-
-        return name;
-    }
 
     @Override
     protected void onError(Context context, String s) {
