@@ -72,7 +72,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         getSupportActionBar().setTitle(R.string.edit_title);
 
         // ListView
-        mEditItems = new LinkedList<EditProfileItem>();
+        mEditItems = new LinkedList<>();
         initEditItems();
 
         ListView editsListView = (ListView) findViewById(R.id.lvEdits);
@@ -408,14 +408,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     }
                 });
             }
-
-            if (position == getCount() - 1) {
-                convertView.setPadding(0, 0, 0, 10);
-            } else {
-                convertView.setPadding(0, 0, 0, 0);
-            }
-
-
             return convertView;
         }
 
