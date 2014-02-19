@@ -91,8 +91,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
 
     private ClosingsController mClosingsController;
 
-    private static boolean mEditorInitializationForSessionInvoked = false;
-
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -148,23 +146,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
     }
 
-    private void initEditor() {
-        if (mEditorInitializationForSessionInvoked) return;
-        if (mFooterView != null) {
-            if (Editor.isEditor() && mEditorItem == null) {
-                mEditorItem = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
-                Button btnMenu = (Button) mEditorItem.findViewById(R.id.btnMenu);
-                btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.F_EDITOR));
-                btnMenu.setTag(FragmentId.F_EDITOR);
-                btnMenu.setOnClickListener(this);
-                mFooterView.addView(mEditorItem);
-            } else {
-                mFooterView.removeView(mEditorItem);
-            }
-        }
-        mEditorInitializationForSessionInvoked = true;
-    }
-
     public static void selectFragment(FragmentId fragmentId) {
         Intent intent = new Intent();
         intent.setAction(SELECT_MENU_ITEM);
@@ -189,6 +170,26 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         list.setVerticalScrollBarEnabled(false);
         // controller for closings uses ViewStub in header to be inflated
         mClosingsController = new ClosingsController(this, mHeaderViewStub, mAdapter);
+    }
+
+    private void initEditor() {
+        if (mFooterView != null) {
+            if (Editor.isEditor()) {
+                if (mEditorItem == null) {
+                    mEditorItem = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
+                    Button btnMenu = (Button) mEditorItem.findViewById(R.id.btnMenu);
+                    btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.F_EDITOR));
+                    btnMenu.setTag(FragmentId.F_EDITOR);
+                    btnMenu.setOnClickListener(this);
+                    mFooterView.addView(mEditorItem);
+                }
+            } else {
+                if (mEditorItem != null) {
+                    mFooterView.removeView(mEditorItem);
+                    mEditorItem = null;
+                }
+            }
+        }
     }
 
     private void initHeader() {
@@ -232,6 +233,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         getListView().addFooterView(mFooterView);
 
         mBuyWidgetController.setSalesEnabled(CacheProfile.getGooglePlayProducts().saleExists);
+        initEditor();
     }
 
     private void initProfileMenuItem(View headerView) {
@@ -596,6 +598,5 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
 
     public static void onLogout() {
         ClosingsController.onLogout();
-        mEditorInitializationForSessionInvoked = false;
     }
 }
