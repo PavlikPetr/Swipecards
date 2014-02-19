@@ -20,7 +20,6 @@ import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.utils.config.UserConfig;
 
-import java.util.LinkedList;
 
 import com.topface.topface.R;
 
@@ -227,7 +226,8 @@ public class UserNotificationManager {
         UserConfig config = App.getUserConfig();
         MessageStack messagesStack = config.getNotificationMessagesStack();
         messagesStack.setLastElem(mContext.getString(R.string.general_some_more));
-        Spannable spanMessage = new SpannableString(user.name + "  " + message);
+
+        Spannable spanMessage = new SpannableString(String.format(mContext.getString(R.string.notification_message_format), user.name, message));
         spanMessage.setSpan(new StyleSpan(Typeface.BOLD), 0, user.name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         messagesStack.addFirst(spanMessage);
         config.setNotificationMessagesStack(messagesStack);

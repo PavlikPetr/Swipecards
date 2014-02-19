@@ -48,5 +48,10 @@ public class MessageStack extends LinkedList<Spannable>{
 
     private int mRestMessages;
     private String mLast;
-    private static final int SHOWED_MESSAGES = 5; //Количество показываемых сообщений
+    /**
+     * Количество показываемых сообщений в нотификации. Когда пытаемся показать больше,
+     * самое старое сообщение удаляется и вместо него ставится фраза
+     * осталось %d нотификаций.
+     */
+    private static final int SHOWED_MESSAGES = 5;
 }

@@ -796,4 +796,5 @@
     </plurals>
     <string name="coins_subscription">Подписка на монеты</string>
     <string name="general_some_more">и еще %d</string>
+
 </resources>
