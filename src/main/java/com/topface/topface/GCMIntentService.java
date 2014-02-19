@@ -45,6 +45,7 @@ public class GCMIntentService extends GCMBaseIntentService {
         }
     }
 
+
     @Override
     protected void onError(Context context, String s) {
         Debug.error(String.format("GCM: Error: %s", s));

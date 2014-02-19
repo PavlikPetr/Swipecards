@@ -6,6 +6,7 @@ import android.text.Spannable;
 
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
+import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.LinkedList;
@@ -32,6 +33,7 @@ public class UserConfig extends AbstractConfig {
     private static final String DATA_MUTUAL_CLOSING_LAST_TIME = "data_closings_mutual_last_date";
     private static final String DATA_BONUS_LAST_SHOW_TIME = "data_bonus_last_show_time";
     public static final String NOTIFICATIONS_MESSAGES_STACK = "notifications_messages_stack";
+    public static final String NOTIFICATION_REST_MESSAGES = "notifications_rest_messages";
 
     public UserConfig(Context context) {
         super(context);
@@ -59,6 +61,8 @@ public class UserConfig extends AbstractConfig {
         settingsMap.addLongField(generateKey(DATA_MUTUAL_CLOSING_LAST_TIME), 0L);
         // notification messages stack
         settingsMap.addListField(generateKey(NOTIFICATIONS_MESSAGES_STACK), new LinkedList<String>());
+        // rest notification messages
+        settingsMap.addIntegerField(generateKey(NOTIFICATION_REST_MESSAGES), 0);
     }
 
     @Override
@@ -265,16 +269,20 @@ public class UserConfig extends AbstractConfig {
         return getSettingsMap().getLongField(generateKey(DATA_BONUS_LAST_SHOW_TIME));
     }
 
-    public LinkedList<Spannable> getNotificationMessagesStack() {
-        return (LinkedList<Spannable>) getSettingsMap().getListField(generateKey(NOTIFICATIONS_MESSAGES_STACK));
+    public MessageStack getNotificationMessagesStack() {
+        MessageStack messageStack = new MessageStack((LinkedList<Spannable>) getSettingsMap().getListField(generateKey(NOTIFICATIONS_MESSAGES_STACK)));
+        messageStack.setRestMessages(getSettingsMap().getIntegerField(generateKey(NOTIFICATION_REST_MESSAGES)));
+        return messageStack;
     }
 
-    public boolean setNotificationMessagesStack(LinkedList<Spannable> messages) {
+    public boolean setNotificationMessagesStack(MessageStack messages) {
+        getSettingsMap().setField(generateKey(NOTIFICATION_REST_MESSAGES), messages.getRestMessages());
         return getSettingsMap().setField(generateKey(NOTIFICATIONS_MESSAGES_STACK), messages);
     }
 
     public void resetNotificationMessagesStack() {
         resetAndSaveConfig(generateKey(NOTIFICATIONS_MESSAGES_STACK));
+        resetAndSaveConfig(generateKey(NOTIFICATION_REST_MESSAGES));
     }
 
     // =====================================================

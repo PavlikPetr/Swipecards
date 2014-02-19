@@ -32,7 +32,7 @@ public class UserNotification {
     private boolean mOngoing;
 
 
-    private LinkedList<Spannable> messages;
+    private MessageStack messages;
 
     public enum Type {PROGRESS, STANDARD, FAIL, ACTIONS}
 
@@ -83,7 +83,7 @@ public class UserNotification {
         return (int) (context.getResources().getDisplayMetrics().density * ICON_SIZE);
     }
 
-    public void setMessages(LinkedList<Spannable> messages) {
+    public void setMessages(MessageStack messages) {
         this.messages = messages;
     }
 
@@ -193,7 +193,9 @@ public class UserNotification {
 
     private void generateInbox() {
         NotificationCompat.InboxStyle inboxStyle =
-                new NotificationCompat.InboxStyle(notificationBuilder.setContentTitle(Utils.getQuantityString(R.plurals.notification_many_messages, messages.size(), messages.size())));
+                new NotificationCompat.InboxStyle(notificationBuilder.setContentTitle(
+                        Utils.getQuantityString(R.plurals.notification_many_messages,
+                                messages.getAllCount(), messages.getAllCount())));
         for (Spannable message : messages) {
             inboxStyle.addLine(message);
         }
