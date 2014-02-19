@@ -31,6 +31,7 @@ public class UserConfig extends AbstractConfig {
     public static final String DATA_NOVICE_SYMPATHY = "novice_dating_sympathy";
     private static final String DATA_LIKE_CLOSING_LAST_TIME = "data_closings_likes_last_date";
     private static final String DATA_MUTUAL_CLOSING_LAST_TIME = "data_closings_mutual_last_date";
+    private static final String DATA_BONUS_LAST_SHOW_TIME = "data_bonus_last_show_time";
     public static final String NOTIFICATIONS_MESSAGES_STACK = "notifications_messages_stack";
     public static final String NOTIFICATION_REST_MESSAGES = "notifications_rest_messages";
 
@@ -113,7 +114,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets current user pincode value
-     *
      * @param pinCode value
      * @return true on success
      */
@@ -123,7 +123,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Current user pincode
-     *
      * @return pincode value
      */
     public String getPinCode() {
@@ -134,9 +133,8 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets promo popup last date
-     *
      * @param popupType type of popup (((Options.PromoPopupEntity)someEntity).getPopupAirType())
-     * @param lastTime  date of launch
+     * @param lastTime date of launch
      * @return true on success
      */
     public boolean setPromoPopupLastTime(int popupType, long lastTime) {
@@ -145,7 +143,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Last date of promo popup's launch
-     *
      * @param popupType type of popup (((Options.PromoPopupEntity)someEntity).getPopupAirType())
      * @return date
      */
@@ -155,7 +152,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Resets last date of promo popup's launch
-     *
      * @param popupType type of popup (((Options.PromoPopupEntity)someEntity).getPopupAirType())
      */
     public void resetPromoPopupData(int popupType) {
@@ -166,7 +162,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * "Send sympathy hint" for novice user
-     *
      * @return true if hint needs to be shown
      */
     public boolean getNoviceSympathy() {
@@ -175,7 +170,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets "send sympathy hint" flag for novice user
-     *
      * @param needShow true if hint needs to be shown
      * @return true on success
      */
@@ -185,7 +179,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * "Buy sympathy hint" flag for novice user
-     *
      * @return true if hint need to be shown
      */
     public boolean getNoviceBuySympathy() {
@@ -194,7 +187,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets "buy sympathy hint" flag for novice user
-     *
      * @param needShow true if hint need to be shown
      * @return true on success
      */
@@ -204,7 +196,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * First trial to show "Buy sympathy hint" for delay hint purposes
-     *
      * @return time of first trial
      */
     public long getNoviceBuySympathyDate() {
@@ -213,7 +204,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Sets time of first trial to show "Buy sympathy hint" for delay hint purposes
-     *
      * @param lastTime time of show
      * @return true on success
      */
@@ -259,6 +249,24 @@ public class UserConfig extends AbstractConfig {
      */
     public long getMutualClosingsLastTime() {
         return getSettingsMap().getLongField(generateKey(DATA_MUTUAL_CLOSING_LAST_TIME));
+    }
+
+    /**
+     * Sets last time of click on bonus menu item
+     *
+     * @param lastShowTime timestamp of last visit time from server
+     */
+    public void setBonusCounterLastShowTime(long lastShowTime) {
+        getSettingsMap().setField(generateKey(DATA_BONUS_LAST_SHOW_TIME), lastShowTime);
+    }
+
+    /**
+     * Last time of click on bonus menu item
+     *
+     * @return timestamp
+     */
+    public long getBonusCounterLastShowTime() {
+        return getSettingsMap().getLongField(generateKey(DATA_BONUS_LAST_SHOW_TIME));
     }
 
     public MessageStack getNotificationMessagesStack() {

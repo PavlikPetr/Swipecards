@@ -19,5 +19,5 @@
         android:id="@+id/ivHeaderDivider"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/chat_divider_bg"/>
+        android:background="@drawable/divider_feed_filter"/>
 </LinearLayout>
