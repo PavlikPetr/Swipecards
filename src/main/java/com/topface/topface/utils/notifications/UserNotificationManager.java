@@ -22,6 +22,8 @@ import com.topface.topface.utils.config.UserConfig;
 
 
 import com.topface.topface.R;
+import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
 
 public class UserNotificationManager {
     private static UserNotificationManager mInstance;

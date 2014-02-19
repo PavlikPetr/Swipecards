@@ -43,6 +43,7 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Auth;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
@@ -81,6 +82,7 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONObject;
 
@@ -216,8 +218,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         // History ListView & ListAdapter
         initChatHistory(root);
-
-        GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
+        if (!AuthToken.getInstance().isEmpty()) {
+            GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
+        }
 
         return root;
     }
