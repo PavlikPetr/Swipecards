@@ -181,8 +181,6 @@ public class UserConfig extends AbstractConfig {
      */
     public boolean setNoviceSympathy(boolean needShow) {
         return getSettingsMap().setField(generateKey(DATA_NOVICE_SYMPATHY), needShow);
-    }public void setUser(User user) {
-        this.user = user;
     }
 
     /**
