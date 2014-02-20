@@ -607,5 +607,4 @@
         <item quantity="one">%d min.</item>
     </plurals>
     <string name="ok_label">Odnoklassniki</string>
-    <string name="notification_message_format">%1$s &#160;%2$s</string>
 </resources>
