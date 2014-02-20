@@ -31,7 +31,7 @@ public class MessageStack extends LinkedList<Spannable>{
     }
 
     public int getAllCount() {
-        return mRestMessages + size() - (mRestMessages > 0? 1:0);
+        return mRestMessages + size();
     }
 
     public MessageStack(LinkedList<Spannable> list) {
