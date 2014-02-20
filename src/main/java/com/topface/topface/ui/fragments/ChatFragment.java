@@ -43,7 +43,6 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Auth;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
@@ -210,7 +209,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (!AuthToken.getInstance().isEmpty()) {
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
-        
         return root;
     }
 
@@ -627,6 +625,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         });
         if (!needToClose) {
             chatActions.setVisibility(View.VISIBLE);
+            Utils.hideSoftKeyboard(getActivity(), mEditBox);
+            toggleAddPanel(false);
         }
         chatActions.startAnimation(ta);
     }
