@@ -11,12 +11,15 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.ClosingsController;
-import com.topface.topface.utils.offerwalls.Offerwalls;
+import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Опции приложения
@@ -83,7 +86,7 @@ public class Options extends AbstractData {
     public int priceLeader = 8;
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
-    public String offerwall = Offerwalls.SPONSORPAY;
+    public String offerwall = OfferwallsManager.SPONSORPAY;
 
     public int premium_period;
     public int contacts_count;
@@ -108,8 +111,13 @@ public class Options extends AbstractData {
     public String gagTypeBanner = BannerBlock.BANNER_ADMOB;
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
     public String helpUrl;
+    /**
+     * Ключ эксперимента под который попадает данный пользователь (передаем его в GA)
+     */
+    public ExperimentTags experimentTags;
 
     public Bonus bonus = new Bonus();
+    public Offerwalls offerwalls = new Offerwalls();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -230,8 +238,20 @@ public class Options extends AbstractData {
                 bonus.counter = bonusObject.optInt("counter");
                 bonus.timestamp = bonusObject.optLong("counterTimestamp");
             }
+            // offerwalls for
+            JSONObject jsonOfferwalls = response.optJSONObject("offerwalls");
+            if (jsonOfferwalls != null) {
+                offerwalls.mainText = jsonOfferwalls.optString("mainText");
+                offerwalls.extraText = jsonOfferwalls.optString("extraText", null);
+                fillOffers(offerwalls.mainOffers, jsonOfferwalls.optJSONArray("mainOffers"));
+                fillOffers(offerwalls.extraOffers, jsonOfferwalls.optJSONArray("extraOffers"));
+            }
 
             helpUrl = response.optString("helpUrl");
+            JSONObject tagsObject = response.optJSONObject("experimentTags");
+            if (tagsObject != null && tagsObject.length() > 0) {
+                experimentTags = new ExperimentTags(tagsObject);
+            }
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
@@ -242,6 +262,20 @@ public class Options extends AbstractData {
             Debug.error(cacheToPreferences ? "Options from preferences" : "Options response is null");
         }
 
+    }
+
+    private void fillOffers(List<Offerwalls.Offer> list, JSONArray offersArrObj) throws JSONException {
+        if (offersArrObj == null) return;
+        for (int i = 0; i < offersArrObj.length(); i++) {
+            JSONObject offerObj = offersArrObj.getJSONObject(i);
+            if (offerObj != null) {
+                Offerwalls.Offer offer = new Offerwalls.Offer();
+                offer.text = offerObj.optString("text");
+                offer.action = offerObj.optString("action");
+                offer.type = offerObj.optInt("type");
+                list.add(offer);
+            }
+        }
     }
 
 
@@ -479,6 +513,26 @@ public class Options extends AbstractData {
         public boolean enabled;
         public int counter;
         public long timestamp;
-
     }
+
+    public static class Offerwalls {
+        public String mainText;
+        public String extraText;
+        public List<Offer> mainOffers = new ArrayList<>();
+        public List<Offer> extraOffers = new ArrayList<>();
+
+        public static class Offer {
+            public static final int TYPE_MAIN = 1;
+            public static final int TYPE_EXTRA = 0;
+            public String text;
+            public String action;
+            public int type;
+        }
+
+        public boolean hasOffers() {
+            return !mainOffers.isEmpty() && !extraOffers.isEmpty();
+        }
+    }
+
+
 }

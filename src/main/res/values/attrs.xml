@@ -91,4 +91,9 @@
 
     </declare-styleable>
 
+    <declare-styleable name="Theme.Topface">
+        <attr name="blueButtonStyle" format="reference" />
+        <attr name="grayButtonStyle" format="reference" />
+    </declare-styleable>
+
 </resources>

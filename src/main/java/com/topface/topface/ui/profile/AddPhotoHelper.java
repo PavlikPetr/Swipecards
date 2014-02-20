@@ -283,7 +283,7 @@ public class AddPhotoHelper {
                 }
                 mNotificationManager.showNotificationAsync(
                         mContext.getString(R.string.default_photo_upload_complete), "", false,
-                        uri.toString(), 1, getIntentForNotification(), true, null);
+                        uri.toString(), 1, getIntentForNotification(), true, null, null);
             }
 
             @Override
@@ -340,7 +340,7 @@ public class AddPhotoHelper {
         return new Intent(mActivity, NavigationActivity.class)
                 .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
                 .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
     public static class PhotoNotificationListener implements UserNotificationManager.NotificationImageListener {

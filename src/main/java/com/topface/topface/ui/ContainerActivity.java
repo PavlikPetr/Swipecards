@@ -14,7 +14,6 @@ import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.BuyingFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.ContactsFragment;
@@ -23,7 +22,9 @@ import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
 import com.topface.topface.ui.fragments.RegistrationFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.VipBuyFragment;
+import com.topface.topface.ui.fragments.buy.BuyingFragment;
+import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
+import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Debug;
@@ -31,7 +32,7 @@ import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 
-public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements ChatFragment.IUserOnlineListener{
+public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements IUserOnlineListener {
 
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
@@ -53,6 +54,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final int INTENT_SETTINGS_FRAGMENT = 7;
     public static final int INTENT_CONTACTS_FRAGMENT = 8;
     public static final int INTENT_COMPLAIN_FRAGMENT = 9;
+    public static final int INTENT_COINS_SUBSCRIPTION_FRAGMENT = 10;
 
     // Id для админки начиная со 101
     public static final int INTENT_EDITOR_BANNERS = 101;
@@ -138,6 +140,8 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         Fragment fragment = null;
         Intent intent = getIntent();
 
+        Bundle extras = getIntent().getExtras();
+        String source = intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE);
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
                 fragment = VipBuyFragment.newInstance(
@@ -147,8 +151,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
                 );
                 break;
             case INTENT_BUYING_FRAGMENT:
-                Bundle extras = getIntent().getExtras();
-                String source = intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE);
                 if (extras != null && extras.containsKey(BuyingFragment.ARG_ITEM_TYPE)
                         && extras.containsKey(BuyingFragment.ARG_ITEM_PRICE)) {
                     fragment = BuyingFragment.newInstance(
@@ -159,6 +161,9 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
                 } else {
                     fragment = BuyingFragment.newInstance(source);
                 }
+                break;
+            case INTENT_COINS_SUBSCRIPTION_FRAGMENT:
+                fragment = CoinsSubscriptionsFragment.newInstance(source);
                 break;
             case INTENT_CHAT_FRAGMENT:
                 fragment = ChatFragment.newInstance(intent.getStringExtra(ChatFragment.INTENT_ITEM_ID),
@@ -315,6 +320,14 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
 
     }
 
+    public static Intent getCoinsSubscriptionIntent(String from) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_COINS_SUBSCRIPTION_FRAGMENT);
+        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
+        return intent;
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -326,7 +339,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
             mOnlineIcon.setVisibility(online ? View.VISIBLE : View.GONE);
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

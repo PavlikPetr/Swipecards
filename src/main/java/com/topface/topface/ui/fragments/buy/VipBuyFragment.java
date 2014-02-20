@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.buy;
 
 
 import android.content.BroadcastReceiver;
@@ -47,7 +47,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
     private TextView mExtraText;
-
 
     /**
      * Создает новый инстанс фрагмента покупки VIP
@@ -144,7 +143,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.GONE);
         }
         for (GooglePlayProducts.BuyButton curBtn : googlePlayProducts.premium) {
-            GooglePlayProducts.setButton(btnContainer, curBtn, getActivity(),
+            GooglePlayProducts.setBuyButton(btnContainer, curBtn, getActivity(),
                     new GooglePlayProducts.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {

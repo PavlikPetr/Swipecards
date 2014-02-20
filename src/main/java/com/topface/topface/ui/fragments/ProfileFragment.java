@@ -56,6 +56,8 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.dialogs.LeadersDialog;
+import com.topface.topface.ui.fragments.buy.BuyingFragment;
+import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.profile.ProfileFormFragment;
@@ -1005,9 +1007,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 startSettingsActivity();
                 return true;
             case R.id.action_user_actions_list:
-                boolean checked = !item.isChecked();
-                item.setChecked(checked);
-                animateProfileActions(!checked, 500);
+                boolean checked = item.isChecked();
+                item.setChecked(!checked);
+                animateProfileActions(checked, 500);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

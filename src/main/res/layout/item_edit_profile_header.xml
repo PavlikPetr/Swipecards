@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="40dp"
             android:layout_marginLeft="8dp">
 
@@ -62,21 +62,6 @@
             <include
                 layout="@layout/item_edit_profile_name_select"
                 android:id="@+id/loProfileName" />
-
-            <!-- Button
-                    android:id="@+id/btnEditName"
-                    style="@style/ItemTitleText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:background="@drawable/edit_btn_top_selector"
-                    android:drawableRight="@drawable/im_item_arrow"
-                    android:ellipsize="end"
-                    android:gravity="left|center_vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="5dp"
-                    android:singleLine="true"
-                    android:textSize="14sp"/-->
 
             <Button
                 android:id="@+id/btnEditCity"
