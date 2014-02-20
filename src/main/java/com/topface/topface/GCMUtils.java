@@ -51,6 +51,7 @@ public class GCMUtils {
     public static final int GCM_TYPE_GIFT = 7;
     public static final int GCM_TYPE_DIALOGS = 8;
 
+
     public static final String NEXT_INTENT = "com.topface.topface_next";
 
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;

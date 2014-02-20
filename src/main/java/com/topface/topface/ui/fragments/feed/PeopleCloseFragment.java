@@ -3,32 +3,33 @@ package com.topface.topface.ui.fragments.feed;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
+import com.topface.topface.GCMUtils;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONObject;
 
 import java.util.List;
 
-/**
- * Created by ilya on 20.02.14.
- */
+import ad.labs.sdk.R;
+
 public class PeopleCloseFragment extends FeedFragment{
     @Override
     protected Drawable getBackIcon() {
-        return null;
+        return getResources().getDrawable(R.drawable.background_people_close);
     }
 
     @Override
     protected int getTypeForGCM() {
-        return 0;
+        return GCMUtils.GCM_TYPE_UNKNOWN;
     }
 
     @Override
     protected int getTypeForCounters() {
-        return 0;
+        return CountersManager.UNKNOWN_TYPE;
     }
 
     @Override
