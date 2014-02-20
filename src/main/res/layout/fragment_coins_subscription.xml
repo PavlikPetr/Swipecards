@@ -38,38 +38,43 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="center_horizontal|top"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="16dp">
 
             <TextView
                 android:id="@+id/tvFirstMonth"
                 style="@style/CoinsSubscriptionBountyText"
-                android:drawableTop="@drawable/icon_coins_first" />
+                android:drawableTop="@drawable/icon_coins_first"
+                android:layout_weight="3"/>
 
             <ImageView
                 android:id="@+id/ivSecondMonthArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_arrow"
-                android:layout_marginBottom="16dp" />
+                android:layout_weight="1"
+                android:layout_marginTop="32dp" />
 
             <TextView
                 android:id="@+id/tvSecondMonth"
                 style="@style/CoinsSubscriptionBountyText"
-                android:drawableTop="@drawable/icon_coins_second" />
+                android:drawableTop="@drawable/icon_coins_second"
+                android:layout_weight="3"/>
 
             <ImageView
                 android:id="@+id/ivThirdMonthArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_arrow"
-                android:layout_marginBottom="16dp" />
+                android:layout_weight="1"
+                android:layout_marginTop="32dp" />
 
             <TextView
                 android:id="@+id/tvThirdMonth"
                 style="@style/CoinsSubscriptionBountyText"
-                android:drawableTop="@drawable/icon_coins_third" />
+                android:drawableTop="@drawable/icon_coins_third"
+                android:layout_weight="3"/>
         </LinearLayout>
 
     </LinearLayout>
