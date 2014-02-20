@@ -795,6 +795,12 @@
         <item quantity="other">%d сообщений</item>
     </plurals>
     <string name="coins_subscription">Подписка на монеты</string>
-    <string name="general_some_more">и еще %d</string>
+    <plurals name="general_some_more">
+        <item quantity="one">и еще %d</item>
+        <item quantity="many">и еще %d</item>
+        <item quantity="few">и еще %d</item>
+        <item quantity="other">и еще %d</item>
+    </plurals>
+
 
 </resources>
