@@ -242,11 +242,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     private void deleteAccount() {
         DeleteAccountDialog newFragment = DeleteAccountDialog.newInstance();
-        try {
-            newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
-        } catch (Exception e) {
-            Debug.error(e);
-        }
+        newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
     }
 
     private void onChangeButtonClick() {

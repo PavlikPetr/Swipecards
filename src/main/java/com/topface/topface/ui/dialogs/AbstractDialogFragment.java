@@ -3,6 +3,8 @@ package com.topface.topface.ui.dialogs;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,9 @@ import android.view.ViewStub;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.social.AuthToken;
 
 /**
  * Extend this class if you need DialogFragment
@@ -43,6 +48,22 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         View view = stub.inflate();
         initViews(view);
         return root;
+    }
+
+    /**
+     * Don't show popup, when user logged out
+     * @param manager
+     * @param tag
+     */
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try {
+            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+                super.show(manager, tag);
+            }
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     /**

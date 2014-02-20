@@ -113,10 +113,6 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
 
     private void deleteAccountDialog() {
         DeleteAccountDialog newFragment = DeleteAccountDialog.newInstance();
-        try {
-            newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
-        } catch (Exception e) {
-            Debug.error(e);
-        }
+        newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
     }
 }
