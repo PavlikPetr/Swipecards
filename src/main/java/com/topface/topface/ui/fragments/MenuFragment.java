@@ -592,11 +592,8 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 }
             }
         });
-        try {
-            newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
-        } catch (Exception e) {
-            Debug.error(e);
-        }
+
+        newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
     }
 
     public static void onLogout() {

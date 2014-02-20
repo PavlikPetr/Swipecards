@@ -48,35 +48,32 @@
 
             <Button
                 android:id="@+id/btnAddPhotoCamera"
-                style="@style/ButtonGrayText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="26dp"
-                android:background="@drawable/buying_purchase_selector"
+                style="@style/Widget.Topface.Button.Big.Gray"
                 android:text="@string/profile_add_camera" />
 
             <Button
                 android:id="@+id/btnAddPhotoAlbum"
-                style="@style/ButtonGrayText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/buying_purchase_selector"
+                style="@style/Widget.Topface.Button.Big.Gray"
                 android:text="@string/profile_add_album" />
 
             <Button
                 android:id="@+id/btnCancel"
-                style="@style/ButtonGrayText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="26dp"
-                android:background="@drawable/buying_purchase_selector"
+                style="@style/Widget.Topface.Button.Big.Gray"
                 android:text="@string/general_cancel" />
         </LinearLayout>
 
