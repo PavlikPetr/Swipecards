@@ -14,6 +14,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
 /**
@@ -56,8 +57,12 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
      */
     @Override
     public void show(FragmentManager manager, String tag) {
-        if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
-            super.show(manager, tag);
+        try {
+            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+                super.show(manager, tag);
+            }
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 
