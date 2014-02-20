@@ -32,4 +32,6 @@
     <bool name="needProfileBackground">true</bool>
     <!-- С помощью этого флага определяем, планшет ли данное устройство см. ../values-sw600dp/constants.xml -->
     <bool name="is_tablet">false</bool>
+
+    <string name="notification_message_format">%1$s &#160;%2$s</string>
 </resources>

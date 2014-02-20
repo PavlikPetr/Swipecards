@@ -607,5 +607,4 @@
         <item quantity="one">%d min.</item>
     </plurals>
     <string name="ok_label">Odnoklassniki</string>
-    <string name="general_some_more">и еще %d</string>
 </resources>

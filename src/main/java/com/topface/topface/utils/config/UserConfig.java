@@ -59,9 +59,9 @@ public class UserConfig extends AbstractConfig {
         settingsMap.addLongField(generateKey(DATA_LIKE_CLOSING_LAST_TIME), 0L);
         // date of last mutual closings processing
         settingsMap.addLongField(generateKey(DATA_MUTUAL_CLOSING_LAST_TIME), 0L);
-        // notification messages stack
+        // список сообщений для сгруппированных нотификаций (сейчас группируются только сообщения)
         settingsMap.addListField(generateKey(NOTIFICATIONS_MESSAGES_STACK), new LinkedList<String>());
-        // rest notification messages
+        // количество нотификаций, которые пишем в поле "еще %d сообщений"
         settingsMap.addIntegerField(generateKey(NOTIFICATION_REST_MESSAGES), 0);
     }
 

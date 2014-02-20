@@ -20,9 +20,12 @@ import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.utils.config.UserConfig;
 
-import java.util.LinkedList;
 
 import com.topface.topface.R;
+import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
+
+import java.util.LinkedList;
 
 public class UserNotificationManager {
     private static UserNotificationManager mInstance;
@@ -203,10 +206,10 @@ public class UserNotificationManager {
             id = newNotificationId();
         }
 
-        MessageStack messagesStack = new MessageStack(mContext.getString(R.string.general_some_more));
+        MessageStack messagesStack = new MessageStack();
         if (intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ContainerActivity.INTENT_CHAT_FRAGMENT) {
             id = MESSAGES_ID;
-            messagesStack = saveMessageStack(title, message, user);
+            messagesStack = saveMessageStack(message, user);
         }
         UserNotification notification = new UserNotification(mContext);
         notification.setType(type);
@@ -223,11 +226,10 @@ public class UserNotificationManager {
         return id;
     }
 
-    private MessageStack saveMessageStack(String title, String message, User user) {
+    private MessageStack saveMessageStack(String message, User user) {
         UserConfig config = App.getUserConfig();
         MessageStack messagesStack = config.getNotificationMessagesStack();
-        messagesStack.setLastElem(mContext.getString(R.string.general_some_more));
-        Spannable spanMessage = new SpannableString(user.name + "  " + message);
+        Spannable spanMessage = new SpannableString(String.format(mContext.getString(R.string.notification_message_format), user.name, message));
         spanMessage.setSpan(new StyleSpan(Typeface.BOLD), 0, user.name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         messagesStack.addFirst(spanMessage);
         config.setNotificationMessagesStack(messagesStack);
