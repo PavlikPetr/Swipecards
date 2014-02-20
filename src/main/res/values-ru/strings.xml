@@ -789,10 +789,10 @@
 
     <string name="ok_label">Одноклассники</string>
     <plurals name="notification_many_messages">
-        <item quantity="one">%d сообщение</item>
-        <item quantity="many">%d сообщений</item>
-        <item quantity="few">%d сообщения</item>
-        <item quantity="other">%d сообщений</item>
+        <item quantity="one">%d новое сообщение</item>
+        <item quantity="many">%d новых сообщений</item>
+        <item quantity="few">%d новых сообщения</item>
+        <item quantity="other">%d новых сообщений</item>
     </plurals>
     <string name="coins_subscription">Подписка на монеты</string>
     <plurals name="general_some_more">
