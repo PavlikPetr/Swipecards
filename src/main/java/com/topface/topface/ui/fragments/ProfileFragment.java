@@ -1007,9 +1007,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 startSettingsActivity();
                 return true;
             case R.id.action_user_actions_list:
-                boolean checked = !item.isChecked();
-                item.setChecked(checked);
-                animateProfileActions(!checked, 500);
+                boolean checked = item.isChecked();
+                item.setChecked(!checked);
+                animateProfileActions(checked, 500);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

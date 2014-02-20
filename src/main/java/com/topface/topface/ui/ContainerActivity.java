@@ -32,7 +32,7 @@ import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 
-public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements ChatFragment.IUserOnlineListener {
+public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements IUserOnlineListener {
 
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
@@ -339,7 +339,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
             mOnlineIcon.setVisibility(online ? View.VISIBLE : View.GONE);
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
