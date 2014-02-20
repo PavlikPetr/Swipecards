@@ -71,7 +71,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:singleLine="false"
-            android:clickable="false"/>
+            android:clickable="false" />
 
         <ViewStub
             android:id="@+id/EditorTestStub"
@@ -95,26 +95,14 @@
                 android:text="@string/general_buying_disabled"
                 android:visibility="gone" />
 
-            <RelativeLayout
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
+            <TextView
                 android:id="@+id/likes_title"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:text="@string/buying_sympathies"
-                    android:layout_alignParentLeft="true"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_sympathy_small"
-                    android:layout_alignParentRight="true" />
-            </RelativeLayout>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/buying_sympathies"
+                android:textSize="16sp" />
 
             <!-- 10 000 power btn -->
             <LinearLayout
@@ -142,27 +130,14 @@
                 style="@style/Widget.Topface.Button.Big.Blue"
                 android:text="@string/get_it_for_free" />
 
-            <RelativeLayout
-
+            <TextView
                 android:id="@+id/coins_title"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:text="@string/buying_money"
-                    android:layout_alignParentLeft="true"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_coins_small"
-                    android:layout_alignParentRight="true" />
-            </RelativeLayout>
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/buying_money"
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:id="@+id/fbCoins"

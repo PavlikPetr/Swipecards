@@ -25,7 +25,7 @@
             android:id="@+id/tvInfoText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            style="@style/TopfaceTextAppearance.Small"/>
+            style="@style/TopfaceTextAppearance.Medium"/>
 
         <LinearLayout
             android:orientation="horizontal"
