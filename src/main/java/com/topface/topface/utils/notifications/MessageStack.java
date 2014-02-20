@@ -26,7 +26,7 @@ public class MessageStack extends LinkedList<Spannable>{
             if (mRestMessages > 0) {
                 removeLast();
             }
-            add(new SpannableString(Utils.getQuantityString(R.plurals.general_some_more, mRestMessages)));
+            add(new SpannableString(Utils.getQuantityString(R.plurals.general_some_more, mRestMessages, mRestMessages)));
         }
     }
 
