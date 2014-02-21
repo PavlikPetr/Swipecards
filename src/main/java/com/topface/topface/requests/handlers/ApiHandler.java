@@ -105,7 +105,6 @@ abstract public class ApiHandler extends Handler {
         if (!mNeedCounters || !response.isNeedUpdateCounters()) return;
         try {
             JSONObject unread = response.getUnread();
-            JSONObject balance = response.getBalance();
             String method = response.getMethodName();
             Debug.log("Set counters from method " + method);
             CountersManager countersManager = CountersManager
@@ -123,17 +122,7 @@ abstract public class ApiHandler extends Handler {
                                 unread.optInt("admirations")
                         );
             }
-            if (balance != null) {
-                countersManager.setBalanceCounters(
-                        balance.optInt("likes"),
-                        balance.optInt("money")
-                );
-                boolean premiumStatus = balance.optBoolean("premium", CacheProfile.premium);
-                if (premiumStatus != CacheProfile.premium) {
-                    CacheProfile.premium = premiumStatus;
-                    App.sendProfileAndOptionsRequests();
-                }
-            }
+            countersManager.setBalanceCounters(response.getBalance());
         } catch (Exception e) {
             Debug.error("api handler exception", e);
         }

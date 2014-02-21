@@ -421,7 +421,7 @@ public class AuthorizationManager {
 
 
     public static void logout(Activity activity) {
-        GCMRegistrar.unregister(activity.getApplicationContext());
+        GCMRegistrar.unregister(activity);
         Ssid.remove();
         AuthToken authToken = AuthToken.getInstance();
         if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
