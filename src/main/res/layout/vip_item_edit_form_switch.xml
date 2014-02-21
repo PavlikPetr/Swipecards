@@ -31,18 +31,7 @@
         android:background="@drawable/edit_switch"
         android:button="@android:color/transparent"
         android:layout_marginRight="10dp"
-
         android:clickable="false" />
-
-    <ProgressBar
-        android:tag="vsiLoadBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        style="@android:style/Widget.ProgressBar.Small"
-        android:visibility="gone"
-        android:layout_marginRight="10dp" />
 
     <TextView
         android:tag="tvSwitchOn"
@@ -65,5 +54,16 @@
         android:layout_marginLeft="12dp"
         android:text="@string/settings_switch_off"
         android:textSize="12sp" />
+
+    <ProgressBar
+        android:tag="vsiLoadBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="34dp"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:visibility="visible"
+        />
 
 </RelativeLayout>
