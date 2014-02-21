@@ -74,6 +74,6 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="38dp"
         style="@android:style/Widget.ProgressBar.Small"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -801,6 +801,8 @@
         <item quantity="few">и еще %d</item>
         <item quantity="other">и еще %d</item>
     </plurals>
+    <string name="you_was_subscribed">Подписка оформлена</string>
+    <string name="subscriptions_can_be_changed">Подписка оформлена. Изменить условия подписки можно в Google Play</string>
 
 
 </resources>
