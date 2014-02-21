@@ -26,7 +26,7 @@ public class MessageStack extends LinkedList<Spannable>{
             if (mRestMessages > 0) {
                 removeLast();
             }
-            add(new SpannableString(Utils.getQuantityString(R.plurals.general_some_more, mRestMessages)));
+            add(new SpannableString(Utils.getQuantityString(R.plurals.general_some_more, mRestMessages, mRestMessages)));
         }
     }
 
@@ -40,7 +40,7 @@ public class MessageStack extends LinkedList<Spannable>{
 
     public MessageStack() {}
 
-    private int mRestMessages;
+    private int mRestMessages = -1;
     /**
      * Количество показываемых сообщений в нотификации. Когда пытаемся показать больше,
      * самое старое сообщение удаляется и вместо него ставится фраза
