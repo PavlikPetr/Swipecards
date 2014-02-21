@@ -26,7 +26,13 @@ public class BonusFragment extends BaseFragment {
     }
 
     @Override
+    protected String getTitle() {
+        return getString(R.string.general_bonus);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_bonus, null);
         Options.Offerwalls offerwalls = CacheProfile.getOptions().offerwalls;
         // main offerwalls - blue buttons

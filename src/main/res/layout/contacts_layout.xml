@@ -69,6 +69,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/contactsList"
+        android:cacheColorHint="#0000"
         android:layout_below="@id/addContainer"
         android:layout_above="@id/buttonContainer" />
 

@@ -175,13 +175,11 @@ public class PopupManager {
         ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {
             @Override
             public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
-                try {
+
                     InvitesPopup popup = InvitesPopup.newInstance(contacts);
                     popup.show(mActivity.getSupportFragmentManager(), InvitesPopup.TAG);
                     EasyTracker.getTracker().sendEvent("InvitesPopup", "Show", "", 0L);
-                } catch (Exception e) {
-                    Debug.error("InvitesPopup exception", e);
-                }
+
             }
         };
 
