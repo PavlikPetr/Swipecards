@@ -199,9 +199,29 @@ public class GCMUtils {
     }
 
     private static void setCounters(Intent extra, Context context) {
-        String countersString = extra.getStringExtra("counters");
-        if (countersString != null) {
-            setCounters(countersString, context);
+        CountersManager counterManager = CountersManager.getInstance(context)
+                .setMethod(CountersManager.CHANGED_BY_GCM);
+        try {
+            String countersStr = extra.getStringExtra("counters");
+            if (countersStr != null) {
+                JSONObject countersJson = new JSONObject(countersStr);
+                // on Api version 8 unread counter will have the same keys as common requests
+                counterManager.setEntitiesCounters(
+                        countersJson.optInt("unread_likes"),
+                        countersJson.optInt("unread_sympaties"),
+                        countersJson.optInt("unread_messages"),
+                        countersJson.optInt("unread_visitors"),
+                        countersJson.optInt("unread_fans"),
+                        countersJson.optInt("unread_admirations")
+                );
+            }
+            String balanceStr = extra.getStringExtra("balance");
+            if (balanceStr != null) {
+                JSONObject balanceJson = new JSONObject(balanceStr);
+                counterManager.setBalanceCounters(balanceJson);
+            }
+        } catch (JSONException e) {
+            Debug.error(e);
         }
     }
 
@@ -302,22 +322,6 @@ public class GCMUtils {
 
         }
         return i;
-    }
-
-    private static void setCounters(String counters, Context context) {
-        try {
-            JSONObject countersJson = new JSONObject(counters);
-            CountersManager.getInstance(context).setMethod(CountersManager.CHANGED_BY_GCM);
-            CountersManager.getInstance(context).setEntitiesCounters(countersJson.optInt("unread_likes"),
-                    countersJson.optInt("unread_sympaties"),
-                    countersJson.optInt("unread_messages"),
-                    countersJson.optInt("unread_visitors"),
-                    countersJson.optInt("unread_fans"),
-                    countersJson.optInt("unread_admirations"));
-        } catch (JSONException e) {
-            Debug.error(e);
-        }
-
     }
 
     public static void cancelNotification(final Context context, final int type) {
