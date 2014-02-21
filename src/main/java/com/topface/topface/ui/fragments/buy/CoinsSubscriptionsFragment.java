@@ -72,11 +72,18 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
     }
 
     private void initButtonsViews(GooglePlayProducts products) {
-        for (GooglePlayProducts.BuyButton curBtn : products.coinsSubscriptions) {
+        for (final GooglePlayProducts.BuyButton curBtn : products.coinsSubscriptions) {
             mButtonsViews.add(GooglePlayProducts.setBuyButton(mContainer, curBtn, getActivity(),
                     new GooglePlayProducts.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
+                            if (curBtn instanceof GooglePlayProducts.SubscriptionBuyButton) {
+                                if (((GooglePlayProducts.SubscriptionBuyButton)curBtn).activated) {
+                                    Toast.makeText(getActivity(), R.string.subscriptions_can_be_changed, Toast.LENGTH_SHORT)
+                                            .show();
+                                    return;
+                                }
+                            }
                             buySubscription(id);
                             Bundle arguments = getArguments();
                             String from = "";
@@ -115,6 +122,10 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
 
     @Override
     public void onPurchased() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.setResult(Activity.RESULT_OK);
+        }
         App.sendProfileAndOptionsRequests(new SimpleApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -122,10 +133,6 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                 if (isAdded()) {
                     removeAllBuyButtons();
                     initButtonsViews(CacheProfile.getGooglePlayProducts());
-                    Activity activity = getActivity();
-                    if (activity != null) {
-                        activity.setResult(Activity.RESULT_OK);
-                    }
                 }
                 LocalBroadcastManager.getInstance(App.getContext())
                         .sendBroadcast(new Intent(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));

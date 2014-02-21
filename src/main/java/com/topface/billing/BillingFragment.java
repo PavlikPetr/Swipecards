@@ -8,6 +8,7 @@ import android.view.ViewStub;
 import com.topface.topface.R;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.Utils;
 
 /**
  * Фрагмент, упрощающий создание фрагментов с покупками
@@ -94,5 +95,9 @@ abstract public class BillingFragment extends BaseFragment implements BillingLis
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    protected void editSubscriptions() {
+        Utils.goToMarket(getActivity());
     }
 }
