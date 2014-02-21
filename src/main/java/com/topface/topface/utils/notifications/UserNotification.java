@@ -212,7 +212,7 @@ public class UserNotification {
             // Adds the Intent to the top of the stack
             stackBuilder.addNextIntent(intent);
             // Gets a PendingIntent containing the entire back stack
-            resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
+            resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
             resultPendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
