@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.topface.topface.App;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.LeadersRequest;
+
+import org.json.JSONObject;
 
 public class CountersManager {
     public static final String UPDATE_BALANCE = "com.topface.topface.UPDATE_BALANCE";
@@ -91,6 +94,20 @@ public class CountersManager {
         CountersManager.fansCounter = fansCounter;
         CountersManager.admirationsCounter = admirationsCounter;
         commitCounters();
+    }
+
+    public void setBalanceCounters(JSONObject balanceJson) {
+        if (balanceJson == null) return;
+        setBalanceCounters(
+                balanceJson.optInt("likes"),
+                balanceJson.optInt("money")
+        );
+        boolean premiumStatus = balanceJson.optBoolean("premium", CacheProfile.premium);
+        if (premiumStatus != CacheProfile.premium) {
+            CacheProfile.premium = premiumStatus;
+            App.sendProfileAndOptionsRequests();
+        }
+        updateBalanceCounters();
     }
 
     public void setBalanceCounters(int likes, int money) {

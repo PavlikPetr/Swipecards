@@ -4,8 +4,8 @@
     package="com.topface.topface"
     android:installLocation="auto"
 
-    android:versionCode="101"
-    android:versionName="2.9.3">
+    android:versionCode="102"
+    android:versionName="2.9.4">
 
 <!-- permissions -->
     <permission
