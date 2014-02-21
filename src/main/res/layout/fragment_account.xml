@@ -16,7 +16,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:background="@drawable/im_btn_like_bg">
+            android:background="@drawable/edit_big_btn_selector">
 
             <TextView
                 android:id="@+id/tvName"

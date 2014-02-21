@@ -55,6 +55,9 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 title = getString(R.string.ban_title);
                 message = getIntent().getStringExtra(BANNING_TEXT_INTENT);
                 mTimerTextView.setVisibility(View.GONE);
+                btnCancel.setText(R.string.settings_logout);
+                btnCancel.setVisibility(View.VISIBLE);
+                btnCancel.setOnClickListener(this);
                 break;
             case TYPE_FLOOD:
                 message = getString(R.string.ban_flood_detected);
@@ -129,6 +132,13 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                         break;
                 }
                 break;
+            case TYPE_BAN:
+                switch (v.getId()) {
+                    case R.id.btnCancel:
+                        AuthorizationManager.logout(this);
+                    default:
+                        break;
+                }
             default:
                 break;
         }

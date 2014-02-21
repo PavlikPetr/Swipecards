@@ -565,8 +565,6 @@
         <item name="postProcessor">mask</item>
         <item name="clipMask">@drawable/photo_mask</item>
         <item name="border">@drawable/photo_border</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_marginRight">6dp</item>
         <item name="android:layout_marginLeft">6dp</item>
         <item name="android:layout_width">72dp</item>

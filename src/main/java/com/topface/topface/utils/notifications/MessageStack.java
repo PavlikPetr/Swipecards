@@ -21,17 +21,17 @@ public class MessageStack extends LinkedList<Spannable>{
     public void addFirst(Spannable object) {
         super.addFirst(object);
         if (size() > SHOWED_MESSAGES) {
-            mRestMessages++;
             removeLast();
             if (mRestMessages > 0) {
                 removeLast();
             }
+            mRestMessages++;
             add(new SpannableString(Utils.getQuantityString(R.plurals.general_some_more, mRestMessages, mRestMessages)));
         }
     }
 
     public int getAllCount() {
-        return mRestMessages + size() - (mRestMessages > 0? 1:0);
+        return mRestMessages + size() + (mRestMessages == 0? 0 : -1); //отнимаем один, потому что сайз учитывает строчку "и еще %d"
     }
 
     public MessageStack(LinkedList<Spannable> list) {
