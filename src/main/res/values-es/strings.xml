@@ -43,6 +43,7 @@
     <string name="general_visitors">Huéspedes</string>
     <string name="general_profile">Perfil</string>
     <string name="general_settings">Ajustes</string>
+    <string name="general_settings_abbr">Ajustes</string>
     <string name="general_chat">Chat</string>
     <string name="general_allow">Permitir</string>
     <string name="notification_popup_title">Permitir</string>
