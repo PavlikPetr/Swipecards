@@ -2,6 +2,7 @@ package com.topface.topface.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +102,12 @@ public class UserPhotoFragment extends BaseFragment {
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
             intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS_COUNT, mUser.photosCount);
             intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
-            startActivity(intent);
+            Fragment parentFrag = getParentFragment();
+            if (parentFrag != null) {
+                parentFrag.startActivity(intent);
+            } else {
+                startActivity(intent);
+            }
         }
     };
 

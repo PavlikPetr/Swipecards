@@ -341,6 +341,10 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     private void removeClosings() {
+        removeClosings(null);
+    }
+
+    private void removeClosings(FragmentId currentSelectedFragmentInLeftMenu) {
         if (mClosingsWidget != null) mClosingsWidget.setVisibility(View.GONE);
         if (mAdapter != null) {
             mAdapter.setEnabled(true);
@@ -349,7 +353,9 @@ public class ClosingsController implements View.OnClickListener {
         }
         // switch to DatingFragment after closings are passed
         unlockLeftMenu();
-        MenuFragment.selectFragment(BaseFragment.FragmentId.F_DATING);
+        if (currentSelectedFragmentInLeftMenu != FragmentId.F_PROFILE) {
+            MenuFragment.selectFragment(BaseFragment.FragmentId.F_DATING);
+        }
         mClosingsPassed = true;
         mLikesClosingsActive = false;
         mMutualClosingsActive = false;
@@ -416,9 +422,9 @@ public class ClosingsController implements View.OnClickListener {
         mLogoutWasInitiated = false;
     }
 
-    public void onPremiumObtained() {
+    public void onPremiumObtained(FragmentId fragmentId) {
         if (!mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) {
-            removeClosings();
+            removeClosings(fragmentId);
         }
     }
 
