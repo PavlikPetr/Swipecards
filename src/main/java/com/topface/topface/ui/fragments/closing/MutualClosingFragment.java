@@ -49,7 +49,7 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
         mUserName = (TextView) controlsView.findViewById(R.id.tvUserName);
         mUserCity = (TextView) controlsView.findViewById(R.id.tvUserCity);
-        addViewsToHide(mUserCity);
+        addViewsToHide(mUserName);
         addViewsToHide(mUserCity);
         return controlsView;
     }
