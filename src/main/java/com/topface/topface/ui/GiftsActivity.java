@@ -13,7 +13,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.fragments.GiftsFragment;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.TripleButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,11 +27,11 @@ public class GiftsActivity extends BaseFragmentActivity {
     public static final String INTENT_GIFT_URL = "gift_url";
     public static final String INTENT_GIFT_PRICE = "gift_price";
     public static final String GIFTS_LIST = "gifts_list";
-    public static ArrayList<Gift> mGiftsList = new ArrayList<Gift>();
+    public static ArrayList<Gift> mGiftsList = new ArrayList<>();
 
     public GiftsCollection mGiftsCollection;
 
-    private LockerView mLoadingLocker;
+    private View mLoadingLocker;
     private TripleButton mTripleButton;
 
     private GiftsFragment mGiftFragment;
@@ -44,7 +43,7 @@ public class GiftsActivity extends BaseFragmentActivity {
 
         getSupportActionBar().setTitle(getString(R.string.gifts_title));
 
-        mLoadingLocker = (LockerView) this.findViewById(R.id.llvGiftsLoading);
+        mLoadingLocker = this.findViewById(R.id.llvGiftsLoading);
 
         mGiftFragment = new GiftsFragment();
         getSupportFragmentManager().beginTransaction()
@@ -173,14 +172,14 @@ public class GiftsActivity extends BaseFragmentActivity {
      */
     public static class GiftsCollection {
         public static int currentType = Gift.ROMANTIC;
-        private LinkedList<Gift> mAllGifts = new LinkedList<Gift>();
+        private LinkedList<Gift> mAllGifts = new LinkedList<>();
 
         public void add(ArrayList<Gift> gifts) {
             mAllGifts.addAll(gifts);
         }
 
         public ArrayList<Gift> getGifts(int type) {
-            ArrayList<Gift> result = new ArrayList<Gift>();
+            ArrayList<Gift> result = new ArrayList<>();
             for (Gift gift : mAllGifts) {
                 if (gift.type == type) {
                     result.add(gift);

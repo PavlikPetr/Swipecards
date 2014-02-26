@@ -29,9 +29,7 @@ import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -39,7 +37,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener {
 
     public static final String NEED_EXIT = "NEED_EXIT";
-    private LockerView mLockerView;
+    private View mLockerView;
     private EditText mEditText;
     private TextView mText;
     private Button mBtnChange;
@@ -57,7 +55,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_topface_account, container, false);
 
-        mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
+        mLockerView = root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
 
         String code = ((SettingsContainerActivity) getActivity()).getConfirmationCode();

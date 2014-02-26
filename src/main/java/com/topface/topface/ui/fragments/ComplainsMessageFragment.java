@@ -16,7 +16,6 @@ import com.topface.topface.R;
 import com.topface.topface.requests.ComplainRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Utils;
 
 public class ComplainsMessageFragment extends BaseFragment {
@@ -29,7 +28,7 @@ public class ComplainsMessageFragment extends BaseFragment {
     private ComplainRequest.TypesNames typeName;
     private int userId;
     private EditText description;
-    private LockerView complainLocker;
+    private View mComplainLocker;
     private String feedId;
     private MenuItem mSendMenuItem;
 
@@ -81,7 +80,7 @@ public class ComplainsMessageFragment extends BaseFragment {
         Bundle arguments = getArguments();
         className = (ComplainRequest.ClassNames) arguments.getSerializable(CLASS_NAME);
         typeName = (ComplainRequest.TypesNames) arguments.getSerializable(TYPE_NAME);
-        complainLocker = (LockerView) root.findViewById(R.id.complainLocker);
+        mComplainLocker = root.findViewById(R.id.complainLocker);
         ComplainsFragment.ComplainItem item = ComplainsFragment.getItemIdByClassAndType(className, typeName);
         userId = arguments.getInt(USER_ID);
         feedId = arguments.getString(FEED_ID);
@@ -103,7 +102,7 @@ public class ComplainsMessageFragment extends BaseFragment {
         if (feedId != null) {
             request.setFeedId(feedId);
         }
-        complainLocker.setVisibility(View.VISIBLE);
+        mComplainLocker.setVisibility(View.VISIBLE);
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -124,7 +123,7 @@ public class ComplainsMessageFragment extends BaseFragment {
             public void always(IApiResponse response) {
                 super.always(response);
                 if (isAdded()) {
-                    complainLocker.setVisibility(View.GONE);
+                    mComplainLocker.setVisibility(View.GONE);
                     mSendMenuItem.setEnabled(true);
                 }
             }

@@ -11,7 +11,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
 import com.topface.topface.ui.edit.EditMainFormItemsFragment.EditType;
-import com.topface.topface.ui.views.LockerView;
 
 public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
 
@@ -44,7 +43,7 @@ public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
 
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
-        LockerView lv = (LockerView) findViewById(R.id.loProfileLoading);
+        View lv = findViewById(R.id.loProfileLoading);
 
         int titleId;
         int dataId;

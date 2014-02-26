@@ -24,7 +24,6 @@ import com.topface.topface.requests.LeaderRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -34,7 +33,7 @@ import java.util.LinkedList;
 public class LeadersActivity extends BaseFragmentActivity {
     private com.topface.topface.ui.gridlayout.GridLayout mGridView;
     private GridLayout mUselessGridView;
-    private LockerView mLoadingLocker;
+    private View mLoadingLocker;
     private PhotoSelector mSelectedPhoto = new PhotoSelector();
     private Button mBuyButton;
 
@@ -62,7 +61,7 @@ public class LeadersActivity extends BaseFragmentActivity {
         mGridView = (GridLayout) findViewById(R.id.usedGrid);
         mUselessGridView = (GridLayout) findViewById(R.id.unusedGrid);
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
-        mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
+        mLoadingLocker = findViewById(R.id.llvLeaderSending);
         mUselessTitle = (TextView) findViewById(R.id.unusedTitle);
         mUselessTitle.setText(String.format(getString(R.string.leaders_pick_condition), CacheProfile.getOptions().minLeadersPercent));
         if (CacheProfile.getOptions().minLeadersPercent == 0) {

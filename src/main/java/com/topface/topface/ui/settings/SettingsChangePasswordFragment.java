@@ -17,7 +17,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -25,7 +24,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 public class SettingsChangePasswordFragment extends BaseFragment implements OnClickListener {
 
-    private LockerView mLockerView;
+    private View mLockerView;
     private EditText mEdPassword;
     private EditText mEdPasswordConfirmation;
     private Button mBtnSave;
@@ -45,7 +44,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_change_password, container, false);
 
-        mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
+        mLockerView = root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
 
         TextView mSetPasswordText = (TextView) root.findViewById(R.id.setPasswordText);
