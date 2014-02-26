@@ -413,7 +413,14 @@ public class CacheProfile {
     }
 
     public static boolean needToSelectCity(Context context) {
-        return (!CacheProfile.isEmpty() && (CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(context))
-                && !CacheProfile.wasCityAsked);
+        return (
+                !CacheProfile.isEmpty() &&
+                        (
+                                CacheProfile.city == null ||
+                                        CacheProfile.city.isEmpty() ||
+                                        CacheProfile.needCityConfirmation(context)
+                        )
+                        && !CacheProfile.wasCityAsked
+        );
     }
 }

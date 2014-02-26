@@ -62,15 +62,16 @@ public class EditSwitcher {
         return mCheckbox.isChecked();
     }
 
-    public void setVisibility(int visibility) {
-        setVisibility(visibility, isChecked());
+    public void setVisibility(boolean visible) {
+        setVisibility(visible, isChecked());
     }
 
-    public void setVisibility(int visibility, boolean checked) {
+    public void setVisibility(boolean visible, boolean checked) {
+        int visibility = visible ? View.VISIBLE : View.INVISIBLE;
         mCheckbox.setVisibility(visibility);
-        if (visibility == View.GONE) {
-            mTextOff.setVisibility(visibility);
+        if (!visible) {
             mTextOn.setVisibility(visibility);
+            mTextOff.setVisibility(visibility);
         } else {
             setChecked(checked);
         }
@@ -78,11 +79,11 @@ public class EditSwitcher {
 
     public void setProgressState(boolean waiting, boolean checked) {
         mPrgrsBar.setVisibility(waiting ? View.VISIBLE : View.GONE);
-        setVisibility(waiting ? View.GONE : View.VISIBLE, checked);
+        setVisibility(!waiting, checked);
     }
 
     public void setProgressState(boolean waiting) {
         mPrgrsBar.setVisibility(waiting ? View.VISIBLE : View.GONE);
-        setVisibility(waiting ? View.GONE : View.VISIBLE);
+        setVisibility(!waiting);
     }
 }

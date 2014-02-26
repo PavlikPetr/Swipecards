@@ -733,6 +733,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     }
                 } else {
                     startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    closeChatActions();
                 }
                 break;
             case R.id.acBookmark:

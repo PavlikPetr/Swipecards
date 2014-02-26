@@ -43,6 +43,7 @@
     <string name="general_visitors">Guests</string>
     <string name="general_profile">Profile</string>
     <string name="general_settings">Settings</string>
+    <string name="general_settings_abbr">Sett.</string>
     <string name="general_chat">Chat</string>
     <string name="general_allow">Allow</string>
     <string name="notification_popup_title">Allow us to send you a notification, so you can instantly find out about new likes, admirations or unread messages</string>
@@ -607,4 +608,16 @@
         <item quantity="one">%d min.</item>
     </plurals>
     <string name="ok_label">Odnoklassniki</string>
+    <plurals name="notification_many_messages">
+        <item quantity="zero">%d new messages</item>
+        <item quantity="other">%d new messages</item>
+        <item quantity="one">%d new message</item>
+    </plurals>
+    <string name="coins_subscription">Coins subscription</string>
+    <plurals name="general_some_more">
+        <item quantity="other">and %d</item>
+        <item quantity="one">and %d</item>
+    </plurals>
+    <string name="you_was_subscribed">Subscribed</string>
+    <string name="subscriptions_can_be_changed">Subscribed. You can change your subscription on Google Play.</string>
 </resources>

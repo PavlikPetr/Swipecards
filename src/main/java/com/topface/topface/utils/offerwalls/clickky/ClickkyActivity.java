@@ -11,7 +11,7 @@ public class ClickkyActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OfferWebview mWebView = new OfferWebview(this, WallType.APP_WALL);
+        OfferWebview mWebView = new OfferWebview(this, WallType.OFFER_WALL);
         RelativeLayout mRelLayout = new RelativeLayout(this);
         //задаем параметры нашему layout
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(

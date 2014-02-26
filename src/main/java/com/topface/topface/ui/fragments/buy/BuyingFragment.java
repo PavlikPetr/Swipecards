@@ -199,7 +199,7 @@ public class BuyingFragment extends BillingFragment {
         LinearLayout coinsButtons = (LinearLayout) root.findViewById(R.id.fbCoins);
         if (!products.coinsSubscriptions.isEmpty()) {
             CoinsSubscriptionInfo info = products.productsInfo.coinsSubscriptionInfo;
-            GooglePlayProducts.BuyButton btn = info.status.active ? info.hasSubscriptionButton : info.noSubscriptionButton;
+            GooglePlayProducts.BuyButton btn = info.status.isActive() ? info.hasSubscriptionButton : info.noSubscriptionButton;
             mCoinsSubscriptionButton = GooglePlayProducts.setOpenButton(coinsButtons, btn,
                     getActivity(), mCoinsSubscriptionClickListener);
             if (mCoinsSubscriptionButton != null) {

@@ -30,7 +30,6 @@ import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.profile.BlackListActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Utils;
 
 import static android.view.View.OnClickListener;
 
@@ -172,7 +171,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         editVip.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                editPremium();
+                editSubscriptions();
             }
         });
 
@@ -231,10 +230,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             layoutText.setCompoundDrawablesWithIntrinsicBounds(bgLeftId, 0, 0, 0);
         }
         return layout;
-    }
-
-    private void editPremium() {
-        Utils.goToMarket(getActivity());
     }
 
     private void setInvisible() {

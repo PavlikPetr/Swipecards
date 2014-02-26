@@ -43,6 +43,7 @@
     <string name="general_visitors">Svečiai</string>
     <string name="general_profile">Profilis</string>
     <string name="general_settings">Nustatymai</string>
+    <string name="general_settings_abbr">Nustat.</string>
     <string name="general_chat">Pokalbis</string>
     <string name="general_allow">Leisti</string>
     <string name="notification_popup_title">Laiskite atsiųsti jums pranešimą, kad jūs galėtumėte sužinoti apie naują simpatiją, susižavėjimą ar neperskaitytą pranešimą</string>

@@ -16,6 +16,8 @@ import android.support.v4.util.SparseArrayCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,6 +145,21 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
     };
     private RelativeLayout mBlocked;
+    private MenuItem mBarActions;
+    private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float v, int i2) {
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+            closeProfileActions();
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -486,7 +503,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         circleIndicator.setViewPager(mHeaderPager);
         circleIndicator.setSnap(true);
         mHeaderPagerAdapter.setPageIndicator(circleIndicator);
-
+        circleIndicator.setOnPageChangeListener(mPageChangeListener);
     }
 
     private void initBodyPages(View root) {
@@ -511,8 +528,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         //Tabs for Body
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
         mTabIndicator.setViewPager(mBodyPager);
-
         mBodyPagerAdapter.setPageIndicator(mTabIndicator);
+        mTabIndicator.setOnPageChangeListener(mPageChangeListener);
     }
 
     private void addHeaderPage(String className) {
@@ -767,7 +784,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             intent.putExtra(ChatFragment.INTENT_USER_AGE, mUserProfile.age);
             intent.putExtra(ChatFragment.INTENT_USER_CITY, mUserProfile.city == null ? "" : mUserProfile.city.name);
             intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object) this).getClass().getSimpleName());
-            getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+            startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
         }
     }
 
@@ -996,6 +1013,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        mBarActions = menu.findItem(R.id.action_user_actions_list);
+    }
+
+    @Override
     protected Integer getOptionsMenuRes() {
         return isMyProfile() ? R.menu.actions_my_profile : R.menu.actions_user_profile;
     }
@@ -1007,8 +1030,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 startSettingsActivity();
                 return true;
             case R.id.action_user_actions_list:
-                boolean checked = item.isChecked();
-                item.setChecked(!checked);
+                boolean checked = mBarActions.isChecked();
+                mBarActions.setChecked(!checked);
                 animateProfileActions(checked, 500);
                 return true;
             default:
@@ -1040,4 +1063,26 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
         }
     };
+
+    private void closeProfileActions() {
+        if (mBarActions != null && mBarActions.isChecked()) {
+            onOptionsItemSelected(mBarActions);
+        }
+    }
+
+    private void onStartActivity() {
+        closeProfileActions();
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        onStartActivity();
+        super.startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        onStartActivity();
+        super.startActivity(intent);
+    }
 }

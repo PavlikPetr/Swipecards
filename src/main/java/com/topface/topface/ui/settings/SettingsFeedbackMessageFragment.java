@@ -108,16 +108,18 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     }
 
     public static void fillVersion(Context context, Report report) {
-        try {
-            PackageInfo pInfo;
-            PackageManager pManager = context.getPackageManager();
-            if (context != null && pManager != null) {
-                pInfo = pManager.getPackageInfo(context.getPackageName(), 0);
-                report.topface_version = pInfo.versionName;
-                report.topface_versionCode = pInfo.versionCode;
+        if (context != null && report != null) {
+            try {
+                PackageInfo pInfo;
+                PackageManager pManager = context.getPackageManager();
+                if (pManager != null) {
+                    pInfo = pManager.getPackageInfo(context.getPackageName(), 0);
+                    report.topface_version = pInfo.versionName;
+                    report.topface_versionCode = pInfo.versionCode;
+                }
+            } catch (NameNotFoundException e) {
+                Debug.error(e);
             }
-        } catch (NameNotFoundException e) {
-            Debug.error(e);
         }
     }
 

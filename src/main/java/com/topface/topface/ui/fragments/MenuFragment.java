@@ -110,7 +110,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                     initEditor();
                     initBonus();
                     if (CacheProfile.premium) {
-                        mClosingsController.onPremiumObtained();
+                        mClosingsController.onPremiumObtained(getCurrentFragmentId());
                     }
                     break;
                 case GooglePlayProducts.INTENT_UPDATE_PRODUCTS:
@@ -346,7 +346,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         // We need to clean state if there was a logout in other Activity
         mClosingsController.onLogoutWasInitiated();
         if (CacheProfile.premium) {
-            mClosingsController.onPremiumObtained();
+            mClosingsController.onPremiumObtained(getCurrentFragmentId());
         }
 
     }
