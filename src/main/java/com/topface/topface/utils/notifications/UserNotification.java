@@ -140,6 +140,7 @@ public class UserNotification {
         notificationBuilder.setSmallIcon(R.drawable.ic_notification);
         notificationBuilder.setContentTitle(mTitle);
         notificationBuilder.setContentText(mText);
+        notificationBuilder.setAutoCancel(true);
         setLargeIcon();
         Intent retryIntent = new Intent(AddPhotoHelper.CANCEL_NOTIFICATION_RECEIVER + intent.getParcelableExtra("PhotoUrl"));
         retryIntent.putExtra("id", mId);
