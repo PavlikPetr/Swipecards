@@ -43,6 +43,7 @@
     <string name="general_visitors">Visite</string>
     <string name="general_profile">Profilo</string>
     <string name="general_settings">Impostazioni</string>
+    <string name="general_settings_abbr">Impost.</string>
     <string name="general_chat">Chat</string>
     <string name="general_allow">Abilitare</string>
     <string name="notification_popup_title">Abilitare l’invio di avviso per sapere subito che hai una nuova simpatia, un’ammirazione o un messaggio non letto</string>

@@ -25,6 +25,7 @@
     <string name="general_profile_error">Λάθους τη φόρτωση του προφίλ</string>
     <string name="general_dbl_all">\'Ολα</string>
     <string name="general_dbl_unread">Αδιάβαστος</string>
+    <string name="general_dbl_new">Νέες</string>
     <string name="general_edit_button">Επ.</string>
     <string name="general_save_button">Αποθήκευση.</string>
     <string name="general_send_button">Στείλ.</string>
@@ -42,6 +43,7 @@
     <string name="general_visitors">Οι επισκέπτες</string>
     <string name="general_profile">Προφίλ</string>
     <string name="general_settings">Ρυθμίσεις</string>
+    <string name="general_settings_abbr">Ρυθμίσεις</string>
     <string name="general_chat">Συνομιλία</string>
     <string name="general_allow">Επιτρέψτε</string>
     <string name="notification_popup_title">Επιτρέψτε μας να σας στείλουμε μια ειδοποίηση, έτσι ώστε να μπορείτε αμέσως να μάθετε για τις νέες συμπάθειες, το θαυμασμό ή τα μη αναγνωσμένα μηνύματα</string>

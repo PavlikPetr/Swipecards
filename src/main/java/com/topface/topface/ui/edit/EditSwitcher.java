@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class EditSwitcher {
@@ -12,6 +13,7 @@ public class EditSwitcher {
     private TextView mTextOn;
     private TextView mTextOff;
     private ViewGroup mRoot;
+    private ProgressBar mPrgrsBar;
 
     public EditSwitcher(ViewGroup root, String title) {
         mRoot = root;
@@ -22,6 +24,7 @@ public class EditSwitcher {
         mCheckbox = (CheckBox) root.findViewWithTag("cbSwitch");
         mTextOn = (TextView) root.findViewWithTag("tvSwitchOn");
         mTextOff = (TextView) root.findViewWithTag("tvSwitchOff");
+        mPrgrsBar = (ProgressBar) root.findViewWithTag("vsiLoadBar");
     }
 
     public EditSwitcher(ViewGroup root) {
@@ -59,13 +62,28 @@ public class EditSwitcher {
         return mCheckbox.isChecked();
     }
 
-    public void setVisibility(int visibility) {
+    public void setVisibility(boolean visible) {
+        setVisibility(visible, isChecked());
+    }
+
+    public void setVisibility(boolean visible, boolean checked) {
+        int visibility = visible ? View.VISIBLE : View.INVISIBLE;
         mCheckbox.setVisibility(visibility);
-        if (visibility == View.GONE) {
-            mTextOff.setVisibility(visibility);
+        if (!visible) {
             mTextOn.setVisibility(visibility);
+            mTextOff.setVisibility(visibility);
         } else {
-            setChecked(isChecked());
+            setChecked(checked);
         }
+    }
+
+    public void setProgressState(boolean waiting, boolean checked) {
+        mPrgrsBar.setVisibility(waiting ? View.VISIBLE : View.GONE);
+        setVisibility(!waiting, checked);
+    }
+
+    public void setProgressState(boolean waiting) {
+        mPrgrsBar.setVisibility(waiting ? View.VISIBLE : View.GONE);
+        setVisibility(!waiting);
     }
 }

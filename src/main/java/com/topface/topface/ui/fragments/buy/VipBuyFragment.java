@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +30,6 @@ import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.profile.BlackListActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Utils;
 
 import static android.view.View.OnClickListener;
 
@@ -42,11 +40,18 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public static final String VIP_PURCHASED_INTENT = "com.topface.topface.VIP_PURCHASED";
     EditSwitcher mInvisSwitcher;
 
-    ProgressBar mInvisLoadBar;
-
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
     private TextView mExtraText;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switchLayouts();
+            if(mInvisSwitcher != null) {
+                mInvisSwitcher.setChecked(CacheProfile.invisible);
+            }
+        }
+    };
 
     /**
      * Создает новый инстанс фрагмента покупки VIP
@@ -80,6 +85,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        mInvisSwitcher.setProgressState(false, CacheProfile.invisible);
     }
 
     @Override
@@ -165,7 +171,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         editVip.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                editPremium();
+                editSubscriptions();
             }
         });
 
@@ -178,12 +184,10 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                         new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                setVisibility();
+                                setInvisible();
                             }
                         });
         mInvisSwitcher = new EditSwitcher(invisLayout);
-        mInvisLoadBar = (ProgressBar) invisLayout.findViewWithTag("vsiLoadBar");
-        mInvisSwitcher.setChecked(CacheProfile.invisible);
 
         initEditItem(root,
                 R.id.fepBlackList,
@@ -228,38 +232,32 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         return layout;
     }
 
-    private void editPremium() {
-        Utils.goToMarket(getActivity());
-    }
-
-    private void setVisibility() {
-        mInvisSwitcher.doSwitch();
-        mInvisSwitcher.setVisibility(View.GONE);
-        mInvisLoadBar.setVisibility(View.VISIBLE);
-
+    private void setInvisible() {
         SettingsRequest request = new SettingsRequest(getActivity());
-        request.invisible = mInvisSwitcher.isChecked();
-        registerRequest(request);
-
+        final boolean invisibility = !mInvisSwitcher.isChecked();
+        request.invisible = invisibility;
+        mInvisSwitcher.setProgressState(true);
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) throws NullPointerException {
-                CacheProfile.invisible = mInvisSwitcher.isChecked();
-                if (mInvisLoadBar != null && getActivity() != null) {
-                    mInvisLoadBar.setVisibility(View.GONE);
-                    mInvisSwitcher.setVisibility(View.VISIBLE);
-                }
+                CacheProfile.invisible = invisibility;
+                CacheProfile.sendUpdateProfileBroadcast();
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) throws NullPointerException {
                 if (mInvisSwitcher != null && getActivity() != null) {
                     if (CacheProfile.invisible != mInvisSwitcher.isChecked()) {
-                        mInvisSwitcher.doSwitch();
-                        mInvisLoadBar.setVisibility(View.GONE);
-                        mInvisSwitcher.setVisibility(View.VISIBLE);
-
+                        mInvisSwitcher.setChecked(CacheProfile.invisible);
                     }
+                }
+            }
+
+            @Override
+            public void always(IApiResponse response) {
+                super.always(response);
+                if (mInvisSwitcher != null && getActivity() != null) {
+                    mInvisSwitcher.setProgressState(false, CacheProfile.invisible);
                 }
             }
         }).exec();
@@ -315,13 +313,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     @Override
     public void onCancel() {
     }
-
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switchLayouts();
-        }
-    };
 
     @Override
     protected boolean needOptionsMenu() {

@@ -43,6 +43,7 @@
     <string name="general_visitors">Gäster</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Inställningar</string>
+    <string name="general_settings_abbr">Inställningar</string>
     <string name="general_chat">Chat</string>
     <string name="general_allow">Tillåta</string>
     <string name="notification_popup_title">Tillåta sända dig notifikationer för att du genast kan få veta om ny sympati, beundran eller oläst meddelande.</string>
