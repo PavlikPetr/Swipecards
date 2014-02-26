@@ -78,6 +78,9 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
         try {
             jsonResult = response;
             if (!jsonResult.isNull("error")) {
+                if (!jsonResult.isNull("id")) {
+                    id = jsonResult.optString("id");
+                }
                 jsonResult = jsonResult.getJSONObject("error");
                 code = jsonResult.getInt("code");
                 message = jsonResult.optString("message", "");

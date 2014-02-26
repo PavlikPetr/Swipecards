@@ -23,10 +23,10 @@ public class AuthButtonsController {
 
     public static final String BUTTON_SETTINGS = "ButtonSettings";
     private Context mContext;
-    private HashSet<String> activeButtons; // Те кнопки, которые реально показываются пользователю в данный момент
-    private HashSet<String> realButtons; // Те кнопки, которые изначально показываются пользователю
-    private final HashSet<String> allSocials = new HashSet<String>();
-    private LinkedList<HashSet<String>> allScreenSocials;
+    private HashSet<String> activeButtons = new HashSet<>(); // Те кнопки, которые реально показываются пользователю в данный момент
+    private HashSet<String> realButtons = new HashSet<>(); // Те кнопки, которые изначально показываются пользователю
+    private final HashSet<String> allSocials = new HashSet<>();
+    private LinkedList<HashSet<String>> allScreenSocials = new LinkedList<>();
     private String locale;
 
     private SharedPreferences mPreferences;
@@ -59,18 +59,18 @@ public class AuthButtonsController {
     private void initAllSocialsForLocale() {
         locale = getLocale();
         Collections.addAll(allSocials, AuthToken.SN_FACEBOOK, AuthToken.SN_VKONTAKTE, AuthToken.SN_ODNOKLASSNIKI);
-        allScreenSocials = new LinkedList<HashSet<String>>();
+        allScreenSocials = new LinkedList<>();
         if (locale.equals("Ru")) {
-            allScreenSocials.add(new HashSet<String>(Arrays.asList(AuthToken.SN_FACEBOOK, AuthToken.SN_VKONTAKTE, AuthToken.SN_ODNOKLASSNIKI)));
+            allScreenSocials.add(new HashSet<>(Arrays.asList(AuthToken.SN_FACEBOOK, AuthToken.SN_VKONTAKTE, AuthToken.SN_ODNOKLASSNIKI)));
         } else {
-            allScreenSocials.add(new HashSet<String>(Arrays.asList(AuthToken.SN_FACEBOOK)));
+            allScreenSocials.add(new HashSet<>(Arrays.asList(AuthToken.SN_FACEBOOK)));
 
         }
     }
 
     private String getLocale() {
         Locale lang = Locale.getDefault();
-        HashSet<Locale> ruLocales = new HashSet<Locale>();
+        HashSet<Locale> ruLocales = new HashSet<>();
         ruLocales.add(new Locale("ru", "RU"));
         ruLocales.add(new Locale("uk", "UA"));
         ruLocales.add(new Locale("be", "BY"));
@@ -107,7 +107,7 @@ public class AuthButtonsController {
     }
 
     public HashSet<String> getOthers() {
-        HashSet<String> others = new HashSet<String>();
+        HashSet<String> others = new HashSet<>();
         for (String sn : allSocials) {
             if (!activeButtons.contains(sn)) {
                 others.add(sn);
@@ -127,7 +127,7 @@ public class AuthButtonsController {
     }
 
     public HashSet<String> getButtonsSettings() {
-        HashSet<String> settings = new HashSet<String>();
+        HashSet<String> settings = new HashSet<>();
         if (mContext != null) {
             String android_id = android.provider.Settings.Secure.getString(mContext.getContentResolver(),
                     android.provider.Settings.Secure.ANDROID_ID);
@@ -156,7 +156,7 @@ public class AuthButtonsController {
     }
 
     private HashSet<String> fromJson(String json) {
-        realButtons = new HashSet<String>();
+        realButtons = new HashSet<>();
         try {
             if (!TextUtils.isEmpty(json)) {
                 JSONArray object = new JSONArray(json);

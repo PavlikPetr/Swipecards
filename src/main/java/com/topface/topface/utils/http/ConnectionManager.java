@@ -47,6 +47,7 @@ public class ConnectionManager {
 
     public static final String TAG = "ConnectionManager";
     private final HashMap<String, IApiRequest> mPendingRequests;
+    private AtomicBoolean mStopRequestsOnBan = new AtomicBoolean(false);
 
     private ConnectionManager() {
         mWorker = getNewExecutorService();
@@ -92,7 +93,7 @@ public class ConnectionManager {
         //Флаг, по которому мы будем определять в конце запроса, нужно ли нам затирать запрос и закрывать соедининение
         boolean needResend = false;
 
-        if (request == null || request.isCanceled()) {
+        if (request == null || request.isCanceled() || mStopRequestsOnBan.get()) {
             Debug.log("CM:: request is canceled");
             //Если запрос отменен, то прекращаем обработку сразу
             return;
@@ -131,13 +132,10 @@ public class ConnectionManager {
                     return;
                 }
             }
-
             //Проверяем, нет ли в конечном запросе ошибок авторизации (т.е. не верного токена, пароля и т.п.)
             checkAuthError(request, response);
-
             //Обрабатываем ответ от сервера
             needResend = processResponse(request, response);
-
         } catch (Exception e) {
             //Мы отлавливаем все ошибки, возникшие при запросе, не хотим что бы приложение падало из-за них
             Debug.error(TAG + "::REQUEST::ERROR", e);
@@ -279,6 +277,9 @@ public class ConnectionManager {
     }
 
     private void showBanActivity(IApiRequest apiRequest, IApiResponse apiResponse) {
+        if (mStopRequestsOnBan.get()) return;
+        shutdown();
+        mStopRequestsOnBan.set(true);
         Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_BAN);
@@ -294,9 +295,7 @@ public class ConnectionManager {
     }
 
     private void showFloodActivity(IApiRequest apiRequest, IApiResponse apiResponse) {
-        // закрываем воркер, чтобы удалить висящие запросы
-        mWorker.shutdownNow();
-        mWorker = getNewExecutorService();
+        shutdown();
         // открываем экран флуда
         Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -308,6 +307,14 @@ public class ConnectionManager {
                     apiResponse.getJsonResult().optLong("remainingTime"));
         }
         apiRequest.getContext().startActivity(intent);
+    }
+
+    /**
+     * Закрываем воркер, чтобы удалить висящие запросы. Создаем новый пулл для обработки запросов
+     */
+    private void shutdown() {
+        mWorker.shutdownNow();
+        mWorker = getNewExecutorService();
     }
 
     private boolean showRetryDialog(final IApiRequest apiRequest) {
@@ -475,4 +482,7 @@ public class ConnectionManager {
         return resultResponse;
     }
 
+    public void onBanActivityFinish() {
+        mStopRequestsOnBan.set(false);
+    }
 }
