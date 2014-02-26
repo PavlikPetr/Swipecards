@@ -922,21 +922,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void sendGift(int id, final int price) {
-
         if (id <= 0) {
             showLoadingBackground();
             Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
             return;
         }
-
-        final History loaderItem = new History(IListLoader.ItemType.WAITING);
-        mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView());
-
         final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
         registerRequest(sendGift);
         sendGift.giftId = id;
         sendGift.userId = mUserId;
-
+        final History loaderItem = new History(IListLoader.ItemType.WAITING);
+        addSentMessage(loaderItem, sendGift);
         sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
             @Override
             protected void success(SendGiftAnswer data, IApiResponse response) {
@@ -972,22 +968,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }).exec();
     }
 
+    private void addSentMessage(History loaderItem, ApiRequest request) {
+        mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView(), request);
+    }
+
     private boolean sendMessage() {
         Editable editText = mEditBox.getText();
         String editString = editText == null ? "" : editText.toString();
         if (editText == null || TextUtils.isEmpty(editString.trim()) || mUserId == 0) {
             return false;
         }
-
+        editText.clear();
         final History loaderItem = new History(IListLoader.ItemType.WAITING);
-        if (mAdapter != null && mListView != null) {
-            mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView());
-        }
-
         final MessageRequest messageRequest = new MessageRequest(mUserId, editString, getActivity());
         registerRequest(messageRequest);
-        editText.clear();
-
+        if (mAdapter != null && mListView != null) {
+            addSentMessage(loaderItem, messageRequest);
+        }
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, IApiResponse response) {
@@ -1061,7 +1058,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                            int userSex, String userName, int userAge,
                                            String userCity, String prevEntity) {
         ChatFragment fragment = new ChatFragment();
-
         Bundle args = new Bundle();
         args.putString(INTENT_ITEM_ID, itemId);
         args.putInt(INTENT_USER_ID, userId);
@@ -1072,7 +1068,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         args.putString(INTENT_USER_CITY, userCity);
         args.putString(BaseFragmentActivity.INTENT_PREV_ENTITY, prevEntity);
         fragment.setArguments(args);
-
         return fragment;
     }
 
