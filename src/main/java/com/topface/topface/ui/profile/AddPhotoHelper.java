@@ -298,6 +298,7 @@ public class AddPhotoHelper {
                 }
                 photoAddRequest.cancel();
                 showErrorMessage(codeError);
+                notificationListener.needShowNotification = false;
                 mNotificationManager.showFailNotificationAsync(
                         mContext.getString(R.string.default_photo_upload_error), "",
                         uri.toString(), getIntentForNotification(), null);
