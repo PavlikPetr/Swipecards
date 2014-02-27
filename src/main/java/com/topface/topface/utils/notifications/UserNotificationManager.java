@@ -14,18 +14,12 @@ import android.view.View;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.GCMUtils.User;
+import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.utils.config.UserConfig;
-
-
-import com.topface.topface.R;
-import com.topface.topface.utils.social.AuthToken;
-import com.topface.topface.utils.social.AuthorizationManager;
-
-import java.util.LinkedList;
 
 public class UserNotificationManager {
     private static UserNotificationManager mInstance;
@@ -207,7 +201,7 @@ public class UserNotificationManager {
         }
 
         MessageStack messagesStack = new MessageStack();
-        if (intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ContainerActivity.INTENT_CHAT_FRAGMENT) {
+        if (intent != null && intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ContainerActivity.INTENT_CHAT_FRAGMENT) {
             id = MESSAGES_ID;
             messagesStack = saveMessageStack(message, user);
         }

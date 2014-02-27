@@ -30,7 +30,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Utils;
@@ -43,7 +42,7 @@ public class ContactsFragment extends BaseFragment {
     private Button addButton;
     private Button mContactsVip;
     private ArrayList<ContactsProvider.Contact> data;
-    private LockerView locker;
+    private View mLockerView;
     private CheckBox mCheckBox;
 
     public static ContactsFragment newInstance(ArrayList<ContactsProvider.Contact> contacts) {
@@ -58,8 +57,7 @@ public class ContactsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.contacts_layout, container, false);
-
-        locker = (LockerView) root.findViewById(R.id.clLocker);
+        mLockerView = root.findViewById(R.id.clLocker);
 
         TextView title = (TextView) root.findViewById(R.id.inviteText);
         title.setText(Utils.getQuantityString(R.plurals.invite_friends_plurals, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().contacts_count, CacheProfile.getOptions().premium_period));
@@ -131,7 +129,7 @@ public class ContactsFragment extends BaseFragment {
 
     private void sendInvitesRequest() {
         if (contactsView.getAdapter() != null) {
-            locker.setVisibility(View.VISIBLE);
+            mLockerView.setVisibility(View.VISIBLE);
             final ArrayList<ContactsProvider.Contact> contacts = ((ContactsListAdapter) contactsView.getAdapter()).getOnlyChecked();
             InviteContactsRequest request = new InviteContactsRequest(getActivity(), contacts);
             request.callback(new ApiHandler() {
@@ -185,7 +183,7 @@ public class ContactsFragment extends BaseFragment {
 
     private void unlockUi() {
         if (isAdded()) {
-            locker.setVisibility(View.GONE);
+            mLockerView.setVisibility(View.GONE);
         }
     }
 

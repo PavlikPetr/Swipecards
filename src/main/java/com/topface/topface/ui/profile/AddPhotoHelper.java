@@ -26,7 +26,6 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
@@ -51,7 +50,7 @@ public class AddPhotoHelper {
     private Activity mActivity;
     private Fragment mFragment;
     private Handler mHandler;
-    private LockerView mLockerView;
+    private View mProgressView;
 
     public static final int ADD_PHOTO_RESULT_OK = 0;
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
@@ -63,10 +62,10 @@ public class AddPhotoHelper {
     private File outputFile;
     private static HashMap<String, File> fileNames = new HashMap<>();
 
-    public AddPhotoHelper(Fragment fragment, LockerView mLockerView) {
+    public AddPhotoHelper(Fragment fragment, View progressView) {
         this(fragment.getActivity());
         mFragment = fragment;
-        this.mLockerView = mLockerView;
+        this.mProgressView = progressView;
     }
 
     public AddPhotoHelper(Activity activity) {
@@ -76,14 +75,14 @@ public class AddPhotoHelper {
     }
 
     public void showProgressDialog() {
-        if (mLockerView != null) {
-            mLockerView.setVisibility(View.VISIBLE);
+        if (mProgressView != null) {
+            mProgressView.setVisibility(View.VISIBLE);
         }
     }
 
     public void hideProgressDialog() {
-        if (mLockerView != null) {
-            mLockerView.setVisibility(View.GONE);
+        if (mProgressView != null) {
+            mProgressView.setVisibility(View.GONE);
         }
     }
 

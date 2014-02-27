@@ -60,7 +60,6 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
         return adapter.getSelectedUsersStringIds();
     }
 
-
     @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.BOOKMARKS;

@@ -30,7 +30,6 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.ArrayList;
@@ -49,16 +48,16 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     private AddPhotoHelper mAddPhotoHelper;
 
     private ViewFlipper mViewFlipper;
-    private LockerView mLockerView;
-    private LockerView mLoadingLocker;
+    private View mExternalLockerView;
+    private View mLoadingLocker;
 
     public EditProfilePhotoFragment() {
         super();
     }
 
-    public EditProfilePhotoFragment(LockerView lockerView) {
+    public EditProfilePhotoFragment(View externalLockerView) {
         this();
-        mLockerView = lockerView;
+        mExternalLockerView = externalLockerView;
     }
 
     @Override
@@ -75,7 +74,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         mPhotoGridAdapter = new EditProfileGridAdapter(
                 getActivity().getApplicationContext(), mPhotoLinks);
 
-        mAddPhotoHelper = new AddPhotoHelper(this, mLockerView);
+        mAddPhotoHelper = new AddPhotoHelper(this, mExternalLockerView);
         mAddPhotoHelper.setOnResultHandler(mHandler);
     }
 
@@ -84,7 +83,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
 
-        mLoadingLocker = (LockerView) root.findViewById(R.id.fppLocker);
+        mLoadingLocker = root.findViewById(R.id.fppLocker);
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 

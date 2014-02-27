@@ -78,22 +78,15 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
         try {
             jsonResult = response;
             if (!jsonResult.isNull("error")) {
+                id = jsonResult.optString("id");
                 jsonResult = jsonResult.getJSONObject("error");
                 code = jsonResult.getInt("code");
                 message = jsonResult.optString("message", "");
             } else if (!jsonResult.isNull("result")) {
-                if (!jsonResult.isNull("unread")) {
-                    unread = jsonResult.optJSONObject("unread");
-                }
-                if (!jsonResult.isNull("balance")) {
-                    balance = jsonResult.optJSONObject("balance");
-                }
-                if (!jsonResult.isNull("method")) {
-                    method = jsonResult.optString("method");
-                }
-                if (!jsonResult.isNull("id")) {
-                    id = jsonResult.optString("id");
-                }
+                unread = jsonResult.optJSONObject("unread");
+                balance = jsonResult.optJSONObject("balance");
+                method = jsonResult.optString("method");
+                id = jsonResult.optString("id");
                 jsonResult = jsonResult.getJSONObject("result");
                 code = ErrorCodes.RESULT_OK;
             } else {

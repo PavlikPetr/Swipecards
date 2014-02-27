@@ -55,7 +55,6 @@ import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
@@ -77,7 +76,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected boolean mIsUpdating;
     private RetryViewCreator mRetryView;
     private RelativeLayout mContainer;
-    protected LockerView mLockView;
+    protected View mLockView;
 
     private BroadcastReceiver readItemReceiver;
 
@@ -98,7 +97,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         View root = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) root.findViewById(R.id.feedContainer);
         initNavigationBar();
-        mLockView = (LockerView) root.findViewById(R.id.llvFeedLoading);
+        mLockView = root.findViewById(R.id.llvFeedLoading);
         mLockView.setVisibility(View.GONE);
         init();
 

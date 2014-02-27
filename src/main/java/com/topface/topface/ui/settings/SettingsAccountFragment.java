@@ -18,23 +18,20 @@ import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 public class SettingsAccountFragment extends BaseFragment implements OnClickListener {
-
-    private LockerView lockerView;
+    private View mLockerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_account, container, false);
 
-        lockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
-        lockerView.setVisibility(View.GONE);
+        mLockerView = root.findViewById(R.id.llvLogoutLoading);
+        mLockerView.setVisibility(View.GONE);
 
         Drawable icon = null;
         final AuthToken token = AuthToken.getInstance();
@@ -76,7 +73,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         final LogoutRequest logoutRequest = new LogoutRequest(getActivity());
-                        lockerView.setVisibility(View.VISIBLE);
+                        mLockerView.setVisibility(View.VISIBLE);
                         logoutRequest.callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
@@ -87,7 +84,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
                             public void fail(int codeError, IApiResponse response) {
                                 FragmentActivity activity = getActivity();
                                 if (activity != null) {
-                                    lockerView.setVisibility(View.GONE);
+                                    mLockerView.setVisibility(View.GONE);
                                     Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_LONG).show();
                                     AuthorizationManager.showRetryLogoutDialog(activity, logoutRequest);
                                 }

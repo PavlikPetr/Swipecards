@@ -32,7 +32,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
     public static final String INVITE_POPUP_PREF_KEY = "INVITE_POPUP";
     public static final String CONTACTS = "contacts";
     private ArrayList<ContactsProvider.Contact> contacts;
-    private View locker;
+    private View mLocker;
 
     public static InvitesPopup newInstance(ArrayList<ContactsProvider.Contact> data) {
         Bundle args = new Bundle();
@@ -73,7 +73,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
                 invitesCheckBox.setChecked(!invitesCheckBox.isChecked());
             }
         });
-        locker = root.findViewById(R.id.ipLocker);
+        mLocker = root.findViewById(R.id.ipLocker);
         final Button sendContacts = (Button) root.findViewById(R.id.sendContacts);
         sendContacts.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn,
                 CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
@@ -100,7 +100,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
 
     private void sendInvitesRequest() {
         InviteContactsRequest request = new InviteContactsRequest(getActivity(), contacts);
-        locker.setVisibility(View.VISIBLE);
+        mLocker.setVisibility(View.VISIBLE);
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -129,7 +129,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
             public void always(IApiResponse response) {
                 super.always(response);
                 if (isAdded()) {
-                    locker.setVisibility(View.GONE);
+                    mLocker.setVisibility(View.GONE);
                 }
             }
         }).exec();

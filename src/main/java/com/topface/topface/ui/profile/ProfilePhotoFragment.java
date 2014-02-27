@@ -33,7 +33,6 @@ import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ProfileFragment;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -45,7 +44,7 @@ public class ProfilePhotoFragment extends BaseFragment {
 
     private ViewFlipper mViewFlipper;
     private GridView mGridAlbum;
-    private LockerView mLoadingLocker;
+    private View mLoadingLocker;
     private TextView mTitle;
 
 
@@ -120,7 +119,7 @@ public class ProfilePhotoFragment extends BaseFragment {
             setActionBarTitles(getString(R.string.edit_title), getString(R.string.edit_album));
         }
 
-        mLoadingLocker = (LockerView) root.findViewById(R.id.fppLocker);
+        mLoadingLocker = root.findViewById(R.id.fppLocker);
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
