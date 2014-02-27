@@ -99,7 +99,6 @@ public class LeadersActivity extends BaseFragmentActivity {
                             .callback(new ApiHandler() {
                                 @Override
                                 public void success(IApiResponse response) {
-                                    mLoadingLocker.setVisibility(View.GONE);
                                     Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
@@ -136,7 +135,6 @@ public class LeadersActivity extends BaseFragmentActivity {
             @Override
             protected void success(Photos data, IApiResponse response) {
                 fillPhotos(data);
-                mLoadingLocker.setVisibility(View.GONE);
                 rv.setVisibility(View.GONE);
             }
 
@@ -147,7 +145,6 @@ public class LeadersActivity extends BaseFragmentActivity {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                mLoadingLocker.setVisibility(View.GONE);
                 rv.setVisibility(View.VISIBLE);
             }
 
