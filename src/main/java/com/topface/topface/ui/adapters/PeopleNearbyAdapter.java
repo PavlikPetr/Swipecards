@@ -9,8 +9,8 @@ import com.topface.topface.data.FeedGeo;
 
 import java.text.DecimalFormat;
 
-public class PeopleCloseAdapter extends FeedAdapter<FeedGeo>{
-    public PeopleCloseAdapter(Context context, Updater updateCallback) {
+public class PeopleNearbyAdapter extends FeedAdapter<FeedGeo>{
+    public PeopleNearbyAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
     }
 

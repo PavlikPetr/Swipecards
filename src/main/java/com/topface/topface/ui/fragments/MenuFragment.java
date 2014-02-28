@@ -41,7 +41,7 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
-import com.topface.topface.ui.fragments.feed.PeopleCloseFragment;
+import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.BuyWidgetController;
@@ -513,7 +513,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 fragment = new FansFragment();
                 break;
             case F_GEO:
-                fragment = new PeopleCloseFragment();
+                fragment = new PeopleNearbyFragment();
                 break;
             case F_BONUS:
                 fragment = new BonusFragment();

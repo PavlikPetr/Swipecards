@@ -9,14 +9,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGeo;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BuyLikesAccessRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -27,8 +25,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
-import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.ui.adapters.PeopleCloseAdapter;
+import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
@@ -38,7 +35,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 
-public class PeopleCloseFragment extends FeedFragment{
+public class PeopleNearbyFragment extends FeedFragment{
     protected View mEmptyFeedView;
 
     @Override
@@ -58,7 +55,7 @@ public class PeopleCloseFragment extends FeedFragment{
 
     @Override
     protected FeedAdapter getNewAdapter() {
-        return new PeopleCloseAdapter(getActivity(), getUpdaterCallback());
+        return new PeopleNearbyAdapter(getActivity(), getUpdaterCallback());
     }
 
     @Override
