@@ -119,8 +119,8 @@ abstract public class ApiHandler extends Handler {
                                 unread.optInt("dialogs"),
                                 unread.optInt("visitors"),
                                 unread.optInt("fans"),
-                                unread.optInt("admirations")
-                        );
+                                unread.optInt("admirations"),
+                                unread.optInt("peopleNearby"));
             }
             countersManager.setBalanceCounters(response.getBalance());
         } catch (Exception e) {

@@ -11,4 +11,6 @@
     <!--text colors-->
     <color name="text_light_gray">#B8B8B8</color>
     <color name="text_white">#FFFFFF</color>
+
+    <color name="geo_color">#FFCF72</color>>
 </resources>

@@ -17,7 +17,7 @@ public class FeedRequest extends ApiRequest {
     public boolean leave; //Оставить сообщения не прочитанными
 
     public static enum FeedService {
-        DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST, BOOKMARKS, FANS, ADMIRATIONS
+        DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST, BOOKMARKS, FANS, ADMIRATIONS, GEO
     }
 
     public FeedRequest(FeedService service, Context context) {

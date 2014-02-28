@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:padding="34dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/background_people_close"
+        android:layout_above="@+id/tvText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp" />
+
+    <TextView
+        android:id="@id/tvText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TopfaceTextAppearance.Medium"
+        android:gravity="center"
+        android:layout_marginTop="16dp" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnBuyCoins"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Topface.Button.Big.Blue"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
+
+        <ProgressBar
+            android:id="@+id/prsLoading"
+            style="@android:style/Widget.ProgressBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+    </RelativeLayout>
+</LinearLayout>

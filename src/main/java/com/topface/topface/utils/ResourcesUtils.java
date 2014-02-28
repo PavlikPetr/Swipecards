@@ -34,6 +34,8 @@ public class ResourcesUtils {
                 return R.string.general_bonus;
             case F_FANS:
                 return R.string.general_fans;
+            case F_GEO:
+                return R.string.people_nearby;
             case F_EDITOR:
                 return R.string.editor_menu_admin;
             case F_SETTINGS:

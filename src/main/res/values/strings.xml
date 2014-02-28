@@ -618,6 +618,6 @@
         <item quantity="other">and %d</item>
         <item quantity="one">and %d</item>
     </plurals>
-    <string name="you_was_subscribed">Subscribed</string>
+    <string name="you_were_subscribed">Subscribed</string>
     <string name="subscriptions_can_be_changed">Subscribed. You can change your subscription on Google Play.</string>
 </resources>
