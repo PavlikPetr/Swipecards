@@ -48,16 +48,10 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     private AddPhotoHelper mAddPhotoHelper;
 
     private ViewFlipper mViewFlipper;
-    private View mExternalLockerView;
     private View mLoadingLocker;
 
     public EditProfilePhotoFragment() {
         super();
-    }
-
-    public EditProfilePhotoFragment(View externalLockerView) {
-        this();
-        mExternalLockerView = externalLockerView;
     }
 
     @Override
@@ -73,9 +67,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         }
         mPhotoGridAdapter = new EditProfileGridAdapter(
                 getActivity().getApplicationContext(), mPhotoLinks);
-
-        mAddPhotoHelper = new AddPhotoHelper(this, mExternalLockerView);
-        mAddPhotoHelper.setOnResultHandler(mHandler);
     }
 
     @Override
@@ -84,6 +75,8 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
 
         mLoadingLocker = root.findViewById(R.id.fppLocker);
+        mAddPhotoHelper = new AddPhotoHelper(this, mLoadingLocker);
+        mAddPhotoHelper.setOnResultHandler(mHandler);
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 

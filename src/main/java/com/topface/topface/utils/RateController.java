@@ -1,6 +1,6 @@
 package com.topface.topface.utils;
 
-import android.app.Activity;
+import android.content.Context;
 
 import com.topface.topface.data.Rate;
 import com.topface.topface.requests.ApiResponse;
@@ -13,10 +13,10 @@ import com.topface.topface.ui.ContainerActivity;
 public class RateController {
 
     private final SendLikeRequest.Place mPlace;
-    private Activity mContext;
+    private Context mContext;
     private OnRateControllerListener mOnRateControllerUiListener;
 
-    public RateController(final Activity context, SendLikeRequest.Place place) {
+    public RateController(final Context context, SendLikeRequest.Place place) {
         mContext = context;
         mPlace = place;
     }

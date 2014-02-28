@@ -40,11 +40,7 @@ public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.ac_fragment_frame);
-
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
-
-        View lv = findViewById(R.id.loProfileLoading);
-
         int titleId;
         int dataId;
         String data;
@@ -71,7 +67,7 @@ public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
                 mFragment = EditFormItemInputFragment.newInstance(titleId, data);
                 break;
             case INTENT_EDIT_ALBUM:
-                mFragment = new EditProfilePhotoFragment(lv);
+                mFragment = new EditProfilePhotoFragment();
                 break;
             case INTENT_EDIT_FILTER:
                 mFragment = new FilterFragment();
@@ -84,7 +80,7 @@ public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
                         FilterFragment.mTargetUser.sex, FilterFragment.mTargetUser.getType());
                 break;
             case INTENT_EDIT_PROFILE_PHOTO:
-                mFragment = new EditProfilePhotoFragment(lv);
+                mFragment = new EditProfilePhotoFragment();
                 break;
             case INTENT_EDIT_AGE:
                 int age_start = intent.getIntExtra(INTENT_AGE_START, 16);

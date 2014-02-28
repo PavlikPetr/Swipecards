@@ -170,7 +170,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         final FragmentActivity activity = getActivity();
-        mRateController = new RateController(activity, SendLikeRequest.Place.FROM_PROFILE);
+        mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_PROFILE);
 
         String itemId = getArguments().getString(ARG_FEED_ITEM_ID);
         if (itemId != null) {
@@ -581,6 +581,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 @Override
                                 public void onRateFailed(int userId, int mutualId) {
                                     if (v != null && getActivity() != null) {
+                                        closeProfileActions();
                                         loader.setVisibility(View.INVISIBLE);
                                         icon.setVisibility(View.VISIBLE);
                                         if (CacheProfile.money > 0) {
@@ -595,8 +596,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 }
                             });
 
-                    //noinspection deprecation
-//                    ((TextView) v).setAlpha(80);
                 }
                 break;
             case R.id.acSympathy:
@@ -1015,7 +1014,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        mBarActions = menu.findItem(R.id.action_user_actions_list);
+        MenuItem barActionsItem = menu.findItem(R.id.action_user_actions_list);
+        if (barActionsItem != null && mBarActions != null) {
+            barActionsItem.setChecked(mBarActions.isChecked());
+        }
+        mBarActions = barActionsItem;
     }
 
     @Override
