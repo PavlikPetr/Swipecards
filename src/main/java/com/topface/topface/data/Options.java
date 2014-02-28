@@ -227,7 +227,8 @@ public class Options extends AbstractData {
             }
 
             JSONObject blockPeopleJson = response.optJSONObject("blockPeopleNearby");
-            if (blockPeople == null) blockPeople = new BlockPeopleNearby();
+            blockPeople = blockPeople == null ?
+                    new BlockPeopleNearby():blockPeople;
             if (blockPeopleJson != null) {
                 blockPeople.enabled = blockPeopleJson.optBoolean("enabled");
                 blockPeople.text = blockPeopleJson.optString("text");

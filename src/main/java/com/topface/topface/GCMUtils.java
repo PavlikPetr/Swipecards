@@ -314,11 +314,9 @@ public class GCMUtils {
                 }
                 break;
             case GCM_TYPE_GEO:
-                if (showVisitors) {
-                    lastNotificationType = GCM_TYPE_GEO;
-                    i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, F_GEO);
-                }
+                lastNotificationType = GCM_TYPE_GEO;
+                i = new Intent(context, NavigationActivity.class);
+                i.putExtra(NEXT_INTENT, F_GEO);
             case GCM_TYPE_UPDATE:
                 i = Utils.getMarketIntent(context);
                 break;
