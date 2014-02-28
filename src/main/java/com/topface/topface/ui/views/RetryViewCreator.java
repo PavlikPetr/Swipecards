@@ -42,10 +42,13 @@ public class RetryViewCreator {
         if (mRetryView != null) mRetryView.setVisibility(visibility);
     }
 
-    public static RetryViewCreator createRetryView(Context context, String text, InnerButton btn1, InnerButton btn2) {
+    private static RetryViewCreator createRetryView(Context context, String text, InnerButton btn1, InnerButton btn2, Integer backgroundColor) {
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup retryView = (ViewGroup) mInflater.inflate(R.layout.layout_retryview, null);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        if (backgroundColor != null) {
+            retryView.setBackgroundColor(backgroundColor);
+        }
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
         retryView.setLayoutParams(params);
 
@@ -62,30 +65,37 @@ public class RetryViewCreator {
         return new RetryViewCreator(retryView, btn1);
     }
 
-    public static RetryViewCreator createRetryView(Context context, String text, InnerButton btn) {
-        return createRetryView(context, text, btn, null);
+    private static RetryViewCreator createRetryView(Context context, String text, InnerButton btn, Integer backgroundColor) {
+        return createRetryView(context, text, btn, null, backgroundColor);
     }
 
     public static RetryViewCreator createDefaultRetryView(Context context, View.OnClickListener listener) {
-        StringBuilder strBuilder = new StringBuilder();
-        strBuilder.append(REFRESH_TEMPLATE).append(context.getString(R.string.general_dialog_retry));
+        return createDefaultRetryView(context, listener, null);
+    }
+
+    public static RetryViewCreator createDefaultRetryView(Context context, View.OnClickListener listener, Integer backgroundColor) {
         return createRetryView(
                 context,
                 context.getString(R.string.general_data_error),
-                new InnerButton(InnerButton.Type.GRAY, strBuilder.toString(), listener)
+                new InnerButton(InnerButton.Type.GRAY, REFRESH_TEMPLATE + context.getString(R.string.general_dialog_retry), listener),
+                backgroundColor
         );
     }
 
     public static RetryViewCreator createDefaultRetryView(Context context, String text, View.OnClickListener listener,
                                                           String textBtn2, View.OnClickListener listener2, int orientation) {
-        StringBuilder strBuilder = new StringBuilder();
-        strBuilder.append(REFRESH_TEMPLATE).append(context.getString(R.string.general_dialog_retry));
+        return createDefaultRetryView(context, text, listener, textBtn2, listener2, orientation, null);
+    }
+
+    public static RetryViewCreator createDefaultRetryView(Context context, String text, View.OnClickListener listener,
+                                                          String textBtn2, View.OnClickListener listener2, int orientation, Integer backgroundColor) {
         buttonsOrientation = orientation;
         return createRetryView(
                 context,
                 text,
-                new InnerButton(InnerButton.Type.GRAY, strBuilder.toString(), listener),
-                new InnerButton(InnerButton.Type.GRAY, textBtn2, listener2)
+                new InnerButton(InnerButton.Type.GRAY, REFRESH_TEMPLATE + context.getString(R.string.general_dialog_retry), listener),
+                new InnerButton(InnerButton.Type.GRAY, textBtn2, listener2),
+                backgroundColor
         );
     }
 

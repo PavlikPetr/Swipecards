@@ -352,7 +352,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 update(false, "retry");
                 mLockScreen.setVisibility(View.GONE);
             }
-        });
+        }, getResources().getColor(R.color.bg_main));
         mLockScreen.addView(retryView.getView());
     }
 
