@@ -407,6 +407,7 @@ public class AuthFragment extends BaseFragment {
     private void auth(final AuthToken token) {
         EasyTracker.getTracker().sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
         App.getConfig().onAuthTokenReceived();
+        hideButtons();
         final AuthRequest authRequest = new AuthRequest(token.getTokenInfo(), getActivity());
         authRequest.callback(new ApiHandler() {
             @Override
@@ -732,6 +733,8 @@ public class AuthFragment extends BaseFragment {
         removeRedAlert();
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             loadAllProfileData();
+        } else {
+            showButtons();
         }
     }
 

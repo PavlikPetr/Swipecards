@@ -395,7 +395,7 @@
     <plurals name="virus_request_likes_cnt">
         <item quantity="one">Теперь у вас %d симпатия!</item>
         <item quantity="few">Теперь у вас %d симпатии!</item>
-        <item quantity="many">Теперь у вас %d симпатия!</item>
+        <item quantity="many">Теперь у вас %d симпатий!</item>
         <item quantity="other">Теперь у вас %d симпатий!</item>
     </plurals>
 

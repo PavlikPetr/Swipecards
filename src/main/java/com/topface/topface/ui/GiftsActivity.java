@@ -13,7 +13,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.fragments.GiftsFragment;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.TripleButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,11 +27,10 @@ public class GiftsActivity extends BaseFragmentActivity {
     public static final String INTENT_GIFT_URL = "gift_url";
     public static final String INTENT_GIFT_PRICE = "gift_price";
     public static final String GIFTS_LIST = "gifts_list";
-    public static ArrayList<Gift> mGiftsList = new ArrayList<Gift>();
+    public static ArrayList<Gift> mGiftsList = new ArrayList<>();
 
     public GiftsCollection mGiftsCollection;
 
-    private LockerView mLoadingLocker;
     private TripleButton mTripleButton;
 
     private GiftsFragment mGiftFragment;
@@ -43,8 +41,6 @@ public class GiftsActivity extends BaseFragmentActivity {
         setContentView(R.layout.ac_gifts);
 
         getSupportActionBar().setTitle(getString(R.string.gifts_title));
-
-        mLoadingLocker = (LockerView) this.findViewById(R.id.llvGiftsLoading);
 
         mGiftFragment = new GiftsFragment();
         getSupportFragmentManager().beginTransaction()
@@ -107,7 +103,8 @@ public class GiftsActivity extends BaseFragmentActivity {
     private void update() {
         if (mGiftsList.isEmpty()) {
             mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
-            mLoadingLocker.setVisibility(View.VISIBLE);
+            mTripleButton.setEnabled(false);
+            setSupportProgressBarIndeterminateVisibility(true);
             GiftsRequest giftRequest = new GiftsRequest(this);
             registerRequest(giftRequest);
             giftRequest.callback(new DataApiHandler<LinkedList<Gift>>() {
@@ -117,8 +114,6 @@ public class GiftsActivity extends BaseFragmentActivity {
                     mGiftsList.addAll(data);
                     mGiftsCollection.add(mGiftsList);
                     mGiftFragment.setGifts(mGiftsCollection.getGifts());
-
-                    mLoadingLocker.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -133,7 +128,13 @@ public class GiftsActivity extends BaseFragmentActivity {
                             R.string.general_data_error,
                             Toast.LENGTH_SHORT
                     ).show();
-                    mLoadingLocker.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void always(IApiResponse response) {
+                    super.always(response);
+                    mTripleButton.setEnabled(true);
+                    setSupportProgressBarIndeterminateVisibility(false);
                 }
             }).exec();
         } else {
@@ -145,14 +146,7 @@ public class GiftsActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (mGiftsList.isEmpty()) {
-            update();
-        } else {
-            mGiftsCollection.add(mGiftsList);
-            mGiftFragment.setGifts(mGiftsCollection.getGifts());
-        }
-
+        update();
         switch (GiftsCollection.currentType) {
             case Gift.ROMANTIC:
                 mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
@@ -173,14 +167,14 @@ public class GiftsActivity extends BaseFragmentActivity {
      */
     public static class GiftsCollection {
         public static int currentType = Gift.ROMANTIC;
-        private LinkedList<Gift> mAllGifts = new LinkedList<Gift>();
+        private LinkedList<Gift> mAllGifts = new LinkedList<>();
 
         public void add(ArrayList<Gift> gifts) {
             mAllGifts.addAll(gifts);
         }
 
         public ArrayList<Gift> getGifts(int type) {
-            ArrayList<Gift> result = new ArrayList<Gift>();
+            ArrayList<Gift> result = new ArrayList<>();
             for (Gift gift : mAllGifts) {
                 if (gift.type == type) {
                     result.add(gift);

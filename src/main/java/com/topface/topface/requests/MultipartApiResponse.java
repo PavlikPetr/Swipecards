@@ -31,7 +31,7 @@ public class MultipartApiResponse implements IApiResponse {
     public int code = ErrorCodes.RESULT_DONT_SET;
     public String message;
     public JSONObject jsonResult;
-    private HashMap<String, ApiResponse> mResponses = new HashMap<String, ApiResponse>();
+    private HashMap<String, ApiResponse> mResponses = new HashMap<>();
 
     public MultipartApiResponse(HttpURLConnection connection) {
         try {
@@ -49,16 +49,16 @@ public class MultipartApiResponse implements IApiResponse {
         }
     }
 
-
     private void parseResponses(LinkedList<String> parts) {
-        int result = ErrorCodes.RESULT_OK;
+        code = ErrorCodes.RESULT_OK;
         boolean firstResponse = true;
         for (String responseString : parts) {
             if (!TextUtils.isEmpty(responseString)) {
                 ApiResponse response = new ApiResponse(responseString);
                 mResponses.put(response.id, response);
                 if (!response.isCompleted()) {
-                    result = response.getResultCode();
+                    code = response.getResultCode();
+                    message = response.getErrorMessage();
                 } else {
                     //Для всех ответов кроме первого отключаем обновление счетчиков
                     if (firstResponse) {
@@ -71,25 +71,21 @@ public class MultipartApiResponse implements IApiResponse {
                 Debug.error("Wrong response part:\n" + responseString);
             }
         }
-        code = result;
     }
 
     private LinkedList<String> splitResponses(HttpURLConnection connection) throws IOException {
-        LinkedList<String> parts = new LinkedList<String>();
+        LinkedList<String> parts = new LinkedList<>();
         //Если подключение не пустое и код ответа правильный
         if (connection != null && HttpUtils.isCorrectResponseCode(connection.getResponseCode())) {
             //Если нужно, разархивируем поток из Gzip
             InputStream stream = HttpUtils.getGzipInputStream(connection);
-
             if (stream != null) {
                 BufferedInputStream is = new BufferedInputStream(new FlushedInputStream(stream), HttpUtils.BUFFER_SIZE);
-
                 String boundary = getBoundary(connection.getContentType());
                 if (TextUtils.isEmpty(boundary)) {
                     setError(ErrorCodes.WRONG_RESPONSE, "Boundary not found");
                     return null;
                 }
-
                 MultipartStream multipartStream = new MultipartStream(is, boundary.getBytes());
                 boolean nextPart = multipartStream.skipPreamble();
                 while (nextPart) {
@@ -104,8 +100,6 @@ public class MultipartApiResponse implements IApiResponse {
 
                     nextPart = multipartStream.readBoundary();
                 }
-
-
                 stream.close();
                 is.close();
             }
@@ -191,7 +185,6 @@ public class MultipartApiResponse implements IApiResponse {
         if (mResponses != null && mResponses.size() > 0) {
             response = (ApiResponse) mResponses.values().toArray()[0];
         }
-
         return response;
     }
 
@@ -212,7 +205,6 @@ public class MultipartApiResponse implements IApiResponse {
                 }
             }
         }
-
         return result;
     }
 
@@ -235,7 +227,6 @@ public class MultipartApiResponse implements IApiResponse {
 
     @Override
     public String toString() {
-
         String result = "MultipartResponse\n";
         if (mResponses != null && mResponses.size() > 0) {
             for (Map.Entry<String, ApiResponse> response : mResponses.entrySet()) {

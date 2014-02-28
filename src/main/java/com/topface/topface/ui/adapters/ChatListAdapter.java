@@ -67,7 +67,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private static final int T_COUNT = 13;
 
-    private HashMap<History, ApiRequest> mHashRepeatRequests = new HashMap<>();
+    private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
     private AddressesCache mAddressesCache = new AddressesCache();
@@ -265,7 +265,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
-    public void addSentMessage(History item, ListView parentView) {
+    public void addSentMessage(History item, ListView parentView, ApiRequest request) {
+        mHashRequestByWaitingRetryItem.put(item, request);
         this.addSentMessage(item);
         parentView.setSelection(getCount() - 1);
         if (getCount() > 0) {
@@ -276,6 +277,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public void replaceMessage(History emptyItem, History unrealItem, ListView parentView) {
         FeedList<History> data = getData();
         int positionToReplace = -1;
+        mHashRequestByWaitingRetryItem.remove(emptyItem);
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i) == emptyItem) {
                 positionToReplace = i;
@@ -295,7 +297,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public void showRetrySendMessage(History emptyItem, ApiRequest request) {
         emptyItem.setLoaderTypeFlags(IListLoader.ItemType.REPEAT);
-        mHashRepeatRequests.put(emptyItem, request);
+        mHashRequestByWaitingRetryItem.put(emptyItem, request);
         notifyDataSetChanged();
     }
 
@@ -340,13 +342,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                     holder.retrier.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ApiRequest request = mHashRepeatRequests.get(item);
-                            if (request != null) {
-                                request.canceled = false;
-                                request.getHandler().setCancel(false);
-                                request.exec();
-                            }
-                            mHashRepeatRequests.remove(item);
+                            ApiRequest request = mHashRequestByWaitingRetryItem.get(item);
+                            resendCanceledRequest(request);
+                            mHashRequestByWaitingRetryItem.remove(item);
                             item.setLoaderTypeFlags(IListLoader.ItemType.WAITING);
                             notifyDataSetChanged();
                         }
@@ -354,6 +352,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 } else {
                     holder.loader.setVisibility(View.VISIBLE);
                     holder.retrier.setVisibility(View.GONE);
+                    ApiRequest request = mHashRequestByWaitingRetryItem.get(item);
+                    if (request != null && request.isCanceled()) {
+                        resendCanceledRequest(request);
+                    }
                 }
                 return;
             case T_FRIEND:
@@ -382,6 +384,14 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             holder.dateDividerText.setText(item.createdRelative);
         } else {
             holder.dateDivider.setVisibility(View.GONE);
+        }
+    }
+
+    private void resendCanceledRequest(ApiRequest request) {
+        if (request != null) {
+            request.canceled = false;
+            request.getHandler().setCancel(false);
+            request.exec();
         }
     }
 

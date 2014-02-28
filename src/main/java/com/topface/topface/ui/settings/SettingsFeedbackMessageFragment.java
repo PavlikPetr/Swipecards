@@ -28,7 +28,6 @@ import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
@@ -51,7 +50,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     private EditText mTransactionIdEditText;
 
     private Report mReport = new Report();
-    private LockerView loadingLocker;
+    private View mLoadingLocker;
     private int mFeedbackType;
 
     @Override
@@ -60,7 +59,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         View root = inflater.inflate(R.layout.fragment_feedback_message, null);
         if (root == null) return null;
         // Navigation bar
-        loadingLocker = (LockerView) root.findViewById(R.id.fbLoadingLocker);
+        mLoadingLocker = root.findViewById(R.id.fbLoadingLocker);
 
         // EditText
         root.findViewById(R.id.tvTitle).setVisibility(View.GONE);
@@ -323,17 +322,17 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
     @Override
     protected void lockUi() {
-        if (loadingLocker != null) {
-            loadingLocker.setVisibility(View.VISIBLE);
+        if (mLoadingLocker != null) {
+            mLoadingLocker.setVisibility(View.VISIBLE);
             mEditText.setEnabled(false);
         }
     }
 
     @Override
     protected void unlockUi() {
-        if (loadingLocker != null) {
+        if (mLoadingLocker != null) {
             mEditText.setEnabled(true);
-            loadingLocker.setVisibility(View.GONE);
+            mLoadingLocker.setVisibility(View.GONE);
         }
     }
 

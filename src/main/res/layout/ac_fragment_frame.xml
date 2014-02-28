@@ -9,12 +9,4 @@
         android:id="@+id/loFrame"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
-
-    <com.topface.topface.ui.views.LockerView
-        android:id="@+id/loProfileLoading"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        style="@style/LoadingLocker"
-        android:visibility="gone" />
-
 </RelativeLayout>

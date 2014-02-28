@@ -21,12 +21,7 @@ import java.util.List;
 /**
  * Черный список. Сюда попадают заблокированые пользователи, отныне от них не приходит никакая активность
  */
-public class BlackListFragment extends FeedFragment<BlackListItem> implements View.OnClickListener {
-
-    @Override
-    protected int getLayout() {
-        return R.layout.ac_feed_black_list;
-    }
+public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> implements View.OnClickListener {
 
     @Override
     protected Drawable getBackIcon() {
