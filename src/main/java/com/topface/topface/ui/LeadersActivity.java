@@ -125,7 +125,7 @@ public class LeadersActivity extends BaseFragmentActivity {
             public void onClick(View view) {
                 request.exec();
             }
-        });
+        }, getResources().getColor(R.color.bg_main));
         rv.setVisibility(View.GONE);
         mContainer.addView(rv.getView());
 
