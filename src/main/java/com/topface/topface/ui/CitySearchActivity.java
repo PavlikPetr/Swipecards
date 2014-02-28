@@ -78,9 +78,9 @@ public class CitySearchActivity extends BaseFragmentActivity {
         mAllCitiesString = getResources().getString(R.string.filter_cities_all);
 
         // Data
-        mTopCitiesList = new LinkedList<City>();
-        mDataList = new LinkedList<City>();
-        mNameList = new LinkedList<String>();
+        mTopCitiesList = new LinkedList<>();
+        mDataList = new LinkedList<>();
+        mNameList = new LinkedList<>();
 
         // Title Header        
         initHeader();
@@ -153,7 +153,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
     private void initListView() {
-        final LayoutInflater mInflater = LayoutInflater.from(getApplicationContext());
+        final LayoutInflater mInflater = LayoutInflater.from(this);
         mListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, mNameList) {
             class ViewHolder {
                 TextView mTitle;
@@ -250,7 +250,15 @@ public class CitySearchActivity extends BaseFragmentActivity {
                     break;
                 case INTENT_CITY_SEARCH_AFTER_REGISTRATION:
                     mMyCityTitle.setText(R.string.we_detect_your_city);
-                    if (cityTextView != null) cityTextView.setText(CacheProfile.city.name);
+                    if (cityTextView != null) {
+                        cityTextView.setText(CacheProfile.city.name);
+                        cityTextView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                finish();
+                            }
+                        });
+                    }
                     break;
                 default:
                     mMyCityTitle.setText(R.string.edit_my_city);
