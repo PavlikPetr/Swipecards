@@ -55,6 +55,7 @@ public class CacheProfile {
     public static int unread_visitors;          // количество непрочитанных гостей
     public static int unread_fans;              // количество непрочитаных поклонников
     public static int unread_admirations;       // количество непрочитаных восхищений
+    public static int unread_geo;               // количество пользователей поблизости
     public static City city;                    // город пользователя
     public static int money;                    // количество монет у пользователя
     public static int likes;                    // количество симпатий пользователя
@@ -390,6 +391,8 @@ public class CacheProfile {
                 return CacheProfile.unread_fans;
             case F_ADMIRATIONS:
                 return CacheProfile.unread_admirations;
+            case F_GEO:
+                return CacheProfile.unread_geo;
             case F_BONUS:
                 return needShowBonusCounter ? getOptions().bonus.counter : 0;
             default:

@@ -285,11 +285,6 @@
     <string name="virus_chat_likes_request_title">Darovať sympatie Vašim priateľom</string>
     <string name="virus_chat_btn">Získať sympatie</string>
     <string name="virus_request_error">Nepodarilo sa odoslať sympatie Vašim priateľom</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="few">Teraz máte %d sympatie!</item>
-        <item quantity="other">Teraz máte %d sympatií!</item>
-        <item quantity="one">Teraz máte %d sympatiu!</item>
-    </plurals>
     <string name="profile_ask_sent">Žiadosť je odoslaná</string>
     <string name="virus_error">Za 24 hodín môže Váš priateľ darovať sympatiu iba 1 raz! Skúste zajtra!</string>
     <string name="popup_version_title">Je dostupná nová verzia aplikácie</string>
@@ -488,7 +483,7 @@
     <string name="settings_select_language">Výber jazyka aplikácie</string>
     <string name="restart_to_change_locale">Ak chcete zmeniť jazyk, aplikácia sa reštartuje</string>
     <string name="locale_changing">Zmena jazyka</string>
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="other">Páčite sa %d ľuďom</item>
         <item quantity="one">Páčite sa %d človeku</item>
     </plurals>

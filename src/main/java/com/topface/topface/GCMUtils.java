@@ -30,6 +30,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DIALOGS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_GEO;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITORS;
@@ -50,6 +51,8 @@ public class GCMUtils {
     public static final int GCM_TYPE_PROMO = 6;
     public static final int GCM_TYPE_GIFT = 7;
     public static final int GCM_TYPE_DIALOGS = 8;
+    public static final int GCM_TYPE_GEO = 9;
+
 
     public static final String NEXT_INTENT = "com.topface.topface_next";
 
@@ -212,7 +215,8 @@ public class GCMUtils {
                         countersJson.optInt("unread_messages"),
                         countersJson.optInt("unread_visitors"),
                         countersJson.optInt("unread_fans"),
-                        countersJson.optInt("unread_admirations")
+                        countersJson.optInt("unread_admirations"),
+                        countersJson.optInt("unread_people_nearby")
                 );
             }
             String balanceStr = extra.getStringExtra("balance");
@@ -308,6 +312,11 @@ public class GCMUtils {
                     i = new Intent(context, NavigationActivity.class);
                     i.putExtra(NEXT_INTENT, F_VISITORS);
                 }
+                break;
+            case GCM_TYPE_GEO:
+                lastNotificationType = GCM_TYPE_GEO;
+                i = new Intent(context, NavigationActivity.class);
+                i.putExtra(NEXT_INTENT, F_GEO);
                 break;
             case GCM_TYPE_UPDATE:
                 i = Utils.getMarketIntent(context);

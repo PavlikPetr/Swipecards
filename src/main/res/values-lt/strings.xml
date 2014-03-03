@@ -298,11 +298,6 @@
     <string name="virus_chat_likes_request_title">Padovanoti simpatijas jūsų draugams</string>
     <string name="virus_chat_btn">Gauti simpatijas</string>
     <string name="virus_request_error">Nepavyko išsiųsti simpatijų jūsų draugams</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="few">Dabar pas jus %d simpatijos!</item>
-        <item quantity="other">Dabar pas jus %d simpatijų!</item>
-        <item quantity="one">Dabar pas jus %d simpatija!</item>
-    </plurals>
     <string name="profile_ask_sent">Prašymas išsiųstas</string>
     <string name="virus_error">Per parą jūsų draugas gali padovanoti simpatijas tiktai 1 kartą! Pabandykite rytoj!</string>
     <string name="popup_version_title">Yra nauja priedo versija</string>
@@ -501,7 +496,7 @@
     <string name="settings_select_language">Programos kalbos pasirinkimas</string>
     <string name="restart_to_change_locale">Kad pasikeistų kalba, programa bus perkrauta</string>
     <string name="locale_changing">Kalbos pakeitimas</string>
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="few">Jūs patikote %d žmonėms</item>
         <item quantity="other">Jūs patikote %d žmonėms</item>
         <item quantity="one">Jūs patikote %d žmogui</item>
@@ -620,4 +615,17 @@
         <item quantity="one">%d min.</item>
     </plurals>
     <string name="ok_label">Bendraklasiai</string>
+    <plurals name="notification_many_messages">
+        <item quantity="few">%d nauji pranešimai</item>
+        <item quantity="other">%d naujų pranešimų</item>
+        <item quantity="one">%d naujas pranešimas</item>
+    </plurals>
+    <string name="coins_subscription">Monetų prenumerata</string>
+    <plurals name="general_some_more">
+        <item quantity="few">ir dar %d</item>
+        <item quantity="other">ir dar %d</item>
+        <item quantity="one">ir dar %d</item>
+    </plurals>
+    <string name="you_were_subscribed">Prenumerata įforminta</string>
+    <string name="subscriptions_can_be_changed">Prenumerata įforminta. Pakeisti prenumeratos sąlygas galima Google Play</string>
 </resources>

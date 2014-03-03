@@ -295,10 +295,6 @@
     <string name="virus_chat_likes_request_title">Sympathien Ihren Freunden schenken</string>
     <string name="virus_chat_btn">Sympathien bekommen</string>
     <string name="virus_request_error">Es klappt nicht, Ihren Freunden Sympathien zu senden</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">Jetzt haben Sie %d Sympathien!</item>
-        <item quantity="one">Jetzt haben Sie %d Sympathie!</item>
-    </plurals>
     <string name="profile_ask_sent">Bitte ist gesendet</string>
     <string name="virus_error">Ihr Freund kann nur einmal pro Tag Sympathien Ihnen schenken! Versuchen Sie morgen!</string>
     <string name="popup_version_title">Neue Version der Anwendung ist erreichbar</string>
@@ -493,7 +489,7 @@
     <string name="settings_select_language">Sprache wählen</string>
     <string name="restart_to_change_locale">Für den Sprachwechsel wird die App neu gestartet</string>
     <string name="locale_changing">Sprache ändern</string>
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="other">Sie gefallen %d Menschen</item>
         <item quantity="one">Sie gefallen %d Menschen</item>
     </plurals>

@@ -285,11 +285,6 @@
     <string name="virus_chat_likes_request_title">Fa cadou simpatii la prietenii tai</string>
     <string name="virus_chat_btn">Primeste simpatii</string>
     <string name="virus_request_error">Expediere de simpatii esuata catre prietenii Dmv</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="few">Acum aveti %d simpatii!</item>
-        <item quantity="other">Acum aveti %d simpatii!</item>
-        <item quantity="one">Acum aveti %d simpatii!</item>
-    </plurals>
     <string name="profile_ask_sent">Cererea a fost trimisa</string>
     <string name="virus_error">In 24 de ore prietenul Dmv poate face cadou o simpatie numai o singura data! Incercati maine!</string>
     <string name="popup_version_title">Este accesibila o noua versiune a aplicatiei</string>

@@ -282,11 +282,6 @@
     <string name="virus_chat_likes_request_title">Wyślij sympatie swoim znajomym</string>
     <string name="virus_chat_btn">Zdobądź sympatie</string>
     <string name="virus_request_error">Nie udało się wysłać sympatie do Twoich znajomych</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="few">Teraz masz %d sympatii!</item>
-        <item quantity="other">Teraz masz %d sympatii!</item>
-        <item quantity="one">Teraz masz %d sympatię!</item>
-    </plurals>
     <string name="profile_ask_sent">Prośba została wysłana</string>
     <string name="virus_error">Za dobę Twój znajomy może wysłać sympatie tylko 1 raz! Spróbuj jutro!</string>
     <string name="popup_version_title">Dostępna nowa wersja aplikacji</string>
@@ -483,7 +478,7 @@
     <string name="general_get_dating">Poznawaj</string>
     <string name="settings_select_language">Wybierz język aplikacji</string>
     <string name="locale_changing">Zmiana języka</string>
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="few">Podobasz się %d ludziom</item>
         <item quantity="other">Podobasz się %d ludziom</item>
         <item quantity="one">Podobasz się %d osobie</item>

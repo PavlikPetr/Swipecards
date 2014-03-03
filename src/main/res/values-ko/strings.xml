@@ -279,9 +279,6 @@
     <string name="virus_chat_likes_request_title">친구들에게 호감도 선물하기</string>
     <string name="virus_chat_btn">호감도 받기</string>
     <string name="virus_request_error">당신의 친구들에게 호감도 전송이 실패하였습니다.</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">이제 당신은 %d 호감도가 있습니다!</item>
-    </plurals>
     <string name="profile_ask_sent">요청사항이 전송되었습니다.</string>
     <string name="virus_error">당신의 친구는 하루에 한번 만 호감도를 보낼 수 있습니다! 내일 다시 한번 시도해 보십시오!</string>
     <string name="popup_version_title">어플의 새로운 버전을 이용 가능합니다.</string>
@@ -468,7 +465,7 @@
     <string name="settings_select_language">어플 언어 선택</string>
     <string name="restart_to_change_locale">언어 변경을 위하여 시스템을 재시작합니다.</string>
     <string name="locale_changing">언어 변경</string>
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="other">%d 명의 사람들이 당신을 좋아합니다.</item>
     </plurals>
     <string name="to_see_likes_by_vip">지금 바로 당신을 마음에 들어하는 상대를 알아보기 위해서 VIP 계정을 등록하여 보세요.</string>
