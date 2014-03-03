@@ -126,7 +126,6 @@ dependencies {
     //Ad networks SDK
     compile project(':libs:MoPub')
     compile project(':libs:AdLabSDK')
-    compile project(':libs:LifeStreetMediaSDK')
 
     instrumentTestCompile 'com.jayway.android.robotium:robotium-solo:4.+'
 
@@ -226,19 +225,6 @@ project(':libs:AdLabSDK') {
     android.sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['src']
-        res.srcDirs = ['res']
-    }
-}
-
-
-project(':libs:LifeStreetMediaSDK') {
-    apply plugin: 'android-library'
-    dependencies {
-        compile supportLibrary
-    }
-    android.sourceSets.main {
-        manifest.srcFile 'AndroidManifest.xml'
-        java.srcDirs = ['sdk', '3rdparty/OpenUDID/src']
         res.srcDirs = ['res']
     }
 }

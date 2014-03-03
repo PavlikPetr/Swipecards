@@ -314,7 +314,7 @@ public class FullscreenController {
 
             @Override
             protected Banner parseResponse(ApiResponse response) {
-                return Banner.parse(response);
+                return new Banner(response);
             }
 
             @Override

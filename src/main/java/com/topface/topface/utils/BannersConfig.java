@@ -60,7 +60,7 @@ public class BannersConfig {
     public void restoreBannersSettings() {
         SharedPreferences preferences = getPreferences();
         Options options = CacheProfile.getOptions();
-        options.pages = new HashMap<String, Options.Page>();
+        options.pages = new HashMap<>();
         for (String pageName : Options.PAGES) {
             String str = preferences.getString(pageName, Static.EMPTY);
             if (!TextUtils.isEmpty(str)) {
