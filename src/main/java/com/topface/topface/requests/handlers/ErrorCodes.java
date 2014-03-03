@@ -73,4 +73,5 @@ public class ErrorCodes {
     public static final int UNCONFIRMED_LOGIN = 53;
     public static final int USER_DELETED = 54;
     public static final int BLOCKED_SYMPATHIES = 57;
+    public static final int BLOCKED_PEOPLE_NEARBY = 58;
 }

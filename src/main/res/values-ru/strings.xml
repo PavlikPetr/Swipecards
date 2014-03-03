@@ -650,7 +650,7 @@
     <string name="restart_to_change_locale">Для смены языка приложение будет перезапущено</string>
     <string name="locale_changing">Смена языка</string>
 
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="one">Вы понравились %d человеку</item>
         <item quantity="many">Вы понравились %d людям</item>
         <item quantity="few">Вы понравились %d людям</item>
@@ -801,8 +801,9 @@
         <item quantity="few">и еще %d</item>
         <item quantity="other">и еще %d</item>
     </plurals>
-    <string name="you_was_subscribed">Подписка оформлена</string>
+    <string name="you_were_subscribed">Подписка оформлена</string>
     <string name="subscriptions_can_be_changed">Подписка оформлена. Изменить условия подписки можно в Google Play</string>
-
-
+    <string name="people_nearby">Люди рядом</string>
+    <string name="nobody_nearby">Вокруг нет ни души!</string>
+    <string name="general_distance">%.02f км</string>
 </resources>

@@ -25,6 +25,7 @@
     <string name="general_profile_error">Profil yükleme hatası</string>
     <string name="general_dbl_all">Bütün</string>
     <string name="general_dbl_unread">Okunmamış</string>
+    <string name="general_dbl_new">Yeni</string>
     <string name="general_edit_button">Düzelt</string>
     <string name="general_save_button">Kaydet</string>
     <string name="general_send_button">Gönder</string>
@@ -42,6 +43,7 @@
     <string name="general_visitors">Misafirler</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Ayarlar</string>
+    <string name="general_settings_abbr">Ayarlar</string>
     <string name="general_chat">Sohbet</string>
     <string name="general_allow">İzin vermek</string>
     <string name="notification_popup_title">Yeni sempatiniz, hayranlık veya okunmamış mesaj hakkında bilgi hemen almak için size bildirim göndermeye izin verin</string>
@@ -294,11 +296,6 @@
     <string name="virus_chat_likes_request_title">Arkadaşlarınıza sempatileri hediye etmek</string>
     <string name="virus_chat_btn">Sempati kazanmak</string>
     <string name="virus_request_error">Sempatiler arkadaşlarınıza gönderilemedi</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="zero">Artık sizin %d sempatiniz var!</item>
-        <item quantity="other">Artık sizin %d sempatiniz var!</item>
-        <item quantity="one">Artık sizin %d sempatiniz var!</item>
-    </plurals>
     <string name="profile_ask_sent">İstek gönderildi</string>
     <string name="virus_error">Yirmi dört saat içinde arkadaşınız sadece 1 defa sempati hediye edebilir! Yarın deneyin!</string>
     <string name="popup_version_title">Uygulamanın yeni versiyonu mevcuttur</string>
@@ -497,7 +494,7 @@
     <string name="settings_select_language">Uygulamanın dil seçimi</string>
     <string name="restart_to_change_locale">Dil değişimi için uygulama yeniden yüklenilecek</string>
     <string name="locale_changing">Dil değişimi</string>
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="zero">Sizden %d kişi hoşlandı</item>
         <item quantity="other">Sizden %d kişi hoşlandı</item>
         <item quantity="one">Sizden %d kişi hoşlandı</item>
@@ -614,4 +611,17 @@
         <item quantity="one">%d dak.</item>
     </plurals>
     <string name="ok_label">Sınıf arkadaşlar</string>
+    <plurals name="notification_many_messages">
+        <item quantity="zero">%d yeni mesaj</item>
+        <item quantity="other">%d yeni mesaj</item>
+        <item quantity="one">%d yeni mesaj</item>
+    </plurals>
+    <string name="coins_subscription">Para üyeliği</string>
+    <plurals name="general_some_more">
+        <item quantity="zero">ve daha %d</item>
+        <item quantity="other">ve daha %d</item>
+        <item quantity="one">ve daha %d</item>
+    </plurals>
+    <string name="you_were_subscribed">Abonelik oluşmuştur.</string>
+    <string name="subscriptions_can_be_changed">Abonelik oluşmuştur.</string>
 </resources>

@@ -41,6 +41,7 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
+import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.BuyWidgetController;
@@ -61,6 +62,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_BOOKMAR
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DATING;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_FANS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_GEO;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_PROFILE;
@@ -221,6 +223,8 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 R.drawable.ic_fans_selector));
         menuItems.put(F_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
+        menuItems.put(F_GEO.getId(), LeftMenuAdapter.newLeftMenuItem(F_GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                R.drawable.icon_people_close));
         if (CacheProfile.getOptions().bonus.enabled) {
             menuItems.put(F_BONUS.getId(), LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_bonus_1));
@@ -507,6 +511,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 break;
             case F_FANS:
                 fragment = new FansFragment();
+                break;
+            case F_GEO:
+                fragment = new PeopleNearbyFragment();
                 break;
             case F_BONUS:
                 fragment = new BonusFragment();

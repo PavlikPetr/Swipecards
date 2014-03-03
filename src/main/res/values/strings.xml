@@ -295,11 +295,6 @@
     <string name="virus_chat_likes_request_title">Give likes to your friends as a gift</string>
     <string name="virus_chat_btn">Receive likes</string>
     <string name="virus_request_error">Unable to send likes to your friends</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="zero">You have no likes</item>
-        <item quantity="other">Now you have %d of likes!</item>
-        <item quantity="one">Now you have %d like!</item>
-    </plurals>
     <string name="profile_ask_sent">Request is sent</string>
     <string name="virus_error">During the day, your friend can send likes only 1 time! Try again tomorrow!</string>
     <string name="popup_version_title">New application version is available</string>
@@ -493,7 +488,7 @@
     <string name="settings_select_language">Select application language</string>
     <string name="restart_to_change_locale">Application will be restarted to change language</string>
     <string name="locale_changing">Changing the language</string>
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="other">%d people liked you</item>
         <item quantity="one">%d person liked you</item>
     </plurals>
@@ -618,6 +613,6 @@
         <item quantity="other">and %d</item>
         <item quantity="one">and %d</item>
     </plurals>
-    <string name="you_was_subscribed">Subscribed</string>
+    <string name="you_were_subscribed">Subscribed</string>
     <string name="subscriptions_can_be_changed">Subscribed. You can change your subscription on Google Play.</string>
 </resources>

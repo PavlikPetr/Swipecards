@@ -294,10 +294,6 @@
     <string name="virus_chat_likes_request_title">Να δώσω συμπάθειες προς τους φίλους σας</string>
     <string name="virus_chat_btn">Αποκτήστε τις συμπάθειες</string>
     <string name="virus_request_error">Απέτυχε η αποστολή τις συμπάθειες στους φίλους σας</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">Τώρα έχετε %d συμπάθειες!</item>
-        <item quantity="one">Τώρα έχετε %d συμπάθεια!</item>
-    </plurals>
     <string name="profile_ask_sent">Αίτηση έχει σταλεί.</string>
     <string name="virus_error">Κατά τη διάρκεια της ημέρας, ο φίλος σας μπορεί να δώσει για δώρο τις συμπάθειες μόνο 1 φορά! Δοκιμάστε το αύριο!</string>
     <string name="popup_version_title">Διαθέσιμα μια νέα έκδοση της εφαρμογής</string>
@@ -490,7 +486,7 @@
     <string name="settings_select_language">Επιλέξτε γλώσσα για την εφαρμογη</string>
     <string name="restart_to_change_locale">Για να αλλάξετε τη γλώσσα η εφαρμογή θα πρέπει να επανεκκινηθεί</string>
     <string name="locale_changing">Αλλαγή γλώσσας</string>
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="other">Αρέσετε σε %d ανθρώπους</item>
         <item quantity="one">Αρέσετε σε %d άνθρωπο</item>
     </plurals>

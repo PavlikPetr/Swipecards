@@ -392,6 +392,7 @@
     <style name="ListAgeAndCity" parent="ListCity">
         <item name="android:textSize">14sp</item>
         <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:drawablePadding">5dp</item>
     </style>
 
     <style name="ListName" parent="ShadowItemFont">

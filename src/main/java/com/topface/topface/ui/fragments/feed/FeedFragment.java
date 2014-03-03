@@ -38,6 +38,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
+import com.topface.topface.requests.BookmarkAddRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -378,7 +379,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mActionMode = null;
         }
     };
-
     /**
      * В данный момент у нас проблема с id в диалогах, поэтому в DialogsFragment этот метод переопределен
      */
@@ -511,47 +511,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
             @Override
             protected void success(FeedListData<T> data, IApiResponse response) {
-                FeedAdapter<T> adapter = getListAdapter();
-                if (isHistoryLoad) {
-                    adapter.addData(data);
-                } else if (isPullToRefreshUpdating) {
-                    if (makeItemsRead) {
-                        makeAllItemsRead();
-                    }
-                    if (data.items.size() > 0) {
-                        if (adapter.getCount() >= limit) {
-                            data.more = true;
-                        }
-                        adapter.addDataFirst(data);
-                    } else {
-                        adapter.notifyDataSetChanged();
-                    }
-                } else {
-                    adapter.setData(data);
-                }
-                onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
-                mListView.onRefreshComplete();
-                mListView.setVisibility(View.VISIBLE);
-                mIsUpdating = false;
+                processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, limit);
             }
 
             @Override
             public void fail(final int codeError, IApiResponse response) {
-                Activity activity = getActivity();
-                if (activity != null) {
-                    if (isHistoryLoad) {
-                        adapter.showRetryItem();
-                    }
-
-                    //Если ошибки обработаны на уровне фрагмента,
-                    // то не показываем стандартную ошибку
-                    if (!processErrors(codeError)) {
-                        Utils.showErrorMessage();
-                    }
-                    onUpdateFail(isPullToRefreshUpdating || isHistoryLoad);
-                    mListView.onRefreshComplete();
-                    mIsUpdating = false;
-                }
+                processFailUpdate(codeError, isHistoryLoad, adapter, isPullToRefreshUpdating);
             }
 
             @Override
@@ -559,6 +524,49 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 return !isForPremium();
             }
         }).exec();
+    }
+
+    protected void processFailUpdate(int codeError, boolean isHistoryLoad, FeedAdapter<T> adapter, boolean isPullToRefreshUpdating) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            if (isHistoryLoad) {
+                adapter.showRetryItem();
+            }
+
+            //Если ошибки обработаны на уровне фрагмента,
+            // то не показываем стандартную ошибку
+            if (!processErrors(codeError)) {
+                Utils.showErrorMessage();
+            }
+            onUpdateFail(isPullToRefreshUpdating || isHistoryLoad);
+            mListView.onRefreshComplete();
+            mIsUpdating = false;
+        }
+    }
+
+    protected void processSuccessUpdate(FeedListData<T> data, boolean isHistoryLoad, boolean isPullToRefreshUpdating, boolean makeItemsRead, int limit) {
+        FeedAdapter<T> adapter = getListAdapter();
+        if (isHistoryLoad) {
+            adapter.addData(data);
+        } else if (isPullToRefreshUpdating) {
+            if (makeItemsRead) {
+                makeAllItemsRead();
+            }
+            if (data.items.size() > 0) {
+                if (adapter.getCount() >= limit) {
+                    data.more = true;
+                }
+                adapter.addDataFirst(data);
+            } else {
+                adapter.notifyDataSetChanged();
+            }
+        } else {
+            adapter.setData(data);
+        }
+        onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
+        mListView.onRefreshComplete();
+        mListView.setVisibility(View.VISIBLE);
+        mIsUpdating = false;
     }
 
     protected boolean isForPremium() {
@@ -576,6 +584,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         switch (codeError) {
             case ErrorCodes.PREMIUM_ACCESS_ONLY:
             case ErrorCodes.BLOCKED_SYMPATHIES:
+            case ErrorCodes.BLOCKED_PEOPLE_NEARBY:
                 onEmptyFeed(codeError);
                 return true;
             default:
@@ -595,7 +604,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected abstract FeedListData<T> getFeedList(JSONObject response);
 
-    private FeedRequest getRequest() {
+    protected FeedRequest getRequest() {
         return new FeedRequest(getFeedService(), getActivity());
     }
 
@@ -677,7 +686,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mInflated = stub.inflate();
             initEmptyFeedView(mInflated, errorCode);
         }
-        if (mInflated != null) mInflated.setVisibility(View.VISIBLE);
+        if (mInflated != null) {
+            mInflated.setVisibility(View.VISIBLE);
+            initEmptyFeedView(mInflated, errorCode);
+        }
         if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
     }
 

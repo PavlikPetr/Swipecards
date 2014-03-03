@@ -95,6 +95,7 @@ public class Options extends AbstractData {
     public boolean block_chat_not_mutual;
     public Closing closing = new Closing();
     public BlockSympathy blockSympathy = new BlockSympathy();
+    public BlockPeopleNearby blockPeople = new BlockPeopleNearby();
     /**
      * Настройки для промо-попапа 3-1
      */
@@ -223,6 +224,16 @@ public class Options extends AbstractData {
                     blockSympathy.group = settingsBlock.optString("group");
                     blockSympathy.price = settingsBlock.optInt("price");
                 }
+            }
+
+            JSONObject blockPeopleJson = response.optJSONObject("blockPeopleNearby");
+            blockPeople = blockPeople == null ?
+                    new BlockPeopleNearby():blockPeople;
+            if (blockPeopleJson != null) {
+                blockPeople.enabled = blockPeopleJson.optBoolean("enabled");
+                blockPeople.text = blockPeopleJson.optString("text");
+                blockPeople.buttonText = blockPeopleJson.optString("buttonText");
+                blockPeople.price = blockPeopleJson.optInt("price");
             }
 
             JSONObject getJarJson = response.optJSONObject("getjar");
@@ -507,6 +518,13 @@ public class Options extends AbstractData {
 
         public BlockSympathy() {
         }
+    }
+
+    public static class BlockPeopleNearby {
+        public boolean enabled = false;
+        public String text = Static.EMPTY;
+        public String buttonText = Static.EMPTY;
+        public int price = 0;
     }
 
     public static class Bonus {

@@ -295,10 +295,6 @@
     <string name="virus_chat_likes_request_title">Skänk sympatier till vänner</string>
     <string name="virus_chat_btn">Erhålla sympatier</string>
     <string name="virus_request_error">Det gick inte att skicka fler sympatier till vänner</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">Nu har du %d sympatier!</item>
-        <item quantity="one">Nu har du %d sympati!</item>
-    </plurals>
     <string name="profile_ask_sent">Förfrågan sskickat</string>
     <string name="virus_error">En vän kan skicka dig sympatier endast en gång om dygnet! Försök i morgon!</string>
     <string name="popup_version_title">Ny applikationsversion är tillgänglig</string>
@@ -491,7 +487,7 @@
     <string name="settings_select_language">Välj applikationens språk</string>
     <string name="restart_to_change_locale">För att byta språk behöver man logga om appen</string>
     <string name="locale_changing">Byta språk</string>
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="other">%d personer gillar dig</item>
         <item quantity="one">%d person gillar dig</item>
     </plurals>
@@ -602,4 +598,15 @@
         <item quantity="one">%d min.</item>
     </plurals>
     <string name="ok_label">Klasskamrater</string>
+    <plurals name="notification_many_messages">
+        <item quantity="other">%d nya meddelanden</item>
+        <item quantity="one">%d nytt meddelande</item>
+    </plurals>
+    <string name="coins_subscription">Prenumeration på mynt</string>
+    <plurals name="general_some_more">
+        <item quantity="other">och ytterligare %d</item>
+        <item quantity="one">och ytterligare %d</item>
+    </plurals>
+    <string name="you_were_subscribed">Prenumerationen är klar</string>
+    <string name="subscriptions_can_be_changed">Prenumerationen är klar. Ändringar är möjliga på Google Play</string>
 </resources>

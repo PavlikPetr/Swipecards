@@ -96,7 +96,7 @@ public class GooglePlayProducts extends AbstractData {
                 if (buyButtonFromJSON != null) {
                     if (userSubscriptions.contains(buyButtonFromJSON.id)) {
                         buyButtonFromJSON.price = 0;
-                        buyButtonFromJSON.hint = App.getContext().getString(R.string.you_was_subscribed);
+                        buyButtonFromJSON.hint = App.getContext().getString(R.string.you_were_subscribed);
                         buyButtonFromJSON.activated = true;
                     }
                     list.add(buyButtonFromJSON);

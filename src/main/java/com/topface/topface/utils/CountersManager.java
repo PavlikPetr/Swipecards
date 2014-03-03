@@ -19,6 +19,7 @@ public class CountersManager {
     private static int dialogsCounter;
     private static int fansCounter;
     private static int admirationsCounter;
+    private static int geoCounter;
 
     private Context mContext;
 
@@ -35,6 +36,7 @@ public class CountersManager {
     public final static int DIALOGS = 3;
     public final static int FANS = 4;
     public final static int ADMIRATIONS = 5;
+    public final static int GEO = 6;
 
     private static String lastRequestMethod;
 
@@ -55,6 +57,7 @@ public class CountersManager {
         dialogsCounter = CacheProfile.unread_messages;
         fansCounter = CacheProfile.unread_fans;
         admirationsCounter = CacheProfile.unread_admirations;
+        geoCounter = CacheProfile.unread_geo;
     }
 
     public void setCounter(int type, int value) {
@@ -83,16 +86,20 @@ public class CountersManager {
                 admirationsCounter = value;
                 commitCounters();
                 break;
+            case GEO:
+                geoCounter = value;
+                break;
         }
     }
 
-    public void setEntitiesCounters(int likesCounter, int sympathyCounter, int dialogsCounter, int visitorsCounter, int fansCounter, int admirationsCounter) {
+    public void setEntitiesCounters(int likesCounter, int sympathyCounter, int dialogsCounter, int visitorsCounter, int fansCounter, int admirationsCounter, int geoCounter) {
         CountersManager.likesCounter = likesCounter;
         CountersManager.sympathyCounter = sympathyCounter;
         CountersManager.dialogsCounter = dialogsCounter;
         CountersManager.visitorsCounter = visitorsCounter;
         CountersManager.fansCounter = fansCounter;
         CountersManager.admirationsCounter = admirationsCounter;
+        CountersManager.geoCounter = geoCounter;
         commitCounters();
     }
 
@@ -130,6 +137,8 @@ public class CountersManager {
                 return fansCounter;
             case ADMIRATIONS:
                 return admirationsCounter;
+            case GEO:
+                return geoCounter;
         }
         return -1;
     }
@@ -141,12 +150,14 @@ public class CountersManager {
 
     private void commitCounters() {
         String method = lastRequestMethod == null ? NULL_METHOD : lastRequestMethod;
+        //надо как-нибудь отрефакторить эту жесть в будущем
         if ((likesCounter != CacheProfile.unread_likes ||
                 dialogsCounter != CacheProfile.unread_messages ||
                 sympathyCounter != CacheProfile.unread_mutual ||
                 visitorsCounter != CacheProfile.unread_visitors ||
                 fansCounter != CacheProfile.unread_fans ||
-                admirationsCounter != CacheProfile.unread_admirations) &&
+                admirationsCounter != CacheProfile.unread_admirations) ||
+                geoCounter != CacheProfile.unread_geo &&
                 !checkMethodIsDenyed(method)
                 ) {
             CacheProfile.unread_likes = likesCounter;
@@ -155,6 +166,7 @@ public class CountersManager {
             CacheProfile.unread_visitors = visitorsCounter;
             CacheProfile.unread_fans = fansCounter;
             CacheProfile.unread_admirations = admirationsCounter;
+            CacheProfile.unread_geo = geoCounter;
             updateUICounters();
         }
     }

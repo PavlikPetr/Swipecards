@@ -278,10 +278,6 @@
     <string name="virus_chat_likes_request_title">Szimpátia adása barátaidnak</string>
     <string name="virus_chat_btn">Szimpátia kapása</string>
     <string name="virus_request_error">Nem tudtuk elküldeni a szimpátiákat a barátaidnak</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">Теп%d szimpátiát van!</item>
-        <item quantity="one">Те%d szimpátiát van!</item>
-    </plurals>
     <string name="profile_ask_sent">Felkérés elküldve</string>
     <string name="virus_error">Barátod csak naponta egyszer tudj szimpátiákat ajándékozni! Próbáld meg holnap!</string>
     <string name="popup_version_title">Új verzió elérhető</string>
