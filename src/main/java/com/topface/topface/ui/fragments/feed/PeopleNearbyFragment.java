@@ -129,14 +129,16 @@ public class PeopleNearbyFragment extends FeedFragment{
                             @Override
                             public void success(IApiResponse response) {
                                 super.success(response);
-                                inflated.setVisibility(View.GONE);
-                                updateData(false, true);
+                                if (isAdded()) {
+                                    inflated.setVisibility(View.GONE);
+                                    updateData(false, true);
+                                }
                             }
 
                             @Override
                             public void fail(int codeError, IApiResponse response) {
                                 super.fail(codeError, response);
-                                if (codeError == ErrorCodes.PAYMENT) {
+                                if (isAdded() && codeError == ErrorCodes.PAYMENT) {
                                     Toast.makeText(getActivity(), R.string.not_enough_coins, Toast.LENGTH_LONG).show();
                                     openBuyScreenOnBlockedGeo();
                                 }
@@ -145,8 +147,10 @@ public class PeopleNearbyFragment extends FeedFragment{
                             @Override
                             public void always(IApiResponse response) {
                                 super.always(response);
-                                btnBuy.setVisibility(View.VISIBLE);
-                                progress.setVisibility(View.GONE);
+                                if (isAdded()) {
+                                    btnBuy.setVisibility(View.VISIBLE);
+                                    progress.setVisibility(View.GONE);
+                                }
                             }
                         }).exec();
                     } else {
