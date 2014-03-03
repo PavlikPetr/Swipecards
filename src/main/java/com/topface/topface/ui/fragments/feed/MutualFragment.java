@@ -71,7 +71,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
 
     @Override
     protected int getTypeForGCM() {
-        return GCMUtils.GCM_TYPE_SYMPATHY;
+        return GCMUtils.GCM_TYPE_MUTUAL;
     }
 
     @Override

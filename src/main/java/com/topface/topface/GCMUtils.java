@@ -44,7 +44,7 @@ public class GCMUtils {
 
     public static final int GCM_TYPE_UNKNOWN = -1;
     public static final int GCM_TYPE_MESSAGE = 0;
-    public static final int GCM_TYPE_SYMPATHY = 1;
+    public static final int GCM_TYPE_MUTUAL = 1;
     public static final int GCM_TYPE_LIKE = 2;
     public static final int GCM_TYPE_GUESTS = 4;
     public static final int GCM_TYPE_UPDATE = 5;
@@ -290,9 +290,9 @@ public class GCMUtils {
                 break;
 
 
-            case GCM_TYPE_SYMPATHY:
+            case GCM_TYPE_MUTUAL:
                 if (showSympathy) {
-                    lastNotificationType = GCM_TYPE_SYMPATHY;
+                    lastNotificationType = GCM_TYPE_MUTUAL;
                     i = new Intent(context, NavigationActivity.class);
                     i.putExtra(NEXT_INTENT, F_MUTUAL);
                 }

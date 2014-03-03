@@ -765,7 +765,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 public void onClick(View v) {
                     retryButtonClick(mRetryView.getView());
                 }
-            });
+            }, getResources().getColor(R.color.bg_main));
             mRetryView.setVisibility(View.GONE);
             mContainer.addView(mRetryView.getView());
         }
