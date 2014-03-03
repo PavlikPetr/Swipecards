@@ -66,32 +66,21 @@ public class UserPhotoFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
-
+        // title
         mTitle = (TextView) root.findViewById(R.id.usedTitle);
-
         if (mPhotoLinks == null) {
             mTitle.setText(Utils.formatPhotoQuantity(0));
         }
-
+        mTitle.setVisibility(View.VISIBLE);
+        // album
         mGridAlbum = (GridView) root.findViewById(R.id.usedGrid);
         mGridAlbum.setAdapter(mUserPhotoGridAdapter);
         mGridAlbum.setOnItemClickListener(mOnItemClickListener);
         if (mUserPhotoGridAdapter != null) {
             mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
         }
-
-        mTitle.setVisibility(View.VISIBLE);
+        initTitle(mPhotoLinks);
         return root;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
@@ -122,9 +111,7 @@ public class UserPhotoFragment extends BaseFragment {
     }
 
     private void setPhotos(Photos photos) {
-        if (photos != null) {
-            mTitle.setText(Utils.formatPhotoQuantity(mUser.photosCount));
-        }
+        initTitle(photos);
 
         if (mUserPhotoGridAdapter == null) {
             mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext(),
@@ -134,14 +121,18 @@ public class UserPhotoFragment extends BaseFragment {
         }
     }
 
+    private void initTitle(Photos photos) {
+        if (mTitle != null && photos != null) {
+            mTitle.setText(Utils.formatPhotoQuantity(mUser == null ? 0 : mUser.photosCount));
+        }
+    }
+
     @Override
     public void clearContent() {
         if (mPhotoLinks != null) {
             mPhotoLinks.clear();
         }
-        if (mTitle != null) {
-            mTitle.setText(Utils.formatPhotoQuantity(0));
-        }
+        initTitle(mPhotoLinks);
         if (mUserPhotoGridAdapter != null) {
             mUserPhotoGridAdapter.notifyDataSetChanged();
         }
