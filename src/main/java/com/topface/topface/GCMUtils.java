@@ -317,6 +317,7 @@ public class GCMUtils {
                 lastNotificationType = GCM_TYPE_GEO;
                 i = new Intent(context, NavigationActivity.class);
                 i.putExtra(NEXT_INTENT, F_GEO);
+                break;
             case GCM_TYPE_UPDATE:
                 i = Utils.getMarketIntent(context);
                 break;
