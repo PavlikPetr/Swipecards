@@ -16,21 +16,20 @@ public class Banner extends AbstractData {
     public static final String ACTION_PAGE = "PAGE";
     public static final String ACTION_METHOD = "METHOD";
     public static final String ACTION_OFFERWALL = "OFFERWALL";
-    public static final String INVITE_PAGE = "INVITE_PAGE";
 
-    public static Banner parse(ApiResponse response) {
-        Banner banner = new Banner();
+    public Banner(ApiResponse response) {
+        fillData(response);
+    }
 
+    private void fillData(ApiResponse response) {
         try {
             JSONObject item = response.jsonResult;
-            banner.name = item.optString("name");
-            banner.url = item.optString("url");
-            banner.action = item.optString("action");
-            banner.parameter = item.optString("parameter");
+            name = item.optString("name");
+            url = item.optString("url");
+            action = item.optString("action");
+            parameter = item.optString("parameter");
         } catch (Exception e) {
             Debug.error("Banner.class: Wrong response parsing", e);
         }
-
-        return banner;
     }
 }

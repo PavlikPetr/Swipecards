@@ -73,7 +73,7 @@ public class FloatBlock {
 
     public static Map<String, Options.Page> getActivityMap() {
         if (mBannersMap == null) {
-            mBannersMap = new HashMap<String, Options.Page>();
+            mBannersMap = new HashMap<>();
             Options mOptions = CacheProfile.getOptions();
             if (mOptions.pages.containsKey(Options.PAGE_LIKES)) {
                 mBannersMap.put(LikesFragment.class.toString(), mOptions.pages.get(Options.PAGE_LIKES));

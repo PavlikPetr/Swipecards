@@ -16,9 +16,6 @@
 [submodule "libs/MoPub"]
 	path = libs/MoPub
 	url = git@github.com:Topface/mopub-client.git
-[submodule "libs/LifeStreetMediaSDK"]
-	path = libs/LifeStreetMediaSDK
-	url = git@github.com:Topface/LifeStreetMediaSDK.git
 [submodule "libs/odnoklassniki"]
 	path = libs/odnoklassniki
 	url = git@github.com:Topface/Odnoklassniki-Android-SDK.git
