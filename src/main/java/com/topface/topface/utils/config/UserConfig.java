@@ -281,7 +281,6 @@ public class UserConfig extends AbstractConfig {
     }
 
     public void resetNotificationMessagesStack() {
-        resetAndSaveConfig(generateKey(NOTIFICATIONS_MESSAGES_STACK));
         resetAndSaveConfig(generateKey(NOTIFICATION_REST_MESSAGES));
     }
 
