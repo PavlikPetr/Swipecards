@@ -132,7 +132,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private ImageButton mBtnChatAdd;
 
     private String[] editButtonsNames;
-    private boolean mReceiverRegistered = false;
     private String mItemId;
     private boolean wasFailed = false;
     private boolean isInBlackList = false;
@@ -854,12 +853,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             mAdapter.notifyDataSetChanged();
         }
 
-        if (!mReceiverRegistered) {
-            IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
-            getActivity().registerReceiver(mNewMessageReceiver, filter);
+        IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
+        getActivity().registerReceiver(mNewMessageReceiver, filter);
 
-            mReceiverRegistered = true;
-        }
         mUpdater = new Handler();
         startTimer();
         GCMUtils.lastUserId = mUserId;
@@ -867,11 +863,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onPause() {
-        super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
-        if (mReceiverRegistered && mNewMessageReceiver != null) {
-            getActivity().unregisterReceiver(mNewMessageReceiver);
-            mReceiverRegistered = false;
-        }
+        super.onPause();
+        getActivity().unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
         Utils.hideSoftKeyboard(getActivity(), mEditBox);
