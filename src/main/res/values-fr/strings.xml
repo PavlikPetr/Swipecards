@@ -283,10 +283,6 @@
     <string name="virus_chat_likes_request_title">Offrir des sympathies à vos amis</string>
     <string name="virus_chat_btn">Recevoir des sympathies</string>
     <string name="virus_request_error">On n\'a pas réussi d\'énvoyer les sympathies à vos amis</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">Maintenant vous avez %d sympathies!</item>
-        <item quantity="one">Maintenant vous avez %d sympathie!</item>
-    </plurals>
     <string name="profile_ask_sent">La demande est envoyée</string>
     <string name="virus_error">Votre ami ne peut offrir des sympathies qu\'une seule fois sur 24 heures! Essayez demain!</string>
     <string name="popup_version_title">Une nouvelle version de l\'application est accessible</string>
@@ -479,7 +475,7 @@
     <string name="settings_select_language">Le choi de la langue de l\'application</string>
     <string name="restart_to_change_locale">L\'application sera relancée pour changer la langue</string>
     <string name="locale_changing">Changer la langue</string>
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="other">Vous avez plu à %d personnes</item>
         <item quantity="one">Vous avez plu à %d personne</item>
     </plurals>

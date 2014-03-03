@@ -295,11 +295,6 @@
     <string name="virus_chat_likes_request_title">Regalare simpatie agli amici</string>
     <string name="virus_chat_btn">Ricevere simpatie</string>
     <string name="virus_request_error">Non siamo riusciti ad inviare simpatie ai tuoi amici</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="zero">Ora hai %d simpatie!</item>
-        <item quantity="other">Ora hai %d simpatie!</item>
-        <item quantity="one">Ora hai %d simpatia!</item>
-    </plurals>
     <string name="profile_ask_sent">La richiesta è stata inviata</string>
     <string name="virus_error">Il tuo amico può regalare le simpatie solo 1 volta al giorno! Riprova domani!</string>
     <string name="popup_version_title">La nuova versione dell’applicazione è disponibile</string>
@@ -492,7 +487,7 @@
     <string name="settings_select_language">Scelta della lingua dell’applicazione</string>
     <string name="restart_to_change_locale">L’applicazione sarà riavviata per cambiare lingua</string>
     <string name="locale_changing">Lingua</string>
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="other">Piaci a %d persone</item>
         <item quantity="one">Piaci a %d persona</item>
     </plurals>
@@ -603,4 +598,15 @@
         <item quantity="one">%d min</item>
     </plurals>
     <string name="ok_label">Odnoklassniki</string>
+    <plurals name="notification_many_messages">
+        <item quantity="other">%d nuovi messaggi</item>
+        <item quantity="one">%d nuovo messaggio</item>
+    </plurals>
+    <string name="coins_subscription">Abbonamento alle monete</string>
+    <plurals name="general_some_more">
+        <item quantity="other">e ancora %d</item>
+        <item quantity="one">e ancora %d</item>
+    </plurals>
+    <string name="you_were_subscribed">L’abbonamento è stato completato</string>
+    <string name="subscriptions_can_be_changed">L’abbonamento è stato completato. Puoi cambiare le condizioni dell’abbonamento su Google Play</string>
 </resources>

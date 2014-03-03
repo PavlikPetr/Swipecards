@@ -285,11 +285,6 @@
     <string name="virus_chat_likes_request_title">Подарувати симпатії вашим друзям</string>
     <string name="virus_chat_btn">Отримати симпатії</string>
     <string name="virus_request_error">Не вдалося відправити симпатій вашим друзям</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="few">Зараз у вас %d симпатії!</item>
-        <item quantity="other">Зараз у вас %d симпатій!</item>
-        <item quantity="one">Зараз у вас %d симпатія!</item>
-    </plurals>
     <string name="profile_ask_sent">Прохання відправлено</string>
     <string name="virus_error">За добу ваш друг може подарувати симпатії тільки 1 раз! Спробуйте завтра!</string>
     <string name="popup_version_title">Доступна нова версія додатка</string>

@@ -285,11 +285,6 @@
     <string name="virus_chat_likes_request_title">Pokloniti simpatije vašim prijateljima</string>
     <string name="virus_chat_btn">Dobiti simpatije</string>
     <string name="virus_request_error">Nije uspeo pokušaj slanja simpatija vašim prijateljima</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="few">Sada imate %d simpatije!</item>
-        <item quantity="other">Sada imate %d simpatija!</item>
-        <item quantity="one">Sada imate %d simpatija!</item>
-    </plurals>
     <string name="profile_ask_sent">Molba je poslata</string>
     <string name="virus_error">Tokom jednog dana vaš prijatelj može pokloniti simpatije samo 1 put! Pokušajte sutra!</string>
     <string name="popup_version_title">Dostupna je nova verzija priloga</string>
@@ -488,7 +483,7 @@
     <string name="settings_select_language">Izbor jezika priloga</string>
     <string name="restart_to_change_locale">Za promenu jezika prilog će biti aktiviran</string>
     <string name="locale_changing">Promena jezika</string>
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="few">Dopali ste se %d osobama</item>
         <item quantity="other">Dopali ste se %d ljudima</item>
         <item quantity="one">Dopali ste se %d čpveku</item>

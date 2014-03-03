@@ -293,10 +293,6 @@
     <string name="virus_chat_likes_request_title">Dar presente de simpatias para seus amigos</string>
     <string name="virus_chat_btn">Receber simpatias</string>
     <string name="virus_request_error">Não foi possível enviar simpatias para seus amigos</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">Agora vocês têm %d de simpatia!</item>
-        <item quantity="one">Agora vocês têm %d de simpatia!</item>
-    </plurals>
     <string name="profile_ask_sent">Pedido enviado</string>
     <string name="virus_error">O seu amigo pode dar presente de simpatias só uma vez por dia! Tente amanhã!</string>
     <string name="popup_version_title">Está disponível nova versão de aplicação</string>

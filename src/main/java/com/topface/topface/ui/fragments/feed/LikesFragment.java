@@ -159,7 +159,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         viewFlipper.setDisplayedChild(1);
         View currentView = viewFlipper.getChildAt(1);
         if (currentView != null) {
-            String title = Utils.getQuantityString(R.plurals.you_was_liked, CacheProfile.unread_likes, CacheProfile.unread_likes);
+            String title = Utils.getQuantityString(R.plurals.you_were_liked, CacheProfile.unread_likes, CacheProfile.unread_likes);
             ((TextView) currentView.findViewById(R.id.tvTitle)).setText(title);
             currentView.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -650,7 +650,7 @@
     <string name="restart_to_change_locale">Для смены языка приложение будет перезапущено</string>
     <string name="locale_changing">Смена языка</string>
 
-    <plurals name="you_was_liked">
+    <plurals name="you_were_liked">
         <item quantity="one">Вы понравились %d человеку</item>
         <item quantity="many">Вы понравились %d людям</item>
         <item quantity="few">Вы понравились %d людям</item>
