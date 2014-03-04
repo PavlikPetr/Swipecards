@@ -72,25 +72,29 @@ public class PeopleNearbyFragment extends FeedFragment{
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
         mIsUpdating = true;
         onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
-        Location location = GeoLocationManager.getLastKnownLocation(getActivity());
-        PeopleNearbyRequest request = new PeopleNearbyRequest(getActivity(), location.getLatitude(), location.getLongitude());
-        request.callback(new DataApiHandler<FeedListData<FeedGeo>>() {
+        Location location = null;//GeoLocationManager.getLastKnownLocation(getActivity());
+        if (location != null) {
+            PeopleNearbyRequest request = new PeopleNearbyRequest(getActivity(), location.getLatitude(), location.getLongitude());
+            request.callback(new DataApiHandler<FeedListData<FeedGeo>>() {
 
-            @Override
-            protected void success(FeedListData<FeedGeo> data, IApiResponse response) {
-                processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, getListAdapter().getLimit());
-            }
+                @Override
+                protected void success(FeedListData<FeedGeo> data, IApiResponse response) {
+                    processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, getListAdapter().getLimit());
+                }
 
-            @Override
-            protected FeedListData<FeedGeo> parseResponse(ApiResponse response) {
-                return getFeedList(response.jsonResult);
-            }
+                @Override
+                protected FeedListData<FeedGeo> parseResponse(ApiResponse response) {
+                    return getFeedList(response.jsonResult);
+                }
 
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                processFailUpdate(codeError, isHistoryLoad, getListAdapter(), isPullToRefreshUpdating);
-            }
-        }).exec();
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    processFailUpdate(codeError, isHistoryLoad, getListAdapter(), isPullToRefreshUpdating);
+                }
+            }).exec();
+        } else {
+            onEmptyFeed();
+        }
     }
 
     @Override
