@@ -2,14 +2,11 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.Spannable;
 
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
-
-import java.util.LinkedList;
 
 /**
  * Created by kirussell on 06.01.14.
@@ -278,7 +275,7 @@ public class UserConfig extends AbstractConfig {
 
     public boolean setNotificationMessagesStack(MessageStack messages) {
         getSettingsMap().setField(generateKey(NOTIFICATION_REST_MESSAGES), messages.getRestMessages());
-        return getSettingsMap().setField(generateKey(NOTIFICATIONS_MESSAGES_STACK), messages.toJSON());
+        return getSettingsMap().setField(generateKey(NOTIFICATIONS_MESSAGES_STACK), messages.toJson());
     }
 
     public void resetNotificationMessagesStack() {

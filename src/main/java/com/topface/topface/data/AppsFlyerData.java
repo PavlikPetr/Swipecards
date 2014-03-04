@@ -31,4 +31,9 @@ public class AppsFlyerData implements SerializableToJson {
                 .put("referrer", mReferrer);
     }
 
+    @Override
+    public void fromJSON(String json) {
+
+    }
+
 }

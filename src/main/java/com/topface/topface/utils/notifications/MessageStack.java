@@ -1,12 +1,9 @@
 package com.topface.topface.utils.notifications;
 
-import android.text.Spannable;
-import android.text.SpannableString;
-
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.JsonSerializable;
 import com.topface.topface.utils.SerializableList;
 import com.topface.topface.utils.Utils;
 
@@ -25,7 +22,7 @@ public class MessageStack extends SerializableList{
     }
 
     @Override
-    public void addFirst(JsonSerializable object) {
+    public void addFirst(SerializableToJson object) {
         super.addFirst(object);
         if (size() > SHOWED_MESSAGES) {
             removeLast();
@@ -57,7 +54,7 @@ public class MessageStack extends SerializableList{
      */
     private static final int SHOWED_MESSAGES = 5;
 
-    public static class Message implements JsonSerializable {
+    public static class Message implements SerializableToJson {
         public String mName;
         public String mTitle;
 
@@ -69,7 +66,7 @@ public class MessageStack extends SerializableList{
         public Message() {}
 
         @Override
-        public String toJSON() {
+        public JSONObject toJson() {
             JSONObject object = new JSONObject();
             try {
                 object.put("name", mName);
@@ -77,7 +74,7 @@ public class MessageStack extends SerializableList{
             } catch (JSONException e) {
                 Debug.error(e);
             }
-            return object.toString();
+            return object;
         }
 
         @Override

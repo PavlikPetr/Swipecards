@@ -76,6 +76,11 @@ public class City extends AbstractData implements SerializableToJson, Cloneable 
     }
 
     @Override
+    public void fromJSON(String json) {
+
+    }
+
+    @Override
     protected Object clone() throws CloneNotSupportedException {
         super.clone();
         return new City(id, name, full);

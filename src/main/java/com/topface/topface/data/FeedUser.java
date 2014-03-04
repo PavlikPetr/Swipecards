@@ -117,6 +117,11 @@ public class FeedUser extends AbstractData implements SerializableToJson {
     }
 
     @Override
+    public void fromJSON(String json) {
+
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o instanceof FeedUser) {
             return ((FeedUser) o).id == id;

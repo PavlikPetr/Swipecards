@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.requests.ComplainRequest;
 
 import org.json.JSONArray;
@@ -8,14 +9,18 @@ import org.json.JSONException;
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 
-public class SerializableList extends LinkedList<JsonSerializable> {
+public class SerializableList extends LinkedList<SerializableToJson> {
 
 
-    public String toJSON() {
+    public String toJson() {
         JSONArray array = new JSONArray();
-        for (Object item : this) {
-            JsonSerializable jsonItem = (JsonSerializable) item;
-            array.put(jsonItem.toJSON());
+        try {
+            for (Object item : this) {
+                SerializableToJson jsonItem = (SerializableToJson) item;
+                array.put(jsonItem.toJson().toString());
+            }
+        } catch (JSONException e) {
+
         }
         return array.toString();
     }
@@ -28,7 +33,7 @@ public class SerializableList extends LinkedList<JsonSerializable> {
             for (int i = 0; i < jsonArray.length(); i++) {
                 Constructor<?> constructor = serializableClass.getConstructor();
                 Object item = constructor.newInstance();
-                JsonSerializable jsonSerializable = (JsonSerializable) item;
+                SerializableToJson jsonSerializable = (SerializableToJson) item;
                 jsonSerializable.fromJSON(jsonArray.getString(i));
                 add(jsonSerializable);
             }
