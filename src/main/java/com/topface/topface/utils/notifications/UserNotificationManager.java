@@ -223,9 +223,7 @@ public class UserNotificationManager {
     private MessageStack saveMessageStack(String message, User user) {
         UserConfig config = App.getUserConfig();
         MessageStack messagesStack = config.getNotificationMessagesStack();
-        Spannable spanMessage = new SpannableString(String.format(mContext.getString(R.string.notification_message_format), user.name, message));
-        spanMessage.setSpan(new StyleSpan(Typeface.BOLD), 0, user.name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        messagesStack.addFirst(spanMessage);
+        messagesStack.addFirst(new MessageStack.Message(user.name, message));
         config.setNotificationMessagesStack(messagesStack);
         config.saveConfig();
         return messagesStack;
