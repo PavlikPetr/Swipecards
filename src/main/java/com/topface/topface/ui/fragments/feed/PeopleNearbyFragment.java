@@ -72,7 +72,7 @@ public class PeopleNearbyFragment extends FeedFragment{
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
         mIsUpdating = true;
         onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
-        Location location = null;//GeoLocationManager.getLastKnownLocation(getActivity());
+        Location location = GeoLocationManager.getLastKnownLocation(getActivity());
         if (location != null) {
             PeopleNearbyRequest request = new PeopleNearbyRequest(getActivity(), location.getLatitude(), location.getLongitude());
             request.callback(new DataApiHandler<FeedListData<FeedGeo>>() {
