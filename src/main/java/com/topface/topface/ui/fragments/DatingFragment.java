@@ -652,6 +652,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             unlockControls();
             showNovice();
             hasOneSympathyOrDelight = true;
+            showControls();
         }
 
         mPreloadManager.preloadPhoto(mUserSearchList);
