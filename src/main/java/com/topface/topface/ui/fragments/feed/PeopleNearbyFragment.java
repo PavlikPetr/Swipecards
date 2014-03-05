@@ -69,7 +69,7 @@ public class PeopleNearbyFragment extends FeedFragment{
     }
 
     @Override
-    protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
+    protected void updateData(boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
         mIsUpdating = true;
         onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
         Location location = GeoLocationManager.getLastKnownLocation(getActivity());
@@ -79,7 +79,7 @@ public class PeopleNearbyFragment extends FeedFragment{
 
                 @Override
                 protected void success(FeedListData<FeedGeo> data, IApiResponse response) {
-                    processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, getListAdapter().getLimit());
+                    processSuccessUpdate(data, isHistoryLoad, false, makeItemsRead, getListAdapter().getLimit());
                 }
 
                 @Override
@@ -89,7 +89,7 @@ public class PeopleNearbyFragment extends FeedFragment{
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    processFailUpdate(codeError, isHistoryLoad, getListAdapter(), isPullToRefreshUpdating);
+                    processFailUpdate(codeError, isHistoryLoad, getListAdapter(), false);
                 }
             }).exec();
         } else {
@@ -102,7 +102,7 @@ public class PeopleNearbyFragment extends FeedFragment{
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
         ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
         Options.BlockPeopleNearby blockPeopleNearby = CacheProfile.getOptions().blockPeople;
-        if (blockPeopleNearby.enabled && errorCode == ErrorCodes.BLOCKED_PEOPLE_NEARBY) {
+        if (errorCode == ErrorCodes.BLOCKED_PEOPLE_NEARBY) {
             initEmptyScreenOnBlocked(inflated, viewFlipper, blockPeopleNearby);
         } else {
             initEmptyScreen(viewFlipper);
