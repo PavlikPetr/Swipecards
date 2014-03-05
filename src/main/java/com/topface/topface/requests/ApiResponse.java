@@ -179,6 +179,11 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
     }
 
     @Override
+    public void fromJSON(String json) {
+
+    }
+
+    @Override
     public JSONObject getJsonResult() {
         return jsonResult;
     }

@@ -5,21 +5,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.StyleSpan;
 
 import com.topface.topface.R;
+import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
-
-import java.util.LinkedList;
 
 public class UserNotification {
     public static final int ICON_SIZE = 64;
@@ -197,8 +200,11 @@ public class UserNotification {
                 new NotificationCompat.InboxStyle(notificationBuilder.setContentTitle(
                         Utils.getQuantityString(R.plurals.notification_many_messages,
                                 messages.getAllCount(), messages.getAllCount())));
-        for (Spannable message : messages) {
-            inboxStyle.addLine(message);
+        for (SerializableToJson item : messages) {
+            MessageStack.Message message = (MessageStack.Message) item;
+            Spannable spanMessage = new SpannableString(String.format(mContext.getString(R.string.notification_message_format), message.mName, message.mTitle));
+            spanMessage.setSpan(new StyleSpan(Typeface.BOLD), 0, message.mName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            inboxStyle.addLine(spanMessage);
         }
         inboxStyle.build();
     }

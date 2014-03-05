@@ -285,14 +285,6 @@ public abstract class AbstractConfig {
             return false;
         }
 
-        public boolean setField(String fieldName, List value) {
-            if (containsKey(fieldName)) {
-                get(fieldName).value = value;
-                return true;
-            }
-            return false;
-        }
-
         public String getStringField(String fieldName) {
             SettingsField settingsField = get(fieldName);
             if (settingsField != null && settingsField.value != null) {
@@ -331,14 +323,6 @@ public abstract class AbstractConfig {
                 return (Double) settingsField.value;
             }
             return 0.0;
-        }
-
-        public List getListField(String fieldName) {
-            SettingsField settingsField = get(fieldName);
-            if (settingsField != null && settingsField.value != null) {
-                return (List) settingsField.value;
-            }
-            return new LinkedList();
         }
     }
 }
