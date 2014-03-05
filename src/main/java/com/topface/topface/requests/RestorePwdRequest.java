@@ -3,6 +3,7 @@ package com.topface.topface.requests;
 import android.content.Context;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.topface.BuildConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,9 +19,9 @@ public class RestorePwdRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONObject data = new JSONObject();
-        data.put("login", login);
-        return data;
+        return new JSONObject()
+                .put("login", login)
+                .put("clientType", BuildConfig.BILLING_TYPE.getClientType());
     }
 
     @Override
