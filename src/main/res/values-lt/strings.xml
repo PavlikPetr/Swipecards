@@ -298,6 +298,11 @@
     <string name="virus_chat_likes_request_title">Padovanoti simpatijas jūsų draugams</string>
     <string name="virus_chat_btn">Gauti simpatijas</string>
     <string name="virus_request_error">Nepavyko išsiųsti simpatijų jūsų draugams</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="few">Dabar pas jus %d simpatijos!</item>
+        <item quantity="other">Dabar pas jus %d simpatijų!</item>
+        <item quantity="one">Dabar pas jus %d simpatija!</item>
+    </plurals>
     <string name="profile_ask_sent">Prašymas išsiųstas</string>
     <string name="virus_error">Per parą jūsų draugas gali padovanoti simpatijas tiktai 1 kartą! Pabandykite rytoj!</string>
     <string name="popup_version_title">Yra nauja priedo versija</string>
@@ -628,4 +633,7 @@
     </plurals>
     <string name="you_were_subscribed">Prenumerata įforminta</string>
     <string name="subscriptions_can_be_changed">Prenumerata įforminta. Pakeisti prenumeratos sąlygas galima Google Play</string>
+    <string name="people_nearby">Žmonės šalia</string>
+    <string name="nobody_nearby">Aplinkui nė gyvos dvasios!</string>
+    <string name="general_distance">%.02f km</string>
 </resources>

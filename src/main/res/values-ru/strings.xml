@@ -133,6 +133,7 @@
 
     <!-- Profile editing  -->
     <string name="edit_title">Редактирование</string>
+    <string name="edit_block_photo">Фотографии</string>
     <string name="edit_bg_photo">Фоновая фотография</string>
     <string name="edit_album">Альбом</string>
     <string name="edit_profile_photo">Поменять фото</string>
@@ -218,6 +219,8 @@
     <string name="settings_feedback_success_msg">Спасибо, сообщение было успешно отослано</string>
     <string name="settings_switch_on">вкл.</string>
     <string name="settings_switch_off">выкл.</string>
+    <string name="settings_block_main">Основные</string>
+    <string name="settings_block_additional">Дополнительно</string>
 
     <!-- Leaders -->
     <string name="leaders_go_date">Хочу сюда</string>

@@ -297,6 +297,10 @@
     <string name="virus_chat_likes_request_title">Regalar simpatías a tus amigos</string>
     <string name="virus_chat_btn">Recibir simpatías</string>
     <string name="virus_request_error">Fallo en envio de simpatías a tus amigos</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="other">¡Ahora tienes %d simpatías!</item>
+        <item quantity="one">¡Ahora tienes %d simpatía!</item>
+    </plurals>
     <string name="profile_ask_sent">Solicitud enviada</string>
     <string name="virus_error">¡Tu amigo puede regalar simpatías sólo 1 vez al día! ¡Prueba mañana!</string>
     <string name="popup_version_title">Está disponible una nueva versión de la aplicación</string>
@@ -602,4 +606,18 @@
         <item quantity="one">%d min.</item>
     </plurals>
     <string name="ok_label">Одноклассники</string>
+    <plurals name="notification_many_messages">
+        <item quantity="other">%d mensajes nuevos</item>
+        <item quantity="one">%d mensaje nuevo</item>
+    </plurals>
+    <string name="coins_subscription">Suscripció a las monedas</string>
+    <plurals name="general_some_more">
+        <item quantity="other">y %d más</item>
+        <item quantity="one">y %d más</item>
+    </plurals>
+    <string name="you_were_subscribed">Suscripción tramitada</string>
+    <string name="subscriptions_can_be_changed">Suscripción tramitada. Puedes cambiar las condiciones de la suscripción en Google Play</string>
+    <string name="people_nearby">Gente cerca</string>
+    <string name="nobody_nearby">¡No hay nadie cerca!</string>
+    <string name="general_distance">%.02f km</string>
 </resources>
