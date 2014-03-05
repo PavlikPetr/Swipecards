@@ -17,14 +17,12 @@ import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
 import com.topface.topface.R;
+import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.JsonSerializable;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
-
-import java.util.LinkedList;
 
 public class UserNotification {
     public static final int ICON_SIZE = 64;
@@ -202,7 +200,7 @@ public class UserNotification {
                 new NotificationCompat.InboxStyle(notificationBuilder.setContentTitle(
                         Utils.getQuantityString(R.plurals.notification_many_messages,
                                 messages.getAllCount(), messages.getAllCount())));
-        for (JsonSerializable item : messages) {
+        for (SerializableToJson item : messages) {
             MessageStack.Message message = (MessageStack.Message) item;
             Spannable spanMessage = new SpannableString(String.format(mContext.getString(R.string.notification_message_format), message.mName, message.mTitle));
             spanMessage.setSpan(new StyleSpan(Typeface.BOLD), 0, message.mName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
