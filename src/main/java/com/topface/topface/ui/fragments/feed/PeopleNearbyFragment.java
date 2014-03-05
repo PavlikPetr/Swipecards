@@ -93,7 +93,7 @@ public class PeopleNearbyFragment extends FeedFragment{
                 }
             }).exec();
         } else {
-            onEmptyFeed();
+            onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
         }
     }
 
@@ -105,12 +105,20 @@ public class PeopleNearbyFragment extends FeedFragment{
         if (errorCode == ErrorCodes.BLOCKED_PEOPLE_NEARBY) {
             initEmptyScreenOnBlocked(inflated, viewFlipper, blockPeopleNearby);
         } else {
-            initEmptyScreen(viewFlipper);
+            initEmptyScreen(viewFlipper, errorCode);
         }
     }
 
-    private void initEmptyScreen(ViewFlipper viewFlipper) {
+    private void initEmptyScreen(ViewFlipper viewFlipper, int errorCode) {
         viewFlipper.setDisplayedChild(0);
+        View currentView = viewFlipper.getChildAt(0);
+        if (currentView != null) {
+            if (errorCode == ErrorCodes.CANNOT_GET_GEO) {
+                ((TextView)currentView.findViewById(R.id.tvText)).setText(R.string.cannot_get_geo);
+            } else {
+                ((TextView)currentView.findViewById(R.id.tvText)).setText(R.string.nobody_nearby);
+            }
+        }
     }
 
     private void initEmptyScreenOnBlocked(final View inflated, ViewFlipper viewFlipper, final Options.BlockPeopleNearby blockPeopleNearby) {
