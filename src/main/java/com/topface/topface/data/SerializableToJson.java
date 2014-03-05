@@ -5,4 +5,6 @@ import org.json.JSONObject;
 
 public interface SerializableToJson {
     public JSONObject toJson() throws JSONException;
+
+    public void fromJSON(String json);
 }

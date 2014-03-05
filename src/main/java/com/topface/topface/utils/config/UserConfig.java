@@ -2,14 +2,11 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.Spannable;
 
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
-
-import java.util.LinkedList;
 
 /**
  * Created by kirussell on 06.01.14.
@@ -60,7 +57,7 @@ public class UserConfig extends AbstractConfig {
         // date of last mutual closings processing
         settingsMap.addLongField(generateKey(DATA_MUTUAL_CLOSING_LAST_TIME), 0L);
         // список сообщений для сгруппированных нотификаций (сейчас группируются только сообщения)
-        settingsMap.addListField(generateKey(NOTIFICATIONS_MESSAGES_STACK), new LinkedList<String>());
+        settingsMap.addStringField(generateKey(NOTIFICATIONS_MESSAGES_STACK), Static.EMPTY);
         // количество нотификаций, которые пишем в поле "еще %d сообщений"
         settingsMap.addIntegerField(generateKey(NOTIFICATION_REST_MESSAGES), 0);
     }
@@ -270,14 +267,15 @@ public class UserConfig extends AbstractConfig {
     }
 
     public MessageStack getNotificationMessagesStack() {
-        MessageStack messageStack = new MessageStack((LinkedList<Spannable>) getSettingsMap().getListField(generateKey(NOTIFICATIONS_MESSAGES_STACK)));
+        MessageStack messageStack = new MessageStack();
+        messageStack.fromJSON(getSettingsMap().getStringField(generateKey(NOTIFICATIONS_MESSAGES_STACK)), MessageStack.Message.class.getName());
         messageStack.setRestMessages(getSettingsMap().getIntegerField(generateKey(NOTIFICATION_REST_MESSAGES)));
         return messageStack;
     }
 
     public boolean setNotificationMessagesStack(MessageStack messages) {
         getSettingsMap().setField(generateKey(NOTIFICATION_REST_MESSAGES), messages.getRestMessages());
-        return getSettingsMap().setField(generateKey(NOTIFICATIONS_MESSAGES_STACK), messages);
+        return getSettingsMap().setField(generateKey(NOTIFICATIONS_MESSAGES_STACK), messages.toJson());
     }
 
     public void resetNotificationMessagesStack() {

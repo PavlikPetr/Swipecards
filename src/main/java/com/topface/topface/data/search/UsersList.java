@@ -246,6 +246,11 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         return new JSONObject().put(USERS, usersJson);
     }
 
+    @Override
+    public void fromJSON(String json) {
+
+    }
+
     @SuppressWarnings("unchecked")
     public void replace(UsersList usersList) {
         clear();
