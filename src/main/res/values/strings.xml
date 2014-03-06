@@ -81,6 +81,7 @@
     <string name="filter_age_string">From %1$d to %2$d</string>
     <string name="filter_only_online">Only online</string>
     <string name="filter_only_beautiful">Only beautiful</string>
+    <string name="filter_city_age_parameters">Age and city</string>
     <string name="filter_extra_parameters">Advanced search</string>
     <string name="filter_age">Select age</string>
     <string name="filter_online">Online</string>
