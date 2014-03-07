@@ -12,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -44,6 +46,7 @@ public class ContactsFragment extends BaseFragment {
     private ArrayList<ContactsProvider.Contact> data;
     private View mLockerView;
     private CheckBox mCheckBox;
+    private View root;
 
     public static ContactsFragment newInstance(ArrayList<ContactsProvider.Contact> contacts) {
         Bundle args = new Bundle();
@@ -56,7 +59,7 @@ public class ContactsFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.contacts_layout, container, false);
+        root = inflater.inflate(R.layout.contacts_layout, container, false);
         mLockerView = root.findViewById(R.id.clLocker);
 
         TextView title = (TextView) root.findViewById(R.id.inviteText);
@@ -107,6 +110,8 @@ public class ContactsFragment extends BaseFragment {
             }
         });
 
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         mContactsVip = (Button) root.findViewById(R.id.contactsVip);
         if (data.size() < CacheProfile.getOptions().contacts_count) {
             mContactsVip.setText(getString(R.string.general_rest_contacts, CacheProfile.getOptions().contacts_count - data.size()));
@@ -125,6 +130,12 @@ public class ContactsFragment extends BaseFragment {
         ContactsListAdapter adapter = new ContactsListAdapter(getActivity(), data);
         contactsView.setAdapter(adapter);
         return root;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     private void sendInvitesRequest() {

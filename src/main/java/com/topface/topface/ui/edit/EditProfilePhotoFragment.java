@@ -237,7 +237,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 holder.mBtnSetAsMain = (Button) convertView.findViewById(R.id.btnSetAsMain);
                 holder.mBtnDelete = (Button) convertView.findViewById(R.id.btnDeletePhoto);
                 holder.mBtnRestore = (Button) convertView.findViewById(R.id.btnRestorePhoto);
-//                holder.mBtnSelectedAsMain = (Button) convertView.findViewById(R.id.btnSetAsMainSelected);
+                holder.mBtnSelectedAsMain = (Button) convertView.findViewById(R.id.btnSetAsMainSelected);
                 holder.mShadow = (ImageView) convertView.findViewById(R.id.ivShadow);
                 convertView.setTag(holder);
             } else {
