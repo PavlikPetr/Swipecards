@@ -46,7 +46,6 @@ public class ContactsFragment extends BaseFragment {
     private ArrayList<ContactsProvider.Contact> data;
     private View mLockerView;
     private CheckBox mCheckBox;
-    private View root;
 
     public static ContactsFragment newInstance(ArrayList<ContactsProvider.Contact> contacts) {
         Bundle args = new Bundle();
@@ -59,7 +58,7 @@ public class ContactsFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.contacts_layout, container, false);
+        View root = inflater.inflate(R.layout.contacts_layout, container, false);
         mLockerView = root.findViewById(R.id.clLocker);
 
         TextView title = (TextView) root.findViewById(R.id.inviteText);
