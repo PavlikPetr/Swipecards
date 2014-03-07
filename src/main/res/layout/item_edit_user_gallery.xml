@@ -37,11 +37,15 @@
     <Button
         android:id="@+id/btnSetAsMain"
         style="@style/EditPhotoButtonsText"
-        android:layout_width="wrap_content"
+        android:layout_width="93dp"
         android:layout_height="26dp"
         android:layout_alignTop="@id/ivPhoto"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:background="@drawable/edit_btn_set_as_main_selector"
         android:text="@string/edit_set_as_main" />
 
