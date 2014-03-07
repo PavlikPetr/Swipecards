@@ -104,6 +104,7 @@
     <string name="filter_age_string">От %1$d до %2$d</string>
     <string name="filter_only_online">Только онлайн</string>
     <string name="filter_only_beautiful">Только красивые</string>
+    <string name="filter_city_age_parameters">Возраст и город</string>
     <string name="filter_extra_parameters">Дополнительные параметры</string>
     <string name="filter_age">Выбор возраста</string>
     <string name="filter_online">Онлайн</string>
@@ -133,6 +134,7 @@
 
     <!-- Profile editing  -->
     <string name="edit_title">Редактирование</string>
+    <string name="edit_block_photo">Фотографии</string>
     <string name="edit_bg_photo">Фоновая фотография</string>
     <string name="edit_album">Альбом</string>
     <string name="edit_profile_photo">Поменять фото</string>
@@ -218,6 +220,8 @@
     <string name="settings_feedback_success_msg">Спасибо, сообщение было успешно отослано</string>
     <string name="settings_switch_on">вкл.</string>
     <string name="settings_switch_off">выкл.</string>
+    <string name="settings_block_main">Основные</string>
+    <string name="settings_block_additional">Дополнительно</string>
 
     <!-- Leaders -->
     <string name="leaders_go_date">Хочу сюда</string>
