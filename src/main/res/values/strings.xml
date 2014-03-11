@@ -626,5 +626,6 @@
     <string name="people_nearby">People nearby</string>
     <string name="nobody_nearby">Nobody is nearby!</string>
     <string name="general_distance_km">%.02f km</string>
+    <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Not able to determine location</string>
 </resources>
