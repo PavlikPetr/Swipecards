@@ -93,9 +93,9 @@ public class PeopleNearbyFragment extends FeedFragment{
                     processFailUpdate(codeError, isHistoryLoad, getListAdapter(), false);
                 }
             }).exec();
-//        } else {
-//            onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
-//        }
+        } else {
+            onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
+        }
     }
 
     @Override
