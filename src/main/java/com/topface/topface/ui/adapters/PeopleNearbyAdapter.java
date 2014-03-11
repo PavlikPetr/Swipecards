@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGeo;
 
-import java.text.DecimalFormat;
-
 public class PeopleNearbyAdapter extends FeedAdapter<FeedGeo>{
     public PeopleNearbyAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
@@ -19,7 +17,14 @@ public class PeopleNearbyAdapter extends FeedAdapter<FeedGeo>{
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         FeedGeo item = getItem(position);
-        holder.city.setText(String.format(getContext().getString(R.string.general_distance), item.distance));
+        double distance = 0;
+        if (item.distance >= 1000) {
+            distance = item.distance / 1000;
+            holder.city.setText(String.format(getContext().getString(R.string.general_distance_km), distance));
+        } else {
+            distance = item.distance >= 1? item.distance : 1;
+            holder.city.setText(String.format(getContext().getString(R.string.general_distance_m), (int)distance));
+        }
         holder.city.setCompoundDrawablesWithIntrinsicBounds(getContext().getResources().getDrawable(R.drawable.geo_ico),
                 null, null, null);
         holder.city.setTextColor(getContext().getResources().getColor(R.color.geo_color));

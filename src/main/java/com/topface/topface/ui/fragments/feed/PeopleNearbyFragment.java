@@ -75,6 +75,7 @@ public class PeopleNearbyFragment extends FeedFragment{
         Location location = GeoLocationManager.getLastKnownLocation(getActivity());
         if (location != null) {
             PeopleNearbyRequest request = new PeopleNearbyRequest(getActivity(), location.getLatitude(), location.getLongitude());
+
             request.callback(new DataApiHandler<FeedListData<FeedGeo>>() {
 
                 @Override
