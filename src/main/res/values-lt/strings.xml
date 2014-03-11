@@ -635,5 +635,5 @@
     <string name="subscriptions_can_be_changed">Prenumerata įforminta. Pakeisti prenumeratos sąlygas galima Google Play</string>
     <string name="people_nearby">Žmonės šalia</string>
     <string name="nobody_nearby">Aplinkui nė gyvos dvasios!</string>
-    <string name="general_distance">%.02f km</string>
+    <string name="general_distance_km">%.02f km</string>
 </resources>
