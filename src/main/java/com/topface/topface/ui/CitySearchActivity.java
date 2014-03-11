@@ -63,7 +63,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_city);
         Debug.log(this, "+onCreate");
-
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
         mRequestKey = getIntent().getIntExtra(Static.INTENT_REQUEST_KEY, 0);
@@ -76,28 +75,21 @@ public class CitySearchActivity extends BaseFragmentActivity {
             initCity = CacheProfile.city;
         }
         mAllCitiesString = getResources().getString(R.string.filter_cities_all);
-
         // Data
         mTopCitiesList = new LinkedList<>();
         mDataList = new LinkedList<>();
         mNameList = new LinkedList<>();
-
         // Title Header        
         initHeader();
-
         //My City
         initMyCity();
-
         // Progress
         mProgressBar = (ProgressBar) findViewById(R.id.prsCityLoading);
         mCityFail = (TextView) findViewById(R.id.noCities);
-
         // ListView
         initListView();
-
         // EditText
         initEditText();
-
         update();
     }
 
@@ -163,20 +155,15 @@ public class CitySearchActivity extends BaseFragmentActivity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 ViewHolder holder;
-
                 if (convertView == null) {
                     holder = new ViewHolder();
-
                     convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
                     holder.mTitle = (TextView) convertView.findViewWithTag("tvTitle");
                     holder.mBackground = (ImageView) convertView.findViewWithTag("ivEditBackground");
-
                     convertView.setTag(holder);
                 } else {
                     holder = (ViewHolder) convertView.getTag();
                 }
-
-
                 if (position == 0) {
                     if (getCount() == 1) {
                         holder.mBackground.setImageDrawable(getResources().getDrawable(
@@ -195,19 +182,15 @@ public class CitySearchActivity extends BaseFragmentActivity {
                             R.drawable.edit_big_btn_middle_selector));
                     convertView.setPadding(0, 0, 0, 0);
                 }
-
                 if (getCount() > position) {
                     holder.mTitle.setText(getItem(position));
                 }
-
                 return convertView;
             }
         };
-
         // ListView
         cityListView = (ListView) findViewById(R.id.lvCityList);
         cityListView.setAdapter(mListAdapter);
-
         // возврат значения и выход
         cityListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -252,7 +235,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
                     mMyCityTitle.setText(R.string.we_detect_your_city);
                     if (cityTextView != null) {
                         cityTextView.setText(CacheProfile.city.name);
-                        cityTextView.setOnClickListener(new View.OnClickListener() {
+                        mCbMyCity.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 finish();
@@ -271,7 +254,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
     private void update() {
         mProgressBar.setVisibility(View.VISIBLE);
-
         CitiesRequest citiesRequest = new CitiesRequest(this);
         registerRequest(citiesRequest);
         citiesRequest.type = "top";
