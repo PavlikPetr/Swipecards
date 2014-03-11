@@ -161,9 +161,6 @@ public class ServicesTextView extends View {
             for (int i = 0; i < mMaxChars; i++) {
                 this.text += "9";
             }
-            if (textWithoutBackround == null) {
-                textWithoutBackround = "+";
-            }
         }
         invalidate();
     }
