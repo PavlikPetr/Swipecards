@@ -619,5 +619,5 @@
     <string name="subscriptions_can_be_changed">Suscripción tramitada. Puedes cambiar las condiciones de la suscripción en Google Play</string>
     <string name="people_nearby">Gente cerca</string>
     <string name="nobody_nearby">¡No hay nadie cerca!</string>
-    <string name="general_distance">%.02f km</string>
+    <string name="general_distance_km">%.02f km</string>
 </resources>

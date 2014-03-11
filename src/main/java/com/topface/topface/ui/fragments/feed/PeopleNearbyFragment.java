@@ -73,8 +73,9 @@ public class PeopleNearbyFragment extends FeedFragment{
         mIsUpdating = true;
         onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
         Location location = GeoLocationManager.getLastKnownLocation(getActivity());
-        if (location != null) {
-            PeopleNearbyRequest request = new PeopleNearbyRequest(getActivity(), location.getLatitude(), location.getLongitude());
+//        if (location != null) {
+//            PeopleNearbyRequest request = new PeopleNearbyRequest(getActivity(), location.getLatitude(), location.getLongitude());
+        PeopleNearbyRequest request = new PeopleNearbyRequest(getActivity(), 59.932610, 30.348303);
             request.callback(new DataApiHandler<FeedListData<FeedGeo>>() {
 
                 @Override
@@ -92,9 +93,9 @@ public class PeopleNearbyFragment extends FeedFragment{
                     processFailUpdate(codeError, isHistoryLoad, getListAdapter(), false);
                 }
             }).exec();
-        } else {
-            onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
-        }
+//        } else {
+//            onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
+//        }
     }
 
     @Override
