@@ -809,6 +809,7 @@
     <string name="subscriptions_can_be_changed">Подписка оформлена. Изменить условия подписки можно в Google Play</string>
     <string name="people_nearby">Люди рядом</string>
     <string name="nobody_nearby">Вокруг нет ни души!</string>
-    <string name="general_distance">%.02f км</string>
+    <string name="general_distance_km">%.02f км</string>
+    <string name="general_distance_m">%d м</string>
     <string name="cannot_get_geo">Не удалось определить местоположение</string>
 </resources>

@@ -81,6 +81,7 @@
     <string name="filter_age_string">From %1$d to %2$d</string>
     <string name="filter_only_online">Only online</string>
     <string name="filter_only_beautiful">Only beautiful</string>
+    <string name="filter_city_age_parameters">Age and city</string>
     <string name="filter_extra_parameters">Advanced search</string>
     <string name="filter_age">Select age</string>
     <string name="filter_online">Online</string>
@@ -624,6 +625,7 @@
     <string name="subscriptions_can_be_changed">Subscribed. You can change your subscription on Google Play.</string>
     <string name="people_nearby">People nearby</string>
     <string name="nobody_nearby">Nobody is nearby!</string>
-    <string name="general_distance">%.02f km</string>
+    <string name="general_distance_km">%.02f km</string>
+    <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Not able to determine location</string>
 </resources>

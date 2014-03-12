@@ -13,9 +13,9 @@ import java.util.Collections;
 
 public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
-    public static final int NEW_ITEM_LAYOUT = R.layout.item_new_feed_dialog;
+    public static final int NEW_ITEM_LAYOUT = R.layout.item_feed_new_dialog;
     public static final int ITEM_LAYOUT = R.layout.item_feed_dialog;
-    public static final int NEW_VIP_ITEM_LAYOUT = R.layout.item_new_feed_vip_dialog;
+    public static final int NEW_VIP_ITEM_LAYOUT = R.layout.item_feed_vip_new_dialog;
     public static final int VIP_ITEM_LAYOUT = R.layout.item_feed_vip_dialog;
 
     public DialogListAdapter(Context context, Updater updateCallback) {

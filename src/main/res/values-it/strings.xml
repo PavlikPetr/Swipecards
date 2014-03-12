@@ -615,5 +615,5 @@
     <string name="subscriptions_can_be_changed">L’abbonamento è stato completato. Puoi cambiare le condizioni dell’abbonamento su Google Play</string>
     <string name="people_nearby">Persone attorno a te</string>
     <string name="nobody_nearby">Non c’è un’anima viva!</string>
-    <string name="general_distance">%.02f km</string>
+    <string name="general_distance_km">%.02f km</string>
 </resources>

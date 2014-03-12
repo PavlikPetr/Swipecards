@@ -43,7 +43,7 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
 
     @Override
     protected int getNewItemLayout() {
-        return R.layout.item_new_feed_dialog;
+        return R.layout.item_feed_new_dialog;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
 
     @Override
     protected int getNewVipItemLayout() {
-        return R.layout.item_new_feed_vip_dialog;
+        return R.layout.item_feed_vip_new_dialog;
     }
 
     @Override
