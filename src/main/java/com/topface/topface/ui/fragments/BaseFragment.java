@@ -53,7 +53,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         F_VISITORS(11),
         F_GEO(12),
         F_BONUS(13),
-        F_EDITOR(14),
+        F_EDITOR(1000),
         F_SETTINGS(15),
         F_UNDEFINED(-1);
 
