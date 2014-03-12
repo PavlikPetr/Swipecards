@@ -1,11 +1,13 @@
 package com.topface.topface.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -16,6 +18,10 @@ import com.topface.topface.ui.analytics.TrackedActivity;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BanActivity extends TrackedActivity implements View.OnClickListener {
 
@@ -35,6 +41,7 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
 
     // variables for Restore process
     private AuthToken.TokenInfo mLocalTokenInfo;
+    private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +150,26 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 }
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!mBackPressedOnce.get()) {
+            (new Timer()).schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    mBackPressedOnce.set(false);
+                }
+            }, 3000);
+            mBackPressedOnce.set(true);
+            Toast.makeText(this, R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(NavigationActivity.INTENT_EXIT, true);
+            startActivity(intent);
+            super.onBackPressed();
         }
     }
 }

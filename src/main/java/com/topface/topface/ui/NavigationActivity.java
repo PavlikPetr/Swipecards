@@ -58,6 +58,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_HIGH;
@@ -66,6 +69,7 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
+    public static final String INTENT_EXIT = "EXIT";
 
     private MenuFragment mMenuFragment;
     private HackyDrawerLayout mDrawerLayout;
@@ -77,6 +81,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     private static NavigationActivity instance = null;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationBarController mNavBarController;
+    private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
 
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
@@ -87,6 +92,9 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (getIntent().getBooleanExtra(INTENT_EXIT, false)) {
+            finish();
+        }
         mNeedAnimate = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
@@ -327,6 +335,16 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
         } else if (mMenuFragment.isLockedByClosings()) {
             mMenuFragment.showClosingsDialog();
+        } else if (!mBackPressedOnce.get()) {
+            (new Timer()).schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    mBackPressedOnce.set(false);
+                }
+            }, 3000);
+            mBackPressedOnce.set(true);
+            Toast.makeText(this, R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT).show();
+            isPopupVisible = false;
         } else {
             super.onBackPressed();
             isPopupVisible = false;
