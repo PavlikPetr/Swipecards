@@ -812,4 +812,5 @@
     <string name="general_distance_km">%.02f км</string>
     <string name="general_distance_m">%d м</string>
     <string name="cannot_get_geo">Не удалось определить местоположение</string>
+    <string name="press_back_more_to_close_app">Нажмите кнопку назад еще раз для выхода из Topface</string>
 </resources>
