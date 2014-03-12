@@ -134,6 +134,9 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     public boolean hasFragment(BaseFragment.FragmentId id) {
+        if (mItems.size() <= id.getId()) {
+            return false;
+        }
         return mItems.valueAt(id.getId()) != null;
     }
 
