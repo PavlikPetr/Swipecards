@@ -38,9 +38,12 @@
         android:textColor="#FFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@id/cbSwitch"
+        android:layout_alignLeft="@id/cbSwitch"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="14dp"
         android:layout_centerVertical="true"
-        android:layout_marginRight="12dp"
         android:text="@string/settings_switch_on"
         android:textSize="12sp" />
 
@@ -51,6 +54,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/cbSwitch"
         android:layout_centerVertical="true"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_marginRight="36dp"
         android:layout_marginLeft="12dp"
         android:text="@string/settings_switch_off"
         android:textSize="12sp" />
