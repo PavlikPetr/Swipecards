@@ -81,6 +81,7 @@
     <string name="filter_age_string">Da %1$d a %2$d</string>
     <string name="filter_only_online">Solo online</string>
     <string name="filter_only_beautiful">Solo belle</string>
+    <string name="filter_city_age_parameters">Età e città</string>
     <string name="filter_extra_parameters">Parametri aggiuntivi</string>
     <string name="filter_age">Età</string>
     <string name="filter_online">Online</string>
@@ -104,6 +105,7 @@
     <string name="profile_empty_form">L’utente non ha riempito il questionario</string>
     <string name="profile_ask_form">Chiedere di riempire il questionario</string>
     <string name="edit_title">Modifica</string>
+    <string name="edit_block_photo">Foto</string>
     <string name="edit_bg_photo">Foto di sfondo</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Cambia foto</string>
@@ -174,6 +176,8 @@
     <string name="settings_feedback_success_msg">Grazie, il messaggio è stato inviato con successo</string>
     <string name="settings_switch_on">on</string>
     <string name="settings_switch_off">off</string>
+    <string name="settings_block_main">Principali</string>
+    <string name="settings_block_additional">Extra</string>
     <string name="leaders_go_date">Voglio stare qui</string>
     <string name="leaders_leader_now">Ora tutti ti vedranno!</string>
     <string name="leaders_need_photo">Prima devi scegliere la foto!</string>
@@ -616,4 +620,5 @@
     <string name="people_nearby">Persone attorno a te</string>
     <string name="nobody_nearby">Non c’è un’anima viva!</string>
     <string name="general_distance_km">%.02f km</string>
+    <string name="cannot_get_geo">Non siamo riusciti ad indentificare la posizione</string>
 </resources>

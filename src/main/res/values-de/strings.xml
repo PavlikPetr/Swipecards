@@ -80,6 +80,7 @@
     <string name="filter_age_string">Von %1$d bis %2$d</string>
     <string name="filter_only_online">Nur on-line</string>
     <string name="filter_only_beautiful">Nur schöne</string>
+    <string name="filter_city_age_parameters">Alter und Stadt</string>
     <string name="filter_extra_parameters">Ergänzende Parameter</string>
     <string name="filter_age">Alter</string>
     <string name="filter_online">On-line</string>
@@ -103,6 +104,7 @@
     <string name="profile_empty_form">Nutzer hat den Fragebogen nicht ausgefüllt</string>
     <string name="profile_ask_form">Bitten, den Fragebogen auszufüllen</string>
     <string name="edit_title">Ändern</string>
+    <string name="edit_block_photo">Fotos</string>
     <string name="edit_bg_photo">Hintergrund-Foto</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Foto ändern</string>
@@ -600,4 +602,12 @@
         <item quantity="one">%d Min.</item>
     </plurals>
     <string name="ok_label">Odnoklassniki</string>
+    <plurals name="notification_many_messages">
+        <item quantity="other">%d neue Nachrichten</item>
+        <item quantity="one">%d neue Nachricht</item>
+    </plurals>
+    <plurals name="general_some_more">
+        <item quantity="other">und noch %d</item>
+        <item quantity="one">und noch %d</item>
+    </plurals>
 </resources>

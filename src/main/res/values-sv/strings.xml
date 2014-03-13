@@ -81,6 +81,7 @@
     <string name="filter_age_string">Från %1$d till %2$d</string>
     <string name="filter_only_online">Endast online</string>
     <string name="filter_only_beautiful">Bara snygga</string>
+    <string name="filter_city_age_parameters">Ålder och stad</string>
     <string name="filter_extra_parameters">Fler kriterier</string>
     <string name="filter_age">Ålder</string>
     <string name="filter_online">Online</string>
@@ -104,6 +105,7 @@
     <string name="profile_empty_form">Användaren har inte ifyllt frågelistan</string>
     <string name="profile_ask_form">Be att fylla i frågelista</string>
     <string name="edit_title">Redigera</string>
+    <string name="edit_block_photo">Foton</string>
     <string name="edit_bg_photo">Bakgrundsfoto</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Ändra foto</string>
@@ -174,6 +176,8 @@
     <string name="settings_feedback_success_msg">Tack, ditt meddelande är avsänt</string>
     <string name="settings_switch_on">på</string>
     <string name="settings_switch_off">av</string>
+    <string name="settings_block_main">Basfunktioner</string>
+    <string name="settings_block_additional">Ytterligare funktioner</string>
     <string name="leaders_go_date">Vill hit</string>
     <string name="leaders_leader_now">Nu kommer alla att se dig!</string>
     <string name="leaders_need_photo">Först bör man välja foto!</string>
@@ -295,6 +299,10 @@
     <string name="virus_chat_likes_request_title">Skänk sympatier till vänner</string>
     <string name="virus_chat_btn">Erhålla sympatier</string>
     <string name="virus_request_error">Det gick inte att skicka fler sympatier till vänner</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="other">Nu har du %d sympatier!</item>
+        <item quantity="one">Nu har du  %d sympati!</item>
+    </plurals>
     <string name="profile_ask_sent">Förfrågan sskickat</string>
     <string name="virus_error">En vän kan skicka dig sympatier endast en gång om dygnet! Försök i morgon!</string>
     <string name="popup_version_title">Ny applikationsversion är tillgänglig</string>
@@ -609,4 +617,7 @@
     </plurals>
     <string name="you_were_subscribed">Prenumerationen är klar</string>
     <string name="subscriptions_can_be_changed">Prenumerationen är klar. Ändringar är möjliga på Google Play</string>
+    <string name="people_nearby">Personer i närheten</string>
+    <string name="nobody_nearby">Det finns inte en människa i närheten!</string>
+    <string name="cannot_get_geo">Det gick inte att identifiera läget</string>
 </resources>

@@ -81,6 +81,7 @@
     <string name="filter_age_string">Nuo %1$d iki %2$d</string>
     <string name="filter_only_online">Tiktai online</string>
     <string name="filter_only_beautiful">Tiktai gražūs</string>
+    <string name="filter_city_age_parameters">Amžius ir miestas</string>
     <string name="filter_extra_parameters">Papildomi parametrai</string>
     <string name="filter_age">Amžius</string>
     <string name="filter_online">Online</string>
@@ -104,6 +105,7 @@
     <string name="profile_empty_form">Vartotojas neužpildė anketos</string>
     <string name="profile_ask_form">Paprašyti užpildyti anketą</string>
     <string name="edit_title">Redagavimas</string>
+    <string name="edit_block_photo">fotografijos</string>
     <string name="edit_bg_photo">Foninė fotografija</string>
     <string name="edit_album">Albumas</string>
     <string name="edit_profile_photo">Pakeisti fotografiją</string>
@@ -175,6 +177,8 @@
     <string name="settings_feedback_success_msg">Ačiū, pranešimas buvo sėkmingai išsiųstas</string>
     <string name="settings_switch_on">įjungti</string>
     <string name="settings_switch_off">išjungti</string>
+    <string name="settings_block_main">Pagrindiniai</string>
+    <string name="settings_block_additional">Papildomai</string>
     <string name="leaders_go_date">Noriu čionai</string>
     <string name="leaders_leader_now">Dabar jus pamatys visi!</string>
     <string name="leaders_need_photo">Pirmiausiai reikia išrinkti fotografiją!</string>
@@ -636,4 +640,5 @@
     <string name="people_nearby">Žmonės šalia</string>
     <string name="nobody_nearby">Aplinkui nė gyvos dvasios!</string>
     <string name="general_distance_km">%.02f km</string>
+    <string name="cannot_get_geo">Nepavyko nustatyti buvimo vietos</string>
 </resources>

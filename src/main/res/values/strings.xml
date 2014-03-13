@@ -628,5 +628,5 @@
     <string name="general_distance_km">%.02f km</string>
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Not able to determine location</string>
-    <string name="press_back_more_to_close_app">Press back again to exit Topface</string>
+    <string name="press_back_more_to_close_app">Press the back button one more time to exit Topface</string>
 </resources>
