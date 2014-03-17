@@ -98,6 +98,7 @@
     <string name="chat_wink_out">Вы подмигнули.</string>
     <string name="chat_dialog_gps">GPS выключен! Включить?</string>
     <string name="chat_toast_fail_location">Не удалось определить местоположение</string>
+    <string name="general_location">Местоположение</string>
 
     <!-- Filter -->
     <string name="filter_filter">Фильтр</string>
