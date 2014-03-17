@@ -619,5 +619,8 @@
     <string name="subscriptions_can_be_changed">Prenumerationen är klar. Ändringar är möjliga på Google Play</string>
     <string name="people_nearby">Personer i närheten</string>
     <string name="nobody_nearby">Det finns inte en människa i närheten!</string>
+    <string name="general_distance_km">%.02f km</string>
+    <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Det gick inte att identifiera läget</string>
+    <string name="press_back_more_to_close_app">Tryck på knappen en gång till för att lägga ut från Topface</string>
 </resources>
