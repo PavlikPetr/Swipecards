@@ -104,6 +104,7 @@
     <string name="profile_empty_form">Αυτός ο χρήστης δεν έχει συμπληρώσει το ερωτηματολόγιο</string>
     <string name="profile_ask_form">Ζητήστε να συμπληρώσουν το ερωτηματολόγιο</string>
     <string name="edit_title">Επεξεργασία ενός</string>
+    <string name="edit_block_photo">Οι φωτογραφίες</string>
     <string name="edit_bg_photo">Φωτογραφία για το παρασκήνιο</string>
     <string name="edit_album">\'Αλμπουμ</string>
     <string name="edit_profile_photo">Αλλαγή της φωτογραφίας</string>
@@ -294,6 +295,10 @@
     <string name="virus_chat_likes_request_title">Να δώσω συμπάθειες προς τους φίλους σας</string>
     <string name="virus_chat_btn">Αποκτήστε τις συμπάθειες</string>
     <string name="virus_request_error">Απέτυχε η αποστολή τις συμπάθειες στους φίλους σας</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="other">Τώρα έχετε %d συμπάθειες!</item>
+        <item quantity="one">Τώρα έχετε %d συμπάθεια!</item>
+    </plurals>
     <string name="profile_ask_sent">Αίτηση έχει σταλεί.</string>
     <string name="virus_error">Κατά τη διάρκεια της ημέρας, ο φίλος σας μπορεί να δώσει για δώρο τις συμπάθειες μόνο 1 φορά! Δοκιμάστε το αύριο!</string>
     <string name="popup_version_title">Διαθέσιμα μια νέα έκδοση της εφαρμογής</string>
@@ -596,4 +601,12 @@
         <item quantity="one">%d λεπτό.</item>
     </plurals>
     <string name="ok_label">Odnoklassniki</string>
+    <plurals name="notification_many_messages">
+        <item quantity="other">%d νέα μηνύματα</item>
+        <item quantity="one">%d νέο μήνυμα</item>
+    </plurals>
+    <plurals name="general_some_more">
+        <item quantity="other">και ακόμα %d</item>
+        <item quantity="one">και ακόμα %d</item>
+    </plurals>
 </resources>

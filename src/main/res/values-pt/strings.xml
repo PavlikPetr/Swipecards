@@ -25,6 +25,7 @@
     <string name="general_profile_error">Erro no carregamento de perfil</string>
     <string name="general_dbl_all">Todos</string>
     <string name="general_dbl_unread">Não lidos</string>
+    <string name="general_dbl_new">Novos</string>
     <string name="general_edit_button">Editar</string>
     <string name="general_save_button">Guardar</string>
     <string name="general_send_button">Enviar</string>
@@ -42,9 +43,11 @@
     <string name="general_visitors">Visitantes</string>
     <string name="general_profile">Perfil</string>
     <string name="general_settings">Definições</string>
+    <string name="general_settings_abbr">Nastr.</string>
     <string name="general_chat">Conversação</string>
     <string name="general_allow">Permitir</string>
     <string name="notification_popup_title">Permita-me enviar-lhe uma notificação para que você possa saber de imediato sobre a nova simpatia, admiração ou mensagens não lidas</string>
+    <string name="email_successfully_changed">O seu e-mail foi alterado com sucesso</string>
     <string name="auth_btn_vk">Entrar através de VK</string>
     <string name="auth_btn_fb">Entrar através de Facebook</string>
     <string name="auth_retry">Tentar novamente</string>
@@ -78,6 +81,7 @@
     <string name="filter_age_string">De %1$d até %2$d</string>
     <string name="filter_only_online">Somente em linha</string>
     <string name="filter_only_beautiful">Somente bonitos</string>
+    <string name="filter_city_age_parameters">Idade e cidade</string>
     <string name="filter_extra_parameters">Parâmetros adicionais</string>
     <string name="filter_age">Escolha de idade</string>
     <string name="filter_online">Em linha</string>
@@ -101,6 +105,7 @@
     <string name="profile_empty_form">O utente não preencheu o questonário</string>
     <string name="profile_ask_form">Apelar preencher o questionário</string>
     <string name="edit_title">Edição</string>
+    <string name="edit_block_photo">Fotos</string>
     <string name="edit_bg_photo">Fotografia de fundo</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Mudar a foto</string>
@@ -171,6 +176,8 @@
     <string name="settings_feedback_success_msg">Obrigado, a mensagem foi enviada com sucesso</string>
     <string name="settings_switch_on">fechar</string>
     <string name="settings_switch_off">cortar</string>
+    <string name="settings_block_main">Principais</string>
+    <string name="settings_block_additional">Adicionalmente</string>
     <string name="leaders_go_date">Eu quero ficar aqui!</string>
     <string name="leaders_leader_now">Agora todos lhe vêm!</string>
     <string name="leaders_need_photo">Primeiramente, é necessário escolher uma fotografia!</string>
@@ -558,4 +565,10 @@
     <string name="pincode_auth_input">Você precisa introduzir o nome de usuário e senha.</string>
     <string name="pincode_will_be_reset">Perante uma autorização de sucesso todas as configurações do aplicativo serão reiniciadas.</string>
     <string name="ok_label">Condiscípulos</string>
+    <string name="coins_subscription">Assinatura para moedas</string>
+    <string name="you_were_subscribed">Assinatura formalizada</string>
+    <string name="subscriptions_can_be_changed">Assinatura foi formalizada. Alterar os termos de assinatura pode ser no Google Play</string>
+    <string name="people_nearby">Pessoas próximas</string>
+    <string name="nobody_nearby">Não há nenhuma alma ao redor!</string>
+    <string name="cannot_get_geo">Não foi possível determinar a localização</string>
 </resources>
