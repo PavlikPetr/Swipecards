@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.view.View;
 
+import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 
 public abstract class NoFilterFeedFragment<T extends FeedItem> extends FeedFragment<T> {
@@ -20,5 +21,10 @@ public abstract class NoFilterFeedFragment<T extends FeedItem> extends FeedFragm
     @Override
     protected final void setFilterSwitcherState(boolean clickable) {
         //Мы не используем фильтр, поэтому и его статус менять не будем
+    }
+
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return R.menu.feed_context_empty;
     }
 }
