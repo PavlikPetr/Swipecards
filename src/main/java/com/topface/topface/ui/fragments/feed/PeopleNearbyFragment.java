@@ -35,7 +35,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 
-public class PeopleNearbyFragment extends FeedFragment{
+public class PeopleNearbyFragment extends NoFilterFeedFragment {
     protected View mEmptyFeedView;
 
     @Override
