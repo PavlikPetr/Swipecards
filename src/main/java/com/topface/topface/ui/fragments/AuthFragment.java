@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -663,6 +664,7 @@ public class AuthFragment extends BaseFragment {
             mBackButton.setEnabled(false);
         }
     }
+
 
     private void btnVKClick() {
         // костыль, надо избавить от viewflipper к чертовой бабушке
