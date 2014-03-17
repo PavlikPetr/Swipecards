@@ -47,10 +47,10 @@ public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
         Intent intent = getIntent();
         switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0)) {
             case INTENT_EDIT_NAME_AGE:
-                mFragment = new EditMainFormItemsFragment(new EditType[]{EditType.NAME, EditType.AGE});
+                mFragment = EditMainFormItemsFragment.newInstance(new EditType[]{EditType.NAME, EditType.AGE});
                 break;
             case INTENT_EDIT_STATUS:
-                mFragment = new EditMainFormItemsFragment(new EditType[]{EditType.STATUS});
+                mFragment = EditMainFormItemsFragment.newInstance(new EditType[]{EditType.STATUS});
                 break;
             case INTENT_EDIT_BACKGROUND:
                 mFragment = new EditBackgroundFragment();
@@ -86,7 +86,7 @@ public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
                 int age_start = intent.getIntExtra(INTENT_AGE_START, 16);
                 int age_end = intent.getIntExtra(INTENT_AGE_END, 32);
                 int sex = intent.getIntExtra(FILTER_SEX, 1);
-                mFragment = new EditAgeFragment(age_start, age_end, sex);
+                mFragment = EditAgeFragment.newInstance(age_start, age_end, sex);
                 break;
             default:
                 break;

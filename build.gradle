@@ -17,7 +17,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.8.+'
+        classpath 'com.android.tools.build:gradle:0.9.+'
     }
 }
 
@@ -127,8 +127,7 @@ dependencies {
     compile project(':libs:MoPub')
     compile project(':libs:AdLabSDK')
 
-    instrumentTestCompile 'com.jayway.android.robotium:robotium-solo:4.+'
-
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.+'
 }
 
 

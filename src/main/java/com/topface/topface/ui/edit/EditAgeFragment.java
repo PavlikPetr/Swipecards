@@ -14,30 +14,43 @@ import com.topface.topface.R;
 import com.topface.topface.ui.views.RangeSeekBar;
 
 public class EditAgeFragment extends AbstractEditFragment {
+    private static final String ARG_AGE_START = "arg_age_start";
+    private static final String ARG_AGE_END = "arg_age_end";
+    private static final String ARG_SEX = "arg_sex";
+    public static final int absoluteMin = 16;
+    public static final int absoluteMax = 80;
     private int age_start;
     private int age_start_before;
     private int age_end;
     private int age_end_before;
     private int sex;
     private String baseSexString;
-
-    public static final int absoluteMin = 16;
-    public static final int absoluteMax = 80;
-
-
     private RangeSeekBar<Integer> rsb;
 
-    @SuppressWarnings("UnusedDeclaration")
-    public EditAgeFragment() {
-        super();
-    }
-
-    public EditAgeFragment(int age_start, int age_end, int sex) {
-        this.age_end = age_end;
-        this.age_start = age_start;
+    @Override
+    protected void restoreState() {
+        super.restoreState();
+        Bundle args = getArguments();
+        if (args != null) {
+            this.age_end = args.getInt(ARG_AGE_END);
+            this.age_start = args.getInt(ARG_AGE_START);
+            this.sex = args.getInt(ARG_SEX);
+        }
         age_end_before = age_start;
         age_end_before = age_end;
-        this.sex = sex;
+    }
+
+    public EditAgeFragment() {
+    }
+
+    public static EditAgeFragment newInstance(int age_start, int age_end, int sex) {
+        EditAgeFragment fragment = new EditAgeFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_AGE_START, age_start);
+        args.putInt(ARG_AGE_END, age_end);
+        args.putInt(ARG_SEX, sex);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -54,7 +67,7 @@ public class EditAgeFragment extends AbstractEditFragment {
         final TextView tv = (TextView) view.findViewById(R.id.apValue);
         tv.setText(makeString(age_start, age_end));
 
-        rsb = new RangeSeekBar<Integer>(absoluteMin, absoluteMax, getActivity());
+        rsb = new RangeSeekBar<>(absoluteMin, absoluteMax, getActivity());
         rsb.setMinimalRange(20);
         rsb.setSelectedMaxValue(age_end);
         rsb.setSelectedMinValue(age_start);
