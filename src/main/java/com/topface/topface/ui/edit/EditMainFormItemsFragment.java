@@ -36,37 +36,46 @@ import java.util.HashMap;
 
 public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener {
 
+    private static final String ARG_TYPES = "arg_types";
+
+    public enum EditType {NAME, AGE, STATUS}
+
     public static final int MAX_AGE = 99;
     public static final int MIN_AGE = 16;
+    public static final int MAX_STATUS_LENGTH = 200;
     public static final String INTENT_SEX_CHANGED = "SEX_CHANGED";
     private boolean ageIncorrect = false;
     private boolean nameIncorrect;
 
-    public enum EditType {NAME, AGE, STATUS}
-
-    public static final int MAX_STATUS_LENGTH = 200;
-
     private EditType[] mTypes;
-    private HashMap<EditType, String> hashChangedData = new HashMap<EditMainFormItemsFragment.EditType, String>();
-
+    private HashMap<EditType, String> hashChangedData = new HashMap<>();
     private EditText mEdName;
     private EditText mEdAge;
     private EditText mEdStatus;
     private int mSex;
     private View mLoGirl;
     private View mLoBoy;
-
     private ImageView mCheckGirl;
     private ImageView mCheckBoy;
 
-
     public EditMainFormItemsFragment() {
-        super();
     }
 
-    public EditMainFormItemsFragment(EditType[] type) {
-        this();
-        mTypes = type;
+    public static EditMainFormItemsFragment newInstance(EditType[] types) {
+        EditMainFormItemsFragment fragment = new EditMainFormItemsFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_TYPES, types);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    protected void restoreState() {
+        super.restoreState();
+        Bundle args = getArguments();
+        if (args != null) {
+            mTypes = (EditType[]) args.getSerializable(ARG_TYPES);
+        }
     }
 
     @Override
