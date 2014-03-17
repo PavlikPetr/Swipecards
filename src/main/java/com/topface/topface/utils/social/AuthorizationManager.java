@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.inputmethod.InputMethodManager;
 
 import com.facebook.topface.AsyncFacebookRunner;
 import com.facebook.topface.AsyncFacebookRunner.RequestListener;
