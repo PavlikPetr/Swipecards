@@ -43,6 +43,7 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
@@ -479,11 +480,10 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         BaseFragment fragment;
         switch (id) {
             case F_VIP_PROFILE:
-                fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE,
-                        VipBuyFragment.class.getName());
+                fragment = OwnProfileFragment.newInstance(VipBuyFragment.class.getName());
                 break;
             case F_PROFILE:
-                fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
+                fragment = OwnProfileFragment.newInstance();
                 break;
             case F_DATING:
                 fragment = new DatingFragment();
@@ -531,7 +531,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 }
                 break;
             default:
-                fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
+                fragment = OwnProfileFragment.newInstance();
                 break;
         }
         return fragment;

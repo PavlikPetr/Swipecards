@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui.fragments.profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,13 +16,12 @@ import com.topface.topface.data.User;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.StandardMessageSendRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 
 import java.util.LinkedList;
 
-public class UserFormFragment extends BaseFragment implements OnClickListener {
+public class UserFormFragment extends ProfileInnerFragment implements OnClickListener {
     private User mUser;
     private UserFormListAdapter mUserFormListAdapter;
     private View mTitleLayout;
@@ -36,7 +35,6 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
         mUserFormListAdapter = new UserFormListAdapter(getActivity().getApplicationContext());
     }
 
@@ -56,7 +54,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
         mPgb = (ProgressBar) mEmptyFormLayout.findViewById(R.id.pgbProgress);
         mSuccessText = (TextView) mEmptyFormLayout.findViewById(R.id.emptyFormSuccess);
 
-        mTitleLayout = root.findViewById(R.id.usedTitle);
+        mTitleLayout = root.findViewById(R.id.loUserTitle);
         mTitle = (TextView) root.findViewById(R.id.tvTitle);
         mState = (ImageView) root.findViewById(R.id.ivState);
         if (mUser != null) {
@@ -141,10 +139,4 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
                 break;
         }
     }
-
-    @Override
-    public boolean isTrackable() {
-        return false;
-    }
-
 }

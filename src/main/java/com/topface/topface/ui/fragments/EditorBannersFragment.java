@@ -20,9 +20,9 @@ import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
-import com.topface.topface.utils.BannersConfig;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.ads.BannersConfig;
 
 public class EditorBannersFragment extends BaseFragment implements View.OnClickListener {
 

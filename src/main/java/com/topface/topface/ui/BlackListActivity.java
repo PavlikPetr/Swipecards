@@ -1,9 +1,8 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui;
 
 import android.os.Bundle;
 
 import com.topface.topface.R;
-import com.topface.topface.ui.BaseFragmentActivity;
 
 
 public class BlackListActivity extends BaseFragmentActivity {

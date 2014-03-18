@@ -1,4 +1,4 @@
-package com.topface.topface.utils.GeoUtils;
+package com.topface.topface.utils.geo;
 
 import android.content.Context;
 import android.location.Location;

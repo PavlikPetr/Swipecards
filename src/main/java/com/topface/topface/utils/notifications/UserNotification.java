@@ -19,7 +19,7 @@ import android.text.style.StyleSpan;
 import com.topface.topface.R;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.profile.AddPhotoHelper;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
@@ -199,7 +199,8 @@ public class UserNotification {
         NotificationCompat.InboxStyle inboxStyle =
                 new NotificationCompat.InboxStyle(notificationBuilder.setContentTitle(
                         Utils.getQuantityString(R.plurals.notification_many_messages,
-                                messages.getAllCount(), messages.getAllCount())));
+                                messages.getAllCount(), messages.getAllCount())
+                ));
         for (SerializableToJson item : messages) {
             MessageStack.Message message = (MessageStack.Message) item;
             Spannable spanMessage = new SpannableString(String.format(mContext.getString(R.string.notification_message_format), message.mName, message.mTitle));

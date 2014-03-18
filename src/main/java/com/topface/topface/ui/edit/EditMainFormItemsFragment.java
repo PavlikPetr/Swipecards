@@ -32,7 +32,9 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener {
 
@@ -64,7 +66,11 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     public static EditMainFormItemsFragment newInstance(EditType[] types) {
         EditMainFormItemsFragment fragment = new EditMainFormItemsFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_TYPES, types);
+        ArrayList<String> typesList = new ArrayList<>();
+        for (EditType type : types) {
+            typesList.add(type.name());
+        }
+        args.putStringArrayList(ARG_TYPES, typesList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,7 +80,13 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         super.restoreState();
         Bundle args = getArguments();
         if (args != null) {
-            mTypes = (EditType[]) args.getSerializable(ARG_TYPES);
+            List<String> list = args.getStringArrayList(ARG_TYPES);
+            if (list != null) {
+                mTypes = new EditType[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    mTypes[i] = EditType.valueOf(list.get(i));
+                }
+            }
         }
     }
 

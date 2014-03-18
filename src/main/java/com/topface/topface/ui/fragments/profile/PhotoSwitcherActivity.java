@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui.fragments.profile;
 
 import android.app.Activity;
 import android.content.Intent;

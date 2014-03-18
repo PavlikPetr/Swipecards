@@ -27,9 +27,9 @@ import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.profile.AddPhotoHelper;
-import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
+import com.topface.topface.ui.fragments.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.ArrayList;

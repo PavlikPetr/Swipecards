@@ -7,7 +7,8 @@
     android:id="@+id/mUserActions"
     android:background="@drawable/drop_menu_backgroud"
     android:paddingLeft="3dp"
-    android:paddingRight="3dp">
+    android:paddingRight="3dp"
+    android:visibility="invisible">
 
     <RelativeLayout
         android:layout_width="fill_parent"

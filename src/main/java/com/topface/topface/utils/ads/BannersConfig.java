@@ -1,4 +1,4 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.ads;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.blocks.FloatBlock;
+import com.topface.topface.utils.CacheProfile;
 
 import java.util.HashMap;
 

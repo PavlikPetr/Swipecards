@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui.fragments.profile;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,19 +13,16 @@ import android.widget.ListView;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.edit.EditContainerActivity;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 
-public class ProfileFormFragment extends BaseFragment {
+public class ProfileFormFragment extends ProfileInnerFragment {
 
     private ProfileFormListAdapter mProfileFormListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
-        setHasOptionsMenu(false);
         mProfileFormListAdapter = new ProfileFormListAdapter(getActivity().getApplicationContext());
         mProfileFormListAdapter.setOnFillListener(mOnFillClickListener);
     }
@@ -36,7 +33,7 @@ public class ProfileFormFragment extends BaseFragment {
         ListView formListView = (ListView) root.findViewById(R.id.fragmentFormList);
         formListView.setAdapter(mProfileFormListAdapter);
 
-        View titleLayout = root.findViewById(R.id.usedTitle);
+        View titleLayout = root.findViewById(R.id.loUserTitle);
         titleLayout.setVisibility(View.GONE);
         (root.findViewById(R.id.ivDivider)).setVisibility(View.GONE);
 
@@ -96,14 +93,4 @@ public class ProfileFormFragment extends BaseFragment {
             }
         }
     };
-
-    @Override
-    protected boolean needOptionsMenu() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrackable() {
-        return false;
-    }
 }

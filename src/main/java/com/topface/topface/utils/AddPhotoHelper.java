@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,10 +26,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.BackgroundThread;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.IPhotoTakerWithDialog;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import java.io.File;

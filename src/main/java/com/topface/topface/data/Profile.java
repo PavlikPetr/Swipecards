@@ -8,7 +8,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
@@ -26,6 +25,8 @@ import java.util.LinkedList;
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
 
+    public final static int TYPE_OWN_PROFILE = 1;
+    public final static int TYPE_USER_PROFILE = 2;
     private static String[] EMPTY_STATUSES = {Static.EMPTY, "-", "."};
 
     public int uid; // id пользователя в топфейсе
@@ -459,7 +460,7 @@ public class Profile extends AbstractDataWithPhotos {
     }
 
     public int getType() {
-        return (this instanceof User) ? ProfileFragment.TYPE_USER_PROFILE : ProfileFragment.TYPE_MY_PROFILE;
+        return (this instanceof User) ? TYPE_USER_PROFILE : TYPE_OWN_PROFILE;
     }
 
     /**

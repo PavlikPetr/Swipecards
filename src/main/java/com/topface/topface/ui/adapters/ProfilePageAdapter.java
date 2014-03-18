@@ -5,9 +5,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.util.SparseArrayCompat;
 
-import com.topface.topface.ui.fragments.HeaderMainFragment;
-import com.topface.topface.ui.fragments.HeaderStatusFragment;
-import com.topface.topface.ui.fragments.ProfileFragment;
+import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
+import com.topface.topface.ui.fragments.profile.HeaderMainFragment;
+import com.topface.topface.ui.fragments.profile.HeaderStatusFragment;
 import com.topface.topface.utils.Debug;
 import com.viewpagerindicator.PageIndicator;
 
@@ -15,19 +15,19 @@ import java.util.ArrayList;
 
 public class ProfilePageAdapter extends FragmentStatePagerAdapter {
 
-    private ArrayList<String> mFragmentsClasses = new ArrayList<String>();
-    private ArrayList<String> mFragmentsTitles = new ArrayList<String>();
-    private SparseArrayCompat<Fragment> mFragmentCache = new SparseArrayCompat<Fragment>();
-    private ProfileFragment.ProfileUpdater mProfileUpdater;
+    private ArrayList<String> mFragmentsClasses = new ArrayList<>();
+    private ArrayList<String> mFragmentsTitles = new ArrayList<>();
+    private SparseArrayCompat<Fragment> mFragmentCache = new SparseArrayCompat<>();
+    private AbstractProfileFragment.ProfileInnerUpdater mProfileUpdater;
     private PageIndicator mPageIndicator;
 
-    public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses, ProfileFragment.ProfileUpdater profileUpdater) {
+    public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses, AbstractProfileFragment.ProfileInnerUpdater profileUpdater) {
         super(fm);
         mFragmentsClasses = fragmentsClasses;
         mProfileUpdater = profileUpdater;
     }
 
-    public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses, ArrayList<String> fragmentTitles, ProfileFragment.ProfileUpdater profileUpdater) {
+    public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses, ArrayList<String> fragmentTitles, AbstractProfileFragment.ProfileInnerUpdater profileUpdater) {
         super(fm);
         mFragmentsClasses = fragmentsClasses;
         mFragmentsTitles = fragmentTitles;
@@ -45,13 +45,6 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
             }
         }
         return -1;
-    }
-
-    public String getClassNameByFragmentIndex(int i) {
-        if (mFragmentsClasses.isEmpty()) {
-            return "";
-        }
-        return mFragmentsClasses.get(i);
     }
 
     @Override
