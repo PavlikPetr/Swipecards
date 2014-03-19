@@ -1,4 +1,4 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.ads;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,6 +33,10 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.BackgroundThread;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 

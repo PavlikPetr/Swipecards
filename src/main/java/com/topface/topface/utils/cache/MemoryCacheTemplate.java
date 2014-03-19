@@ -1,6 +1,8 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.cache;
 
 import android.graphics.Bitmap;
+
+import com.topface.topface.utils.Debug;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
@@ -12,7 +14,7 @@ public class MemoryCacheTemplate<K, V> {
 
 
     public MemoryCacheTemplate() {
-        mCache = new HashMap<K, SoftReference<V>>();
+        mCache = new HashMap<>();
     }
 
 
@@ -29,7 +31,7 @@ public class MemoryCacheTemplate<K, V> {
 
 
     public void put(K key, V value) {
-        mCache.put(key, new SoftReference<V>(value));
+        mCache.put(key, new SoftReference<>(value));
     }
 
 

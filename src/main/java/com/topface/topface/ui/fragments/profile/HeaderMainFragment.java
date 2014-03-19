@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.profile;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,7 +19,7 @@ import com.topface.topface.utils.http.ProfileBackgrounds;
 /**
  * Фрагмент с аватркой и именем пользователя в профиле
  */
-public class HeaderMainFragment extends BaseFragment {
+public class HeaderMainFragment extends ProfileInnerFragment {
     private static final String ARG_TAG_AVATAR = "avatar";
     private static final String ARG_TAG_NAME = "name";
     private static final String ARG_TAG_CITY = "city";
@@ -33,13 +33,6 @@ public class HeaderMainFragment extends BaseFragment {
     private String mCityVal;
     private ImageView mBackgroundView;
     private int mBackgroundVal;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setNeedTitles(false);
-        setHasOptionsMenu(false);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -157,10 +150,5 @@ public class HeaderMainFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    @Override
-    protected boolean needOptionsMenu() {
-        return false;
     }
 }

@@ -2,9 +2,9 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 
-import com.topface.topface.utils.BannersConfig;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.ads.BannersConfig;
 
 /**
  * Created by kirussell on 11.01.14.

@@ -28,11 +28,11 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.AddressesCache;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.geo.AddressesCache;
 
 import java.util.ArrayList;
 import java.util.Collection;

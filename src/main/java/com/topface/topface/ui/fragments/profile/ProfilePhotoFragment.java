@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui.fragments.profile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,14 +31,12 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
-import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
-public class ProfilePhotoFragment extends BaseFragment {
+public class ProfilePhotoFragment extends ProfileInnerFragment {
 
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
 
@@ -51,7 +49,6 @@ public class ProfilePhotoFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(), CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
@@ -146,13 +143,13 @@ public class ProfilePhotoFragment extends BaseFragment {
         root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoAlbum));
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoAlbum));
             }
         });
         root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoCamera));
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoCamera));
             }
         });
         root.findViewById(R.id.btnCancel).setOnClickListener(new OnClickListener() {
@@ -304,15 +301,5 @@ public class ProfilePhotoFragment extends BaseFragment {
             initTitleText(mTitle);
         }
     };
-
-    @Override
-    protected boolean needOptionsMenu() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrackable() {
-        return false;
-    }
 }
  

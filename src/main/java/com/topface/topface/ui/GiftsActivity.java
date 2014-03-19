@@ -204,10 +204,4 @@ public class GiftsActivity extends BaseFragmentActivity {
         super.onRestoreInstanceState(savedInstanceState);
         mGiftsList = savedInstanceState.getParcelableArrayList(GIFTS_LIST);
     }
-
-    @Override
-    public boolean isTrackable() {
-        return false;
-    }
-
 }

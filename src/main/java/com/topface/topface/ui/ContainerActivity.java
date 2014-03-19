@@ -18,14 +18,14 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.ContactsFragment;
 import com.topface.topface.ui.fragments.EditorBannersFragment;
-import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
 import com.topface.topface.ui.fragments.RegistrationFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
@@ -185,11 +185,10 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
                 break;
             case INTENT_PROFILE_FRAGMENT:
                 //Открываем профиль
-                fragment = ProfileFragment.newInstance(
-                        intent.getStringExtra(ProfileFragment.INTENT_ITEM_ID),
-                        intent.getIntExtra(ProfileFragment.INTENT_UID, 0),
-                        intent.getIntExtra(ProfileFragment.INTENT_TYPE, ProfileFragment.TYPE_MY_PROFILE),
-                        intent.getStringExtra(ProfileFragment.INTENT_CALLING_FRAGMENT)
+                fragment = UserProfileFragment.newInstance(
+                        intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID),
+                        intent.getIntExtra(AbstractProfileFragment.INTENT_UID, 0),
+                        intent.getStringExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT)
 
                 );
                 break;
@@ -274,18 +273,13 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     }
 
     public static Intent getProfileIntent(int userId, String itemId, String className, Context context) {
-        int type = (userId == CacheProfile.uid) ?
-                ProfileFragment.TYPE_MY_PROFILE :
-                ProfileFragment.TYPE_USER_PROFILE;
-
         Intent i = new Intent(context, ContainerActivity.class);
-        i.putExtra(ProfileFragment.INTENT_UID, userId);
-        i.putExtra(ProfileFragment.INTENT_TYPE, type);
+        i.putExtra(AbstractProfileFragment.INTENT_UID, userId);
         if (className != null) {
-            i.putExtra(ProfileFragment.INTENT_CALLING_FRAGMENT, className);
+            i.putExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT, className);
         }
         if (itemId != null) {
-            i.putExtra(ProfileFragment.INTENT_ITEM_ID, itemId);
+            i.putExtra(AbstractProfileFragment.INTENT_ITEM_ID, itemId);
         }
         i.putExtra(Static.INTENT_REQUEST_KEY, INTENT_PROFILE_FRAGMENT);
         return i;

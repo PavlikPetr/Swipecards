@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.ProfileFragment;
+import com.topface.topface.data.Profile;
 import com.topface.topface.utils.FormInfo;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
     private FormInfo mFormInfo;
     private static int mSeletedDataId;
     private int mSex = Static.BOY;
-    private int mProfileType = ProfileFragment.TYPE_MY_PROFILE;
+    private int mProfileType = Profile.TYPE_OWN_PROFILE;
 
     private ListView mListView;
 
@@ -55,12 +55,12 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         ((TextView) header.findViewWithTag("tvTitle")).setText(formItemTitle);
         mListView.addHeaderView(header);
 
-        ArrayList<String> listStr = new ArrayList<String>();
+        ArrayList<String> listStr = new ArrayList<>();
         listStr.addAll(Arrays.asList(mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData})));
         String[] data = new String[listStr.size()];
         listStr.toArray(data);
 
-        ArrayList<Integer> listInt = new ArrayList<Integer>();
+        ArrayList<Integer> listInt = new ArrayList<>();
         for (int elem : mFormInfo.getIdsByTitleId(mTitleId)) {
             listInt.add(elem);
         }

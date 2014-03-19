@@ -26,9 +26,9 @@ import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.BlackListActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
-import com.topface.topface.ui.profile.BlackListActivity;
 import com.topface.topface.utils.CacheProfile;
 
 import static android.view.View.OnClickListener;
@@ -47,7 +47,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             switchLayouts();
-            if(mInvisSwitcher != null) {
+            if (mInvisSwitcher != null) {
                 mInvisSwitcher.setChecked(CacheProfile.invisible);
             }
         }
@@ -161,7 +161,8 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                             }
                             EasyTracker.getTracker().sendEvent("Subscription", "ButtonClick" + from, id, 0L);
                         }
-                    });
+                    }
+            );
         }
     }
 
@@ -186,7 +187,8 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                             public void onClick(View v) {
                                 setInvisible();
                             }
-                        });
+                        }
+                );
         mInvisSwitcher = new EditSwitcher(invisLayout);
 
         initEditItem(root,
@@ -199,7 +201,8 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                     public void onClick(View v) {
                         goToBlackList();
                     }
-                });
+                }
+        );
 
         initEditItem(root,
                 R.id.fepProfileBG,
@@ -211,7 +214,8 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                     public void onClick(View v) {
                         goToBgPick();
                     }
-                });
+                }
+        );
     }
 
     private RelativeLayout initEditItem(View root, int ID, int bgId, int bgLeftId, String text, OnClickListener listener) {
@@ -316,6 +320,11 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     @Override
     protected boolean needOptionsMenu() {
+        return false;
+    }
+
+    @Override
+    public boolean isTrackable() {
         return false;
     }
 }

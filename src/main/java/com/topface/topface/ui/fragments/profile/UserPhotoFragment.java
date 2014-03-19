@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui.fragments.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,10 +19,9 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.Utils;
 
-public class UserPhotoFragment extends BaseFragment {
+public class UserPhotoFragment extends ProfileInnerFragment {
     private User mUser;
     private UserPhotoGridAdapter mUserPhotoGridAdapter;
     private TextView mTitle;
@@ -33,7 +32,6 @@ public class UserPhotoFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
         mUpdater = new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
@@ -137,10 +135,5 @@ public class UserPhotoFragment extends BaseFragment {
             mUserPhotoGridAdapter.notifyDataSetChanged();
         }
         mGridAlbum = null;
-    }
-
-    @Override
-    public boolean isTrackable() {
-        return false;
     }
 }
