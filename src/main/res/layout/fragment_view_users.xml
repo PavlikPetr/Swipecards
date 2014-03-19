@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ac_dating_container"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/auth_bg"
-    android:id="@+id/ac_dating_container">
+    android:background="@drawable/auth_bg">
 
     <!-- Dating Album -->
     <com.topface.topface.ui.views.ImageSwitcher
@@ -11,36 +11,42 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <ViewStub
-        android:id="@+id/vsTopPanelContainer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-
-    <ViewStub
-        android:id="@+id/vsControls"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
-
     <RelativeLayout
-        android:id="@+id/loHelperContainer"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:layout_marginTop="?attr/actionBarSize">
 
-        <ProgressBar
-            android:id="@+id/prsDatingLoading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone"
-            style="@android:style/Widget.ProgressBar.Small" />
+        <ViewStub
+            android:id="@+id/vsTopPanelContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
 
-        <ImageButton
-            android:id="@+id/btnUpdate"
-            android:src="@drawable/btn_refresh_selector"
-            android:layout_centerInParent="true"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:background="#0000"
-            android:visibility="gone" />
+        <ViewStub
+            android:id="@+id/vsControls"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+        <RelativeLayout
+            android:id="@+id/loHelperContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <ProgressBar
+                android:id="@+id/prsDatingLoading"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/btnUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="#0000"
+                android:src="@drawable/btn_refresh_selector"
+                android:visibility="gone" />
+        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

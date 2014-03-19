@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
 
     <ViewFlipper
         android:id="@+id/prFlipper"
@@ -35,7 +35,7 @@
                     android:layout_marginRight="10dp"
                     android:gravity="center"
                     android:text="@string/like_topface"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
 
                 <Button
                     android:id="@+id/btnRPYes"
@@ -44,7 +44,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="@string/general_yes"/>
+                    android:text="@string/general_yes" />
 
                 <Button
                     android:id="@+id/btnRPNo"
@@ -53,7 +53,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="@string/general_no"/>
+                    android:text="@string/general_no" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -76,7 +76,7 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center_horizontal"
                 android:text="@string/dashbrd_popup_rating"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/btnRatingPopupRate"
@@ -85,7 +85,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:text="@string/dashbrd_popup_rate"/>
+                android:text="@string/dashbrd_popup_rate" />
 
             <Button
                 android:id="@+id/btnRatingPopupLate"
@@ -94,7 +94,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:text="@string/dashbrd_popup_later"/>
+                android:text="@string/dashbrd_popup_later" />
 
             <Button
                 android:id="@+id/btnRatingPopupCancel"
@@ -103,7 +103,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:text="@string/dashbrd_popup_cancel"/>
+                android:text="@string/dashbrd_popup_cancel" />
 
         </LinearLayout>
 

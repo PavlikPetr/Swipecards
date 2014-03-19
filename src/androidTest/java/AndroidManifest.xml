@@ -19,5 +19,5 @@
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
         android:label="Tests for com.topface.topface"
-        android:targetPackage="com.topface.topface"/>
+        android:targetPackage="com.topface.topface" />
 </manifest>

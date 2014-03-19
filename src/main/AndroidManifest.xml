@@ -50,7 +50,7 @@
         android:largeScreens="true"
         android:normalScreens="true"
         android:resizeable="true"
-        android:smallScreens="true"/>
+        android:smallScreens="true" />
 
     <application
         android:name=".App"
@@ -63,11 +63,12 @@
 
         <uses-library
             android:name="com.google.android.maps"
-            android:required="false"/>
+            android:required="false" />
 
         <!-- activity -->
         <activity
             android:name=".ui.NavigationActivity"
+            android:theme="@style/Theme.Topface.ActionbarOverlay"
             android:configChanges="locale|screenSize|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
@@ -86,42 +87,42 @@
                 <data
                     android:host="topface.com"
                     android:pathPrefix="/profile"
-                    android:scheme="http"/>
+                    android:scheme="http" />
 
                 <data
                     android:host="topface.ru"
                     android:pathPattern="/profile"
-                    android:scheme="http"/>
+                    android:scheme="http" />
 
                 <data
                     android:host="topface.com"
                     android:pathPrefix="/confirm"
-                    android:scheme="http"/>
+                    android:scheme="http" />
 
                 <data
                     android:host="topface.ru"
                     android:pathPrefix="/confirm"
-                    android:scheme="http"/>
+                    android:scheme="http" />
 
                 <data
                     android:host="topface.com"
                     android:pathPattern="/profile"
-                    android:scheme="https"/>
+                    android:scheme="https" />
 
                 <data
                     android:host="topface.ru"
                     android:pathPattern="/profile"
-                    android:scheme="https"/>
+                    android:scheme="https" />
 
                 <data
                     android:host="topface.com"
                     android:pathPrefix="/confirm"
-                    android:scheme="https"/>
+                    android:scheme="https" />
 
                 <data
                     android:host="topface.ru"
                     android:pathPrefix="/confirm"
-                    android:scheme="https"/>
+                    android:scheme="https" />
 
                 />
             </intent-filter>
@@ -133,7 +134,7 @@
 
                 <data
                     android:host="offerwall"
-                    android:scheme="topface"/>
+                    android:scheme="topface" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -175,7 +176,7 @@
             android:name=".ui.settings.SettingsContainerActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.BanActivity" />
-        <activity android:name=".ui.BlackListActivity"/>
+        <activity android:name=".ui.BlackListActivity" />
         <activity
             android:name=".ui.ContainerActivity"
             android:parentActivityName=".ui.NavigationActivity"
@@ -193,7 +194,7 @@
             android:configChanges="orientation"
             android:launchMode="singleTask">
             <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -260,7 +261,7 @@
 
         <activity
             android:name="com.lifestreet.android.lsmsdk.mraid.MRAIDInterstitialActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
 
         <activity
             android:name=".utils.offerwalls.supersonicads.SupersonicWallActivity"
@@ -271,7 +272,7 @@
             android:excludeFromRecents="true"
             android:finishOnTaskLaunch="true"
             android:launchMode="singleInstance"
-            android:theme="@style/Theme.Topface.NoActionBar"/>
+            android:theme="@style/Theme.Topface.NoActionBar" />
 
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
@@ -349,7 +350,7 @@
             android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
 
@@ -359,7 +360,7 @@
             android:name="com.google.analytics.tracking.android.CampaignTrackingReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
 

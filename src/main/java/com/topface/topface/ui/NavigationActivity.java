@@ -67,7 +67,7 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
+public class NavigationActivity extends CustomTitlesBaseFragmentActivity implements INavigationFragmentsListener {
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String INTENT_EXIT = "EXIT";
     private static NavigationActivity instance = null;
@@ -96,11 +96,16 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             getIntent().setData(null);
         }
     };
+
+    private View mContentFrame;
     private MenuFragment mMenuFragment;
     private HackyDrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
     private boolean needAnimate = false;
     private boolean isPopupVisible = false;
+    private boolean mActionBarOverlayed = false;
+    private int mInitialTopMargin = 0;
+
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationBarController mNavBarController;
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
@@ -215,6 +220,11 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
             return;
+        }
+        mContentFrame = findViewById(R.id.fragment_content);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mContentFrame.getLayoutParams();
+        if (params != null) {
+            mInitialTopMargin = params.topMargin;
         }
         initDrawerLayout();
         initFullscreen();
@@ -586,5 +596,35 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     private void takePhoto() {
         getAddPhotoHelper().showTakePhotoDialog(mPhotoTaker, null);
+    }
+
+    private void switchContentTopMargin(boolean actionbarOverlay) {
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mContentFrame.getLayoutParams();
+        if (params != null) {
+            params.topMargin = actionbarOverlay ? 0 : mInitialTopMargin;
+            mContentFrame.requestLayout();
+            mActionBarOverlayed = actionbarOverlay;
+        }
+    }
+
+    @Override
+    public void onFragmentSwitch(FragmentId fragmentId) {
+        if (fragmentId.isOverlayed()) {
+            switchContentTopMargin(true);
+        } else if (mActionBarOverlayed) {
+            switchContentTopMargin(false);
+        }
+    }
+
+    @Override
+    public void onHideActionBar() {
+        setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onShowActionBar() {
+        setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        getSupportActionBar().show();
     }
 }

@@ -8,4 +8,4 @@
     android:layout_height="wrap_content"
     inneractive:adType="Banner"
     inneractive:appID="Topface_TopfaceAndroid_Android"
-    inneractive:refreshInterval="60"/>
+    inneractive:refreshInterval="60" />
