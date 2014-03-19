@@ -41,12 +41,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static enum FragmentId {
         F_VIP_PROFILE(0),
         F_PROFILE(1),
-        F_DATING(2),
+        F_DATING(2, true),
         F_LIKES(3),
         F_ADMIRATIONS(4),
         F_MUTUAL(5),
-        F_LIKES_CLOSINGS(6),
-        F_MUTUAL_CLOSINGS(7),
+        F_LIKES_CLOSINGS(6, true),
+        F_MUTUAL_CLOSINGS(7, true),
         F_DIALOGS(8),
         F_BOOKMARKS(9),
         F_FANS(10),
@@ -58,13 +58,35 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         F_UNDEFINED(-1);
 
         private int mNumber;
+        private boolean mIsOverlayed;
 
+        /**
+         * Constructor for enum type of fragment ids
+         * By default fragment is not overlayed by ActionBar
+         *
+         * @param number integer id
+         */
         FragmentId(int number) {
+            this(number, false);
+        }
+
+        /**
+         * Constructor for enum type of fragment ids
+         *
+         * @param number      integer id
+         * @param isOverlayed true if fragment will be overlayed by actionbar
+         */
+        FragmentId(int number, boolean isOverlayed) {
             mNumber = number;
+            mIsOverlayed = isOverlayed;
         }
 
         public int getId() {
             return mNumber;
+        }
+
+        public boolean isOverlayed() {
+            return mIsOverlayed;
         }
     }
 

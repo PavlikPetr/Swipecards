@@ -614,9 +614,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
 
     @Override
     public void onFragmentSwitch(FragmentId fragmentId) {
-        if (fragmentId == FragmentId.F_DATING
-                || fragmentId == FragmentId.F_LIKES_CLOSINGS
-                || fragmentId == FragmentId.F_MUTUAL_CLOSINGS) {
+        if (fragmentId.isOverlayed()) {
             switchContentTopMargin(true);
         } else if (mActionBarOverlayed) {
             switchContentTopMargin(false);
