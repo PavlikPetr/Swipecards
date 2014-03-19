@@ -22,7 +22,7 @@ public class BlackListGetTest extends FeedTest<BlackListItem> {
 
     @Override
     protected FeedListData<BlackListItem> getFeedList(ApiResponse response) {
-        return new FeedListData<BlackListItem>(response.jsonResult, BlackListItem.class);
+        return new FeedListData<>(response.jsonResult, BlackListItem.class);
     }
 
     @Override

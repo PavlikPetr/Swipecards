@@ -22,8 +22,6 @@ public class ProfileTests extends ActivityInstrumentationTestCase2<NavigationAct
     }
 
     public void testProfile() throws Exception {
-//        solo.clickOnImageButton(R.id.btnDatingSwitchNext);
-//        solo.clickOnImageButton(R.id.btnDatingProfile);
         assertTrue(true);
     }
 

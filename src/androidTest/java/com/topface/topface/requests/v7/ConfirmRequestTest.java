@@ -1,4 +1,4 @@
-package com.topface.topface.requests.v6;
+package com.topface.topface.requests.v7;
 
 import android.content.Context;
 
@@ -16,10 +16,10 @@ public class ConfirmRequestTest extends AbstractThreadTest {
         runAsyncTest(new Runnable() {
             @Override
             public void run() {
-                final Context context = getInstrumentation().getContext();
+                final Context context = getInstrumentation().getTargetContext();
                 AuthToken token = AuthToken.getInstance();
                 token.saveToken("1", "iovorobiev@mail.ru", "asdasd");
-                AuthRequest auth = new AuthRequest(token, context);
+                AuthRequest auth = new AuthRequest(token.getTokenInfo(), context);
                 auth.callback(new ApiHandler() {
                     @Override
                     public void success(IApiResponse response) {

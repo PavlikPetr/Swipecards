@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class PhotoTest extends InstrumentationTestCase {
 
     public void testGetSuitableLink() {
-        HashMap<String, String> links = new HashMap<String, String>();
+        HashMap<String, String> links = new HashMap<>();
         links.put("c64x64", "url1");
         links.put("c128x128", "url2");
         links.put("c192x192", "url3");

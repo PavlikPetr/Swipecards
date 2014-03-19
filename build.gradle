@@ -124,7 +124,7 @@ dependencies {
     compile project(':libs:odnoklassniki')
 
     //Ad networks SDK
-    compile project(':libs:MoPub')
+    compile project(':libs:mopub-android-sdk')
     compile project(':libs:AdLabSDK')
 
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.+'
@@ -200,7 +200,7 @@ project(':libs:odnoklassniki') {
 }
 
 //Ad networks
-project(':libs:MoPub') {
+project(':libs:mopub-android-sdk') {
     apply plugin: 'android-library'
     dependencies {
         compile supportLibrary
@@ -209,7 +209,6 @@ project(':libs:MoPub') {
     android.sourceSets.main {
         manifest.srcFile 'mopub-sdk/AndroidManifest.xml'
         java.srcDirs = ['mopub-sdk/src/main/java']
-        res.srcDirs = ['mopub-sdk/res']
     }
 }
 
@@ -241,8 +240,7 @@ subprojects {
 android {
     lintOptions {
         checkReleaseBuilds true
-        // Or, if you prefer, you can continue to check for errors in release builds,
-        // but continue the build even when errors are found:
-        abortOnError false
+        abortOnError true
+        ignore "MissingTranslation"
     }
 }

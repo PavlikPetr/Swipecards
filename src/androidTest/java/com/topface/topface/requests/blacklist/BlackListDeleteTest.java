@@ -18,6 +18,16 @@ import java.util.ArrayList;
 public class BlackListDeleteTest extends AbstractThreadTest {
     private String mUserIdForDelete;
 
+    /**
+     * Хелпер для получения черного списка
+     *
+     * @param handler специальный handler, проверяющий целостность списка и возвращаюший только корректный черный список
+     */
+    public static void runBlackListGetRequest(BlackListHandler handler, Context context) {
+        new FeedRequest(FeedRequest.FeedService.BLACK_LIST, context)
+                .callback(handler).exec();
+    }
+
     public void testBlackListDeleteRequestExec() throws Throwable {
         runAsyncTest(new Runnable() {
             @Override
@@ -42,7 +52,7 @@ public class BlackListDeleteTest extends AbstractThreadTest {
                         assertTrue("ApiResponse error " + response, false);
                         stopTest("testBlackListDeleteRequestExec");
                     }
-                }, getInstrumentation().getContext());
+                }, getInstrumentation().getTargetContext());
             }
         }, "testBlackListDeleteRequestExec");
     }
@@ -53,7 +63,7 @@ public class BlackListDeleteTest extends AbstractThreadTest {
             public void run() {
                 ArrayList<String> users = new ArrayList<>();
                 users.add(userId);
-                new DeleteBlackListRequest(users, getInstrumentation().getContext())
+                new DeleteBlackListRequest(users, getInstrumentation().getTargetContext())
                         .callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
@@ -104,19 +114,9 @@ public class BlackListDeleteTest extends AbstractThreadTest {
                         assertTrue("ApiResponse error " + response, false);
                         stopTest("testBlackListDeleteRequestExec");
                     }
-                }, getInstrumentation().getContext());
+                }, getInstrumentation().getTargetContext());
             }
         });
-    }
-
-    /**
-     * Хелпер для получения черного списка
-     *
-     * @param handler специальный handler, проверяющий целостность списка и возвращаюший только корректный черный список
-     */
-    public static void runBlackListGetRequest(BlackListHandler handler, Context context) {
-        new FeedRequest(FeedRequest.FeedService.BLACK_LIST, context)
-                .callback(handler).exec();
     }
 
 

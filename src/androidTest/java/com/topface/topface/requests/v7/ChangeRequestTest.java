@@ -1,4 +1,4 @@
-package com.topface.topface.requests.v6;
+package com.topface.topface.requests.v7;
 
 
 import android.content.Context;
@@ -16,7 +16,7 @@ public class ChangeRequestTest extends AbstractThreadTest {
         runAsyncTest(new Runnable() {
             @Override
             public void run() {
-                Context context = getInstrumentation().getContext();
+                Context context = getInstrumentation().getTargetContext();
                 ChangeLoginRequest request = new ChangeLoginRequest(context,
                         EMAIL_TEST);
                 request.callback(new ApiHandler() {

@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.util.Log;
 
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,22 +24,20 @@ public class Debug {
      * Отладка включена всегда
      */
     public static final int MODE_ALWAYS = 2;
-    /**
-     * Отла
-     */
-    private static final int MODE_DISABLE = 3;
-
     public static final int MAX_LOG_MESSAGE_LENGTH = 3500;
     /**
      * Резать длинные сообщения в логах на несколько
      */
     public static final boolean CHUNK_LONG_LOGS = true;
-
+    /**
+     * Отла
+     */
+    private static final int MODE_DISABLE = 3;
     /**
      * Форматировать JSON
      */
     private static final boolean FORMAT_JSON = true;
-    private static boolean mShowDebugLogs = App.DEBUG;
+    private static boolean mShowDebugLogs = BuildConfig.DEBUG;
 
     public static void log(Object obj, String msg) {
         if (mShowDebugLogs) {
@@ -174,14 +173,14 @@ public class Debug {
     }
 
     /**
-     * В зависимости от режима дебага вклчает отладку
+     * В зависимости от режима дебага вклчает отладку2
      *
      * @param mode режим отладки (только при дебаге, включен всегда или для редакторов и при отладке)
      */
     public static void setDebugMode(int mode) {
         switch (mode) {
             case MODE_EDITOR:
-                mShowDebugLogs = App.DEBUG || Editor.isEditor();
+                mShowDebugLogs = BuildConfig.DEBUG || Editor.isEditor();
                 break;
             case MODE_ALWAYS:
                 mShowDebugLogs = true;
@@ -191,7 +190,7 @@ public class Debug {
                 break;
             case MODE_DEBUG:
             default:
-                mShowDebugLogs = App.DEBUG;
+                mShowDebugLogs = BuildConfig.DEBUG;
                 break;
         }
     }

@@ -1,4 +1,4 @@
-package com.topface.topface.requests.v6;
+package com.topface.topface.requests.v7;
 
 import android.content.Context;
 
@@ -15,7 +15,7 @@ public class RegisterRequestTest extends AbstractThreadTest {
         runAsyncTest(new Runnable() {
             @Override
             public void run() {
-                Context context = getInstrumentation().getContext();
+                Context context = getInstrumentation().getTargetContext();
                 RegisterRequest request = new RegisterRequest(context,
                         "iovorobiev@mail.ru",
                         "asdasd",

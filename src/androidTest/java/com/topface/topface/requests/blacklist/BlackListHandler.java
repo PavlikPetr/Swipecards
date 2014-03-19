@@ -4,6 +4,7 @@ import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.Debug;
 
 abstract class BlackListHandler extends ApiHandler {
 
@@ -12,12 +13,12 @@ abstract class BlackListHandler extends ApiHandler {
     @Override
     public void success(IApiResponse response) {
         final FeedListData<BlackListItem> feedList =
-                new FeedListData<BlackListItem>(response.getJsonResult(), BlackListItem.class);
+                new FeedListData<>(response.getJsonResult(), BlackListItem.class);
 
         try {
             onBlackListResult(feedList);
         } catch (Throwable throwable) {
-//            assertTrue(false);
+            Debug.error(throwable);
         }
 
     }

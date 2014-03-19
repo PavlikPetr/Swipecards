@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--suppress AndroidLintMissingTranslation -->
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- Данный конфиг используется для IllustratedTextView -->
     <string-array name="itv_templates">
         <item>{{coins}}</item>

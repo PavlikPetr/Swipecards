@@ -15,7 +15,7 @@ public class ComplainRequestTest extends AbstractThreadTest {
         runAsyncTest(new Runnable() {
             @Override
             public void run() {
-                Context context = getInstrumentation().getContext();
+                Context context = getInstrumentation().getTargetContext();
                 ComplainRequest request = new ComplainRequest(context, 43945394, ComplainRequest.ClassNames.PRIVATE_MSG, ComplainRequest.TypesNames.SPAM);
                 request.callback(new ApiHandler() {
                     @Override
