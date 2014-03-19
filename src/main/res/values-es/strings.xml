@@ -624,5 +624,7 @@
     <string name="people_nearby">Gente cerca</string>
     <string name="nobody_nearby">¡No hay nadie cerca!</string>
     <string name="general_distance_km">%.02f km</string>
+    <string name="general_distance_m">%d m.</string>
     <string name="cannot_get_geo">No fue posible detectar la úbicación</string>
+    <string name="press_back_more_to_close_app">Pulsa el botón atrás otra vez para salir de Topface</string>
 </resources>

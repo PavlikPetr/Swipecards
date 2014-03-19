@@ -640,5 +640,7 @@
     <string name="people_nearby">Žmonės šalia</string>
     <string name="nobody_nearby">Aplinkui nė gyvos dvasios!</string>
     <string name="general_distance_km">%.02f km</string>
+    <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Nepavyko nustatyti buvimo vietos</string>
+    <string name="press_back_more_to_close_app">Spauskite mygtuką atgal dar sykį kad išeiti iš Topface</string>
 </resources>
