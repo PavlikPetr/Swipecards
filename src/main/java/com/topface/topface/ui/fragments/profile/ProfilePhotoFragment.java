@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui.fragments.profile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,14 +31,12 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
-import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
-public class ProfilePhotoFragment extends BaseFragment {
+public class ProfilePhotoFragment extends ProfileInnerFragment {
 
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
 
@@ -46,12 +44,41 @@ public class ProfilePhotoFragment extends BaseFragment {
     private GridView mGridAlbum;
     private View mLoadingLocker;
     private TextView mTitle;
+    private BroadcastReceiver mPhotosReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ArrayList<Photo> arrList = intent.getParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS);
+            boolean clear = intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_CLEAR, false);
+            Photos newPhotos = new Photos();
 
+            newPhotos.addAll(arrList);
+            if (clear) {
+                newPhotos.addFirst(null);
+                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
+            } else {
+                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
+            }
+            initTitleText(mTitle);
+        }
+    };
+    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (position == 0) {
+                mViewFlipper.setDisplayedChild(1);
+                return;
+            }
+            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, CacheProfile.uid);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, --position);
+            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
+            startActivity(intent);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(), CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
@@ -146,13 +173,13 @@ public class ProfilePhotoFragment extends BaseFragment {
         root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoAlbum));
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoAlbum));
             }
         });
         root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoCamera));
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoCamera));
             }
         });
         root.findViewById(R.id.btnCancel).setOnClickListener(new OnClickListener() {
@@ -266,53 +293,10 @@ public class ProfilePhotoFragment extends BaseFragment {
         }
     }
 
-    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (position == 0) {
-                mViewFlipper.setDisplayedChild(1);
-                return;
-            }
-            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, CacheProfile.uid);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, --position);
-            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
-            startActivity(intent);
-        }
-    };
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPhotosReceiver);
-    }
-
-    private BroadcastReceiver mPhotosReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            ArrayList<Photo> arrList = intent.getParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS);
-            boolean clear = intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_CLEAR, false);
-            Photos newPhotos = new Photos();
-
-            newPhotos.addAll(arrList);
-            if (clear) {
-                newPhotos.addFirst(null);
-                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
-            } else {
-                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
-            }
-            initTitleText(mTitle);
-        }
-    };
-
-    @Override
-    protected boolean needOptionsMenu() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrackable() {
-        return false;
     }
 }
  

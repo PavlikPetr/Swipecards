@@ -1,14 +1,16 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.geo;
 
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.topface.topface.data.History;
+import com.topface.topface.utils.BackgroundThread;
+import com.topface.topface.utils.cache.MemoryCacheTemplate;
 
 public class AddressesCache {
 
-    private MemoryCacheTemplate<String, String> mAddressesCache = new MemoryCacheTemplate<String, String>();
+    private MemoryCacheTemplate<String, String> mAddressesCache = new MemoryCacheTemplate<>();
 
     public void mapAddressDetection(final History history, final TextView tv,
                                     final ProgressBar prgsBar) {

@@ -1,4 +1,4 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.ads;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,6 +33,10 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.BackgroundThread;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 
@@ -50,11 +54,10 @@ import ru.ideast.adwired.events.OnStopListener;
 public class FullscreenController {
 
     public static final String URL_SEPARATOR = "::";
-    private static boolean isFullScreenBannerVisible = false;
     private static final String MOPUB_INTERSTITIAL_ID = "00db7208a90811e281c11231392559e4";
     private static final String IVENGO_APP_ID = "aggeas97392g";
     private static final String LIFESTREET_TAG = "http://mobile-android.lfstmedia.com/m2/slot76331?ad_size=320x480&adkey=a25";
-
+    private static boolean isFullScreenBannerVisible = false;
     private SharedPreferences mPreferences;
     private Activity mActivity;
 

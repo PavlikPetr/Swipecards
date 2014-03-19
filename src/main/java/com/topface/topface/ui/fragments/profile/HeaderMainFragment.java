@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.profile;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,7 +19,7 @@ import com.topface.topface.utils.http.ProfileBackgrounds;
 /**
  * Фрагмент с аватркой и именем пользователя в профиле
  */
-public class HeaderMainFragment extends BaseFragment {
+public class HeaderMainFragment extends ProfileInnerFragment {
     private static final String ARG_TAG_AVATAR = "avatar";
     private static final String ARG_TAG_NAME = "name";
     private static final String ARG_TAG_CITY = "city";
@@ -34,11 +34,27 @@ public class HeaderMainFragment extends BaseFragment {
     private ImageView mBackgroundView;
     private int mBackgroundVal;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setNeedTitles(false);
-        setHasOptionsMenu(false);
+    private static void saveState(Fragment fragment, Profile profile) {
+        if (!fragment.isVisible()) {
+            if (fragment.getArguments() == null && !fragment.isAdded()) {
+                Bundle args = new Bundle();
+                fragment.setArguments(args);
+            }
+
+            fragment.getArguments().putParcelable(ARG_TAG_AVATAR, profile.photo);
+            fragment.getArguments().putString(ARG_TAG_NAME, profile.getNameAndAge());
+            if (profile.city != null) {
+                fragment.getArguments().putString(ARG_TAG_CITY, profile.city.name);
+            }
+            fragment.getArguments().putInt(ARG_TAG_BACKGROUND, profile.background);
+        }
+    }
+
+    public static Fragment newInstance(Profile profile) {
+        HeaderMainFragment fragment = new HeaderMainFragment();
+        if (profile == null) return fragment;
+        saveState(fragment, profile);
+        return fragment;
     }
 
     @Override
@@ -118,29 +134,6 @@ public class HeaderMainFragment extends BaseFragment {
         }
     }
 
-    private static void saveState(Fragment fragment, Profile profile) {
-        if (!fragment.isVisible()) {
-            if (fragment.getArguments() == null && !fragment.isAdded()) {
-                Bundle args = new Bundle();
-                fragment.setArguments(args);
-            }
-
-            fragment.getArguments().putParcelable(ARG_TAG_AVATAR, profile.photo);
-            fragment.getArguments().putString(ARG_TAG_NAME, profile.getNameAndAge());
-            if (profile.city != null) {
-                fragment.getArguments().putString(ARG_TAG_CITY, profile.city.name);
-            }
-            fragment.getArguments().putInt(ARG_TAG_BACKGROUND, profile.background);
-        }
-    }
-
-    public static Fragment newInstance(Profile profile) {
-        HeaderMainFragment fragment = new HeaderMainFragment();
-        if (profile == null) return fragment;
-        saveState(fragment, profile);
-        return fragment;
-    }
-
     @Override
     public void clearContent() {
         mAvatarView.setPhoto(null);
@@ -157,10 +150,5 @@ public class HeaderMainFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    @Override
-    protected boolean needOptionsMenu() {
-        return false;
     }
 }

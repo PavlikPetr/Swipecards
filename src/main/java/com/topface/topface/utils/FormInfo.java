@@ -6,10 +6,10 @@ import android.text.InputType;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.QuestionaryRequest;
 import com.topface.topface.requests.SettingsRequest;
-import com.topface.topface.ui.fragments.ProfileFragment;
 
 import java.util.List;
 
@@ -300,7 +300,7 @@ public class FormInfo {
             return variants[0] == null ? result : variants[0];
         }
 
-        if (mProfileType == ProfileFragment.TYPE_USER_PROFILE) {
+        if (mProfileType == Profile.TYPE_USER_PROFILE) {
             switch (mSex) {
                 case Static.BOY:
                     result = variants[0];

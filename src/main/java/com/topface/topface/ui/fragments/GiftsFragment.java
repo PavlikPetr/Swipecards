@@ -35,24 +35,24 @@ import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
+import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 
 import java.util.ArrayList;
 
-public class GiftsFragment extends BaseFragment {
-    private static final int GIFTS_LOAD_COUNT = 30;
+public class GiftsFragment extends ProfileInnerFragment {
+    public static final String GIFTS_ALL_TAG = "giftsGridAll";
     // Data
     private String mTag = GIFTS_ALL_TAG;
-
-    public static final String GIFTS_ALL_TAG = "giftsGridAll";
     public static final String GIFTS_USER_PROFILE_TAG = "giftsGridProfile";
-
+    private static final int GIFTS_LOAD_COUNT = 30;
     private TextView mTitle;
     private View mGroupInfo;
     private TextView mTextInfo;
     private Button mBtnInfo;
     private GiftsAdapter mGridAdapter;
     private GridView mGridView;
-    private ProfileFragment.OnGiftReceivedListener mGiftReceivedListener;
+    private UserProfileFragment.OnGiftReceivedListener mGiftReceivedListener;
 
     private Profile mProfile;
     private boolean mIsUpdating = false;
@@ -61,7 +61,6 @@ public class GiftsFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
     }
 
     @Override
@@ -376,7 +375,7 @@ public class GiftsFragment extends BaseFragment {
         super.onDestroy();
     }
 
-    public void sendGift(ProfileFragment.OnGiftReceivedListener listener) {
+    public void sendGift(UserProfileFragment.OnGiftReceivedListener listener) {
         this.mGiftReceivedListener = listener;
         sendGift();
     }
@@ -396,10 +395,5 @@ public class GiftsFragment extends BaseFragment {
                 }
             }
         };
-    }
-
-    @Override
-    protected boolean needOptionsMenu() {
-        return false;
     }
 }

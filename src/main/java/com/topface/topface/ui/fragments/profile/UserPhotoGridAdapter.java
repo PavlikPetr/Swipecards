@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui.fragments.profile;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,11 +13,6 @@ import com.topface.topface.ui.views.ImageViewRemote;
 public class UserPhotoGridAdapter extends ProfileGridAdapter {
     // Data
     private LayoutInflater mInflater;
-
-    // class ViewHolder
-    static class ViewHolder {
-        ImageViewRemote photo;
-    }
 
     public UserPhotoGridAdapter(Context context, Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
         super(photoLinks, totalPhotos, callback);
@@ -45,5 +40,10 @@ public class UserPhotoGridAdapter extends ProfileGridAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    // class ViewHolder
+    static class ViewHolder {
+        ImageViewRemote photo;
     }
 }

@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +22,7 @@ import com.topface.topface.utils.CacheProfile;
  * Time: 14:56
  * To change this template use File | Settings | File Templates.
  */
-public class HeaderStatusFragment extends BaseFragment implements View.OnClickListener {
+public class HeaderStatusFragment extends ProfileInnerFragment implements View.OnClickListener {
     private static final String ARG_TAG_STATUS = "status";
     private static final String ARG_TAG_PROFILE_TYPE = "profile_type";
 
@@ -31,22 +31,32 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
     private String mStatusVal;
     private int mProfileType;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setNeedTitles(false);
-        setHasOptionsMenu(false);
+    private static void saveState(Fragment fragment, Profile profile, int profileType) {
+        if (!fragment.isVisible()) {
+            Bundle args = new Bundle();
+            if (fragment.getArguments() == null) {
+                fragment.setArguments(args);
+            }
+            fragment.getArguments().putString(ARG_TAG_STATUS, profile.getStatus());
+            fragment.getArguments().putInt(ARG_TAG_PROFILE_TYPE, profileType);
+        }
+    }
+
+    public static Fragment newInstance(Profile profile, int profileType) {
+        HeaderStatusFragment fragment = new HeaderStatusFragment();
+        if (profile == null) return fragment;
+        saveState(fragment, profile, profileType);
+        return fragment;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
         //init views
         View root = inflater.inflate(R.layout.fragment_profile_header_status, null);
         mBtnEditStatus = (ImageButton) root.findViewById(R.id.btnEdit);
         mStatusView = (TextView) root.findViewById(R.id.tvStatus);
 
-        if (mProfileType == ProfileFragment.TYPE_MY_PROFILE) {
+        if (mProfileType == Profile.TYPE_OWN_PROFILE) {
             mStatusView.setHint(R.string.status_is_empty);
             mStatusView.setOnClickListener(this);
             mBtnEditStatus.setVisibility(View.VISIBLE);
@@ -92,17 +102,6 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
         mStatusVal = profile.getStatus();
     }
 
-    private static void saveState(Fragment fragment, Profile profile, int profileType) {
-        if (!fragment.isVisible()) {
-            Bundle args = new Bundle();
-            if (fragment.getArguments() == null) {
-                fragment.setArguments(args);
-            }
-            fragment.getArguments().putString(ARG_TAG_STATUS, profile.getStatus());
-            fragment.getArguments().putInt(ARG_TAG_PROFILE_TYPE, profileType);
-        }
-    }
-
     private void saveState(HeaderStatusFragment fragment, Profile profile) {
         if (!fragment.isVisible()) {
             Bundle args = new Bundle();
@@ -111,13 +110,6 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
             }
             fragment.getArguments().putString(ARG_TAG_STATUS, profile.getStatus());
         }
-    }
-
-    public static Fragment newInstance(Profile profile, int profileType) {
-        HeaderStatusFragment fragment = new HeaderStatusFragment();
-        if (profile == null) return fragment;
-        saveState(fragment, profile, profileType);
-        return fragment;
     }
 
     @Override
@@ -133,7 +125,7 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (mProfileType == ProfileFragment.TYPE_MY_PROFILE && requestCode == EditContainerActivity.INTENT_EDIT_STATUS) {
+        if (mProfileType == Profile.TYPE_OWN_PROFILE && requestCode == EditContainerActivity.INTENT_EDIT_STATUS) {
             mStatusVal = CacheProfile.getStatus();
         }
     }
@@ -149,15 +141,5 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
             default:
                 break;
         }
-    }
-
-    @Override
-    protected boolean needOptionsMenu() {
-        return false;
-    }
-
-    @Override
-    public boolean isTrackable() {
-        return false;
     }
 }

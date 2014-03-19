@@ -8,7 +8,8 @@
     android:background="@drawable/drop_menu_backgroud"
     android:orientation="vertical"
     android:paddingLeft="3dp"
-    android:paddingRight="3dp">
+    android:paddingRight="3dp"
+    android:visibility="invisible">
 
     <RelativeLayout
         android:id="@+id/acProfile"

@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui.fragments.profile;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -35,25 +35,54 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     public static final String INTENT_MORE = "more";
     public static final String INTENT_CLEAR = "clear";
+    public static final String DEFAULT_UPDATE_PHOTOS_INTENT = "com.topface.topface.updatePhotos";
+    public static final String INTENT_USER_ID = "user_id";
+    public static final String INTENT_ALBUM_POS = "album_position";
+    public static final String INTENT_PHOTOS = "album_photos";
+    public static final String INTENT_PHOTOS_COUNT = "photos_count";
+    public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
+    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mPhotoAlbumControl.setVisibility(mPhotoAlbumControl.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+        }
+    };
     private TextView mCounter;
     private ViewGroup mPhotoAlbumControl;
     private Photos mPhotoLinks;
     private PreloadManager mPreloadManager;
     private Photos mDeletedPhotos = new Photos();
-
-    public static final String DEFAULT_UPDATE_PHOTOS_INTENT = "com.topface.topface.updatePhotos";
-
-    public static final String INTENT_USER_ID = "user_id";
-    public static final String INTENT_ALBUM_POS = "album_position";
-    public static final String INTENT_PHOTOS = "album_photos";
-    public static final String INTENT_PHOTOS_COUNT = "photos_count";
-
     private ImageSwitcher mImageSwitcher;
     private boolean mNeedMore;
     private boolean mCanSendAlbumReq = true;
     private int mUid;
     private int mLoadedCount;
-    public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
+    ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageSelected(int position) {
+            mPreloadManager.preloadPhoto(mPhotoLinks, position + 1);
+            setCounter(position);
+            refreshButtonsState();
+            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
+                final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
+                if (mNeedMore) {
+                    mImageSwitcher.getAdapter().notifyDataSetChanged();
+                    if (mCanSendAlbumReq) {
+                        mCanSendAlbumReq = false;
+                        sendAlbumRequest(data);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+        }
+    };
     private int mCurrentPosition = 0;
     private TextView mSetAvatarButton;
     private ImageButton mDeleteButton;
@@ -237,41 +266,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             mCounter.setText((mCurrentPosition + 1) + "/" + mPhotoLinks.size());
         }
     }
-
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            mPhotoAlbumControl.setVisibility(mPhotoAlbumControl.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-        }
-    };
-
-
-    ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageSelected(int position) {
-            mPreloadManager.preloadPhoto(mPhotoLinks, position + 1);
-            setCounter(position);
-            refreshButtonsState();
-            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
-                final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
-                if (mNeedMore) {
-                    mImageSwitcher.getAdapter().notifyDataSetChanged();
-                    if (mCanSendAlbumReq) {
-                        mCanSendAlbumReq = false;
-                        sendAlbumRequest(data);
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-        }
-    };
 
     private void refreshButtonsState() {
         if (mUid == CacheProfile.uid && mSetAvatarButton != null && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {

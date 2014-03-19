@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui.fragments.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,21 +19,35 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.Utils;
 
-public class UserPhotoFragment extends BaseFragment {
+public class UserPhotoFragment extends ProfileInnerFragment {
     private User mUser;
     private UserPhotoGridAdapter mUserPhotoGridAdapter;
     private TextView mTitle;
     private Photos mPhotoLinks;
     private LoadingListAdapter.Updater mUpdater;
     private GridView mGridAlbum;
+    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS_COUNT, mUser.photosCount);
+            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
+            Fragment parentFrag = getParentFragment();
+            if (parentFrag != null) {
+                parentFrag.startActivity(intent);
+            } else {
+                startActivity(intent);
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
         mUpdater = new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
@@ -83,23 +97,6 @@ public class UserPhotoFragment extends BaseFragment {
         return root;
     }
 
-    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS_COUNT, mUser.photosCount);
-            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
-            Fragment parentFrag = getParentFragment();
-            if (parentFrag != null) {
-                parentFrag.startActivity(intent);
-            } else {
-                startActivity(intent);
-            }
-        }
-    };
-
     public void setUserData(User user) {
         mUser = user;
         mPhotoLinks = user.photos;
@@ -137,10 +134,5 @@ public class UserPhotoFragment extends BaseFragment {
             mUserPhotoGridAdapter.notifyDataSetChanged();
         }
         mGridAlbum = null;
-    }
-
-    @Override
-    public boolean isTrackable() {
-        return false;
     }
 }

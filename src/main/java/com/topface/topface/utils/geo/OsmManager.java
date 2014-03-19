@@ -1,6 +1,7 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.geo;
 
 import com.topface.topface.Static;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONObject;
@@ -17,11 +18,9 @@ public class OsmManager {
     public static final String OSM_ZOOM = "zoom";
     public static final String OSM_DETALIZATION = "addressdetails";
     public static final String OSM_LOCALE = "accept-language";
-
-
-    public static String resultFormat = "json";
     public static final String zoom = "18";
     public static final String detalization = "1";
+    public static String resultFormat = "json";
 
     public static String getAddress(double lat, double lon) {
         StringBuilder resultSB = new StringBuilder();
