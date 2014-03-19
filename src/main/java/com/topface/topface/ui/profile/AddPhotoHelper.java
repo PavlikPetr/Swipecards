@@ -275,9 +275,9 @@ public class AddPhotoHelper {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (notificationListener.mNotification != null) {
-                            notificationListener.mNotification.updateProgress(percentage);
-                            mNotificationManager.showBuildedNotification(notificationListener.mNotification);
+                        if (notificationListener.notification != null) {
+                            notificationListener.notification.updateProgress(percentage);
+                            mNotificationManager.showBuildedNotification(notificationListener.notification);
                         }
 
                     }
@@ -365,16 +365,16 @@ public class AddPhotoHelper {
 
     public static class PhotoNotificationListener implements UserNotificationManager.NotificationImageListener {
         public boolean needShowNotification = true;
-        private UserNotification mNotification;
+        private UserNotification notification;
 
         @Override
         public void onSuccess(UserNotification notification) {
-            mNotification = notification;
+            this.notification = notification;
         }
 
         public int getId() {
 
-            return mNotification == null? -1 : mNotification.getId();
+            return notification == null? -1 : notification.getId();
         }
 
         @Override

@@ -179,7 +179,9 @@ public class UserNotification {
     }
 
     private android.app.Notification generateProgress() {
+        notificationBuilder.setDefaults(Notification.FLAG_ONLY_ALERT_ONCE);
         notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_upload);
+        notificationBuilder.setSound(Uri.EMPTY);
         setLargeIcon();
         notificationBuilder.setContentTitle(mTitle);
         PendingIntent resultPendingIntent = generatePendingIntent(mIntent);
@@ -194,8 +196,6 @@ public class UserNotification {
     }
 
     public Notification updateProgress(int currentProgress) {
-        notificationBuilder.setDefaults(Notification.FLAG_ONLY_ALERT_ONCE);
-        notificationBuilder.setSound(Uri.EMPTY);
         notificationBuilder.setProgress(100, currentProgress, false);
         if (isVersionOld()) {
             notificationBuilder.setContentText(String.format(mContext.getString(R.string.loading_photo_percent), currentProgress));

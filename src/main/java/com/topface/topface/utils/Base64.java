@@ -276,7 +276,8 @@ public class Base64 {
             -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9,     // Decimal 231 - 243
             -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9         // Decimal 244 - 255
     };
-    public static final int PERCENT_UPDATE_INTERVAL = 5;
+    public static final double INTERVAL_FACTOR = 100000d;
+
 
 
 /* ********  D E T E R M I N E   W H I C H   A L H A B E T  ******** */
@@ -1484,20 +1485,19 @@ public class Base64 {
             //Write until done
             int percentage = 0;
             int prevPercentage = 0;
-            while ((numBytes = bis.read(buffer)) >= 0) {
+            int updateInterval = getUpdateInterval(contentLength);
 
+            while ((numBytes = bis.read(buffer)) >= 0) {
                 length += numBytes;
                 Debug.log("Write bytes: " + length);
                 output.write(buffer, 0, numBytes);
                 percentage = (int)(((double)length/(double)contentLength) * 100);
-                if (percentage - prevPercentage >= PERCENT_UPDATE_INTERVAL) {
+                if (percentage - prevPercentage >= updateInterval) {
                     listener.onProgress(percentage);
                     prevPercentage = percentage;
                 }
-                if (percentage == 100) {
-                    listener.onSuccess();
-                }
             }
+            listener.onSuccess();
             Debug.log("Write bytes ended");
         } finally {
             try {
@@ -1511,6 +1511,13 @@ public class Base64 {
             }
         }
 
+    }
+
+    private static int getUpdateInterval(int contentLength) {
+        int updateInterval = (int) ((INTERVAL_FACTOR / (double)contentLength) * 100);
+        updateInterval = (updateInterval < 1)? 1:updateInterval;
+        updateInterval = (updateInterval > 20)? 20:updateInterval;
+        return updateInterval;
     }
 
     /**
