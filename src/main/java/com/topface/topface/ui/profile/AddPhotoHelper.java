@@ -27,9 +27,11 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.BackgroundThread;
+import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import java.io.File;
@@ -267,8 +269,26 @@ public class AddPhotoHelper {
                 uri.toString(), getIntentForNotification(), notificationListener
         );
 
+        final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext, new Base64.ProgressListener() {
+            @Override
+            public void onProgress(final int percentage) {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (notificationListener.mNotification != null) {
+                            notificationListener.mNotification.updateProgress(percentage);
+                            mNotificationManager.showBuildedNotification(notificationListener.mNotification);
+                        }
 
-        final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext);
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+        });
         //TODO также обрабатывать запросы с id...x, где x-порядковый номер переповтора
         fileNames.put(photoAddRequest.getId(), outputFile);
         photoAddRequest.callback(new DataApiHandler<Photo>() {
@@ -345,15 +365,16 @@ public class AddPhotoHelper {
 
     public static class PhotoNotificationListener implements UserNotificationManager.NotificationImageListener {
         public boolean needShowNotification = true;
-        private int id = -1;
+        private UserNotification mNotification;
 
         @Override
-        public void onSuccess(int id) {
-            this.id = id;
+        public void onSuccess(UserNotification notification) {
+            mNotification = notification;
         }
 
         public int getId() {
-            return id;
+
+            return mNotification == null? -1 : mNotification.getId();
         }
 
         @Override
@@ -417,6 +438,7 @@ public class AddPhotoHelper {
         });
         takePhotoDialog.setPhotoTaker(photoTaker);
     }
+
 
 }
 
