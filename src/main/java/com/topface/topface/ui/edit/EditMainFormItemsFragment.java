@@ -38,17 +38,13 @@ import java.util.List;
 
 public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener {
 
-    private static final String ARG_TYPES = "arg_types";
-
-    public enum EditType {NAME, AGE, STATUS}
-
     public static final int MAX_AGE = 99;
     public static final int MIN_AGE = 16;
     public static final int MAX_STATUS_LENGTH = 200;
     public static final String INTENT_SEX_CHANGED = "SEX_CHANGED";
+    private static final String ARG_TYPES = "arg_types";
     private boolean ageIncorrect = false;
     private boolean nameIncorrect;
-
     private EditType[] mTypes;
     private HashMap<EditType, String> hashChangedData = new HashMap<>();
     private EditText mEdName;
@@ -494,4 +490,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     protected String getTitle() {
         return getString(R.string.edit_title);
     }
+
+    public enum EditType {NAME, AGE, STATUS}
 }

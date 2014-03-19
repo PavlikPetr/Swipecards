@@ -39,10 +39,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
     public static final String VIP_PURCHASED_INTENT = "com.topface.topface.VIP_PURCHASED";
     EditSwitcher mInvisSwitcher;
-
-    private LinearLayout mBuyVipViewsContainer;
-    private LinearLayout mEditPremiumContainer;
-    private TextView mExtraText;
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -52,6 +48,9 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             }
         }
     };
+    private LinearLayout mBuyVipViewsContainer;
+    private LinearLayout mEditPremiumContainer;
+    private TextView mExtraText;
 
     /**
      * Создает новый инстанс фрагмента покупки VIP

@@ -35,12 +35,26 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
     private static int mTitleId;
     private static int mDataId;
     private static String mData;
-    private FormInfo mFormInfo;
     private static int mSeletedDataId;
+    private FormInfo mFormInfo;
     private int mSex = Static.BOY;
     private int mProfileType = Profile.TYPE_OWN_PROFILE;
 
     private ListView mListView;
+
+    public static FilterChooseFormItemFragment newInstance(int titleId, int dataId, String data, int sex, int profileType) {
+        FilterChooseFormItemFragment fragment = new FilterChooseFormItemFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_TAG_TITLE_ID, titleId);
+        args.putInt(ARG_TAG_DATA_ID, dataId);
+        args.putString(ARG_TAG_DATA, data);
+        args.putInt(ARG_TAG_SEX, sex);
+        args.putInt(ARG_TAG_PROFILE_TYPE, profileType);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,6 +83,58 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         mListView.setAdapter(new FormCheckingDataAdapter(getActivity().getApplicationContext(),
                 data, ids, mSeletedDataId));
         return root;
+    }
+
+    @Override
+    protected boolean hasChanges() {
+        return mDataId != mSeletedDataId;
+    }
+
+    @Override
+    protected void saveChanges(Handler handler) {
+        handler.sendEmptyMessage(0);
+        mDataId = mSeletedDataId;
+        Intent intent = getActivity().getIntent();
+        intent.putExtra(INTENT_TITLE_ID, mTitleId);
+        intent.putExtra(INTENT_SELECTED_ID, mSeletedDataId);
+        getActivity().setResult(Activity.RESULT_OK, intent);
+
+    }
+
+    @Override
+    protected void lockUi() {
+        mListView.setEnabled(false);
+    }
+
+    @Override
+    protected void unlockUi() {
+        mListView.setEnabled(true);
+    }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
+    @Override
+    protected void restoreState() {
+        mTitleId = getArguments().getInt(ARG_TAG_TITLE_ID);
+        mDataId = getArguments().getInt(ARG_TAG_DATA_ID);
+        mSeletedDataId = mDataId;
+        mData = getArguments().getString(ARG_TAG_DATA);
+        mSex = getArguments().getInt(ARG_TAG_SEX);
+        mProfileType = getArguments().getInt(ARG_TAG_PROFILE_TYPE);
+        mFormInfo = new FormInfo(getActivity().getApplicationContext(), mSex, mProfileType);
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.edit_title);
+    }
+
+    @Override
+    protected String getSubtitle() {
+        return mFormInfo.getFormTitle(mTitleId);
     }
 
     private class FormCheckingDataAdapter extends BaseAdapter {
@@ -161,71 +227,5 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
             ImageView mBackground;
             ImageView mCheck;
         }
-    }
-
-    @Override
-    protected boolean hasChanges() {
-        return mDataId != mSeletedDataId;
-    }
-
-    @Override
-    protected void saveChanges(Handler handler) {
-        handler.sendEmptyMessage(0);
-        mDataId = mSeletedDataId;
-        Intent intent = getActivity().getIntent();
-        intent.putExtra(INTENT_TITLE_ID, mTitleId);
-        intent.putExtra(INTENT_SELECTED_ID, mSeletedDataId);
-        getActivity().setResult(Activity.RESULT_OK, intent);
-
-    }
-
-    @Override
-    protected void lockUi() {
-        mListView.setEnabled(false);
-    }
-
-    @Override
-    protected void unlockUi() {
-        mListView.setEnabled(true);
-    }
-
-    @Override
-    public boolean isTrackable() {
-        return false;
-    }
-
-    public static FilterChooseFormItemFragment newInstance(int titleId, int dataId, String data, int sex, int profileType) {
-        FilterChooseFormItemFragment fragment = new FilterChooseFormItemFragment();
-
-        Bundle args = new Bundle();
-        args.putInt(ARG_TAG_TITLE_ID, titleId);
-        args.putInt(ARG_TAG_DATA_ID, dataId);
-        args.putString(ARG_TAG_DATA, data);
-        args.putInt(ARG_TAG_SEX, sex);
-        args.putInt(ARG_TAG_PROFILE_TYPE, profileType);
-        fragment.setArguments(args);
-
-        return fragment;
-    }
-
-    @Override
-    protected void restoreState() {
-        mTitleId = getArguments().getInt(ARG_TAG_TITLE_ID);
-        mDataId = getArguments().getInt(ARG_TAG_DATA_ID);
-        mSeletedDataId = mDataId;
-        mData = getArguments().getString(ARG_TAG_DATA);
-        mSex = getArguments().getInt(ARG_TAG_SEX);
-        mProfileType = getArguments().getInt(ARG_TAG_PROFILE_TYPE);
-        mFormInfo = new FormInfo(getActivity().getApplicationContext(), mSex, mProfileType);
-    }
-
-    @Override
-    protected String getTitle() {
-        return getString(R.string.edit_title);
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return mFormInfo.getFormTitle(mTitleId);
     }
 }

@@ -37,6 +37,30 @@ public class OwnProfileFragment extends AbstractProfileFragment {
     private AddPhotoHelper mAddPhotoHelper;
     private BroadcastReceiver mAddPhotoReceiver;
     private BroadcastReceiver mUpdateProfileReceiver;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
+                Photo photo = (Photo) msg.obj;
+                // ставим фото на аватарку только если она едиснтвенная
+                if (CacheProfile.photos.size() == 0) {
+                    CacheProfile.photo = photo;
+                }
+                // добавляется фото в начало списка
+                CacheProfile.photos.addFirst(photo);
+                ArrayList<Photo> photosForAdd = new ArrayList<>();
+                photosForAdd.add(photo);
+                Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photosForAdd);
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+                // оповещаем всех об изменениях
+                CacheProfile.sendUpdateProfileBroadcast();
+                Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+                Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
     public static OwnProfileFragment newInstance() {
         OwnProfileFragment fragment = new OwnProfileFragment();
@@ -168,29 +192,4 @@ public class OwnProfileFragment extends AbstractProfileFragment {
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mAddPhotoReceiver, new IntentFilter(ADD_PHOTO_INTENT));
     }
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-                Photo photo = (Photo) msg.obj;
-                // ставим фото на аватарку только если она едиснтвенная
-                if (CacheProfile.photos.size() == 0) {
-                    CacheProfile.photo = photo;
-                }
-                // добавляется фото в начало списка
-                CacheProfile.photos.addFirst(photo);
-                ArrayList<Photo> photosForAdd = new ArrayList<>();
-                photosForAdd.add(photo);
-                Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-                intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photosForAdd);
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-                // оповещаем всех об изменениях
-                CacheProfile.sendUpdateProfileBroadcast();
-                Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
-            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
-                Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
 }

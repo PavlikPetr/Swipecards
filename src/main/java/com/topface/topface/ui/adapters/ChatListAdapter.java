@@ -41,20 +41,6 @@ import java.util.HashMap;
 
 public class ChatListAdapter extends LoadingListAdapter<History> implements AbsListView.OnScrollListener {
 
-    static class ViewHolder {
-        View dateDivider;
-        TextView dateDividerText;
-        TextView message;
-        TextView date;
-        ImageViewRemote gift;
-        ImageViewRemote mapBackground;
-        ProgressBar prgsLoader;
-        Button likeRequest;
-        View userInfo;
-        View loader;
-        View retrier;
-    }
-
     private static final int T_WAIT_OR_RETRY = 3;
     private static final int T_USER = 5;
     private static final int T_FRIEND = 6;
@@ -64,17 +50,86 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private static final int T_FRIEND_MAP = 10;
     private static final int T_USER_REQUEST = 11;
     private static final int T_FRIEND_REQUEST = 12;
-
     private static final int T_COUNT = 13;
-
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
     private AddressesCache mAddressesCache = new AddressesCache();
     private View.OnClickListener mOnClickListener;
     private ChatFragment.OnListViewItemLongClickListener mLongClickListener;
-
     private View mHeaderView;
+    private View.OnClickListener mLikeRequestListener = new View.OnClickListener() {
+        @Override
+        public void onClick(final View v) {
+            final int position = (Integer) v.getTag();
+            final ProgressBar prsLoader = (ProgressBar) v.getTag(R.id.prsLoader);
+            final History item = getItem(position);
+            if (item != null) {
+                EasyTracker.getTracker().sendEvent("VirusLike", "Click", "Chat", 0L);
+
+                prsLoader.setVisibility(View.VISIBLE);
+                v.setVisibility(View.INVISIBLE);
+                new VirusLikesRequest(item.id, mContext).callback(new DataApiHandler<VirusLike>() {
+
+                    @Override
+                    protected void success(VirusLike data, IApiResponse response) {
+                        EasyTracker.getTracker().sendEvent("VirusLike", "Success", "Chat", 0L);
+                        //После заврешения запроса удаляем элемент
+                        removeItem(getPosition(position));
+                        //И предлагаем отправить пользователю запрос своим друзьям не из приложения
+                        data.sendFacebookRequest(
+                                "Chat",
+                                mContext,
+                                new VirusLike.VirusLikeDialogListener(mContext) {
+
+                                    private void showCompleteMessage() {
+                                        Toast.makeText(
+                                                mContext,
+                                                Utils.getQuantityString(
+                                                        R.plurals.virus_request_likes_cnt,
+                                                        CacheProfile.likes,
+                                                        CacheProfile.likes
+                                                ),
+                                                Toast.LENGTH_SHORT
+                                        ).show();
+                                    }
+
+                                    @Override
+                                    public void onComplete(Bundle values) {
+                                        super.onComplete(values);
+                                        showCompleteMessage();
+                                    }
+
+                                    @Override
+                                    public void onCancel() {
+                                        super.onCancel();
+                                        showCompleteMessage();
+                                    }
+                                }
+                        );
+                    }
+
+                    @Override
+                    protected VirusLike parseResponse(ApiResponse response) {
+                        return new VirusLike(response);
+                    }
+
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                        EasyTracker.getTracker().sendEvent("VirusLike", "Fail", "Chat", 0L);
+                        Utils.showErrorMessage();
+                    }
+
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        prsLoader.setVisibility(View.GONE);
+                        v.setVisibility(View.VISIBLE);
+                    }
+                }).exec();
+            }
+        }
+    };
 
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
         super(context, data, updateCallback);
@@ -88,6 +143,22 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             if (item.isWaitingItem() || item.isRepeatItem() || item.isFake()) {
                 mUnrealItems.add(item);
             }
+        }
+    }
+
+    public static int getItemType(History item) {
+        boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
+        switch (item.type) {
+            case FeedDialog.GIFT:
+                return output ? T_USER_GIFT : T_FRIEND_GIFT;
+            case FeedDialog.MAP:
+                return output ? T_USER_MAP : T_FRIEND_MAP;
+            case FeedDialog.ADDRESS:
+                return output ? T_USER_MAP : T_FRIEND_MAP;
+            case FeedDialog.LIKE_REQUEST:
+                return output ? T_USER_REQUEST : T_FRIEND_REQUEST;
+            default:
+                return output ? T_USER : T_FRIEND;
         }
     }
 
@@ -109,22 +180,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             return ChatListAdapter.getItemType(item);
         } else {
             return superType;
-        }
-    }
-
-    public static int getItemType(History item) {
-        boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
-        switch (item.type) {
-            case FeedDialog.GIFT:
-                return output ? T_USER_GIFT : T_FRIEND_GIFT;
-            case FeedDialog.MAP:
-                return output ? T_USER_MAP : T_FRIEND_MAP;
-            case FeedDialog.ADDRESS:
-                return output ? T_USER_MAP : T_FRIEND_MAP;
-            case FeedDialog.LIKE_REQUEST:
-                return output ? T_USER_REQUEST : T_FRIEND_REQUEST;
-            default:
-                return output ? T_USER : T_FRIEND;
         }
     }
 
@@ -623,82 +678,23 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         }
     }
 
-    private View.OnClickListener mLikeRequestListener = new View.OnClickListener() {
-        @Override
-        public void onClick(final View v) {
-            final int position = (Integer) v.getTag();
-            final ProgressBar prsLoader = (ProgressBar) v.getTag(R.id.prsLoader);
-            final History item = getItem(position);
-            if (item != null) {
-                EasyTracker.getTracker().sendEvent("VirusLike", "Click", "Chat", 0L);
-
-                prsLoader.setVisibility(View.VISIBLE);
-                v.setVisibility(View.INVISIBLE);
-                new VirusLikesRequest(item.id, mContext).callback(new DataApiHandler<VirusLike>() {
-
-                    @Override
-                    protected void success(VirusLike data, IApiResponse response) {
-                        EasyTracker.getTracker().sendEvent("VirusLike", "Success", "Chat", 0L);
-                        //После заврешения запроса удаляем элемент
-                        removeItem(getPosition(position));
-                        //И предлагаем отправить пользователю запрос своим друзьям не из приложения
-                        data.sendFacebookRequest(
-                                "Chat",
-                                mContext,
-                                new VirusLike.VirusLikeDialogListener(mContext) {
-
-                                    private void showCompleteMessage() {
-                                        Toast.makeText(
-                                                mContext,
-                                                Utils.getQuantityString(
-                                                        R.plurals.virus_request_likes_cnt,
-                                                        CacheProfile.likes,
-                                                        CacheProfile.likes
-                                                ),
-                                                Toast.LENGTH_SHORT
-                                        ).show();
-                                    }
-
-                                    @Override
-                                    public void onComplete(Bundle values) {
-                                        super.onComplete(values);
-                                        showCompleteMessage();
-                                    }
-
-                                    @Override
-                                    public void onCancel() {
-                                        super.onCancel();
-                                        showCompleteMessage();
-                                    }
-                                }
-                        );
-                    }
-
-                    @Override
-                    protected VirusLike parseResponse(ApiResponse response) {
-                        return new VirusLike(response);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-                        EasyTracker.getTracker().sendEvent("VirusLike", "Fail", "Chat", 0L);
-                        Utils.showErrorMessage();
-                    }
-
-                    @Override
-                    public void always(IApiResponse response) {
-                        super.always(response);
-                        prsLoader.setVisibility(View.GONE);
-                        v.setVisibility(View.VISIBLE);
-                    }
-                }).exec();
-            }
-        }
-    };
-
     @Override
     public void notifyDataSetChanged() {
         updateHeaderState(null);
         super.notifyDataSetChanged();
+    }
+
+    static class ViewHolder {
+        View dateDivider;
+        TextView dateDividerText;
+        TextView message;
+        TextView date;
+        ImageViewRemote gift;
+        ImageViewRemote mapBackground;
+        ProgressBar prgsLoader;
+        Button likeRequest;
+        View userInfo;
+        View loader;
+        View retrier;
     }
 }

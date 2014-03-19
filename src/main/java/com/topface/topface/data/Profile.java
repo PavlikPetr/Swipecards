@@ -44,18 +44,13 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean premium;
     public boolean invisible;
     public boolean inBlackList;
-
-    protected String status; // статус пользователя
-
     public LinkedList<FormItem> forms = new LinkedList<>();
-
     public ArrayList<Gift> gifts = new ArrayList<>();
     public SparseArrayCompat<TopfaceNotifications> notifications = new SparseArrayCompat<>();
     public boolean email;
     public boolean emailGrabbed;
     public boolean emailConfirmed;
     public int xstatus;
-
     public int photosCount;
     // Идентификатор заднего фона в профиле
     public int background;
@@ -63,9 +58,10 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean paid;
     // Показывать рекламу или нет
     public boolean showAd;
+    public boolean canInvite;
+    protected String status; // статус пользователя
     // Флаг того, является ли пользоветль редактором
     private boolean mEditor;
-    public boolean canInvite;
 
     public static Profile parse(ApiResponse response) {
         return parse(new Profile(), response.jsonResult);
@@ -445,47 +441,6 @@ public class Profile extends AbstractDataWithPhotos {
         }
     }
 
-    public String getNameAndAge() {
-        String result;
-        if (firstName != null && firstName.length() > 0 && age > 0) {
-            result = firstName + ", " + age;
-        } else {
-            result = firstName;
-        }
-        return result;
-    }
-
-    public void setEditor(boolean editor) {
-        mEditor = editor;
-    }
-
-    public int getType() {
-        return (this instanceof User) ? TYPE_USER_PROFILE : TYPE_OWN_PROFILE;
-    }
-
-    /**
-     *
-     */
-    public static class TopfaceNotifications {
-        public boolean apns;
-        public boolean mail;
-        public int type;
-
-        public TopfaceNotifications(boolean apns, boolean mail, int type) {
-            this.apns = apns;
-            this.mail = mail;
-            this.type = type;
-        }
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = normilizeStatus(status);
-    }
-
     public static String normilizeStatus(String status) {
         if (status == null) {
             return Static.EMPTY;
@@ -506,12 +461,53 @@ public class Profile extends AbstractDataWithPhotos {
         return name.replaceAll("\n", " ").trim();
     }
 
+    public String getNameAndAge() {
+        String result;
+        if (firstName != null && firstName.length() > 0 && age > 0) {
+            result = firstName + ", " + age;
+        } else {
+            result = firstName;
+        }
+        return result;
+    }
+
+    public int getType() {
+        return (this instanceof User) ? TYPE_USER_PROFILE : TYPE_OWN_PROFILE;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = normilizeStatus(status);
+    }
+
     public boolean isEmpty() {
         return uid <= 0;
     }
 
     public boolean isEditor() {
         return mEditor;
+    }
+
+    public void setEditor(boolean editor) {
+        mEditor = editor;
+    }
+
+    /**
+     *
+     */
+    public static class TopfaceNotifications {
+        public boolean apns;
+        public boolean mail;
+        public int type;
+
+        public TopfaceNotifications(boolean apns, boolean mail, int type) {
+            this.apns = apns;
+            this.mail = mail;
+            this.type = type;
+        }
     }
 
 }

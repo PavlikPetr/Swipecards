@@ -675,6 +675,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void prevUser() {
         fillUserInfo(mUserSearchList.prevUser());
+        unlockControls();
     }
 
     private void fillUserInfo(SearchUser currUser) {

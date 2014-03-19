@@ -14,11 +14,6 @@ public class UserPhotoGridAdapter extends ProfileGridAdapter {
     // Data
     private LayoutInflater mInflater;
 
-    // class ViewHolder
-    static class ViewHolder {
-        ImageViewRemote photo;
-    }
-
     public UserPhotoGridAdapter(Context context, Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
         super(photoLinks, totalPhotos, callback);
         mInflater = LayoutInflater.from(context);
@@ -45,5 +40,10 @@ public class UserPhotoGridAdapter extends ProfileGridAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    // class ViewHolder
+    static class ViewHolder {
+        ImageViewRemote photo;
     }
 }

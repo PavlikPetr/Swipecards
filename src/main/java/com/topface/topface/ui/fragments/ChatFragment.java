@@ -117,7 +117,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     // Data
     private int mUserId;
-
+    private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String id = intent.getStringExtra("id");
+            if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
+                update(true, "update counters");
+                startTimer();
+                GCMUtils.cancelNotification(getActivity(), GCMUtils.GCM_TYPE_MESSAGE);
+            }
+        }
+    };
     private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mIsAddPanelOpened;
@@ -130,12 +140,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private SwapControl mSwapControl;
     private Button mAddToBlackList;
     private ImageButton mBtnChatAdd;
-
     private String[] editButtonsNames;
     private String mItemId;
     private boolean wasFailed = false;
+    TimerTask mUpdaterTask = new TimerTask() {
+        @Override
+        public void run() {
+            updateUI(new Runnable() {
+                @Override
+                public void run() {
+                    if (mUpdater != null && !wasFailed) {
+                        update(true, "timer");
+                        mUpdater.postDelayed(this, DEFAULT_CHAT_UPDATE_PERIOD);
+                    }
+                }
+            });
+        }
+    };
     private boolean isInBlackList = false;
-
     // Managers
     private RelativeLayout mLockScreen;
     private String[] editButtonsSelfNames;
@@ -145,6 +167,29 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private String mUserCity;
     private int mUserSex;
     private MenuItem mBarAvatar;
+    private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            return actionId == EditorInfo.IME_ACTION_SEND && sendMessage();
+        }
+    };
+
+    public static ChatFragment newInstance(String itemId, int userId, boolean profileInvoke,
+                                           int userSex, String userName, int userAge,
+                                           String userCity, String prevEntity) {
+        ChatFragment fragment = new ChatFragment();
+        Bundle args = new Bundle();
+        args.putString(INTENT_ITEM_ID, itemId);
+        args.putInt(INTENT_USER_ID, userId);
+        args.putBoolean(INTENT_PROFILE_INVOKE, profileInvoke);
+        args.putInt(INTENT_USER_SEX, userSex);
+        args.putString(INTENT_USER_NAME, userName);
+        args.putInt(INTENT_USER_AGE, userAge);
+        args.putString(INTENT_USER_CITY, userCity);
+        args.putString(BaseFragmentActivity.INTENT_PREV_ENTITY, prevEntity);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -876,13 +921,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
-    private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
-        @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            return actionId == EditorInfo.IME_ACTION_SEND && sendMessage();
-        }
-    };
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1002,22 +1040,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         return true;
     }
 
-    private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String id = intent.getStringExtra("id");
-            if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
-                update(true, "update counters");
-                startTimer();
-                GCMUtils.cancelNotification(getActivity(), GCMUtils.GCM_TYPE_MESSAGE);
-            }
-        }
-    };
-
-    public interface OnListViewItemLongClickListener {
-        public void onLongClick(int position, View v);
-    }
-
     private void startTimer() {
         if (mUpdater != null) {
             mUpdater.removeCallbacks(mUpdaterTask);
@@ -1030,38 +1052,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             mUpdater.removeCallbacks(mUpdaterTask);
             mUpdater = null;
         }
-    }
-
-    TimerTask mUpdaterTask = new TimerTask() {
-        @Override
-        public void run() {
-            updateUI(new Runnable() {
-                @Override
-                public void run() {
-                    if (mUpdater != null && !wasFailed) {
-                        update(true, "timer");
-                        mUpdater.postDelayed(this, DEFAULT_CHAT_UPDATE_PERIOD);
-                    }
-                }
-            });
-        }
-    };
-
-    public static ChatFragment newInstance(String itemId, int userId, boolean profileInvoke,
-                                           int userSex, String userName, int userAge,
-                                           String userCity, String prevEntity) {
-        ChatFragment fragment = new ChatFragment();
-        Bundle args = new Bundle();
-        args.putString(INTENT_ITEM_ID, itemId);
-        args.putInt(INTENT_USER_ID, userId);
-        args.putBoolean(INTENT_PROFILE_INVOKE, profileInvoke);
-        args.putInt(INTENT_USER_SEX, userSex);
-        args.putString(INTENT_USER_NAME, userName);
-        args.putInt(INTENT_USER_AGE, userAge);
-        args.putString(INTENT_USER_CITY, userCity);
-        args.putString(BaseFragmentActivity.INTENT_PREV_ENTITY, prevEntity);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     protected FeedAdapter.Updater getUpdaterCallback() {
@@ -1127,5 +1117,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public interface OnListViewItemLongClickListener {
+        public void onLongClick(int position, View v);
     }
 }

@@ -21,26 +21,56 @@ import com.viewpagerindicator.TabPageIndicator;
 import java.util.ArrayList;
 
 public abstract class AbstractProfileFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
-    protected static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
-    protected static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
-    protected static final String ARG_TAG_CALLING_CLASS = "intent_profile_calling_fragment";
-    protected static final String ARG_FEED_ITEM_ID = "item_id";
     public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
     public static final String DEFAULT_NON_ACTIVATED = "#FFFFFF";
     public static final String INTENT_UID = "intent_profile_uid";
     public static final String INTENT_ITEM_ID = "intent_profile_item_id";
     public static final String INTENT_CALLING_FRAGMENT = "intent_profile_calling_fragment";
     public static final String ADD_PHOTO_INTENT = "com.topface.topface.ADD_PHOTO_INTENT";
-
+    protected static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
+    protected static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
+    protected static final String ARG_TAG_CALLING_CLASS = "intent_profile_calling_fragment";
+    protected static final String ARG_FEED_ITEM_ID = "item_id";
+    // state
+    protected HeaderMainFragment mHeaderMainFragment;
+    protected ProfilePageAdapter mHeaderPagerAdapter;
+    protected GiftsFragment mGiftFragment;
     private ArrayList<String> BODY_PAGES_TITLES = new ArrayList<>();
     private ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<>();
     private ArrayList<String> HEADER_PAGES_CLASS_NAMES = new ArrayList<>();
-    // state
-    protected HeaderMainFragment mHeaderMainFragment;
     private HeaderStatusFragment mHeaderStatusFragment;
     private UserPhotoFragment mUserPhotoFragment;
     private UserFormFragment mUserFormFragment;
     private Profile mProfile = null;
+    ProfileInnerUpdater mProfileUpdater = new ProfileInnerUpdater() {
+        @Override
+        public void update() {
+            setProfile(getProfile());
+        }
+
+        public void bindFragment(Fragment fragment) {
+            if (fragment instanceof HeaderMainFragment) {
+                mHeaderMainFragment = (HeaderMainFragment) fragment;
+            } else if (fragment instanceof HeaderStatusFragment) {
+                mHeaderStatusFragment = (HeaderStatusFragment) fragment;
+            } else if (fragment instanceof UserPhotoFragment) {
+                mUserPhotoFragment = (UserPhotoFragment) fragment;
+            } else if (fragment instanceof UserFormFragment) {
+                mUserFormFragment = (UserFormFragment) fragment;
+            } else if (fragment instanceof GiftsFragment) {
+                mGiftFragment = (GiftsFragment) fragment;
+            }
+        }
+
+        public Profile getProfile() {
+            return mProfile;
+        }
+
+        @Override
+        public int getProfileType() {
+            return AbstractProfileFragment.this.getProfileType();
+        }
+    };
     private String mBodyStartPageClassName;
     private String mHeaderStartPageClassName;
     private int mStartBodyPage = 0;
@@ -50,8 +80,6 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     private ViewPager mBodyPager;
     private ProfilePageAdapter mBodyPagerAdapter;
     private ViewPager mHeaderPager;
-    protected ProfilePageAdapter mHeaderPagerAdapter;
-    protected GiftsFragment mGiftFragment;
     private TabPageIndicator mTabIndicator;
 
     @Override
@@ -126,6 +154,10 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         mHeaderPager = null;
     }
 
+    protected Profile getProfile() {
+        return mProfile;
+    }
+
     protected void setProfile(Profile profile) {
         mProfile = profile;
         if (mHeaderMainFragment != null) mHeaderMainFragment.setProfile(profile);
@@ -135,10 +167,6 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
             mUserPhotoFragment.setUserData((User) profile);
         if (mUserFormFragment != null && profile instanceof User)
             mUserFormFragment.setUserData((User) profile);
-    }
-
-    protected Profile getProfile() {
-        return mProfile;
     }
 
     protected String getCallingClassName() {
@@ -213,48 +241,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         }
     }
 
-
-    ProfileInnerUpdater mProfileUpdater = new ProfileInnerUpdater() {
-        @Override
-        public void update() {
-            setProfile(getProfile());
-        }
-
-        public void bindFragment(Fragment fragment) {
-            if (fragment instanceof HeaderMainFragment) {
-                mHeaderMainFragment = (HeaderMainFragment) fragment;
-            } else if (fragment instanceof HeaderStatusFragment) {
-                mHeaderStatusFragment = (HeaderStatusFragment) fragment;
-            } else if (fragment instanceof UserPhotoFragment) {
-                mUserPhotoFragment = (UserPhotoFragment) fragment;
-            } else if (fragment instanceof UserFormFragment) {
-                mUserFormFragment = (UserFormFragment) fragment;
-            } else if (fragment instanceof GiftsFragment) {
-                mGiftFragment = (GiftsFragment) fragment;
-            }
-        }
-
-        public Profile getProfile() {
-            return mProfile;
-        }
-
-        @Override
-        public int getProfileType() {
-            return AbstractProfileFragment.this.getProfileType();
-        }
-    };
-
     protected abstract int getProfileType();
-
-    public interface ProfileInnerUpdater {
-        void update();
-
-        void bindFragment(Fragment fragment);
-
-        Profile getProfile();
-
-        int getProfileType();
-    }
 
     protected void onStartActivity() {
     }
@@ -281,5 +268,15 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
 
     @Override
     public void onPageScrollStateChanged(int i) {
+    }
+
+    public interface ProfileInnerUpdater {
+        void update();
+
+        void bindFragment(Fragment fragment);
+
+        Profile getProfile();
+
+        int getProfileType();
     }
 }

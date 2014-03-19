@@ -153,18 +153,22 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
     }
 
-    private void initBonus() {
-        if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(F_BONUS)) {
-            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_1));
-            mAdapter.refreshCounterBadges();
-        }
-    }
-
     public static void selectFragment(FragmentId fragmentId) {
         Intent intent = new Intent();
         intent.setAction(SELECT_MENU_ITEM);
         intent.putExtra(SELECTED_FRAGMENT_ID, fragmentId);
         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+    }
+
+    public static void onLogout() {
+        ClosingsController.onLogout();
+    }
+
+    private void initBonus() {
+        if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(F_BONUS)) {
+            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_1));
+            mAdapter.refreshCounterBadges();
+        }
     }
 
     @Override
@@ -400,7 +404,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         notifyDataSetChanged();
     }
 
-
     private void notifyDataSetChanged() {
         notifyDataSetChanged(false);
     }
@@ -586,10 +589,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         return mClosingsController.isLeftMenuLocked();
     }
 
-    public static interface OnFragmentSelectedListener {
-        public void onFragmentSelected(FragmentId fragmentId);
-    }
-
     public void setOnFragmentSelected(OnFragmentSelectedListener listener) {
         mOnFragmentSelected = listener;
     }
@@ -617,7 +616,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
     }
 
-    public static void onLogout() {
-        ClosingsController.onLogout();
+    public static interface OnFragmentSelectedListener {
+        public void onFragmentSelected(FragmentId fragmentId);
     }
 }

@@ -31,6 +31,24 @@ public class HeaderStatusFragment extends ProfileInnerFragment implements View.O
     private String mStatusVal;
     private int mProfileType;
 
+    private static void saveState(Fragment fragment, Profile profile, int profileType) {
+        if (!fragment.isVisible()) {
+            Bundle args = new Bundle();
+            if (fragment.getArguments() == null) {
+                fragment.setArguments(args);
+            }
+            fragment.getArguments().putString(ARG_TAG_STATUS, profile.getStatus());
+            fragment.getArguments().putInt(ARG_TAG_PROFILE_TYPE, profileType);
+        }
+    }
+
+    public static Fragment newInstance(Profile profile, int profileType) {
+        HeaderStatusFragment fragment = new HeaderStatusFragment();
+        if (profile == null) return fragment;
+        saveState(fragment, profile, profileType);
+        return fragment;
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         //init views
@@ -84,17 +102,6 @@ public class HeaderStatusFragment extends ProfileInnerFragment implements View.O
         mStatusVal = profile.getStatus();
     }
 
-    private static void saveState(Fragment fragment, Profile profile, int profileType) {
-        if (!fragment.isVisible()) {
-            Bundle args = new Bundle();
-            if (fragment.getArguments() == null) {
-                fragment.setArguments(args);
-            }
-            fragment.getArguments().putString(ARG_TAG_STATUS, profile.getStatus());
-            fragment.getArguments().putInt(ARG_TAG_PROFILE_TYPE, profileType);
-        }
-    }
-
     private void saveState(HeaderStatusFragment fragment, Profile profile) {
         if (!fragment.isVisible()) {
             Bundle args = new Bundle();
@@ -103,13 +110,6 @@ public class HeaderStatusFragment extends ProfileInnerFragment implements View.O
             }
             fragment.getArguments().putString(ARG_TAG_STATUS, profile.getStatus());
         }
-    }
-
-    public static Fragment newInstance(Profile profile, int profileType) {
-        HeaderStatusFragment fragment = new HeaderStatusFragment();
-        if (profile == null) return fragment;
-        saveState(fragment, profile, profileType);
-        return fragment;
     }
 
     @Override

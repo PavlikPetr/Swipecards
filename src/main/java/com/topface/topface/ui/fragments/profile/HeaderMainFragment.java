@@ -34,6 +34,29 @@ public class HeaderMainFragment extends ProfileInnerFragment {
     private ImageView mBackgroundView;
     private int mBackgroundVal;
 
+    private static void saveState(Fragment fragment, Profile profile) {
+        if (!fragment.isVisible()) {
+            if (fragment.getArguments() == null && !fragment.isAdded()) {
+                Bundle args = new Bundle();
+                fragment.setArguments(args);
+            }
+
+            fragment.getArguments().putParcelable(ARG_TAG_AVATAR, profile.photo);
+            fragment.getArguments().putString(ARG_TAG_NAME, profile.getNameAndAge());
+            if (profile.city != null) {
+                fragment.getArguments().putString(ARG_TAG_CITY, profile.city.name);
+            }
+            fragment.getArguments().putInt(ARG_TAG_BACKGROUND, profile.background);
+        }
+    }
+
+    public static Fragment newInstance(Profile profile) {
+        HeaderMainFragment fragment = new HeaderMainFragment();
+        if (profile == null) return fragment;
+        saveState(fragment, profile);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -109,29 +132,6 @@ public class HeaderMainFragment extends ProfileInnerFragment {
             }
             mBackgroundVal = profile.background;
         }
-    }
-
-    private static void saveState(Fragment fragment, Profile profile) {
-        if (!fragment.isVisible()) {
-            if (fragment.getArguments() == null && !fragment.isAdded()) {
-                Bundle args = new Bundle();
-                fragment.setArguments(args);
-            }
-
-            fragment.getArguments().putParcelable(ARG_TAG_AVATAR, profile.photo);
-            fragment.getArguments().putString(ARG_TAG_NAME, profile.getNameAndAge());
-            if (profile.city != null) {
-                fragment.getArguments().putString(ARG_TAG_CITY, profile.city.name);
-            }
-            fragment.getArguments().putInt(ARG_TAG_BACKGROUND, profile.background);
-        }
-    }
-
-    public static Fragment newInstance(Profile profile) {
-        HeaderMainFragment fragment = new HeaderMainFragment();
-        if (profile == null) return fragment;
-        saveState(fragment, profile);
-        return fragment;
     }
 
     @Override

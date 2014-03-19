@@ -13,12 +13,12 @@
 [submodule "libs/PhotoView"]
 	path = libs/PhotoView
 	url = git@github.com:Topface/PhotoView.git
-[submodule "libs/MoPub"]
-	path = libs/MoPub
-	url = git@github.com:Topface/mopub-client.git
 [submodule "libs/odnoklassniki"]
 	path = libs/odnoklassniki
 	url = git@github.com:Topface/Odnoklassniki-Android-SDK.git
 [submodule "libs/AdLabSDK"]
 	path = libs/AdLabSDK
 	url = git@github.com:Topface/AdLabSDK.git
+[submodule "libs/mopub-android-sdk"]
+	path = libs/mopub-android-sdk
+	url = git@github.com:Topface/mopub-android-sdk.git

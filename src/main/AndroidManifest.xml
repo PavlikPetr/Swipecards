@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<manifest
     package="com.topface.topface"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="auto"
 
     android:versionCode="103"
@@ -45,32 +46,32 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
 
     <supports-screens
-        android:resizeable="true"
-        android:smallScreens="true"
-        android:normalScreens="true"
+        android:anyDensity="true"
         android:largeScreens="true"
-        android:anyDensity="true" />
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
 
     <application
-        android:allowBackup="true"
         android:name=".App"
+        android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
-        android:logo="@drawable/ic_home_topface_white"
         android:label="@string/app_name"
+        android:logo="@drawable/ic_home_topface_white"
         android:theme="@style/Theme.Topface">
 
         <uses-library
-            android:required="false"
-            android:name="com.google.android.maps" />
+            android:name="com.google.android.maps"
+            android:required="false" />
 
         <!-- activity -->
         <activity
             android:name=".ui.NavigationActivity"
             android:theme="@style/Theme.Topface.ActionbarOverlay"
+            android:configChanges="locale|screenSize|orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:configChanges="locale|screenSize|orientation">
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -84,44 +85,44 @@
 
 
                 <data
-                    android:scheme="http"
                     android:host="topface.com"
-                    android:pathPrefix="/profile" />
+                    android:pathPrefix="/profile"
+                    android:scheme="http" />
 
                 <data
-                    android:scheme="http"
                     android:host="topface.ru"
-                    android:pathPattern="/profile" />
+                    android:pathPattern="/profile"
+                    android:scheme="http" />
 
                 <data
-                    android:scheme="http"
                     android:host="topface.com"
-                    android:pathPrefix="/confirm" />
+                    android:pathPrefix="/confirm"
+                    android:scheme="http" />
 
                 <data
-                    android:scheme="http"
                     android:host="topface.ru"
-                    android:pathPrefix="/confirm" />
+                    android:pathPrefix="/confirm"
+                    android:scheme="http" />
 
                 <data
-                    android:scheme="https"
                     android:host="topface.com"
-                    android:pathPattern="/profile" />
+                    android:pathPattern="/profile"
+                    android:scheme="https" />
 
                 <data
-                    android:scheme="https"
                     android:host="topface.ru"
-                    android:pathPattern="/profile" />
+                    android:pathPattern="/profile"
+                    android:scheme="https" />
 
                 <data
-                    android:scheme="https"
                     android:host="topface.com"
-                    android:pathPrefix="/confirm" />
+                    android:pathPrefix="/confirm"
+                    android:scheme="https" />
 
                 <data
-                    android:scheme="https"
                     android:host="topface.ru"
-                    android:pathPrefix="/confirm" />
+                    android:pathPrefix="/confirm"
+                    android:scheme="https" />
 
                 />
             </intent-filter>
@@ -132,8 +133,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="topface"
-                    android:host="offerwall" />
+                    android:host="offerwall"
+                    android:scheme="topface" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -178,8 +179,8 @@
         <activity android:name=".ui.BlackListActivity" />
         <activity
             android:name=".ui.ContainerActivity"
-            android:screenOrientation="portrait"
             android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -190,8 +191,8 @@
 
         <activity
             android:name="ru.ok.android.sdk.OkAuthActivity"
-            android:launchMode="singleTask"
-            android:configChanges="orientation">
+            android:configChanges="orientation"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -268,10 +269,10 @@
 
         <activity
             android:name="org.acra.CrashReportDialog"
-            android:theme="@style/Theme.Topface.NoActionBar"
-            android:launchMode="singleInstance"
             android:excludeFromRecents="true"
-            android:finishOnTaskLaunch="true" />
+            android:finishOnTaskLaunch="true"
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.Topface.NoActionBar" />
 
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
@@ -364,8 +365,8 @@
         </receiver>
 
         <receiver
-            android:exported="true"
             android:name="com.sponsorpay.sdk.android.advertiser.InstallReferrerReceiver"
+            android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />

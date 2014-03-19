@@ -16,21 +16,17 @@ import com.topface.topface.R;
 @SuppressWarnings("UnusedDeclaration")
 public class ServicesTextView extends View {
 
+    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private int mMaxChars;
     private int mCharPadding;
     private String text;
     private int textSize;
     private String textWithoutBackround;
     private int imageId;
-
     private String color = "#B8B8B8"; //TODO: сделать это как параметр view
-
     private Bitmap mBackgroundFree;
     private Bitmap mBackgroundFull;
     private Bitmap mImageBitmap;
-
-    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private OnMeasureListener listener;
 
     public ServicesTextView(Context context) {
         super(context);
@@ -73,9 +69,6 @@ public class ServicesTextView extends View {
             }
         }
         setMeasuredDimension(mBackgroundFree.getWidth() * (mMaxChars + additionalChars) + addWidth + mCharPadding, height);
-        if (listener != null) {
-            listener.onMeasure(mBackgroundFree.getWidth() * (mMaxChars + additionalChars) + addWidth + mCharPadding, height);
-        }
     }
 
     private void initBitmaps() {
@@ -173,10 +166,6 @@ public class ServicesTextView extends View {
     public void setCharPadding(int charPadding) {
         final float scale = getContext().getResources().getDisplayMetrics().density;
         mCharPadding = (int) (charPadding * scale);
-    }
-
-    public interface OnMeasureListener {
-        public void onMeasure(int width, int height);
     }
 
 }

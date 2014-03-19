@@ -40,24 +40,37 @@ public class AddPhotoHelper {
 
     public static final String CANCEL_NOTIFICATION_RECEIVER = "CancelNotificationReceiver";
     public static final String FILENAME_CONST = "filename";
-    public static String PATH_TO_FILE;
-    private String mFileName = "/tmp.jpg";
-
-    private Context mContext;
-    private Activity mActivity;
-    private Fragment mFragment;
-    private Handler mHandler;
-    private View mProgressView;
-
     public static final int ADD_PHOTO_RESULT_OK = 0;
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG = 1703;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 1702;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG = 1701;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 1700;
+    public static String PATH_TO_FILE;
+    private static HashMap<String, File> fileNames = new HashMap<>();
+    private String mFileName = "/tmp.jpg";
+    private Context mContext;
+    private Activity mActivity;
+    private Fragment mFragment;
+    private Handler mHandler;
+    private View mProgressView;
     private UserNotificationManager mNotificationManager;
     private File outputFile;
-    private static HashMap<String, File> fileNames = new HashMap<>();
+    private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.btnAddPhotoAlbum:
+                case R.id.btnTakeFormGallery:
+                    startChooseFromGallery();
+                    break;
+                case R.id.btnAddPhotoCamera:
+                case R.id.btnTakePhoto:
+                    startCamera();
+                    break;
+            }
+        }
+    };
 
     public AddPhotoHelper(Fragment fragment, View progressView) {
         this(fragment.getActivity());
@@ -86,24 +99,6 @@ public class AddPhotoHelper {
     public OnClickListener getAddPhotoClickListener() {
         return mOnAddPhotoClickListener;
     }
-
-
-    private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.btnAddPhotoAlbum:
-                case R.id.btnTakeFormGallery:
-                    startChooseFromGallery();
-                    break;
-                case R.id.btnAddPhotoCamera:
-                case R.id.btnTakePhoto:
-                    startCamera();
-                    break;
-            }
-        }
-    };
-
 
     public void startCamera() {
         startCamera(false);
@@ -340,30 +335,6 @@ public class AddPhotoHelper {
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
-    public static class PhotoNotificationListener implements UserNotificationManager.NotificationImageListener {
-        public boolean needShowNotification = true;
-        private int id = -1;
-
-        @Override
-        public void onSuccess(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        @Override
-        public void onFail() {
-        }
-
-        @Override
-        public boolean needShowNotification() {
-            return needShowNotification;
-        }
-    }
-
-
     private void showErrorMessage(int codeError) {
         switch (codeError) {
             case ErrorCodes.INCORRECT_PHOTO_DATA:
@@ -413,6 +384,29 @@ public class AddPhotoHelper {
             }
         });
         takePhotoDialog.setPhotoTaker(photoTaker);
+    }
+
+    public static class PhotoNotificationListener implements UserNotificationManager.NotificationImageListener {
+        public boolean needShowNotification = true;
+        private int id = -1;
+
+        @Override
+        public void onSuccess(int id) {
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public void onFail() {
+        }
+
+        @Override
+        public boolean needShowNotification() {
+            return needShowNotification;
+        }
     }
 
 }

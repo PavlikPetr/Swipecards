@@ -106,6 +106,11 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
         }
     }
 
+    @Override
+    protected String getTitle() {
+        return getString(R.string.editor_configure_banners);
+    }
+
     private class PageConfigurator extends LinearLayout {
         private Options.Page mPage;
 
@@ -233,10 +238,5 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             }
 
         }
-    }
-
-    @Override
-    protected String getTitle() {
-        return getString(R.string.editor_configure_banners);
     }
 }

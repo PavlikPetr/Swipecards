@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 
@@ -22,7 +23,10 @@ public class AuthRequest extends ApiRequest {
     public static final String SERVICE_NAME = "auth.login";
     public static final String FALLBACK_CLIENT_VERSION = "2.9.0.1";
     public static final String FALLBACK_LOCALE = "en_US";
-
+    /**
+     * Временная зона девайса по умолчанию, отправляем каждый раз на сервер при авторизации
+     */
+    public static final String timezone = TimeZone.getDefault().getID();
     private String sid; // id пользователя в социальной сети
     private String token; // токен авторизации в соц сети
     private String platform; // код социальной сети
@@ -36,10 +40,6 @@ public class AuthRequest extends ApiRequest {
     private String refresh; // еще один токен для одноклассников
     private AppsFlyerData appsflyer; //ID пользователя в appsflyer
     private boolean tablet; // является ли данное устройство планшетом
-    /**
-     * Временная зона девайса по умолчанию, отправляем каждый раз на сервер при авторизации
-     */
-    public static final String timezone = TimeZone.getDefault().getID();
 
     private AuthRequest(Context context) {
         super(context);
@@ -100,6 +100,7 @@ public class AuthRequest extends ApiRequest {
                 .put("password", password)
                 .put("refresh", refresh)
                 .put("timezone", timezone)
+                .put("android_api_level", Build.VERSION.SDK_INT)
                 .put("tablet", tablet);
 
         //Устанавливаем clientDeviceId

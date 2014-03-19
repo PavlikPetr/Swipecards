@@ -14,7 +14,7 @@ public class ParallelRequestTest extends AbstractThreadTest {
         runAsyncTest(new Runnable() {
             @Override
             public void run() {
-                Context context = getInstrumentation().getContext();
+                Context context = getInstrumentation().getTargetContext();
                 ParallelApiRequest request = new ParallelApiRequest(context);
                 request.addRequest(new AppOptionsRequest(context).callback(new DataApiHandler<Options>() {
                     @Override

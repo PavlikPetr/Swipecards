@@ -41,13 +41,11 @@ import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import java.util.ArrayList;
 
 public class GiftsFragment extends ProfileInnerFragment {
-    private static final int GIFTS_LOAD_COUNT = 30;
+    public static final String GIFTS_ALL_TAG = "giftsGridAll";
     // Data
     private String mTag = GIFTS_ALL_TAG;
-
-    public static final String GIFTS_ALL_TAG = "giftsGridAll";
     public static final String GIFTS_USER_PROFILE_TAG = "giftsGridProfile";
-
+    private static final int GIFTS_LOAD_COUNT = 30;
     private TextView mTitle;
     private View mGroupInfo;
     private TextView mTextInfo;

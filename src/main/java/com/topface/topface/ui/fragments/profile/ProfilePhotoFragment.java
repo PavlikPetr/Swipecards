@@ -44,7 +44,37 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private GridView mGridAlbum;
     private View mLoadingLocker;
     private TextView mTitle;
+    private BroadcastReceiver mPhotosReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ArrayList<Photo> arrList = intent.getParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS);
+            boolean clear = intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_CLEAR, false);
+            Photos newPhotos = new Photos();
 
+            newPhotos.addAll(arrList);
+            if (clear) {
+                newPhotos.addFirst(null);
+                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
+            } else {
+                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
+            }
+            initTitleText(mTitle);
+        }
+    };
+    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (position == 0) {
+                mViewFlipper.setDisplayedChild(1);
+                return;
+            }
+            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, CacheProfile.uid);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, --position);
+            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
+            startActivity(intent);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -263,43 +293,10 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         }
     }
 
-    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (position == 0) {
-                mViewFlipper.setDisplayedChild(1);
-                return;
-            }
-            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, CacheProfile.uid);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, --position);
-            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
-            startActivity(intent);
-        }
-    };
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPhotosReceiver);
     }
-
-    private BroadcastReceiver mPhotosReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            ArrayList<Photo> arrList = intent.getParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS);
-            boolean clear = intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_CLEAR, false);
-            Photos newPhotos = new Photos();
-
-            newPhotos.addAll(arrList);
-            if (clear) {
-                newPhotos.addFirst(null);
-                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
-            } else {
-                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
-            }
-            initTitleText(mTitle);
-        }
-    };
 }
  

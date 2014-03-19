@@ -17,26 +17,16 @@ import com.topface.topface.utils.FormItem;
 import java.util.LinkedList;
 
 public class ProfileFormListAdapter extends BaseAdapter {
-    // Data
-    private LayoutInflater mInflater;
-    private LinkedList<FormItem> mProfileForms = new LinkedList<>();
-    private View.OnClickListener mOnFillListener;
-
     // Constants
     private static final int T_HEADER = 0;
     private static final int T_DIVIDER = 1;
     private static final int T_DATA = 2;
     private static final int T_STATUS = 3;
     private static final int T_COUNT = T_STATUS + 1;
-
-    // class ViewHolder
-    private static class ViewHolder {
-        public ImageView state;
-        public TextView title;
-        public TextView header;
-        public TextView value;
-        public Button fill;
-    }
+    // Data
+    private LayoutInflater mInflater;
+    private LinkedList<FormItem> mProfileForms = new LinkedList<>();
+    private View.OnClickListener mOnFillListener;
 
     public ProfileFormListAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -190,6 +180,15 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
     public void setOnFillListener(View.OnClickListener onFillListener) {
         mOnFillListener = onFillListener;
+    }
+
+    // class ViewHolder
+    private static class ViewHolder {
+        public ImageView state;
+        public TextView title;
+        public TextView header;
+        public TextView value;
+        public Button fill;
     }
 }
 

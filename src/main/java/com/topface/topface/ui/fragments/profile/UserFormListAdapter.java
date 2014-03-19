@@ -16,25 +16,15 @@ import java.util.LinkedList;
 
 public class UserFormListAdapter extends BaseAdapter {
 
-    private LayoutInflater mInflater;
-    private LinkedList<FormItem> mUserForms;
-    private LinkedList<FormItem> mInitialUserForms;
-    private LinkedList<FormItem> mMatchedUserForms;
-
-    private boolean isMatchedDataOnly = false;
-
     private static final int T_HEADER = 0;
     private static final int T_DIVIDER = 1;
     private static final int T_DATA = 2;
     private static final int T_COUNT = T_DATA + 1;
-
-    // class ViewHolder
-    private static class ViewHolder {
-        public ImageView mState;
-        public TextView mTitle;
-        public TextView mHeader;
-        public TextView mValue;
-    }
+    private LayoutInflater mInflater;
+    private LinkedList<FormItem> mUserForms;
+    private LinkedList<FormItem> mInitialUserForms;
+    private LinkedList<FormItem> mMatchedUserForms;
+    private boolean isMatchedDataOnly = false;
 
     public UserFormListAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -214,6 +204,14 @@ public class UserFormListAdapter extends BaseAdapter {
                 return R.drawable.user_details;
         }
         return 0;
+    }
+
+    // class ViewHolder
+    private static class ViewHolder {
+        public ImageView mState;
+        public TextView mTitle;
+        public TextView mHeader;
+        public TextView mValue;
     }
 
 }

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 abstract public class AbstractThreadTest extends InstrumentationTestCase {
-    private HashMap<String, CountDownLatch> mSignal = new HashMap<String, CountDownLatch>();
+    private HashMap<String, CountDownLatch> mSignal = new HashMap<>();
 
     protected void runAsyncTest(Runnable test, String testName) throws Throwable {
         mSignal.put(testName, new CountDownLatch(1));

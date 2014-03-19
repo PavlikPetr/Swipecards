@@ -1,6 +1,5 @@
 package com.topface.topface.requests;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import com.topface.topface.data.FeedItem;
@@ -12,7 +11,7 @@ public abstract class FeedTest<T extends FeedItem> extends AbstractThreadTest {
 
 
     private void sendFeedRequest(final String testName) {
-        FeedRequest request = new FeedRequest(getFeedType(), getInstrumentation().getContext());
+        FeedRequest request = new FeedRequest(getFeedType(), getInstrumentation().getTargetContext());
         request.limit = LIMIT;
         request.unread = false;
         request.callback(new ApiHandler() {
@@ -59,9 +58,5 @@ public abstract class FeedTest<T extends FeedItem> extends AbstractThreadTest {
         } catch (Throwable throwable) {
             assertTrue("FeedTest fail", false);
         }
-    }
-
-    protected Context getContext() {
-        return getInstrumentation().getContext();
     }
 }

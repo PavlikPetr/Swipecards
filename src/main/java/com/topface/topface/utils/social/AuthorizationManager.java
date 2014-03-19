@@ -144,7 +144,7 @@ public class AuthorizationManager {
         mParentActivity.startActivityForResult(intent, VkAuthActivity.INTENT_WEB_AUTH);
     }
 
-    // mFacebook methods
+    // Facebook methods
     public void facebookAuth() {
         mAsyncFacebookRunner = new AsyncFacebookRunner(mFacebook);
         mFacebook.authorize(mParentActivity, FB_PERMISSIONS, mDialogListener);
@@ -247,36 +247,25 @@ public class AuthorizationManager {
             Debug.log("FB", "mDialogListener::onComplete");
             mAsyncFacebookRunner.request("/me", mRequestListener);
             LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, DIALOG_COMPLETED));
-//            if (mHandler != null) {
-//                mHandler.sendEmptyMessage(DIALOG_COMPLETED);
-//            }
         }
 
         @Override
         public void onFacebookError(FacebookError e) {
             Debug.log("FB", "mDialogListener::onFacebookError:" + e.getMessage());
             LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
-//            if (mHandler != null) {
-//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-//            }
         }
 
         @Override
         public void onError(DialogError e) {
             Debug.log("FB", "mDialogListener::onError");
             LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
-//            if (mHandler != null) {
-//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-//            }
         }
 
         @Override
         public void onCancel() {
             Debug.log("FB", "mDialogListener::onCancel");
             LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_CANCELLED));
-//            if (mHandler != null) {
-//                mHandler.sendEmptyMessage(AUTHORIZATION_CANCELLED);
-//            }
+
         }
     };
 

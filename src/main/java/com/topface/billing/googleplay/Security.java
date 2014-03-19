@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.topface.billing.googleplay.Consts.PurchaseState;
-import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.utils.Base64;
 
 import org.json.JSONArray;
@@ -51,29 +51,7 @@ public class Security {
      * This has to be "static" so that the {@link BillingReceiver} can
      * check if a nonce exists.
      */
-    private static HashSet<Long> sKnownNonces = new HashSet<Long>();
-
-    /**
-     * A class to hold the verified purchase information.
-     */
-    public static class VerifiedPurchase {
-        public PurchaseState purchaseState;
-        public String notificationId;
-        public String productId;
-        public String orderId;
-        public long purchaseTime;
-        public String developerPayload;
-
-        public VerifiedPurchase(PurchaseState purchaseState, String notificationId,
-                                String productId, String orderId, long purchaseTime, String developerPayload) {
-            this.purchaseState = purchaseState;
-            this.notificationId = notificationId;
-            this.productId = productId;
-            this.orderId = orderId;
-            this.purchaseTime = purchaseTime;
-            this.developerPayload = developerPayload;
-        }
-    }
+    private static HashSet<Long> sKnownNonces = new HashSet<>();
 
     /**
      * Generates a nonce (a random number used once).
@@ -135,7 +113,7 @@ public class Security {
                 Log.w(TAG, "signature does not match data.");
                 return null;
             }
-        } else if (App.DEBUG) {
+        } else if (BuildConfig.DEBUG) {
             //Если подпись пустая и включен режим дебага, то считаем что подпись верная
             //Так мы можем проводить тестовые покупки
             verified = true;
@@ -163,7 +141,7 @@ public class Security {
             return null;
         }
 
-        ArrayList<VerifiedPurchase> purchases = new ArrayList<VerifiedPurchase>();
+        ArrayList<VerifiedPurchase> purchases = new ArrayList<>();
         try {
             for (int i = 0; i < numTransactions; i++) {
                 JSONObject jElement = jTransactionsArray.getJSONObject(i);
@@ -250,5 +228,27 @@ public class Security {
             Log.e(TAG, "Base64 decoding failed.");
         }
         return false;
+    }
+
+    /**
+     * A class to hold the verified purchase information.
+     */
+    public static class VerifiedPurchase {
+        public PurchaseState purchaseState;
+        public String notificationId;
+        public String productId;
+        public String orderId;
+        public long purchaseTime;
+        public String developerPayload;
+
+        public VerifiedPurchase(PurchaseState purchaseState, String notificationId,
+                                String productId, String orderId, long purchaseTime, String developerPayload) {
+            this.purchaseState = purchaseState;
+            this.notificationId = notificationId;
+            this.productId = productId;
+            this.orderId = orderId;
+            this.purchaseTime = purchaseTime;
+            this.developerPayload = developerPayload;
+        }
     }
 }

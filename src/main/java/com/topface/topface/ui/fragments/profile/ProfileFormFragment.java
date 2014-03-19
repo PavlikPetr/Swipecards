@@ -18,52 +18,6 @@ import com.topface.topface.utils.FormItem;
 
 public class ProfileFormFragment extends ProfileInnerFragment {
 
-    private ProfileFormListAdapter mProfileFormListAdapter;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mProfileFormListAdapter = new ProfileFormListAdapter(getActivity().getApplicationContext());
-        mProfileFormListAdapter.setOnFillListener(mOnFillClickListener);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_form, container, false);
-        ListView formListView = (ListView) root.findViewById(R.id.fragmentFormList);
-        formListView.setAdapter(mProfileFormListAdapter);
-
-        View titleLayout = root.findViewById(R.id.loUserTitle);
-        titleLayout.setVisibility(View.GONE);
-        (root.findViewById(R.id.ivDivider)).setVisibility(View.GONE);
-
-        return root;
-    }
-
-    private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mProfileFormListAdapter != null) {
-                mProfileFormListAdapter.refillData();
-                mProfileFormListAdapter.notifyDataSetChanged();
-            }
-        }
-    };
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mProfileFormListAdapter.refillData();
-        mProfileFormListAdapter.notifyDataSetChanged();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
-    }
-
     View.OnClickListener mOnFillClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -93,4 +47,48 @@ public class ProfileFormFragment extends ProfileInnerFragment {
             }
         }
     };
+    private ProfileFormListAdapter mProfileFormListAdapter;
+    private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mProfileFormListAdapter != null) {
+                mProfileFormListAdapter.refillData();
+                mProfileFormListAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mProfileFormListAdapter = new ProfileFormListAdapter(getActivity().getApplicationContext());
+        mProfileFormListAdapter.setOnFillListener(mOnFillClickListener);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_form, container, false);
+        ListView formListView = (ListView) root.findViewById(R.id.fragmentFormList);
+        formListView.setAdapter(mProfileFormListAdapter);
+
+        View titleLayout = root.findViewById(R.id.loUserTitle);
+        titleLayout.setVisibility(View.GONE);
+        (root.findViewById(R.id.ivDivider)).setVisibility(View.GONE);
+
+        return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mProfileFormListAdapter.refillData();
+        mProfileFormListAdapter.notifyDataSetChanged();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
+    }
 }

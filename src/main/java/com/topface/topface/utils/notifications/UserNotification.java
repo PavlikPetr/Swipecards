@@ -36,18 +36,18 @@ public class UserNotification {
 
 
     private MessageStack messages;
-
-    public enum Type {PROGRESS, STANDARD, FAIL, ACTIONS}
-
     private Type mType;
     private boolean mIsTextNotification;
-
     private int unread = 0;
     private Context mContext;
     private NotificationCompat.Builder notificationBuilder;
 
     public UserNotification(Context context) {
         this.mContext = context;
+    }
+
+    public static int getIconSize(Context context) {
+        return (int) (context.getResources().getDisplayMetrics().density * ICON_SIZE);
     }
 
     public void setType(Type mType) {
@@ -80,10 +80,6 @@ public class UserNotification {
 
     public void setOngoing(boolean mOngoing) {
         this.mOngoing = mOngoing;
-    }
-
-    public static int getIconSize(Context context) {
-        return (int) (context.getResources().getDisplayMetrics().density * ICON_SIZE);
     }
 
     public void setMessages(MessageStack messages) {
@@ -241,6 +237,8 @@ public class UserNotification {
                     R.drawable.ic_notification));
         }
     }
+
+    public enum Type {PROGRESS, STANDARD, FAIL, ACTIONS}
 
     public static class NotificationAction {
         int iconResId;

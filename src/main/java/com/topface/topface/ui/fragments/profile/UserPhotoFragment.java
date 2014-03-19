@@ -28,6 +28,22 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     private Photos mPhotoLinks;
     private LoadingListAdapter.Updater mUpdater;
     private GridView mGridAlbum;
+    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS_COUNT, mUser.photosCount);
+            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
+            Fragment parentFrag = getParentFragment();
+            if (parentFrag != null) {
+                parentFrag.startActivity(intent);
+            } else {
+                startActivity(intent);
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,23 +96,6 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         initTitle(mPhotoLinks);
         return root;
     }
-
-    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS_COUNT, mUser.photosCount);
-            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
-            Fragment parentFrag = getParentFragment();
-            if (parentFrag != null) {
-                parentFrag.startActivity(intent);
-            } else {
-                startActivity(intent);
-            }
-        }
-    };
 
     public void setUserData(User user) {
         mUser = user;

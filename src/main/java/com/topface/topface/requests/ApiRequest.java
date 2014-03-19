@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.WindowManager;
 
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.RetryDialog;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -44,10 +45,10 @@ public abstract class ApiRequest implements IApiRequest {
     public Context context;
     public boolean canceled = false;
     protected HttpURLConnection mURLConnection;
+    protected String mApiUrl;
     private boolean doNeedAlert;
     private int mResendCnt = 0;
     private String mPostData;
-    protected String mApiUrl;
     private boolean isNeedCounters = true;
 
     public ApiRequest(Context context) {
@@ -56,6 +57,10 @@ public abstract class ApiRequest implements IApiRequest {
         }
         this.context = context;
         doNeedAlert = true;
+    }
+
+    protected static String getRevNum() {
+        return App.getAppConfig().getApiRevision();
     }
 
     public ApiRequest callback(ApiHandler handler) {
@@ -371,16 +376,12 @@ public abstract class ApiRequest implements IApiRequest {
      * @param connection соединение к которому будет добавлен заголовок
      */
     protected void setRevisionHeader(HttpURLConnection connection) {
-        if (App.DEBUG || Editor.isEditor()) {
+        if (BuildConfig.DEBUG || Editor.isEditor()) {
             String rev = getRevNum();
             if (rev != null && rev.length() > 0) {
                 connection.setRequestProperty("Cookie", "revnum=" + rev + ";");
             }
         }
-    }
-
-    protected static String getRevNum() {
-        return App.getAppConfig().getApiRevision();
     }
 
     @Override

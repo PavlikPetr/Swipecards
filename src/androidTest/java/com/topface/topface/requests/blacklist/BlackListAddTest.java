@@ -23,7 +23,7 @@ public class BlackListAddTest extends AbstractThreadTest {
         runAsyncTest(new Runnable() {
             @Override
             public void run() {
-                new BlackListAddRequest(Integer.parseInt(TEST_USER_ID), getInstrumentation().getContext())
+                new BlackListAddRequest(Integer.parseInt(TEST_USER_ID), getInstrumentation().getTargetContext())
                         .callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
@@ -75,7 +75,7 @@ public class BlackListAddTest extends AbstractThreadTest {
                     public void fail(int codeError, IApiResponse response) {
                         stopTest("checkUserIsAdded");
                     }
-                }, getInstrumentation().getContext());
+                }, getInstrumentation().getTargetContext());
             }
         }, "checkUserIsAdded");
     }

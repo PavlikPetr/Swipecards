@@ -664,6 +664,7 @@ public class AuthFragment extends BaseFragment {
         }
     }
 
+
     private void btnVKClick() {
         // костыль, надо избавить от viewflipper к чертовой бабушке
         mProcessingTFReg = false;

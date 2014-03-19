@@ -76,10 +76,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private LinearLayout mUserActions;
     private ProgressBar mGiftsLoader;
     private ImageView mGiftsIcon;
-    private RelativeLayout mBlocked;
-    private MenuItem mBarActions;
-    // controllers
-    private RateController mRateController;
     private OnGiftReceivedListener mGiftsReceivedListener = new OnGiftReceivedListener() {
         @Override
         public void onReceived() {
@@ -91,6 +87,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             }
         }
     };
+    private RelativeLayout mBlocked;
+    private MenuItem mBarActions;
+    // controllers
+    private RateController mRateController;
 
     public static UserProfileFragment newInstance(String itemId, int id, String className) {
         UserProfileFragment fragment = new UserProfileFragment();

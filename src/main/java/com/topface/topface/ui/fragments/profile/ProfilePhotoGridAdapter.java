@@ -11,17 +11,11 @@ import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 
 public class ProfilePhotoGridAdapter extends ProfileGridAdapter {
-    // Data
-    protected LayoutInflater mInflater;
-
     protected static final int T_ADD_BTN = 0;
     protected static final int T_PHOTO = 1;
     protected static final int T_COUNT = T_PHOTO + 1;
-
-    // class ViewHolder
-    static class ViewHolder {
-        ImageViewRemote photo;
-    }
+    // Data
+    protected LayoutInflater mInflater;
 
     public ProfilePhotoGridAdapter(Context context, Photos photoLinks) {
         this(context, photoLinks, photoLinks.size(), null);
@@ -74,5 +68,10 @@ public class ProfilePhotoGridAdapter extends ProfileGridAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    // class ViewHolder
+    static class ViewHolder {
+        ImageViewRemote photo;
     }
 }
