@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.BonusFragment;
+import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
@@ -141,6 +143,15 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             }
         }
     };
+    private INavigationFragmentsListener mFragmentSwitchListener;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof INavigationFragmentsListener) {
+            mFragmentSwitchListener = (INavigationFragmentsListener) activity;
+        }
+    }
 
     private void initBonus() {
         if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(F_BONUS)) {
@@ -461,6 +472,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (mFragmentSwitchListener != null) {
+                    mFragmentSwitchListener.onFragmentSwitch(mSelectedFragment);
+                }
                 if (mOnFragmentSelected != null) {
                     mOnFragmentSelected.onFragmentSelected(mSelectedFragment);
                 }

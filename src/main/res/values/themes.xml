@@ -46,6 +46,11 @@
         <item name="android:actionModeCloseDrawable" tools:ignore="NewApi">@drawable/ic_check</item>
     </style>
 
+    <style name="Theme.Topface.ActionbarOverlay" parent="Theme.Topface">
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
+    </style>
+
     <style name="Theme.Topface.NoActionBar.Fullscreen" parent="Theme.Topface.NoActionBar">
         <item name="android:windowFullscreen">true</item>
     </style>
