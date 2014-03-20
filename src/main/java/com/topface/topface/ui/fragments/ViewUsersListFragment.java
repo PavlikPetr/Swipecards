@@ -53,7 +53,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private ImageSwitcher mImageSwitcher;
     private ImageButton mRetryBtn;
     private View mControlsView;
-    private View mTopPanel;
+    private View mTopPanelView;
 
     private UsersList<T> mUsersList;
     private PreloadManager<SearchUser> mPreloadManager;
@@ -138,29 +138,27 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     }
 
     private void inflateTopPanel(View root) {
-        Integer resId = getTopPanelLayoutResId();
-        if (resId != null) {
-            ViewStub topPanelStub = ((ViewStub) root.findViewById(R.id.vsTopPanelContainer));
-            topPanelStub.setLayoutResource(R.layout.controls_closing_top_panel);
-            final View view = topPanelStub.inflate();
-            mTopPanel = view;
-            initTopPanel(view);
-
-        }
+        mTopPanelView = inflateViewStubWithResId(root, getTopPanelLayoutResId(), R.id.vsTopPanelContainer);
+        initTopPanel(mTopPanelView);
     }
 
     private void inflateControls(View root) {
-        Integer resId = getControlsLayoutResId();
-        if (resId != null) {
-            ViewStub controlsStub = (ViewStub) root.findViewById(R.id.vsControls);
-            controlsStub.setLayoutResource(getControlsLayoutResId());
-            mControlsView = initControls(controlsStub.inflate());
+        mControlsView = inflateViewStubWithResId(root, getControlsLayoutResId(), R.id.vsControls);
+        initControls(mControlsView);
+    }
+
+    private View inflateViewStubWithResId(View root, Integer layoutResId, int viewStubLayoutId) {
+        if (layoutResId != null) {
+            ViewStub controlsStub = (ViewStub) root.findViewById(viewStubLayoutId);
+            controlsStub.setLayoutResource(layoutResId);
+            return controlsStub.inflate();
         }
+        return null;
     }
 
     protected abstract void initTopPanel(View topPanelView);
 
-    protected abstract View initControls(View controlsView);
+    protected abstract void initControls(View controlsView);
 
     private void initActionBar() {
         refreshActionBarTitles();
@@ -252,9 +250,9 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                             mControlsView.getVisibility() != View.VISIBLE ? View.VISIBLE : View.GONE
                     );
                 }
-                if (mTopPanel != null) {
-                    mTopPanel.setVisibility(
-                            mTopPanel.getVisibility() != View.VISIBLE ? View.VISIBLE : View.GONE
+                if (mTopPanelView != null) {
+                    mTopPanelView.setVisibility(
+                            mTopPanelView.getVisibility() != View.VISIBLE ? View.VISIBLE : View.GONE
                     );
                 }
             }

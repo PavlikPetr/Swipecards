@@ -1,5 +1,10 @@
 package com.topface.topface.utils;
 
+import com.lifestreet.android.lsmsdk.commons.Timer;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+
 @SuppressWarnings("ALL")
 public class Base64 {
 
@@ -271,6 +276,8 @@ public class Base64 {
             -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9,     // Decimal 231 - 243
             -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9         // Decimal 244 - 255
     };
+    public static final double INTERVAL_FACTOR = 100000d;
+
 
 
 /* ********  D E T E R M I N E   W H I C H   A L H A B E T  ******** */
@@ -1457,10 +1464,11 @@ public class Base64 {
     }   // end encodeFromFile
 
 
-    public static void encodeFromInputToOutputStream(java.io.InputStream stream, java.io.OutputStream output)
+    public static void encodeFromInputToOutputStream(java.io.InputStream stream, java.io.OutputStream output, ProgressListener listener, int contentLength)
             throws java.io.IOException {
 
         Base64.InputStream bis = null;
+
         try {
             int available = stream.available();
             available = available == 0 ? 4096 : available;
@@ -1475,11 +1483,21 @@ public class Base64 {
             );
 
             //Write until done
+            int percentage = 0;
+            int prevPercentage = 0;
+            int updateInterval = getUpdateInterval(contentLength);
+
             while ((numBytes = bis.read(buffer)) >= 0) {
                 length += numBytes;
                 Debug.log("Write bytes: " + length);
                 output.write(buffer, 0, numBytes);
+                percentage = (int)(((double)length/(double)contentLength) * 100);
+                if (percentage - prevPercentage >= updateInterval) {
+                    listener.onProgress(percentage);
+                    prevPercentage = percentage;
+                }
             }
+            listener.onSuccess();
             Debug.log("Write bytes ended");
         } finally {
             try {
@@ -1493,6 +1511,13 @@ public class Base64 {
             }
         }
 
+    }
+
+    private static int getUpdateInterval(int contentLength) {
+        int updateInterval = (int) ((INTERVAL_FACTOR / (double)contentLength) * 100);
+        updateInterval = (updateInterval < 1)? 1:updateInterval;
+        updateInterval = (updateInterval > 20)? 20:updateInterval;
+        return updateInterval;
     }
 
     /**
@@ -1980,5 +2005,11 @@ public class Base64 {
 
     }   // end inner class OutputStream
 
+
+    public static interface ProgressListener {
+        public void onProgress(int percentage);
+
+        public void onSuccess();
+    }
 
 }   // end class Base64
