@@ -1,5 +1,6 @@
 package com.topface.topface.utils.notifications;
 
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.Spannable;
@@ -31,9 +34,14 @@ public class UserNotification {
     private String mText;
     private String mTitle;
 
+
+    private Intent mIntent;
     private int mId;
     private boolean mOngoing;
 
+
+
+    Notification generatedNotification;
 
     private MessageStack messages;
     private Type mType;
@@ -82,11 +90,27 @@ public class UserNotification {
         this.mOngoing = mOngoing;
     }
 
+    public void setIntent(Intent intent) {
+        mIntent = intent;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public Notification getGeneratedNotification() {
+        return generatedNotification;
+    }
+
     public void setMessages(MessageStack messages) {
         this.messages = messages;
     }
 
-    public android.app.Notification generate(Intent intent, NotificationAction[] actions) {
+    public Notification generate() {
+        return generate(null);
+    }
+
+    public android.app.Notification generate(NotificationAction[] actions) {
         try {
             notificationBuilder = new NotificationCompat.Builder(mContext);
             if (Settings.getInstance().isVibrationEnabled()) {
@@ -96,11 +120,11 @@ public class UserNotification {
             notificationBuilder.setOngoing(mOngoing);
             switch (mType) {
                 case PROGRESS:
-                    return generateProgress(intent);
+                    return generateProgress();
                 case FAIL:
-                    return generateFail(intent);
+                    return generateFail();
                 case STANDARD:
-                    return generateStandard(intent);
+                    return generateStandard();
                 case ACTIONS:
                     return generateWithActions(actions);
             }
@@ -110,7 +134,7 @@ public class UserNotification {
         return null;
     }
 
-    private android.app.Notification generateStandard(Intent intent) {
+    private android.app.Notification generateStandard() {
         notificationBuilder.setSmallIcon(R.drawable.ic_notification);
         setLargeIcon();
         notificationBuilder.setContentTitle(mTitle);
@@ -127,37 +151,57 @@ public class UserNotification {
         if (unread > 0) {
             notificationBuilder.setNumber(unread);
         }
-        PendingIntent resultPendingIntent = generatePendingIntent(intent);
+        PendingIntent resultPendingIntent = generatePendingIntent(mIntent);
         notificationBuilder.setAutoCancel(true);
         notificationBuilder.setContentIntent(resultPendingIntent);
 
-        //noinspection deprecation
-        return notificationBuilder.build();
+        generatedNotification = notificationBuilder.build();
+        return generatedNotification;
     }
 
-    private android.app.Notification generateFail(Intent intent) {
+    private android.app.Notification generateFail() {
         notificationBuilder.setSmallIcon(R.drawable.ic_notification);
         notificationBuilder.setContentTitle(mTitle);
         notificationBuilder.setContentText(mText);
         notificationBuilder.setAutoCancel(true);
         setLargeIcon();
-        Intent retryIntent = new Intent(AddPhotoHelper.CANCEL_NOTIFICATION_RECEIVER + intent.getParcelableExtra("PhotoUrl"));
+        Intent retryIntent = new Intent(AddPhotoHelper.CANCEL_NOTIFICATION_RECEIVER + mIntent.getParcelableExtra("PhotoUrl"));
         retryIntent.putExtra("id", mId);
         retryIntent.putExtra("isRetry", true);
-        PendingIntent resultPendingIntent = generatePendingIntent(intent);
+        PendingIntent resultPendingIntent = generatePendingIntent(mIntent);
         notificationBuilder.setContentIntent(resultPendingIntent);
-        return notificationBuilder.build();
+        generatedNotification = notificationBuilder.build();
+        return generatedNotification;
     }
 
-    private android.app.Notification generateProgress(Intent intent) {
+    private android.app.Notification generateProgress() {
+        notificationBuilder.setDefaults(Notification.FLAG_ONLY_ALERT_ONCE);
         notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_upload);
+        notificationBuilder.setSound(Uri.EMPTY);
         setLargeIcon();
         notificationBuilder.setContentTitle(mTitle);
-        PendingIntent resultPendingIntent = generatePendingIntent(intent);
+        PendingIntent resultPendingIntent = generatePendingIntent(mIntent);
         generateBigPicture();
         notificationBuilder.setContentIntent(resultPendingIntent);
         notificationBuilder.setProgress(100, 100, true);
-        return notificationBuilder.build();
+        if (isVersionOld()) {
+            notificationBuilder.setContentText(mContext.getString(R.string.waiting_for_load));
+        }
+        generatedNotification = notificationBuilder.build();
+        return generatedNotification;
+    }
+
+    public Notification updateProgress(int currentProgress) {
+        notificationBuilder.setProgress(100, currentProgress, false);
+        if (isVersionOld()) {
+            notificationBuilder.setContentText(String.format(mContext.getString(R.string.loading_photo_percent), currentProgress));
+        }
+        generatedNotification = notificationBuilder.build();
+        return generatedNotification;
+    }
+
+    private boolean isVersionOld() {
+        return android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB;
     }
 
     public android.app.Notification generateWithActions(NotificationAction[] actions) {

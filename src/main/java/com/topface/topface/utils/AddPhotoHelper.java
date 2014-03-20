@@ -27,6 +27,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
+import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import java.io.File;
@@ -259,8 +260,26 @@ public class AddPhotoHelper {
                 uri.toString(), getIntentForNotification(), notificationListener
         );
 
+        final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext, new Base64.ProgressListener() {
+            @Override
+            public void onProgress(final int percentage) {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (notificationListener.notification != null) {
+                            notificationListener.notification.updateProgress(percentage);
+                            mNotificationManager.showBuildedNotification(notificationListener.notification);
+                        }
 
-        final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext);
+                    }
+                });
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+        });
         //TODO также обрабатывать запросы с id...x, где x-порядковый номер переповтора
         fileNames.put(photoAddRequest.getId(), outputFile);
         photoAddRequest.callback(new DataApiHandler<Photo>() {
@@ -335,6 +354,8 @@ public class AddPhotoHelper {
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
+    
+
     private void showErrorMessage(int codeError) {
         switch (codeError) {
             case ErrorCodes.INCORRECT_PHOTO_DATA:
@@ -388,15 +409,16 @@ public class AddPhotoHelper {
 
     public static class PhotoNotificationListener implements UserNotificationManager.NotificationImageListener {
         public boolean needShowNotification = true;
-        private int id = -1;
+        private UserNotification notification;
 
         @Override
-        public void onSuccess(int id) {
-            this.id = id;
+        public void onSuccess(UserNotification notification) {
+            this.notification = notification;
         }
 
         public int getId() {
-            return id;
+
+            return notification == null? -1 : notification.getId();
         }
 
         @Override
@@ -408,6 +430,8 @@ public class AddPhotoHelper {
             return needShowNotification;
         }
     }
+
+
 
 }
 

@@ -352,7 +352,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                     testNetworkNotificationId = notificationManager.showNotificationWithActions(
                             "Network Errors", "all requests will be returning errors", null,
                             true,
-                            actions);
+                            actions).getId();
                 } else {
                     mAppConfig.setTestNetwork(false);
                     notificationManager.cancelNotification(testNetworkNotificationId);

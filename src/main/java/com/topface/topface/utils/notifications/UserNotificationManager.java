@@ -47,19 +47,19 @@ public class UserNotificationManager {
     /*
         isTextNotification - разворачивать нотификацию как текст - true, как картинку - false
      */
-    public int showNotification(String title, String message, boolean isTextNotification,
+    public UserNotification showNotification(String title, String message, boolean isTextNotification,
                                 Bitmap icon, int unread, Intent intent, boolean doNeedReplace, User user) {
         return showNotification(title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, false, UserNotification.Type.STANDARD, null, user);
     }
 
-    private int showNotification(String title, String message, boolean isTextNotification,
+    private UserNotification showNotification(String title, String message, boolean isTextNotification,
                                  Bitmap icon, int unread, Intent intent, boolean doNeedReplace, UserNotification.Type type) {
         return showNotification(title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, false, type, null, null);
     }
 
-    private int showNotification(String title, String message, boolean isTextNotification,
+    private UserNotification showNotification(String title, String message, boolean isTextNotification,
                                  Bitmap icon, int unread, Intent intent, boolean doNeedReplace, boolean ongoing, UserNotification.Type type) {
         return showNotification(title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, ongoing, type, null, null);
@@ -108,13 +108,13 @@ public class UserNotificationManager {
         });
     }
 
-    public int showNotificationWithActions(String title, String message, Bitmap icon,
+    public UserNotification showNotificationWithActions(String title, String message, Bitmap icon,
                                            boolean ongoing,
                                            UserNotification.NotificationAction[] actions) {
         return showNotification(title, message, false, icon, 0, null, true, ongoing, UserNotification.Type.ACTIONS, actions, null);
     }
 
-    public int showProgressNotification(String title, Bitmap icon, Intent intent) {
+    public UserNotification showProgressNotification(String title, Bitmap icon, Intent intent) {
         return showNotification(title, null, false, icon, 0, intent, true, false, UserNotification.Type.PROGRESS);
     }
 
@@ -153,7 +153,7 @@ public class UserNotificationManager {
     }
 
 
-    public int showFailNotification(String title, String msg, Bitmap icon, Intent intent) {
+    public UserNotification showFailNotification(String title, String msg, Bitmap icon, Intent intent) {
         return showNotification(title, msg, false, icon, 0, intent, true, UserNotification.Type.FAIL);
     }
 
@@ -191,7 +191,7 @@ public class UserNotificationManager {
         });
     }
 
-    private int showNotification(String title, String message, boolean isTextNotification,
+    private UserNotification showNotification(String title, String message, boolean isTextNotification,
                                  Bitmap icon, int unread, Intent intent, boolean createNew,
                                  boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions,
                                  User user) {
@@ -215,9 +215,13 @@ public class UserNotificationManager {
         notification.setId(id);
         notification.setOngoing(ongoing);
         notification.setMessages(messagesStack);
+        notification.setIntent(intent);
+        mNotificationManager.notify(id, notification.generate(actions));
+        return notification;
+    }
 
-        mNotificationManager.notify(id, notification.generate(intent, actions));
-        return id;
+    public void showBuildedNotification(UserNotification notification) {
+        mNotificationManager.notify(notification.getId(), notification.getGeneratedNotification());
     }
 
     private MessageStack saveMessageStack(String message, User user) {
@@ -246,7 +250,7 @@ public class UserNotificationManager {
     }
 
     public static interface NotificationImageListener {
-        public void onSuccess(int id);
+        public void onSuccess(UserNotification notification);
 
         public void onFail();
 

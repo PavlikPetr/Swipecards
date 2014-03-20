@@ -32,10 +32,16 @@ public class PhotoAddRequest extends ApiRequest {
     public static final String HTTP_REQUEST_CLOSE_DATA = LINE_END + TWO_HH + BOUNDARY + TWO_HH + LINE_END;
 
     private Uri mUri = null;
+    private Base64.ProgressListener notificationUpdater;
 
     public PhotoAddRequest(Uri uri, Context context) {
         super(context);
         mUri = uri;
+    }
+
+    public PhotoAddRequest(Uri uri, Context context, Base64.ProgressListener listener) {
+        this(uri, context);
+        notificationUpdater = listener;
     }
 
     @Override
@@ -89,7 +95,7 @@ public class PhotoAddRequest extends ApiRequest {
                 outputStream
         ));
         dos.write(headersBytes);
-        Base64.encodeFromInputToOutputStream(inputStream, dos);
+        Base64.encodeFromInputToOutputStream(inputStream, dos, notificationUpdater, contentLength);
         dos.write(endBytes);
         dos.flush();
         dos.close();
