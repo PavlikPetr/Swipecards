@@ -44,11 +44,6 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     }
 
     @Override
-    public Integer getTopPanelLayoutResId() {
-        return R.layout.controls_closing_top_panel;
-    }
-
-    @Override
     protected String getCacheKey() {
         return ClosingsController.LIKES_CACHE_KEY;
     }
@@ -65,7 +60,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     }
 
     @Override
-    protected View initControls(View controlsView) {
+    protected void initControls(View controlsView) {
         controlsView.findViewById(R.id.btnSkip).setOnClickListener(this);
         controlsView.findViewById(R.id.btnSkipAll).setOnClickListener(this);
         View btnSkipAll = controlsView.findViewById(R.id.btnSkipAll);
@@ -79,7 +74,6 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
         mUserCity = (TextView) controlsView.findViewById(R.id.tvUserCity);
         addViewsToHide(mUserName);
         addViewsToHide(mUserCity);
-        return controlsView;
     }
 
     @Override

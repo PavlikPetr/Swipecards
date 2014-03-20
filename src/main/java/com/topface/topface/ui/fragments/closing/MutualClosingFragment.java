@@ -38,7 +38,7 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     }
 
     @Override
-    protected View initControls(View controlsView) {
+    protected void initControls(View controlsView) {
         mBtnSkipAll = controlsView.findViewById(R.id.btnSkipAll);
         mBtnSkipAll.setOnClickListener(this);
         if (CacheProfile.unread_mutual > CacheProfile.getOptions().closing.limitMutual) {
@@ -51,7 +51,6 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         mUserCity = (TextView) controlsView.findViewById(R.id.tvUserCity);
         addViewsToHide(mUserName);
         addViewsToHide(mUserCity);
-        return controlsView;
     }
 
     @Override
