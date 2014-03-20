@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ac_dating_container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/auth_bg">
+
+    <!-- Dating Album -->
+    <com.topface.topface.ui.views.ImageSwitcher
+        android:id="@+id/glrDatingAlbum"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/dating_shadow" />
+
+        <include
+            android:id="@+id/vfDatingButtons"
+            layout="@layout/dating_buttons"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <include
+            android:id="@+id/loDatingResources"
+            layout="@layout/resources_dating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp" />
+
+        <include
+            android:id="@+id/loUserInfo"
+            layout="@layout/dating_user_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/vfDatingButtons"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="6dp" />
+
+        <TextView
+            android:id="@+id/tvDatingCounter"
+            style="@style/DatingButtonsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="4dp"
+            android:gravity="center_vertical"
+            android:textSize="10sp"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/prsDatingLoading"
+            style="@android:style/Widget.ProgressBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/btnUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="#0000"
+            android:src="@drawable/btn_refresh_selector"
+            android:visibility="gone" />
+
+        <com.topface.topface.ui.views.NoviceLayout
+            android:id="@+id/loNovice"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="gone" />
+    </RelativeLayout>
+</RelativeLayout>

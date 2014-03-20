@@ -162,6 +162,18 @@ public class GiftsActivity extends BaseFragmentActivity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(GIFTS_LIST, mGiftsList);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mGiftsList = savedInstanceState.getParcelableArrayList(GIFTS_LIST);
+    }
+
     /**
      * Works with array of gifts, categorizes by type
      */
@@ -192,22 +204,4 @@ public class GiftsActivity extends BaseFragmentActivity {
             GiftsCollection.currentType = type;
         }
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(GIFTS_LIST, mGiftsList);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mGiftsList = savedInstanceState.getParcelableArrayList(GIFTS_LIST);
-    }
-
-    @Override
-    public boolean isTrackable() {
-        return false;
-    }
-
 }

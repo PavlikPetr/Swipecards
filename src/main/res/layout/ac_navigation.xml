@@ -9,12 +9,16 @@
     <FrameLayout
         android:id="@+id/fragment_content"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_height="fill_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:foreground="@drawable/actionbar_shadow"
+        android:foregroundGravity="top|fill_horizontal" />
 
     <FrameLayout
         android:id="@+id/fragment_menu"
         android:layout_width="@dimen/left_menu_width"
         android:layout_height="match_parent"
-        android:layout_gravity="left" />
+        android:layout_gravity="left"
+        android:layout_marginTop="?attr/actionBarSize" />
 
 </com.topface.topface.ui.views.HackyDrawerLayout>

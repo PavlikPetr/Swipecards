@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/usedTitle"
+        android:id="@+id/loUserTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
@@ -18,13 +18,13 @@
 
         <TextView
             android:id="@+id/tvTitle"
+            style="@style/ShadowUserText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/ivState"
             android:singleLine="true"
             android:textColor="#B8B8B8"
-            style="@style/ShadowUserText"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -39,9 +39,9 @@
 
     <include
         android:id="@+id/ivDivider"
+        layout="@layout/item_divider"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/item_divider" />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/loEmptyForm"
@@ -63,12 +63,12 @@
 
         <Button
             android:id="@+id/btnEmptyForm"
+            style="@style/Widget.Topface.Button.Big.Gray"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="26dp"
-            style="@style/Widget.Topface.Button.Big.Gray"
             android:text="@string/profile_ask_form" />
 
         <RelativeLayout
@@ -79,8 +79,8 @@
                 android:id="@+id/pgbProgress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <TextView
@@ -89,12 +89,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginTop="26dp"
             android:gravity="center"
+            android:text="@string/profile_ask_sent"
+            android:textColor="#B8B8B8"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#B8B8B8"
-            android:layout_marginTop="26dp"
-            android:text="@string/profile_ask_sent"
             android:visibility="gone" />
 
     </LinearLayout>

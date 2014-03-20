@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.closing;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import com.topface.topface.requests.SkipAllClosedRequest;
 import com.topface.topface.requests.SkipClosedRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
@@ -47,6 +49,8 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         }
     };
     private List<View> mViewsToHideAndShow = new ArrayList<>();
+    private boolean mControlViewsHidden = false;
+    private INavigationFragmentsListener mFragmentSwitchListener;
 
     /**
      * Add items to list of views for hide and show purposes on ImageSwitcher click
@@ -55,6 +59,14 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
      */
     protected void addViewsToHide(View view) {
         mViewsToHideAndShow.add(view);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof INavigationFragmentsListener) {
+            mFragmentSwitchListener = (INavigationFragmentsListener) activity;
+        }
     }
 
     @Override
@@ -269,11 +281,17 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             public void onClick(View v) {
                 for (View view : mViewsToHideAndShow) {
                     if (view != null) {
-                        view.setVisibility(
-                                view.getVisibility() != View.VISIBLE ? View.VISIBLE : View.GONE
-                        );
+                        view.setVisibility(mControlViewsHidden ? View.VISIBLE : View.GONE);
                     }
                 }
+                if (mFragmentSwitchListener != null) {
+                    if (mControlViewsHidden) {
+                        mFragmentSwitchListener.onShowActionBar();
+                    } else {
+                        mFragmentSwitchListener.onHideActionBar();
+                    }
+                }
+                mControlViewsHidden = !mControlViewsHidden;
             }
         };
     }

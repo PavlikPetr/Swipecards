@@ -22,7 +22,7 @@ import android.text.style.StyleSpan;
 import com.topface.topface.R;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.profile.AddPhotoHelper;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
@@ -44,18 +44,18 @@ public class UserNotification {
     Notification generatedNotification;
 
     private MessageStack messages;
-
-    public enum Type {PROGRESS, STANDARD, FAIL, ACTIONS}
-
     private Type mType;
     private boolean mIsTextNotification;
-
     private int unread = 0;
     private Context mContext;
     private NotificationCompat.Builder notificationBuilder;
 
     public UserNotification(Context context) {
         this.mContext = context;
+    }
+
+    public static int getIconSize(Context context) {
+        return (int) (context.getResources().getDisplayMetrics().density * ICON_SIZE);
     }
 
     public void setType(Type mType) {
@@ -100,10 +100,6 @@ public class UserNotification {
 
     public Notification getGeneratedNotification() {
         return generatedNotification;
-    }
-
-    public static int getIconSize(Context context) {
-        return (int) (context.getResources().getDisplayMetrics().density * ICON_SIZE);
     }
 
     public void setMessages(MessageStack messages) {
@@ -243,7 +239,8 @@ public class UserNotification {
         NotificationCompat.InboxStyle inboxStyle =
                 new NotificationCompat.InboxStyle(notificationBuilder.setContentTitle(
                         Utils.getQuantityString(R.plurals.notification_many_messages,
-                                messages.getAllCount(), messages.getAllCount())));
+                                messages.getAllCount(), messages.getAllCount())
+                ));
         for (SerializableToJson item : messages) {
             MessageStack.Message message = (MessageStack.Message) item;
             Spannable spanMessage = new SpannableString(String.format(mContext.getString(R.string.notification_message_format), message.mName, message.mTitle));
@@ -284,6 +281,8 @@ public class UserNotification {
                     R.drawable.ic_notification));
         }
     }
+
+    public enum Type {PROGRESS, STANDARD, FAIL, ACTIONS}
 
     public static class NotificationAction {
         int iconResId;

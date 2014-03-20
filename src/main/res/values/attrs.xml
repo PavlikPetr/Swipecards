@@ -56,11 +56,6 @@
         <attr name="textWithoutBackground" format="string" />
     </declare-styleable>
 
-    <declare-styleable name="AnimatedView">
-        <attr name="settings" format="reference" />
-        <attr name="src" format="reference" />
-    </declare-styleable>
-
     <declare-styleable name="com.inneractive.api.ads.InneractiveAd">
         <attr name="appID" format="string" />
         <attr name="adType">

@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--suppress AndroidLintMissingTranslation -->
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- settings -->
     <string name="settings_help_url">http://topface.com/faq-mobile?from=android</string>
     <string name="settings_topface_url">http://topface.com</string>

@@ -39,7 +39,10 @@ public class SettingsAboutFragment extends BaseFragment {
             String packageName = activity.getPackageName();
             versionNumber = packageManager.getPackageInfo(packageName, 0).versionName;
 
-            versionNumber = setDebugData(versionNumber, packageManager, packageName);
+            //Дополнительную информацию показываем только в дебаг режиме
+            if (BuildConfig.DEBUG) {
+                versionNumber = setDebugData(versionNumber, packageManager, packageName);
+            }
 
         } catch (Exception e) {
             versionNumber = "unknown";

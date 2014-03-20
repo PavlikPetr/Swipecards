@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.BonusFragment;
+import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
@@ -43,6 +45,7 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
@@ -140,11 +143,13 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             }
         }
     };
+    private INavigationFragmentsListener mFragmentSwitchListener;
 
-    private void initBonus() {
-        if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(F_BONUS)) {
-            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_1));
-            mAdapter.refreshCounterBadges();
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof INavigationFragmentsListener) {
+            mFragmentSwitchListener = (INavigationFragmentsListener) activity;
         }
     }
 
@@ -153,6 +158,17 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         intent.setAction(SELECT_MENU_ITEM);
         intent.putExtra(SELECTED_FRAGMENT_ID, fragmentId);
         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+    }
+
+    public static void onLogout() {
+        ClosingsController.onLogout();
+    }
+
+    private void initBonus() {
+        if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(F_BONUS)) {
+            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_1));
+            mAdapter.refreshCounterBadges();
+        }
     }
 
     @Override
@@ -388,7 +404,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         notifyDataSetChanged();
     }
 
-
     private void notifyDataSetChanged() {
         notifyDataSetChanged(false);
     }
@@ -460,6 +475,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (mFragmentSwitchListener != null) {
+                    mFragmentSwitchListener.onFragmentSwitch(mSelectedFragment);
+                }
                 if (mOnFragmentSelected != null) {
                     mOnFragmentSelected.onFragmentSelected(mSelectedFragment);
                 }
@@ -479,11 +497,10 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         BaseFragment fragment;
         switch (id) {
             case F_VIP_PROFILE:
-                fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE,
-                        VipBuyFragment.class.getName());
+                fragment = OwnProfileFragment.newInstance(VipBuyFragment.class.getName());
                 break;
             case F_PROFILE:
-                fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
+                fragment = OwnProfileFragment.newInstance();
                 break;
             case F_DATING:
                 fragment = new DatingFragment();
@@ -531,7 +548,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 }
                 break;
             default:
-                fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
+                fragment = OwnProfileFragment.newInstance();
                 break;
         }
         return fragment;
@@ -572,10 +589,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         return mClosingsController.isLeftMenuLocked();
     }
 
-    public static interface OnFragmentSelectedListener {
-        public void onFragmentSelected(FragmentId fragmentId);
-    }
-
     public void setOnFragmentSelected(OnFragmentSelectedListener listener) {
         mOnFragmentSelected = listener;
     }
@@ -603,7 +616,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
     }
 
-    public static void onLogout() {
-        ClosingsController.onLogout();
+    public static interface OnFragmentSelectedListener {
+        public void onFragmentSelected(FragmentId fragmentId);
     }
 }

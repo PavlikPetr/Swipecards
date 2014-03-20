@@ -38,7 +38,9 @@ public class MultipartApiResponse implements IApiResponse {
             //Разбиваем ответ на подответы, в итоге получим массив json объектов
             LinkedList<String> responses = splitResponses(connection);
             if (responses == null || responses.isEmpty()) {
-                setError(ErrorCodes.NULL_RESPONSE, "Responses is null");
+                if (isCodeEqual(ErrorCodes.RESULT_DONT_SET)) {
+                    setError(ErrorCodes.NULL_RESPONSE, "Responses is null");
+                }
             } else {
                 //Парсим ответы.
                 parseResponses(responses);
@@ -227,12 +229,15 @@ public class MultipartApiResponse implements IApiResponse {
 
     @Override
     public String toString() {
-        String result = "MultipartResponse\n";
+        String result;
         if (mResponses != null && mResponses.size() > 0) {
+            result = "MultipartResponse\n";
             for (Map.Entry<String, ApiResponse> response : mResponses.entrySet()) {
                 ApiResponse value = response.getValue();
                 result += "\nresponse #" + value.id + "\n" + value.toString() + "\n";
             }
+        } else {
+            result = String.format("MultipartResponse error #%d: %s", code, message);
         }
         return result;
     }

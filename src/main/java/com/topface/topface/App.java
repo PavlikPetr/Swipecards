@@ -5,9 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
@@ -33,20 +30,20 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.utils.BackgroundThread;
-import com.topface.topface.utils.BannersConfig;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
+import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.acra.ACRA;
@@ -64,170 +61,11 @@ public class App extends Application {
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
     private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 90;
 
-    /// will be false in released apk
-    public static boolean DEBUG = false;
     private static Context mContext;
     private static Intent mConnectionIntent;
     private static ConnectionChangeReceiver mConnectionReceiver;
     private static long mLastProfileUpdate;
     private static Configurations mBaseConfig;
-
-    /**
-     * Can return true in release mode for editors(Админка)
-     *
-     * @return true if Debug mode is on
-     */
-    public static boolean isDebugMode() {
-        boolean debug = false;
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(),
-                    PackageManager.GET_CONFIGURATIONS);
-        } catch (PackageManager.NameNotFoundException e) {
-            Debug.error(e);
-        }
-        if (packageInfo != null) {
-            int flags = packageInfo.applicationInfo.flags;
-            debug = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-        }
-        return debug;
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        mContext = getApplicationContext();
-        //Включаем отладку, если это дебаг версия
-        checkDebugMode();
-        //Включаем логирование ошибок
-        initAcra();
-
-        //Базовые настройки приложения, инитим их один раз при старте приложения
-        mBaseConfig = new Configurations(this);
-        Editor.setConfig(mBaseConfig.getAppConfig());
-
-        //Включаем строгий режим, если это Debug версия
-        checkStrictMode();
-        //Для Android 2.1 и ниже отключаем Keep-Alive
-        checkKeepAlive();
-
-        String msg = "+onCreate\n" + mBaseConfig.toString();
-        if (BuildConfig.BUILD_TIME > 0) {
-            msg += "\nBuild Time: " + SimpleDateFormat.getInstance().format(BuildConfig.BUILD_TIME);
-        }
-        if (!TextUtils.isEmpty(BuildConfig.GIT_HEAD_SHA)) {
-            msg += "\nCommit: " + BuildConfig.GIT_HEAD_SHA;
-        }
-        Debug.log("App", msg);
-
-        //Начинаем слушать подключение к интернету
-        if (mConnectionIntent == null) {
-            mConnectionReceiver = new ConnectionChangeReceiver(mContext);
-            mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
-        }
-
-        //Инициализируем GCM
-        if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
-            GCMUtils.init(getContext());
-        }
-
-        final Handler handler = new Handler();
-        //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                onCreateAsync(handler);
-            }
-        };
-    }
-
-    /**
-     * Вызывается в onCreate, но выполняется в отдельном потоке
-     *
-     * @param handler нужен для выполнения запросов
-     */
-    private void onCreateAsync(Handler handler) {
-        Debug.log("App", "+onCreateAsync");
-        DateUtils.syncTime();
-        Ssid.load();
-        CacheProfile.loadProfile();
-        //Оповещаем о том, что профиль загрузился
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-        if (!GCMIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    sendProfileAndOptionsRequests();
-                    sendLocation();
-                }
-            });
-        }
-    }
-
-    private void sendLocation() {
-        Location curLocation = GeoLocationManager.getLastKnownLocation(mContext);
-        if (curLocation != null) {
-            SettingsRequest settingsRequest = new SettingsRequest(this);
-            settingsRequest.location = curLocation;
-            settingsRequest.exec();
-        }
-    }
-
-    private void initAcra() {
-        if (!DEBUG) {
-            ACRA.init(this);
-            ACRA.getErrorReporter().setReportSender(new HockeySender());
-        } else {
-            //Если дебажим приложение, то показываем диалог и отправляем на email
-            try {
-                //Что бы такая схема работала, сперва выставляем конфиг
-                ACRAConfiguration acraConfig = ACRA.getConfig();
-                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
-                acraConfig.setResDialogText(R.string.crash_dialog_text);
-                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
-                acraConfig.setMode(ReportingInteractionMode.DIALOG);
-                ACRA.setConfig(acraConfig);
-                //Потом инитим
-                ACRA.init(this);
-                //И потом выставляем ReportSender
-                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
-            } catch (ACRAConfigurationException e) {
-                Debug.error("Acra init error", e);
-            }
-        }
-    }
-
-    private void checkKeepAlive() {
-        //На устройствах раньше чем Froyo (2.1),
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-            System.setProperty("http.keepAlive", "false");
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    private void checkStrictMode() {
-        //Для разработчиков включаем StrictMode, что бы не расслоблялись
-        if (DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            StrictMode.enableDefaults();
-        }
-    }
-
-    private void checkDebugMode() {
-        DEBUG = isDebugMode();
-        if (DEBUG) {
-            FragmentManager.enableDebugLogging(true);
-        }
-    }
-
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        //Прекращаем слушать подключение к интернету
-        if (mConnectionIntent != null && mConnectionReceiver != null) {
-            unregisterReceiver(mConnectionReceiver);
-        }
-    }
 
     /**
      * Множественный запрос Options и профиля
@@ -240,7 +78,6 @@ public class App extends Application {
                 .callback(handler)
                 .exec();
     }
-
 
     /**
      * Множественный запрос Options и профиля
@@ -361,6 +198,141 @@ public class App extends Application {
 
     public static Novice getNovice() {
         return getConfig().getNovice();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        mContext = getApplicationContext();
+        //Включаем отладку, если это дебаг версия
+        enableDebugLogs();
+        //Включаем логирование ошибок
+        initAcra();
+
+        //Базовые настройки приложения, инитим их один раз при старте приложения
+        mBaseConfig = new Configurations(this);
+        Editor.setConfig(mBaseConfig.getAppConfig());
+
+        //Включаем строгий режим, если это Debug версия
+        checkStrictMode();
+        //Для Android 2.1 и ниже отключаем Keep-Alive
+        checkKeepAlive();
+
+        String msg = "+onCreate\n" + mBaseConfig.toString();
+        if (BuildConfig.BUILD_TIME > 0) {
+            msg += "\nBuild Time: " + SimpleDateFormat.getInstance().format(BuildConfig.BUILD_TIME);
+        }
+        if (!TextUtils.isEmpty(BuildConfig.GIT_HEAD_SHA)) {
+            msg += "\nCommit: " + BuildConfig.GIT_HEAD_SHA;
+        }
+        Debug.log("App", msg);
+
+        //Начинаем слушать подключение к интернету
+        if (mConnectionIntent == null) {
+            mConnectionReceiver = new ConnectionChangeReceiver(mContext);
+            mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
+        }
+
+        //Инициализируем GCM
+        if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
+            GCMUtils.init(getContext());
+        }
+
+        final Handler handler = new Handler();
+        //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                onCreateAsync(handler);
+            }
+        };
+    }
+
+    /**
+     * Вызывается в onCreate, но выполняется в отдельном потоке
+     *
+     * @param handler нужен для выполнения запросов
+     */
+    private void onCreateAsync(Handler handler) {
+        Debug.log("App", "+onCreateAsync");
+        DateUtils.syncTime();
+        Ssid.load();
+        CacheProfile.loadProfile();
+        //Оповещаем о том, что профиль загрузился
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
+        if (!GCMIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    sendProfileAndOptionsRequests();
+                    sendLocation();
+                }
+            });
+        }
+    }
+
+    private void sendLocation() {
+        Location curLocation = GeoLocationManager.getLastKnownLocation(mContext);
+        if (curLocation != null) {
+            SettingsRequest settingsRequest = new SettingsRequest(this);
+            settingsRequest.location = curLocation;
+            settingsRequest.exec();
+        }
+    }
+
+    private void initAcra() {
+        if (!BuildConfig.DEBUG) {
+            ACRA.init(this);
+            ACRA.getErrorReporter().setReportSender(new HockeySender());
+        } else {
+            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
+            try {
+                //Что бы такая схема работала, сперва выставляем конфиг
+                ACRAConfiguration acraConfig = ACRA.getConfig();
+                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
+                acraConfig.setResDialogText(R.string.crash_dialog_text);
+                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
+                acraConfig.setMode(ReportingInteractionMode.DIALOG);
+                ACRA.setConfig(acraConfig);
+                //Потом инитим
+                ACRA.init(this);
+                //И потом выставляем ReportSender
+                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
+            } catch (ACRAConfigurationException e) {
+                Debug.error("Acra init error", e);
+            }
+        }
+    }
+
+    private void checkKeepAlive() {
+        //На устройствах раньше чем Froyo (2.1),
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
+            System.setProperty("http.keepAlive", "false");
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
+    private void checkStrictMode() {
+        //Для разработчиков включаем StrictMode, что бы не расслоблялись
+        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            StrictMode.enableDefaults();
+        }
+    }
+
+    private void enableDebugLogs() {
+        if (BuildConfig.DEBUG) {
+            FragmentManager.enableDebugLogging(true);
+        }
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        //Прекращаем слушать подключение к интернету
+        if (mConnectionIntent != null && mConnectionReceiver != null) {
+            unregisterReceiver(mConnectionReceiver);
+        }
     }
 }
 

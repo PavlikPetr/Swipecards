@@ -27,9 +27,9 @@ import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.profile.AddPhotoHelper;
-import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
+import com.topface.topface.ui.fragments.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.ArrayList;
@@ -49,6 +49,35 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
     private ViewFlipper mViewFlipper;
     private View mLoadingLocker;
+    private boolean mOperationsFinished = true;
+    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (position == 0) {
+                mViewFlipper.setDisplayedChild(1);
+            }
+        }
+    };
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            mViewFlipper.setDisplayedChild(0);
+            Activity activity = getActivity();
+            if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
+                Photo photo = (Photo) msg.obj;
+
+                CacheProfile.photos.addFirst(photo);
+                mPhotoGridAdapter.addFirst(photo);
+
+                if (activity != null) {
+                    Toast.makeText(activity, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+                    activity.setResult(Activity.RESULT_OK);
+                }
+            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR && activity != null) {
+                Toast.makeText(activity, R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
     public EditProfilePhotoFragment() {
         super();
@@ -104,8 +133,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     protected boolean hasChanges() {
         return (mSelectedAsMainId != mLastSelectedAsMainId) || !mDeleted.isEmpty();
     }
-
-    private boolean mOperationsFinished = true;
 
     @Override
     protected void saveChanges(final Handler handler) {
@@ -213,6 +240,32 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         }
     }
 
+    @Override
+    protected void lockUi() {
+        mPhotoGridView.setEnabled(false);
+    }
+
+    @Override
+    protected void unlockUi() {
+        mPhotoGridView.setEnabled(true);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.edit_title);
+    }
+
+    @Override
+    protected String getSubtitle() {
+        return getString(R.string.edit_album);
+    }
+
     class EditProfileGridAdapter extends ProfilePhotoGridAdapter {
 
         public EditProfileGridAdapter(Context context,
@@ -303,61 +356,5 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             Button mBtnRestore;
             Button mBtnSelectedAsMain;
         }
-    }
-
-    @Override
-    protected void lockUi() {
-        mPhotoGridView.setEnabled(false);
-    }
-
-    @Override
-    protected void unlockUi() {
-        mPhotoGridView.setEnabled(true);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
-    }
-
-    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (position == 0) {
-                mViewFlipper.setDisplayedChild(1);
-            }
-        }
-    };
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            mViewFlipper.setDisplayedChild(0);
-            Activity activity = getActivity();
-            if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-                Photo photo = (Photo) msg.obj;
-
-                CacheProfile.photos.addFirst(photo);
-                mPhotoGridAdapter.addFirst(photo);
-
-                if (activity != null) {
-                    Toast.makeText(activity, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
-                    activity.setResult(Activity.RESULT_OK);
-                }
-            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR && activity != null) {
-                Toast.makeText(activity, R.string.photo_add_error, Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
-    @Override
-    protected String getTitle() {
-        return getString(R.string.edit_title);
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return getString(R.string.edit_album);
     }
 }

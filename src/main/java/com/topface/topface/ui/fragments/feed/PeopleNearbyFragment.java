@@ -28,14 +28,14 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.GeoUtils.GeoLocationManager;
+import com.topface.topface.utils.geo.GeoLocationManager;
 
 import org.json.JSONObject;
 
 import java.util.List;
 
 
-public class PeopleNearbyFragment extends NoFilterFeedFragment {
+public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     protected View mEmptyFeedView;
 
     @Override
@@ -54,13 +54,13 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment {
     }
 
     @Override
-    protected FeedAdapter getNewAdapter() {
+    protected FeedAdapter<FeedGeo> getNewAdapter() {
         return new PeopleNearbyAdapter(getActivity(), getUpdaterCallback());
     }
 
     @Override
-    protected FeedListData getFeedList(JSONObject response) {
-        return new FeedListData(response, FeedGeo.class);
+    protected FeedListData<FeedGeo> getFeedList(JSONObject response) {
+        return new FeedListData<>(response, FeedGeo.class);
     }
 
     @Override
@@ -115,9 +115,9 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment {
         View currentView = viewFlipper.getChildAt(0);
         if (currentView != null) {
             if (errorCode == ErrorCodes.CANNOT_GET_GEO) {
-                ((TextView)currentView.findViewById(R.id.tvText)).setText(R.string.cannot_get_geo);
+                ((TextView) currentView.findViewById(R.id.tvText)).setText(R.string.cannot_get_geo);
             } else {
-                ((TextView)currentView.findViewById(R.id.tvText)).setText(R.string.nobody_nearby);
+                ((TextView) currentView.findViewById(R.id.tvText)).setText(R.string.nobody_nearby);
             }
         }
     }

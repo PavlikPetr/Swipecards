@@ -2,7 +2,7 @@ package com.topface.topface.utils.controllers;
 
 import android.app.Activity;
 
-import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 
@@ -14,23 +14,27 @@ import java.util.List;
  * Control actions on start: popups, fullscreen & etc
  */
 public class StartActionsController {
+    public static final int AC_PRIORITY_HIGH = 3;
+    public static final int AC_PRIORITY_NORMAL = 2;
+    public static final int AC_PRIORITY_LOW = 1;
     private static final String TAG = "StartActionController";
     /**
      * Indicates whether some action was processed on start or not.
      * Static field will die with App session
      */
     private static boolean processedActionForSession = false;
-
-    public static final int AC_PRIORITY_HIGH = 3;
-    public static final int AC_PRIORITY_NORMAL = 2;
-    public static final int AC_PRIORITY_LOW = 1;
     private final Activity mActivity;
 
     private List<IStartAction> mPendingActions;
+    private IStartAction mDebugAction;
 
     public StartActionsController(Activity activity) {
         mPendingActions = new LinkedList<>();
         mActivity = activity;
+    }
+
+    public static void onLogout() {
+        processedActionForSession = false;
     }
 
     /**
@@ -47,7 +51,7 @@ public class StartActionsController {
                 } else {
                     Debug.log(TAG, "some action already processed for this session");
                 }
-                if (App.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     if (mDebugAction != null) {
                         processAction(mDebugAction);
                     }
@@ -134,20 +138,15 @@ public class StartActionsController {
         }
     }
 
-    private IStartAction mDebugAction;
-
     /**
      * Register action to be 100% processed onProcessAction in debug apk
      *
      * @param action to be processed
      */
+    @SuppressWarnings("UnusedDeclaration")
     public void registerDebugAction(IStartAction action) {
-        if (App.DEBUG) {
+        if (BuildConfig.DEBUG) {
             mDebugAction = action;
         }
-    }
-
-    public static void onLogout() {
-        processedActionForSession = false;
     }
 }

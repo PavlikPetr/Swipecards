@@ -55,6 +55,7 @@ import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
@@ -144,6 +145,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
 
+    private INavigationFragmentsListener mFragmentSwitcherListener;
+
     private void startDatingFilterActivity() {
         Intent intent = new Intent(getActivity().getApplicationContext(),
                 EditContainerActivity.class);
@@ -151,6 +154,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private AtomicBoolean moneyDecreased = new AtomicBoolean(false);
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof INavigationFragmentsListener) {
+            mFragmentSwitcherListener = (INavigationFragmentsListener) activity;
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -179,7 +190,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
 
-        View root = inflater.inflate(R.layout.ac_dating, null);
+        View root = inflater.inflate(R.layout.fragmen_dating, null);
 
         initViews(root);
         initActionBar();
@@ -664,6 +675,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void prevUser() {
         fillUserInfo(mUserSearchList.prevUser());
+        unlockControls();
     }
 
     private void fillUserInfo(SearchUser currUser) {
@@ -895,6 +907,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingCounter.setVisibility(View.VISIBLE);
         mDatingResources.setVisibility(View.VISIBLE);
         mUserInfo.setVisibility(View.VISIBLE);
+        mFragmentSwitcherListener.onShowActionBar();
         mIsHide = false;
     }
 
@@ -903,6 +916,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingCounter.setVisibility(View.GONE);
         mDatingResources.setVisibility(View.GONE);
         mUserInfo.setVisibility(View.GONE);
+        mFragmentSwitcherListener.onHideActionBar();
         mIsHide = true;
     }
 

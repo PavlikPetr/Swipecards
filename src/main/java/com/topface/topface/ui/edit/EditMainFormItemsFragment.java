@@ -32,21 +32,19 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener {
-
-    private static final String ARG_TYPES = "arg_types";
-
-    public enum EditType {NAME, AGE, STATUS}
 
     public static final int MAX_AGE = 99;
     public static final int MIN_AGE = 16;
     public static final int MAX_STATUS_LENGTH = 200;
     public static final String INTENT_SEX_CHANGED = "SEX_CHANGED";
+    private static final String ARG_TYPES = "arg_types";
     private boolean ageIncorrect = false;
     private boolean nameIncorrect;
-
     private EditType[] mTypes;
     private HashMap<EditType, String> hashChangedData = new HashMap<>();
     private EditText mEdName;
@@ -64,7 +62,11 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     public static EditMainFormItemsFragment newInstance(EditType[] types) {
         EditMainFormItemsFragment fragment = new EditMainFormItemsFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_TYPES, types);
+        ArrayList<String> typesList = new ArrayList<>();
+        for (EditType type : types) {
+            typesList.add(type.name());
+        }
+        args.putStringArrayList(ARG_TYPES, typesList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,7 +76,13 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         super.restoreState();
         Bundle args = getArguments();
         if (args != null) {
-            mTypes = (EditType[]) args.getSerializable(ARG_TYPES);
+            List<String> list = args.getStringArrayList(ARG_TYPES);
+            if (list != null) {
+                mTypes = new EditType[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    mTypes[i] = EditType.valueOf(list.get(i));
+                }
+            }
         }
     }
 
@@ -482,4 +490,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     protected String getTitle() {
         return getString(R.string.edit_title);
     }
+
+    public enum EditType {NAME, AGE, STATUS}
 }

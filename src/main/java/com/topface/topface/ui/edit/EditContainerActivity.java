@@ -33,7 +33,11 @@ public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
 
     public static final int INTENT_EDIT_FILTER = 201;
     public static final int INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM = 202;
-
+    Handler mFinishHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            EditContainerActivity.super.finish();
+        }
+    };
     private Fragment mFragment;
 
     @Override
@@ -83,10 +87,11 @@ public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
                 mFragment = new EditProfilePhotoFragment();
                 break;
             case INTENT_EDIT_AGE:
-                int age_start = intent.getIntExtra(INTENT_AGE_START, 16);
-                int age_end = intent.getIntExtra(INTENT_AGE_END, 32);
-                int sex = intent.getIntExtra(FILTER_SEX, 1);
-                mFragment = EditAgeFragment.newInstance(age_start, age_end, sex);
+                mFragment = EditAgeFragment.newInstance(
+                        intent.getIntExtra(INTENT_AGE_START, 16),
+                        intent.getIntExtra(INTENT_AGE_END, 32),
+                        intent.getIntExtra(FILTER_SEX, Static.BOY)
+                );
                 break;
             default:
                 break;
@@ -119,12 +124,6 @@ public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
             super.finish();
         }
     }
-
-    Handler mFinishHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            EditContainerActivity.super.finish();
-        }
-    };
 
     @Override
     public boolean isTrackable() {

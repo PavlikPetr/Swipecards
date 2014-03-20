@@ -12,23 +12,26 @@ import android.view.View;
 
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.ContactsFragment;
 import com.topface.topface.ui.fragments.EditorBannersFragment;
-import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
 import com.topface.topface.ui.fragments.RegistrationFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -37,10 +40,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
     public static final String FEED_ID = "FEED_ID";
-
-    private int mCurrentFragmentId = -1;
-    private Fragment mCurrentFragment;
-
     /**
      * Constant keys for different fragments
      * Values have to be > 0
@@ -50,16 +49,91 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final int INTENT_CHAT_FRAGMENT = 3;
     public static final int INTENT_REGISTRATION_FRAGMENT = 4;
     public static final int INTENT_RECOVER_PASSWORD = 5;
-    private static final int INTENT_PROFILE_FRAGMENT = 6;
     public static final int INTENT_SETTINGS_FRAGMENT = 7;
     public static final int INTENT_CONTACTS_FRAGMENT = 8;
     public static final int INTENT_COMPLAIN_FRAGMENT = 9;
     public static final int INTENT_COINS_SUBSCRIPTION_FRAGMENT = 10;
-
     // Id для админки начиная со 101
     public static final int INTENT_EDITOR_BANNERS = 101;
-
+    private static final int INTENT_PROFILE_FRAGMENT = 6;
+    private int mCurrentFragmentId = -1;
+    private Fragment mCurrentFragment;
     private View mOnlineIcon;
+
+    public static Intent getNewIntent(int code) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, code);
+        return intent;
+    }
+
+    public static Intent getIntentForContacts(ArrayList<ContactsProvider.Contact> data) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CONTACTS_FRAGMENT);
+        intent.putParcelableArrayListExtra(CONTACTS_DATA, data);
+        return intent;
+    }
+
+    public static Intent getProfileIntent(int userId, Context context) {
+        return getProfileIntent(userId, null, Static.EMPTY, context);
+    }
+
+    public static Intent getProfileIntent(int userId, String itemId, Context context) {
+        return getProfileIntent(userId, itemId, null, context);
+    }
+
+    public static Intent getProfileIntent(int userId, Class callingClass, Context context) {
+        return getProfileIntent(userId, null, callingClass.getName(), context);
+    }
+
+    public static Intent getProfileIntent(int userId, String itemId, String className, Context context) {
+        Intent i = new Intent(context, ContainerActivity.class);
+        i.putExtra(AbstractProfileFragment.INTENT_UID, userId);
+        if (className != null) {
+            i.putExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT, className);
+        }
+        if (itemId != null) {
+            i.putExtra(AbstractProfileFragment.INTENT_ITEM_ID, itemId);
+        }
+        i.putExtra(Static.INTENT_REQUEST_KEY, INTENT_PROFILE_FRAGMENT);
+        return i;
+    }
+
+    public static Intent getComplainIntent(int userId) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_COMPLAIN_FRAGMENT);
+        intent.putExtra(INTENT_USERID, userId);
+        return intent;
+    }
+
+    public static Intent getComplainIntent(int userId, String feedId) {
+        Intent intent = getComplainIntent(userId);
+        intent.putExtra(FEED_ID, feedId);
+        return intent;
+    }
+
+    public static Intent getVipBuyIntent(String extraText, String from) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP_FRAGMENT);
+        intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
+        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
+        return intent;
+    }
+
+    public static Intent getBuyingIntent(String from) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
+        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
+        return intent;
+
+    }
+
+    public static Intent getCoinsSubscriptionIntent(String from) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_COINS_SUBSCRIPTION_FRAGMENT);
+        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
+        return intent;
+
+    }
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -122,14 +196,16 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
                 finish();
             }
 
-            if (App.DEBUG && mCurrentFragmentId <= 0) {
-                throw new IllegalArgumentException("ContainerActivity needs request code, use static ContainerActivity methods to get Intents");
+            if (BuildConfig.DEBUG && mCurrentFragmentId <= 0) {
+                throw new IllegalArgumentException(
+                        "ContainerActivity needs request code, use static ContainerActivity methods to get Intents"
+                );
             }
         }
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
         FragmentManager manager = getSupportFragmentManager();
         if (savedInstanceState != null) {
             mCurrentFragment = manager.findFragmentById(R.id.loFrame);
@@ -185,11 +261,10 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
                 break;
             case INTENT_PROFILE_FRAGMENT:
                 //Открываем профиль
-                fragment = ProfileFragment.newInstance(
-                        intent.getStringExtra(ProfileFragment.INTENT_ITEM_ID),
-                        intent.getIntExtra(ProfileFragment.INTENT_UID, 0),
-                        intent.getIntExtra(ProfileFragment.INTENT_TYPE, ProfileFragment.TYPE_MY_PROFILE),
-                        intent.getStringExtra(ProfileFragment.INTENT_CALLING_FRAGMENT)
+                fragment = UserProfileFragment.newInstance(
+                        intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID),
+                        intent.getIntExtra(AbstractProfileFragment.INTENT_UID, 0),
+                        intent.getStringExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT)
 
                 );
                 break;
@@ -246,86 +321,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     protected boolean isNeedAuth() {
         return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT &&
                 mCurrentFragmentId != INTENT_RECOVER_PASSWORD && super.isNeedAuth();
-    }
-
-    public static Intent getNewIntent(int code) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, code);
-        return intent;
-    }
-
-    public static Intent getIntentForContacts(ArrayList<ContactsProvider.Contact> data) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CONTACTS_FRAGMENT);
-        intent.putParcelableArrayListExtra(CONTACTS_DATA, data);
-        return intent;
-    }
-
-    public static Intent getProfileIntent(int userId, Context context) {
-        return getProfileIntent(userId, null, Static.EMPTY, context);
-    }
-
-    public static Intent getProfileIntent(int userId, String itemId, Context context) {
-        return getProfileIntent(userId, itemId, null, context);
-    }
-
-    public static Intent getProfileIntent(int userId, Class callingClass, Context context) {
-        return getProfileIntent(userId, null, callingClass.getName(), context);
-    }
-
-    public static Intent getProfileIntent(int userId, String itemId, String className, Context context) {
-        int type = (userId == CacheProfile.uid) ?
-                ProfileFragment.TYPE_MY_PROFILE :
-                ProfileFragment.TYPE_USER_PROFILE;
-
-        Intent i = new Intent(context, ContainerActivity.class);
-        i.putExtra(ProfileFragment.INTENT_UID, userId);
-        i.putExtra(ProfileFragment.INTENT_TYPE, type);
-        if (className != null) {
-            i.putExtra(ProfileFragment.INTENT_CALLING_FRAGMENT, className);
-        }
-        if (itemId != null) {
-            i.putExtra(ProfileFragment.INTENT_ITEM_ID, itemId);
-        }
-        i.putExtra(Static.INTENT_REQUEST_KEY, INTENT_PROFILE_FRAGMENT);
-        return i;
-    }
-
-    public static Intent getComplainIntent(int userId) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_COMPLAIN_FRAGMENT);
-        intent.putExtra(INTENT_USERID, userId);
-        return intent;
-    }
-
-    public static Intent getComplainIntent(int userId, String feedId) {
-        Intent intent = getComplainIntent(userId);
-        intent.putExtra(FEED_ID, feedId);
-        return intent;
-    }
-
-    public static Intent getVipBuyIntent(String extraText, String from) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP_FRAGMENT);
-        intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
-        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        return intent;
-    }
-
-    public static Intent getBuyingIntent(String from) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
-        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        return intent;
-
-    }
-
-    public static Intent getCoinsSubscriptionIntent(String from) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_COINS_SUBSCRIPTION_FRAGMENT);
-        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        return intent;
-
     }
 
     @Override

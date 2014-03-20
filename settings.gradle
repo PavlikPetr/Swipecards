@@ -7,5 +7,5 @@ include ':libs:Android-ViewPagerIndicator', ':libs:PullToRefresh', ':libs:PhotoV
 //Social networks
 include ':libs:Facebook', ':libs:odnoklassniki'
 //Ad networs
-include ':libs:MoPub', ':libs:AdLabSDK'
+include ':libs:mopub-android-sdk', ':libs:AdLabSDK'
 

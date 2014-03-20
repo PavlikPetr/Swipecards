@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.inneractive.api.ads.InneractiveAd xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:inneractive="http://schemas.android.com/apk/res/com.topface.topface"
+<com.inneractive.api.ads.InneractiveAd
     android:id="@+id/ad"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:inneractive="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    inneractive:appID="Topface_TopfaceAndroid_Android"
     inneractive:adType="Banner"
+    inneractive:appID="Topface_TopfaceAndroid_Android"
     inneractive:refreshInterval="60" />
