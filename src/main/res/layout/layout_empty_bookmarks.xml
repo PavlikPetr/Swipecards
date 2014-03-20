@@ -5,33 +5,36 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:clickable="true">
-
-    <TextView
-        android:id="@+id/tvText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_bookmarks_to_be_connected"
-        style="@style/ItemTitleText"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
-        android:orientation="horizontal"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/favorite"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="18dp" />
+        <TextView
+            android:id="@+id/tvText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_bookmarks_to_be_connected"
+            style="@style/ItemTitleText"
+            android:gravity="center"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/favorite"
-        android:layout_above="@id/tvText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
+
+
+    </LinearLayout>
 </RelativeLayout>
