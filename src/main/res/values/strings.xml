@@ -77,6 +77,7 @@
     <string name="chat_wink_out">You winked at him.</string>
     <string name="chat_dialog_gps">GPS is off! Turn it on?</string>
     <string name="chat_toast_fail_location">Cannot identify your location</string>
+    <string name="general_location">Location</string>
     <string name="filter_filter">Filter</string>
     <string name="filter_age_string">From %1$d to %2$d</string>
     <string name="filter_only_online">Only online</string>
@@ -510,7 +511,7 @@
     <string name="delete">Delete</string>
     <string name="delete_account_warning">Attention! You are trying to delete your profile on Topface.</string>
     <string name="delete_account_error">Unfortunately, your attempt to delete your account failed. You can try it again.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">You are trying to enter to delete your account. Before entering your account, it will be restored afterwards. Are you sure?</string>
+    <string name="delete_account_will_be_restored_are_you_sure">You are trying to login to your deleted account. When logging into your account, it will be restored. Are you sure?</string>
     <string name="restore_of_account">Restore account</string>
     <string name="restore">Restore</string>
     <string name="admiration_sended">Admiration sent</string>
@@ -629,4 +630,6 @@
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Not able to determine location</string>
     <string name="press_back_more_to_close_app">Press the back button one more time to exit Topface</string>
+    <string name="waiting_for_load">Waiting to load…</string>
+    <string name="loading_photo_percent">Uploading photos %d%%</string>
 </resources>
