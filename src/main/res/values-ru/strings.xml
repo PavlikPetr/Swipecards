@@ -233,6 +233,7 @@
     <plurals name="leaders_price">
         <item quantity="one">Встать за %d монету</item>
         <item quantity="few">Встать за %d монеты</item>
+        <item quantity="many">Встать за %d монет</item>
         <item quantity="other">Встать за %d монет</item>
     </plurals>
 
