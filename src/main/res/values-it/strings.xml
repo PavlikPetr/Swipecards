@@ -624,4 +624,6 @@
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Non siamo riusciti ad indentificare la posizione</string>
     <string name="press_back_more_to_close_app">Ripremi il tasto Indietro per uscire da Topface</string>
+    <string name="waiting_for_load">Attesa di caricamento…</string>
+    <string name="loading_photo_percent">Caricamento della foto %d%%</string>
 </resources>
