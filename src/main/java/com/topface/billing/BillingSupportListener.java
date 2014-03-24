@@ -12,7 +12,7 @@ public interface BillingSupportListener {
     /**
      * Вызывается, если доступна подписка
      */
-    public void onSubscritionSupported();
+    public void onSubscriptionSupported();
 
     /**
      * Вызывается, если платежи не доступы
@@ -22,5 +22,5 @@ public interface BillingSupportListener {
     /**
      * Вызывается, если платежи доступны
      */
-    public void onSubscritionUnsupported();
+    public void onSubscriptionUnsupported();
 }

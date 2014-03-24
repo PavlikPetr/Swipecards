@@ -114,8 +114,8 @@ public class ResponseHandler {
         //Отправляем проверку на сервер
         if (purchaseState == PurchaseState.PURCHASED) {
             //Перед отправкой добаляем в очередь
-            String queueId = GooglePlayV2Queue.getInstance(context).addPurchaseToQueue(signedData, signature);
-            verifyPurchase(context, signedData, signature, queueId);
+            String queueId = GooglePlayV2Queue.getInstance(context).addPurchaseToQueue(signedData, signature, productId);
+            verifyPurchase(context, signedData, signature, queueId, productId);
         }
 
         if (sPurchaseObserver != null) {
@@ -171,7 +171,9 @@ public class ResponseHandler {
      * @param signature подпись данных платежа
      * @param queueId   id покуки в очереди запросов
      */
-    public static void verifyPurchase(final Context context, final String data, final String signature, final String queueId) {
+    public static void verifyPurchase(final Context context, final String data,
+                                      final String signature, final String queueId,
+                                      final String productId) {
         // Отправлем заказ на сервер
         final GooglePlayPurchaseRequest purchaseRequest = new GooglePlayPurchaseRequest(context);
         purchaseRequest.data = data;
@@ -185,7 +187,7 @@ public class ResponseHandler {
                 GooglePlayV2Queue.getInstance(context).deleteQueueItem(queueId);
                 //Оповещаем интерфейс о том, что элемент удачно куплен
                 if (sPurchaseObserver != null) {
-                    sPurchaseObserver.postVerify(response);
+                    sPurchaseObserver.postVerify(response, productId);
                 }
                 if (verify.revenue > 0) {
                     try {
@@ -214,7 +216,7 @@ public class ResponseHandler {
                 }
                 //В случае ошибки не забываем оповестить об этом
                 if (sPurchaseObserver != null) {
-                    sPurchaseObserver.postVerify(response);
+                    sPurchaseObserver.postVerify(response, productId);
                 }
             }
 

@@ -18,7 +18,6 @@ import com.topface.topface.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -28,17 +27,18 @@ import java.util.List;
 public class GooglePlayProducts extends AbstractData {
     public static final String INTENT_UPDATE_PRODUCTS = "com.topface.topface.action.UPDATE_PRODUCTS";
 
-    public static enum ButtonType {
+    public static enum ProductType {
         COINS("coins"),
         LIKES("likes"),
         PREMIUM("premium"),
         LEADER("leader"),
         OTHERS("others"),
-        COINS_SUBSCRIPTION("coinsSubscription");
+        COINS_SUBSCRIPTION("coinsSubscription"),
+        COINS_SUBSCRIPTION_MASKED("coinsSubscriptionMasked");
 
         private String mTypeName;
 
-        ButtonType(String typeName) {
+        ProductType(String typeName) {
             mTypeName = typeName;
         }
 
@@ -53,7 +53,8 @@ public class GooglePlayProducts extends AbstractData {
     public LinkedList<BuyButton> premium = new LinkedList<>();
     public LinkedList<BuyButton> others = new LinkedList<>();
     public LinkedList<BuyButton> coinsSubscriptions = new LinkedList<>();
-    public ProductsInfo productsInfo;
+    public LinkedList<BuyButton> coinsSubscriptionsMasked = new LinkedList<>();
+    public ProductsInfo info;
 
     public GooglePlayProducts(@NotNull IApiResponse data) {
         fillData(data.getJsonResult());
@@ -68,12 +69,20 @@ public class GooglePlayProducts extends AbstractData {
     protected void fillData(JSONObject data) {
         try {
             fillProductsInfo(data.optJSONObject("info"));
-            fillSubscriptionsProductsArray(coinsSubscriptions, data.optJSONArray("coinsSubscription"),
-                    productsInfo.coinsSubscriptionInfo.status.userSubscriptions);
-            fillProductsArray(coins, data.optJSONArray("coins"));
-            fillProductsArray(likes, data.optJSONArray("likes"));
-            fillProductsArray(premium, data.optJSONArray("premium"));
-            fillProductsArray(others, data.optJSONArray("others"));
+            fillSubscriptionsProductsArray(
+                    coinsSubscriptionsMasked,
+                    data.optJSONArray(ProductType.COINS_SUBSCRIPTION_MASKED.getName()),
+                    info.coinsSubscriptionMasked.status.userSubscriptions
+            );
+            fillSubscriptionsProductsArray(
+                    coinsSubscriptions,
+                    data.optJSONArray(ProductType.COINS_SUBSCRIPTION.getName()),
+                    info.coinsSubscription.status.userSubscriptions
+            );
+            fillProductsArray(coins, data.optJSONArray(ProductType.COINS.getName()));
+            fillProductsArray(likes, data.optJSONArray(ProductType.LIKES.getName()));
+            fillProductsArray(premium, data.optJSONArray(ProductType.PREMIUM.getName()));
+            fillProductsArray(others, data.optJSONArray(ProductType.OTHERS.getName()));
         } catch (Exception e) {
             Debug.error("GooglePlayProducts parsing error", e);
         }
@@ -83,7 +92,7 @@ public class GooglePlayProducts extends AbstractData {
 
     private void fillProductsInfo(JSONObject infoJson) {
         if (infoJson != null) {
-            productsInfo = new ProductsInfo(infoJson);
+            info = new ProductsInfo(infoJson);
         }
     }
 
@@ -151,13 +160,13 @@ public class GooglePlayProducts extends AbstractData {
                                              final BuyButtonClickListener listener) {
         String value;
         String economy;
-        if (buyBtn.type == ButtonType.COINS_SUBSCRIPTION && buyBtn.price == 0) {
+        if (buyBtn.type == ProductType.COINS_SUBSCRIPTION && buyBtn.price == 0) {
             value = buyBtn.hint;
             economy = null;
         } else {
             value = String.format(
                     App.getContext().getString(R.string.default_price_format),
-                    buyBtn.price / 100f
+                    (float) (buyBtn.price / 100)
             );
             economy = buyBtn.hint;
         }
@@ -300,23 +309,43 @@ public class GooglePlayProducts extends AbstractData {
         );
     }
 
+    /**
+     * Can check if this product id is in on of subscriptions list
+     *
+     * @param productId sku for product
+     * @return true if productId refers to subscriptions
+     */
+    public boolean isSubscription(String productId) {
+        for (BuyButton subscription : coinsSubscriptions) {
+            if (subscription.id.equals(productId)) {
+                return true;
+            }
+        }
+        for (BuyButton subscription : coinsSubscriptionsMasked) {
+            if (subscription.id.equals(productId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public interface BuyButtonClickListener {
         public void onClick(String id);
     }
 
-    private static ButtonType getButtonTypeByName(String name) {
-        if (name.equals(ButtonType.COINS.getName())) {
-            return ButtonType.COINS;
-        } else if (name.equals(ButtonType.COINS_SUBSCRIPTION.getName())) {
-            return ButtonType.COINS_SUBSCRIPTION;
-        } else if (name.equals(ButtonType.LIKES.getName())) {
-            return ButtonType.LIKES;
-        } else if (name.equals(ButtonType.PREMIUM.getName())) {
-            return ButtonType.PREMIUM;
-        } else if (name.equals(ButtonType.LEADER.getName())) {
-            return ButtonType.LEADER;
+    private static ProductType getProductTypeByName(String name) {
+        if (name.equals(ProductType.COINS.getName())) {
+            return ProductType.COINS;
+        } else if (name.equals(ProductType.COINS_SUBSCRIPTION.getName())) {
+            return ProductType.COINS_SUBSCRIPTION;
+        } else if (name.equals(ProductType.LIKES.getName())) {
+            return ProductType.LIKES;
+        } else if (name.equals(ProductType.PREMIUM.getName())) {
+            return ProductType.PREMIUM;
+        } else if (name.equals(ProductType.LEADER.getName())) {
+            return ProductType.LEADER;
         } else {
-            return ButtonType.OTHERS;
+            return ProductType.OTHERS;
         }
     }
 
@@ -326,19 +355,22 @@ public class GooglePlayProducts extends AbstractData {
         public int price;
         protected int showType;
         public String hint;
-        public ButtonType type;
+        public ProductType type;
         public int discount;
 
         public BuyButton(JSONObject json) {
-            id = json.optString("id");
-            title = json.optString("title");
-            price = json.optInt("price");
-            hint = json.optString("hint");
-            showType = json.optInt("showType");
-            type = getButtonTypeByName(json.optString("type"));
-            discount = json.optInt("discount");
+            if (json != null) {
+                id = json.optString("id");
+                title = json.optString("title");
+                price = json.optInt("price");
+                hint = json.optString("hint");
+                showType = json.optInt("showType");
+                type = getProductTypeByName(json.optString("type"));
+                discount = json.optInt("discount");
+            }
         }
-    } 
+    }
+
     public static class SubscriptionBuyButton extends BuyButton {
 
         public boolean activated = false;
@@ -350,10 +382,12 @@ public class GooglePlayProducts extends AbstractData {
     }
 
     public class ProductsInfo {
-        public CoinsSubscriptionInfo coinsSubscriptionInfo;
+        public CoinsSubscriptionInfo coinsSubscription;
+        public CoinsSubscriptionInfo coinsSubscriptionMasked;
 
         public ProductsInfo(JSONObject infoJson) {
-            coinsSubscriptionInfo = new CoinsSubscriptionInfo(infoJson.optJSONObject("coinsSubscription"));
+            coinsSubscription = new CoinsSubscriptionInfo(infoJson.optJSONObject(ProductType.COINS_SUBSCRIPTION.getName()));
+            coinsSubscriptionMasked = new CoinsSubscriptionInfo(infoJson.optJSONObject(ProductType.COINS_SUBSCRIPTION_MASKED.getName()));
         }
 
         public class CoinsSubscriptionInfo {
@@ -361,21 +395,21 @@ public class GooglePlayProducts extends AbstractData {
             public String text;
             public BuyButton hasSubscriptionButton;
             public BuyButton noSubscriptionButton;
-            public StatusInfo status;
+            public StatusInfo status = new StatusInfo(null);
 
             public CoinsSubscriptionInfo(JSONObject json) {
-                try {
+                if (json != null) {
                     JSONArray arrMonths = json.optJSONArray("months");
-                    for (int i = 0; i < arrMonths.length(); i++) {
-                        months.add(new MonthInfo(arrMonths.getJSONObject(i)));
+                    if (arrMonths != null) {
+                        for (int i = 0; i < arrMonths.length(); i++) {
+                            months.add(new MonthInfo(arrMonths.optJSONObject(i)));
+                        }
                     }
-                } catch (JSONException ex) {
-                    Debug.error(ex);
+                    text = json.optString("text");
+                    hasSubscriptionButton = new BuyButton(json.optJSONObject("hasSubscriptionButton"));
+                    noSubscriptionButton = new BuyButton(json.optJSONObject("noSubscriptionButton"));
+                    status = new StatusInfo(json.optJSONObject("status"));
                 }
-                text = json.optString("text");
-                hasSubscriptionButton = new BuyButton(json.optJSONObject("hasSubscriptionButton"));
-                noSubscriptionButton = new BuyButton(json.optJSONObject("noSubscriptionButton"));
-                status = new StatusInfo(json.optJSONObject("status"));
             }
 
             public BuyButton getSubscriptionButton() {
@@ -387,8 +421,10 @@ public class GooglePlayProducts extends AbstractData {
                 public String amount;
 
                 public MonthInfo(JSONObject json) {
-                    title = json.optString("title");
-                    amount = json.optString("amount");
+                    if (json != null) {
+                        title = json.optString("title");
+                        amount = json.optString("amount");
+                    }
                 }
             }
 
@@ -396,13 +432,11 @@ public class GooglePlayProducts extends AbstractData {
                 public List<String> userSubscriptions = new ArrayList<>();
 
                 public StatusInfo(JSONObject json) {
-                    try {
+                    if (json != null) {
                         JSONArray arrSubscriptions = json.optJSONArray("products");
                         for (int i = 0; i < arrSubscriptions.length(); i++) {
-                            userSubscriptions.add(arrSubscriptions.getString(i));
+                            userSubscriptions.add(arrSubscriptions.optString(i));
                         }
-                    } catch (JSONException e) {
-                        Debug.error(e);
                     }
                 }
 

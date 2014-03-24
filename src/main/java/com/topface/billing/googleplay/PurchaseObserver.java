@@ -22,9 +22,10 @@ import java.lang.reflect.Method;
  * An interface for observing changes related to purchases. The main application
  * extends this class and registers an instance of that derived class with
  * {@link ResponseHandler}. The main application implements the callbacks
- * {@link #onBillingSupported(boolean)} and
- * {@link #onPurchaseStateChange(PurchaseState, String, int, long)}.  These methods
- * are used to update the UI.
+ * {@link #onBillingSupported(boolean, String)} } and
+ * {@link #onPurchaseStateChange(com.topface.billing.googleplay.Consts.PurchaseState, String,
+ * int, long, String, String, String)}.
+ * These methods are used to update the UI.
  */
 public abstract class PurchaseObserver {
     private static final String TAG = "PurchaseObserver";
@@ -44,7 +45,7 @@ public abstract class PurchaseObserver {
 
     /**
      * This is the callback that is invoked when Android Market responds to the
-     * {@link BillingService#checkBillingSupported()} request.
+     * {@link BillingService#checkBillingSupported(String)} request.
      *
      * @param supported true if in-app billing is supported.
      */
@@ -53,13 +54,14 @@ public abstract class PurchaseObserver {
     /**
      * This is the callback that is invoked when an item is purchased,
      * refunded, or canceled.  It is the callback invoked in response to
-     * calling {@link BillingService#requestPurchase(String)}.  It may also
+     * calling {@link BillingService#requestPurchase(String, String, String)}.  It may also
      * be invoked asynchronously when a purchase is made on another device
      * (if the purchase was for a Market-managed item), or if the purchase
      * was refunded, or the charge was canceled.  This handles the UI
      * update.  The database update is handled in
-     * {@link ResponseHandler#purchaseResponse(android.content.Context, PurchaseState,
-     * String, String, long)}.
+     * {@link ResponseHandler#purchaseResponse(android.content.Context,
+     * com.topface.billing.googleplay.Consts.PurchaseState, String, String, long,
+     * String, String, String)}.
      *
      * @param purchaseState the purchase state of the item
      * @param itemId        a string identifying the item (the "SKU")
@@ -75,7 +77,8 @@ public abstract class PurchaseObserver {
      * This is called when we receive a response code from Market for a
      * RequestPurchase request that we made.  This is NOT used for any
      * purchase state changes.  All purchase state changes are received in
-     * {@link #onPurchaseStateChange(PurchaseState, String, int, long)}.
+     * {@link #onPurchaseStateChange(com.topface.billing.googleplay.Consts.PurchaseState, String,
+     * int, long, String, String, String)}.
      * This is used for reporting various errors, or if the user backed out
      * and didn't purchase the item.  The possible response codes are:
      * RESULT_OK means that the order was sent successfully to the server.
@@ -171,11 +174,11 @@ public abstract class PurchaseObserver {
      *
      * @param response ответ от сервера
      */
-    void postVerify(final IApiResponse response) {
+    void postVerify(final IApiResponse response, final String productId) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                onVerifyResponse(response);
+                onVerifyResponse(response, productId);
             }
         });
     }
@@ -185,5 +188,5 @@ public abstract class PurchaseObserver {
      *
      * @param response объект ответа от сервера
      */
-    abstract public void onVerifyResponse(IApiResponse response);
+    abstract public void onVerifyResponse(IApiResponse response, String productId);
 }
