@@ -568,8 +568,6 @@
     <string name="default_ringtone">Preimpostato</string>
     <string name="photo_info_deleted">Eliminata</string>
     <string name="user_deleted_or_banned">L’utente è stato eliminato o ha ricevuto ban</string>
-    <string name="locking_popup_title">L’accesso alla sezione «%s» è limitato!</string>
-    <string name="locking_popup_message">Per accedere alla sezione «%s» rispondi a tutte le simpatie in entrata o ricevi VIP.</string>
     <string name="locking_popup_button_answer">Rispondere alle simpatie</string>
     <string name="locking_menu_message">L’accesso ad alcune sezioni è limitato. Rispondi a tutte le simpatie in entrata o ricevi VIP per togliere le restrizioni.</string>
     <string name="locking_likes_message">Attenzione! L’accesso ad alcune sezioni è limitato. Rispondi a tutte le simpatie in entrata o ricevi VIP per togliere tutte le restrizioni.</string>
@@ -624,4 +622,6 @@
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Non siamo riusciti ad indentificare la posizione</string>
     <string name="press_back_more_to_close_app">Ripremi il tasto Indietro per uscire da Topface</string>
+    <string name="waiting_for_load">Attesa di caricamento…</string>
+    <string name="loading_photo_percent">Caricamento della foto %d%%</string>
 </resources>

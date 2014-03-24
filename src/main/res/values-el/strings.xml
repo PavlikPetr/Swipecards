@@ -563,8 +563,6 @@
     <string name="default_ringtone">Από προεπιλογή</string>
     <string name="photo_info_deleted">Διαγράφεται</string>
     <string name="user_deleted_or_banned">Ο χρήστης απαγορεύεται ή να διαγραφεί</string>
-    <string name="locking_popup_title">Η μετάβαση στο τμήμα «%s» είναι περιορισμένη!</string>
-    <string name="locking_popup_message">Για να μπορέσετε να μεταβείτε στο τμήμα «%s» απαντήστε σε όλες τις νέες συμπάθειες ή αποκτήστε VIP.</string>
     <string name="locking_popup_button_answer">Απαντήστε σε νέες συμπάθειες</string>
     <string name="locking_menu_message">Η πρόσβαση σε ορισμένες σελίδες της εφαρμογής είναι περιορισμένη. Για κατάργηση όλων των περιορισμών, απαντήστε σε όλες τις νέες συμπάθειες ή αποκτήστε VIP.</string>
     <string name="locking_likes_message">Προσοχή! Η πρόσβαση σε ορισμένες σελίδες της εφαρμογής είναι περιορισμένη. Για κατάργηση όλων των περιορισμών, απαντήστε σε όλες τις νέες συμπάθειες ή αποκτήστε VIP.</string>
