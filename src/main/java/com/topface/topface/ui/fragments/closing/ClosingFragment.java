@@ -26,6 +26,7 @@ import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
+import com.topface.topface.utils.AnimationHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.cache.UsersListCacheManager;
@@ -279,9 +280,10 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AnimationHelper animationHelper = AnimationHelper.getInstance(getActivity());
                 for (View view : mViewsToHideAndShow) {
                     if (view != null) {
-                        view.setVisibility(mControlViewsHidden ? View.VISIBLE : View.GONE);
+                        view.startAnimation(animationHelper.getFadingAnimation(view, mControlViewsHidden));
                     }
                 }
                 if (mFragmentSwitchListener != null) {

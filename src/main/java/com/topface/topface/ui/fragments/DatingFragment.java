@@ -63,6 +63,7 @@ import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.AnimationHelper;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -663,7 +664,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             unlockControls();
             showNovice();
             hasOneSympathyOrDelight = true;
-            showControls();
         }
 
         mPreloadManager.preloadPhoto(mUserSearchList);
@@ -904,18 +904,20 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
-        mDatingCounter.setVisibility(View.VISIBLE);
-        mDatingResources.setVisibility(View.VISIBLE);
-        mUserInfo.setVisibility(View.VISIBLE);
+        AnimationHelper animationHelper = AnimationHelper.getInstance(getActivity());
+        mUserInfo.startAnimation(animationHelper.getFadingAnimation(mUserInfo, true));
+        mDatingCounter.startAnimation(animationHelper.getFadingAnimation(mDatingCounter, true));
+        mDatingResources.startAnimation(animationHelper.getFadingAnimation(mDatingResources, true));
         mFragmentSwitcherListener.onShowActionBar();
         mIsHide = false;
     }
 
     @Override
     public void hideControls() {
-        mDatingCounter.setVisibility(View.GONE);
-        mDatingResources.setVisibility(View.GONE);
-        mUserInfo.setVisibility(View.GONE);
+        AnimationHelper animationHelper = AnimationHelper.getInstance(getActivity());
+        mUserInfo.startAnimation(animationHelper.getFadingAnimation(mUserInfo, false));
+        mDatingCounter.startAnimation(animationHelper.getFadingAnimation(mDatingCounter, false));
+        mDatingResources.startAnimation(animationHelper.getFadingAnimation(mDatingResources, false));
         mFragmentSwitcherListener.onHideActionBar();
         mIsHide = true;
     }
@@ -1035,23 +1037,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
             }
 
-            int currentPhotoPosition = mImageSwitcher.getPreviousSelectedPosition();
-            if (position == 1 && currentPhotoPosition == 0) {
-                hideControls();
-            } else if (position == 0 && currentPhotoPosition > 0) {
-                showControls();
-            }
             setCounter(mImageSwitcher.getSelectedPosition());
-
-            if (isAfterLast) {
-                hideControls();
-                isAfterLast = false;
-            }
-
-            if (position == ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData().size() - 1) {
-                showControls();
-                isAfterLast = true;
-            }
         }
 
         @Override
