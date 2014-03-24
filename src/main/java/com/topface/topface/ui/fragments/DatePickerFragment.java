@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Build;
@@ -14,17 +15,30 @@ import java.util.Calendar;
 
 public class DatePickerFragment extends TrackedDialogFragment implements DatePickerDialog.OnDateSetListener {
 
-    private static final int START_SHIFT = 33;
     public static final String YEAR = "year";
     public static final String MONTH = "month";
     public static final String DAY = "day";
-
+    public static final String TAG = "datePickerTag";
+    private static final int START_SHIFT = 33;
     private static long MAX_DATE;
     private static long MIN_DATE;
-
-    public static final String TAG = "datePickerTag";
-
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+
+    public static DatePickerFragment newInstance(int year, int month, int day) {
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
+        Bundle arguments = new Bundle();
+        arguments.putInt(YEAR, year);
+        arguments.putInt(MONTH, month);
+        arguments.putInt(DAY, day);
+        datePickerFragment.setArguments(arguments);
+        return datePickerFragment;
+    }
+
+    public static boolean isValidDate(final int year, final int month, final int day, final long minDate,
+                                      final long maxDate) {
+        final long millis = DateUtils.getDateInMilliseconds(year, month, day);
+        return (millis >= minDate && millis <= maxDate);
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -56,11 +70,16 @@ public class DatePickerFragment extends TrackedDialogFragment implements DatePic
                 }
             }
         };
+        setMinAndMaxDate(dialog);
+        return dialog;
+    }
+
+    @TargetApi(11)
+    private void setMinAndMaxDate(DatePickerDialog dialog) {
         if (Build.VERSION.SDK_INT > 11) {
             dialog.getDatePicker().setMinDate(MIN_DATE);
             dialog.getDatePicker().setMaxDate(MAX_DATE);
         }
-        return dialog;
     }
 
     @Override
@@ -72,22 +91,6 @@ public class DatePickerFragment extends TrackedDialogFragment implements DatePic
 
     public void setOnDateSetListener(DatePickerDialog.OnDateSetListener listener) {
         mDateSetListener = listener;
-    }
-
-    public static DatePickerFragment newInstance(int year, int month, int day) {
-        DatePickerFragment datePickerFragment = new DatePickerFragment();
-        Bundle arguments = new Bundle();
-        arguments.putInt(YEAR, year);
-        arguments.putInt(MONTH, month);
-        arguments.putInt(DAY, day);
-        datePickerFragment.setArguments(arguments);
-        return datePickerFragment;
-    }
-
-    public static boolean isValidDate(final int year, final int month, final int day, final long minDate,
-                                      final long maxDate) {
-        final long millis = DateUtils.getDateInMilliseconds(year, month, day);
-        return (millis >= minDate && millis <= maxDate);
     }
 
 }

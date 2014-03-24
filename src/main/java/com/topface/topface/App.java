@@ -53,6 +53,7 @@ import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 @ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends Application {
@@ -159,6 +160,10 @@ public class App extends Application {
 
     public static Context getContext() {
         return mContext;
+    }
+
+    public static Locale getCurrentLocale() {
+        return mContext.getResources().getConfiguration().locale;
     }
 
     public static boolean isOnline() {
