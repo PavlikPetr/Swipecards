@@ -9,16 +9,15 @@ import java.util.Date;
 
 public class DateUtils {
 
-    public static long midnight;
-    public static long current_year;
-    private final static SimpleDateFormat mDateFormatDayYear = new SimpleDateFormat("dd MMMM yyyy");
-    private final static SimpleDateFormat mDateFormatDay = new SimpleDateFormat("dd MMMM");
-    private final static SimpleDateFormat mDateFormatDayOfWeek = new SimpleDateFormat("EEEE");
-    private final static SimpleDateFormat mDateFormatHours = new SimpleDateFormat("HH:mm");
-
     public static final long DAY_IN_MILLISECONDS = 86400000; // 24 * 60 * 60 * 1000;
     public static final long HOUR_IN_MILLISECONDS = 3600000; // 60 * 60 * 1000;
     public static final long MINUTE_IN_MILLISECONDS = 60000; // 60 * 1000;
+    private final static SimpleDateFormat mDateFormatDayYear = new SimpleDateFormat("dd MMMM yyyy", App.getCurrentLocale());
+    private final static SimpleDateFormat mDateFormatDay = new SimpleDateFormat("dd MMMM", App.getCurrentLocale());
+    private final static SimpleDateFormat mDateFormatDayOfWeek = new SimpleDateFormat("EEEE", App.getCurrentLocale());
+    private final static SimpleDateFormat mDateFormatHours = new SimpleDateFormat("HH:mm", App.getCurrentLocale());
+    public static long midnight;
+    public static long current_year;
 
     public static void syncTime() {
         Calendar cal = Calendar.getInstance();
