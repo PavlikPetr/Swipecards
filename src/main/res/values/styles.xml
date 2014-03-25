@@ -67,7 +67,7 @@
     </style>
 
     <style name="NoShadowItemFont">
-        <item name="android:shadowColor">@android:color/transparent</item>
+        <item name="android:shadowColor">@null</item>
         <item name="android:shadowRadius">0</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">0</item>
