@@ -60,6 +60,8 @@ public class UserConfig extends AbstractConfig {
         settingsMap.addStringField(generateKey(NOTIFICATIONS_MESSAGES_STACK), Static.EMPTY);
         // количество нотификаций, которые пишем в поле "еще %d сообщений"
         settingsMap.addIntegerField(generateKey(NOTIFICATION_REST_MESSAGES), 0);
+        // время последнего сброса счетчика вкладки бонусов
+        settingsMap.addLongField(generateKey(DATA_BONUS_LAST_SHOW_TIME), 0L);
     }
 
     @Override

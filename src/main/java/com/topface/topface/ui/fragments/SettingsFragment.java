@@ -203,18 +203,19 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 root.findViewById(R.id.loMelody).setVisibility(View.GONE);
             }
         }
+
+        // Account
+        initAccountViews(root);
+
         // Help
         frame = (ViewGroup) root.findViewById(R.id.loHelp);
         if (!TextUtils.isEmpty(CacheProfile.getOptions().helpUrl)) {
-            setBackground(R.drawable.edit_big_btn_top_selector, frame);
+            setBackground(R.drawable.edit_big_btn_middle_selector, frame);
             setText(R.string.settings_help, frame);
             frame.setOnClickListener(this);
         } else {
             frame.setVisibility(View.GONE);
         }
-
-        // Account
-        initAccountViews(root);
 
         // Rate app
         frame = (ViewGroup) root.findViewById(R.id.loFeedback);
@@ -240,19 +241,12 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     private void initAccountViews(View root) {
         ViewGroup frame;
         frame = (ViewGroup) root.findViewById(R.id.loAccount);
-        setBackground(
-                TextUtils.isEmpty(CacheProfile.getOptions().helpUrl) ?
-                        R.drawable.edit_big_btn_top_selector :
-                        R.drawable.edit_big_btn_middle_selector,
-                frame
-        );
-
+        setBackground(R.drawable.edit_big_btn_top_selector, frame);
         ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_account);
         TextView socialNameText = (TextView) frame.findViewWithTag("tvText");
         mSettings.getSocialAccountName(socialNameText);
         mSettings.getSocialAccountIcon(socialNameText);
         socialNameText.setVisibility(View.VISIBLE);
-
         frame.setOnClickListener(this);
     }
 

@@ -148,7 +148,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         loName.setVisibility(View.VISIBLE);
         ((TextView) loName.findViewWithTag("tvTitle")).setText(R.string.edit_name);
         mEdName = (EditText) loName.findViewWithTag("edText");
-        mEdName.setText(data);
+        mEdName.append(data);
         mEdName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEdName.addTextChangedListener(new TextWatcher() {
             String before = Static.EMPTY;
@@ -180,7 +180,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         InputFilter[] filters = new InputFilter[1];
         filters[0] = new InputFilter.LengthFilter(MAX_STATUS_LENGTH);
         mEdStatus.setFilters(filters);
-        mEdStatus.setText(data);
+        mEdStatus.append(data);
         mEdStatus.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEdStatus.addTextChangedListener(new TextWatcher() {
             String before = Static.EMPTY;
@@ -213,7 +213,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         InputFilter[] fArray = new InputFilter[1];
         fArray[0] = new InputFilter.LengthFilter(maxLength);
         mEdAge.setFilters(fArray);
-        mEdAge.setText(data);
+        mEdAge.append(data);
         mEdAge.setInputType(InputType.TYPE_CLASS_NUMBER);
         mEdAge.addTextChangedListener(new TextWatcher() {
             String before = Static.EMPTY;

@@ -563,9 +563,7 @@
     <string name="default_ringtone">Standard</string>
     <string name="photo_info_deleted">Ist gelöscht</string>
     <string name="user_deleted_or_banned">Nutzer ist gelöscht oder gebannt</string>
-    <string name="locking_popup_title">Der Übergang in «%s» ist begrenzt!</string>
-    <string name="locking_popup_message">Für den Übergang in «%s» antworten Sie auf alle empfangenen Sympathien oder bekommen Sie VIP.</string>
-    <string name="locking_popup_button_answer">Auf Sympathien antworten</string>
+    <string name="locking_popup_button_answer">Antworten</string>
     <string name="locking_menu_message">Der Zugang zu einigen Seiten der App ist begrenzt. Falls Sie sich von allen Begrenzungen befreien wollen, antworten Sie auf alle empfangene Sympathien oder bekommen Sie VIP.</string>
     <string name="locking_likes_message">Achtung! Der Zugang zu einigen Seiten der App ist begrenzt. Falls Sie sich von allen Begrenzungen befreien wollen, antworten Sie auf alle empfangene Sympathien oder bekommen Sie VIP.</string>
     <string name="locking_screen_button_answer">Antworten</string>

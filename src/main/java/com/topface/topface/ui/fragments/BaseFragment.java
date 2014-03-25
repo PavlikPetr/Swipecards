@@ -106,8 +106,14 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        clearPreviousState();
         refreshActionBarTitles();
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    private void clearPreviousState() {
+        mSupportActionBar = null;
+        mTitleSetter = null;
     }
 
     public void refreshActionBarTitles() {
