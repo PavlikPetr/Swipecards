@@ -67,7 +67,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         // TextEdit
         ((TextView) root.findViewById(R.id.tvTitle)).setText(mFormInfo.getFormTitle(mTitleId));
         mEditText = (EditText) root.findViewById(R.id.edText);
-        mEditText.setText(mData);
+        mEditText.append(mData);
         mEditText.setInputType(mFormInfo.getInputType(mTitleId));
         mEditText.addTextChangedListener(new TextWatcher() {
 
