@@ -66,6 +66,13 @@
         <item name="android:shadowDy">-2</item>
     </style>
 
+    <style name="NoShadowItemFont">
+        <item name="android:shadowColor">@android:color/transparent</item>
+        <item name="android:shadowRadius">0</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+    </style>
+
     <style name="RedAlertTextShadow">
         <item name="android:shadowColor">#350d0d</item>
         <item name="android:shadowRadius">1</item>
@@ -510,7 +517,7 @@
         <item name="android:background">@drawable/bg_message_friend</item>
     </style>
 
-    <style name="chat_message">
+    <style name="chat_message" parent="NoShadowItemFont">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical|left</item>
@@ -547,7 +554,7 @@
         <item name="android:layout_height">130dp</item>
     </style>
 
-    <style name="chat_image.map">
+    <style name="chat_image.map" parent="NoShadowItemFont">
         <item name="android:layout_width">146dp</item>
         <item name="android:layout_height">100dp</item>
     </style>
