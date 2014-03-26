@@ -386,6 +386,7 @@ public class ClosingsController implements View.OnClickListener {
         if (!mLeftMenuLocked) {
             if (mMenuFragment.getActivity() instanceof  NavigationActivity) {
                 NavigationActivity activity = (NavigationActivity) mMenuFragment.getActivity();
+                activity.onShowActionBar();
                 activity.setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN, new HackyDrawerLayout.IBackPressedListener() {
                     @Override
                     public void onBackPressed() {
