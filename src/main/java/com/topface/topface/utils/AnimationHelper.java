@@ -7,55 +7,47 @@ import android.view.animation.AnimationUtils;
 
 import com.topface.topface.R;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class AnimationHelper {
-    private static AnimationHelper mInstance;
     private Context mContext;
 
-    public static AnimationHelper getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new AnimationHelper(context);
-        }
-        return mInstance;
-    }
-
-    private AnimationHelper(Context context) {
+    public AnimationHelper(Context context) {
         mContext = context;
     }
 
-    public Animation getFadingAnimation(View view, boolean isShowing) {
+    public void animateFadingViews(final List<View> viewsToAnimate, final boolean isShowing) {
         Animation animation = AnimationUtils.loadAnimation(mContext, isShowing ? R.anim.abc_fade_in : R.anim.abc_fade_out);
         if (animation != null) {
-            animation.setAnimationListener(new MultipleViewsAnimationLinstener(view, isShowing));
-        }
-        return animation;
-    }
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    if (isShowing) {
+                        for (View view : viewsToAnimate) {
+                            view.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
 
-    public static class MultipleViewsAnimationLinstener implements Animation.AnimationListener {
-        private View view;
-        private boolean isShowing;
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    if (!isShowing) {
+                        for (View view : viewsToAnimate) {
+                            view.setVisibility(View.GONE);
+                        }
+                    }
+                }
 
-        public MultipleViewsAnimationLinstener(View view, boolean isShowing) {
-            this.view = view;
-            this.isShowing = isShowing;
-        }
+                @Override
+                public void onAnimationRepeat(Animation animation) {
 
-        @Override
-        public void onAnimationStart(Animation animation) {
-            if (isShowing) {
-                view.setVisibility(View.VISIBLE);
+                }
+            });
+            
+            for (View view : viewsToAnimate) {
+                view.startAnimation(animation);
             }
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-            if (!isShowing) {
-                view.setVisibility(View.GONE);
-            }
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-
         }
     }
 }

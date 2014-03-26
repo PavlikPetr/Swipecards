@@ -280,12 +280,10 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AnimationHelper animationHelper = AnimationHelper.getInstance(getActivity());
-                for (View view : mViewsToHideAndShow) {
-                    if (view != null) {
-                        view.startAnimation(animationHelper.getFadingAnimation(view, mControlViewsHidden));
-                    }
-                }
+                AnimationHelper animationHelper = new AnimationHelper(getActivity());
+
+                          animationHelper.animateFadingViews(mViewsToHideAndShow, mControlViewsHidden);
+
                 if (mFragmentSwitchListener != null) {
                     if (mControlViewsHidden) {
                         mFragmentSwitchListener.onShowActionBar();

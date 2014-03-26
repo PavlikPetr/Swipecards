@@ -74,6 +74,8 @@ import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
@@ -129,6 +131,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private BroadcastReceiver mProfileReceiver;
     private boolean mNeedMore;
     private int mLoadedCount;
+
+    private List<View> mViewsToHideAndShow;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -263,7 +267,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         initResources(root);
         initControlButtons(root);
-
+        mViewsToHideAndShow = new ArrayList<>();
+        mViewsToHideAndShow.add(mDatingCounter);
+        mViewsToHideAndShow.add(mDatingResources);
+        mViewsToHideAndShow.add(mUserInfo);
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
     }
 
@@ -904,20 +911,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
-        AnimationHelper animationHelper = AnimationHelper.getInstance(getActivity());
-        mUserInfo.startAnimation(animationHelper.getFadingAnimation(mUserInfo, true));
-        mDatingCounter.startAnimation(animationHelper.getFadingAnimation(mDatingCounter, true));
-        mDatingResources.startAnimation(animationHelper.getFadingAnimation(mDatingResources, true));
+        AnimationHelper animationHelper = new AnimationHelper(getActivity());
+        animationHelper.animateFadingViews(mViewsToHideAndShow, true);
+
         mFragmentSwitcherListener.onShowActionBar();
         mIsHide = false;
     }
 
     @Override
     public void hideControls() {
-        AnimationHelper animationHelper = AnimationHelper.getInstance(getActivity());
-        mUserInfo.startAnimation(animationHelper.getFadingAnimation(mUserInfo, false));
-        mDatingCounter.startAnimation(animationHelper.getFadingAnimation(mDatingCounter, false));
-        mDatingResources.startAnimation(animationHelper.getFadingAnimation(mDatingResources, false));
+        AnimationHelper animationHelper = new AnimationHelper(getActivity());
+        animationHelper.animateFadingViews(mViewsToHideAndShow, false);
+
         mFragmentSwitcherListener.onHideActionBar();
         mIsHide = true;
     }
