@@ -17,25 +17,19 @@ public class AnimationHelper {
         mContext = context;
     }
 
-    public void animateFadingViews(final List<View> viewsToAnimate, final boolean isShowing) {
-        Animation animation = AnimationUtils.loadAnimation(mContext, isShowing ? R.anim.abc_fade_in : R.anim.abc_fade_out);
+    public void animateFadeOut(final List<View> viewsToAnimate) {
+        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.abc_fade_out);
         if (animation != null) {
             animation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
-                    if (isShowing) {
-                        for (View view : viewsToAnimate) {
-                            view.setVisibility(View.VISIBLE);
-                        }
-                    }
+
                 }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    if (!isShowing) {
-                        for (View view : viewsToAnimate) {
-                            view.setVisibility(View.GONE);
-                        }
+                    for (View view : viewsToAnimate) {
+                        view.setVisibility(View.GONE);
                     }
                 }
 
@@ -44,7 +38,35 @@ public class AnimationHelper {
 
                 }
             });
-            
+
+            for (View view : viewsToAnimate) {
+                view.startAnimation(animation);
+            }
+        }
+    }
+
+    public void animateFadeIn(final List<View> viewsToAnimate) {
+        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.abc_fade_in);
+        if (animation != null) {
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    for (View view : viewsToAnimate) {
+                        view.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+
             for (View view : viewsToAnimate) {
                 view.startAnimation(animation);
             }

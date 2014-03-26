@@ -5,11 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
@@ -52,6 +55,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     private List<View> mViewsToHideAndShow = new ArrayList<>();
     private boolean mControlViewsHidden = false;
     private INavigationFragmentsListener mFragmentSwitchListener;
+    private AnimationHelper mAnimationHelper;
 
     /**
      * Add items to list of views for hide and show purposes on ImageSwitcher click
@@ -68,6 +72,12 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         if (activity instanceof INavigationFragmentsListener) {
             mFragmentSwitchListener = (INavigationFragmentsListener) activity;
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAnimationHelper = new AnimationHelper(getActivity());
     }
 
     @Override
@@ -280,9 +290,11 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AnimationHelper animationHelper = new AnimationHelper(getActivity());
-
-                          animationHelper.animateFadingViews(mViewsToHideAndShow, mControlViewsHidden);
+                if (mControlViewsHidden) {
+                    mAnimationHelper.animateFadeIn(mViewsToHideAndShow);
+                } else {
+                    mAnimationHelper.animateFadeOut(mViewsToHideAndShow);
+                }
 
                 if (mFragmentSwitchListener != null) {
                     if (mControlViewsHidden) {

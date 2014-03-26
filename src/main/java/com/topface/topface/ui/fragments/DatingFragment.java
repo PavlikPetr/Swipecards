@@ -151,6 +151,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private INavigationFragmentsListener mFragmentSwitcherListener;
+    private AnimationHelper mAnimationHelper;
 
     private void startDatingFilterActivity() {
         Intent intent = new Intent(getActivity().getApplicationContext(),
@@ -247,6 +248,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void initViews(View root) {
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
+
+        mAnimationHelper = new AnimationHelper(getActivity());
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfDatingButtons);
 
@@ -911,18 +914,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
-        AnimationHelper animationHelper = new AnimationHelper(getActivity());
-        animationHelper.animateFadingViews(mViewsToHideAndShow, true);
-
+        mAnimationHelper.animateFadeIn(mViewsToHideAndShow);
         mFragmentSwitcherListener.onShowActionBar();
         mIsHide = false;
     }
 
     @Override
     public void hideControls() {
-        AnimationHelper animationHelper = new AnimationHelper(getActivity());
-        animationHelper.animateFadingViews(mViewsToHideAndShow, false);
-
+        mAnimationHelper.animateFadeOut(mViewsToHideAndShow);
         mFragmentSwitcherListener.onHideActionBar();
         mIsHide = true;
     }
