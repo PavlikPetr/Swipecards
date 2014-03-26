@@ -1,6 +1,5 @@
 package com.topface.topface.ui;
 
-import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.TextView;
@@ -19,11 +18,6 @@ public abstract class CustomTitlesBaseFragmentActivity extends BaseFragmentActiv
 
     IActionBarTitleSetter mActioBarTitleSetter;
     private View mCustomView;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     protected void initActionBar(ActionBar actionBar) {

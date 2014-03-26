@@ -53,6 +53,7 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.ResourcesUtils;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -558,12 +559,13 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     public void onClick(View v) {
         if (getListView().isClickable()) {
             FragmentId id = (FragmentId) v.getTag();
-            //Сделано так, потому что при нажатии на кнопку бонусов не должно открываться нового фрагмента
-            //к тому же тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
+            //Тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
             //его локально, а не серверно, как это происходит с остальными счетчиками.
             if (id == F_BONUS) {
                 if (CacheProfile.needShowBonusCounter) {
-                    App.getUserConfig().setBonusCounterLastShowTime(CacheProfile.getOptions().bonus.timestamp);
+                    UserConfig config = App.getUserConfig();
+                    config.setBonusCounterLastShowTime(CacheProfile.getOptions().bonus.timestamp);
+                    config.saveConfig();
                 }
                 CacheProfile.needShowBonusCounter = false;
                 mAdapter.refreshCounterBadges();

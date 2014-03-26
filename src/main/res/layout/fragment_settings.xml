@@ -82,13 +82,13 @@
             layout="@layout/item_divider" />
 
         <include
-            android:id="@+id/loHelp"
+            android:id="@+id/loAccount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             layout="@layout/item_edit_form_select" />
 
         <include
-            android:id="@+id/loAccount"
+            android:id="@+id/loHelp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             layout="@layout/item_edit_form_select" />
