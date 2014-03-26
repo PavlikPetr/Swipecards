@@ -205,7 +205,7 @@ public class BuyingFragment extends BillingFragment {
     }
 
     private void initCoinsButtons(View root, GooglePlayProducts products) {
-        boolean coinsMaskedExperiment = CacheProfile.getOptions().coinsMaskedExperiment;
+        boolean coinsMaskedExperiment = CacheProfile.getOptions().forceCoinsSubscriptions;
         List<BuyButton> coinsProducts = coinsMaskedExperiment &&
                 !products.info.coinsSubscriptionMasked.status.isActive() ?
                 products.coinsSubscriptionsMasked : products.coins;
@@ -331,15 +331,14 @@ public class BuyingFragment extends BillingFragment {
 
     @Override
     public void onPurchased(String productId) {
-        Debug.log("purchased");
-        final GooglePlayProducts products = CacheProfile.getGooglePlayProducts();
-        if (products.isSubscription(productId)) {
+        Debug.log("Purchased item with ID:" + productId);
+        if (CacheProfile.getGooglePlayProducts().isSubscription(productId)) {
             App.sendProfileAndOptionsRequests(new SimpleApiHandler() {
                 @Override
                 public void success(IApiResponse response) {
                     super.success(response);
                     if (isAdded()) {
-                        initCoinsButtons(getView(), products);
+                        initCoinsButtons(getView(), CacheProfile.getGooglePlayProducts());
                     }
                     LocalBroadcastManager.getInstance(App.getContext())
                             .sendBroadcast(new Intent(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));

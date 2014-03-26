@@ -5,9 +5,11 @@ package com.topface.billing.googleplay;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.appsflyer.AppsFlyerLib;
+import com.topface.billing.BillingDriver;
 import com.topface.billing.BillingUtils;
 import com.topface.billing.googleplay.BillingService.RequestPurchase;
 import com.topface.billing.googleplay.BillingService.RestoreTransactions;
@@ -109,13 +111,16 @@ public class ResponseHandler {
      */
     public static void purchaseResponse(
             final Context context, final PurchaseState purchaseState, final String productId,
-            final String orderId, final long purchaseTime, final String developerPayload, final String signedData, final String signature) {
+            final String orderId, final long purchaseTime, final String developerPayload,
+            final String signedData, final String signature) {
 
         //Отправляем проверку на сервер
         if (purchaseState == PurchaseState.PURCHASED) {
             //Перед отправкой добаляем в очередь
-            String queueId = GooglePlayV2Queue.getInstance(context).addPurchaseToQueue(signedData, signature, productId);
-            verifyPurchase(context, signedData, signature, queueId, productId);
+            String testProductId = BillingDriver.getProductIdForTestPayment();
+            String queueId = GooglePlayV2Queue.getInstance(context)
+                    .addPurchaseToQueue(signedData, signature, productId, testProductId);
+            verifyPurchase(context, signedData, signature, queueId, productId, testProductId);
         }
 
         if (sPurchaseObserver != null) {
@@ -173,7 +178,7 @@ public class ResponseHandler {
      */
     public static void verifyPurchase(final Context context, final String data,
                                       final String signature, final String queueId,
-                                      final String productId) {
+                                      final String productId, final String testProductId) {
         // Отправлем заказ на сервер
         final GooglePlayPurchaseRequest purchaseRequest = new GooglePlayPurchaseRequest(context);
         purchaseRequest.data = data;
@@ -187,7 +192,11 @@ public class ResponseHandler {
                 GooglePlayV2Queue.getInstance(context).deleteQueueItem(queueId);
                 //Оповещаем интерфейс о том, что элемент удачно куплен
                 if (sPurchaseObserver != null) {
-                    sPurchaseObserver.postVerify(response, productId);
+                    if (!TextUtils.isEmpty(testProductId)) {
+                        sPurchaseObserver.postVerify(response, testProductId);
+                    } else {
+                        sPurchaseObserver.postVerify(response, productId);
+                    }
                 }
                 if (verify.revenue > 0) {
                     try {

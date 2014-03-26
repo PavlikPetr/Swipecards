@@ -119,7 +119,7 @@ public class Options extends AbstractData {
 
     public Bonus bonus = new Bonus();
     public Offerwalls offerwalls = new Offerwalls();
-    public boolean coinsMaskedExperiment;
+    public boolean forceCoinsSubscriptions;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -265,7 +265,7 @@ public class Options extends AbstractData {
                 experimentTags = new ExperimentTags(tagsObject);
             }
             // TODO init after availability on server
-            coinsMaskedExperiment = response.optBoolean("coinsMaskedExperiment");
+            forceCoinsSubscriptions = response.optBoolean("forceCoinsSubscriptions");
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }

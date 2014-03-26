@@ -15,6 +15,7 @@ public class GooglePlayV2Queue extends BillingQueue {
     public static final String SIGNATURE_KEY = "signature";
     public static final String DATA_KEY = "data";
     private static final java.lang.String PRODUCT_ID = "product";
+    private static final String TEST_PRODUCT_ID = "test_product";
     private static Context mContext;
     private static GooglePlayV2Queue mInstance;
 
@@ -34,18 +35,20 @@ public class GooglePlayV2Queue extends BillingQueue {
     public void sendQueueItems() {
         final QueueItem item = getQueueItemObject();
         if (item != null) {
-            ResponseHandler.verifyPurchase(mContext, item.data, item.signature, item.id, item.productId);
+            ResponseHandler.verifyPurchase(mContext, item.data, item.signature, item.id,
+                    item.productId, item.testProductId);
         }
 
     }
 
-    public synchronized String addPurchaseToQueue(String data, String signature, String productId) {
+    public synchronized String addPurchaseToQueue(String data, String signature, String productId, String testProductId) {
         String id = "";
         try {
             JSONObject dataJson = new JSONObject();
             dataJson.put(DATA_KEY, data);
             dataJson.put(SIGNATURE_KEY, signature);
             dataJson.put(PRODUCT_ID, productId);
+            dataJson.put(TEST_PRODUCT_ID, testProductId);
             id = super.addPurchaseToQueue(dataJson);
         } catch (JSONException e) {
             Debug.error(e);
@@ -63,6 +66,7 @@ public class GooglePlayV2Queue extends BillingQueue {
             item.data = object.optString(DATA_KEY);
             item.signature = object.optString(SIGNATURE_KEY);
             item.productId = object.optString(PRODUCT_ID);
+            item.testProductId = object.optString(TEST_PRODUCT_ID);
         }
         return (item != null && item.id != null) ? item : null;
     }
@@ -73,5 +77,6 @@ public class GooglePlayV2Queue extends BillingQueue {
         public String signature;
         public String data;
         public String productId;
+        public String testProductId;
     }
 }
