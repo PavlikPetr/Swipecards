@@ -30,20 +30,30 @@ public class GooglePlayProducts extends AbstractData {
     public static enum ProductType {
         COINS("coins"),
         LIKES("likes"),
-        PREMIUM("premium"),
+        PREMIUM("premium", true),
         LEADER("leader"),
         OTHERS("others"),
-        COINS_SUBSCRIPTION("coinsSubscription"),
-        COINS_SUBSCRIPTION_MASKED("coinsSubscriptionMasked");
+        COINS_SUBSCRIPTION("coinsSubscription", true),
+        COINS_SUBSCRIPTION_MASKED("coinsSubscriptionMasked", true);
 
         private String mTypeName;
+        private boolean mIsSubscription;
 
         ProductType(String typeName) {
+            this(typeName, false);
+        }
+
+        ProductType(String typeName, boolean isSubscription) {
             mTypeName = typeName;
+            mIsSubscription = isSubscription;
         }
 
         public String getName() {
             return mTypeName;
+        }
+
+        public boolean isSubscription() {
+            return mIsSubscription;
         }
     }
 
@@ -338,6 +348,8 @@ public class GooglePlayProducts extends AbstractData {
             return ProductType.COINS;
         } else if (name.equals(ProductType.COINS_SUBSCRIPTION.getName())) {
             return ProductType.COINS_SUBSCRIPTION;
+        } else if (name.equals(ProductType.COINS_SUBSCRIPTION_MASKED.getName())) {
+            return ProductType.COINS_SUBSCRIPTION_MASKED;
         } else if (name.equals(ProductType.LIKES.getName())) {
             return ProductType.LIKES;
         } else if (name.equals(ProductType.PREMIUM.getName())) {

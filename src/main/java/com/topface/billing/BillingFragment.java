@@ -86,7 +86,7 @@ abstract public class BillingFragment extends BaseFragment implements BillingLis
     protected void buy(GooglePlayProducts.BuyButton btn) {
         String itemId = btn.id;
         if (itemId != null) {
-            if (btn instanceof GooglePlayProducts.SubscriptionBuyButton) {
+            if (btn.type.isSubscription()) {
                 buySubscription(btn.id);
             } else {
                 buyItem(btn.id);
