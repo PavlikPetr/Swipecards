@@ -573,6 +573,8 @@
     <string name="default_ringtone">By default</string>
     <string name="photo_info_deleted">Deleted</string>
     <string name="user_deleted_or_banned">The user is banned or deleted</string>
+    <string name="locking_popup_title">Entrance to the section «%s» is restricted</string>
+    <string name="locking_popup_message">For availability, respond to incoming likes or get VIP</string>
     <string name="locking_popup_button_answer">Respond to likes</string>
     <string name="locking_menu_message">Access to certain pages of the application is restricted. To remove these restrictions, answer all incoming likes or get VIP.</string>
     <string name="locking_likes_message">Attention! Access to some of the pages on the application is restricted. To remove these restrictions, answer to all incoming likes or get VIP.</string>
