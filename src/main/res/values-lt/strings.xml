@@ -585,8 +585,6 @@
     <string name="default_ringtone">Pagal nutylėjimą</string>
     <string name="photo_info_deleted">Pašalinta</string>
     <string name="user_deleted_or_banned">Vartotojas pašalintas arba užbanintas</string>
-    <string name="locking_popup_title">Perėjimas į skiltį «%s» apribotas!</string>
-    <string name="locking_popup_message">Kad pereiti į skiltį «%s» atsakykite į visas įeinančias simpatijas arba gaukite VIP.</string>
     <string name="locking_popup_button_answer">Atsakyti į simpatijas</string>
     <string name="locking_menu_message">Prieiga prie kai kurių programos puslapių apribota. Kad pašalinti apribojimus atsakykite į visas įeinančias simpatijas arba gaukite VIP.</string>
     <string name="locking_likes_message">Dėmesio! Prieiga prie kai kurių programos puslapių apribota. Kad pašalinti visus apribojimus atsakykite į visas įeinančias simpatijas arba gaukite VIP.</string>
