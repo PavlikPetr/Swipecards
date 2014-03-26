@@ -102,7 +102,7 @@ public class AuthFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         Debug.log("AF: onCreate");
         mAuthorizationManager = new AuthorizationManager(getActivity());
-        View root = inflater.inflate(R.layout.ac_auth, null);
+        View root = inflater.inflate(R.layout.fragment_auth, null);
         if (savedInstanceState != null) {
             btnsHidden = savedInstanceState.getBoolean(BTNS_HIDDEN);
         }
