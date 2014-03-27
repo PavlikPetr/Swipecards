@@ -10,9 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
@@ -34,8 +32,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -52,7 +48,6 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             onCountersUpdated();
         }
     };
-    private List<View> mViewsToHideAndShow = new ArrayList<>();
     private boolean mControlViewsHidden = false;
     private INavigationFragmentsListener mFragmentSwitchListener;
     private AnimationHelper mAnimationHelper;
@@ -63,7 +58,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
      * @param view from ui
      */
     protected void addViewsToHide(View view) {
-        mViewsToHideAndShow.add(view);
+        mAnimationHelper.addView(view);
     }
 
     @Override
@@ -77,7 +72,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAnimationHelper = new AnimationHelper(getActivity());
+        mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
     }
 
     @Override
@@ -291,9 +286,9 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             @Override
             public void onClick(View v) {
                 if (mControlViewsHidden) {
-                    mAnimationHelper.animateFadeIn(mViewsToHideAndShow);
+                    mAnimationHelper.animateIn();
                 } else {
-                    mAnimationHelper.animateFadeOut(mViewsToHideAndShow);
+                    mAnimationHelper.animateOut();
                 }
 
                 if (mFragmentSwitchListener != null) {

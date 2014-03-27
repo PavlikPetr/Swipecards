@@ -7,20 +7,29 @@ import android.view.animation.AnimationUtils;
 
 import com.topface.topface.R;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class AnimationHelper {
     private Context mContext;
+    private List<View> mViewsToAnimate;
 
-    public AnimationHelper(Context context) {
+    private Animation mInAnimation;
+    private Animation mOutAnimation;
+
+    public AnimationHelper(Context context, int inResource, int outResource) {
         mContext = context;
+        mViewsToAnimate = new ArrayList<>();
+        generateOutAnimation(outResource);
+        generateInAnimation(inResource);
+
     }
 
-    public void animateFadeOut(final List<View> viewsToAnimate) {
-        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.abc_fade_out);
-        if (animation != null) {
-            animation.setAnimationListener(new Animation.AnimationListener() {
+    private void generateOutAnimation(int outResource) {
+        mOutAnimation = AnimationUtils.loadAnimation(mContext,outResource);
+        if (mOutAnimation != null) {
+            mOutAnimation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
 
@@ -28,7 +37,7 @@ public class AnimationHelper {
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    for (View view : viewsToAnimate) {
+                    for (View view : mViewsToAnimate) {
                         view.setVisibility(View.GONE);
                     }
                 }
@@ -38,20 +47,20 @@ public class AnimationHelper {
 
                 }
             });
-
-            for (View view : viewsToAnimate) {
-                view.startAnimation(animation);
+        } else {
+            for (View view : mViewsToAnimate) {
+                view.setVisibility(View.GONE);
             }
         }
     }
 
-    public void animateFadeIn(final List<View> viewsToAnimate) {
-        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.abc_fade_in);
-        if (animation != null) {
-            animation.setAnimationListener(new Animation.AnimationListener() {
+    private void generateInAnimation(int inResource) {
+        mInAnimation = AnimationUtils.loadAnimation(mContext, inResource);
+        if (mInAnimation != null) {
+            mInAnimation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
-                    for (View view : viewsToAnimate) {
+                    for (View view : mViewsToAnimate) {
                         view.setVisibility(View.VISIBLE);
                     }
                 }
@@ -66,10 +75,26 @@ public class AnimationHelper {
 
                 }
             });
-
-            for (View view : viewsToAnimate) {
-                view.startAnimation(animation);
+        } else {
+            for (View view : mViewsToAnimate) {
+                view.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+    public void addView(View view) {
+        mViewsToAnimate.add(view);
+    }
+
+    public void animateOut() {
+        for (View view : mViewsToAnimate) {
+            view.startAnimation(mOutAnimation);
+        }
+    }
+
+    public void animateIn() {
+        for (View view : mViewsToAnimate) {
+            view.startAnimation(mInAnimation);
         }
     }
 }
