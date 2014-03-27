@@ -3,14 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fillViewport="true"
-    android:background="@drawable/auth_bg"
+
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/authContainer"
-
+        android:background="@drawable/auth_bg"
         android:clickable="true">
 
         <!--ImageView
@@ -68,7 +68,6 @@
             <include layout="@layout/layout_signin" />
 
         </ViewFlipper>
-
 
     </RelativeLayout>
 </ScrollView>
