@@ -4,19 +4,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-
-    <ImageView
-        android:id="@+id/ivAuthLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/auth_logo" />
-
     <LinearLayout
         android:id="@+id/ivAuthGroup"
-        android:layout_below="@id/ivAuthLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -145,5 +134,14 @@
             android:layout_height="wrap_content"
             android:text="@string/other_auth" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivAuthLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_above="@id/ivAuthGroup"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/auth_logo" />
 
 </RelativeLayout>

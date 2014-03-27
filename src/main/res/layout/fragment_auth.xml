@@ -3,10 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/auth_bg"
-    android:paddingTop="?attr/actionBarSize"
     android:fillViewport="true"
-    android:clipToPadding="true">
+    android:background="@drawable/auth_bg"
+    >
 
     <RelativeLayout
         android:id="@+id/authContainer"
@@ -63,7 +62,6 @@
             <include layout="@layout/layout_signin" />
 
         </ViewFlipper>
-
 
     </RelativeLayout>
 </ScrollView>
