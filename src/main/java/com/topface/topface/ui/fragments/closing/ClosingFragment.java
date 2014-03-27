@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -26,12 +27,11 @@ import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
+import com.topface.topface.utils.AnimationHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,9 +48,9 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             onCountersUpdated();
         }
     };
-    private List<View> mViewsToHideAndShow = new ArrayList<>();
     private boolean mControlViewsHidden = false;
     private INavigationFragmentsListener mFragmentSwitchListener;
+    private AnimationHelper mAnimationHelper;
 
     /**
      * Add items to list of views for hide and show purposes on ImageSwitcher click
@@ -58,7 +58,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
      * @param view from ui
      */
     protected void addViewsToHide(View view) {
-        mViewsToHideAndShow.add(view);
+        mAnimationHelper.addView(view);
     }
 
     @Override
@@ -67,6 +67,12 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         if (activity instanceof INavigationFragmentsListener) {
             mFragmentSwitchListener = (INavigationFragmentsListener) activity;
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
     }
 
     @Override
@@ -279,11 +285,12 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (View view : mViewsToHideAndShow) {
-                    if (view != null) {
-                        view.setVisibility(mControlViewsHidden ? View.VISIBLE : View.GONE);
-                    }
+                if (mControlViewsHidden) {
+                    mAnimationHelper.animateIn();
+                } else {
+                    mAnimationHelper.animateOut();
                 }
+
                 if (mFragmentSwitchListener != null) {
                     if (mControlViewsHidden) {
                         mFragmentSwitchListener.onShowActionBar();

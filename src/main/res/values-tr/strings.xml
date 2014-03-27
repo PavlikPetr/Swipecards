@@ -77,10 +77,12 @@
     <string name="chat_wink_out">Siz göz kırptınız.</string>
     <string name="chat_dialog_gps">GPS kapalı! Açalım mı?</string>
     <string name="chat_toast_fail_location">Konum belirlenemedi</string>
+    <string name="general_location">Yeriniz</string>
     <string name="filter_filter">Filtre</string>
     <string name="filter_age_string">%1$d’dan %2$d’a</string>
     <string name="filter_only_online">Sadece çevrim içi</string>
     <string name="filter_only_beautiful">Sadece güzel</string>
+    <string name="filter_city_age_parameters">Yaş ve şehir</string>
     <string name="filter_extra_parameters">Daha fazla seçenek</string>
     <string name="filter_age">Yaş</string>
     <string name="filter_online">Çevrim içi</string>
@@ -104,6 +106,7 @@
     <string name="profile_empty_form">Kullanıcı anketi doldurmadı</string>
     <string name="profile_ask_form">Anketi doldurmak için rica etmek</string>
     <string name="edit_title">Düzeltme</string>
+    <string name="edit_block_photo">Fotoğraflar</string>
     <string name="edit_bg_photo">Yeni fotoğraf</string>
     <string name="edit_album">Albüm</string>
     <string name="edit_profile_photo">Foto değiştirmek</string>
@@ -174,6 +177,8 @@
     <string name="settings_feedback_success_msg">Teşekkürler, mesaj başarılıyla gönderilmiştir</string>
     <string name="settings_switch_on">aç</string>
     <string name="settings_switch_off">kapat</string>
+    <string name="settings_block_main">Genel</string>
+    <string name="settings_block_additional">Ek</string>
     <string name="leaders_go_date">Buraya istiyorum</string>
     <string name="leaders_leader_now">Artık sizi herkes görecek!</string>
     <string name="leaders_need_photo">Önce fotoğraf seçin!</string>
@@ -296,6 +301,11 @@
     <string name="virus_chat_likes_request_title">Arkadaşlarınıza sempatileri hediye etmek</string>
     <string name="virus_chat_btn">Sempati kazanmak</string>
     <string name="virus_request_error">Sempatiler arkadaşlarınıza gönderilemedi</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="zero">Artık sizin %d sempatiniz var!</item>
+        <item quantity="other">Artık sizin %d sempatiniz var!</item>
+        <item quantity="one">Artık sizin %d sempatiniz var!</item>
+    </plurals>
     <string name="profile_ask_sent">İstek gönderildi</string>
     <string name="virus_error">Yirmi dört saat içinde arkadaşınız sadece 1 defa sempati hediye edebilir! Yarın deneyin!</string>
     <string name="popup_version_title">Uygulamanın yeni versiyonu mevcuttur</string>
@@ -572,8 +582,6 @@
     <string name="default_ringtone">Varsayılan</string>
     <string name="photo_info_deleted">Silinmiştir</string>
     <string name="user_deleted_or_banned">Kullanıcı silinmiş veya engellenmiştir</string>
-    <string name="locking_popup_title">«%s» bölümüne geçiş sınırlıdır!</string>
-    <string name="locking_popup_message">«%s» bölümüne geçmek için tüm gelen sempatilere cevap verin veya VIP alın.</string>
     <string name="locking_popup_button_answer">Sempatilere cevap vermek</string>
     <string name="locking_menu_message">Uygulamanın bazı sayfalarına erişim sınırlıdır. Tüm sınırları kaldırmak için tüm gelen sempatilere cevap verin veya VIP alın.</string>
     <string name="locking_likes_message">Dikkat! Uygulamanın bazı sayfalarına erişim sınırlıdır. Tüm sınırları kaldırmak için tüm gelen sempatilere cevap verin veya VIP alın.</string>
@@ -624,4 +632,12 @@
     </plurals>
     <string name="you_were_subscribed">Abonelik oluşmuştur.</string>
     <string name="subscriptions_can_be_changed">Abonelik oluşmuştur.</string>
+    <string name="people_nearby">İnsanlar yakında</string>
+    <string name="nobody_nearby">Ortalık bomboş!</string>
+    <string name="general_distance_km">%.02f км</string>
+    <string name="general_distance_m">%d м</string>
+    <string name="cannot_get_geo">Yeriniz Tespit edilemedi</string>
+    <string name="press_back_more_to_close_app">Topface\'den çıkmak için bir daha geri düğmesine tıklayın</string>
+    <string name="waiting_for_load">Bekleyin, yükleme yapılıyor…</string>
+    <string name="loading_photo_percent">%d%% resim yüklemesi</string>
 </resources>

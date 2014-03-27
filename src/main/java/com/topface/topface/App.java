@@ -53,6 +53,7 @@ import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 @ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends Application {
@@ -161,6 +162,10 @@ public class App extends Application {
         return mContext;
     }
 
+    public static Locale getCurrentLocale() {
+        return mContext.getResources().getConfiguration().locale;
+    }
+
     public static boolean isOnline() {
         return mConnectionReceiver.isConnected();
     }
@@ -173,6 +178,9 @@ public class App extends Application {
     }
 
     public static Configurations getConfig() {
+        if (mBaseConfig == null) {
+            mBaseConfig = new Configurations(App.getContext());
+        }
         return mBaseConfig;
     }
 
@@ -211,15 +219,15 @@ public class App extends Application {
         initAcra();
 
         //Базовые настройки приложения, инитим их один раз при старте приложения
-        mBaseConfig = new Configurations(this);
-        Editor.setConfig(mBaseConfig.getAppConfig());
+        Configurations baseConfig = getConfig();
+        Editor.setConfig(baseConfig.getAppConfig());
 
         //Включаем строгий режим, если это Debug версия
         checkStrictMode();
         //Для Android 2.1 и ниже отключаем Keep-Alive
         checkKeepAlive();
 
-        String msg = "+onCreate\n" + mBaseConfig.toString();
+        String msg = "+onCreate\n" + baseConfig.toString();
         if (BuildConfig.BUILD_TIME > 0) {
             msg += "\nBuild Time: " + SimpleDateFormat.getInstance().format(BuildConfig.BUILD_TIME);
         }

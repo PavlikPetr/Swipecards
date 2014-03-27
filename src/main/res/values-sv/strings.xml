@@ -77,6 +77,7 @@
     <string name="chat_wink_out">Du har blinkat</string>
     <string name="chat_dialog_gps">GPS inaktiverad! Aktivera?</string>
     <string name="chat_toast_fail_location">Det gick inte att identifiera läget</string>
+    <string name="general_location">Läge</string>
     <string name="filter_filter">Filter</string>
     <string name="filter_age_string">Från %1$d till %2$d</string>
     <string name="filter_only_online">Endast online</string>
@@ -567,8 +568,8 @@
     <string name="default_ringtone">Som standard</string>
     <string name="photo_info_deleted">Raderats</string>
     <string name="user_deleted_or_banned">Användaren raderad eller bannlyst</string>
-    <string name="locking_popup_title">Tilgång till sidan «%s» är begransad!</string>
-    <string name="locking_popup_message">För att få tillgång till sidan  «%s» besvara alla inkommande sympatier eller erhåll VIP.</string>
+    <string name="locking_popup_title">Övergång till «%s» är begränsad</string>
+    <string name="locking_popup_message">För att få tillgång svara på inkommande sympatier eller erhåll VIP</string>
     <string name="locking_popup_button_answer">Besvara sympatier</string>
     <string name="locking_menu_message">Tillgång till vissa sidor är begränsad. För att ta bort begränsningar besvara alla inkommande sympatier eller erhåll VIP.</string>
     <string name="locking_likes_message">OBS! Tillgång till vissa sidor är begränsad. För att ta bort alla begränsningar besvara alla inkommande sympatier eller erhåll VIP.</string>
@@ -623,4 +624,6 @@
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Det gick inte att identifiera läget</string>
     <string name="press_back_more_to_close_app">Tryck på knappen en gång till för att lägga ut från Topface</string>
+    <string name="waiting_for_load">Väntar på uppladdningen…</string>
+    <string name="loading_photo_percent">%d%% foto laddas</string>
 </resources>

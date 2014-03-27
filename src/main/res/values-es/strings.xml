@@ -77,6 +77,7 @@
     <string name="chat_wink_out">Has guiñado</string>
     <string name="chat_dialog_gps">¡GPS es desconectado! ¿Conectar?</string>
     <string name="chat_toast_fail_location">No podemos determinar tu ubicación</string>
+    <string name="general_location">Ubicación</string>
     <string name="filter_filter">Filtro</string>
     <string name="filter_age_string">Desde %1$d hasta %2$d</string>
     <string name="filter_only_online">Solamente en línea</string>
@@ -571,8 +572,8 @@
     <string name="default_ringtone">Por definición</string>
     <string name="photo_info_deleted">Eliminada</string>
     <string name="user_deleted_or_banned">El usuario eliminado o baneado</string>
-    <string name="locking_popup_title">¡Acceso a la sección «%s» está limitado!</string>
-    <string name="locking_popup_message">Para acceder a la sección «%s» responde a todas las simpatías entrantes u obtenga VIP.</string>
+    <string name="locking_popup_title">Paso a la sección \"%s\" está limitado</string>
+    <string name="locking_popup_message">Para acceder responde a las simpatías entrantes u obten VIP</string>
     <string name="locking_popup_button_answer">Responder a las simpatías</string>
     <string name="locking_menu_message">El acceso a algunas páginas de la aplicación está limitado. Para quitar todas las limitaciones responde a todas las simpatías u obtenga VIP.</string>
     <string name="locking_likes_message">¡Atención! El acceso a algunas páginas de la aplicación está limitado. Para quitar todas las limitaciones responde a todas las simpatías u obtenga VIP.</string>
@@ -627,4 +628,6 @@
     <string name="general_distance_m">%d m.</string>
     <string name="cannot_get_geo">No fue posible detectar la úbicación</string>
     <string name="press_back_more_to_close_app">Pulsa el botón atrás otra vez para salir de Topface</string>
+    <string name="waiting_for_load">Esperando para subir…</string>
+    <string name="loading_photo_percent">Subiendo fotografía %d%%</string>
 </resources>

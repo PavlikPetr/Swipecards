@@ -89,6 +89,7 @@ public class BannerBlock {
     public static final String BANNER_LIFESTREET = "LIFESTREET";
     public static final String BANNER_ADLAB = "ADLAB";
     public static final String BANNER_INNERACTIVE = "INNERACTIVE";
+    public static final String BANNER_ADMOB_MEDIATION = "ADMOB_MEDIATION";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
     public final static String[] BANNERS = new String[]{
@@ -131,7 +132,6 @@ public class BannerBlock {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             if (CacheProfile.getOptions().containsBannerType(BANNER_ADCAMP)) {
                 AdsManager.getInstance().initialize(App.getContext());
-                AdsManager.getInstance().addTestDevice("99000200906025");
                 mAdcampInitialized = true;
             }
         }
@@ -190,6 +190,8 @@ public class BannerBlock {
                     return mInflater.inflate(R.layout.banner_topface, mBannerLayout, false);
                 case BANNER_ADMOB:
                     return mInflater.inflate(R.layout.banner_admob, mBannerLayout, false);
+                case BANNER_ADMOB_MEDIATION:
+                    return mInflater.inflate(R.layout.banner_admob_mediation, mBannerLayout, false);
                 case BANNER_ADWIRED:
                     return mInflater.inflate(R.layout.banner_adwired, mBannerLayout, false);
                 case BANNER_MOPUB:

@@ -268,7 +268,6 @@ public class ClosingsController implements View.OnClickListener {
     public void onClick(View v) {
         Object tag = v.getTag();
         if (tag instanceof FragmentId) {
-            unlockLeftMenu();
             switch ((FragmentId) tag) {
                 case F_LIKES_CLOSINGS:
                     selectMenuItem(FragmentId.F_LIKES_CLOSINGS);
@@ -384,8 +383,9 @@ public class ClosingsController implements View.OnClickListener {
 
     private void lockLeftMenu() {
         if (!mLeftMenuLocked) {
-            if (mMenuFragment.getActivity() instanceof  NavigationActivity) {
+            if (mMenuFragment.getActivity() instanceof NavigationActivity) {
                 NavigationActivity activity = (NavigationActivity) mMenuFragment.getActivity();
+                activity.onShowActionBar();
                 activity.setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN, new HackyDrawerLayout.IBackPressedListener() {
                     @Override
                     public void onBackPressed() {
@@ -406,6 +406,7 @@ public class ClosingsController implements View.OnClickListener {
                 NavigationActivity activity = ((NavigationActivity) mMenuFragment.getActivity());
                 activity.setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 activity.getSupportActionBar().setDisplayUseLogoEnabled(true);
+                activity.onShowActionBar();
             }
         }
     }

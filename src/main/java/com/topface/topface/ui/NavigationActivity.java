@@ -503,6 +503,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
             } catch (Exception e) {
                 Debug.error(e);
             }
+            Debug.log("Current User ID:" + CacheProfile.getProfile().uid);
         }
         mMenuFragment.onLoadProfile();
     }
@@ -618,8 +619,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
 
     @Override
     public void onHideActionBar() {
-        setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        getSupportActionBar().hide();
+        if (!mMenuFragment.isLockedByClosings()) {
+            setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            getSupportActionBar().hide();
+        }
     }
 
     @Override

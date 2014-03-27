@@ -77,6 +77,7 @@
     <string name="chat_wink_out">You winked at him.</string>
     <string name="chat_dialog_gps">GPS is off! Turn it on?</string>
     <string name="chat_toast_fail_location">Cannot identify your location</string>
+    <string name="general_location">Location</string>
     <string name="filter_filter">Filter</string>
     <string name="filter_age_string">From %1$d to %2$d</string>
     <string name="filter_only_online">Only online</string>
@@ -510,7 +511,7 @@
     <string name="delete">Delete</string>
     <string name="delete_account_warning">Attention! You are trying to delete your profile on Topface.</string>
     <string name="delete_account_error">Unfortunately, your attempt to delete your account failed. You can try it again.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">You are trying to enter to delete your account. Before entering your account, it will be restored afterwards. Are you sure?</string>
+    <string name="delete_account_will_be_restored_are_you_sure">You are trying to login to your deleted account. When logging into your account, it will be restored. Are you sure?</string>
     <string name="restore_of_account">Restore account</string>
     <string name="restore">Restore</string>
     <string name="admiration_sended">Admiration sent</string>
@@ -572,8 +573,8 @@
     <string name="default_ringtone">By default</string>
     <string name="photo_info_deleted">Deleted</string>
     <string name="user_deleted_or_banned">The user is banned or deleted</string>
-    <string name="locking_popup_title">Access to the «%s» section is restricted.</string>
-    <string name="locking_popup_message">To gain access to «%s» section, please answer to all incoming likes or get a VIP-status.</string>
+    <string name="locking_popup_title">Entrance to the section «%s» is restricted</string>
+    <string name="locking_popup_message">For availability, respond to incoming likes or get VIP</string>
     <string name="locking_popup_button_answer">Respond to likes</string>
     <string name="locking_menu_message">Access to certain pages of the application is restricted. To remove these restrictions, answer all incoming likes or get VIP.</string>
     <string name="locking_likes_message">Attention! Access to some of the pages on the application is restricted. To remove these restrictions, answer to all incoming likes or get VIP.</string>
@@ -629,4 +630,6 @@
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Not able to determine location</string>
     <string name="press_back_more_to_close_app">Press the back button one more time to exit Topface</string>
+    <string name="waiting_for_load">Waiting to load…</string>
+    <string name="loading_photo_percent">Uploading photos %d%%</string>
 </resources>

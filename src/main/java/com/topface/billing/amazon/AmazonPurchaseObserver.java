@@ -39,7 +39,7 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
 
             //Если SDK доступно, то мы можем и подписываться и покупать
             listener.onInAppBillingSupported();
-            listener.onSubscritionSupported();
+            listener.onSubscriptionSupported();
         }
     }
 
@@ -89,7 +89,7 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
             case ALREADY_ENTITLED:
                 //При попытке купить уже купленые товары просто отправлям коллбэк, не трогая сервер
                 if (listener != null) {
-                    listener.onPurchased();
+                    listener.onPurchased(purchaseResponse.getReceipt().getSku());
                 }
                 break;
 
@@ -103,7 +103,7 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
 
     public static void validateRequest(final BillingListener listener,
                                        String queueId,
-                                       String sku, String userId, String purchaseToken, String requestId,
+                                       final String sku, String userId, String purchaseToken, String requestId,
                                        final Context context) {
         //Добавляем запрос в очередь только если это не уже запрос из очереди
         final String queueNewId;
@@ -120,7 +120,7 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
                     public void success(IApiResponse response) {
                         AmazonQueue.getInstance(context).deleteQueueItem(queueNewId);
                         if (listener != null) {
-                            listener.onPurchased();
+                            listener.onPurchased(sku);
                         }
                     }
 

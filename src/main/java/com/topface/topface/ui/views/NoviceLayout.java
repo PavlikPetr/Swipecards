@@ -74,7 +74,7 @@ public class NoviceLayout extends RelativeLayout {
                 @Override
                 public void onGlobalLayout() {
                     int[] point = new int[2];
-                    mMask.getLocationOnScreen(point);
+                    mMask.getLocationInWindow(point);
                     mBackground.setImageBitmap(getMaskedBackgroundBitmap(point));
                     ViewTreeObserver obs = mMask.getViewTreeObserver();
                     invalidate();
@@ -109,21 +109,19 @@ public class NoviceLayout extends RelativeLayout {
         Bitmap output = null;
         try {
             Bitmap mask = ((BitmapDrawable) mMask.getDrawable()).getBitmap();
-
-            Point size = Utils.getSrceenSize(mContext);
-            int width = size.x;
-            int height = size.y;
-
+            Point windowSizes = Utils.getSrceenSize(mContext);
+            int width = getWidth();
+            int height = getHeight();
+            Point maskPoint = new Point(
+                    point[0] - windowSizes.x + width,
+                    point[1] - windowSizes.y + height
+            );
             output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
-
             Canvas canvas = new Canvas(output);
-
-            canvas.drawARGB(178, 0, 0, 0);
-
             Paint paint = new Paint();
+            canvas.drawARGB(178, 0, 0, 0);
             paint.setXfermode(new PorterDuffXfermode(Mode.DST_OUT));
-            canvas.drawBitmap(mask, point[0], point[1], paint);
-
+            canvas.drawBitmap(mask, maskPoint.x, maskPoint.y, paint);
         } catch (OutOfMemoryError e) {
             Debug.error(e);
         }

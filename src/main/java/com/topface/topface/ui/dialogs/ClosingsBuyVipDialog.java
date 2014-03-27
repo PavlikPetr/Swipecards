@@ -18,11 +18,21 @@ import com.topface.topface.utils.ResourcesUtils;
 
 public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.OnClickListener {
 
-    public static boolean opened = false;
-
     public static final String TAG = "com.topface.topface.ui.dialogs.ClosingsBuyVipDialog_TAG";
     private static final String ARG_FRAGMENT = "fragmentId";
+    public static boolean opened = false;
     private IRespondToLikesListener mWatchSequentialyListener;
+
+    public static ClosingsBuyVipDialog newInstance(BaseFragment.FragmentId fragmentId) {
+        ClosingsBuyVipDialog dialog = new ClosingsBuyVipDialog();
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_FRAGMENT, fragmentId);
+        dialog.setArguments(args);
+
+        dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Topface);
+        return dialog;
+    }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
@@ -43,7 +53,7 @@ public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.On
         ((TextView) root.findViewById(R.id.tvTitle))
                 .setText(String.format(getString(R.string.locking_popup_title), fragmentName));
         ((TextView) root.findViewById(R.id.tvMessage))
-                .setText(String.format(getString(R.string.locking_popup_message), fragmentName));
+                .setText(getString(R.string.locking_popup_message));
     }
 
     @Override
@@ -81,17 +91,6 @@ public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.On
         if (dialog != null) dialog.dismiss();
     }
 
-    public static ClosingsBuyVipDialog newInstance(BaseFragment.FragmentId fragmentId) {
-        ClosingsBuyVipDialog dialog = new ClosingsBuyVipDialog();
-
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_FRAGMENT, fragmentId);
-        dialog.setArguments(args);
-
-        dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Topface);
-        return dialog;
-    }
-
     @Override
     public void show(FragmentManager manager, String tag) {
         super.show(manager, tag);
@@ -102,12 +101,12 @@ public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.On
         mWatchSequentialyListener = listener;
     }
 
-    public interface IRespondToLikesListener {
-        void onRespondToLikes();
-    }
-
     @Override
     protected String getTrackName() {
         return "ClosingBuyVipPopup";
+    }
+
+    public interface IRespondToLikesListener {
+        void onRespondToLikes();
     }
 }

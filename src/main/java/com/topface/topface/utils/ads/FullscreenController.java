@@ -11,6 +11,10 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.google.ads.Ad;
+import com.google.ads.AdListener;
+import com.google.ads.AdRequest;
+import com.google.ads.InterstitialAd;
 import com.ivengo.adv.AdvListener;
 import com.ivengo.adv.AdvView;
 import com.lifestreet.android.lsmsdk.BannerAdapter;
@@ -57,6 +61,8 @@ public class FullscreenController {
     private static final String MOPUB_INTERSTITIAL_ID = "00db7208a90811e281c11231392559e4";
     private static final String IVENGO_APP_ID = "aggeas97392g";
     private static final String LIFESTREET_TAG = "http://mobile-android.lfstmedia.com/m2/slot76331?ad_size=320x480&adkey=a25";
+    private static final String ADMOB_INTERSTITIAL_ID = "a153303efcaf2c6";
+    private static final String ADMOB_MEDIATION_INTERSTITIAL_ID = "5161525f5e624978";
     private static boolean isFullScreenBannerVisible = false;
     private SharedPreferences mPreferences;
     private Activity mActivity;
@@ -66,6 +72,134 @@ public class FullscreenController {
 
     public FullscreenController(Activity activity) {
         mActivity = activity;
+    }
+
+    private void requestFallbackFullscreen() {
+        if (mActivity != null) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    addLastFullscreenShowedTime();
+                    requestGagFullscreen();
+                }
+            });
+        }
+    }
+
+    private boolean showFullscreenBanner(String url) {
+        boolean passByTime = isTimePassed();
+        boolean passByUrl = passFullScreenByUrl(url);
+
+        return passByUrl && passByTime;
+    }
+
+    private boolean isTimePassed() {
+        long currentTime = System.currentTimeMillis();
+        long lastCall = getPreferences().getLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, currentTime);
+        return !getPreferences().contains(Static.PREFERENCES_LAST_FULLSCREEN_TIME)
+                || Math.abs(currentTime - lastCall) > DateUtils.DAY_IN_MILLISECONDS;
+    }
+
+    private boolean passFullScreenByUrl(String url) {
+        return !getFullscreenUrls().contains(url);
+    }
+
+    private Set<String> getFullscreenUrls() {
+        String urls = getPreferences().getString(Static.PREFERENCES_FULLSCREEN_URLS_SET, "");
+        String[] urlList = TextUtils.split(urls, URL_SEPARATOR);
+        return new HashSet<>(Arrays.asList(urlList));
+    }
+
+    private void addLastFullscreenShowedTime() {
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                SharedPreferences.Editor editor = getPreferences().edit();
+                editor.putLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, System.currentTimeMillis());
+                editor.commit();
+            }
+        };
+    }
+
+    private void addNewUrlToFullscreenSet(String url) {
+        Set<String> urlSet = getFullscreenUrls();
+        urlSet.add(url);
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putString(Static.PREFERENCES_FULLSCREEN_URLS_SET, TextUtils.join(URL_SEPARATOR, urlSet));
+        editor.commit();
+    }
+
+    private void requestGagFullscreen() {
+        requestFullscreen(CacheProfile.getOptions().gagTypeFullscreen);
+    }
+
+    @SuppressWarnings("UnnecessaryReturnStatement")
+    public void requestFullscreen(String type) {
+        switch (type) {
+            case BannerBlock.BANNER_NONE:
+                return;
+            case BannerBlock.BANNER_ADMOB_MEDIATION:
+                requestAdmobFullscreen(ADMOB_MEDIATION_INTERSTITIAL_ID);
+                break;
+            case BannerBlock.BANNER_ADMOB:
+                requestAdmobFullscreen(ADMOB_INTERSTITIAL_ID);
+                break;
+            case BannerBlock.BANNER_ADWIRED:
+                requestAdwiredFullscreen();
+                break;
+            case BannerBlock.BANNER_TOPFACE:
+                requestTopfaceFullscreen();
+                break;
+            case BannerBlock.BANNER_MOPUB:
+                requestMopubFullscreen();
+                break;
+            case BannerBlock.BANNER_IVENGO:
+                requestIvengoFullscreen();
+                break;
+            case BannerBlock.BANNER_LIFESTREET:
+                requestLifestreetFullscreen();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void requestAdmobFullscreen(String adUnitId) {
+        // Создание межстраничного объявления.
+        final InterstitialAd interstitial = new InterstitialAd(mActivity, adUnitId);
+        // Создание запроса объявления.
+        AdRequest adRequest = new AdRequest();
+        // Запуск загрузки межстраничного объявления.
+        interstitial.loadAd(adRequest);
+        // AdListener будет использовать обратные вызовы, указанные ниже.
+        interstitial.setAdListener(new AdListener() {
+            @Override
+            public void onReceiveAd(Ad ad) {
+                if (ad == interstitial) {
+                    interstitial.show();
+                    isFullScreenBannerVisible = true;
+                    addLastFullscreenShowedTime();
+                }
+            }
+
+            @Override
+            public void onFailedToReceiveAd(Ad ad, AdRequest.ErrorCode errorCode) {
+                requestFallbackFullscreen();
+            }
+
+            @Override
+            public void onPresentScreen(Ad ad) {
+            }
+
+            @Override
+            public void onDismissScreen(Ad ad) {
+                isFullScreenBannerVisible = false;
+            }
+
+            @Override
+            public void onLeaveApplication(Ad ad) {
+            }
+        });
     }
 
     private void requestLifestreetFullscreen() {
@@ -123,18 +257,6 @@ public class FullscreenController {
             public void onCloseAd(int i) {
             }
         });
-    }
-
-    private void requestFallbackFullscreen() {
-        if (mActivity != null) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    addLastFullscreenShowedTime();
-                    requestGagFullscreen();
-                }
-            });
-        }
     }
 
     private void requestMopubFullscreen() {
@@ -206,76 +328,6 @@ public class FullscreenController {
             }
         } catch (Exception ex) {
             Debug.error(ex);
-        }
-    }
-
-    private boolean showFullscreenBanner(String url) {
-        boolean passByTime = isTimePassed();
-        boolean passByUrl = passFullScreenByUrl(url);
-
-        return passByUrl && passByTime;
-    }
-
-    private boolean isTimePassed() {
-        long currentTime = System.currentTimeMillis();
-        long lastCall = getPreferences().getLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, currentTime);
-        return !getPreferences().contains(Static.PREFERENCES_LAST_FULLSCREEN_TIME)
-                || Math.abs(currentTime - lastCall) > DateUtils.DAY_IN_MILLISECONDS;
-    }
-
-    private boolean passFullScreenByUrl(String url) {
-        return !getFullscreenUrls().contains(url);
-    }
-
-    private Set<String> getFullscreenUrls() {
-        String urls = getPreferences().getString(Static.PREFERENCES_FULLSCREEN_URLS_SET, "");
-        String[] urlList = TextUtils.split(urls, URL_SEPARATOR);
-        return new HashSet<>(Arrays.asList(urlList));
-    }
-
-    private void addLastFullscreenShowedTime() {
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                SharedPreferences.Editor editor = getPreferences().edit();
-                editor.putLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, System.currentTimeMillis());
-                editor.commit();
-            }
-        };
-    }
-
-    private void addNewUrlToFullscreenSet(String url) {
-        Set<String> urlSet = getFullscreenUrls();
-        urlSet.add(url);
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putString(Static.PREFERENCES_FULLSCREEN_URLS_SET, TextUtils.join(URL_SEPARATOR, urlSet));
-        editor.commit();
-    }
-
-    private void requestGagFullscreen() {
-        requestFullscreen(CacheProfile.getOptions().gagTypeFullscreen);
-    }
-
-    @SuppressWarnings("UnnecessaryReturnStatement")
-    public void requestFullscreen(String type) {
-        switch (type) {
-            case BannerBlock.BANNER_NONE:
-                return;
-            case BannerBlock.BANNER_ADWIRED:
-                requestAdwiredFullscreen();
-                break;
-            case BannerBlock.BANNER_TOPFACE:
-                requestTopfaceFullscreen();
-                break;
-            case BannerBlock.BANNER_MOPUB:
-                requestMopubFullscreen();
-                break;
-            case BannerBlock.BANNER_IVENGO:
-                requestIvengoFullscreen();
-                break;
-            case BannerBlock.BANNER_LIFESTREET:
-                requestLifestreetFullscreen();
-                break;
         }
     }
 
@@ -401,8 +453,7 @@ public class FullscreenController {
             public boolean isApplicable() {
                 if (CacheProfile.show_ad) {
                     if (!CacheProfile.isEmpty() && FullscreenController.this.isTimePassed()) {
-                        startPage = CacheProfile.getOptions().pages
-                                .get(Options.PAGE_START);
+                        startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
                         if (startPage != null) {
                             if (startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER)) {
                                 return true;

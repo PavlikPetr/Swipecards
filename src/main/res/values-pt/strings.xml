@@ -77,6 +77,7 @@
     <string name="chat_wink_out">Você piscou o olho.</string>
     <string name="chat_dialog_gps">GPS excluido! Incluir?</string>
     <string name="chat_toast_fail_location">Não foi possivel determinar a localização</string>
+    <string name="general_location">localização</string>
     <string name="filter_filter">filtro</string>
     <string name="filter_age_string">De %1$d até %2$d</string>
     <string name="filter_only_online">Somente em linha</string>
@@ -531,8 +532,8 @@
     <string name="default_ringtone">Por silêncio</string>
     <string name="photo_info_deleted">Remover</string>
     <string name="user_deleted_or_banned">O Usuário foi banido ou excluído</string>
-    <string name="locking_popup_title">A mudança para a secção «%s» é limitada!</string>
-    <string name="locking_popup_message">Para mudar para a secção «%s» responda a todas as simpatias recebidas ou obtenha VIP.</string>
+    <string name="locking_popup_title">Transição para secção «%s» é limitada</string>
+    <string name="locking_popup_message">Para ter</string>
     <string name="locking_popup_button_answer">Responder as simpatias</string>
     <string name="locking_menu_message">O acesso a determinadas páginas da aplicação é limitado. Para remover as restrições, responda a todas as simpatias recebidas ou obtenha VIP.</string>
     <string name="locking_likes_message">Atenção! Acesso a determinadas páginas da aplicação é limitado. Para remover todas as restrições, responda a todas as simpatias recebidas ou obtenha VIP.</string>
@@ -570,5 +571,10 @@
     <string name="subscriptions_can_be_changed">Assinatura foi formalizada. Alterar os termos de assinatura pode ser no Google Play</string>
     <string name="people_nearby">Pessoas próximas</string>
     <string name="nobody_nearby">Não há nenhuma alma ao redor!</string>
+    <string name="general_distance_km">%.02f km</string>
+    <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Não foi possível determinar a localização</string>
+    <string name="press_back_more_to_close_app">Clique novamente para sair de Topface</string>
+    <string name="waiting_for_load">À espera de carregamento…</string>
+    <string name="loading_photo_percent">carregamento de fotos %d%%</string>
 </resources>

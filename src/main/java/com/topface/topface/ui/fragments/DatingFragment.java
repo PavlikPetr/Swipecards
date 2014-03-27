@@ -63,6 +63,7 @@ import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.AnimationHelper;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -73,6 +74,7 @@ import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
@@ -129,6 +131,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private boolean mNeedMore;
     private int mLoadedCount;
 
+    private List<View> mViewsToHideAndShow;
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -146,6 +150,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private INavigationFragmentsListener mFragmentSwitcherListener;
+    private AnimationHelper mAnimationHelper;
 
     private void startDatingFilterActivity() {
         Intent intent = new Intent(getActivity().getApplicationContext(),
@@ -262,6 +267,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         initResources(root);
         initControlButtons(root);
+
+        mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
+        mAnimationHelper.addView(mDatingCounter);
+        mAnimationHelper.addView(mDatingResources);
+        mAnimationHelper.addView(mUserInfo);
 
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
     }
@@ -663,7 +673,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             unlockControls();
             showNovice();
             hasOneSympathyOrDelight = true;
-            showControls();
         }
 
         mPreloadManager.preloadPhoto(mUserSearchList);
@@ -904,18 +913,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
-        mDatingCounter.setVisibility(View.VISIBLE);
-        mDatingResources.setVisibility(View.VISIBLE);
-        mUserInfo.setVisibility(View.VISIBLE);
+        mAnimationHelper.animateIn();
         mFragmentSwitcherListener.onShowActionBar();
         mIsHide = false;
     }
 
     @Override
     public void hideControls() {
-        mDatingCounter.setVisibility(View.GONE);
-        mDatingResources.setVisibility(View.GONE);
-        mUserInfo.setVisibility(View.GONE);
+        mAnimationHelper.animateOut();
         mFragmentSwitcherListener.onHideActionBar();
         mIsHide = true;
     }
@@ -1021,7 +1026,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
-        private boolean isAfterLast = false;
 
         @Override
         public void onPageSelected(int position) {
@@ -1035,23 +1039,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
             }
 
-            int currentPhotoPosition = mImageSwitcher.getPreviousSelectedPosition();
-            if (position == 1 && currentPhotoPosition == 0) {
-                hideControls();
-            } else if (position == 0 && currentPhotoPosition > 0) {
-                showControls();
-            }
             setCounter(mImageSwitcher.getSelectedPosition());
-
-            if (isAfterLast) {
-                hideControls();
-                isAfterLast = false;
-            }
-
-            if (position == ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData().size() - 1) {
-                showControls();
-                isAfterLast = true;
-            }
         }
 
         @Override
@@ -1152,6 +1140,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProgressBar.setVisibility(View.GONE);
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);
+        mFragmentSwitcherListener.onShowActionBar();
     }
 
     @Override
