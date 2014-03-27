@@ -62,6 +62,7 @@ public class FullscreenController {
     private static final String IVENGO_APP_ID = "aggeas97392g";
     private static final String LIFESTREET_TAG = "http://mobile-android.lfstmedia.com/m2/slot76331?ad_size=320x480&adkey=a25";
     private static final String ADMOB_INTERSTITIAL_ID = "a153303efcaf2c6";
+    private static final String ADMOB_MEDIATION_INTERSTITIAL_ID = "5161525f5e624978";
     private static boolean isFullScreenBannerVisible = false;
     private SharedPreferences mPreferences;
     private Activity mActivity;
@@ -137,6 +138,12 @@ public class FullscreenController {
         switch (type) {
             case BannerBlock.BANNER_NONE:
                 return;
+            case BannerBlock.BANNER_ADMOB_MEDIATION:
+                requestAdmobFullscreen(ADMOB_MEDIATION_INTERSTITIAL_ID);
+                break;
+            case BannerBlock.BANNER_ADMOB:
+                requestAdmobFullscreen(ADMOB_INTERSTITIAL_ID);
+                break;
             case BannerBlock.BANNER_ADWIRED:
                 requestAdwiredFullscreen();
                 break;
@@ -152,20 +159,16 @@ public class FullscreenController {
             case BannerBlock.BANNER_LIFESTREET:
                 requestLifestreetFullscreen();
                 break;
-            case BannerBlock.BANNER_ADMOB:
-                requestAdmobFullscreen();
-                break;
             default:
                 break;
         }
     }
 
-    private void requestAdmobFullscreen() {
+    private void requestAdmobFullscreen(String adUnitId) {
         // Создание межстраничного объявления.
-        final InterstitialAd interstitial = new InterstitialAd(mActivity, ADMOB_INTERSTITIAL_ID);
+        final InterstitialAd interstitial = new InterstitialAd(mActivity, adUnitId);
         // Создание запроса объявления.
         AdRequest adRequest = new AdRequest();
-        adRequest.addTestDevice("99000200906025");
         // Запуск загрузки межстраничного объявления.
         interstitial.loadAd(adRequest);
         // AdListener будет использовать обратные вызовы, указанные ниже.
