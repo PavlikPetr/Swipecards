@@ -154,6 +154,10 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
     }
 
+    public INavigationFragmentsListener getNavigationFragmentsListener() {
+        return mFragmentSwitchListener;
+    }
+
     public static void selectFragment(FragmentId fragmentId) {
         Intent intent = new Intent();
         intent.setAction(SELECT_MENU_ITEM);

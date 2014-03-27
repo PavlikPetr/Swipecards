@@ -25,6 +25,7 @@ import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -49,8 +50,8 @@ public class ClosingsController implements View.OnClickListener {
     public static final String TAG = "Closings";
     public static final String LIKES_CACHE_KEY = "likes_cache_key";
     public static final String MUTUALS_CACHE_KEY = "mutuals_cache_key";
-    private final MenuFragment mMenuFragment;
 
+    private final MenuFragment mMenuFragment;
     private LeftMenuAdapter mAdapter;
     private View likesMenuItem;
     private View mutualsMenuItem;
@@ -58,19 +59,19 @@ public class ClosingsController implements View.OnClickListener {
     private View mClosingsWidget;
     private List<TextView> mCounterBadges = new ArrayList<>();
     private UsersListCacheManager mCacheManager;
-
     private static boolean mClosingsPassed = false; // need flag for session, skip on logout
     private int mReceivedUnreadLikes = 0;
     private int mReceivedUnreadMutuals = 0;
     private boolean mMutualClosingsActive = false;
     private boolean mLikesClosingsActive = false;
-
     private List<View> menuItemsButtons = new ArrayList<>();
     private boolean mLeftMenuLocked = false;
     private static boolean mLogoutWasInitiated = false;
+    private INavigationFragmentsListener mNavigationFragmentsListener;
 
     public ClosingsController(@NotNull final MenuFragment menuFragment, @NotNull ViewStub mHeaderViewStub, @NotNull LeftMenuAdapter adapter) {
         mMenuFragment = menuFragment;
+        mNavigationFragmentsListener = mMenuFragment.getNavigationFragmentsListener();
         mViewStub = mHeaderViewStub;
         mViewStub.setLayoutResource(R.layout.layout_left_menu_closings_widget);
         mAdapter = adapter;
@@ -289,6 +290,9 @@ public class ClosingsController implements View.OnClickListener {
 
     private void selectMenuItem(FragmentId id) {
         if (id != null) {
+            if (mNavigationFragmentsListener != null) {
+                mNavigationFragmentsListener.onShowActionBar();
+            }
             unlockLeftMenu();
             MenuFragment.selectFragment(id);
         }
@@ -358,6 +362,9 @@ public class ClosingsController implements View.OnClickListener {
         mClosingsPassed = true;
         mLikesClosingsActive = false;
         mMutualClosingsActive = false;
+        if (mNavigationFragmentsListener != null) {
+            mNavigationFragmentsListener.onShowActionBar();
+        }
     }
 
     public static void onLogout() {
@@ -385,7 +392,9 @@ public class ClosingsController implements View.OnClickListener {
         if (!mLeftMenuLocked) {
             if (mMenuFragment.getActivity() instanceof NavigationActivity) {
                 NavigationActivity activity = (NavigationActivity) mMenuFragment.getActivity();
-                activity.onShowActionBar();
+                if (mNavigationFragmentsListener != null) {
+                    mNavigationFragmentsListener.onShowActionBar();
+                }
                 activity.setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN, new HackyDrawerLayout.IBackPressedListener() {
                     @Override
                     public void onBackPressed() {
@@ -406,7 +415,6 @@ public class ClosingsController implements View.OnClickListener {
                 NavigationActivity activity = ((NavigationActivity) mMenuFragment.getActivity());
                 activity.setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 activity.getSupportActionBar().setDisplayUseLogoEnabled(true);
-                activity.onShowActionBar();
             }
         }
     }

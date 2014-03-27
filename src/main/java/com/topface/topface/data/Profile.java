@@ -20,7 +20,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
@@ -45,7 +47,7 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean invisible;
     public boolean inBlackList;
     public LinkedList<FormItem> forms = new LinkedList<>();
-    public ArrayList<Gift> gifts = new ArrayList<>();
+    public Gifts gifts = new Gifts();
     public SparseArrayCompat<TopfaceNotifications> notifications = new SparseArrayCompat<>();
     public boolean email;
     public boolean emailGrabbed;
@@ -416,7 +418,9 @@ public class Profile extends AbstractDataWithPhotos {
     }
 
     private static void parseGifts(Profile profile, JSONObject resp) throws JSONException {
-        JSONArray arrGifts = resp.optJSONObject("gifts").optJSONArray("items");
+        JSONObject jsonGifts = resp.optJSONObject("gifts");
+        JSONArray arrGifts = jsonGifts.optJSONArray("items");
+        profile.gifts.more = jsonGifts.optBoolean("more");
         if (arrGifts == null) return;
         for (int i = 0; i < arrGifts.length(); i++) {
             JSONObject itemGift = arrGifts.getJSONObject(i);
@@ -510,4 +514,26 @@ public class Profile extends AbstractDataWithPhotos {
         }
     }
 
+    public static class Gifts implements Iterable<Gift> {
+        public List<Gift> list = new ArrayList<>();
+        public boolean more;
+
+        public Gifts() {
+            list = new ArrayList<>();
+            more = false;
+        }
+
+        public boolean add(Gift gift) {
+            return list.add(gift);
+        }
+
+        public void add(int index, Gift gift) {
+            list.add(index, gift);
+        }
+
+        @Override
+        public Iterator<Gift> iterator() {
+            return list.iterator();
+        }
+    }
 }

@@ -38,7 +38,7 @@ import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class GiftsFragment extends ProfileInnerFragment {
     public static final String GIFTS_ALL_TAG = "giftsGridAll";
@@ -311,37 +311,45 @@ public class GiftsFragment extends ProfileInnerFragment {
         }).exec();
     }
 
-    public void setGifts(ArrayList<Gift> gifts) {
+    public void setGifts(Profile.Gifts gifts) {
+        setGifts(gifts.list, gifts.more);
+    }
+
+    public void setGifts(List<Gift> gifts) {
+        setGifts(gifts, false);
+    }
+
+    public void setGifts(List<Gift> gifts, boolean more) {
         if (mProfile == null) mTag = GIFTS_ALL_TAG;
         if (isAdded()) {
-            if (mGridAdapter.getData() != null) {
-                mGridAdapter.getData().clear();
-            }
-
-            for (Gift gift : gifts) {
-                FeedGift item = new FeedGift();
-                item.gift = gift;
-                mGridAdapter.getData().add(item);
-            }
-
-            if (mTag != null) {
-                if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
-                    mGridAdapter.getData().add(0, FeedGift.getSendedGiftItem());
-                    if (mGridAdapter.getData().size() >= GIFTS_LOAD_COUNT)
-                        mGridAdapter.getData().add(new FeedGift(ItemType.LOADER));
-                } else {
-                    if (mGridAdapter.getData().isEmpty()) {
-                        mGroupInfo.setVisibility(View.VISIBLE);
-                        mTextInfo.setText(R.string.you_dont_have_gifts_yet);
-                        mBtnInfo.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                startActivity(ContainerActivity.getBuyingIntent("ProfileGifts"));
-                            }
-                        });
+            FeedList<FeedGift> data = mGridAdapter.getData();
+            if (data != null) {
+                data.clear();
+                for (Gift gift : gifts) {
+                    FeedGift item = new FeedGift();
+                    item.gift = gift;
+                    data.add(item);
+                }
+                if (mTag != null) {
+                    if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
+                        data.add(0, FeedGift.getSendedGiftItem());
+                        if (more) {
+                            data.add(new FeedGift(ItemType.LOADER));
+                        }
                     } else {
-                        mGroupInfo.setVisibility(View.GONE);
-                        mTextInfo.setVisibility(View.GONE);
+                        if (data.isEmpty()) {
+                            mGroupInfo.setVisibility(View.VISIBLE);
+                            mTextInfo.setText(R.string.you_dont_have_gifts_yet);
+                            mBtnInfo.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    startActivity(ContainerActivity.getBuyingIntent("ProfileGifts"));
+                                }
+                            });
+                        } else {
+                            mGroupInfo.setVisibility(View.GONE);
+                            mTextInfo.setVisibility(View.GONE);
+                        }
                     }
                 }
             }
