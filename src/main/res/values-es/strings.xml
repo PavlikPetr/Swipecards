@@ -572,6 +572,8 @@
     <string name="default_ringtone">Por definición</string>
     <string name="photo_info_deleted">Eliminada</string>
     <string name="user_deleted_or_banned">El usuario eliminado o baneado</string>
+    <string name="locking_popup_title">Paso a la sección \"%s\" está limitado</string>
+    <string name="locking_popup_message">Para acceder responde a las simpatías entrantes u obten VIP</string>
     <string name="locking_popup_button_answer">Responder a las simpatías</string>
     <string name="locking_menu_message">El acceso a algunas páginas de la aplicación está limitado. Para quitar todas las limitaciones responde a todas las simpatías u obtenga VIP.</string>
     <string name="locking_likes_message">¡Atención! El acceso a algunas páginas de la aplicación está limitado. Para quitar todas las limitaciones responde a todas las simpatías u obtenga VIP.</string>
