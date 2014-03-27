@@ -283,11 +283,11 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     }
 
     @Override
-    public void onSubscritionSupported() {
+    public void onSubscriptionSupported() {
     }
 
     @Override
-    public void onSubscritionUnsupported() {
+    public void onSubscriptionUnsupported() {
         //Если подписка не поддерживается, сообщаем об этом пользователю
         if (!CacheProfile.premium) {
             Toast.makeText(App.getContext(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)
@@ -304,7 +304,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     }
 
     @Override
-    public void onPurchased() {
+    public void onPurchased(String productId) {
         switchLayouts();
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(VIP_PURCHASED_INTENT));
     }

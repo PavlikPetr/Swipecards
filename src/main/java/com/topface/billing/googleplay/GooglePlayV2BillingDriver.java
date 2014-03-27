@@ -51,9 +51,9 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
             }
 
             if (mBillingService.checkBillingSupported(Consts.ITEM_TYPE_SUBSCRIPTION)) {
-                listener.onSubscritionSupported();
+                listener.onSubscriptionSupported();
             } else {
-                listener.onSubscritionUnsupported();
+                listener.onSubscriptionUnsupported();
             }
         }
     }
@@ -166,13 +166,13 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
         }
 
         @Override
-        public void onVerifyResponse(IApiResponse response) {
+        public void onVerifyResponse(IApiResponse response, String productId) {
             Debug.log(String.format("VerifyResponse: #%d:\n%s", response.getResultCode(), response.getJsonResult()));
             BillingListener listener = getBillingListener();
             if (listener != null) {
                 if (response.isCompleted()) {
                     Debug.log("Billing: onPurchased");
-                    listener.onPurchased();
+                    listener.onPurchased(productId);
                 } else {
                     Debug.log("Billing: onError");
                     listener.onError();

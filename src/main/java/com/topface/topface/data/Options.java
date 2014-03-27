@@ -119,6 +119,7 @@ public class Options extends AbstractData {
 
     public Bonus bonus = new Bonus();
     public Offerwalls offerwalls = new Offerwalls();
+    public boolean forceCoinsSubscriptions;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -228,7 +229,7 @@ public class Options extends AbstractData {
 
             JSONObject blockPeopleJson = response.optJSONObject("blockPeopleNearby");
             blockPeople = blockPeople == null ?
-                    new BlockPeopleNearby():blockPeople;
+                    new BlockPeopleNearby() : blockPeople;
             if (blockPeopleJson != null) {
                 blockPeople.enabled = blockPeopleJson.optBoolean("enabled");
                 blockPeople.text = blockPeopleJson.optString("text");
@@ -263,6 +264,8 @@ public class Options extends AbstractData {
             if (tagsObject != null && tagsObject.length() > 0) {
                 experimentTags = new ExperimentTags(tagsObject);
             }
+            // TODO init after availability on server
+            forceCoinsSubscriptions = response.optBoolean("forceCoinsSubscriptions");
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }

@@ -113,24 +113,6 @@
 
             <!-- Money -->
             <TextView
-                android:id="@+id/titleSpecialOffers"
-                android:layout_marginTop="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:textSize="16sp"
-                android:text="@string/buy_special_offers" />
-
-            <Button
-                android:id="@+id/btnOfferwall"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                style="@style/Widget.Topface.Button.Big.Blue"
-                android:text="@string/get_it_for_free" />
-
-            <TextView
                 android:id="@+id/coins_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
