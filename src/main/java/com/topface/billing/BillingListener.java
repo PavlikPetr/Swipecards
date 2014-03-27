@@ -5,7 +5,7 @@ public interface BillingListener {
     /**
      * Покупка завершилась удачно
      */
-    public void onPurchased();
+    public void onPurchased(String sku);
 
     /**
      * Произошла ошибка при покупке

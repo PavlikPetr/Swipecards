@@ -54,7 +54,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
         View root = inflater.inflate(R.layout.fragment_coins_subscription, null);
         mContainer = (LinearLayout) root.findViewById(R.id.loContainer);
         GooglePlayProducts products = CacheProfile.getGooglePlayProducts();
-        CoinsSubscriptionInfo info = products.productsInfo.coinsSubscriptionInfo;
+        CoinsSubscriptionInfo info = products.info.coinsSubscription;
         // info text
         ((TextView) root.findViewById(R.id.tvInfoText)).setText(info.text);
         // icons with coins
@@ -78,7 +78,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                         @Override
                         public void onClick(String id) {
                             if (curBtn instanceof GooglePlayProducts.SubscriptionBuyButton) {
-                                if (((GooglePlayProducts.SubscriptionBuyButton)curBtn).activated) {
+                                if (((GooglePlayProducts.SubscriptionBuyButton) curBtn).activated) {
                                     Toast.makeText(getActivity(), R.string.subscriptions_can_be_changed, Toast.LENGTH_SHORT)
                                             .show();
                                     return;
@@ -92,7 +92,8 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                             }
                             EasyTracker.getTracker().sendEvent("Coins Subscription", "ButtonClick" + from, id, 0L);
                         }
-                    }));
+                    }
+            ));
         }
     }
 
@@ -121,23 +122,23 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
     }
 
     @Override
-    public void onPurchased() {
+    public void onPurchased(String productId) {
         Activity activity = getActivity();
         if (activity != null) {
             activity.setResult(Activity.RESULT_OK);
-        }
-        App.sendProfileAndOptionsRequests(new SimpleApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                super.success(response);
-                if (isAdded()) {
-                    removeAllBuyButtons();
-                    initButtonsViews(CacheProfile.getGooglePlayProducts());
+            App.sendProfileAndOptionsRequests(new SimpleApiHandler() {
+                @Override
+                public void success(IApiResponse response) {
+                    super.success(response);
+                    if (isAdded()) {
+                        removeAllBuyButtons();
+                        initButtonsViews(CacheProfile.getGooglePlayProducts());
+                    }
+                    LocalBroadcastManager.getInstance(App.getContext())
+                            .sendBroadcast(new Intent(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
                 }
-                LocalBroadcastManager.getInstance(App.getContext())
-                        .sendBroadcast(new Intent(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -156,7 +157,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
     }
 
     @Override
-    public void onSubscritionSupported() {
+    public void onSubscriptionSupported() {
 
     }
 
@@ -166,7 +167,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
     }
 
     @Override
-    public void onSubscritionUnsupported() {
+    public void onSubscriptionUnsupported() {
         //Если подписка не поддерживается, сообщаем об этом пользователю
         if (!CacheProfile.premium) {
             Toast.makeText(App.getContext(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)

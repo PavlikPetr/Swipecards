@@ -132,7 +132,6 @@ public class BannerBlock {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             if (CacheProfile.getOptions().containsBannerType(BANNER_ADCAMP)) {
                 AdsManager.getInstance().initialize(App.getContext());
-                AdsManager.getInstance().addTestDevice("99000200906025");
                 mAdcampInitialized = true;
             }
         }

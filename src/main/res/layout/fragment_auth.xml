@@ -4,12 +4,14 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/auth_bg"
-    android:fillViewport="true">
+    android:paddingTop="?attr/actionBarSize"
+    android:fillViewport="true"
+    android:clipToPadding="true">
 
     <RelativeLayout
         android:id="@+id/authContainer"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
 
         android:clickable="true">
 

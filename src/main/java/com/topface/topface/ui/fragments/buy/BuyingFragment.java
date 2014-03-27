@@ -22,16 +22,23 @@ import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.GooglePlayProducts.ProductsInfo.CoinsSubscriptionInfo;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.topface.topface.data.GooglePlayProducts.BuyButton;
+import static com.topface.topface.data.GooglePlayProducts.BuyButtonClickListener;
 
 public class BuyingFragment extends BillingFragment {
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
@@ -58,7 +65,7 @@ public class BuyingFragment extends BillingFragment {
     private TextView mResourcesInfo;
     private String mFrom;
     private View mCoinsSubscriptionButton;
-    private GooglePlayProducts.BuyButtonClickListener mCoinsSubscriptionClickListener = new GooglePlayProducts.BuyButtonClickListener() {
+    private BuyButtonClickListener mCoinsSubscriptionClickListener = new BuyButtonClickListener() {
         @Override
         public void onClick(String id) {
             startActivityForResult(ContainerActivity.getCoinsSubscriptionIntent(mFrom), ContainerActivity.INTENT_COINS_SUBSCRIPTION_FRAGMENT);
@@ -155,15 +162,16 @@ public class BuyingFragment extends BillingFragment {
             } else {
                 mResourcesInfo.setText(getResources().getString(R.string.buying_default_message));
             }
-
         }
     }
 
     private void updateCoinsSubscriptionButton() {
-        CoinsSubscriptionInfo coinsSubscriptionInfo = CacheProfile.getGooglePlayProducts()
-                .productsInfo.coinsSubscriptionInfo;
-        GooglePlayProducts.BuyButton btn = coinsSubscriptionInfo.getSubscriptionButton();
-        GooglePlayProducts.switchOpenButtonTexts(mCoinsSubscriptionButton, btn, mCoinsSubscriptionClickListener);
+        if (mCoinsSubscriptionButton != null) {
+            CoinsSubscriptionInfo coinsSubscriptionInfo = CacheProfile.getGooglePlayProducts()
+                    .info.coinsSubscription;
+            BuyButton btn = coinsSubscriptionInfo.getSubscriptionButton();
+            GooglePlayProducts.switchOpenButtonTexts(mCoinsSubscriptionButton, btn, mCoinsSubscriptionClickListener);
+        }
     }
 
     private void initButtons(View root) {
@@ -172,65 +180,72 @@ public class BuyingFragment extends BillingFragment {
         if (products.likes.isEmpty() && products.coins.isEmpty()) {
             root.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
         }
-        // likes buttons
-        if (products.likes.isEmpty()) {
-            root.findViewById(R.id.likes_title).setVisibility(View.GONE);
-        } else {
-            root.findViewById(R.id.likes_title).setVisibility(View.VISIBLE);
-        }
-        for (GooglePlayProducts.BuyButton curButton : products.likes) {
-            View newButton = GooglePlayProducts.setBuyButton(likesButtons, curButton, getActivity(),
-                    new GooglePlayProducts.BuyButtonClickListener() {
+        // sympathies title
+        root.findViewById(R.id.likes_title).setVisibility(
+                products.likes.isEmpty() ? View.GONE : View.VISIBLE
+        );
+        // sympathies buttons
+        for (BuyButton curButton : products.likes) {
+            View btnView = GooglePlayProducts.setBuyButton(likesButtons, curButton, getActivity(),
+                    new BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
                             buyItem(id);
                         }
-                    });
-            if (newButton != null) {
-                purchaseButtons.add(newButton);
+                    }
+            );
+            if (btnView != null) {
+                purchaseButtons.add(btnView);
             }
         }
         // coins buttons
-        if (products.coins.isEmpty()) {
-            root.findViewById(R.id.coins_title).setVisibility(View.GONE);
-        } else {
-            root.findViewById(R.id.coins_title).setVisibility(View.VISIBLE);
-        }
-        LinearLayout coinsButtons = (LinearLayout) root.findViewById(R.id.fbCoins);
-        if (!products.coinsSubscriptions.isEmpty()) {
-            CoinsSubscriptionInfo info = products.productsInfo.coinsSubscriptionInfo;
-            GooglePlayProducts.BuyButton btn = info.status.isActive() ? info.hasSubscriptionButton : info.noSubscriptionButton;
-            mCoinsSubscriptionButton = GooglePlayProducts.setOpenButton(coinsButtons, btn,
-                    getActivity(), mCoinsSubscriptionClickListener);
-            if (mCoinsSubscriptionButton != null) {
-                purchaseButtons.add(mCoinsSubscriptionButton);
-            }
-
-        }
-        for (GooglePlayProducts.BuyButton curButton : products.coins) {
-            View newButton = GooglePlayProducts.setBuyButton(coinsButtons, curButton, getActivity(),
-                    new GooglePlayProducts.BuyButtonClickListener() {
-                        @Override
-                        public void onClick(String id) {
-                            buyItem(id);
-                        }
-                    });
-            if (newButton != null) {
-                purchaseButtons.add(newButton);
-            }
-        }
-        // Button for offerwalls (Tapjoy and Sponsorpay)
-        View offerwall = root.findViewById(R.id.btnOfferwall);
-        offerwall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OfferwallsManager.startOfferwall(getActivity());
-            }
-        });
-        offerwall.setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
-        root.findViewById(R.id.titleSpecialOffers).setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
+        initCoinsButtons(root, products);
         // paymentwall buttons
         initPaymentwallButtons(root);
+    }
+
+    private void initCoinsButtons(View root, GooglePlayProducts products) {
+        boolean coinsMaskedExperiment = CacheProfile.getOptions().forceCoinsSubscriptions;
+        List<BuyButton> coinsProducts = coinsMaskedExperiment &&
+                !products.info.coinsSubscriptionMasked.status.isActive() ?
+                products.coinsSubscriptionsMasked : products.coins;
+        root.findViewById(R.id.coins_title).setVisibility(
+                coinsProducts.isEmpty() ? View.GONE : View.VISIBLE
+        );
+        LinearLayout coinsButtonsContainer = (LinearLayout) root.findViewById(R.id.fbCoins);
+        if (coinsButtonsContainer.getChildCount() > 0) {
+            coinsButtonsContainer.removeAllViews();
+        }
+        // coins subscriptions button
+        mCoinsSubscriptionButton = coinsMaskedExperiment ? null : getCoinsSubscriptionsButton(products, coinsButtonsContainer);
+        if (mCoinsSubscriptionButton != null) {
+            purchaseButtons.add(mCoinsSubscriptionButton);
+        }
+        // coins items buttons also coinsSubscriptionsMasked buttons
+        for (final BuyButton curButton : coinsProducts) {
+            View btnView = GooglePlayProducts.setBuyButton(coinsButtonsContainer, curButton, getActivity(),
+                    new BuyButtonClickListener() {
+                        @Override
+                        public void onClick(String id) {
+                            buy(curButton);
+                        }
+                    }
+            );
+            if (btnView != null) {
+                purchaseButtons.add(btnView);
+            }
+        }
+        coinsButtonsContainer.requestLayout();
+    }
+
+    private View getCoinsSubscriptionsButton(GooglePlayProducts products, LinearLayout coinsButtons) {
+        if (!products.coinsSubscriptions.isEmpty()) {
+            CoinsSubscriptionInfo info = products.info.coinsSubscription;
+            BuyButton btn = info.status.isActive() ? info.hasSubscriptionButton : info.noSubscriptionButton;
+            return GooglePlayProducts.setOpenButton(coinsButtons, btn,
+                    getActivity(), mCoinsSubscriptionClickListener);
+        }
+        return null;
     }
 
     private void initPaymentwallButtons(View root) {
@@ -294,7 +309,7 @@ public class BuyingFragment extends BillingFragment {
     }
 
     @Override
-    public void onSubscritionSupported() {
+    public void onSubscriptionSupported() {
         //TODO: добавить поддержку подписок
     }
 
@@ -310,12 +325,26 @@ public class BuyingFragment extends BillingFragment {
     }
 
     @Override
-    public void onSubscritionUnsupported() {
+    public void onSubscriptionUnsupported() {
         //TODO: добавить поддержку подписок
     }
 
     @Override
-    public void onPurchased() {
+    public void onPurchased(String productId) {
+        Debug.log("Purchased item with ID:" + productId);
+        if (CacheProfile.getGooglePlayProducts().isSubscription(productId)) {
+            App.sendProfileAndOptionsRequests(new SimpleApiHandler() {
+                @Override
+                public void success(IApiResponse response) {
+                    super.success(response);
+                    if (isAdded()) {
+                        initCoinsButtons(getView(), CacheProfile.getGooglePlayProducts());
+                    }
+                    LocalBroadcastManager.getInstance(App.getContext())
+                            .sendBroadcast(new Intent(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
+                }
+            });
+        }
     }
 
     @Override

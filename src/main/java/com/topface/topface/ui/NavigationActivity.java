@@ -503,6 +503,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
             } catch (Exception e) {
                 Debug.error(e);
             }
+            Debug.log("Current User ID:" + CacheProfile.getProfile().uid);
         }
         mMenuFragment.onLoadProfile();
     }
