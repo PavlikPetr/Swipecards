@@ -1026,7 +1026,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
-        private boolean isAfterLast = false;
 
         @Override
         public void onPageSelected(int position) {
@@ -1141,6 +1140,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProgressBar.setVisibility(View.GONE);
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);
+        mFragmentSwitcherListener.onShowActionBar();
     }
 
     @Override
