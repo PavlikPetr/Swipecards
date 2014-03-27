@@ -74,7 +74,6 @@ import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.social.AuthToken;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -249,8 +248,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
 
-        mAnimationHelper = new AnimationHelper(getActivity());
-
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfDatingButtons);
 
         // Dating controls
@@ -270,10 +267,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         initResources(root);
         initControlButtons(root);
-        mViewsToHideAndShow = new ArrayList<>();
-        mViewsToHideAndShow.add(mDatingCounter);
-        mViewsToHideAndShow.add(mDatingResources);
-        mViewsToHideAndShow.add(mUserInfo);
+
+        mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
+        mAnimationHelper.addView(mDatingCounter);
+        mAnimationHelper.addView(mDatingResources);
+        mAnimationHelper.addView(mUserInfo);
+
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
     }
 
@@ -914,14 +913,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
-        mAnimationHelper.animateFadeIn(mViewsToHideAndShow);
+        mAnimationHelper.animateIn();
         mFragmentSwitcherListener.onShowActionBar();
         mIsHide = false;
     }
 
     @Override
     public void hideControls() {
-        mAnimationHelper.animateFadeOut(mViewsToHideAndShow);
+        mAnimationHelper.animateOut();
         mFragmentSwitcherListener.onHideActionBar();
         mIsHide = true;
     }
