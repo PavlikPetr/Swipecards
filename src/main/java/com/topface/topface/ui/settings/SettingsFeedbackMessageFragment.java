@@ -1,5 +1,7 @@
 package com.topface.topface.ui.settings;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -33,7 +35,10 @@ import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
@@ -249,6 +254,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
     public static class Report {
         String email;
+        List<String> userDeviceAccounts;
         String subject;
         String body = Static.EMPTY;
         String topface_version = "unknown";
@@ -262,6 +268,34 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
         private AuthToken authToken = AuthToken.getInstance();
 
+        public Report() {
+            userDeviceAccounts = getAccounts();
+        }
+
+        private List<String> getAccounts() {
+            List<String> result = new ArrayList<>();
+            Pattern emailPattern = Pattern.compile(
+                    "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                            "\\@" +
+                            "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                            "(" +
+                            "\\." +
+                            "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                            ")+"
+            );
+            try {
+                Account[] accounts = AccountManager.get(App.getContext()).getAccounts();
+                for (Account account : accounts) {
+                    if (emailPattern.matcher(account.name).matches()) {
+                        result.add(account.name);
+                    }
+                }
+            } catch (Exception ex) {
+                Debug.error(ex);
+            }
+            return result;
+        }
+
         public String getSubject() {
             return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserSocialId() + "}";
         }
@@ -274,6 +308,9 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             StringBuilder strBuilder = new StringBuilder();
 
             strBuilder.append("<p>Email for answer: ").append(email).append(";</p>\n");
+            strBuilder.append("<p>Device accounts: ");
+            strBuilder.append(TextUtils.join(", ", userDeviceAccounts));
+            strBuilder.append(";</p>\n");
             strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode)
                     .append(";</p>\n");
             strBuilder.append("<p>Device: ").append(device).append("/").append(model).append(";</p>\n");
