@@ -177,13 +177,10 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
             if (convertView == null) {
                 holder = new ViewHolder();
-
                 convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
                 holder.mTitle = (TextView) convertView.findViewWithTag("tvTitle");
                 holder.mBackground = (ImageView) convertView.findViewWithTag("ivEditBackground");
                 holder.mCheck = (ImageView) convertView.findViewWithTag("ivCheck");
-
-
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();

@@ -19,6 +19,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.config.UserConfig;
 
 public class UserNotificationManager {
@@ -216,7 +217,11 @@ public class UserNotificationManager {
         notification.setOngoing(ongoing);
         notification.setMessages(messagesStack);
         notification.setIntent(intent);
-        mNotificationManager.notify(id, notification.generate(actions));
+        try {
+            mNotificationManager.notify(id, notification.generate(actions));
+        } catch (Exception e) {
+            Debug.error(e);
+        }
         return notification;
     }
 
