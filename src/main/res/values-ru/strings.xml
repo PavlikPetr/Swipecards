@@ -294,6 +294,7 @@
     <string name="edit_refresh_status">Обновить статус</string>
 
     <string name="ban_title">Поздравляем! Вы забанены</string>
+    <string name="ban_complain">Пожаловаться на бан</string>
     <string name="general_ready">Готово</string>
     <string name="profile_deleted_user">Пользователь удален</string>
     <string name="filter_main_parameters">Мне интересны</string>
