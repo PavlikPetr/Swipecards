@@ -89,6 +89,10 @@ public class GooglePlayProducts extends AbstractData {
                     data.optJSONArray(ProductType.COINS_SUBSCRIPTION.getName()),
                     info.coinsSubscription.status.userSubscriptions
             );
+            // skip sale flag if there is active force coins subscriptions' experiment
+            if (CacheProfile.getOptions().forceCoinsSubscriptions) {
+                saleExists = false;
+            }
             fillProductsArray(coins, data.optJSONArray(ProductType.COINS.getName()));
             fillProductsArray(likes, data.optJSONArray(ProductType.LIKES.getName()));
             fillProductsArray(premium, data.optJSONArray(ProductType.PREMIUM.getName()));
