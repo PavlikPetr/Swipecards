@@ -312,7 +312,7 @@ public class GiftsFragment extends ProfileInnerFragment {
     }
 
     public void setGifts(Profile.Gifts gifts) {
-        setGifts(gifts.list, gifts.more);
+        setGifts(gifts, gifts.more);
     }
 
     public void setGifts(List<Gift> gifts) {
