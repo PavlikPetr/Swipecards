@@ -4,9 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,9 +17,11 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.utils.Utils;
 
-public class QuickMessageFragment extends BaseFragment implements View.OnClickListener {
+public class QuickMessageFragment extends AbstractDialogFragment implements View.OnClickListener {
+    public static final String TAG = "QuickMessageFragment";
     private static final String ARG_USER_ID = "user_id";
     private EditText mEditBox;
     private int mUserId;
@@ -34,22 +34,22 @@ public class QuickMessageFragment extends BaseFragment implements View.OnClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserId = getArguments().getInt(ARG_USER_ID);
-        setNeedTitles(false);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_quick_message, null);
-        rootView.findViewById(R.id.btnChatAdd).setVisibility(View.GONE);
-        rootView.findViewById(R.id.btnSend).setOnClickListener(this);
-        rootView.findViewById(R.id.btnClose).setOnClickListener(this);
-        mMessageBox = rootView.findViewById(R.id.chatUserMessage);
-        mMessage = (TextView) rootView.findViewById(R.id.chat_message);
-        mEditBox = (EditText) rootView.findViewById(R.id.edChatBox);
-        mLoader = rootView.findViewById(R.id.quickMessageLoader);
+    protected void initViews(View root) {
+        root.findViewById(R.id.btnChatAdd).setVisibility(View.GONE);
+        root.findViewById(R.id.btnSend).setOnClickListener(this);
+        root.findViewById(R.id.btnClose).setOnClickListener(this);
+        mMessageBox = root.findViewById(R.id.chatUserMessage);
+        mMessage = (TextView) root.findViewById(R.id.chat_message);
+        mEditBox = (EditText) root.findViewById(R.id.edChatBox);
+        mLoader = root.findViewById(R.id.quickMessageLoader);
+    }
 
-        return rootView;
+    @Override
+    public int getDialogLayoutRes() {
+        return R.layout.fragment_quick_message;
     }
 
     @Override
@@ -97,7 +97,6 @@ public class QuickMessageFragment extends BaseFragment implements View.OnClickLi
         editText.clear();
 
         final MessageRequest messageRequest = new MessageRequest(mUserId, editString, getActivity());
-        registerRequest(messageRequest);
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, IApiResponse response) {

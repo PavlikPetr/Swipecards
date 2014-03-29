@@ -10,9 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
@@ -124,10 +122,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         FeedUser user = getCurrentUser();
         if (user != null) {
             QuickMessageFragment fragment = QuickMessageFragment.newInstance(user.id, getChatListener());
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.add(android.R.id.content, fragment, ((Object) fragment).getClass().getName());
-            transaction.addToBackStack(null);
-            transaction.commit();
+            fragment.show(getFragmentManager(), QuickMessageFragment.TAG);
         } else {
             showNextUser();
         }
