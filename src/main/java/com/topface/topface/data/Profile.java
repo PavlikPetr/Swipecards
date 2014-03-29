@@ -20,9 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
@@ -514,26 +512,11 @@ public class Profile extends AbstractDataWithPhotos {
         }
     }
 
-    public static class Gifts implements Iterable<Gift> {
-        public List<Gift> list = new ArrayList<>();
+    public static class Gifts extends ArrayList<Gift> {
         public boolean more;
 
         public Gifts() {
-            list = new ArrayList<>();
             more = false;
-        }
-
-        public boolean add(Gift gift) {
-            return list.add(gift);
-        }
-
-        public void add(int index, Gift gift) {
-            list.add(index, gift);
-        }
-
-        @Override
-        public Iterator<Gift> iterator() {
-            return list.iterator();
         }
     }
 }

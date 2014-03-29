@@ -1,7 +1,5 @@
 package com.topface.topface.ui.settings;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -30,15 +28,14 @@ import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
+import com.topface.topface.utils.ClientUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
@@ -65,10 +62,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         if (root == null) return null;
         // Navigation bar
         mLoadingLocker = root.findViewById(R.id.fbLoadingLocker);
-
         // EditText
         root.findViewById(R.id.tvTitle).setVisibility(View.GONE);
-
         //Если  текущий язык приложения не русский или английский, то нужно показывать сообщение
         //о том, что лучше писать нам по русски или английски, поэтому проверяем тут локаль
         TextView incorrectLocaleTv = (TextView) root.findViewById(R.id.tvLocale);
@@ -76,7 +71,6 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         if (language.equals("en") || language.equals("ru")) {
             incorrectLocaleTv.setVisibility(View.GONE);
         }
-
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -101,13 +95,9 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 }
             }
         });
-
         initTextViews(root, mFeedbackType);
-
         SettingsFeedbackMessageFragment.fillVersion(getActivity(), mReport);
-
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
         return root;
     }
 
@@ -269,31 +259,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         private AuthToken authToken = AuthToken.getInstance();
 
         public Report() {
-            userDeviceAccounts = getAccounts();
-        }
-
-        private List<String> getAccounts() {
-            List<String> result = new ArrayList<>();
-            Pattern emailPattern = Pattern.compile(
-                    "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-                            "\\@" +
-                            "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                            "(" +
-                            "\\." +
-                            "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                            ")+"
-            );
-            try {
-                Account[] accounts = AccountManager.get(App.getContext()).getAccounts();
-                for (Account account : accounts) {
-                    if (emailPattern.matcher(account.name).matches()) {
-                        result.add(account.name);
-                    }
-                }
-            } catch (Exception ex) {
-                Debug.error(ex);
-            }
-            return result;
+            userDeviceAccounts = ClientUtils.getClientAccounts();
         }
 
         public String getSubject() {

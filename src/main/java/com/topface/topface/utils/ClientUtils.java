@@ -1,9 +1,15 @@
 package com.topface.topface.utils;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.os.Build;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientUtils {
     public static final String FALLBACK_LOCALE = "en_US";
@@ -24,5 +30,20 @@ public class ClientUtils {
         }
 
         return locale;
+    }
+
+    public static List<String> getClientAccounts() {
+        List<String> result = new ArrayList<>();
+        try {
+            Account[] accounts = AccountManager.get(App.getContext()).getAccounts();
+            for (Account account : accounts) {
+                if (Utils.isValidEmail(account.name)) {
+                    result.add(account.name);
+                }
+            }
+        } catch (Exception ex) {
+            Debug.error(ex);
+        }
+        return result;
     }
 }

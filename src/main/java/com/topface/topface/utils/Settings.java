@@ -17,6 +17,8 @@ import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
+import java.util.List;
+
 /**
  * Вспомогательный класс для работы с настройками приложения
  */
@@ -120,7 +122,14 @@ public class Settings {
     }
 
     public String getSocialAccountEmail() {
-        return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_EMAIL, Static.EMPTY);
+        String email = mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_EMAIL, Static.EMPTY);
+        if (!Utils.isValidEmail(email)) {
+            List<String> accountsEmails = ClientUtils.getClientAccounts();
+            if (!accountsEmails.isEmpty()) {
+                email = accountsEmails.get(0);
+            }
+        }
+        return email;
     }
 
     public void getSocialAccountNameAsync(final Handler handler) {
