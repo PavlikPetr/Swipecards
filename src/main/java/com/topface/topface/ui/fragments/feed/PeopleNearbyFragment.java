@@ -54,7 +54,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     @Override
-    protected FeedAdapter<FeedGeo> getNewAdapter() {
+    protected FeedAdapter<FeedGeo> createNewAdapter() {
         return new PeopleNearbyAdapter(getActivity(), getUpdaterCallback());
     }
 

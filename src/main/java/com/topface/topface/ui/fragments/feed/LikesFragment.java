@@ -81,7 +81,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected LikesListAdapter getNewAdapter() {
+    protected LikesListAdapter createNewAdapter() {
         LikesListAdapter adapter = new LikesListAdapter(getActivity(), getUpdaterCallback());
         adapter.setOnMutualListener(new OnMutualListener() {
 

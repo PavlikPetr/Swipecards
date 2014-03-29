@@ -70,7 +70,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected DialogListAdapter getNewAdapter() {
+    protected DialogListAdapter createNewAdapter() {
         return new DialogListAdapter(getActivity().getApplicationContext(), getUpdaterCallback());
     }
 
