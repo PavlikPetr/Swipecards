@@ -441,9 +441,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 if (mGiftFragment != null && mGiftFragment.getActivity() != null) {
                     mGiftFragment.sendGift(mGiftsReceivedListener);
                 } else {
-                    Intent intent = new Intent(getActivity().getApplicationContext(),
-                            GiftsActivity.class);
-                    startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
+                    startActivityForResult(
+                            GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
+                            GiftsActivity.INTENT_REQUEST_GIFT
+                    );
                 }
                 break;
             case R.id.acChat:
