@@ -714,8 +714,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 EasyTracker.getTracker().sendEvent("Chat", "AdditionalClick", "", 1L);
                 break;
             case R.id.btnChatGift:
-                startActivityForResult(new Intent(getActivity(), GiftsActivity.class),
-                        GiftsActivity.INTENT_REQUEST_GIFT);
+                startActivityForResult(
+                        GiftsActivity.getSendGiftIntent(getActivity(), mUserId, false),
+                        GiftsActivity.INTENT_REQUEST_GIFT
+                );
                 EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
             case R.id.btnBuyVip:

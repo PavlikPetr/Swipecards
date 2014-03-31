@@ -13,28 +13,24 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
-import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FeedGiftsRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.SendGiftRequest;
-import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.IGiftSendListener;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
-import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 
@@ -53,10 +49,18 @@ public class GiftsFragment extends ProfileInnerFragment {
     private GiftsAdapter mGridAdapter;
     private GridView mGridView;
     private UserProfileFragment.OnGiftReceivedListener mGiftReceivedListener;
+    private IGiftSendListener mGiftSendListener;
 
     private Profile mProfile;
     private boolean mIsUpdating = false;
-    private boolean needFeedUpdate = true;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof IGiftSendListener) {
+            mGiftSendListener = (IGiftSendListener) activity;
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,14 +70,12 @@ public class GiftsFragment extends ProfileInnerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_grid, null);
-
         mGridView = (GridView) root.findViewById(R.id.usedGrid);
         mGridView.setAnimationCacheEnabled(false);
         mGridView.setScrollingCacheEnabled(true);
         mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), new FeedList<FeedGift>(), getUpdaterCallback());
         mGridView.setAdapter(mGridAdapter);
         mGridView.setOnScrollListener(mGridAdapter);
-
         mTitle = (TextView) root.findViewById(R.id.usedTitle);
         mGroupInfo = root.findViewById(R.id.loInfo);
         mTextInfo = (TextView) mGroupInfo.findViewById(R.id.tvInfo);
@@ -83,7 +85,6 @@ public class GiftsFragment extends ProfileInnerFragment {
         }
         return root;
     }
-
 
     private void initViews() {
         updateUI(new Runnable() {
@@ -97,16 +98,12 @@ public class GiftsFragment extends ProfileInnerFragment {
                             FragmentActivity activity = getActivity();
                             if (activity != null) {
                                 FeedGift item = (FeedGift) parent.getItemAtPosition(position);
-                                Intent intent = activity.getIntent();
                                 if (view.getTag() instanceof ViewHolder) {
-                                    if (item != null && item.gift.type != Gift.PROFILE && item.gift.type != Gift.SEND_BTN) {
-                                        intent.putExtra(GiftsActivity.INTENT_GIFT_ID, item.gift.id);
-                                        intent.putExtra(GiftsActivity.INTENT_GIFT_URL, item.gift.link);
-                                        intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, item.gift.price);
-
-                                        EasyTracker.getTracker().sendEvent("Gifts", "Send", "GiftId=" + item.gift.id, (long) item.gift.price);
-                                        activity.setResult(Activity.RESULT_OK, intent);
-                                        activity.finish();
+                                    if (item != null
+                                            && item.gift.type != Gift.PROFILE
+                                            && item.gift.type != Gift.SEND_BTN
+                                            && mGiftSendListener != null) {
+                                        mGiftSendListener.onSendGift(item.gift);
                                     }
                                 }
                             }
@@ -147,7 +144,7 @@ public class GiftsFragment extends ProfileInnerFragment {
                 if (mProfile != null) {
                     mTitle.setText(R.string.gifts);
                     mTitle.setVisibility(View.VISIBLE);
-                    if (mGridAdapter.getData().size() <= getMinItemsCount() && needFeedUpdate) {
+                    if (mGridAdapter.getData().size() <= getMinItemsCount()) {
                         onNewFeeds();
                     }
                 }
@@ -168,71 +165,21 @@ public class GiftsFragment extends ProfileInnerFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                //Этот флаг нужен для того, чтобы, когда нет подарков,
-                //на onResume не кидался запрос на обновление подарков.
-                needFeedUpdate = false;
-                sendGift(data);
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+                    String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+                    FeedGift sended = new FeedGift();
+                    sended.gift = new Gift(id, Gift.PROFILE_NEW, url, 0);
+                    addGift(sended);
+                    if (mGiftReceivedListener != null) {
+                        mGiftReceivedListener.onReceived();
+                    }
+                }
             }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void sendGift(Intent data) {
-        Bundle extras = data.getExtras();
-        if (extras != null) {
-            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
-            final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
-
-            if (mProfile != null) {
-                final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
-                registerRequest(sendGift);
-                sendGift.giftId = id;
-                sendGift.userId = mProfile.uid;
-                final FeedGift sendedGift = new FeedGift();
-                sendedGift.gift = new Gift(
-                        sendGift.giftId,
-                        Gift.PROFILE_NEW,
-                        url,
-                        0
-                );
-                sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
-
-                    @Override
-                    protected void success(SendGiftAnswer answer, IApiResponse response) {
-                        addGift(sendedGift);
-                    }
-
-                    @Override
-                    protected SendGiftAnswer parseResponse(ApiResponse response) {
-                        return SendGiftAnswer.parse(response);
-                    }
-
-                    @Override
-                    public void fail(int codeError, final IApiResponse response) {
-                        if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                            FragmentActivity activity = getActivity();
-                            if (activity != null) {
-                                Intent intent = ContainerActivity.getBuyingIntent("Gifts");
-                                intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                                intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
-                                startActivity(intent);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void always(IApiResponse response) {
-                        super.always(response);
-                        needFeedUpdate = true;
-                        if (mGiftReceivedListener != null) {
-                            mGiftReceivedListener.onReceived();
-                        }
-                    }
-                }).exec();
-            }
-        }
     }
 
     public void addGift(FeedGift sendedGift) {
@@ -274,7 +221,6 @@ public class GiftsFragment extends ProfileInnerFragment {
                 request.from = data.get(data.size() - 1).gift.feedId;
             }
         }
-
         request.callback(new DataApiHandler<FeedListData<FeedGift>>() {
 
             @Override
@@ -362,7 +308,6 @@ public class GiftsFragment extends ProfileInnerFragment {
                     }
                 });
             }
-
             initViews();
         }
     }
@@ -389,9 +334,10 @@ public class GiftsFragment extends ProfileInnerFragment {
     }
 
     public void sendGift() {
-        Intent intent = new Intent(getActivity().getApplicationContext(),
-                GiftsActivity.class);
-        getParentFragment().startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
+        getParentFragment().startActivityForResult(
+                GiftsActivity.getSendGiftIntent(getActivity(), mProfile.uid),
+                GiftsActivity.INTENT_REQUEST_GIFT
+        );
     }
 
     protected FeedAdapter.Updater getUpdaterCallback() {
