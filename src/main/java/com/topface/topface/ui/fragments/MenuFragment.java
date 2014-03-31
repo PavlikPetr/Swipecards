@@ -154,6 +154,10 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
     }
 
+    public INavigationFragmentsListener getNavigationFragmentsListener() {
+        return mFragmentSwitchListener;
+    }
+
     public static void selectFragment(FragmentId fragmentId) {
         Intent intent = new Intent();
         intent.setAction(SELECT_MENU_ITEM);
@@ -276,10 +280,12 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             ((Button) profileLayoutWithBackground.findViewById(R.id.btnUserName)).setText(name);
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
                     ProfileBackgrounds.getBackgroundResource(getActivity(), CacheProfile.background_id));
-            ((ImageViewRemote) profileLayoutWithBackground.findViewById(R.id.ivProfileBackground))
+            ((ImageViewRemote) profileLayoutWithBackground.findViewById(R.id.profile_menu_background_image))
                     .setRemoteImageBitmap(bitmap);
         } else {
             profileLayout.setVisibility(View.VISIBLE);
+            ((Button) profileLayout.findViewById(R.id.profile_button))
+                    .setText(R.string.general_profile);
             profileLayoutWithBackground.setVisibility(View.GONE);
             currentLayout = profileLayout;
         }
@@ -299,7 +305,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             avatarView.setPhoto(CacheProfile.photo);
         }
         // set OnClickListener for profile menu item
-        mProfileButton = (Button) currentLayout.findViewWithTag("btnFragmentProfile");
+        mProfileButton = (Button) currentLayout.findViewWithTag("profile_fragment_button_tag");
         if (mProfileButton == null) {
             mProfileButton = (Button) currentLayout.findViewWithTag(F_PROFILE);
         } else {

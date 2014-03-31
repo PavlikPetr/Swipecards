@@ -31,7 +31,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
-    protected MutualListAdapter getNewAdapter() {
+    protected MutualListAdapter createNewAdapter() {
         return new MutualListAdapter(getActivity(), getUpdaterCallback());
     }
 

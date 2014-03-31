@@ -41,7 +41,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     }
 
     @Override
-    protected FeedAdapter<FeedBookmark> getNewAdapter() {
+    protected FeedAdapter<FeedBookmark> createNewAdapter() {
         return new BookmarksListAdapter(getActivity(), getUpdaterCallback());
     }
 

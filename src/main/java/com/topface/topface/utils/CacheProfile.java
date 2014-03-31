@@ -12,7 +12,6 @@ import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
-import com.topface.topface.data.Gift;
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
@@ -27,7 +26,6 @@ import com.topface.topface.utils.config.SessionConfig;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -76,7 +74,7 @@ public class CacheProfile {
     private static boolean editor;              // является ли пользователь редактором
     private static String status;               // статус пользователя
     public static boolean canInvite;            // может ли этот пользователь отправлять приглашения контактам
-    public static ArrayList<Gift> gifts = new ArrayList<>(); // массив подарков пользователя
+    public static Profile.Gifts gifts = new Profile.Gifts(); // массив подарков пользователя
     public static SparseArrayCompat<Profile.TopfaceNotifications> notifications;
 
     // State
