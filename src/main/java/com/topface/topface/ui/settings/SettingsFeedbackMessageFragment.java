@@ -28,11 +28,13 @@ import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
+import com.topface.topface.utils.ClientUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.util.List;
 import java.util.Locale;
 
 public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
@@ -60,10 +62,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         if (root == null) return null;
         // Navigation bar
         mLoadingLocker = root.findViewById(R.id.fbLoadingLocker);
-
         // EditText
         root.findViewById(R.id.tvTitle).setVisibility(View.GONE);
-
         //Если  текущий язык приложения не русский или английский, то нужно показывать сообщение
         //о том, что лучше писать нам по русски или английски, поэтому проверяем тут локаль
         TextView incorrectLocaleTv = (TextView) root.findViewById(R.id.tvLocale);
@@ -71,7 +71,6 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         if (language.equals("en") || language.equals("ru")) {
             incorrectLocaleTv.setVisibility(View.GONE);
         }
-
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -96,13 +95,9 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 }
             }
         });
-
         initTextViews(root, mFeedbackType);
-
         SettingsFeedbackMessageFragment.fillVersion(getActivity(), mReport);
-
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
         return root;
     }
 
@@ -249,6 +244,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
     public static class Report {
         String email;
+        List<String> userDeviceAccounts;
         String subject;
         String body = Static.EMPTY;
         String topface_version = "unknown";
@@ -262,6 +258,10 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
         private AuthToken authToken = AuthToken.getInstance();
 
+        public Report() {
+            userDeviceAccounts = ClientUtils.getClientAccounts();
+        }
+
         public String getSubject() {
             return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserSocialId() + "}";
         }
@@ -274,6 +274,9 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             StringBuilder strBuilder = new StringBuilder();
 
             strBuilder.append("<p>Email for answer: ").append(email).append(";</p>\n");
+            strBuilder.append("<p>Device accounts: ");
+            strBuilder.append(TextUtils.join(", ", userDeviceAccounts));
+            strBuilder.append(";</p>\n");
             strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode)
                     .append(";</p>\n");
             strBuilder.append("<p>Device: ").append(device).append("/").append(model).append(";</p>\n");

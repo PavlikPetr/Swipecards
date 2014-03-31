@@ -35,7 +35,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    protected FeedAdapter<Visitor> getNewAdapter() {
+    protected FeedAdapter<Visitor> createNewAdapter() {
         return new VisitorsListAdapter(getActivity(), getUpdaterCallback());
     }
 

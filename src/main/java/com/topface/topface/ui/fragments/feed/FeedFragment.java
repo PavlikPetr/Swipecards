@@ -38,7 +38,6 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
-import com.topface.topface.requests.BookmarkAddRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -236,7 +235,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
         });
 
-        mListAdapter = getNewAdapter();
+        mListAdapter = createNewAdapter();
         FeedAdapter<T> adapter = getListAdapter();
         adapter.setOnAvatarClickListener(this);
         //Пауза загрузки изображений при прокрутке списка
@@ -265,7 +264,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
      *
      * @return адаптер фида
      */
-    abstract protected FeedAdapter<T> getNewAdapter();
+    abstract protected FeedAdapter<T> createNewAdapter();
 
     protected LoadingListAdapter.Updater getUpdaterCallback() {
         return new LoadingListAdapter.Updater() {
@@ -379,6 +378,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mActionMode = null;
         }
     };
+
     /**
      * В данный момент у нас проблема с id в диалогах, поэтому в DialogsFragment этот метод переопределен
      */
