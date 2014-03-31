@@ -80,7 +80,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
 
-    public static final int SEARCH_LIMIT = 30;
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
 
     private TextView mResourcesLikes;
@@ -93,7 +92,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Button mChatBtn;
     private Button mSwitchNextBtn;
     private Button mSwitchPrevBtn;
-    private View mUserInfo;
     private TextView mUserInfoName;
     private TextView mUserInfoCity;
     private TextView mUserInfoStatus;
@@ -130,8 +128,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private BroadcastReceiver mProfileReceiver;
     private boolean mNeedMore;
     private int mLoadedCount;
-
-    private List<View> mViewsToHideAndShow;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -254,10 +250,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
         // User Info
-        mUserInfo = root.findViewById(R.id.loUserInfo);
-        mUserInfoName = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserName));
-        mUserInfoCity = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserCity));
-        mUserInfoStatus = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserStatus));
+        View userInfo = root.findViewById(R.id.loUserInfo);
+        mUserInfoName = ((TextView) userInfo.findViewById(R.id.tvDatingUserName));
+        mUserInfoCity = ((TextView) userInfo.findViewById(R.id.tvDatingUserCity));
+        mUserInfoStatus = ((TextView) userInfo.findViewById(R.id.tvDatingUserStatus));
 
         // Counter
         mDatingCounter = ((TextView) root.findViewById(R.id.tvDatingCounter));
@@ -271,7 +267,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
         mAnimationHelper.addView(mDatingCounter);
         mAnimationHelper.addView(mDatingResources);
-        mAnimationHelper.addView(mUserInfo);
+        mAnimationHelper.addView(userInfo);
 
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
     }
@@ -342,7 +338,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             int age = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ?
                     EditAgeFragment.absoluteMax : CacheProfile.dating.ageEnd;
             String headerText = getString(CacheProfile.dating.sex == Static.BOY ?
-                    R.string.dating_header_guys : R.string.dating_header_girls,
+                            R.string.dating_header_guys : R.string.dating_header_girls,
                     CacheProfile.dating.ageStart, age);
             String plus = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ? "+" : "";
             return headerText + plus;
@@ -513,9 +509,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private SearchRequest getSearchRequest() {
-        SearchRequest searchRequest = new SearchRequest(getActivity());
-        searchRequest.limit = SEARCH_LIMIT;
-        searchRequest.onlyOnline = getFilterOnlyOnline();
+        SearchRequest searchRequest = new SearchRequest(getFilterOnlyOnline(), getActivity());
         registerRequest(searchRequest);
         return searchRequest;
     }
