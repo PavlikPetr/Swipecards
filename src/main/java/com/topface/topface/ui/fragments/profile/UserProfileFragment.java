@@ -207,12 +207,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     private void getUserProfile(final int profileId) {
         mLoaderView.setVisibility(View.VISIBLE);
-        if (profileId < 1) {
-            mLoaderView.setVisibility(View.INVISIBLE);
-            mRetryView.showOnlyMessage(true);
-            mLockScreen.setVisibility(View.VISIBLE);
-            return;
-        }
         UserRequest userRequest = new UserRequest(profileId, getActivity());
         registerRequest(userRequest);
         userRequest.callback(new DataApiHandler<User>() {
@@ -257,7 +251,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
             @Override
             public void fail(final int codeError, IApiResponse response) {
-                showRetryBtn();
+                if (response.isCodeEqual(ErrorCodes.INCORRECT_VALUE)
+                        || response.isCodeEqual(ErrorCodes.USER_NOT_FOUND)) {
+                    showForNotExisting();
+                } else {
+                    showRetryBtn();
+                }
             }
         }).exec();
     }
@@ -270,22 +269,25 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         showLockWithText(getString(R.string.user_is_deleted));
     }
 
-    private void showLockWithText(String text) {
+    private void showForNotExisting() {
+        showLockWithText(getString(R.string.user_does_not_exist), true);
+    }
+
+    private void showLockWithText(String text, boolean onlyMessage) {
         if (mRetryView != null && isAdded()) {
             mLoaderView.setVisibility(View.GONE);
             mLockScreen.setVisibility(View.VISIBLE);
             mRetryView.setText(text);
-            mRetryView.showOnlyMessage(true);
+            mRetryView.showRetryButton(!onlyMessage);
         }
     }
 
+    private void showLockWithText(String text) {
+        showLockWithText(text, false);
+    }
+
     private void showRetryBtn() {
-        if (mRetryView != null && isAdded()) {
-            mLoaderView.setVisibility(View.GONE);
-            mLockScreen.setVisibility(View.VISIBLE);
-            mRetryView.setText(getString(R.string.general_profile_error));
-            mRetryView.showOnlyMessage(false);
-        }
+        showLockWithText(getString(R.string.general_profile_error), false);
     }
 
     @Override
