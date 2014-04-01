@@ -113,6 +113,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private static final int DELETE_BUTTON = 1;
     private static final int COPY_BUTTON = 0;
 
+    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
+            mUser.bookmarked = isBookmarked;
+            if (chatActions != null) {
+                ((TextView)chatActions.findViewById(R.id.acBookmark).findViewById(R.id.favTV)).setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            }
+        }
+    };
+
     private IUserOnlineListener mUserOnlineListener;
 
     // Data
@@ -246,14 +257,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         restoreData(savedInstanceState);
         // History ListView & ListAdapter
         initChatHistory(root);
-
         if (mUser != null && !mUser.isEmpty()) {
             onUserLoaded(mUser);
         }
         if (!AuthToken.getInstance().isEmpty()) {
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
+        //регистрируем здесь, потому что может быть такая ситуация, что обновить надо, когда активити находится не на топе стека
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BookmarkAddRequest.UPDATE_BOOKMARKED));
         return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
 
     @Override
@@ -801,12 +819,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void success(IApiResponse response) {
                         super.success(response);
-//                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
-                        if (mUser != null) {
-                            textView.setText(App.getContext().getString(mUser.bookmarked ? R.string.general_bookmarks_add : R.string.general_bookmarks_delete));
-                            mUser.bookmarked = !mUser.bookmarked;
-                        }
-
+                        Intent intent = new Intent(BookmarkAddRequest.UPDATE_BOOKMARKED);
+                        intent.putExtra("bookmarked", !mUser.bookmarked);
+                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                         loader.setVisibility(View.INVISIBLE);
                         icon.setVisibility(View.VISIBLE);
                     }
