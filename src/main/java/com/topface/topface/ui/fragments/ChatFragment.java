@@ -112,9 +112,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private static final int COMPLAIN_BUTTON = 2;
     private static final int DELETE_BUTTON = 1;
     private static final int COPY_BUTTON = 0;
-    public static final String UPDATE_BOOKMARKED = "com.topface.UPDATE_BOOKMARKED";
 
-    private BroadcastReceiver updateActionsReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
@@ -265,14 +264,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
         //регистрируем здесь, потому что может быть такая ситуация, что обновить надо, когда активити находится не на топе стека
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(updateActionsReceiver, new IntentFilter(UPDATE_BOOKMARKED));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BookmarkAddRequest.UPDATE_BOOKMARKED));
         return root;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateActionsReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
 
     @Override
@@ -820,7 +819,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void success(IApiResponse response) {
                         super.success(response);
-                        Intent intent = new Intent(UPDATE_BOOKMARKED);
+                        Intent intent = new Intent(BookmarkAddRequest.UPDATE_BOOKMARKED);
                         intent.putExtra("bookmarked", !mUser.bookmarked);
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                         loader.setVisibility(View.INVISIBLE);

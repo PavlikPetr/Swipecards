@@ -26,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedGift;
@@ -95,7 +94,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private MenuItem mBarActions;
     // controllers
     private RateController mRateController;
-    private BroadcastReceiver updateActionsReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
@@ -147,7 +146,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         });
         mLockScreen.addView(mRetryView.getView());
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(updateActionsReceiver, new IntentFilter(ChatFragment.UPDATE_BOOKMARKED));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BookmarkAddRequest.UPDATE_BOOKMARKED));
         return root;
     }
 
@@ -161,7 +160,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateActionsReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
 
     @Override
@@ -555,7 +554,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     @Override
                     public void success(IApiResponse response) {
                         super.success(response);
-                        Intent intent = new Intent(ChatFragment.UPDATE_BOOKMARKED);
+                        Intent intent = new Intent(BookmarkAddRequest.UPDATE_BOOKMARKED);
                         intent.putExtra("bookmarked", !((User) profile).bookmarked);
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                         loader.setVisibility(View.INVISIBLE);
