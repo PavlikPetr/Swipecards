@@ -7,7 +7,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="8dp">
+        >
 
 
         <LinearLayout
@@ -107,7 +107,9 @@
             android:id="@+id/tvBackToMainAuth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/AuthBackButtonStyle" />
+            style="@style/AuthBackButtonStyle"
+            android:layout_marginBottom="8dp"
+            />
 
         <ImageView
             android:layout_alignParentBottom="true"
