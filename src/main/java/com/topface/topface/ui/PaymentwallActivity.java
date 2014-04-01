@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.topface.topface.R;
@@ -24,13 +23,12 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     public static final String SUCCESS_URL_PATTERN = "success_url=([^&]+)";
     public static final String USER_ID = "userId";
     public static final int ACTION_BUY = 100;
-    private int mUid;
-    private static final int RESULT_ERROR = 1;
     public static final String DEFAULT_URL = "https://wallapi.com/api/subscription/?key=3b2e96bcaa32b23b34605dfbf51c4df5&uid=[USER_ID]&widget=m2_1&success_url=http://topface.com/paymentwall-success";
+    private static final int RESULT_ERROR = 1;
+    private int mUid;
     private String mSuccessUrl;
     private View mProgressBar;
     private WebView webView;
-    private Button close;
 
     public static Intent getIntent(Context context, int userId) {
         Intent intent = new Intent(context, PaymentwallActivity.class);
@@ -42,6 +40,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         mUid = getIntent().getIntExtra(USER_ID, 0);
         mSuccessUrl = getSuccessUrl(getWidgetUrl());
+        getSupportActionBar().setTitle(R.string.buying_header_title);
         if (mUid == 0 || TextUtils.isEmpty(mSuccessUrl)) {
             Toast.makeText(this, R.string.general_data_error, Toast.LENGTH_SHORT).show();
             finishActivity(RESULT_ERROR);
@@ -52,13 +51,6 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
         // Progress
         mProgressBar = findViewById(R.id.prsWebLoading);
-        close = (Button) findViewById(R.id.closeWebView);
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         // WebView
         webView = (WebView) findViewById(R.id.wvWebFrame);
@@ -79,6 +71,14 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         }
 
         return result;
+    }
+
+    private String getWidgetUrl() {
+        String url = CacheProfile.getOptions().getPaymentwallLink();
+        if (TextUtils.isEmpty(url)) {
+            url = DEFAULT_URL.replace("[USER_ID]", Integer.toString(mUid));
+        }
+        return url;
     }
 
     private class PaymentwallClient extends WebViewClient {
@@ -122,7 +122,6 @@ public class PaymentwallActivity extends BaseFragmentActivity {
                 finishActivity(Activity.RESULT_OK);
             }
             mProgressBar.setVisibility(View.GONE);
-            close.setVisibility(View.VISIBLE);
         }
 
 
@@ -133,31 +132,9 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
         }
 
-        public void performBackButtonClick() {
-            finish();
-        }
-
         public void log(String obj) {
             Debug.log("JS:" + obj);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mProgressBar.getVisibility() == View.VISIBLE) {
-            super.onBackPressed();
-        }
-        String code = "javascript:if(window.ps_back_button.style.display == 'none' || window.ps_back_button == undefined) {jsinterface.performBackButtonClick();} else { event = document.createEvent( 'HTMLEvents' ); event.initEvent( 'click', true, true );window.ps_back_button.dispatchEvent( event );}";
-        String testCode = "javascript: window.ps_back_button.click();";
-        webView.loadUrl(code);
-    }
-
-    private String getWidgetUrl() {
-        String url = CacheProfile.getOptions().getPaymentwallLink();
-        if (TextUtils.isEmpty(url)) {
-            url = DEFAULT_URL.replace("[USER_ID]", Integer.toString(mUid));
-        }
-        return url;
     }
 
 
