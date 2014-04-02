@@ -21,6 +21,7 @@ import com.google.ads.Ad;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.inmobi.commons.InMobi;
 import com.inneractive.api.ads.InneractiveAd;
 import com.inneractive.api.ads.InneractiveAdListener;
 import com.lifestreet.android.lsmsdk.BannerAdapter;
@@ -30,6 +31,7 @@ import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
@@ -95,6 +97,7 @@ public class BannerBlock {
     public final static String[] BANNERS = new String[]{
             BANNER_TOPFACE,
             BANNER_ADMOB,
+            BANNER_ADMOB_MEDIATION,
             BANNER_ADWIRED,
             BANNER_MOPUB,
             BANNER_IVENGO,
@@ -129,6 +132,9 @@ public class BannerBlock {
     }
 
     public static void init() {
+        if (BuildConfig.DEBUG) {
+            InMobi.setLogLevel(InMobi.LOG_LEVEL.DEBUG);
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             if (CacheProfile.getOptions().containsBannerType(BANNER_ADCAMP)) {
                 AdsManager.getInstance().initialize(App.getContext());
@@ -598,7 +604,6 @@ public class BannerBlock {
             protected VirusLike parseResponse(ApiResponse response) {
                 return new VirusLike(response);
             }
-
 
             @Override
             public void fail(int codeError, IApiResponse response) {
