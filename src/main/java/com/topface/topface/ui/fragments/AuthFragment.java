@@ -113,7 +113,6 @@ public class AuthFragment extends BaseFragment {
             loadAllProfileData();
         }
         checkOnline();
-        getSupportActionBar().hide();
         return root;
     }
 
@@ -726,6 +725,7 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        getSupportActionBar().hide();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(connectionChangeListener,
                 new IntentFilter(ConnectionChangeReceiver.REAUTH));
         if (authorizationReceiver == null || !authReceiverRegistered) {

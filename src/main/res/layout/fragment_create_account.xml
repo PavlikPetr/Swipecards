@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:orientation="vertical"
-            android:paddingBottom="40dp"
             android:gravity="center_horizontal">
 
             <LinearLayout
@@ -25,12 +24,12 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_registration_folder"
                 android:gravity="center"
-                android:paddingTop="75dp"
                 android:paddingBottom="50dp">
 
                 <LinearLayout
                     android:id="@+id/loForm"
                     android:layout_width="210dp"
+                    android:layout_marginTop="40dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_registration_form_folder"
                     android:orientation="vertical"

@@ -14,7 +14,7 @@
 
         <com.topface.topface.ui.views.ImageViewRemote xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
             ivr:postProcessor="leftMenuClip"
-            android:id="@+id/ivProfileBackground"
+            android:id="@+id/profile_menu_background_image"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/left_menu_background_height"
             android:scaleType="centerCrop" />
@@ -59,7 +59,7 @@
         </LinearLayout>
 
         <Button
-            android:tag="btnFragmentProfile"
+            android:tag="profile_fragment_button_tag"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/left_menu_background_height"
             android:background="@drawable/bg_semitransparent_black_selector" />
@@ -96,7 +96,8 @@
             android:layout_marginLeft="8dp" />
 
         <Button
-            android:tag="btnFragmentProfile"
+            android:id="@+id/profile_button"
+            android:tag="profile_fragment_button_tag"
             android:layout_toRightOf="@id/ivMenuAvatar"
             android:layout_centerVertical="true"
             style="@style/LeftMenuButtons"

@@ -1,7 +1,10 @@
 package com.topface.topface.ui.fragments.profile;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -91,6 +94,19 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private MenuItem mBarActions;
     // controllers
     private RateController mRateController;
+    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
+            Profile profile = getProfile();
+            if (profile != null) {
+                ((User) profile).bookmarked = isBookmarked;
+                if (mBookmarkAction != null) {
+                    mBookmarkAction.setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                }
+            }
+        }
+    };
 
     public static UserProfileFragment newInstance(String itemId, int id, String className) {
         UserProfileFragment fragment = new UserProfileFragment();
@@ -129,6 +145,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             }
         });
         mLockScreen.addView(mRetryView.getView());
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BookmarkAddRequest.UPDATE_BOOKMARKED));
         return root;
     }
 
@@ -137,6 +155,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         super.restoreState();
         mProfileId = getArguments().getInt(ARG_TAG_PROFILE_ID);
         mItemId = getArguments().getString(ARG_FEED_ITEM_ID);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
 
     @Override
@@ -207,12 +231,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     private void getUserProfile(final int profileId) {
         mLoaderView.setVisibility(View.VISIBLE);
-        if (profileId < 1) {
-            mLoaderView.setVisibility(View.INVISIBLE);
-            mRetryView.showOnlyMessage(true);
-            mLockScreen.setVisibility(View.VISIBLE);
-            return;
-        }
         UserRequest userRequest = new UserRequest(profileId, getActivity());
         registerRequest(userRequest);
         userRequest.callback(new DataApiHandler<User>() {
@@ -257,7 +275,11 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
             @Override
             public void fail(final int codeError, IApiResponse response) {
-                showRetryBtn();
+                if (response.isCodeEqual(ErrorCodes.INCORRECT_VALUE, ErrorCodes.USER_NOT_FOUND)) {
+                    showForNotExisting();
+                } else {
+                    showRetryBtn();
+                }
             }
         }).exec();
     }
@@ -270,22 +292,25 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         showLockWithText(getString(R.string.user_is_deleted));
     }
 
-    private void showLockWithText(String text) {
+    private void showForNotExisting() {
+        showLockWithText(getString(R.string.user_does_not_exist), true);
+    }
+
+    private void showLockWithText(String text, boolean onlyMessage) {
         if (mRetryView != null && isAdded()) {
             mLoaderView.setVisibility(View.GONE);
             mLockScreen.setVisibility(View.VISIBLE);
             mRetryView.setText(text);
-            mRetryView.showOnlyMessage(true);
+            mRetryView.showRetryButton(!onlyMessage);
         }
     }
 
+    private void showLockWithText(String text) {
+        showLockWithText(text, false);
+    }
+
     private void showRetryBtn() {
-        if (mRetryView != null && isAdded()) {
-            mLoaderView.setVisibility(View.GONE);
-            mLockScreen.setVisibility(View.VISIBLE);
-            mRetryView.setText(getString(R.string.general_profile_error));
-            mRetryView.showOnlyMessage(false);
-        }
+        showLockWithText(getString(R.string.general_profile_error), false);
     }
 
     @Override
@@ -441,9 +466,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 if (mGiftFragment != null && mGiftFragment.getActivity() != null) {
                     mGiftFragment.sendGift(mGiftsReceivedListener);
                 } else {
-                    Intent intent = new Intent(getActivity().getApplicationContext(),
-                            GiftsActivity.class);
-                    startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
+                    startActivityForResult(
+                            GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
+                            GiftsActivity.INTENT_REQUEST_GIFT
+                    );
                 }
                 break;
             case R.id.acChat:
@@ -529,12 +555,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     @Override
                     public void success(IApiResponse response) {
                         super.success(response);
-//                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
-                        if (profile != null && profile instanceof User) {
-                            textView.setText(App.getContext().getString(((User) profile).bookmarked ? R.string.general_bookmarks_add : R.string.general_bookmarks_delete));
-                            ((User) profile).bookmarked = !((User) profile).bookmarked;
-                        }
-
+                        Intent intent = new Intent(BookmarkAddRequest.UPDATE_BOOKMARKED);
+                        intent.putExtra("bookmarked", !((User) profile).bookmarked);
+                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                         loader.setVisibility(View.INVISIBLE);
                         icon.setVisibility(View.VISIBLE);
                     }

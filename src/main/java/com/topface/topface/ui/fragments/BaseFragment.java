@@ -296,7 +296,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected String getSubtitle() {
-
         return null;
     }
 
@@ -316,7 +315,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                 mTitleSetter = new ActionBarTitleSetterDelegate(actionBar);
             }
         }
-
         return mTitleSetter;
     }
 }

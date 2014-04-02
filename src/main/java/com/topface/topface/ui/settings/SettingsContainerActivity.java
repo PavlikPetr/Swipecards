@@ -1,5 +1,6 @@
 package com.topface.topface.ui.settings;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,8 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
 import com.topface.topface.utils.social.AuthToken;
+
+import static com.topface.topface.ui.settings.FeedbackMessageFragment.FeedbackType;
 
 public class SettingsContainerActivity extends CustomTitlesBaseFragmentActivity {
 
@@ -20,6 +23,12 @@ public class SettingsContainerActivity extends CustomTitlesBaseFragmentActivity 
     public static final int INTENT_SEND_FEEDBACK = 204;
     public static final int INTENT_CHANGE_PASSWORD = 205;
     private String mConfirmCode;
+
+    public static Intent getFeedbackMessageIntent(Context context, FeedbackMessageFragment.FeedbackType feedbackType) {
+        Intent intent = new Intent(context, SettingsContainerActivity.class);
+        intent.putExtra(FeedbackMessageFragment.INTENT_FEEDBACK_TYPE, feedbackType);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -54,7 +63,11 @@ public class SettingsContainerActivity extends CustomTitlesBaseFragmentActivity 
                 fragment = new SettingsAboutFragment();
                 break;
             case INTENT_SEND_FEEDBACK:
-                fragment = new SettingsFeedbackMessageFragment();
+                fragment = FeedbackMessageFragment.newInstance(
+                        (FeedbackType) getIntent().getSerializableExtra(
+                                FeedbackMessageFragment.INTENT_FEEDBACK_TYPE
+                        )
+                );
             default:
                 break;
         }

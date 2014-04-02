@@ -44,7 +44,7 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     }
 
     @Override
-    protected BlackListAdapter getNewAdapter() {
+    protected BlackListAdapter createNewAdapter() {
         return new BlackListAdapter(getActivity().getApplicationContext(), getUpdaterCallback());
     }
 

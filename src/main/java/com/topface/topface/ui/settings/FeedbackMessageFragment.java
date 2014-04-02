@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -24,34 +25,52 @@ import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
-import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.SendFeedbackRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
+import com.topface.topface.utils.ClientUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.util.List;
 import java.util.Locale;
 
-public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
+public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
-
-    public static final int UNKNOWN = 0;
-    public static final int ERROR_MESSAGE = 1;
-    public static final int DEVELOPERS_MESSAGE = 2;
-    public static final int PAYMENT_MESSAGE = 3;
-    public static final int COOPERATION_MESSAGE = 4;
-
     private EditText mEditText;
     private EditText mEditEmail;
     private EditText mTransactionIdEditText;
-
     private Report mReport = new Report();
     private View mLoadingLocker;
-    private int mFeedbackType;
+    private FeedbackType mFeedbackType;
+
+    public static void fillVersion(Context context, Report report) {
+        if (context != null && report != null) {
+            try {
+                PackageInfo pInfo;
+                PackageManager pManager = context.getPackageManager();
+                if (pManager != null) {
+                    pInfo = pManager.getPackageInfo(context.getPackageName(), 0);
+                    report.topface_version = pInfo.versionName;
+                    report.topface_versionCode = pInfo.versionCode;
+                }
+            } catch (NameNotFoundException e) {
+                Debug.error(e);
+            }
+        }
+    }
+
+    public static Fragment newInstance(FeedbackType feedbackType) {
+        Fragment fragment = new FeedbackMessageFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(INTENT_FEEDBACK_TYPE, feedbackType);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -60,10 +79,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         if (root == null) return null;
         // Navigation bar
         mLoadingLocker = root.findViewById(R.id.fbLoadingLocker);
-
         // EditText
         root.findViewById(R.id.tvTitle).setVisibility(View.GONE);
-
         //Если  текущий язык приложения не русский или английский, то нужно показывать сообщение
         //о том, что лучше писать нам по русски или английски, поэтому проверяем тут локаль
         TextView incorrectLocaleTv = (TextView) root.findViewById(R.id.tvLocale);
@@ -71,7 +88,6 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         if (language.equals("en") || language.equals("ru")) {
             incorrectLocaleTv.setVisibility(View.GONE);
         }
-
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -96,55 +112,40 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 }
             }
         });
-
         initTextViews(root, mFeedbackType);
-
-        SettingsFeedbackMessageFragment.fillVersion(getActivity(), mReport);
-
+        FeedbackMessageFragment.fillVersion(getActivity(), mReport);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
         return root;
-    }
-
-    public static void fillVersion(Context context, Report report) {
-        if (context != null && report != null) {
-            try {
-                PackageInfo pInfo;
-                PackageManager pManager = context.getPackageManager();
-                if (pManager != null) {
-                    pInfo = pManager.getPackageInfo(context.getPackageName(), 0);
-                    report.topface_version = pInfo.versionName;
-                    report.topface_versionCode = pInfo.versionCode;
-                }
-            } catch (NameNotFoundException e) {
-                Debug.error(e);
-            }
-        }
     }
 
     @Override
     protected void restoreState() {
         super.restoreState();
-        Bundle extras = getActivity().getIntent().getExtras();
+        Bundle extras = getArguments();
         if (extras != null) {
-            mFeedbackType = extras.getInt(INTENT_FEEDBACK_TYPE, UNKNOWN);
-        }
-        switch (mFeedbackType) {
-            case ERROR_MESSAGE:
-                mReport.subject = getResources().getString(R.string.settings_error_message_internal);
-                break;
-            case DEVELOPERS_MESSAGE:
-                mReport.subject = getResources().getString(R.string.settings_ask_developer_internal);
-                break;
-            case PAYMENT_MESSAGE:
-                mReport.subject = getResources().getString(R.string.settings_payment_problems_internal);
-                break;
-            case COOPERATION_MESSAGE:
-                mReport.subject = getResources().getString(R.string.settings_cooperation_internal);
-                break;
-            case UNKNOWN:
-                mReport.subject = getResources().getString(R.string.settings_feedback_internal);
-                break;
+            mFeedbackType = (FeedbackType) extras.getSerializable(INTENT_FEEDBACK_TYPE);
+            mFeedbackType = mFeedbackType == null ? FeedbackType.UNKNOWN : mFeedbackType;
+            switch (mFeedbackType) {
+                case ERROR_MESSAGE:
+                    mReport.subject = getString(R.string.settings_error_message_internal);
+                    break;
+                case DEVELOPERS_MESSAGE:
+                    mReport.subject = getString(R.string.settings_ask_developer_internal);
+                    break;
+                case PAYMENT_MESSAGE:
+                    mReport.subject = getString(R.string.settings_payment_problems_internal);
+                    break;
+                case COOPERATION_MESSAGE:
+                    mReport.subject = getString(R.string.settings_cooperation_internal);
+                    break;
+                case BAN:
+                    mReport.subject = getString(R.string.feedback_subject_ban_internal);
+                    break;
+                case UNKNOWN:
+                default:
+                    mReport.subject = getString(R.string.settings_feedback_internal);
+                    break;
+            }
         }
     }
 
@@ -163,12 +164,14 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 return getString(R.string.settings_payment_problems);
             case COOPERATION_MESSAGE:
                 return getString(R.string.settings_cooperation);
+            case BAN:
+                return getString(R.string.feedback_subject_ban);
             default:
                 return null;
         }
     }
 
-    private void initTextViews(View root, int feedbackType) {
+    private void initTextViews(View root, FeedbackType feedbackType) {
         mEditEmail = (EditText) root.findViewById(R.id.edEmail);
         mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
         mEditEmail.setText(Settings.getInstance().getSocialAccountEmail());
@@ -207,7 +210,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             mReport.body = feedbackText;
             mReport.transactionId = Utils.getText(mTransactionIdEditText).trim();
             prepareRequestSend();
-            FeedbackReport feedbackRequest = new FeedbackReport(getActivity(), mReport);
+            SendFeedbackRequest feedbackRequest = new SendFeedbackRequest(getActivity(), mReport);
             feedbackRequest.callback(new ApiHandler() {
 
                 @Override
@@ -247,8 +250,45 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         }
     }
 
+    @Override
+    protected void lockUi() {
+        if (mLoadingLocker != null) {
+            mLoadingLocker.setVisibility(View.VISIBLE);
+            mEditText.setEnabled(false);
+        }
+    }
+
+    @Override
+    protected void unlockUi() {
+        if (mLoadingLocker != null) {
+            mEditText.setEnabled(true);
+            mLoadingLocker.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return R.menu.actions_send;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_send:
+                saveChanges(new Handler());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public enum FeedbackType {
+        UNKNOWN, ERROR_MESSAGE, DEVELOPERS_MESSAGE, PAYMENT_MESSAGE, COOPERATION_MESSAGE, BAN
+    }
+
     public static class Report {
         String email;
+        List<String> userDeviceAccounts;
         String subject;
         String body = Static.EMPTY;
         String topface_version = "unknown";
@@ -262,18 +302,33 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
         private AuthToken authToken = AuthToken.getInstance();
 
+        public Report() {
+            userDeviceAccounts = ClientUtils.getClientAccounts();
+        }
+
         public String getSubject() {
             return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserSocialId() + "}";
+        }
+
+        public void setSubject(String subject) {
+            this.subject = subject;
         }
 
         public String getBody() {
             return body;
         }
 
+        public void setBody(String body) {
+            this.body = body;
+        }
+
         public String getExtra() {
             StringBuilder strBuilder = new StringBuilder();
 
             strBuilder.append("<p>Email for answer: ").append(email).append(";</p>\n");
+            strBuilder.append("<p>Device accounts: ");
+            strBuilder.append(TextUtils.join(", ", userDeviceAccounts));
+            strBuilder.append(";</p>\n");
             strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode)
                     .append(";</p>\n");
             strBuilder.append("<p>Device: ").append(device).append("/").append(model).append(";</p>\n");
@@ -307,48 +362,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             return email;
         }
 
-        public void setBody(String body) {
-            this.body = body;
-        }
-
         public void setEmail(String email) {
             this.email = email;
-        }
-
-        public void setSubject(String subject) {
-            this.subject = subject;
-        }
-    }
-
-    @Override
-    protected void lockUi() {
-        if (mLoadingLocker != null) {
-            mLoadingLocker.setVisibility(View.VISIBLE);
-            mEditText.setEnabled(false);
-        }
-    }
-
-    @Override
-    protected void unlockUi() {
-        if (mLoadingLocker != null) {
-            mEditText.setEnabled(true);
-            mLoadingLocker.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_send;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_send:
-                saveChanges(new Handler());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 }
