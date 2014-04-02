@@ -36,7 +36,7 @@
             android:id="@+id/btnSend"
             android:layout_width="fill_parent"
             android:layout_height="40dp"
-            android:text="@string/confirm"
+            android:text="@string/send_confirm_link"
             style="@style/Widget.Topface.Button.Big.Blue"
             android:padding="0dp"
             android:textSize="12sp" />
