@@ -122,7 +122,8 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         Bundle extras = getArguments();
         if (extras != null) {
             mFeedbackType = (FeedbackType) extras.getSerializable(INTENT_FEEDBACK_TYPE);
-            switch (mFeedbackType == null ? FeedbackType.UNKNOWN : mFeedbackType) {
+            mFeedbackType == null ? FeedbackType.UNKNOWN : mFeedbackType;
+            switch (mFeedbackType) {
                 case ERROR_MESSAGE:
                     mReport.subject = getString(R.string.settings_error_message_internal);
                     break;
