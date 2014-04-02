@@ -41,18 +41,36 @@ import java.util.Locale;
 public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
-
-    public enum FeedbackType {
-        UNKNOWN, ERROR_MESSAGE, DEVELOPERS_MESSAGE, PAYMENT_MESSAGE, COOPERATION_MESSAGE, BAN
-    }
-
     private EditText mEditText;
     private EditText mEditEmail;
     private EditText mTransactionIdEditText;
-
     private Report mReport = new Report();
     private View mLoadingLocker;
     private FeedbackType mFeedbackType;
+
+    public static void fillVersion(Context context, Report report) {
+        if (context != null && report != null) {
+            try {
+                PackageInfo pInfo;
+                PackageManager pManager = context.getPackageManager();
+                if (pManager != null) {
+                    pInfo = pManager.getPackageInfo(context.getPackageName(), 0);
+                    report.topface_version = pInfo.versionName;
+                    report.topface_versionCode = pInfo.versionCode;
+                }
+            } catch (NameNotFoundException e) {
+                Debug.error(e);
+            }
+        }
+    }
+
+    public static Fragment newInstance(FeedbackType feedbackType) {
+        Fragment fragment = new FeedbackMessageFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(INTENT_FEEDBACK_TYPE, feedbackType);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -100,29 +118,13 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         return root;
     }
 
-    public static void fillVersion(Context context, Report report) {
-        if (context != null && report != null) {
-            try {
-                PackageInfo pInfo;
-                PackageManager pManager = context.getPackageManager();
-                if (pManager != null) {
-                    pInfo = pManager.getPackageInfo(context.getPackageName(), 0);
-                    report.topface_version = pInfo.versionName;
-                    report.topface_versionCode = pInfo.versionCode;
-                }
-            } catch (NameNotFoundException e) {
-                Debug.error(e);
-            }
-        }
-    }
-
     @Override
     protected void restoreState() {
         super.restoreState();
         Bundle extras = getArguments();
         if (extras != null) {
             mFeedbackType = (FeedbackType) extras.getSerializable(INTENT_FEEDBACK_TYPE);
-            mFeedbackType == null ? FeedbackType.UNKNOWN : mFeedbackType;
+            mFeedbackType = mFeedbackType == null ? FeedbackType.UNKNOWN : mFeedbackType;
             switch (mFeedbackType) {
                 case ERROR_MESSAGE:
                     mReport.subject = getString(R.string.settings_error_message_internal);
@@ -248,6 +250,42 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         }
     }
 
+    @Override
+    protected void lockUi() {
+        if (mLoadingLocker != null) {
+            mLoadingLocker.setVisibility(View.VISIBLE);
+            mEditText.setEnabled(false);
+        }
+    }
+
+    @Override
+    protected void unlockUi() {
+        if (mLoadingLocker != null) {
+            mEditText.setEnabled(true);
+            mLoadingLocker.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return R.menu.actions_send;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_send:
+                saveChanges(new Handler());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public enum FeedbackType {
+        UNKNOWN, ERROR_MESSAGE, DEVELOPERS_MESSAGE, PAYMENT_MESSAGE, COOPERATION_MESSAGE, BAN
+    }
+
     public static class Report {
         String email;
         List<String> userDeviceAccounts;
@@ -272,8 +310,16 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
             return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserSocialId() + "}";
         }
 
+        public void setSubject(String subject) {
+            this.subject = subject;
+        }
+
         public String getBody() {
             return body;
+        }
+
+        public void setBody(String body) {
+            this.body = body;
         }
 
         public String getExtra() {
@@ -316,56 +362,8 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
             return email;
         }
 
-        public void setBody(String body) {
-            this.body = body;
-        }
-
         public void setEmail(String email) {
             this.email = email;
         }
-
-        public void setSubject(String subject) {
-            this.subject = subject;
-        }
-    }
-
-    @Override
-    protected void lockUi() {
-        if (mLoadingLocker != null) {
-            mLoadingLocker.setVisibility(View.VISIBLE);
-            mEditText.setEnabled(false);
-        }
-    }
-
-    @Override
-    protected void unlockUi() {
-        if (mLoadingLocker != null) {
-            mEditText.setEnabled(true);
-            mLoadingLocker.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_send;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_send:
-                saveChanges(new Handler());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public static Fragment newInstance(FeedbackType feedbackType) {
-        Fragment fragment = new FeedbackMessageFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(INTENT_FEEDBACK_TYPE, feedbackType);
-        fragment.setArguments(args);
-        return fragment;
     }
 }
