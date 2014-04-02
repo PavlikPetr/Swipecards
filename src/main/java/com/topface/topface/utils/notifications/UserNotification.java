@@ -113,9 +113,16 @@ public class UserNotification {
     public android.app.Notification generate(NotificationAction[] actions) {
         try {
             notificationBuilder = new NotificationCompat.Builder(mContext);
+
+            int notification = 0;
             if (Settings.getInstance().isVibrationEnabled()) {
-                notificationBuilder.setDefaults(android.app.Notification.DEFAULT_VIBRATE);
+                notification |= android.app.Notification.DEFAULT_VIBRATE;
             }
+            if (Settings.getInstance().isLEDEnabled())
+            {
+                notification |= Notification.DEFAULT_LIGHTS;
+            }
+            notificationBuilder.setDefaults(notification);
             notificationBuilder.setSound(Settings.getInstance().getRingtone());
             notificationBuilder.setOngoing(mOngoing);
             switch (mType) {

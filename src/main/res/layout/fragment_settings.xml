@@ -60,6 +60,12 @@
             layout="@layout/editor_form_switch" />
 
         <include
+            android:id="@+id/loLED"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/editor_form_switch" />
+
+        <include
             android:id="@+id/loMelody"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
