@@ -818,5 +818,5 @@
     <string name="press_back_more_to_close_app">Нажмите кнопку назад еще раз для выхода из Topface</string>
     <string name="waiting_for_load">Ожидание загрузки…</string>
     <string name="loading_photo_percent">Загрузка фотографии %d%%</string>
-    <string name="user_does_not_exist">Пользователь не существует</string>
+    <string name="user_does_not_exist">Пользователь не найден</string>
 </resources>

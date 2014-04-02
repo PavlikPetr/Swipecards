@@ -251,8 +251,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
             @Override
             public void fail(final int codeError, IApiResponse response) {
-                if (response.isCodeEqual(ErrorCodes.INCORRECT_VALUE)
-                        || response.isCodeEqual(ErrorCodes.USER_NOT_FOUND)) {
+                if (response.isCodeEqual(ErrorCodes.INCORRECT_VALUE, ErrorCodes.USER_NOT_FOUND)) {
                     showForNotExisting();
                 } else {
                     showRetryBtn();
