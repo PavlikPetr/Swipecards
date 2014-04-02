@@ -23,25 +23,6 @@ public class RetryViewCreator {
         mBtn1 = btn1;
     }
 
-    public void setText(String text) {
-        if (mRetryView != null) {
-            ((TextView) mRetryView.findViewById(R.id.tvMessage)).setText(text);
-        }
-    }
-
-    public void setListener(View.OnClickListener listener) {
-        if (mBtn1 != null) mBtn1.setListener(listener);
-    }
-
-    public View getView() {
-        return mRetryView;
-    }
-
-    @SuppressWarnings("MagicConstant")
-    public void setVisibility(int visibility) {
-        if (mRetryView != null) mRetryView.setVisibility(visibility);
-    }
-
     private static RetryViewCreator createRetryView(Context context, String text, InnerButton btn1, InnerButton btn2, Integer backgroundColor) {
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup retryView = (ViewGroup) mInflater.inflate(R.layout.layout_retryview, null);
@@ -99,6 +80,25 @@ public class RetryViewCreator {
         );
     }
 
+    public void setText(String text) {
+        if (mRetryView != null) {
+            ((TextView) mRetryView.findViewById(R.id.tvMessage)).setText(text);
+        }
+    }
+
+    public void setListener(View.OnClickListener listener) {
+        if (mBtn1 != null) mBtn1.setListener(listener);
+    }
+
+    public View getView() {
+        return mRetryView;
+    }
+
+    @SuppressWarnings("MagicConstant")
+    public void setVisibility(int visibility) {
+        if (mRetryView != null) mRetryView.setVisibility(visibility);
+    }
+
     public void performClick() {
         mBtn1.performClick();
     }
@@ -113,17 +113,17 @@ public class RetryViewCreator {
         }
     }
 
+    public void showRetryButton(boolean showRetry) {
+        if (mRetryView != null && mBtn1 != null) {
+            mBtn1.setVisibility(showRetry ? View.VISIBLE : View.GONE);
+        }
+    }
+
     public boolean isVisible() {
         return mRetryView != null && mRetryView.getVisibility() == View.VISIBLE;
     }
 
     private static final class InnerButton {
-
-        public void setText(String btnText) {
-            mButtonView.setText(btnText);
-        }
-
-        public enum Type {GRAY, BLUE}
 
         private IllustratedTextView mButtonView;
         private Type mType = Type.GRAY;
@@ -134,6 +134,10 @@ public class RetryViewCreator {
             mType = type;
             mText = text;
             mListener = listener;
+        }
+
+        public void setText(String btnText) {
+            mButtonView.setText(btnText);
         }
 
         private View createButtonView(ViewGroup parentView) {
@@ -159,6 +163,12 @@ public class RetryViewCreator {
             if (mButtonView != null) mButtonView.setOnClickListener(listener);
         }
 
+        public void setVisibility(int visibility) {
+            if (mButtonView != null) {
+                mButtonView.setVisibility(visibility);
+            }
+        }
+
         public void performClick() {
             if (mButtonView != null) mButtonView.performClick();
         }
@@ -172,5 +182,7 @@ public class RetryViewCreator {
         private IllustratedTextView generateBlueButton(ViewGroup parent) {
             return (IllustratedTextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.retry_btn_blue, null);
         }
+
+        public enum Type {GRAY, BLUE}
     }
 }

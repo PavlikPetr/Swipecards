@@ -14,7 +14,8 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RestoreAccountRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.analytics.TrackedActivity;
+import com.topface.topface.ui.analytics.TrackedFragmentActivity;
+import com.topface.topface.ui.settings.FeedbackMessageFragment;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -23,7 +24,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class BanActivity extends TrackedActivity implements View.OnClickListener {
+import static com.topface.topface.ui.settings.FeedbackMessageFragment.FeedbackType;
+
+public class BanActivity extends TrackedFragmentActivity implements View.OnClickListener {
 
     public static final int TYPE_UNKNOWN = 0;
     public static final int TYPE_BAN = 1;
@@ -47,51 +50,68 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ban);
-        ImageView image = (ImageView) findViewById(R.id.ivBan);
+        initViews();
+    }
+
+    private void initViews() {
         TextView titleTextView = (TextView) findViewById(R.id.banned_title);
         TextView messageTextView = (TextView) findViewById(R.id.banned_message);
         mTimerTextView = (TextView) findViewById(R.id.banned_timer);
-        Button btnConfirm = (Button) findViewById(R.id.btnConfirm);
         Button btnCancel = (Button) findViewById(R.id.btnCancel);
 
         mType = getIntent().getIntExtra(INTENT_TYPE, TYPE_UNKNOWN);
-
         String title = Static.EMPTY;
         String message = Static.EMPTY;
         switch (mType) {
             case TYPE_BAN:
-                title = getString(R.string.ban_title);
-                message = getIntent().getStringExtra(BANNING_TEXT_INTENT);
-                mTimerTextView.setVisibility(View.GONE);
-                btnCancel.setText(R.string.settings_logout);
-                btnCancel.setVisibility(View.VISIBLE);
-                btnCancel.setOnClickListener(this);
+                initViewsForBan(titleTextView, messageTextView, btnCancel);
                 break;
             case TYPE_FLOOD:
-                message = getString(R.string.ban_flood_detected);
-                mTimerTextView.setVisibility(View.VISIBLE);
+                initViewsForFlood(titleTextView, messageTextView, title);
                 long floodTime = getIntent().getLongExtra(INTENT_FLOOD_TIME, DEFAULT_FLOOD_WAIT_TIME) * 1000l;
                 getTimer(floodTime).start();
                 break;
             case TYPE_RESTORE:
-                title = getString(R.string.delete_account_will_be_restored_are_you_sure);
-                btnConfirm.setText(R.string.restore);
-                btnConfirm.setVisibility(View.VISIBLE);
-                btnConfirm.setOnClickListener(this);
-                btnCancel.setText(android.R.string.cancel);
-                btnCancel.setVisibility(View.VISIBLE);
-                btnCancel.setOnClickListener(this);
-                mTimerTextView.setVisibility(View.GONE);
-                image.setVisibility(View.GONE);
+                initViewsForRestore(titleTextView, messageTextView, btnCancel, message);
                 mLocalTokenInfo = AuthToken.getInstance().getTokenInfo();
                 AuthToken.getInstance().removeToken();
                 break;
             default:
                 break;
         }
+    }
 
-        titleTextView.setText(title);
+    private void initViewsForRestore(TextView titleTextView, TextView messageTextView, Button btnCancel, String message) {
+        ImageView image = (ImageView) findViewById(R.id.ivBan);
+        Button btnConfirm = (Button) findViewById(R.id.btnConfirm);
+        btnConfirm.setText(R.string.restore);
+        btnConfirm.setVisibility(View.VISIBLE);
+        btnConfirm.setOnClickListener(this);
+        btnCancel.setText(android.R.string.cancel);
+        btnCancel.setVisibility(View.VISIBLE);
+        btnCancel.setOnClickListener(this);
+        mTimerTextView.setVisibility(View.GONE);
+        image.setVisibility(View.GONE);
+        titleTextView.setText(R.string.delete_account_will_be_restored_are_you_sure);
         messageTextView.setText(message);
+    }
+
+    private void initViewsForFlood(TextView titleTextView, TextView messageTextView, String title) {
+        mTimerTextView.setVisibility(View.VISIBLE);
+        titleTextView.setText(title);
+        messageTextView.setText(R.string.ban_flood_detected);
+    }
+
+    private void initViewsForBan(TextView titleTextView, TextView messageTextView, Button btnCancel) {
+        View logoutView = findViewById(R.id.logout_text);
+        mTimerTextView.setVisibility(View.GONE);
+        btnCancel.setText(R.string.ban_complain);
+        btnCancel.setVisibility(View.VISIBLE);
+        btnCancel.setOnClickListener(this);
+        logoutView.setVisibility(View.VISIBLE);
+        logoutView.setOnClickListener(this);
+        titleTextView.setText(R.string.ban_title);
+        messageTextView.setText(getIntent().getStringExtra(BANNING_TEXT_INTENT));
     }
 
     @Override
@@ -144,7 +164,22 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
             case TYPE_BAN:
                 switch (v.getId()) {
                     case R.id.btnCancel:
+                        ConnectionManager.getInstance().onBanActivityFinish();
+                        getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(
+                                        R.anim.slide_in_from_right, R.anim.slide_out_right,
+                                        R.anim.slide_in_from_right, R.anim.slide_out_right
+                                )
+                                .add(
+                                        R.id.foreground_frame_layout,
+                                        FeedbackMessageFragment.newInstance(FeedbackType.BAN)
+                                )
+                                .addToBackStack(null)
+                                .commit();
+                        break;
+                    case R.id.logout_text:
                         AuthorizationManager.logout(this);
+                        break;
                     default:
                         break;
                 }
@@ -155,7 +190,11 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
 
     @Override
     public void onBackPressed() {
-        if (!mBackPressedOnce.get()) {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            super.onBackPressed();
+            getSupportActionBar().setTitle(R.string.app_name);
+            getSupportActionBar().setSubtitle(null);
+        } else if (!mBackPressedOnce.get()) {
             (new Timer()).schedule(new TimerTask() {
                 @Override
                 public void run() {

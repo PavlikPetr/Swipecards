@@ -69,32 +69,35 @@ public class SettingsFeedbackFragment extends BaseFragment implements OnClickLis
 
     @Override
     public void onClick(View v) {
-        Intent intent;
+        Intent intent = null;
         switch (v.getId()) {
             case R.id.loErrorMessage:
-                intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
-                intent.putExtra(SettingsFeedbackMessageFragment.INTENT_FEEDBACK_TYPE,
-                        SettingsFeedbackMessageFragment.ERROR_MESSAGE);
-                startActivityForResult(intent, SettingsContainerActivity.INTENT_SEND_FEEDBACK);
+                intent = SettingsContainerActivity.getFeedbackMessageIntent(
+                        getActivity(),
+                        FeedbackMessageFragment.FeedbackType.ERROR_MESSAGE
+                );
                 break;
             case R.id.loAskDevelopers:
-                intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
-                intent.putExtra(SettingsFeedbackMessageFragment.INTENT_FEEDBACK_TYPE,
-                        SettingsFeedbackMessageFragment.DEVELOPERS_MESSAGE);
-                startActivityForResult(intent, SettingsContainerActivity.INTENT_SEND_FEEDBACK);
+                intent = SettingsContainerActivity.getFeedbackMessageIntent(
+                        getActivity(),
+                        FeedbackMessageFragment.FeedbackType.DEVELOPERS_MESSAGE
+                );
                 break;
             case R.id.loPaymentProblem:
-                intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
-                intent.putExtra(SettingsFeedbackMessageFragment.INTENT_FEEDBACK_TYPE,
-                        SettingsFeedbackMessageFragment.PAYMENT_MESSAGE);
-                startActivityForResult(intent, SettingsContainerActivity.INTENT_SEND_FEEDBACK);
+                intent = SettingsContainerActivity.getFeedbackMessageIntent(
+                        getActivity(),
+                        FeedbackMessageFragment.FeedbackType.PAYMENT_MESSAGE
+                );
                 break;
             case R.id.loCooperation:
-                intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
-                intent.putExtra(SettingsFeedbackMessageFragment.INTENT_FEEDBACK_TYPE,
-                        SettingsFeedbackMessageFragment.COOPERATION_MESSAGE);
-                startActivityForResult(intent, SettingsContainerActivity.INTENT_SEND_FEEDBACK);
+                intent = SettingsContainerActivity.getFeedbackMessageIntent(
+                        getActivity(),
+                        FeedbackMessageFragment.FeedbackType.COOPERATION_MESSAGE
+                );
                 break;
+        }
+        if (intent != null) {
+            startActivityForResult(intent, SettingsContainerActivity.INTENT_SEND_FEEDBACK);
         }
 
     }
