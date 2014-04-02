@@ -7,10 +7,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.topface.topface.R;
-import com.topface.topface.requests.FeedbackReport;
+import com.topface.topface.requests.SendFeedbackRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.EmptyApiHandler;
-import com.topface.topface.ui.settings.SettingsFeedbackMessageFragment;
+import com.topface.topface.ui.settings.FeedbackMessageFragment;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
@@ -75,18 +75,18 @@ public class SendFeedbackDialog extends AbstractModalDialog implements View.OnCl
         switch (v.getId()) {
             case R.id.btnSend:
                 Utils.hideSoftKeyboard(getActivity(), mEdMessage);
-                final String message = mEdMessage.getText().toString();
+                final String message = Utils.getText(mEdMessage);
                 final ApiHandler handler = new EmptyApiHandler();
                 new BackgroundThread() {
                     @Override
                     public void execute() {
                         if (!TextUtils.isEmpty(message)) {
-                            SettingsFeedbackMessageFragment.Report report = new SettingsFeedbackMessageFragment.Report();
+                            FeedbackMessageFragment.Report report = new FeedbackMessageFragment.Report();
                             report.setSubject(mSubject);
                             report.setBody(message);
                             report.setEmail(Settings.getInstance().getSocialAccountEmail());
-                            SettingsFeedbackMessageFragment.fillVersion(getActivity(), report);
-                            FeedbackReport feedbackRequest = new FeedbackReport(getActivity(), report);
+                            FeedbackMessageFragment.fillVersion(getActivity(), report);
+                            SendFeedbackRequest feedbackRequest = new SendFeedbackRequest(getActivity(), report);
                             feedbackRequest.callback(handler).exec();
                         }
                     }

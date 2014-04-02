@@ -819,4 +819,5 @@
     <string name="waiting_for_load">Ожидание загрузки…</string>
     <string name="loading_photo_percent">Загрузка фотографии %d%%</string>
     <string name="user_does_not_exist">Пользователь не найден</string>
+    <string name="feedback_subject_ban">Жалоба на несправедливый бан</string>
 </resources>

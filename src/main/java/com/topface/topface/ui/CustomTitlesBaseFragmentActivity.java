@@ -71,10 +71,14 @@ public abstract class CustomTitlesBaseFragmentActivity extends BaseFragmentActiv
 
         private TextView mTitleView;
         private TextView mSubtitleView;
+        private boolean mNoTitle;
+        private boolean mNoSubtitle;
 
         protected CustomActionBarTitleSetter(TextView titleView, TextView subtitleView) {
             mTitleView = titleView;
             mSubtitleView = subtitleView;
+            mNoTitle = (mTitleView == null);
+            mNoSubtitle = (mSubtitleView == null);
         }
 
         @Override
@@ -102,6 +106,7 @@ public abstract class CustomTitlesBaseFragmentActivity extends BaseFragmentActiv
         }
 
         private void setTitle(String title) {
+            if (mNoTitle) return;
             if (title == null) {
                 mTitleView.setVisibility(View.GONE);
             } else {
@@ -111,6 +116,7 @@ public abstract class CustomTitlesBaseFragmentActivity extends BaseFragmentActiv
         }
 
         private void setTitle(int title) {
+            if (mNoTitle) return;
             if (mTitleView.getVisibility() == View.GONE) {
                 mTitleView.setVisibility(View.VISIBLE);
             }
@@ -118,6 +124,7 @@ public abstract class CustomTitlesBaseFragmentActivity extends BaseFragmentActiv
         }
 
         private void setSubtitle(String subtitle) {
+            if (mNoSubtitle) return;
             if (subtitle == null) {
                 mSubtitleView.setVisibility(View.GONE);
             } else {
@@ -127,6 +134,7 @@ public abstract class CustomTitlesBaseFragmentActivity extends BaseFragmentActiv
         }
 
         private void setSubtitle(int subtitle) {
+            if (mNoSubtitle) return;
             if (mSubtitleView.getVisibility() == View.GONE) {
                 mSubtitleView.setVisibility(View.VISIBLE);
             }

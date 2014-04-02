@@ -100,7 +100,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
             Profile profile = getProfile();
             if (profile != null) {
-                ((User)profile).bookmarked = isBookmarked;
+                ((User) profile).bookmarked = isBookmarked;
                 if (mBookmarkAction != null) {
                     mBookmarkAction.setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                 }

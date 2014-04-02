@@ -9,31 +9,37 @@ import android.support.v7.app.ActionBar;
 public class ActionBarTitleSetterDelegate implements IActionBarTitleSetter {
 
     private ActionBar mActionBar;
+    private boolean mNoActionBar;
 
     public ActionBarTitleSetterDelegate(ActionBar actionBar) {
         mActionBar = actionBar;
+        mNoActionBar = (mActionBar == null);
     }
 
     @Override
     public void setActionBarTitles(String title, String subtitle) {
+        if (mNoActionBar) return;
         mActionBar.setTitle(title);
         mActionBar.setSubtitle(subtitle);
     }
 
     @Override
     public void setActionBarTitles(int title, int subtitle) {
+        if (mNoActionBar) return;
         mActionBar.setTitle(title);
         mActionBar.setSubtitle(subtitle);
     }
 
     @Override
     public void setActionBarTitles(String title, int subtitle) {
+        if (mNoActionBar) return;
         mActionBar.setTitle(title);
         mActionBar.setSubtitle(subtitle);
     }
 
     @Override
     public void setActionBarTitles(int title, String subtitle) {
+        if (mNoActionBar) return;
         mActionBar.setTitle(title);
         mActionBar.setSubtitle(subtitle);
     }
