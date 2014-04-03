@@ -96,6 +96,7 @@ public class Options extends AbstractData {
     public Closing closing = new Closing();
     public BlockSympathy blockSympathy = new BlockSympathy();
     public BlockPeopleNearby blockPeople = new BlockPeopleNearby();
+    public boolean isActivityAllowed; //Разрешено ли пользователю ставить лайки и совершать прочую активность
     /**
      * Настройки для промо-попапа 3-1
      */
