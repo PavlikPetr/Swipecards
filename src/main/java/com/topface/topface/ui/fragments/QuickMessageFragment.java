@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserId = getArguments().getInt(ARG_USER_ID);
+        setNeedActionBarIndent(false);
     }
 
     @Override
@@ -45,6 +47,7 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
         mMessage = (TextView) root.findViewById(R.id.chat_message);
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
         mLoader = root.findViewById(R.id.quickMessageLoader);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     @Override
