@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -144,6 +145,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void initTextViews(ViewGroup root) {
+        Drawable icon = getResources().getDrawable(R.drawable.tf_logo_account);
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setText(mToken.getLogin());
         mEditText.setSelection(Utils.getText(mEditText).length());
@@ -167,6 +169,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             }
         });
         mText = (TextView) root.findViewById(R.id.tvText);
+        mText.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
         mText.setText(mToken.getLogin());
     }
 
