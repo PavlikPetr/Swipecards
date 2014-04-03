@@ -131,8 +131,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             root.findViewById(R.id.loMutual).setVisibility(View.GONE);
             root.findViewById(R.id.loChat).setVisibility(View.GONE);
             root.findViewById(R.id.loGuests).setVisibility(View.GONE);
-            root.findViewById(R.id.loVibration).setVisibility(View.GONE);
-            root.findViewById(R.id.loMelody).setVisibility(View.GONE);
         } else {
             if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES) != null) {
                 mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
@@ -209,6 +207,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
             if (!GCMUtils.GCM_SUPPORTED) {
                 root.findViewById(R.id.loVibration).setVisibility(View.GONE);
+                root.findViewById(R.id.loLED).setVisibility(View.GONE);
                 root.findViewById(R.id.loMelody).setVisibility(View.GONE);
             }
         }
