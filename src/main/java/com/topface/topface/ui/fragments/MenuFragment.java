@@ -325,7 +325,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             if (savedInstanceState != null) {
                 FragmentId savedId = (FragmentId) savedInstanceState.getSerializable(CURRENT_FRAGMENT_STATE);
                 if (savedId != null) {
-                    //switchFragment(savedId, false);
+                    switchFragment(savedId, false);
                     return;
                 }
             }
