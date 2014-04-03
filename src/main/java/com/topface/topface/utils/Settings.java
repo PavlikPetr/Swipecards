@@ -30,6 +30,7 @@ public class Settings {
     public static final String SETTINGS_GCM_VIBRATION = "settings_c2dm_vibration";
     public static final String SETTINGS_GCM = "settings_c2dm";
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
+    public static final String SETTINGS_GCM_LED = "settings_gcm_led";
 
     public static final String SETTINGS_SOCIAL_ACCOUNT_NAME = "social_account_name";
     public static final String SETTINGS_SOCIAL_ACCOUNT_EMAIL = "social_account_email";
@@ -151,6 +152,10 @@ public class Settings {
 
     public Boolean isVibrationEnabled() {
         return mSettings.getBoolean(SETTINGS_GCM_VIBRATION, true);
+    }
+
+    public boolean isLEDEnabled() {
+        return mSettings.getBoolean(SETTINGS_GCM_LED, true);
     }
 
     public boolean isNotificationEnabled() {

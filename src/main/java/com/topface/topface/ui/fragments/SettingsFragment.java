@@ -48,6 +48,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     private Settings mSettings;
     private EditSwitcher mSwitchVibration;
+    private EditSwitcher mSwitchLED;
     private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<>();
     private CountDownTimer mSendTimer = new CountDownTimer(3000, 3000) {
         @Override
@@ -187,6 +188,14 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             setText(R.string.settings_vibration, frame);
             mSwitchVibration = new EditSwitcher(frame);
             mSwitchVibration.setChecked(mSettings.isVibrationEnabled());
+            frame.setOnClickListener(this);
+
+            //LED
+            frame = (ViewGroup) root.findViewById(R.id.loLED);
+            setBackground(R.drawable.edit_big_btn_middle, frame);
+            setText(R.string.settings_led, frame);
+            mSwitchLED = new EditSwitcher(frame);
+            mSwitchLED.setChecked(mSettings.isLEDEnabled());
             frame.setOnClickListener(this);
 
             //Melody
@@ -329,6 +338,10 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             case R.id.loVibration:
                 mSwitchVibration.doSwitch();
                 mSettings.setSetting(Settings.SETTINGS_GCM_VIBRATION, mSwitchVibration.isChecked());
+                break;
+            case R.id.loLED:
+                mSwitchLED.doSwitch();
+                mSettings.setSetting(Settings.SETTINGS_GCM_LED, mSwitchLED.isChecked());
                 break;
             case R.id.loMelody:
                 intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
