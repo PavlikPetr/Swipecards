@@ -821,4 +821,5 @@
     <string name="loading_photo_percent">Загрузка фотографии %d%%</string>
     <string name="user_does_not_exist">Пользователь не найден</string>
     <string name="feedback_subject_ban">Жалоба на несправедливый бан</string>
+    <string name="settings_led">LED уведомление</string>
 </resources>
