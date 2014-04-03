@@ -325,7 +325,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             if (savedInstanceState != null) {
                 FragmentId savedId = (FragmentId) savedInstanceState.getSerializable(CURRENT_FRAGMENT_STATE);
                 if (savedId != null) {
-                    switchFragment(savedId, false);
+                    //switchFragment(savedId, false);
                     return;
                 }
             }
@@ -447,6 +447,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         String fragmentTag = getTagById(newFragmentId);
         Debug.log("MenuFragment: Try switch to fragment with tag " + fragmentTag + " (old fragment " + mSelectedFragment + ")");
         BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
+
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
             newFragment = getFragmentNewInstanceById(newFragmentId);
@@ -459,11 +460,10 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             if (mHardwareAccelerated) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
-            if (newFragment.isAdded()) {
+            if (oldFragment != newFragment && newFragment.isAdded()) {
                 transaction.remove(newFragment);
                 Debug.error("MenuFragment: try detach already added new fragment " + fragmentTag);
             }
-
             transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
             transaction.commitAllowingStateLoss();
             //Вызываем executePendingTransactions, если передан соответвующий флаг

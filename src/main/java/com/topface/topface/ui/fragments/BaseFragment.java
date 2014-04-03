@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 
 import com.topface.topface.Static;
@@ -268,9 +267,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         } else if (activity instanceof ActionBarActivity) {
             // check support of indeterminate progress bar
             ActionBarActivity abActivity = (ActionBarActivity) activity;
-            if (abActivity.supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS)) {
-                abActivity.setSupportProgressBarIndeterminate(visible);
-            }
+            abActivity.setSupportProgressBarIndeterminateVisibility(visible);
         }
     }
 

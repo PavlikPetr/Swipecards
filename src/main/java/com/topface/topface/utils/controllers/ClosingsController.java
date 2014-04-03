@@ -109,7 +109,6 @@ public class ClosingsController implements View.OnClickListener {
             public void success(IApiResponse response) {
                 super.success(response);
                 Options.Closing closings = CacheProfile.getOptions().closing;
-
                 boolean needLikesClosings = mReceivedUnreadLikes > 0 && closings.isLikesAvailable();
                 boolean needMutualsClosings = mReceivedUnreadMutuals > 0 && closings.isMutualAvailable();
                 Debug.log(ClosingsController.TAG, "has likes=" + needLikesClosings +
@@ -318,7 +317,7 @@ public class ClosingsController implements View.OnClickListener {
                         mAdapter.showItem(FragmentId.F_LIKES);
                         mAdapter.notifyDataSetChanged();
                     }
-                    MenuFragment.selectFragment(FragmentId.F_MUTUAL_CLOSINGS);
+                    selectMenuItem(FragmentId.F_MUTUAL_CLOSINGS);
                 }
             }
             CacheProfile.getOptions().closing.onStopLikesClosings();
@@ -333,7 +332,7 @@ public class ClosingsController implements View.OnClickListener {
                         mAdapter.showItem(FragmentId.F_MUTUAL);
                         mAdapter.notifyDataSetChanged();
                     }
-                    MenuFragment.selectFragment(FragmentId.F_LIKES_CLOSINGS);
+                    selectMenuItem(FragmentId.F_LIKES_CLOSINGS);
                 }
             }
             CacheProfile.getOptions().closing.onStopMutualClosings();
