@@ -2,12 +2,12 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.topface.topface.ui.settings.SettingsFeedbackMessageFragment;
+import com.topface.topface.ui.settings.FeedbackMessageFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FeedbackReport extends ApiRequest {
+public class SendFeedbackRequest extends ApiRequest {
 
     public static final String SERVICE = "user.sendFeedback";
 
@@ -16,7 +16,7 @@ public class FeedbackReport extends ApiRequest {
     public String extra;
     public String email;
 
-    public FeedbackReport(Context context, SettingsFeedbackMessageFragment.Report report) {
+    public SendFeedbackRequest(Context context, FeedbackMessageFragment.Report report) {
         super(context);
         subject = report.getSubject();
         text = report.getBody();
