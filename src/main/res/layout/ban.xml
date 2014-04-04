@@ -65,10 +65,10 @@
         android:id="@+id/logout_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/settings_logout"
+        android:padding="12dp"
         android:visibility="gone" />
 
     <FrameLayout
