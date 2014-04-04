@@ -74,6 +74,7 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
@@ -116,13 +117,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
-            mUser.bookmarked = isBookmarked;
+            boolean isBlackList = intent.getBooleanExtra("blackList", false);
+            boolean isChanged = intent.getBooleanExtra("changed", false);
             if (chatActions != null) {
-                ((TextView)chatActions.findViewById(R.id.acBookmark).findViewById(R.id.favTV)).setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                if (isBlackList) {
+                    mUser.blocked = isChanged;
+                    ((TextView)chatActions.findViewById(R.id.acBlock)
+                            .findViewById(R.id.blockTV)).setText(isChanged ? R.string.black_list_delete : R.string.black_list_add_short);
+                } else {
+                    mUser.bookmarked = isChanged;
+                    ((TextView)chatActions.findViewById(R.id.acBookmark)
+                            .findViewById(R.id.favTV)).setText(isChanged ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                }
             }
         }
     };
+
+
 
     private IUserOnlineListener mUserOnlineListener;
 
@@ -264,7 +275,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
         //регистрируем здесь, потому что может быть такая ситуация, что обновить надо, когда активити находится не на топе стека
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BookmarkAddRequest.UPDATE_BOOKMARKED));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(UserProfileFragment.UPDATE_USER_CATEGORY));
         return root;
     }
 
@@ -776,7 +787,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                 if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
-                                    mUser.blocked = !mUser.blocked;
+                                    Intent intent = new Intent(UserProfileFragment.UPDATE_USER_CATEGORY);
+                                    intent.putExtra("blackList", true);
+                                    intent.putExtra("changed", !mUser.blocked);
+                                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                                     if (mUser.blocked) {
                                         textView.setText(R.string.black_list_delete);
                                     } else {
@@ -819,8 +833,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void success(IApiResponse response) {
                         super.success(response);
-                        Intent intent = new Intent(BookmarkAddRequest.UPDATE_BOOKMARKED);
-                        intent.putExtra("bookmarked", !mUser.bookmarked);
+                        Intent intent = new Intent(UserProfileFragment.UPDATE_USER_CATEGORY);
+                        intent.putExtra("changed", !mUser.bookmarked);
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                         loader.setVisibility(View.INVISIBLE);
                         icon.setVisibility(View.VISIBLE);
