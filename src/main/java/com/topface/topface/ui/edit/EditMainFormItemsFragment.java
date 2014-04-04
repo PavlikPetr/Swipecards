@@ -11,11 +11,13 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -148,10 +150,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         loName.setVisibility(View.VISIBLE);
         ((TextView) loName.findViewWithTag("tvTitle")).setText(R.string.edit_name);
         mEdName = (EditText) loName.findViewWithTag("edText");
+        mEdName.setInputType(InputType.TYPE_CLASS_TEXT);
         if (data != null) {
             mEdName.append(data);
         }
-        mEdName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEdName.addTextChangedListener(new TextWatcher() {
             String before = Static.EMPTY;
 
@@ -217,10 +219,20 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         InputFilter[] fArray = new InputFilter[1];
         fArray[0] = new InputFilter.LengthFilter(maxLength);
         mEdAge.setFilters(fArray);
+        mEdAge.setInputType(InputType.TYPE_CLASS_NUMBER);
         if (data != null) {
             mEdAge.append(data);
         }
-        mEdAge.setInputType(InputType.TYPE_CLASS_NUMBER);
+        mEdAge.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        mEdAge.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    getActivity().finish();
+                }
+                return false;
+            }
+        });
         mEdAge.addTextChangedListener(new TextWatcher() {
             String before = Static.EMPTY;
 
