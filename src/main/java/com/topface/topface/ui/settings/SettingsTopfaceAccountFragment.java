@@ -186,6 +186,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void initButtons(ViewGroup root) {
         mBtnChange = (Button) root.findViewById(R.id.btnChange);
         mBtnChange.setOnClickListener(this);
+        mBtnChange.setVisibility(View.VISIBLE);
         mBtnLogout = (Button) root.findViewById(R.id.btnLogout);
         mBtnLogout.setOnClickListener(this);
         mBtnDelete = (Button) root.findViewById(R.id.btnDeleteAccount);

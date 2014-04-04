@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -169,6 +170,8 @@ public class FullscreenController {
         final InterstitialAd interstitial = new InterstitialAd(mActivity, adUnitId);
         // Создание запроса объявления.
         AdRequest adRequest = new AdRequest();
+        adRequest.setGender(CacheProfile.getProfile().sex == Static.BOY ? AdRequest.Gender.MALE :
+                AdRequest.Gender.FEMALE);
         // Запуск загрузки межстраничного объявления.
         interstitial.loadAd(adRequest);
         // AdListener будет использовать обратные вызовы, указанные ниже.
@@ -177,7 +180,6 @@ public class FullscreenController {
             public void onReceiveAd(Ad ad) {
                 if (ad == interstitial) {
                     interstitial.show();
-                    isFullScreenBannerVisible = true;
                     addLastFullscreenShowedTime();
                 }
             }
@@ -189,10 +191,17 @@ public class FullscreenController {
 
             @Override
             public void onPresentScreen(Ad ad) {
+                if (mActivity instanceof ActionBarActivity) {
+                    ((ActionBarActivity) mActivity).getSupportActionBar().hide();
+                }
+                isFullScreenBannerVisible = true;
             }
 
             @Override
             public void onDismissScreen(Ad ad) {
+                if (mActivity instanceof ActionBarActivity) {
+                    ((ActionBarActivity) mActivity).getSupportActionBar().show();
+                }
                 isFullScreenBannerVisible = false;
             }
 
@@ -382,25 +391,27 @@ public class FullscreenController {
     }
 
     public void hideFullscreenBanner(final ViewGroup bannerContainer) {
-        Animation animation = AnimationUtils.loadAnimation(App.getContext(), android.R.anim.fade_out);
-        if (animation != null) {
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
+        if (bannerContainer != null) {
+            Animation animation = AnimationUtils.loadAnimation(App.getContext(), android.R.anim.fade_out);
+            if (animation != null) {
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    bannerContainer.setVisibility(View.GONE);
-                }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        bannerContainer.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
-            bannerContainer.startAnimation(animation);
-        } else {
-            bannerContainer.setVisibility(View.GONE);
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
+                bannerContainer.startAnimation(animation);
+            } else {
+                bannerContainer.setVisibility(View.GONE);
+            }
         }
         isFullScreenBannerVisible = false;
     }

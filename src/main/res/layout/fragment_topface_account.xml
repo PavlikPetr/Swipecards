@@ -30,7 +30,8 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:focusable="true"
-                android:focusableInTouchMode="true" />
+                android:focusableInTouchMode="true"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tvText"
@@ -42,7 +43,7 @@
                 android:textSize="14sp"
                 style="@style/ItemTitleText"
                 android:drawablePadding="5dp"
-                android:visibility="gone" />
+                 />
         </RelativeLayout>
 
         <Button
@@ -64,7 +65,8 @@
             android:layout_marginRight="8dp"
             android:background="@drawable/btn_gray_selector"
             android:text="@string/settings_logout"
-            style="@style/ButtonGrayText" />
+            style="@style/ButtonGrayText"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <Button
