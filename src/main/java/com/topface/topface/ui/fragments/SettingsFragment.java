@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,7 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
+import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.HashMap;
@@ -337,6 +340,14 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             case R.id.loVibration:
                 mSwitchVibration.doSwitch();
                 mSettings.setSetting(Settings.SETTINGS_GCM_VIBRATION, mSwitchVibration.isChecked());
+
+                // Send empty vibro notification to demonstrate
+                if (mSwitchVibration.isChecked()) {
+                    UserNotificationManager.getInstance(getActivity()).showSimpleNotification(
+                            new NotificationCompat.Builder(getActivity()).setDefaults(Notification.
+                                    DEFAULT_VIBRATE).build()
+                    );
+                }
                 break;
             case R.id.loLED:
                 mSwitchLED.doSwitch();
