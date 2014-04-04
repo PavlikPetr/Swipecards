@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:orientation="vertical"
+            android:paddingBottom="30dp"
             android:gravity="center_horizontal">
 
             <LinearLayout
@@ -170,8 +171,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AuthBackButtonStyle"
-            android:gravity="top"
-            android:paddingBottom="1dp" />
+            android:layout_marginBottom="8dp" />
 
 
     </RelativeLayout>
