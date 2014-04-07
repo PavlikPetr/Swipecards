@@ -18,6 +18,7 @@ import com.topface.topface.requests.BookmarkAddRequest;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteBlackListRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.BlackListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
@@ -42,7 +43,7 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(updateListReceiver, new IntentFilter(UserProfileFragment.UPDATE_USER_CATEGORY));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(updateListReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
     }
 
     @Override

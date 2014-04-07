@@ -15,6 +15,7 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.User;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.ContactsFragment;
@@ -36,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements IUserOnlineListener {
+    public static final String UPDATE_USER_CATEGORY = "com.topface.topface.action.USER_CATEGORY";
 
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
@@ -56,6 +58,8 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     // Id для админки начиная со 101
     public static final int INTENT_EDITOR_BANNERS = 101;
     private static final int INTENT_PROFILE_FRAGMENT = 6;
+    public static final String TYPE = "type";
+    public static final String CHANGED = "changed";
     private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
     private View mOnlineIcon;
@@ -290,6 +294,15 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         }
 
         return fragment;
+    }
+
+    public enum ActionTypes {BLACK_LIST, BOOKMARK};
+
+    public Intent getIntentForActionsUpdate(ActionTypes type, boolean value) {
+        Intent intent = new Intent(UPDATE_USER_CATEGORY);
+        intent.putExtra(TYPE, type);
+        intent.putExtra(CHANGED, value);
+        return intent;
     }
 
     private void setRotationMode() {
