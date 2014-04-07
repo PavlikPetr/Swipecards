@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -41,13 +42,13 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(updateListReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+        return super.onCreateView(inflater, container, saved);
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateListReceiver);
     }
