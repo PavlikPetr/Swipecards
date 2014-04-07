@@ -224,15 +224,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             mEdAge.append(data);
         }
         mEdAge.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        mEdAge.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                    getActivity().finish();
-                }
-                return false;
-            }
-        });
+        mEdAge.setOnEditorActionListener(getOnDoneListener());
         mEdAge.addTextChangedListener(new TextWatcher() {
             String before = Static.EMPTY;
 
@@ -255,6 +247,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             }
         });
     }
+
+
 
     @Override
     protected boolean hasChanges() {

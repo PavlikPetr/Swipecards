@@ -75,15 +75,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
             mEditText.append(mData);
         }
 
-        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                    getActivity().finish();
-                }
-                return false;
-            }
-        });
+        mEditText.setOnEditorActionListener(getOnDoneListener());
         mEditText.addTextChangedListener(new TextWatcher() {
 
             String before = Static.EMPTY;
