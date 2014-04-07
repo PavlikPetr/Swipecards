@@ -173,7 +173,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
@@ -528,7 +528,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                 if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
-                                    Intent intent = ((ContainerActivity)getActivity()).getIntentForActionsUpdate(ContainerActivity.ActionTypes.BLACK_LIST, !((User) profile).inBlackList);
+                                    Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BLACK_LIST, !((User) profile).inBlackList);
                                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                                     if (profile.inBlackList) {
                                         textView.setText(R.string.black_list_delete);
@@ -571,7 +571,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     @Override
                     public void success(IApiResponse response) {
                         super.success(response);
-                        Intent intent = ((ContainerActivity)getActivity()).getIntentForActionsUpdate(ContainerActivity.ActionTypes.BOOKMARK, !((User) profile).bookmarked);
+                        Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BOOKMARK, !((User) profile).bookmarked);
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                         loader.setVisibility(View.INVISIBLE);
                         icon.setVisibility(View.VISIBLE);

@@ -298,7 +298,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
 
     public enum ActionTypes {BLACK_LIST, BOOKMARK};
 
-    public Intent getIntentForActionsUpdate(ActionTypes type, boolean value) {
+    public static Intent getIntentForActionsUpdate(ActionTypes type, boolean value) {
         Intent intent = new Intent(UPDATE_USER_CATEGORY);
         intent.putExtra(TYPE, type);
         intent.putExtra(CHANGED, value);

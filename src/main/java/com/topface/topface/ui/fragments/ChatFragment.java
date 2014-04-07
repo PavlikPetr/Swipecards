@@ -791,7 +791,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                 if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
-                                    Intent intent = ((ContainerActivity)getActivity()).getIntentForActionsUpdate(ContainerActivity.ActionTypes.BLACK_LIST, !mUser.blocked);
+                                    Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BLACK_LIST, !mUser.blocked);
                                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                                     if (mUser.blocked) {
                                         textView.setText(R.string.black_list_delete);
@@ -835,7 +835,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void success(IApiResponse response) {
                         super.success(response);
-                        Intent intent = ((ContainerActivity)getActivity()).getIntentForActionsUpdate(ContainerActivity.ActionTypes.BLACK_LIST, !mUser.bookmarked);
+                        Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BLACK_LIST, !mUser.bookmarked);
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                         loader.setVisibility(View.INVISIBLE);
                         icon.setVisibility(View.VISIBLE);
