@@ -1,6 +1,13 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -8,11 +15,14 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.requests.BookmarkAddRequest;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteBlackListRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.BlackListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 
 import org.json.JSONObject;
 
@@ -22,6 +32,26 @@ import java.util.List;
  * Черный список. Сюда попадают заблокированые пользователи, отныне от них не приходит никакая активность
  */
 public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> implements View.OnClickListener {
+    private BroadcastReceiver updateListReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (isAdded()) {
+                updateData(false, false,false);
+            }
+        }
+    };
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(updateListReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+        return super.onCreateView(inflater, container, saved);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateListReceiver);
+    }
 
     @Override
     protected Drawable getBackIcon() {
