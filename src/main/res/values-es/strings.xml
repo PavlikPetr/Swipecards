@@ -224,6 +224,7 @@
     <string name="settings_melody">Melodía de notificación</string>
     <string name="edit_refresh_status">Renovar estado</string>
     <string name="ban_title">¡Felicidades! Estas baneado/a</string>
+    <string name="ban_complain">Denunciar baneo</string>
     <string name="general_ready">Listo</string>
     <string name="profile_deleted_user">Usuario eliminado</string>
     <string name="filter_main_parameters">Me interesa</string>
@@ -630,4 +631,6 @@
     <string name="press_back_more_to_close_app">Pulsa el botón atrás otra vez para salir de Topface</string>
     <string name="waiting_for_load">Esperando para subir…</string>
     <string name="loading_photo_percent">Subiendo fotografía %d%%</string>
+    <string name="user_does_not_exist">Usuario no encontrado</string>
+    <string name="feedback_subject_ban">Denunciar un baneo injusto</string>
 </resources>

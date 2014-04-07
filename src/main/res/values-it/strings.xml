@@ -224,6 +224,7 @@
     <string name="settings_melody">Suoneria di avviso</string>
     <string name="edit_refresh_status">Aggiornare lo stato</string>
     <string name="ban_title">Congratulazioni! Hai ricevuto ban</string>
+    <string name="ban_complain">Reclamare ban</string>
     <string name="general_ready">Fatto</string>
     <string name="profile_deleted_user">L’utente è stato eliminato</string>
     <string name="filter_main_parameters">Mi interessano</string>
@@ -626,4 +627,6 @@
     <string name="press_back_more_to_close_app">Ripremi il tasto Indietro per uscire da Topface</string>
     <string name="waiting_for_load">Attesa di caricamento…</string>
     <string name="loading_photo_percent">Caricamento della foto %d%%</string>
+    <string name="user_does_not_exist">Utente non trovato</string>
+    <string name="feedback_subject_ban">Reclamo di un ban ingiusto</string>
 </resources>
