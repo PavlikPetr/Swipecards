@@ -1,12 +1,15 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +33,15 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
     private View mMessageBox;
     private TextView mMessage;
     private View mLoader;
+    private boolean mActionBarIsShowing;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof ActionBarActivity) {
+            mActionBarIsShowing = ((ActionBarActivity) activity).getSupportActionBar().isShowing();
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +54,15 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
     protected void initViews(View root) {
         root.findViewById(R.id.btnChatAdd).setVisibility(View.GONE);
         root.findViewById(R.id.btnSend).setOnClickListener(this);
-        root.findViewById(R.id.btnClose).setOnClickListener(this);
+        // close button
+        View closeButton = root.findViewById(R.id.close_button_image);
+        closeButton.setOnClickListener(this);
+        final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) closeButton.getLayoutParams();
+        if (!mActionBarIsShowing && params != null) {
+            params.topMargin = Utils.getPxFromDp(8);
+        }
+        closeButton.setLayoutParams(params);
+        // edit text for user message input
         mMessageBox = root.findViewById(R.id.chatUserMessage);
         mMessage = (TextView) root.findViewById(R.id.chat_message);
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
@@ -81,7 +101,7 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
             case R.id.btnSend:
                 sendMessage();
                 break;
-            case R.id.btnClose:
+            case R.id.close_button_image:
                 if (mListener != null) {
                     mListener.onCancel(this);
                 }
