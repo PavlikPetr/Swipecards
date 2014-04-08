@@ -3,13 +3,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@drawable/auth_bg">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/authContainer"
-        android:background="@drawable/auth_bg">
+        >
 
         <LinearLayout
             android:id="@+id/loLoginGroup"
@@ -34,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_registration_form_folder"
                     android:orientation="vertical"
-                    android:padding="0dp">
+                    >
 
                     <EditText
                         android:id="@+id/edEmail"
@@ -150,14 +151,7 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/AuthButtonsBigText"
-            android:text="@string/welcome_to_topface"
-            android:layout_centerHorizontal="true"
-            android:layout_above="@id/loLoginGroup"
-            android:layout_marginBottom="30dp" />
+
 
         <TextView
             android:id="@+id/tvRedAlert"
@@ -173,7 +167,14 @@
             style="@style/AuthBackButtonStyle"
             android:layout_marginBottom="8dp" />
 
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AuthButtonsBigText"
+            android:text="@string/welcome_to_topface"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/loLoginGroup"
+            android:layout_marginBottom="20dp" />
     </RelativeLayout>
 
 </ScrollView>
