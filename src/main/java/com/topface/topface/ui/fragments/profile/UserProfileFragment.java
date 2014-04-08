@@ -68,6 +68,8 @@ import java.util.ArrayList;
  * Profile fragment to view profile with ui for interactions with another profile
  */
 public class UserProfileFragment extends AbstractProfileFragment implements View.OnClickListener {
+
+
     private static final String ARG_TAG_PROFILE_ID = "profile_id";
     private int mProfileId;
     private String mItemId;
@@ -97,12 +99,25 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
+            ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
+            boolean isChanged = intent.getBooleanExtra(ContainerActivity.CHANGED, false);
+
             Profile profile = getProfile();
+
             if (profile != null) {
-                ((User) profile).bookmarked = isBookmarked;
-                if (mBookmarkAction != null) {
-                    mBookmarkAction.setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                switch (type) {
+                    case BLACK_LIST:
+                        ((User) profile).inBlackList = isChanged;
+                        if (mBlocked != null) {
+                            ((TextView)mBlocked.findViewById(R.id.blockTV)).setText(isChanged? R.string.black_list_delete : R.string.black_list_add_short);
+                        }
+                        break;
+                    case BOOKMARK:
+                        ((User) profile).bookmarked = isChanged;
+                        if (mBookmarkAction != null) {
+                            mBookmarkAction.setText(isChanged ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                        }
+                        break;
                 }
             }
         }
@@ -146,7 +161,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         });
         mLockScreen.addView(mRetryView.getView());
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BookmarkAddRequest.UPDATE_BOOKMARKED));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
         return root;
     }
 
@@ -158,7 +173,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
@@ -513,7 +528,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                 if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
-                                    profile.inBlackList = !profile.inBlackList;
+                                    Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BLACK_LIST, !((User) profile).inBlackList);
+                                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                                     if (profile.inBlackList) {
                                         textView.setText(R.string.black_list_delete);
                                     } else {
@@ -555,8 +571,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     @Override
                     public void success(IApiResponse response) {
                         super.success(response);
-                        Intent intent = new Intent(BookmarkAddRequest.UPDATE_BOOKMARKED);
-                        intent.putExtra("bookmarked", !((User) profile).bookmarked);
+                        Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BOOKMARK, !((User) profile).bookmarked);
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                         loader.setVisibility(View.INVISIBLE);
                         icon.setVisibility(View.VISIBLE);

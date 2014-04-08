@@ -65,7 +65,7 @@
             android:layout_marginRight="8dp"
             android:background="@drawable/btn_gray_selector"
             android:text="@string/settings_logout"
-            style="@style/ButtonGrayText"
+            style="@style/Widget.Topface.Button.Big.Gray"
             android:visibility="gone"/>
     </LinearLayout>
 
