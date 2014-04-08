@@ -64,6 +64,7 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
             mState.setImageResource(R.drawable.user_cell);
         }
         mTitleLayout.setVisibility(View.VISIBLE);
+        mTitleLayout.setOnClickListener(this);
 
         return root;
     }
@@ -108,7 +109,7 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.usedTitle:
+            case R.id.loUserTitle:
                 if (mUserFormListAdapter.isMatchedDataOnly()) mUserFormListAdapter.setAllData();
                 else mUserFormListAdapter.setMatchedDataOnly();
                 mUserFormListAdapter.notifyDataSetChanged();
