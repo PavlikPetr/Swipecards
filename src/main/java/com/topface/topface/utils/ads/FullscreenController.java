@@ -58,6 +58,7 @@ import ru.ideast.adwired.events.OnStopListener;
  */
 public class FullscreenController {
 
+    private static final String TAG = "FullscreenController";
     public static final String URL_SEPARATOR = "::";
     private static final String MOPUB_INTERSTITIAL_ID = "00db7208a90811e281c11231392559e4";
     private static final String IVENGO_APP_ID = "aggeas97392g";
@@ -452,7 +453,7 @@ public class FullscreenController {
 
             @Override
             public void callInBackground() {
-                // no actions in background
+                Debug.log(TAG, startPage.banner);
             }
 
             @Override
