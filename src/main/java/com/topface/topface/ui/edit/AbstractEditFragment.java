@@ -50,7 +50,7 @@ public abstract class AbstractEditFragment extends BaseFragment {
         return new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                if ((actionId == EditorInfo.IME_ACTION_DONE)) {
                     getActivity().finish();
                 }
                 return false;
