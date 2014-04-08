@@ -78,6 +78,8 @@ import ru.ideast.adwired.events.OnStopListener;
  */
 public class BannerBlock {
 
+    private static final String TAG = "BannerBlock";
+
     public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
     /**
      * Идентификаторы типов баннеров
@@ -160,6 +162,7 @@ public class BannerBlock {
             if (bannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
                 if (bannersMap.get(fragmentId) != null) {
                     String bannerType = bannersMap.get(fragmentId).banner;
+                    Debug.log(TAG, bannerType);
 
                     //AdCamp uses only FROYO and above
                     if (bannerType.equals(BANNER_ADCAMP)) {
