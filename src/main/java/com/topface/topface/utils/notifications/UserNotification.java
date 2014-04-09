@@ -184,6 +184,7 @@ public class UserNotification {
     private android.app.Notification generateProgress() {
         notificationBuilder.setDefaults(Notification.FLAG_ONLY_ALERT_ONCE);
         notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_upload);
+        notificationBuilder.setVibrate(new long[]{});
         notificationBuilder.setSound(Uri.EMPTY);
         setLargeIcon();
         notificationBuilder.setContentTitle(mTitle);
