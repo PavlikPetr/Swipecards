@@ -111,12 +111,9 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
                         @Override
                         public void fail(int codeError, IApiResponse response) {
-                            Activity activity = getActivity();
-                            if (activity != null) {
-                                getActivity().setResult(Activity.RESULT_CANCELED);
-                                finishRequestSend();
-                                handler.sendEmptyMessage(0);
-                            }
+                            setSelectedId(item.dataId);
+                            mAdapter.mLastSelected = mAdapter.getSelectedIndex(item.dataId);
+                            completeFailedRequest();
                         }
                     }).exec();
                     break;
@@ -215,7 +212,6 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                 }
             });
 
-            convertView.setEnabled(mListView.isEnabled());
             return convertView;
         }
 
@@ -235,6 +231,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
     @Override
     protected void unlockUi() {
         mListView.setEnabled(true);
+        mAdapter.notifyDataSetChanged();
     }
 
     public static EditFormItemsFragment newInstance(int titleId, int dataId, String data) {

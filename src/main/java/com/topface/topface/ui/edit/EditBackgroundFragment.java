@@ -96,7 +96,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    finishRequestSend();
+                    completeFailedRequest();
                 }
             }).exec();
         } else {
@@ -214,6 +214,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
     @Override
     protected void unlockUi() {
         mBackgroundImagesListView.setEnabled(true);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

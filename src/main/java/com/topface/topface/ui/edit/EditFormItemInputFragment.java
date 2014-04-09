@@ -135,9 +135,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
                         @Override
                         public void fail(int codeError, IApiResponse response) {
-                            getActivity().setResult(Activity.RESULT_CANCELED);
-                            finishRequestSend();
-                            if (handler != null) handler.sendEmptyMessage(0);
+                            completeFailedRequest();
                         }
                     }).exec();
                     break;

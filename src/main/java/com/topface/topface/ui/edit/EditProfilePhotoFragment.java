@@ -164,7 +164,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     @Override
                     public void fail(int codeError, IApiResponse response) {
 //                        finishOperations(handler);
-                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_LONG).show();
+                        completeFailedRequest();
                     }
 
 

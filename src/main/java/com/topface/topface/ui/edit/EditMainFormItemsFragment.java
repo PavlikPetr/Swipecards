@@ -255,6 +255,11 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         if (mEdStatus != null) imm.hideSoftInputFromWindow(mEdStatus.getWindowToken(), 0);
 
         if (hasChanges()) {
+            final int sex = CacheProfile.sex;
+            final String name = CacheProfile.first_name;
+            final int age = CacheProfile.age;
+            final String status = CacheProfile.getStatus();
+
             SettingsRequest request = getSettigsRequest();
             if (ageIncorrect) {
                 showAlertDialog(getString(R.string.profile_edit_age_ranges));
@@ -289,9 +294,11 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
-                        getActivity().setResult(Activity.RESULT_CANCELED);
-                        finishRequestSend();
-                        if (handler != null) handler.sendEmptyMessage(0);
+                        switchSex(sex);
+                        if (mEdName != null) mEdName.setText(name);
+                        if (mEdAge != null) mEdAge.setText(String.valueOf(age));
+                        if (mEdStatus != null) mEdStatus.setText(status);
+                        completeFailedRequest();
                     }
                 }).exec();
             }

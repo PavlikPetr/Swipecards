@@ -1,8 +1,11 @@
 package com.topface.topface.ui.edit;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 
 public abstract class AbstractEditFragment extends BaseFragment {
@@ -54,4 +57,11 @@ public abstract class AbstractEditFragment extends BaseFragment {
     protected abstract boolean hasChanges();
 
     protected abstract void saveChanges(Handler handler);
+
+    protected void completeFailedRequest() {
+        getActivity().setResult(Activity.RESULT_CANCELED);
+        Toast toast = Toast.makeText(getActivity(), R.string.profile_update_error, Toast.LENGTH_SHORT);
+        toast.show();
+        finishRequestSend();
+    }
 }
