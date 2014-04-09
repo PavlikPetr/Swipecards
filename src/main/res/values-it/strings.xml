@@ -487,6 +487,7 @@
     <string name="general_type_complain">Oggetto del reclamo</string>
     <string name="confirm_email_for_dating">Siamo contrari allo spam. Conferma il tuo e-mail per chattare su Topface!</string>
     <string name="confirm">Confermare</string>
+    <string name="send_confirm_link">Invia il link di conferma</string>
     <string name="complain_type_swearing_msg">Cafonate, minacce, parolacce</string>
     <string name="general_bookmarks_is_deleted">L’utente è stato rimosso dai preferiti</string>
     <string name="general_blacklist_is_deleted">L’utente è stato rimosso dalla black list</string>
@@ -629,4 +630,5 @@
     <string name="loading_photo_percent">Caricamento della foto %d%%</string>
     <string name="user_does_not_exist">Utente non trovato</string>
     <string name="feedback_subject_ban">Reclamo di un ban ingiusto</string>
+    <string name="settings_led">Notifica LED</string>
 </resources>
