@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private Button mBtnChange;
     private Button mBtnLogout;
     private Button mBtnDelete;
+
+    RelativeLayout fieldContainer;
+
     private final AuthToken mToken = AuthToken.getInstance();
 
     private static final int ACTION_RESEND_CONFIRM = 0;
@@ -55,6 +59,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_topface_account, container, false);
+
+        fieldContainer = (RelativeLayout) root.findViewById(R.id.fieldContainer_layout);
 
         mLockerView = root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
@@ -196,9 +202,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
+            fieldContainer.setBackground(getResources().getDrawable(R.drawable.edit_big_btn_selector));
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
+            fieldContainer.setBackground(null);
             setChangeBtnAction(ACTION_RESEND_CONFIRM);
         }
     }
