@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -202,11 +203,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
-            fieldContainer.setBackground(getResources().getDrawable(R.drawable.edit_big_btn_selector));
+            fieldContainer.setBackgroundResource(R.drawable.edit_big_btn_selector);
+
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
-            fieldContainer.setBackground(null);
+            fieldContainer.setBackgroundResource(android.R.color.transparent);
             setChangeBtnAction(ACTION_RESEND_CONFIRM);
         }
     }

@@ -34,7 +34,7 @@
         <TextView
             android:id="@+id/retryDialogMessage"
             android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:gravity="center"
             android:text="@string/general_internet_off"
             android:layout_centerHorizontal="true"
