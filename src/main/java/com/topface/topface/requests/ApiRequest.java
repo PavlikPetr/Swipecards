@@ -87,11 +87,6 @@ public abstract class ApiRequest implements IApiRequest {
             try {
                 retryDialog.show();
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-
-//                lp.copyFrom(retryDialog.getWindow().getAttributes());
-//                lp.width = 300;
-//                lp.height = 300;
-//                retryDialog.getWindow().setAttributes(lp);
             } catch (Exception e) {
                 Debug.error(e);
             }
