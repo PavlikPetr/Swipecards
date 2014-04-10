@@ -207,12 +207,12 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             melodyName.setVisibility(View.VISIBLE);
             setRingtonNameByUri(mSettings.getRingtone());
             frame.setOnClickListener(this);
+        }
 
-            if (!GCMUtils.GCM_SUPPORTED) {
-                root.findViewById(R.id.loVibration).setVisibility(View.GONE);
-                root.findViewById(R.id.loLED).setVisibility(View.GONE);
-                root.findViewById(R.id.loMelody).setVisibility(View.GONE);
-            }
+        if (!GCMUtils.GCM_SUPPORTED) {
+            root.findViewById(R.id.loVibration).setVisibility(View.GONE);
+            root.findViewById(R.id.loLED).setVisibility(View.GONE);
+            root.findViewById(R.id.loMelody).setVisibility(View.GONE);
         }
 
         // Account

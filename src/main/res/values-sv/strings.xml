@@ -487,6 +487,7 @@
     <string name="general_type_complain">Klagomålets rubrik</string>
     <string name="confirm_email_for_dating">VI är emot spam. Bekräfta din epost-adress för att dejta på Topface!</string>
     <string name="confirm">Bekräfta</string>
+    <string name="send_confirm_link">Skicka länken för bekräftelse</string>
     <string name="complain_type_swearing_msg">Grovheter, hot, svordomar</string>
     <string name="general_bookmarks_is_deleted">Användaren har raderats från favoriter</string>
     <string name="general_blacklist_is_deleted">Användaren har raderats från svartlistan.</string>
@@ -629,4 +630,5 @@
     <string name="loading_photo_percent">%d%% foto laddas</string>
     <string name="user_does_not_exist">Användaren ej hittats</string>
     <string name="feedback_subject_ban">Klaga på orättvis bannlysning</string>
+    <string name="settings_led">LED notifikation</string>
 </resources>
