@@ -164,7 +164,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     @Override
                     public void fail(int codeError, IApiResponse response) {
 //                        finishOperations(handler);
-                        completeFailedRequest();
+                        warnEditingFailed(handler);
                     }
 
 
@@ -195,8 +195,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     @Override
                     public void fail(int codeError, IApiResponse response) {
                         if (getActivity() != null) {
-                            getActivity().setResult(Activity.RESULT_CANCELED);
-                            //                        finishOperations(handler);
                             if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
                                 Photo removedPhoto = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
                                 mPhotoGridAdapter.getData().remove(removedPhoto);
@@ -204,12 +202,10 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                                 if (CacheProfile.photos.contains(removedPhoto)) {
                                     CacheProfile.photos.remove(removedPhoto);
                                     Toast.makeText(App.getContext(), R.string.general_photo_deleted, Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 }
-                                mLastSelectedAsMainId = mSelectedAsMainId;
                             }
                         }
+                        warnEditingFailed(handler);
                     }
 
                     @Override

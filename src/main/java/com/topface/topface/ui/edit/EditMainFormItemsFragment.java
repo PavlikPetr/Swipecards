@@ -294,11 +294,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
-                        switchSex(sex);
-                        if (mEdName != null) mEdName.setText(name);
-                        if (mEdAge != null) mEdAge.setText(String.valueOf(age));
-                        if (mEdStatus != null) mEdStatus.setText(status);
-                        completeFailedRequest();
+                        warnEditingFailed(handler);
                     }
                 }).exec();
             }

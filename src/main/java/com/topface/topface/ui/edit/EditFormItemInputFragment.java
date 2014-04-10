@@ -135,7 +135,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
                         @Override
                         public void fail(int codeError, IApiResponse response) {
-                            completeFailedRequest();
+                            warnEditingFailed(handler);
                         }
                     }).exec();
                     break;

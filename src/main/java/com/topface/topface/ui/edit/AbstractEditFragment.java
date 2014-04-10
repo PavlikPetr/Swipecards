@@ -1,6 +1,8 @@
 package com.topface.topface.ui.edit;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.widget.Button;
 import android.widget.Toast;
@@ -59,9 +61,38 @@ public abstract class AbstractEditFragment extends BaseFragment {
     protected abstract void saveChanges(Handler handler);
 
     protected void completeFailedRequest() {
-        getActivity().setResult(Activity.RESULT_CANCELED);
-        Toast toast = Toast.makeText(getActivity(), R.string.profile_update_error, Toast.LENGTH_SHORT);
-        toast.show();
+        if (getActivity() != null) {
+            getActivity().setResult(Activity.RESULT_CANCELED);
+            Toast toast = Toast.makeText(getActivity(), R.string.profile_update_error, Toast.LENGTH_SHORT);
+            toast.show();
+        }
         finishRequestSend();
+    }
+
+    protected void warnEditingFailed(final Handler handler) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getString(R.string.general_error));
+        builder.setMessage(R.string.retry_cancel_editing);
+        builder.setNegativeButton(R.string.general_exit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                completeFailedRequest();
+                if (handler == null) getActivity().finish();
+                else handler.sendEmptyMessage(0);
+            }
+        });
+        builder.setPositiveButton(R.string.general_dialog_retry, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (handler != null) saveChanges(handler);
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finishRequestSend();
+            }
+        });
+        builder.create().show();
     }
 }
