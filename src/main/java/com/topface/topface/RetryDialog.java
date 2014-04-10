@@ -26,6 +26,8 @@ public class RetryDialog extends AlertDialog {
     private Context mContext;
     private IApiRequest mRequest;
 
+    private static boolean isShowing = false;
+
     public RetryDialog(Context context, IApiRequest request) {
         super(context);
         mContext = context;
@@ -68,6 +70,20 @@ public class RetryDialog extends AlertDialog {
             }
         };
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mReciever, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
+    }
+
+    @Override
+    public void show() {
+        if (!isShowing) {
+            super.show();
+            isShowing = true;
+        }
+    }
+
+    @Override
+    public void cancel() {
+        super.cancel();
+        isShowing = false;
     }
 
     @Override
