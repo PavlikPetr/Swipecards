@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:gravity="center"
+            android:layout_centerHorizontal="true"
             android:text="@string/general_internet_off"
             android:layout_below="@id/image" />
     </RelativeLayout>
