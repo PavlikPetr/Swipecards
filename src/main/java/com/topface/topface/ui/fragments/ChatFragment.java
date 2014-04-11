@@ -112,20 +112,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private static final int COMPLAIN_BUTTON = 2;
     private static final int DELETE_BUTTON = 1;
     private static final int COPY_BUTTON = 0;
-
-    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
-            mUser.bookmarked = isBookmarked;
-            if (chatActions != null) {
-                ((TextView)chatActions.findViewById(R.id.acBookmark).findViewById(R.id.favTV)).setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-            }
-        }
-    };
-
     private IUserOnlineListener mUserOnlineListener;
-
     // Data
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
@@ -173,6 +160,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private RelativeLayout mLockScreen;
     private String[] editButtonsSelfNames;
     private ViewGroup chatActions;
+    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
+            mUser.bookmarked = isBookmarked;
+            if (chatActions != null) {
+                ((TextView) chatActions.findViewById(R.id.acBookmark).findViewById(R.id.favTV)).setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            }
+        }
+    };
     private String mUserName;
     private int mUserAge;
     private String mUserCity;
@@ -912,6 +909,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
         } else {
+            update(true, "resume update");
             mAdapter.notifyDataSetChanged();
         }
 
