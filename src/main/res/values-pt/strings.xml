@@ -225,6 +225,7 @@
     <string name="settings_melody">Melodia de notificação</string>
     <string name="edit_refresh_status">Renovar status</string>
     <string name="ban_title">Parabenizamos! Você está banido</string>
+    <string name="ban_complain">Queixar-se de proibição</string>
     <string name="general_ready">Pronto</string>
     <string name="profile_deleted_user">Utilizador eliminado</string>
     <string name="filter_main_parameters">Para mim são interessantes</string>
@@ -479,6 +480,7 @@
     <string name="general_type_complain">Assunto de queixa</string>
     <string name="confirm_email_for_dating">Nós somos contra o spam. Confirme o seu endereço de email para se travar conhecimentos em Topface!</string>
     <string name="confirm">Confirmar</string>
+    <string name="send_confirm_link">Enviar uma nota para a confirmação</string>
     <string name="complain_type_swearing_msg">Grosseria, ameaças, obscenidade</string>
     <string name="general_bookmarks_is_deleted">O usuário foi removido dos favoritos</string>
     <string name="general_blacklist_is_deleted">O usuário foi removido da lista negra</string>
@@ -577,4 +579,7 @@
     <string name="press_back_more_to_close_app">Clique novamente para sair de Topface</string>
     <string name="waiting_for_load">À espera de carregamento…</string>
     <string name="loading_photo_percent">carregamento de fotos %d%%</string>
+    <string name="user_does_not_exist">O usuário não foi encontrado</string>
+    <string name="feedback_subject_ban">Reclamação sobre proibição injusta</string>
+    <string name="settings_led">LED notificação</string>
 </resources>

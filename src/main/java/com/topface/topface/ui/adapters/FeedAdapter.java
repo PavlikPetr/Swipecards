@@ -231,11 +231,18 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    public final void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
-            if (mUpdateCallback != null && !mData.isEmpty() && mData.getLast().isLoader()) {
-                mUpdateCallback.onUpdate();
-            }
+            loadOlderItems();
+        }
+    }
+
+    /**
+     * Method tries to load older items (if there is loader item at the end of listView)
+     */
+    public final void loadOlderItems() {
+        if (mUpdateCallback != null && !mData.isEmpty() && mData.getLast().isLoader()) {
+            mUpdateCallback.onUpdate();
         }
     }
 

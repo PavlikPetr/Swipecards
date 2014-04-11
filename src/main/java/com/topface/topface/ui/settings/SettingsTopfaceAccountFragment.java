@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +46,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private Button mBtnChange;
     private Button mBtnLogout;
     private Button mBtnDelete;
+
+    RelativeLayout fieldContainer;
+
     private final AuthToken mToken = AuthToken.getInstance();
 
     private static final int ACTION_RESEND_CONFIRM = 0;
@@ -54,6 +60,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_topface_account, container, false);
+
+        fieldContainer = (RelativeLayout) root.findViewById(R.id.fieldContainer_layout);
 
         mLockerView = root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
@@ -144,6 +152,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void initTextViews(ViewGroup root) {
+        Drawable icon = getResources().getDrawable(R.drawable.tf_logo_account);
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setText(mToken.getLogin());
         mEditText.setSelection(Utils.getText(mEditText).length());
@@ -167,6 +176,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             }
         });
         mText = (TextView) root.findViewById(R.id.tvText);
+        mText.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
         mText.setText(mToken.getLogin());
     }
 
@@ -183,6 +193,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void initButtons(ViewGroup root) {
         mBtnChange = (Button) root.findViewById(R.id.btnChange);
         mBtnChange.setOnClickListener(this);
+        mBtnChange.setVisibility(View.VISIBLE);
         mBtnLogout = (Button) root.findViewById(R.id.btnLogout);
         mBtnLogout.setOnClickListener(this);
         mBtnDelete = (Button) root.findViewById(R.id.btnDeleteAccount);
@@ -192,9 +203,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
+            fieldContainer.setBackgroundResource(R.drawable.edit_big_btn_selector);
+
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
+            fieldContainer.setBackgroundResource(android.R.color.transparent);
             setChangeBtnAction(ACTION_RESEND_CONFIRM);
         }
     }

@@ -163,6 +163,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (getListAdapter().isNeedUpdate() || needUpdate) {
             updateData(false, true);
         }
+        getListAdapter().loadOlderItems();
         if (mFloatBlock != null) {
             mFloatBlock.onResume();
         }
@@ -482,6 +483,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
+        needUpdate = false;
         mIsUpdating = true;
         onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
 
@@ -520,6 +522,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
 
             @Override
+            public void always(IApiResponse response) {
+                super.always(response);
+                mIsUpdating = false;
+            }
+
+            @Override
             protected boolean isShowPremiumError() {
                 return !isForPremium();
             }
@@ -540,7 +548,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
             onUpdateFail(isPullToRefreshUpdating || isHistoryLoad);
             mListView.onRefreshComplete();
-            mIsUpdating = false;
         }
     }
 
@@ -566,7 +573,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
         mListView.onRefreshComplete();
         mListView.setVisibility(View.VISIBLE);
-        mIsUpdating = false;
     }
 
     protected boolean isForPremium() {
@@ -792,7 +798,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (!lastMethod.equals(CountersManager.NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
             int counters = CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters());
             if (counters > 0) {
-                needUpdate = false;
                 updateData(true, false);
             }
         }

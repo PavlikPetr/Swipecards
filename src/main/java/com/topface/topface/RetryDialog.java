@@ -43,13 +43,13 @@ public class RetryDialog extends AlertDialog {
         setContentView(R.layout.retry_dialog_layout);
         ((TextView) findViewById(R.id.retryDialogMessage)).setText(mMessage);
 
+
         ImageView satelite = (ImageView) findViewById(R.id.sat);
         Animation anim = new RotateAnimation(0f, 358f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
 
         anim.setRepeatCount(Animation.INFINITE);
         anim.setDuration(3000);
         anim.setInterpolator(new LinearInterpolator());
-//        satelite.setAnimation(anim);
         satelite.startAnimation(anim);
 
         mReciever = new BroadcastReceiver() {
