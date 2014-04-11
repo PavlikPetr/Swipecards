@@ -938,8 +938,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
         if (CacheProfile.getOptions().isActivityAllowed) {
             showNextUser();
-        } else {
-
         }
     }
 
