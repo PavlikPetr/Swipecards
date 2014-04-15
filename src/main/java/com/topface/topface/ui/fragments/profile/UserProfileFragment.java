@@ -72,6 +72,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     private static final String ARG_TAG_PROFILE_ID = "profile_id";
     private int mProfileId;
+    private int mLastLoadedProfileId;
     private String mItemId;
     // views
     private RelativeLayout mLockScreen;
@@ -244,7 +245,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         return getString(R.string.general_profile);
     }
 
+    private boolean isLoaded(int profileId) {
+        return profileId == mLastLoadedProfileId;
+    }
+
     private void getUserProfile(final int profileId) {
+        if (isLoaded(profileId)) return;
         mLoaderView.setVisibility(View.VISIBLE);
         UserRequest userRequest = new UserRequest(profileId, getActivity());
         registerRequest(userRequest);
@@ -281,6 +287,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         }
                     }
                 }
+                mLastLoadedProfileId = mProfileId;
             }
 
             @Override
