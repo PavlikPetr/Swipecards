@@ -61,8 +61,9 @@ public abstract class AbstractEditFragment extends BaseFragment {
     protected abstract void saveChanges(Handler handler);
 
     protected void completeFailedRequest() {
-        if (getActivity() != null) {
-            getActivity().setResult(Activity.RESULT_CANCELED);
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.setResult(Activity.RESULT_CANCELED);
             Toast toast = Toast.makeText(getActivity(), R.string.profile_update_error, Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -77,14 +78,20 @@ public abstract class AbstractEditFragment extends BaseFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 completeFailedRequest();
-                if (handler == null) getActivity().finish();
-                else handler.sendEmptyMessage(0);
+                Activity activity = getActivity();
+                if (handler == null && activity != null) {
+                    activity.finish();
+                } else {
+                    handler.sendEmptyMessage(0);
+                }
             }
         });
         builder.setPositiveButton(R.string.general_dialog_retry, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (handler != null) saveChanges(handler);
+                if (handler != null) {
+                    saveChanges(handler);
+                }
             }
         });
         builder.setOnCancelListener(new DialogInterface.OnCancelListener() {

@@ -255,11 +255,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         if (mEdStatus != null) imm.hideSoftInputFromWindow(mEdStatus.getWindowToken(), 0);
 
         if (hasChanges()) {
-            final int sex = CacheProfile.sex;
-            final String name = CacheProfile.first_name;
-            final int age = CacheProfile.age;
-            final String status = CacheProfile.getStatus();
-
             SettingsRequest request = getSettigsRequest();
             if (ageIncorrect) {
                 showAlertDialog(getString(R.string.profile_edit_age_ranges));
