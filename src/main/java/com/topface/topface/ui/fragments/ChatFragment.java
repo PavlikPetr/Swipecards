@@ -413,6 +413,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         });
         mListView.setClickable(true);
+        mListView.getRefreshableView().setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         if (mAdapter.isEmpty()) {
             mAdapter.addHeader(mListView.getRefreshableView());
         }
