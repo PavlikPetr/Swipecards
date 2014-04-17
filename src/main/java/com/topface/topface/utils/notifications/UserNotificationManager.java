@@ -1,21 +1,16 @@
 package com.topface.topface.utils.notifications;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.StyleSpan;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils.User;
-import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.ui.ContainerActivity;
@@ -23,26 +18,23 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.config.UserConfig;
 
 public class UserNotificationManager {
-    private static UserNotificationManager mInstance;
     public static final int NOTIFICATION_ID = 1312; //Completely random number
     public static final int MESSAGES_ID = 1311;
-
+    private static UserNotificationManager mInstance;
+    private static int lastId = 1314;
     private NotificationManager mNotificationManager;
     private Context mContext;
 
-
-    private static int lastId = 1314;
+    private UserNotificationManager(Context context) {
+        mContext = context;
+        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+    }
 
     public static UserNotificationManager getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new UserNotificationManager(context);
         }
         return mInstance;
-    }
-
-    private UserNotificationManager(Context context) {
-        mContext = context;
-        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     /*
@@ -227,6 +219,10 @@ public class UserNotificationManager {
 
     public void showBuildedNotification(UserNotification notification) {
         mNotificationManager.notify(notification.getId(), notification.getGeneratedNotification());
+    }
+
+    public void showSimpleNotification(Notification notification) {
+        mNotificationManager.notify(1, notification);
     }
 
     private MessageStack saveMessageStack(String message, User user) {

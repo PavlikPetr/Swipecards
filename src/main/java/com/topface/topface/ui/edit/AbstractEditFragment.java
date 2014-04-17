@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Handler;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -46,6 +49,18 @@ public abstract class AbstractEditFragment extends BaseFragment {
                 }
             });
         }
+    }
+
+    public TextView.OnEditorActionListener getOnDoneListener() {
+        return new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_ACTION_DONE)) {
+                    getActivity().finish();
+                }
+                return false;
+            }
+        };
     }
 
     protected void refreshSaveState() {

@@ -224,6 +224,7 @@
     <string name="settings_melody">Ringtone notification</string>
     <string name="edit_refresh_status">Update status</string>
     <string name="ban_title">Congratulations! You are banned</string>
+    <string name="ban_complain">Ban complaint</string>
     <string name="general_ready">Done</string>
     <string name="profile_deleted_user">User is deleted</string>
     <string name="filter_main_parameters">I am interested in</string>
@@ -487,6 +488,7 @@
     <string name="general_type_complain">Subject of complaints</string>
     <string name="confirm_email_for_dating">We are against spam. Confirm your e-mail address, so you can get together with Topface!</string>
     <string name="confirm">Confirm</string>
+    <string name="send_confirm_link">Send a link for confirmation</string>
     <string name="complain_type_swearing_msg">Rudeness, threats, curse words</string>
     <string name="general_bookmarks_is_deleted">User deleted from favorites</string>
     <string name="general_blacklist_is_deleted">User deleted from blacklist</string>
@@ -632,4 +634,7 @@
     <string name="press_back_more_to_close_app">Press the back button one more time to exit Topface</string>
     <string name="waiting_for_load">Waiting to load…</string>
     <string name="loading_photo_percent">Uploading photos %d%%</string>
+    <string name="user_does_not_exist">User not found</string>
+    <string name="feedback_subject_ban">Complaint on unfair ban</string>
+    <string name="settings_led">LED notification</string>
 </resources>

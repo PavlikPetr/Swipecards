@@ -46,9 +46,8 @@ import java.util.List;
 
 public class LikesFragment extends FeedFragment<FeedLike> {
 
-    private RateController mRateController;
     protected View mEmptyFeedView;
-
+    private RateController mRateController;
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -135,23 +134,15 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     protected void initEmptyFeedView(final View inflated, int errorCode) {
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
         ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
-        if (CacheProfile.premium) {
-            final Options.BlockSympathy blockSympathyOptions = CacheProfile.getOptions().blockSympathy;
-            if (blockSympathyOptions.enabled && errorCode == ErrorCodes.BLOCKED_SYMPATHIES) {
-                initEmptyScreenOnBlockedLikes(inflated, viewFlipper, blockSympathyOptions);
-            } else {
+        switch (errorCode) {
+            case ErrorCodes.PREMIUM_ACCESS_ONLY:
+                initEmptyScreenOnLikesNeedVip(viewFlipper);
+                break;
+            case ErrorCodes.BLOCKED_SYMPATHIES:
+                initEmptyScreenOnBlockedLikes(inflated, viewFlipper);
+                break;
+            default:
                 initEmptyScreenWithoutLikes(viewFlipper);
-            }
-        } else {
-            if (CacheProfile.unread_likes > 0) {
-                if (errorCode == ErrorCodes.PREMIUM_ACCESS_ONLY) {
-                    initEmptyScreenOnLikesNeedVip(viewFlipper);
-                } else {
-                    initEmptyScreenWithoutLikes(viewFlipper);
-                }
-            } else {
-                initEmptyScreenWithoutLikes(viewFlipper);
-            }
         }
     }
 
@@ -159,7 +150,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         viewFlipper.setDisplayedChild(1);
         View currentView = viewFlipper.getChildAt(1);
         if (currentView != null) {
-            String title = Utils.getQuantityString(R.plurals.you_were_liked, CacheProfile.unread_likes, CacheProfile.unread_likes);
+            String title = Utils.getQuantityString(
+                    R.plurals.you_were_liked,
+                    CacheProfile.unread_likes,
+                    CacheProfile.unread_likes
+            );
             ((TextView) currentView.findViewById(R.id.tvTitle)).setText(title);
             currentView.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -185,7 +180,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         }
     }
 
-    private void initEmptyScreenOnBlockedLikes(final View inflated, ViewFlipper viewFlipper, final Options.BlockSympathy blockSympathyOptions) {
+    private void initEmptyScreenOnBlockedLikes(final View inflated, ViewFlipper viewFlipper) {
+        final Options.BlockSympathy blockSympathyOptions = CacheProfile.getOptions().blockSympathy;
         // send stat to google analytics
         sendBlockSympathyStatistics(blockSympathyOptions);
         // set paid likes view

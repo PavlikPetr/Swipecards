@@ -454,7 +454,7 @@
     <string name="empty_fields">Не все поля заполнены</string>
     <string name="email_already_registered">Пользователь с таким e-mail уже существует</string>
 
-    <string name="enter_email_from_registration">Введите e-mail, который вы указывали при регистрации</string>
+    <string name="enter_email_from_registration">Введите e-mail, который вы указали при регистрации</string>
     <string name="default_photo_upload">Загрузка фотографии</string>
     <string name="default_photo_upload_error">Ошибка загрузки</string>
     <string name="default_photo_upload_repeat">Попробуйте повторить позже</string>
@@ -645,6 +645,7 @@
 
     <string name="confirm_email_for_dating">Мы против спама. Подтвердите свой почтовый адрес, чтобы знакомиться в Topface!</string>
     <string name="confirm">Подтвердить</string>
+    <string name="send_confirm_link">Отправить ссылку для подтверждения</string>
 
     <string name="complain_type_swearing_msg">Хамство, угрозы, мат</string>
     <string name="general_bookmarks_is_deleted">Пользователь удален из избранных</string>
@@ -820,4 +821,7 @@
     <string name="loading_photo_percent">Загрузка фотографии %d%%</string>
     <string name="profile_update_error">Ошибка обновления данных</string>
     <string name="retry_cancel_editing">Ошибка отправки данных на сервер. Выйти без сохранения или повторить попытку?</string>
+    <string name="user_does_not_exist">Пользователь не найден</string>
+    <string name="feedback_subject_ban">Жалоба на несправедливый бан</string>
+    <string name="settings_led">LED уведомление</string>
 </resources>

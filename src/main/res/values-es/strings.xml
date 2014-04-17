@@ -224,6 +224,7 @@
     <string name="settings_melody">Melodía de notificación</string>
     <string name="edit_refresh_status">Renovar estado</string>
     <string name="ban_title">¡Felicidades! Estas baneado/a</string>
+    <string name="ban_complain">Denunciar baneo</string>
     <string name="general_ready">Listo</string>
     <string name="profile_deleted_user">Usuario eliminado</string>
     <string name="filter_main_parameters">Me interesa</string>
@@ -490,6 +491,7 @@
     <string name="general_type_complain">Tus denuncias</string>
     <string name="confirm_email_for_dating">Luchamos contra spam. ¡Confirma tu dirección de correo para poder conocer la gente en Topface!</string>
     <string name="confirm">Confirmar</string>
+    <string name="send_confirm_link">Enviar enlace de confirmación</string>
     <string name="complain_type_swearing_msg">Insultos, amenazas</string>
     <string name="general_bookmarks_is_deleted">Usuario eliminado de los favoritos</string>
     <string name="general_blacklist_is_deleted">Usuario eliminado de la lista negra</string>
@@ -630,4 +632,7 @@
     <string name="press_back_more_to_close_app">Pulsa el botón atrás otra vez para salir de Topface</string>
     <string name="waiting_for_load">Esperando para subir…</string>
     <string name="loading_photo_percent">Subiendo fotografía %d%%</string>
+    <string name="user_does_not_exist">Usuario no encontrado</string>
+    <string name="feedback_subject_ban">Denunciar un baneo injusto</string>
+    <string name="settings_led">aviso LED</string>
 </resources>

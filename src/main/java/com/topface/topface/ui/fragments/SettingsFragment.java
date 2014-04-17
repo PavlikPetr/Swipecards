@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,7 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
+import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.HashMap;
@@ -48,6 +51,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     private Settings mSettings;
     private EditSwitcher mSwitchVibration;
+    private EditSwitcher mSwitchLED;
     private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<>();
     private CountDownTimer mSendTimer = new CountDownTimer(3000, 3000) {
         @Override
@@ -130,8 +134,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             root.findViewById(R.id.loMutual).setVisibility(View.GONE);
             root.findViewById(R.id.loChat).setVisibility(View.GONE);
             root.findViewById(R.id.loGuests).setVisibility(View.GONE);
-            root.findViewById(R.id.loVibration).setVisibility(View.GONE);
-            root.findViewById(R.id.loMelody).setVisibility(View.GONE);
         } else {
             if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES) != null) {
                 mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
@@ -189,6 +191,14 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             mSwitchVibration.setChecked(mSettings.isVibrationEnabled());
             frame.setOnClickListener(this);
 
+            //LED
+            frame = (ViewGroup) root.findViewById(R.id.loLED);
+            setBackground(R.drawable.edit_big_btn_middle, frame);
+            setText(R.string.settings_led, frame);
+            mSwitchLED = new EditSwitcher(frame);
+            mSwitchLED.setChecked(mSettings.isLEDEnabled());
+            frame.setOnClickListener(this);
+
             //Melody
             frame = (ViewGroup) root.findViewById(R.id.loMelody);
             setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
@@ -197,11 +207,12 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             melodyName.setVisibility(View.VISIBLE);
             setRingtonNameByUri(mSettings.getRingtone());
             frame.setOnClickListener(this);
+        }
 
-            if (!GCMUtils.GCM_SUPPORTED) {
-                root.findViewById(R.id.loVibration).setVisibility(View.GONE);
-                root.findViewById(R.id.loMelody).setVisibility(View.GONE);
-            }
+        if (!GCMUtils.GCM_SUPPORTED) {
+            root.findViewById(R.id.loVibration).setVisibility(View.GONE);
+            root.findViewById(R.id.loLED).setVisibility(View.GONE);
+            root.findViewById(R.id.loMelody).setVisibility(View.GONE);
         }
 
         // Account
@@ -329,6 +340,18 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             case R.id.loVibration:
                 mSwitchVibration.doSwitch();
                 mSettings.setSetting(Settings.SETTINGS_GCM_VIBRATION, mSwitchVibration.isChecked());
+
+                // Send empty vibro notification to demonstrate
+                if (mSwitchVibration.isChecked()) {
+                    UserNotificationManager.getInstance(getActivity()).showSimpleNotification(
+                            new NotificationCompat.Builder(getActivity()).setDefaults(Notification.
+                                    DEFAULT_VIBRATE).build()
+                    );
+                }
+                break;
+            case R.id.loLED:
+                mSwitchLED.doSwitch();
+                mSettings.setSetting(Settings.SETTINGS_GCM_LED, mSwitchLED.isChecked());
                 break;
             case R.id.loMelody:
                 intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);

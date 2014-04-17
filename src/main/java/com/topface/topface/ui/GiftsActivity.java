@@ -227,6 +227,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         Intent resultIntent = new Intent();
         resultIntent.putExtra(INTENT_GIFT_ID, item.id);
         resultIntent.putExtra(INTENT_GIFT_URL, item.link);
+        resultIntent.putExtra(INTENT_GIFT_PRICE, item.price);
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }

@@ -77,10 +77,12 @@
     <string name="chat_wink_out">Έχετε κλείσει το μάτι.</string>
     <string name="chat_dialog_gps">GPS είναι απενεργοποιημένος! Να συμπεριλάβετε?</string>
     <string name="chat_toast_fail_location">Ελέγξτε την τρέχουσα θέση σας στο χάρτη</string>
+    <string name="general_location">Τοποθεσία</string>
     <string name="filter_filter">Φίλτρο</string>
     <string name="filter_age_string">Από %1$d έως %2$d</string>
     <string name="filter_only_online">Mόνο online</string>
     <string name="filter_only_beautiful">Μόνο όμορφες</string>
+    <string name="filter_city_age_parameters">Ηλικία και πόλη</string>
     <string name="filter_extra_parameters">Περισσότερες Επιλογές Αναζήτησης</string>
     <string name="filter_age">Ηλικία</string>
     <string name="filter_online">Online</string>
@@ -175,6 +177,8 @@
     <string name="settings_feedback_success_msg">Σας ευχαριστούμε, το μήνυμα εστάλη επιτυχώς</string>
     <string name="settings_switch_on">Συμπ.</string>
     <string name="settings_switch_off">εκτός.</string>
+    <string name="settings_block_main">Βασικές</string>
+    <string name="settings_block_additional">Πρόσθετες</string>
     <string name="leaders_go_date">Θέλω εδώ</string>
     <string name="leaders_leader_now">Τώρα σας μπορούν να δουν όλα!</string>
     <string name="leaders_need_photo">Πρώτα θα πρέπει να επιλέξετε μια φωτογραφία!</string>
@@ -215,6 +219,7 @@
     <string name="rate_popup_set_rate">Στείλτε την εκτίμηση</string>
     <string name="rate_popup_later">Ζητήστε αργότερα</string>
     <string name="rate_popup_cancel">\'Οχι, eυχαριστώ</string>
+    <string name="rate_popup_error">Θα πρέπει να καθορίσετε πόσα αστέρια έχετε βάλει γαι την εφαρμογή μας</string>
     <string name="feedback_popup_title">Έχετε βάλει μια χαμηλή βαθμολογία. Πείτε μας τι δεν σας αρέσει στην εφαρμογή μας. Βοηθήστε μας να γίνουμε καλύτεροι. Σας ευχαριστώ!</string>
     <string name="settings_melody">Κοινοποίηση τον ήχο κλήσης</string>
     <string name="edit_refresh_status">Κάντε ενημέρωση της κατάστασης</string>
@@ -563,6 +568,7 @@
     <string name="default_ringtone">Από προεπιλογή</string>
     <string name="photo_info_deleted">Διαγράφεται</string>
     <string name="user_deleted_or_banned">Ο χρήστης απαγορεύεται ή να διαγραφεί</string>
+    <string name="locking_popup_title">Η μετάβαση στο τμήμα «%s» είναι περιορισμένη</string>
     <string name="locking_popup_button_answer">Απαντήστε σε νέες συμπάθειες</string>
     <string name="locking_menu_message">Η πρόσβαση σε ορισμένες σελίδες της εφαρμογής είναι περιορισμένη. Για κατάργηση όλων των περιορισμών, απαντήστε σε όλες τις νέες συμπάθειες ή αποκτήστε VIP.</string>
     <string name="locking_likes_message">Προσοχή! Η πρόσβαση σε ορισμένες σελίδες της εφαρμογής είναι περιορισμένη. Για κατάργηση όλων των περιορισμών, απαντήστε σε όλες τις νέες συμπάθειες ή αποκτήστε VIP.</string>
@@ -603,8 +609,18 @@
         <item quantity="other">%d νέα μηνύματα</item>
         <item quantity="one">%d νέο μήνυμα</item>
     </plurals>
+    <string name="coins_subscription">Η εγγραφή για κέρματα</string>
     <plurals name="general_some_more">
         <item quantity="other">και ακόμα %d</item>
         <item quantity="one">και ακόμα %d</item>
     </plurals>
+    <string name="you_were_subscribed">Η Εγγραφή ολοκληρώθηκε</string>
+    <string name="subscriptions_can_be_changed">Η Εγγραφή ολοκληρώθηκε. Αλλαγή των όρων εγγραφής στο Google Play</string>
+    <string name="nobody_nearby">Ούτε ψυχή γύρω!</string>
+    <string name="general_distance_km">%.02f χιλ.</string>
+    <string name="general_distance_m">%d μ</string>
+    <string name="cannot_get_geo">Δεν μπορούμε να προσδιορίσουμε την τοποθεσία σας</string>
+    <string name="press_back_more_to_close_app">Πατήστε το κουμπί ξανά για να βγείτε από Topface</string>
+    <string name="waiting_for_load">Αναμονή φόρτωσης</string>
+    <string name="loading_photo_percent">Ανέβασμα εικόνας %d%%</string>
 </resources>

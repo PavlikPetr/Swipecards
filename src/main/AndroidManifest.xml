@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="auto"
 
-    android:versionCode="103"
-    android:versionName="2.9.5">
+    android:versionCode="104"
+    android:versionName="2.9.6">
 
     <!-- permissions -->
     <permission
@@ -68,9 +68,9 @@
         <!-- activity -->
         <activity
             android:name=".ui.NavigationActivity"
-            android:theme="@style/Theme.Topface.ActionbarOverlay"
             android:configChanges="locale|screenSize|orientation"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.Topface.ActionbarOverlay"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -272,6 +272,20 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
 
         <activity
+            android:name="com.tapit.advertising.internal.TapItAdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+
+        <activity
+            android:name="com.millennialmedia.android.MMActivity"
+            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <activity
+            android:name="com.inmobi.androidsdk.IMBrowserActivity"
+            android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize"
+            android:hardwareAccelerated="true" />
+
+        <activity
             android:name="org.acra.CrashReportDialog"
             android:excludeFromRecents="true"
             android:finishOnTaskLaunch="true"
@@ -325,7 +339,6 @@
             </intent-filter>
         </receiver>
 
-
         <!-- gcm -->
         <service android:name=".GCMIntentService" />
         <receiver
@@ -362,7 +375,8 @@
 
         <receiver
             android:name="com.google.analytics.tracking.android.CampaignTrackingReceiver"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
@@ -370,6 +384,16 @@
 
         <receiver
             android:name="com.sponsorpay.sdk.android.advertiser.InstallReferrerReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.inmobi.commons.analytics.androidsdk.IMAdTrackerReceiver"
+            android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>

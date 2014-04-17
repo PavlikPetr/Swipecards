@@ -8,7 +8,6 @@ import org.json.JSONObject;
 public class BookmarkAddRequest extends ConfirmedApiRequest {
     private int uid;
     public static final String SERVICE_NAME = "bookmark.add";
-    public static final String UPDATE_BOOKMARKED = "com.topface.topface.action.ADD_TO_BOOKMARK_INTENT";
 
     public BookmarkAddRequest(int userId, Context context) {
         super(context);

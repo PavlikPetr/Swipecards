@@ -10,13 +10,15 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/fieldContainer_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="16dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:background="@drawable/edit_big_btn_selector">
 
             <EditText
                 android:id="@+id/edText"
@@ -29,18 +31,20 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:focusable="true"
-                android:focusableInTouchMode="true" />
+                android:focusableInTouchMode="true"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tvText"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:singleLine="true"
                 android:padding="4dp"
                 android:textSize="14sp"
-                style="@style/BackgroundText"
-                android:visibility="gone" />
+                style="@style/ItemTitleText"
+                android:drawablePadding="5dp"
+                 />
         </RelativeLayout>
 
         <Button
@@ -60,9 +64,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:background="@drawable/btn_light_gray_selector"
+            android:background="@drawable/btn_gray_selector"
             android:text="@string/settings_logout"
-            style="@style/ButtonGrayText" />
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <Button

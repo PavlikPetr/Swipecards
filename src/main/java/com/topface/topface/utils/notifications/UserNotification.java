@@ -113,9 +113,16 @@ public class UserNotification {
     public android.app.Notification generate(NotificationAction[] actions) {
         try {
             notificationBuilder = new NotificationCompat.Builder(mContext);
+
+            int notification = 0;
             if (Settings.getInstance().isVibrationEnabled()) {
-                notificationBuilder.setDefaults(android.app.Notification.DEFAULT_VIBRATE);
+                notification |= android.app.Notification.DEFAULT_VIBRATE;
             }
+            if (Settings.getInstance().isLEDEnabled())
+            {
+                notification |= Notification.DEFAULT_LIGHTS;
+            }
+            notificationBuilder.setDefaults(notification);
             notificationBuilder.setSound(Settings.getInstance().getRingtone());
             notificationBuilder.setOngoing(mOngoing);
             switch (mType) {
@@ -177,6 +184,7 @@ public class UserNotification {
     private android.app.Notification generateProgress() {
         notificationBuilder.setDefaults(Notification.FLAG_ONLY_ALERT_ONCE);
         notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_upload);
+        notificationBuilder.setVibrate(new long[]{});
         notificationBuilder.setSound(Uri.EMPTY);
         setLargeIcon();
         notificationBuilder.setContentTitle(mTitle);
