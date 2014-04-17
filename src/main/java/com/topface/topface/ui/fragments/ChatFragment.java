@@ -187,16 +187,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private RelativeLayout mLockScreen;
     private String[] editButtonsSelfNames;
     private ViewGroup chatActions;
-    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
-            mUser.bookmarked = isBookmarked;
-            if (chatActions != null) {
-                ((TextView) chatActions.findViewById(R.id.acBookmark).findViewById(R.id.favTV)).setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-            }
-        }
-    };
     private String mUserName;
     private int mUserAge;
     private String mUserCity;
