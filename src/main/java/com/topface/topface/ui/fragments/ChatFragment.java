@@ -140,7 +140,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
 
     private IUserOnlineListener mUserOnlineListener;
-
     // Data
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
@@ -928,6 +927,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
         } else {
+            update(true, "resume update");
             mAdapter.notifyDataSetChanged();
         }
 
