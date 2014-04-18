@@ -224,6 +224,7 @@
     <string name="settings_melody">Κοινοποίηση τον ήχο κλήσης</string>
     <string name="edit_refresh_status">Κάντε ενημέρωση της κατάστασης</string>
     <string name="ban_title">Συγχαρητήρια! Είστε αποκλεισμένος</string>
+    <string name="ban_complain">Η αναφορά για την απαγόρευση</string>
     <string name="general_ready">Έγινε</string>
     <string name="profile_deleted_user">Ο χρήστης έχει διαγραφεί</string>
     <string name="filter_main_parameters">Έχω ένα ενδιαφέρον</string>
@@ -486,6 +487,7 @@
     <string name="general_type_complain">Θέμα καταγγελιών</string>
     <string name="confirm_email_for_dating">Είμαστε αντίθετοι με την τοποθέτηση  spam.Επιβεβαιώστε το email  για να εξοικείωσετε στο Topface!</string>
     <string name="confirm">Επιβεβαιώστε</string>
+    <string name="send_confirm_link">Στείλτε ένα σύνδεσμο για την επιβεβαίωση</string>
     <string name="complain_type_swearing_msg">Ευγένειας, απειλές, ύβρεις</string>
     <string name="general_bookmarks_is_deleted">Ο χρήστης διαγράφεται από τα αγαπημένες</string>
     <string name="general_blacklist_is_deleted">Ο χρήστης διαγράφεται από τη μαύρη λίστα</string>
@@ -623,4 +625,6 @@
     <string name="press_back_more_to_close_app">Πατήστε το κουμπί ξανά για να βγείτε από Topface</string>
     <string name="waiting_for_load">Αναμονή φόρτωσης</string>
     <string name="loading_photo_percent">Ανέβασμα εικόνας %d%%</string>
+    <string name="user_does_not_exist">Ο χρήστης δεν βρέθηκε</string>
+    <string name="settings_led">LED κοινοποίηση</string>
 </resources>
