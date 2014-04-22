@@ -7,8 +7,8 @@ import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.Toast;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -116,5 +116,6 @@ public abstract class AbstractEditFragment extends BaseFragment {
             }
         });
         builder.create().show();
+        setSupportProgressBarIndeterminateVisibility(false);
     }
 }
