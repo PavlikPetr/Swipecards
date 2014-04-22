@@ -112,20 +112,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private static final int COMPLAIN_BUTTON = 2;
     private static final int DELETE_BUTTON = 1;
     private static final int COPY_BUTTON = 0;
-
-    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
-            mUser.bookmarked = isBookmarked;
-            if (chatActions != null) {
-                ((TextView)chatActions.findViewById(R.id.acBookmark).findViewById(R.id.favTV)).setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-            }
-        }
-    };
-
     private IUserOnlineListener mUserOnlineListener;
-
     // Data
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
@@ -173,6 +160,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private RelativeLayout mLockScreen;
     private String[] editButtonsSelfNames;
     private ViewGroup chatActions;
+    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
+            mUser.bookmarked = isBookmarked;
+            if (chatActions != null) {
+                ((TextView) chatActions.findViewById(R.id.acBookmark).findViewById(R.id.favTV)).setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            }
+        }
+    };
     private String mUserName;
     private int mUserAge;
     private String mUserCity;
@@ -365,6 +362,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     buttons = editButtonsSelfNames;
                 } else {
                     buttons = editButtonsNames;
+                }
+                if (item.type == FeedDialog.GIFT || item.type == FeedDialog.MAP ||
+                        item.type == FeedDialog.ADDRESS) {
+                    String[] noCopyButtons = new String[buttons.length - 1];
+                    int idx = 0;
+                    for (String button : buttons) {
+                        if (!button.equals(getString(R.string.general_copy_title))) {
+                            noCopyButtons[idx] = button;
+                            idx++;
+                        }
+                    }
+                    buttons = noCopyButtons;
                 }
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.general_spinner_title)
