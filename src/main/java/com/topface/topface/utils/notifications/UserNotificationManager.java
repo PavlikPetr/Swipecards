@@ -5,9 +5,11 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils.User;
@@ -20,10 +22,13 @@ import com.topface.topface.utils.config.UserConfig;
 public class UserNotificationManager {
     public static final int NOTIFICATION_ID = 1312; //Completely random number
     public static final int MESSAGES_ID = 1311;
+    public static final int TARGET_IMAGE_SIZE = 256;
+    public static final int TARGET_IMAGE_SIZE_PRE_JB = 128;
     private static UserNotificationManager mInstance;
     private static int lastId = 1314;
     private NotificationManager mNotificationManager;
     private Context mContext;
+    private ImageSize mImageSize;
 
     private UserNotificationManager(Context context) {
         mContext = context;
@@ -58,11 +63,6 @@ public class UserNotificationManager {
                 doNeedReplace, ongoing, type, null, null);
     }
 
-    public void showNotificationAsync(final String title, final String message, final boolean isTextNotification,
-                                      String uri, final int unread, final Intent intent, final boolean doNeedReplace) {
-        showNotificationAsync(title, message, isTextNotification, uri, unread, intent, doNeedReplace, null, null);
-    }
-
     public void showNotificationAsync(final String title, final String message, User user, final boolean isTextNotification,
                                       String uri, final int unread, final Intent intent, final boolean doNeedReplace) {
         showNotificationAsync(title, message, isTextNotification, uri, unread, intent, doNeedReplace, null, user);
@@ -71,7 +71,7 @@ public class UserNotificationManager {
     public void showNotificationAsync(final String title, final String message, final boolean isTextNotification,
                                       String uri, final int unread, final Intent intent, final boolean doNeedReplace,
                                       final NotificationImageListener listener, final User user) {
-        DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, new ImageLoadingListener() {
+        DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, getTargetImageSize(), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
             }
@@ -112,7 +112,7 @@ public class UserNotificationManager {
     }
 
     public void showProgressNotificationAsync(final String title, String uri, final Intent intent, final NotificationImageListener listener) {
-        DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, new ImageLoadingListener() {
+        DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, getTargetImageSize(), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -145,13 +145,26 @@ public class UserNotificationManager {
         });
     }
 
+    private ImageSize getTargetImageSize() {
+        //среднее отбалдическое разрешение, сделано что бы показывать большие изображения в уведомлениях
+        if (mImageSize == null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                mImageSize = new ImageSize(TARGET_IMAGE_SIZE, TARGET_IMAGE_SIZE);
+            } else {
+                mImageSize = new ImageSize(TARGET_IMAGE_SIZE_PRE_JB, TARGET_IMAGE_SIZE_PRE_JB);
+            }
+        }
+
+        return mImageSize;
+    }
+
 
     public UserNotification showFailNotification(String title, String msg, Bitmap icon, Intent intent) {
         return showNotification(title, msg, false, icon, 0, intent, true, UserNotification.Type.FAIL);
     }
 
     public void showFailNotificationAsync(final String title, final String msg, final String iconUri, final Intent intent, final NotificationImageListener listener) {
-        DefaultImageLoader.getInstance().getImageLoader().loadImage(iconUri, new ImageLoadingListener() {
+        DefaultImageLoader.getInstance().getImageLoader().loadImage(iconUri, getTargetImageSize(), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 

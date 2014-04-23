@@ -140,7 +140,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
 
     private IUserOnlineListener mUserOnlineListener;
-
     // Data
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
@@ -413,6 +412,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         });
         mListView.setClickable(true);
+        mListView.getRefreshableView().setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         if (mAdapter.isEmpty()) {
             mAdapter.addHeader(mListView.getRefreshableView());
         }
@@ -835,7 +835,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void success(IApiResponse response) {
                         super.success(response);
-                        Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BLACK_LIST, !mUser.bookmarked);
+                        Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BOOKMARK, !mUser.bookmarked);
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                         loader.setVisibility(View.INVISIBLE);
                         icon.setVisibility(View.VISIBLE);
@@ -927,6 +927,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
         } else {
+            update(true, "resume update");
             mAdapter.notifyDataSetChanged();
         }
 

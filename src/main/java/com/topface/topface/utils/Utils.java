@@ -360,7 +360,7 @@ public class Utils {
     }
 
     public static String getClientOsVersion() {
-        return "Android " + Build.VERSION.RELEASE + "; Build/" + Build.ID;
+        return "Android " + Build.VERSION.RELEASE + "; Build/" + Build.PRODUCT;
     }
 
     public static void hideSoftKeyboard(Context context, EditText... edTexts) {

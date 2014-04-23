@@ -8,6 +8,7 @@ import android.view.WindowManager;
 
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
+import com.topface.topface.R;
 import com.topface.topface.RetryDialog;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -77,7 +78,7 @@ public abstract class ApiRequest implements IApiRequest {
         handler.setNeedCounters(isNeedCounters);
 
         if (context != null && context instanceof Activity && !App.isOnline() && doNeedAlert) {
-            RetryDialog retryDialog = new RetryDialog(context, this);
+            RetryDialog retryDialog = new RetryDialog(context.getString(R.string.general_internet_off), context, this);
             if (handler != null) {
                 Message msg = new Message();
                 msg.obj = new ApiResponse(ErrorCodes.ERRORS_PROCCESED, "App is offline");
@@ -86,11 +87,6 @@ public abstract class ApiRequest implements IApiRequest {
             try {
                 retryDialog.show();
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-
-                lp.copyFrom(retryDialog.getWindow().getAttributes());
-                lp.width = 300;
-                lp.height = 300;
-                retryDialog.getWindow().setAttributes(lp);
             } catch (Exception e) {
                 Debug.error(e);
             }

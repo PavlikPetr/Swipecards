@@ -48,7 +48,7 @@ public class App extends Application {
 
     public static final String TAG = "Topface";
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
-    private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 90;
+    private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 120;
 
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -162,7 +162,7 @@ public class App extends Application {
     public static void checkProfileUpdate() {
         if (System.currentTimeMillis() > mLastProfileUpdate + PROFILE_UPDATE_TIMEOUT) {
             mLastProfileUpdate = System.currentTimeMillis();
-            getProfileRequest(ProfileRequest.P_NECESSARY_DATA);
+            getProfileRequest(ProfileRequest.P_NECESSARY_DATA).exec();
         }
     }
 
