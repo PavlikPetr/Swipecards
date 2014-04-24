@@ -13,10 +13,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
-import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Products;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.requests.AmazonProductsRequest;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AppOptionsRequest;
@@ -74,7 +75,7 @@ public class App extends Application {
     public static void sendProfileAndOptionsRequests(ApiHandler handler) {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getOptionsRequst())
-                .addRequest(getGooglePlayProductsRequest())
+                .addRequest(getProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .callback(handler)
                 .exec();
@@ -94,22 +95,40 @@ public class App extends Application {
         });
     }
 
-    private static ApiRequest getGooglePlayProductsRequest() {
-        return new GooglePlayProductsRequest(App.getContext()).callback(new DataApiHandler<GooglePlayProducts>() {
-            @Override
-            protected void success(GooglePlayProducts data, IApiResponse response) {
-            }
+    private static ApiRequest getProductsRequest() {
+        ApiRequest request;
+        switch (BuildConfig.BILLING_TYPE) {
+            case AMAZON:
+                request = new AmazonProductsRequest(App.getContext());
+                break;
+            case GOOGLE_PLAY:
+                request = new GooglePlayProductsRequest(App.getContext());
+                break;
+            case NOKIA_STORE:
+            default:
+                request = null;
+                break;
+        }
 
-            @Override
-            protected GooglePlayProducts parseResponse(ApiResponse response) {
-                return new GooglePlayProducts(response);
-            }
+        if (request != null) {
+            request.callback(new DataApiHandler<Products>() {
+                @Override
+                protected void success(Products data, IApiResponse response) {
+                }
 
-            @Override
-            public void fail(int codeError, IApiResponse response) {
+                @Override
+                protected Products parseResponse(ApiResponse response) {
+                    return new Products(response);
+                }
 
-            }
-        });
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+
+                }
+            });
+        }
+
+        return request;
     }
 
     private static ApiRequest getOptionsRequst() {
@@ -228,6 +247,7 @@ public class App extends Application {
         checkKeepAlive();
 
         String msg = "+onCreate\n" + baseConfig.toString();
+        //noinspection ConstantConditions
         if (BuildConfig.BUILD_TIME > 0) {
             msg += "\nBuild Time: " + SimpleDateFormat.getInstance().format(BuildConfig.BUILD_TIME);
         }

@@ -21,31 +21,30 @@ import java.util.regex.Pattern;
 
 public class PaymentwallActivity extends BaseFragmentActivity {
     public static final String SUCCESS_URL_PATTERN = "success_url=([^&]+)";
-    public static final String USER_ID = "userId";
     public static final int ACTION_BUY = 100;
-    public static final String DEFAULT_URL = "https://wallapi.com/api/subscription/?key=3b2e96bcaa32b23b34605dfbf51c4df5&uid=[USER_ID]&widget=m2_1&success_url=http://topface.com/paymentwall-success";
     private static final int RESULT_ERROR = 1;
-    private int mUid;
+    private static final String TEST_PURCHASE = "testPurchase";
     private String mSuccessUrl;
     private View mProgressBar;
-    private WebView webView;
+    private boolean mIsTestPurchase;
+    private String mWidgetUrl;
 
-    public static Intent getIntent(Context context, int userId) {
+    public static Intent getIntent(Context context, boolean testPurchasesEnabled) {
         Intent intent = new Intent(context, PaymentwallActivity.class);
-        intent.putExtra(USER_ID, userId);
+        intent.putExtra(TEST_PURCHASE, testPurchasesEnabled);
         return intent;
     }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUid = getIntent().getIntExtra(USER_ID, 0);
-        mSuccessUrl = getSuccessUrl(getWidgetUrl());
-        getSupportActionBar().setTitle(R.string.buying_header_title);
-        if (mUid == 0 || TextUtils.isEmpty(mSuccessUrl)) {
-            Toast.makeText(this, R.string.general_data_error, Toast.LENGTH_SHORT).show();
-            finishActivity(RESULT_ERROR);
+        mIsTestPurchase = getIntent().getBooleanExtra(TEST_PURCHASE, false);
+        mWidgetUrl = getWidgetUrl();
+        if (TextUtils.isEmpty(mWidgetUrl)) {
+            onFatalError();
             return;
         }
+        mSuccessUrl = getSuccessUrl(mWidgetUrl);
+        getSupportActionBar().setTitle(R.string.buying_header_title);
 
         setContentView(R.layout.ac_web_auth);
 
@@ -53,13 +52,17 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         mProgressBar = findViewById(R.id.prsWebLoading);
 
         // WebView
-        webView = (WebView) findViewById(R.id.wvWebFrame);
+        WebView webView = (WebView) findViewById(R.id.wvWebFrame);
         //noinspection AndroidLintSetJavaScriptEnabled
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setVerticalScrollbarOverlay(true);
-        webView.addJavascriptInterface(new JavascriptInterface(), "jsinterface");
         webView.setVerticalFadingEdgeEnabled(true);
         webView.setWebViewClient(new PaymentwallClient(webView));
+    }
+
+    private void onFatalError() {
+        Toast.makeText(this, R.string.general_data_error, Toast.LENGTH_SHORT).show();
+        finishActivity(RESULT_ERROR);
     }
 
     private String getSuccessUrl(String url) {
@@ -75,8 +78,8 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
     private String getWidgetUrl() {
         String url = CacheProfile.getOptions().getPaymentwallLink();
-        if (TextUtils.isEmpty(url)) {
-            url = DEFAULT_URL.replace("[USER_ID]", Integer.toString(mUid));
+        if (!TextUtils.isEmpty(url) && mIsTestPurchase) {
+            url += "&test_mode=1";
         }
         return url;
     }
@@ -85,7 +88,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
         public PaymentwallClient(WebView webView) {
             super();
-            webView.loadUrl(getWidgetUrl());
+            webView.loadUrl(mWidgetUrl);
             webView.setBackgroundColor(0x00000000);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
@@ -96,7 +99,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
             Debug.log(String.format("PW: error load page %s %d: %s", failingUrl, errorCode, description));
-            finishActivity(RESULT_ERROR);
+            onFatalError();
         }
 
         @Override
@@ -125,16 +128,6 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         }
 
 
-    }
-
-    public final class JavascriptInterface {
-        public JavascriptInterface() {
-
-        }
-
-        public void log(String obj) {
-            Debug.log("JS:" + obj);
-        }
     }
 
 

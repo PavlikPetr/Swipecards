@@ -249,6 +249,7 @@ public class Options extends AbstractData {
                 bonus.enabled = bonusObject.optBoolean("enabled");
                 bonus.counter = bonusObject.optInt("counter");
                 bonus.timestamp = bonusObject.optLong("counterTimestamp");
+                bonus.integrationUrl = bonusObject.optString("integrationUrl");
             }
             // offerwalls for
             JSONObject jsonOfferwalls = response.optJSONObject("offerwalls");
@@ -534,6 +535,7 @@ public class Options extends AbstractData {
         public boolean enabled;
         public int counter;
         public long timestamp;
+        public String integrationUrl;
     }
 
     public static class Offerwalls {

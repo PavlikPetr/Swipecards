@@ -39,6 +39,11 @@ android {
             buildConfigField "com.topface.billing.BillingType", "BILLING_TYPE",
                     "com.topface.billing.BillingType.AMAZON";
         }
+        //flavor для версии приложения для Nokia X
+        nokia {
+            buildConfigField "com.topface.billing.BillingType", "BILLING_TYPE",
+                    "com.topface.billing.BillingType.NOKIA_STORE";
+        }
     }
 
     compileOptions {
