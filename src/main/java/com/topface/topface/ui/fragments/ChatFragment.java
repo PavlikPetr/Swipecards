@@ -48,6 +48,7 @@ import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
@@ -75,6 +76,7 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
@@ -113,6 +115,31 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private static final int COMPLAIN_BUTTON = 2;
     private static final int DELETE_BUTTON = 1;
     private static final int COPY_BUTTON = 0;
+
+    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
+            boolean isChanged = intent.getBooleanExtra(ContainerActivity.CHANGED, false);
+            if (chatActions != null) {
+                switch (type) {
+                    case BLACK_LIST:
+                        mUser.blocked = isChanged;
+                        ((TextView)chatActions.findViewById(R.id.acBlock)
+                                .findViewById(R.id.blockTV)).setText(isChanged ? R.string.black_list_delete : R.string.black_list_add_short);
+                        break;
+                    case BOOKMARK:
+                        mUser.bookmarked = isChanged;
+                        ((TextView)chatActions.findViewById(R.id.acBookmark)
+                                .findViewById(R.id.favTV)).setText(isChanged ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                        break;
+                }
+            }
+        }
+    };
+
+
+
     private IUserOnlineListener mUserOnlineListener;
     // Data
     private int mUserId;
@@ -159,16 +186,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     // Managers
     private RelativeLayout mLockScreen;
     private ViewGroup chatActions;
-    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
-            mUser.bookmarked = isBookmarked;
-            if (chatActions != null) {
-                ((TextView) chatActions.findViewById(R.id.acBookmark).findViewById(R.id.favTV)).setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-            }
-        }
-    };
     private String mUserName;
     private int mUserAge;
     private String mUserCity;
@@ -258,7 +275,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
         //регистрируем здесь, потому что может быть такая ситуация, что обновить надо, когда активити находится не на топе стека
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BookmarkAddRequest.UPDATE_BOOKMARKED));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
         return root;
     }
 
@@ -352,7 +369,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onLongClick(final int position, final View v) {
 
-                final History item = mAdapter.getItem(position);
+                History item = mAdapter.getItem(position);
                 if (item == null) return;
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.general_spinner_title)
@@ -386,6 +403,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         });
         mListView.setClickable(true);
+        mListView.getRefreshableView().setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         if (mAdapter.isEmpty()) {
             mAdapter.addHeader(mListView.getRefreshableView());
         }
@@ -764,7 +782,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                 if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
-                                    mUser.blocked = !mUser.blocked;
+                                    Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BLACK_LIST, !mUser.blocked);
+                                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                                     if (mUser.blocked) {
                                         textView.setText(R.string.black_list_delete);
                                     } else {
@@ -807,8 +826,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void success(IApiResponse response) {
                         super.success(response);
-                        Intent intent = new Intent(BookmarkAddRequest.UPDATE_BOOKMARKED);
-                        intent.putExtra("bookmarked", !mUser.bookmarked);
+                        Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BOOKMARK, !mUser.bookmarked);
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                         loader.setVisibility(View.INVISIBLE);
                         icon.setVisibility(View.VISIBLE);
@@ -900,6 +918,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
         } else {
+            update(true, "resume update");
             mAdapter.notifyDataSetChanged();
         }
 

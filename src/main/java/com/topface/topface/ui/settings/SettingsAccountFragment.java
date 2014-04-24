@@ -28,11 +28,11 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_account, container, false);
-
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_topface_account, container, false);
         mLockerView = root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
-
+        setNeedTitles(true);
+        refreshActionBarTitles();
         Drawable icon = null;
         final AuthToken token = AuthToken.getInstance();
 
@@ -45,7 +45,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
         } else if (token.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
             icon = getResources().getDrawable(R.drawable.ico_ok_account);
         }
-        TextView textName = (TextView) root.findViewById(R.id.tvName);
+        TextView textName = (TextView) root.findViewById(R.id.tvText);
         textName.setText(Settings.getInstance().getSocialAccountName());
         textName.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 

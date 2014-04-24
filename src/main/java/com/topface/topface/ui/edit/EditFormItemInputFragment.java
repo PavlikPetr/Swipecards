@@ -7,10 +7,12 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.Utils;
 
 public class EditFormItemInputFragment extends AbstractEditFragment {
 
@@ -68,7 +71,11 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         ((TextView) root.findViewById(R.id.tvTitle)).setText(mFormInfo.getFormTitle(mTitleId));
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setInputType(mFormInfo.getInputType(mTitleId));
-        mEditText.append(mData);
+        if (mData != null) {
+            mEditText.append(mData);
+        }
+
+        mEditText.setOnEditorActionListener(getOnDoneListener());
         mEditText.addTextChangedListener(new TextWatcher() {
 
             String before = Static.EMPTY;
@@ -112,7 +119,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                 if (CacheProfile.forms.get(i).titleId == mTitleId) {
                     final FormItem item = CacheProfile.forms.get(i);
                     FormItem newItem;
-                    mInputData = mEditText.getText().toString().trim();
+                    mInputData = Utils.getText(mEditText).trim();
                     newItem = new FormItem(item.titleId, mInputData, FormItem.DATA);
 
                     mFormInfo.fillFormItem(newItem);
@@ -135,9 +142,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
                         @Override
                         public void fail(int codeError, IApiResponse response) {
-                            getActivity().setResult(Activity.RESULT_CANCELED);
-                            finishRequestSend();
-                            if (handler != null) handler.sendEmptyMessage(0);
+                            warnEditingFailed(handler);
                         }
                     }).exec();
                     break;

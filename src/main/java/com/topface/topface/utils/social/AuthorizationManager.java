@@ -275,22 +275,15 @@ public class AuthorizationManager {
             try {
                 Debug.log("FB", "mRequestListener::onComplete");
                 JSONObject jsonResult = new JSONObject(response);
-
                 AuthToken.getInstance().saveToken(
                         AuthToken.SN_FACEBOOK,
                         jsonResult.getString("id"),
                         mFacebook.getAccessToken(),
                         Long.toString(mFacebook.getAccessExpires())
                 );
-
                 Settings settings = Settings.getInstance();
-                settings.setSocialAccountName(
-                        jsonResult.optString("name", "")
-                );
-                settings.setSocialAccountEmail(
-                        jsonResult.optString("email", "")
-                );
-
+                settings.setSocialAccountName(jsonResult.optString("name", ""));
+                settings.setSocialAccountEmail(jsonResult.optString("email", ""));
                 receiveToken();
             } catch (JSONException e) {
                 Debug.error("FB login mRequestListener::onComplete:error", e);

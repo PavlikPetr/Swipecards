@@ -227,6 +227,7 @@
     <string name="settings_melody">Pranešimo melodija</string>
     <string name="edit_refresh_status">Atnaujinti statusą</string>
     <string name="ban_title">Sveikiname! Jūs užbanintas</string>
+    <string name="ban_complain">Pasiskųsti dėl bano</string>
     <string name="general_ready">Paruošta</string>
     <string name="profile_deleted_user">Vartotojas pašalintas</string>
     <string name="filter_main_parameters">Man įdomūs</string>
@@ -496,6 +497,7 @@
     <string name="general_type_complain">Skundo tema</string>
     <string name="confirm_email_for_dating">Mes esame prieš brukalą. Patvirtinkite savo el. pašto adresą, kad pažindintis Topface!</string>
     <string name="confirm">Patvirtinti</string>
+    <string name="send_confirm_link">Išsiųsti nuorodą patvirtinimui</string>
     <string name="complain_type_swearing_msg">Chamiškumas, grąsinimai, keiksmažodžiai</string>
     <string name="general_bookmarks_is_deleted">Vartotojas pašalintas iš išrinktųjų</string>
     <string name="general_blacklist_is_deleted">Vartotojas pašalintas iš juodojo sąrašo</string>
@@ -646,4 +648,7 @@
     <string name="press_back_more_to_close_app">Spauskite mygtuką atgal dar sykį kad išeiti iš Topface</string>
     <string name="waiting_for_load">Įkrovos laukimas…</string>
     <string name="loading_photo_percent">Fotografijos įkrova %d%%</string>
+    <string name="user_does_not_exist">Vartotojas nerastas</string>
+    <string name="feedback_subject_ban">Skundas dėl neteisingo bano</string>
+    <string name="settings_led">LED pranešimas</string>
 </resources>

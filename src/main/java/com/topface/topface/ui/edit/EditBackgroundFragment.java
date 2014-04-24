@@ -96,7 +96,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    finishRequestSend();
+                    warnEditingFailed(handler);
                 }
             }).exec();
         } else {
@@ -109,6 +109,28 @@ public class EditBackgroundFragment extends AbstractEditFragment {
     @Override
     protected boolean hasChanges() {
         return CacheProfile.background_id != mSelectedId;
+    }
+
+    @Override
+    protected void lockUi() {
+        mBackgroundImagesListView.setEnabled(false);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void unlockUi() {
+        mBackgroundImagesListView.setEnabled(true);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.edit_title);
+    }
+
+    @Override
+    protected String getSubtitle() {
+        return getString(R.string.edit_bg_photo);
     }
 
     class BackgroundImagesAdapter extends BaseAdapter {
@@ -203,26 +225,5 @@ public class EditBackgroundFragment extends AbstractEditFragment {
             ImageView mFrameImageView;
             ViewGroup mSelected;
         }
-    }
-
-    @Override
-    protected void lockUi() {
-        mBackgroundImagesListView.setEnabled(false);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    protected void unlockUi() {
-        mBackgroundImagesListView.setEnabled(true);
-    }
-
-    @Override
-    protected String getTitle() {
-        return getString(R.string.edit_title);
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return getString(R.string.edit_bg_photo);
     }
 }
