@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -70,6 +69,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
@@ -88,7 +88,6 @@ import com.topface.topface.utils.social.AuthToken;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimerTask;
@@ -357,50 +356,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (item == null) return;
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.general_spinner_title)
-                        .setAdapter(new BaseAdapter() {
-
-                            private int count;
-                            private ArrayList<String> editButtonsNames = new ArrayList<>(Arrays.
-                                    asList(getString(R.string.general_copy_title),
-                                            getString(R.string.general_delete_title),
-                                            getString(R.string.general_complain)));
-                            private LayoutInflater inflater;
-
-                            {
-                                if (item.target == 0) {
-                                    editButtonsNames.remove(getString(R.string.general_complain));
-                                }
-                                if (item.type == FeedDialog.GIFT || item.type == FeedDialog.MAP ||
-                                        item.type == FeedDialog.ADDRESS) {
-                                    editButtonsNames.remove(getString(R.string.general_copy_title));
-                                }
-                                count = editButtonsNames.size();
-                                inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                            }
-
-                            @Override
-                            public int getCount() {
-                                return count;
-                            }
-
-                            @Override
-                            public Object getItem(int position) {
-                                return editButtonsNames.get(position);
-                            }
-
-                            @Override
-                            public long getItemId(int position) {
-                                return position;
-                            }
-
-                            @Override
-                            public View getView(int position, View convertView, ViewGroup parent) {
-                                TextView editOption = (TextView) inflater.inflate(android.R.layout.simple_list_item_1, null);
-
-                                editOption.setText(getItem(position).toString());
-                                return editOption;
-                            }
-                        }, new DialogInterface.OnClickListener() {
+                        .setAdapter(new EditButtonsAdapter(getActivity(), item), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which) {
