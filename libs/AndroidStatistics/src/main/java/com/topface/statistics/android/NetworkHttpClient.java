@@ -7,7 +7,6 @@ import com.topface.statistics.IRequestCallback;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,7 +17,6 @@ import java.util.concurrent.ThreadFactory;
  */
 public class NetworkHttpClient implements INetworkClient {
 
-    public static final String ACCEPT_ENCODING = "gzip,deflate";
     public static final String CONTENT_TYPE = "application/json";
     public static final int CONNECT_TIMEOUT = 3000;
     private static final String DEFAULT_URL = "http://topface.com/stats/";
@@ -57,8 +55,11 @@ public class NetworkHttpClient implements INetworkClient {
                 HttpURLConnection connection = getConnection(mUrl);
                 if (connection != null) {
                     try {
+                        byte[] buffData = data.getBytes();
+                        connection.setFixedLengthStreamingMode(buffData.length);
                         OutputStream outputStream = connection.getOutputStream();
-                        outputStream.write(data.getBytes());
+                        outputStream.write(buffData);
+                        outputStream.flush();
                         outputStream.close();
                         callback.onSuccess();
                     } catch (IOException e) {
@@ -80,13 +81,10 @@ public class NetworkHttpClient implements INetworkClient {
         try {
             connection = (HttpURLConnection) (new URL(url)).openConnection();
             connection.setDoOutput(true);
-            connection.setRequestProperty("Content-Type", CONTENT_TYPE);
-            connection.setRequestProperty("Accept-Encoding", ACCEPT_ENCODING);
-            connection.setRequestProperty("User-Agent", mUserAgent);
             connection.setUseCaches(false);
+            connection.setRequestProperty("Content-Type", CONTENT_TYPE);
+            connection.setRequestProperty("User-Agent", mUserAgent);
             connection.setConnectTimeout(CONNECT_TIMEOUT);
-        } catch (MalformedURLException e) {
-            Log.e(StatisticsTracker.TAG, e.toString());
         } catch (IOException e) {
             Log.e(StatisticsTracker.TAG, e.toString());
         }
@@ -101,7 +99,7 @@ public class NetworkHttpClient implements INetworkClient {
 
     @Override
     public INetworkClient setUserAgent(String userAgent) {
-        mUrl = userAgent;
+        mUserAgent = userAgent;
         return this;
     }
 }

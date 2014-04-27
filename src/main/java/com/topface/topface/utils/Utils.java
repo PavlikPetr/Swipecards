@@ -7,8 +7,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.text.Editable;
@@ -420,14 +418,5 @@ public class Utils {
             return Static.EMPTY;
         }
         return text.toString();
-    }
-
-    public static int getConnectivityType(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo info = cm.getActiveNetworkInfo();
-        if (info != null) {
-            return info.getType();
-        }
-        return -1;
     }
 }

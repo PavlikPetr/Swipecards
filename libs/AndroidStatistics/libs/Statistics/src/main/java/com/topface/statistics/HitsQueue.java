@@ -11,15 +11,24 @@ import java.util.*;
  */
 public class HitsQueue {
 
-    private LinkedList<Entry<Long, String>> mCommonHits = new LinkedList<>();
-    private LinkedList<String> mImportantHits = new LinkedList<>();
-    private IAsyncStorage mStorage;
     private static final String DELIMITER = "&";
     private static final String IMPORTANT_HITS_KEY = "important_hits";
     private static final String COMMON_HITS_KEY = "common_hits";
+    private LinkedList<Entry<Long, String>> mCommonHits = new LinkedList<>();
+    private LinkedList<String> mImportantHits = new LinkedList<>();
+    private IAsyncStorage mStorage;
 
     public HitsQueue(IAsyncStorage storage) {
         mStorage = storage;
+    }
+
+    private static String[] splitString(String str, String delim) {
+        StringTokenizer stringtokenizer = new StringTokenizer(str, delim);
+        String arr[] = new String[stringtokenizer.countTokens()];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = stringtokenizer.nextToken();
+        }
+        return arr;
     }
 
     public HitsQueue setStorage(IAsyncStorage storage) {
@@ -31,7 +40,7 @@ public class HitsQueue {
      * Adds hit to head of queue
      *
      * @param expireTime timestamp when data will expire
-     * @param hitData data to add
+     * @param hitData    data to add
      */
     public void addHit(long expireTime, String hitData) {
         mCommonHits.addFirst(new Entry<>(expireTime, hitData));
@@ -84,6 +93,9 @@ public class HitsQueue {
                     } else {
                         return result;
                     }
+                } else {
+                    mCommonHits.clear();
+                    break;
                 }
             }
         }
@@ -153,13 +165,8 @@ public class HitsQueue {
         return null;
     }
 
-    private static String[] splitString(String str, String delim) {
-        StringTokenizer stringtokenizer = new StringTokenizer(str, delim);
-        String arr[] = new String[stringtokenizer.countTokens()];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = stringtokenizer.nextToken();
-        }
-        return arr;
+    public static interface IHitsRestoreListener {
+        void onHitsRestored();
     }
 
     private class Entry<T, D> {
@@ -175,9 +182,5 @@ public class HitsQueue {
         public String toString() {
             return time.toString() + DELIMITER + data.toString();
         }
-    }
-
-    public static interface IHitsRestoreListener {
-        void onHitsRestored();
     }
 }

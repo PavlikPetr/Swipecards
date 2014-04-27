@@ -3,10 +3,7 @@ package com.topface.statistics.android;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import com.topface.statistics.Hit;
-import com.topface.statistics.INetworkClient;
-import com.topface.statistics.NetworkDataDispatcher;
-import com.topface.statistics.Statistics;
+import com.topface.statistics.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +13,7 @@ import java.util.Map;
  */
 public class StatisticsTracker {
 
-    static final String TAG = "TFAndroidTracker";
+    public static final String TAG = "TFAndroidTracker";
     private static final Map<String, String> mPredefinedSlices = new HashMap<>();
     private static volatile StatisticsTracker mInstance;
     private Statistics mStatistics;
@@ -24,6 +21,7 @@ public class StatisticsTracker {
     private INetworkClient mNetworkClient;
     private int mActiveActivities;
     private boolean mEnabled;
+    private ILogger mLogger;
 
     private StatisticsTracker() {
         mNetworkClient = new NetworkHttpClient();
@@ -50,7 +48,7 @@ public class StatisticsTracker {
     public StatisticsTracker setConfiguration(StatisticsConfiguration configuration) {
         mEnabled = configuration.statisticsEnabled;
         mStatistics
-                .setMaxHitsDispatch(configuration.maxHitsDispatch)
+                .setMaxHitsDispatch(3)//configuration.maxHitsDispatch)
                 .setMaxDispatchExpireDelay(configuration.maxDispatchExpireDelay);
         mNetworkClient.setUserAgent(configuration.userAgent);
         return this;
@@ -87,16 +85,12 @@ public class StatisticsTracker {
         }
     }
 
-    public StatisticsTracker addPredefinedSlices(String key, String value) {
+    public StatisticsTracker putPredefinedSlice(String key, String value) {
         mPredefinedSlices.put(key, value);
         return this;
     }
 
-    public void addPredefinedSlices(Slices slices) {
-        mPredefinedSlices.putAll(slices);
-    }
-
-    public void sendEvent(String name, int count, Slices slices) {
+    public void sendEvent(String name, Integer count, Slices slices) {
         if (mEnabled && mContext != null) {
             mStatistics.sendHit(new AndroidHit(name, count, slices));
         }
@@ -106,9 +100,19 @@ public class StatisticsTracker {
         sendEvent(name, count, null);
     }
 
+    public void sendEvent(String name, Slices slices) {
+        sendEvent(name, null, slices);
+    }
+
+    public StatisticsTracker setLogger(ILogger logger) {
+        this.mLogger = logger;
+        mStatistics.setLogger(logger);
+        return this;
+    }
+
     private class AndroidHit extends Hit {
 
-        public AndroidHit(String name, int count, Map<String, String> slices) {
+        public AndroidHit(String name, Integer count, Map<String, String> slices) {
             super(name, count, slices);
             addAllSlice(mPredefinedSlices);
         }

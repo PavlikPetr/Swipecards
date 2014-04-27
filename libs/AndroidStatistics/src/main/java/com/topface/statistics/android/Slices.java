@@ -7,7 +7,7 @@ import java.util.HashMap;
  */
 public class Slices extends HashMap<String, String> {
 
-    public Slices addSlice(String key, String value) {
+    public Slices putSlice(String key, String value) {
         super.put(key, value);
         return this;
     }

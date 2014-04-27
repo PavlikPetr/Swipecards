@@ -1,8 +1,8 @@
 package com.topface.topface.data;
 
-import android.net.ConnectivityManager;
 import com.topface.statistics.android.StatisticsConfiguration;
 import com.topface.topface.App;
+import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONObject;
@@ -32,12 +32,12 @@ public class AppOptions extends AbstractData {
         }
     }
 
-    public StatisticsConfiguration getStatisticsConfiguration(int connectivityType) {
+    public StatisticsConfiguration getStatisticsConfiguration(Connectivity.Conn connectivityType) {
         return getStatisticsConfiguration(true, connectivityType);
     }
 
-    public StatisticsConfiguration getStatisticsConfiguration(boolean hasConnection, int connectivityType) {
-        boolean wifi = connectivityType == ConnectivityManager.TYPE_WIFI;
+    public StatisticsConfiguration getStatisticsConfiguration(boolean hasConnection, Connectivity.Conn connectivityType) {
+        boolean wifi = connectivityType == Connectivity.Conn.WIFI;
         return new StatisticsConfiguration(
                 hasConnection && clientStatisticsSettings.enabled,
                 wifi ? clientStatisticsSettings.maxSizeWifi : clientStatisticsSettings.maxSizeCell,

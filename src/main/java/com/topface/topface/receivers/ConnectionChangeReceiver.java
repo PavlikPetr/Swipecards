@@ -3,12 +3,11 @@ package com.topface.topface.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v4.content.LocalBroadcastManager;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.RetryRequestReceiver;
+import com.topface.topface.utils.Connectivity;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
     public static final int CONNECTION_OFFLINE = 0;
@@ -18,13 +17,11 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
     public static final String REAUTH = "reauth_after_internet_connected";
     private static int mConnectionType = 0;
     public boolean mIsConnected = false;
-    Context ctx;
-    private ConnectivityManager mConnectivityManager;
+    private Context mContext;
 
     public ConnectionChangeReceiver(Context context) {
         super();
-        ctx = context;
-        mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        mContext = context;
         updateConnectionStatus();
     }
 
@@ -32,34 +29,28 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         return mConnectionType;
     }
 
-    public static boolean isMobileConnection() {
-        return getConnectionType() == CONNECTION_MOBILE;
-    }
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        int connectionType = updateConnectionStatus();
+        Connectivity.Conn connectionType = updateConnectionStatus();
         StatisticsTracker.getInstance()
                 .setConfiguration(App.getAppOptions().getStatisticsConfiguration(mIsConnected, connectionType));
     }
 
-    private int updateConnectionStatus() {
-        NetworkInfo activeNetInfo = mConnectivityManager.getActiveNetworkInfo();
-        int connectionType = -1;
-        if (activeNetInfo != null) {
-            connectionType = activeNetInfo.getType();
+    private Connectivity.Conn updateConnectionStatus() {
+        Connectivity.Conn connectionType = Connectivity.Conn.UNKNOWN;
+        mIsConnected = Connectivity.isConnected(mContext);
+        if (mIsConnected) {
+            connectionType = Connectivity.getConnType(mContext);
             switch (connectionType) {
-                case ConnectivityManager.TYPE_MOBILE:
-                    mConnectionType = CONNECTION_MOBILE;
-                    break;
-                case ConnectivityManager.TYPE_WIFI:
-                case ConnectivityManager.TYPE_WIMAX:
+                case WIFI:
                     mConnectionType = CONNECTION_WIFI;
                     break;
+                case THREE_G:
+                case EDGE:
+                    mConnectionType = CONNECTION_MOBILE;
+                    break;
             }
-            mIsConnected = activeNetInfo.isConnected();
         } else {
-            mIsConnected = false;
             mConnectionType = CONNECTION_OFFLINE;
         }
         sendBroadCastToActiveActivity();
@@ -71,14 +62,14 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         Intent intent = new Intent();
         intent.setAction(REAUTH);
         intent.putExtra(CONNECTION_TYPE, mConnectionType);
-        LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     private void sendToNavigation() {
         Intent intent = new Intent();
         intent.setAction(RetryRequestReceiver.RETRY_INTENT);
         intent.putExtra(CONNECTION_TYPE, mConnectionType);
-        LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     private void sendBroadCastToActiveActivity() {

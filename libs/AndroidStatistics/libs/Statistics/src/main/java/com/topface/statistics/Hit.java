@@ -5,15 +5,14 @@ import java.util.Map;
 
 /**
  * Created by kirussell on 04.04.14.
- *
  */
 public class Hit implements IStatisticsData {
 
     private String n;
-    private int c;
+    private Integer c;
     private Map<String, String> x;
 
-    public Hit(String name, int count, Map<String, String> slices) {
+    public Hit(String name, Integer count, Map<String, String> slices) {
         n = name;
         c = count;
         x = slices == null ? new HashMap<String, String>() : new HashMap<>(slices);

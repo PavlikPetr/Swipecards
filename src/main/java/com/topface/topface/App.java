@@ -12,6 +12,7 @@ import android.os.StrictMode;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.GooglePlayProducts;
@@ -257,8 +258,15 @@ public class App extends Application {
 
         // Инициализируем общие срезы для статистики
         StatisticsTracker.getInstance().setContext(mContext)
-                .addPredefinedSlices("app", BuildConfig.STATISTICS_APP)
-                .addPredefinedSlices("cvn", Utils.getClientVersion());
+                .putPredefinedSlice("app", BuildConfig.STATISTICS_APP)
+                .putPredefinedSlice("cvn", Utils.getClientVersion());
+        if (BuildConfig.DEBUG) {
+            StatisticsTracker.getInstance().setLogger(new ILogger() {
+                public void log(String msg) {
+                    Debug.log(StatisticsTracker.TAG, msg);
+                }
+            });
+        }
 
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
@@ -301,7 +309,7 @@ public class App extends Application {
             protected void success(AppOptions data, IApiResponse response) {
                 mAppOptions = data;
                 StatisticsTracker.getInstance()
-                        .setConfiguration(data.getStatisticsConfiguration(Utils.getConnectivityType(mContext)));
+                        .setConfiguration(data.getStatisticsConfiguration(Connectivity.getConnType(mContext)));
             }
 
             @Override
