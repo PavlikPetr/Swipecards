@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 /**
  * Created by kirussell on 23.04.2014.
+ * Global app options
  */
 public class AppGetOptionsRequest extends ApiRequest {
     private static final String SERVICE_NAME = "app.getOptions";
@@ -22,5 +23,10 @@ public class AppGetOptionsRequest extends ApiRequest {
     @Override
     public String getServiceName() {
         return SERVICE_NAME;
+    }
+
+    @Override
+    public boolean isNeedAuth() {
+        return false;
     }
 }

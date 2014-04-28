@@ -297,10 +297,10 @@ public class App extends Application {
                 public void run() {
                     sendProfileAndOptionsRequests();
                     sendLocation();
-                    sendAppOptionsRequest();
                 }
             });
         }
+        sendAppOptionsRequest();
     }
 
     private void sendAppOptionsRequest() {

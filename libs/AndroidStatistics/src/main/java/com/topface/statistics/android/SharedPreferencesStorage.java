@@ -30,9 +30,7 @@ public class SharedPreferencesStorage implements IAsyncStorage {
         startThread(new Runnable() {
             @Override
             public void run() {
-                synchronized (mPreferences) {
-                    mPreferences.edit().putString(key, packData(data));
-                }
+                mPreferences.edit().putString(key, packData(data));
             }
         });
     }
@@ -42,12 +40,10 @@ public class SharedPreferencesStorage implements IAsyncStorage {
         startThread(new Runnable() {
             @Override
             public void run() {
-                synchronized (mPreferences) {
-                    for (String key : keys) {
-                        listener.onDataObtained(key, unpackData(mPreferences.getString(key, "")));
-                    }
-                    listener.onFinished();
+                for (String key : keys) {
+                    listener.onDataObtained(key, unpackData(mPreferences.getString(key, "")));
                 }
+                listener.onFinished();
             }
         });
     }

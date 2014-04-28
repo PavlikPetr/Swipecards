@@ -31,10 +31,6 @@ public class NetworkHttpClient implements INetworkClient {
         this(DEFAULT_URL, null);
     }
 
-    public NetworkHttpClient(String url) {
-        this(url, null);
-    }
-
     public NetworkHttpClient(String url, String userAgent) {
         mWorker = Executors.newFixedThreadPool(THREAD_PULL_SIZE, new ThreadFactory() {
             @Override
@@ -55,18 +51,26 @@ public class NetworkHttpClient implements INetworkClient {
             public void run() {
                 HttpURLConnection connection = getConnection(mUrl);
                 if (connection != null) {
+                    OutputStream outputStream = null;
+                    byte[] buffData = data.getBytes();
                     try {
-                        byte[] buffData = data.getBytes();
                         connection.setFixedLengthStreamingMode(buffData.length);
-                        OutputStream outputStream = connection.getOutputStream();
-                        outputStream.write(buffData);
-                        outputStream.flush();
-                        outputStream.close();
-                        callback.onSuccess();
+                        outputStream = connection.getOutputStream();
                     } catch (IOException e) {
                         Log.e(StatisticsTracker.TAG, e.toString());
                         callback.onFail();
                     } finally {
+                        if (outputStream != null) {
+                            try {
+                                outputStream.write(buffData);
+                                outputStream.flush();
+                                outputStream.close();
+                                callback.onSuccess();
+                            } catch (IOException e) {
+                                Log.e(StatisticsTracker.TAG, e.toString());
+                                callback.onFail();
+                            }
+                        }
                         connection.disconnect();
                     }
                 } else {
