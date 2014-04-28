@@ -73,6 +73,9 @@ public class Connectivity {
                         return Conn.EDGE;
                     case TelephonyManager.NETWORK_TYPE_UNKNOWN:
                     default:
+                        if (type == ConnectivityManager.TYPE_WIMAX) {
+                            return Conn.THREE_G;
+                        }
                         return Conn.UNKNOWN;
                 }
             } else {
