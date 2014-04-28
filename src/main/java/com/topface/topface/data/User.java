@@ -18,6 +18,7 @@ public class User extends Profile {
     public boolean banned;
     public boolean deleted;
     public boolean bookmarked;
+    public boolean isSympathySent;
 
     public static User parse(int userId, ApiResponse response) {
         User user = new User();
@@ -36,6 +37,7 @@ public class User extends Profile {
                 user.banned = item.optBoolean("banned");
                 user.deleted = item.optBoolean("deleted") || user.isEmpty();
                 user.bookmarked = item.optBoolean("bookmarked");
+                user.isSympathySent = item.optBoolean("isSympathySent");
             } else {
                 user.deleted = true;
                 user.uid = userId;

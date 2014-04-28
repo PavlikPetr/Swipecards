@@ -79,6 +79,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private RetryViewCreator mRetryView;
     private View mLoaderView;
     private TextView mBookmarkAction;
+    private RelativeLayout mSympathy;
+    private TextView mSympathyText;
+    private RelativeLayout mDelight;
+    private TextView mDelightText;
     private LinearLayout mUserActions;
     private ProgressBar mGiftsLoader;
     private ImageView mGiftsIcon;
@@ -151,6 +155,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         mBlocked = (RelativeLayout) mUserActions.findViewById(R.id.acBlock);
         mUserActions.setVisibility(View.INVISIBLE);
         mBookmarkAction = (TextView) mUserActions.findViewById(R.id.favTV);
+        mSympathy = (RelativeLayout) mUserActions.findViewById(R.id.acSympathy);
+        mSympathyText = (TextView) mSympathy.findViewById(R.id.likeTV);
+        mDelight = (RelativeLayout) mUserActions.findViewById(R.id.acDelight);
+        mDelightText = (TextView) mDelight.findViewById(R.id.delTV);
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         mLockScreen = (RelativeLayout) root.findViewById(R.id.lockScreen);
         mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
@@ -275,6 +283,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     } else {
                         ((TextView) mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_add_short);
                     }
+                    if (user.isSympathySent) {
+                        disableSympathyDelight();
+                    }
                     setProfile(user);
                     if (mHeaderMainFragment != null) {
                         mHeaderMainFragment.setOnline(user.online);
@@ -376,23 +387,30 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         mUserActions.startAnimation(ta);
     }
 
+    private void disableSympathyDelight() {
+        mSympathy.setSelected(true);
+        mSympathyText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+        mSympathy.setEnabled(false);
+
+        mDelight.setSelected(true);
+        mDelightText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+        mDelight.setEnabled(false);
+    }
+
     @Override
     public void onClick(final View v) {
         final Profile profile = getProfile();
         switch (v.getId()) {
             case R.id.acDelight:
                 if (v.isEnabled()) {
-                    v.setSelected(true);
-                    final TextView textView = (TextView) v.findViewById(R.id.delTV);
                     final ProgressBar loader = (ProgressBar) v.findViewById(R.id.delPrBar);
                     final ImageView icon = (ImageView) v.findViewById(R.id.delIcon);
 
                     loader.setVisibility(View.VISIBLE);
                     icon.setVisibility(View.GONE);
 
-                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                     v.findViewById(R.id.delPrBar).setVisibility(View.VISIBLE);
-                    v.setEnabled(false);
+                    disableSympathyDelight();
                     mRateController.onAdmiration(
                             profile.uid,
                             ((User) profile).mutual ?
@@ -421,8 +439,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                         }
                                         v.setEnabled(true);
                                         v.setSelected(false);
-                                        if (textView != null) {
-                                            textView.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                        if (mDelightText != null) {
+                                            mDelightText.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
                                         }
                                     }
                                 }
@@ -433,15 +451,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 break;
             case R.id.acSympathy:
                 if (v.isEnabled()) {
-                    v.setSelected(true);
-                    TextView textView = (TextView) v.findViewById(R.id.likeTV);
                     final ProgressBar loader = (ProgressBar) v.findViewById(R.id.likePrBar);
                     final ImageView icon = (ImageView) v.findViewById(R.id.likeIcon);
 
                     loader.setVisibility(View.VISIBLE);
                     icon.setVisibility(View.GONE);
-                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
-                    v.setEnabled(false);
+                    disableSympathyDelight();
                     mRateController.onLike(
                             profile.uid,
                             ((User) profile).mutual ?
