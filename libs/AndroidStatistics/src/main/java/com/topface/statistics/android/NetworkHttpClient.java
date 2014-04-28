@@ -56,19 +56,18 @@ public class NetworkHttpClient implements INetworkClient {
                     try {
                         connection.setFixedLengthStreamingMode(buffData.length);
                         outputStream = connection.getOutputStream();
+                        outputStream.write(buffData);
+                        outputStream.flush();
+                        callback.onSuccess();
                     } catch (IOException e) {
                         Log.e(StatisticsTracker.TAG, e.toString());
                         callback.onFail();
                     } finally {
                         if (outputStream != null) {
                             try {
-                                outputStream.write(buffData);
-                                outputStream.flush();
                                 outputStream.close();
-                                callback.onSuccess();
                             } catch (IOException e) {
                                 Log.e(StatisticsTracker.TAG, e.toString());
-                                callback.onFail();
                             }
                         }
                         connection.disconnect();
