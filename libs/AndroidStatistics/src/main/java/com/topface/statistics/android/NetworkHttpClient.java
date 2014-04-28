@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadFactory;
  * Http client wich uses HttpUrlConnection to connect
  */
 public class NetworkHttpClient implements INetworkClient {
-
+    public static final String POST = "POST";
     public static final String CONTENT_TYPE = "application/json";
     public static final int CONNECT_TIMEOUT = 3000;
     private static final String DEFAULT_URL = "http://topface.com/stats/";
@@ -85,6 +85,7 @@ public class NetworkHttpClient implements INetworkClient {
             connection.setUseCaches(false);
             connection.setRequestProperty("Content-Type", CONTENT_TYPE);
             connection.setRequestProperty("User-Agent", mUserAgent);
+            connection.setRequestMethod(POST);
             connection.setConnectTimeout(CONNECT_TIMEOUT);
         } catch (IOException e) {
             Log.e(StatisticsTracker.TAG, e.toString());
