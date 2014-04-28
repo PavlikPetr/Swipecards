@@ -5,6 +5,13 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main statistics class. Contains logic for:
+ * - queueing events
+ * - dispatch data
+ * - store/restore not dispatched data
+ * - rules to dispatch data
+ */
 public class Statistics {
     private static final long DEFAULT_MAX_EXPIRE_DELAY = 180000;
     private long mMaxDispatchExpireDelay = DEFAULT_MAX_EXPIRE_DELAY;
@@ -38,6 +45,9 @@ public class Statistics {
         tryToDispatchQueue();
     }
 
+    /**
+     * Call on some activity start
+     */
     public void onStart() {
         mHitsQueue.restoreHitsQueue(new HitsQueue.IHitsRestoreListener() {
             @Override
@@ -47,6 +57,9 @@ public class Statistics {
         });
     }
 
+    /**
+     * Call on some activity stop
+     */
     public void onStop() {
         dispatchQueue();
         mHitsQueue.storeHitsQueue();

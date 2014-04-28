@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Created by kirussell on 22.04.2014.
+ *
  */
 class DummyHitDataBuilder implements IHitDataBuilder {
 

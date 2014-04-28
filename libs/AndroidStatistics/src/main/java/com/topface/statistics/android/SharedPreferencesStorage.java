@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by kirussell on 22.04.2014.
+ * Async storage based on SharedPreferences
  */
 public class SharedPreferencesStorage implements IAsyncStorage {
 

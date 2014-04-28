@@ -14,6 +14,7 @@ import java.util.concurrent.ThreadFactory;
 
 /**
  * Created by kirussell on 16.04.2014.
+ * Http client wich uses HttpUrlConnection to connect
  */
 public class NetworkHttpClient implements INetworkClient {
 

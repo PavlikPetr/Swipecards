@@ -39,7 +39,7 @@ public class StatisticsTest extends TestCase {
         statistics.setMaxHitsDispatch(2);
         statistics.sendHit(testHit);
         assertEquals(dispatcher.lastDispatchedData.size(), 0);
-        Thread.sleep(DISPATCH_DELAY);
+        Thread.sleep(DISPATCH_DELAY / 2);
         statistics.sendHit(testHit);
         assertEquals(dispatcher.lastDispatchedData.size(), 1);
     }
@@ -65,7 +65,7 @@ public class StatisticsTest extends TestCase {
         dispatcher.clear();
         // others will be in queue
         String injectedData = "testDataInjected";
-        statistics.sendHit(testHit.addSlice("marker",injectedData));
+        statistics.sendHit(testHit.addSlice("marker", injectedData));
         statistics.sendHit(testHit);
         statistics.setMaxHitsDispatch(1);
         statistics.onStop();

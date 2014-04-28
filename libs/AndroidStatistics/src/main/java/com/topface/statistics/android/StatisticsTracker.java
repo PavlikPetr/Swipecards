@@ -10,6 +10,8 @@ import java.util.Map;
 
 /**
  * Created by kirussell on 22.04.2014.
+ * Android statistics tracker wraps Statistics instance.
+ * NOTE: needs Context for work
  */
 public class StatisticsTracker {
 
@@ -48,12 +50,11 @@ public class StatisticsTracker {
     public StatisticsTracker setConfiguration(StatisticsConfiguration configuration) {
         mEnabled = configuration.statisticsEnabled;
         mStatistics
-                .setMaxHitsDispatch(3)//configuration.maxHitsDispatch)
+                .setMaxHitsDispatch(configuration.maxHitsDispatch)
                 .setMaxDispatchExpireDelay(configuration.maxDispatchExpireDelay);
         mNetworkClient.setUserAgent(configuration.userAgent);
         return this;
     }
-
 
     public StatisticsTracker setContext(Context context) {
         if (context == null) {
@@ -85,28 +86,54 @@ public class StatisticsTracker {
         }
     }
 
+    /**
+     * Slices common for all sent events
+     *
+     * @param key   slice name
+     * @param value slice value
+     * @return self
+     */
     public StatisticsTracker putPredefinedSlice(String key, String value) {
         mPredefinedSlices.put(key, value);
         return this;
     }
 
+    /**
+     * Sends event to statistics queue
+     *
+     * @param name   event name
+     * @param count  event count value
+     * @param slices event slices
+     */
     public void sendEvent(String name, Integer count, Slices slices) {
         if (mEnabled && mContext != null) {
             mStatistics.sendHit(new AndroidHit(name, count, slices));
         }
     }
 
+    /**
+     * Sends event to statistics queue without slices (predefined slices still be sent)
+     *
+     * @param name  event name
+     * @param count event count value
+     */
     public void sendEvent(String name, int count) {
         sendEvent(name, count, null);
     }
 
+    /**
+     * Sends event to statistics queue without count (count field will be excepted from sent data)
+     *
+     * @param name   event name
+     * @param slices event slices
+     */
     public void sendEvent(String name, Slices slices) {
         sendEvent(name, null, slices);
     }
 
     public StatisticsTracker setLogger(ILogger logger) {
         this.mLogger = logger;
-        mStatistics.setLogger(logger);
+        mStatistics.setLogger(mLogger);
         return this;
     }
 

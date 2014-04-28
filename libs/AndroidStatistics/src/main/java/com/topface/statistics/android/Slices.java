@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 /**
  * Created by kirussell on 22.04.2014.
+ * Collect slices with objects of this class
  */
 public class Slices extends HashMap<String, String> {
 

@@ -2,16 +2,13 @@ package com.nostra13.universalimageloader.core;
 
 import android.os.Handler;
 import com.nostra13.universalimageloader.utils.IoUtils;
-import com.topface.statistics.TfStatConsts;
-import com.topface.statistics.android.Slices;
-import com.topface.statistics.android.StatisticsTracker;
-import com.topface.topface.App;
-import com.topface.topface.utils.Connectivity;
+import com.topface.topface.utils.RequestConnectionListener;
 
 import java.io.*;
 
 /**
  * Created by kirussell on 26.04.2014.
+ * Extended LoadAndDisplayImageTask to inject some statistics events tracking
  */
 public class ExtendedLoadAndDisplayImageTask extends LoadAndDisplayImageTask {
 
@@ -23,31 +20,16 @@ public class ExtendedLoadAndDisplayImageTask extends LoadAndDisplayImageTask {
 
     @Override
     protected boolean downloadImage(File targetFile) throws IOException {
-        StatisticsTracker tracker = StatisticsTracker.getInstance();
-        Slices slices = new Slices()
-                .putSlice(TfStatConsts.con, TfStatConsts.getConnType(Connectivity.getConnType(App.getContext())))
-                .putSlice(TfStatConsts.mtd, TfStatConsts.getMtd(SERVICE_NAME));
-        long startTimestamp = System.currentTimeMillis();
+        RequestConnectionListener listener = new RequestConnectionListener(SERVICE_NAME);
+        listener.onConnectionStarted();
         InputStream is = getDownloader().getStream(uri, options.getExtraForDownloader());
-        long connEstablishedTime = System.currentTimeMillis();
-        tracker.sendEvent(
-                TfStatConsts.api_connect_time,
-                slices.putSlice(TfStatConsts.val, TfStatConsts.getConnTimeVal(connEstablishedTime - startTimestamp))
-        );
+        listener.onConnectionEstablished();
         boolean loaded;
         try {
             OutputStream os = new BufferedOutputStream(new FileOutputStream(targetFile), BUFFER_SIZE);
             try {
                 loaded = IoUtils.copyStream(is, os, this);
-                long endResponseReadTime = System.currentTimeMillis();
-                tracker.sendEvent(
-                        TfStatConsts.api_load_time,
-                        slices.putSlice(TfStatConsts.val, TfStatConsts.getConnTimeVal(endResponseReadTime - connEstablishedTime))
-                );
-                tracker.sendEvent(
-                        TfStatConsts.api_request_time,
-                        slices.putSlice(TfStatConsts.val, TfStatConsts.getRequestTimeVal(endResponseReadTime - startTimestamp))
-                );
+                listener.onConnectionClose();
             } finally {
                 IoUtils.closeSilently(os);
             }

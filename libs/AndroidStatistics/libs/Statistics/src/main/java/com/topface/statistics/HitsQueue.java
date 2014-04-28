@@ -31,6 +31,12 @@ public class HitsQueue {
         return arr;
     }
 
+    /**
+     * Sets storage to save not dispatched data
+     *
+     * @param storage async storage
+     * @return self
+     */
     public HitsQueue setStorage(IAsyncStorage storage) {
         mStorage = storage;
         return this;

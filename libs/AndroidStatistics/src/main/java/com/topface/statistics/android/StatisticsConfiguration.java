@@ -2,6 +2,7 @@ package com.topface.statistics.android;
 
 /**
  * Created by kirussell on 23.04.2014.
+ * Some configuration data to pass to tracker
  */
 public class StatisticsConfiguration {
     public boolean statisticsEnabled = false;

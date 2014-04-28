@@ -4,16 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
-import com.topface.statistics.TfStatConsts;
-import com.topface.statistics.android.Slices;
-import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.BackgroundThread;
-import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.RequestConnectionListener;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONException;
@@ -281,20 +278,13 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     final public IApiResponse sendRequestAndReadResponse() throws Exception {
-        StatisticsTracker tracker = StatisticsTracker.getInstance();
-        Slices slices = new Slices()
-                .putSlice(TfStatConsts.con, TfStatConsts.getConnType(Connectivity.getConnType(getContext())))
-                .putSlice(TfStatConsts.mtd, TfStatConsts.getMtd(getServiceName()));
+        RequestConnectionListener listener = new RequestConnectionListener(getServiceName());
         int responseCode = -1;
         IApiResponse response;
         mApiUrl = getApiUrl();
-        long startConnectTime = System.currentTimeMillis();
+        listener.onConnectionStarted();
         HttpURLConnection connection = getConnection();
-        long connEstablishedTime = System.currentTimeMillis();
-        tracker.sendEvent(
-                TfStatConsts.api_connect_time,
-                slices.putSlice(TfStatConsts.val, TfStatConsts.getConnTimeVal(connEstablishedTime - startConnectTime))
-        );
+        listener.onConnectionEstablished();
         if (connection != null) {
             //Непосредственно пишим данные в подключение
             if (writeData(connection)) {
@@ -310,15 +300,7 @@ public abstract class ApiRequest implements IApiRequest {
         if (HttpUtils.isCorrectResponseCode(responseCode)) {
             //Если код ответа верный, то читаем данные из потока и создаем IApiResponse
             response = readResponse();
-            long endResponseReadTime = System.currentTimeMillis();
-            tracker.sendEvent(
-                    TfStatConsts.api_load_time,
-                    slices.putSlice(TfStatConsts.val, TfStatConsts.getConnTimeVal(endResponseReadTime - connEstablishedTime))
-            );
-            tracker.sendEvent(
-                    TfStatConsts.api_request_time,
-                    slices.putSlice(TfStatConsts.val, TfStatConsts.getRequestTimeVal(endResponseReadTime - startConnectTime))
-            );
+            listener.onConnectionClose();
         } else {
             //Если не верный, то конструируем соответсвующий ответ
             response = constructApiResponse(ErrorCodes.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);
