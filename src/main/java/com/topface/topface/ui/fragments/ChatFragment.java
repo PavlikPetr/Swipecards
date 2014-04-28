@@ -48,7 +48,6 @@ import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.SendGiftAnswer;
-import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
@@ -76,7 +75,6 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
@@ -111,10 +109,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
-
-    private static final int COMPLAIN_BUTTON = 2;
-    private static final int DELETE_BUTTON = 1;
-    private static final int COPY_BUTTON = 0;
 
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
@@ -370,22 +364,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             public void onLongClick(final int position, final View v) {
 
                 History item = mAdapter.getItem(position);
+                final EditButtonsAdapter editAdapter = new EditButtonsAdapter(getActivity(), item);
                 if (item == null) return;
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.general_spinner_title)
-                        .setAdapter(new EditButtonsAdapter(getActivity(), item), new DialogInterface.OnClickListener() {
+                        .setAdapter(editAdapter, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case DELETE_BUTTON:
+                                switch ((int) editAdapter.getItemId(which)) {
+                                    case EditButtonsAdapter.ITEM_DELETE:
                                         deleteItem(position);
                                         EasyTracker.getTracker().sendEvent("Chat", "DeleteItem", "", 1L);
                                         break;
-                                    case COPY_BUTTON:
+                                    case EditButtonsAdapter.ITEM_COPY:
                                         mAdapter.copyText(((TextView) v).getText().toString());
                                         EasyTracker.getTracker().sendEvent("Chat", "CopyItemText", "", 1L);
                                         break;
-                                    case COMPLAIN_BUTTON:
+                                    case EditButtonsAdapter.ITEM_COMPLAINT:
                                         startActivity(ContainerActivity.getComplainIntent(mUserId, mAdapter.getItem(position).id));
                                         EasyTracker.getTracker().sendEvent("Chat", "ComplainItemText", "", 1L);
                                         break;
