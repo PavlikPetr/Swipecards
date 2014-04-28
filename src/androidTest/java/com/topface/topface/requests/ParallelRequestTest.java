@@ -16,7 +16,7 @@ public class ParallelRequestTest extends AbstractThreadTest {
             public void run() {
                 Context context = getInstrumentation().getTargetContext();
                 ParallelApiRequest request = new ParallelApiRequest(context);
-                request.addRequest(new AppOptionsRequest(context).callback(new DataApiHandler<Options>() {
+                request.addRequest(new UserGetAppOptionsRequest(context).callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {
                         Debug.log("[ParallelRequest] Options response " + response);

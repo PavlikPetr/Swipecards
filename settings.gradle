@@ -1,11 +1,10 @@
 //Имя проекта. Без этого будет использоваться имя папки
 rootProject.name = 'topface-android'
 //Topface sub projects
-include ':libs:IllustratedTextView'
+include ':libs:IllustratedTextView', ':libs:AndroidStatistics', ':libs:AndroidStatistics:libs:Statistics'
 //Third part libs
 include ':libs:Android-ViewPagerIndicator', ':libs:PullToRefresh', ':libs:PhotoView', ':libs:UniversalImageLoader'
 //Social networks
 include ':libs:Facebook', ':libs:odnoklassniki'
 //Ad networs
 include ':libs:mopub-android-sdk', ':libs:AdLabSDK'
-
