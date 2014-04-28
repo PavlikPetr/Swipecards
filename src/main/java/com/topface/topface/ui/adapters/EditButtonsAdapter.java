@@ -19,8 +19,8 @@ import com.topface.topface.data.History;
 public class EditButtonsAdapter extends BaseAdapter {
 
     public static final int ITEM_COPY = 1;
-    public static final int ITEM_DELETE = 2;
-    public static final int ITEM_COMPLAINT = 3;
+    public static final int ITEM_COMPLAINT = 2;
+    public static final int ITEM_DELETE = 3;
 
     private SparseArray<String> mEditButtonsNames;
     private LayoutInflater mInflater;
