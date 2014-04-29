@@ -267,6 +267,7 @@ public class App extends Application {
                 }
             });
         }
+        sendAppOptionsRequest();
 
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
@@ -300,7 +301,6 @@ public class App extends Application {
                 }
             });
         }
-        sendAppOptionsRequest();
     }
 
     private void sendAppOptionsRequest() {
