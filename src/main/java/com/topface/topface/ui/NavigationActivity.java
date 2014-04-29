@@ -199,6 +199,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         if (getIntent().getBooleanExtra(INTENT_EXIT, false)) {
             finish();
         }
+        setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
         instance = this;
