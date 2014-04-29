@@ -9,16 +9,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -30,7 +22,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,7 +54,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_city);
         Debug.log(this, "+onCreate");
-        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
         mRequestKey = getIntent().getIntExtra(Static.INTENT_REQUEST_KEY, 0);
         try {
@@ -347,13 +337,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
     protected void onDestroy() {
         Debug.log(this, "-onDestroy");
         super.onDestroy();
-    }
-
-
-    @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
     }
 
     @Override

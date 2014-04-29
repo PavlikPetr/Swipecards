@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.appsflyer.AppsFlyerLib;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
@@ -38,22 +37,13 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.HackyDrawerLayout;
-import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.ExternalLinkExecuter;
-import com.topface.topface.utils.IPhotoTakerWithDialog;
-import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.NavigationBarController;
-import com.topface.topface.utils.PopupManager;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,9 +53,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
-import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_HIGH;
-import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
-import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
+import static com.topface.topface.utils.controllers.StartActionsController.*;
 
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity implements INavigationFragmentsListener {
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
@@ -101,7 +89,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     private MenuFragment mMenuFragment;
     private HackyDrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
-    private boolean needAnimate = false;
     private boolean isPopupVisible = false;
     private boolean mActionBarOverlayed = false;
     private int mInitialTopMargin = 0;
@@ -212,7 +199,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         if (getIntent().getBooleanExtra(INTENT_EXIT, false)) {
             finish();
         }
-        mNeedAnimate = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
         instance = this;
@@ -382,14 +368,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         } else {
             LocaleConfig.localeChangeInitiated = false;
         }
-
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
-
-        if (needAnimate) {
-            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
-        }
-        needAnimate = true;
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
         new ExternalLinkExecuter(mListener).execute(getIntent());
         App.checkProfileUpdate();

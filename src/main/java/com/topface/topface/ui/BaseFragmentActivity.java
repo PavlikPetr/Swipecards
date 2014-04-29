@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -272,6 +271,12 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
         }
         super.startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
     }
 
     protected boolean isNeedBroughtToFront(Intent intent) {
