@@ -2,11 +2,7 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -16,26 +12,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -43,23 +24,8 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.FeedDialog;
-import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.History;
-import com.topface.topface.data.HistoryListData;
-import com.topface.topface.data.SendGiftAnswer;
-import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackListAddRequest;
-import com.topface.topface.requests.BookmarkAddRequest;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.DeleteBlackListRequest;
-import com.topface.topface.requests.DeleteBookmarksRequest;
-import com.topface.topface.requests.DeleteMessagesRequest;
-import com.topface.topface.requests.HistoryRequest;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.MessageRequest;
-import com.topface.topface.requests.SendGiftRequest;
+import com.topface.topface.data.*;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -68,23 +34,14 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
-import com.topface.topface.ui.adapters.ChatListAdapter;
-import com.topface.topface.ui.adapters.EditButtonsAdapter;
-import com.topface.topface.ui.adapters.FeedAdapter;
-import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.ui.adapters.IListLoader;
+import com.topface.topface.ui.adapters.*;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.UserActions;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.social.AuthToken;
-
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -115,23 +72,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         public void onReceive(Context context, Intent intent) {
             ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
             boolean isChanged = intent.getBooleanExtra(ContainerActivity.CHANGED, false);
-            if (chatActions != null) {
+            if (chatActions != null && type != null) {
                 switch (type) {
                     case BLACK_LIST:
                         mUser.blocked = isChanged;
-                        ((TextView)chatActions.findViewById(R.id.acBlock)
-                                .findViewById(R.id.blockTV)).setText(isChanged ? R.string.black_list_delete : R.string.black_list_add_short);
+                        ((TextView) chatActions.findViewById(R.id.block_action_text))
+                                .setText(isChanged ? R.string.black_list_delete : R.string.black_list_add_short);
                         break;
                     case BOOKMARK:
                         mUser.bookmarked = isChanged;
-                        ((TextView)chatActions.findViewById(R.id.acBookmark)
-                                .findViewById(R.id.favTV)).setText(isChanged ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                        ((TextView) chatActions.findViewById(R.id.bookmark_action_text))
+                                .setText(isChanged ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                         break;
                 }
             }
         }
     };
-
 
 
     private IUserOnlineListener mUserOnlineListener;
@@ -633,9 +589,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             actions.add(new UserActions.ActionItem(R.id.acComplain, this));
             actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
             UserActions userActions = new UserActions(chatActions, actions);
-            TextView bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
+            TextView bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.bookmark_action_text);
             RelativeLayout blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
-            ((TextView) blockView.findViewById(R.id.blockTV)).setText(user.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
+            ((TextView) blockView.findViewById(R.id.block_action_text)).setText(user.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
             // ставим значок онлайн в нужное состояние
             if (mUserOnlineListener != null) {
@@ -758,7 +714,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             case R.id.acBlock:
                 if (CacheProfile.premium) {
                     if (mUserId > 0) {
-                        final TextView textView = (TextView) v.findViewById(R.id.blockTV);
+                        final TextView textView = (TextView) v.findViewById(R.id.block_action_text);
                         final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
                         final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
 
@@ -803,7 +759,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 }
                 break;
             case R.id.acBookmark:
-                final TextView textView = (TextView) v.findViewById(R.id.favTV);
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
                 final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
 

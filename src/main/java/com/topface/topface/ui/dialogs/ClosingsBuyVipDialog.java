@@ -8,7 +8,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.TextView;
-
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -46,7 +45,9 @@ public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.On
         String fragmentName = Static.EMPTY;
         if (getActivity() != null) {
             BaseFragment.FragmentId fragmentId = (BaseFragment.FragmentId) getArguments().getSerializable(ARG_FRAGMENT);
-            fragmentName = getString(ResourcesUtils.getFragmentNameResId(fragmentId));
+            if (fragmentId != null) {
+                fragmentName = getString(ResourcesUtils.getFragmentNameResId(fragmentId));
+            }
         }
         root.findViewById(R.id.btnRespondToLikes).setOnClickListener(this);
         root.findViewById(R.id.btnBuyVip).setOnClickListener(this);
