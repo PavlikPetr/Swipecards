@@ -1,17 +1,21 @@
 package com.topface.topface.ui.edit;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.topface.topface.R;
+
 public class EditSwitcher {
     private TextView mTitle;
-    private CheckBox mCheckbox;
-    private TextView mTextOn;
-    private TextView mTextOff;
+    private Switcher mSwitcher;
     private ViewGroup mRoot;
     private ProgressBar mPrgrsBar;
 
@@ -21,9 +25,7 @@ public class EditSwitcher {
         if (!TextUtils.isEmpty(title)) {
             setTitle(title);
         }
-        mCheckbox = (CheckBox) root.findViewWithTag("cbSwitch");
-        mTextOn = (TextView) root.findViewWithTag("tvSwitchOn");
-        mTextOff = (TextView) root.findViewWithTag("tvSwitchOff");
+        mSwitcher = (Switcher) root.findViewWithTag("cbSwitch");
         mPrgrsBar = (ProgressBar) root.findViewWithTag("vsiLoadBar");
     }
 
@@ -36,30 +38,21 @@ public class EditSwitcher {
     }
 
     public boolean setChecked(boolean checked) {
-        mCheckbox.setChecked(checked);
-        if (checked) {
-            mTextOn.setVisibility(View.VISIBLE);
-            mTextOff.setVisibility(View.INVISIBLE);
-        } else {
-            mTextOn.setVisibility(View.INVISIBLE);
-            mTextOff.setVisibility(View.VISIBLE);
-        }
+        mSwitcher.setChecked(checked);
         return checked;
     }
 
     public void setEnabled(boolean enabled) {
         mRoot.setEnabled(enabled);
-        mCheckbox.setEnabled(enabled);
-        mTextOn.setEnabled(enabled);
-        mTextOff.setEnabled(enabled);
+        mSwitcher.setEnabled(enabled);
     }
 
     public boolean doSwitch() {
-        return setChecked(!mCheckbox.isChecked());
+        return setChecked(!mSwitcher.isChecked());
     }
 
     public boolean isChecked() {
-        return mCheckbox.isChecked();
+        return mSwitcher.isChecked();
     }
 
     public void setVisibility(boolean visible) {
@@ -68,11 +61,8 @@ public class EditSwitcher {
 
     public void setVisibility(boolean visible, boolean checked) {
         int visibility = visible ? View.VISIBLE : View.INVISIBLE;
-        mCheckbox.setVisibility(visibility);
-        if (!visible) {
-            mTextOn.setVisibility(visibility);
-            mTextOff.setVisibility(visibility);
-        } else {
+        mSwitcher.setVisibility(visibility);
+        if (visible) {
             setChecked(checked);
         }
     }
@@ -85,5 +75,59 @@ public class EditSwitcher {
     public void setProgressState(boolean waiting) {
         mPrgrsBar.setVisibility(waiting ? View.VISIBLE : View.GONE);
         setVisibility(!waiting);
+    }
+
+    public static class Switcher extends Button {
+
+        private String mTextOn;
+        private String mTextOff;
+
+        private int mBackgroundOn;
+        private int mBackgrounOff;
+
+        private boolean mChecked;
+
+        public Switcher(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            mTextOn = context.getString(R.string.settings_switch_on);
+            mTextOff = context.getString(R.string.settings_switch_off);
+            mBackgroundOn = R.drawable.edit_switch_on;
+            mBackgrounOff = R.drawable.edit_switch_off;
+            syncState();
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            CharSequence defaultText = getText();
+            Paint meter = new Paint();
+            if (meter.measureText(mTextOn, 0, mTextOn.length()) > meter.measureText(mTextOff, 0, mTextOff.length())) {
+                setText(mTextOn);
+            } else {
+                setText(mTextOff);
+            }
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            setText(defaultText);
+        }
+
+        public void setChecked(boolean checked) {
+            mChecked = checked;
+            syncState();
+        }
+
+        private void syncState() {
+            if (mChecked) {
+                setBackgroundResource(mBackgroundOn);
+                setTextColor(Color.parseColor("#FFFFFF"));
+                setText(mTextOn);
+            } else {
+                setBackgroundResource(mBackgrounOff);
+                setTextColor(Color.parseColor("#2F2F2F"));
+                setText(mTextOff);
+            }
+        }
+
+        public boolean isChecked() {
+            return mChecked;
+        }
     }
 }
