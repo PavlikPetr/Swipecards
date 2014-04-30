@@ -3,15 +3,14 @@ package com.topface.topface.ui.edit;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.topface.topface.ui.views.Switcher;
+
 public class EditSwitcher {
     private TextView mTitle;
-    private CheckBox mCheckbox;
-    private TextView mTextOn;
-    private TextView mTextOff;
+    private Switcher mSwitcher;
     private ViewGroup mRoot;
     private ProgressBar mPrgrsBar;
 
@@ -21,9 +20,7 @@ public class EditSwitcher {
         if (!TextUtils.isEmpty(title)) {
             setTitle(title);
         }
-        mCheckbox = (CheckBox) root.findViewWithTag("cbSwitch");
-        mTextOn = (TextView) root.findViewWithTag("tvSwitchOn");
-        mTextOff = (TextView) root.findViewWithTag("tvSwitchOff");
+        mSwitcher = (Switcher) root.findViewWithTag("cbSwitch");
         mPrgrsBar = (ProgressBar) root.findViewWithTag("vsiLoadBar");
     }
 
@@ -36,30 +33,21 @@ public class EditSwitcher {
     }
 
     public boolean setChecked(boolean checked) {
-        mCheckbox.setChecked(checked);
-        if (checked) {
-            mTextOn.setVisibility(View.VISIBLE);
-            mTextOff.setVisibility(View.INVISIBLE);
-        } else {
-            mTextOn.setVisibility(View.INVISIBLE);
-            mTextOff.setVisibility(View.VISIBLE);
-        }
+        mSwitcher.setChecked(checked);
         return checked;
     }
 
     public void setEnabled(boolean enabled) {
         mRoot.setEnabled(enabled);
-        mCheckbox.setEnabled(enabled);
-        mTextOn.setEnabled(enabled);
-        mTextOff.setEnabled(enabled);
+        mSwitcher.setEnabled(enabled);
     }
 
     public boolean doSwitch() {
-        return setChecked(!mCheckbox.isChecked());
+        return setChecked(!mSwitcher.isChecked());
     }
 
     public boolean isChecked() {
-        return mCheckbox.isChecked();
+        return mSwitcher.isChecked();
     }
 
     public void setVisibility(boolean visible) {
@@ -68,11 +56,8 @@ public class EditSwitcher {
 
     public void setVisibility(boolean visible, boolean checked) {
         int visibility = visible ? View.VISIBLE : View.INVISIBLE;
-        mCheckbox.setVisibility(visibility);
-        if (!visible) {
-            mTextOn.setVisibility(visibility);
-            mTextOff.setVisibility(visibility);
-        } else {
+        mSwitcher.setVisibility(visibility);
+        if (visible) {
             setChecked(checked);
         }
     }
@@ -86,4 +71,5 @@ public class EditSwitcher {
         mPrgrsBar.setVisibility(waiting ? View.VISIBLE : View.GONE);
         setVisibility(!waiting);
     }
+
 }
