@@ -489,7 +489,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     mGiftFragment.sendGift(mGiftsReceivedListener);
                 } else {
                     startActivityForResult(
-                            GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
+                            GiftsActivity.getSendGiftIntent(getActivity(), mProfileId, false),
                             GiftsActivity.INTENT_REQUEST_GIFT
                     );
                 }
@@ -560,7 +560,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
                 break;
             case R.id.acBookmark:
-                final TextView textView = (TextView) v.findViewById(R.id.favTV);
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
                 final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
 

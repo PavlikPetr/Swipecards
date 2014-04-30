@@ -332,7 +332,7 @@ public class GiftsFragment extends ProfileInnerFragment {
 
     public void sendGift() {
         getParentFragment().startActivityForResult(
-                GiftsActivity.getSendGiftIntent(getActivity(), mProfile.uid),
+                GiftsActivity.getSendGiftIntent(getActivity(), mProfile.uid, true),
                 GiftsActivity.INTENT_REQUEST_GIFT
         );
     }
