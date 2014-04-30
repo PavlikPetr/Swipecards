@@ -27,7 +27,6 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -74,6 +73,7 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.views.BackButtonEditTextMaster;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
@@ -142,10 +142,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mIsAddPanelOpened;
+    private boolean mIsKeyboardOpened; // Shows whether keyboard opened or not. Should be maintained very carefully, because there are no keyboard show/hide events.
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedUser mUser;
-    private EditText mEditBox;
+    private BackButtonEditTextMaster mEditBox;
     private TextView mLoadingBackgroundText;
     private AnimationDrawable mLoadingBackgroundDrawable;
     private SwapControl mSwapControl;
@@ -246,8 +247,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         // Swap Control
         initAddPanel(root);
         // Edit Box
-        mEditBox = (EditText) root.findViewById(R.id.edChatBox);
+        mEditBox = (BackButtonEditTextMaster) root.findViewById(R.id.edChatBox);
         mEditBox.setOnEditorActionListener(mEditorActionListener);
+        mEditBox.setOnKeyBoardExitedListener(new BackButtonEditTextMaster.OnKeyBoardExitedListener() {
+            @Override
+            public void onKeyboardExited() {
+                mIsKeyboardOpened = false;
+            }
+        });
         //LockScreen
         initLockScreen(root);
         //Send Button
@@ -291,7 +298,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             public void onSizeChanged(int w, int h, int oldw, int oldh) {
                 if (oldh > h) {
                     // keyboard opened
-                    toggleAddPanel(false);
+                    mIsKeyboardOpened = true;
+                    toggleAddPanel(false, true);
                     closeChatActions();
                 }
             }
@@ -728,7 +736,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 }
                 break;
             case R.id.btnChatAdd:
-                toggleAddPanel();
+                if (mIsKeyboardOpened) {
+                    toggleAddPanel(true, true);
+                } else {
+                    toggleAddPanel();
+                }
                 closeChatActions();
                 EasyTracker.getTracker().sendEvent("Chat", "AdditionalClick", "", 1L);
                 break;
@@ -957,15 +969,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void toggleAddPanel() {
-        toggleAddPanel(!mIsAddPanelOpened);
+        toggleAddPanel(!mIsAddPanelOpened, false);
     }
 
     private void toggleAddPanel(boolean open) {
+        toggleAddPanel(open, false);
+    }
+
+    private void toggleAddPanel(boolean open, boolean instant) {
         if (mIsAddPanelOpened == open) return;
         if (open) {
             Utils.hideSoftKeyboard(getActivity(), mEditBox);
+            mIsKeyboardOpened = false;
         }
-        mSwapControl.snapToScreen(!open ? 0 : 1);
+        mSwapControl.snapToScreen(!open ? 0 : 1, instant);
         mBtnChatAdd.setSelected(open);
         mIsAddPanelOpened = open;
     }
