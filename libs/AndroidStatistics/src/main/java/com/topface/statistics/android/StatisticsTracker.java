@@ -24,14 +24,12 @@ public class StatisticsTracker {
     private int mActiveActivities;
     private boolean mEnabled;
     private ILogger mLogger;
+    private IDataDispatcher mNetworkDispatcher;
 
     private StatisticsTracker() {
         mNetworkClient = new NetworkHttpClient();
-        mStatistics = new Statistics(
-                new NetworkDataDispatcher(
-                        mNetworkClient
-                )
-        );
+        mNetworkDispatcher = new NetworkDataDispatcher(mNetworkClient);
+        mStatistics = new Statistics(mNetworkDispatcher);
     }
 
     public static StatisticsTracker getInstance() {
@@ -134,6 +132,7 @@ public class StatisticsTracker {
     public StatisticsTracker setLogger(ILogger logger) {
         this.mLogger = logger;
         mStatistics.setLogger(mLogger);
+        mNetworkDispatcher.setLogger(mLogger);
         return this;
     }
 

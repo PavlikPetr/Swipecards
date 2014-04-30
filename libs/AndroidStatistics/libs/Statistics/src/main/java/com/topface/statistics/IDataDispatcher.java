@@ -10,4 +10,6 @@ public interface IDataDispatcher {
     void dispatchData(List<String> data);
 
     IDataDispatcher setDataBuilder(IHitDataBuilder builder);
+
+    IDataDispatcher setLogger(ILogger logger);
 }
