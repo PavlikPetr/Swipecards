@@ -9,12 +9,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.View;
+
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.*;
+import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.fragments.ComplainsFragment;
+import com.topface.topface.ui.fragments.ContactsFragment;
+import com.topface.topface.ui.fragments.EditorBannersFragment;
+import com.topface.topface.ui.fragments.RecoverPwdFragment;
+import com.topface.topface.ui.fragments.RegistrationFragment;
+import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
@@ -23,6 +30,7 @@ import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

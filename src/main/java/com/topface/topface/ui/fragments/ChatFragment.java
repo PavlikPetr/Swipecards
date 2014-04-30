@@ -68,6 +68,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
@@ -83,6 +84,7 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;

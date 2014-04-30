@@ -9,9 +9,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 
+@SuppressWarnings("UnusedDeclaration")
 public abstract class AbstractEditFragment extends BaseFragment {
 
     protected Button mBackButton;

@@ -5,9 +5,12 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Simple EditText. The only difference is that you can set listener on back button when you press it to close keyboard.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class BackButtonEditTextMaster extends EditText {
 
     private OnKeyBoardExitedListener mOnKeyBoardExitedListener;
@@ -25,7 +28,7 @@ public class BackButtonEditTextMaster extends EditText {
     }
 
     @Override
-    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+    public boolean onKeyPreIme(int keyCode, @NotNull KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             mOnKeyBoardExitedListener.onKeyboardExited();
         }

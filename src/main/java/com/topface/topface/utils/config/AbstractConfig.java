@@ -2,6 +2,7 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 
@@ -237,12 +238,12 @@ public abstract class AbstractConfig {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"unchecked", "UnusedDeclaration"})
         public SettingsField<Double> addDoubleField(String fieldName, Double defaultValue) {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"unchecked", "UnusedDeclaration"})
         public SettingsField<LinkedList<String>> addListField(String fieldName, List defaultValue) {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
@@ -279,6 +280,7 @@ public abstract class AbstractConfig {
             return false;
         }
 
+        @SuppressWarnings("UnusedDeclaration")
         public boolean setField(String fieldName, Double value) {
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
@@ -319,6 +321,7 @@ public abstract class AbstractConfig {
             return 0L;
         }
 
+        @SuppressWarnings("UnusedDeclaration")
         public Double getDoubleField(String fieldName) {
             SettingsField settingsField = get(fieldName);
             if (settingsField != null && settingsField.value != null) {

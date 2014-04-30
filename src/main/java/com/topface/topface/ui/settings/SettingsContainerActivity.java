@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;

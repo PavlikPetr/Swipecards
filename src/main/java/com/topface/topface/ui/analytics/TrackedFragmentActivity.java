@@ -2,6 +2,7 @@ package com.topface.topface.ui.analytics;
 
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.Tracker;
 import com.topface.topface.data.ExperimentTags;
