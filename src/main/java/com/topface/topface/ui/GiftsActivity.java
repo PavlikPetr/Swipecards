@@ -234,22 +234,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
     /**
      * Intent to start GiftsActivity for sending gift item
-     * By default send gift request will be executed in GiftActivity and return result item
-     * in onActivityResult(...)
-     *
-     * @param context where activity will be launched
-     * @param userId  profile to send gift
-     * @return intent
-     */
-    public static Intent getSendGiftIntent(Context context, int userId) {
-        Intent result = new Intent(context, GiftsActivity.class);
-        result.putExtra(INTENT_USER_ID_TO_SEND_GIFT, userId);
-        result.putExtra(INTENT_SEND_GIFT, true);
-        return result;
-    }
-
-    /**
-     * Intent to start GiftsActivity for sending gift item
      * If you need to process send gift request yourself set sendGift flag to false
      *
      * @param context  lauch context
