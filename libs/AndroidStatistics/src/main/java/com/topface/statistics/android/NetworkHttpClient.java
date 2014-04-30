@@ -49,12 +49,11 @@ public class NetworkHttpClient implements INetworkClient {
         mWorker.submit(new Runnable() {
             @Override
             public void run() {
-                HttpURLConnection connection = getConnection(mUrl);
+                byte[] buffData = data.getBytes();
+                HttpURLConnection connection = getConnection(mUrl, buffData.length);
                 if (connection != null) {
                     OutputStream outputStream = null;
-                    byte[] buffData = data.getBytes();
                     try {
-                        connection.setFixedLengthStreamingMode(buffData.length);
                         outputStream = connection.getOutputStream();
                         outputStream.write(buffData);
                         outputStream.flush();
@@ -80,12 +79,14 @@ public class NetworkHttpClient implements INetworkClient {
         });
     }
 
-    private HttpURLConnection getConnection(String url) {
+    private HttpURLConnection getConnection(String url, int contentLength) {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) (new URL(url)).openConnection();
             connection.setDoOutput(true);
             connection.setUseCaches(false);
+            connection.setFixedLengthStreamingMode(contentLength);
+//            connection.setRequestProperty("Content-Length", Integer.toString(contentLength));
             connection.setRequestProperty("Content-Type", CONTENT_TYPE);
             connection.setRequestProperty("User-Agent", mUserAgent);
             connection.setRequestMethod(POST);

@@ -27,7 +27,6 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -69,12 +68,12 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.adapters.ChatListAdapter;
-import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.views.BackButtonEditTextMaster;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
@@ -84,7 +83,6 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
-
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -115,26 +113,25 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         public void onReceive(Context context, Intent intent) {
             ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
             boolean isChanged = intent.getBooleanExtra(ContainerActivity.CHANGED, false);
-            if (chatActions != null) {
+            if (chatActions != null && type != null) {
                 switch (type) {
                     case BLACK_LIST:
                         mUser.blocked = isChanged;
-                        ((TextView)chatActions.findViewById(R.id.acBlock)
-                                .findViewById(R.id.blockTV)).setText(isChanged ? R.string.black_list_delete : R.string.black_list_add_short);
+                        ((TextView) chatActions.findViewById(R.id.block_action_text))
+                                .setText(isChanged ? R.string.black_list_delete : R.string.black_list_add_short);
                         break;
                     case BOOKMARK:
                         mUser.bookmarked = isChanged;
-                        ((TextView)chatActions.findViewById(R.id.acBookmark)
-                                .findViewById(R.id.favTV)).setText(isChanged ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                        ((TextView) chatActions.findViewById(R.id.bookmark_action_text))
+                                .setText(isChanged ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                         break;
                 }
             }
         }
     };
 
-
-
     private IUserOnlineListener mUserOnlineListener;
+
     // Data
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
@@ -151,10 +148,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mIsAddPanelOpened;
+    private boolean mIsKeyboardOpened; // Shows whether keyboard opened or not. Should be maintained very carefully, because there are no keyboard show/hide events.
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedUser mUser;
-    private EditText mEditBox;
+    private BackButtonEditTextMaster mEditBox;
     private TextView mLoadingBackgroundText;
     private AnimationDrawable mLoadingBackgroundDrawable;
     private SwapControl mSwapControl;
@@ -251,8 +249,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         // Swap Control
         initAddPanel(root);
         // Edit Box
-        mEditBox = (EditText) root.findViewById(R.id.edChatBox);
+        mEditBox = (BackButtonEditTextMaster) root.findViewById(R.id.edChatBox);
         mEditBox.setOnEditorActionListener(mEditorActionListener);
+        mEditBox.setOnKeyBoardExitedListener(new BackButtonEditTextMaster.OnKeyBoardExitedListener() {
+            @Override
+            public void onKeyboardExited() {
+                mIsKeyboardOpened = false;
+            }
+        });
         //LockScreen
         initLockScreen(root);
         //Send Button
@@ -296,7 +300,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             public void onSizeChanged(int w, int h, int oldw, int oldh) {
                 if (oldh > h) {
                     // keyboard opened
-                    toggleAddPanel(false);
+                    mIsKeyboardOpened = true;
+                    toggleAddPanel(false, true);
                     closeChatActions();
                 }
             }
@@ -633,9 +638,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             actions.add(new UserActions.ActionItem(R.id.acComplain, this));
             actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
             UserActions userActions = new UserActions(chatActions, actions);
-            TextView bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
+            TextView bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.bookmark_action_text);
             RelativeLayout blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
-            ((TextView) blockView.findViewById(R.id.blockTV)).setText(user.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
+            ((TextView) blockView.findViewById(R.id.block_action_text)).setText(user.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
             // ставим значок онлайн в нужное состояние
             if (mUserOnlineListener != null) {
@@ -728,7 +733,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 }
                 break;
             case R.id.btnChatAdd:
-                toggleAddPanel();
+                if (mIsKeyboardOpened) {
+                    toggleAddPanel(true, true);
+                } else {
+                    toggleAddPanel();
+                }
                 closeChatActions();
                 EasyTracker.getTracker().sendEvent("Chat", "AdditionalClick", "", 1L);
                 break;
@@ -758,7 +767,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             case R.id.acBlock:
                 if (CacheProfile.premium) {
                     if (mUserId > 0) {
-                        final TextView textView = (TextView) v.findViewById(R.id.blockTV);
+                        final TextView textView = (TextView) v.findViewById(R.id.block_action_text);
                         final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
                         final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
 
@@ -803,7 +812,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 }
                 break;
             case R.id.acBookmark:
-                final TextView textView = (TextView) v.findViewById(R.id.favTV);
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
                 final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
 
@@ -958,15 +966,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void toggleAddPanel() {
-        toggleAddPanel(!mIsAddPanelOpened);
+        toggleAddPanel(!mIsAddPanelOpened, false);
     }
 
     private void toggleAddPanel(boolean open) {
+        toggleAddPanel(open, false);
+    }
+
+    private void toggleAddPanel(boolean open, boolean instant) {
         if (mIsAddPanelOpened == open) return;
         if (open) {
             Utils.hideSoftKeyboard(getActivity(), mEditBox);
+            mIsKeyboardOpened = false;
         }
-        mSwapControl.snapToScreen(!open ? 0 : 1);
+        mSwapControl.snapToScreen(!open ? 0 : 1, instant);
         mBtnChatAdd.setSelected(open);
         mIsAddPanelOpened = open;
     }

@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.topface.billing.BillingFragment;
+import com.topface.billing.BillingType;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -26,6 +29,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -208,9 +212,7 @@ public class BuyingFragment extends PaymentwallBuyingFragment {
             return;
         }
         boolean coinsMaskedExperiment = CacheProfile.getOptions().forceCoinsSubscriptions;
-        List<BuyButton> coinsProducts = coinsMaskedExperiment &&
-                !products.info.coinsSubscriptionMasked.status.isActive() ?
-                products.coinsSubscriptionsMasked : products.coins;
+        List<BuyButton> coinsProducts = getCoinsProducts(products, coinsMaskedExperiment);
         root.findViewById(R.id.coins_title).setVisibility(
                 coinsProducts.isEmpty() ? View.GONE : View.VISIBLE
         );
@@ -238,6 +240,14 @@ public class BuyingFragment extends PaymentwallBuyingFragment {
             }
         }
         coinsButtonsContainer.requestLayout();
+    }
+
+    private LinkedList<BuyButton> getCoinsProducts(@NotNull GooglePlayProducts products, boolean coinsMaskedExperiment) {
+        boolean hasMaskedCoinsSubs = products.info != null
+                && products.info.coinsSubscriptionMasked != null
+                && products.info.coinsSubscriptionMasked.status != null
+                && products.info.coinsSubscriptionMasked.status.isActive();
+        return coinsMaskedExperiment && !hasMaskedCoinsSubs ? products.coinsSubscriptionsMasked : products.coins;
     }
 
     private View getCoinsSubscriptionsButton(Products products, LinearLayout coinsButtons) {

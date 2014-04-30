@@ -1,4 +1,4 @@
-package com.topface.topface.ui;
+package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,10 +13,8 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;

@@ -2,7 +2,6 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 
@@ -101,7 +100,10 @@ public abstract class AbstractConfig {
      * Sets default data for concrete field
      */
     protected void resetSettingsMap(String key) {
-        mSettingsMap.get(key).resetToDefault();
+        SettingsField field = getSettingsMap().get(key);
+        if (field != null) {
+            field.resetToDefault();
+        }
     }
 
     /**
@@ -236,7 +238,7 @@ public abstract class AbstractConfig {
         }
 
         @SuppressWarnings("unchecked")
-         public SettingsField<Double> addDoubleField(String fieldName, Double defaultValue) {
+        public SettingsField<Double> addDoubleField(String fieldName, Double defaultValue) {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
 
