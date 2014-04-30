@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="vertical"
@@ -26,16 +26,16 @@
                     android:text="@string/default_balance_constant"
                     android:layout_marginBottom="10dp"
                     android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
-                    android:id="@+id/fbCurCoins"
-                    stv:maxChars="5"
-                    stv:charPadding="7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    stv:fontSize="24"
-                    stv:image="@drawable/ic_coins" />
+                                                               android:id="@+id/fbCurCoins"
+                                                               stv:maxChars="5"
+                                                               stv:charPadding="7"
+                                                               android:layout_width="wrap_content"
+                                                               android:layout_height="wrap_content"
+                                                               stv:fontSize="24"
+                                                               stv:image="@drawable/ic_coins"/>
             </LinearLayout>
 
             <LinearLayout
@@ -46,13 +46,13 @@
                 android:layout_alignParentBottom="true">
 
                 <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
-                    android:id="@+id/fbCurLikes"
-                    stv:maxChars="5"
-                    stv:charPadding="7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    stv:fontSize="24"
-                    stv:image="@drawable/ic_sympathy" />
+                                                               android:id="@+id/fbCurLikes"
+                                                               stv:maxChars="5"
+                                                               stv:charPadding="7"
+                                                               android:layout_width="wrap_content"
+                                                               android:layout_height="wrap_content"
+                                                               stv:fontSize="24"
+                                                               stv:image="@drawable/ic_sympathy"/>
             </LinearLayout>
         </RelativeLayout>
 
@@ -71,13 +71,13 @@
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:singleLine="false"
-            android:clickable="false" />
+            android:clickable="false"/>
 
         <ViewStub
             android:id="@+id/EditorTestStub"
             android:layout="@layout/fragment_buy_editor"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 style="@style/TitleWhiteText"
                 android:text="@string/general_buying_disabled"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/likes_title"
@@ -102,13 +102,13 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="2dp"
                 android:text="@string/buying_sympathies"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <LinearLayout
                 android:id="@+id/fbLikes"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical"/>
 
             <!-- Money -->
             <TextView
@@ -118,14 +118,14 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="2dp"
                 android:text="@string/buying_money"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <LinearLayout
                 android:id="@+id/fbCoins"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="10dp"/>
 
 
             <ViewStub

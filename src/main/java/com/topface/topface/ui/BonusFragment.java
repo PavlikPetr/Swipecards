@@ -95,7 +95,7 @@ public class BonusFragment extends BaseFragment {
      * Creates button specified by offer object: styled and with appropriate click listener
      *
      * @param activity current context
-     * @param offer offer from Options
+     * @param offer    offer from Options
      * @return button obj
      */
     private static Button createButton(final Activity activity, final Options.Offerwalls.Offer offer) {
