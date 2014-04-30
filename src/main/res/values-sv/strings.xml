@@ -224,6 +224,7 @@
     <string name="settings_melody">Notifikationsmelodi</string>
     <string name="edit_refresh_status">Förnya status</string>
     <string name="ban_title">Grattis! Du har bannlysts!</string>
+    <string name="ban_complain">Klaga på bannlysning</string>
     <string name="general_ready">Klart</string>
     <string name="profile_deleted_user">Användaren raderats</string>
     <string name="filter_main_parameters">Jag är intresserad</string>
@@ -486,6 +487,7 @@
     <string name="general_type_complain">Klagomålets rubrik</string>
     <string name="confirm_email_for_dating">VI är emot spam. Bekräfta din epost-adress för att dejta på Topface!</string>
     <string name="confirm">Bekräfta</string>
+    <string name="send_confirm_link">Skicka länken för bekräftelse</string>
     <string name="complain_type_swearing_msg">Grovheter, hot, svordomar</string>
     <string name="general_bookmarks_is_deleted">Användaren har raderats från favoriter</string>
     <string name="general_blacklist_is_deleted">Användaren har raderats från svartlistan.</string>
@@ -626,4 +628,7 @@
     <string name="press_back_more_to_close_app">Tryck på knappen en gång till för att lägga ut från Topface</string>
     <string name="waiting_for_load">Väntar på uppladdningen…</string>
     <string name="loading_photo_percent">%d%% foto laddas</string>
+    <string name="user_does_not_exist">Användaren ej hittats</string>
+    <string name="feedback_subject_ban">Klaga på orättvis bannlysning</string>
+    <string name="settings_led">LED notifikation</string>
 </resources>

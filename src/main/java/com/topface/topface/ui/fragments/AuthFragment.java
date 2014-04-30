@@ -45,6 +45,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AuthButtonsController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -718,6 +719,7 @@ public class AuthFragment extends BaseFragment {
             }
             AuthToken token = AuthToken.getInstance();
             token.saveToken(emailLogin, emailLogin, password);
+            Settings.getInstance().setSocialAccountEmail(emailLogin);
             auth(token);
         }
     }

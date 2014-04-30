@@ -2,7 +2,6 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
@@ -21,15 +20,20 @@ public class AppConfig extends AbstractConfig {
 
     public static final String BASE_CONFIG_SETTINGS = "base_config_settings";
     public static final String DATA_API_URL = "data_api_url";
-    private static final String DATA_API_REVISION = "data_api_revision";
     public static final String DATA_AUTH_VK_API = "data_auth_vk_api";
     public static final String DATA_AUTH_FB_API = "data_auth_fb_api";
+    public static final String FLOOD_ENDS_TIME = "flood_ens_time";
+    private static final String DATA_API_REVISION = "data_api_revision";
     private static final String DATA_EDITOR_MODE = "data_editor_mode";
     private static final String DATA_DEBUG_MODE = "data_debug_mode";
     private static final String DATA_APP_CONFIG_VERSION = "data_app_config_version";
     private static final String DATA_API_VERSION = "data_api_version";
-    public static final String FLOOD_ENDS_TIME = "flood_ens_time";
     private static final String DATA_TEST_NETWORK = "data_test_network_mode";
+    private static final String DATA_APP_OPTIONS = "data_app_options";
+
+    public AppConfig(Context context) {
+        super(context);
+    }
 
     @Override
     protected void fillSettingsMap(SettingsMap settingsMap) {
@@ -51,10 +55,8 @@ public class AppConfig extends AbstractConfig {
         settingsMap.addLongField(FLOOD_ENDS_TIME, 0l);
         // flag for test mode for network errors
         settingsMap.addBooleanField(DATA_TEST_NETWORK, false);
-    }
-
-    public AppConfig(Context context) {
-        super(context);
+        // app options
+        settingsMap.addStringField(DATA_APP_OPTIONS, Static.EMPTY);
     }
 
     protected SharedPreferences getPreferences() {
@@ -92,18 +94,6 @@ public class AppConfig extends AbstractConfig {
     /**
      * Debug mode from Debug class
      *
-     * @param mode {@link com.topface.topface.utils.Debug#MODE_DEBUG},
-     *             {@link com.topface.topface.utils.Debug#MODE_EDITOR},
-     *             {@link com.topface.topface.utils.Debug#MODE_ALWAYS},
-     *             {@link com.topface.topface.utils.Debug#MODE_DISABLE}
-     */
-    public void setDebugMode(int mode) {
-        getSettingsMap().setField(DATA_DEBUG_MODE, mode);
-    }
-
-    /**
-     * Debug mode from Debug class
-     *
      * @return mode: {@link com.topface.topface.utils.Debug#MODE_DEBUG},
      * {@link com.topface.topface.utils.Debug#MODE_EDITOR},
      * {@link com.topface.topface.utils.Debug#MODE_ALWAYS},
@@ -114,14 +104,15 @@ public class AppConfig extends AbstractConfig {
     }
 
     /**
-     * Editor mode from Editor class
+     * Debug mode from Debug class
      *
-     * @param mode {@link com.topface.topface.utils.Editor#MODE_USER_FIELD},
-     *             {@link com.topface.topface.utils.Editor#MODE_EDITOR},
-     *             {@link com.topface.topface.utils.Editor#MODE_NOT_EDITOR}
+     * @param mode {@link com.topface.topface.utils.Debug#MODE_DEBUG},
+     *             {@link com.topface.topface.utils.Debug#MODE_EDITOR},
+     *             {@link com.topface.topface.utils.Debug#MODE_ALWAYS},
+     *             {@link com.topface.topface.utils.Debug#MODE_DISABLE}
      */
-    public void setEditorMode(int mode) {
-        getSettingsMap().setField(DATA_EDITOR_MODE, mode);
+    public void setDebugMode(int mode) {
+        getSettingsMap().setField(DATA_DEBUG_MODE, mode);
     }
 
     /**
@@ -133,6 +124,17 @@ public class AppConfig extends AbstractConfig {
      */
     public int getEditorMode() {
         return getSettingsMap().getIntegerField(DATA_EDITOR_MODE);
+    }
+
+    /**
+     * Editor mode from Editor class
+     *
+     * @param mode {@link com.topface.topface.utils.Editor#MODE_USER_FIELD},
+     *             {@link com.topface.topface.utils.Editor#MODE_EDITOR},
+     *             {@link com.topface.topface.utils.Editor#MODE_NOT_EDITOR}
+     */
+    public void setEditorMode(int mode) {
+        getSettingsMap().setField(DATA_EDITOR_MODE, mode);
     }
 
     /**
@@ -165,19 +167,19 @@ public class AppConfig extends AbstractConfig {
     /**
      * Network errors mode
      *
-     * @param value true if need opportunity to switch network errors on and off
+     * @return true if network errors mode switched on
      */
-    public void setTestNetwork(boolean value) {
-        getSettingsMap().setField(DATA_TEST_NETWORK, value);
+    public boolean getTestNetwork() {
+        return getSettingsMap().getBooleanField(DATA_TEST_NETWORK);
     }
 
     /**
      * Network errors mode
      *
-     * @return true if network errors mode switched on
+     * @param value true if need opportunity to switch network errors on and off
      */
-    public boolean getTestNetwork() {
-        return getSettingsMap().getBooleanField(DATA_TEST_NETWORK);
+    public void setTestNetwork(boolean value) {
+        getSettingsMap().setField(DATA_TEST_NETWORK, value);
     }
 
     /**
@@ -204,6 +206,24 @@ public class AppConfig extends AbstractConfig {
         return settingsMap.getStringField(DATA_API_URL) + "?v=" + settingsMap.getIntegerField(DATA_API_VERSION);
     }
 
+    /**
+     * App options
+     *
+     * @return json data
+     */
+    public String getAppOptions() {
+        return getSettingsMap().getStringField(DATA_APP_OPTIONS);
+    }
+
+    /**
+     * Sets app options
+     *
+     * @param value json
+     */
+    public void setAppOptions(String value) {
+        getSettingsMap().setField(DATA_APP_OPTIONS, value);
+    }
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder(super.toString());
@@ -212,5 +232,9 @@ public class AppConfig extends AbstractConfig {
             result.append(field.key).append(": ").append(field.value).append("\n");
         }
         return result.toString();
+    }
+
+    public void resetAppOptionsData() {
+        resetAndSaveConfig(DATA_APP_OPTIONS);
     }
 }

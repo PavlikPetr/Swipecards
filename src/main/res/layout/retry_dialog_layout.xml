@@ -1,38 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/dl_connection_lost"
-    android:padding="5dp">
-
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
     <RelativeLayout
-        android:id="@+id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true">
+        android:layout_centerInParent="true"
+        android:background="@drawable/dl_connection_lost"
+        android:layout_margin="30dp"
+        android:padding="5dp">
 
-        <ImageView
-            android:id="@+id/sat"
-            android:src="@drawable/satellite"
+        <RelativeLayout
+            android:id="@+id/image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
 
-            />
+            <ImageView
+                android:id="@+id/sat"
+                android:src="@drawable/satellite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-        <ImageView
-            android:src="@drawable/earth"
-            android:layout_width="wrap_content"
+                />
+
+            <ImageView
+                android:src="@drawable/earth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/retryDialogMessage"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:text="@string/general_internet_off"
+            android:layout_below="@id/image" />
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/retryDialogMessage"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:gravity="center"
-        android:text="@string/general_internet_off"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/image" />
 </RelativeLayout>

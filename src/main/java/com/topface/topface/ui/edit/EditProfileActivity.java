@@ -1,11 +1,7 @@
 package com.topface.topface.ui.edit;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -17,12 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-
+import android.widget.*;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -41,7 +32,6 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,18 +55,13 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_edit_profile);
-
         hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
-
         //Navigation bar
         getSupportActionBar().setTitle(R.string.edit_title);
-
         // ListView
         mEditItems = new LinkedList<>();
         initEditItems();
-
         ListView editsListView = (ListView) findViewById(R.id.lvEdits);
-
         // Header
         LayoutInflater inflater = getLayoutInflater();
         ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_header, editsListView, false);
@@ -112,14 +97,12 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             TextView editProfileMsg = (TextView) findViewById(R.id.EditProfileMessage);
             editProfileMsg.setVisibility(View.VISIBLE);
         }
-
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 updateViews();
             }
         };
-
     }
 
     @Override
@@ -266,13 +249,15 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                                 public void success(IApiResponse response) {
                                     CacheProfile.city = city;
                                     CacheProfile.sendUpdateProfileBroadcast();
+                                    mEditCity.setText(city.name);
                                 }
 
                                 @Override
                                 public void fail(int codeError, IApiResponse response) {
+                                    Toast toast = Toast.makeText(EditProfileActivity.this, R.string.profile_update_error, Toast.LENGTH_SHORT);
+                                    toast.show();
                                 }
                             }).exec();
-                            mEditCity.setText(city.name);
                         }
                     } catch (JSONException e) {
                         Debug.error(e);
@@ -282,6 +267,19 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onPreFinish() {
+        if (CacheProfile.city != null) {
+            if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
+                Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
+                intent.putExtra(GCMUtils.NEXT_INTENT, FragmentId.F_VIP_PROFILE);
+                SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                preferences.edit().putBoolean(Static.PREFERENCES_NEED_EDIT, false).commit();
+                startActivity(intent);
+            }
+        }
     }
 
     class EditsAdapter extends BaseAdapter {
@@ -448,7 +446,8 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         public Drawable getIcon() {
             Bitmap original = BitmapFactory.decodeResource(getResources(),
                     ProfileBackgrounds.getBackgroundResource(getApplicationContext(),
-                            CacheProfile.background_id));
+                            CacheProfile.background_id)
+            );
             Drawable icon = getResources().getDrawable(R.drawable.edit_icon_photo);
             if (icon != null) {
                 int w = icon.getIntrinsicWidth();
@@ -573,19 +572,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         public EditProfileItem setText(int resId) {
             mTitle = getResources().getString(resId);
             return this;
-        }
-    }
-
-    @Override
-    protected void onPreFinish() {
-        if (CacheProfile.city != null) {
-            if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
-                Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
-                intent.putExtra(GCMUtils.NEXT_INTENT, FragmentId.F_VIP_PROFILE);
-                SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                preferences.edit().putBoolean(Static.PREFERENCES_NEED_EDIT, false).commit();
-                startActivity(intent);
-            }
         }
     }
 }

@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -44,7 +43,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private BroadcastReceiver mReauthReceiver;
-    protected boolean mNeedAnimate = true;
+    private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private StartActionsController mStartActionsController;
 
@@ -114,6 +113,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         if (mNeedAnimate) {
             overridePendingTransition(com.topface.topface.R.anim.slide_in_from_right, com.topface.topface.R.anim.slide_out_left);
         }
+    }
+
+    protected void setNeedTransitionAnimation(boolean needAnimate) {
+        mNeedAnimate = needAnimate;
     }
 
     private void checkProfileLoad() {
@@ -272,6 +275,14 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
         }
         super.startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (mNeedAnimate) {
+            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
+        }
     }
 
     protected boolean isNeedBroughtToFront(Intent intent) {

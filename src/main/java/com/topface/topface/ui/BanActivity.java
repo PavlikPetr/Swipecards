@@ -1,9 +1,12 @@
 package com.topface.topface.ui;
 
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,12 +48,32 @@ public class BanActivity extends TrackedFragmentActivity implements View.OnClick
     // variables for Restore process
     private AuthToken.TokenInfo mLocalTokenInfo;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
+    private boolean mIndeterminateSupported = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setWindowOptions();
         setContentView(R.layout.ban);
         initViews();
+    }
+
+    private void setWindowOptions() {
+        // supportRequestWindowFeature() вызывать только до setContent(),
+        // метод setSupportProgressBarIndeterminateVisibility(boolean) вызывать строго после setContent();
+        mIndeterminateSupported = supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        // для корректного отображения картинок
+        getWindow().setFormat(PixelFormat.RGBA_8888);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
+    }
+
+    @Override
+    public void setSupportProgressBarIndeterminateVisibility(boolean visible) {
+        if (mIndeterminateSupported) {
+            if (getSupportActionBar() != null) {
+                super.setSupportProgressBarIndeterminateVisibility(visible);
+            }
+        }
     }
 
     private void initViews() {

@@ -83,7 +83,6 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
-
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -109,17 +108,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
-    private static final int COMPLAIN_BUTTON = 2;
-    private static final int DELETE_BUTTON = 1;
-    private static final int COPY_BUTTON = 0;
-
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
-            mUser.bookmarked = isBookmarked;
-            if (chatActions != null) {
-                ((TextView)chatActions.findViewById(R.id.acBookmark).findViewById(R.id.favTV)).setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
+            boolean isChanged = intent.getBooleanExtra(ContainerActivity.CHANGED, false);
+            if (chatActions != null && type != null) {
+                switch (type) {
+                    case BLACK_LIST:
+                        mUser.blocked = isChanged;
+                        ((TextView) chatActions.findViewById(R.id.block_action_text))
+                                .setText(isChanged ? R.string.black_list_delete : R.string.black_list_add_short);
+                        break;
+                    case BOOKMARK:
+                        mUser.bookmarked = isChanged;
+                        ((TextView) chatActions.findViewById(R.id.bookmark_action_text))
+                                .setText(isChanged ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                        break;
+                }
             }
         }
     };
@@ -152,7 +158,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private SwapControl mSwapControl;
     private Button mAddToBlackList;
     private ImageButton mBtnChatAdd;
-    private String[] editButtonsNames;
     private String mItemId;
     private boolean wasFailed = false;
     TimerTask mUpdaterTask = new TimerTask() {
@@ -172,7 +177,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private boolean isInBlackList = false;
     // Managers
     private RelativeLayout mLockScreen;
-    private String[] editButtonsSelfNames;
     private ViewGroup chatActions;
     private String mUserName;
     private int mUserAge;
@@ -242,8 +246,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
         // Navigation bar
         initNavigationbar(mUserName, mUserAge, mUserCity);
-        editButtonsNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title), getString(R.string.general_complain)};
-        editButtonsSelfNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title)};
         // Swap Control
         initAddPanel(root);
         // Edit Box
@@ -271,7 +273,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
         //регистрируем здесь, потому что может быть такая ситуация, что обновить надо, когда активити находится не на топе стека
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BookmarkAddRequest.UPDATE_BOOKMARKED));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
         return root;
     }
 
@@ -367,28 +369,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             public void onLongClick(final int position, final View v) {
 
                 History item = mAdapter.getItem(position);
+                final EditButtonsAdapter editAdapter = new EditButtonsAdapter(getActivity(), item);
                 if (item == null) return;
-                String[] buttons;
-                if (item.target == 0) {
-                    buttons = editButtonsSelfNames;
-                } else {
-                    buttons = editButtonsNames;
-                }
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.general_spinner_title)
-                        .setItems(buttons, new DialogInterface.OnClickListener() {
+                        .setAdapter(editAdapter, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case DELETE_BUTTON:
+                                switch ((int) editAdapter.getItemId(which)) {
+                                    case EditButtonsAdapter.ITEM_DELETE:
                                         deleteItem(position);
                                         EasyTracker.getTracker().sendEvent("Chat", "DeleteItem", "", 1L);
                                         break;
-                                    case COPY_BUTTON:
+                                    case EditButtonsAdapter.ITEM_COPY:
                                         mAdapter.copyText(((TextView) v).getText().toString());
                                         EasyTracker.getTracker().sendEvent("Chat", "CopyItemText", "", 1L);
                                         break;
-                                    case COMPLAIN_BUTTON:
+                                    case EditButtonsAdapter.ITEM_COMPLAINT:
                                         startActivity(ContainerActivity.getComplainIntent(mUserId, mAdapter.getItem(position).id));
                                         EasyTracker.getTracker().sendEvent("Chat", "ComplainItemText", "", 1L);
                                         break;
@@ -641,9 +638,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             actions.add(new UserActions.ActionItem(R.id.acComplain, this));
             actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
             UserActions userActions = new UserActions(chatActions, actions);
-            TextView bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
+            TextView bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.bookmark_action_text);
             RelativeLayout blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
-            ((TextView) blockView.findViewById(R.id.blockTV)).setText(user.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
+            ((TextView) blockView.findViewById(R.id.block_action_text)).setText(user.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
             // ставим значок онлайн в нужное состояние
             if (mUserOnlineListener != null) {
@@ -770,7 +767,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             case R.id.acBlock:
                 if (CacheProfile.premium) {
                     if (mUserId > 0) {
-                        final TextView textView = (TextView) v.findViewById(R.id.blockTV);
+                        final TextView textView = (TextView) v.findViewById(R.id.block_action_text);
                         final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
                         final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
 
@@ -789,7 +786,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                 if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
-                                    mUser.blocked = !mUser.blocked;
+                                    Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BLACK_LIST, !mUser.blocked);
+                                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                                     if (mUser.blocked) {
                                         textView.setText(R.string.black_list_delete);
                                     } else {
@@ -814,7 +812,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 }
                 break;
             case R.id.acBookmark:
-                final TextView textView = (TextView) v.findViewById(R.id.favTV);
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
                 final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
 
@@ -832,8 +829,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void success(IApiResponse response) {
                         super.success(response);
-                        Intent intent = new Intent(BookmarkAddRequest.UPDATE_BOOKMARKED);
-                        intent.putExtra("bookmarked", !mUser.bookmarked);
+                        Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BOOKMARK, !mUser.bookmarked);
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                         loader.setVisibility(View.INVISIBLE);
                         icon.setVisibility(View.VISIBLE);
@@ -925,6 +921,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
         } else {
+            update(true, "resume update");
             mAdapter.notifyDataSetChanged();
         }
 

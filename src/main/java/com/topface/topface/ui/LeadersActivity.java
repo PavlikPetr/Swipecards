@@ -4,23 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.AlbumRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.LeaderRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -31,7 +22,7 @@ import com.topface.topface.utils.Utils;
 import java.util.LinkedList;
 
 public class LeadersActivity extends BaseFragmentActivity {
-    private com.topface.topface.ui.gridlayout.GridLayout mGridView;
+    private GridLayout mGridView;
     private GridLayout mUselessGridView;
     private View mLoadingLocker;
     private PhotoSelector mSelectedPhoto = new PhotoSelector();
@@ -58,19 +49,17 @@ public class LeadersActivity extends BaseFragmentActivity {
         uselessPhotos = new Photos();
 
 //        mProgressBar = (ProgressBar) findViewById(R.id.loader);
-        mGridView = (GridLayout) findViewById(R.id.usedGrid);
-        mUselessGridView = (GridLayout) findViewById(R.id.unusedGrid);
+        mGridView = (GridLayout) findViewById(R.id.useful_photos_grid);
+        mUselessGridView = (GridLayout) findViewById(R.id.useless_photos_grid);
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
         mLoadingLocker = findViewById(R.id.llvLeaderSending);
-        mUselessTitle = (TextView) findViewById(R.id.unusedTitle);
+        mUselessTitle = (TextView) findViewById(R.id.useless_photos_title_text);
         mUselessTitle.setText(String.format(getString(R.string.leaders_pick_condition), CacheProfile.getOptions().minLeadersPercent));
         if (CacheProfile.getOptions().minLeadersPercent == 0) {
             mUselessTitle.setVisibility(View.GONE);
         } else {
             mUselessTitle.setVisibility(View.VISIBLE);
         }
-
-
         setListeners();
         getProfile();
         setPrice();
@@ -247,7 +236,6 @@ public class LeadersActivity extends BaseFragmentActivity {
                     mItem = item;
                     mPhotoId = photo.getId();
                 }
-
             }
         }
 

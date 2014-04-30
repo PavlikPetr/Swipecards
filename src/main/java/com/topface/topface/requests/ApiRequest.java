@@ -4,21 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.WindowManager;
-
-import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
-import com.topface.topface.RetryDialog;
-import com.topface.topface.Ssid;
-import com.topface.topface.Static;
+import com.topface.topface.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.RequestConnectionListener;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -77,7 +71,7 @@ public abstract class ApiRequest implements IApiRequest {
         handler.setNeedCounters(isNeedCounters);
 
         if (context != null && context instanceof Activity && !App.isOnline() && doNeedAlert) {
-            RetryDialog retryDialog = new RetryDialog(context, this);
+            RetryDialog retryDialog = new RetryDialog(context.getString(R.string.general_internet_off), context, this);
             if (handler != null) {
                 Message msg = new Message();
                 msg.obj = new ApiResponse(ErrorCodes.ERRORS_PROCCESED, "App is offline");
@@ -85,12 +79,6 @@ public abstract class ApiRequest implements IApiRequest {
             }
             try {
                 retryDialog.show();
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-
-                lp.copyFrom(retryDialog.getWindow().getAttributes());
-                lp.width = 300;
-                lp.height = 300;
-                retryDialog.getWindow().setAttributes(lp);
             } catch (Exception e) {
                 Debug.error(e);
             }
@@ -290,10 +278,13 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     final public IApiResponse sendRequestAndReadResponse() throws Exception {
+        RequestConnectionListener listener = new RequestConnectionListener(getServiceName());
         int responseCode = -1;
         IApiResponse response;
         mApiUrl = getApiUrl();
+        listener.onConnectionStarted();
         HttpURLConnection connection = getConnection();
+        listener.onConnectionEstablished();
         if (connection != null) {
             //Непосредственно пишим данные в подключение
             if (writeData(connection)) {
@@ -309,6 +300,7 @@ public abstract class ApiRequest implements IApiRequest {
         if (HttpUtils.isCorrectResponseCode(responseCode)) {
             //Если код ответа верный, то читаем данные из потока и создаем IApiResponse
             response = readResponse();
+            listener.onConnectionClose();
         } else {
             //Если не верный, то конструируем соответсвующий ответ
             response = constructApiResponse(ErrorCodes.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);

@@ -10,18 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.requests.AlbumRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.PhotoDeleteRequest;
-import com.topface.topface.requests.PhotoMainRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
@@ -261,9 +255,10 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void setCounter(int position) {
+        int photosLinksSize = mPhotoLinks.size();
         if (mPhotoLinks != null) {
-            mCurrentPosition = position;
-            mCounter.setText((mCurrentPosition + 1) + "/" + mPhotoLinks.size());
+            mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
+            mCounter.setText((mCurrentPosition + 1) + "/" + photosLinksSize);
         }
     }
 

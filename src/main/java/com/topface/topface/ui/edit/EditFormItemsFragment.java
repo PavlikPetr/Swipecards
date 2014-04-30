@@ -25,17 +25,28 @@ import com.topface.topface.utils.FormItem;
 
 public class EditFormItemsFragment extends AbstractEditFragment {
 
-    private static int mTitleId;
-    private static int mDataId;
     private static final String ARG_TAG_TITLE_ID = "title_id";
     private static final String ARG_TAG_DATA_ID = "data_id";
     private static final String ARG_TAG_DATA = "data";
+    private static int mTitleId;
+    private static int mDataId;
+    private static int mSeletedDataId;
     private String mData;
     private FormInfo mFormInfo;
-    private static int mSeletedDataId;
-
     private ListView mListView;
     private FormCheckingDataAdapter mAdapter;
+
+    public static EditFormItemsFragment newInstance(int titleId, int dataId, String data) {
+        EditFormItemsFragment fragment = new EditFormItemsFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_TAG_TITLE_ID, titleId);
+        args.putInt(ARG_TAG_DATA_ID, dataId);
+        args.putString(ARG_TAG_DATA, data);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -111,12 +122,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
                         @Override
                         public void fail(int codeError, IApiResponse response) {
-                            Activity activity = getActivity();
-                            if (activity != null) {
-                                getActivity().setResult(Activity.RESULT_CANCELED);
-                                finishRequestSend();
-                                handler.sendEmptyMessage(0);
-                            }
+                            warnEditingFailed(handler);
                         }
                     }).exec();
                     break;
@@ -130,6 +136,28 @@ public class EditFormItemsFragment extends AbstractEditFragment {
     @Override
     public boolean hasChanges() {
         return mDataId != mSeletedDataId;
+    }
+
+    @Override
+    protected void lockUi() {
+        mListView.setEnabled(false);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void unlockUi() {
+        mListView.setEnabled(true);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.edit_title);
+    }
+
+    @Override
+    protected String getSubtitle() {
+        return mFormInfo.getFormTitle(mTitleId);
     }
 
     private class FormCheckingDataAdapter extends BaseAdapter {
@@ -215,7 +243,6 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                 }
             });
 
-            convertView.setEnabled(mListView.isEnabled());
             return convertView;
         }
 
@@ -224,38 +251,5 @@ public class EditFormItemsFragment extends AbstractEditFragment {
             ImageView mBackground;
             ImageView mCheck;
         }
-    }
-
-    @Override
-    protected void lockUi() {
-        mListView.setEnabled(false);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    protected void unlockUi() {
-        mListView.setEnabled(true);
-    }
-
-    public static EditFormItemsFragment newInstance(int titleId, int dataId, String data) {
-        EditFormItemsFragment fragment = new EditFormItemsFragment();
-
-        Bundle args = new Bundle();
-        args.putInt(ARG_TAG_TITLE_ID, titleId);
-        args.putInt(ARG_TAG_DATA_ID, dataId);
-        args.putString(ARG_TAG_DATA, data);
-        fragment.setArguments(args);
-
-        return fragment;
-    }
-
-    @Override
-    protected String getTitle() {
-        return getString(R.string.edit_title);
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return mFormInfo.getFormTitle(mTitleId);
     }
 }

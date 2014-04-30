@@ -10,18 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-
 import com.google.ads.Ad;
 import com.google.ads.AdListener;
 import com.google.ads.AdRequest;
 import com.google.ads.InterstitialAd;
 import com.ivengo.adv.AdvListener;
 import com.ivengo.adv.AdvView;
-import com.lifestreet.android.lsmsdk.BannerAdapter;
-import com.lifestreet.android.lsmsdk.BasicSlotListener;
-import com.lifestreet.android.lsmsdk.InterstitialAdapter;
-import com.lifestreet.android.lsmsdk.InterstitialSlot;
-import com.lifestreet.android.lsmsdk.SlotView;
+import com.lifestreet.android.lsmsdk.*;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubInterstitial;
 import com.topface.topface.App;
@@ -43,20 +38,20 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
 import ru.ideast.adwired.events.OnStopListener;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  */
 public class FullscreenController {
 
+    private static final String TAG = "FullscreenController";
     public static final String URL_SEPARATOR = "::";
     private static final String MOPUB_INTERSTITIAL_ID = "00db7208a90811e281c11231392559e4";
     private static final String IVENGO_APP_ID = "aggeas97392g";
@@ -169,6 +164,8 @@ public class FullscreenController {
         final InterstitialAd interstitial = new InterstitialAd(mActivity, adUnitId);
         // Создание запроса объявления.
         AdRequest adRequest = new AdRequest();
+        adRequest.setGender(CacheProfile.getProfile().sex == Static.BOY ? AdRequest.Gender.MALE :
+                AdRequest.Gender.FEMALE);
         // Запуск загрузки межстраничного объявления.
         interstitial.loadAd(adRequest);
         // AdListener будет использовать обратные вызовы, указанные ниже.
@@ -177,7 +174,6 @@ public class FullscreenController {
             public void onReceiveAd(Ad ad) {
                 if (ad == interstitial) {
                     interstitial.show();
-                    isFullScreenBannerVisible = true;
                     addLastFullscreenShowedTime();
                 }
             }
@@ -189,6 +185,7 @@ public class FullscreenController {
 
             @Override
             public void onPresentScreen(Ad ad) {
+                isFullScreenBannerVisible = true;
             }
 
             @Override
@@ -382,25 +379,27 @@ public class FullscreenController {
     }
 
     public void hideFullscreenBanner(final ViewGroup bannerContainer) {
-        Animation animation = AnimationUtils.loadAnimation(App.getContext(), android.R.anim.fade_out);
-        if (animation != null) {
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
+        if (bannerContainer != null) {
+            Animation animation = AnimationUtils.loadAnimation(App.getContext(), android.R.anim.fade_out);
+            if (animation != null) {
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    bannerContainer.setVisibility(View.GONE);
-                }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        bannerContainer.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
-            bannerContainer.startAnimation(animation);
-        } else {
-            bannerContainer.setVisibility(View.GONE);
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
+                bannerContainer.startAnimation(animation);
+            } else {
+                bannerContainer.setVisibility(View.GONE);
+            }
         }
         isFullScreenBannerVisible = false;
     }
@@ -441,7 +440,7 @@ public class FullscreenController {
 
             @Override
             public void callInBackground() {
-                // no actions in background
+                Debug.log(TAG, startPage.banner);
             }
 
             @Override

@@ -12,21 +12,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
+import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
@@ -36,12 +24,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.imageloader.DefaultImageLoader;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackListAddRequest;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.DeleteAbstractRequest;
-import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
@@ -59,7 +42,6 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
-
 import org.json.JSONObject;
 
 import java.util.List;
@@ -163,6 +145,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (getListAdapter().isNeedUpdate() || needUpdate) {
             updateData(false, true);
         }
+        getListAdapter().loadOlderItems();
         if (mFloatBlock != null) {
             mFloatBlock.onResume();
         }
@@ -337,7 +320,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
                 @Override
                 public void onSelected(int size) {
-                    mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
+                    if (mActionMode != null) {
+                        mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
+                    }
                 }
             });
             adapter.notifyDataSetChanged();
@@ -482,6 +467,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
+        needUpdate = false;
         mIsUpdating = true;
         onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
 
@@ -520,6 +506,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
 
             @Override
+            public void always(IApiResponse response) {
+                super.always(response);
+                mIsUpdating = false;
+            }
+
+            @Override
             protected boolean isShowPremiumError() {
                 return !isForPremium();
             }
@@ -540,7 +532,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
             onUpdateFail(isPullToRefreshUpdating || isHistoryLoad);
             mListView.onRefreshComplete();
-            mIsUpdating = false;
         }
     }
 
@@ -566,7 +557,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
         mListView.onRefreshComplete();
         mListView.setVisibility(View.VISIBLE);
-        mIsUpdating = false;
     }
 
     protected boolean isForPremium() {
@@ -792,7 +782,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (!lastMethod.equals(CountersManager.NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
             int counters = CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters());
             if (counters > 0) {
-                needUpdate = false;
                 updateData(true, false);
             }
         }

@@ -10,40 +10,15 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.FeedGift;
-import com.topface.topface.data.Gift;
-import com.topface.topface.data.Profile;
-import com.topface.topface.data.SendGiftAnswer;
-import com.topface.topface.data.User;
-import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackListAddRequest;
-import com.topface.topface.requests.BookmarkAddRequest;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.DeleteBlackListRequest;
-import com.topface.topface.requests.DeleteBookmarksRequest;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.SendGiftRequest;
-import com.topface.topface.requests.SendLikeRequest;
-import com.topface.topface.requests.UserRequest;
+import com.topface.topface.data.*;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
@@ -68,14 +43,21 @@ import java.util.ArrayList;
  * Profile fragment to view profile with ui for interactions with another profile
  */
 public class UserProfileFragment extends AbstractProfileFragment implements View.OnClickListener {
+
+
     private static final String ARG_TAG_PROFILE_ID = "profile_id";
     private int mProfileId;
+    private int mLastLoadedProfileId;
     private String mItemId;
     // views
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
     private View mLoaderView;
     private TextView mBookmarkAction;
+    private RelativeLayout mSympathy;
+    private TextView mSympathyText;
+    private RelativeLayout mDelight;
+    private TextView mDelightText;
     private LinearLayout mUserActions;
     private ProgressBar mGiftsLoader;
     private ImageView mGiftsIcon;
@@ -97,12 +79,23 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean isBookmarked = intent.getBooleanExtra("bookmarked", false);
+            ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
+            boolean isChanged = intent.getBooleanExtra(ContainerActivity.CHANGED, false);
             Profile profile = getProfile();
-            if (profile != null) {
-                ((User) profile).bookmarked = isBookmarked;
-                if (mBookmarkAction != null) {
-                    mBookmarkAction.setText(isBookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            if (profile != null && type != null) {
+                switch (type) {
+                    case BLACK_LIST:
+                        ((User) profile).inBlackList = isChanged;
+                        if (mBlocked != null) {
+                            ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(isChanged ? R.string.black_list_delete : R.string.black_list_add_short);
+                        }
+                        break;
+                    case BOOKMARK:
+                        ((User) profile).bookmarked = isChanged;
+                        if (mBookmarkAction != null) {
+                            mBookmarkAction.setText(isChanged ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                        }
+                        break;
                 }
             }
         }
@@ -134,7 +127,11 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         bookmarksLayout.setOnClickListener(this);
         mBlocked = (RelativeLayout) mUserActions.findViewById(R.id.acBlock);
         mUserActions.setVisibility(View.INVISIBLE);
-        mBookmarkAction = (TextView) mUserActions.findViewById(R.id.favTV);
+        mBookmarkAction = (TextView) mUserActions.findViewById(R.id.bookmark_action_text);
+        mSympathy = (RelativeLayout) mUserActions.findViewById(R.id.acSympathy);
+        mSympathyText = (TextView) mSympathy.findViewById(R.id.likeTV);
+        mDelight = (RelativeLayout) mUserActions.findViewById(R.id.acDelight);
+        mDelightText = (TextView) mDelight.findViewById(R.id.delTV);
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         mLockScreen = (RelativeLayout) root.findViewById(R.id.lockScreen);
         mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
@@ -146,7 +143,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         });
         mLockScreen.addView(mRetryView.getView());
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BookmarkAddRequest.UPDATE_BOOKMARKED));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
         return root;
     }
 
@@ -158,7 +155,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
@@ -229,7 +226,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         return getString(R.string.general_profile);
     }
 
+    private boolean isLoaded(int profileId) {
+        return profileId == mLastLoadedProfileId;
+    }
+
     private void getUserProfile(final int profileId) {
+        if (isLoaded(profileId)) return;
         mLoaderView.setVisibility(View.VISIBLE);
         UserRequest userRequest = new UserRequest(profileId, getActivity());
         registerRequest(userRequest);
@@ -250,9 +252,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         mBookmarkAction.setText(App.getContext().getString(R.string.general_bookmarks_add));
                     }
                     if (user.inBlackList) {
-                        ((TextView) mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_delete);
+                        ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(R.string.black_list_delete);
                     } else {
-                        ((TextView) mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_add_short);
+                        ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(R.string.black_list_add_short);
+                    }
+                    if (user.isSympathySent) {
+                        disableSympathyDelight();
                     }
                     setProfile(user);
                     if (mHeaderMainFragment != null) {
@@ -266,6 +271,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         }
                     }
                 }
+                mLastLoadedProfileId = mProfileId;
             }
 
             @Override
@@ -354,23 +360,30 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         mUserActions.startAnimation(ta);
     }
 
+    private void disableSympathyDelight() {
+        mSympathy.setSelected(true);
+        mSympathyText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+        mSympathy.setEnabled(false);
+
+        mDelight.setSelected(true);
+        mDelightText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+        mDelight.setEnabled(false);
+    }
+
     @Override
     public void onClick(final View v) {
         final Profile profile = getProfile();
         switch (v.getId()) {
             case R.id.acDelight:
                 if (v.isEnabled()) {
-                    v.setSelected(true);
-                    final TextView textView = (TextView) v.findViewById(R.id.delTV);
                     final ProgressBar loader = (ProgressBar) v.findViewById(R.id.delPrBar);
                     final ImageView icon = (ImageView) v.findViewById(R.id.delIcon);
 
                     loader.setVisibility(View.VISIBLE);
                     icon.setVisibility(View.GONE);
 
-                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                     v.findViewById(R.id.delPrBar).setVisibility(View.VISIBLE);
-                    v.setEnabled(false);
+                    disableSympathyDelight();
                     mRateController.onAdmiration(
                             profile.uid,
                             ((User) profile).mutual ?
@@ -399,8 +412,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                         }
                                         v.setEnabled(true);
                                         v.setSelected(false);
-                                        if (textView != null) {
-                                            textView.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                        if (mDelightText != null) {
+                                            mDelightText.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
                                         }
                                     }
                                 }
@@ -411,15 +424,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 break;
             case R.id.acSympathy:
                 if (v.isEnabled()) {
-                    v.setSelected(true);
-                    TextView textView = (TextView) v.findViewById(R.id.likeTV);
                     final ProgressBar loader = (ProgressBar) v.findViewById(R.id.likePrBar);
                     final ImageView icon = (ImageView) v.findViewById(R.id.likeIcon);
 
                     loader.setVisibility(View.VISIBLE);
                     icon.setVisibility(View.GONE);
-                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
-                    v.setEnabled(false);
+                    disableSympathyDelight();
                     mRateController.onLike(
                             profile.uid,
                             ((User) profile).mutual ?
@@ -494,7 +504,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             case R.id.acBlock:
                 if (CacheProfile.premium) {
                     if (profile.uid > 0) {
-                        final TextView textView = (TextView) v.findViewById(R.id.blockTV);
+                        final TextView textView = (TextView) v.findViewById(R.id.block_action_text);
                         final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
                         final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
 
@@ -513,7 +523,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                 if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
-                                    profile.inBlackList = !profile.inBlackList;
+                                    Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BLACK_LIST, !((User) profile).inBlackList);
+                                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                                     if (profile.inBlackList) {
                                         textView.setText(R.string.black_list_delete);
                                     } else {
@@ -537,7 +548,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
                 break;
             case R.id.acBookmark:
-                final TextView textView = (TextView) v.findViewById(R.id.favTV);
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
                 final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
 
@@ -555,8 +565,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     @Override
                     public void success(IApiResponse response) {
                         super.success(response);
-                        Intent intent = new Intent(BookmarkAddRequest.UPDATE_BOOKMARKED);
-                        intent.putExtra("bookmarked", !((User) profile).bookmarked);
+                        Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BOOKMARK, !((User) profile).bookmarked);
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                         loader.setVisibility(View.INVISIBLE);
                         icon.setVisibility(View.VISIBLE);

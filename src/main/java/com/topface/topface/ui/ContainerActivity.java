@@ -9,19 +9,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.View;
-
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.ChatFragment;
-import com.topface.topface.ui.fragments.ComplainsFragment;
-import com.topface.topface.ui.fragments.ContactsFragment;
-import com.topface.topface.ui.fragments.EditorBannersFragment;
-import com.topface.topface.ui.fragments.RecoverPwdFragment;
-import com.topface.topface.ui.fragments.RegistrationFragment;
-import com.topface.topface.ui.fragments.SettingsFragment;
+import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
@@ -30,12 +23,12 @@ import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements IUserOnlineListener {
+    public static final String UPDATE_USER_CATEGORY = "com.topface.topface.action.USER_CATEGORY";
 
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
@@ -56,6 +49,8 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     // Id для админки начиная со 101
     public static final int INTENT_EDITOR_BANNERS = 101;
     private static final int INTENT_PROFILE_FRAGMENT = 6;
+    public static final String TYPE = "type";
+    public static final String CHANGED = "changed";
     private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
     private View mOnlineIcon;
@@ -141,14 +136,11 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         initRequestKey();
         checkAuth();
         setContentView(R.layout.ac_fragment_frame);
-        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
-
         //Сперва пробуем
         mCurrentFragment = getSupportFragmentManager().findFragmentById(R.id.loFrame);
         if (mCurrentFragment == null) {
             mCurrentFragment = getNewFragment(mCurrentFragmentId);
         }
-
         if (mCurrentFragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(
@@ -292,6 +284,15 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         return fragment;
     }
 
+    public enum ActionTypes {BLACK_LIST, BOOKMARK}
+
+    public static Intent getIntentForActionsUpdate(ActionTypes type, boolean value) {
+        Intent intent = new Intent(UPDATE_USER_CATEGORY);
+        intent.putExtra(TYPE, type);
+        intent.putExtra(CHANGED, value);
+        return intent;
+    }
+
     private void setRotationMode() {
         if (mCurrentFragmentId == INTENT_CHAT_FRAGMENT) {
             int rotationStatus = Settings.System.getInt(
@@ -321,11 +322,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     protected boolean isNeedAuth() {
         return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT &&
                 mCurrentFragmentId != INTENT_RECOVER_PASSWORD && super.isNeedAuth();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override

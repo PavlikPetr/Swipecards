@@ -3,8 +3,8 @@ package com.topface.topface.imageloader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -19,16 +19,29 @@ import com.topface.topface.utils.Debug;
 @SuppressWarnings("UnusedDeclaration")
 public class DefaultImageLoader {
 
+    public static final int DISC_CACHE_SIZE = 10 * 1024 * 1024;
     private static ImageLoader mImageLoader;
     private static DefaultImageLoader mInstance;
-    public static final int DISC_CACHE_SIZE = 10 * 1024 * 1024;
     private final Context mContext;
     private DisplayImageOptions mOptimizedConfig;
 
     public DefaultImageLoader(Context context) {
         mContext = context;
-        mImageLoader = ImageLoader.getInstance();
+        mImageLoader = ExtendedImageLoader.getInstance();
         mImageLoader.init(getConfig().build());
+    }
+
+    /**
+     * Загрузчик изображений нужно использовать только с контекстом активити
+     *
+     * @return инстанс загрузчика изображений
+     */
+    public static DefaultImageLoader getInstance() {
+        if (mInstance == null) {
+            mInstance = new DefaultImageLoader(App.getContext());
+        }
+
+        return mInstance;
     }
 
     protected ImageLoaderConfiguration.Builder getConfig() {
@@ -72,19 +85,6 @@ public class DefaultImageLoader {
 
     public ImageLoader getImageLoader() {
         return mImageLoader;
-    }
-
-    /**
-     * Загрузчик изображений нужно использовать только с контекстом активити
-     *
-     * @return инстанс загрузчика изображений
-     */
-    public static DefaultImageLoader getInstance() {
-        if (mInstance == null) {
-            mInstance = new DefaultImageLoader(App.getContext());
-        }
-
-        return mInstance;
     }
 
     public void displayImage(String uri, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener, BitmapProcessor processor) {
