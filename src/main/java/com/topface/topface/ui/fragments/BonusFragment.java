@@ -1,4 +1,4 @@
-package com.topface.topface.ui;
+package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,10 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -60,7 +58,7 @@ public class BonusFragment extends BaseFragment {
      * Creates button specified by offer object: styled and with appropriate click listener
      *
      * @param activity current context
-     * @param offer offer from Options
+     * @param offer    offer from Options
      * @return button obj
      */
     private static Button createButton(final Activity activity, final Options.Offerwalls.Offer offer) {

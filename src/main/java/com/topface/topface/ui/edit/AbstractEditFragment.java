@@ -9,14 +9,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 
 public abstract class AbstractEditFragment extends BaseFragment {
 
     protected Button mBackButton;
-    protected Handler mFinishHandler;
 
     public AbstractEditFragment() {
         super();
@@ -96,7 +94,7 @@ public abstract class AbstractEditFragment extends BaseFragment {
                 Activity activity = getActivity();
                 if (handler == null && activity != null) {
                     activity.finish();
-                } else {
+                } else if (handler != null) {
                     handler.sendEmptyMessage(0);
                 }
             }
