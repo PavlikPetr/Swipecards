@@ -12,10 +12,10 @@ import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
-import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.data.Products;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
@@ -222,7 +222,7 @@ public class CacheProfile {
      * Опции по умолчанию
      */
     private static Options options;
-    private static GooglePlayProducts mProducts;
+    private static Products mProducts;
 
     /**
      * Данные из сервиса options
@@ -252,26 +252,22 @@ public class CacheProfile {
 
     /**
      * Данные из сервиса googleplay.getProducts
+     * Внимание! Может возвращать null, если данный тип сборки не поддерживает покупки
      */
-    public static GooglePlayProducts getGooglePlayProducts() {
+    public static Products getProducts() {
         if (mProducts == null) {
             SessionConfig config = App.getSessionConfig();
-            String productsCache = config.getGoogleProductsData();
+            String productsCache = config.getProductsData();
             if (!TextUtils.isEmpty(productsCache)) {
                 //Получаем опции из кэша
                 try {
-                    mProducts = new GooglePlayProducts(
+                    mProducts = new Products(
                             new JSONObject(productsCache)
                     );
                 } catch (JSONException e) {
                     config.resetGoogleProductsData();
                     Debug.error(e);
                 }
-            }
-            if (mProducts == null) {
-                //Если по каким то причинам кэша нет и опции нам в данный момент взять негде.
-                //то просто используем их по умолчанию
-                mProducts = new GooglePlayProducts((JSONObject) null);
             }
         }
         return mProducts;
@@ -316,13 +312,13 @@ public class CacheProfile {
         }
     }
 
-    public static void setGooglePlayProducts(GooglePlayProducts products, final JSONObject response) {
+    public static void setGooglePlayProducts(Products products, final JSONObject response) {
         mProducts = products;
         //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
         if (response != null) {
             App.getSessionConfig().setGoogleProductsData(response.toString());
             LocalBroadcastManager.getInstance(App.getContext())
-                    .sendBroadcast(new Intent(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
+                    .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
 
         }
     }

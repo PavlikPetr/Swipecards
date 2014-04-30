@@ -75,6 +75,12 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
 
+            <ViewStub
+                android:id="@+id/mobilePayments"
+                android:layout="@layout/mobile_payments_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -226,7 +232,6 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 layout="@layout/vip_item_edit_form_select" />
-
 
         </LinearLayout>
     </LinearLayout>

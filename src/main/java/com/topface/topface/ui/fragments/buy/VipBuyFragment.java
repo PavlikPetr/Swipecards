@@ -18,11 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.GooglePlayProducts;
+import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -33,7 +32,7 @@ import com.topface.topface.utils.CacheProfile;
 
 import static android.view.View.OnClickListener;
 
-public class VipBuyFragment extends BillingFragment implements OnClickListener {
+public class VipBuyFragment extends PaymentwallBuyingFragment implements OnClickListener {
 
     public static final String ACTION_BAR_CONST = "needActionBar";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
@@ -141,15 +140,18 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private void initBuyVipViews(View root) {
         mBuyVipViewsContainer = (LinearLayout) root.findViewById(R.id.fbpContainer);
         LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
-        GooglePlayProducts googlePlayProducts = CacheProfile.getGooglePlayProducts();
-        if (googlePlayProducts.premium.isEmpty()) {
+        Products products = CacheProfile.getProducts();
+        if (products == null) {
+            return;
+        }
+        if (products.premium.isEmpty()) {
             root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.VISIBLE);
         } else {
             root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.GONE);
         }
-        for (GooglePlayProducts.BuyButton curBtn : googlePlayProducts.premium) {
-            GooglePlayProducts.setBuyButton(btnContainer, curBtn, getActivity(),
-                    new GooglePlayProducts.BuyButtonClickListener() {
+        for (Products.BuyButton curBtn : products.premium) {
+            Products.setBuyButton(btnContainer, curBtn, getActivity(),
+                    new Products.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
                             buySubscription(id);
@@ -297,10 +299,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     @Override
     public void onInAppBillingSupported() {
-    }
-
-    @Override
-    public void onInAppBillingUnsupported() {
     }
 
     @Override
