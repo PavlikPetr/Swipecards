@@ -2,10 +2,13 @@ package com.topface.billing.googleplay;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.topface.billing.BillingDriver;
 import com.topface.billing.BillingListener;
 import com.topface.billing.BillingSupportListener;
+import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -48,6 +51,7 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
                 listener.onInAppBillingSupported();
             } else {
                 listener.onInAppBillingUnsupported();
+                Toast.makeText(App.getContext(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT).show();
             }
 
             if (mBillingService.checkBillingSupported(Consts.ITEM_TYPE_SUBSCRIPTION)) {

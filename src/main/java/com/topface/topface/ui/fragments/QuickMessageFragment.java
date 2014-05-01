@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.History;

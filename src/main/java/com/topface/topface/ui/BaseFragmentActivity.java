@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -318,6 +319,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected void onProfileUpdated() {
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public boolean isPackageInstalled(String packagename, Context context) {
         PackageManager pm = context.getPackageManager();
         try {

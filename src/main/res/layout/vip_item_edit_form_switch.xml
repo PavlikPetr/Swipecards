@@ -21,7 +21,7 @@
 
     <!-- Switch -->
 
-    <CheckBox
+    <com.topface.topface.ui.views.Switcher
         android:tag="cbSwitch"
         android:id="@+id/cbSwitch"
         android:layout_width="wrap_content"
@@ -31,35 +31,9 @@
         android:background="@drawable/edit_switch"
         android:button="@android:color/transparent"
         android:layout_marginRight="10dp"
-        android:clickable="false" />
-
-    <TextView
-        android:tag="tvSwitchOn"
-        android:textColor="#FFFFFF"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/cbSwitch"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="14dp"
-        android:layout_centerVertical="true"
-        android:text="@string/settings_switch_on"
-        android:textSize="12sp" />
-
-    <TextView
-        android:tag="tvSwitchOff"
-        android:textColor="#2F2F2F"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/cbSwitch"
-        android:layout_centerVertical="true"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:layout_marginRight="36dp"
-        android:layout_marginLeft="12dp"
-        android:text="@string/settings_switch_off"
-        android:textSize="12sp" />
+        android:clickable="false"
+        android:textSize="12sp"
+        android:minHeight="0dp" />
 
     <ProgressBar
         android:tag="vsiLoadBar"

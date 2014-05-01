@@ -24,7 +24,7 @@ public class GoogleProductsTest extends TestCase {
 
                 @Override
                 public void executeWith(JSONObject json) {
-                    new GooglePlayProducts(json);
+                    new Products(json);
                     Debug.log(TEST, json.toString());
                 }
             });
@@ -57,7 +57,7 @@ public class GoogleProductsTest extends TestCase {
             }
         } else if (currJsonObj instanceof JSONObject) {
             JSONObject jsonObj = (JSONObject) currJsonObj;
-            Iterator<String> iterKeys = jsonObj.keys();
+            @SuppressWarnings("unchecked") Iterator<String> iterKeys = jsonObj.keys();
             while (iterKeys.hasNext()) {
                 String key = iterKeys.next();
                 recursiveJsonObjectsNull(originalJson, jsonObj.opt(key), executor);

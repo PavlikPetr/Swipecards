@@ -45,8 +45,10 @@ public class BillingDriverManager {
                 }
                 break;
             case GOOGLE_PLAY:
-            default:
                 driver = new GooglePlayV2BillingDriver(activity, listener);
+                break;
+            default:
+                driver = new PaymentwallBillingDriver(activity, listener);
 
         }
 

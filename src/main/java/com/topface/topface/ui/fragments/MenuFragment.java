@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,12 @@ import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
-import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Products;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
@@ -35,10 +37,22 @@ import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
-import com.topface.topface.ui.fragments.feed.*;
+import com.topface.topface.ui.fragments.feed.AdmirationFragment;
+import com.topface.topface.ui.fragments.feed.BookmarksFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.FansFragment;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
+import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.BuyWidgetController;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -46,7 +60,19 @@ import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.*;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_ADMIRATIONS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_BONUS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_BOOKMARKS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DATING;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DIALOGS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_FANS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_GEO;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_PROFILE;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_UNDEFINED;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VIP_PROFILE;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITORS;
 
 /**
  * Created by kirussell on 05.11.13.
@@ -93,9 +119,10 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                         mClosingsController.onPremiumObtained(getCurrentFragmentId());
                     }
                     break;
-                case GooglePlayProducts.INTENT_UPDATE_PRODUCTS:
-                    if (mBuyWidgetController != null) {
-                        mBuyWidgetController.setSalesEnabled(CacheProfile.getGooglePlayProducts().saleExists);
+                case Products.INTENT_UPDATE_PRODUCTS:
+                    Products products = CacheProfile.getProducts();
+                    if (products != null && mBuyWidgetController != null) {
+                        mBuyWidgetController.setSalesEnabled(products.saleExists);
                     }
                     break;
                 case SELECT_MENU_ITEM:
@@ -178,6 +205,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 if (mEditorItem == null) {
                     mEditorItem = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
                     Button btnMenu = (Button) mEditorItem.findViewById(R.id.btnMenu);
+                    //noinspection ResourceType
                     btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.F_EDITOR));
                     btnMenu.setTag(FragmentId.F_EDITOR);
                     btnMenu.setOnClickListener(this);
@@ -234,7 +262,8 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 mFooterView.findViewById(R.id.countersLayout));
         getListView().addFooterView(mFooterView);
 
-        mBuyWidgetController.setSalesEnabled(CacheProfile.getGooglePlayProducts().saleExists);
+        Products products = CacheProfile.getProducts();
+        mBuyWidgetController.setSalesEnabled(products != null && products.saleExists);
         initEditor();
     }
 
@@ -329,7 +358,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         super.onResume();
         IntentFilter filter = new IntentFilter();
         filter.addAction(CacheProfile.PROFILE_UPDATE_ACTION);
-        filter.addAction(GooglePlayProducts.INTENT_UPDATE_PRODUCTS);
+        filter.addAction(Products.INTENT_UPDATE_PRODUCTS);
         filter.addAction(CountersManager.UPDATE_BALANCE);
         filter.addAction(SELECT_MENU_ITEM);
         filter.addAction(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED);
@@ -339,8 +368,8 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         initProfileMenuItem(mHeaderView);
         if (mBuyWidgetController != null) {
             mBuyWidgetController.updateBalance();
-            GooglePlayProducts products = CacheProfile.getGooglePlayProducts();
-            if (products.saleExists == !mBuyWidgetController.salesEnabled) {
+            Products products = CacheProfile.getProducts();
+            if (products != null && products.saleExists == !mBuyWidgetController.salesEnabled) {
                 mBuyWidgetController.setSalesEnabled(products.saleExists);
             }
         }
@@ -549,7 +578,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 }
                 CacheProfile.needShowBonusCounter = false;
                 mAdapter.refreshCounterBadges();
-                if (CacheProfile.getOptions().offerwalls.hasOffers()) {
+                if (!TextUtils.isEmpty(CacheProfile.getOptions().bonus.integrationUrl) ||
+                        CacheProfile.getOptions().offerwalls.hasOffers()
+                        ) {
                     selectMenu(F_BONUS);
                 } else {
                     OfferwallsManager.startOfferwall(getActivity());

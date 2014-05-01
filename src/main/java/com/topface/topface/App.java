@@ -12,18 +12,37 @@ import android.os.StrictMode;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
-import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Products;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.AmazonProductsRequest;
+import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.AppGetOptionsRequest;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.GooglePlayProductsRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ParallelApiRequest;
+import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.blocks.BannerBlock;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.BackgroundThread;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Connectivity;
+import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
@@ -33,6 +52,7 @@ import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthToken;
+
 import org.acra.ACRA;
 import org.acra.ACRAConfiguration;
 import org.acra.ACRAConfigurationException;
@@ -64,7 +84,7 @@ public class App extends Application {
     public static void sendProfileAndOptionsRequests(ApiHandler handler) {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getOptionsRequst())
-                .addRequest(getGooglePlayProductsRequest())
+                .addRequest(getProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .callback(handler)
                 .exec();
@@ -84,22 +104,40 @@ public class App extends Application {
         });
     }
 
-    private static ApiRequest getGooglePlayProductsRequest() {
-        return new GooglePlayProductsRequest(App.getContext()).callback(new DataApiHandler<GooglePlayProducts>() {
-            @Override
-            protected void success(GooglePlayProducts data, IApiResponse response) {
-            }
+    private static ApiRequest getProductsRequest() {
+        ApiRequest request;
+        switch (BuildConfig.BILLING_TYPE) {
+            case AMAZON:
+                request = new AmazonProductsRequest(App.getContext());
+                break;
+            case GOOGLE_PLAY:
+                request = new GooglePlayProductsRequest(App.getContext());
+                break;
+            case NOKIA_STORE:
+            default:
+                request = null;
+                break;
+        }
 
-            @Override
-            protected GooglePlayProducts parseResponse(ApiResponse response) {
-                return new GooglePlayProducts(response);
-            }
+        if (request != null) {
+            request.callback(new DataApiHandler<Products>() {
+                @Override
+                protected void success(Products data, IApiResponse response) {
+                }
 
-            @Override
-            public void fail(int codeError, IApiResponse response) {
+                @Override
+                protected Products parseResponse(ApiResponse response) {
+                    return new Products(response);
+                }
 
-            }
-        });
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+
+                }
+            });
+        }
+
+        return request;
     }
 
     private static ApiRequest getOptionsRequst() {
@@ -237,6 +275,7 @@ public class App extends Application {
         checkKeepAlive();
 
         String msg = "+onCreate\n" + baseConfig.toString();
+        //noinspection ConstantConditions
         if (BuildConfig.BUILD_TIME > 0) {
             msg += "\nBuild Time: " + SimpleDateFormat.getInstance().format(BuildConfig.BUILD_TIME);
         }

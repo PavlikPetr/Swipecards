@@ -3,7 +3,13 @@ package com.topface.statistics.android;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import com.topface.statistics.*;
+
+import com.topface.statistics.Hit;
+import com.topface.statistics.IDataDispatcher;
+import com.topface.statistics.ILogger;
+import com.topface.statistics.INetworkClient;
+import com.topface.statistics.NetworkDataDispatcher;
+import com.topface.statistics.Statistics;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +19,7 @@ import java.util.Map;
  * Android statistics tracker wraps Statistics instance.
  * NOTE: needs Context for work
  */
+@SuppressWarnings("UnusedDeclaration")
 public class StatisticsTracker {
 
     public static final String TAG = "TFAndroidTracker";

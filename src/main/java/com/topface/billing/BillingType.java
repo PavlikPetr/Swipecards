@@ -6,7 +6,8 @@ package com.topface.billing;
  */
 public enum BillingType {
     GOOGLE_PLAY("google-play-v2"),
-    AMAZON("amazon");
+    AMAZON("amazon"),
+    NOKIA_STORE("android-nokia");
 
     private final String mClientType;
 

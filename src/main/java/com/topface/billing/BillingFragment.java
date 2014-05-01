@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 
 import com.topface.topface.R;
-import com.topface.topface.data.GooglePlayProducts;
+import com.topface.topface.data.Products;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.Utils;
@@ -79,11 +79,11 @@ abstract public class BillingFragment extends BaseFragment implements BillingLis
 
     /**
      * Chooses buyItem or buySubscription based on btn class type
-     * (@link(GooglePlayProducts.SubscriptionBuyButton) or GooglePlayProducts.BuyButton)
+     * (@link(Products.SubscriptionBuyButton) or Products.BuyButton)
      *
      * @param btn BuyButton object to determine which type of buy is processing
      */
-    protected void buy(GooglePlayProducts.BuyButton btn) {
+    protected void buy(Products.BuyButton btn) {
         String itemId = btn.id;
         if (itemId != null) {
             if (btn.type.isSubscription()) {
@@ -118,4 +118,9 @@ abstract public class BillingFragment extends BaseFragment implements BillingLis
     protected void editSubscriptions() {
         Utils.goToMarket(getActivity());
     }
+
+    protected boolean isTestPurchasesEnabled() {
+        return mBillingDriver.isTestPurchasesEnabled();
+    }
+
 }

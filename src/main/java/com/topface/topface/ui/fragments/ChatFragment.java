@@ -2,7 +2,11 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -12,11 +16,25 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.*;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -24,8 +42,23 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.*;
-import com.topface.topface.requests.*;
+import com.topface.topface.data.FeedDialog;
+import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.History;
+import com.topface.topface.data.HistoryListData;
+import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BlackListAddRequest;
+import com.topface.topface.requests.BookmarkAddRequest;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.DeleteBlackListRequest;
+import com.topface.topface.requests.DeleteBookmarksRequest;
+import com.topface.topface.requests.DeleteMessagesRequest;
+import com.topface.topface.requests.HistoryRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.MessageRequest;
+import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -34,14 +67,24 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
-import com.topface.topface.ui.adapters.*;
+import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.adapters.EditButtonsAdapter;
+import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.views.BackButtonEditTextMaster;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.UserActions;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -89,8 +132,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
     };
 
-
     private IUserOnlineListener mUserOnlineListener;
+
     // Data
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
@@ -107,10 +150,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mIsAddPanelOpened;
+    private boolean mIsKeyboardOpened; // Shows whether keyboard opened or not. Should be maintained very carefully, because there are no keyboard show/hide events.
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedUser mUser;
-    private EditText mEditBox;
+    private BackButtonEditTextMaster mEditBox;
     private TextView mLoadingBackgroundText;
     private AnimationDrawable mLoadingBackgroundDrawable;
     private SwapControl mSwapControl;
@@ -207,8 +251,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         // Swap Control
         initAddPanel(root);
         // Edit Box
-        mEditBox = (EditText) root.findViewById(R.id.edChatBox);
+        mEditBox = (BackButtonEditTextMaster) root.findViewById(R.id.edChatBox);
         mEditBox.setOnEditorActionListener(mEditorActionListener);
+        mEditBox.setOnKeyBoardExitedListener(new BackButtonEditTextMaster.OnKeyBoardExitedListener() {
+            @Override
+            public void onKeyboardExited() {
+                mIsKeyboardOpened = false;
+            }
+        });
         //LockScreen
         initLockScreen(root);
         //Send Button
@@ -252,7 +302,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             public void onSizeChanged(int w, int h, int oldw, int oldh) {
                 if (oldh > h) {
                     // keyboard opened
-                    toggleAddPanel(false);
+                    mIsKeyboardOpened = true;
+                    toggleAddPanel(false, true);
                     closeChatActions();
                 }
             }
@@ -684,7 +735,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 }
                 break;
             case R.id.btnChatAdd:
-                toggleAddPanel();
+                if (mIsKeyboardOpened) {
+                    toggleAddPanel(true, true);
+                } else {
+                    toggleAddPanel();
+                }
                 closeChatActions();
                 EasyTracker.getTracker().sendEvent("Chat", "AdditionalClick", "", 1L);
                 break;
@@ -913,15 +968,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void toggleAddPanel() {
-        toggleAddPanel(!mIsAddPanelOpened);
+        toggleAddPanel(!mIsAddPanelOpened, false);
     }
 
     private void toggleAddPanel(boolean open) {
+        toggleAddPanel(open, false);
+    }
+
+    private void toggleAddPanel(boolean open, boolean instant) {
         if (mIsAddPanelOpened == open) return;
         if (open) {
             Utils.hideSoftKeyboard(getActivity(), mEditBox);
+            mIsKeyboardOpened = false;
         }
-        mSwapControl.snapToScreen(!open ? 0 : 1);
+        mSwapControl.snapToScreen(!open ? 0 : 1, instant);
         mBtnChatAdd.setSelected(open);
         mIsAddPanelOpened = open;
     }

@@ -9,8 +9,16 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -22,6 +30,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

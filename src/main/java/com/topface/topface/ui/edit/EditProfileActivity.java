@@ -1,7 +1,11 @@
 package com.topface.topface.ui.edit;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,7 +17,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -32,6 +42,7 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

@@ -634,6 +634,8 @@
     <string name="press_back_more_to_close_app">Press the back button one more time to exit Topface</string>
     <string name="waiting_for_load">Waiting to load…</string>
     <string name="loading_photo_percent">Uploading photos %d%%</string>
+    <string name="profile_update_error">Update data error</string>
+    <string name="retry_cancel_editing">Error sending data to the server. Exit without saving or retrying?</string>
     <string name="user_does_not_exist">User not found</string>
     <string name="feedback_subject_ban">Complaint on unfair ban</string>
     <string name="settings_led">LED notification</string>
