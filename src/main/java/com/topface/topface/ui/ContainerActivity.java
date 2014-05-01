@@ -15,7 +15,6 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.User;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.ContactsFragment;
@@ -57,7 +56,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final int INTENT_COINS_SUBSCRIPTION_FRAGMENT = 10;
     // Id для админки начиная со 101
     public static final int INTENT_EDITOR_BANNERS = 101;
-    private static final int INTENT_PROFILE_FRAGMENT = 6;
+    public static final int INTENT_PROFILE_FRAGMENT = 6;
     public static final String TYPE = "type";
     public static final String CHANGED = "changed";
     private int mCurrentFragmentId = -1;
@@ -296,7 +295,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         return fragment;
     }
 
-    public enum ActionTypes {BLACK_LIST, BOOKMARK};
+    public enum ActionTypes {BLACK_LIST, BOOKMARK}
 
     public static Intent getIntentForActionsUpdate(ActionTypes type, boolean value) {
         Intent intent = new Intent(UPDATE_USER_CATEGORY);
