@@ -122,6 +122,16 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         return intent;
     }
 
+    public static Intent getBuyingIntent(String from, int itemType, int itemPrice) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
+        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
+        intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, itemType);
+        intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, itemPrice);
+        return intent;
+
+    }
+
     public static Intent getBuyingIntent(String from) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
