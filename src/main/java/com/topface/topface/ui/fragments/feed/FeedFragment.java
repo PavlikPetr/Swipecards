@@ -338,7 +338,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
                 @Override
                 public void onSelected(int size) {
-                    mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
+                    if (mActionMode != null) {
+                        mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
+                    }
                 }
             });
             adapter.notifyDataSetChanged();

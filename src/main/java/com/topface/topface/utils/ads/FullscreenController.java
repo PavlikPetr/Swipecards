@@ -5,24 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-
 import com.google.ads.Ad;
 import com.google.ads.AdListener;
 import com.google.ads.AdRequest;
 import com.google.ads.InterstitialAd;
 import com.ivengo.adv.AdvListener;
 import com.ivengo.adv.AdvView;
-import com.lifestreet.android.lsmsdk.BannerAdapter;
-import com.lifestreet.android.lsmsdk.BasicSlotListener;
-import com.lifestreet.android.lsmsdk.InterstitialAdapter;
-import com.lifestreet.android.lsmsdk.InterstitialSlot;
-import com.lifestreet.android.lsmsdk.SlotView;
+import com.lifestreet.android.lsmsdk.*;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubInterstitial;
 import com.topface.topface.App;
@@ -44,15 +38,14 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
 import ru.ideast.adwired.events.OnStopListener;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  */
@@ -192,17 +185,11 @@ public class FullscreenController {
 
             @Override
             public void onPresentScreen(Ad ad) {
-                if (mActivity instanceof ActionBarActivity) {
-                    ((ActionBarActivity) mActivity).getSupportActionBar().hide();
-                }
                 isFullScreenBannerVisible = true;
             }
 
             @Override
             public void onDismissScreen(Ad ad) {
-                if (mActivity instanceof ActionBarActivity) {
-                    ((ActionBarActivity) mActivity).getSupportActionBar().show();
-                }
                 isFullScreenBannerVisible = false;
             }
 

@@ -5,15 +5,10 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Реализация метода api options
- */
-public class AppOptionsRequest extends ApiRequest {
+public class AmazonProductsRequest extends ApiRequest {
+    private static final String SERVICE = "amazon.getProducts";
 
-    public static final String SERVICE = "user.getAppOptions";
-    public static final String VERSION_INTENT = "com.topface.topface.OPTIONS";
-
-    public AppOptionsRequest(Context context) {
+    public AmazonProductsRequest(Context context) {
         super(context);
         doNeedAlert(false);
     }

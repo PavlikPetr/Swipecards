@@ -44,7 +44,6 @@ public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.ac_fragment_frame);
-        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         int titleId;
         int dataId;
         String data;
@@ -115,11 +114,8 @@ public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
 
     @Override
     public void finish() {
-
         if (mFragment instanceof AbstractEditFragment) {
-            AbstractEditFragment editFragment = (AbstractEditFragment) mFragment;
-            editFragment.saveChanges(mFinishHandler);
-
+            ((AbstractEditFragment) mFragment).saveChanges(mFinishHandler);
         } else {
             super.finish();
         }

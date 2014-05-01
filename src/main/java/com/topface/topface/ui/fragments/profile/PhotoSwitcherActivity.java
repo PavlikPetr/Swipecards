@@ -261,9 +261,10 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void setCounter(int position) {
+        int photosLinksSize = mPhotoLinks.size();
         if (mPhotoLinks != null) {
-            mCurrentPosition = position;
-            mCounter.setText((mCurrentPosition + 1) + "/" + mPhotoLinks.size());
+            mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
+            mCounter.setText((mCurrentPosition + 1) + "/" + photosLinksSize);
         }
     }
 

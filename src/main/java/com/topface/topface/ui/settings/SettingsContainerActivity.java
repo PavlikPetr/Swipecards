@@ -34,15 +34,9 @@ public class SettingsContainerActivity extends CustomTitlesBaseFragmentActivity 
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.ac_fragment_frame);
-
         Fragment fragment = null;
-
-        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
-
         Intent intent = getIntent();
-
         mConfirmCode = getIntent().getStringExtra(CONFIRMATION_CODE);
-
         switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0)) {
             case INTENT_ACCOUNT:
                 AuthToken token = AuthToken.getInstance();
@@ -71,7 +65,6 @@ public class SettingsContainerActivity extends CustomTitlesBaseFragmentActivity 
             default:
                 break;
         }
-
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.loFrame, fragment).commit();
         }
@@ -79,7 +72,6 @@ public class SettingsContainerActivity extends CustomTitlesBaseFragmentActivity 
 
     @Override
     protected void initCustomActionBarView(View mCustomView) {
-
     }
 
     @Override

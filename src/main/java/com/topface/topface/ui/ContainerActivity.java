@@ -122,6 +122,16 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         return intent;
     }
 
+    public static Intent getBuyingIntent(String from, int itemType, int itemPrice) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
+        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
+        intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, itemType);
+        intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, itemPrice);
+        return intent;
+
+    }
+
     public static Intent getBuyingIntent(String from) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
@@ -144,14 +154,11 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         initRequestKey();
         checkAuth();
         setContentView(R.layout.ac_fragment_frame);
-        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
-
         //Сперва пробуем
         mCurrentFragment = getSupportFragmentManager().findFragmentById(R.id.loFrame);
         if (mCurrentFragment == null) {
             mCurrentFragment = getNewFragment(mCurrentFragmentId);
         }
-
         if (mCurrentFragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(
@@ -333,11 +340,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     protected boolean isNeedAuth() {
         return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT &&
                 mCurrentFragmentId != INTENT_RECOVER_PASSWORD && super.isNeedAuth();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override

@@ -13,10 +13,10 @@ import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 
+@SuppressWarnings("UnusedDeclaration")
 public abstract class AbstractEditFragment extends BaseFragment {
 
     protected Button mBackButton;
-    protected Handler mFinishHandler;
 
     public AbstractEditFragment() {
         super();
@@ -96,7 +96,7 @@ public abstract class AbstractEditFragment extends BaseFragment {
                 Activity activity = getActivity();
                 if (handler == null && activity != null) {
                     activity.finish();
-                } else {
+                } else if (handler != null) {
                     handler.sendEmptyMessage(0);
                 }
             }

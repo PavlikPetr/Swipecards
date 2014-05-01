@@ -628,6 +628,8 @@
     <string name="press_back_more_to_close_app">Ripremi il tasto Indietro per uscire da Topface</string>
     <string name="waiting_for_load">Attesa di caricamento…</string>
     <string name="loading_photo_percent">Caricamento della foto %d%%</string>
+    <string name="profile_update_error">Si è verificato un errore durante l’aggiornamento dati</string>
+    <string name="retry_cancel_editing">Si è verificato un errore sul server durante l’aggiornamento dati. Uscire senza salvare o riprovare?</string>
     <string name="user_does_not_exist">Utente non trovato</string>
     <string name="feedback_subject_ban">Reclamo di un ban ingiusto</string>
     <string name="settings_led">Notifica LED</string>

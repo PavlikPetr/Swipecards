@@ -66,18 +66,13 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_edit_profile);
-
         hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
-
         //Navigation bar
         getSupportActionBar().setTitle(R.string.edit_title);
-
         // ListView
         mEditItems = new LinkedList<>();
         initEditItems();
-
         ListView editsListView = (ListView) findViewById(R.id.lvEdits);
-
         // Header
         LayoutInflater inflater = getLayoutInflater();
         ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_header, editsListView, false);
@@ -113,14 +108,12 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             TextView editProfileMsg = (TextView) findViewById(R.id.EditProfileMessage);
             editProfileMsg.setVisibility(View.VISIBLE);
         }
-
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 updateViews();
             }
         };
-
     }
 
     @Override

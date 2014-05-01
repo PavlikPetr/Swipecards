@@ -824,4 +824,6 @@
     <string name="user_does_not_exist">Пользователь не найден</string>
     <string name="feedback_subject_ban">Жалоба на несправедливый бан</string>
     <string name="settings_led">LED уведомление</string>
+
+    <string name="buying_not_enough_coins">Вам не хватает %d {{coins}}</string>
 </resources>

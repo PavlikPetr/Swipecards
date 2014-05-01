@@ -109,15 +109,13 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         public void onReceive(Context context, Intent intent) {
             ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
             boolean isChanged = intent.getBooleanExtra(ContainerActivity.CHANGED, false);
-
             Profile profile = getProfile();
-
-            if (profile != null) {
+            if (profile != null && type != null) {
                 switch (type) {
                     case BLACK_LIST:
                         ((User) profile).inBlackList = isChanged;
                         if (mBlocked != null) {
-                            ((TextView)mBlocked.findViewById(R.id.blockTV)).setText(isChanged? R.string.black_list_delete : R.string.black_list_add_short);
+                            ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(isChanged ? R.string.black_list_delete : R.string.black_list_add_short);
                         }
                         break;
                     case BOOKMARK:
@@ -157,7 +155,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         bookmarksLayout.setOnClickListener(this);
         mBlocked = (RelativeLayout) mUserActions.findViewById(R.id.acBlock);
         mUserActions.setVisibility(View.INVISIBLE);
-        mBookmarkAction = (TextView) mUserActions.findViewById(R.id.favTV);
+        mBookmarkAction = (TextView) mUserActions.findViewById(R.id.bookmark_action_text);
         mSympathy = (RelativeLayout) mUserActions.findViewById(R.id.acSympathy);
         mSympathyText = (TextView) mSympathy.findViewById(R.id.likeTV);
         mDelight = (RelativeLayout) mUserActions.findViewById(R.id.acDelight);
@@ -282,9 +280,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         mBookmarkAction.setText(App.getContext().getString(R.string.general_bookmarks_add));
                     }
                     if (user.inBlackList) {
-                        ((TextView) mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_delete);
+                        ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(R.string.black_list_delete);
                     } else {
-                        ((TextView) mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_add_short);
+                        ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(R.string.black_list_add_short);
                     }
                     if (user.isSympathySent) {
                         disableSympathyDelight();
@@ -512,7 +510,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     mGiftFragment.sendGift(mGiftsReceivedListener);
                 } else {
                     startActivityForResult(
-                            GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
+                            GiftsActivity.getSendGiftIntent(getActivity(), mProfileId, false),
                             GiftsActivity.INTENT_REQUEST_GIFT
                     );
                 }
@@ -539,7 +537,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             case R.id.acBlock:
                 if (CacheProfile.premium) {
                     if (profile.uid > 0) {
-                        final TextView textView = (TextView) v.findViewById(R.id.blockTV);
+                        final TextView textView = (TextView) v.findViewById(R.id.block_action_text);
                         final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
                         final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
 
@@ -583,7 +581,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
                 break;
             case R.id.acBookmark:
-                final TextView textView = (TextView) v.findViewById(R.id.favTV);
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
                 final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
 
