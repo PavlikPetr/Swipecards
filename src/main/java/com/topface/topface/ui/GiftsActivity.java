@@ -7,22 +7,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
-
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.SendGiftAnswer;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.GiftsRequest;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.SendGiftRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.views.TripleButton;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -211,10 +205,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 public void fail(int codeError, final IApiResponse response) {
                     setSupportProgressBarIndeterminateVisibility(false);
                     if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                        Intent intent = ContainerActivity.getBuyingIntent("Gifts");
-                        intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                        intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, item.price);
-                        startActivity(intent);
+                        startActivity(ContainerActivity.getBuyingIntent("Gifts", BuyingFragment.TYPE_GIFT, item.price));
                     }
                 }
             }).exec();

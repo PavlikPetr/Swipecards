@@ -13,6 +13,7 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
@@ -62,16 +63,15 @@ public class LeadersActivity extends BaseFragmentActivity {
         }
         setListeners();
         getProfile();
-        setPrice();
+        setPrice(CacheProfile.getOptions().priceLeader);
     }
 
-    private void setPrice() {
-        int leadersPrice = CacheProfile.getOptions().priceLeader;
+    private void setPrice(int price) {
         mBuyButton.setText(
                 Utils.getQuantityString(
                         R.plurals.leaders_price,
-                        leadersPrice,
-                        leadersPrice
+                        price,
+                        price
                 )
         );
     }
@@ -80,8 +80,9 @@ public class LeadersActivity extends BaseFragmentActivity {
         mBuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (CacheProfile.money < CacheProfile.getOptions().priceLeader) {
-                    startActivity(ContainerActivity.getBuyingIntent("Leaders"));
+                int leadersPrice = CacheProfile.getOptions().priceLeader;
+                if (CacheProfile.money < leadersPrice) {
+                    startActivity(ContainerActivity.getBuyingIntent("Leaders", BuyingFragment.TYPE_LEADERS, leadersPrice));
                 } else if (mSelectedPhoto.isSelected()) {
                     mLoadingLocker.setVisibility(View.VISIBLE);
                     new LeaderRequest(mSelectedPhoto.getPhotoId(), LeadersActivity.this)

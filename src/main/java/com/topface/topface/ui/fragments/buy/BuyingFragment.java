@@ -43,6 +43,7 @@ import static com.topface.topface.data.GooglePlayProducts.BuyButtonClickListener
 public class BuyingFragment extends BillingFragment {
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_GIFT = 1;
+    public static final int TYPE_LEADERS = 2;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
 
     private LinkedList<View> purchaseButtons = new LinkedList<>();
@@ -153,6 +154,10 @@ public class BuyingFragment extends BillingFragment {
                     case TYPE_GIFT:
                         mResourcesInfo.setText(String.format(
                                 getResources().getString(R.string.buying_you_have_no_coins_for_gift),
+                                coins - CacheProfile.money));
+                        break;
+                    case TYPE_LEADERS:
+                        mResourcesInfo.setText(String.format(getResources().getString(R.string.buying_not_enough_coins),
                                 coins - CacheProfile.money));
                         break;
                     default:
