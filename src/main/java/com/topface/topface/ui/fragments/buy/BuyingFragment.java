@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Products;
@@ -26,7 +25,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -140,23 +138,28 @@ public class BuyingFragment extends PaymentwallBuyingFragment {
         if (mCurCoins != null && mCurLikes != null && mResourcesInfo != null) {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
             mCurLikes.setText(Integer.toString(CacheProfile.likes));
-
             Bundle args = getArguments();
+
+            int type = 0;
+            int coins = 0;
+            int diff = 0;
             if (args != null) {
-                int type = args.getInt(ARG_ITEM_TYPE);
-                int coins = args.getInt(ARG_ITEM_PRICE);
+                type = args.getInt(ARG_ITEM_TYPE);
+                coins = args.getInt(ARG_ITEM_PRICE);
+                diff = coins - CacheProfile.money;
+            }
+            if (diff > 0) {
                 switch (type) {
                     case TYPE_GIFT:
-                        mResourcesInfo.setText(String.format(
-                                getResources().getString(R.string.buying_you_have_no_coins_for_gift),
-                                coins - CacheProfile.money));
+                        mResourcesInfo.setText(
+                                String.format(getResources().getString(R.string.buying_you_have_no_coins_for_gift), diff)
+                        );
                         break;
                     case TYPE_LEADERS:
-                        mResourcesInfo.setText(String.format(getResources().getString(R.string.buying_not_enough_coins),
-                                coins - CacheProfile.money));
-                        break;
                     default:
-                        mResourcesInfo.setText(getResources().getString(R.string.buying_default_message));
+                        mResourcesInfo.setText(
+                                String.format(getResources().getString(R.string.buying_not_enough_coins), diff)
+                        );
                         break;
                 }
             } else {
