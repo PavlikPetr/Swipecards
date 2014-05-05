@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="auto"
 
-    android:versionCode="104"
-    android:versionName="2.9.6">
+    android:versionCode="105"
+    android:versionName="2.9.7">
 
-    <!-- permissions -->
+<!-- permissions -->
     <permission
         android:name="com.topface.topface.permission.C2D_MESSAGE"
         android:protectionLevel="signature"/>
