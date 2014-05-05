@@ -74,7 +74,6 @@ import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.social.AuthToken;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
@@ -590,7 +589,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingSkip: {
                 skipUser(mCurrentUser);
-                if (mCurrentUser != null) {
+                if (mCurrentUser != null && !mCurrentUser.rated) {
                     mCurrentUser.skipped = true;
                 }
                 showNextUser();
