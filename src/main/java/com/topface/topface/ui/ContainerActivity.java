@@ -56,7 +56,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final int INTENT_COINS_SUBSCRIPTION_FRAGMENT = 10;
     // Id для админки начиная со 101
     public static final int INTENT_EDITOR_BANNERS = 101;
-    private static final int INTENT_PROFILE_FRAGMENT = 6;
+    public static final int INTENT_PROFILE_FRAGMENT = 6;
     public static final String TYPE = "type";
     public static final String CHANGED = "changed";
     private int mCurrentFragmentId = -1;
@@ -120,6 +120,16 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
         return intent;
+    }
+
+    public static Intent getBuyingIntent(String from, int itemType, int itemPrice) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
+        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
+        intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, itemType);
+        intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, itemPrice);
+        return intent;
+
     }
 
     public static Intent getBuyingIntent(String from) {

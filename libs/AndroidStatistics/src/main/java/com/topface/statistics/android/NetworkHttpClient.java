@@ -58,6 +58,9 @@ public class NetworkHttpClient implements INetworkClient {
                         outputStream = connection.getOutputStream();
                         outputStream.write(buffData);
                         outputStream.flush();
+                        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                            connection.getInputStream().close();
+                        }
                         callback.onSuccess();
                     } catch (IOException e) {
                         Log.e(StatisticsTracker.TAG, e.toString());
@@ -84,10 +87,10 @@ public class NetworkHttpClient implements INetworkClient {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) (new URL(url)).openConnection();
+            connection.setDoInput(true);
             connection.setDoOutput(true);
             connection.setUseCaches(false);
             connection.setFixedLengthStreamingMode(contentLength);
-//            connection.setRequestProperty("Content-Length", Integer.toString(contentLength));
             connection.setRequestProperty("Content-Type", CONTENT_TYPE);
             connection.setRequestProperty("User-Agent", mUserAgent);
             connection.setRequestMethod(POST);
