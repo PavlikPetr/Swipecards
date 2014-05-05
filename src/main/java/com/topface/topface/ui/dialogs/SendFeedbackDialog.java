@@ -5,11 +5,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.widget.Toast;
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendFeedbackRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.requests.handlers.EmptyApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.settings.FeedbackMessageFragment;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Settings;
@@ -76,7 +79,18 @@ public class SendFeedbackDialog extends AbstractModalDialog implements View.OnCl
             case R.id.btnSend:
                 Utils.hideSoftKeyboard(getActivity(), mEdMessage);
                 final String message = Utils.getText(mEdMessage);
-                final ApiHandler handler = new EmptyApiHandler();
+                final ApiHandler handler = new SimpleApiHandler() {
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                        if (response.isCodeEqual(ErrorCodes.TOO_MANY_MESSAGES)) {
+                            Toast.makeText(App.getContext(), R.string.ban_flood_detected,
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(App.getContext(), R.string.general_data_error,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                };
                 new BackgroundThread() {
                     @Override
                     public void execute() {
