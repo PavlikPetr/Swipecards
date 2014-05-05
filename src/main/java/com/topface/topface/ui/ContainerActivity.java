@@ -56,7 +56,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final int INTENT_COINS_SUBSCRIPTION_FRAGMENT = 10;
     // Id для админки начиная со 101
     public static final int INTENT_EDITOR_BANNERS = 101;
-    private static final int INTENT_PROFILE_FRAGMENT = 6;
+    public static final int INTENT_PROFILE_FRAGMENT = 6;
     public static final String TYPE = "type";
     public static final String CHANGED = "changed";
     private int mCurrentFragmentId = -1;

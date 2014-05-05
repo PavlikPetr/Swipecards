@@ -59,6 +59,7 @@ import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
@@ -74,7 +75,6 @@ import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.social.AuthToken;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
@@ -603,7 +603,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
-                    getActivity().startActivity(ContainerActivity.getProfileIntent(mCurrentUser.id, DatingFragment.class, getActivity()));
+                    startActivityForResult(ContainerActivity.getProfileIntent(mCurrentUser.id, DatingFragment.class, getActivity()),
+                            ContainerActivity.INTENT_PROFILE_FRAGMENT);
                     EasyTracker.getTracker().sendEvent("Dating", "Additional", "Profile", 1L);
                 }
             }
@@ -989,6 +990,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         unlockControls();
                     }
                 }).exec();
+            }
+        } else if (resultCode == UserProfileFragment.USER_LIKED && requestCode == ContainerActivity.INTENT_PROFILE_FRAGMENT) {
+            int likedUsedId = data.getExtras().getInt(UserProfileFragment.USER_ID_EXTRA);
+            if (likedUsedId == mCurrentUser.id) {
+                mDelightBtn.setEnabled(false);
+                mMutualBtn.setEnabled(false);
+                mCurrentUser.rated = true;
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

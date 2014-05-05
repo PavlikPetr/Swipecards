@@ -70,7 +70,10 @@ import java.util.ArrayList;
 public class UserProfileFragment extends AbstractProfileFragment implements View.OnClickListener {
 
 
+    public static final int USER_LIKED = 1; // Result code if user was liked
+
     private static final String ARG_TAG_PROFILE_ID = "profile_id";
+    public static final String USER_ID_EXTRA = "user_id";
     private int mProfileId;
     private int mLastLoadedProfileId;
     private String mItemId;
@@ -393,7 +396,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         mDelight.setSelected(true);
         mDelightText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
         mDelight.setEnabled(false);
+
+        Intent intent = new Intent();
+        intent.putExtra(USER_ID_EXTRA, mProfileId);
+        getActivity().setResult(USER_LIKED, intent);
     }
+
 
     @Override
     public void onClick(final View v) {
