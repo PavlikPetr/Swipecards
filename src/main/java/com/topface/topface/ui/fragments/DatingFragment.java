@@ -590,7 +590,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingSkip: {
                 skipUser(mCurrentUser);
-                if (mCurrentUser != null) {
+                if (mCurrentUser != null && !mCurrentUser.rated) {
                     mCurrentUser.skipped = true;
                 }
                 showNextUser();
