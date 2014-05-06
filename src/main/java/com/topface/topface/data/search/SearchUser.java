@@ -18,8 +18,8 @@ public class SearchUser extends FeedUser implements SerializableToJson {
     public boolean mutual;
 
     // Flags
-    public boolean skipped = false;
-    public boolean rated = false;
+    public boolean skipped;
+    public boolean rated;
 
     public SearchUser(JSONObject user) {
         super(user);
@@ -31,6 +31,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
 
         status = Profile.normilizeStatus(user.optString("status"));
         mutual = user.optBoolean("isMutualPossible");
+        rated = user.optBoolean("rated", false);
     }
 
     @Override
@@ -40,6 +41,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
         json.put("mutual", mutual);
         json.put("photos", photos.toJson());
         json.put("photosCount", photosCount);
+        json.put("rated", rated);
         return json;
     }
 
