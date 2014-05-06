@@ -11,10 +11,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-
 import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
@@ -42,10 +43,43 @@ public class EditBackgroundFragment extends AbstractEditFragment {
 
         mSelectedId = CacheProfile.background_id;
 
-        // List
         mBackgroundImagesListView = (ListView) root.findViewById(R.id.lvList);
-        mAdapter = new BackgroundImagesAdapter(getActivity().getApplicationContext(), getBackgroundImagesList());
-        mBackgroundImagesListView.setAdapter(mAdapter);
+        mBackgroundImagesListView.setVisibility(View.INVISIBLE);
+        // List
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter = new BackgroundImagesAdapter(getActivity().getApplicationContext(), getBackgroundImagesList());
+                mBackgroundImagesListView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mBackgroundImagesListView.setAdapter(mAdapter);
+                        Animation fadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
+                        if (fadeIn != null) {
+                            fadeIn.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+                                    mBackgroundImagesListView.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                            mBackgroundImagesListView.startAnimation(fadeIn);
+                        } else {
+                            mBackgroundImagesListView.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+            }
+        }).start();
 
         return root;
     }
