@@ -101,7 +101,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     private MenuFragment mMenuFragment;
     private HackyDrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
-    private boolean needAnimate = false;
     private boolean isPopupVisible = false;
     private boolean mActionBarOverlayed = false;
     private int mInitialTopMargin = 0;
@@ -212,7 +211,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         if (getIntent().getBooleanExtra(INTENT_EXIT, false)) {
             finish();
         }
-        mNeedAnimate = false;
+        setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
         instance = this;
@@ -382,14 +381,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         } else {
             LocaleConfig.localeChangeInitiated = false;
         }
-
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
-
-        if (needAnimate) {
-            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
-        }
-        needAnimate = true;
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
         new ExternalLinkExecuter(mListener).execute(getIntent());
         App.checkProfileUpdate();

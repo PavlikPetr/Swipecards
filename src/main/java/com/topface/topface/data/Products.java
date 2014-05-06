@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GooglePlayProducts extends AbstractData {
+public class Products extends AbstractData {
     public static final String INTENT_UPDATE_PRODUCTS = "com.topface.topface.action.UPDATE_PRODUCTS";
 
     public static enum ProductType {
@@ -66,11 +66,11 @@ public class GooglePlayProducts extends AbstractData {
     public LinkedList<BuyButton> coinsSubscriptionsMasked = new LinkedList<>();
     public ProductsInfo info;
 
-    public GooglePlayProducts(@NotNull IApiResponse data) {
+    public Products(@NotNull IApiResponse data) {
         fillData(data.getJsonResult());
     }
 
-    public GooglePlayProducts(@Nullable JSONObject data) {
+    public Products(@Nullable JSONObject data) {
         if (data != null) {
             fillData(data);
         }
@@ -98,7 +98,7 @@ public class GooglePlayProducts extends AbstractData {
             fillProductsArray(premium, data.optJSONArray(ProductType.PREMIUM.getName()));
             fillProductsArray(others, data.optJSONArray(ProductType.OTHERS.getName()));
         } catch (Exception e) {
-            Debug.error("GooglePlayProducts parsing error", e);
+            Debug.error("Products parsing error", e);
         }
         //Обновляем кэш
         CacheProfile.setGooglePlayProducts(this, data);

@@ -101,7 +101,10 @@ public abstract class AbstractConfig {
      * Sets default data for concrete field
      */
     protected void resetSettingsMap(String key) {
-        mSettingsMap.get(key).resetToDefault();
+        SettingsField field = getSettingsMap().get(key);
+        if (field != null) {
+            field.resetToDefault();
+        }
     }
 
     /**
@@ -235,12 +238,12 @@ public abstract class AbstractConfig {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
 
-        @SuppressWarnings("unchecked")
-         public SettingsField<Double> addDoubleField(String fieldName, Double defaultValue) {
+        @SuppressWarnings({"unchecked", "UnusedDeclaration"})
+        public SettingsField<Double> addDoubleField(String fieldName, Double defaultValue) {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"unchecked", "UnusedDeclaration"})
         public SettingsField<LinkedList<String>> addListField(String fieldName, List defaultValue) {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
@@ -277,6 +280,7 @@ public abstract class AbstractConfig {
             return false;
         }
 
+        @SuppressWarnings("UnusedDeclaration")
         public boolean setField(String fieldName, Double value) {
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
@@ -317,6 +321,7 @@ public abstract class AbstractConfig {
             return 0L;
         }
 
+        @SuppressWarnings("UnusedDeclaration")
         public Double getDoubleField(String fieldName) {
             SettingsField settingsField = get(fieldName);
             if (settingsField != null && settingsField.value != null) {
