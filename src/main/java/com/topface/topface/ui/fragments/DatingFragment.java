@@ -440,8 +440,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded()) {
                             showEmptySearchDialog();
                         } else if (!mUserSearchList.isEnded()) {
-
-                            showNextUser();
                             unlockControls();
                         } else {
                             showEmptySearchDialog();

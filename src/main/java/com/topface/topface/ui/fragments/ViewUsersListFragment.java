@@ -326,10 +326,8 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         if (usersAdded) {
                             if (currentUser != null && mCurrentUser != currentUser) {
                                 showUser(currentUser);
-                                unlockControls();
-                            } else {
-                                showNextUser();
                             }
+                            unlockControls();
                         } else {
                             getProgressBar().setVisibility(View.GONE);
                         }
