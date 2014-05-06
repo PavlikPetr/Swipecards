@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -106,14 +107,19 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private void initBirthdayViews(View root) {
         View birthday = root.findViewById(R.id.loBirthday);
         mBirthdayText = (TextView) birthday.findViewById(R.id.tvBirthday);
-        birthday.setOnClickListener(new View.OnClickListener() {
+        ImageButton downArrow = (ImageButton) birthday.findViewById(R.id.ibBirthday);
+        View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePickerFragment datePicker = DatePickerFragment.newInstance(mYear, mMonthOfYear, mDayOfMonth);
                 datePicker.setOnDateSetListener(RegistrationFragment.this);
                 datePicker.show(getChildFragmentManager(), DatePickerFragment.TAG);
             }
-        });
+        };
+        birthday.setOnClickListener(clickListener);
+        mBirthdayText.setOnClickListener(clickListener);
+        downArrow.setOnClickListener(clickListener);
+
     }
 
     private void initSexViews(View root) {
