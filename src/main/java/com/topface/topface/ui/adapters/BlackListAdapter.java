@@ -13,6 +13,7 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
     public static final int LIMIT = 100;
 
     public static final int ITEM_LAYOUT = R.layout.item_feed_black_list;
+    public static final int ITEM_VIP_LAYOUT = R.layout.item_feed_vip_black_list;
 
     public BlackListAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
@@ -30,12 +31,12 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
 
     @Override
     protected int getVipItemLayout() {
-        return ITEM_LAYOUT;
+        return ITEM_VIP_LAYOUT;
     }
 
     @Override
     protected int getNewVipItemLayout() {
-        return ITEM_LAYOUT;
+        return ITEM_VIP_LAYOUT;
     }
 
     @Override
