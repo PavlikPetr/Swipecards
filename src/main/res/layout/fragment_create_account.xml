@@ -26,12 +26,11 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_registration_folder"
                 android:gravity="center"
-                android:paddingBottom="50dp">
+                android:paddingTop="25dp">
 
                 <LinearLayout
                     android:id="@+id/loForm"
                     android:layout_width="210dp"
-                    android:layout_marginTop="40dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_registration_form_folder"
                     android:orientation="vertical"
@@ -69,14 +68,17 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/textlines">
 
-                        <TextView
+                        <EditText
                             android:id="@+id/tvBirthday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
                             android:hint="@string/birthdate"
-                            style="@style/EditTextAuth" />
+                            style="@style/EditTextAuth"
+                            android:background="@android:color/transparent"
+                            android:focusable="false"
+                            android:cursorVisible="false" />
 
                         <ImageButton
                             android:id="@+id/ibBirthday"
@@ -95,16 +97,19 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content">
 
-                        <TextView
+                        <EditText
                             android:id="@+id/tvSex"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
                             android:hint="@string/general_sex"
-                            style="@style/EditTextAuth" />
+                            style="@style/EditTextAuth"
+                            android:background="@android:color/transparent"
+                            android:focusable="false"
+                            android:cursorVisible="false" />
 
-                        <TextView
+                        <EditText
                             android:id="@+id/tvBoy"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -112,16 +117,22 @@
                             android:layout_centerVertical="true"
                             android:text="@string/boy"
                             style="@style/RegistrationSexTextView"
-                            android:drawableLeft="@drawable/ic_sex_male" />
+                            android:drawableLeft="@drawable/ic_sex_male"
+                            android:background="@android:color/transparent"
+                            android:focusable="false"
+                            android:cursorVisible="false" />
 
-                        <TextView
+                        <EditText
                             android:id="@+id/tvGirl"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_toLeftOf="@id/tvBoy"
                             android:text="@string/girl"
-                            style="@style/RegistrationSexTextView" />
+                            style="@style/RegistrationSexTextView"
+                            android:background="@android:color/transparent"
+                            android:focusable="false"
+                            android:cursorVisible="false" />
 
                     </RelativeLayout>
                 </LinearLayout>
