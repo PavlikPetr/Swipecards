@@ -44,7 +44,13 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mPhotoAlbumControl.setVisibility(mPhotoAlbumControl.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+            if (mPhotoAlbumControl != null) {
+                mPhotoAlbumControl.setVisibility(
+                        mPhotoAlbumControl.getVisibility() == View.GONE ?
+                                View.VISIBLE :
+                                View.GONE
+                );
+            }
         }
     };
     private TextView mCounter;
