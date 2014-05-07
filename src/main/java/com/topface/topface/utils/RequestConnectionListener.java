@@ -31,7 +31,7 @@ public class RequestConnectionListener {
         mConnEstablishedTime = System.currentTimeMillis();
         mTracker.sendEvent(
                 TfStatConsts.api_connect_time,
-                mSlices.putSlice(TfStatConsts.val, TfStatConsts.getConnTimeVal(mConnEstablishedTime - mConnStartedTime))
+                mSlices.putSlice(TfStatConsts.val, getConnTimeVal(mConnEstablishedTime - mConnStartedTime))
         );
     }
 
@@ -39,11 +39,19 @@ public class RequestConnectionListener {
         long connClosedTime = System.currentTimeMillis();
         mTracker.sendEvent(
                 TfStatConsts.api_load_time,
-                mSlices.putSlice(TfStatConsts.val, TfStatConsts.getConnTimeVal(connClosedTime - mConnEstablishedTime))
+                mSlices.putSlice(TfStatConsts.val, getConnTimeVal(connClosedTime - mConnEstablishedTime))
         );
         mTracker.sendEvent(
                 TfStatConsts.api_request_time,
-                mSlices.putSlice(TfStatConsts.val, TfStatConsts.getRequestTimeVal(connClosedTime - mConnStartedTime))
+                mSlices.putSlice(TfStatConsts.val, getRequestTimeVal(connClosedTime - mConnStartedTime))
         );
+    }
+
+    protected String getConnTimeVal(long interval) {
+        return TfStatConsts.getConnTimeVal(interval);
+    }
+
+    protected String getRequestTimeVal(long interval) {
+        return TfStatConsts.getRequestTimeVal(interval);
     }
 }
