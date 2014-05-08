@@ -633,4 +633,5 @@
     <string name="user_does_not_exist">Användaren ej hittats</string>
     <string name="feedback_subject_ban">Klaga på orättvis bannlysning</string>
     <string name="settings_led">LED notifikation</string>
+    <string name="buying_not_enough_coins">Du behöver ytterligare %d {{coins}}</string>
 </resources>

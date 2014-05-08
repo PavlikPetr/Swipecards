@@ -297,6 +297,10 @@
     <string name="virus_chat_likes_request_title">Sympathien Ihren Freunden schenken</string>
     <string name="virus_chat_btn">Sympathien bekommen</string>
     <string name="virus_request_error">Es klappt nicht, Ihren Freunden Sympathien zu senden</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="other">Jetzt haben Sie %d Sympathien!</item>
+        <item quantity="one">Jetzt haben Sie %d Sympathie!</item>
+    </plurals>
     <string name="profile_ask_sent">Bitte ist gesendet</string>
     <string name="virus_error">Ihr Freund kann nur einmal pro Tag Sympathien Ihnen schenken! Versuchen Sie morgen!</string>
     <string name="popup_version_title">Neue Version der Anwendung ist erreichbar</string>
@@ -608,4 +612,8 @@
         <item quantity="other">und noch %d</item>
         <item quantity="one">und noch %d</item>
     </plurals>
+    <string name="general_distance_km">%.02f km</string>
+    <string name="general_distance_m">%d m</string>
+    <string name="settings_led">LED Benachrichtigung</string>
+    <string name="buying_not_enough_coins">Sie brauchen noch %d {{coins}}</string>
 </resources>

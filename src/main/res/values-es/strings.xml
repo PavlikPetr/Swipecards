@@ -637,4 +637,5 @@
     <string name="user_does_not_exist">Usuario no encontrado</string>
     <string name="feedback_subject_ban">Denunciar un baneo injusto</string>
     <string name="settings_led">aviso LED</string>
+    <string name="buying_not_enough_coins">Te falta %d {{coins}}</string>
 </resources>

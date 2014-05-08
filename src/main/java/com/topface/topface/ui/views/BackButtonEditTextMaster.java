@@ -29,7 +29,7 @@ public class BackButtonEditTextMaster extends EditText {
 
     @Override
     public boolean onKeyPreIme(int keyCode, @NotNull KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && mOnKeyBoardExitedListener != null) {
             mOnKeyBoardExitedListener.onKeyboardExited();
         }
         return false;

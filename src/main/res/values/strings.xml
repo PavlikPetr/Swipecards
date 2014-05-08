@@ -639,4 +639,5 @@
     <string name="user_does_not_exist">User not found</string>
     <string name="feedback_subject_ban">Complaint on unfair ban</string>
     <string name="settings_led">LED notification</string>
+    <string name="buying_not_enough_coins">You don\'t have enough %d {{coins}}</string>
 </resources>

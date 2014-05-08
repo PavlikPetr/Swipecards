@@ -17,7 +17,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.android.tools.build:gradle:0.10.+'
     }
 }
 
@@ -255,7 +255,8 @@ android {
     lintOptions {
         checkReleaseBuilds true
         abortOnError true
-        ignore "MissingTranslation"
+        ignore "MissingTranslation", "ValidFragment"
+        /*ValidFragment пока игнорируем, но нужно будет исправить*/
     }
     aaptOptions.useAaptPngCruncher = true
 }

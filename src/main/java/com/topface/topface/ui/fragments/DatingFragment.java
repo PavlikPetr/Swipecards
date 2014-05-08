@@ -991,7 +991,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         } else if (resultCode == UserProfileFragment.USER_LIKED && requestCode == ContainerActivity.INTENT_PROFILE_FRAGMENT) {
             int likedUsedId = data.getExtras().getInt(UserProfileFragment.USER_ID_EXTRA);
-            if (likedUsedId == mCurrentUser.id) {
+            if (mCurrentUser != null && likedUsedId == mCurrentUser.id) {
                 mDelightBtn.setEnabled(false);
                 mMutualBtn.setEnabled(false);
                 mCurrentUser.rated = true;
