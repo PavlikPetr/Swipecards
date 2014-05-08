@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,27 +22,25 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LeaderRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.adapters.LeadersPhotoGridAdapter;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
-import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-import java.util.LinkedList;
-
 public class LeadersActivity extends BaseFragmentActivity {
-    private GridLayout mGridView;
-    private GridLayout mUselessGridView;
+    private GridView mGridView;
+    private GridView mUselessGridView;
     private View mLoadingLocker;
-    private PhotoSelector mSelectedPhoto = new PhotoSelector();
     private Button mBuyButton;
 
     private Photos usePhotos;
     private Photos uselessPhotos;
 
+    private LeadersPhotoGridAdapter mUsePhotosAdapter;
+    private LeadersPhotoGridAdapter mUselessPhotosAdapter;
 
-    private LinkedList<LeadersPhoto> mLeadersPhotos = new LinkedList<>();
     private TextView mUselessTitle;
     private RelativeLayout mContainer;
 
@@ -59,8 +57,8 @@ public class LeadersActivity extends BaseFragmentActivity {
         uselessPhotos = new Photos();
 
 //        mProgressBar = (ProgressBar) findViewById(R.id.loader);
-        mGridView = (GridLayout) findViewById(R.id.useful_photos_grid);
-        mUselessGridView = (GridLayout) findViewById(R.id.useless_photos_grid);
+        mGridView = (GridView) findViewById(R.id.useful_photos_grid);
+        mUselessGridView = (GridView) findViewById(R.id.useless_photos_grid);
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
         mLoadingLocker = findViewById(R.id.llvLeaderSending);
         mUselessTitle = (TextView) findViewById(R.id.useless_photos_title_text);
@@ -90,11 +88,12 @@ public class LeadersActivity extends BaseFragmentActivity {
             @Override
             public void onClick(View view) {
                 int leadersPrice = CacheProfile.getOptions().priceLeader;
+                int selectedPhotoId = mUsePhotosAdapter.getSelectedPhotoId();
                 if (CacheProfile.money < leadersPrice) {
                     startActivity(ContainerActivity.getBuyingIntent("Leaders", BuyingFragment.TYPE_LEADERS, leadersPrice));
-                } else if (mSelectedPhoto.isSelected()) {
+                } else if (selectedPhotoId != -1) {
                     mLoadingLocker.setVisibility(View.VISIBLE);
-                    new LeaderRequest(mSelectedPhoto.getPhotoId(), LeadersActivity.this)
+                    new LeaderRequest(selectedPhotoId, LeadersActivity.this)
                             .callback(new ApiHandler() {
                                 @Override
                                 public void success(IApiResponse response) {
@@ -163,37 +162,23 @@ public class LeadersActivity extends BaseFragmentActivity {
         for (final Photo photo : usePhotos) {
             View view = getLayoutInflater().inflate(R.layout.leaders_photo_item, null);
             ImageViewRemote ivr = (ImageViewRemote) view.findViewById(R.id.ivLeadPhoto);
-            final ImageView mask = (ImageView) view.findViewById(R.id.lpiMask);
-            mLeadersPhotos.add(new LeadersPhoto(photo, mask));
-            view.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mSelectedPhoto != null) {
-                        mSelectedPhoto.select(mask, photo);
-                    }
-                }
-            });
-            mGridView.addView(view);
             ivr.setPhoto(photo);
         }
+        mUsePhotosAdapter = new LeadersPhotoGridAdapter(this, usePhotos);
+        mGridView.setAdapter(mUsePhotosAdapter);
 
         for (Photo photo : uselessPhotos) {
             View view = getLayoutInflater().inflate(R.layout.leaders_photo_unused_item, null);
             ImageViewRemote ivr = (ImageViewRemote) view.findViewById(R.id.ivLeadPhoto);
             TextView tv = (TextView) view.findViewById(R.id.lpuRating);
             tv.setText(getString(R.string.default_percent_equation, photo.mLiked));
-            mUselessGridView.addView(view);
             ivr.setPhoto(photo);
         }
+        mUselessPhotosAdapter = new LeadersPhotoGridAdapter(this, uselessPhotos);
+        mUselessGridView.setAdapter(mUselessPhotosAdapter);
 
         if (uselessPhotos.size() == 0) {
             mUselessTitle.setVisibility(View.GONE);
-        }
-
-        if (mSelectedPhoto != null) {
-            if (mLeadersPhotos.size() > 0) {
-                mSelectedPhoto.select(mLeadersPhotos.get(0).view, mLeadersPhotos.get(0).photo);
-            }
         }
     }
 
@@ -214,51 +199,5 @@ public class LeadersActivity extends BaseFragmentActivity {
 
     private void getProfile() {
         updateProfileInfo(CacheProfile.getProfile());
-    }
-
-    public static class LeadersPhoto {
-        public ImageView view;
-        public Photo photo;
-
-        public LeadersPhoto(Photo photo, ImageView view) {
-            this.photo = photo;
-            this.view = view;
-        }
-    }
-
-    public static class PhotoSelector {
-        private ImageView mItem;
-        private int mPhotoId;
-
-        public void select(ImageView item, Photo photo) {
-            if (item != null) {
-                //При повторном клике на выбранный элемент, отключаем
-                if (item.equals(mItem)) {
-                    mItem.setImageResource(R.drawable.mask_normal_photo);
-                    mItem = null;
-                    mPhotoId = -1;
-
-                } else {
-                    if (mItem != null) {
-                        mItem.setImageResource(R.drawable.mask_normal_photo);
-                    }
-                    item.setImageResource(R.drawable.mask_selected_photo);
-                    mItem = item;
-                    mPhotoId = photo.getId();
-                }
-            }
-        }
-
-        public boolean isSelected() {
-            return mItem != null;
-        }
-
-        public int getPhotoId() {
-            return mPhotoId;
-        }
-
-        public ImageView getItem() {
-            return mItem;
-        }
     }
 }
