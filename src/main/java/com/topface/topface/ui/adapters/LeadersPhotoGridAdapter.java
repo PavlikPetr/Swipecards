@@ -35,15 +35,15 @@ public class LeadersPhotoGridAdapter extends ProfileGridAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.leaders_photo_item, null, false);
             holder = new ViewHolder();
-            holder.mPhoto = (ImageViewRemote) convertView.findViewById(R.id.ivLeadPhoto);
-            holder.mCheckMark = (ImageView) convertView.findViewById(R.id.lpiCheckMark);
+            holder.photo = (ImageViewRemote) convertView.findViewById(R.id.ivLeadPhoto);
+            holder.checkMark = (ImageView) convertView.findViewById(R.id.lpiCheckMark);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.mPhoto.setPhoto(item);
-        holder.mPhoto.setOnClickListener(new View.OnClickListener() {
+        holder.photo.setPhoto(item);
+        holder.photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSelectedId = mSelectedId == itemId ? -1 : itemId;
@@ -51,7 +51,7 @@ public class LeadersPhotoGridAdapter extends ProfileGridAdapter {
             }
         });
 
-        holder.mCheckMark.setVisibility(itemId == mSelectedId ? View.VISIBLE : View.GONE);
+        holder.checkMark.setVisibility(itemId == mSelectedId ? View.VISIBLE : View.GONE);
 
         return convertView;
     }
@@ -61,7 +61,7 @@ public class LeadersPhotoGridAdapter extends ProfileGridAdapter {
     }
 
     private static class ViewHolder {
-        ImageViewRemote mPhoto;
-        ImageView mCheckMark;
+        ImageViewRemote photo;
+        ImageView checkMark;
     }
 }
