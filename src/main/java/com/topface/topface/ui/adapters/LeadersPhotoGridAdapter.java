@@ -46,20 +46,12 @@ public class LeadersPhotoGridAdapter extends ProfileGridAdapter {
         holder.mPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mSelectedId == itemId) {
-                    mSelectedId = -1;
-                } else {
-                    mSelectedId = itemId;
-                }
+                mSelectedId = mSelectedId == itemId ? -1 : itemId;
                 notifyDataSetChanged();
             }
         });
 
-        if (itemId == mSelectedId) {
-            holder.mCheckMark.setVisibility(View.VISIBLE);
-        } else {
-            holder.mCheckMark.setVisibility(View.GONE);
-        }
+        holder.mCheckMark.setVisibility(itemId == mSelectedId ? View.VISIBLE : View.GONE);
 
         return convertView;
     }
