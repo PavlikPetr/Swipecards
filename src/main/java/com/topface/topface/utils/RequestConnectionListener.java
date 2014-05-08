@@ -4,6 +4,7 @@ import com.topface.statistics.TfStatConsts;
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 
 /**
  * Created by kirussell on 28.04.2014.
@@ -29,22 +30,34 @@ public class RequestConnectionListener {
 
     public void onConnectionEstablished() {
         mConnEstablishedTime = System.currentTimeMillis();
+        long interval = mConnEstablishedTime - mConnStartedTime;
+        addDebugVal(interval);
         mTracker.sendEvent(
                 TfStatConsts.api_connect_time,
-                mSlices.putSlice(TfStatConsts.val, getConnTimeVal(mConnEstablishedTime - mConnStartedTime))
+                mSlices.putSlice(TfStatConsts.val, getConnTimeVal(interval))
         );
     }
 
     public void onConnectionClose() {
         long connClosedTime = System.currentTimeMillis();
+        long interval = connClosedTime - mConnEstablishedTime;
+        addDebugVal(interval);
         mTracker.sendEvent(
                 TfStatConsts.api_load_time,
-                mSlices.putSlice(TfStatConsts.val, getConnTimeVal(connClosedTime - mConnEstablishedTime))
+                mSlices.putSlice(TfStatConsts.val, getConnTimeVal(interval))
         );
+        interval = connClosedTime - mConnStartedTime;
+        addDebugVal(interval);
         mTracker.sendEvent(
                 TfStatConsts.api_request_time,
-                mSlices.putSlice(TfStatConsts.val, getRequestTimeVal(connClosedTime - mConnStartedTime))
+                mSlices.putSlice(TfStatConsts.val, getRequestTimeVal(interval))
         );
+    }
+
+    private void addDebugVal(long val) {
+        if (BuildConfig.DEBUG) {
+            mSlices.put(TfStatConsts.debug_val, Long.toString(val));
+        }
     }
 
     protected String getConnTimeVal(long interval) {
