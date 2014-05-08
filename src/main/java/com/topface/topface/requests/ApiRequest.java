@@ -4,7 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
-import com.topface.topface.*;
+
+import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
+import com.topface.topface.R;
+import com.topface.topface.RetryDialog;
+import com.topface.topface.Ssid;
+import com.topface.topface.Static;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.BackgroundThread;
@@ -13,6 +19,7 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.RequestConnectionListener;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -149,11 +156,9 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public void setFinished() {
-        closeConnection();
         mPostData = null;
     }
 
-    @Override
     public String toPostData() {
         //Непосредственно перед отправкой запроса устанавливаем новый SSID
         setSsid(Ssid.get());
@@ -174,8 +179,7 @@ public abstract class ApiRequest implements IApiRequest {
         return handler;
     }
 
-    @Override
-    public boolean setSsid(String ssid) {
+    private boolean setSsid(String ssid) {
         if (isNeedAuth()) {
             //Если SSID изменился, то сбрасываем кэш данных запроса
             if (!TextUtils.equals(ssid, this.ssid)) {
@@ -224,8 +228,6 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     protected HttpURLConnection openConnection() throws IOException {
-        //Если открываем новое подключение, то старое закрываем
-        closeConnection();
 
         mURLConnection = HttpUtils.openPostConnection(mApiUrl, getContentType());
         setRevisionHeader(mURLConnection);
@@ -235,13 +237,6 @@ public abstract class ApiRequest implements IApiRequest {
 
     protected String getContentType() {
         return CONTENT_TYPE;
-    }
-
-    public void closeConnection() {
-        if (mURLConnection != null) {
-            mURLConnection.disconnect();
-            mURLConnection = null;
-        }
     }
 
     /**
@@ -263,9 +258,6 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     public HttpURLConnection getConnection() throws IOException {
-        if (mURLConnection != null) {
-            closeConnection();
-        }
 
         mURLConnection = openConnection();
 
@@ -345,13 +337,11 @@ public abstract class ApiRequest implements IApiRequest {
         return responseCode;
     }
 
-    @Override
     public IApiResponse readResponse() throws IOException {
         String rawResponse = null;
         IApiResponse response;
         if (mURLConnection != null) {
             rawResponse = HttpUtils.readStringFromConnection(mURLConnection);
-            closeConnection();
         }
         //Если ответ не пустой, то создаем объект ответа
         if (!TextUtils.isEmpty(rawResponse)) {
