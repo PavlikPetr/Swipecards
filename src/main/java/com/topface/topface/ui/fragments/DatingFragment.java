@@ -59,7 +59,6 @@ import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
@@ -145,6 +144,24 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
 
+    private BroadcastReceiver mRateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int likedUserId = intent.getExtras().getInt(RateController.USER_ID_EXTRA);
+            if (mCurrentUser != null && likedUserId == mCurrentUser.id) {
+                mDelightBtn.setEnabled(false);
+                mMutualBtn.setEnabled(false);
+                mCurrentUser.rated = true;
+            } else if (mUserSearchList != null) {
+                for (SearchUser searchUser : mUserSearchList) {
+                    if (searchUser.id == likedUserId) {
+                        searchUser.rated = true;
+                    }
+                }
+            }
+        }
+    };
+
     private INavigationFragmentsListener mFragmentSwitcherListener;
     private AnimationHelper mAnimationHelper;
 
@@ -181,6 +198,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 inBackroundThread();
             }
         };
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mRateReceiver, new IntentFilter(RateController.USER_RATED));
     }
 
     protected void inBackroundThread() {
@@ -218,6 +237,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRateReceiver);
     }
 
     @Override
@@ -988,13 +1008,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         unlockControls();
                     }
                 }).exec();
-            }
-        } else if (resultCode == UserProfileFragment.USER_LIKED && requestCode == ContainerActivity.INTENT_PROFILE_FRAGMENT) {
-            int likedUsedId = data.getExtras().getInt(UserProfileFragment.USER_ID_EXTRA);
-            if (mCurrentUser != null && likedUsedId == mCurrentUser.id) {
-                mDelightBtn.setEnabled(false);
-                mMutualBtn.setEnabled(false);
-                mCurrentUser.rated = true;
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
