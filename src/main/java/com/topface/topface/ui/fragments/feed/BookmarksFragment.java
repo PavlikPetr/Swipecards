@@ -20,6 +20,8 @@ import java.util.List;
 
 public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
 
+    public static final int SELECTION_LIMIT = 10;
+
     @Override
     protected Drawable getBackIcon() {
         return getResources().getDrawable(R.drawable.favorite);
@@ -67,6 +69,11 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
 
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
+    }
+
+    @Override
+    protected int getMultiSelectionLimit() {
+        return SELECTION_LIMIT;
     }
 
     @Override
