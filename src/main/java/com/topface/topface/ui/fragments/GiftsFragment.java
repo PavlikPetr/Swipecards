@@ -91,7 +91,6 @@ public class GiftsFragment extends ProfileInnerFragment {
             @Override
             public void run() {
                 if (mTag.equals(GIFTS_ALL_TAG)) {
-                    mTitle.setVisibility(View.GONE);
                     mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -111,11 +110,10 @@ public class GiftsFragment extends ProfileInnerFragment {
                     });
 
                 } else if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
-                    if (mGridAdapter.getData().size() > 1)
-                        mTitle.setText(R.string.gifts);
-                    else
+                    if (mGridAdapter.getData().size() < 1) {
                         mTitle.setText(R.string.user_does_not_have_gifts);
-                    mTitle.setVisibility(View.VISIBLE);
+                        mTitle.setVisibility(View.VISIBLE);
+                    }
                     mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -142,8 +140,6 @@ public class GiftsFragment extends ProfileInnerFragment {
                     });
                 }
                 if (mProfile != null) {
-                    mTitle.setText(R.string.gifts);
-                    mTitle.setVisibility(View.VISIBLE);
                     if (mGridAdapter.getData().size() <= getMinItemsCount()) {
                         onNewFeeds();
                     }
@@ -187,7 +183,7 @@ public class GiftsFragment extends ProfileInnerFragment {
             mGridAdapter.add(1, sendedGift);
         } else {
             mGridAdapter.add(sendedGift);
-            mTitle.setText(R.string.gifts);
+            mTitle.setVisibility(View.GONE);
         }
         if (mProfile.gifts != null) mProfile.gifts.add(0, sendedGift.gift);
         mGridAdapter.notifyDataSetChanged();
@@ -233,6 +229,7 @@ public class GiftsFragment extends ProfileInnerFragment {
                     mTextInfo.setVisibility(View.GONE);
                 } else if (mTag.equals(GIFTS_USER_PROFILE_TAG) && mGridAdapter.getData().size() <= getMinItemsCount()) {
                     mTitle.setText(R.string.user_does_not_have_gifts);
+                    mTitle.setVisibility(View.VISIBLE);
                 }
 
                 if (gifts.more) {
@@ -335,7 +332,7 @@ public class GiftsFragment extends ProfileInnerFragment {
 
     public void sendGift() {
         getParentFragment().startActivityForResult(
-                GiftsActivity.getSendGiftIntent(getActivity(), mProfile.uid),
+                GiftsActivity.getSendGiftIntent(getActivity(), mProfile.uid, true),
                 GiftsActivity.INTENT_REQUEST_GIFT
         );
     }

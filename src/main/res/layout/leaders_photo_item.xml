@@ -7,13 +7,13 @@
 
     <com.topface.topface.ui.views.ImageViewRemote
         android:id="@+id/ivLeadPhoto"
-        android:scaleType="centerCrop"
-        android:layout_width="95dp"
-        android:layout_height="95dp" />
+        style="@style/GalleryItem"
+        android:layout_centerInParent="true" />
 
     <ImageView
-        android:id="@+id/lpiMask"
-        android:layout_width="95dp"
-        android:layout_height="95dp"
-        android:src="@drawable/mask_normal_photo" />
+        android:id="@+id/lpiCheckMark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/mask_selected_photo" />
 </RelativeLayout>

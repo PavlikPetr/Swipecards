@@ -44,7 +44,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private BroadcastReceiver mReauthReceiver;
-    protected boolean mNeedAnimate = true;
+    private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private StartActionsController mStartActionsController;
 
@@ -114,6 +114,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         if (mNeedAnimate) {
             overridePendingTransition(com.topface.topface.R.anim.slide_in_from_right, com.topface.topface.R.anim.slide_out_left);
         }
+    }
+
+    protected void setNeedTransitionAnimation(boolean needAnimate) {
+        mNeedAnimate = needAnimate;
     }
 
     private void checkProfileLoad() {
@@ -274,6 +278,14 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         super.startActivityForResult(intent, requestCode);
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        if (mNeedAnimate) {
+            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
+        }
+    }
+
     protected boolean isNeedBroughtToFront(Intent intent) {
         return intent != null &&
                 !intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false) &&
@@ -307,6 +319,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected void onProfileUpdated() {
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public boolean isPackageInstalled(String packagename, Context context) {
         PackageManager pm = context.getPackageManager();
         try {

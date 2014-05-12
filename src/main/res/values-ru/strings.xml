@@ -819,7 +819,11 @@
     <string name="press_back_more_to_close_app">Нажмите кнопку назад еще раз для выхода из Topface</string>
     <string name="waiting_for_load">Ожидание загрузки…</string>
     <string name="loading_photo_percent">Загрузка фотографии %d%%</string>
+    <string name="profile_update_error">Ошибка обновления данных</string>
+    <string name="retry_cancel_editing">Во время отправки данных возникла ошибка соединения. Повторить попытку или выйти, не сохраняя данные?</string>
     <string name="user_does_not_exist">Пользователь не найден</string>
     <string name="feedback_subject_ban">Жалоба на несправедливый бан</string>
     <string name="settings_led">LED уведомление</string>
+
+    <string name="buying_not_enough_coins">Вам не хватает %d {{coins}}</string>
 </resources>

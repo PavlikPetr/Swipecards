@@ -39,7 +39,7 @@ import android.os.Process;
  * если они есть в коде, с которым вы работаете, но даже не вы писали
  */
 public abstract class BackgroundThread extends Thread {
-    public static final int DEFAULT_PRIORITY = Process.THREAD_PRIORITY_BACKGROUND;
+    public static final int DEFAULT_PRIORITY = Thread.NORM_PRIORITY - 2;
 
     public BackgroundThread() {
         this(DEFAULT_PRIORITY);

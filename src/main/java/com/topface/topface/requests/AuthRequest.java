@@ -129,13 +129,6 @@ public class AuthRequest extends ApiRequest {
     }
 
     @Override
-    public boolean setSsid(String ssid) {
-        //В AuthRequest у нас нет ssid
-        this.ssid = null;
-        return true;
-    }
-
-    @Override
     public boolean isNeedAuth() {
         return false;
     }

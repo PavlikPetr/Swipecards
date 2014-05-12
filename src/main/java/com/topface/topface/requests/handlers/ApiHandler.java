@@ -7,18 +7,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
-
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.AppOptionsRequest;
-import com.topface.topface.requests.ConfirmedApiRequest;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
-
 import org.json.JSONObject;
 
 abstract public class ApiHandler extends Handler {
@@ -132,8 +126,8 @@ abstract public class ApiHandler extends Handler {
         String methodName = response.getMethodName();
         if (methodName.equals(ProfileRequest.SERVICE)) {
             CacheProfile.sendUpdateProfileBroadcast();
-        } else if (methodName.equals(AppOptionsRequest.SERVICE)) {
-            LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(AppOptionsRequest.VERSION_INTENT));
+        } else if (methodName.equals(UserGetAppOptionsRequest.SERVICE)) {
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(UserGetAppOptionsRequest.VERSION_INTENT));
         }
     }
 
@@ -141,12 +135,12 @@ abstract public class ApiHandler extends Handler {
         return mContext != null;
     }
 
-    public void setContext(Context context) {
-        mContext = context;
-    }
-
     protected Context getContext() {
         return mContext;
+    }
+
+    public void setContext(Context context) {
+        mContext = context;
     }
 
     protected boolean isShowPremiumError() {

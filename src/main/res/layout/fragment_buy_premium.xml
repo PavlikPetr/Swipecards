@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent">
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent">
 
     <LinearLayout
         android:orientation="vertical"
@@ -22,7 +22,7 @@
             android:textSize="12sp"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
-            android:singleLine="false" />
+            android:singleLine="false"/>
 
         <LinearLayout
             android:orientation="vertical"
@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/vip_not_activated"
                     style="@style/TitleWhiteText"
-                    android:layout_alignParentLeft="true" />
+                    android:layout_alignParentLeft="true"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -61,19 +61,25 @@
                 style="@style/TitleWhiteText"
                 android:text="@string/general_buying_disabled"
                 android:visibility="gone"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"/>
 
             <ViewStub
                 android:id="@+id/EditorTestStub"
                 android:layout="@layout/fragment_buy_editor"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
             <LinearLayout
                 android:id="@+id/fbpBtnContainer"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
+
+            <ViewStub
+                android:id="@+id/mobilePayments"
+                android:layout="@layout/mobile_payments_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -82,7 +88,7 @@
                 style="@style/TitleWhiteText"
                 android:layout_marginLeft="5dp"
                 android:layout_marginBottom="5dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"/>
 
             <TextView
                 android:layout_width="fill_parent"
@@ -92,12 +98,12 @@
                 style="@style/VipItemTitleWhiteText"
                 android:textSize="13sp"
                 android:drawablePadding="5dp"
-                android:drawableLeft="@drawable/ic_guests" />
+                android:drawableLeft="@drawable/ic_guests"/>
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/delimiter_rocket" />
+                android:src="@drawable/delimiter_rocket"/>
 
             <TextView
                 android:layout_width="fill_parent"
@@ -107,12 +113,12 @@
                 style="@style/VipItemTitleWhiteText"
                 android:textSize="13sp"
                 android:drawableLeft="@drawable/ic_invisible"
-                android:drawablePadding="5dp" />
+                android:drawablePadding="5dp"/>
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/delimiter_rocket" />
+                android:src="@drawable/delimiter_rocket"/>
 
             <TextView
                 android:layout_width="fill_parent"
@@ -122,12 +128,12 @@
                 style="@style/VipItemTitleWhiteText"
                 android:textSize="13sp"
                 android:drawablePadding="5dp"
-                android:drawableLeft="@drawable/ic_stop_ads" />
+                android:drawableLeft="@drawable/ic_stop_ads"/>
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/delimiter_rocket" />
+                android:src="@drawable/delimiter_rocket"/>
 
             <TextView
                 android:layout_width="fill_parent"
@@ -137,12 +143,12 @@
                 style="@style/VipItemTitleWhiteText"
                 android:textSize="13sp"
                 android:drawableLeft="@drawable/ic_message"
-                android:drawablePadding="5dp" />
+                android:drawablePadding="5dp"/>
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/delimiter_rocket" />
+                android:src="@drawable/delimiter_rocket"/>
 
             <TextView
                 android:layout_width="fill_parent"
@@ -152,12 +158,12 @@
                 style="@style/VipItemTitleWhiteText"
                 android:textSize="13sp"
                 android:drawableLeft="@drawable/ic_blacklist"
-                android:drawablePadding="5dp" />
+                android:drawablePadding="5dp"/>
 
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/delimiter_rocket" />
+                android:src="@drawable/delimiter_rocket"/>
 
 
             <TextView
@@ -168,7 +174,7 @@
                 style="@style/VipItemTitleWhiteText"
                 android:textSize="13sp"
                 android:drawableLeft="@drawable/ic_vip"
-                android:drawablePadding="5dp" />
+                android:drawablePadding="5dp"/>
 
         </LinearLayout>
 
@@ -191,7 +197,7 @@
                     style="@style/TitleWhiteText"
                     android:text="@string/vip_rest"
                     android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"/>
 
                 <ImageButton
                     android:id="@+id/fepVipEdit"
@@ -199,7 +205,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_edit"
                     android:layout_alignParentRight="true"
-                    android:background="@android:color/transparent" />
+                    android:background="@android:color/transparent"/>
             </RelativeLayout>
 
             <include
@@ -209,7 +215,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="20dp"
-                layout="@layout/vip_item_edit_form_switch" />
+                layout="@layout/vip_item_edit_form_switch"/>
 
             <include
                 android:id="@+id/fepBlackList"
@@ -217,7 +223,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                layout="@layout/vip_item_edit_form_select" />
+                layout="@layout/vip_item_edit_form_select"/>
 
             <include
                 android:id="@+id/fepProfileBG"
@@ -225,8 +231,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                layout="@layout/vip_item_edit_form_select" />
-
+                layout="@layout/vip_item_edit_form_select"/>
 
         </LinearLayout>
     </LinearLayout>

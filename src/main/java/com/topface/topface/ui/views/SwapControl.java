@@ -48,12 +48,12 @@ public class SwapControl extends ViewGroup {
         }
     }
 
-    public void snapToScreen(int screenPosition) {
+    public void snapToScreen(int screenPosition, boolean instant) {
         int h = getChildAt(1).getHeight();
         if (screenPosition == 1)
-            mScroller.startScroll(0, 0, 0, h, Math.abs(h) * 2);
+            mScroller.startScroll(0, 0, 0, h, instant ? 0 : Math.abs(h) * 2);
         else
-            mScroller.startScroll(0, h, 0, -h, Math.abs(h) * 2);
+            mScroller.startScroll(0, h, 0, -h, instant ? 0 : Math.abs(h) * 2);
 
         invalidate();
     }

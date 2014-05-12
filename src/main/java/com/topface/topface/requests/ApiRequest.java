@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.WindowManager;
 
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
@@ -17,6 +16,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.RequestConnectionListener;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 
@@ -86,7 +86,6 @@ public abstract class ApiRequest implements IApiRequest {
             }
             try {
                 retryDialog.show();
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
             } catch (Exception e) {
                 Debug.error(e);
             }
@@ -157,11 +156,9 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public void setFinished() {
-        closeConnection();
         mPostData = null;
     }
 
-    @Override
     public String toPostData() {
         //Непосредственно перед отправкой запроса устанавливаем новый SSID
         setSsid(Ssid.get());
@@ -182,8 +179,7 @@ public abstract class ApiRequest implements IApiRequest {
         return handler;
     }
 
-    @Override
-    public boolean setSsid(String ssid) {
+    private boolean setSsid(String ssid) {
         if (isNeedAuth()) {
             //Если SSID изменился, то сбрасываем кэш данных запроса
             if (!TextUtils.equals(ssid, this.ssid)) {
@@ -232,8 +228,6 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     protected HttpURLConnection openConnection() throws IOException {
-        //Если открываем новое подключение, то старое закрываем
-        closeConnection();
 
         mURLConnection = HttpUtils.openPostConnection(mApiUrl, getContentType());
         setRevisionHeader(mURLConnection);
@@ -243,13 +237,6 @@ public abstract class ApiRequest implements IApiRequest {
 
     protected String getContentType() {
         return CONTENT_TYPE;
-    }
-
-    public void closeConnection() {
-        if (mURLConnection != null) {
-            mURLConnection.disconnect();
-            mURLConnection = null;
-        }
     }
 
     /**
@@ -271,9 +258,6 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     public HttpURLConnection getConnection() throws IOException {
-        if (mURLConnection != null) {
-            closeConnection();
-        }
 
         mURLConnection = openConnection();
 
@@ -286,10 +270,13 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     final public IApiResponse sendRequestAndReadResponse() throws Exception {
+        RequestConnectionListener listener = new RequestConnectionListener(getServiceName());
         int responseCode = -1;
         IApiResponse response;
         mApiUrl = getApiUrl();
+        listener.onConnectionStarted();
         HttpURLConnection connection = getConnection();
+        listener.onConnectionEstablished();
         if (connection != null) {
             //Непосредственно пишим данные в подключение
             if (writeData(connection)) {
@@ -305,6 +292,7 @@ public abstract class ApiRequest implements IApiRequest {
         if (HttpUtils.isCorrectResponseCode(responseCode)) {
             //Если код ответа верный, то читаем данные из потока и создаем IApiResponse
             response = readResponse();
+            listener.onConnectionClose();
         } else {
             //Если не верный, то конструируем соответсвующий ответ
             response = constructApiResponse(ErrorCodes.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);
@@ -349,13 +337,11 @@ public abstract class ApiRequest implements IApiRequest {
         return responseCode;
     }
 
-    @Override
     public IApiResponse readResponse() throws IOException {
         String rawResponse = null;
         IApiResponse response;
         if (mURLConnection != null) {
             rawResponse = HttpUtils.readStringFromConnection(mURLConnection);
-            closeConnection();
         }
         //Если ответ не пустой, то создаем объект ответа
         if (!TextUtils.isEmpty(rawResponse)) {

@@ -38,8 +38,9 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (activity instanceof ActionBarActivity) {
-            mActionBarIsShowing = ((ActionBarActivity) activity).getSupportActionBar().isShowing();
+        if (activity != null && activity instanceof ActionBarActivity) {
+            android.support.v7.app.ActionBar actionBar = ((ActionBarActivity) activity).getSupportActionBar();
+            mActionBarIsShowing = actionBar != null && actionBar.isShowing();
         }
     }
 

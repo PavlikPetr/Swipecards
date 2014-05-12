@@ -301,9 +301,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
-                        getActivity().setResult(Activity.RESULT_CANCELED);
-                        finishRequestSend();
-                        if (handler != null) handler.sendEmptyMessage(0);
+                        warnEditingFailed(handler);
                     }
                 }).exec();
             }
