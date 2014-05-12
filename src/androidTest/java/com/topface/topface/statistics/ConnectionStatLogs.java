@@ -181,6 +181,7 @@ public class ConnectionStatLogs extends InstrumentationTestCase {
         for (String url : getListOfImagesUrls(size, urlsToChoose)) {
             listener.onConnectionStarted();
             try {
+                listener.onConnectInvoked();
                 stream = connFactory.getStream(url);
                 listener.onConnectionEstablished();
                 stream.close();

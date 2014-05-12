@@ -15,6 +15,7 @@ public class RequestConnectionListener {
     private final StatisticsTracker mTracker;
     private final Slices mSlices;
     private long mConnStartedTime;
+    private long mConnInvokedTime;
     private long mConnEstablishedTime;
 
     public RequestConnectionListener(String serviceName) {
@@ -28,9 +29,13 @@ public class RequestConnectionListener {
         mConnStartedTime = System.currentTimeMillis();
     }
 
+    public void onConnectInvoked() {
+        mConnInvokedTime = System.currentTimeMillis();
+    }
+
     public void onConnectionEstablished() {
         mConnEstablishedTime = System.currentTimeMillis();
-        long interval = mConnEstablishedTime - mConnStartedTime;
+        long interval = mConnEstablishedTime - mConnInvokedTime;
         addDebugVal(interval);
         mTracker.sendEvent(
                 TfStatConsts.api_connect_time,

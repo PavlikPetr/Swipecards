@@ -2,12 +2,10 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 import android.text.TextUtils;
-
 import com.topface.topface.App;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,7 +26,7 @@ abstract public class MultipartApiRequest extends ApiRequest {
     }
 
     @Override
-    protected boolean writeData(HttpURLConnection connection) throws IOException {
+    protected boolean writeData(HttpURLConnection connection, IConnectionConfigureListener listener) throws IOException {
         //Формируем базовую часть запроса (Заголовки, json данные)
         String requests = getRequests();
         //Переводим в байты
@@ -39,7 +37,14 @@ abstract public class MultipartApiRequest extends ApiRequest {
         //Считаем общую длинну получившегося запроса
         int contentLength = requestsBytes.length + endBytes.length;
         //Создаем исходящее подключение к серверу
-        OutputStream outputStream = HttpUtils.getOutputStream(contentLength, connection);
+        //Устанавливаем длину данных
+        if (contentLength > 0) {
+            connection.setFixedLengthStreamingMode(contentLength);
+        }
+        listener.onConfigureEnd();
+        connection.connect();
+        listener.onConnectionEstablished();
+        OutputStream outputStream = connection.getOutputStream();
 
         //Записываем наши данные
         DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(
