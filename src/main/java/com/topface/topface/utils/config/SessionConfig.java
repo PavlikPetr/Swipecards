@@ -42,6 +42,7 @@ public class SessionConfig extends AbstractConfig {
 
     /**
      * Set profile cache from profile request
+     *
      * @param profileResponseJson profile json response
      * @return true on success
      */
@@ -51,6 +52,7 @@ public class SessionConfig extends AbstractConfig {
 
     /**
      * Profile cached json response
+     *
      * @return profile json response
      */
     public String getProfileData() {
@@ -68,6 +70,7 @@ public class SessionConfig extends AbstractConfig {
 
     /**
      * Sets options cache from options request
+     *
      * @param optionsResponseJson options json response
      * @return true on success
      */
@@ -77,6 +80,7 @@ public class SessionConfig extends AbstractConfig {
 
     /**
      * Options caches json response
+     *
      * @return options json response
      */
     public String getOptionsData() {
@@ -94,6 +98,7 @@ public class SessionConfig extends AbstractConfig {
 
     /**
      * Sets google products cache from google play products request
+     *
      * @param googleProductsResponseJson google play products json response
      * @return true on success
      */
@@ -103,9 +108,10 @@ public class SessionConfig extends AbstractConfig {
 
     /**
      * Google products cached json response
+     *
      * @return google plat products json
      */
-    public String getGoogleProductsData() {
+    public String getProductsData() {
         return getSettingsMap().getStringField(DATA_GOOGLE_PRODUCTS);
     }
 

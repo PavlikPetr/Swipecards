@@ -15,7 +15,6 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.User;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.ContactsFragment;
@@ -57,7 +56,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final int INTENT_COINS_SUBSCRIPTION_FRAGMENT = 10;
     // Id для админки начиная со 101
     public static final int INTENT_EDITOR_BANNERS = 101;
-    private static final int INTENT_PROFILE_FRAGMENT = 6;
+    public static final int INTENT_PROFILE_FRAGMENT = 6;
     public static final String TYPE = "type";
     public static final String CHANGED = "changed";
     private int mCurrentFragmentId = -1;
@@ -123,6 +122,16 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         return intent;
     }
 
+    public static Intent getBuyingIntent(String from, int itemType, int itemPrice) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
+        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
+        intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, itemType);
+        intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, itemPrice);
+        return intent;
+
+    }
+
     public static Intent getBuyingIntent(String from) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
@@ -145,14 +154,11 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         initRequestKey();
         checkAuth();
         setContentView(R.layout.ac_fragment_frame);
-        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
-
         //Сперва пробуем
         mCurrentFragment = getSupportFragmentManager().findFragmentById(R.id.loFrame);
         if (mCurrentFragment == null) {
             mCurrentFragment = getNewFragment(mCurrentFragmentId);
         }
-
         if (mCurrentFragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(
@@ -296,7 +302,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         return fragment;
     }
 
-    public enum ActionTypes {BLACK_LIST, BOOKMARK};
+    public enum ActionTypes {BLACK_LIST, BOOKMARK}
 
     public static Intent getIntentForActionsUpdate(ActionTypes type, boolean value) {
         Intent intent = new Intent(UPDATE_USER_CATEGORY);
@@ -334,11 +340,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     protected boolean isNeedAuth() {
         return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT &&
                 mCurrentFragmentId != INTENT_RECOVER_PASSWORD && super.isNeedAuth();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override

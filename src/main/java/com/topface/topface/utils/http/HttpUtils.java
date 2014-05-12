@@ -1,7 +1,9 @@
 package com.topface.topface.utils.http;
 
 import android.os.Build;
+import android.text.TextUtils;
 
+import com.topface.topface.BuildConfig;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
@@ -21,22 +23,13 @@ public class HttpUtils {
     public static final String GZIP_ENCODING = "gzip";
     public static final String LINE_END = "\r\n";
     public static final String TWO_HH = "--";
-
-    /**
-     * Типы HTTP запросов, PUT и т.п. мы не поддерживаем
-     */
-    public static enum HttpConnectionType {
-        POST, GET
-    }
-
     public static final int BUFFER_SIZE = 8192;
-    private static String mUserAgent;
-
     //Параметры соединения
     public static final int CONNECT_TIMEOUT = 5000;
     public static final int READ_TIMEOUT = 20000;
     public static final String USER_AGENT_APP_NAME = "Topface";
     public static final String ACCEPT_ENCODING = "gzip,deflate";
+    private static String mUserAgent;
 
     public static String httpGetRequest(String url) {
         String result = null;
@@ -56,23 +49,37 @@ public class HttpUtils {
         if (connection != null && isCorrectResponseCode(connection.getResponseCode())) {
             //Если нужно, разархивируем поток из Gzip
             InputStream stream = HttpUtils.getGzipInputStream(connection);
+            BufferedReader reader = null;
 
             if (stream != null) {
-                //Создаем BufferReader, что бы упростить себе чтение строк
-                BufferedReader reader = new BufferedReader(new InputStreamReader(
-                        new BufferedInputStream(new FlushedInputStream(stream), HttpUtils.BUFFER_SIZE)
-                ), HttpUtils.BUFFER_SIZE);
 
-                //Читаем содержимое потока
-                StringBuilder sb = new StringBuilder();
-                for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                    sb.append(line);
+                try {
+                    //Создаем BufferReader, что бы упростить себе чтение строк
+                    reader = new BufferedReader(
+                            new InputStreamReader(
+                                    new BufferedInputStream(
+                                            new FlushedInputStream(stream),
+                                            HttpUtils.BUFFER_SIZE
+                                    )
+                            ),
+                            HttpUtils.BUFFER_SIZE
+                    );
+                    //Читаем содержимое потока
+                    StringBuilder sb = new StringBuilder();
+                    for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+                        sb.append(line);
+                    }
+                    result = sb.toString();
+                } finally {
+                    if (reader != null) {
+                        reader.close();
+                    }
                 }
-                result = sb.toString();
 
-                stream.close();
-                reader.close();
             }
+        }
+        if (connection != null) {
+            connection.disconnect();
         }
 
         return result;
@@ -170,7 +177,6 @@ public class HttpUtils {
         return connection.getOutputStream();
     }
 
-
     /**
      * Проверяет что код ответа от сервера верный и можно получать данные
      *
@@ -185,8 +191,10 @@ public class HttpUtils {
         if (mUserAgent == null) {
             final Locale locale = Locale.getDefault();
             mUserAgent = String.format(
-                    USER_AGENT_APP_NAME + "/%s (%s; %s-%s)",
+                    USER_AGENT_APP_NAME + "/%s%s (%s; %s; %s-%s)",
                     Utils.getClientVersion(),
+                    TextUtils.equals(BuildConfig.BUILD_TYPE, "release") ? "" : "-" + BuildConfig.BUILD_TYPE,
+                    BuildConfig.BILLING_TYPE.getClientType(),
                     Utils.getClientOsVersion(),
                     locale.getLanguage(),
                     locale.getCountry()
@@ -194,6 +202,13 @@ public class HttpUtils {
         }
 
         return mUserAgent;
+    }
+
+    /**
+     * Типы HTTP запросов, PUT и т.п. мы не поддерживаем
+     */
+    public static enum HttpConnectionType {
+        POST, GET
     }
 
 }

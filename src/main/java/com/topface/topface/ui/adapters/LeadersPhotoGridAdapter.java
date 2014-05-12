@@ -1,0 +1,67 @@
+package com.topface.topface.ui.adapters;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.topface.topface.R;
+import com.topface.topface.data.Photo;
+import com.topface.topface.data.Photos;
+import com.topface.topface.ui.fragments.profile.ProfileGridAdapter;
+import com.topface.topface.ui.views.ImageViewRemote;
+
+/**
+ * Photos adapter for photos which you can put into a leaders feed
+ */
+public class LeadersPhotoGridAdapter extends ProfileGridAdapter {
+
+    private LayoutInflater mInflater;
+
+    private int mSelectedId;
+
+    public LeadersPhotoGridAdapter(Context context, Photos photoLinks) {
+        super(photoLinks, photoLinks.size(), null);
+        mInflater = LayoutInflater.from(context);
+        mSelectedId = photoLinks.size() > 0 ? photoLinks.getFirst().getId() : -1;
+    }
+
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final ViewHolder holder;
+        Photo item = getItem(position);
+        final int itemId = item.getId();
+
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.leaders_photo_item, null, false);
+            holder = new ViewHolder();
+            holder.photo = (ImageViewRemote) convertView.findViewById(R.id.ivLeadPhoto);
+            holder.checkMark = (ImageView) convertView.findViewById(R.id.lpiCheckMark);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        holder.photo.setPhoto(item);
+        holder.photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSelectedId = mSelectedId == itemId ? -1 : itemId;
+                notifyDataSetChanged();
+            }
+        });
+
+        holder.checkMark.setVisibility(itemId == mSelectedId ? View.VISIBLE : View.GONE);
+
+        return convertView;
+    }
+
+    public int getSelectedPhotoId() {
+        return mSelectedId;
+    }
+
+    private static class ViewHolder {
+        ImageViewRemote photo;
+        ImageView checkMark;
+    }
+}

@@ -32,6 +32,7 @@ import java.util.List;
  * Черный список. Сюда попадают заблокированые пользователи, отныне от них не приходит никакая активность
  */
 public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> implements View.OnClickListener {
+    public static final int SELECTION_LIMIT = 100;
     private BroadcastReceiver updateListReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -91,6 +92,11 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     @Override
     protected List<String> getSelectedFeedIds(FeedAdapter<BlackListItem> adapter) {
         return adapter.getSelectedUsersStringIds();
+    }
+
+    @Override
+    protected int getMultiSelectionLimit() {
+        return SELECTION_LIMIT;
     }
 
     @Override

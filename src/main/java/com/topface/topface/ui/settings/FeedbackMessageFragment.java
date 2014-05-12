@@ -11,23 +11,15 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
-import com.topface.topface.R;
-import com.topface.topface.Ssid;
-import com.topface.topface.Static;
+import com.topface.topface.*;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendFeedbackRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.utils.ClientUtils;
 import com.topface.topface.utils.Debug;
@@ -230,8 +222,13 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
                 @Override
                 public void fail(int codeError, IApiResponse response) {
                     finishRequestSend();
-                    Toast.makeText(App.getContext(), R.string.general_data_error,
-                            Toast.LENGTH_SHORT).show();
+                    if (response.isCodeEqual(ErrorCodes.TOO_MANY_MESSAGES)) {
+                        Toast.makeText(App.getContext(), R.string.ban_flood_detected,
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(App.getContext(), R.string.general_data_error,
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             }).exec();
         } else {

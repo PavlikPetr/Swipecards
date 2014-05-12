@@ -1,23 +1,30 @@
-package com.topface.topface.ui;
+package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 public class BonusFragment extends BaseFragment {
+
+    private View mProgressBar;
+    private String mIntegrationUrl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,33 @@ public class BonusFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        View root;
+        mIntegrationUrl = CacheProfile.getOptions().bonus.integrationUrl;
+        if (!TextUtils.isEmpty(mIntegrationUrl)) {
+            root = getIntegrationWebView(inflater);
+        } else {
+            root = getOfferwallView(inflater);
+        }
+        return root;
+    }
+
+    private View getIntegrationWebView(LayoutInflater inflater) {
+        View root = inflater.inflate(R.layout.ac_web_auth, null);
+        // Progress
+        mProgressBar = root.findViewById(R.id.prsWebLoading);
+
+        // WebView
+        WebView webView = (WebView) root.findViewById(R.id.wvWebFrame);
+        //noinspection AndroidLintSetJavaScriptEnabled
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setVerticalScrollbarOverlay(true);
+        webView.setVerticalFadingEdgeEnabled(true);
+        webView.setWebViewClient(new LoaderClient(webView));
+
+        return root;
+    }
+
+    private View getOfferwallView(LayoutInflater inflater) {
         View root = inflater.inflate(R.layout.fragment_bonus, null);
         Options.Offerwalls offerwalls = CacheProfile.getOptions().offerwalls;
         // main offerwalls - blue buttons
@@ -60,7 +94,7 @@ public class BonusFragment extends BaseFragment {
      * Creates button specified by offer object: styled and with appropriate click listener
      *
      * @param activity current context
-     * @param offer offer from Options
+     * @param offer    offer from Options
      * @return button obj
      */
     private static Button createButton(final Activity activity, final Options.Offerwalls.Offer offer) {
@@ -103,5 +137,33 @@ public class BonusFragment extends BaseFragment {
         btn.setText(text);
         btn.setOnClickListener(listener);
         return btn;
+    }
+
+    private class LoaderClient extends WebViewClient {
+
+        public LoaderClient(WebView webView) {
+            super();
+            webView.loadUrl(mIntegrationUrl);
+        }
+
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            super.onReceivedError(view, errorCode, description, failingUrl);
+            Debug.log(String.format("PW: error load page %s %d: %s", failingUrl, errorCode, description));
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            Debug.log("PW: start load page " + url);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            mProgressBar.setVisibility(View.GONE);
+        }
+
+
     }
 }

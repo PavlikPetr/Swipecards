@@ -4,16 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
+import android.graphics.*;
 import android.graphics.Bitmap.Config;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.text.Editable;
@@ -24,7 +17,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
@@ -40,7 +32,18 @@ import java.util.regex.Pattern;
 public class Utils {
     public static final long DAY = 86400000;
     public static final long WEEK_IN_SECONDS = 604800;
-
+    public static final int RADIUS_OUT = 0;
+    public static final int RADIUS_IN = 1;
+    // from android.util.Patterns.EMAIL_ADDRESS
+    private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
+            "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@" +
+                    "" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    ")+"
+    );
     private static PluralResources mPluralResources;
     private static String mClientVersion;
     private static float mDensity = App.getContext().getResources().getDisplayMetrics().density;
@@ -198,9 +201,6 @@ public class Utils {
         return output;
     }
 
-    public static final int RADIUS_OUT = 0;
-    public static final int RADIUS_IN = 1;
-
     public static Bitmap getScaleAndRoundBitmapOut(Bitmap bitmap, final int width, final int height, float radiusMult) {
         return getScaleAndRoundBitmap(RADIUS_OUT, bitmap, width, height, radiusMult);
     }
@@ -308,17 +308,6 @@ public class Utils {
         }
     }
 
-    // from android.util.Patterns.EMAIL_ADDRESS
-    private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
-            "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@" +
-                    "" +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                    "(" +
-                    "\\." +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                    ")+"
-    );
-
     public static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
@@ -369,7 +358,7 @@ public class Utils {
     }
 
     public static String getClientOsVersion() {
-        return "Android " + Build.VERSION.RELEASE + "; Build/" + Build.ID;
+        return "Android " + Build.VERSION.RELEASE + "; Build/" + Build.PRODUCT;
     }
 
     public static void hideSoftKeyboard(Context context, EditText... edTexts) {

@@ -619,19 +619,26 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         return dataClone;
     }
 
-    private void setLongClickListener(final int position, View convertView, final ViewHolder holder) {
-        if (holder.message != null && convertView != null) {
+    private void setLongClickListener(final int position, final View convertView, final ViewHolder holder) {
+        setLongClickListenerIfPresented(position, convertView, holder.message);
+        setLongClickListenerIfPresented(position, convertView, holder.mapBackground);
+        setLongClickListenerIfPresented(position, convertView, holder.gift);
+    }
+
+    private void setLongClickListenerIfPresented(final int position, final View convertView, final View view)
+    {
+        if (view != null && convertView != null) {
             convertView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    mLongClickListener.onLongClick(position, holder.message);
+                    mLongClickListener.onLongClick(position, view);
                     return false;
                 }
             });
-            holder.message.setOnLongClickListener(new View.OnLongClickListener() {
+            view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(View view) {
-                    mLongClickListener.onLongClick(position, holder.message);
+                public boolean onLongClick(View v) {
+                    mLongClickListener.onLongClick(position, view);
                     return false;
                 }
             });

@@ -168,7 +168,7 @@
     <string name="settings_feedback_success_msg">감사합니다. 메세지가 성공적으로 전송되었습니다.</string>
     <string name="settings_switch_on">켜기</string>
     <string name="settings_switch_off">끄기</string>
-    <string name="leaders_go_date">이곳에서 데이트하고 싶습니다.</string>
+    <string name="leaders_go_date">이곳에서\n데이트하고\n싶습니다.</string>
     <string name="leaders_leader_now">이제 모두가 당신을 따르게 됩니다.</string>
     <string name="leaders_need_photo">우선 사진을 선택하여 주십시오.</string>
     <string name="leaders_select_photo">효과적인 사진을 선택하십시오.</string>

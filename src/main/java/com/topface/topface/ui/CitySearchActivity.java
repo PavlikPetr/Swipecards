@@ -63,7 +63,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_city);
         Debug.log(this, "+onCreate");
-        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
         mRequestKey = getIntent().getIntExtra(Static.INTENT_REQUEST_KEY, 0);
         try {
@@ -347,13 +346,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
     protected void onDestroy() {
         Debug.log(this, "-onDestroy");
         super.onDestroy();
-    }
-
-
-    @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
     }
 
     @Override

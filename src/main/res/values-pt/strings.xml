@@ -579,6 +579,8 @@
     <string name="press_back_more_to_close_app">Clique novamente para sair de Topface</string>
     <string name="waiting_for_load">À espera de carregamento…</string>
     <string name="loading_photo_percent">carregamento de fotos %d%%</string>
+    <string name="profile_update_error">Erro na atualização de banco de dados</string>
+    <string name="retry_cancel_editing">Erro ao enviar dados para o servidor. Sair sem salvar ou tentar novamente?</string>
     <string name="user_does_not_exist">O usuário não foi encontrado</string>
     <string name="feedback_subject_ban">Reclamação sobre proibição injusta</string>
     <string name="settings_led">LED notificação</string>

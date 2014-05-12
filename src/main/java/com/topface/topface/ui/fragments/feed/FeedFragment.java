@@ -67,7 +67,7 @@ import java.util.List;
 import static android.widget.AdapterView.OnItemClickListener;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
-    private static final int FEED_MULTI_SELECTION_LIMIT = 10;
+    private static final int FEED_MULTI_SELECTION_LIMIT = 100;
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
@@ -338,7 +338,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
                 @Override
                 public void onSelected(int size) {
-                    mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
+                    if (mActionMode != null) {
+                        mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
+                    }
                 }
             });
             adapter.notifyDataSetChanged();

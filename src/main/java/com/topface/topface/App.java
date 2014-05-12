@@ -13,29 +13,36 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
-import com.topface.topface.data.GooglePlayProducts;
+import com.topface.statistics.ILogger;
+import com.topface.statistics.android.StatisticsTracker;
+import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Products;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.requests.AmazonProductsRequest;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.AppOptionsRequest;
+import com.topface.topface.requests.AppGetOptionsRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GooglePlayProductsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
@@ -51,6 +58,8 @@ import org.acra.ACRAConfiguration;
 import org.acra.ACRAConfigurationException;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -67,6 +76,7 @@ public class App extends Application {
     private static ConnectionChangeReceiver mConnectionReceiver;
     private static long mLastProfileUpdate;
     private static Configurations mBaseConfig;
+    private static AppOptions mAppOptions;
 
     /**
      * Множественный запрос Options и профиля
@@ -74,7 +84,7 @@ public class App extends Application {
     public static void sendProfileAndOptionsRequests(ApiHandler handler) {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getOptionsRequst())
-                .addRequest(getGooglePlayProductsRequest())
+                .addRequest(getProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .callback(handler)
                 .exec();
@@ -94,26 +104,44 @@ public class App extends Application {
         });
     }
 
-    private static ApiRequest getGooglePlayProductsRequest() {
-        return new GooglePlayProductsRequest(App.getContext()).callback(new DataApiHandler<GooglePlayProducts>() {
-            @Override
-            protected void success(GooglePlayProducts data, IApiResponse response) {
-            }
+    private static ApiRequest getProductsRequest() {
+        ApiRequest request;
+        switch (BuildConfig.BILLING_TYPE) {
+            case AMAZON:
+                request = new AmazonProductsRequest(App.getContext());
+                break;
+            case GOOGLE_PLAY:
+                request = new GooglePlayProductsRequest(App.getContext());
+                break;
+            case NOKIA_STORE:
+            default:
+                request = null;
+                break;
+        }
 
-            @Override
-            protected GooglePlayProducts parseResponse(ApiResponse response) {
-                return new GooglePlayProducts(response);
-            }
+        if (request != null) {
+            request.callback(new DataApiHandler<Products>() {
+                @Override
+                protected void success(Products data, IApiResponse response) {
+                }
 
-            @Override
-            public void fail(int codeError, IApiResponse response) {
+                @Override
+                protected Products parseResponse(ApiResponse response) {
+                    return new Products(response);
+                }
 
-            }
-        });
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+
+                }
+            });
+        }
+
+        return request;
     }
 
     private static ApiRequest getOptionsRequst() {
-        return new AppOptionsRequest(App.getContext())
+        return new UserGetAppOptionsRequest(App.getContext())
                 .callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {
@@ -208,6 +236,25 @@ public class App extends Application {
         return getConfig().getNovice();
     }
 
+    public static AppOptions getAppOptions() {
+        if (mAppOptions == null) {
+            AppConfig config = App.getAppConfig();
+            String appOptionsCache = config.getAppOptions();
+            if (!TextUtils.isEmpty(appOptionsCache)) {
+                try {
+                    mAppOptions = new AppOptions(new JSONObject(appOptionsCache));
+                } catch (JSONException e) {
+                    config.resetAppOptionsData();
+                    Debug.error(e);
+                }
+            }
+            if (mAppOptions == null) {
+                mAppOptions = new AppOptions(null);
+            }
+        }
+        return mAppOptions;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -228,6 +275,7 @@ public class App extends Application {
         checkKeepAlive();
 
         String msg = "+onCreate\n" + baseConfig.toString();
+        //noinspection ConstantConditions
         if (BuildConfig.BUILD_TIME > 0) {
             msg += "\nBuild Time: " + SimpleDateFormat.getInstance().format(BuildConfig.BUILD_TIME);
         }
@@ -247,6 +295,19 @@ public class App extends Application {
             GCMUtils.init(getContext());
         }
 
+        // Инициализируем общие срезы для статистики
+        StatisticsTracker.getInstance().setContext(mContext)
+                .putPredefinedSlice("app", BuildConfig.STATISTICS_APP)
+                .putPredefinedSlice("cvn", Utils.getClientVersion());
+        if (BuildConfig.DEBUG) {
+            StatisticsTracker.getInstance().setLogger(new ILogger() {
+                public void log(String msg) {
+                    Debug.log(StatisticsTracker.TAG, msg);
+                }
+            });
+        }
+        sendAppOptionsRequest();
+
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new BackgroundThread() {
@@ -256,6 +317,7 @@ public class App extends Application {
             }
         };
     }
+
 
     /**
      * Вызывается в onCreate, но выполняется в отдельном потоке
@@ -278,6 +340,26 @@ public class App extends Application {
                 }
             });
         }
+    }
+
+    private void sendAppOptionsRequest() {
+        new AppGetOptionsRequest(mContext).callback(new DataApiHandler<AppOptions>() {
+            @Override
+            protected void success(AppOptions data, IApiResponse response) {
+                mAppOptions = data;
+                StatisticsTracker.getInstance()
+                        .setConfiguration(data.getStatisticsConfiguration(Connectivity.getConnType(mContext)));
+            }
+
+            @Override
+            protected AppOptions parseResponse(ApiResponse response) {
+                return new AppOptions(response.jsonResult);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+            }
+        }).exec();
     }
 
     private void sendLocation() {

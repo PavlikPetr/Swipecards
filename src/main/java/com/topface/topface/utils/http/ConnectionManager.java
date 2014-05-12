@@ -377,9 +377,6 @@ public class ConnectionManager {
             //Если OutOfMemory, то отменяем запросы, толку от этого все равно нет
             response = apiRequest.constructApiResponse(ErrorCodes.ERRORS_PROCCESED, "Request OutOfMemory: " + e.toString());
         } finally {
-            //Закрываем соединение
-            apiRequest.closeConnection();
-
             if (response == null) {
                 response = apiRequest.constructApiResponse(ErrorCodes.NULL_RESPONSE, "Null response");
             }

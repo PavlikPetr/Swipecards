@@ -15,9 +15,9 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.GooglePlayProducts;
-import com.topface.topface.data.GooglePlayProducts.ProductsInfo.CoinsSubscriptionInfo;
-import com.topface.topface.data.GooglePlayProducts.ProductsInfo.CoinsSubscriptionInfo.MonthInfo;
+import com.topface.topface.data.Products;
+import com.topface.topface.data.Products.ProductsInfo.CoinsSubscriptionInfo;
+import com.topface.topface.data.Products.ProductsInfo.CoinsSubscriptionInfo.MonthInfo;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Created by kirussell on 12.02.14.
  * Subscriptions on packs of coins.
- * UI configures based on server options from GooglePlayProducts object
+ * UI configures based on server options from Products object
  */
 public class CoinsSubscriptionsFragment extends BillingFragment {
     private LinearLayout mContainer;
@@ -53,14 +53,16 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_coins_subscription, null);
         mContainer = (LinearLayout) root.findViewById(R.id.loContainer);
-        GooglePlayProducts products = CacheProfile.getGooglePlayProducts();
-        CoinsSubscriptionInfo info = products.info.coinsSubscription;
-        // info text
-        ((TextView) root.findViewById(R.id.tvInfoText)).setText(info.text);
-        // icons with coins
-        initCoinsIconsViews(root, info);
-        // buttons
-        initButtonsViews(products);
+        Products products = CacheProfile.getProducts();
+        if (products != null) {
+            CoinsSubscriptionInfo info = products.info.coinsSubscription;
+            // info text
+            ((TextView) root.findViewById(R.id.tvInfoText)).setText(info.text);
+            // icons with coins
+            initCoinsIconsViews(root, info);
+            // buttons
+            initButtonsViews(products);
+        }
         return root;
     }
 
@@ -71,14 +73,14 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
         mButtonsViews.clear();
     }
 
-    private void initButtonsViews(GooglePlayProducts products) {
-        for (final GooglePlayProducts.BuyButton curBtn : products.coinsSubscriptions) {
-            mButtonsViews.add(GooglePlayProducts.setBuyButton(mContainer, curBtn, getActivity(),
-                    new GooglePlayProducts.BuyButtonClickListener() {
+    private void initButtonsViews(Products products) {
+        for (final Products.BuyButton curBtn : products.coinsSubscriptions) {
+            mButtonsViews.add(Products.setBuyButton(mContainer, curBtn, getActivity(),
+                    new Products.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
-                            if (curBtn instanceof GooglePlayProducts.SubscriptionBuyButton) {
-                                if (((GooglePlayProducts.SubscriptionBuyButton) curBtn).activated) {
+                            if (curBtn instanceof Products.SubscriptionBuyButton) {
+                                if (((Products.SubscriptionBuyButton) curBtn).activated) {
                                     Toast.makeText(getActivity(), R.string.subscriptions_can_be_changed, Toast.LENGTH_SHORT)
                                             .show();
                                     return;
@@ -104,7 +106,9 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
         int[] monthsArrowsResIds = new int[]{0, R.id.ivSecondMonthArrow, R.id.ivThirdMonthArrow};
         for (int i = 0; i < monthsResIds.length; i++) {
             MonthInfo month = info.months.get(i);
+            //noinspection ResourceType
             textView = (TextView) root.findViewById(monthsResIds[i]);
+            //noinspection ResourceType
             arrowView = root.findViewById(monthsArrowsResIds[i]);
             if (month != null && i < info.months.size()) {
                 textView.setText(month.title + "\n" + month.amount);
@@ -122,7 +126,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
     }
 
     @Override
-    public void onPurchased(String productId) {
+    public void onPurchased(final String productId) {
         Activity activity = getActivity();
         if (activity != null) {
             activity.setResult(Activity.RESULT_OK);
@@ -132,10 +136,13 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                     super.success(response);
                     if (isAdded()) {
                         removeAllBuyButtons();
-                        initButtonsViews(CacheProfile.getGooglePlayProducts());
+                        Products products = CacheProfile.getProducts();
+                        if (products != null) {
+                            initButtonsViews(products);
+                        }
                     }
                     LocalBroadcastManager.getInstance(App.getContext())
-                            .sendBroadcast(new Intent(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
+                            .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
                 }
             });
         }
