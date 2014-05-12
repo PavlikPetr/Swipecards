@@ -261,7 +261,7 @@ public class Options extends AbstractData {
                 fillOffers(offerwalls.extraOffers, jsonOfferwalls.optJSONArray("extraOffers"));
             }
 
-            isActivityAllowed = response.optBoolean("isActivityAllowed");
+            isActivityAllowed = response.optBoolean("isActivityAllowed", true);
 
             helpUrl = response.optString("helpUrl");
             JSONObject tagsObject = response.optJSONObject("experimentTags");
