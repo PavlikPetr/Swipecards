@@ -67,7 +67,7 @@ import java.util.List;
 import static android.widget.AdapterView.OnItemClickListener;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
-    private static final int FEED_MULTI_SELECTION_LIMIT = 10;
+    private static final int FEED_MULTI_SELECTION_LIMIT = 100;
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
