@@ -51,15 +51,7 @@ public class PurchasesFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.purchases_fragment, null);
-        mActionBar = getActionBar(root);
-        mActionBar.showBackButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-        mActionBar.showCashInfo();
-        mActionBar.setTitleText(getString(R.string.buying_header_title));
+
         initViews(root);
         return root;
     }
