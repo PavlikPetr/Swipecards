@@ -576,6 +576,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                                     mutualId,
                                                     SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler()).exec();
                                         }
+
                                     }
                                 }
                         );
@@ -599,10 +600,20 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 mCurrentUser.mutual ?
                                         SendLikeRequest.DEFAULT_MUTUAL
                                         : SendLikeRequest.DEFAULT_NO_MUTUAL,
-                                null
+                                new RateController.OnRateRequestListener() {
+                                    @Override
+                                    public void onRateCompleted(int mutualId) {
+
+                                    }
+
+                                    @Override
+                                    public void onRateFailed(int userId, int mutualId) {
+                                        mCurrentUser.rated = false;
+                                        unlockControls();
+                                    }
+                                }
                         );
                     }
-                    //currentSearch.rated = true;
                 }
             }
             break;
@@ -944,7 +955,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mCurrentUser != null) {
             mCurrentUser.rated = true;
         }
-        showNextUser();
+        if (CacheProfile.getOptions().isActivityAllowed) {
+            showNextUser();
+        }
     }
 
     @Override

@@ -49,23 +49,37 @@ public class HttpUtils {
         if (connection != null && isCorrectResponseCode(connection.getResponseCode())) {
             //Если нужно, разархивируем поток из Gzip
             InputStream stream = HttpUtils.getGzipInputStream(connection);
+            BufferedReader reader = null;
 
             if (stream != null) {
-                //Создаем BufferReader, что бы упростить себе чтение строк
-                BufferedReader reader = new BufferedReader(new InputStreamReader(
-                        new BufferedInputStream(new FlushedInputStream(stream), HttpUtils.BUFFER_SIZE)
-                ), HttpUtils.BUFFER_SIZE);
 
-                //Читаем содержимое потока
-                StringBuilder sb = new StringBuilder();
-                for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                    sb.append(line);
+                try {
+                    //Создаем BufferReader, что бы упростить себе чтение строк
+                    reader = new BufferedReader(
+                            new InputStreamReader(
+                                    new BufferedInputStream(
+                                            new FlushedInputStream(stream),
+                                            HttpUtils.BUFFER_SIZE
+                                    )
+                            ),
+                            HttpUtils.BUFFER_SIZE
+                    );
+                    //Читаем содержимое потока
+                    StringBuilder sb = new StringBuilder();
+                    for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+                        sb.append(line);
+                    }
+                    result = sb.toString();
+                } finally {
+                    if (reader != null) {
+                        reader.close();
+                    }
                 }
-                result = sb.toString();
 
-                stream.close();
-                reader.close();
             }
+        }
+        if (connection != null) {
+            connection.disconnect();
         }
 
         return result;

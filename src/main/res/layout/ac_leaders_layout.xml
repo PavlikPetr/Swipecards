@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/leadersCont"
-                android:background="@color/bg_main">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/leadersCont"
+    android:background="@color/bg_main">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -33,71 +32,65 @@
                 style="@style/Widget.Topface.Button.Big.Blue"/>
         </RelativeLayout>
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/loFooter"
+            android:orientation="vertical"
             android:layout_alignParentTop="true"
-            android:layout_margin="5dp">
+            android:layout_above="@id/loFooter">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="14sp"
+                android:text="@string/choose_cool_photo" />
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:textSize="14sp"
-                    android:text="@string/choose_cool_photo"/>
+            <GridView
+                android:id="@+id/useful_photos_grid"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fadeScrollbars="true"
+                android:fadingEdge="none"
+                android:horizontalSpacing="0px"
+                android:listSelector="@android:color/transparent"
+                android:padding="0px"
+                android:columnWidth="110dp"
+                android:numColumns="auto_fit"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="0px"
+                android:gravity="center" />
 
-                <com.topface.topface.ui.gridlayout.GridLayout
-                    android:id="@+id/useful_photos_grid"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:fadeScrollbars="true"
-                    android:fadingEdge="none"
-                    android:horizontalSpacing="0px"
-                    android:listSelector="@android:color/transparent"
-                    android:padding="0px"
-                    app:columnsAutoFit="true"
-                    app:columnWidth="95"
-                    android:stretchMode="columnWidth"
-                    android:verticalSpacing="0px"
-                    android:gravity="center"/>
+            <TextView
+                android:id="@+id/useless_photos_title_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/useless_photos_title_text"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:textSize="14sp"/>
-
-                <com.topface.topface.ui.gridlayout.GridLayout
-                    android:id="@+id/useless_photos_grid"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:fadeScrollbars="true"
-                    android:fadingEdge="none"
-                    android:horizontalSpacing="0px"
-                    android:listSelector="@android:color/transparent"
-                    android:padding="0px"
-                    app:columnWidth="95"
-                    app:columnsAutoFit="true"
-                    android:stretchMode="columnWidth"
-                    android:verticalSpacing="0px"
-                    android:gravity="center"/>
-            </LinearLayout>
-        </ScrollView>
+            <GridView
+                android:id="@+id/useless_photos_grid"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fadeScrollbars="true"
+                android:fadingEdge="none"
+                android:horizontalSpacing="0px"
+                android:listSelector="@android:color/transparent"
+                android:padding="0px"
+                android:columnWidth="110dp"
+                android:numColumns="auto_fit"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="0px"
+                android:gravity="center" />
+        </LinearLayout>
     </RelativeLayout>
 
     <com.topface.topface.ui.views.LockerView

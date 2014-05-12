@@ -96,6 +96,7 @@ public class Options extends AbstractData {
     public Closing closing = new Closing();
     public BlockSympathy blockSympathy = new BlockSympathy();
     public BlockPeopleNearby blockPeople = new BlockPeopleNearby();
+    public boolean isActivityAllowed = true; //Разрешено ли пользователю ставить лайки и совершать прочую активность
     /**
      * Настройки для промо-попапа 3-1
      */
@@ -259,6 +260,8 @@ public class Options extends AbstractData {
                 fillOffers(offerwalls.mainOffers, jsonOfferwalls.optJSONArray("mainOffers"));
                 fillOffers(offerwalls.extraOffers, jsonOfferwalls.optJSONArray("extraOffers"));
             }
+
+            isActivityAllowed = response.optBoolean("isActivityAllowed", true);
 
             helpUrl = response.optString("helpUrl");
             JSONObject tagsObject = response.optJSONObject("experimentTags");

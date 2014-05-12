@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,8 +51,6 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
 
     /**
      * Don't show popup, when user logged out
-     * @param manager
-     * @param tag
      */
     @Override
     public void show(FragmentManager manager, String tag) {
@@ -62,7 +59,7 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
                 super.show(manager, tag);
             }
         } catch (Exception e) {
-            Debug.error(e);
+            Debug.error("AbstractDialogFragment " + tag + " show error: " + e.getMessage());
         }
     }
 
