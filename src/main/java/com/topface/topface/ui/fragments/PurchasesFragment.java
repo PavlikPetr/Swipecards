@@ -12,13 +12,11 @@ import android.widget.TextView;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
-import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.viewpagerindicator.TabPageIndicator;
 
 public class PurchasesFragment extends BaseFragment {
 
-    private ActionBar mActionBar;
     private TabPageIndicator mTabIndicator;
     private ViewPager mPager;
     private TextView mResourcesInfo;
