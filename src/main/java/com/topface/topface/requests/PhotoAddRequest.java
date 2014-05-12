@@ -8,6 +8,7 @@ import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.BitmapUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
+import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,15 +59,7 @@ public class PhotoAddRequest extends ApiRequest {
         Debug.log("Base64 file size: " + fileSize);
         //Считаем общую длинну получившегося запроса
         int contentLength = headersBytes.length + endBytes.length + fileSize;
-
-        //Устанавливаем длину данных
-        if (contentLength > 0) {
-            connection.setFixedLengthStreamingMode(contentLength);
-        }
-        listener.onConfigureEnd();
-        connection.connect();
-        listener.onConnectionEstablished();
-
+        HttpUtils.setContentLengthAndConnect(connection, listener, contentLength);
         if (contentLength > 0) {
             //Отправляем наш  POST запрос
             writeRequest(

@@ -33,19 +33,12 @@ abstract public class MultipartApiRequest extends ApiRequest {
         byte[] requestsBytes = requests.getBytes();
         //Это просто закрывающие данные запроса с boundary и переносами строк
         byte[] endBytes = getMultipartEnding().getBytes();
-
         //Считаем общую длинну получившегося запроса
         int contentLength = requestsBytes.length + endBytes.length;
-        //Создаем исходящее подключение к серверу
-        //Устанавливаем длину данных
-        if (contentLength > 0) {
-            connection.setFixedLengthStreamingMode(contentLength);
-        }
-        listener.onConfigureEnd();
-        connection.connect();
-        listener.onConnectionEstablished();
+        //Устанавливаем длину данных и Создаем исходящее подключение к серверу
+        HttpUtils.setContentLengthAndConnect(connection, listener, contentLength);
+        //Открываем поток на запись данных
         OutputStream outputStream = connection.getOutputStream();
-
         //Записываем наши данные
         DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(
                 outputStream
@@ -55,7 +48,6 @@ abstract public class MultipartApiRequest extends ApiRequest {
         dos.flush();
         dos.close();
         outputStream.close();
-
         Debug.logJson(
                 ConnectionManager.TAG,
                 "MULTIPART REQUEST >>> " +
@@ -63,7 +55,6 @@ abstract public class MultipartApiRequest extends ApiRequest {
                         " rev:" + App.getAppConfig().getApiRevision(),
                 requests
         );
-
         return true;
     }
 

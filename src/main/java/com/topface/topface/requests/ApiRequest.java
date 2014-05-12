@@ -304,16 +304,9 @@ public abstract class ApiRequest implements IApiRequest {
 
         //Переводим строку запроса в байты
         byte[] requestData = requestJson.getBytes();
-        boolean hasData = requestData.length > 0;
-        if (hasData) {
-            //Устанавливаем длину данных
-            connection.setFixedLengthStreamingMode(requestData.length);
-        }
-        listener.onConfigureEnd();
-        connection.connect();
-        listener.onConnectionEstablished();
+        HttpUtils.setContentLengthAndConnect(connection, listener, requestData.length);
 
-        if (hasData && !isCanceled()) {
+        if (requestData.length > 0 && !isCanceled()) {
             Debug.logJson(
                     ConnectionManager.TAG,
                     "REQUEST >>> " + mApiUrl + " rev:" + getRevNum(),

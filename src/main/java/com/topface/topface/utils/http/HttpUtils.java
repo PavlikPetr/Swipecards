@@ -3,6 +3,7 @@ package com.topface.topface.utils.http;
 import android.os.Build;
 import android.text.TextUtils;
 import com.topface.topface.BuildConfig;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
@@ -140,6 +141,18 @@ public class HttpUtils {
 
     public static HttpURLConnection openPostConnection(String url, String contentType) throws IOException {
         return openConnection(HttpConnectionType.POST, url, contentType);
+    }
+
+    public static void setContentLengthAndConnect(HttpURLConnection connection,
+                                                  ApiRequest.IConnectionConfigureListener listener,
+                                                  int requestDataLength) throws IOException {
+        if (requestDataLength > 0) {
+            //Устанавливаем длину данных
+            connection.setFixedLengthStreamingMode(requestDataLength);
+        }
+        listener.onConfigureEnd();
+        connection.connect();
+        listener.onConnectionEstablished();
     }
 
     public static void sendPostData(byte[] requestData, HttpURLConnection connection) throws IOException {
