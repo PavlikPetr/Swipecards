@@ -10,15 +10,40 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.*;
-import com.topface.topface.requests.*;
+import com.topface.topface.data.FeedGift;
+import com.topface.topface.data.Gift;
+import com.topface.topface.data.Profile;
+import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.data.User;
+import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BlackListAddRequest;
+import com.topface.topface.requests.BookmarkAddRequest;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.DeleteBlackListRequest;
+import com.topface.topface.requests.DeleteBookmarksRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.SendGiftRequest;
+import com.topface.topface.requests.SendLikeRequest;
+import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
@@ -374,6 +399,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     @Override
     public void onClick(final View v) {
         final Profile profile = getProfile();
+        if (profile == null) {
+            return;
+        }
         switch (v.getId()) {
             case R.id.acDelight:
                 if (v.isEnabled()) {
