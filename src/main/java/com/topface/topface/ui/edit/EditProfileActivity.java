@@ -148,6 +148,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         // edit form items
         FormItem prevFormItem = null;
+        if (CacheProfile.forms == null) {
+            return;
+        }
         for (int i = 0; i < CacheProfile.forms.size(); i++) {
             FormItem formItem = CacheProfile.forms.get(i);
             EditProfileItem item = null;

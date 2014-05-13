@@ -131,10 +131,10 @@ public class HttpUtils {
         connection.setConnectTimeout(CONNECT_TIMEOUT);
         connection.setReadTimeout(READ_TIMEOUT);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            connection.setRequestProperty("Connection", "Keep-Alive");
-        } else {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
             connection.setRequestProperty("Connection", "close");
+        } else {
+            connection.setRequestProperty("Connection", "Keep-Alive");
         }
 
         return connection;
