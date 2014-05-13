@@ -99,7 +99,7 @@ public class PurchasesFragment extends BaseFragment {
         }
         fragments.put(0, new BuyingPageEntity("Google play", gpArgs));
         fragments.put(1, new BuyingPageEntity("Бесплатно", null));
-        fragments.put(2, new BuyingPageEntity("Другие способы", null));
+//        fragments.put(2, new BuyingPageEntity("Другие способы", null));
         return fragments;
     }
 

@@ -5,9 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.offerwalls.Offerwalls;
+//import com.topface.topface.utils.offerwalls.Offerwalls;
 
 public class FreeCoinsFragment extends BaseFragment{
     public static FreeCoinsFragment newInstance() {
@@ -26,7 +27,7 @@ public class FreeCoinsFragment extends BaseFragment{
         offerwall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Offerwalls.startOfferwall(getActivity());
+//                Options.Offerwalls.startOfferwall(getActivity());
             }
         });
         offerwall.setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);

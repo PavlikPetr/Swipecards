@@ -33,8 +33,8 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
                 return BuyingFragment.newInstance(pagesInfo.get(position).getArguments().getString(BillingFragment.ARG_TAG_SOURCE));
             case 1:
                 return FreeCoinsFragment.newInstance();
-            case 2:
-                return PaymentWallFragment.newInstance();
+//            case 2:
+//                return PaymentWallFragment.newInstance();
             default:
                 try {
                     throw new Exception("wrong position");

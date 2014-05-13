@@ -19,6 +19,7 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.ContactsFragment;
 import com.topface.topface.ui.fragments.EditorBannersFragment;
+import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
 import com.topface.topface.ui.fragments.RegistrationFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
@@ -239,13 +240,13 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
             case INTENT_BUYING_FRAGMENT:
                 if (extras != null && extras.containsKey(BuyingFragment.ARG_ITEM_TYPE)
                         && extras.containsKey(BuyingFragment.ARG_ITEM_PRICE)) {
-                    fragment = BuyingFragment.newInstance(
+                    fragment = PurchasesFragment.newInstance(
                             extras.getInt(BuyingFragment.ARG_ITEM_TYPE),
                             extras.getInt(BuyingFragment.ARG_ITEM_PRICE),
                             source
                     );
                 } else {
-                    fragment = BuyingFragment.newInstance(source);
+                    fragment = PurchasesFragment.newInstance(source);
                 }
                 break;
             case INTENT_COINS_SUBSCRIPTION_FRAGMENT:
