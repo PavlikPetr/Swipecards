@@ -1,6 +1,5 @@
 package com.topface.statistics;
 
-import android.content.Context;
 import com.nostra13.universalimageloader.core.ExtendedLoadAndDisplayImageTask;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.PhotoAddRequest;
@@ -8,9 +7,11 @@ import com.topface.topface.utils.Connectivity;
 
 /**
  * Created by kirussell on 24.04.2014.
+ *
  */
 public class TfStatConsts {
     // statistics slices
+    public static final String debug_val = "debug_val";
     // - connectivity
     public static final String val = "val";
     public static final String con = "con";
@@ -20,10 +21,6 @@ public class TfStatConsts {
     public static final String api_connect_time = "api_connect_time";
     public static final String api_load_time = "api_load_time";
     public static final String api_request_time = "api_request_time";
-
-    public static String getConnType(Context context) {
-        return getConnType(Connectivity.getConnType(context));
-    }
 
     public static String getConnType(Connectivity.Conn connectionType) {
         switch (connectionType) {

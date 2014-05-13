@@ -2,17 +2,12 @@ package com.topface.topface.utils.http;
 
 import android.os.Build;
 import android.text.TextUtils;
-
 import com.topface.topface.BuildConfig;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Locale;
@@ -148,33 +143,32 @@ public class HttpUtils {
         return openConnection(HttpConnectionType.POST, url, contentType);
     }
 
+    public static void setContentLengthAndConnect(HttpURLConnection connection,
+                                                  ApiRequest.IConnectionConfigureListener listener,
+                                                  int requestDataLength) throws IOException {
+        if (requestDataLength > 0) {
+            //Устанавливаем длину данных
+            connection.setFixedLengthStreamingMode(requestDataLength);
+        }
+        listener.onConfigureEnd();
+        connection.connect();
+        listener.onConnectionEstablished();
+    }
+
     public static void sendPostData(byte[] requestData, HttpURLConnection connection) throws IOException {
         //Отправляем данные
         if (connection == null) {
             Debug.error("connection is null");
             return;
         }
-        OutputStream outputStream = getOutputStream(requestData.length, connection);
+
+        OutputStream outputStream = connection.getOutputStream();
         if (outputStream != null) {
             outputStream.write(requestData);
             outputStream.close();
         } else {
             Debug.error("Http.getOutputStream() is null");
         }
-    }
-
-    public static OutputStream getOutputStream(int contentLength, HttpURLConnection connection) throws IOException {
-        //Устанавливаем длину данных
-        if (contentLength > 0) {
-            connection.setFixedLengthStreamingMode(contentLength);
-        }
-        /*else {
-            //Nginx без поддержки сторонних модулей не поддерживает chunked.
-            //Подробности https://tasks.verumnets.ru/issues/13282
-            connection.setChunkedStreamingMode(-1);
-        }*/
-
-        return connection.getOutputStream();
     }
 
     /**
