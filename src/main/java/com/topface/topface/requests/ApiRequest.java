@@ -4,13 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
-
-import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
-import com.topface.topface.R;
-import com.topface.topface.RetryDialog;
-import com.topface.topface.Ssid;
-import com.topface.topface.Static;
+import com.topface.topface.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.BackgroundThread;
@@ -19,7 +13,6 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.RequestConnectionListener;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -257,29 +250,32 @@ public abstract class ApiRequest implements IApiRequest {
         }
     }
 
-    public HttpURLConnection getConnection() throws IOException {
-
-        mURLConnection = openConnection();
-
-        return mURLConnection;
-    }
-
     protected String getApiUrl() {
         return App.getAppConfig().getApiUrl();
     }
 
     @Override
     final public IApiResponse sendRequestAndReadResponse() throws Exception {
-        RequestConnectionListener listener = new RequestConnectionListener(getServiceName());
+        final RequestConnectionListener listener = new RequestConnectionListener(getServiceName());
         int responseCode = -1;
         IApiResponse response;
         mApiUrl = getApiUrl();
         listener.onConnectionStarted();
-        HttpURLConnection connection = getConnection();
-        listener.onConnectionEstablished();
+        HttpURLConnection connection = openConnection();
         if (connection != null) {
+            IConnectionConfigureListener connConfListener = new IConnectionConfigureListener() {
+                @Override
+                public void onConfigureEnd() {
+                    listener.onConnectInvoked();
+                }
+
+                @Override
+                public void onConnectionEstablished() {
+                    listener.onConnectionEstablished();
+                }
+            };
             //Непосредственно пишим данные в подключение
-            if (writeData(connection)) {
+            if (writeData(connection, connConfListener)) {
                 //Возвращаем HTTP статус ответа
                 responseCode = getResponseCode(connection);
             }
@@ -302,22 +298,22 @@ public abstract class ApiRequest implements IApiRequest {
 
     }
 
-    protected boolean writeData(HttpURLConnection connection) throws IOException {
+    protected boolean writeData(HttpURLConnection connection, IConnectionConfigureListener listener) throws IOException {
         //Формируем свои данные для отправки POST запросом
         String requestJson = toPostData();
 
         //Переводим строку запроса в байты
         byte[] requestData = requestJson.getBytes();
+        HttpUtils.setContentLengthAndConnect(connection, listener, requestData.length);
+
         if (requestData.length > 0 && !isCanceled()) {
             Debug.logJson(
                     ConnectionManager.TAG,
                     "REQUEST >>> " + mApiUrl + " rev:" + getRevNum(),
                     requestJson
             );
-
             //Отправляем наш  POST запрос
             HttpUtils.sendPostData(requestData, connection);
-
             return true;
         } else {
             Debug.error(String.format("ConnectionManager: Api request %s is empty", getServiceName()));
@@ -396,5 +392,11 @@ public abstract class ApiRequest implements IApiRequest {
         if (handler != null) {
             handler.cancel();
         }
+    }
+
+    public static interface IConnectionConfigureListener {
+        void onConfigureEnd();
+
+        void onConnectionEstablished();
     }
 }

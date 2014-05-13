@@ -22,6 +22,7 @@ public class ExtendedLoadAndDisplayImageTask extends LoadAndDisplayImageTask {
     protected boolean downloadImage(File targetFile) throws IOException {
         RequestConnectionListener listener = new RequestConnectionListener(SERVICE_NAME);
         listener.onConnectionStarted();
+        listener.onConnectInvoked();
         InputStream is = getDownloader().getStream(uri, options.getExtraForDownloader());
         listener.onConnectionEstablished();
         boolean loaded;

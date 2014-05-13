@@ -10,40 +10,15 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.FeedGift;
-import com.topface.topface.data.Gift;
-import com.topface.topface.data.Profile;
-import com.topface.topface.data.SendGiftAnswer;
-import com.topface.topface.data.User;
-import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackListAddRequest;
-import com.topface.topface.requests.BookmarkAddRequest;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.DeleteBlackListRequest;
-import com.topface.topface.requests.DeleteBookmarksRequest;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.SendGiftRequest;
-import com.topface.topface.requests.SendLikeRequest;
-import com.topface.topface.requests.UserRequest;
+import com.topface.topface.data.*;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
@@ -153,7 +128,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_PROFILE);
         RelativeLayout bookmarksLayout = (RelativeLayout) mUserActions.findViewById(R.id.acBookmark);
         bookmarksLayout.setOnClickListener(this);
-        mBlocked = (RelativeLayout) mUserActions.findViewById(R.id.acBlock);
+        mBlocked = (RelativeLayout) mUserActions.findViewById(R.id.add_to_black_list_action);
         mUserActions.setVisibility(View.INVISIBLE);
         mBookmarkAction = (TextView) mUserActions.findViewById(R.id.bookmark_action_text);
         mSympathy = (RelativeLayout) mUserActions.findViewById(R.id.acSympathy);
@@ -210,7 +185,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         actions.add(new UserActions.ActionItem(R.id.acSympathy, this));
         actions.add(new UserActions.ActionItem(R.id.acDelight, this));
         actions.add(new UserActions.ActionItem(R.id.acChat, this));
-        actions.add(new UserActions.ActionItem(R.id.acBlock, this));
+        actions.add(new UserActions.ActionItem(R.id.add_to_black_list_action, this));
         actions.add(new UserActions.ActionItem(R.id.acComplain, this));
         actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
         new UserActions(mUserActions, actions);
@@ -534,7 +509,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     openChat();
                 }
                 break;
-            case R.id.acBlock:
+            case R.id.add_to_black_list_action:
                 if (CacheProfile.premium) {
                     if (profile.uid > 0) {
                         final TextView textView = (TextView) v.findViewById(R.id.block_action_text);
