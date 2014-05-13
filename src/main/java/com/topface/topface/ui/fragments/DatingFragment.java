@@ -156,6 +156,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 for (SearchUser searchUser : mUserSearchList) {
                     if (searchUser.id == likedUserId) {
                         searchUser.rated = true;
+                        break;
                     }
                 }
             }
