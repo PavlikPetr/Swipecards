@@ -704,11 +704,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void showNextUser() {
-        showUser(mUserSearchList.nextUser());
+        if (mUserSearchList != null) {
+            showUser(mUserSearchList.nextUser());
+        }
     }
 
     private void prevUser() {
-        fillUserInfo(mUserSearchList.prevUser());
+        if (mUserSearchList != null) {
+            fillUserInfo(mUserSearchList.prevUser());
+        }
         unlockControls();
     }
 
