@@ -3,8 +3,6 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -73,14 +71,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         public void onReceive(Context context, Intent intent) {
             ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
             boolean isChanged = intent.getBooleanExtra(ContainerActivity.CHANGED, false);
-            if (chatActions != null && type != null) {
+            if (mActions != null && type != null) {
                 switch (type) {
                     case BLACK_LIST:
                         mUser.blocked = isChanged;
                         break;
                     case BOOKMARK:
                         mUser.bookmarked = isChanged;
-                        ((TextView) chatActions.findViewById(R.id.bookmark_action_text))
+                        ((TextView) mActions.findViewById(R.id.bookmark_action_text))
                                 .setText(isChanged ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                         break;
                 }
@@ -111,8 +109,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private ChatListAdapter mAdapter;
     private FeedUser mUser;
     private BackButtonEditTextMaster mEditBox;
-    private TextView mLoadingBackgroundText;
-    private AnimationDrawable mLoadingBackgroundDrawable;
     private SwapControl mSwapControl;
     private ImageButton mBtnChatAdd;
     private String mItemId;
@@ -133,19 +129,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     };
     // Managers
     private RelativeLayout mLockScreen;
-    private ViewGroup chatActions;
+    private ViewStub mChatActionsStub;
     private String mUserName;
     private int mUserAge;
     private String mUserCity;
     private int mUserSex;
     private MenuItem mBarAvatar;
-    private AddToBlackListViewsController mBlackListActionsController;
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             return actionId == EditorInfo.IME_ACTION_SEND && sendMessage();
         }
     };
+    private ArrayList<UserActions.ActionItem> mChatActions;
 
     public static ChatFragment newInstance(String itemId, int userId, boolean profileInvoke,
                                            int userSex, String userName, int userAge,
@@ -190,19 +186,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_chat, null);
         Debug.log(this, "+onCreate");
-        // actions
-        chatActions = (ViewGroup) root.findViewById(R.id.loChatActions);
-        chatActions.setVisibility(View.INVISIBLE);
-        // black list views
-        mBlackListActionsController = new AddToBlackListViewsController(root, this);
-        // Locker
-        mLoadingBackgroundText = (TextView) root.findViewById(R.id.tvBackgroundText);
-        Drawable[] drawables = mLoadingBackgroundText.getCompoundDrawables();
-        if (drawables != null) {
-            if (drawables[0] instanceof AnimationDrawable) {
-                mLoadingBackgroundDrawable = (AnimationDrawable) drawables[0];
-            }
-        }
+        // mChatActions
+        mChatActionsStub = (ViewStub) root.findViewById(R.id.chat_actions_stub);
         // Navigation bar
         initNavigationbar(mUserName, mUserAge, mUserCity);
         // Swap Control
@@ -269,22 +254,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mBtnChatAdd = (ImageButton) root.findViewById(R.id.btnChatAdd);
         mBtnChatAdd.setOnClickListener(this);
         mBtnChatAdd.setSelected(false);
-        // Gift Button
-        root.findViewById(R.id.btnChatGift).setOnClickListener(this);
-        // Photo Button
-        root.findViewById(R.id.btnChatPhoto).setEnabled(false);
-        //Buy VIP button
-        Button buyVip = (Button) root.findViewById(R.id.btnBuyVip);
-        TextView title = (TextView) root.findViewById(R.id.tvBuyVipTitle);
-        // Check premium possibilities
-        if (CacheProfile.premium) {
-            title.setVisibility(View.GONE);
-            buyVip.setVisibility(View.GONE);
-        } else {
-            buyVip.setOnClickListener(this);
-            title.setVisibility(View.VISIBLE);
-            buyVip.setVisibility(View.VISIBLE);
-        }
+        // Send gift button
+        root.findViewById(R.id.panel_send_gift_button).setOnClickListener(this);
     }
 
     private void restoreData(Bundle savedInstanceState) {
@@ -307,7 +278,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 } else {
                     mLockScreen.setVisibility(View.GONE);
                 }
-                showLoadingBackground();
+                hideLoading();
             } catch (Exception | OutOfMemoryError e) {
                 Debug.error(e);
             }
@@ -322,7 +293,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
             @Override
             public void onLongClick(final int position, final View v) {
-
                 History item = mAdapter.getItem(position);
                 final EditButtonsAdapter editAdapter = new EditButtonsAdapter(getActivity(), item);
                 if (item == null) return;
@@ -464,7 +434,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
         mIsUpdating = true;
         if (!pullToRefresh && !scrollRefresh) {
-            hideLoadingBackground();
+            showLoading();
         }
         HistoryRequest historyRequest = new HistoryRequest(getActivity());
         registerRequest(historyRequest);
@@ -513,7 +483,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         } else if (scrollRefresh) {
                             mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                         } else {
-                            mAdapter.setData(data.items, data.more, mListView.getRefreshableView());
+                            mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                         }
                     } else {
                         if (!data.more && !pullToRefresh) mAdapter.forceStopLoader();
@@ -534,7 +504,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                showLoadingBackground();
+                hideLoading();
                 FeedList<History> data = mAdapter != null ? mAdapter.getData() : null;
                 if (mLockScreen != null && (data == null || data.isEmpty())) {
                     mLockScreen.setVisibility(View.VISIBLE);
@@ -546,8 +516,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void always(IApiResponse response) {
                 super.always(response);
-
-                showLoadingBackground();
+                hideLoading();
                 if (pullToRefresh && mListView != null) {
                     mListView.onRefreshComplete();
                 }
@@ -586,16 +555,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private void onUserLoaded(FeedUser user) {
         if (!(user.deleted || user.banned)) {
-            // список действий в контекстном меню
-            ArrayList<UserActions.ActionItem> actions = new ArrayList<>();
-            actions.add(new UserActions.ActionItem(user.sex == 1 ? R.id.acProfile : R.id.acWProfile, this));
-            actions.add(new UserActions.ActionItem(R.id.add_to_black_list_action, this));
-            actions.add(new UserActions.ActionItem(R.id.acComplain, this));
-            actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
-            UserActions userActions = new UserActions(chatActions, actions);
-            TextView bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.bookmark_action_text);
-            mBlackListActionsController.setInBlackList(user.blocked);
-            bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
             // ставим значок онлайн в нужное состояние
             if (mUserOnlineListener != null) {
                 mUserOnlineListener.setUserOnline(user.online);
@@ -618,39 +577,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                             R.drawable.feed_banned_female_avatar :
                             R.drawable.feed_banned_male_avatar);
         }
-    }
-
-    private void animateChatActions(final boolean needToClose, long time) {
-        TranslateAnimation ta;
-        if (needToClose) {
-            ta = new TranslateAnimation(0, 0, 0, -chatActions.getHeight());
-        } else {
-            ta = new TranslateAnimation(0, 0, -chatActions.getHeight(), 0);
-        }
-        ta.setDuration(time);
-        ta.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                chatActions.clearAnimation();
-                if (needToClose) {
-                    chatActions.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        if (!needToClose) {
-            chatActions.setVisibility(View.VISIBLE);
-            Utils.hideSoftKeyboard(getActivity(), mEditBox);
-            toggleAddPanel(false);
-        }
-        chatActions.startAnimation(ta);
     }
 
     private void release() {
@@ -695,20 +621,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 closeChatActions();
                 EasyTracker.getTracker().sendEvent("Chat", "AdditionalClick", "", 1L);
                 break;
-            case R.id.btnChatGift:
+            case R.id.panel_send_gift_button:
                 startActivityForResult(
                         GiftsActivity.getSendGiftIntent(getActivity(), mUserId, false),
                         GiftsActivity.INTENT_REQUEST_GIFT
                 );
                 EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
-            case R.id.btnBuyVip:
-                startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                break;
-            case R.id.add_to_black_list_button:
             case R.id.add_to_black_list_action:
                 if (CacheProfile.premium) {
-                    mBlackListActionsController.processActionFor(mUserId);
+                    mBlackListActionController.processActionFor(mUserId);
                 } else {
                     startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                     closeChatActions();
@@ -720,7 +642,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(profileIntent);
                 closeChatActions();
                 break;
-            case R.id.acBookmark:
+            case R.id.add_to_bookmark_action:
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
                 final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
 
@@ -754,7 +676,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     }
                 }).exec();
                 break;
-            case R.id.acComplain:
+            case R.id.complain_action:
                 startActivity(ContainerActivity.getComplainIntent(mUserId));
                 closeChatActions();
                 break;
@@ -844,7 +766,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private void sendGift(int id, final int price) {
         if (id <= 0) {
-            showLoadingBackground();
+            hideLoading();
             Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -884,7 +806,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void always(IApiResponse response) {
                 super.always(response);
-                showLoadingBackground();
+                hideLoading();
             }
         }).exec();
     }
@@ -955,22 +877,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         };
     }
 
-    private void showLoadingBackground() {
-        if (mLoadingBackgroundText != null) {
-            mLoadingBackgroundText.setVisibility(View.GONE);
-            if (mLoadingBackgroundDrawable != null) {
-                mLoadingBackgroundDrawable.stop();
-            }
-        }
+    private void showLoading() {
+        setSupportProgressBarIndeterminateVisibility(true);
     }
 
-    private void hideLoadingBackground() {
-        if (mLoadingBackgroundText != null) {
-            mLoadingBackgroundText.setVisibility(View.VISIBLE);
-            if (mLoadingBackgroundDrawable != null) {
-                mLoadingBackgroundDrawable.start();
-            }
-        }
+    private void hideLoading() {
+        setSupportProgressBarIndeterminateVisibility(false);
     }
 
     @Override
@@ -994,14 +906,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_profile:
-                if (mUser == null) return true;
-                if (!(mUser.deleted || mUser.banned)) {
-                    boolean checked = item.isChecked();
-                    item.setChecked(!checked);
-                    animateChatActions(checked, 500);
-                } else {
-                    Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
-                            Toast.LENGTH_LONG).show();
+                if (mUser != null) {
+                    if (!(mUser.deleted || mUser.banned)) {
+                        initActions(mChatActionsStub, mUser, getActions(mUser));
+                        boolean checked = item.isChecked();
+                        item.setChecked(!checked);
+                        animateChatActions(checked, 500);
+                    } else {
+                        Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
                 return true;
             default:
@@ -1013,26 +927,94 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         public void onLongClick(int position, View v);
     }
 
+    private ArrayList<UserActions.ActionItem> getActions(FeedUser user) {
+        if (mChatActions == null) {
+            mChatActions = new ArrayList<>();
+            mChatActions.add(new UserActions.ActionItem(user.sex == 1 ? R.id.acProfile : R.id.acWProfile, this));
+            mChatActions.add(new UserActions.ActionItem(R.id.add_to_black_list_action, this));
+            mChatActions.add(new UserActions.ActionItem(R.id.complain_action, this));
+            mChatActions.add(new UserActions.ActionItem(R.id.add_to_bookmark_action, this));
+        }
+        return mChatActions;
+    }
+
+    private View mActions;
+    private int mActionsHeightHeuristic;
+    private AddToBlackListViewsController mBlackListActionController;
+
+    private void initActions(ViewStub actionsStub, FeedUser user, ArrayList<UserActions.ActionItem> actions) {
+        if (mActions == null) {
+            actionsStub.setLayoutResource(R.layout.user_actions_layout);
+            mActions = actionsStub.inflate();
+            // список действий в контекстном меню
+            UserActions userActions = new UserActions(mActions, actions);
+            TextView bookmarksTv = (TextView) userActions.getViewById(R.id.add_to_bookmark_action).findViewById(R.id.bookmark_action_text);
+            mBlackListActionController = new AddToBlackListViewsController(mActions);
+            mBlackListActionController.setInBlackList(user.blocked);
+            bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
+        }
+    }
+
+    private void animateChatActions(final boolean needToClose, long time) {
+        if (mActions != null) {
+            TranslateAnimation ta;
+            int height = getChatActionsViewHeight();
+            if (needToClose) {
+                ta = new TranslateAnimation(0, 0, 0, -height);
+            } else {
+                ta = new TranslateAnimation(0, 0, -height, 0);
+            }
+            ta.setDuration(time);
+            ta.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    if (!needToClose) {
+                        mActions.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mActions.clearAnimation();
+                    if (needToClose) {
+                        mActions.setVisibility(View.INVISIBLE);
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+            if (!needToClose) {
+                Utils.hideSoftKeyboard(getActivity(), mEditBox);
+                toggleAddPanel(false);
+            }
+            mActions.startAnimation(ta);
+        }
+    }
+
+    private int getChatActionsViewHeight() {
+        int height = mActions.getHeight();
+        if (height <= 0) {
+            return mActionsHeightHeuristic;
+        }
+        return height;
+    }
+
     private class AddToBlackListViewsController {
 
-        final View panelProgress;
-        final Button panelButton;
         final TextView actionText;
         final View actionLoader;
         final View actionIcon;
 
         private boolean isInBlackList = false;
 
-        AddToBlackListViewsController(View root, View.OnClickListener listener) {
-            panelButton = (Button) root.findViewById(R.id.add_to_black_list_button);
-            panelProgress = root.findViewById(R.id.add_to_black_list_in_panel_progress);
+        AddToBlackListViewsController(View root) {
             View actionView = root.findViewById(R.id.add_to_black_list_action);
             actionText = (TextView) actionView.findViewById(R.id.block_action_text);
             actionLoader = actionView.findViewById(R.id.blockPrBar);
             actionIcon = actionView.findViewById(R.id.blockIcon);
-            panelButton.setVisibility(CacheProfile.premium ? View.VISIBLE : View.GONE);
-            // on click listeners
-            panelButton.setOnClickListener(listener);
             // click listener for actionView is set through UserActions
             // set states for views
             initViews(isInBlackList);
@@ -1053,9 +1035,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
 
         private void execRequest(ApiRequest blackListRequest, final boolean toBlackList) {
-            panelButton.setEnabled(false);
-            panelButton.setVisibility(View.INVISIBLE);
-            panelProgress.setVisibility(View.VISIBLE);
             actionLoader.setVisibility(View.VISIBLE);
             actionIcon.setVisibility(View.INVISIBLE);
             blackListRequest.callback(new VipApiHandler() {
@@ -1072,9 +1051,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 public void always(IApiResponse response) {
                     super.always(response);
                     if (isAdded()) {
-                        panelButton.setEnabled(true);
-                        panelButton.setVisibility(View.VISIBLE);
-                        panelProgress.setVisibility(View.GONE);
                         actionLoader.setVisibility(View.INVISIBLE);
                         actionIcon.setVisibility(View.VISIBLE);
                     }
@@ -1085,7 +1061,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         private void initViews(boolean inBlackList) {
             int resIdText = inBlackList ? R.string.black_list_delete : R.string.black_list_add_short;
             actionText.setText(resIdText);
-            panelButton.setText(resIdText);
         }
 
         public void setInBlackList(boolean value) {

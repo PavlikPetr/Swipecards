@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout
-        android:id="@+id/mUserActions"
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mUserActions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/drop_menu_backgroud"
@@ -26,7 +26,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
                 android:src="@drawable/ico_drop_menu_profile_m_normal"
-
                 />
 
         <ProgressBar
@@ -80,7 +79,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-            android:id="@+id/acDelight"
+            android:id="@+id/send_admiration_action"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/actions_menu_delimiter"
@@ -94,7 +93,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
                 android:src="@drawable/us_ac_delight_selector"
-
                 />
 
         <ProgressBar
@@ -115,7 +113,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-            android:id="@+id/acSympathy"
+            android:id="@+id/send_sympathy_action"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/actions_menu_delimiter"
@@ -129,7 +127,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
                 android:src="@drawable/us_ac_sympathy_selector"
-
                 />
 
         <ProgressBar
@@ -150,7 +147,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-            android:id="@+id/acChat"
+            android:id="@+id/open_chat_action"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/actions_menu_delimiter"
@@ -164,7 +161,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
                 android:src="@drawable/us_ac_chat_selector"
-
                 />
 
         <ProgressBar
@@ -185,7 +181,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-            android:id="@+id/acGift"
+            android:id="@+id/send_gift_action"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/actions_menu_delimiter"
@@ -199,7 +195,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
                 android:src="@drawable/us_ac_gift_selector"
-
                 />
 
         <ProgressBar
@@ -234,7 +229,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
                 android:src="@drawable/us_ac_block"
-
                 />
 
         <ProgressBar
@@ -255,7 +249,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-            android:id="@+id/acBookmark"
+            android:id="@+id/add_to_bookmark_action"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/actions_menu_delimiter"
@@ -269,7 +263,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
                 android:src="@drawable/ic_star"
-
                 />
 
         <ProgressBar
@@ -290,7 +283,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-            android:id="@+id/acComplain"
+            android:id="@+id/complain_action"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:visibility="gone">
@@ -303,7 +296,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
                 android:src="@drawable/ico_drop_menu_alarm_normal"
-
                 />
 
         <ProgressBar
