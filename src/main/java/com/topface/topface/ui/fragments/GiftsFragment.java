@@ -106,6 +106,7 @@ public class GiftsFragment extends ProfileInnerFragment {
                                     }
                                 }
                             }
+                            updateIfRetrier(position);
                         }
                     });
 
@@ -125,24 +126,9 @@ public class GiftsFragment extends ProfileInnerFragment {
                                     }
                                 }
                             }
-
-                            if (mGridAdapter.getData().get(position).isRetrier()) {
-                                updateUI(new Runnable() {
-                                    public void run() {
-                                        removeLoaderItem();
-                                        mGridAdapter.getData().add(new FeedGift(ItemType.LOADER));
-                                        mGridAdapter.notifyDataSetChanged();
-                                        onNewFeeds();
-                                    }
-                                });
-                            }
+                            updateIfRetrier(position);
                         }
                     });
-                }
-                if (mProfile != null) {
-                    if (mGridAdapter.getData().size() <= getMinItemsCount()) {
-                        onNewFeeds();
-                    }
                 }
             }
         });
@@ -150,6 +136,19 @@ public class GiftsFragment extends ProfileInnerFragment {
 
     private int getMinItemsCount() {
         return mTag.equals(GIFTS_USER_PROFILE_TAG) ? 1 : 0;
+    }
+
+    private void updateIfRetrier(int position) {
+        if (mGridAdapter.getData().get(position).isRetrier()) {
+            updateUI(new Runnable() {
+                public void run() {
+                    removeLoaderItem();
+                    mGridAdapter.getData().add(new FeedGift(ItemType.LOADER));
+                    mGridAdapter.notifyDataSetChanged();
+                    onNewFeeds();
+                }
+            });
+        }
     }
 
     @Override
@@ -227,11 +226,7 @@ public class GiftsFragment extends ProfileInnerFragment {
                 if (!gifts.items.isEmpty()) {
                     mGroupInfo.setVisibility(View.GONE);
                     mTextInfo.setVisibility(View.GONE);
-                } else if (mTag.equals(GIFTS_USER_PROFILE_TAG) && mGridAdapter.getData().size() <= getMinItemsCount()) {
-                    mTitle.setText(R.string.user_does_not_have_gifts);
-                    mTitle.setVisibility(View.VISIBLE);
                 }
-
                 if (gifts.more) {
                     data.add(new FeedGift(ItemType.LOADER));
                 }
@@ -276,7 +271,10 @@ public class GiftsFragment extends ProfileInnerFragment {
                 if (mTag != null) {
                     if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
                         data.add(0, FeedGift.getSendedGiftItem());
-
+                        if (data.size() <= getMinItemsCount()) {
+                            mTitle.setText(R.string.user_does_not_have_gifts);
+                            mTitle.setVisibility(View.VISIBLE);
+                        }
                     } else {
                         if (data.isEmpty()) {
                             mGroupInfo.setVisibility(View.VISIBLE);
