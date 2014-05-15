@@ -1,7 +1,5 @@
 package com.topface.topface.utils;
 
-import android.os.Process;
-
 /**
  * Вспомогательный класс, наследник обычного {@link Thread}, но с немного иным способом использования:
  * <pre>
@@ -11,7 +9,7 @@ import android.os.Process;
  *             Debug.log("BackgroundThread with priority " + getPriority());
  *         }
  *     };
- *     //BackgroundThread with priority 10
+ *     //BackgroundThread with priority 3
  * </pre>
  * <ul>
  * <li>
@@ -21,7 +19,7 @@ import android.os.Process;
  * </li>
  * <li>
  * По умолчанию этот поток будет иметь
- * приоритет {@link Process#THREAD_PRIORITY_BACKGROUND} (приоретет 10),
+ * приоритет {@link Thread.NORM_PRIORITY} - 2 (приоретет 3),
  * это нужно, что бы не конкурировать с UI
  * </li>
  * <li>
