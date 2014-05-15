@@ -8,13 +8,14 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.GiftsFragment;
+import com.topface.topface.ui.views.DarkenImageView;
+import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -81,11 +82,13 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     private ProfilePageAdapter mBodyPagerAdapter;
     private ViewPager mHeaderPager;
     private TabPageIndicator mTabIndicator;
+    private DarkenImageView mBackgroundView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_profile, null);
+        mBackgroundView = (DarkenImageView) root.findViewById(R.id.profile_background_image);
         initHeaderPages(root);
         initBodyPages(root);
         // start pages initialization
@@ -159,14 +162,28 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     }
 
     protected void setProfile(Profile profile) {
+        int previousBackground = mProfile != null ? mProfile.background : -1;
         mProfile = profile;
-        if (mHeaderMainFragment != null) mHeaderMainFragment.setProfile(profile);
-        if (mHeaderStatusFragment != null) mHeaderStatusFragment.setProfile(profile);
-        if (mGiftFragment != null) mGiftFragment.setProfile(profile);
-        if (mUserPhotoFragment != null && profile instanceof User)
+        if (previousBackground != mProfile.background && mBackgroundView != null) {
+            mBackgroundView.setImageResource(
+                    ProfileBackgrounds.getBackgroundResource(getActivity(), mProfile.background)
+            );
+        }
+        if (mHeaderMainFragment != null) {
+            mHeaderMainFragment.setProfile(profile);
+        }
+        if (mHeaderStatusFragment != null) {
+            mHeaderStatusFragment.setProfile(profile);
+        }
+        if (mGiftFragment != null) {
+            mGiftFragment.setProfile(profile);
+        }
+        if (mUserPhotoFragment != null && profile instanceof User) {
             mUserPhotoFragment.setUserData((User) profile);
-        if (mUserFormFragment != null && profile instanceof User)
+        }
+        if (mUserFormFragment != null && profile instanceof User) {
             mUserFormFragment.setUserData((User) profile);
+        }
     }
 
     protected String getCallingClassName() {
@@ -188,7 +205,26 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         circleIndicator.setViewPager(mHeaderPager);
         circleIndicator.setSnap(true);
         mHeaderPagerAdapter.setPageIndicator(circleIndicator);
-        circleIndicator.setOnPageChangeListener(this);
+        circleIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                AbstractProfileFragment.this.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                // when positionOffset is near 1.0f ViewPager changes position and sets positionOffset to 0
+                if (position <= 0) {
+                    mBackgroundView.setDarkenFrameOpacity(positionOffset);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                AbstractProfileFragment.this.onPageSelected(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                AbstractProfileFragment.this.onPageScrollStateChanged(state);
+            }
+        });
     }
 
     private void initBodyPages(View root) {
