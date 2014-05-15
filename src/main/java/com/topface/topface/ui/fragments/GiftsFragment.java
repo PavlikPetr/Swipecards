@@ -276,9 +276,7 @@ public class GiftsFragment extends ProfileInnerFragment {
                 if (mTag != null) {
                     if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
                         data.add(0, FeedGift.getSendedGiftItem());
-                        if (more) {
-                            data.add(new FeedGift(ItemType.LOADER));
-                        }
+
                     } else {
                         if (data.isEmpty()) {
                             mGroupInfo.setVisibility(View.VISIBLE);
@@ -293,6 +291,9 @@ public class GiftsFragment extends ProfileInnerFragment {
                             mGroupInfo.setVisibility(View.GONE);
                             mTextInfo.setVisibility(View.GONE);
                         }
+                    }
+                    if (more) {
+                        data.add(new FeedGift(ItemType.LOADER));
                     }
                 }
             }
@@ -341,7 +342,7 @@ public class GiftsFragment extends ProfileInnerFragment {
         return new FeedAdapter.Updater() {
             @Override
             public void onUpdate() {
-                if (!mIsUpdating && !mTag.equals(GIFTS_ALL_TAG) && mGridAdapter.getData().getLast().isLoader()) {
+                if (!mIsUpdating) {
                     onNewFeeds();
                 }
             }

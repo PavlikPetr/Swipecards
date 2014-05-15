@@ -412,7 +412,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     icon.setVisibility(View.GONE);
 
                     v.findViewById(R.id.delPrBar).setVisibility(View.VISIBLE);
-                    disableSympathyDelight();
                     mRateController.onAdmiration(
                             profile.uid,
                             ((User) profile).mutual ?
@@ -425,7 +424,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                         Toast.makeText(App.getContext(), R.string.admiration_sended, Toast.LENGTH_SHORT).show();
                                         loader.setVisibility(View.INVISIBLE);
                                         icon.setVisibility(View.VISIBLE);
-
+                                        disableSympathyDelight();
                                     }
                                 }
 
@@ -458,7 +457,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
                     loader.setVisibility(View.VISIBLE);
                     icon.setVisibility(View.GONE);
-                    disableSympathyDelight();
                     mRateController.onLike(
                             profile.uid,
                             ((User) profile).mutual ?
@@ -471,6 +469,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                         Toast.makeText(App.getContext(), R.string.sympathy_sended, Toast.LENGTH_SHORT).show();
                                         loader.setVisibility(View.INVISIBLE);
                                         icon.setVisibility(View.VISIBLE);
+                                        disableSympathyDelight();
                                     }
                                 }
 
