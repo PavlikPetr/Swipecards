@@ -51,101 +51,28 @@
         </LinearLayout>
 
         <LinearLayout
+                android:id="@+id/loAddButtons"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:background="@drawable/bg_chat_add_panel"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
 
-            <LinearLayout
-                    android:id="@+id/loAddButtons"
-                    android:layout_width="fill_parent"
+            <Button
+                    android:id="@+id/panel_send_gift_button"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_chat_add_panel"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp">
-
-                <Button
-                        android:id="@+id/btnChatGift"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/ChatButtonsText"
-                        android:text="@string/general_gift"
-                        android:background="@drawable/chat_gift_selector"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginRight="6dp"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"/>
-
-
-                <Button
-                        android:id="@+id/btnChatPhoto"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/ChatButtonsText"
-                        android:text="@string/general_soon"
-                        android:background="@drawable/chat_photo_selector"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginRight="6dp"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal">
-
-                <TextView
-                        android:id="@+id/tvBuyVipTitle"
-                        android:layout_height="wrap_content"
-                        android:layout_width="fill_parent"
-                        android:text="@string/black_list_activation"
-                        style="@style/ChatVipTitleText"
-                        android:layout_marginTop="6dp"/>
-
-                <Button
-                        android:id="@+id/btnBuyVip"
-                        android:layout_height="wrap_content"
-                        android:layout_width="fill_parent"
-                        style="@style/Widget.Topface.Button.Big.Blue"
-                        android:text="@string/buying_vip_status"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"/>
-
-                <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp">
-
-                    <Button
-                            android:id="@+id/add_to_black_list_button"
-                            android:layout_height="wrap_content"
-                            android:layout_width="fill_parent"
-                            style="@style/Widget.Topface.Button.Big.Gray"
-                            android:text="@string/black_list_add"
-                            android:layout_centerInParent="true"
-                            />
-
-                    <ProgressBar
-                            android:id="@+id/add_to_black_list_in_panel_progress"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            style="@android:style/Widget.ProgressBar.Small"
-                            android:visibility="gone"
-                            />
-                </RelativeLayout>
-            </LinearLayout>
+                    style="@style/ChatButtonsText"
+                    android:text="@string/general_gift"
+                    android:background="@drawable/chat_gift_selector"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"/>
         </LinearLayout>
     </com.topface.topface.ui.views.SwapControl>
 
@@ -162,12 +89,11 @@
             android:drawableLeft="@drawable/loader"
             android:visibility="gone"/>
 
-    <include
-            android:id="@+id/loChatActions"
+    <ViewStub
+            android:id="@+id/chat_actions_stub"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            layout="@layout/user_actions_layout"/>
+            android:layout_marginRight="5dp"/>
 </RelativeLayout>
