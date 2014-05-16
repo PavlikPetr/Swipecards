@@ -1,49 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:layout_gravity="center"
-              android:gravity="center"
-              android:padding="34dp">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
 
     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="34dp">
+
+        <LinearLayout
             android:id="@+id/ivAvatars"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-        <com.topface.topface.ui.views.ImageViewRemote
+            <com.topface.topface.ui.views.ImageViewRemote
                 android:id="@+id/ivOne"
                 android:layout_width="wrap_content"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:src="@drawable/likes_male_one"/>
+                android:layout_weight="1"
+                android:src="@drawable/likes_male_one" />
 
-        <com.topface.topface.ui.views.ImageViewRemote
+            <com.topface.topface.ui.views.ImageViewRemote
                 android:id="@+id/ivTwo"
                 android:layout_width="wrap_content"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:src="@drawable/likes_male_two"/>
+                android:layout_weight="1"
+                android:src="@drawable/likes_male_two" />
 
-        <com.topface.topface.ui.views.ImageViewRemote
+            <com.topface.topface.ui.views.ImageViewRemote
                 android:id="@+id/ivThree"
                 android:layout_width="wrap_content"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:src="@drawable/likes_male_three"/>
+                android:layout_weight="1"
+                android:src="@drawable/likes_male_three" />
 
-    </LinearLayout>
+        </LinearLayout>
 
-    <TextView
+        <TextView
             android:id="@+id/blocked_likes_text"
+            style="@style/TopfaceTextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TopfaceTextAppearance.Medium"
-            android:gravity="center"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:gravity="center" />
 
-    <include layout="@layout/layout_empty_feed_controls"/>
-</LinearLayout>
+        <include layout="@layout/layout_empty_feed_controls" />
+    </LinearLayout>
+</ScrollView>
