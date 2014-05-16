@@ -14,7 +14,8 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.GiftsFragment;
+import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
+import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -34,7 +35,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     // state
     protected HeaderMainFragment mHeaderMainFragment;
     protected ProfilePageAdapter mHeaderPagerAdapter;
-    protected GiftsFragment mGiftFragment;
+    private UpdatableGiftsFragment mGiftFragment;
     private ArrayList<String> BODY_PAGES_TITLES = new ArrayList<>();
     private ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<>();
     private ArrayList<String> HEADER_PAGES_CLASS_NAMES = new ArrayList<>();
@@ -57,8 +58,8 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
                 mUserPhotoFragment = (UserPhotoFragment) fragment;
             } else if (fragment instanceof UserFormFragment) {
                 mUserFormFragment = (UserFormFragment) fragment;
-            } else if (fragment instanceof GiftsFragment) {
-                mGiftFragment = (GiftsFragment) fragment;
+            } else if (fragment instanceof UpdatableGiftsFragment) {
+                mGiftFragment = (UpdatableGiftsFragment) fragment;
             }
         }
 
@@ -278,5 +279,9 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         Profile getProfile();
 
         int getProfileType();
+    }
+
+    protected UpdatableGiftsFragment getGiftFragment() {
+        return mGiftFragment;
     }
 }

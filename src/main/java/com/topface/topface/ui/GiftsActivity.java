@@ -14,7 +14,7 @@ import com.topface.topface.data.Gift;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.fragments.GiftsFragment;
+import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.views.TripleButton;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +38,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
     public GiftsCollection mGiftsCollection;
     private TripleButton mTripleButton;
-    private GiftsFragment mGiftFragment;
+    private PlainGiftsFragment mGiftFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +48,9 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
         mUserIdToSendGift = getIntent().getIntExtra(INTENT_USER_ID_TO_SEND_GIFT, 0);
         mNeedToSendGift = getIntent().getBooleanExtra(INTENT_SEND_GIFT, true);
-        mGiftFragment = new GiftsFragment();
+        mGiftFragment = new PlainGiftsFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.giftGrid, mGiftFragment, GiftsFragment.GIFTS_ALL_TAG).commit();
+                .replace(R.id.giftGrid, mGiftFragment).commit();
 
         mGiftsCollection = new GiftsCollection();
 
