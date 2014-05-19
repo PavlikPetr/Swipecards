@@ -1,37 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-<ViewFlipper
-    android:id="@+id/vfEmptyViews"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:clickable="true">
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <TextView
-            android:id="@+id/tvText"
-            style="@style/ItemTitleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:gravity="center"
-            android:text="@string/nobody_nearby"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="34dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/tvText"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="28dp"
-            android:src="@drawable/background_people_close"/>
+            android:layout_marginBottom="18dp"
+            android:src="@drawable/background_people_close" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/blocked_geo_text"
+            style="@style/TopfaceTextAppearance.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center" />
 
-    <include layout="@layout/layout_paid_geo" />
-
-</ViewFlipper>
+        <include layout="@layout/layout_empty_feed_controls" />
+    </LinearLayout>
+</ScrollView>

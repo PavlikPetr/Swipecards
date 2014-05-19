@@ -7,20 +7,12 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
-
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGeo;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.DeleteAbstractRequest;
-import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.PeopleNearbyAccessRequest;
-import com.topface.topface.requests.PeopleNearbyRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
@@ -29,7 +21,6 @@ import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.geo.GeoLocationManager;
-
 import org.json.JSONObject;
 
 import java.util.List;
@@ -101,77 +92,98 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
-        ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
         Options.BlockPeopleNearby blockPeopleNearby = CacheProfile.getOptions().blockPeople;
         if (errorCode == ErrorCodes.BLOCKED_PEOPLE_NEARBY) {
-            initEmptyScreenOnBlocked(inflated, viewFlipper, blockPeopleNearby);
+            initEmptyScreenOnBlocked(inflated, blockPeopleNearby);
         } else {
-            initEmptyScreen(viewFlipper, errorCode);
+            initEmptyScreen(inflated, errorCode);
         }
     }
 
-    private void initEmptyScreen(ViewFlipper viewFlipper, int errorCode) {
-        viewFlipper.setDisplayedChild(0);
-        View currentView = viewFlipper.getChildAt(0);
-        if (currentView != null) {
-            if (errorCode == ErrorCodes.CANNOT_GET_GEO) {
-                ((TextView) currentView.findViewById(R.id.tvText)).setText(R.string.cannot_get_geo);
-            } else {
-                ((TextView) currentView.findViewById(R.id.tvText)).setText(R.string.nobody_nearby);
-            }
+    private void initEmptyScreen(View emptyView, int errorCode) {
+        if (emptyView != null) {
+            emptyView.findViewById(R.id.controls_layout).setVisibility(View.GONE);
+            ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(
+                    errorCode == ErrorCodes.CANNOT_GET_GEO ? R.string.cannot_get_geo : R.string.nobody_nearby
+            );
         }
     }
 
-    private void initEmptyScreenOnBlocked(final View inflated, ViewFlipper viewFlipper, final Options.BlockPeopleNearby blockPeopleNearby) {
-        viewFlipper.setDisplayedChild(1);
-        View currentView = viewFlipper.getChildAt(1);
+    private void initEmptyScreenOnBlocked(final View emptyView, final Options.BlockPeopleNearby blockPeopleNearby) {
+        if (emptyView != null) {
+            emptyView.findViewById(R.id.controls_layout).setVisibility(View.VISIBLE);
+            ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(blockPeopleNearby.text);
+            initBuyCoinsButton(emptyView, blockPeopleNearby);
+            initBuyVipButton(emptyView, blockPeopleNearby);
+        }
+    }
 
-        if (currentView != null) {
-            ((TextView) currentView.findViewById(R.id.tvText)).setText(blockPeopleNearby.text);
-            final Button btnBuy = (Button) currentView.findViewById(R.id.btnBuyCoins);
-            final ProgressBar progress = (ProgressBar) currentView.findViewById(R.id.prsLoading);
-            btnBuy.setText(blockPeopleNearby.buttonText);
-            btnBuy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (CacheProfile.money >= blockPeopleNearby.price) {
-                        btnBuy.setVisibility(View.INVISIBLE);
-                        progress.setVisibility(View.VISIBLE);
-                        PeopleNearbyAccessRequest request = new PeopleNearbyAccessRequest(getActivity());
-                        request.callback(new SimpleApiHandler() {
-                            @Override
-                            public void success(IApiResponse response) {
-                                super.success(response);
-                                if (isAdded()) {
-                                    inflated.setVisibility(View.GONE);
-                                    updateData(false, true);
-                                }
-                            }
-
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                                super.fail(codeError, response);
-                                if (isAdded() && codeError == ErrorCodes.PAYMENT) {
-                                    Toast.makeText(getActivity(), R.string.not_enough_coins, Toast.LENGTH_LONG).show();
-                                    openBuyScreenOnBlockedGeo();
-                                }
-                            }
-
-                            @Override
-                            public void always(IApiResponse response) {
-                                super.always(response);
-                                if (isAdded()) {
-                                    btnBuy.setVisibility(View.VISIBLE);
-                                    progress.setVisibility(View.GONE);
-                                }
-                            }
-                        }).exec();
-                    } else {
-                        openBuyScreenOnBlockedGeo();
+    private void initBuyVipButton(View emptyView, final Options.BlockPeopleNearby blockPeopleNearby) {
+        final Button buyButton = (Button) emptyView.findViewById(R.id.buy_vip_button);
+        TextView buyText = (TextView) emptyView.findViewById(R.id.buy_vip_text);
+        if (CacheProfile.getOptions().unlockAllForPremium) {
+            initButtonForBlockedScreen(
+                    buyText, blockPeopleNearby.textPremium,
+                    buyButton, blockPeopleNearby.buttonTextPremium,
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivityForResult(
+                                    ContainerActivity.getVipBuyIntent(null, "PeopleNearby"),
+                                    ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                            );
+                        }
                     }
-                }
-            });
+            );
+        } else {
+            buyText.setVisibility(View.GONE);
+            buyButton.setVisibility(View.GONE);
         }
+    }
+
+    private void initBuyCoinsButton(final View emptyView, final Options.BlockPeopleNearby blockPeopleNearby) {
+        final Button btnBuy = (Button) emptyView.findViewById(R.id.buy_coins_button);
+        final ProgressBar progress = (ProgressBar) emptyView.findViewById(R.id.prsLoading);
+        initButtonForBlockedScreen(btnBuy, blockPeopleNearby.buttonText, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CacheProfile.money >= blockPeopleNearby.price) {
+                    btnBuy.setVisibility(View.INVISIBLE);
+                    progress.setVisibility(View.VISIBLE);
+                    PeopleNearbyAccessRequest request = new PeopleNearbyAccessRequest(getActivity());
+                    request.callback(new SimpleApiHandler() {
+                        @Override
+                        public void success(IApiResponse response) {
+                            super.success(response);
+                            if (isAdded()) {
+                                emptyView.setVisibility(View.GONE);
+                                updateData(false, true);
+                            }
+                        }
+
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+                            super.fail(codeError, response);
+                            if (isAdded() && codeError == ErrorCodes.PAYMENT) {
+                                Toast.makeText(getActivity(), R.string.not_enough_coins, Toast.LENGTH_LONG).show();
+                                openBuyScreenOnBlockedGeo();
+                            }
+                        }
+
+                        @Override
+                        public void always(IApiResponse response) {
+                            super.always(response);
+                            if (isAdded()) {
+                                btnBuy.setVisibility(View.VISIBLE);
+                                progress.setVisibility(View.GONE);
+                            }
+                        }
+                    }).exec();
+                } else {
+                    openBuyScreenOnBlockedGeo();
+                }
+            }
+        });
     }
 
     private void openBuyScreenOnBlockedGeo() {

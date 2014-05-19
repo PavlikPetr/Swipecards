@@ -126,17 +126,22 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, itemType);
-        intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, itemPrice);
+        if (itemType != -1) {
+            intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, itemType);
+        }
+        if (itemPrice != -1) {
+            intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, itemPrice);
+        }
         return intent;
+    }
+
+    public static Intent getBuyingIntent(String from, int itemPrice) {
+        return getBuyingIntent(from, -1, itemPrice);
 
     }
 
     public static Intent getBuyingIntent(String from) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
-        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        return intent;
+        return getBuyingIntent(from, -1, -1);
 
     }
 
