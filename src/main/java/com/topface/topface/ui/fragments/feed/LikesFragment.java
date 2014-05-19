@@ -1,10 +1,19 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -13,14 +22,24 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.BuyLikesAccessRequest;
+import com.topface.topface.requests.DeleteAbstractRequest;
+import com.topface.topface.requests.DeleteLikesRequest;
+import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.BackgroundThread;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
+
 import org.json.JSONObject;
 
 import java.util.List;
@@ -226,7 +245,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                             super.fail(codeError, response);
                             if (codeError == ErrorCodes.PAYMENT) {
                                 Toast.makeText(getActivity(), R.string.not_enough_coins, Toast.LENGTH_LONG).show();
-                                openBuyScreenOnBlockedLikes(blockSympathyOptions.group);
+                                openBuyScreenOnBlockedLikes(blockSympathyOptions);
                             }
                         }
 
@@ -238,18 +257,24 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         }
                     }).exec();
                 } else {
-                    openBuyScreenOnBlockedLikes(blockSympathyOptions.group);
+                    openBuyScreenOnBlockedLikes(blockSympathyOptions);
                 }
             }
         });
     }
 
-    private void openBuyScreenOnBlockedLikes(String group) {
+    private void openBuyScreenOnBlockedLikes(Options.BlockSympathy blockSympathyOptions) {
+        String group = blockSympathyOptions.group;
         EasyTracker.getTracker().sendEvent(
                 getTrackName(), "VipPaidSympathies." + group,
                 "OpenBuyingScreen", 1l
         );
-        startActivity(ContainerActivity.getBuyingIntent("VipPaidSympathies." + group));
+        startActivity(
+                ContainerActivity.getBuyingIntent(
+                        "VipPaidSympathies." + group,
+                        blockSympathyOptions.price
+                )
+        );
     }
 
     private void sendBlockSympathyStatistics(final Options.BlockSympathy blockSympathyOptions) {
