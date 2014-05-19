@@ -11,10 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.Debug;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

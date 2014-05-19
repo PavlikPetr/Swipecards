@@ -3,6 +3,7 @@ package com.topface.topface.utils.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
 
 /**

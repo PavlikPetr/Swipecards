@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -20,7 +21,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 
 import org.json.JSONException;

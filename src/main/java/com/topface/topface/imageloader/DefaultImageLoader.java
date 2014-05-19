@@ -3,6 +3,7 @@ package com.topface.topface.imageloader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -12,9 +13,9 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.nostra13.universalimageloader.utils.L;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.utils.Debug;
 
 @SuppressWarnings("UnusedDeclaration")
 public class DefaultImageLoader {

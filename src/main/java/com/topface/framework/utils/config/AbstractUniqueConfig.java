@@ -1,4 +1,4 @@
-package com.topface.topface.utils.config;
+package com.topface.framework.utils.config;
 
 import android.content.Context;
 

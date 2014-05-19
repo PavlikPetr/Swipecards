@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -38,7 +39,6 @@ import com.topface.topface.ui.edit.EditProfileItem.Type;
 import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ProfileBackgrounds;

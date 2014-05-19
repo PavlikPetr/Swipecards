@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -50,7 +51,6 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.config.UserConfig;

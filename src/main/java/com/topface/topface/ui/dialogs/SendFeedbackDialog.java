@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
@@ -14,7 +16,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.settings.FeedbackMessageFragment;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 

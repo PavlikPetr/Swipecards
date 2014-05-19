@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ViewFlipper;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
-import com.topface.topface.utils.Debug;
 
 public class LikesListAdapter extends FeedAdapter<FeedLike> {
     private int mSelectedForMutual = -1;

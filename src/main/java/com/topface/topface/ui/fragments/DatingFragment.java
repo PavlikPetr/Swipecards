@@ -28,6 +28,8 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryRequestReceiver;
@@ -64,10 +66,8 @@ import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AnimationHelper;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
@@ -360,7 +360,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     EditAgeFragment.absoluteMax : CacheProfile.dating.ageEnd;
             String headerText = getString(CacheProfile.dating.sex == Static.BOY ?
                             R.string.dating_header_guys : R.string.dating_header_girls,
-                    CacheProfile.dating.ageStart, age);
+                    CacheProfile.dating.ageStart, age
+            );
             String plus = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ? "+" : "";
             return headerText + plus;
         }

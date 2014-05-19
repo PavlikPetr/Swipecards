@@ -5,9 +5,9 @@ import android.graphics.BitmapFactory;
 import android.support.v4.util.SparseArrayCompat;
 
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
 public class MaskClipProcessor implements BitmapProcessor {
