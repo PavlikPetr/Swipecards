@@ -16,7 +16,7 @@ import com.topface.topface.utils.social.AuthToken;
  * <p/>
  * use generateKey(String name) to create keys to put(key) and get(key) data
  */
-public class UserConfig extends AbstractConfig {
+public class UserConfig extends AbstractUniqueConfig {
     private static final String PROFILE_CONFIG_SETTINGS = "profile_config_settings";
     /**
      * Keys' names to generate user-based keys
@@ -37,31 +37,39 @@ public class UserConfig extends AbstractConfig {
     }
 
     @Override
+    protected String generateUniqueKey(String name) {
+        AuthToken token = AuthToken.getInstance();
+        return token.getSocialNet() +
+                Static.AMPERSAND + token.getUserTokenUniqueId() +
+                Static.AMPERSAND + name;
+    }
+
+    @Override
     protected void fillSettingsMap(SettingsMap settingsMap) {
         // pincode value
-        settingsMap.addStringField(generateKey(DATA_PIN_CODE), Static.EMPTY);
+        addField(settingsMap, DATA_PIN_CODE, Static.EMPTY);
         // admirations promo popup last date of show
-        settingsMap.addLongField(generatePromoPopupKey(Options.PromoPopupEntity.AIR_ADMIRATIONS), 0L);
+        addField(settingsMap, getPromoPopupKey(Options.PromoPopupEntity.AIR_ADMIRATIONS), 0L);
         // messages promo popup last date of show
-        settingsMap.addLongField(generatePromoPopupKey(Options.PromoPopupEntity.AIR_MESSAGES), 0L);
+        addField(settingsMap, getPromoPopupKey(Options.PromoPopupEntity.AIR_MESSAGES), 0L);
         // visitors promo popup last date of show
-        settingsMap.addLongField(generatePromoPopupKey(Options.PromoPopupEntity.AIR_VISITORS), 0L);
+        addField(settingsMap, getPromoPopupKey(Options.PromoPopupEntity.AIR_VISITORS), 0L);
         // flag show if "buy sympathies hint" is passed
-        settingsMap.addBooleanField(generateKey(DATA_NOVICE_BUY_SYMPATHY), true);
+        addField(settingsMap, DATA_NOVICE_BUY_SYMPATHY, true);
         // data of first launch to show "buy sympathies hint" with some delay from first launch
-        settingsMap.addLongField(generateKey(DATA_NOVICE_BUY_SYMPATHY_DATE), 0L);
+        addField(settingsMap, DATA_NOVICE_BUY_SYMPATHY_DATE, 0L);
         // flag show if "send sympathy hint" is passed
-        settingsMap.addBooleanField(generateKey(DATA_NOVICE_SYMPATHY), true);
+        addField(settingsMap, DATA_NOVICE_SYMPATHY, true);
         // date of last likes closings processing
-        settingsMap.addLongField(generateKey(DATA_LIKE_CLOSING_LAST_TIME), 0L);
+        addField(settingsMap, DATA_LIKE_CLOSING_LAST_TIME, 0L);
         // date of last mutual closings processing
-        settingsMap.addLongField(generateKey(DATA_MUTUAL_CLOSING_LAST_TIME), 0L);
+        addField(settingsMap, DATA_MUTUAL_CLOSING_LAST_TIME, 0L);
         // список сообщений для сгруппированных нотификаций (сейчас группируются только сообщения)
-        settingsMap.addStringField(generateKey(NOTIFICATIONS_MESSAGES_STACK), Static.EMPTY);
+        addField(settingsMap, NOTIFICATIONS_MESSAGES_STACK, Static.EMPTY);
         // количество нотификаций, которые пишем в поле "еще %d сообщений"
-        settingsMap.addIntegerField(generateKey(NOTIFICATION_REST_MESSAGES), 0);
+        addField(settingsMap, NOTIFICATION_REST_MESSAGES, 0);
         // время последнего сброса счетчика вкладки бонусов
-        settingsMap.addLongField(generateKey(DATA_BONUS_LAST_SHOW_TIME), 0L);
+        addField(settingsMap, DATA_BONUS_LAST_SHOW_TIME, 0L);
     }
 
     @Override
@@ -78,26 +86,13 @@ public class UserConfig extends AbstractConfig {
     }
 
     /**
-     * Use this method to create key which will be related to current user
-     *
-     * @param name data field name
-     * @return new key which contains user id
-     */
-    private String generateKey(String name) {
-        AuthToken token = AuthToken.getInstance();
-        return token.getSocialNet() +
-                Static.AMPERSAND + token.getUserTokenUniqueId() +
-                Static.AMPERSAND + name;
-    }
-
-    /**
      * Use this method to create key for promopopup which will be related to current user
      *
      * @param popupType type of promo popup []
      * @return new key which contains user id
      */
-    private String generatePromoPopupKey(int popupType) {
-        return generateKey(DATA_PROMO_POPUP + popupType);
+    private String getPromoPopupKey(int popupType) {
+        return DATA_PROMO_POPUP + popupType;
     }
 
     /**
@@ -117,7 +112,7 @@ public class UserConfig extends AbstractConfig {
      * @return true on success
      */
     public boolean setPinCode(String pinCode) {
-        return getSettingsMap().setField(generateKey(DATA_PIN_CODE), pinCode);
+        return setField(getSettingsMap(), DATA_PIN_CODE, pinCode);
     }
 
     /**
@@ -125,7 +120,7 @@ public class UserConfig extends AbstractConfig {
      * @return pincode value
      */
     public String getPinCode() {
-        return getSettingsMap().getStringField(generateKey(DATA_PIN_CODE));
+        return getStringField(getSettingsMap(), DATA_PIN_CODE);
     }
 
     // =======================PromoPopups=======================
@@ -137,7 +132,7 @@ public class UserConfig extends AbstractConfig {
      * @return true on success
      */
     public boolean setPromoPopupLastTime(int popupType, long lastTime) {
-        return getSettingsMap().setField(generatePromoPopupKey(popupType), lastTime);
+        return setField(getSettingsMap(), getPromoPopupKey(popupType), lastTime);
     }
 
     /**
@@ -146,7 +141,7 @@ public class UserConfig extends AbstractConfig {
      * @return date
      */
     public long getPromoPopupLastTime(int popupType) {
-        return getSettingsMap().getLongField(generatePromoPopupKey(popupType));
+        return getLongField(getSettingsMap(), getPromoPopupKey(popupType));
     }
 
     /**
@@ -154,7 +149,7 @@ public class UserConfig extends AbstractConfig {
      * @param popupType type of popup (((Options.PromoPopupEntity)someEntity).getPopupAirType())
      */
     public void resetPromoPopupData(int popupType) {
-        resetAndSaveConfig(generatePromoPopupKey(popupType));
+        resetAndSaveConfig(getPromoPopupKey(popupType));
     }
 
     // =======================Novice=======================
@@ -164,7 +159,7 @@ public class UserConfig extends AbstractConfig {
      * @return true if hint needs to be shown
      */
     public boolean getNoviceSympathy() {
-        return getSettingsMap().getBooleanField(generateKey(DATA_NOVICE_SYMPATHY));
+        return getBooleanField(getSettingsMap(), DATA_NOVICE_SYMPATHY);
     }
 
     /**
@@ -173,7 +168,7 @@ public class UserConfig extends AbstractConfig {
      * @return true on success
      */
     public boolean setNoviceSympathy(boolean needShow) {
-        return getSettingsMap().setField(generateKey(DATA_NOVICE_SYMPATHY), needShow);
+        return setField(getSettingsMap(), DATA_NOVICE_SYMPATHY, needShow);
     }
 
     /**
@@ -181,7 +176,7 @@ public class UserConfig extends AbstractConfig {
      * @return true if hint need to be shown
      */
     public boolean getNoviceBuySympathy() {
-        return getSettingsMap().getBooleanField(generateKey(DATA_NOVICE_BUY_SYMPATHY));
+        return getBooleanField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY);
     }
 
     /**
@@ -190,7 +185,7 @@ public class UserConfig extends AbstractConfig {
      * @return true on success
      */
     public boolean setNoviceBuySympathy(boolean needShow) {
-        return getSettingsMap().setField(generateKey(DATA_NOVICE_BUY_SYMPATHY), needShow);
+        return setField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY, needShow);
     }
 
     /**
@@ -198,7 +193,7 @@ public class UserConfig extends AbstractConfig {
      * @return time of first trial
      */
     public long getNoviceBuySympathyDate() {
-        return getSettingsMap().getLongField(generateKey(DATA_NOVICE_BUY_SYMPATHY_DATE));
+        return getLongField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY_DATE);
     }
 
     /**
@@ -207,7 +202,7 @@ public class UserConfig extends AbstractConfig {
      * @return true on success
      */
     public Boolean setNoviceBuySympathyDate(long lastTime) {
-        return getSettingsMap().setField(generateKey(DATA_NOVICE_BUY_SYMPATHY_DATE), lastTime);
+        return setField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY_DATE, lastTime);
     }
 
     // =======================Closings=======================
@@ -219,7 +214,7 @@ public class UserConfig extends AbstractConfig {
      * @return true on success
      */
     public boolean setLikesClosingsLastTime(long lastTime) {
-        return getSettingsMap().setField(generateKey(DATA_LIKE_CLOSING_LAST_TIME), lastTime);
+        return setField(getSettingsMap(), DATA_LIKE_CLOSING_LAST_TIME, lastTime);
     }
 
     /**
@@ -228,7 +223,7 @@ public class UserConfig extends AbstractConfig {
      * @return date in unix time
      */
     public long getLikesClosingsLastTime() {
-        return getSettingsMap().getLongField(generateKey(DATA_LIKE_CLOSING_LAST_TIME));
+        return getLongField(getSettingsMap(), DATA_LIKE_CLOSING_LAST_TIME);
     }
 
     /**
@@ -238,7 +233,7 @@ public class UserConfig extends AbstractConfig {
      * @return true on success
      */
     public boolean setMutualClosingsLastTime(long lastTime) {
-        return getSettingsMap().setField(generateKey(DATA_MUTUAL_CLOSING_LAST_TIME), lastTime);
+        return setField(getSettingsMap(), DATA_MUTUAL_CLOSING_LAST_TIME, lastTime);
     }
 
     /**
@@ -247,7 +242,7 @@ public class UserConfig extends AbstractConfig {
      * @return date in unix time
      */
     public long getMutualClosingsLastTime() {
-        return getSettingsMap().getLongField(generateKey(DATA_MUTUAL_CLOSING_LAST_TIME));
+        return getLongField(getSettingsMap(), DATA_MUTUAL_CLOSING_LAST_TIME);
     }
 
     /**
@@ -256,7 +251,7 @@ public class UserConfig extends AbstractConfig {
      * @param lastShowTime timestamp of last visit time from server
      */
     public void setBonusCounterLastShowTime(long lastShowTime) {
-        getSettingsMap().setField(generateKey(DATA_BONUS_LAST_SHOW_TIME), lastShowTime);
+        setField(getSettingsMap(), DATA_BONUS_LAST_SHOW_TIME, lastShowTime);
     }
 
     /**
@@ -265,24 +260,24 @@ public class UserConfig extends AbstractConfig {
      * @return timestamp
      */
     public long getBonusCounterLastShowTime() {
-        return getSettingsMap().getLongField(generateKey(DATA_BONUS_LAST_SHOW_TIME));
+        return getLongField(getSettingsMap(), DATA_BONUS_LAST_SHOW_TIME);
     }
 
     public MessageStack getNotificationMessagesStack() {
         MessageStack messageStack = new MessageStack();
-        messageStack.fromJSON(getSettingsMap().getStringField(generateKey(NOTIFICATIONS_MESSAGES_STACK)), MessageStack.Message.class.getName());
-        messageStack.setRestMessages(getSettingsMap().getIntegerField(generateKey(NOTIFICATION_REST_MESSAGES)));
+        messageStack.fromJSON(getStringField(getSettingsMap(), NOTIFICATIONS_MESSAGES_STACK), MessageStack.Message.class.getName());
+        messageStack.setRestMessages(getIntegerField(getSettingsMap(), NOTIFICATION_REST_MESSAGES));
         return messageStack;
     }
 
     public boolean setNotificationMessagesStack(MessageStack messages) {
-        getSettingsMap().setField(generateKey(NOTIFICATION_REST_MESSAGES), messages.getRestMessages());
-        return getSettingsMap().setField(generateKey(NOTIFICATIONS_MESSAGES_STACK), messages.toJson());
+        setField(getSettingsMap(), NOTIFICATION_REST_MESSAGES, messages.getRestMessages());
+        return setField(getSettingsMap(), NOTIFICATIONS_MESSAGES_STACK, messages.toJson());
     }
 
     public void resetNotificationMessagesStack() {
-        resetAndSaveConfig(generateKey(NOTIFICATIONS_MESSAGES_STACK));
-        resetAndSaveConfig(generateKey(NOTIFICATION_REST_MESSAGES));
+        resetAndSaveConfig(NOTIFICATIONS_MESSAGES_STACK);
+        resetAndSaveConfig(NOTIFICATION_REST_MESSAGES);
     }
 
     // =====================================================

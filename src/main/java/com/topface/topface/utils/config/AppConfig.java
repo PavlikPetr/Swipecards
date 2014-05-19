@@ -2,6 +2,7 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
@@ -38,25 +39,25 @@ public class AppConfig extends AbstractConfig {
     @Override
     protected void fillSettingsMap(SettingsMap settingsMap) {
         // api url: https://api.topface.com/
-        settingsMap.addStringField(DATA_API_URL, Static.API_URL);
+        addField(settingsMap, DATA_API_URL, Static.API_URL);
         // api version number
-        settingsMap.addIntegerField(DATA_API_VERSION, Static.API_VERSION);
+        addField(settingsMap, DATA_API_VERSION, Static.API_VERSION);
         // api revision for test platforms
-        settingsMap.addStringField(DATA_API_REVISION, null);
+        addField(settingsMap, DATA_API_REVISION, null);
         // vk api id
-        settingsMap.addStringField(DATA_AUTH_VK_API, Static.AUTH_VK_ID);
+        addField(settingsMap, DATA_AUTH_VK_API, Static.AUTH_VK_ID);
         // fb api id
-        settingsMap.addStringField(DATA_AUTH_FB_API, Static.AUTH_FACEBOOK_ID);
+        addField(settingsMap, DATA_AUTH_FB_API, Static.AUTH_FACEBOOK_ID);
         // editor mode from Editor class
-        settingsMap.addIntegerField(DATA_EDITOR_MODE, Editor.MODE_USER_FIELD);
+        addField(settingsMap, DATA_EDITOR_MODE, Editor.MODE_USER_FIELD);
         // editor mode from Debug class
-        settingsMap.addIntegerField(DATA_DEBUG_MODE, Debug.MODE_EDITOR);
+        addField(settingsMap, DATA_DEBUG_MODE, Debug.MODE_EDITOR);
         // date when flood ends
-        settingsMap.addLongField(FLOOD_ENDS_TIME, 0l);
+        addField(settingsMap, FLOOD_ENDS_TIME, 0l);
         // flag for test mode for network errors
-        settingsMap.addBooleanField(DATA_TEST_NETWORK, false);
+        addField(settingsMap, DATA_TEST_NETWORK, false);
         // app options
-        settingsMap.addStringField(DATA_APP_OPTIONS, Static.EMPTY);
+        addField(settingsMap, DATA_APP_OPTIONS, Static.EMPTY);
     }
 
     protected SharedPreferences getPreferences() {
@@ -79,7 +80,7 @@ public class AppConfig extends AbstractConfig {
      * @return api key
      */
     public String getAuthVkApi() {
-        return getSettingsMap().getStringField(DATA_AUTH_VK_API);
+        return getStringField(getSettingsMap(), DATA_AUTH_VK_API);
     }
 
     /**
@@ -88,7 +89,7 @@ public class AppConfig extends AbstractConfig {
      * @return api key
      */
     public String getAuthFbApi() {
-        return getSettingsMap().getStringField(DATA_AUTH_FB_API);
+        return getStringField(getSettingsMap(), DATA_AUTH_FB_API);
     }
 
     /**
@@ -100,7 +101,7 @@ public class AppConfig extends AbstractConfig {
      * {@link com.topface.topface.utils.Debug#MODE_DISABLE}
      */
     public int getDebugMode() {
-        return getSettingsMap().getIntegerField(DATA_DEBUG_MODE);
+        return getIntegerField(getSettingsMap(), DATA_DEBUG_MODE);
     }
 
     /**
@@ -112,7 +113,7 @@ public class AppConfig extends AbstractConfig {
      *             {@link com.topface.topface.utils.Debug#MODE_DISABLE}
      */
     public void setDebugMode(int mode) {
-        getSettingsMap().setField(DATA_DEBUG_MODE, mode);
+        setField(getSettingsMap(), DATA_DEBUG_MODE, mode);
     }
 
     /**
@@ -123,7 +124,7 @@ public class AppConfig extends AbstractConfig {
      * {@link com.topface.topface.utils.Editor#MODE_NOT_EDITOR}
      */
     public int getEditorMode() {
-        return getSettingsMap().getIntegerField(DATA_EDITOR_MODE);
+        return getIntegerField(getSettingsMap(), DATA_EDITOR_MODE);
     }
 
     /**
@@ -134,7 +135,7 @@ public class AppConfig extends AbstractConfig {
      *             {@link com.topface.topface.utils.Editor#MODE_NOT_EDITOR}
      */
     public void setEditorMode(int mode) {
-        getSettingsMap().setField(DATA_EDITOR_MODE, mode);
+        setField(getSettingsMap(), DATA_EDITOR_MODE, mode);
     }
 
     /**
@@ -143,7 +144,7 @@ public class AppConfig extends AbstractConfig {
      * @return version number
      */
     public Integer getApiVersion() {
-        return getSettingsMap().getIntegerField(DATA_API_VERSION);
+        return getIntegerField(getSettingsMap(), DATA_API_VERSION);
     }
 
     /**
@@ -152,7 +153,7 @@ public class AppConfig extends AbstractConfig {
      * @return url for request
      */
     public String getApiDomain() {
-        return getSettingsMap().getStringField(DATA_API_URL);
+        return getStringField(getSettingsMap(), DATA_API_URL);
     }
 
     /**
@@ -161,7 +162,7 @@ public class AppConfig extends AbstractConfig {
      * @return revision id
      */
     public String getApiRevision() {
-        return getSettingsMap().getStringField(DATA_API_REVISION);
+        return getStringField(getSettingsMap(), DATA_API_REVISION);
     }
 
     /**
@@ -170,7 +171,7 @@ public class AppConfig extends AbstractConfig {
      * @return true if network errors mode switched on
      */
     public boolean getTestNetwork() {
-        return getSettingsMap().getBooleanField(DATA_TEST_NETWORK);
+        return getBooleanField(getSettingsMap(), DATA_TEST_NETWORK);
     }
 
     /**
@@ -179,7 +180,7 @@ public class AppConfig extends AbstractConfig {
      * @param value true if need opportunity to switch network errors on and off
      */
     public void setTestNetwork(boolean value) {
-        getSettingsMap().setField(DATA_TEST_NETWORK, value);
+        setField(getSettingsMap(), DATA_TEST_NETWORK, value);
     }
 
     /**
@@ -191,9 +192,9 @@ public class AppConfig extends AbstractConfig {
      */
     public void setApiUrl(String url, Integer version, String revision) {
         SettingsMap settingsMap = getSettingsMap();
-        settingsMap.setField(DATA_API_URL, url);
-        settingsMap.setField(DATA_API_VERSION, version);
-        settingsMap.setField(DATA_API_REVISION, revision);
+        setField(settingsMap, DATA_API_URL, url);
+        setField(settingsMap, DATA_API_VERSION, version);
+        setField(settingsMap, DATA_API_REVISION, revision);
     }
 
     /**
@@ -203,7 +204,7 @@ public class AppConfig extends AbstractConfig {
      */
     public String getApiUrl() {
         SettingsMap settingsMap = getSettingsMap();
-        return settingsMap.getStringField(DATA_API_URL) + "?v=" + settingsMap.getIntegerField(DATA_API_VERSION);
+        return getStringField(settingsMap, DATA_API_URL) + "?v=" + getIntegerField(settingsMap, DATA_API_VERSION);
     }
 
     /**
@@ -212,7 +213,7 @@ public class AppConfig extends AbstractConfig {
      * @return json data
      */
     public String getAppOptions() {
-        return getSettingsMap().getStringField(DATA_APP_OPTIONS);
+        return getStringField(getSettingsMap(), DATA_APP_OPTIONS);
     }
 
     /**
@@ -221,7 +222,7 @@ public class AppConfig extends AbstractConfig {
      * @param value json
      */
     public void setAppOptions(String value) {
-        getSettingsMap().setField(DATA_APP_OPTIONS, value);
+        setField(getSettingsMap(), DATA_APP_OPTIONS, value);
     }
 
     @Override
