@@ -4,7 +4,6 @@ import com.topface.statistics.TfStatConsts;
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
 
 /**
  * Created by kirussell on 28.04.2014.
@@ -60,9 +59,10 @@ public class RequestConnectionListener {
     }
 
     private void addDebugVal(long val) {
-        if (BuildConfig.DEBUG) {
+        //Включать исключительно для тестирования, иначе ворнинги в логах сыпятся
+        /*if (BuildConfig.DEBUG) {
             mSlices.put(TfStatConsts.debug_val, Long.toString(val));
-        }
+        }*/
     }
 
     protected String getConnTimeVal(long interval) {
