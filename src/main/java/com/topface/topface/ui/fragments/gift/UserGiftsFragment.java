@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
+import com.topface.topface.data.Profile;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
@@ -37,7 +38,7 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
 
     @Override
     protected void initViews() {
-        if (mGridAdapter.getData().size() < 1) {
+        if (mGridAdapter.getData().size() < getMinItemsCount()) {
             mTitle.setText(R.string.user_does_not_have_gifts);
             mTitle.setVisibility(View.VISIBLE);
         }
@@ -50,12 +51,14 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
     }
 
     @Override
-    protected void postGiftsLoadInfoUpdate() {
+    protected void postGiftsLoadInfoUpdate(Profile.Gifts gifts) {
         FeedList<FeedGift> data = mGridAdapter.getData();
         data.add(0, FeedGift.getSendedGiftItem());
         if (data.size() <= getMinItemsCount()) {
             mTitle.setText(R.string.user_does_not_have_gifts);
             mTitle.setVisibility(View.VISIBLE);
+        } else {
+            super.postGiftsLoadInfoUpdate(gifts);
         }
     }
 

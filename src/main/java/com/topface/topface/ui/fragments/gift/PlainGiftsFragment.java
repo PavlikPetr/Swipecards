@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.gift;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -11,28 +10,16 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
-import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Gift;
-import com.topface.topface.data.Profile;
-import com.topface.topface.data.User;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.FeedGiftsRequest;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IGiftSendListener;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
-import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
-import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 
 import java.util.List;
 
@@ -44,6 +31,7 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
     protected GiftsAdapter mGridAdapter;
     private GridView mGridView;
     private IGiftSendListener mGiftSendListener;
+    private T mGiftsFirstPortion;
 
     @Override
     public void onAttach(Activity activity) {
@@ -106,7 +94,7 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         return 0;
     }
 
-    protected void postGiftsLoadInfoUpdate() {
+    protected void postGiftsLoadInfoUpdate(T gifts) {
         mGroupInfo.setVisibility(View.GONE);
         mTextInfo.setVisibility(View.GONE);
     }
@@ -116,28 +104,30 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         super.onStart();
     }
 
-    public void setGifts(T gifts) {
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setGifts(mGiftsFirstPortion);
+        mGiftsFirstPortion = null;
+    }
+
+    public void setGifts(final T gifts) {
         if (isAdded()) {
             FeedList<FeedGift> data = mGridAdapter.getData();
-            if (data != null) {
+            if (data != null && gifts != null) {
                 data.clear();
                 for (Gift gift : gifts) {
                     FeedGift item = new FeedGift();
                     item.gift = gift;
                     data.add(item);
                 }
-                postGiftsLoadInfoUpdate();
             }
+            postGiftsLoadInfoUpdate(gifts);
 
-            if (mGridView != null) {
-                mGridView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mGridAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
+            mGridAdapter.notifyDataSetChanged();
             initViews();
+        } else {
+            mGiftsFirstPortion = gifts;
         }
     }
 
@@ -149,4 +139,5 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
     protected FeedAdapter.Updater getUpdaterCallback() {
         return null;
     }
+
 }

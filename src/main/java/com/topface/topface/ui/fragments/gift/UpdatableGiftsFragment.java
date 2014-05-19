@@ -1,16 +1,11 @@
 package com.topface.topface.ui.fragments.gift;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
-import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FeedGiftsRequest;
@@ -18,8 +13,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
-
-import java.util.List;
 
 /**
  * Fragment displaying updatable gifts feed
@@ -32,10 +25,8 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
     private boolean mIsUpdating = false;
 
     @Override
-    public void setGifts(Profile.Gifts gifts) {
-        super.setGifts(gifts);
-
-        if (gifts.more) {
+    protected void postGiftsLoadInfoUpdate(Profile.Gifts gifts) {
+        if (gifts != null && gifts.more) {
             addItem(new FeedGift(IListLoader.ItemType.LOADER));
         }
     }
