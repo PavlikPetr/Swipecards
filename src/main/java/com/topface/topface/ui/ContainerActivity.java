@@ -242,11 +242,10 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
                 );
                 break;
             case INTENT_BUYING_FRAGMENT:
-                if (extras != null && extras.containsKey(BuyingFragment.ARG_ITEM_TYPE)
-                        && extras.containsKey(BuyingFragment.ARG_ITEM_PRICE)) {
+                if (extras != null) {
                     fragment = BuyingFragment.newInstance(
-                            extras.getInt(BuyingFragment.ARG_ITEM_TYPE),
-                            extras.getInt(BuyingFragment.ARG_ITEM_PRICE),
+                            extras.getInt(BuyingFragment.ARG_ITEM_TYPE, 0),
+                            extras.getInt(BuyingFragment.ARG_ITEM_PRICE, 0),
                             source
                     );
                 } else {

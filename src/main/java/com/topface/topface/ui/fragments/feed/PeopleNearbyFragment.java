@@ -7,12 +7,19 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGeo;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.DeleteAbstractRequest;
+import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.PeopleNearbyAccessRequest;
+import com.topface.topface.requests.PeopleNearbyRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
@@ -21,6 +28,7 @@ import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.geo.GeoLocationManager;
+
 import org.json.JSONObject;
 
 import java.util.List;
@@ -166,7 +174,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                             super.fail(codeError, response);
                             if (isAdded() && codeError == ErrorCodes.PAYMENT) {
                                 Toast.makeText(getActivity(), R.string.not_enough_coins, Toast.LENGTH_LONG).show();
-                                openBuyScreenOnBlockedGeo();
+                                openBuyScreenOnBlockedGeo(blockPeopleNearby);
                             }
                         }
 
@@ -180,14 +188,16 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                         }
                     }).exec();
                 } else {
-                    openBuyScreenOnBlockedGeo();
+                    openBuyScreenOnBlockedGeo(blockPeopleNearby);
                 }
             }
         });
     }
 
-    private void openBuyScreenOnBlockedGeo() {
-        startActivity(ContainerActivity.getBuyingIntent("PeoplePaidNearby"));
+    private void openBuyScreenOnBlockedGeo(Options.BlockPeopleNearby blockPeopleNearby) {
+        startActivity(
+                ContainerActivity.getBuyingIntent("PeoplePaidNearby", blockPeopleNearby.price)
+        );
     }
 
     @Override
