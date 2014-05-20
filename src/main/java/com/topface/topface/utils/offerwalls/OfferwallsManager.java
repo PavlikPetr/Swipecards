@@ -27,13 +27,13 @@ import com.getjar.sdk.response.PurchaseSucceededResponse;
 import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ValidateGetJarRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
 import com.topface.topface.utils.offerwalls.supersonicads.SupersonicWallActivity;
 

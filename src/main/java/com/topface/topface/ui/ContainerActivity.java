@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.topface.billing.BillingFragment;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
@@ -28,7 +29,6 @@ import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.ContactsProvider;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;

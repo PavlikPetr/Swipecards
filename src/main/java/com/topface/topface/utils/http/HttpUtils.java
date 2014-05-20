@@ -2,12 +2,18 @@ package com.topface.topface.utils.http;
 
 import android.os.Build;
 import android.text.TextUtils;
+
+import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Locale;

@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -8,10 +9,10 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

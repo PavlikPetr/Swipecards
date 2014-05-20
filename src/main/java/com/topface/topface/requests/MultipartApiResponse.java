@@ -2,9 +2,9 @@ package com.topface.topface.requests;
 
 import android.text.TextUtils;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.multipart.MultipartStream;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.FlushedInputStream;
 import com.topface.topface.utils.http.HttpUtils;
 

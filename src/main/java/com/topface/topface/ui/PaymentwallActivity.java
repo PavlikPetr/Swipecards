@@ -12,9 +12,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

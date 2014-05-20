@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -27,7 +28,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
@@ -347,7 +347,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                                     createBroadcastPendingIntent(ACTION_TEST_NETWORK_ERRORS_OFF)),
                             new UserNotification.NotificationAction(R.drawable.ic_close_dialog, "Cancel",
                                     createBroadcastPendingIntent(ACTION_CANCEL_TEST_NETWORK_ERRORS,
-                                            testNetworkNotificationId)),
+                                            testNetworkNotificationId)
+                            ),
                     };
                     testNetworkNotificationId = notificationManager.showNotificationWithActions(
                             "Network Errors", "all requests will be returning errors", null,

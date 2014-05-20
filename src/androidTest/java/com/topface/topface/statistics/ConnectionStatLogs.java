@@ -5,10 +5,10 @@ import android.test.InstrumentationTestCase;
 
 import com.nostra13.universalimageloader.core.assist.ContentLengthInputStream;
 import com.nostra13.universalimageloader.utils.IoUtils;
+import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.StatisticsConfiguration;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.Static;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.RequestConnectionListener;
 import com.topface.topface.utils.http.HttpUtils;
 

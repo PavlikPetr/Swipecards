@@ -4,9 +4,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
-import com.topface.topface.utils.Debug;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
@@ -30,7 +31,6 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.geo.AddressesCache;
 
@@ -625,8 +625,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         setLongClickListenerIfPresented(position, convertView, holder.gift);
     }
 
-    private void setLongClickListenerIfPresented(final int position, final View convertView, final View view)
-    {
+    private void setLongClickListenerIfPresented(final int position, final View convertView, final View view) {
         if (view != null && convertView != null) {
             convertView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.topface.billing.BillingUtils;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -41,7 +42,6 @@ import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.ExternalLinkExecuter;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.LocaleConfig;

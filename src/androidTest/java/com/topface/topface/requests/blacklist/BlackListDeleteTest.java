@@ -4,6 +4,7 @@ package com.topface.topface.requests.blacklist;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.AbstractThreadTest;
@@ -11,7 +12,6 @@ import com.topface.topface.requests.DeleteBlackListRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.utils.Debug;
 
 import java.util.ArrayList;
 

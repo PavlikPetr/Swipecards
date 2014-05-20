@@ -1,7 +1,7 @@
 package com.topface.topface.data;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.utils.Debug;
 
 public class Rate extends AbstractData {
     // Data

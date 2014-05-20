@@ -4,15 +4,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
-import com.topface.topface.*;
+
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
+import com.topface.topface.R;
+import com.topface.topface.RetryDialog;
+import com.topface.topface.Ssid;
+import com.topface.topface.Static;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.utils.BackgroundThread;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.RequestConnectionListener;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

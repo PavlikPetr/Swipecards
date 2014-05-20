@@ -2,11 +2,11 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.utils.Debug;
 
 public class ParallelRequestTest extends AbstractThreadTest {
 

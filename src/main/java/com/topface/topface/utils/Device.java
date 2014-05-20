@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 
 public class Device {
