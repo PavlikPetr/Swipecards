@@ -21,8 +21,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+
             android:layout_centerInParent="true"
-            style="@style/Widget.Topface.Button.Blue"
+            style="@style/Widget.Topface.Button.Big.Blue"
             android:text="@string/get_it_for_free"
             />
 </LinearLayout>

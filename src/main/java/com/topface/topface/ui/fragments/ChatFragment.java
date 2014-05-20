@@ -35,7 +35,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.adapters.*;
-import com.topface.topface.ui.fragments.buy.BuyingFragment;
+import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackButtonEditTextMaster;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -977,8 +977,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                     mAdapter.removeItem(loaderItem);
                     Intent intent = ContainerActivity.getBuyingIntent("Chat");
-                    intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                    intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                    intent.putExtra(GPlayBuyingFragment.ARG_ITEM_TYPE, GPlayBuyingFragment.TYPE_GIFT);
+                    intent.putExtra(GPlayBuyingFragment.ARG_ITEM_PRICE, price);
                     startActivity(intent);
                 } else {
                     mAdapter.showRetrySendMessage(loaderItem, sendGift);

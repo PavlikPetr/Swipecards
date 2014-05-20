@@ -13,6 +13,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Products;
@@ -222,7 +223,8 @@ public class CacheProfile {
      * Опции по умолчанию
      */
     private static Options options;
-    private static Products mProducts;
+    private static Products mGPlayProducts;
+    private static PaymentWallProducts mPWProducts;
 
     /**
      * Данные из сервиса options
@@ -255,13 +257,13 @@ public class CacheProfile {
      * Внимание! Может возвращать null, если данный тип сборки не поддерживает покупки
      */
     public static Products getProducts() {
-        if (mProducts == null) {
+        if (mGPlayProducts == null) {
             SessionConfig config = App.getSessionConfig();
             String productsCache = config.getProductsData();
             if (!TextUtils.isEmpty(productsCache)) {
                 //Получаем опции из кэша
                 try {
-                    mProducts = new Products(
+                    mGPlayProducts = new Products(
                             new JSONObject(productsCache)
                     );
                 } catch (JSONException e) {
@@ -270,7 +272,7 @@ public class CacheProfile {
                 }
             }
         }
-        return mProducts;
+        return mGPlayProducts;
     }
 
     public static boolean isDataFilled() {
@@ -313,10 +315,20 @@ public class CacheProfile {
     }
 
     public static void setGooglePlayProducts(Products products, final JSONObject response) {
-        mProducts = products;
+        mGPlayProducts = products;
         //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
         if (response != null) {
             App.getSessionConfig().setGoogleProductsData(response.toString());
+            LocalBroadcastManager.getInstance(App.getContext())
+                    .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
+
+        }
+    }
+
+    public static void setPaymentWallProducts(PaymentWallProducts products, final JSONObject response) {
+        mPWProducts = products;
+        if (response != null) {
+            App.getSessionConfig().setPaymentWallProductsData(response.toString());
             LocalBroadcastManager.getInstance(App.getContext())
                     .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
 

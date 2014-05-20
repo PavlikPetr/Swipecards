@@ -54,7 +54,7 @@ import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.GiftsFragment;
-import com.topface.topface.ui.fragments.buy.BuyingFragment;
+import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
@@ -683,8 +683,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             FragmentActivity activity = getActivity();
                             if (activity != null) {
                                 Intent intent = ContainerActivity.getBuyingIntent("Profile");
-                                intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                                intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                                intent.putExtra(GPlayBuyingFragment.ARG_ITEM_TYPE, GPlayBuyingFragment.TYPE_GIFT);
+                                intent.putExtra(GPlayBuyingFragment.ARG_ITEM_PRICE, price);
                                 startActivity(intent);
                             }
                         } else {

@@ -23,7 +23,7 @@ import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
 import com.topface.topface.ui.fragments.RegistrationFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.buy.BuyingFragment;
+import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
 import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
@@ -127,8 +127,8 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, itemType);
-        intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, itemPrice);
+        intent.putExtra(GPlayBuyingFragment.ARG_ITEM_TYPE, itemType);
+        intent.putExtra(GPlayBuyingFragment.ARG_ITEM_PRICE, itemPrice);
         return intent;
 
     }
@@ -238,11 +238,11 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
                 );
                 break;
             case INTENT_BUYING_FRAGMENT:
-                if (extras != null && extras.containsKey(BuyingFragment.ARG_ITEM_TYPE)
-                        && extras.containsKey(BuyingFragment.ARG_ITEM_PRICE)) {
+                if (extras != null && extras.containsKey(GPlayBuyingFragment.ARG_ITEM_TYPE)
+                        && extras.containsKey(GPlayBuyingFragment.ARG_ITEM_PRICE)) {
                     fragment = PurchasesFragment.newInstance(
-                            extras.getInt(BuyingFragment.ARG_ITEM_TYPE),
-                            extras.getInt(BuyingFragment.ARG_ITEM_PRICE),
+                            extras.getInt(GPlayBuyingFragment.ARG_ITEM_TYPE),
+                            extras.getInt(GPlayBuyingFragment.ARG_ITEM_PRICE),
                             source
                     );
                 } else {

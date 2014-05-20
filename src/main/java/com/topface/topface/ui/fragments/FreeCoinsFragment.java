@@ -8,7 +8,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-//import com.topface.topface.utils.offerwalls.Offerwalls;
+import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 public class FreeCoinsFragment extends BaseFragment{
     public static FreeCoinsFragment newInstance() {
@@ -24,10 +24,11 @@ public class FreeCoinsFragment extends BaseFragment{
 
     private void initView(View root) {
         View offerwall = root.findViewById(R.id.btnOfferwall);
+        OfferwallsManager.init(getActivity());
         offerwall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Options.Offerwalls.startOfferwall(getActivity());
+                OfferwallsManager.startOfferwall(getActivity());
             }
         });
         offerwall.setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);

@@ -100,6 +100,10 @@ public class Products extends AbstractData {
         } catch (Exception e) {
             Debug.error("Products parsing error", e);
         }
+        updateCache(data);
+    }
+
+    protected void updateCache(JSONObject data) {
         //Обновляем кэш
         CacheProfile.setGooglePlayProducts(this, data);
     }
@@ -373,6 +377,7 @@ public class Products extends AbstractData {
         public String hint;
         public ProductType type;
         public int discount;
+        public String pWallLink;
 
         public BuyButton(JSONObject json) {
             if (json != null) {
@@ -383,6 +388,7 @@ public class Products extends AbstractData {
                 showType = json.optInt("showType");
                 type = getProductTypeByName(json.optString("type"));
                 discount = json.optInt("discount");
+                pWallLink = json.optString("paymentwall-link");
             }
         }
     }

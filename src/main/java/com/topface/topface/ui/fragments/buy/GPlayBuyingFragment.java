@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Products;
@@ -20,7 +22,6 @@ import com.topface.topface.data.Products.ProductsInfo.CoinsSubscriptionInfo;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
@@ -33,7 +34,7 @@ import java.util.List;
 import static com.topface.topface.data.Products.BuyButton;
 import static com.topface.topface.data.Products.BuyButtonClickListener;
 
-public class BuyingFragment extends PaymentwallBuyingFragment {
+public class GPlayBuyingFragment extends BillingFragment {
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_GIFT = 1;
     public static final int TYPE_LEADERS = 2;
@@ -54,9 +55,8 @@ public class BuyingFragment extends PaymentwallBuyingFragment {
         }
     };
 
-    private ServicesTextView mCurCoins;
-    private ServicesTextView mCurLikes;
-    private TextView mResourcesInfo;
+    private TextView mCurCoins;
+    private TextView mCurLikes;
     private String mFrom;
     private View mCoinsSubscriptionButton;
     private BuyButtonClickListener mCoinsSubscriptionClickListener = new BuyButtonClickListener() {
@@ -66,8 +66,8 @@ public class BuyingFragment extends PaymentwallBuyingFragment {
         }
     };
 
-    public static BuyingFragment newInstance(int type, int coins, String from) {
-        BuyingFragment fragment = new BuyingFragment();
+    public static GPlayBuyingFragment newInstance(int type, int coins, String from) {
+        GPlayBuyingFragment fragment = new GPlayBuyingFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_ITEM_TYPE, type);
         args.putInt(ARG_ITEM_PRICE, coins);
@@ -78,20 +78,21 @@ public class BuyingFragment extends PaymentwallBuyingFragment {
         return fragment;
     }
 
-    public static BuyingFragment newInstance(String from) {
-        BuyingFragment buyingFragment = new BuyingFragment();
+    public static GPlayBuyingFragment newInstance(String from) {
+        GPlayBuyingFragment GPlayBuyingFragment = new GPlayBuyingFragment();
         if (from != null) {
             Bundle args = new Bundle();
             args.putString(ARG_TAG_SOURCE, from);
-            buyingFragment.setArguments(args);
+            GPlayBuyingFragment.setArguments(args);
         }
-        return buyingFragment;
+        return GPlayBuyingFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         OfferwallsManager.init(getActivity());
+
         Bundle args = getArguments();
         if (args != null) {
             mFrom = args.getString(ARG_TAG_SOURCE);
@@ -107,7 +108,7 @@ public class BuyingFragment extends PaymentwallBuyingFragment {
     }
 
     protected void initViews(View root) {
-        initBalanceCounters(root);
+        initBalanceCounters(getSupportActionBar().getCustomView());
         initButtons(root);
     }
 
@@ -128,43 +129,16 @@ public class BuyingFragment extends PaymentwallBuyingFragment {
     }
 
     private void initBalanceCounters(View root) {
-        mCurCoins = (ServicesTextView) root.findViewById(R.id.fbCurCoins);
-        mCurLikes = (ServicesTextView) root.findViewById(R.id.fbCurLikes);
-        mResourcesInfo = (TextView) root.findViewById(R.id.tvResourcesInfo);
+        root.findViewById(R.id.resources_layout).setVisibility(View.VISIBLE);
+        mCurCoins = (TextView) root.findViewById(R.id.coins_textview);
+        mCurLikes = (TextView) root.findViewById(R.id.likes_textview);
         updateBalanceCounters();
     }
 
     private void updateBalanceCounters() {
-        if (mCurCoins != null && mCurLikes != null && mResourcesInfo != null) {
+        if (mCurCoins != null && mCurLikes != null) {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
             mCurLikes.setText(Integer.toString(CacheProfile.likes));
-            Bundle args = getArguments();
-
-            int type = 0;
-            int coins = 0;
-            int diff = 0;
-            if (args != null) {
-                type = args.getInt(ARG_ITEM_TYPE);
-                coins = args.getInt(ARG_ITEM_PRICE);
-                diff = coins - CacheProfile.money;
-            }
-            if (diff > 0) {
-                switch (type) {
-                    case TYPE_GIFT:
-                        mResourcesInfo.setText(
-                                String.format(getResources().getString(R.string.buying_you_have_no_coins_for_gift), diff)
-                        );
-                        break;
-                    case TYPE_LEADERS:
-                    default:
-                        mResourcesInfo.setText(
-                                String.format(getResources().getString(R.string.buying_not_enough_coins), diff)
-                        );
-                        break;
-                }
-            } else {
-                mResourcesInfo.setText(getResources().getString(R.string.buying_default_message));
-            }
         }
     }
 
@@ -291,7 +265,6 @@ public class BuyingFragment extends PaymentwallBuyingFragment {
 
     @Override
     public void onInAppBillingUnsupported() {
-        super.onInAppBillingUnsupported();
         //Если платежи не поддерживаются, то скрываем все кнопки
         getView().findViewById(R.id.likes_title).setVisibility(View.GONE);
         getView().findViewById(R.id.coins_title).setVisibility(View.GONE);

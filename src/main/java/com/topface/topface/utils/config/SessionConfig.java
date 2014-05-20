@@ -15,6 +15,7 @@ public class SessionConfig extends AbstractConfig {
     private static final String DATA_PROFILE = "data_profile_user_data";
     private static final String DATA_OPTIONS = "data_options";
     private static final String DATA_GOOGLE_PRODUCTS = "data_google_products";
+    private static final String DATA_PAYMENTWALL_PRODUCTS = "data_pw_products";
 
     public SessionConfig(Context context) {
         super(context);
@@ -104,6 +105,10 @@ public class SessionConfig extends AbstractConfig {
      */
     public boolean setGoogleProductsData(String googleProductsResponseJson) {
         return getSettingsMap().setField(DATA_GOOGLE_PRODUCTS, googleProductsResponseJson);
+    }
+
+    public boolean setPaymentWallProductsData(String pwProductsResponseJson) {
+        return getSettingsMap().setField(DATA_PAYMENTWALL_PRODUCTS, pwProductsResponseJson);
     }
 
     /**

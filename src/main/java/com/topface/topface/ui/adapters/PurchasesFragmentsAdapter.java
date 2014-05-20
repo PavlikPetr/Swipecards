@@ -4,11 +4,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.util.SparseArrayCompat;
-import com.topface.billing.BillingDriver;
+
 import com.topface.billing.BillingFragment;
+import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.*;
-import com.topface.topface.ui.fragments.buy.BuyingFragment;
+import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+
+import java.util.LinkedList;
 
 public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
 
@@ -23,16 +27,17 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return pagesInfo.get(position).getPageTitle();
+        return CacheProfile.getOptions().tabs.get(position).name;
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case 0:
-                return BuyingFragment.newInstance(pagesInfo.get(position).getArguments().getString(BillingFragment.ARG_TAG_SOURCE));
-            case 1:
-                return FreeCoinsFragment.newInstance();
+        LinkedList<Options.Tab> tabs = CacheProfile.getOptions().tabs;
+        switch (tabs.get(position).type) {
+            case Options.Tab.GPLAY:
+                return GPlayBuyingFragment.newInstance(pagesInfo.get(position).getArguments().getString(BillingFragment.ARG_TAG_SOURCE));
+            case Options.Tab.BONUS:
+                return new BonusFragment();
 //            case 2:
 //                return PaymentWallFragment.newInstance();
             default:
