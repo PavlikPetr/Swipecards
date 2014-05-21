@@ -33,26 +33,6 @@ import java.util.List;
  */
 public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> implements View.OnClickListener {
     public static final int SELECTION_LIMIT = 100;
-    private BroadcastReceiver updateListReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (isAdded()) {
-                updateData(false, false,false);
-            }
-        }
-    };
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(updateListReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
-        return super.onCreateView(inflater, container, saved);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroy();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateListReceiver);
-    }
 
     @Override
     protected Drawable getBackIcon() {
@@ -133,5 +113,10 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteBlackListRequest(ids, getActivity());
+    }
+
+    @Override
+    protected boolean whetherDeleteIfBlacklisted() {
+        return false;
     }
 }

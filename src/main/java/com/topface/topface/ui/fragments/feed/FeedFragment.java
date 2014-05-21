@@ -79,6 +79,23 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected View mLockView;
 
     private BroadcastReceiver readItemReceiver;
+    private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getSerializableExtra(ContainerActivity.TYPE).equals(ContainerActivity.ActionTypes.BLACK_LIST) && isAdded()) {
+                int id = intent.getIntExtra(ContainerActivity.FEED_ID, -1);
+                boolean hasValue = intent.hasExtra(ContainerActivity.VALUE);
+                boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
+                if (id != -1 && hasValue) {
+                    if (value == whetherDeleteIfBlacklisted()) {
+                        getListAdapter().removeByUserId(id);
+                    } else {
+                        updateData(false, false, false);
+                    }
+                }
+            }
+        }
+    };
 
     private FloatBlock mFloatBlock;
 
@@ -158,6 +175,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (getListAdapter().isNeedUpdate() || needUpdate) {
@@ -187,6 +210,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mFloatBlock != null) {
             mFloatBlock.onDestroy();
         }
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
     }
 
     protected void init() {
@@ -832,5 +856,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    protected boolean whetherDeleteIfBlacklisted() {
+        return true;
     }
 }

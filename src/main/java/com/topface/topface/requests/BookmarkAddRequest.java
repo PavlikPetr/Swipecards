@@ -2,6 +2,9 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
+import com.topface.topface.requests.handlers.AttitudeHandler;
+import com.topface.topface.ui.ContainerActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,6 +15,7 @@ public class BookmarkAddRequest extends ConfirmedApiRequest {
     public BookmarkAddRequest(int userId, Context context) {
         super(context);
         uid = userId;
+        callback(new AttitudeHandler(context, ContainerActivity.ActionTypes.BOOKMARK, userId, true));
     }
 
     @Override

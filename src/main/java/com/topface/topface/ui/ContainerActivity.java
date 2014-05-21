@@ -41,6 +41,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
     public static final String FEED_ID = "FEED_ID";
+    public static final String FEED_IDS = "FEED_IDS";
     /**
      * Constant keys for different fragments
      * Values have to be > 0
@@ -59,6 +60,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final int INTENT_PROFILE_FRAGMENT = 6;
     public static final String TYPE = "type";
     public static final String CHANGED = "changed";
+    public static final String VALUE = "value";
     private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
     private View mOnlineIcon;
@@ -308,6 +310,22 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         Intent intent = new Intent(UPDATE_USER_CATEGORY);
         intent.putExtra(TYPE, type);
         intent.putExtra(CHANGED, value);
+        return intent;
+    }
+
+    public static Intent getValuedActionsUpdateIntent(ActionTypes type, int userId, boolean value) {
+        Intent intent = new Intent(UPDATE_USER_CATEGORY);
+        intent.putExtra(TYPE, type);
+        intent.putExtra(VALUE, value);
+        intent.putExtra(FEED_ID, userId);
+        return intent;
+    }
+
+    public static Intent getValuedActionsUpdateIntent(ActionTypes type, boolean value, int[] userIds) {
+        Intent intent = new Intent(UPDATE_USER_CATEGORY);
+        intent.putExtra(TYPE, type);
+        intent.putExtra(VALUE, value);
+        intent.putExtra(FEED_IDS, userIds);
         return intent;
     }
 

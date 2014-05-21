@@ -1,6 +1,12 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
 import com.topface.topface.GCMUtils;
@@ -10,8 +16,10 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONObject;
@@ -21,6 +29,37 @@ import java.util.List;
 public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
 
     public static final int SELECTION_LIMIT = 10;
+
+    private BroadcastReceiver mBookmarkedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getSerializableExtra(ContainerActivity.TYPE).equals(ContainerActivity.ActionTypes.BOOKMARK) && isAdded()) {
+                int id = intent.getIntExtra(ContainerActivity.FEED_ID, -1);
+                boolean hasValue = intent.hasExtra(ContainerActivity.VALUE);
+                boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
+                if (id != -1 && hasValue) {
+                    if (value == false) {
+                        getListAdapter().removeByUserId(id);
+                    } else {
+                        updateData(false, false, false);
+                    }
+                }
+            }
+        }
+    };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBookmarkedReceiver,
+                new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBookmarkedReceiver);
+    }
 
     @Override
     protected Drawable getBackIcon() {

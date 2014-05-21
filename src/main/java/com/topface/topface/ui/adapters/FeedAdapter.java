@@ -314,6 +314,19 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return result;
     }
 
+    public boolean removeByUserId(int userId) {
+        boolean result = false;
+        FeedList<T> feeds = getData();
+        for (T feed: feeds) {
+            if (feed.user.id == userId) {
+                result = feeds.remove(feed);
+                notifyDataSetChanged();
+                break;
+            }
+        }
+        return result;
+    }
+
     public T getLastFeedItem() {
         T item = null;
         if (!isEmpty()) {
