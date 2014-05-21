@@ -31,7 +31,7 @@ public class BlackListAddRequest extends ApiRequest {
         List<Integer> list = new ArrayList<>();
         list.add(userId);
         mUserIds = list;
-        callback(new AttitudeHandler(getContext(), ContainerActivity.ActionTypes.BLACK_LIST, userId, true));
+        setCallback();
     }
 
     /**
@@ -40,6 +40,16 @@ public class BlackListAddRequest extends ApiRequest {
     public BlackListAddRequest(List<Integer> userIds, Context context) {
         super(context);
         mUserIds = userIds;
+        setCallback();
+
+    }
+
+    private void setCallback() {
+        int[] ids = new int[mUserIds.size()];
+        for (int i = 0; i < ids.length; i++) {
+            ids[i] = mUserIds.get(i);
+        }
+        callback(new AttitudeHandler(getContext(), ContainerActivity.ActionTypes.BLACK_LIST, ids, true));
     }
 
     @Override

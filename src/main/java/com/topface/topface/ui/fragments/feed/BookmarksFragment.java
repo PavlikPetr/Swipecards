@@ -19,7 +19,6 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
-import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONObject;
@@ -33,13 +32,15 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     private BroadcastReceiver mBookmarkedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getSerializableExtra(ContainerActivity.TYPE).equals(ContainerActivity.ActionTypes.BOOKMARK) && isAdded()) {
-                int id = intent.getIntExtra(ContainerActivity.FEED_ID, -1);
+            if (intent.hasExtra(ContainerActivity.TYPE) &&
+                    intent.getSerializableExtra(ContainerActivity.TYPE)
+                            .equals(ContainerActivity.ActionTypes.BOOKMARK) && isAdded()) {
+                int[] ids = intent.getIntArrayExtra(ContainerActivity.FEED_IDS);
                 boolean hasValue = intent.hasExtra(ContainerActivity.VALUE);
                 boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
-                if (id != -1 && hasValue) {
-                    if (value == false) {
-                        getListAdapter().removeByUserId(id);
+                if (ids != null && hasValue) {
+                    if (!value) {
+                        getListAdapter().removeByUserIds(ids);
                     } else {
                         updateData(false, false, false);
                     }

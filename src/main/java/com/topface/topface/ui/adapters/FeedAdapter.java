@@ -327,6 +327,29 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return result;
     }
 
+
+    /**
+     * @param userIds Users' ids.
+     * @return True if at least one element with id from {@code userIds} was deleted.
+     * False otherwise.
+     */
+    public boolean removeByUserIds(int[] userIds) {
+        boolean result = false;
+        FeedList<T> feeds = getData();
+        for (int id : userIds) {
+            for (T feed : feeds) {
+                if (feed.user.id == id) {
+                    result |= feeds.remove(feed);
+                    break;
+                }
+            }
+        }
+        if (result) {
+            notifyDataSetChanged();
+        }
+        return result;
+    }
+
     public T getLastFeedItem() {
         T item = null;
         if (!isEmpty()) {

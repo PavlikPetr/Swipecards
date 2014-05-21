@@ -16,7 +16,7 @@ public class DeleteBlackListRequest extends DeleteAbstractUsersRequest {
 
     public DeleteBlackListRequest(int id, Context context) {
         super(Integer.toString(id), context);
-        callback(new AttitudeHandler(getContext(), ContainerActivity.ActionTypes.BLACK_LIST, id, false));
+        callback(new AttitudeHandler(getContext(), ContainerActivity.ActionTypes.BLACK_LIST, new int[]{id}, false));
     }
 
     @Override

@@ -318,10 +318,11 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         intent.putExtra(TYPE, type);
         intent.putExtra(VALUE, value);
         intent.putExtra(FEED_ID, userId);
+        intent.putExtra(FEED_IDS, new int[]{userId});
         return intent;
     }
 
-    public static Intent getValuedActionsUpdateIntent(ActionTypes type, boolean value, int[] userIds) {
+    public static Intent getValuedActionsUpdateIntent(ActionTypes type, int[] userIds, boolean value) {
         Intent intent = new Intent(UPDATE_USER_CATEGORY);
         intent.putExtra(TYPE, type);
         intent.putExtra(VALUE, value);

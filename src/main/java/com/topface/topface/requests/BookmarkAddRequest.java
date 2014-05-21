@@ -15,7 +15,7 @@ public class BookmarkAddRequest extends ConfirmedApiRequest {
     public BookmarkAddRequest(int userId, Context context) {
         super(context);
         uid = userId;
-        callback(new AttitudeHandler(context, ContainerActivity.ActionTypes.BOOKMARK, userId, true));
+        callback(new AttitudeHandler(context, ContainerActivity.ActionTypes.BOOKMARK, new int[]{userId}, true));
     }
 
     @Override

@@ -42,9 +42,9 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -82,13 +82,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getSerializableExtra(ContainerActivity.TYPE).equals(ContainerActivity.ActionTypes.BLACK_LIST) && isAdded()) {
-                int id = intent.getIntExtra(ContainerActivity.FEED_ID, -1);
+            if (intent.hasExtra(ContainerActivity.TYPE) &&
+                    intent.getSerializableExtra(ContainerActivity.TYPE)
+                            .equals(ContainerActivity.ActionTypes.BLACK_LIST) && isAdded()) {
+                int[] ids = intent.getIntArrayExtra(ContainerActivity.FEED_IDS);
                 boolean hasValue = intent.hasExtra(ContainerActivity.VALUE);
                 boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
-                if (id != -1 && hasValue) {
+                if (ids != null && hasValue) {
                     if (value == whetherDeleteIfBlacklisted()) {
-                        getListAdapter().removeByUserId(id);
+                        getListAdapter().removeByUserIds(ids);
                     } else {
                         updateData(false, false, false);
                     }
@@ -418,16 +420,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void onAddToBlackList(List<Integer> ids, final List<T> items) {
-        new BlackListAddRequest(ids, getActivity())
-                .callback(new VipApiHandler() {
-                    @Override
-                    public void success(IApiResponse response) {
-                        FeedAdapter<T> adapter = getListAdapter();
-                        if (adapter != null) {
-                            adapter.removeItems(items);
-                        }
-                    }
-                }).exec();
+        BlackListAddRequest r = new BlackListAddRequest(ids, getActivity());
+        r.handler.setOnCompleteAction(new ApiHandler.CompleteAction() {
+            @Override
+            public void onCompleteAction() {
+                if (mLockView != null) {
+                    mLockView.setVisibility(View.GONE);
+                }
+            }
+        });
+        mLockView.setVisibility(View.VISIBLE);
+        r.exec();
     }
 
     private void onDeleteFeedItems(List<String> ids, final List<T> items) {
@@ -440,6 +443,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             return;
         }
         mLockView.setVisibility(View.VISIBLE);
+        if (dr.handler != null) {
+            dr.handler.setOnCompleteAction(new ApiHandler.CompleteAction() {
+                @Override
+                public void onCompleteAction() {
+                    if (mLockView != null) {
+                        mLockView.setVisibility(View.GONE);
+                    }
+                }
+            });
+            dr.exec();
+            return;
+        }
         dr.callback(new SimpleApiHandler() {
             @Override
             public void success(IApiResponse response) {
