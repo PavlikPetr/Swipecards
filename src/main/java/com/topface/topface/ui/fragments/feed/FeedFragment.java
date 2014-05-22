@@ -44,9 +44,9 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -80,6 +80,25 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected View mLockView;
 
     private BroadcastReceiver readItemReceiver;
+    private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.hasExtra(ContainerActivity.TYPE) &&
+                    intent.getSerializableExtra(ContainerActivity.TYPE)
+                            .equals(ContainerActivity.ActionTypes.BLACK_LIST) && isAdded()) {
+                int[] ids = intent.getIntArrayExtra(ContainerActivity.FEED_IDS);
+                boolean hasValue = intent.hasExtra(ContainerActivity.VALUE);
+                boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
+                if (ids != null && hasValue) {
+                    if (value == whetherDeleteIfBlacklisted()) {
+                        getListAdapter().removeByUserIds(ids);
+                    } else {
+                        updateData(false, false, false);
+                    }
+                }
+            }
+        }
+    };
 
     private FloatBlock mFloatBlock;
 
@@ -159,6 +178,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (getListAdapter().isNeedUpdate() || needUpdate) {
@@ -188,6 +213,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mFloatBlock != null) {
             mFloatBlock.onDestroy();
         }
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
     }
 
     protected void init() {
@@ -395,16 +421,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void onAddToBlackList(List<Integer> ids, final List<T> items) {
-        new BlackListAddRequest(ids, getActivity())
-                .callback(new VipApiHandler() {
-                    @Override
-                    public void success(IApiResponse response) {
-                        FeedAdapter<T> adapter = getListAdapter();
-                        if (adapter != null) {
-                            adapter.removeItems(items);
-                        }
-                    }
-                }).exec();
+        BlackListAddRequest r = new BlackListAddRequest(ids, getActivity());
+        r.handler.setOnCompleteAction(new ApiHandler.CompleteAction() {
+            @Override
+            public void onCompleteAction() {
+                if (mLockView != null) {
+                    mLockView.setVisibility(View.GONE);
+                }
+            }
+        });
+        mLockView.setVisibility(View.VISIBLE);
+        r.exec();
     }
 
     private void onDeleteFeedItems(List<String> ids, final List<T> items) {
@@ -417,6 +444,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             return;
         }
         mLockView.setVisibility(View.VISIBLE);
+        if (dr.handler != null) {
+            dr.handler.setOnCompleteAction(new ApiHandler.CompleteAction() {
+                @Override
+                public void onCompleteAction() {
+                    if (mLockView != null) {
+                        mLockView.setVisibility(View.GONE);
+                    }
+                }
+            });
+            dr.exec();
+            return;
+        }
         dr.callback(new SimpleApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -859,5 +898,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             button.setText(buttonText);
             button.setOnClickListener(listener);
         }
+    }
+
+    protected boolean whetherDeleteIfBlacklisted() {
+        return true;
     }
 }
