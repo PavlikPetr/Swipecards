@@ -2,7 +2,11 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,11 +14,26 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.*;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -22,8 +41,23 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.*;
-import com.topface.topface.requests.*;
+import com.topface.topface.data.FeedDialog;
+import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.History;
+import com.topface.topface.data.HistoryListData;
+import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BlackListAddRequest;
+import com.topface.topface.requests.BookmarkAddRequest;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.DeleteBlackListRequest;
+import com.topface.topface.requests.DeleteBookmarksRequest;
+import com.topface.topface.requests.DeleteMessagesRequest;
+import com.topface.topface.requests.HistoryRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.MessageRequest;
+import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -32,15 +66,24 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
-import com.topface.topface.ui.adapters.*;
+import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.adapters.EditButtonsAdapter;
+import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackButtonEditTextMaster;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.UserActions;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -51,6 +94,7 @@ import java.util.TimerTask;
 public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     public static final int LIMIT = 50;
+    public static final int ACTIONS_CLOSE_ANIMATION_TIME = 500;
 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
@@ -188,6 +232,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         Debug.log(this, "+onCreate");
         // mChatActions
         mChatActionsStub = (ViewStub) root.findViewById(R.id.chat_actions_stub);
+        mActions = null;
         // Navigation bar
         initNavigationbar(mUserName, mUserAge, mUserCity);
         // Swap Control
@@ -622,11 +667,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 EasyTracker.getTracker().sendEvent("Chat", "AdditionalClick", "", 1L);
                 break;
             case R.id.panel_send_gift_button:
+                EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
+                closeChatActions();
                 startActivityForResult(
                         GiftsActivity.getSendGiftIntent(getActivity(), mUserId, false),
                         GiftsActivity.INTENT_REQUEST_GIFT
                 );
-                EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
             case R.id.add_to_black_list_action:
                 if (CacheProfile.premium) {
@@ -638,9 +684,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.acWProfile:
             case R.id.acProfile:
+                closeChatActions();
                 Intent profileIntent = ContainerActivity.getProfileIntent(mUserId, getActivity());
                 startActivity(profileIntent);
-                closeChatActions();
                 break;
             case R.id.add_to_bookmark_action:
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
@@ -677,8 +723,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 }).exec();
                 break;
             case R.id.complain_action:
-                startActivity(ContainerActivity.getComplainIntent(mUserId));
                 closeChatActions();
+                startActivity(ContainerActivity.getComplainIntent(mUserId));
                 break;
             case R.id.ivBarAvatar:
                 onOptionsItemSelected(mBarAvatar);
@@ -722,6 +768,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         Utils.hideSoftKeyboard(getActivity(), mEditBox);
     }
 
+    /**
+     * Note: if you starting new activity and need actions' menu to be closed after,
+     * then first call this method. Actions' menu view will fully disappear before new
+     * activity will be shown
+     */
     private void closeChatActions() {
         if (mBarAvatar.isChecked()) {
             onOptionsItemSelected(mBarAvatar);
@@ -911,7 +962,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         initActions(mChatActionsStub, mUser, getActions(mUser));
                         boolean checked = item.isChecked();
                         item.setChecked(!checked);
-                        animateChatActions(checked, 500);
+                        animateChatActions(checked, ACTIONS_CLOSE_ANIMATION_TIME);
                     } else {
                         Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                                 Toast.LENGTH_LONG).show();
@@ -1086,5 +1137,4 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         }
     }
-
 }
