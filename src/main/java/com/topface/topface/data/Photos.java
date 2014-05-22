@@ -1,7 +1,7 @@
 package com.topface.topface.data;
 
 
-import com.topface.topface.utils.Debug;
+import com.topface.framework.utils.Debug;
 
 import org.json.JSONArray;
 import org.json.JSONException;

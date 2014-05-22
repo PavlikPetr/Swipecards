@@ -1,9 +1,6 @@
 package com.topface.topface.utils;
 
-import com.lifestreet.android.lsmsdk.commons.Timer;
-
-import java.io.InputStream;
-import java.io.OutputStream;
+import com.topface.framework.utils.Debug;
 
 @SuppressWarnings("ALL")
 public class Base64 {
@@ -1384,7 +1381,8 @@ public class Base64 {
             // Open a stream
             bis = new Base64.InputStream(
                     new java.io.BufferedInputStream(
-                            new java.io.FileInputStream(file)), Base64.DECODE);
+                            new java.io.FileInputStream(file)), Base64.DECODE
+            );
 
             // Read until done
             while ((numBytes = bis.read(buffer, length, 4096)) >= 0) {
@@ -1439,7 +1437,8 @@ public class Base64 {
             // Open a stream
             bis = new Base64.InputStream(
                     new java.io.BufferedInputStream(
-                            new java.io.FileInputStream(file)), Base64.ENCODE);
+                            new java.io.FileInputStream(file)), Base64.ENCODE
+            );
 
             // Read until done
             while ((numBytes = bis.read(buffer, length, 4096)) >= 0) {
@@ -1491,7 +1490,7 @@ public class Base64 {
                 length += numBytes;
                 Debug.log("Write bytes: " + length);
                 output.write(buffer, 0, numBytes);
-                percentage = (int)(((double)length/(double)contentLength) * 100);
+                percentage = (int) (((double) length / (double) contentLength) * 100);
                 if (percentage - prevPercentage >= updateInterval) {
                     listener.onProgress(percentage);
                     prevPercentage = percentage;
@@ -1514,9 +1513,9 @@ public class Base64 {
     }
 
     private static int getUpdateInterval(int contentLength) {
-        int updateInterval = (int) ((INTERVAL_FACTOR / (double)contentLength) * 100);
-        updateInterval = (updateInterval < 1)? 1:updateInterval;
-        updateInterval = (updateInterval > 20)? 20:updateInterval;
+        int updateInterval = (int) ((INTERVAL_FACTOR / (double) contentLength) * 100);
+        updateInterval = (updateInterval < 1) ? 1 : updateInterval;
+        updateInterval = (updateInterval > 20) ? 20 : updateInterval;
         return updateInterval;
     }
 

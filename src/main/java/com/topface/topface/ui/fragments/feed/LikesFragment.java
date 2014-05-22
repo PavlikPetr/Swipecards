@@ -15,6 +15,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -34,7 +35,6 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
@@ -189,59 +189,92 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         View currentView = viewFlipper.getChildAt(2);
         initAvatarImagesToEmptyView(currentView, blockSympathyOptions.showPhotos);
         if (currentView != null) {
-            ((TextView) currentView.findViewById(R.id.tvText)).setText(blockSympathyOptions.text);
-            final Button btnBuy = (Button) currentView.findViewById(R.id.btnVipBuyCoins);
-            final ProgressBar progress = (ProgressBar) currentView.findViewById(R.id.prsLoading);
-            btnBuy.setText(blockSympathyOptions.buttonText);
-            btnBuy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (CacheProfile.money >= blockSympathyOptions.price) {
-                        btnBuy.setVisibility(View.INVISIBLE);
-                        progress.setVisibility(View.VISIBLE);
-                        EasyTracker.getTracker().sendEvent(
-                                getTrackName(), "VipPaidSympathies." + blockSympathyOptions.group,
-                                "Buying", 1l
-                        );
-                        BuyLikesAccessRequest request = new BuyLikesAccessRequest(getActivity());
-                        request.callback(new SimpleApiHandler() {
-                            @Override
-                            public void success(IApiResponse response) {
-                                super.success(response);
-                                inflated.setVisibility(View.GONE);
-                                updateData(false, true);
-                            }
-
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                                super.fail(codeError, response);
-                                if (codeError == ErrorCodes.PAYMENT) {
-                                    Toast.makeText(getActivity(), R.string.not_enough_coins, Toast.LENGTH_LONG).show();
-                                    openBuyScreenOnBlockedLikes(blockSympathyOptions.group);
-                                }
-                            }
-
-                            @Override
-                            public void always(IApiResponse response) {
-                                super.always(response);
-                                btnBuy.setVisibility(View.VISIBLE);
-                                progress.setVisibility(View.GONE);
-                            }
-                        }).exec();
-                    } else {
-                        openBuyScreenOnBlockedLikes(blockSympathyOptions.group);
-                    }
-                }
-            });
+            ((TextView) currentView.findViewById(R.id.blocked_likes_text)).setText(blockSympathyOptions.text);
+            initBuyCoinsButton(inflated, blockSympathyOptions, currentView);
+            initBuyVipButton(currentView, blockSympathyOptions);
         }
     }
 
-    private void openBuyScreenOnBlockedLikes(String group) {
+    private void initBuyVipButton(View currentView, Options.BlockSympathy blockSympathyOptions) {
+        Button btnBuy = (Button) currentView.findViewById(R.id.buy_vip_button);
+        TextView buyText = (TextView) currentView.findViewById(R.id.buy_vip_text);
+        if (CacheProfile.getOptions().unlockAllForPremium) {
+            initButtonForBlockedScreen(
+                    buyText, blockSympathyOptions.textPremium,
+                    btnBuy, blockSympathyOptions.buttonTextPremium,
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivityForResult(
+                                    ContainerActivity.getVipBuyIntent(null, "Likes"),
+                                    ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                            );
+                        }
+                    }
+            );
+        } else {
+            btnBuy.setVisibility(View.GONE);
+            buyText.setVisibility(View.GONE);
+        }
+    }
+
+    private void initBuyCoinsButton(final View inflated, final Options.BlockSympathy blockSympathyOptions, View currentView) {
+        final Button btnBuy = (Button) currentView.findViewById(R.id.buy_coins_button);
+        final ProgressBar progress = (ProgressBar) currentView.findViewById(R.id.prsLoading);
+        initButtonForBlockedScreen(btnBuy, blockSympathyOptions.buttonText, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CacheProfile.money >= blockSympathyOptions.price) {
+                    btnBuy.setVisibility(View.INVISIBLE);
+                    progress.setVisibility(View.VISIBLE);
+                    EasyTracker.getTracker().sendEvent(
+                            getTrackName(), "VipPaidSympathies." + blockSympathyOptions.group,
+                            "Buying", 1l
+                    );
+                    BuyLikesAccessRequest request = new BuyLikesAccessRequest(getActivity());
+                    request.callback(new SimpleApiHandler() {
+                        @Override
+                        public void success(IApiResponse response) {
+                            super.success(response);
+                            inflated.setVisibility(View.GONE);
+                            updateData(false, true);
+                        }
+
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+                            super.fail(codeError, response);
+                            if (codeError == ErrorCodes.PAYMENT) {
+                                Toast.makeText(getActivity(), R.string.not_enough_coins, Toast.LENGTH_LONG).show();
+                                openBuyScreenOnBlockedLikes(blockSympathyOptions);
+                            }
+                        }
+
+                        @Override
+                        public void always(IApiResponse response) {
+                            super.always(response);
+                            btnBuy.setVisibility(View.VISIBLE);
+                            progress.setVisibility(View.GONE);
+                        }
+                    }).exec();
+                } else {
+                    openBuyScreenOnBlockedLikes(blockSympathyOptions);
+                }
+            }
+        });
+    }
+
+    private void openBuyScreenOnBlockedLikes(Options.BlockSympathy blockSympathyOptions) {
+        String group = blockSympathyOptions.group;
         EasyTracker.getTracker().sendEvent(
                 getTrackName(), "VipPaidSympathies." + group,
                 "OpenBuyingScreen", 1l
         );
-        startActivity(ContainerActivity.getBuyingIntent("VipPaidSympathies." + group));
+        startActivity(
+                ContainerActivity.getBuyingIntent(
+                        "VipPaidSympathies." + group,
+                        blockSympathyOptions.price
+                )
+        );
     }
 
     private void sendBlockSympathyStatistics(final Options.BlockSympathy blockSympathyOptions) {

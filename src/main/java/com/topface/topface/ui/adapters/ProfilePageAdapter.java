@@ -5,10 +5,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.util.SparseArrayCompat;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.HeaderMainFragment;
 import com.topface.topface.ui.fragments.profile.HeaderStatusFragment;
-import com.topface.topface.utils.Debug;
 import com.viewpagerindicator.PageIndicator;
 
 import java.util.ArrayList;

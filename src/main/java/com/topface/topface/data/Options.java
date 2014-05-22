@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -8,7 +9,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -122,6 +122,8 @@ public class Options extends AbstractData {
     public Offerwalls offerwalls = new Offerwalls();
     public boolean forceCoinsSubscriptions;
 
+    public boolean unlockAllForPremium;
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -222,6 +224,8 @@ public class Options extends AbstractData {
                 if (settingsBlock != null) {
                     blockSympathy.text = settingsBlock.optString("text");
                     blockSympathy.buttonText = settingsBlock.optString("buttonText");
+                    blockSympathy.textPremium = settingsBlock.optString("textPremium");
+                    blockSympathy.buttonTextPremium = settingsBlock.optString("buttonTextPremium");
                     blockSympathy.showPhotos = settingsBlock.optBoolean("showPhotos");
                     blockSympathy.group = settingsBlock.optString("group");
                     blockSympathy.price = settingsBlock.optInt("price");
@@ -235,6 +239,8 @@ public class Options extends AbstractData {
                 blockPeople.enabled = blockPeopleJson.optBoolean("enabled");
                 blockPeople.text = blockPeopleJson.optString("text");
                 blockPeople.buttonText = blockPeopleJson.optString("buttonText");
+                blockPeople.textPremium = blockPeopleJson.optString("textPremium");
+                blockPeople.buttonTextPremium = blockPeopleJson.optString("buttonTextPremium");
                 blockPeople.price = blockPeopleJson.optInt("price");
             }
 
@@ -268,8 +274,9 @@ public class Options extends AbstractData {
             if (tagsObject != null && tagsObject.length() > 0) {
                 experimentTags = new ExperimentTags(tagsObject);
             }
-            // TODO init after availability on server
+
             forceCoinsSubscriptions = response.optBoolean("forceCoinsSubscriptions");
+            unlockAllForPremium = response.optBoolean("unlockAllForPremium");
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
@@ -519,18 +526,19 @@ public class Options extends AbstractData {
         public boolean enabled = false;
         public String text = Static.EMPTY;
         public String buttonText = Static.EMPTY;
+        public String textPremium;
+        public String buttonTextPremium;
         public boolean showPhotos = true;
         public String group = Static.UNKNOWN;
         public int price = 0;
-
-        public BlockSympathy() {
-        }
     }
 
     public static class BlockPeopleNearby {
         public boolean enabled = false;
         public String text = Static.EMPTY;
         public String buttonText = Static.EMPTY;
+        public String textPremium;
+        public String buttonTextPremium;
         public int price = 0;
     }
 

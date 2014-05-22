@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.Profile;
 import com.topface.topface.utils.config.AppConfig;

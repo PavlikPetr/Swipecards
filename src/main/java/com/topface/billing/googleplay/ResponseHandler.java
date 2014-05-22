@@ -15,6 +15,7 @@ import com.topface.billing.googleplay.BillingService.RequestPurchase;
 import com.topface.billing.googleplay.BillingService.RestoreTransactions;
 import com.topface.billing.googleplay.Consts.PurchaseState;
 import com.topface.billing.googleplay.Consts.ResponseCode;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.Verify;
@@ -22,7 +23,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GooglePlayPurchaseRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.utils.Debug;
 
 /**
  * This class contains the methods that handle responses from Android Market.  The

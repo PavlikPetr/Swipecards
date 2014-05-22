@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Products;
@@ -23,8 +25,8 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -141,11 +143,10 @@ public class BuyingFragment extends PaymentwallBuyingFragment {
             Bundle args = getArguments();
 
             int type = 0;
-            int coins = 0;
             int diff = 0;
             if (args != null) {
                 type = args.getInt(ARG_ITEM_TYPE);
-                coins = args.getInt(ARG_ITEM_PRICE);
+                int coins = args.getInt(ARG_ITEM_PRICE);
                 diff = coins - CacheProfile.money;
             }
             if (diff > 0) {

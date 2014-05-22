@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.topface.topface.utils.BackgroundThread;
+import com.topface.framework.utils.BackgroundThread;
 
 import java.util.ArrayList;
 import java.util.List;

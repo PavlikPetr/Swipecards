@@ -11,12 +11,12 @@ import android.view.View;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils.User;
 import com.topface.topface.Static;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.config.UserConfig;
 
 public class UserNotificationManager {
@@ -46,19 +46,19 @@ public class UserNotificationManager {
         isTextNotification - разворачивать нотификацию как текст - true, как картинку - false
      */
     public UserNotification showNotification(String title, String message, boolean isTextNotification,
-                                Bitmap icon, int unread, Intent intent, boolean doNeedReplace, User user) {
+                                             Bitmap icon, int unread, Intent intent, boolean doNeedReplace, User user) {
         return showNotification(title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, false, UserNotification.Type.STANDARD, null, user);
     }
 
     private UserNotification showNotification(String title, String message, boolean isTextNotification,
-                                 Bitmap icon, int unread, Intent intent, boolean doNeedReplace, UserNotification.Type type) {
+                                              Bitmap icon, int unread, Intent intent, boolean doNeedReplace, UserNotification.Type type) {
         return showNotification(title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, false, type, null, null);
     }
 
     private UserNotification showNotification(String title, String message, boolean isTextNotification,
-                                 Bitmap icon, int unread, Intent intent, boolean doNeedReplace, boolean ongoing, UserNotification.Type type) {
+                                              Bitmap icon, int unread, Intent intent, boolean doNeedReplace, boolean ongoing, UserNotification.Type type) {
         return showNotification(title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, ongoing, type, null, null);
     }
@@ -102,8 +102,8 @@ public class UserNotificationManager {
     }
 
     public UserNotification showNotificationWithActions(String title, String message, Bitmap icon,
-                                           boolean ongoing,
-                                           UserNotification.NotificationAction[] actions) {
+                                                        boolean ongoing,
+                                                        UserNotification.NotificationAction[] actions) {
         return showNotification(title, message, false, icon, 0, null, true, ongoing, UserNotification.Type.ACTIONS, actions, null);
     }
 
@@ -198,9 +198,9 @@ public class UserNotificationManager {
     }
 
     private UserNotification showNotification(String title, String message, boolean isTextNotification,
-                                 Bitmap icon, int unread, Intent intent, boolean createNew,
-                                 boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions,
-                                 User user) {
+                                              Bitmap icon, int unread, Intent intent, boolean createNew,
+                                              boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions,
+                                              User user) {
         int id = NOTIFICATION_ID;
         if (createNew) {
             id = newNotificationId();

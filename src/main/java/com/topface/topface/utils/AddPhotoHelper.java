@@ -15,6 +15,8 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
@@ -267,8 +269,15 @@ public class AddPhotoHelper {
                     @Override
                     public void run() {
                         if (notificationListener.notification != null) {
-                            notificationListener.notification.updateProgress(percentage);
-                            mNotificationManager.showBuildedNotification(notificationListener.notification);
+                            //Видимо из-за ошибок в прошивке на редких девайсах с Android 4.0.4
+                            //падает - https://rink.hockeyapp.net/manage/apps/26531/app_versions/62/crash_reasons/12857941?type=overview
+                            //поэтому ловим все ошибки
+                            try {
+                                notificationListener.notification.updateProgress(percentage);
+                                mNotificationManager.showBuildedNotification(notificationListener.notification);
+                            } catch (Exception e) {
+                                Debug.error(e);
+                            }
                         }
 
                     }
@@ -354,7 +363,6 @@ public class AddPhotoHelper {
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
-    
 
     private void showErrorMessage(int codeError) {
         switch (codeError) {
@@ -418,7 +426,7 @@ public class AddPhotoHelper {
 
         public int getId() {
 
-            return notification == null? -1 : notification.getId();
+            return notification == null ? -1 : notification.getId();
         }
 
         @Override
@@ -430,7 +438,6 @@ public class AddPhotoHelper {
             return needShowNotification;
         }
     }
-
 
 
 }

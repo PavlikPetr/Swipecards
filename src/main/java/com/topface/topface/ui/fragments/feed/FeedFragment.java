@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -57,7 +59,6 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
 import org.json.JSONObject;
@@ -870,6 +871,32 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    protected static void initButtonForBlockedScreen(Button button, String buttonText, View.OnClickListener listener) {
+        initButtonForBlockedScreen(null, null, button, buttonText, listener);
+    }
+
+    protected static void initButtonForBlockedScreen(TextView textView, String text,
+                                                     Button button, String buttonText,
+                                                     View.OnClickListener listener) {
+        if (textView != null) {
+            if (TextUtils.isEmpty(text)) {
+                textView.setVisibility(View.GONE);
+            } else {
+                textView.setVisibility(View.VISIBLE);
+                textView.setText(text);
+            }
+        }
+
+        if (TextUtils.isEmpty(buttonText)) {
+            // Не показываем кнопку без текста
+            button.setVisibility(View.GONE);
+        } else {
+            button.setVisibility(View.VISIBLE);
+            button.setText(buttonText);
+            button.setOnClickListener(listener);
         }
     }
 

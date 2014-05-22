@@ -3,8 +3,8 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 
@@ -28,19 +28,19 @@ abstract public class MultipartApiRequest extends ApiRequest {
     }
 
     @Override
-    protected boolean writeData(HttpURLConnection connection) throws IOException {
+    protected boolean writeData(HttpURLConnection connection, IConnectionConfigureListener listener) throws IOException {
         //Формируем базовую часть запроса (Заголовки, json данные)
         String requests = getRequests();
         //Переводим в байты
         byte[] requestsBytes = requests.getBytes();
         //Это просто закрывающие данные запроса с boundary и переносами строк
         byte[] endBytes = getMultipartEnding().getBytes();
-
         //Считаем общую длинну получившегося запроса
         int contentLength = requestsBytes.length + endBytes.length;
-        //Создаем исходящее подключение к серверу
-        OutputStream outputStream = HttpUtils.getOutputStream(contentLength, connection);
-
+        //Устанавливаем длину данных и Создаем исходящее подключение к серверу
+        HttpUtils.setContentLengthAndConnect(connection, listener, contentLength);
+        //Открываем поток на запись данных
+        OutputStream outputStream = connection.getOutputStream();
         //Записываем наши данные
         DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(
                 outputStream
@@ -50,7 +50,6 @@ abstract public class MultipartApiRequest extends ApiRequest {
         dos.flush();
         dos.close();
         outputStream.close();
-
         Debug.logJson(
                 ConnectionManager.TAG,
                 "MULTIPART REQUEST >>> " +
@@ -58,7 +57,6 @@ abstract public class MultipartApiRequest extends ApiRequest {
                         " rev:" + App.getAppConfig().getApiRevision(),
                 requests
         );
-
         return true;
     }
 

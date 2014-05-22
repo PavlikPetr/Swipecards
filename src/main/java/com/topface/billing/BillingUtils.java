@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.topface.billing.googleplay.GooglePlayV2Queue;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.requests.handlers.ErrorCodes;
@@ -49,7 +50,7 @@ public class BillingUtils {
                                     .invoke(null, App.getContext());
                             queue.getClass().getMethod("sendQueueItems").invoke(queue);
                         } catch (Exception e) {
-                            com.topface.topface.utils.Debug.error("Amazon library not found", e);
+                            Debug.error("Amazon library not found", e);
                         }
                         break;
                     case GOOGLE_PLAY:

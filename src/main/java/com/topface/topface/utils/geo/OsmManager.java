@@ -1,7 +1,7 @@
 package com.topface.topface.utils.geo;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.Static;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONObject;
