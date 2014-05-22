@@ -94,6 +94,7 @@ import java.util.TimerTask;
 public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     public static final int LIMIT = 50;
+    public static final int ACTIONS_CLOSE_ANIMATION_TIME = 500;
 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
@@ -244,6 +245,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         Debug.log(this, "+onCreate");
         // mChatActions
         mChatActionsStub = (ViewStub) root.findViewById(R.id.chat_actions_stub);
+        mActions = null;
         // Navigation bar
         initNavigationbar(mUserName, mUserAge, mUserCity);
         // Swap Control
@@ -678,11 +680,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 EasyTracker.getTracker().sendEvent("Chat", "AdditionalClick", "", 1L);
                 break;
             case R.id.panel_send_gift_button:
+                EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
+                closeChatActions();
                 startActivityForResult(
                         GiftsActivity.getSendGiftIntent(getActivity(), mUserId, false),
                         GiftsActivity.INTENT_REQUEST_GIFT
                 );
-                EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
             case R.id.add_to_black_list_action:
                 if (CacheProfile.premium) {
@@ -694,9 +697,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.acWProfile:
             case R.id.acProfile:
+                closeChatActions();
                 Intent profileIntent = ContainerActivity.getProfileIntent(mUserId, getActivity());
                 startActivity(profileIntent);
-                closeChatActions();
                 break;
             case R.id.add_to_bookmark_action:
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
@@ -715,8 +718,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 request.exec();
                 break;
             case R.id.complain_action:
-                startActivity(ContainerActivity.getComplainIntent(mUserId));
                 closeChatActions();
+                startActivity(ContainerActivity.getComplainIntent(mUserId));
                 break;
             case R.id.ivBarAvatar:
                 onOptionsItemSelected(mBarAvatar);
@@ -780,6 +783,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         Utils.hideSoftKeyboard(getActivity(), mEditBox);
     }
 
+    /**
+     * Note: if you starting new activity and need actions' menu to be closed after,
+     * then first call this method. Actions' menu view will fully disappear before new
+     * activity will be shown
+     */
     private void closeChatActions() {
         if (mBarAvatar.isChecked()) {
             onOptionsItemSelected(mBarAvatar);
@@ -969,7 +977,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         initActions(mChatActionsStub, mUser, getActions(mUser));
                         boolean checked = item.isChecked();
                         item.setChecked(!checked);
-                        animateChatActions(checked, 500);
+                        animateChatActions(checked, ACTIONS_CLOSE_ANIMATION_TIME);
                     } else {
                         Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                                 Toast.LENGTH_LONG).show();
@@ -1144,5 +1152,4 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         }
     }
-
 }
