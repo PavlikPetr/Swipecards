@@ -1,4 +1,4 @@
-package com.topface.topface.utils;
+package com.topface.framework.utils;
 
 /**
  * Вспомогательный класс, наследник обычного {@link Thread}, но с немного иным способом использования:

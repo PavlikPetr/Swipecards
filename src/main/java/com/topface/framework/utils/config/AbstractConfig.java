@@ -1,10 +1,10 @@
-package com.topface.topface.utils.config;
+package com.topface.framework.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.topface.topface.utils.BackgroundThread;
-import com.topface.topface.utils.Debug;
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +84,7 @@ public abstract class AbstractConfig {
 
     /**
      * Add fields and default values for current config
-     * Add fields with {@link #addField(com.topface.topface.utils.config.AbstractConfig.SettingsMap, String, Object)}
+     * Add fields with {@link #addField(AbstractConfig.SettingsMap, String, Object)}
      *
      * @param settingsMap settingsMap that stores config data
      */
@@ -218,7 +218,7 @@ public abstract class AbstractConfig {
     /**
      * Поле настроек конфига. Нужно для того, что бы их было легко добавлять поля настроек
      */
-    protected static class SettingsField<T> {
+    private static class SettingsField<T> {
         public SettingsField(String key, T defaultValue) {
             this.key = key;
             this.value = defaultValue;
@@ -246,6 +246,11 @@ public abstract class AbstractConfig {
 
         public void resetToDefault() {
             this.value = this.defaultValue;
+        }
+
+        @Override
+        public String toString() {
+            return key + " : " + value + "(" + defaultValue + ")";
         }
     }
 

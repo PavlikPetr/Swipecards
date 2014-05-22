@@ -8,12 +8,13 @@ import android.content.pm.PackageInfo;
 import android.text.TextUtils;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.dialogs.RateAppDialog;
 import com.topface.topface.ui.dialogs.InvitesPopup;
+import com.topface.topface.ui.dialogs.RateAppDialog;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 
@@ -176,9 +177,9 @@ public class PopupManager {
             @Override
             public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
 
-                    InvitesPopup popup = InvitesPopup.newInstance(contacts);
-                    popup.show(mActivity.getSupportFragmentManager(), InvitesPopup.TAG);
-                    EasyTracker.getTracker().sendEvent("InvitesPopup", "Show", "", 0L);
+                InvitesPopup popup = InvitesPopup.newInstance(contacts);
+                popup.show(mActivity.getSupportFragmentManager(), InvitesPopup.TAG);
+                EasyTracker.getTracker().sendEvent("InvitesPopup", "Show", "", 0L);
 
             }
         };

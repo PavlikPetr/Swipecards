@@ -3,7 +3,7 @@ package com.topface.billing.amazon;
 import android.content.Context;
 
 import com.topface.billing.BillingQueue;
-import com.topface.topface.utils.Debug;
+import com.topface.framework.utils.Debug;
 
 import org.json.JSONException;
 import org.json.JSONObject;

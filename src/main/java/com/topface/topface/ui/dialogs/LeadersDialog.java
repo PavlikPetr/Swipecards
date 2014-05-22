@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.Leader;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -17,7 +18,6 @@ import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 
 import org.json.JSONException;
 import org.json.JSONObject;

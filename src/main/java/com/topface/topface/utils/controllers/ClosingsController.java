@@ -7,6 +7,7 @@ import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
@@ -34,7 +35,6 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
 import org.jetbrains.annotations.NotNull;

@@ -1,10 +1,10 @@
 package com.topface.topface.requests.blacklist;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.utils.Debug;
 
 abstract class BlackListHandler extends ApiHandler {
 

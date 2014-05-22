@@ -3,6 +3,7 @@ package com.topface.topface.utils.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.topface.framework.utils.config.AbstractUniqueConfig;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.notifications.MessageStack;

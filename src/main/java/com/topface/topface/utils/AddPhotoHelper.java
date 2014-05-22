@@ -15,6 +15,8 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
@@ -361,7 +363,6 @@ public class AddPhotoHelper {
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
-    
 
     private void showErrorMessage(int codeError) {
         switch (codeError) {
@@ -425,7 +426,7 @@ public class AddPhotoHelper {
 
         public int getId() {
 
-            return notification == null? -1 : notification.getId();
+            return notification == null ? -1 : notification.getId();
         }
 
         @Override
@@ -437,7 +438,6 @@ public class AddPhotoHelper {
             return needShowNotification;
         }
     }
-
 
 
 }

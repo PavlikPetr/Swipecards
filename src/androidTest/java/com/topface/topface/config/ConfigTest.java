@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.test.InstrumentationTestCase;
 
+import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.App;
-import com.topface.topface.utils.config.AbstractConfig;
 
 /**
  * Created by kirussell on 19.05.2014.

@@ -3,8 +3,9 @@ package com.topface.topface.utils.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.topface.framework.utils.Debug;
+import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 
 /**
@@ -95,10 +96,10 @@ public class AppConfig extends AbstractConfig {
     /**
      * Debug mode from Debug class
      *
-     * @return mode: {@link com.topface.topface.utils.Debug#MODE_DEBUG},
-     * {@link com.topface.topface.utils.Debug#MODE_EDITOR},
-     * {@link com.topface.topface.utils.Debug#MODE_ALWAYS},
-     * {@link com.topface.topface.utils.Debug#MODE_DISABLE}
+     * @return mode: {@link com.topface.framework.utils.Debug#MODE_DEBUG},
+     * {@link com.topface.framework.utils.Debug#MODE_EDITOR},
+     * {@link com.topface.framework.utils.Debug#MODE_ALWAYS},
+     * {@link com.topface.framework.utils.Debug#MODE_DISABLE}
      */
     public int getDebugMode() {
         return getIntegerField(getSettingsMap(), DATA_DEBUG_MODE);
@@ -107,10 +108,10 @@ public class AppConfig extends AbstractConfig {
     /**
      * Debug mode from Debug class
      *
-     * @param mode {@link com.topface.topface.utils.Debug#MODE_DEBUG},
-     *             {@link com.topface.topface.utils.Debug#MODE_EDITOR},
-     *             {@link com.topface.topface.utils.Debug#MODE_ALWAYS},
-     *             {@link com.topface.topface.utils.Debug#MODE_DISABLE}
+     * @param mode {@link com.topface.framework.utils.Debug#MODE_DEBUG},
+     *             {@link com.topface.framework.utils.Debug#MODE_EDITOR},
+     *             {@link com.topface.framework.utils.Debug#MODE_ALWAYS},
+     *             {@link com.topface.framework.utils.Debug#MODE_DISABLE}
      */
     public void setDebugMode(int mode) {
         setField(getSettingsMap(), DATA_DEBUG_MODE, mode);
@@ -229,8 +230,8 @@ public class AppConfig extends AbstractConfig {
     public String toString() {
         StringBuilder result = new StringBuilder(super.toString());
         result.append("\n").append("Version: ").append(APP_CONFIG_VERSION).append("\n");
-        for (SettingsField field : getSettingsMap().values()) {
-            result.append(field.key).append(": ").append(field.value).append("\n");
+        for (Object field : getSettingsMap().values()) {
+            result.append(field.toString());
         }
         return result.toString();
     }
