@@ -195,6 +195,8 @@ public class UserNotification {
     }
 
     private PendingIntent getPendingIntent(Intent intent) {
+        // known issue with pendingIntents on KitKat after uninstall/install
+        // https://code.google.com/p/android/issues/detail?id=61850
         if (Build.VERSION.SDK_INT == 19) {
             generatePendingIntent(intent).cancel();
         }
