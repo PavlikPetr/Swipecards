@@ -5,76 +5,44 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true">
 
-    <com.topface.topface.ui.views.SwapControl
-            android:id="@+id/swapFormView"
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:id="@+id/chatContainer">
+
+        <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:background="@color/bg_main"
+            android:visibility="gone"
+            android:id="@+id/llvLockScreen" />
 
-        <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:id="@+id/chatContainer">
+        <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:p2r="http://schemas.android.com/apk/res-auto"
+            p2r:ptrShowIndicator="false"
+            p2r:ptrOverScroll="false"
+            p2r:ptrMode="pullUpFromBottom"
+            android:id="@+id/lvChatList"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:cacheColorHint="#00000000"
+            android:clickable="true"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="8dp"
+            android:fadeScrollbars="true"
+            android:fadingEdge="none"
+            android:stackFromBottom="true"
+            android:listSelector="@android:color/transparent" />
 
-            <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:background="@color/bg_main"
-                    android:visibility="gone"
-                    android:id="@+id/llvLockScreen"/>
+        <FrameLayout
+            android:id="@+id/loChatFooterSend"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-            <com.handmark.pulltorefresh.library.PullToRefreshListView
-                    xmlns:p2r="http://schemas.android.com/apk/res-auto"
-                    p2r:ptrShowIndicator="false"
-                    p2r:ptrOverScroll="false"
-                    p2r:ptrMode="pullUpFromBottom"
-                    android:id="@+id/lvChatList"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dip"
-                    android:layout_weight="1"
-                    android:cacheColorHint="#00000000"
-                    android:clickable="true"
-                    android:divider="@android:color/transparent"
-                    android:dividerHeight="8dp"
-                    android:fadeScrollbars="true"
-                    android:fadingEdge="none"
-                    android:stackFromBottom="true"
-                    android:listSelector="@android:color/transparent"/>
-
-            <FrameLayout
-                    android:id="@+id/loChatFooterSend"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content">
-
-                <include layout="@layout/chat_footer_send"/>
-            </FrameLayout>
-        </LinearLayout>
-
-        <LinearLayout
-                android:id="@+id/loAddButtons"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_chat_add_panel"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp">
-
-            <Button
-                    android:id="@+id/panel_send_gift_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/ChatButtonsText"
-                    android:text="@string/general_gift"
-                    android:background="@drawable/chat_gift_selector"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"/>
-        </LinearLayout>
-    </com.topface.topface.ui.views.SwapControl>
+            <include layout="@layout/chat_footer_send" />
+        </FrameLayout>
+    </LinearLayout>
 
     <TextView
             android:id="@+id/tvBackgroundText"
