@@ -156,9 +156,8 @@ public class UserNotification {
         if (unread > 0) {
             notificationBuilder.setNumber(unread);
         }
-        PendingIntent resultPendingIntent = generatePendingIntent(mIntent);
         notificationBuilder.setAutoCancel(true);
-        notificationBuilder.setContentIntent(resultPendingIntent);
+        notificationBuilder.setContentIntent(getPendingIntent(mIntent));
 
         generatedNotification = notificationBuilder.build();
         return generatedNotification;
@@ -173,8 +172,7 @@ public class UserNotification {
         Intent retryIntent = new Intent(AddPhotoHelper.CANCEL_NOTIFICATION_RECEIVER + mIntent.getParcelableExtra("PhotoUrl"));
         retryIntent.putExtra("id", mId);
         retryIntent.putExtra("isRetry", true);
-        PendingIntent resultPendingIntent = generatePendingIntent(mIntent);
-        notificationBuilder.setContentIntent(resultPendingIntent);
+        notificationBuilder.setContentIntent(getPendingIntent(mIntent));
         generatedNotification = notificationBuilder.build();
         return generatedNotification;
     }
@@ -186,15 +184,23 @@ public class UserNotification {
         notificationBuilder.setSound(Uri.EMPTY);
         setLargeIcon();
         notificationBuilder.setContentTitle(mTitle);
-        PendingIntent resultPendingIntent = generatePendingIntent(mIntent);
         generateBigPicture();
-        notificationBuilder.setContentIntent(resultPendingIntent);
+        notificationBuilder.setContentIntent(getPendingIntent(mIntent));
         notificationBuilder.setProgress(100, 100, true);
         if (isVersionOld()) {
             notificationBuilder.setContentText(mContext.getString(R.string.waiting_for_load));
         }
         generatedNotification = notificationBuilder.build();
         return generatedNotification;
+    }
+
+    private PendingIntent getPendingIntent(Intent intent) {
+        // known issue with pendingIntents on KitKat after uninstall/install
+        // https://code.google.com/p/android/issues/detail?id=61850
+        if (Build.VERSION.SDK_INT == 19) {
+            generatePendingIntent(intent).cancel();
+        }
+        return generatePendingIntent(intent);
     }
 
     public Notification updateProgress(int currentProgress) {
