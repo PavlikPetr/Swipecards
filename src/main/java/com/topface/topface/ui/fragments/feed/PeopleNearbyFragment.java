@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -173,7 +172,6 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                         public void fail(int codeError, IApiResponse response) {
                             super.fail(codeError, response);
                             if (isAdded() && codeError == ErrorCodes.PAYMENT) {
-                                Toast.makeText(getActivity(), R.string.not_enough_coins, Toast.LENGTH_LONG).show();
                                 openBuyScreenOnBlockedGeo(blockPeopleNearby);
                             }
                         }

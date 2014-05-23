@@ -244,7 +244,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         public void fail(int codeError, IApiResponse response) {
                             super.fail(codeError, response);
                             if (codeError == ErrorCodes.PAYMENT) {
-                                Toast.makeText(getActivity(), R.string.not_enough_coins, Toast.LENGTH_LONG).show();
                                 openBuyScreenOnBlockedLikes(blockSympathyOptions);
                             }
                         }
