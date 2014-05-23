@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
@@ -17,7 +18,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
 
 import org.json.JSONObject;
 
