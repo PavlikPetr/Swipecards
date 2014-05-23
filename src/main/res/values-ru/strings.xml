@@ -117,6 +117,10 @@
     <string name="buying_header_title">Покупки</string>
     <string name="buying_you_have">У вас</string>
     <string name="buying_you_have_no_coins_for_gift">Вам не хватает %d {{coins}} для покупки подарка</string>
+    <string name="buying_gift_you_need_more_coins">Чтобы отправить подарок, купите еще %d {{coins}}</string>
+    <string name="buying_unlock_likes_you_need_more_coins">Чтобы увидеть, кому вы нравитесь, купите еще %d {{coins}}</string>
+    <string name="buying_leaders_you_need_more_coins">Чтобы вас все увидели, купите еще %d {{coins}}</string>
+
     <string name="buying_default_message">Вы можете отправлять подарки и восхищения за монеты</string>
     <string name="buying_money">Покупка монет</string>
 
