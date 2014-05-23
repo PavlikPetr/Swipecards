@@ -35,13 +35,9 @@
             android:stackFromBottom="true"
             android:listSelector="@android:color/transparent" />
 
-        <FrameLayout
+        <include
             android:id="@+id/loChatFooterSend"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <include layout="@layout/chat_footer_send" />
-        </FrameLayout>
+            layout="@layout/chat_footer_send" />
     </LinearLayout>
 
     <TextView
