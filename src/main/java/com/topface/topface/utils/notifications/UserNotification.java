@@ -19,7 +19,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
-import com.topface.framework.utils.Debug;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.ui.NavigationActivity;
