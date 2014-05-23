@@ -1,6 +1,11 @@
 package com.topface.topface.ui.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.SparseArrayCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -11,12 +16,18 @@ import android.widget.TextView;
 
 import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
+import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.viewpagerindicator.TabPageIndicator;
+
+import java.util.LinkedList;
 
 public class PurchasesFragment extends BaseFragment {
 
+    public static final String IS_VIP_PRODUCTS = "is_vip_products";
     private TabPageIndicator mTabIndicator;
     private ViewPager mPager;
     private TextView mResourcesInfo;
@@ -24,6 +35,15 @@ public class PurchasesFragment extends BaseFragment {
     public static final int TYPE_GIFT = 1;
     public static final int TYPE_DELIGHT = 2;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
+    private TextView mCurCoins;
+    private TextView mCurLikes;
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+                    updateBalanceCounters();
+        }
+    };
 
     public static PurchasesFragment newInstance(int type, int coins, String from) {
         PurchasesFragment fragment = new PurchasesFragment();
@@ -47,6 +67,16 @@ public class PurchasesFragment extends BaseFragment {
         return purchasesFragment;
     }
 
+    public static PurchasesFragment newInstance(String extratext, String from) {
+        PurchasesFragment purchasesFragment = new PurchasesFragment();
+        Bundle args = new Bundle();
+        args.putString(BillingFragment.ARG_TAG_SOURCE, from);
+        args.putString(VipBuyFragment.ARG_TAG_EXRA_TEXT, extratext);
+        args.putBoolean(IS_VIP_PRODUCTS, true);
+        purchasesFragment.setArguments(args);
+        return purchasesFragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -56,22 +86,66 @@ public class PurchasesFragment extends BaseFragment {
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateBalanceCounters();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(receiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
+    }
+
     private void initViews(View root) {
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
-
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
-        PurchasesFragmentsAdapter pagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), getBuyingFragments());
+        int pagesCount = getPagesCount();
+        if (pagesCount == 1) {
+            mTabIndicator.setVisibility(View.GONE);
+        }
+        PurchasesFragmentsAdapter pagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), getArguments(), pagesCount);
         mPager.setAdapter(pagerAdapter);
         mTabIndicator.setViewPager(mPager);
         mResourcesInfo = (TextView) root.findViewById(R.id.payReason);
-        mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
+        if (getArguments().getBoolean(IS_VIP_PRODUCTS)) {
+            mResourcesInfo.setVisibility(View.GONE);
+        } else {
+            mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
+        }
         updateBalanceCounters();
         mPager.setCurrentItem(0);
+        initBalanceCounters(getSupportActionBar().getCustomView());
+    }
+
+    private int getPagesCount() {
+        LinkedList<Options.Tab> tabs = CacheProfile.getOptions().tabs;
+        if (getArguments().getBoolean(IS_VIP_PRODUCTS)) {
+            for (Options.Tab tab : tabs) {
+                if (tab.type.equals(Options.Tab.BONUS)) {
+                    return tabs.size() - 1;
+                }
+            }
+        }
+        return tabs.size();
+    }
+
+    private void initBalanceCounters(View root) {
+        root.findViewById(R.id.resources_layout).setVisibility(View.VISIBLE);
+        mCurCoins = (TextView) root.findViewById(R.id.coins_textview);
+        mCurLikes = (TextView) root.findViewById(R.id.likes_textview);
+        updateBalanceCounters();
     }
 
     private void updateBalanceCounters() {
 
         Bundle args = getArguments();
+        if (mCurCoins != null && mCurLikes != null) {
+            mCurCoins.setText(Integer.toString(CacheProfile.money));
+            mCurLikes.setText(Integer.toString(CacheProfile.likes));
+        }
         if (args != null) {
             int type = args.getInt(ARG_ITEM_TYPE);
             int coins = args.getInt(ARG_ITEM_PRICE);
@@ -92,28 +166,22 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private SparseArrayCompat<BuyingPageEntity> getBuyingFragments() {
-        SparseArrayCompat<BuyingPageEntity> fragments = new SparseArrayCompat<BuyingPageEntity>();
+        SparseArrayCompat<BuyingPageEntity> fragments = new SparseArrayCompat<>();
         Bundle gpArgs = new Bundle();
         if (getArguments() != null) {
             gpArgs.putString(BillingFragment.ARG_TAG_SOURCE, getArguments().getString(BillingFragment.ARG_TAG_SOURCE));
         }
-        fragments.put(0, new BuyingPageEntity("Google play", gpArgs));
-        fragments.put(1, new BuyingPageEntity("Бесплатно", null));
+        fragments.put(0, new BuyingPageEntity(gpArgs));
+        fragments.put(1, new BuyingPageEntity(null));
 //        fragments.put(2, new BuyingPageEntity("Другие способы", null));
         return fragments;
     }
 
     public class BuyingPageEntity {
-        private String pageTitle;
         private Bundle arguments;
 
-        public BuyingPageEntity(String pageTitle, Bundle arguments) {
-            this.pageTitle = pageTitle;
+        public BuyingPageEntity(Bundle arguments) {
             this.arguments = arguments;
-        }
-
-        public String getPageTitle() {
-            return pageTitle;
         }
 
         public Bundle getArguments() {

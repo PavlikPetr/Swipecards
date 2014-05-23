@@ -34,195 +34,17 @@ import java.util.List;
 import static com.topface.topface.data.Products.BuyButton;
 import static com.topface.topface.data.Products.BuyButtonClickListener;
 
-public class GPlayBuyingFragment extends BillingFragment {
-    public static final String ARG_ITEM_TYPE = "type_of_buying_item";
-    public static final int TYPE_GIFT = 1;
-    public static final int TYPE_LEADERS = 2;
-    public static final String ARG_ITEM_PRICE = "quantity_of_coins";
+public class GPlayBuyingFragment extends AbstractBuyingFragment {
 
-    private LinkedList<View> purchaseButtons = new LinkedList<>();
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case CountersManager.UPDATE_BALANCE:
-                    updateBalanceCounters();
-                    break;
-                case Products.INTENT_UPDATE_PRODUCTS:
-                    updateCoinsSubscriptionButton();
-                    break;
-            }
-        }
-    };
 
-    private TextView mCurCoins;
-    private TextView mCurLikes;
-    private String mFrom;
-    private View mCoinsSubscriptionButton;
-    private BuyButtonClickListener mCoinsSubscriptionClickListener = new BuyButtonClickListener() {
+    private Products.BuyButtonClickListener mCoinsSubscriptionClickListener = new Products.BuyButtonClickListener() {
         @Override
         public void onClick(String id) {
-            startActivityForResult(ContainerActivity.getCoinsSubscriptionIntent(mFrom), ContainerActivity.INTENT_COINS_SUBSCRIPTION_FRAGMENT);
+            startActivityForResult(ContainerActivity.getCoinsSubscriptionIntent(getFrom()), ContainerActivity.INTENT_COINS_SUBSCRIPTION_FRAGMENT);
         }
     };
 
-    public static GPlayBuyingFragment newInstance(int type, int coins, String from) {
-        GPlayBuyingFragment fragment = new GPlayBuyingFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_ITEM_TYPE, type);
-        args.putInt(ARG_ITEM_PRICE, coins);
-        if (from != null) {
-            args.putString(ARG_TAG_SOURCE, from);
-        }
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static GPlayBuyingFragment newInstance(String from) {
-        GPlayBuyingFragment GPlayBuyingFragment = new GPlayBuyingFragment();
-        if (from != null) {
-            Bundle args = new Bundle();
-            args.putString(ARG_TAG_SOURCE, from);
-            GPlayBuyingFragment.setArguments(args);
-        }
-        return GPlayBuyingFragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        OfferwallsManager.init(getActivity());
-
-        Bundle args = getArguments();
-        if (args != null) {
-            mFrom = args.getString(ARG_TAG_SOURCE);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(R.layout.fragment_buy, null);
-        initViews(root);
-        return root;
-    }
-
-    protected void initViews(View root) {
-        initBalanceCounters(getSupportActionBar().getCustomView());
-        initButtons(root);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(CountersManager.UPDATE_BALANCE);
-        filter.addAction(Products.INTENT_UPDATE_PRODUCTS);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, filter);
-        updateBalanceCounters();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
-    }
-
-    private void initBalanceCounters(View root) {
-        root.findViewById(R.id.resources_layout).setVisibility(View.VISIBLE);
-        mCurCoins = (TextView) root.findViewById(R.id.coins_textview);
-        mCurLikes = (TextView) root.findViewById(R.id.likes_textview);
-        updateBalanceCounters();
-    }
-
-    private void updateBalanceCounters() {
-        if (mCurCoins != null && mCurLikes != null) {
-            mCurCoins.setText(Integer.toString(CacheProfile.money));
-            mCurLikes.setText(Integer.toString(CacheProfile.likes));
-        }
-    }
-
-    private void updateCoinsSubscriptionButton() {
-        if (mCoinsSubscriptionButton != null) {
-            Products products = CacheProfile.getProducts();
-            if (products != null) {
-                CoinsSubscriptionInfo coinsSubscriptionInfo = products
-                        .info.coinsSubscription;
-                BuyButton btn = coinsSubscriptionInfo.getSubscriptionButton();
-                Products.switchOpenButtonTexts(mCoinsSubscriptionButton, btn, mCoinsSubscriptionClickListener);
-            }
-        }
-    }
-
-    private void initButtons(View root) {
-        LinearLayout likesButtons = (LinearLayout) root.findViewById(R.id.fbLikes);
-
-        Products products = CacheProfile.getProducts();
-        //Если у нас нет продуктов, то не показываем кнопки
-        if (products == null) {
-            return;
-        }
-        if (products.likes.isEmpty() && products.coins.isEmpty()) {
-            root.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
-        }
-        // sympathies title
-        root.findViewById(R.id.likes_title).setVisibility(
-                products.likes.isEmpty() ? View.GONE : View.VISIBLE
-        );
-        // sympathies buttons
-        for (BuyButton curButton : products.likes) {
-            View btnView = Products.setBuyButton(likesButtons, curButton, getActivity(),
-                    new BuyButtonClickListener() {
-                        @Override
-                        public void onClick(String id) {
-                            buyItem(id);
-                        }
-                    }
-            );
-            if (btnView != null) {
-                purchaseButtons.add(btnView);
-            }
-        }
-        // coins buttons
-        initCoinsButtons(root, products);
-    }
-
-    private void initCoinsButtons(View root, Products products) {
-        if (products == null) {
-            return;
-        }
-        boolean coinsMaskedExperiment = CacheProfile.getOptions().forceCoinsSubscriptions;
-        List<BuyButton> coinsProducts = getCoinsProducts(products, coinsMaskedExperiment);
-        root.findViewById(R.id.coins_title).setVisibility(
-                coinsProducts.isEmpty() ? View.GONE : View.VISIBLE
-        );
-        LinearLayout coinsButtonsContainer = (LinearLayout) root.findViewById(R.id.fbCoins);
-        if (coinsButtonsContainer.getChildCount() > 0) {
-            coinsButtonsContainer.removeAllViews();
-        }
-        // coins subscriptions button
-        mCoinsSubscriptionButton = coinsMaskedExperiment ? null : getCoinsSubscriptionsButton(products, coinsButtonsContainer);
-        if (mCoinsSubscriptionButton != null) {
-            purchaseButtons.add(mCoinsSubscriptionButton);
-        }
-        // coins items buttons also coinsSubscriptionsMasked buttons
-        for (final BuyButton curButton : coinsProducts) {
-            View btnView = Products.setBuyButton(coinsButtonsContainer, curButton, getActivity(),
-                    new BuyButtonClickListener() {
-                        @Override
-                        public void onClick(String id) {
-                            buy(curButton);
-                        }
-                    }
-            );
-            if (btnView != null) {
-                purchaseButtons.add(btnView);
-            }
-        }
-        coinsButtonsContainer.requestLayout();
-    }
-
-    private LinkedList<BuyButton> getCoinsProducts(@NotNull Products products, boolean coinsMaskedExperiment) {
+    protected LinkedList<BuyButton> getCoinsProducts(@NotNull Products products, boolean coinsMaskedExperiment) {
         boolean hasMaskedCoinsSubs = products.info != null
                 && products.info.coinsSubscriptionMasked != null
                 && products.info.coinsSubscriptionMasked.status != null
@@ -230,7 +52,17 @@ public class GPlayBuyingFragment extends BillingFragment {
         return coinsMaskedExperiment && !hasMaskedCoinsSubs ? products.coinsSubscriptionsMasked : products.coins;
     }
 
-    private View getCoinsSubscriptionsButton(Products products, LinearLayout coinsButtons) {
+    @Override
+    public Products getProducts() {
+        return CacheProfile.getProducts();
+    }
+
+    @Override
+    public BuyButtonClickListener getCoinsSubscriptionClickListener() {
+        return null;
+    }
+
+    protected View getCoinsSubscriptionsButton(Products products, LinearLayout coinsButtons) {
         if (!products.coinsSubscriptions.isEmpty()) {
             CoinsSubscriptionInfo info = products.info.coinsSubscription;
             BuyButton btn = info.status.isActive() ? info.hasSubscriptionButton : info.noSubscriptionButton;
@@ -240,71 +72,8 @@ public class GPlayBuyingFragment extends BillingFragment {
         return null;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == ContainerActivity.INTENT_COINS_SUBSCRIPTION_FRAGMENT) {
-            if (resultCode == Activity.RESULT_OK) {
-                updateCoinsSubscriptionButton();
-            }
-        }
-    }
 
-    @Override
-    public void onInAppBillingSupported() {
-        for (View btn : purchaseButtons) {
-            btn.setEnabled(true);
-        }
-    }
-
-    @Override
-    public void onSubscriptionSupported() {
-        //TODO: добавить поддержку подписок
-    }
-
-    @Override
-    public void onInAppBillingUnsupported() {
-        //Если платежи не поддерживаются, то скрываем все кнопки
-        getView().findViewById(R.id.likes_title).setVisibility(View.GONE);
-        getView().findViewById(R.id.coins_title).setVisibility(View.GONE);
-        getView().findViewById(R.id.fbCoins).setVisibility(View.GONE);
-        getView().findViewById(R.id.fbLikes).setVisibility(View.GONE);
-
-    }
-
-    @Override
-    public void onSubscriptionUnsupported() {
-        //TODO: добавить поддержку подписок
-    }
-
-    @Override
-    public void onPurchased(String productId) {
-        Debug.log("Purchased item with ID:" + productId);
-        final Products products = CacheProfile.getProducts();
-        if (products != null && products.isSubscription(productId)) {
-            App.sendProfileAndOptionsRequests(new SimpleApiHandler() {
-                @Override
-                public void success(IApiResponse response) {
-                    super.success(response);
-                    if (isAdded()) {
-                        initCoinsButtons(getView(), products);
-                    }
-                    LocalBroadcastManager.getInstance(App.getContext())
-                            .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onError() {
-    }
-
-    @Override
-    public void onCancel() {
-        //Возможно стоит добавить реакцию на отмену покупки пользователем
-    }
 
     @Override
     protected String getTitle() {

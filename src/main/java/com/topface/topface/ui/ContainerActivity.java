@@ -231,8 +231,8 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         String source = intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE);
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
-                fragment = VipBuyFragment.newInstance(
-                        true,
+
+                fragment = PurchasesFragment.newInstance(
                         intent.getStringExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT),
                         intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE)
                 );

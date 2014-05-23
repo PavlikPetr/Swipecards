@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Products;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.utils.CacheProfile;
 
@@ -21,7 +22,7 @@ import java.util.TimerTask;
 /**
  * Абстрактный фрагмент с покупками, в котором есть кнопки покупки через Paymentwall
  */
-public abstract class PaymentwallBuyingFragment extends BillingFragment {
+public abstract class PaymentwallBuyingFragment extends AbstractBuyingFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -80,6 +81,21 @@ public abstract class PaymentwallBuyingFragment extends BillingFragment {
                     child.setOnClickListener(mobilePaymentsListener);
                 }
             }
+        }
+    }
+
+    @Override
+    protected void buy(Products.BuyButton btn) {
+        super.buy(btn);
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            activity.startActivityForResult(
+                    PaymentwallActivity.getIntent(
+                            activity,
+                            isTestPurchasesEnabled()
+                    ),
+                    PaymentwallActivity.ACTION_BUY
+            );
         }
     }
 

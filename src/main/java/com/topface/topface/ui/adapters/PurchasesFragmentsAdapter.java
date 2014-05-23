@@ -1,5 +1,7 @@
 package com.topface.topface.ui.adapters;
 
+import android.graphics.pdf.PdfDocument;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -9,6 +11,8 @@ import com.topface.billing.BillingFragment;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
+import com.topface.topface.ui.fragments.buy.PaymentWallBuyingFragment;
+import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
@@ -16,13 +20,17 @@ import java.util.LinkedList;
 
 public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
 
-    private final FragmentManager mFragmentManager;
-    private SparseArrayCompat<PurchasesFragment.BuyingPageEntity> pagesInfo = new SparseArrayCompat<PurchasesFragment.BuyingPageEntity>();
+    private final boolean mIsVip;
+    private final int mCount;
+    private SparseArrayCompat<Fragment> mFragmentCache = new SparseArrayCompat<>();
+    private Bundle mArguments;
 
-    public PurchasesFragmentsAdapter(FragmentManager fm, SparseArrayCompat<PurchasesFragment.BuyingPageEntity> fragments) {
+    public PurchasesFragmentsAdapter(FragmentManager fm, Bundle arguments, int count) {
         super(fm);
-        mFragmentManager = fm;
-        pagesInfo = fragments;
+        mArguments = arguments;
+        mFragmentCache = new SparseArrayCompat<>();
+        mIsVip = arguments.getBoolean(PurchasesFragment.IS_VIP_PRODUCTS);
+        mCount = count;
     }
 
     @Override
@@ -33,32 +41,38 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         LinkedList<Options.Tab> tabs = CacheProfile.getOptions().tabs;
+        Fragment fragment = mFragmentCache.get(position);
+        if (fragment != null) return fragment;
         switch (tabs.get(position).type) {
             case Options.Tab.GPLAY:
-                return GPlayBuyingFragment.newInstance(pagesInfo.get(position).getArguments().getString(BillingFragment.ARG_TAG_SOURCE));
+                if (!mIsVip) {
+                    fragment = GPlayBuyingFragment.newInstance(mArguments.getString(BillingFragment.ARG_TAG_SOURCE));
+                } else {
+                    fragment = VipBuyFragment.newInstance(true, mArguments.getString(VipBuyFragment.ARG_TAG_EXRA_TEXT), mArguments.getString(VipBuyFragment.ARG_TAG_SOURCE));
+                }
+                break;
             case Options.Tab.BONUS:
-                return new BonusFragment();
-//            case 2:
-//                return PaymentWallFragment.newInstance();
+                if (!mIsVip) {
+                    fragment = new BonusFragment();
+                }
+                break;
+            case Options.Tab.PWALL:
+                fragment = PaymentWallBuyingFragment.newInstance(mArguments.getString(BillingFragment.ARG_TAG_SOURCE));
+                break;
             default:
                 try {
                     throw new Exception("wrong position");
                 } catch (Exception e) {
                     Debug.error(e);
-
                 }
                 break;
         }
-
-        return null;
+        mFragmentCache.put(position, fragment);
+        return fragment;
     }
 
     @Override
     public int getCount() {
-        return pagesInfo.size();
-    }
-
-    public SparseArrayCompat<PurchasesFragment.BuyingPageEntity> getPagesInfo() {
-        return pagesInfo;
+        return mCount;
     }
 }

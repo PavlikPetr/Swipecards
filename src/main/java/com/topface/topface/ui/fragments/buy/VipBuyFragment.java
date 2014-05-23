@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -32,7 +33,7 @@ import com.topface.topface.utils.CacheProfile;
 
 import static android.view.View.OnClickListener;
 
-public class VipBuyFragment extends PaymentwallBuyingFragment implements OnClickListener {
+public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     public static final String ACTION_BAR_CONST = "needActionBar";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
@@ -299,6 +300,11 @@ public class VipBuyFragment extends PaymentwallBuyingFragment implements OnClick
 
     @Override
     public void onInAppBillingSupported() {
+    }
+
+    @Override
+    public void onInAppBillingUnsupported() {
+
     }
 
     @Override
