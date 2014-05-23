@@ -161,9 +161,10 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         initRequestKey();
         checkAuth();
         setContentView(R.layout.ac_fragment_frame);
-        //Сперва пробуем
+        //Сперва пробуем получуить существующий фрагмент из fragmentManager
         mCurrentFragment = getSupportFragmentManager().findFragmentById(R.id.loFrame);
         if (mCurrentFragment == null) {
+            //Если не находим, то создаем новый
             mCurrentFragment = getNewFragment(mCurrentFragmentId);
         }
         if (mCurrentFragment != null) {
