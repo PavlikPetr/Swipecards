@@ -61,8 +61,6 @@ import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
@@ -114,21 +112,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         public void onReceive(Context context, Intent intent) {
             ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
             boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
-            if (chatActions != null && type != null) {
+            if (type != null) {
                 switch (type) {
                     case BLACK_LIST:
                         if (intent.hasExtra(ContainerActivity.VALUE)) {
-                            isInBlackList = mUser.blocked = value;
-                            ((TextView) chatActions.findViewById(R.id.block_action_text))
-                                    .setText(value ? R.string.black_list_delete : R.string.black_list_add_short);
-                            mAddToBlackList.setText(value ? R.string.black_list_delete : R.string.black_list_add);
+                            mUser.blocked = value;
+                            mBlackListActionController.switchAction();
                         }
-                        getView().findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
-                        getView().findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
+                        mBlackListActionController.setViewsToNormalState();
                         break;
                     case BOOKMARK:
                         if (intent.hasExtra(ContainerActivity.VALUE)) {
-                            TextView mBookmarkAction = ((TextView) chatActions.findViewById(R.id.bookmark_action_text));
+                            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
                             if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE)) {
                                 mUser.bookmarked = value;
                                 mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
@@ -685,12 +680,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
             case R.id.add_to_black_list_action:
-                if (CacheProfile.premium) {
-                    mBlackListActionController.processActionFor(mUserId);
-                } else {
-                    startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                    closeChatActions();
-                }
+                mBlackListActionController.processActionFor(mUserId);
                 break;
             case R.id.acWProfile:
             case R.id.acProfile:
@@ -723,26 +713,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 break;
             default:
                 break;
-        }
-    }
-
-    private void operateBlacklist() {
-        if (CacheProfile.premium) {
-            if (mUserId > 0) {
-                getView().findViewById(R.id.blockPrBar).setVisibility(View.VISIBLE);
-                getView().findViewById(R.id.blockIcon).setVisibility(View.GONE);
-
-                ApiRequest request;
-                if (mUser.blocked) {
-                    request = new DeleteBlackListRequest(mUserId, getActivity());
-                } else {
-                    request = new BlackListAddRequest(mUserId, getActivity());
-                }
-                request.exec();
-            }
-        } else {
-            startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-            closeChatActions();
         }
     }
 
@@ -1008,7 +978,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             UserActions userActions = new UserActions(mActions, actions);
             TextView bookmarksTv = (TextView) userActions.getViewById(R.id.add_to_bookmark_action).findViewById(R.id.bookmark_action_text);
             mBlackListActionController = new AddToBlackListViewsController(mActions);
-            mBlackListActionController.setInBlackList(user.blocked);
+            mBlackListActionController.switchAction();
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
         }
@@ -1066,8 +1036,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         final View actionLoader;
         final View actionIcon;
 
-        private boolean isInBlackList = false;
-
         AddToBlackListViewsController(View root) {
             View actionView = root.findViewById(R.id.add_to_black_list_action);
             actionText = (TextView) actionView.findViewById(R.id.block_action_text);
@@ -1075,73 +1043,36 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             actionIcon = actionView.findViewById(R.id.blockIcon);
             // click listener for actionView is set through UserActions
             // set states for views
-            initViews(isInBlackList);
+            switchAction();
         }
 
-        public void addToBlackList(int userId) {
-            if (userId > 0) {
-                BlackListAddRequest blackListRequest = new BlackListAddRequest(userId, getActivity());
-                execRequest(blackListRequest, true);
-            }
-        }
-
-        public void removeFromBlackList(int userId) {
-            if (userId > 0) {
-                DeleteBlackListRequest blackListRequest = new DeleteBlackListRequest(userId, getActivity());
-                execRequest(blackListRequest, false);
-            }
-        }
-
-        private void execRequest(ApiRequest blackListRequest, final boolean toBlackList) {
-            actionLoader.setVisibility(View.VISIBLE);
-            actionIcon.setVisibility(View.INVISIBLE);
-            blackListRequest.callback(new VipApiHandler() {
-                @Override
-                public void success(IApiResponse response) {
-                    super.success(response);
-                    isInBlackList = toBlackList;
-                    if (isAdded()) {
-                        onChange(isInBlackList);
-                    }
-                }
-
-                @Override
-                public void always(IApiResponse response) {
-                    super.always(response);
-                    if (isAdded()) {
-                        actionLoader.setVisibility(View.INVISIBLE);
-                        actionIcon.setVisibility(View.VISIBLE);
-                    }
-                }
-            }).exec();
-        }
-
-        private void initViews(boolean inBlackList) {
-            int resIdText = inBlackList ? R.string.black_list_delete : R.string.black_list_add_short;
-            actionText.setText(resIdText);
-        }
-
-        public void setInBlackList(boolean value) {
-            isInBlackList = value;
-            initViews(value);
-        }
-
-        private void onChange(boolean inBlackList) {
-            initViews(inBlackList);
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
-                    ContainerActivity.getIntentForActionsUpdate(
-                            ContainerActivity.ActionTypes.BLACK_LIST,
-                            !inBlackList
-                    )
-            );
+        public void switchAction() {
+            actionText.setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
         }
 
         public void processActionFor(int userId) {
-            if (isInBlackList) {
-                removeFromBlackList(userId);
+            if (CacheProfile.premium) {
+                if (mUserId > 0) {
+                    actionLoader.setVisibility(View.VISIBLE);
+                    actionIcon.setVisibility(View.GONE);
+
+                    ApiRequest request;
+                    if (mUser.blocked) {
+                        request = new DeleteBlackListRequest(mUserId, getActivity());
+                    } else {
+                        request = new BlackListAddRequest(mUserId, getActivity());
+                    }
+                    request.exec();
+                }
             } else {
-                addToBlackList(userId);
+                startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                closeChatActions();
             }
+        }
+
+        public void setViewsToNormalState() {
+            actionLoader.setVisibility(View.INVISIBLE);
+            actionIcon.setVisibility(View.VISIBLE);
         }
     }
 
