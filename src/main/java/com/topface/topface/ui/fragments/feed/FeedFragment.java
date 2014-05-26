@@ -93,7 +93,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     if (value == whetherDeleteIfBlacklisted()) {
                         getListAdapter().removeByUserIds(ids);
                     } else {
-                        updateData(false, false, false);
+                        needUpdate = true;
                     }
                 }
             }
@@ -902,5 +902,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected boolean whetherDeleteIfBlacklisted() {
         return true;
+    }
+
+    public void updateOnResume() {
+        needUpdate = true;
     }
 }

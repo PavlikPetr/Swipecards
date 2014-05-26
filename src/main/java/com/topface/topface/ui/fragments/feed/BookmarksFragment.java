@@ -42,7 +42,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
                     if (!value) {
                         getListAdapter().removeByUserIds(ids);
                     } else {
-                        updateData(false, false, false);
+                        updateOnResume();
                     }
                 }
             }
