@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
@@ -164,7 +165,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     protected void setProfile(Profile profile) {
         int previousBackground = mProfile != null ? mProfile.background : -1;
         mProfile = profile;
-        if (previousBackground != mProfile.background && mBackgroundView != null) {
+        if (mProfile != null && previousBackground != mProfile.background && mBackgroundView != null) {
             mBackgroundView.setImageResource(
                     ProfileBackgrounds.getBackgroundResource(getActivity(), mProfile.background)
             );
