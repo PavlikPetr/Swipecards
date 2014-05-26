@@ -356,13 +356,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     protected String getTitle() {
         if (CacheProfile.dating != null) {
-            int age = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ?
+            int age = CacheProfile.dating.ageEnd == DatingFilter.MAX_AGE ?
                     EditAgeFragment.absoluteMax : CacheProfile.dating.ageEnd;
             String headerText = getString(CacheProfile.dating.sex == Static.BOY ?
                             R.string.dating_header_guys : R.string.dating_header_girls,
                     CacheProfile.dating.ageStart, age
             );
-            String plus = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ? "+" : "";
+            String plus = CacheProfile.dating.ageEnd == DatingFilter.MAX_AGE ? "+" : "";
             return headerText + plus;
         }
         return Static.EMPTY;
