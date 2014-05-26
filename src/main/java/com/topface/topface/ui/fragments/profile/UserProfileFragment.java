@@ -314,6 +314,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
                         }
                     }
+                    if (user.isSympathySent) {
+                        mRateController.userRateBroadcast(user.uid);
+                    }
                 }
                 mLastLoadedProfileId = mProfileId;
             }

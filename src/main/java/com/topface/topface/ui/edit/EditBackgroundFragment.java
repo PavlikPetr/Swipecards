@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+
 import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
@@ -44,7 +46,10 @@ public class EditBackgroundFragment extends AbstractEditFragment {
         mSelectedId = CacheProfile.background_id;
 
         mBackgroundImagesListView = (ListView) root.findViewById(R.id.lvList);
-        mBackgroundImagesListView.setVisibility(View.INVISIBLE);
+        //В Android 2 есть баг, что не вызывается листенер, поэтому мы не скрываем список
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            mBackgroundImagesListView.setVisibility(View.INVISIBLE);
+        }
         // List
         new Thread(new Runnable() {
             @Override
@@ -64,7 +69,6 @@ public class EditBackgroundFragment extends AbstractEditFragment {
 
                                 @Override
                                 public void onAnimationEnd(Animation animation) {
-
                                 }
 
                                 @Override
