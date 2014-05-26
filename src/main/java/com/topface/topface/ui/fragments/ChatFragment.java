@@ -74,6 +74,7 @@ import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
@@ -96,6 +97,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
+    private static final String KEYBOARD_OPENED = "keyboard_opened";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_USER_SEX = "user_sex";
@@ -144,6 +146,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     };
     private Handler mUpdater;
     private boolean mIsUpdating;
+    private boolean mIsKeyboardOpened;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedUser mUser;
@@ -221,7 +224,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(R.layout.fragment_chat, null);
+        KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
+        root.setmKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
+            @Override
+            public void keyboardOpened() {
+                mIsKeyboardOpened = true;
+                animateChatActions(true, 500);
+            }
+
+            @Override
+            public void keyboardClosed() {
+                mIsKeyboardOpened = false;
+            }
+        });
         Debug.log(this, "+onCreate");
         // mChatActions
         mChatActionsStub = (ViewStub) root.findViewById(R.id.chat_actions_stub);
@@ -381,6 +396,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(WAS_FAILED, wasFailed);
+        outState.putBoolean(KEYBOARD_OPENED, mIsKeyboardOpened);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
         if (mUser != null) {
             try {
@@ -388,6 +404,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             } catch (Exception e) {
                 Debug.error(e);
             }
+        }
+    }
+
+    @Override
+    public void onViewStateRestored (Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            mIsKeyboardOpened = savedInstanceState.getBoolean(KEYBOARD_OPENED);
         }
     }
 
@@ -720,7 +744,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         getActivity().unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
-        Utils.hideSoftKeyboard(getActivity(), mEditBox);
     }
 
     private void closeChatActions() {
