@@ -5,6 +5,7 @@ import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 
 import com.topface.topface.App;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
@@ -67,7 +68,7 @@ public class Profile extends AbstractDataWithPhotos {
         return parse(new Profile(), response.jsonResult);
     }
 
-    protected static Profile parse(Profile profile, JSONObject resp) {
+    protected static Profile parse(final Profile profile, final JSONObject resp) {
         try {
             profile.uid = resp.optInt("id");
             profile.age = resp.optInt("age");
@@ -93,6 +94,8 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.paid = resp.optBoolean("paid");
                 profile.showAd = resp.optBoolean("showAd", true);
                 profile.canInvite = resp.optBoolean("canInvite");
+
+                GCMUtils.init(resp.optString("notificationToken"), App.getContext());
             }
 
             profile.setEditor(resp.optBoolean("editor", false));

@@ -363,7 +363,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.EditorSendGCMToken:
                 GCMRegistrar.setRegisteredOnServer(getActivity(), false);
-                GCMUtils.init(getActivity());
+                GCMUtils.init("", getActivity());
                 break;
             case R.id.EditorSendAuth:
                 new AuthRequest(AuthToken.getInstance().getTokenInfo(), getActivity()).callback(new ApiHandler() {

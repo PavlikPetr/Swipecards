@@ -20,7 +20,6 @@ import com.facebook.topface.Facebook.DialogListener;
 import com.facebook.topface.FacebookError;
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -98,7 +97,6 @@ public class AuthorizationManager {
     public static Auth saveAuthInfo(IApiResponse response) {
         Auth auth = new Auth(response);
         Ssid.save(auth.ssid);
-        GCMUtils.init(App.getContext());
         AuthToken token = AuthToken.getInstance();
         if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             token.saveToken(auth.userId, token.getLogin(), token.getPassword());
