@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.topface.topface.Static;
+import com.topface.topface.data.PaymentWallProducts;
 
 /**
  * Created by kirussell on 14.01.14.
@@ -16,6 +17,7 @@ public class SessionConfig extends AbstractConfig {
     private static final String DATA_OPTIONS = "data_options";
     private static final String DATA_GOOGLE_PRODUCTS = "data_google_products";
     private static final String DATA_PAYMENTWALL_PRODUCTS = "data_pw_products";
+    private static final String DATA_PAYMENTWALL_MOBILE_PRODUCTS = "data_pw_mobile_products";
 
     public SessionConfig(Context context) {
         super(context);
@@ -107,8 +109,9 @@ public class SessionConfig extends AbstractConfig {
         return getSettingsMap().setField(DATA_GOOGLE_PRODUCTS, googleProductsResponseJson);
     }
 
-    public boolean setPaymentWallProductsData(String pwProductsResponseJson) {
-        return getSettingsMap().setField(DATA_PAYMENTWALL_PRODUCTS, pwProductsResponseJson);
+    public boolean setPaymentWallProductsData(String pwProductsResponseJson, PaymentWallProducts.TYPE type) {
+        return getSettingsMap().setField(type == PaymentWallProducts.TYPE.MOBILE ? DATA_PAYMENTWALL_MOBILE_PRODUCTS :
+                DATA_PAYMENTWALL_PRODUCTS, pwProductsResponseJson);
     }
 
     /**
@@ -118,6 +121,11 @@ public class SessionConfig extends AbstractConfig {
      */
     public String getProductsData() {
         return getSettingsMap().getStringField(DATA_GOOGLE_PRODUCTS);
+    }
+
+    public String getPaymentwallProductsData(PaymentWallProducts.TYPE type) {
+        return getSettingsMap().getStringField(type == PaymentWallProducts.TYPE.MOBILE ? DATA_PAYMENTWALL_MOBILE_PRODUCTS :
+                DATA_PAYMENTWALL_PRODUCTS);
     }
 
     /**

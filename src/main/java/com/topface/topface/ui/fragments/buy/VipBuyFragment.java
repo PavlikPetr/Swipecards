@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.billing.BillingDriver;
+import com.topface.billing.BillingDriverManager;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -81,6 +83,11 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     }
 
     @Override
+    protected BillingDriver getBillingDriver() {
+        return  BillingDriverManager.getInstance().createMainBillingDriver(getActivity(), this, this);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
@@ -141,7 +148,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private void initBuyVipViews(View root) {
         mBuyVipViewsContainer = (LinearLayout) root.findViewById(R.id.fbpContainer);
         LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
-        Products products = CacheProfile.getProducts();
+        Products products = getProducts();
         if (products == null) {
             return;
         }
@@ -150,22 +157,30 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         } else {
             root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.GONE);
         }
-        for (Products.BuyButton curBtn : products.premium) {
+        for (final Products.BuyButton curBtn : products.premium) {
             Products.setBuyButton(btnContainer, curBtn, getActivity(),
                     new Products.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
-                            buySubscription(id);
-                            Bundle arguments = getArguments();
-                            String from = "";
-                            if (arguments != null) {
-                                from = "From" + arguments.getString(ARG_TAG_SOURCE);
-                            }
-                            EasyTracker.getTracker().sendEvent("Subscription", "ButtonClick" + from, id, 0L);
+                            buy(id, curBtn);
                         }
                     }
             );
         }
+    }
+
+    protected void buy(String id, Products.BuyButton curBtn) {
+        buySubscription(id);
+        Bundle arguments = getArguments();
+        String from = "";
+        if (arguments != null) {
+            from = "From" + arguments.getString(ARG_TAG_SOURCE);
+        }
+        EasyTracker.getTracker().sendEvent("Subscription", "ButtonClick" + from, id, 0L);
+    }
+
+    protected Products getProducts() {
+        return CacheProfile.getGPlayProducts();
     }
 
     private void initEditVipViews(View root) {

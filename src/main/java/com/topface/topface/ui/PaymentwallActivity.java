@@ -24,6 +24,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     public static final int ACTION_BUY = 100;
     private static final int RESULT_ERROR = 1;
     private static final String TEST_PURCHASE = "testPurchase";
+    public static final String PW_URL = "pw_url";
     private String mSuccessUrl;
     private View mProgressBar;
     private boolean mIsTestPurchase;
@@ -32,6 +33,13 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     public static Intent getIntent(Context context, boolean testPurchasesEnabled) {
         Intent intent = new Intent(context, PaymentwallActivity.class);
         intent.putExtra(TEST_PURCHASE, testPurchasesEnabled);
+        return intent;
+    }
+
+    public static Intent getIntent(Context context, boolean testPurchasesEnabled, String url) {
+        Intent intent = new Intent(context, PaymentwallActivity.class);
+        intent.putExtra(TEST_PURCHASE, testPurchasesEnabled);
+        intent.putExtra(PW_URL, url);
         return intent;
     }
 
@@ -77,7 +85,10 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     }
 
     private String getWidgetUrl() {
-        String url = CacheProfile.getOptions().getPaymentwallLink();
+        String url = getIntent().getStringExtra(PW_URL);
+        if (url == null) {
+            url = CacheProfile.getOptions().getPaymentwallLink();
+        }
         if (!TextUtils.isEmpty(url) && mIsTestPurchase) {
             url += "&test_mode=1";
         }

@@ -48,31 +48,6 @@ public abstract class AbstractBuyingFragment extends BillingFragment{
 
     private String mFrom;
 
-    public static AbstractBuyingFragment newInstance(String from) {
-        GPlayBuyingFragment GPlayBuyingFragment = new GPlayBuyingFragment();
-        if (from != null) {
-            Bundle args = new Bundle();
-            args.putString(ARG_TAG_SOURCE, from);
-            GPlayBuyingFragment.setArguments(args);
-        }
-        return GPlayBuyingFragment;
-    }
-
-
-    public static AbstractBuyingFragment newInstance(int type, int coins, String from) {
-        GPlayBuyingFragment fragment = new GPlayBuyingFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_ITEM_TYPE, type);
-        args.putInt(ARG_ITEM_PRICE, coins);
-        if (from != null) {
-            args.putString(ARG_TAG_SOURCE, from);
-        }
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +58,6 @@ public abstract class AbstractBuyingFragment extends BillingFragment{
             mFrom = args.getString(ARG_TAG_SOURCE);
         }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,12 +87,12 @@ public abstract class AbstractBuyingFragment extends BillingFragment{
                 products.likes.isEmpty() ? View.GONE : View.VISIBLE
         );
         // sympathies buttons
-        for (Products.BuyButton curButton : products.likes) {
+        for (final Products.BuyButton curButton : products.likes) {
             View btnView = Products.setBuyButton(likesButtons, curButton, getActivity(),
                     new Products.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
-                            buyItem(id);
+                            buy(curButton);
                         }
                     }
             );

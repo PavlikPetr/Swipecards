@@ -18,6 +18,7 @@ import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
@@ -29,6 +30,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GooglePlayProductsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
+import com.topface.topface.requests.PaymentwallProductsRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
@@ -86,9 +88,27 @@ public class App extends Application {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getOptionsRequst())
                 .addRequest(getProductsRequest())
+                .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .callback(handler)
                 .exec();
+    }
+
+    private static PaymentwallProductsRequest getPaymentwallProductsRequest() {
+        PaymentwallProductsRequest request = new PaymentwallProductsRequest(App.getContext());
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(IApiResponse response) {
+                new PaymentWallProducts(response, PaymentWallProducts.TYPE.DIRECT);
+                new PaymentWallProducts(response, PaymentWallProducts.TYPE.MOBILE);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+
+            }
+        });
+        return request;
     }
 
     /**

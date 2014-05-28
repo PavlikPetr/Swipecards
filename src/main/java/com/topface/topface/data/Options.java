@@ -557,7 +557,7 @@ public class Options extends AbstractData {
     public static class Tab {
         public static final String GPLAY = "google-play";
         public static final String PWALL_MOBILE = "paymentwall-mobile";
-        public static final String PWALL = "paymentwall";
+        public static final String PWALL = "paymentwall-direct";
         public static final String BONUS = "bonus";
 
         public String name;

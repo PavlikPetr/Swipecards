@@ -17,12 +17,15 @@ import android.widget.TextView;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.PaymentWallProducts;
+import com.topface.topface.data.Products;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.viewpagerindicator.TabPageIndicator;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class PurchasesFragment extends BaseFragment {
@@ -102,11 +105,12 @@ public class PurchasesFragment extends BaseFragment {
     private void initViews(View root) {
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
-        int pagesCount = getPagesCount();
-        if (pagesCount == 1) {
-            mTabIndicator.setVisibility(View.GONE);
-        }
-        PurchasesFragmentsAdapter pagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), getArguments(), pagesCount);
+
+        LinkedList<Options.Tab> tabs = new LinkedList<>(CacheProfile.getOptions().tabs);
+
+        removeExcessTabs(tabs); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
+
+        PurchasesFragmentsAdapter pagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), getArguments(), tabs);
         mPager.setAdapter(pagerAdapter);
         mTabIndicator.setViewPager(mPager);
         mResourcesInfo = (TextView) root.findViewById(R.id.payReason);
@@ -120,16 +124,39 @@ public class PurchasesFragment extends BaseFragment {
         initBalanceCounters(getSupportActionBar().getCustomView());
     }
 
-    private int getPagesCount() {
-        LinkedList<Options.Tab> tabs = CacheProfile.getOptions().tabs;
-        if (getArguments().getBoolean(IS_VIP_PRODUCTS)) {
-            for (Options.Tab tab : tabs) {
-                if (tab.type.equals(Options.Tab.BONUS)) {
-                    return tabs.size() - 1;
+    private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
+        boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS);
+        for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext();) {
+            Options.Tab tab = iterator.next();
+            Products products = getProductsByTab(tab);
+            if (products != null && !tab.type.equals(Options.Tab.BONUS)) {
+                if (products.coins.isEmpty() && products.likes.isEmpty() && !isVip) {
+                    iterator.remove();
+                } else if (isVip && products.premium.isEmpty()) {
+                    iterator.remove();
                 }
+
+            }
+            if (tab.type.equals(Options.Tab.BONUS) && isVip) {
+                iterator.remove();
             }
         }
-        return tabs.size();
+    }
+
+    private Products getProductsByTab(Options.Tab tab) {
+        Products products = null;
+        switch (tab.type) {
+            case Options.Tab.GPLAY:
+                products = CacheProfile.getGPlayProducts();
+                break;
+            case Options.Tab.PWALL:
+                products = CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.DIRECT);
+                break;
+            case Options.Tab.PWALL_MOBILE:
+                products = CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.MOBILE);
+                break;
+        }
+        return products;
     }
 
     private void initBalanceCounters(View root) {

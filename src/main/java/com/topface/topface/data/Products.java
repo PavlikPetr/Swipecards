@@ -66,6 +66,10 @@ public class Products extends AbstractData {
     public LinkedList<BuyButton> coinsSubscriptionsMasked = new LinkedList<>();
     public ProductsInfo info;
 
+    public Products() {
+
+    }
+
     public Products(@NotNull IApiResponse data) {
         fillData(data.getJsonResult());
     }
@@ -77,22 +81,31 @@ public class Products extends AbstractData {
     }
 
     protected void fillData(JSONObject data) {
+        fillProducts(data);
+        updateCache(data);
+    }
+
+    private void fillProducts(JSONObject data) {
         try {
             fillProductsInfo(data.optJSONObject("info"));
-            fillSubscriptionsProductsArray(
-                    coinsSubscriptions,
-                    data.optJSONArray(ProductType.COINS_SUBSCRIPTION.getName()),
-                    info.coinsSubscription.status.userSubscriptions
-            );
+            if (info != null) {
+                fillSubscriptionsProductsArray(
+                        coinsSubscriptions,
+                        data.optJSONArray(ProductType.COINS_SUBSCRIPTION.getName()),
+                        info.coinsSubscription.status.userSubscriptions
+                );
+            }
             // skip sale flag if there is an active forceCoinsSubscription experiment
             if (CacheProfile.getOptions().forceCoinsSubscriptions) {
                 saleExists = false;
             }
-            fillSubscriptionsProductsArray(
-                    coinsSubscriptionsMasked,
-                    data.optJSONArray(ProductType.COINS_SUBSCRIPTION_MASKED.getName()),
-                    info.coinsSubscriptionMasked.status.userSubscriptions
-            );
+            if (info != null) {
+                fillSubscriptionsProductsArray(
+                        coinsSubscriptionsMasked,
+                        data.optJSONArray(ProductType.COINS_SUBSCRIPTION_MASKED.getName()),
+                        info.coinsSubscriptionMasked.status.userSubscriptions
+                );
+            }
             fillProductsArray(coins, data.optJSONArray(ProductType.COINS.getName()));
             fillProductsArray(likes, data.optJSONArray(ProductType.LIKES.getName()));
             fillProductsArray(premium, data.optJSONArray(ProductType.PREMIUM.getName()));
@@ -100,7 +113,6 @@ public class Products extends AbstractData {
         } catch (Exception e) {
             Debug.error("Products parsing error", e);
         }
-        updateCache(data);
     }
 
     protected void updateCache(JSONObject data) {
@@ -108,14 +120,14 @@ public class Products extends AbstractData {
         CacheProfile.setGooglePlayProducts(this, data);
     }
 
-    private void fillProductsInfo(JSONObject infoJson) {
+    protected void fillProductsInfo(JSONObject infoJson) {
         if (infoJson != null) {
             info = new ProductsInfo(infoJson);
         }
     }
 
-    private void fillSubscriptionsProductsArray(LinkedList<BuyButton> list, JSONArray coinsJSON,
-                                                List<String> userSubscriptions) {
+    protected void fillSubscriptionsProductsArray(LinkedList<BuyButton> list, JSONArray coinsJSON,
+                                                  List<String> userSubscriptions) {
         if (coinsJSON != null && list != null) {
             SubscriptionBuyButton buyButtonFromJSON;
             for (int i = 0; i < coinsJSON.length(); i++) {
@@ -132,7 +144,7 @@ public class Products extends AbstractData {
         }
     }
 
-    private void fillProductsArray(LinkedList<BuyButton> list, JSONArray coinsJSON) {
+    protected void fillProductsArray(LinkedList<BuyButton> list, JSONArray coinsJSON) {
         if (coinsJSON != null && list != null) {
             BuyButton buyButtonFromJSON;
             for (int i = 0; i < coinsJSON.length(); i++) {
@@ -388,7 +400,7 @@ public class Products extends AbstractData {
                 showType = json.optInt("showType");
                 type = getProductTypeByName(json.optString("type"));
                 discount = json.optInt("discount");
-                pWallLink = json.optString("paymentwall-link");
+                pWallLink = json.optString("url");
             }
         }
     }

@@ -1,41 +1,49 @@
 package com.topface.topface.ui.fragments.buy;
 
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.topface.billing.BillingFragment;
-import com.topface.topface.App;
+import com.topface.billing.BillingDriver;
+import com.topface.billing.BillingDriverManager;
 import com.topface.topface.R;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Products.ProductsInfo.CoinsSubscriptionInfo;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import static com.topface.topface.data.Products.BuyButton;
 import static com.topface.topface.data.Products.BuyButtonClickListener;
 
 public class GPlayBuyingFragment extends AbstractBuyingFragment {
 
+    public static GPlayBuyingFragment newInstance(String from) {
+        GPlayBuyingFragment buyingFragment = new GPlayBuyingFragment();
+        if (from != null) {
+            Bundle args = new Bundle();
+            args.putString(ARG_TAG_SOURCE, from);
+            buyingFragment.setArguments(args);
+        }
+        return buyingFragment;
+    }
+
+
+    public static GPlayBuyingFragment newInstance(int type, int coins, String from) {
+        GPlayBuyingFragment fragment = new GPlayBuyingFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_ITEM_TYPE, type);
+        args.putInt(ARG_ITEM_PRICE, coins);
+        if (from != null) {
+            args.putString(ARG_TAG_SOURCE, from);
+        }
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     private Products.BuyButtonClickListener mCoinsSubscriptionClickListener = new Products.BuyButtonClickListener() {
         @Override
@@ -54,7 +62,7 @@ public class GPlayBuyingFragment extends AbstractBuyingFragment {
 
     @Override
     public Products getProducts() {
-        return CacheProfile.getProducts();
+        return CacheProfile.getGPlayProducts();
     }
 
     @Override
@@ -72,8 +80,10 @@ public class GPlayBuyingFragment extends AbstractBuyingFragment {
         return null;
     }
 
-
-
+    @Override
+    protected BillingDriver getBillingDriver() {
+        return BillingDriverManager.getInstance().createMainBillingDriver(getActivity(), this, this);
+    }
 
     @Override
     protected String getTitle() {

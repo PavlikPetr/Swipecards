@@ -49,6 +49,6 @@ public class PaymentwallBillingDriver extends BillingDriver {
 
     @Override
     public boolean isTestPurchasesAvailable() {
-        return CacheProfile.isEditor() && !TextUtils.isEmpty(CacheProfile.getOptions().getPaymentwallLink());
+        return false;
     }
 }

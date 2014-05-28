@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.billing.BillingDriver;
+import com.topface.billing.BillingDriverManager;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -49,11 +51,16 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
     }
 
     @Override
+    protected BillingDriver getBillingDriver() {
+        return  BillingDriverManager.getInstance().createMainBillingDriver(getActivity(), this, this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_coins_subscription, null);
         mContainer = (LinearLayout) root.findViewById(R.id.loContainer);
-        Products products = CacheProfile.getProducts();
+        Products products = CacheProfile.getGPlayProducts();
         if (products != null) {
             CoinsSubscriptionInfo info = products.info.coinsSubscription;
             // info text
@@ -136,7 +143,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                     super.success(response);
                     if (isAdded()) {
                         removeAllBuyButtons();
-                        Products products = CacheProfile.getProducts();
+                        Products products = CacheProfile.getGPlayProducts();
                         if (products != null) {
                             initButtonsViews(products);
                         }
