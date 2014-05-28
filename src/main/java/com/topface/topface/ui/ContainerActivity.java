@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.topface.billing.BillingFragment;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
@@ -29,7 +30,6 @@ import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.ContactsProvider;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +42,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
     public static final String FEED_ID = "FEED_ID";
+    public static final String FEED_IDS = "FEED_IDS";
     /**
      * Constant keys for different fragments
      * Values have to be > 0
@@ -60,6 +61,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final int INTENT_PROFILE_FRAGMENT = 6;
     public static final String TYPE = "type";
     public static final String CHANGED = "changed";
+    public static final String VALUE = "value";
     private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
     private View mOnlineIcon;
@@ -127,17 +129,22 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        intent.putExtra(GPlayBuyingFragment.ARG_ITEM_TYPE, itemType);
-        intent.putExtra(GPlayBuyingFragment.ARG_ITEM_PRICE, itemPrice);
+        if (itemType != -1) {
+            intent.putExtra(GPlayBuyingFragment.ARG_ITEM_TYPE, itemType);
+        }
+        if (itemPrice != -1) {
+            intent.putExtra(GPlayBuyingFragment.ARG_ITEM_PRICE, itemPrice);
+        }
         return intent;
+    }
+
+    public static Intent getBuyingIntent(String from, int itemPrice) {
+        return getBuyingIntent(from, -1, itemPrice);
 
     }
 
     public static Intent getBuyingIntent(String from) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
-        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        return intent;
+        return getBuyingIntent(from, -1, -1);
 
     }
 
@@ -155,9 +162,10 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         initRequestKey();
         checkAuth();
         setContentView(R.layout.ac_fragment_frame);
-        //Сперва пробуем
+        //Сперва пробуем получуить существующий фрагмент из fragmentManager
         mCurrentFragment = getSupportFragmentManager().findFragmentById(R.id.loFrame);
         if (mCurrentFragment == null) {
+            //Если не находим, то создаем новый
             mCurrentFragment = getNewFragment(mCurrentFragmentId);
         }
         if (mCurrentFragment != null) {
@@ -309,6 +317,23 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         Intent intent = new Intent(UPDATE_USER_CATEGORY);
         intent.putExtra(TYPE, type);
         intent.putExtra(CHANGED, value);
+        return intent;
+    }
+
+    public static Intent getValuedActionsUpdateIntent(ActionTypes type, int userId, boolean value) {
+        Intent intent = new Intent(UPDATE_USER_CATEGORY);
+        intent.putExtra(TYPE, type);
+        intent.putExtra(VALUE, value);
+        intent.putExtra(FEED_ID, userId);
+        intent.putExtra(FEED_IDS, new int[]{userId});
+        return intent;
+    }
+
+    public static Intent getValuedActionsUpdateIntent(ActionTypes type, int[] userIds, boolean value) {
+        Intent intent = new Intent(UPDATE_USER_CATEGORY);
+        intent.putExtra(TYPE, type);
+        intent.putExtra(VALUE, value);
+        intent.putExtra(FEED_IDS, userIds);
         return intent;
     }
 

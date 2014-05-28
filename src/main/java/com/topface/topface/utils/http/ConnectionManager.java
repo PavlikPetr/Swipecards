@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryDialog;
@@ -19,7 +20,6 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.net.SocketException;

@@ -2,7 +2,7 @@ package com.topface.topface.utils.cache;
 
 import android.graphics.Bitmap;
 
-import com.topface.topface.utils.Debug;
+import com.topface.framework.utils.Debug;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;

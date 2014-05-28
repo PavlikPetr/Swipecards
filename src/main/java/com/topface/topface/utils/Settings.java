@@ -10,6 +10,8 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.widget.TextView;
 
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;

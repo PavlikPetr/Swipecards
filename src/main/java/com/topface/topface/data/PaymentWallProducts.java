@@ -2,7 +2,6 @@ package com.topface.topface.data;
 
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

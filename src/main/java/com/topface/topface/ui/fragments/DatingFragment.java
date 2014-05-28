@@ -28,6 +28,8 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryRequestReceiver;
@@ -59,16 +61,13 @@ import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AnimationHelper;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
@@ -145,6 +144,25 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
 
+    private BroadcastReceiver mRateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int likedUserId = intent.getExtras().getInt(RateController.USER_ID_EXTRA);
+            if (mCurrentUser != null && likedUserId == mCurrentUser.id) {
+                mDelightBtn.setEnabled(false);
+                mMutualBtn.setEnabled(false);
+                mCurrentUser.rated = true;
+            } else if (mUserSearchList != null) {
+                for (SearchUser searchUser : mUserSearchList) {
+                    if (searchUser.id == likedUserId) {
+                        searchUser.rated = true;
+                        break;
+                    }
+                }
+            }
+        }
+    };
+
     private INavigationFragmentsListener mFragmentSwitcherListener;
     private AnimationHelper mAnimationHelper;
 
@@ -181,6 +199,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 inBackroundThread();
             }
         };
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mRateReceiver, new IntentFilter(RateController.USER_RATED));
     }
 
     protected void inBackroundThread() {
@@ -218,6 +238,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRateReceiver);
     }
 
     @Override
@@ -335,12 +356,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     protected String getTitle() {
         if (CacheProfile.dating != null) {
-            int age = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ?
+            int age = CacheProfile.dating.ageEnd == DatingFilter.MAX_AGE ?
                     EditAgeFragment.absoluteMax : CacheProfile.dating.ageEnd;
             String headerText = getString(CacheProfile.dating.sex == Static.BOY ?
                             R.string.dating_header_guys : R.string.dating_header_girls,
-                    CacheProfile.dating.ageStart, age);
-            String plus = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ? "+" : "";
+                    CacheProfile.dating.ageStart, age
+            );
+            String plus = CacheProfile.dating.ageEnd == DatingFilter.MAX_AGE ? "+" : "";
             return headerText + plus;
         }
         return Static.EMPTY;
@@ -683,11 +705,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void showNextUser() {
-        showUser(mUserSearchList.nextUser());
+        if (mUserSearchList != null) {
+            showUser(mUserSearchList.nextUser());
+        }
     }
 
     private void prevUser() {
-        fillUserInfo(mUserSearchList.prevUser());
+        if (mUserSearchList != null) {
+            fillUserInfo(mUserSearchList.prevUser());
+        }
         unlockControls();
     }
 
@@ -1001,13 +1027,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         unlockControls();
                     }
                 }).exec();
-            }
-        } else if (resultCode == UserProfileFragment.USER_LIKED && requestCode == ContainerActivity.INTENT_PROFILE_FRAGMENT) {
-            int likedUsedId = data.getExtras().getInt(UserProfileFragment.USER_ID_EXTRA);
-            if (mCurrentUser != null && likedUsedId == mCurrentUser.id) {
-                mDelightBtn.setEnabled(false);
-                mMutualBtn.setEnabled(false);
-                mCurrentUser.rated = true;
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

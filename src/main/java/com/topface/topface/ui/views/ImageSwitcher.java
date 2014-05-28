@@ -101,7 +101,7 @@ public class ImageSwitcher extends ViewPager {
                             oldPosition = mNext;
                             mImageSwitcherAdapter.setPhotoToPosition(mNext, false);
                         }
-                    } else if (i < oldPosition){
+                    } else if (i < oldPosition) {
                         //Проверяем, не начали ли мы грузить предыдущую фотографию
                         if (mPrev != i) {
                             mPrev = i;
@@ -280,9 +280,7 @@ public class ImageSwitcher extends ViewPager {
     public boolean onTouchEvent(MotionEvent ev) {
         try {
             return super.onTouchEvent(ev);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return false;
-        } catch (IllegalStateException e) {
+        } catch (ArrayIndexOutOfBoundsException | IllegalStateException | IllegalArgumentException e) {
             return false;
         }
     }
@@ -307,6 +305,7 @@ public class ImageSwitcher extends ViewPager {
         return mCurrentPhotoPosition;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public int getPreviousSelectedPosition() {
         return mPreviousPhotoPosition;
     }

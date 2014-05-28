@@ -30,6 +30,6 @@ public class VipApiHandler extends SimpleApiHandler {
 
     @Override
     public void always(IApiResponse response) {
-        //Этот метод можно переопределить
+        super.always(response);
     }
 }

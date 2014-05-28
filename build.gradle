@@ -45,6 +45,7 @@ android {
         nokia {
             buildConfigField "com.topface.billing.BillingType", "BILLING_TYPE",
                     "com.topface.billing.BillingType.NOKIA_STORE";
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroidnokia\"";
         }
     }
 

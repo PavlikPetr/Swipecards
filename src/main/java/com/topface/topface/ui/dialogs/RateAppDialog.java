@@ -9,11 +9,11 @@ import android.view.View;
 import android.widget.RatingBar;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 

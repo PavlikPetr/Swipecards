@@ -28,6 +28,7 @@ import android.widget.ViewFlipper;
 
 import com.appsflyer.AppsFlyerLib;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
@@ -44,7 +45,6 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AuthButtonsController;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;

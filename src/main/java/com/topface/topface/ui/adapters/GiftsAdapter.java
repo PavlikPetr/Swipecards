@@ -69,18 +69,16 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
             holder.giftText.setText(R.string.gifts_send_btn);
             holder.giftText.setVisibility(View.VISIBLE);
             holder.priceText.setVisibility(View.GONE);
+        } else if (item.gift.type == Gift.PROFILE || item.gift.type == Gift.PROFILE_NEW) {
+            holder.giftImage.setRemoteSrc(item.gift.link);
+            holder.giftText.setText(Static.EMPTY);
+            holder.giftText.setVisibility(View.VISIBLE);
+            holder.priceText.setVisibility(View.GONE);
         } else {
-            if (item.gift.type == Gift.PROFILE || item.gift.type == Gift.PROFILE_NEW) {
-                holder.giftImage.setRemoteSrc(item.gift.link);
-                holder.giftText.setText(Static.EMPTY);
-                holder.giftText.setVisibility(View.VISIBLE);
-                holder.priceText.setVisibility(View.GONE);
-            } else {
-                holder.giftImage.setRemoteSrc(item.gift.link);
-                holder.priceText.setVisibility(View.VISIBLE);
-                holder.priceText.setText(Integer.toString(item.gift.price));
-                holder.giftText.setVisibility(View.GONE);
-            }
+            holder.giftImage.setRemoteSrc(item.gift.link);
+            holder.priceText.setVisibility(View.VISIBLE);
+            holder.priceText.setText(Integer.toString(item.gift.price));
+            holder.giftText.setVisibility(View.GONE);
         }
 
         return convertView;

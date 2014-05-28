@@ -13,9 +13,9 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiRequest;
-import com.topface.topface.utils.Debug;
 
 /**
  * Диалог, показываемый при ошибке отправки запроса и предлагающий его повторить

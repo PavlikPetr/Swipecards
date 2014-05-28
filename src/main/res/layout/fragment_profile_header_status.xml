@@ -1,36 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-
-    <ImageView
-        android:src="@drawable/bg_profile_status"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="fitXY" />
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
     <TextView
-        android:id="@+id/tvStatus"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        android:layout_margin="20dp"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:background="@android:color/transparent"
-        android:singleLine="false"
-        android:maxLines="5" />
+            android:id="@+id/tvStatus"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:singleLine="false"
+            android:maxLines="5"/>
 
     <ImageButton
-        android:id="@+id/btnEdit"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
-        android:src="@drawable/edit_icon_pen_selector"
-        android:background="@android:color/transparent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:scaleType="fitXY"
-        android:visibility="gone" />
+            android:id="@+id/btnEdit"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/edit_icon_pen_selector"
+            android:background="@android:color/transparent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitXY"
+            android:visibility="gone"/>
 
 </RelativeLayout>

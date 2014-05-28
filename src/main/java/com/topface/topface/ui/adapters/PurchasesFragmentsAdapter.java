@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.util.SparseArrayCompat;
 
 import com.topface.billing.BillingFragment;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.ui.fragments.*;
@@ -14,7 +15,6 @@ import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
 import com.topface.topface.ui.fragments.buy.PaymentWallBuyingFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipPWBuyFragment;
-import com.topface.topface.utils.Debug;
 
 import java.util.LinkedList;
 

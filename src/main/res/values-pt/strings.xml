@@ -584,4 +584,5 @@
     <string name="user_does_not_exist">O usuário não foi encontrado</string>
     <string name="feedback_subject_ban">Reclamação sobre proibição injusta</string>
     <string name="settings_led">LED notificação</string>
+    <string name="buying_not_enough_coins">Você não tem suficiente %d {{coins}}</string>
 </resources>

@@ -32,6 +32,7 @@ public class StatisticsTracker {
     private boolean mEnabled;
     private ILogger mLogger;
     private IDataDispatcher mNetworkDispatcher;
+    private StatisticsConfiguration mConfiguration;
 
     private StatisticsTracker() {
         mNetworkClient = new NetworkHttpClient();
@@ -53,12 +54,22 @@ public class StatisticsTracker {
     }
 
     public StatisticsTracker setConfiguration(StatisticsConfiguration configuration) {
-        mEnabled = configuration.statisticsEnabled;
-        mStatistics
-                .setMaxHitsDispatch(configuration.maxHitsDispatch)
-                .setMaxDispatchExpireDelay(configuration.maxDispatchExpireDelay);
-        mNetworkClient.setUserAgent(configuration.userAgent);
+        if (configuration != null) {
+            mConfiguration = configuration;
+            mEnabled = mConfiguration.statisticsEnabled;
+            mStatistics
+                    .setMaxHitsDispatch(mConfiguration.maxHitsDispatch)
+                    .setMaxDispatchExpireDelay(mConfiguration.maxDispatchExpireDelay);
+            mNetworkClient.setUserAgent(mConfiguration.userAgent);
+            if (mConfiguration.statisticsUrl != null) {
+                mNetworkClient.setUrl(mConfiguration.statisticsUrl);
+            }
+        }
         return this;
+    }
+
+    public StatisticsConfiguration getConfiguration() {
+        return mConfiguration;
     }
 
     public StatisticsTracker setContext(Context context) {

@@ -23,8 +23,10 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.fragments.GiftsFragment;
+import com.topface.topface.ui.fragments.gift.OwnGiftsFragment;
+import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
+import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 
@@ -127,7 +129,7 @@ public class OwnProfileFragment extends AbstractProfileFragment {
         addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
         addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
         addBodyPage(VipBuyFragment.class.getName(), getResources().getString(R.string.vip_status));
-        addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
+        addBodyPage(OwnGiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
     }
 
     @Override

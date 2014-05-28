@@ -1,8 +1,8 @@
 package com.topface.topface.data.search;
 
 
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.cache.SearchCacheManager;
 
 public class CachableSearchList<T extends FeedUser> extends UsersList<T> {

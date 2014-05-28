@@ -1,10 +1,11 @@
 package com.topface.topface.data;
 
+import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.StatisticsConfiguration;
 import com.topface.topface.App;
 import com.topface.topface.utils.Connectivity;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.HttpUtils;
+
 import org.json.JSONObject;
 
 /**

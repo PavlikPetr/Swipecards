@@ -3,8 +3,9 @@ package com.topface.topface.utils.http;
 import android.os.Build;
 import android.text.TextUtils;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
-import com.topface.topface.utils.Debug;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.Utils;
 
 import java.io.BufferedInputStream;
@@ -131,10 +132,10 @@ public class HttpUtils {
         connection.setConnectTimeout(CONNECT_TIMEOUT);
         connection.setReadTimeout(READ_TIMEOUT);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            connection.setRequestProperty("Connection", "Keep-Alive");
-        } else {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
             connection.setRequestProperty("Connection", "close");
+        } else {
+            connection.setRequestProperty("Connection", "Keep-Alive");
         }
 
         return connection;
@@ -148,33 +149,32 @@ public class HttpUtils {
         return openConnection(HttpConnectionType.POST, url, contentType);
     }
 
+    public static void setContentLengthAndConnect(HttpURLConnection connection,
+                                                  ApiRequest.IConnectionConfigureListener listener,
+                                                  int requestDataLength) throws IOException {
+        if (requestDataLength > 0) {
+            //Устанавливаем длину данных
+            connection.setFixedLengthStreamingMode(requestDataLength);
+        }
+        listener.onConfigureEnd();
+        connection.connect();
+        listener.onConnectionEstablished();
+    }
+
     public static void sendPostData(byte[] requestData, HttpURLConnection connection) throws IOException {
         //Отправляем данные
         if (connection == null) {
             Debug.error("connection is null");
             return;
         }
-        OutputStream outputStream = getOutputStream(requestData.length, connection);
+
+        OutputStream outputStream = connection.getOutputStream();
         if (outputStream != null) {
             outputStream.write(requestData);
             outputStream.close();
         } else {
             Debug.error("Http.getOutputStream() is null");
         }
-    }
-
-    public static OutputStream getOutputStream(int contentLength, HttpURLConnection connection) throws IOException {
-        //Устанавливаем длину данных
-        if (contentLength > 0) {
-            connection.setFixedLengthStreamingMode(contentLength);
-        }
-        /*else {
-            //Nginx без поддержки сторонних модулей не поддерживает chunked.
-            //Подробности https://tasks.verumnets.ru/issues/13282
-            connection.setChunkedStreamingMode(-1);
-        }*/
-
-        return connection.getOutputStream();
     }
 
     /**
