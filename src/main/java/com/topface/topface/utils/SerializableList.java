@@ -1,7 +1,7 @@
 package com.topface.topface.utils;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.data.SerializableToJson;
-import com.topface.topface.requests.ComplainRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +25,7 @@ public class SerializableList extends LinkedList<SerializableToJson> {
         return array.toString();
     }
 
-    public void fromJSON(String json,  String className) {
+    public void fromJSON(String json, String className) {
         try {
             JSONArray jsonArray = new JSONArray(json);
             Class<?> serializableClass = Class.forName(className);

@@ -1,7 +1,7 @@
 package com.topface.topface.data;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.utils.Debug;
 
 import org.json.JSONObject;
 

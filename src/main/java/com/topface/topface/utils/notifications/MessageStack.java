@@ -1,9 +1,9 @@
 package com.topface.topface.utils.notifications;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.SerializableToJson;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.SerializableList;
 import com.topface.topface.utils.Utils;
 
@@ -12,11 +12,12 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-public class MessageStack extends SerializableList{
+public class MessageStack extends SerializableList {
 
     public int getRestMessages() {
         return mRestMessages;
     }
+
     public void setRestMessages(int restMessages) {
         mRestMessages = restMessages;
     }
@@ -37,14 +38,15 @@ public class MessageStack extends SerializableList{
     }
 
     public int getAllCount() {
-        return mRestMessages + size() + (mRestMessages == 0? 0 : -1); //отнимаем один, потому что сайз учитывает строчку "и еще %d"
+        return mRestMessages + size() + (mRestMessages == 0 ? 0 : -1); //отнимаем один, потому что сайз учитывает строчку "и еще %d"
     }
 
     public MessageStack(LinkedList<Message> list) {
         addAll(list);
     }
 
-    public MessageStack() {}
+    public MessageStack() {
+    }
 
     private int mRestMessages;
     /**
@@ -63,7 +65,8 @@ public class MessageStack extends SerializableList{
             mTitle = title;
         }
 
-        public Message() {}
+        public Message() {
+        }
 
         @Override
         public JSONObject toJson() {

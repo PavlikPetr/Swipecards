@@ -4,9 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
-import com.topface.topface.utils.Debug;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,8 +18,8 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
 
     public static final String DATING_ONLY_ONLINE_FIELD = "datingOnline";
 
-    public static final int webAbsoluteMaxAge = 99;
-    public static final int webAbsoluteMinAge = 16;
+    public static final int MAX_AGE = 99;
+    public static final int MIN_AGE = 16;
 
     public City city = new City();
     public int sex;
@@ -37,8 +37,8 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
 
     public DatingFilter() {
         city = new City();
-        ageStart = webAbsoluteMinAge;
-        ageEnd = webAbsoluteMaxAge;
+        ageStart = MIN_AGE;
+        ageEnd = MAX_AGE;
     }
 
     public DatingFilter(JSONObject data) {
@@ -85,12 +85,12 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
     }
 
     private void trimToMinMaxAge() {
-        if (ageStart < webAbsoluteMinAge) {
-            ageStart = webAbsoluteMinAge;
+        if (ageStart < MIN_AGE) {
+            ageStart = MIN_AGE;
         }
 
-        if (ageEnd > webAbsoluteMaxAge) {
-            ageEnd = webAbsoluteMaxAge;
+        if (ageEnd > MAX_AGE) {
+            ageEnd = MAX_AGE;
         }
     }
 

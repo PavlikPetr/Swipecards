@@ -101,7 +101,7 @@ public class ImageSwitcher extends ViewPager {
                             oldPosition = mNext;
                             mImageSwitcherAdapter.setPhotoToPosition(mNext, false);
                         }
-                    } else if (i < oldPosition){
+                    } else if (i < oldPosition) {
                         //Проверяем, не начали ли мы грузить предыдущую фотографию
                         if (mPrev != i) {
                             mPrev = i;

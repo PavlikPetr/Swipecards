@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.Static;
 import com.topface.topface.utils.social.AuthToken;
 

@@ -1,13 +1,12 @@
-package com.topface.topface.utils.config;
+package com.topface.framework.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.topface.topface.utils.BackgroundThread;
-import com.topface.topface.utils.Debug;
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -84,11 +83,47 @@ public abstract class AbstractConfig {
     }
 
     /**
-     * Add fields with default values
+     * Add fields and default values for current config
+     * Add fields with {@link #addField(AbstractConfig.SettingsMap, String, Object)}
      *
      * @param settingsMap settingsMap that stores config data
      */
     protected abstract void fillSettingsMap(SettingsMap settingsMap);
+
+    /**
+     * Use to populate settings map
+     *
+     * @param settingsMap  map to populate
+     * @param key          field's key
+     * @param defaultValue field's default value
+     */
+    protected void addField(SettingsMap settingsMap, String key, Object defaultValue) {
+        settingsMap.addField(key, defaultValue);
+    }
+
+    protected boolean setField(SettingsMap settingsMap, String key, Object defaultValue) {
+        return settingsMap.setField(key, defaultValue);
+    }
+
+    protected String getStringField(SettingsMap settingsMap, String key) {
+        return settingsMap.getStringField(key);
+    }
+
+    protected int getIntegerField(SettingsMap settingsMap, String key) {
+        return settingsMap.getIntegerField(key);
+    }
+
+    protected boolean getBooleanField(SettingsMap settingsMap, String key) {
+        return settingsMap.getBooleanField(key);
+    }
+
+    protected Long getLongField(SettingsMap settingsMap, String key) {
+        return settingsMap.getLongField(key);
+    }
+
+    protected Double getDoubleField(SettingsMap settingsMap, String key) {
+        return settingsMap.getDoubleField(key);
+    }
 
     /**
      * Sets default data
@@ -183,7 +218,7 @@ public abstract class AbstractConfig {
     /**
      * Поле настроек конфига. Нужно для того, что бы их было легко добавлять поля настроек
      */
-    protected static class SettingsField<T> {
+    private static class SettingsField<T> {
         public SettingsField(String key, T defaultValue) {
             this.key = key;
             this.value = defaultValue;
@@ -212,43 +247,23 @@ public abstract class AbstractConfig {
         public void resetToDefault() {
             this.value = this.defaultValue;
         }
+
+        @Override
+        public String toString() {
+            return key + " : " + value + "(" + defaultValue + ")";
+        }
     }
 
     /**
      * Класс хранения полей настроек
      */
     protected static class SettingsMap extends HashMap<String, SettingsField> {
-        @SuppressWarnings("unchecked")
-        public SettingsField<String> addStringField(String fieldName, String defaultValue) {
+
+        private SettingsField addField(String fieldName, Object defaultValue) {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
         }
 
-        @SuppressWarnings("unchecked")
-        public SettingsField<Integer> addIntegerField(String fieldName, Integer defaultValue) {
-            return put(fieldName, new SettingsField<>(fieldName, defaultValue));
-        }
-
-        @SuppressWarnings({"unchecked"})
-        public SettingsField<Integer> addBooleanField(String fieldName, Boolean defaultValue) {
-            return put(fieldName, new SettingsField<>(fieldName, defaultValue));
-        }
-
-        @SuppressWarnings("unchecked")
-        public SettingsField<Long> addLongField(String fieldName, Long defaultValue) {
-            return put(fieldName, new SettingsField<>(fieldName, defaultValue));
-        }
-
-        @SuppressWarnings({"unchecked", "UnusedDeclaration"})
-        public SettingsField<Double> addDoubleField(String fieldName, Double defaultValue) {
-            return put(fieldName, new SettingsField<>(fieldName, defaultValue));
-        }
-
-        @SuppressWarnings({"unchecked", "UnusedDeclaration"})
-        public SettingsField<LinkedList<String>> addListField(String fieldName, List defaultValue) {
-            return put(fieldName, new SettingsField<>(fieldName, defaultValue));
-        }
-
-        public boolean setField(String fieldName, String value) {
+        private boolean setField(String fieldName, Object value) {
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
                 return true;
@@ -256,40 +271,7 @@ public abstract class AbstractConfig {
             return false;
         }
 
-        public boolean setField(String fieldName, Integer value) {
-            if (containsKey(fieldName)) {
-                get(fieldName).value = value;
-                return true;
-            }
-            return false;
-        }
-
-        public boolean setField(String fieldName, Long value) {
-            if (containsKey(fieldName)) {
-                get(fieldName).value = value;
-                return true;
-            }
-            return false;
-        }
-
-        public boolean setField(String fieldName, Boolean value) {
-            if (containsKey(fieldName)) {
-                get(fieldName).value = value;
-                return true;
-            }
-            return false;
-        }
-
-        @SuppressWarnings("UnusedDeclaration")
-        public boolean setField(String fieldName, Double value) {
-            if (containsKey(fieldName)) {
-                get(fieldName).value = value;
-                return true;
-            }
-            return false;
-        }
-
-        public String getStringField(String fieldName) {
+        private String getStringField(String fieldName) {
             SettingsField settingsField = get(fieldName);
             if (settingsField != null && settingsField.value != null) {
                 return (String) settingsField.value;
@@ -297,7 +279,7 @@ public abstract class AbstractConfig {
             return "";
         }
 
-        public int getIntegerField(String fieldName) {
+        private int getIntegerField(String fieldName) {
             SettingsField settingsField = get(fieldName);
             if (settingsField != null && settingsField.value != null) {
                 return (Integer) settingsField.value;
@@ -305,7 +287,7 @@ public abstract class AbstractConfig {
             return 0;
         }
 
-        public boolean getBooleanField(String fieldName) {
+        private boolean getBooleanField(String fieldName) {
             SettingsField settingsField = get(fieldName);
             if (settingsField != null && settingsField.value != null) {
                 return (Boolean) settingsField.value;
@@ -313,7 +295,7 @@ public abstract class AbstractConfig {
             return false;
         }
 
-        public Long getLongField(String fieldName) {
+        private Long getLongField(String fieldName) {
             SettingsField settingsField = get(fieldName);
             if (settingsField != null && settingsField.value != null) {
                 return (Long) settingsField.value;
@@ -321,8 +303,7 @@ public abstract class AbstractConfig {
             return 0L;
         }
 
-        @SuppressWarnings("UnusedDeclaration")
-        public Double getDoubleField(String fieldName) {
+        private Double getDoubleField(String fieldName) {
             SettingsField settingsField = get(fieldName);
             if (settingsField != null && settingsField.value != null) {
                 return (Double) settingsField.value;

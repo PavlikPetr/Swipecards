@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.google.android.gcm.GCMBaseIntentService;
-import com.topface.topface.utils.Debug;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.utils.Editor;
 
 import org.json.JSONException;

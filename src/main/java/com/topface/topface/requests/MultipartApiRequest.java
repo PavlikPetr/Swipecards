@@ -2,10 +2,12 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 import android.text.TextUtils;
+
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
