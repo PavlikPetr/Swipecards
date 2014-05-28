@@ -34,11 +34,6 @@ public abstract class AbstractBuyingFragment extends BillingFragment{
     private LinkedList<View> purchaseButtons = new LinkedList<>();
     private View mCoinsSubscriptionButton;
 
-    public static final String ARG_ITEM_TYPE = "type_of_buying_item";
-    public static final int TYPE_GIFT = 1;
-    public static final int TYPE_LEADERS = 2;
-    public static final String ARG_ITEM_PRICE = "quantity_of_coins";
-
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -175,7 +170,7 @@ public abstract class AbstractBuyingFragment extends BillingFragment{
         getView().findViewById(R.id.coins_title).setVisibility(View.GONE);
         getView().findViewById(R.id.fbCoins).setVisibility(View.GONE);
         getView().findViewById(R.id.fbLikes).setVisibility(View.GONE);
-
+        getView().findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
     }
 
     public String getFrom() {

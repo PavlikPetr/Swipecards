@@ -60,7 +60,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_coins_subscription, null);
         mContainer = (LinearLayout) root.findViewById(R.id.loContainer);
-        Products products = CacheProfile.getGPlayProducts();
+        Products products = CacheProfile.getMarketProducts();
         if (products != null) {
             CoinsSubscriptionInfo info = products.info.coinsSubscription;
             // info text
@@ -143,7 +143,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                     super.success(response);
                     if (isAdded()) {
                         removeAllBuyButtons();
-                        Products products = CacheProfile.getGPlayProducts();
+                        Products products = CacheProfile.getMarketProducts();
                         if (products != null) {
                             initButtonsViews(products);
                         }

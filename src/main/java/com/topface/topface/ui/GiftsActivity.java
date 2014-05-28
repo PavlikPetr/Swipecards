@@ -21,6 +21,7 @@ import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
 import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
 import com.topface.topface.ui.views.TripleButton;
@@ -220,7 +221,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 public void fail(int codeError, final IApiResponse response) {
                     setSupportProgressBarIndeterminateVisibility(false);
                     if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                        startActivity(ContainerActivity.getBuyingIntent("Gifts", GPlayBuyingFragment.TYPE_GIFT, item.price));
+                        startActivity(ContainerActivity.getBuyingIntent("Gifts", PurchasesFragment.TYPE_GIFT, item.price));
                     }
                 }
             }).exec();

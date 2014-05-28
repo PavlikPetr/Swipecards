@@ -94,11 +94,12 @@ public class App extends Application {
                 .exec();
     }
 
-    private static PaymentwallProductsRequest getPaymentwallProductsRequest() {
-        PaymentwallProductsRequest request = new PaymentwallProductsRequest(App.getContext());
-        request.callback(new ApiHandler() {
+    private static ApiRequest getPaymentwallProductsRequest() {
+        return new PaymentwallProductsRequest(App.getContext()).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                //При создании нового объекта продуктов, все данные о них записываются в кэш,
+                //поэтому здесь просто создаются два объекта продуктов.
                 new PaymentWallProducts(response, PaymentWallProducts.TYPE.DIRECT);
                 new PaymentWallProducts(response, PaymentWallProducts.TYPE.MOBILE);
             }
@@ -108,7 +109,6 @@ public class App extends Application {
 
             }
         });
-        return request;
     }
 
     /**

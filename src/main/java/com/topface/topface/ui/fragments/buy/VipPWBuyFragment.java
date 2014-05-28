@@ -46,8 +46,7 @@ public class VipPWBuyFragment extends VipBuyFragment {
             activity.startActivityForResult(
                     PaymentwallActivity.getIntent(
                             activity,
-                            isTestPurchasesEnabled(),
-                            btn.pWallLink
+                            btn.paymentwallLink
                     ),
                     PaymentwallActivity.ACTION_BUY
             );

@@ -11,6 +11,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Products.ProductsInfo.CoinsSubscriptionInfo;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +37,8 @@ public class GPlayBuyingFragment extends AbstractBuyingFragment {
     public static GPlayBuyingFragment newInstance(int type, int coins, String from) {
         GPlayBuyingFragment fragment = new GPlayBuyingFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_ITEM_TYPE, type);
-        args.putInt(ARG_ITEM_PRICE, coins);
+        args.putInt(PurchasesFragment.ARG_ITEM_TYPE, type);
+        args.putInt(PurchasesFragment.ARG_ITEM_PRICE, coins);
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
         }
@@ -62,7 +63,7 @@ public class GPlayBuyingFragment extends AbstractBuyingFragment {
 
     @Override
     public Products getProducts() {
-        return CacheProfile.getGPlayProducts();
+        return CacheProfile.getMarketProducts();
     }
 
     @Override

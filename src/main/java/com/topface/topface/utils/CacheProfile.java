@@ -224,7 +224,7 @@ public class CacheProfile {
      * Опции по умолчанию
      */
     private static Options options;
-    private static Products mGPlayProducts;
+    private static Products mMarketProducts;
     private static PaymentWallProducts mPWProducts;
     private static PaymentWallProducts mPWMobileProducts;
 
@@ -258,14 +258,14 @@ public class CacheProfile {
      * Данные из сервиса googleplay.getProducts
      * Внимание! Может возвращать null, если данный тип сборки не поддерживает покупки
      */
-    public static Products getGPlayProducts() {
-        if (mGPlayProducts == null) {
+    public static Products getMarketProducts() {
+        if (mMarketProducts == null) {
             SessionConfig config = App.getSessionConfig();
             String productsCache = config.getProductsData();
             if (!TextUtils.isEmpty(productsCache)) {
                 //Получаем опции из кэша
                 try {
-                    mGPlayProducts = new Products(
+                    mMarketProducts = new Products(
                             new JSONObject(productsCache)
                     );
                 } catch (JSONException e) {
@@ -274,7 +274,7 @@ public class CacheProfile {
                 }
             }
         }
-        return mGPlayProducts;
+        return mMarketProducts;
     }
 
     public static Products getPaymentWallProducts(PaymentWallProducts.TYPE type) {
@@ -338,7 +338,7 @@ public class CacheProfile {
     }
 
     public static void setGooglePlayProducts(Products products, final JSONObject response) {
-        mGPlayProducts = products;
+        mMarketProducts = products;
         //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
         if (response != null) {
             App.getSessionConfig().setGoogleProductsData(response.toString());

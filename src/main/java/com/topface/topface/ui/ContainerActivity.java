@@ -130,10 +130,10 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
         if (itemType != -1) {
-            intent.putExtra(GPlayBuyingFragment.ARG_ITEM_TYPE, itemType);
+            intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, itemType);
         }
         if (itemPrice != -1) {
-            intent.putExtra(GPlayBuyingFragment.ARG_ITEM_PRICE, itemPrice);
+            intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, itemPrice);
         }
         return intent;
     }
@@ -246,11 +246,11 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
                 );
                 break;
             case INTENT_BUYING_FRAGMENT:
-                if (extras != null && extras.containsKey(GPlayBuyingFragment.ARG_ITEM_TYPE)
-                        && extras.containsKey(GPlayBuyingFragment.ARG_ITEM_PRICE)) {
+                if (extras != null && extras.containsKey(PurchasesFragment.ARG_ITEM_TYPE)
+                        && extras.containsKey(PurchasesFragment.ARG_ITEM_PRICE)) {
                     fragment = PurchasesFragment.newInstance(
-                            extras.getInt(GPlayBuyingFragment.ARG_ITEM_TYPE),
-                            extras.getInt(GPlayBuyingFragment.ARG_ITEM_PRICE),
+                            extras.getInt(PurchasesFragment.ARG_ITEM_TYPE),
+                            extras.getInt(PurchasesFragment.ARG_ITEM_PRICE),
                             source
                     );
                 } else {

@@ -180,7 +180,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     }
 
     protected Products getProducts() {
-        return CacheProfile.getGPlayProducts();
+        return CacheProfile.getMarketProducts();
     }
 
     private void initEditVipViews(View root) {

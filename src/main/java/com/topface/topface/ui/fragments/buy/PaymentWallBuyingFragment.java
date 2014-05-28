@@ -10,6 +10,7 @@ import com.topface.billing.PaymentwallBillingDriver;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
 import com.topface.topface.ui.PaymentwallActivity;
+import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.List;
@@ -33,8 +34,8 @@ public class PaymentWallBuyingFragment extends AbstractBuyingFragment{
     public static AbstractBuyingFragment newInstance(int type, int coins, String from) {
         PaymentWallBuyingFragment fragment = new PaymentWallBuyingFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_ITEM_TYPE, type);
-        args.putInt(ARG_ITEM_PRICE, coins);
+        args.putInt(PurchasesFragment.ARG_ITEM_TYPE, type);
+        args.putInt(PurchasesFragment.ARG_ITEM_PRICE, coins);
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
         }
@@ -49,8 +50,7 @@ public class PaymentWallBuyingFragment extends AbstractBuyingFragment{
             activity.startActivityForResult(
                     PaymentwallActivity.getIntent(
                             activity,
-                            isTestPurchasesEnabled(),
-                            btn.pWallLink
+                            btn.paymentwallLink
                     ),
                     PaymentwallActivity.ACTION_BUY
             );

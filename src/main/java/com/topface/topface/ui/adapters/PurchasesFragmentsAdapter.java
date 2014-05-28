@@ -42,12 +42,14 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment = mFragmentCache.get(position);
         if (fragment != null) return fragment;
+        String from = mArguments.getString(BillingFragment.ARG_TAG_SOURCE);
+        String extraText = mArguments.getString(VipBuyFragment.ARG_TAG_EXRA_TEXT);
         switch (mTabs.get(position).type) {
             case Options.Tab.GPLAY:
                 if (!mIsVip) {
-                    fragment = GPlayBuyingFragment.newInstance(mArguments.getString(BillingFragment.ARG_TAG_SOURCE));
+                    fragment = GPlayBuyingFragment.newInstance(from);
                 } else {
-                    fragment = VipBuyFragment.newInstance(true, mArguments.getString(VipBuyFragment.ARG_TAG_EXRA_TEXT), mArguments.getString(VipBuyFragment.ARG_TAG_SOURCE));
+                    fragment = VipBuyFragment.newInstance(true, extraText, from);
                 }
                 break;
             case Options.Tab.BONUS:
@@ -57,25 +59,19 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
                 break;
             case Options.Tab.PWALL:
                 if (!mIsVip) {
-                    fragment = PaymentWallBuyingFragment.newInstance(mArguments.getString(BillingFragment.ARG_TAG_SOURCE), PaymentWallProducts.TYPE.DIRECT);
+                    fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.DIRECT);
                 } else {
-                    fragment = VipPWBuyFragment.newInstance(true, mArguments.getString(VipBuyFragment.ARG_TAG_EXRA_TEXT),
-                            mArguments.getString(VipBuyFragment.ARG_TAG_SOURCE), PaymentWallProducts.TYPE.DIRECT);
+                    fragment = VipPWBuyFragment.newInstance(true, extraText, from, PaymentWallProducts.TYPE.DIRECT);
                 }
                 break;
             case Options.Tab.PWALL_MOBILE:
                 if (!mIsVip) {
-                    fragment = PaymentWallBuyingFragment.newInstance(mArguments.getString(BillingFragment.ARG_TAG_SOURCE), PaymentWallProducts.TYPE.MOBILE);
+                    fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.MOBILE);
                 } else {
-                    fragment = VipPWBuyFragment.newInstance(true, mArguments.getString(VipBuyFragment.ARG_TAG_EXRA_TEXT),
-                            mArguments.getString(VipBuyFragment.ARG_TAG_SOURCE), PaymentWallProducts.TYPE.MOBILE);
+                    fragment = VipPWBuyFragment.newInstance(true, extraText, from, PaymentWallProducts.TYPE.MOBILE);
                 }
             default:
-                try {
-                    throw new Exception("wrong position");
-                } catch (Exception e) {
-                    Debug.error(e);
-                }
+                Debug.error("PurchasesFragmentsAdapter wrong position");
                 break;
         }
         mFragmentCache.put(position, fragment);

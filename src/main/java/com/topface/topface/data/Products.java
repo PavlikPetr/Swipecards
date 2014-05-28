@@ -389,7 +389,7 @@ public class Products extends AbstractData {
         public String hint;
         public ProductType type;
         public int discount;
-        public String pWallLink;
+        public String paymentwallLink;
 
         public BuyButton(JSONObject json) {
             if (json != null) {
@@ -400,7 +400,7 @@ public class Products extends AbstractData {
                 showType = json.optInt("showType");
                 type = getProductTypeByName(json.optString("type"));
                 discount = json.optInt("discount");
-                pWallLink = json.optString("url");
+                paymentwallLink = json.optString("url");
             }
         }
     }

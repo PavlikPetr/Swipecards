@@ -767,8 +767,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                     mAdapter.removeItem(loaderItem);
                     Intent intent = ContainerActivity.getBuyingIntent("Chat");
-                    intent.putExtra(GPlayBuyingFragment.ARG_ITEM_TYPE, GPlayBuyingFragment.TYPE_GIFT);
-                    intent.putExtra(GPlayBuyingFragment.ARG_ITEM_PRICE, price);
+                    intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
+                    intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
                     startActivity(intent);
                 } else {
                     mAdapter.showRetrySendMessage(loaderItem, sendGift);

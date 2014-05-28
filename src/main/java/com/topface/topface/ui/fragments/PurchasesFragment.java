@@ -31,17 +31,18 @@ import java.util.LinkedList;
 public class PurchasesFragment extends BaseFragment {
 
     public static final String IS_VIP_PRODUCTS = "is_vip_products";
+    public static final String LAST_PAGE = "LAST_PAGE";
     private TabPageIndicator mTabIndicator;
     private ViewPager mPager;
     private TextView mResourcesInfo;
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_GIFT = 1;
-    public static final int TYPE_DELIGHT = 2;
+    public static final int TYPE_LEADERS = 2;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
     private TextView mCurCoins;
     private TextView mCurLikes;
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
                     updateBalanceCounters();
@@ -85,24 +86,29 @@ public class PurchasesFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.purchases_fragment, null);
 
-        initViews(root);
+        initViews(root, savedInstanceState);
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(LAST_PAGE, mPager.getCurrentItem());
     }
 
     @Override
     public void onResume() {
         super.onResume();
         updateBalanceCounters();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(receiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(receiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
     }
 
-    private void initViews(View root) {
+    private void initViews(View root, Bundle savedInstanceState) {
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
 
@@ -120,7 +126,11 @@ public class PurchasesFragment extends BaseFragment {
             mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
         }
         updateBalanceCounters();
-        mPager.setCurrentItem(0);
+        if (savedInstanceState != null) {
+            mPager.setCurrentItem(savedInstanceState.getInt(LAST_PAGE, 0));
+        } else {
+            mPager.setCurrentItem(0);
+        }
         initBalanceCounters(getSupportActionBar().getCustomView());
     }
 
@@ -129,13 +139,10 @@ public class PurchasesFragment extends BaseFragment {
         for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext();) {
             Options.Tab tab = iterator.next();
             Products products = getProductsByTab(tab);
-            if (products != null && !tab.type.equals(Options.Tab.BONUS)) {
-                if (products.coins.isEmpty() && products.likes.isEmpty() && !isVip) {
-                    iterator.remove();
-                } else if (isVip && products.premium.isEmpty()) {
+            if (products != null) {
+                if ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) || (isVip && products.premium.isEmpty())) {
                     iterator.remove();
                 }
-
             }
             if (tab.type.equals(Options.Tab.BONUS) && isVip) {
                 iterator.remove();
@@ -147,7 +154,7 @@ public class PurchasesFragment extends BaseFragment {
         Products products = null;
         switch (tab.type) {
             case Options.Tab.GPLAY:
-                products = CacheProfile.getGPlayProducts();
+                products = CacheProfile.getMarketProducts();
                 break;
             case Options.Tab.PWALL:
                 products = CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.DIRECT);
@@ -190,29 +197,5 @@ public class PurchasesFragment extends BaseFragment {
             mResourcesInfo.setText(getResources().getString(R.string.buying_default_message));
         }
 
-    }
-
-    private SparseArrayCompat<BuyingPageEntity> getBuyingFragments() {
-        SparseArrayCompat<BuyingPageEntity> fragments = new SparseArrayCompat<>();
-        Bundle gpArgs = new Bundle();
-        if (getArguments() != null) {
-            gpArgs.putString(BillingFragment.ARG_TAG_SOURCE, getArguments().getString(BillingFragment.ARG_TAG_SOURCE));
-        }
-        fragments.put(0, new BuyingPageEntity(gpArgs));
-        fragments.put(1, new BuyingPageEntity(null));
-//        fragments.put(2, new BuyingPageEntity("Другие способы", null));
-        return fragments;
-    }
-
-    public class BuyingPageEntity {
-        private Bundle arguments;
-
-        public BuyingPageEntity(Bundle arguments) {
-            this.arguments = arguments;
-        }
-
-        public Bundle getArguments() {
-            return arguments;
-        }
     }
 }
