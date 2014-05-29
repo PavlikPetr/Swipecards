@@ -112,7 +112,7 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
     }
 
     public void setGifts(final T gifts) {
-        if (isAdded()) {
+        if (isAdded() && getView() != null) { // getView() to check that view is created
             FeedList<FeedGift> data = mGridAdapter.getData();
             if (data != null && gifts != null) {
                 data.clear();

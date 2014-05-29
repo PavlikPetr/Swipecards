@@ -116,12 +116,13 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }
         });
 
+        loadGifts();
     }
 
     /**
      * Loading array of gifts from server
      */
-    private void update() {
+    private void loadGifts() {
         if (mGiftsList.isEmpty()) {
             mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
             mTripleButton.setEnabled(false);
@@ -167,7 +168,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     protected void onResume() {
         super.onResume();
-        update();
         switch (GiftsCollection.currentType) {
             case Gift.ROMANTIC:
                 mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
