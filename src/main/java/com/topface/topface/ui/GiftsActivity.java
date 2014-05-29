@@ -116,12 +116,13 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }
         });
 
+        loadGifts();
     }
 
     /**
      * Loading array of gifts from server
      */
-    private void update() {
+    private void loadGifts() {
         if (mGiftsList.isEmpty()) {
             mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
             mTripleButton.setEnabled(false);
@@ -159,7 +160,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 }
             }).exec();
         } else {
-            mGiftsCollection.clear();
             mGiftsCollection.add(mGiftsList);
             mGiftFragment.setGifts(mGiftsCollection.getGifts());
         }
@@ -168,7 +168,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     protected void onResume() {
         super.onResume();
-        update();
         switch (GiftsCollection.currentType) {
             case Gift.ROMANTIC:
                 mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
@@ -264,10 +263,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
         public void add(ArrayList<Gift> gifts) {
             mAllGifts.addAll(gifts);
-        }
-
-        public void clear() {
-            mAllGifts.clear();
         }
 
         public ArrayList<Gift> getGifts(int type) {
