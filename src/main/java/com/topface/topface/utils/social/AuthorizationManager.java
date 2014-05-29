@@ -22,7 +22,6 @@ import com.google.android.gcm.GCMRegistrar;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -98,7 +97,6 @@ public class AuthorizationManager {
     public static Auth saveAuthInfo(IApiResponse response) {
         Auth auth = new Auth(response);
         Ssid.save(auth.ssid);
-        GCMUtils.init(App.getContext());
         AuthToken token = AuthToken.getInstance();
         if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             token.saveToken(auth.userId, token.getLogin(), token.getPassword());
