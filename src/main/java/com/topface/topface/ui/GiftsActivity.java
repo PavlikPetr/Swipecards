@@ -159,6 +159,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 }
             }).exec();
         } else {
+            mGiftsCollection.clear();
             mGiftsCollection.add(mGiftsList);
             mGiftFragment.setGifts(mGiftsCollection.getGifts());
         }
@@ -263,6 +264,10 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
         public void add(ArrayList<Gift> gifts) {
             mAllGifts.addAll(gifts);
+        }
+
+        public void clear() {
+            mAllGifts.clear();
         }
 
         public ArrayList<Gift> getGifts(int type) {
