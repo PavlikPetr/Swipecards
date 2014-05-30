@@ -16,7 +16,7 @@ public class SessionConfig extends AbstractConfig {
 
     private static final String DATA_PROFILE = "data_profile_user_data";
     private static final String DATA_OPTIONS = "data_options";
-    private static final String DATA_GOOGLE_PRODUCTS = "data_google_products";
+    private static final String DATA_MARKET_PRODUCTS = "data_google_products";
     private static final String DATA_PAYMENTWALL_PRODUCTS = "data_pw_products";
     private static final String DATA_PAYMENTWALL_MOBILE_PRODUCTS = "data_pw_mobile_products";
 
@@ -30,8 +30,10 @@ public class SessionConfig extends AbstractConfig {
         addField(settingsMap, DATA_PROFILE, Static.EMPTY);
         // user options
         addField(settingsMap, DATA_OPTIONS, Static.EMPTY);
-        // use google products
-        addField(settingsMap, DATA_GOOGLE_PRODUCTS, Static.EMPTY);
+        // use market and paymentwall products
+        addField(settingsMap, DATA_MARKET_PRODUCTS, Static.EMPTY);
+        addField(settingsMap, DATA_PAYMENTWALL_PRODUCTS, Static.EMPTY);
+        addField(settingsMap, DATA_PAYMENTWALL_MOBILE_PRODUCTS, Static.EMPTY);
     }
 
     @Override
@@ -106,8 +108,8 @@ public class SessionConfig extends AbstractConfig {
      * @param googleProductsResponseJson google play products json response
      * @return true on success
      */
-    public boolean setGoogleProductsData(String googleProductsResponseJson) {
-        return setField(getSettingsMap(), DATA_GOOGLE_PRODUCTS, googleProductsResponseJson);
+    public boolean setMarketProductsData(String googleProductsResponseJson) {
+        return setField(getSettingsMap(), DATA_MARKET_PRODUCTS, googleProductsResponseJson);
     }
 
     public boolean setPaymentWallProductsData(String pwProductsResponseJson, PaymentWallProducts.TYPE type) {
@@ -121,7 +123,7 @@ public class SessionConfig extends AbstractConfig {
      * @return google plat products json
      */
     public String getProductsData() {
-        return getStringField(getSettingsMap(), DATA_GOOGLE_PRODUCTS);
+        return getStringField(getSettingsMap(), DATA_MARKET_PRODUCTS);
     }
 
     public String getPaymentwallProductsData(PaymentWallProducts.TYPE type) {
@@ -133,6 +135,6 @@ public class SessionConfig extends AbstractConfig {
      * Resets saved google play products data
      */
     public void resetGoogleProductsData() {
-        resetAndSaveConfig(DATA_GOOGLE_PRODUCTS);
+        resetAndSaveConfig(DATA_MARKET_PRODUCTS);
     }
 }

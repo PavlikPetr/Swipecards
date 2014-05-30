@@ -94,17 +94,15 @@ public class Products extends AbstractData {
                         data.optJSONArray(ProductType.COINS_SUBSCRIPTION.getName()),
                         info.coinsSubscription.status.userSubscriptions
                 );
-            }
-            // skip sale flag if there is an active forceCoinsSubscription experiment
-            if (CacheProfile.getOptions().forceCoinsSubscriptions) {
-                saleExists = false;
-            }
-            if (info != null) {
                 fillSubscriptionsProductsArray(
                         coinsSubscriptionsMasked,
                         data.optJSONArray(ProductType.COINS_SUBSCRIPTION_MASKED.getName()),
                         info.coinsSubscriptionMasked.status.userSubscriptions
                 );
+                // skip sale flag if there is an active forceCoinsSubscription experiment
+                if (CacheProfile.getOptions().forceCoinsSubscriptions) {
+                    saleExists = false;
+                }
             }
             fillProductsArray(coins, data.optJSONArray(ProductType.COINS.getName()));
             fillProductsArray(likes, data.optJSONArray(ProductType.LIKES.getName()));

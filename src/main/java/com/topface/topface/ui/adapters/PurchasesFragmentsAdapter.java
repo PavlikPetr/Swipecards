@@ -28,7 +28,6 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
     public PurchasesFragmentsAdapter(FragmentManager fm, Bundle arguments, LinkedList<Options.Tab> tabs) {
         super(fm);
         mArguments = arguments;
-        mFragmentCache = new SparseArrayCompat<>();
         mIsVip = arguments.getBoolean(PurchasesFragment.IS_VIP_PRODUCTS);
         mTabs = tabs;
     }
