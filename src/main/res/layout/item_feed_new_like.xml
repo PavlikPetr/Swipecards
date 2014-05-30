@@ -61,13 +61,6 @@
                 android:id="@+id/ivHeart"
                 android:visibility="gone"
                 style="@style/FeedHeart" />
-
-
-            <!-- online -->
-
-            <ImageView
-                android:id="@+id/ivOnline"
-                style="@style/OnlineIndicator" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -86,5 +79,11 @@
                 android:background="@drawable/likes_btn_mutual_selector" />
         </RelativeLayout>
     </ViewFlipper>
+
+    <!-- online -->
+
+    <ImageView
+        android:id="@+id/ivOnline"
+        style="@style/OnlineIndicator" />
 
 </RelativeLayout>
