@@ -311,11 +311,6 @@ public class App extends Application {
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
         }
 
-        //Инициализируем GCM
-        if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
-            GCMUtils.init(getContext());
-        }
-
         // Инициализируем общие срезы для статистики
         StatisticsTracker.getInstance().setContext(mContext)
                 .putPredefinedSlice("app", BuildConfig.STATISTICS_APP)
