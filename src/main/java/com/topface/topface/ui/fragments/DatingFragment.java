@@ -211,7 +211,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
 
-        View root = inflater.inflate(R.layout.fragmen_dating, null);
+        View root = inflater.inflate(R.layout.fragment_dating, null);
 
         initViews(root);
         initActionBar();
