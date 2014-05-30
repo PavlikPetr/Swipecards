@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:id="@+id/titleContainer"
     android:layout_gravity="center_vertical">
@@ -39,4 +39,31 @@
             style="@style/Widget.Topface.ActionBar.Subtitle"
             android:visibility="gone" />
     </LinearLayout>
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/resources_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/coins_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:textSize="20sp"
+            android:drawableRight="@drawable/ic_coins"
+            />
+        <TextView
+            android:id="@+id/likes_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:drawablePadding="5dp"
+            android:textSize="20sp"
+            android:drawableRight="@drawable/ic_sympathy_small"
+            />
+    </LinearLayout>
+</RelativeLayout>

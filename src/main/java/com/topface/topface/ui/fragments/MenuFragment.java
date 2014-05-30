@@ -120,7 +120,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                     }
                     break;
                 case Products.INTENT_UPDATE_PRODUCTS:
-                    Products products = CacheProfile.getProducts();
+                    Products products = CacheProfile.getMarketProducts();
                     if (products != null && mBuyWidgetController != null) {
                         mBuyWidgetController.setSalesEnabled(products.saleExists);
                     }
@@ -262,7 +262,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 mFooterView.findViewById(R.id.countersLayout));
         getListView().addFooterView(mFooterView);
 
-        Products products = CacheProfile.getProducts();
+        Products products = CacheProfile.getMarketProducts();
         mBuyWidgetController.setSalesEnabled(products != null && products.saleExists);
         initEditor();
     }
@@ -368,7 +368,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         initProfileMenuItem(mHeaderView);
         if (mBuyWidgetController != null) {
             mBuyWidgetController.updateBalance();
-            Products products = CacheProfile.getProducts();
+            Products products = CacheProfile.getMarketProducts();
             if (products != null && products.saleExists == !mBuyWidgetController.salesEnabled) {
                 mBuyWidgetController.setSalesEnabled(products.saleExists);
             }

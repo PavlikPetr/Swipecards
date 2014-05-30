@@ -20,10 +20,11 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.ContactsFragment;
 import com.topface.topface.ui.fragments.EditorBannersFragment;
+import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
 import com.topface.topface.ui.fragments.RegistrationFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.buy.BuyingFragment;
+import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
 import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
@@ -129,10 +130,10 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
         if (itemType != -1) {
-            intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, itemType);
+            intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, itemType);
         }
         if (itemPrice != -1) {
-            intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, itemPrice);
+            intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, itemPrice);
         }
         return intent;
     }
@@ -238,21 +239,22 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         String source = intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE);
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
-                fragment = VipBuyFragment.newInstance(
-                        true,
+
+                fragment = PurchasesFragment.newInstance(
                         intent.getStringExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT),
                         intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE)
                 );
                 break;
             case INTENT_BUYING_FRAGMENT:
-                if (extras != null) {
-                    fragment = BuyingFragment.newInstance(
-                            extras.getInt(BuyingFragment.ARG_ITEM_TYPE, 0),
-                            extras.getInt(BuyingFragment.ARG_ITEM_PRICE, 0),
+                if (extras != null && extras.containsKey(PurchasesFragment.ARG_ITEM_TYPE)
+                        && extras.containsKey(PurchasesFragment.ARG_ITEM_PRICE)) {
+                    fragment = PurchasesFragment.newInstance(
+                            extras.getInt(PurchasesFragment.ARG_ITEM_TYPE),
+                            extras.getInt(PurchasesFragment.ARG_ITEM_PRICE),
                             source
                     );
                 } else {
-                    fragment = BuyingFragment.newInstance(source);
+                    fragment = PurchasesFragment.newInstance(source);
                 }
                 break;
             case INTENT_COINS_SUBSCRIPTION_FRAGMENT:
