@@ -92,7 +92,6 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         public PaymentwallClient(WebView webView) {
             super();
             webView.loadUrl(mWidgetUrl);
-            webView.setBackgroundColor(0x00000000);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
             }

@@ -53,7 +53,7 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
                 break;
             case Options.Tab.BONUS:
                 if (!mIsVip) {
-                    fragment = new BonusFragment();
+                    fragment = BonusFragment.newInstance(false);
                 }
                 break;
             case Options.Tab.PWALL:

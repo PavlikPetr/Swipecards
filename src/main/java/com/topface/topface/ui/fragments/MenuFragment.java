@@ -543,7 +543,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 fragment = new PeopleNearbyFragment();
                 break;
             case F_BONUS:
-                fragment = new BonusFragment();
+                fragment = BonusFragment.newInstance(true);
                 break;
             case F_VISITORS:
                 fragment = new VisitorsFragment();

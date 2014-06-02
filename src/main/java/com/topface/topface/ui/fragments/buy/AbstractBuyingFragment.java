@@ -52,7 +52,7 @@ public abstract class AbstractBuyingFragment extends BillingFragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         OfferwallsManager.init(getActivity());
-
+        setNeedTitles(false);
         Bundle args = getArguments();
         if (args != null) {
             mFrom = args.getString(ARG_TAG_SOURCE);
