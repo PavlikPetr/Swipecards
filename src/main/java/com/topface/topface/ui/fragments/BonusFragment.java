@@ -23,12 +23,25 @@ import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 public class BonusFragment extends BaseFragment {
 
+    public static final String NEED_SHOW_TITLE = "need_show_title";
     private View mProgressBar;
     private String mIntegrationUrl;
+
+    public static BonusFragment newInstance(boolean needShowTitle) {
+        BonusFragment fragment = new BonusFragment();
+        Bundle arguments = new Bundle();
+        arguments.putBoolean(NEED_SHOW_TITLE, needShowTitle);
+        fragment.setArguments(arguments);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+            setNeedTitles(args.getBoolean(NEED_SHOW_TITLE));
+        }
         OfferwallsManager.init(getActivity());
     }
 
@@ -41,6 +54,7 @@ public class BonusFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root;
+
         mIntegrationUrl = CacheProfile.getOptions().bonus.integrationUrl;
         if (!TextUtils.isEmpty(mIntegrationUrl)) {
             root = getIntegrationWebView(inflater);

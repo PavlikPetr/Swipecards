@@ -54,34 +54,36 @@ public class EditBackgroundFragment extends AbstractEditFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mAdapter = new BackgroundImagesAdapter(getActivity().getApplicationContext(), getBackgroundImagesList());
-                mBackgroundImagesListView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mBackgroundImagesListView.setAdapter(mAdapter);
-                        Animation fadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
-                        if (fadeIn != null) {
-                            fadeIn.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-                                    mBackgroundImagesListView.setVisibility(View.VISIBLE);
-                                }
+                if (isAdded()) {
+                    mAdapter = new BackgroundImagesAdapter(getActivity(), getBackgroundImagesList());
+                    mBackgroundImagesListView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mBackgroundImagesListView.setAdapter(mAdapter);
+                            Animation fadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
+                            if (fadeIn != null) {
+                                fadeIn.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                        mBackgroundImagesListView.setVisibility(View.VISIBLE);
+                                    }
 
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                }
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                    }
 
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
 
-                                }
-                            });
-                            mBackgroundImagesListView.startAnimation(fadeIn);
-                        } else {
-                            mBackgroundImagesListView.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                                mBackgroundImagesListView.startAnimation(fadeIn);
+                            } else {
+                                mBackgroundImagesListView.setVisibility(View.VISIBLE);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         }).start();
 
