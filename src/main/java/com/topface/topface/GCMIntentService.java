@@ -32,8 +32,34 @@ public class GCMIntentService extends GCMBaseIntentService {
                 String user = intent.getStringExtra("user");
 
                 if (user != null) {
-                    broadcastReceiver.putExtra("id", getUserId(user));
+                    String userId = getUserId(user);
+                    broadcastReceiver.putExtra(GCMUtils.USER_ID_EXTRA, userId);
                     context.sendBroadcast(broadcastReceiver);
+
+                    String gcmType = intent.getStringExtra("type");
+                    Intent updateIntent = null;
+                    switch (gcmType == null ? -1 : Integer.parseInt(gcmType)) {
+                        case GCMUtils.GCM_TYPE_MESSAGE:
+                        case GCMUtils.GCM_TYPE_DIALOGS:
+                        case GCMUtils.GCM_TYPE_GIFT:
+                            updateIntent = new Intent(GCMUtils.GCM_DIALOGS_UPDATE);
+                            break;
+                        case GCMUtils.GCM_TYPE_MUTUAL:
+                            updateIntent = new Intent(GCMUtils.GCM_MUTUAL_UPDATE);
+                            break;
+                        case GCMUtils.GCM_TYPE_LIKE:
+                            updateIntent = new Intent(GCMUtils.GCM_LIKE_UPDATE);
+                            break;
+                        case GCMUtils.GCM_TYPE_GUESTS:
+                            updateIntent = new Intent(GCMUtils.GCM_GUESTS_UPDATE);
+                            break;
+                        case GCMUtils.GCM_TYPE_PEOPLE_NEARBY:
+                            updateIntent = new Intent(GCMUtils.GCM_PEOPLE_NEARBY_UPDATE);
+                            break;
+                    }
+                    if (updateIntent != null) {
+                        context.sendBroadcast(updateIntent);
+                    }
                 }
                 if (Editor.isEditor()) {
                     Intent test = new Intent("com.topface.testapp.GCMTest");

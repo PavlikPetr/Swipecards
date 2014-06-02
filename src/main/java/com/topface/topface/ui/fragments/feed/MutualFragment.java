@@ -93,4 +93,9 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_feed_filtered;
     }
+
+    @Override
+    protected String getGcmUpdateAction() {
+        return GCMUtils.GCM_MUTUAL_UPDATE;
+    }
 }

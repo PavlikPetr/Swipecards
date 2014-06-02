@@ -98,4 +98,9 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteVisitorsRequest(ids, getActivity());
     }
+
+    @Override
+    protected String getGcmUpdateAction() {
+        return GCMUtils.GCM_GUESTS_UPDATE;
+    }
 }

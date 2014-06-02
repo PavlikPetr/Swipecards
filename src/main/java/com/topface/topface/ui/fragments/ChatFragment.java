@@ -70,7 +70,6 @@ import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
-import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
@@ -143,7 +142,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String id = intent.getStringExtra("id");
+            String id = intent.getStringExtra(GCMUtils.USER_ID_EXTRA);
             if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
                 update(true, "update counters");
                 startTimer();
@@ -995,15 +994,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         public void processActionFor(int userId) {
             if (CacheProfile.premium) {
-                if (mUserId > 0) {
+                if (userId > 0) {
                     actionLoader.setVisibility(View.VISIBLE);
                     actionIcon.setVisibility(View.GONE);
 
                     ApiRequest request;
                     if (mUser.blocked) {
-                        request = new DeleteBlackListRequest(mUserId, getActivity());
+                        request = new DeleteBlackListRequest(userId, getActivity());
                     } else {
-                        request = new BlackListAddRequest(mUserId, getActivity());
+                        request = new BlackListAddRequest(userId, getActivity());
                     }
                     request.exec();
                 }
