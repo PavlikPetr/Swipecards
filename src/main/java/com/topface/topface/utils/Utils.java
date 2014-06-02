@@ -84,7 +84,9 @@ public class Utils {
     }
 
     public static Bitmap clipAndScaleBitmap(Bitmap rawBitmap, int dstWidth, int dstHeight) {
-        if (rawBitmap == null || rawBitmap.getWidth() <= 0 || rawBitmap.getHeight() <= 0 || dstWidth <= 0 || dstHeight <= 0)
+        if (rawBitmap == null
+                || rawBitmap.getWidth() <= 0 || rawBitmap.getHeight() <= 0
+                || dstWidth <= 0 || dstHeight <= 0)
             return null;
 
         Bitmap clippedBitmap = null;
