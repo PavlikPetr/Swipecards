@@ -86,8 +86,4 @@ public class GPlayBuyingFragment extends AbstractBuyingFragment {
         return BillingDriverManager.getInstance().createMainBillingDriver(getActivity(), this, this);
     }
 
-    @Override
-    protected String getTitle() {
-        return getString(R.string.buying_header_title);
-    }
 }

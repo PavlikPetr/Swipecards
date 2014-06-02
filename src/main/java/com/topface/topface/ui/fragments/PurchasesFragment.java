@@ -112,19 +112,21 @@ public class PurchasesFragment extends BaseFragment {
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
 
-        LinkedList<Options.Tab> tabs = new LinkedList<>(CacheProfile.getOptions().tabs);
+        LinkedList<Options.Tab> tabs;
+        mResourcesInfo = (TextView) root.findViewById(R.id.payReason);
+        if (getArguments().getBoolean(IS_VIP_PRODUCTS)) {
+            mResourcesInfo.setVisibility(View.GONE);
+            tabs = new LinkedList<>(CacheProfile.getOptions().premiumTabs);
+        } else {
+            tabs = new LinkedList<>(CacheProfile.getOptions().otherTabs);
+            mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
+        }
 
         removeExcessTabs(tabs); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
 
         PurchasesFragmentsAdapter pagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), getArguments(), tabs);
         mPager.setAdapter(pagerAdapter);
         mTabIndicator.setViewPager(mPager);
-        mResourcesInfo = (TextView) root.findViewById(R.id.payReason);
-        if (getArguments().getBoolean(IS_VIP_PRODUCTS)) {
-            mResourcesInfo.setVisibility(View.GONE);
-        } else {
-            mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
-        }
         updateBalanceCounters();
         if (savedInstanceState != null) {
             mPager.setCurrentItem(savedInstanceState.getInt(LAST_PAGE, 0));
@@ -143,9 +145,6 @@ public class PurchasesFragment extends BaseFragment {
                 if ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) || (isVip && products.premium.isEmpty())) {
                     iterator.remove();
                 }
-            }
-            if (tab.type.equals(Options.Tab.BONUS) && isVip) {
-                iterator.remove();
             }
         }
     }
@@ -198,4 +197,10 @@ public class PurchasesFragment extends BaseFragment {
         }
 
     }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.buying_header_title);
+    }
+
 }
