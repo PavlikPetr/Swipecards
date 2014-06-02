@@ -262,7 +262,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
             title.setVisibility(View.VISIBLE);
             if (CacheProfile.photos != null) {
                 int size = CacheProfile.photos.size();
-                if (size > 1) {
+                if (size > 0) {
                     title.setText(Utils.formatPhotoQuantity(size));
                     return;
                 }

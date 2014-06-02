@@ -53,7 +53,7 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
 
     @Override
     protected void initViews(View root) {
-        root.findViewById(R.id.btnChatAdd).setVisibility(View.GONE);
+        root.findViewById(R.id.send_gift_button).setVisibility(View.GONE);
         root.findViewById(R.id.btnSend).setOnClickListener(this);
         // close button
         View closeButton = root.findViewById(R.id.close_button_image);

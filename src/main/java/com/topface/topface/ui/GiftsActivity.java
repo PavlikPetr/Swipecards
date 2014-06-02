@@ -21,8 +21,9 @@ import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.fragments.buy.BuyingFragment;
+import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
+import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
 import com.topface.topface.ui.views.TripleButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -116,12 +117,13 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }
         });
 
+        loadGifts();
     }
 
     /**
      * Loading array of gifts from server
      */
-    private void update() {
+    private void loadGifts() {
         if (mGiftsList.isEmpty()) {
             mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
             mTripleButton.setEnabled(false);
@@ -167,7 +169,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     protected void onResume() {
         super.onResume();
-        update();
         switch (GiftsCollection.currentType) {
             case Gift.ROMANTIC:
                 mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
@@ -220,7 +221,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 public void fail(int codeError, final IApiResponse response) {
                     setSupportProgressBarIndeterminateVisibility(false);
                     if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                        startActivity(ContainerActivity.getBuyingIntent("Gifts", BuyingFragment.TYPE_GIFT, item.price));
+                        startActivity(ContainerActivity.getBuyingIntent("Gifts", PurchasesFragment.TYPE_GIFT, item.price));
                     }
                 }
             }).exec();

@@ -211,7 +211,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
 
-        View root = inflater.inflate(R.layout.fragmen_dating, null);
+        View root = inflater.inflate(R.layout.fragment_dating, null);
 
         initViews(root);
         initActionBar();
@@ -356,13 +356,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     protected String getTitle() {
         if (CacheProfile.dating != null) {
-            int age = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ?
+            int age = CacheProfile.dating.ageEnd == DatingFilter.MAX_AGE ?
                     EditAgeFragment.absoluteMax : CacheProfile.dating.ageEnd;
             String headerText = getString(CacheProfile.dating.sex == Static.BOY ?
                             R.string.dating_header_guys : R.string.dating_header_girls,
                     CacheProfile.dating.ageStart, age
             );
-            String plus = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ? "+" : "";
+            String plus = CacheProfile.dating.ageEnd == DatingFilter.MAX_AGE ? "+" : "";
             return headerText + plus;
         }
         return Static.EMPTY;

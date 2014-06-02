@@ -53,6 +53,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     @Override
     protected void onRegistered(final Context context, final String registrationId) {
+        Debug.log("GCM: Registered: " + registrationId);
         GCMUtils.sendRegId(context, registrationId);
     }
 

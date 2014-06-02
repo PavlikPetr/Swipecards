@@ -26,7 +26,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -61,8 +61,6 @@ import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
@@ -72,12 +70,9 @@ import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
-import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.views.BackButtonEditTextMaster;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.UserActions;
@@ -115,21 +110,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         public void onReceive(Context context, Intent intent) {
             ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
             boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
-            if (chatActions != null && type != null) {
+            if (type != null) {
                 switch (type) {
                     case BLACK_LIST:
                         if (intent.hasExtra(ContainerActivity.VALUE)) {
-                            isInBlackList = mUser.blocked = value;
-                            ((TextView) chatActions.findViewById(R.id.block_action_text))
-                                    .setText(value ? R.string.black_list_delete : R.string.black_list_add_short);
-                            mAddToBlackList.setText(value ? R.string.black_list_delete : R.string.black_list_add);
+                            mUser.blocked = value;
+                            mBlackListActionController.switchAction();
                         }
-                        getView().findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
-                        getView().findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
+                        mBlackListActionController.setViewsToNormalState();
                         break;
                     case BOOKMARK:
                         if (intent.hasExtra(ContainerActivity.VALUE)) {
-                            TextView mBookmarkAction = ((TextView) chatActions.findViewById(R.id.bookmark_action_text));
+                            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
                             if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE)) {
                                 mUser.bookmarked = value;
                                 mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
@@ -160,14 +152,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     };
     private Handler mUpdater;
     private boolean mIsUpdating;
-    private boolean mIsAddPanelOpened;
-    private boolean mIsKeyboardOpened; // Shows whether keyboard opened or not. Should be maintained very carefully, because there are no keyboard show/hide events.
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedUser mUser;
-    private BackButtonEditTextMaster mEditBox;
-    private SwapControl mSwapControl;
-    private ImageButton mBtnChatAdd;
+    private EditText mEditBox;
     private String mItemId;
     private boolean wasFailed = false;
     TimerTask mUpdaterTask = new TimerTask() {
@@ -249,16 +237,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         // Navigation bar
         initNavigationbar(mUserName, mUserAge, mUserCity);
         // Swap Control
-        initAddPanel(root);
+        root.findViewById(R.id.send_gift_button).setOnClickListener(this);
         // Edit Box
-        mEditBox = (BackButtonEditTextMaster) root.findViewById(R.id.edChatBox);
+        mEditBox = (EditText) root.findViewById(R.id.edChatBox);
         mEditBox.setOnEditorActionListener(mEditorActionListener);
-        mEditBox.setOnKeyBoardExitedListener(new BackButtonEditTextMaster.OnKeyBoardExitedListener() {
-            @Override
-            public void onKeyboardExited() {
-                mIsKeyboardOpened = false;
-            }
-        });
         //LockScreen
         initLockScreen(root);
         //Send Button
@@ -293,27 +275,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mUserSex = getArguments().getInt(INTENT_USER_SEX, Static.BOY);
         mUserAge = getArguments().getInt(INTENT_USER_AGE, 0);
         mUserCity = getArguments().getString(INTENT_USER_CITY);
-    }
-
-    private void initAddPanel(View root) {
-        mSwapControl = ((SwapControl) root.findViewById(R.id.swapFormView));
-        mSwapControl.setOnSizeChangedListener(new SwapControl.OnSizeChangedListener() {
-            @Override
-            public void onSizeChanged(int w, int h, int oldw, int oldh) {
-                if (oldh > h) {
-                    // keyboard opened
-                    mIsKeyboardOpened = true;
-                    toggleAddPanel(false, true);
-                    closeChatActions();
-                }
-            }
-        });
-        // Add Button
-        mBtnChatAdd = (ImageButton) root.findViewById(R.id.btnChatAdd);
-        mBtnChatAdd.setOnClickListener(this);
-        mBtnChatAdd.setSelected(false);
-        // Send gift button
-        root.findViewById(R.id.panel_send_gift_button).setOnClickListener(this);
     }
 
     private void restoreData(Bundle savedInstanceState) {
@@ -670,36 +631,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     EasyTracker.getTracker().sendEvent("Chat", "SendMessage", "", 1L);
                 }
                 break;
-            case R.id.btnChatAdd:
-                if (mIsKeyboardOpened) {
-                    toggleAddPanel(true, true);
-                } else {
-                    toggleAddPanel();
-                }
-                closeChatActions();
-                EasyTracker.getTracker().sendEvent("Chat", "AdditionalClick", "", 1L);
-                break;
-            case R.id.panel_send_gift_button:
-                EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
-                closeChatActions();
+            case R.id.send_gift_button:
                 startActivityForResult(
                         GiftsActivity.getSendGiftIntent(getActivity(), mUserId, false),
                         GiftsActivity.INTENT_REQUEST_GIFT
                 );
+                EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
             case R.id.add_to_black_list_action:
-                if (CacheProfile.premium) {
-                    mBlackListActionController.processActionFor(mUserId);
-                } else {
-                    startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                    closeChatActions();
-                }
+                mBlackListActionController.processActionFor(mUserId);
                 break;
             case R.id.acWProfile:
             case R.id.acProfile:
-                closeChatActions();
                 Intent profileIntent = ContainerActivity.getProfileIntent(mUserId, getActivity());
                 startActivity(profileIntent);
+                closeChatActions();
                 break;
             case R.id.add_to_bookmark_action:
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
@@ -718,34 +664,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 request.exec();
                 break;
             case R.id.complain_action:
-                closeChatActions();
                 startActivity(ContainerActivity.getComplainIntent(mUserId));
+                closeChatActions();
                 break;
             case R.id.ivBarAvatar:
                 onOptionsItemSelected(mBarAvatar);
                 break;
             default:
                 break;
-        }
-    }
-
-    private void operateBlacklist() {
-        if (CacheProfile.premium) {
-            if (mUserId > 0) {
-                getView().findViewById(R.id.blockPrBar).setVisibility(View.VISIBLE);
-                getView().findViewById(R.id.blockIcon).setVisibility(View.GONE);
-
-                ApiRequest request;
-                if (mUser.blocked) {
-                    request = new DeleteBlackListRequest(mUserId, getActivity());
-                } else {
-                    request = new BlackListAddRequest(mUserId, getActivity());
-                }
-                request.exec();
-            }
-        } else {
-            startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-            closeChatActions();
         }
     }
 
@@ -807,27 +733,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 }
             }
         }
-
-        toggleAddPanel(false);
-    }
-
-    private void toggleAddPanel() {
-        toggleAddPanel(!mIsAddPanelOpened, false);
-    }
-
-    private void toggleAddPanel(boolean open) {
-        toggleAddPanel(open, false);
-    }
-
-    private void toggleAddPanel(boolean open, boolean instant) {
-        if (mIsAddPanelOpened == open) return;
-        if (open) {
-            Utils.hideSoftKeyboard(getActivity(), mEditBox);
-            mIsKeyboardOpened = false;
-        }
-        mSwapControl.snapToScreen(!open ? 0 : 1, instant);
-        mBtnChatAdd.setSelected(open);
-        mIsAddPanelOpened = open;
     }
 
     private void sendGift(int id, final int price) {
@@ -859,12 +764,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                    mAdapter.removeItem(loaderItem);
+                    if (mAdapter != null) {
+                        mAdapter.removeItem(loaderItem);
+                    }
                     Intent intent = ContainerActivity.getBuyingIntent("Chat");
-                    intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                    intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                    intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
+                    intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
                     startActivity(intent);
-                } else {
+                } else if (mAdapter != null) {
                     mAdapter.showRetrySendMessage(loaderItem, sendGift);
                 }
             }
@@ -1016,7 +923,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             UserActions userActions = new UserActions(mActions, actions);
             TextView bookmarksTv = (TextView) userActions.getViewById(R.id.add_to_bookmark_action).findViewById(R.id.bookmark_action_text);
             mBlackListActionController = new AddToBlackListViewsController(mActions);
-            mBlackListActionController.setInBlackList(user.blocked);
+            mBlackListActionController.switchAction();
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
         }
@@ -1054,7 +961,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             });
             if (!needToClose) {
                 Utils.hideSoftKeyboard(getActivity(), mEditBox);
-                toggleAddPanel(false);
             }
             mActions.startAnimation(ta);
         }
@@ -1074,8 +980,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         final View actionLoader;
         final View actionIcon;
 
-        private boolean isInBlackList = false;
-
         AddToBlackListViewsController(View root) {
             View actionView = root.findViewById(R.id.add_to_black_list_action);
             actionText = (TextView) actionView.findViewById(R.id.block_action_text);
@@ -1083,73 +987,36 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             actionIcon = actionView.findViewById(R.id.blockIcon);
             // click listener for actionView is set through UserActions
             // set states for views
-            initViews(isInBlackList);
+            switchAction();
         }
 
-        public void addToBlackList(int userId) {
-            if (userId > 0) {
-                BlackListAddRequest blackListRequest = new BlackListAddRequest(userId, getActivity());
-                execRequest(blackListRequest, true);
-            }
-        }
-
-        public void removeFromBlackList(int userId) {
-            if (userId > 0) {
-                DeleteBlackListRequest blackListRequest = new DeleteBlackListRequest(userId, getActivity());
-                execRequest(blackListRequest, false);
-            }
-        }
-
-        private void execRequest(ApiRequest blackListRequest, final boolean toBlackList) {
-            actionLoader.setVisibility(View.VISIBLE);
-            actionIcon.setVisibility(View.INVISIBLE);
-            blackListRequest.callback(new VipApiHandler() {
-                @Override
-                public void success(IApiResponse response) {
-                    super.success(response);
-                    isInBlackList = toBlackList;
-                    if (isAdded()) {
-                        onChange(isInBlackList);
-                    }
-                }
-
-                @Override
-                public void always(IApiResponse response) {
-                    super.always(response);
-                    if (isAdded()) {
-                        actionLoader.setVisibility(View.INVISIBLE);
-                        actionIcon.setVisibility(View.VISIBLE);
-                    }
-                }
-            }).exec();
-        }
-
-        private void initViews(boolean inBlackList) {
-            int resIdText = inBlackList ? R.string.black_list_delete : R.string.black_list_add_short;
-            actionText.setText(resIdText);
-        }
-
-        public void setInBlackList(boolean value) {
-            isInBlackList = value;
-            initViews(value);
-        }
-
-        private void onChange(boolean inBlackList) {
-            initViews(inBlackList);
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
-                    ContainerActivity.getIntentForActionsUpdate(
-                            ContainerActivity.ActionTypes.BLACK_LIST,
-                            !inBlackList
-                    )
-            );
+        public void switchAction() {
+            actionText.setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
         }
 
         public void processActionFor(int userId) {
-            if (isInBlackList) {
-                removeFromBlackList(userId);
+            if (CacheProfile.premium) {
+                if (userId > 0) {
+                    actionLoader.setVisibility(View.VISIBLE);
+                    actionIcon.setVisibility(View.GONE);
+
+                    ApiRequest request;
+                    if (mUser.blocked) {
+                        request = new DeleteBlackListRequest(userId, getActivity());
+                    } else {
+                        request = new BlackListAddRequest(userId, getActivity());
+                    }
+                    request.exec();
+                }
             } else {
-                addToBlackList(userId);
+                startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                closeChatActions();
             }
+        }
+
+        public void setViewsToNormalState() {
+            actionLoader.setVisibility(View.INVISIBLE);
+            actionIcon.setVisibility(View.VISIBLE);
         }
     }
 }

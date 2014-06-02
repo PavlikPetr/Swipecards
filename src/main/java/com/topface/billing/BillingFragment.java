@@ -22,8 +22,10 @@ abstract public class BillingFragment extends BaseFragment implements BillingLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBillingDriver = BillingDriverManager.getInstance().createMainBillingDriver(getActivity(), this, this);
+        mBillingDriver = getBillingDriver();
     }
+
+    protected abstract BillingDriver getBillingDriver();
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
