@@ -28,11 +28,11 @@ public class EditButtonsAdapter extends BaseAdapter {
     public EditButtonsAdapter(Context context, History item) {
         mEditButtonsNames = new SparseArray<>(3);
         mEditButtonsNames.append(ITEM_DELETE, context.getString(R.string.general_delete_title));
-        if (item.type != FeedDialog.GIFT && item.type != FeedDialog.MAP &&
+        if (item != null && item.type != FeedDialog.GIFT && item.type != FeedDialog.MAP &&
                 item.type != FeedDialog.ADDRESS) {
             mEditButtonsNames.append(ITEM_COPY, context.getString(R.string.general_copy_title));
         }
-        if (item.target != 0) {
+        if (item != null && item.target != 0) {
             mEditButtonsNames.append(ITEM_COMPLAINT, context.getString(R.string.general_complain));
         }
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

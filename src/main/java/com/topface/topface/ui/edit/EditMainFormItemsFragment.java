@@ -382,7 +382,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         SettingsRequest request = new SettingsRequest(getActivity());
         for (EditType type : hashChangedData.keySet()) {
             String changedValue = hashChangedData.get(type);
-            if (!changedValue.equals(getDataByEditType(type))) {
+            if (type != null && changedValue != null
+                    && !changedValue.equals(getDataByEditType(type))) {
                 switch (type) {
                     case NAME:
                         if (isNameValid(changedValue)) {
