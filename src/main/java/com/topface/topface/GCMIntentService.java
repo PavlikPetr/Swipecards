@@ -36,9 +36,8 @@ public class GCMIntentService extends GCMBaseIntentService {
                     broadcastReceiver.putExtra(GCMUtils.USER_ID_EXTRA, userId);
                     context.sendBroadcast(broadcastReceiver);
 
-                    String gcmType = intent.getStringExtra("type");
                     Intent updateIntent = null;
-                    switch (gcmType == null ? -1 : Integer.parseInt(gcmType)) {
+                    switch (GCMUtils.getType(intent)) {
                         case GCMUtils.GCM_TYPE_MESSAGE:
                         case GCMUtils.GCM_TYPE_DIALOGS:
                         case GCMUtils.GCM_TYPE_GIFT:

@@ -154,13 +154,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void registerGcmReceiver() {
         String action = getGcmUpdateAction();
-        if (!action.isEmpty()) {
+        if (action != null) {
             getActivity().registerReceiver(mGcmReceiver, new IntentFilter(action));
         }
     }
 
     protected String getGcmUpdateAction() {
-        return "";
+        return null;
     }
 
     private void initViews(View root) {

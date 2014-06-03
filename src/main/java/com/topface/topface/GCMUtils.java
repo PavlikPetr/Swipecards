@@ -209,7 +209,7 @@ public class GCMUtils {
         }
     }
 
-    private static int getType(Intent extra) {
+    static int getType(Intent extra) {
         String typeString = extra.getStringExtra("type");
         return typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
     }
