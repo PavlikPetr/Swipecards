@@ -211,7 +211,12 @@ public class GCMUtils {
 
     static int getType(Intent extra) {
         String typeString = extra.getStringExtra("type");
-        return typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
+        try {
+            return typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
+        } catch (NumberFormatException exc) {
+            Debug.error(exc);
+            return GCM_TYPE_UNKNOWN;
+        }
     }
 
     private static void setCounters(Intent extra, Context context) {
