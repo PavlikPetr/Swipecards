@@ -258,7 +258,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     public void onDestroyView() {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(readItemReceiver);
-        getActivity().unregisterReceiver(mGcmReceiver);
+        if (getGcmUpdateAction() != null) {
+            getActivity().unregisterReceiver(mGcmReceiver);
+        }
     }
 
     protected abstract Drawable getBackIcon();
