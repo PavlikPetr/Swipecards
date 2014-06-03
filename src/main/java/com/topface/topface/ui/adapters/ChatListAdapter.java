@@ -220,6 +220,14 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             } else {
                 ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
             }
+            if (user.banned) {
+                ((TextView) mHeaderView.findViewById(R.id.tvFirstMessageTitle)).setText(R.string.user_baned);
+                mHeaderView.findViewById(R.id.tvFirstMessageText).setVisibility(View.GONE);
+            }
+            if (user.deleted) {
+                ((TextView) mHeaderView.findViewById(R.id.tvFirstMessageTitle)).setText(R.string.user_is_deleted);
+                mHeaderView.findViewById(R.id.tvFirstMessageText).setVisibility(View.GONE);
+            }
         }
     }
 
