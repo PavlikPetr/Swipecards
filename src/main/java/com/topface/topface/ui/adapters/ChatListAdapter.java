@@ -220,21 +220,29 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             } else {
                 ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
             }
+            if (user.banned) {
+                ((TextView) mHeaderView.findViewById(R.id.tvFirstMessageTitle)).setText(R.string.user_baned);
+                mHeaderView.findViewById(R.id.tvFirstMessageText).setVisibility(View.GONE);
+            }
+            if (user.deleted) {
+                ((TextView) mHeaderView.findViewById(R.id.tvFirstMessageTitle)).setText(R.string.user_is_deleted);
+                mHeaderView.findViewById(R.id.tvFirstMessageText).setVisibility(View.GONE);
+            }
         }
     }
 
     public void addHeader(ListView parentView) {
         if (mHeaderView == null) {
-            try {
-                mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
-                parentView.addHeaderView(mHeaderView);
-                parentView.setStackFromBottom(false);
-                mHeaderView.setVisibility(View.GONE);
-            } catch (OutOfMemoryError e) {
-                Debug.error("Add header OOM", e);
-            } catch (Exception e) {
-                Debug.error(e);
-            }
+            mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
+        }
+        try {
+            parentView.addHeaderView(mHeaderView);
+            parentView.setStackFromBottom(false);
+            mHeaderView.setVisibility(View.GONE);
+        } catch (OutOfMemoryError e) {
+            Debug.error("Add header OOM", e);
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 
