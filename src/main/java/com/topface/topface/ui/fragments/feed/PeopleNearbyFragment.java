@@ -43,7 +43,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     @Override
     protected int getTypeForGCM() {
-        return GCMUtils.GCM_TYPE_GEO;
+        return GCMUtils.GCM_TYPE_PEOPLE_NEARBY;
     }
 
     @Override
@@ -216,6 +216,11 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     @Override
     protected DeleteAbstractRequest getDeleteRequest(List ids) {
         return null;
+    }
+
+    @Override
+    protected String getGcmUpdateAction() {
+        return GCMUtils.GCM_PEOPLE_NEARBY_UPDATE;
     }
 
 }

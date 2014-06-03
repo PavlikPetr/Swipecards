@@ -350,4 +350,9 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_feed_filtered;
     }
+
+    @Override
+    protected String getGcmUpdateAction() {
+        return GCMUtils.GCM_LIKE_UPDATE;
+    }
 }
