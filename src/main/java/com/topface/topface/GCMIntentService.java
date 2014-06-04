@@ -32,11 +32,9 @@ public class GCMIntentService extends GCMBaseIntentService {
                 String user = intent.getStringExtra("user");
 
                 if (user != null) {
-                    GCMUtils.lastNotificationType = GCMUtils.getType(intent);
                     String userId = getUserId(user);
                     broadcastReceiver.putExtra(GCMUtils.USER_ID_EXTRA, userId);
                     context.sendBroadcast(broadcastReceiver);
-
                     Intent updateIntent = null;
                     switch (GCMUtils.getType(intent)) {
                         case GCMUtils.GCM_TYPE_MESSAGE:

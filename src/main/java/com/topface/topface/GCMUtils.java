@@ -340,6 +340,7 @@ public class GCMUtils {
                 i = Utils.getMarketIntent(context);
                 break;
             case GCM_TYPE_DIALOGS:
+                lastNotificationType = GCM_TYPE_DIALOGS;
                 i = new Intent(context, NavigationActivity.class);
                 i.putExtra(NEXT_INTENT, F_DIALOGS);
                 break;
@@ -362,7 +363,6 @@ public class GCMUtils {
                         int id;
                         switch (type) {
                             case GCM_TYPE_MESSAGE:
-                            case GCM_TYPE_GIFT:
                             case GCM_TYPE_DIALOGS:
                                 id = UserNotificationManager.MESSAGES_ID;
                                 break;
