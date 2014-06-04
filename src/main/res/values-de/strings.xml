@@ -76,6 +76,7 @@
     <string name="chat_wink_out">Sie haben angestupst.</string>
     <string name="chat_dialog_gps">GPS ist ausgeschaltet! Einschalten?</string>
     <string name="chat_toast_fail_location">Es klappt nicht, die Lage zu bestimmen</string>
+    <string name="general_location">Lage</string>
     <string name="filter_filter">Filter</string>
     <string name="filter_age_string">Von %1$d bis %2$d</string>
     <string name="filter_only_online">Nur on-line</string>

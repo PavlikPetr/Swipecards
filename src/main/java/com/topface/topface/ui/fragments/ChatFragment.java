@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -60,8 +61,6 @@ import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
@@ -71,14 +70,12 @@ import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
-import com.topface.topface.ui.fragments.buy.BuyingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -93,6 +90,7 @@ import java.util.TimerTask;
 public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     public static final int LIMIT = 50;
+    public static final int ACTIONS_CLOSE_ANIMATION_TIME = 500;
 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
@@ -113,16 +111,26 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
-            boolean isChanged = intent.getBooleanExtra(ContainerActivity.CHANGED, false);
-            if (mActions != null && type != null) {
+            boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
+            if (type != null) {
                 switch (type) {
                     case BLACK_LIST:
-                        mUser.blocked = isChanged;
+                        if (intent.hasExtra(ContainerActivity.VALUE)) {
+                            mUser.blocked = value;
+                            mBlackListActionController.switchAction();
+                        }
+                        mBlackListActionController.setViewsToNormalState();
                         break;
                     case BOOKMARK:
-                        mUser.bookmarked = isChanged;
-                        ((TextView) mActions.findViewById(R.id.bookmark_action_text))
-                                .setText(isChanged ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                        if (intent.hasExtra(ContainerActivity.VALUE)) {
+                            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
+                            if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE)) {
+                                mUser.bookmarked = value;
+                                mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                            }
+                        }
+                        getView().findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
+                        getView().findViewById(R.id.favIcon).setVisibility(View.VISIBLE);
                         break;
                 }
             }
@@ -136,7 +144,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String id = intent.getStringExtra("id");
+            String id = intent.getStringExtra(GCMUtils.USER_ID_EXTRA);
             if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
                 update(true, "update counters");
                 startTimer();
@@ -240,6 +248,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         Debug.log(this, "+onCreate");
         // mChatActions
         mChatActionsStub = (ViewStub) root.findViewById(R.id.chat_actions_stub);
+        mActions = null;
         // Navigation bar
         initNavigationbar(mUserName, mUserAge, mUserCity);
         // Swap Control
@@ -654,12 +663,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
             case R.id.add_to_black_list_action:
-                if (CacheProfile.premium) {
-                    mBlackListActionController.processActionFor(mUserId);
-                } else {
-                    startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                    closeChatActions();
-                }
+                mBlackListActionController.processActionFor(mUserId);
                 break;
             case R.id.acWProfile:
             case R.id.acProfile:
@@ -681,25 +685,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     request = new BookmarkAddRequest(mUserId, getActivity());
                 }
 
-                request.callback(new SimpleApiHandler() {
-                    @Override
-                    public void success(IApiResponse response) {
-                        super.success(response);
-                        Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BOOKMARK, !mUser.bookmarked);
-                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-                        loader.setVisibility(View.INVISIBLE);
-                        icon.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void always(IApiResponse response) {
-                        super.always(response);
-                        if (isAdded()) {
-                            loader.setVisibility(View.INVISIBLE);
-                            icon.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }).exec();
+                request.exec();
                 break;
             case R.id.complain_action:
                 startActivity(ContainerActivity.getComplainIntent(mUserId));
@@ -746,6 +732,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
     }
 
+    /**
+     * Note: if you starting new activity and need actions' menu to be closed after,
+     * then first call this method. Actions' menu view will fully disappear before new
+     * activity will be shown
+     */
     private void closeChatActions() {
         if (mBarAvatar.isChecked()) {
             onOptionsItemSelected(mBarAvatar);
@@ -796,12 +787,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                    mAdapter.removeItem(loaderItem);
+                    if (mAdapter != null) {
+                        mAdapter.removeItem(loaderItem);
+                    }
                     Intent intent = ContainerActivity.getBuyingIntent("Chat");
-                    intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                    intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                    intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
+                    intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
                     startActivity(intent);
-                } else {
+                } else if (mAdapter != null) {
                     mAdapter.showRetrySendMessage(loaderItem, sendGift);
                 }
             }
@@ -914,7 +907,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         initActions(mChatActionsStub, mUser, getActions(mUser));
                         boolean checked = item.isChecked();
                         item.setChecked(!checked);
-                        animateChatActions(checked, 500);
+                        animateChatActions(checked, ACTIONS_CLOSE_ANIMATION_TIME);
                     } else {
                         Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                                 Toast.LENGTH_LONG).show();
@@ -953,7 +946,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             UserActions userActions = new UserActions(mActions, actions);
             TextView bookmarksTv = (TextView) userActions.getViewById(R.id.add_to_bookmark_action).findViewById(R.id.bookmark_action_text);
             mBlackListActionController = new AddToBlackListViewsController(mActions);
-            mBlackListActionController.setInBlackList(user.blocked);
+            mBlackListActionController.switchAction();
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
         }
@@ -1010,8 +1003,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         final View actionLoader;
         final View actionIcon;
 
-        private boolean isInBlackList = false;
-
         AddToBlackListViewsController(View root) {
             View actionView = root.findViewById(R.id.add_to_black_list_action);
             actionText = (TextView) actionView.findViewById(R.id.block_action_text);
@@ -1019,74 +1010,36 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             actionIcon = actionView.findViewById(R.id.blockIcon);
             // click listener for actionView is set through UserActions
             // set states for views
-            initViews(isInBlackList);
+            switchAction();
         }
 
-        public void addToBlackList(int userId) {
-            if (userId > 0) {
-                BlackListAddRequest blackListRequest = new BlackListAddRequest(userId, getActivity());
-                execRequest(blackListRequest, true);
-            }
-        }
-
-        public void removeFromBlackList(int userId) {
-            if (userId > 0) {
-                DeleteBlackListRequest blackListRequest = new DeleteBlackListRequest(userId, getActivity());
-                execRequest(blackListRequest, false);
-            }
-        }
-
-        private void execRequest(ApiRequest blackListRequest, final boolean toBlackList) {
-            actionLoader.setVisibility(View.VISIBLE);
-            actionIcon.setVisibility(View.INVISIBLE);
-            blackListRequest.callback(new VipApiHandler() {
-                @Override
-                public void success(IApiResponse response) {
-                    super.success(response);
-                    isInBlackList = toBlackList;
-                    if (isAdded()) {
-                        onChange(isInBlackList);
-                    }
-                }
-
-                @Override
-                public void always(IApiResponse response) {
-                    super.always(response);
-                    if (isAdded()) {
-                        actionLoader.setVisibility(View.INVISIBLE);
-                        actionIcon.setVisibility(View.VISIBLE);
-                    }
-                }
-            }).exec();
-        }
-
-        private void initViews(boolean inBlackList) {
-            int resIdText = inBlackList ? R.string.black_list_delete : R.string.black_list_add_short;
-            actionText.setText(resIdText);
-        }
-
-        public void setInBlackList(boolean value) {
-            isInBlackList = value;
-            initViews(value);
-        }
-
-        private void onChange(boolean inBlackList) {
-            initViews(inBlackList);
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
-                    ContainerActivity.getIntentForActionsUpdate(
-                            ContainerActivity.ActionTypes.BLACK_LIST,
-                            !inBlackList
-                    )
-            );
+        public void switchAction() {
+            actionText.setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
         }
 
         public void processActionFor(int userId) {
-            if (isInBlackList) {
-                removeFromBlackList(userId);
+            if (CacheProfile.premium) {
+                if (userId > 0) {
+                    actionLoader.setVisibility(View.VISIBLE);
+                    actionIcon.setVisibility(View.GONE);
+
+                    ApiRequest request;
+                    if (mUser.blocked) {
+                        request = new DeleteBlackListRequest(userId, getActivity());
+                    } else {
+                        request = new BlackListAddRequest(userId, getActivity());
+                    }
+                    request.exec();
+                }
             } else {
-                addToBlackList(userId);
+                startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                closeChatActions();
             }
         }
-    }
 
+        public void setViewsToNormalState() {
+            actionLoader.setVisibility(View.INVISIBLE);
+            actionIcon.setVisibility(View.VISIBLE);
+        }
+    }
 }

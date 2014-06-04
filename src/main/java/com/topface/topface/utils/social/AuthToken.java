@@ -3,9 +3,9 @@ package com.topface.topface.utils.social;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
-import com.topface.topface.utils.Debug;
 
 public class AuthToken {
     // Data

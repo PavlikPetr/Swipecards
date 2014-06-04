@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -43,8 +42,8 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     @Override
-    protected int getTypeForGCM() {
-        return GCMUtils.GCM_TYPE_GEO;
+    protected int[] getTypesForGCM() {
+        return new int[]{GCMUtils.GCM_TYPE_PEOPLE_NEARBY};
     }
 
     @Override
@@ -173,7 +172,6 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                         public void fail(int codeError, IApiResponse response) {
                             super.fail(codeError, response);
                             if (isAdded() && codeError == ErrorCodes.PAYMENT) {
-                                Toast.makeText(getActivity(), R.string.not_enough_coins, Toast.LENGTH_LONG).show();
                                 openBuyScreenOnBlockedGeo(blockPeopleNearby);
                             }
                         }
@@ -218,6 +216,11 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     @Override
     protected DeleteAbstractRequest getDeleteRequest(List ids) {
         return null;
+    }
+
+    @Override
+    protected String getGcmUpdateAction() {
+        return GCMUtils.GCM_PEOPLE_NEARBY_UPDATE;
     }
 
 }

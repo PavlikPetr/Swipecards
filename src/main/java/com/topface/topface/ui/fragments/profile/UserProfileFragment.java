@@ -53,8 +53,11 @@ import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
-import com.topface.topface.ui.fragments.GiftsFragment;
-import com.topface.topface.ui.fragments.buy.BuyingFragment;
+import com.topface.topface.ui.fragments.PurchasesFragment;
+import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
+import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
+import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
+import com.topface.topface.ui.fragments.gift.UserGiftsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
@@ -107,20 +110,26 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         @Override
         public void onReceive(Context context, Intent intent) {
             ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
-            boolean isChanged = intent.getBooleanExtra(ContainerActivity.CHANGED, false);
+            boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
             Profile profile = getProfile();
             if (profile != null && type != null) {
                 switch (type) {
                     case BLACK_LIST:
-                        ((User) profile).inBlackList = isChanged;
+                        ((User) profile).inBlackList = value;
                         if (mBlocked != null) {
-                            ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(isChanged ? R.string.black_list_delete : R.string.black_list_add_short);
+                            ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(value ? R.string.black_list_delete : R.string.black_list_add_short);
                         }
+                        getView().findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
+                        getView().findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
                         break;
                     case BOOKMARK:
-                        ((User) profile).bookmarked = isChanged;
-                        if (mBookmarkAction != null) {
-                            mBookmarkAction.setText(isChanged ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                        if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE)) {
+                            ((User) profile).bookmarked = value;
+                            mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                        }
+                        if (isAdded()) {
+                            getView().findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
+                            getView().findViewById(R.id.favIcon).setVisibility(View.VISIBLE);
                         }
                         break;
                 }
@@ -190,7 +199,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         super.initBody();
         addBodyPage(UserPhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
         addBodyPage(UserFormFragment.class.getName(), getResources().getString(R.string.profile_form));
-        addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
+        addBodyPage(UserGiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
     }
 
     private void initActions(ViewStub stub, User user, ArrayList<UserActions.ActionItem> actions) {
@@ -305,6 +314,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (status == null || TextUtils.isEmpty(status)) {
                             mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
                         }
+                    }
+                    if (user.isSympathySent) {
+                        mRateController.userRateBroadcast(user.uid);
                     }
                 }
                 mLastLoadedProfileId = mProfileId;
@@ -522,8 +534,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 mGiftsIcon = (ImageView) v.findViewById(R.id.giftIcon);
                 mGiftsLoader.setVisibility(View.VISIBLE);
                 mGiftsIcon.setVisibility(View.INVISIBLE);
-                if (mGiftFragment != null && mGiftFragment.getActivity() != null) {
-                    mGiftFragment.sendGift(mGiftsReceivedListener);
+                UserGiftsFragment giftsFragment = getGiftFragment();
+                if (giftsFragment != null && giftsFragment.getActivity() != null) {
+                    giftsFragment.sendGift(mGiftsReceivedListener);
                 } else {
                     startActivityForResult(
                             GiftsActivity.getSendGiftIntent(getActivity(), mProfileId, false),
@@ -565,32 +578,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         } else {
                             request = new BlackListAddRequest(profile.uid, getActivity());
                         }
-                        request.callback(new VipApiHandler() {
-                            @Override
-                            public void success(IApiResponse response) {
-                                super.success(response);
-                                if (isAdded()) {
-                                    loader.setVisibility(View.INVISIBLE);
-                                    icon.setVisibility(View.VISIBLE);
-                                    Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BLACK_LIST, !((User) profile).inBlackList);
-                                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-                                    if (profile.inBlackList) {
-                                        textView.setText(R.string.black_list_delete);
-                                    } else {
-                                        textView.setText(R.string.black_list_add_short);
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                                super.fail(codeError, response);
-                                if (isAdded()) {
-                                    loader.setVisibility(View.INVISIBLE);
-                                    icon.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        }).exec();
+                        request.exec();
                     }
                 } else {
                     startActivityForResult(ContainerActivity.getVipBuyIntent(null, "ProfileSuperSkills"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
@@ -610,25 +598,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     request = new BookmarkAddRequest(profile.uid, getActivity());
                 }
 
-                request.callback(new SimpleApiHandler() {
-                    @Override
-                    public void success(IApiResponse response) {
-                        super.success(response);
-                        Intent intent = ContainerActivity.getIntentForActionsUpdate(ContainerActivity.ActionTypes.BOOKMARK, !((User) profile).bookmarked);
-                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-                        loader.setVisibility(View.INVISIBLE);
-                        icon.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void always(IApiResponse response) {
-                        super.always(response);
-                        if (isAdded()) {
-                            loader.setVisibility(View.INVISIBLE);
-                            icon.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }).exec();
+                request.exec();
                 break;
             case R.id.complain_action:
                 startActivity(ContainerActivity.getComplainIntent(mProfileId));
@@ -644,7 +614,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case GiftsActivity.INTENT_REQUEST_GIFT:
-                    if (mGiftFragment == null || !mGiftFragment.isAdded()) {
+                    UserGiftsFragment giftsFragment = getGiftFragment();
+                    if (giftsFragment == null || !giftsFragment.isAdded()) {
                         sendGift(data);
                         return;
                     }
@@ -680,8 +651,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
                     @Override
                     protected void success(SendGiftAnswer data, IApiResponse response) {
-                        if (mGiftFragment != null) {
-                            mGiftFragment.addGift(sendedGift);
+                        UserGiftsFragment giftsFragment = getGiftFragment();
+                        if (giftsFragment != null) {
+                            giftsFragment.addGift(sendedGift);
                         } else {
                             profile.gifts.add(0, sendedGift.gift);
                         }
@@ -699,8 +671,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             FragmentActivity activity = getActivity();
                             if (activity != null) {
                                 Intent intent = ContainerActivity.getBuyingIntent("Profile");
-                                intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                                intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                                intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
+                                intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
                                 startActivity(intent);
                             }
                         } else {
@@ -752,5 +724,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     public interface OnGiftReceivedListener {
         public void onReceived();
+    }
+
+    @Override
+    protected UserGiftsFragment getGiftFragment() {
+        return (UserGiftsFragment) super.getGiftFragment();
     }
 }

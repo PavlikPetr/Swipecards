@@ -225,6 +225,7 @@
     <string name="settings_melody">Bildirim sesi</string>
     <string name="edit_refresh_status">Durumu yenilemek</string>
     <string name="ban_title">Tebrikler! Siz ban edildiniz</string>
+    <string name="ban_complain">Engellemeyi şikayet etmek</string>
     <string name="general_ready">Hazır</string>
     <string name="profile_deleted_user">Kullanıcı silinmiştir</string>
     <string name="filter_main_parameters">İlgi alanlarım</string>
@@ -494,6 +495,7 @@
     <string name="general_type_complain">Şikâyet konusu</string>
     <string name="confirm_email_for_dating">Biz spama karşıyız. Topface’de tanışmak için posta adresinizi onaylayın!</string>
     <string name="confirm">Onaylamak</string>
+    <string name="send_confirm_link">Onaylama için link göndermek</string>
     <string name="complain_type_swearing_msg">Kabalık, tehdit, küfür</string>
     <string name="general_bookmarks_is_deleted">Kullanıcı seçilmişlerden silinmiştir</string>
     <string name="general_blacklist_is_deleted">Kullanıcı kara listeden silinmiştir</string>
@@ -582,6 +584,8 @@
     <string name="default_ringtone">Varsayılan</string>
     <string name="photo_info_deleted">Silinmiştir</string>
     <string name="user_deleted_or_banned">Kullanıcı silinmiş veya engellenmiştir</string>
+    <string name="locking_popup_title">«%s» bölümüne geçiş sınırlıdır</string>
+    <string name="locking_popup_message">Erişim için gelen sempatilere cevap verin veya VIP alın</string>
     <string name="locking_popup_button_answer">Sempatilere cevap vermek</string>
     <string name="locking_menu_message">Uygulamanın bazı sayfalarına erişim sınırlıdır. Tüm sınırları kaldırmak için tüm gelen sempatilere cevap verin veya VIP alın.</string>
     <string name="locking_likes_message">Dikkat! Uygulamanın bazı sayfalarına erişim sınırlıdır. Tüm sınırları kaldırmak için tüm gelen sempatilere cevap verin veya VIP alın.</string>
@@ -640,4 +644,10 @@
     <string name="press_back_more_to_close_app">Topface\'den çıkmak için bir daha geri düğmesine tıklayın</string>
     <string name="waiting_for_load">Bekleyin, yükleme yapılıyor…</string>
     <string name="loading_photo_percent">%d%% resim yüklemesi</string>
+    <string name="profile_update_error">Bilgi yenileme hatası</string>
+    <string name="retry_cancel_editing">Bilgi gönderme sırasında bağlantı hatası oluşmuştur. Yeniden denemek yoksa kaydetmeden çıkış yapmak mı istiyorsunuz?</string>
+    <string name="user_does_not_exist">Kullanıcı bulunamamıştır.</string>
+    <string name="feedback_subject_ban">İftira engellemeye karşı şikayet</string>
+    <string name="settings_led">LED bildirim</string>
+    <string name="buying_not_enough_coins">Size %d {{coins}} yetmiyor</string>
 </resources>

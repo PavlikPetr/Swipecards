@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
@@ -30,7 +31,6 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.geo.AddressesCache;
 
@@ -220,21 +220,25 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             } else {
                 ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
             }
+            if (user.deleted || user.banned) {
+                ((TextView) mHeaderView.findViewById(R.id.tvFirstMessageTitle)).setText(R.string.user_deleted_or_banned);
+                mHeaderView.findViewById(R.id.tvFirstMessageText).setVisibility(View.GONE);
+            }
         }
     }
 
     public void addHeader(ListView parentView) {
         if (mHeaderView == null) {
-            try {
-                mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
-                parentView.addHeaderView(mHeaderView);
-                parentView.setStackFromBottom(false);
-                mHeaderView.setVisibility(View.GONE);
-            } catch (OutOfMemoryError e) {
-                Debug.error("Add header OOM", e);
-            } catch (Exception e) {
-                Debug.error(e);
-            }
+            mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
+        }
+        try {
+            parentView.addHeaderView(mHeaderView);
+            parentView.setStackFromBottom(false);
+            mHeaderView.setVisibility(View.GONE);
+        } catch (OutOfMemoryError e) {
+            Debug.error("Add header OOM", e);
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 
@@ -625,8 +629,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         setLongClickListenerIfPresented(position, convertView, holder.gift);
     }
 
-    private void setLongClickListenerIfPresented(final int position, final View convertView, final View view)
-    {
+    private void setLongClickListenerIfPresented(final int position, final View convertView, final View view) {
         if (view != null && convertView != null) {
             convertView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

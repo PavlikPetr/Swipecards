@@ -12,22 +12,41 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.text.TextUtils;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.*;
+import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.imageloader.DefaultImageLoader;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BlackListAddRequest;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.DeleteAbstractRequest;
+import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -40,8 +59,8 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
+
 import org.json.JSONObject;
 
 import java.util.List;
@@ -61,6 +80,34 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected View mLockView;
 
     private BroadcastReceiver readItemReceiver;
+    private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.hasExtra(ContainerActivity.TYPE) &&
+                    intent.getSerializableExtra(ContainerActivity.TYPE)
+                            .equals(ContainerActivity.ActionTypes.BLACK_LIST) && isAdded()) {
+                int[] ids = intent.getIntArrayExtra(ContainerActivity.FEED_IDS);
+                boolean hasValue = intent.hasExtra(ContainerActivity.VALUE);
+                boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
+                if (ids != null && hasValue) {
+                    if (value == whetherDeleteIfBlacklisted()) {
+                        getListAdapter().removeByUserIds(ids);
+                    } else {
+                        needUpdate = true;
+                    }
+                }
+            }
+        }
+    };
+    private BroadcastReceiver mGcmReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            for (int type : getTypesForGCM()) {
+                GCMUtils.cancelNotification(getActivity(), type);
+            }
+            updateData(true, false);
+        }
+    };
 
     private FloatBlock mFloatBlock;
 
@@ -103,8 +150,22 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver, filter);
-        GCMUtils.cancelNotification(getActivity(), getTypeForGCM());
+        for (int type : getTypesForGCM()) {
+            GCMUtils.cancelNotification(getActivity(), type);
+        }
+        registerGcmReceiver();
         return root;
+    }
+
+    private void registerGcmReceiver() {
+        String action = getGcmUpdateAction();
+        if (action != null) {
+            getActivity().registerReceiver(mGcmReceiver, new IntentFilter(action));
+        }
+    }
+
+    protected String getGcmUpdateAction() {
+        return null;
     }
 
     private void initViews(View root) {
@@ -140,6 +201,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (getListAdapter().isNeedUpdate() || needUpdate) {
@@ -169,6 +236,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mFloatBlock != null) {
             mFloatBlock.onDestroy();
         }
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
     }
 
     protected void init() {
@@ -195,11 +263,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     public void onDestroyView() {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(readItemReceiver);
+        if (getGcmUpdateAction() != null) {
+            getActivity().unregisterReceiver(mGcmReceiver);
+        }
     }
 
     protected abstract Drawable getBackIcon();
 
-    abstract protected int getTypeForGCM();
+    protected int[] getTypesForGCM() {
+        return new int[]{GCMUtils.GCM_TYPE_UNKNOWN};
+    }
 
     abstract protected int getTypeForCounters();
 
@@ -345,7 +418,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     onDeleteFeedItems(getSelectedFeedIds(adapter), adapter.getSelectedItems());
                     break;
                 case R.id.add_to_black_list:
-                    onAddToBlackList(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
+                    onAddToBlackList(adapter.getSelectedUsersIds());
                     break;
                 default:
                     result = false;
@@ -375,17 +448,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return R.menu.feed_context_menu;
     }
 
-    private void onAddToBlackList(List<Integer> ids, final List<T> items) {
-        new BlackListAddRequest(ids, getActivity())
-                .callback(new VipApiHandler() {
-                    @Override
-                    public void success(IApiResponse response) {
-                        FeedAdapter<T> adapter = getListAdapter();
-                        if (adapter != null) {
-                            adapter.removeItems(items);
-                        }
-                    }
-                }).exec();
+    private void onAddToBlackList(List<Integer> ids) {
+        BlackListAddRequest r = new BlackListAddRequest(ids, getActivity());
+        r.handler.setOnCompleteAction(new ApiHandler.CompleteAction() {
+            @Override
+            public void onCompleteAction() {
+                if (mLockView != null) {
+                    mLockView.setVisibility(View.GONE);
+                }
+            }
+        });
+        mLockView.setVisibility(View.VISIBLE);
+        r.exec();
     }
 
     private void onDeleteFeedItems(List<String> ids, final List<T> items) {
@@ -398,6 +472,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             return;
         }
         mLockView.setVisibility(View.VISIBLE);
+        if (dr.handler != null) {
+            dr.handler.setOnCompleteAction(new ApiHandler.CompleteAction() {
+                @Override
+                public void onCompleteAction() {
+                    if (mLockView != null) {
+                        mLockView.setVisibility(View.GONE);
+                    }
+                }
+            });
+            dr.exec();
+            return;
+        }
         dr.callback(new SimpleApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -840,5 +926,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             button.setText(buttonText);
             button.setOnClickListener(listener);
         }
+    }
+
+    protected boolean whetherDeleteIfBlacklisted() {
+        return true;
+    }
+
+    public void updateOnResume() {
+        needUpdate = true;
     }
 }

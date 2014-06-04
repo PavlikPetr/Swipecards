@@ -15,6 +15,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -34,7 +35,6 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
@@ -93,8 +93,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected int getTypeForGCM() {
-        return GCMUtils.GCM_TYPE_LIKE;
+    protected int[] getTypesForGCM() {
+        return new int[]{GCMUtils.GCM_TYPE_LIKE};
     }
 
     @Override
@@ -244,7 +244,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         public void fail(int codeError, IApiResponse response) {
                             super.fail(codeError, response);
                             if (codeError == ErrorCodes.PAYMENT) {
-                                Toast.makeText(getActivity(), R.string.not_enough_coins, Toast.LENGTH_LONG).show();
                                 openBuyScreenOnBlockedLikes(blockSympathyOptions);
                             }
                         }
@@ -350,5 +349,10 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_feed_filtered;
+    }
+
+    @Override
+    protected String getGcmUpdateAction() {
+        return GCMUtils.GCM_LIKE_UPDATE;
     }
 }

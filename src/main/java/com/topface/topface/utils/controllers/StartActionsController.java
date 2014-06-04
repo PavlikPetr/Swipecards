@@ -2,9 +2,9 @@ package com.topface.topface.utils.controllers;
 
 import android.app.Activity;
 
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
-import com.topface.topface.utils.BackgroundThread;
-import com.topface.topface.utils.Debug;
 
 import java.util.LinkedList;
 import java.util.List;

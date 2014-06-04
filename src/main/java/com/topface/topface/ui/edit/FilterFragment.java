@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -20,7 +21,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 
 import org.json.JSONException;
@@ -73,7 +73,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private void initFilter() {
         try {
-            mFilter = CacheProfile.dating.clone();
+            //Странный, достаточно редкий баг, но бывает что CacheProfile.dating == null
+            mFilter = (CacheProfile.dating != null) ?
+                    CacheProfile.dating.clone() :
+                    new DatingFilter();
             mInitFilter = mFilter.clone();
             mInitFilterOnline = DatingFilter.getOnlyOnlineField();
         } catch (CloneNotSupportedException e) {
@@ -280,8 +283,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private String buildAgeString() {
-        String plus = mFilter.ageEnd == DatingFilter.webAbsoluteMaxAge ? "+" : "";
-        int age_end = mFilter.ageEnd == DatingFilter.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : mFilter.ageEnd;
+        String plus = mFilter.ageEnd == DatingFilter.MAX_AGE ? "+" : "";
+        int age_end = mFilter.ageEnd == DatingFilter.MAX_AGE ? EditAgeFragment.absoluteMax : mFilter.ageEnd;
         return getString(R.string.filter_age_string, mFilter.ageStart, age_end) + plus;
     }
 
@@ -408,7 +411,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 int ageEnd = extras.getInt(EditContainerActivity.INTENT_AGE_END);
                 if (ageEnd != 0 && ageStart != 0) {
                     if (ageEnd == EditAgeFragment.absoluteMax) {
-                        ageEnd = DatingFilter.webAbsoluteMaxAge;
+                        ageEnd = DatingFilter.MAX_AGE;
                     }
                 }
                 mFilter.ageEnd = ageEnd;

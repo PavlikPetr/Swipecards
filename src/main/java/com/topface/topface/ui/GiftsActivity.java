@@ -4,19 +4,28 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.SendGiftAnswer;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.GiftsRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.fragments.GiftsFragment;
-import com.topface.topface.ui.fragments.buy.BuyingFragment;
+import com.topface.topface.ui.fragments.PurchasesFragment;
+import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
+import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
 import com.topface.topface.ui.views.TripleButton;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -38,7 +47,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
     public GiftsCollection mGiftsCollection;
     private TripleButton mTripleButton;
-    private GiftsFragment mGiftFragment;
+    private PlainGiftsFragment mGiftFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +57,16 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
         mUserIdToSendGift = getIntent().getIntExtra(INTENT_USER_ID_TO_SEND_GIFT, 0);
         mNeedToSendGift = getIntent().getBooleanExtra(INTENT_SEND_GIFT, true);
-        mGiftFragment = new GiftsFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.giftGrid, mGiftFragment, GiftsFragment.GIFTS_ALL_TAG).commit();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (fragment == null || !(fragment.getClass().equals(PlainGiftsFragment.class))) {
+            mGiftFragment = new PlainGiftsFragment();
+            transaction.add(R.id.giftGrid, mGiftFragment);
+        } else {
+            mGiftFragment = (PlainGiftsFragment) fragment;
+            transaction.replace(R.id.giftGrid, mGiftFragment);
+        }
+        transaction.commit();
 
         mGiftsCollection = new GiftsCollection();
 
@@ -101,12 +117,13 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }
         });
 
+        loadGifts();
     }
 
     /**
      * Loading array of gifts from server
      */
-    private void update() {
+    private void loadGifts() {
         if (mGiftsList.isEmpty()) {
             mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
             mTripleButton.setEnabled(false);
@@ -152,7 +169,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     protected void onResume() {
         super.onResume();
-        update();
         switch (GiftsCollection.currentType) {
             case Gift.ROMANTIC:
                 mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
@@ -205,7 +221,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 public void fail(int codeError, final IApiResponse response) {
                     setSupportProgressBarIndeterminateVisibility(false);
                     if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                        startActivity(ContainerActivity.getBuyingIntent("Gifts", BuyingFragment.TYPE_GIFT, item.price));
+                        startActivity(ContainerActivity.getBuyingIntent("Gifts", PurchasesFragment.TYPE_GIFT, item.price));
                     }
                 }
             }).exec();

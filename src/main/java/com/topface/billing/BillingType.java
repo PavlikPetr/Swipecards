@@ -9,6 +9,7 @@ public enum BillingType {
     AMAZON("amazon"),
     NOKIA_STORE("android-nokia");
 
+
     private final String mClientType;
 
     BillingType(String clientType) {

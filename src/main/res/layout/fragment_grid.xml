@@ -45,19 +45,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/you_dont_have_gifts_yet"
+            android:layout_gravity="center_horizontal"
             style="@style/BackgroundTitleText" />
 
         <Button
             android:id="@+id/btnInfo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
             android:text="@string/buy_sympathies"
-            android:background="@drawable/btn_blue_selector"
-            style="@style/VipItemTitleWhiteText"
-            android:textStyle="bold"
-            android:padding="10dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp" />
+            style="@style/Widget.Topface.Button.Big.Blue"
+            android:minWidth="210dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
     </LinearLayout>
 
 </RelativeLayout>

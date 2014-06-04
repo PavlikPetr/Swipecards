@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -50,7 +51,6 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.config.UserConfig;
@@ -120,7 +120,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                     }
                     break;
                 case Products.INTENT_UPDATE_PRODUCTS:
-                    Products products = CacheProfile.getProducts();
+                    Products products = CacheProfile.getMarketProducts();
                     if (products != null && mBuyWidgetController != null) {
                         mBuyWidgetController.setSalesEnabled(products.saleExists);
                     }
@@ -262,7 +262,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 mFooterView.findViewById(R.id.countersLayout));
         getListView().addFooterView(mFooterView);
 
-        Products products = CacheProfile.getProducts();
+        Products products = CacheProfile.getMarketProducts();
         mBuyWidgetController.setSalesEnabled(products != null && products.saleExists);
         initEditor();
     }
@@ -368,7 +368,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         initProfileMenuItem(mHeaderView);
         if (mBuyWidgetController != null) {
             mBuyWidgetController.updateBalance();
-            Products products = CacheProfile.getProducts();
+            Products products = CacheProfile.getMarketProducts();
             if (products != null && products.saleExists == !mBuyWidgetController.salesEnabled) {
                 mBuyWidgetController.setSalesEnabled(products.saleExists);
             }
@@ -543,7 +543,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 fragment = new PeopleNearbyFragment();
                 break;
             case F_BONUS:
-                fragment = new BonusFragment();
+                fragment = BonusFragment.newInstance(true);
                 break;
             case F_VISITORS:
                 fragment = new VisitorsFragment();

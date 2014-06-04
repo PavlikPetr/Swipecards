@@ -8,12 +8,14 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.GiftsFragment;
+import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
+import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
 import com.topface.topface.ui.views.DarkenImageView;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -35,7 +37,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     // state
     protected HeaderMainFragment mHeaderMainFragment;
     protected ProfilePageAdapter mHeaderPagerAdapter;
-    protected GiftsFragment mGiftFragment;
+    private UpdatableGiftsFragment mGiftFragment;
     private ArrayList<String> BODY_PAGES_TITLES = new ArrayList<>();
     private ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<>();
     private ArrayList<String> HEADER_PAGES_CLASS_NAMES = new ArrayList<>();
@@ -58,8 +60,8 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
                 mUserPhotoFragment = (UserPhotoFragment) fragment;
             } else if (fragment instanceof UserFormFragment) {
                 mUserFormFragment = (UserFormFragment) fragment;
-            } else if (fragment instanceof GiftsFragment) {
-                mGiftFragment = (GiftsFragment) fragment;
+            } else if (fragment instanceof UpdatableGiftsFragment) {
+                mGiftFragment = (UpdatableGiftsFragment) fragment;
             }
         }
 
@@ -164,7 +166,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     protected void setProfile(Profile profile) {
         int previousBackground = mProfile != null ? mProfile.background : -1;
         mProfile = profile;
-        if (previousBackground != mProfile.background && mBackgroundView != null) {
+        if (mProfile != null && previousBackground != mProfile.background && mBackgroundView != null) {
             mBackgroundView.setImageResource(
                     ProfileBackgrounds.getBackgroundResource(getActivity(), mProfile.background)
             );
@@ -314,5 +316,9 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         Profile getProfile();
 
         int getProfileType();
+    }
+
+    protected UpdatableGiftsFragment getGiftFragment() {
+        return mGiftFragment;
     }
 }

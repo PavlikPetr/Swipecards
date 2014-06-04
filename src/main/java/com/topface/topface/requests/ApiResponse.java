@@ -1,8 +1,8 @@
 package com.topface.topface.requests;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.utils.Debug;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -116,7 +116,7 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
     }
 
     /**
-     *  Если ответ не содержит поля ошибки и содержит ответ, то он завершился удачно
+     * Если ответ не содержит поля ошибки и содержит ответ, то он завершился удачно
      *
      * @return флаг выполенения запроса
      */
