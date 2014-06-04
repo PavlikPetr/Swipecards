@@ -32,6 +32,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                 String user = intent.getStringExtra("user");
 
                 if (user != null) {
+                    GCMUtils.lastNotificationType = GCMUtils.getType(intent);
                     String userId = getUserId(user);
                     broadcastReceiver.putExtra(GCMUtils.USER_ID_EXTRA, userId);
                     context.sendBroadcast(broadcastReceiver);

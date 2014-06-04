@@ -359,7 +359,16 @@ public class GCMUtils {
             public void run() {
                 if (type == lastNotificationType) {
                     if (context != null) {
-                        int id = type == GCM_TYPE_MESSAGE ? UserNotificationManager.MESSAGES_ID : UserNotificationManager.NOTIFICATION_ID;
+                        int id;
+                        switch (type) {
+                            case GCM_TYPE_MESSAGE:
+                            case GCM_TYPE_GIFT:
+                            case GCM_TYPE_DIALOGS:
+                                id = UserNotificationManager.MESSAGES_ID;
+                                break;
+                            default:
+                                id = UserNotificationManager.NOTIFICATION_ID;
+                        }
                         UserNotificationManager.getInstance(context).cancelNotification(id);
                     }
                 }

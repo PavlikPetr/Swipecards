@@ -42,8 +42,8 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     @Override
-    protected int getTypeForGCM() {
-        return GCMUtils.GCM_TYPE_PEOPLE_NEARBY;
+    protected int[] getTypesForGCM() {
+        return new int[]{GCMUtils.GCM_TYPE_PEOPLE_NEARBY};
     }
 
     @Override
