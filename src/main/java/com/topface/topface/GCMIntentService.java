@@ -35,7 +35,6 @@ public class GCMIntentService extends GCMBaseIntentService {
                     String userId = getUserId(user);
                     broadcastReceiver.putExtra(GCMUtils.USER_ID_EXTRA, userId);
                     context.sendBroadcast(broadcastReceiver);
-
                     Intent updateIntent = null;
                     switch (GCMUtils.getType(intent)) {
                         case GCMUtils.GCM_TYPE_MESSAGE:

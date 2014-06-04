@@ -93,8 +93,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected int getTypeForGCM() {
-        return GCMUtils.GCM_TYPE_LIKE;
+    protected int[] getTypesForGCM() {
+        return new int[]{GCMUtils.GCM_TYPE_LIKE};
     }
 
     @Override

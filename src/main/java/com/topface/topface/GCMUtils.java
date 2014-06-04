@@ -340,6 +340,7 @@ public class GCMUtils {
                 i = Utils.getMarketIntent(context);
                 break;
             case GCM_TYPE_DIALOGS:
+                lastNotificationType = GCM_TYPE_DIALOGS;
                 i = new Intent(context, NavigationActivity.class);
                 i.putExtra(NEXT_INTENT, F_DIALOGS);
                 break;
@@ -359,7 +360,15 @@ public class GCMUtils {
             public void run() {
                 if (type == lastNotificationType) {
                     if (context != null) {
-                        int id = type == GCM_TYPE_MESSAGE ? UserNotificationManager.MESSAGES_ID : UserNotificationManager.NOTIFICATION_ID;
+                        int id;
+                        switch (type) {
+                            case GCM_TYPE_MESSAGE:
+                            case GCM_TYPE_DIALOGS:
+                                id = UserNotificationManager.MESSAGES_ID;
+                                break;
+                            default:
+                                id = UserNotificationManager.NOTIFICATION_ID;
+                        }
                         UserNotificationManager.getInstance(context).cancelNotification(id);
                     }
                 }

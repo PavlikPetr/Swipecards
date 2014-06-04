@@ -102,6 +102,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private BroadcastReceiver mGcmReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            for (int type : getTypesForGCM()) {
+                GCMUtils.cancelNotification(getActivity(), type);
+            }
             updateData(true, false);
         }
     };
@@ -147,7 +150,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver, filter);
-        GCMUtils.cancelNotification(getActivity(), getTypeForGCM());
+        for (int type : getTypesForGCM()) {
+            GCMUtils.cancelNotification(getActivity(), type);
+        }
         registerGcmReceiver();
         return root;
     }
@@ -265,7 +270,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected abstract Drawable getBackIcon();
 
-    abstract protected int getTypeForGCM();
+    protected int[] getTypesForGCM() {
+        return new int[]{GCMUtils.GCM_TYPE_UNKNOWN};
+    }
 
     abstract protected int getTypeForCounters();
 
