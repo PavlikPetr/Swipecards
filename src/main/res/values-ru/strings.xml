@@ -121,16 +121,19 @@
         <item quantity="one">Чтобы отправить подарок, купите еще %d монету</item>
         <item quantity="few">Чтобы отправить подарок, купите еще %d монеты</item>
         <item quantity="many">Чтобы отправить подарок, купите еще %d монет</item>
+        <item quantity="other">Чтобы отправить подарок, купите еще %d монет</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="one">Чтобы увидеть, кому вы нравитесь, купите еще %d монету</item>
         <item quantity="few">Чтобы увидеть, кому вы нравитесь, купите еще %d монеты</item>
         <item quantity="many">Чтобы увидеть, кому вы нравитесь, купите еще %d монет</item>
+        <item quantity="other">Чтобы увидеть, кому вы нравитесь, купите еще %d монет</item>
     </plurals>
     <plurals name="buying_leaders_you_need_coins">
         <item quantity="one">Чтобы вас все увидели, купите еще %d монету</item>
         <item quantity="few">Чтобы вас все увидели, купите еще %d монеты</item>
         <item quantity="many">Чтобы вас все увидели, купите еще %d монет</item>
+        <item quantity="other">Чтобы вас все увидели, купите еще %d монет</item>
     </plurals>
     <string name="buying_default_message">Вы можете отправлять подарки и восхищения за монеты</string>
     <string name="buying_money">Покупка монет</string>
