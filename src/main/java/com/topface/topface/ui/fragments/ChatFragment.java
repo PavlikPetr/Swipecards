@@ -142,7 +142,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String id = intent.getStringExtra("id");
+            String id = intent.getStringExtra(GCMUtils.USER_ID_EXTRA);
             if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
                 update(true, "update counters");
                 startTimer();

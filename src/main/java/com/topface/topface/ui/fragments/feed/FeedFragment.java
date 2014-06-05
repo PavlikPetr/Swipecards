@@ -99,6 +99,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
         }
     };
+    private BroadcastReceiver mGcmReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            for (int type : getTypesForGCM()) {
+                GCMUtils.cancelNotification(getActivity(), type);
+            }
+            updateData(true, false);
+        }
+    };
 
     private FloatBlock mFloatBlock;
 
@@ -141,8 +150,22 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver, filter);
-        GCMUtils.cancelNotification(getActivity(), getTypeForGCM());
+        for (int type : getTypesForGCM()) {
+            GCMUtils.cancelNotification(getActivity(), type);
+        }
+        registerGcmReceiver();
         return root;
+    }
+
+    private void registerGcmReceiver() {
+        String action = getGcmUpdateAction();
+        if (action != null) {
+            getActivity().registerReceiver(mGcmReceiver, new IntentFilter(action));
+        }
+    }
+
+    protected String getGcmUpdateAction() {
+        return null;
     }
 
     private void initViews(View root) {
@@ -240,11 +263,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     public void onDestroyView() {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(readItemReceiver);
+        if (getGcmUpdateAction() != null) {
+            getActivity().unregisterReceiver(mGcmReceiver);
+        }
     }
 
     protected abstract Drawable getBackIcon();
 
-    abstract protected int getTypeForGCM();
+    protected int[] getTypesForGCM() {
+        return new int[]{GCMUtils.GCM_TYPE_UNKNOWN};
+    }
 
     abstract protected int getTypeForCounters();
 
@@ -390,7 +418,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     onDeleteFeedItems(getSelectedFeedIds(adapter), adapter.getSelectedItems());
                     break;
                 case R.id.add_to_black_list:
-                    onAddToBlackList(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
+                    onAddToBlackList(adapter.getSelectedUsersIds());
                     break;
                 default:
                     result = false;
@@ -420,7 +448,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return R.menu.feed_context_menu;
     }
 
-    private void onAddToBlackList(List<Integer> ids, final List<T> items) {
+    private void onAddToBlackList(List<Integer> ids) {
         BlackListAddRequest r = new BlackListAddRequest(ids, getActivity());
         r.handler.setOnCompleteAction(new ApiHandler.CompleteAction() {
             @Override

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
-import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedBookmark;
 import com.topface.topface.data.FeedListData;
@@ -70,11 +69,6 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     @Override
     protected String getTitle() {
         return getString(R.string.general_bookmarks);
-    }
-
-    @Override
-    protected int getTypeForGCM() {
-        return GCMUtils.GCM_TYPE_UNKNOWN;
     }
 
     @Override

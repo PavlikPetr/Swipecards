@@ -75,8 +75,8 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    protected int getTypeForGCM() {
-        return GCMUtils.GCM_TYPE_GUESTS;
+    protected int[] getTypesForGCM() {
+        return new int[]{GCMUtils.GCM_TYPE_GUESTS};
     }
 
     @Override
@@ -97,5 +97,10 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteVisitorsRequest(ids, getActivity());
+    }
+
+    @Override
+    protected String getGcmUpdateAction() {
+        return GCMUtils.GCM_GUESTS_UPDATE;
     }
 }

@@ -93,8 +93,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected int getTypeForGCM() {
-        return GCMUtils.GCM_TYPE_LIKE;
+    protected int[] getTypesForGCM() {
+        return new int[]{GCMUtils.GCM_TYPE_LIKE};
     }
 
     @Override
@@ -349,5 +349,10 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_feed_filtered;
+    }
+
+    @Override
+    protected String getGcmUpdateAction() {
+        return GCMUtils.GCM_LIKE_UPDATE;
     }
 }
