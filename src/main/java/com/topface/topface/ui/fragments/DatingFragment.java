@@ -958,10 +958,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void successRate() {
         moneyDecreased.set(false);
-        if (mCurrentUser != null) {
-            mCurrentUser.rated = true;
-        }
         if (CacheProfile.getOptions().isActivityAllowed) {
+            if (mCurrentUser != null) {
+                mCurrentUser.rated = true;
+            }
             showNextUser();
         }
     }
