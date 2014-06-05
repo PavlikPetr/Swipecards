@@ -93,6 +93,7 @@ public class AuthFragment extends BaseFragment {
     private ImageView mVkIcon;
     private ImageView mOkIcon;
     private ImageView mFbIcon;
+    private boolean mNeedShowButtonsOnResume = true;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -109,6 +110,9 @@ public class AuthFragment extends BaseFragment {
             btnsHidden = savedInstanceState.getBoolean(BTNS_HIDDEN);
         }
         initViews(root);
+        if (authorizationReceiver == null || !authReceiverRegistered) {
+            initAuthorizationHandler();
+        }
         //Если у нас нет токена
         if (!AuthToken.getInstance().isEmpty()) {
             //Если мы попали на этот фрагмент с работающей авторизацией, то просто перезапрашиваем профиль
@@ -116,6 +120,12 @@ public class AuthFragment extends BaseFragment {
         }
         checkOnline();
         return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(authorizationReceiver);
     }
 
     private void initViews(final View root) {
@@ -149,7 +159,9 @@ public class AuthFragment extends BaseFragment {
                         hideButtons();
                         break;
                     case AuthorizationManager.TOKEN_RECEIVED:
-                        auth(AuthToken.getInstance());
+                        if (getActivity() != null) {
+                            auth(AuthToken.getInstance());
+                        }
                         break;
                     case AuthorizationManager.AUTHORIZATION_CANCELLED:
                         showButtons();
@@ -695,7 +707,13 @@ public class AuthFragment extends BaseFragment {
             mAuthorizationManager.odnoklassnikiAuth(new AuthorizationManager.OnTokenReceivedListener() {
                 @Override
                 public void onTokenReceived() {
+                    mNeedShowButtonsOnResume = false;
                     hideButtons();
+                }
+
+                @Override
+                public void onTokenReceiveFailed() {
+                    showButtons();
                 }
             });
         }
@@ -734,13 +752,11 @@ public class AuthFragment extends BaseFragment {
         }
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(connectionChangeListener,
                 new IntentFilter(ConnectionChangeReceiver.REAUTH));
-        if (authorizationReceiver == null || !authReceiverRegistered) {
-            initAuthorizationHandler();
-        }
+
         removeRedAlert();
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             loadAllProfileData();
-        } else {
+        } else if (mNeedShowButtonsOnResume){
             showButtons();
         }
     }
@@ -749,7 +765,7 @@ public class AuthFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         authReceiverRegistered = false;
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(authorizationReceiver);
+
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionChangeListener);
     }
 
