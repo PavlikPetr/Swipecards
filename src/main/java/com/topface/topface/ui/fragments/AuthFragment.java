@@ -713,6 +713,7 @@ public class AuthFragment extends BaseFragment {
 
                 @Override
                 public void onTokenReceiveFailed() {
+                    mNeedShowButtonsOnResume = true;
                     showButtons();
                 }
             });
