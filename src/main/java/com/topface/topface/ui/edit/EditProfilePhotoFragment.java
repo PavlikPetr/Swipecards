@@ -64,10 +64,28 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             mViewFlipper.setDisplayedChild(0);
             Activity activity = getActivity();
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-                Photo photo = (Photo) msg.obj;
+                final Photo photo = (Photo) msg.obj;
+                if (CacheProfile.photos.isEmpty()) {
+                    PhotoMainRequest request = new PhotoMainRequest(getActivity());
+                    request.photoId = photo.getId();
+                    request.callback(new ApiHandler() {
+                        @Override
+                        public void success(IApiResponse response) {
+                            CacheProfile.photo = photo;
+                            mLastSelectedAsMainId = photo.getId();
+                            CacheProfile.photos.addFirst(photo);
+                            mPhotoGridAdapter.addFirst(photo);
+                        }
 
-                CacheProfile.photos.addFirst(photo);
-                mPhotoGridAdapter.addFirst(photo);
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+
+                        }
+                    }).exec();
+                } else {
+                    CacheProfile.photos.addFirst(photo);
+                    mPhotoGridAdapter.addFirst(photo);
+                }
 
                 if (activity != null) {
                     Toast.makeText(activity, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
