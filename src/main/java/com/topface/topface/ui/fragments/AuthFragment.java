@@ -759,6 +759,9 @@ public class AuthFragment extends BaseFragment {
             loadAllProfileData();
         } else if (mNeedShowButtonsOnResume){
             showButtons();
+
+        } else {
+            mNeedShowButtonsOnResume = true;
         }
     }
 
