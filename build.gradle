@@ -1,8 +1,8 @@
 //Константы для сборки приложения. В подмодулях следует использовать именно их, а не хардкодить значения
 def defaultCompileSdkVersion = 19
-def defaultBuildToolsVersion = "19.0.1"
+def defaultBuildToolsVersion = "19.1.0"
 
-def supportLibrary = "com.android.support:support-v4:19.0.+"
+def supportLibrary = "com.android.support:support-v4:19.1.0"
 
 def getGitHeadSha() {
     return 'git rev-parse --short HEAD'.execute().text.trim();
@@ -17,7 +17,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.10.+'
+        classpath 'com.android.tools.build:gradle:0.11.+'
     }
 }
 
