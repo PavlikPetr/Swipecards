@@ -827,6 +827,8 @@
         <item quantity="few">и еще %d</item>
         <item quantity="other">и еще %d</item>
     </plurals>
+    <string name="subscription">Подписка</string>
+    <string name="coins">Монеты</string>
     <string name="you_were_subscribed">Подписка оформлена</string>
     <string name="subscriptions_can_be_changed">Подписка оформлена. Изменить условия подписки можно в Google Play</string>
     <string name="people_nearby">Люди рядом</string>
