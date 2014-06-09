@@ -117,8 +117,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected int getTypeForGCM() {
-        return GCMUtils.GCM_TYPE_DIALOGS;
+    protected int[] getTypesForGCM() {
+        return new int[]{GCMUtils.GCM_TYPE_DIALOGS, GCMUtils.GCM_TYPE_MESSAGE, GCMUtils.GCM_TYPE_GIFT};
     }
 
     @Override
@@ -144,5 +144,10 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_feed_filtered;
+    }
+
+    @Override
+    protected String getGcmUpdateAction() {
+        return GCMUtils.GCM_DIALOGS_UPDATE;
     }
 }

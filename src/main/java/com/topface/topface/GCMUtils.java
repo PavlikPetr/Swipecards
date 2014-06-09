@@ -49,10 +49,18 @@ public class GCMUtils {
     public static final int GCM_TYPE_PROMO = 6;
     public static final int GCM_TYPE_GIFT = 7;
     public static final int GCM_TYPE_DIALOGS = 8;
-    public static final int GCM_TYPE_GEO = 9;
+    public static final int GCM_TYPE_PEOPLE_NEARBY = 9;
 
 
     public static final String NEXT_INTENT = "com.topface.topface_next";
+
+    public static final String GCM_DIALOGS_UPDATE = "com.topface.topface.action.GCM_DIALOGS_UPDATE";
+    public static final String GCM_MUTUAL_UPDATE = "com.topface.topface.action.GCM_MUTUAL_UPDATE";
+    public static final String GCM_LIKE_UPDATE = "com.topface.topface.action.GCM_LIKE_UPDATE";
+    public static final String GCM_GUESTS_UPDATE = "com.topface.topface.action.GCM_GUESTS_UPDATE";
+    public static final String GCM_PEOPLE_NEARBY_UPDATE = "com.topface.topface.action.GCM_PEOPLE_NEARBY_UPDATE";
+
+    public static final String USER_ID_EXTRA = "id";
 
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;
 
@@ -201,9 +209,14 @@ public class GCMUtils {
         }
     }
 
-    private static int getType(Intent extra) {
+    static int getType(Intent extra) {
         String typeString = extra.getStringExtra("type");
-        return typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
+        try {
+            return typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
+        } catch (NumberFormatException exc) {
+            Debug.error(exc);
+            return GCM_TYPE_UNKNOWN;
+        }
     }
 
     private static void setCounters(Intent extra, Context context) {
@@ -318,8 +331,8 @@ public class GCMUtils {
                     i.putExtra(NEXT_INTENT, F_VISITORS);
                 }
                 break;
-            case GCM_TYPE_GEO:
-                lastNotificationType = GCM_TYPE_GEO;
+            case GCM_TYPE_PEOPLE_NEARBY:
+                lastNotificationType = GCM_TYPE_PEOPLE_NEARBY;
                 i = new Intent(context, NavigationActivity.class);
                 i.putExtra(NEXT_INTENT, F_GEO);
                 break;
@@ -327,6 +340,7 @@ public class GCMUtils {
                 i = Utils.getMarketIntent(context);
                 break;
             case GCM_TYPE_DIALOGS:
+                lastNotificationType = GCM_TYPE_DIALOGS;
                 i = new Intent(context, NavigationActivity.class);
                 i.putExtra(NEXT_INTENT, F_DIALOGS);
                 break;
@@ -346,7 +360,15 @@ public class GCMUtils {
             public void run() {
                 if (type == lastNotificationType) {
                     if (context != null) {
-                        int id = type == GCM_TYPE_MESSAGE ? UserNotificationManager.MESSAGES_ID : UserNotificationManager.NOTIFICATION_ID;
+                        int id;
+                        switch (type) {
+                            case GCM_TYPE_MESSAGE:
+                            case GCM_TYPE_DIALOGS:
+                                id = UserNotificationManager.MESSAGES_ID;
+                                break;
+                            default:
+                                id = UserNotificationManager.NOTIFICATION_ID;
+                        }
                         UserNotificationManager.getInstance(context).cancelNotification(id);
                     }
                 }
