@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
@@ -28,6 +29,7 @@ import android.widget.ViewFlipper;
 
 import com.appsflyer.AppsFlyerLib;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
@@ -44,7 +46,6 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AuthButtonsController;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -92,6 +93,7 @@ public class AuthFragment extends BaseFragment {
     private ImageView mVkIcon;
     private ImageView mOkIcon;
     private ImageView mFbIcon;
+    private boolean mNeedShowButtonsOnResume = true;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -108,6 +110,9 @@ public class AuthFragment extends BaseFragment {
             btnsHidden = savedInstanceState.getBoolean(BTNS_HIDDEN);
         }
         initViews(root);
+        if (authorizationReceiver == null || !authReceiverRegistered) {
+            initAuthorizationHandler();
+        }
         //Если у нас нет токена
         if (!AuthToken.getInstance().isEmpty()) {
             //Если мы попали на этот фрагмент с работающей авторизацией, то просто перезапрашиваем профиль
@@ -115,6 +120,12 @@ public class AuthFragment extends BaseFragment {
         }
         checkOnline();
         return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(authorizationReceiver);
     }
 
     private void initViews(final View root) {
@@ -148,7 +159,9 @@ public class AuthFragment extends BaseFragment {
                         hideButtons();
                         break;
                     case AuthorizationManager.TOKEN_RECEIVED:
-                        auth(AuthToken.getInstance());
+                        if (getActivity() != null) {
+                            auth(AuthToken.getInstance());
+                        }
                         break;
                     case AuthorizationManager.AUTHORIZATION_CANCELLED:
                         showButtons();
@@ -694,7 +707,14 @@ public class AuthFragment extends BaseFragment {
             mAuthorizationManager.odnoklassnikiAuth(new AuthorizationManager.OnTokenReceivedListener() {
                 @Override
                 public void onTokenReceived() {
+                    mNeedShowButtonsOnResume = false;
                     hideButtons();
+                }
+
+                @Override
+                public void onTokenReceiveFailed() {
+                    mNeedShowButtonsOnResume = true;
+                    showButtons();
                 }
             });
         }
@@ -727,17 +747,21 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getSupportActionBar().hide();
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(connectionChangeListener,
                 new IntentFilter(ConnectionChangeReceiver.REAUTH));
-        if (authorizationReceiver == null || !authReceiverRegistered) {
-            initAuthorizationHandler();
-        }
+
         removeRedAlert();
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             loadAllProfileData();
-        } else {
+        } else if (mNeedShowButtonsOnResume){
             showButtons();
+
+        } else {
+            mNeedShowButtonsOnResume = true;
         }
     }
 
@@ -745,14 +769,17 @@ public class AuthFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         authReceiverRegistered = false;
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(authorizationReceiver);
+
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionChangeListener);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getSupportActionBar().show();
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.show();
+        }
         if (!hasAuthorized) {
             EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "DismissAdditional" : "DismissMain", btnsController.getLocaleTag(), 1L);
         }

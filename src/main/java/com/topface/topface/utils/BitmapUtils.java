@@ -7,6 +7,8 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 
+import com.topface.framework.utils.Debug;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;

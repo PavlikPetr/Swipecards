@@ -4,10 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.BitmapUtils;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 
@@ -45,7 +45,7 @@ public class PhotoAddRequest extends ApiRequest {
     }
 
     @Override
-    protected boolean writeData(HttpURLConnection connection) throws IOException {
+    protected boolean writeData(HttpURLConnection connection, IConnectionConfigureListener listener) throws IOException {
         //Формируем базовую часть запроса (Заголовки, json данные)
         String headers = getHeaders();
         //Переводим в байты
@@ -65,7 +65,7 @@ public class PhotoAddRequest extends ApiRequest {
         Debug.log("Base64 file size: " + fileSize);
         //Считаем общую длинну получившегося запроса
         int contentLength = headersBytes.length + endBytes.length + fileSize;
-
+        HttpUtils.setContentLengthAndConnect(connection, listener, contentLength);
         if (contentLength > 0) {
             //Отправляем наш  POST запрос
             writeRequest(
@@ -90,7 +90,7 @@ public class PhotoAddRequest extends ApiRequest {
     private void writeRequest(byte[] headersBytes, byte[] endBytes, InputStream inputStream,
                               int contentLength, HttpURLConnection connection) throws IOException {
 
-        OutputStream outputStream = HttpUtils.getOutputStream(contentLength, connection);
+        OutputStream outputStream = connection.getOutputStream();
         DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(
                 outputStream
         ));

@@ -10,11 +10,11 @@ import com.amazon.inapp.purchasing.Receipt;
 import com.topface.billing.BillingListener;
 import com.topface.billing.BillingSupportListener;
 import com.topface.billing.BillingUtils;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.requests.AmazonValidateRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.utils.Debug;
 
 /**
  * Класс, обрабатывающий события покупки от Amazon

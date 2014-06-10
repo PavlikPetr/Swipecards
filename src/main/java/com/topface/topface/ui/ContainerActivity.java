@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.topface.billing.BillingFragment;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
@@ -19,16 +20,16 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.ContactsFragment;
 import com.topface.topface.ui.fragments.EditorBannersFragment;
+import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
 import com.topface.topface.ui.fragments.RegistrationFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.buy.BuyingFragment;
+import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
 import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.ContactsProvider;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +42,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
     public static final String FEED_ID = "FEED_ID";
+    public static final String FEED_IDS = "FEED_IDS";
     /**
      * Constant keys for different fragments
      * Values have to be > 0
@@ -59,6 +61,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final int INTENT_PROFILE_FRAGMENT = 6;
     public static final String TYPE = "type";
     public static final String CHANGED = "changed";
+    public static final String VALUE = "value";
     private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
     private View mOnlineIcon;
@@ -126,17 +129,22 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, itemType);
-        intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, itemPrice);
+        if (itemType != -1) {
+            intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, itemType);
+        }
+        if (itemPrice != -1) {
+            intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, itemPrice);
+        }
         return intent;
+    }
+
+    public static Intent getBuyingIntent(String from, int itemPrice) {
+        return getBuyingIntent(from, -1, itemPrice);
 
     }
 
     public static Intent getBuyingIntent(String from) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
-        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        return intent;
+        return getBuyingIntent(from, -1, -1);
 
     }
 
@@ -154,9 +162,10 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         initRequestKey();
         checkAuth();
         setContentView(R.layout.ac_fragment_frame);
-        //Сперва пробуем
+        //Сперва пробуем получуить существующий фрагмент из fragmentManager
         mCurrentFragment = getSupportFragmentManager().findFragmentById(R.id.loFrame);
         if (mCurrentFragment == null) {
+            //Если не находим, то создаем новый
             mCurrentFragment = getNewFragment(mCurrentFragmentId);
         }
         if (mCurrentFragment != null) {
@@ -230,22 +239,22 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         String source = intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE);
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
-                fragment = VipBuyFragment.newInstance(
-                        true,
+
+                fragment = PurchasesFragment.newInstance(
                         intent.getStringExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT),
                         intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE)
                 );
                 break;
             case INTENT_BUYING_FRAGMENT:
-                if (extras != null && extras.containsKey(BuyingFragment.ARG_ITEM_TYPE)
-                        && extras.containsKey(BuyingFragment.ARG_ITEM_PRICE)) {
-                    fragment = BuyingFragment.newInstance(
-                            extras.getInt(BuyingFragment.ARG_ITEM_TYPE),
-                            extras.getInt(BuyingFragment.ARG_ITEM_PRICE),
+                if (extras != null && extras.containsKey(PurchasesFragment.ARG_ITEM_TYPE)
+                        && extras.containsKey(PurchasesFragment.ARG_ITEM_PRICE)) {
+                    fragment = PurchasesFragment.newInstance(
+                            extras.getInt(PurchasesFragment.ARG_ITEM_TYPE),
+                            extras.getInt(PurchasesFragment.ARG_ITEM_PRICE),
                             source
                     );
                 } else {
-                    fragment = BuyingFragment.newInstance(source);
+                    fragment = PurchasesFragment.newInstance(source);
                 }
                 break;
             case INTENT_COINS_SUBSCRIPTION_FRAGMENT:
@@ -309,6 +318,23 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         Intent intent = new Intent(UPDATE_USER_CATEGORY);
         intent.putExtra(TYPE, type);
         intent.putExtra(CHANGED, value);
+        return intent;
+    }
+
+    public static Intent getValuedActionsUpdateIntent(ActionTypes type, int userId, boolean value) {
+        Intent intent = new Intent(UPDATE_USER_CATEGORY);
+        intent.putExtra(TYPE, type);
+        intent.putExtra(VALUE, value);
+        intent.putExtra(FEED_ID, userId);
+        intent.putExtra(FEED_IDS, new int[]{userId});
+        return intent;
+    }
+
+    public static Intent getValuedActionsUpdateIntent(ActionTypes type, int[] userIds, boolean value) {
+        Intent intent = new Intent(UPDATE_USER_CATEGORY);
+        intent.putExtra(TYPE, type);
+        intent.putExtra(VALUE, value);
+        intent.putExtra(FEED_IDS, userIds);
         return intent;
     }
 

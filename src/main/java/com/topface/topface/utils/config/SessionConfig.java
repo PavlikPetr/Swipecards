@@ -3,7 +3,9 @@ package com.topface.topface.utils.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
+import com.topface.topface.data.PaymentWallProducts;
 
 /**
  * Created by kirussell on 14.01.14.
@@ -14,7 +16,9 @@ public class SessionConfig extends AbstractConfig {
 
     private static final String DATA_PROFILE = "data_profile_user_data";
     private static final String DATA_OPTIONS = "data_options";
-    private static final String DATA_GOOGLE_PRODUCTS = "data_google_products";
+    private static final String DATA_MARKET_PRODUCTS = "data_google_products";
+    private static final String DATA_PAYMENTWALL_PRODUCTS = "data_pw_products";
+    private static final String DATA_PAYMENTWALL_MOBILE_PRODUCTS = "data_pw_mobile_products";
 
     public SessionConfig(Context context) {
         super(context);
@@ -23,11 +27,13 @@ public class SessionConfig extends AbstractConfig {
     @Override
     protected void fillSettingsMap(SettingsMap settingsMap) {
         // user profile
-        settingsMap.addStringField(DATA_PROFILE, Static.EMPTY);
+        addField(settingsMap, DATA_PROFILE, Static.EMPTY);
         // user options
-        settingsMap.addStringField(DATA_OPTIONS, Static.EMPTY);
-        // use google products
-        settingsMap.addStringField(DATA_GOOGLE_PRODUCTS, Static.EMPTY);
+        addField(settingsMap, DATA_OPTIONS, Static.EMPTY);
+        // use market and paymentwall products
+        addField(settingsMap, DATA_MARKET_PRODUCTS, Static.EMPTY);
+        addField(settingsMap, DATA_PAYMENTWALL_PRODUCTS, Static.EMPTY);
+        addField(settingsMap, DATA_PAYMENTWALL_MOBILE_PRODUCTS, Static.EMPTY);
     }
 
     @Override
@@ -47,7 +53,7 @@ public class SessionConfig extends AbstractConfig {
      * @return true on success
      */
     public boolean setProfileData(String profileResponseJson) {
-        return getSettingsMap().setField(DATA_PROFILE, profileResponseJson);
+        return setField(getSettingsMap(), DATA_PROFILE, profileResponseJson);
     }
 
     /**
@@ -56,7 +62,7 @@ public class SessionConfig extends AbstractConfig {
      * @return profile json response
      */
     public String getProfileData() {
-        return getSettingsMap().getStringField(DATA_PROFILE);
+        return getStringField(getSettingsMap(), DATA_PROFILE);
     }
 
     /**
@@ -75,7 +81,7 @@ public class SessionConfig extends AbstractConfig {
      * @return true on success
      */
     public boolean setOptionsData(String optionsResponseJson) {
-        return getSettingsMap().setField(DATA_OPTIONS, optionsResponseJson);
+        return setField(getSettingsMap(), DATA_OPTIONS, optionsResponseJson);
     }
 
     /**
@@ -84,7 +90,7 @@ public class SessionConfig extends AbstractConfig {
      * @return options json response
      */
     public String getOptionsData() {
-        return getSettingsMap().getStringField(DATA_OPTIONS);
+        return getStringField(getSettingsMap(), DATA_OPTIONS);
     }
 
     /**
@@ -102,8 +108,13 @@ public class SessionConfig extends AbstractConfig {
      * @param googleProductsResponseJson google play products json response
      * @return true on success
      */
-    public boolean setGoogleProductsData(String googleProductsResponseJson) {
-        return getSettingsMap().setField(DATA_GOOGLE_PRODUCTS, googleProductsResponseJson);
+    public boolean setMarketProductsData(String googleProductsResponseJson) {
+        return setField(getSettingsMap(), DATA_MARKET_PRODUCTS, googleProductsResponseJson);
+    }
+
+    public boolean setPaymentWallProductsData(String pwProductsResponseJson, PaymentWallProducts.TYPE type) {
+        return setField(getSettingsMap(), type == PaymentWallProducts.TYPE.MOBILE ? DATA_PAYMENTWALL_MOBILE_PRODUCTS :
+                DATA_PAYMENTWALL_PRODUCTS, pwProductsResponseJson);
     }
 
     /**
@@ -112,13 +123,18 @@ public class SessionConfig extends AbstractConfig {
      * @return google plat products json
      */
     public String getProductsData() {
-        return getSettingsMap().getStringField(DATA_GOOGLE_PRODUCTS);
+        return getStringField(getSettingsMap(), DATA_MARKET_PRODUCTS);
+    }
+
+    public String getPaymentwallProductsData(PaymentWallProducts.TYPE type) {
+        return getStringField(getSettingsMap(), type == PaymentWallProducts.TYPE.MOBILE ? DATA_PAYMENTWALL_MOBILE_PRODUCTS :
+                DATA_PAYMENTWALL_PRODUCTS);
     }
 
     /**
      * Resets saved google play products data
      */
     public void resetGoogleProductsData() {
-        resetAndSaveConfig(DATA_GOOGLE_PRODUCTS);
+        resetAndSaveConfig(DATA_MARKET_PRODUCTS);
     }
 }

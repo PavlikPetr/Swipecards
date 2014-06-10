@@ -1,9 +1,10 @@
-package com.topface.topface.utils;
+package com.topface.framework.utils;
 
 import android.util.Log;
 
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
+import com.topface.topface.utils.Editor;
 
 import org.json.JSONException;
 import org.json.JSONObject;

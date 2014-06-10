@@ -26,6 +26,6 @@ public class SimpleApiHandler extends ApiHandler {
 
     @Override
     public void always(IApiResponse response) {
-        //Этот метод можно переопределить
+        super.always(response);
     }
 }

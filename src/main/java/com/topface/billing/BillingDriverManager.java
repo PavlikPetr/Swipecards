@@ -3,6 +3,7 @@ package com.topface.billing;
 import android.app.Activity;
 
 import com.topface.billing.googleplay.GooglePlayV2BillingDriver;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 
 /**
@@ -41,7 +42,7 @@ public class BillingDriverManager {
                             .getConstructor(Activity.class, BillingListener.class)
                             .newInstance(activity, listener);
                 } catch (Exception e) {
-                    com.topface.topface.utils.Debug.error("Amazon library not found", e);
+                    Debug.error("Amazon library not found", e);
                 }
                 break;
             case GOOGLE_PLAY:

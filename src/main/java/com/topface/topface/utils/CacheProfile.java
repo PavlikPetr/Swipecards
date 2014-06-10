@@ -8,11 +8,13 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Products;
@@ -222,7 +224,9 @@ public class CacheProfile {
      * Опции по умолчанию
      */
     private static Options options;
-    private static Products mProducts;
+    private static Products mMarketProducts;
+    private static PaymentWallProducts mPWProducts;
+    private static PaymentWallProducts mPWMobileProducts;
 
     /**
      * Данные из сервиса options
@@ -254,14 +258,14 @@ public class CacheProfile {
      * Данные из сервиса googleplay.getProducts
      * Внимание! Может возвращать null, если данный тип сборки не поддерживает покупки
      */
-    public static Products getProducts() {
-        if (mProducts == null) {
+    public static Products getMarketProducts() {
+        if (mMarketProducts == null) {
             SessionConfig config = App.getSessionConfig();
             String productsCache = config.getProductsData();
             if (!TextUtils.isEmpty(productsCache)) {
                 //Получаем опции из кэша
                 try {
-                    mProducts = new Products(
+                    mMarketProducts = new Products(
                             new JSONObject(productsCache)
                     );
                 } catch (JSONException e) {
@@ -270,8 +274,29 @@ public class CacheProfile {
                 }
             }
         }
-        return mProducts;
+        return mMarketProducts;
     }
+
+    public static Products getPaymentWallProducts(PaymentWallProducts.TYPE type) {
+        PaymentWallProducts products = type == PaymentWallProducts.TYPE.MOBILE? mPWMobileProducts : mPWProducts;
+        if (products == null) {
+            SessionConfig config = App.getSessionConfig();
+            String productsCache = config.getPaymentwallProductsData(type);
+            if (!TextUtils.isEmpty(productsCache)) {
+                //Получаем опции из кэша
+                try {
+                    products = new PaymentWallProducts(
+                            new JSONObject(productsCache)
+                    );
+                } catch (JSONException e) {
+                    config.resetGoogleProductsData();
+                    Debug.error(e);
+                }
+            }
+        }
+        return products;
+    }
+
 
     public static boolean isDataFilled() {
         return city != null && !city.isEmpty() && age != 0 && first_name != null && photo != null;
@@ -313,10 +338,30 @@ public class CacheProfile {
     }
 
     public static void setGooglePlayProducts(Products products, final JSONObject response) {
-        mProducts = products;
+        mMarketProducts = products;
         //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
         if (response != null) {
-            App.getSessionConfig().setGoogleProductsData(response.toString());
+            App.getSessionConfig().setMarketProductsData(response.toString());
+            LocalBroadcastManager.getInstance(App.getContext())
+                    .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
+
+        }
+    }
+
+    public static void setPaymentwallProducts(PaymentWallProducts products, final JSONObject response, PaymentWallProducts.TYPE type) {
+        switch (type) {
+            case DIRECT:
+                mPWProducts = products;
+                break;
+            case MOBILE:
+                mPWMobileProducts = products;
+                break;
+        }
+
+
+        //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
+        if (response != null) {
+            App.getSessionConfig().setPaymentWallProductsData(response.toString(), type);
             LocalBroadcastManager.getInstance(App.getContext())
                     .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
 

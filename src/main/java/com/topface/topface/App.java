@@ -1,3 +1,4 @@
+
 package com.topface.topface;
 
 import android.annotation.TargetApi;
@@ -13,10 +14,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
@@ -28,17 +32,16 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GooglePlayProductsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
+import com.topface.topface.requests.PaymentwallProductsRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.blocks.BannerBlock;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
@@ -83,11 +86,29 @@ public class App extends Application {
      */
     public static void sendProfileAndOptionsRequests(ApiHandler handler) {
         new ParallelApiRequest(App.getContext())
-                .addRequest(getOptionsRequst())
+                .addRequest(getOptionsRequest())
                 .addRequest(getProductsRequest())
+                .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .callback(handler)
                 .exec();
+    }
+
+    private static ApiRequest getPaymentwallProductsRequest() {
+        return new PaymentwallProductsRequest(App.getContext()).callback(new ApiHandler() {
+            @Override
+            public void success(IApiResponse response) {
+                //При создании нового объекта продуктов, все данные о них записываются в кэш,
+                //поэтому здесь просто создаются два объекта продуктов.
+                new PaymentWallProducts(response, PaymentWallProducts.TYPE.DIRECT);
+                new PaymentWallProducts(response, PaymentWallProducts.TYPE.MOBILE);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+
+            }
+        });
     }
 
     /**
@@ -140,7 +161,7 @@ public class App extends Application {
         return request;
     }
 
-    private static ApiRequest getOptionsRequst() {
+    private static ApiRequest getOptionsRequest() {
         return new UserGetAppOptionsRequest(App.getContext())
                 .callback(new DataApiHandler<Options>() {
                     @Override
@@ -288,11 +309,6 @@ public class App extends Application {
         if (mConnectionIntent == null) {
             mConnectionReceiver = new ConnectionChangeReceiver(mContext);
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
-        }
-
-        //Инициализируем GCM
-        if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
-            GCMUtils.init(getContext());
         }
 
         // Инициализируем общие срезы для статистики

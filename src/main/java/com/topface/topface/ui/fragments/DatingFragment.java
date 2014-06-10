@@ -28,6 +28,8 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryRequestReceiver;
@@ -65,10 +67,8 @@ import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AnimationHelper;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
@@ -212,7 +212,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
 
-        View root = inflater.inflate(R.layout.fragmen_dating, null);
+        View root = inflater.inflate(R.layout.fragment_dating, null);
 
         initViews(root);
         initActionBar();
@@ -357,12 +357,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     protected String getTitle() {
         if (CacheProfile.dating != null) {
-            int age = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ?
+            int age = CacheProfile.dating.ageEnd == DatingFilter.MAX_AGE ?
                     EditAgeFragment.absoluteMax : CacheProfile.dating.ageEnd;
             String headerText = getString(CacheProfile.dating.sex == Static.BOY ?
                             R.string.dating_header_guys : R.string.dating_header_girls,
-                    CacheProfile.dating.ageStart, age);
-            String plus = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ? "+" : "";
+                    CacheProfile.dating.ageStart, age
+            );
+            String plus = CacheProfile.dating.ageEnd == DatingFilter.MAX_AGE ? "+" : "";
             return headerText + plus;
         }
         return Static.EMPTY;
@@ -706,11 +707,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void showNextUser() {
-        showUser(mUserSearchList.nextUser());
+        if (mUserSearchList != null) {
+            showUser(mUserSearchList.nextUser());
+        }
     }
 
     private void prevUser() {
-        fillUserInfo(mUserSearchList.prevUser());
+        if (mUserSearchList != null) {
+            fillUserInfo(mUserSearchList.prevUser());
+        }
         unlockControls();
     }
 
@@ -955,10 +960,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void successRate() {
         moneyDecreased.set(false);
-        if (mCurrentUser != null) {
-            mCurrentUser.rated = true;
-        }
         if (CacheProfile.getOptions().isActivityAllowed) {
+            if (mCurrentUser != null) {
+                mCurrentUser.rated = true;
+            }
             showNextUser();
         }
     }

@@ -19,8 +19,9 @@ import com.facebook.topface.Facebook;
 import com.facebook.topface.Facebook.DialogListener;
 import com.facebook.topface.FacebookError;
 import com.google.android.gcm.GCMRegistrar;
+import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -29,9 +30,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
-import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.controllers.StartActionsController;
@@ -98,7 +97,6 @@ public class AuthorizationManager {
     public static Auth saveAuthInfo(IApiResponse response) {
         Auth auth = new Auth(response);
         Ssid.save(auth.ssid);
-        GCMUtils.init(App.getContext());
         AuthToken token = AuthToken.getInstance();
         if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             token.saveToken(auth.userId, token.getLogin(), token.getPassword());
@@ -158,8 +156,7 @@ public class AuthorizationManager {
             @Override
             public void onSuccess(String token) {
                 Debug.log("Odnoklassniki auth success with token " + token);
-                listener.onTokenReceived();
-                new GetCurrentUserTask(okAuthObject, token).execute();
+                new GetCurrentUserTask(okAuthObject, token, listener).execute();
             }
 
             @Override
@@ -194,11 +191,19 @@ public class AuthorizationManager {
 
         private final Odnoklassniki odnoklassniki;
         private final String token;
+        private final OnTokenReceivedListener listener;
 
-        public GetCurrentUserTask(Odnoklassniki ok, String token) {
+        public GetCurrentUserTask(Odnoklassniki ok, String token, OnTokenReceivedListener listener) {
             odnoklassniki = ok;
             Debug.log("Odnoklassniki token: " + token);
             this.token = token;
+            this.listener = listener;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            listener.onTokenReceived();
         }
 
         @Override
@@ -225,10 +230,12 @@ public class AuthorizationManager {
                     receiveToken();
                 } catch (Exception e) {
                     mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+                    listener.onTokenReceiveFailed();
                     Debug.error("Odnoklassniki result parse error", e);
                 }
             } else {
                 Debug.error("Odnoklassniki auth error. users.getCurrentUser returns null");
+                listener.onTokenReceiveFailed();
                 mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
             }
         }
@@ -237,6 +244,7 @@ public class AuthorizationManager {
         protected void onCancelled() {
             super.onCancelled();
             Debug.error("Odnoklassniki auth cancelled");
+            listener.onTokenReceiveFailed();
             mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
         }
     }
@@ -472,5 +480,7 @@ public class AuthorizationManager {
     //Этот лисенер специально для того, чтобы скрывать кнопки только тогда, когда нам уже придет ответ от одноклассников.
     public interface OnTokenReceivedListener {
         public void onTokenReceived();
+
+        public void onTokenReceiveFailed();
     }
 }

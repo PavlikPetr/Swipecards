@@ -18,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.billing.BillingDriver;
+import com.topface.billing.BillingDriverManager;
+import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -32,7 +35,7 @@ import com.topface.topface.utils.CacheProfile;
 
 import static android.view.View.OnClickListener;
 
-public class VipBuyFragment extends PaymentwallBuyingFragment implements OnClickListener {
+public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     public static final String ACTION_BAR_CONST = "needActionBar";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
@@ -77,6 +80,11 @@ public class VipBuyFragment extends PaymentwallBuyingFragment implements OnClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNeedTitles(false);
+    }
+
+    @Override
+    protected BillingDriver getBillingDriver() {
+        return  BillingDriverManager.getInstance().createMainBillingDriver(getActivity(), this, this);
     }
 
     @Override
@@ -140,7 +148,7 @@ public class VipBuyFragment extends PaymentwallBuyingFragment implements OnClick
     private void initBuyVipViews(View root) {
         mBuyVipViewsContainer = (LinearLayout) root.findViewById(R.id.fbpContainer);
         LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
-        Products products = CacheProfile.getProducts();
+        Products products = getProducts();
         if (products == null) {
             return;
         }
@@ -149,22 +157,30 @@ public class VipBuyFragment extends PaymentwallBuyingFragment implements OnClick
         } else {
             root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.GONE);
         }
-        for (Products.BuyButton curBtn : products.premium) {
+        for (final Products.BuyButton curBtn : products.premium) {
             Products.setBuyButton(btnContainer, curBtn, getActivity(),
                     new Products.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
-                            buySubscription(id);
-                            Bundle arguments = getArguments();
-                            String from = "";
-                            if (arguments != null) {
-                                from = "From" + arguments.getString(ARG_TAG_SOURCE);
-                            }
-                            EasyTracker.getTracker().sendEvent("Subscription", "ButtonClick" + from, id, 0L);
+                            buy(id, curBtn);
                         }
                     }
             );
         }
+    }
+
+    protected void buy(String id, Products.BuyButton curBtn) {
+        buySubscription(id);
+        Bundle arguments = getArguments();
+        String from = "";
+        if (arguments != null) {
+            from = "From" + arguments.getString(ARG_TAG_SOURCE);
+        }
+        EasyTracker.getTracker().sendEvent("Subscription", "ButtonClick" + from, id, 0L);
+    }
+
+    protected Products getProducts() {
+        return CacheProfile.getMarketProducts();
     }
 
     private void initEditVipViews(View root) {
@@ -299,6 +315,11 @@ public class VipBuyFragment extends PaymentwallBuyingFragment implements OnClick
 
     @Override
     public void onInAppBillingSupported() {
+    }
+
+    @Override
+    public void onInAppBillingUnsupported() {
+
     }
 
     @Override

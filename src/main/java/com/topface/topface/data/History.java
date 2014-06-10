@@ -3,9 +3,9 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.Debug;
 
 import org.json.JSONObject;
 

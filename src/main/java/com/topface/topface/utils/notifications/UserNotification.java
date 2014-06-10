@@ -19,11 +19,11 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 
@@ -38,7 +38,6 @@ public class UserNotification {
     private Intent mIntent;
     private int mId;
     private boolean mOngoing;
-
 
 
     Notification generatedNotification;
@@ -118,8 +117,7 @@ public class UserNotification {
             if (Settings.getInstance().isVibrationEnabled()) {
                 notification |= android.app.Notification.DEFAULT_VIBRATE;
             }
-            if (Settings.getInstance().isLEDEnabled())
-            {
+            if (Settings.getInstance().isLEDEnabled()) {
                 notification |= Notification.DEFAULT_LIGHTS;
             }
             notificationBuilder.setDefaults(notification);
@@ -158,9 +156,8 @@ public class UserNotification {
         if (unread > 0) {
             notificationBuilder.setNumber(unread);
         }
-        PendingIntent resultPendingIntent = generatePendingIntent(mIntent);
         notificationBuilder.setAutoCancel(true);
-        notificationBuilder.setContentIntent(resultPendingIntent);
+        notificationBuilder.setContentIntent(getPendingIntent(mIntent));
 
         generatedNotification = notificationBuilder.build();
         return generatedNotification;
@@ -175,8 +172,7 @@ public class UserNotification {
         Intent retryIntent = new Intent(AddPhotoHelper.CANCEL_NOTIFICATION_RECEIVER + mIntent.getParcelableExtra("PhotoUrl"));
         retryIntent.putExtra("id", mId);
         retryIntent.putExtra("isRetry", true);
-        PendingIntent resultPendingIntent = generatePendingIntent(mIntent);
-        notificationBuilder.setContentIntent(resultPendingIntent);
+        notificationBuilder.setContentIntent(getPendingIntent(mIntent));
         generatedNotification = notificationBuilder.build();
         return generatedNotification;
     }
@@ -188,15 +184,23 @@ public class UserNotification {
         notificationBuilder.setSound(Uri.EMPTY);
         setLargeIcon();
         notificationBuilder.setContentTitle(mTitle);
-        PendingIntent resultPendingIntent = generatePendingIntent(mIntent);
         generateBigPicture();
-        notificationBuilder.setContentIntent(resultPendingIntent);
+        notificationBuilder.setContentIntent(getPendingIntent(mIntent));
         notificationBuilder.setProgress(100, 100, true);
         if (isVersionOld()) {
             notificationBuilder.setContentText(mContext.getString(R.string.waiting_for_load));
         }
         generatedNotification = notificationBuilder.build();
         return generatedNotification;
+    }
+
+    private PendingIntent getPendingIntent(Intent intent) {
+        // known issue with pendingIntents on KitKat after uninstall/install
+        // https://code.google.com/p/android/issues/detail?id=61850
+        if (Build.VERSION.SDK_INT == 19) {
+            generatePendingIntent(intent).cancel();
+        }
+        return generatePendingIntent(intent);
     }
 
     public Notification updateProgress(int currentProgress) {
