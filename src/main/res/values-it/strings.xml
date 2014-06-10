@@ -92,6 +92,18 @@
     <string name="buying_header_title">Acquisti</string>
     <string name="buying_you_have">Hai</string>
     <string name="buying_you_have_no_coins_for_gift">Ti mancano %d {{coins}} per comprare il regalo</string>
+    <plurals name="buying_gift_you_need_coins">
+        <item quantity="other">Per inviare il regalo compra ancora %d monete</item>
+        <item quantity="one">Per inviare il regalo compra ancora %d moneta</item>
+    </plurals>
+    <plurals name="buying_unlock_likes_you_need_coins">
+        <item quantity="other">Per vedere a chi piaci compra ancora %d monete</item>
+        <item quantity="one">Per vedere a chi piaci compra ancora %d moneta</item>
+    </plurals>
+    <plurals name="buying_leaders_you_need_coins">
+        <item quantity="other">Per farti vedere da tutti compra ancora %d monete</item>
+        <item quantity="one">Per farti vedere da tutti compra ancora %d moneta</item>
+    </plurals>
     <string name="buying_default_message">Puoi inviare regali e ammirazioni pagando con le monete</string>
     <string name="buying_money">Acquisto monete</string>
     <string name="profile_header_title">Mio profilo</string>

@@ -92,9 +92,18 @@
     <string name="buying_header_title">Purchases</string>
     <string name="buying_you_have">You have</string>
     <string name="buying_you_have_no_coins_for_gift">You need %d {{coins}} to buy this gift</string>
-    <string name="buying_gift_you_need_more_coins">To be able to send a gift, buy %d more {{coins}}</string>
-    <string name="buying_unlock_likes_you_need_more_coins">To be able to see, who likes you, buy %d more {{coins}}</string>
-    <string name="buying_leaders_you_need_more_coins">For everyone to see you, buy %d more {{coins}}</string>
+    <plurals name="buying_gift_you_need_coins">
+        <item quantity="other">To be able to send a gift, buy %d more coins</item>
+        <item quantity="one">To be able to send a gift, buy %d more coin</item>
+    </plurals>
+    <plurals name="buying_unlock_likes_you_need_coins">
+        <item quantity="other">To be able to see who likes you, buy %d more coins</item>
+        <item quantity="one">To be able to see who likes you, buy %d more coin</item>
+    </plurals>
+    <plurals name="buying_leaders_you_need_coins">
+        <item quantity="other">To be able to be seen by everyone, buy %d more coins</item>
+        <item quantity="one">To be able to be seen by everyone, buy %d more coin</item>
+    </plurals>
     <string name="buying_default_message">You can send gifts and admirations for coins</string>
     <string name="buying_money">Purchase coins</string>
     <string name="profile_header_title">My profile</string>

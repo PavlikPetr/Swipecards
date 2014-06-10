@@ -34,6 +34,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
+import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -271,6 +272,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         startActivity(
                 ContainerActivity.getBuyingIntent(
                         "VipPaidSympathies." + group,
+                        PurchasesFragment.TYPE_UNLOCK_SYMPATHIES,
                         blockSympathyOptions.price
                 )
         );

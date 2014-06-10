@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.util.SparseArrayCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +22,7 @@ import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Utils;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.Iterator;
@@ -38,6 +38,7 @@ public class PurchasesFragment extends BaseFragment {
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_GIFT = 1;
     public static final int TYPE_LEADERS = 2;
+    public static final int TYPE_UNLOCK_SYMPATHIES = 3;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
     private TextView mCurCoins;
     private TextView mCurLikes;
@@ -45,7 +46,7 @@ public class PurchasesFragment extends BaseFragment {
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-                    updateBalanceCounters();
+            updateBalanceCounters();
         }
     };
 
@@ -138,7 +139,7 @@ public class PurchasesFragment extends BaseFragment {
 
     private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
         boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS);
-        for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext();) {
+        for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext(); ) {
             Options.Tab tab = iterator.next();
             Products products = getProductsByTab(tab);
             if (products != null) {
@@ -173,7 +174,7 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void updateBalanceCounters() {
-
+        String text;
         Bundle args = getArguments();
         if (mCurCoins != null && mCurLikes != null) {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
@@ -182,20 +183,25 @@ public class PurchasesFragment extends BaseFragment {
         if (args != null) {
             int type = args.getInt(ARG_ITEM_TYPE);
             int coins = args.getInt(ARG_ITEM_PRICE);
+            int diff = coins - CacheProfile.money;
             switch (type) {
                 case TYPE_GIFT:
-                    mResourcesInfo.setText(String.format(
-                            getResources().getString(R.string.buying_you_have_no_coins_for_gift),
-                            coins - CacheProfile.money));
+                    text = Utils.getQuantityString(R.plurals.buying_gift_you_need_coins, diff, diff);
+                    break;
+                case TYPE_LEADERS:
+                    text = Utils.getQuantityString(R.plurals.buying_leaders_you_need_coins, diff, diff);
+                    break;
+                case TYPE_UNLOCK_SYMPATHIES:
+                    text = Utils.getQuantityString(R.plurals.buying_unlock_likes_you_need_coins, diff, diff);
                     break;
                 default:
-                    mResourcesInfo.setText(getResources().getString(R.string.buying_default_message));
+                    text = getResources().getString(R.string.buying_default_message);
                     break;
             }
         } else {
-            mResourcesInfo.setText(getResources().getString(R.string.buying_default_message));
+            text = getResources().getString(R.string.buying_default_message);
         }
-
+        mResourcesInfo.setText(text);
     }
 
     @Override
