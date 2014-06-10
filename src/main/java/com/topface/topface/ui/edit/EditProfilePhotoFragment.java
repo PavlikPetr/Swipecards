@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +28,7 @@ import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -64,10 +66,20 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             mViewFlipper.setDisplayedChild(0);
             Activity activity = getActivity();
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-                Photo photo = (Photo) msg.obj;
-
-                CacheProfile.photos.addFirst(photo);
-                mPhotoGridAdapter.addFirst(photo);
+                final Photo photo = (Photo) msg.obj;
+                if (CacheProfile.photos.isEmpty()) {
+                    CacheProfile.photo = photo;
+                    mLastSelectedAsMainId = photo.getId();
+                    CacheProfile.photos.addFirst(photo);
+                    mPhotoGridAdapter.addFirst(photo);
+                    CacheProfile.sendUpdateProfileBroadcast();
+                    PhotoMainRequest request = new PhotoMainRequest(getActivity());
+                    request.photoId = photo.getId();
+                    request.callback(new SimpleApiHandler()).exec();
+                } else {
+                    CacheProfile.photos.addFirst(photo);
+                    mPhotoGridAdapter.addFirst(photo);
+                }
 
                 if (activity != null) {
                     Toast.makeText(activity, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
