@@ -92,6 +92,21 @@
     <string name="buying_header_title">Pirkimai</string>
     <string name="buying_you_have">Pas jus</string>
     <string name="buying_you_have_no_coins_for_gift">Jums nepakanka %d {{coins}} dovanos pirkimui</string>
+    <plurals name="buying_gift_you_need_coins">
+        <item quantity="few">Tam, kad išsiųsti dovaną, pirkite dar %d monetas</item>
+        <item quantity="other">Tam, kad išsiųsti dovaną, pirkite dar %d monetų</item>
+        <item quantity="one">Tam, kad išsiųsti dovaną, pirkite dar %d monetą</item>
+    </plurals>
+    <plurals name="buying_unlock_likes_you_need_coins">
+        <item quantity="few">Kad pamatyti, kam jūs patikote, pirkite dar %d monetas</item>
+        <item quantity="other">Kad pamatyti, kam jūs patikote, pirkite dar %d monetų</item>
+        <item quantity="one">Kad pamatyti, kam jūs patikote, pirkite dar %d monetą</item>
+    </plurals>
+    <plurals name="buying_leaders_you_need_coins">
+        <item quantity="few">Tam, kad jus visi pamatytų, pirkite dar %d monetas</item>
+        <item quantity="other">Tam, kad jus visi pamatytų, pirkite dar %d monetų</item>
+        <item quantity="one">Tam, kad jus visi pamatytų, pirkite dar %d monetą</item>
+    </plurals>
     <string name="buying_default_message">Jūs galite siųsti dovanas ir susižavėjimus už monetas</string>
     <string name="buying_money">Monetų pirkimas</string>
     <string name="profile_header_title">Mano profilis</string>
