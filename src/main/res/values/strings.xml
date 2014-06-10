@@ -101,7 +101,7 @@
         <item quantity="one">To be able to see who likes you, buy %d more coin</item>
     </plurals>
     <plurals name="buying_leaders_you_need_coins">
-        <item quantity="other">To be able to be seen by everyone, buy %d more coin</item>
+        <item quantity="other">To be able to be seen by everyone, buy %d more coins</item>
         <item quantity="one">To be able to be seen by everyone, buy %d more coin</item>
     </plurals>
     <string name="buying_default_message">You can send gifts and admirations for coins</string>
