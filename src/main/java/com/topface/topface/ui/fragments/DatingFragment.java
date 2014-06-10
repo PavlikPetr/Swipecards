@@ -59,6 +59,7 @@ import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
@@ -633,8 +634,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
-                    startActivityForResult(ContainerActivity.getProfileIntent(mCurrentUser.id, DatingFragment.class, getActivity()),
-                            ContainerActivity.INTENT_PROFILE_FRAGMENT);
+                    Intent intent = ContainerActivity.getProfileIntent(mCurrentUser.id, DatingFragment.class, getActivity());
+                    intent.putExtra(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, !mCurrentUser.rated);
+                    startActivityForResult(intent, ContainerActivity.INTENT_PROFILE_FRAGMENT);
                     EasyTracker.getTracker().sendEvent("Dating", "Additional", "Profile", 1L);
                 }
             }
