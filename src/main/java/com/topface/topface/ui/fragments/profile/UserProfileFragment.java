@@ -72,12 +72,16 @@ import java.util.ArrayList;
  */
 public class UserProfileFragment extends AbstractProfileFragment implements View.OnClickListener {
 
+    public static final String IGNORE_SYMPATHY_SENT_EXTRA = "IGNORE_SYMPATHY_SENT_EXTRA";
+
 
     private static final String ARG_TAG_PROFILE_ID = "profile_id";
+    private static final String ARG_IGNORE_SYMPATHY_SENT = "igmore_sympathy";
     private int mProfileId;
     private int mLastLoadedProfileId;
     private String mItemId;
     private ArrayList<UserActions.ActionItem> mUserActions;
+    private boolean mIgnoreSympathySent;
     // views
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
@@ -138,13 +142,14 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     };
     private int mActionsHeightHeuristic;
 
-    public static UserProfileFragment newInstance(String itemId, int id, String className) {
+    public static UserProfileFragment newInstance(String itemId, int id, String className, boolean ignoreSympathySent) {
         UserProfileFragment fragment = new UserProfileFragment();
 
         Bundle args = new Bundle();
         args.putInt(ARG_TAG_PROFILE_ID, id);
         args.putString(ARG_FEED_ITEM_ID, itemId);
         args.putString(ARG_TAG_CALLING_CLASS, className);
+        args.putBoolean(ARG_IGNORE_SYMPATHY_SENT, ignoreSympathySent);
         fragment.setArguments(args);
 
         return fragment;
@@ -180,6 +185,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         super.restoreState();
         mProfileId = getArguments().getInt(ARG_TAG_PROFILE_ID);
         mItemId = getArguments().getString(ARG_FEED_ITEM_ID);
+        mIgnoreSympathySent = getArguments().getBoolean(ARG_IGNORE_SYMPATHY_SENT);
     }
 
     @Override
@@ -315,8 +321,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
                         }
                     }
-                    if (user.isSympathySent) {
-                        mRateController.userRateBroadcast(user.uid);
+                    if (user.isSympathySent && !mIgnoreSympathySent) {
+                        disableSympathyDelight();
                     }
                 }
                 mLastLoadedProfileId = mProfileId;
