@@ -34,7 +34,10 @@
         android:capitalize="sentences"
         android:textColor="#000000"
         android:hint="@string/chat_write_message"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical">
+
+        <requestFocus />
+    </EditText>
 
     <Button
         android:id="@+id/btnSend"

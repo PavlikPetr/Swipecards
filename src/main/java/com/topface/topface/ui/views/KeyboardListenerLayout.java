@@ -1,6 +1,7 @@
 package com.topface.topface.ui.views;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
@@ -13,17 +14,21 @@ public class KeyboardListenerLayout extends RelativeLayout {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        if (w == oldw && mKeyboardListener != null) {
-            if (h < oldh) {
-                mKeyboardListener.keyboardOpened();
-            } else {
+        if (mKeyboardListener != null) {
+            if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 mKeyboardListener.keyboardClosed();
+            } else if (w == oldw) {
+                if (h < oldh) {
+                    mKeyboardListener.keyboardOpened();
+                } else if (h > oldh) {
+                    mKeyboardListener.keyboardClosed();
+                }
             }
         }
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
-    public void setmKeyboardListener(KeyboardListener keyboardListener) {
+    public void setKeyboardListener(KeyboardListener keyboardListener) {
         mKeyboardListener = keyboardListener;
     }
     public KeyboardListenerLayout(Context context) {

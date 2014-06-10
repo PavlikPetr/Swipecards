@@ -25,6 +25,7 @@ import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -232,12 +233,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
-        root.setmKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
+        final KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
+        root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @Override
             public void keyboardOpened() {
                 mIsKeyboardOpened = true;
-                animateChatActions(true, 500);
+                if (mActions != null && mActions.getVisibility() == View.VISIBLE) {
+                    animateChatActions(ACTIONS_CLOSE_ANIMATION_TIME);
+                }
             }
 
             @Override
@@ -313,6 +316,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     mLockScreen.setVisibility(View.GONE);
                 }
                 hideLoading();
+                mIsKeyboardOpened = savedInstanceState.getBoolean(KEYBOARD_OPENED, false);
             } catch (Exception | OutOfMemoryError e) {
                 Debug.error(e);
             }
@@ -722,6 +726,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mUpdater = new Handler();
         startTimer();
         GCMUtils.lastUserId = mUserId;
+
+        if (mIsKeyboardOpened) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (inputMethodManager != null) {
+                if (!mEditBox.isFocused()) {
+                    mEditBox.requestFocus();
+                } else {
+                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                }
+            }
+        }
     }
 
     @Override
@@ -907,13 +923,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         initActions(mChatActionsStub, mUser, getActions(mUser));
                         boolean checked = item.isChecked();
                         item.setChecked(!checked);
-                        animateChatActions(checked, ACTIONS_CLOSE_ANIMATION_TIME);
+                        animateChatActions(ACTIONS_CLOSE_ANIMATION_TIME);
                     } else {
                         Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                                 Toast.LENGTH_LONG).show();
                     }
                 }
                 return true;
+            case android.R.id.home:
+                Utils.hideSoftKeyboard(getActivity(), mEditBox);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -952,8 +970,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
-    private void animateChatActions(final boolean needToClose, long time) {
+    private void animateChatActions(long time) {
         if (mActions != null) {
+            final boolean needToClose = mActions.getVisibility() == View.VISIBLE;
             TranslateAnimation ta;
             int height = getChatActionsViewHeight();
             if (needToClose) {
