@@ -45,8 +45,6 @@ import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
@@ -54,9 +52,6 @@ import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
-import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
-import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
 import com.topface.topface.ui.fragments.gift.UserGiftsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
@@ -227,7 +222,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             mSympathyText = (TextView) mSympathy.findViewById(R.id.likeTV);
             mDelight = (RelativeLayout) mActions.findViewById(R.id.send_admiration_action);
             mDelightText = (TextView) mDelight.findViewById(R.id.delTV);
-            if (user.isSympathySent) {
+            if (user.isSympathySent && !mIgnoreSympathySent) {
                 disableSympathyDelight();
             }
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
@@ -320,9 +315,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (status == null || TextUtils.isEmpty(status)) {
                             mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
                         }
-                    }
-                    if (user.isSympathySent && !mIgnoreSympathySent) {
-                        disableSympathyDelight();
                     }
                 }
                 mLastLoadedProfileId = mProfileId;
