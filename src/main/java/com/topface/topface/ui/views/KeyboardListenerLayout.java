@@ -11,22 +11,35 @@ import android.widget.RelativeLayout;
 public class KeyboardListenerLayout extends RelativeLayout {
 
     private KeyboardListener mKeyboardListener;
+    private boolean mKeyboardOpened;
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        if (mKeyboardListener != null) {
-            if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                mKeyboardListener.keyboardClosed();
-            } else if (w == oldw) {
-                if (h < oldh) {
-                    mKeyboardListener.keyboardOpened();
-                } else if (h > oldh) {
-                    mKeyboardListener.keyboardClosed();
-                }
+        if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mKeyboardOpened = false;
+        } else if (w == oldw) {
+            if (h < oldh) {
+                mKeyboardOpened = true;
+            } else if (h > oldh) {
+                mKeyboardOpened = false;
             }
         }
         super.onSizeChanged(w, h, oldw, oldh);
     }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+        if (changed && mKeyboardListener != null) {
+            if (mKeyboardOpened) {
+                mKeyboardListener.keyboardOpened();
+            } else {
+                mKeyboardListener.keyboardClosed();
+            }
+        }
+    }
+
+
 
     public void setKeyboardListener(KeyboardListener keyboardListener) {
         mKeyboardListener = keyboardListener;

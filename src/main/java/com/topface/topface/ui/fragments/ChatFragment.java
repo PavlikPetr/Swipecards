@@ -156,6 +156,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mIsKeyboardOpened;
+    private int mKeyboardFreeHeight;
+    private boolean mJustResumed;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedUser mUser;
@@ -241,6 +243,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (mActions != null && mActions.getVisibility() == View.VISIBLE) {
                     animateChatActions(ACTIONS_CLOSE_ANIMATION_TIME);
                 }
+                mKeyboardFreeHeight = getView().getHeight();
             }
 
             @Override
@@ -276,6 +279,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
         //регистрируем здесь, потому что может быть такая ситуация, что обновить надо, когда активити находится не на топе стека
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+        mJustResumed = false;
         return root;
     }
 
@@ -727,15 +731,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         startTimer();
         GCMUtils.lastUserId = mUserId;
 
-        if (mIsKeyboardOpened) {
+        if (getView().getHeight() == mKeyboardFreeHeight) {
+            mIsKeyboardOpened = true;
+        }
+        if (mIsKeyboardOpened && mJustResumed) {
             InputMethodManager inputMethodManager = (InputMethodManager) getActivity().
                     getSystemService(Context.INPUT_METHOD_SERVICE);
             if (inputMethodManager != null) {
-                if (!mEditBox.isFocused()) {
-                    mEditBox.requestFocus();
-                } else {
-                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                }
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
             }
         }
     }
@@ -746,6 +749,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         getActivity().unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
+        mJustResumed = true;
     }
 
     /**
