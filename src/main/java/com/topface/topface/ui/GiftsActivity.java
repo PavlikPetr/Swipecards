@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -23,7 +24,7 @@ import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
-import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.TripleButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +49,9 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     public GiftsCollection mGiftsCollection;
     private TripleButton mTripleButton;
     private PlainGiftsFragment mGiftFragment;
+    private View mLoaderView;
+    private RelativeLayout mLockScreen;
+    private RetryViewCreator mRetryView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +121,16 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }
         });
 
+        mLoaderView = findViewById(R.id.llvGiftsLoading);
+        mLockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
+        mRetryView = RetryViewCreator.createDefaultRetryView(this, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadGifts();
+            }
+        });
+        mLockScreen.addView(mRetryView.getView());
+
         loadGifts();
     }
 
@@ -134,6 +148,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
                 @Override
                 protected void success(LinkedList<Gift> data, IApiResponse response) {
+                    mLoaderView.setVisibility(View.GONE);
                     mGiftsList.addAll(data);
                     mGiftsCollection.add(mGiftsList);
                     mGiftFragment.setGifts(mGiftsCollection.getGifts());
@@ -151,6 +166,10 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                             R.string.general_data_error,
                             Toast.LENGTH_SHORT
                     ).show();
+                    mLoaderView.setVisibility(View.GONE);
+                    mLockScreen.setVisibility(View.VISIBLE);
+                    mRetryView.setText(getText(R.string.general_error_try_again_later).toString());
+                    mRetryView.showRetryButton(true);
                 }
 
                 @Override
@@ -160,6 +179,8 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                     setSupportProgressBarIndeterminateVisibility(false);
                 }
             }).exec();
+            mLockScreen.setVisibility(View.GONE);
+            mLoaderView.setVisibility(View.VISIBLE);
         } else {
             mGiftsCollection.add(mGiftsList);
             mGiftFragment.setGifts(mGiftsCollection.getGifts());
