@@ -28,11 +28,7 @@
         android:layout_height="fill_parent"
         android:background="@color/bg_main"
         android:visibility="gone"
-        android:id="@+id/lockScreen" />
-
-    <com.topface.topface.ui.views.LockerView
-        android:id="@+id/llvGiftsLoading"
-        style="@style/LoadingLocker"
-        android:visibility="gone" />
+        android:id="@+id/lockScreen"
+        android:layout_below="@id/giftHeaderDivider" />
 
 </RelativeLayout>
