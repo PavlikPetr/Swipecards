@@ -283,7 +283,8 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
                 fragment = UserProfileFragment.newInstance(
                         intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID),
                         intent.getIntExtra(AbstractProfileFragment.INTENT_UID, 0),
-                        intent.getStringExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT)
+                        intent.getStringExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT),
+                        intent.getBooleanExtra(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, false)
 
                 );
                 break;
