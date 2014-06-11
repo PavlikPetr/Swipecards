@@ -358,7 +358,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     private void showLockWithText(String text) {
-        showLockWithText(text, false);
+        showLockWithText(text, true);
     }
 
     private void showRetryBtn() {
