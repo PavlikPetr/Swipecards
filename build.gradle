@@ -61,7 +61,7 @@ android {
         targetSdkVersion 19
 
         //noinspection GroovyAssignabilityCheck
-        testPackageName "com.topface.topface.test"
+        testApplicationId "com.topface.topface.test"
         //noinspection GroovyAssignabilityCheck
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
 
