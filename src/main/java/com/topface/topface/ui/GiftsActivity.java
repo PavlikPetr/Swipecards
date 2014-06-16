@@ -8,10 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
 
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.SendGiftAnswer;
@@ -23,7 +22,7 @@ import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
-import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.TripleButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +47,8 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     public GiftsCollection mGiftsCollection;
     private TripleButton mTripleButton;
     private PlainGiftsFragment mGiftFragment;
+    private RelativeLayout mLockScreen;
+    private RetryViewCreator mRetryView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +118,16 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }
         });
 
-        loadGifts();
+        mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
+
+        mLockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
+        mRetryView = RetryViewCreator.createDefaultRetryView(this, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadGifts();
+            }
+        });
+        mLockScreen.addView(mRetryView.getView());
     }
 
     /**
@@ -125,7 +135,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
      */
     private void loadGifts() {
         if (mGiftsList.isEmpty()) {
-            mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
             mTripleButton.setEnabled(false);
             setSupportProgressBarIndeterminateVisibility(true);
             GiftsRequest giftRequest = new GiftsRequest(this);
@@ -146,11 +155,9 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    Toast.makeText(
-                            App.getContext(),
-                            R.string.general_data_error,
-                            Toast.LENGTH_SHORT
-                    ).show();
+                    mLockScreen.setVisibility(View.VISIBLE);
+                    mRetryView.setText(getText(R.string.general_error_try_again_later).toString());
+                    mRetryView.showRetryButton(true);
                 }
 
                 @Override
@@ -160,6 +167,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                     setSupportProgressBarIndeterminateVisibility(false);
                 }
             }).exec();
+            mLockScreen.setVisibility(View.GONE);
         } else {
             mGiftsCollection.add(mGiftsList);
             mGiftFragment.setGifts(mGiftsCollection.getGifts());
@@ -181,6 +189,10 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 break;
             default:
                 break;
+        }
+
+        if (mLockScreen.getVisibility() != View.VISIBLE) {
+            loadGifts();
         }
     }
 

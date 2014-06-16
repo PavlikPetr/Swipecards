@@ -174,7 +174,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             @Override
             public void onClick(View v) {
                 getUserProfile(mProfileId);
-                mLockScreen.setVisibility(View.GONE);
             }
         });
         mLockScreen.addView(mRetryView.getView());
@@ -299,6 +298,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     private void getUserProfile(final int profileId) {
         if (isLoaded(profileId)) return;
+        mLockScreen.setVisibility(View.GONE);
         mLoaderView.setVisibility(View.VISIBLE);
         UserRequest userRequest = new UserRequest(profileId, getActivity());
         registerRequest(userRequest);
@@ -366,7 +366,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     private void showLockWithText(String text) {
-        showLockWithText(text, false);
+        showLockWithText(text, true);
     }
 
     private void showRetryBtn() {

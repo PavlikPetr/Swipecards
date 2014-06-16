@@ -68,6 +68,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
                 final Photo photo = (Photo) msg.obj;
                 if (CacheProfile.photos.isEmpty()) {
+                    mPhotoLinks.addFirst(photo);
                     CacheProfile.photo = photo;
                     mLastSelectedAsMainId = photo.getId();
                     CacheProfile.photos.addFirst(photo);

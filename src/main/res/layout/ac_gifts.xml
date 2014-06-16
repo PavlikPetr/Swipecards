@@ -23,4 +23,12 @@
         android:layout_height="fill_parent"
         android:layout_below="@id/giftHeaderDivider" />
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/bg_main"
+        android:visibility="gone"
+        android:id="@+id/lockScreen"
+        android:layout_below="@id/giftHeaderDivider" />
+
 </RelativeLayout>
