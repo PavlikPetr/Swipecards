@@ -14,6 +14,7 @@ import android.support.v7.view.ActionMode;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -78,6 +79,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private RetryViewCreator mRetryView;
     private RelativeLayout mContainer;
     protected View mLockView;
+    private MenuItem mLens;
+    private View mFilters;
 
     private BroadcastReceiver readItemReceiver;
     private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
@@ -266,6 +269,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (getGcmUpdateAction() != null) {
             getActivity().unregisterReceiver(mGcmReceiver);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        mLens = menu.findItem(R.id.action_filter);
     }
 
     protected abstract Drawable getBackIcon();
@@ -618,6 +627,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
             onUpdateFail(isPullToRefreshUpdating || isHistoryLoad);
             mListView.onRefreshComplete();
+            setFilterEnabled(false);
         }
     }
 
@@ -643,6 +653,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
         mListView.onRefreshComplete();
         mListView.setVisibility(View.VISIBLE);
+        setFilterEnabled(true);
     }
 
     protected boolean isForPremium() {
@@ -693,6 +704,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void initFilter(View view) {
         mFilterBlock = new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.loToolsBar);
         initDoubleButton(view);
+        mFilters = view.findViewById(R.id.loToolsBar);
     }
 
     protected void initDoubleButton(View view) {
@@ -752,9 +764,21 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
         ViewStub stub = getEmptyFeedViewStub();
         if (stub != null) stub.setVisibility(View.GONE);
+        setFilterEnabled(true);
     }
 
     private View mInflated;
+
+    private void setFilterEnabled(boolean enabled) {
+        if (mLens != null) {
+            mLens.setVisible(enabled);
+        }
+        if (!enabled) {
+            if (mFilterBlock != null && mFilters.getVisibility() == View.VISIBLE) {
+                mFilterBlock.openControls();
+            }
+        }
+    }
 
     protected void onEmptyFeed(int errorCode) {
         ViewStub stub = getEmptyFeedViewStub();
@@ -767,6 +791,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             initEmptyFeedView(mInflated, errorCode);
         }
         if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
+        setFilterEnabled(false);
     }
 
     protected void onEmptyFeed() {
