@@ -1,9 +1,3 @@
-//Константы для сборки приложения. В подмодулях следует использовать именно их, а не хардкодить значения
-def defaultCompileSdkVersion = 19
-def defaultBuildToolsVersion = "19.1"
-
-def supportLibrary = "com.android.support:support-v4:19.0.+"
-
 def getGitHeadSha() {
     return 'git rev-parse --short HEAD'.execute().text.trim();
 }
@@ -17,7 +11,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.11.1'
+        classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
     }
 }
 
@@ -28,8 +22,8 @@ repositories {
 apply plugin: 'android'
 
 android {
-    compileSdkVersion defaultCompileSdkVersion
-    buildToolsVersion defaultBuildToolsVersion
+    compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
+    buildToolsVersion rootProject.ANDROID_BUILD_TOOLS_VERSION
 
     productFlavors {
         //Основной flavor, в нашем случае работает с Google Play
@@ -56,9 +50,9 @@ android {
 
     defaultConfig {
         //noinspection GroovyAssignabilityCheck
-        minSdkVersion 7
+        minSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MIN_SDK_VERSION)
         //noinspection GroovyAssignabilityCheck
-        targetSdkVersion 19
+        targetSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
 
         //noinspection GroovyAssignabilityCheck
         testApplicationId "com.topface.topface.test"
@@ -108,8 +102,8 @@ android {
 
 dependencies {
     //Android Support libs
-    compile supportLibrary
-    compile 'com.android.support:appcompat-v7:19.0.+'
+    compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
+    compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
 
     //All jar libs
     compile fileTree(dir: 'libs', include: '*.jar', exclude: 'GoogleAdMobAdsSdk.jar')
@@ -158,7 +152,7 @@ project(':libs:IllustratedTextView') {
 project(':libs:Android-ViewPagerIndicator') {
     apply plugin: 'android-library'
     dependencies {
-        compile supportLibrary
+        compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
         compile project(':libs:IllustratedTextView')
     }
     android.sourceSets.main {
@@ -195,7 +189,7 @@ project(':libs:UniversalImageLoader') {
     }
 }
 
-//Social networks 
+//Social networks
 project(':libs:Facebook') {
     apply plugin: 'android-library'
     android.sourceSets.main {
@@ -218,7 +212,7 @@ project(':libs:odnoklassniki') {
 project(':libs:mopub-android-sdk') {
     apply plugin: 'android-library'
     dependencies {
-        compile supportLibrary
+        compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
         compile files('../GoogleAdMobAdsSdk.jar')
     }
     android.sourceSets.main {
@@ -247,8 +241,8 @@ subprojects {
     //До лучших времен закоментировал эту строку, пока Idea отказывается делать такие штуки, как папка сборки вне пределов проекта
     //buildDir "../../build/projects/$project.name"
     android {
-        compileSdkVersion defaultCompileSdkVersion
-        buildToolsVersion defaultBuildToolsVersion
+        compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
+        buildToolsVersion rootProject.ANDROID_BUILD_TOOLS_VERSION
     }
 }
 
