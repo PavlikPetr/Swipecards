@@ -118,6 +118,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (mBlocked != null) {
                             ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(value ? R.string.black_list_delete : R.string.black_list_add_short);
                             if (value) {
+                                ((User) profile).bookmarked = !value;
                                 mBookmarkAction.setText(R.string.general_bookmarks_add);
                             }
                         }
@@ -129,6 +130,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             ((User) profile).bookmarked = value;
                             mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                             if (value) {
+                                ((User) profile).inBlackList = !value;
                                 ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(R.string.black_list_add_short);
                             }
                         }
