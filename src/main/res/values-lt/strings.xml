@@ -653,6 +653,8 @@
         <item quantity="other">ir dar %d</item>
         <item quantity="one">ir dar %d</item>
     </plurals>
+    <string name="subscription">Prenumerata</string>
+    <string name="coins">Monetos</string>
     <string name="you_were_subscribed">Prenumerata įforminta</string>
     <string name="subscriptions_can_be_changed">Prenumerata įforminta. Pakeisti prenumeratos sąlygas galima Google Play</string>
     <string name="people_nearby">Žmonės šalia</string>
