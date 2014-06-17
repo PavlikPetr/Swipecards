@@ -119,11 +119,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         if (intent.hasExtra(ContainerActivity.VALUE)) {
                             mUser.blocked = value;
                             mBlackListActionController.switchAction();
+                            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
                             if (value) {
                                 mUser.bookmarked = false;
-                                TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
                                 mBookmarkAction.setText(R.string.general_bookmarks_add);
+                                mBookmarkAction.setTextColor(getResources().getColor(R.color.disabled_color));
+                            } else {
+                                mBookmarkAction.setTextColor(getResources().getColor(R.color.text_white));
                             }
+                            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(!value);
                         }
                         mBlackListActionController.setViewsToNormalState();
                         break;

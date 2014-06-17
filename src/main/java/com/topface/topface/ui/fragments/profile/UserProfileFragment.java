@@ -120,7 +120,11 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             if (value) {
                                 ((User) profile).bookmarked = !value;
                                 mBookmarkAction.setText(R.string.general_bookmarks_add);
+                                mBookmarkAction.setTextColor(getResources().getColor(R.color.disabled_color));
+                            } else {
+                                mBookmarkAction.setTextColor(getResources().getColor(R.color.text_white));
                             }
+                            mBookmarkAction.setEnabled(!value);
                         }
                         getView().findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
                         getView().findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
@@ -425,10 +429,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     private void disableSympathyDelight() {
-        mSympathyText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+        mSympathyText.setTextColor(getResources().getColor(R.color.disabled_color));
         mSympathy.setEnabled(false);
 
-        mDelightText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+        mDelightText.setTextColor(getResources().getColor(R.color.disabled_color));
         mDelight.setEnabled(false);
     }
 

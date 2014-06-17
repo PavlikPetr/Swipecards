@@ -13,4 +13,6 @@
     <color name="text_white">#FFFFFF</color>
 
     <color name="geo_color">#FFCF72</color>>
+
+    <color name="disabled_color">#AAAAAA</color>
 </resources>
