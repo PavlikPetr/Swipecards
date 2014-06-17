@@ -16,7 +16,8 @@
         android:layout_width="fill_parent"
         android:cacheColorHint="#0000"
         android:layout_marginLeft="-14dp"
-        android:layout_toRightOf="@+id/leadersDateBtn" />
+        android:layout_toRightOf="@+id/leadersDateBtn"
+        android:layout_centerVertical="true" />
 
     <Button
         android:id="@id/leadersDateBtn"
