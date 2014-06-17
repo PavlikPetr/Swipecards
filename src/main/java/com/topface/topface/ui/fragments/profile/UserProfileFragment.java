@@ -425,11 +425,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     private void disableSympathyDelight() {
-        mSympathy.setSelected(true);
         mSympathyText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
         mSympathy.setEnabled(false);
 
-        mDelight.setSelected(true);
         mDelightText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
         mDelight.setEnabled(false);
     }
