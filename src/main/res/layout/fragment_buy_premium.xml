@@ -32,28 +32,6 @@
             android:padding="5dp"
             android:layout_marginRight="5dp">
 
-            <RelativeLayout
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/vip_not_activated"
-                    style="@style/TitleWhiteText"
-                    android:layout_alignParentLeft="true"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_rocket"
-                    android:layout_alignParentRight="true"
-
-                    />
-
-            </RelativeLayout>
-
             <TextView
                 android:id="@+id/fbpBuyingDisabled"
                 android:layout_width="fill_parent"

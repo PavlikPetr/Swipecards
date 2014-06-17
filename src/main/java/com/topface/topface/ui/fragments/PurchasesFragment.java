@@ -49,6 +49,7 @@ public class PurchasesFragment extends BaseFragment {
             updateBalanceCounters();
         }
     };
+    private boolean mIsVip;
 
     public static PurchasesFragment newInstance(int type, int coins, String from) {
         PurchasesFragment fragment = new PurchasesFragment();
@@ -113,15 +114,17 @@ public class PurchasesFragment extends BaseFragment {
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
 
+        mIsVip = getArguments().getBoolean(IS_VIP_PRODUCTS);
+
         LinkedList<Options.Tab> tabs;
         mResourcesInfo = (TextView) root.findViewById(R.id.payReason);
-        if (getArguments().getBoolean(IS_VIP_PRODUCTS)) {
-            mResourcesInfo.setVisibility(View.GONE);
+        if (mIsVip) {
+            mResourcesInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_rocket), null);
             tabs = new LinkedList<>(CacheProfile.getOptions().premiumTabs);
         } else {
             tabs = new LinkedList<>(CacheProfile.getOptions().otherTabs);
-            mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
         }
+        mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
 
         removeExcessTabs(tabs); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
 
@@ -195,7 +198,7 @@ public class PurchasesFragment extends BaseFragment {
                     text = Utils.getQuantityString(R.plurals.buying_unlock_likes_you_need_coins, diff, diff);
                     break;
                 default:
-                    text = getResources().getString(R.string.buying_default_message);
+                    text = getResources().getString(mIsVip? R.string.vip_state_off : R.string.buying_default_message);
                     break;
             }
         } else {

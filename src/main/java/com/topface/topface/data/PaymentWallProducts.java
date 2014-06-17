@@ -11,8 +11,10 @@ public class PaymentWallProducts extends Products {
     public enum TYPE {DIRECT, MOBILE}
     private TYPE mType;
 
-    public PaymentWallProducts(@Nullable JSONObject data) {
-        super(data);
+    public PaymentWallProducts(@Nullable JSONObject data, TYPE type) {
+        super();
+        mType = type;
+        fillData(data);
     }
 
     public PaymentWallProducts(@NotNull IApiResponse data, TYPE type) {

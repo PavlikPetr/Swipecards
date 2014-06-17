@@ -45,6 +45,7 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
         String extraText = mArguments.getString(VipBuyFragment.ARG_TAG_EXRA_TEXT);
         switch (mTabs.get(position).type) {
             case Options.Tab.GPLAY:
+            case Options.Tab.AMAZON:
                 if (!mIsVip) {
                     fragment = GPlayBuyingFragment.newInstance(from);
                 } else {

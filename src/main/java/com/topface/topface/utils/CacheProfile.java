@@ -286,7 +286,7 @@ public class CacheProfile {
                 //Получаем опции из кэша
                 try {
                     products = new PaymentWallProducts(
-                            new JSONObject(productsCache)
+                            new JSONObject(productsCache), type
                     );
                 } catch (JSONException e) {
                     config.resetGoogleProductsData();
