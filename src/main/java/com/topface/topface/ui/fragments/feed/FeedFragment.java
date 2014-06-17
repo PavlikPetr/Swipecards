@@ -275,6 +275,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         mLens = menu.findItem(R.id.action_filter);
+        if (mLens != null) {
+            mLens.setVisible(false);
+        }
     }
 
     protected abstract Drawable getBackIcon();
@@ -653,7 +656,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
         mListView.onRefreshComplete();
         mListView.setVisibility(View.VISIBLE);
-        setFilterEnabled(true);
+        setFilterEnabled(!adapter.isEmpty());
     }
 
     protected boolean isForPremium() {
@@ -764,7 +767,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
         ViewStub stub = getEmptyFeedViewStub();
         if (stub != null) stub.setVisibility(View.GONE);
-        setFilterEnabled(true);
+        setFilterEnabled(!getListAdapter().isEmpty());
     }
 
     private View mInflated;
