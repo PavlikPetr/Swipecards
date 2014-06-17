@@ -119,11 +119,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         if (intent.hasExtra(ContainerActivity.VALUE)) {
                             mUser.blocked = value;
                             mBlackListActionController.switchAction();
+                            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
                             if (value) {
                                 mUser.bookmarked = false;
-                                TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
                                 mBookmarkAction.setText(R.string.general_bookmarks_add);
+                                mBookmarkAction.setTextColor(getResources().getColor(R.color.disabled_color));
+                            } else {
+                                mBookmarkAction.setTextColor(getResources().getColor(R.color.text_white));
                             }
+                            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(!value);
                         }
                         mBlackListActionController.setViewsToNormalState();
                         break;
@@ -689,20 +693,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 closeChatActions();
                 break;
             case R.id.add_to_bookmark_action:
-                final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
-                final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
+//                if (v.isEnabled()) {
+                    final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
+                    final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
 
-                loader.setVisibility(View.VISIBLE);
-                icon.setVisibility(View.GONE);
-                ApiRequest request;
+                    loader.setVisibility(View.VISIBLE);
+                    icon.setVisibility(View.GONE);
+                    ApiRequest request;
 
-                if (mUser.bookmarked) {
-                    request = new DeleteBookmarksRequest(mUserId, getActivity());
-                } else {
-                    request = new BookmarkAddRequest(mUserId, getActivity());
-                }
+                    if (mUser.bookmarked) {
+                        request = new DeleteBookmarksRequest(mUserId, getActivity());
+                    } else {
+                        request = new BookmarkAddRequest(mUserId, getActivity());
+                    }
 
-                request.exec();
+                    request.exec();
+//                }
                 break;
             case R.id.complain_action:
                 startActivity(ContainerActivity.getComplainIntent(mUserId));
