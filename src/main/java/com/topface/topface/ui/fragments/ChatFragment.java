@@ -693,22 +693,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 closeChatActions();
                 break;
             case R.id.add_to_bookmark_action:
-//                if (v.isEnabled()) {
-                    final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
-                    final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
+                final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
+                final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
 
-                    loader.setVisibility(View.VISIBLE);
-                    icon.setVisibility(View.GONE);
-                    ApiRequest request;
+                loader.setVisibility(View.VISIBLE);
+                icon.setVisibility(View.GONE);
+                ApiRequest request;
 
-                    if (mUser.bookmarked) {
-                        request = new DeleteBookmarksRequest(mUserId, getActivity());
-                    } else {
-                        request = new BookmarkAddRequest(mUserId, getActivity());
-                    }
+                if (mUser.bookmarked) {
+                    request = new DeleteBookmarksRequest(mUserId, getActivity());
+                } else {
+                    request = new BookmarkAddRequest(mUserId, getActivity());
+                }
 
-                    request.exec();
-//                }
+                request.exec();
                 break;
             case R.id.complain_action:
                 startActivity(ContainerActivity.getComplainIntent(mUserId));
