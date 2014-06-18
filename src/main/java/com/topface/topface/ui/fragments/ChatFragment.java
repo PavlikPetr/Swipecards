@@ -298,8 +298,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
+        super.onDestroyView();
     }
 
     @Override
