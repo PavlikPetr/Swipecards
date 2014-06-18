@@ -656,7 +656,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
         mListView.onRefreshComplete();
         mListView.setVisibility(View.VISIBLE);
-        setFilterEnabled(!adapter.isEmpty());
+        setFilterEnabled(true);
     }
 
     protected boolean isForPremium() {
@@ -767,7 +767,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
         ViewStub stub = getEmptyFeedViewStub();
         if (stub != null) stub.setVisibility(View.GONE);
-        setFilterEnabled(!getListAdapter().isEmpty());
+        setFilterEnabled(mListView.getVisibility() == View.VISIBLE);
     }
 
     private View mInflated;
