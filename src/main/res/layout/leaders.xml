@@ -12,7 +12,6 @@
     <com.topface.topface.ui.blocks.HorizontalListView
         android:id="@+id/leadersList"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0.5dp"
         android:layout_width="fill_parent"
         android:cacheColorHint="#0000"
         android:layout_marginLeft="-14dp"
