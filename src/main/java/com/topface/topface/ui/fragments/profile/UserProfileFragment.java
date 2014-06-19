@@ -119,12 +119,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(value ? R.string.black_list_delete : R.string.black_list_add_short);
                             if (value) {
                                 ((User) profile).bookmarked = !value;
-                                mBookmarkAction.setText(R.string.general_bookmarks_add);
-                                mBookmarkAction.setTextColor(getResources().getColor(R.color.disabled_color));
-                            } else {
-                                mBookmarkAction.setTextColor(getResources().getColor(R.color.text_white));
                             }
-                            mBookmarkAction.setEnabled(!value);
+                            switchBookmarkEnabled(!value);
                         }
                         getView().findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
                         getView().findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
@@ -147,6 +143,15 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             }
         }
     };
+
+    private void switchBookmarkEnabled(boolean enabled) {
+        if (mActions != null) {
+            mBookmarkAction.setText(R.string.general_bookmarks_add);
+            mBookmarkAction.setTextColor(getResources().getColor(enabled? R.color.text_white : R.color.disabled_color));
+            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(enabled);
+        }
+    }
+
     private int mActionsHeightHeuristic;
 
     public static UserProfileFragment newInstance(String itemId, int id, String className, boolean ignoreSympathySent) {
@@ -237,6 +242,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 disableSympathyDelight();
             }
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
+            switchBookmarkEnabled(!((Profile)user).inBlackList);
         }
     }
 
