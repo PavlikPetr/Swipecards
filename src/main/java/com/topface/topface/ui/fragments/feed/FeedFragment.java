@@ -764,10 +764,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void onFilledFeed() {
+        onFilledFeed(true);
+    }
+
+    protected void onFilledFeed(boolean isPushUpdating) {
         if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
         ViewStub stub = getEmptyFeedViewStub();
         if (stub != null) stub.setVisibility(View.GONE);
-        setFilterEnabled(mListView.getVisibility() == View.VISIBLE);
+        setFilterEnabled(isPushUpdating ? mListView.getVisibility() == View.VISIBLE : mLens.isVisible());
     }
 
     private View mInflated;
@@ -838,7 +842,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     @Override
     protected void onUpdateStart(boolean isPushUpdating) {
-        onFilledFeed();
+        onFilledFeed(isPushUpdating);
         if (!isPushUpdating) {
             mListView.setVisibility(View.INVISIBLE);
             mBackgroundText.setVisibility(View.VISIBLE);
