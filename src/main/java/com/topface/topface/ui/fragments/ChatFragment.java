@@ -112,11 +112,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
+            boolean hasValue = intent.hasExtra(ContainerActivity.VALUE);
             boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
-            if (type != null) {
+            if (type != null && mActions != null) {
                 switch (type) {
                     case BLACK_LIST:
-                        if (intent.hasExtra(ContainerActivity.VALUE)) {
+                        if (hasValue) {
                             mUser.blocked = value;
                             mBlackListActionController.switchAction();
                             TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
@@ -130,9 +131,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         mBlackListActionController.setViewsToNormalState();
                         break;
                     case BOOKMARK:
-                        if (intent.hasExtra(ContainerActivity.VALUE)) {
+                        if (hasValue) {
                             TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
-                            if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE)) {
+                            if (mBookmarkAction != null) {
                                 mUser.bookmarked = value;
                                 mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                                 if (value) {
@@ -141,8 +142,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                 }
                             }
                         }
-                        getView().findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
-                        getView().findViewById(R.id.favIcon).setVisibility(View.VISIBLE);
+                        mActions.findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
+                        mActions.findViewById(R.id.favIcon).setVisibility(View.VISIBLE);
                         break;
                 }
             }
@@ -305,8 +306,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
+        super.onDestroyView();
     }
 
     @Override
