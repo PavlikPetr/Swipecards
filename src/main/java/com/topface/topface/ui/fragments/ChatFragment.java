@@ -123,11 +123,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                             TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
                             if (value) {
                                 mUser.bookmarked = false;
-                                mBookmarkAction.setText(R.string.general_bookmarks_add);
-                                mBookmarkAction.setTextColor(getResources().getColor(R.color.disabled_color));
-                            } else {
-                                mBookmarkAction.setTextColor(getResources().getColor(R.color.text_white));
+
                             }
+                            switchBookmarkEnabled(!value);
                             mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(!value);
                         }
                         mBlackListActionController.setViewsToNormalState();
@@ -151,6 +149,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         }
     };
+
+    private void switchBookmarkEnabled(boolean enabled) {
+        if (mActions != null) {
+            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
+            mBookmarkAction.setText(R.string.general_bookmarks_add);
+            mBookmarkAction.setTextColor(getResources().getColor(enabled? R.color.text_white : R.color.disabled_color));
+            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(enabled);
+        }
+    }
 
     private IUserOnlineListener mUserOnlineListener;
 
@@ -984,6 +991,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             mBlackListActionController = new AddToBlackListViewsController(mActions);
             mBlackListActionController.switchAction();
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            switchBookmarkEnabled(!mUser.blocked);
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
         }
     }
