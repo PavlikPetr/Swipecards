@@ -249,8 +249,14 @@ public abstract class ApiRequest implements IApiRequest {
                 @Override
                 public void execute() {
                     if (mURLConnection != null) {
-                        mURLConnection.disconnect();
-                        mURLConnection = null;
+                        //Проблема в KitKat, связаная с багом https://github.com/square/okhttp/issues/658
+                        try {
+                            mURLConnection.disconnect();
+                        } catch (Exception e) {
+                            Debug.error(e);
+                        } finally {
+                            mURLConnection = null;
+                        }
                     }
                 }
             };

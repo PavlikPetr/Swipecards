@@ -296,7 +296,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
             for (int i = 0; i < getChildCount(); i++) {
                 View child = getChildAt(i);
                 int childWidth = child.getMeasuredWidth();
-                child.layout(left, 0, left + childWidth, child.getMeasuredHeight());
+                int padding = (getMeasuredHeight() - child.getMeasuredHeight()) / 2;
+                child.layout(left, padding, left + childWidth, child.getMeasuredHeight() + padding);
                 left += childWidth;
             }
         }

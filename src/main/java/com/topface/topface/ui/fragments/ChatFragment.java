@@ -112,25 +112,28 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
+            boolean hasValue = intent.hasExtra(ContainerActivity.VALUE);
             boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
-            if (type != null) {
+            if (type != null && mActions != null) {
                 switch (type) {
                     case BLACK_LIST:
-                        if (intent.hasExtra(ContainerActivity.VALUE)) {
+                        if (hasValue) {
                             mUser.blocked = value;
                             mBlackListActionController.switchAction();
+                            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
                             if (value) {
                                 mUser.bookmarked = false;
-                                TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
-                                mBookmarkAction.setText(R.string.general_bookmarks_add);
+
                             }
+                            switchBookmarkEnabled(!value);
+                            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(!value);
                         }
                         mBlackListActionController.setViewsToNormalState();
                         break;
                     case BOOKMARK:
-                        if (intent.hasExtra(ContainerActivity.VALUE)) {
+                        if (hasValue) {
                             TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
-                            if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE)) {
+                            if (mBookmarkAction != null) {
                                 mUser.bookmarked = value;
                                 mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                                 if (value) {
@@ -139,13 +142,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                 }
                             }
                         }
-                        getView().findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
-                        getView().findViewById(R.id.favIcon).setVisibility(View.VISIBLE);
+                        mActions.findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
+                        mActions.findViewById(R.id.favIcon).setVisibility(View.VISIBLE);
                         break;
                 }
             }
         }
     };
+
+    private void switchBookmarkEnabled(boolean enabled) {
+        if (mActions != null) {
+            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
+            mBookmarkAction.setText(R.string.general_bookmarks_add);
+            mBookmarkAction.setTextColor(getResources().getColor(enabled? R.color.text_white : R.color.disabled_color));
+            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(enabled);
+        }
+    }
 
     private IUserOnlineListener mUserOnlineListener;
 
@@ -294,8 +306,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
+        super.onDestroyView();
     }
 
     @Override
@@ -979,6 +991,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             mBlackListActionController = new AddToBlackListViewsController(mActions);
             mBlackListActionController.switchAction();
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            switchBookmarkEnabled(!mUser.blocked);
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
         }
     }
