@@ -794,7 +794,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             initEmptyFeedView(mInflated, errorCode);
         }
         if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
-        setFilterEnabled(false);
+        setFilterEnabled(mListView.getVisibility() == View.VISIBLE);
     }
 
     protected void onEmptyFeed() {
