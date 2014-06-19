@@ -153,7 +153,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private void switchBookmarkEnabled(boolean enabled) {
         if (mActions != null) {
             TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
-            mBookmarkAction.setText(R.string.general_bookmarks_add);
+            mBookmarkAction.setText(mUser.bookmarked? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
             mBookmarkAction.setTextColor(getResources().getColor(enabled? R.color.text_white : R.color.disabled_color));
             mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(enabled);
         }
