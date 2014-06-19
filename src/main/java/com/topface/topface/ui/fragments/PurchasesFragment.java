@@ -32,6 +32,7 @@ public class PurchasesFragment extends BaseFragment {
 
     public static final String IS_VIP_PRODUCTS = "is_vip_products";
     public static final String LAST_PAGE = "LAST_PAGE";
+    public static final String ARG_TAG_EXRA_TEXT = "extra_text";
     private TabPageIndicator mTabIndicator;
     private ViewPager mPager;
     private TextView mResourcesInfo;
@@ -77,7 +78,7 @@ public class PurchasesFragment extends BaseFragment {
         PurchasesFragment purchasesFragment = new PurchasesFragment();
         Bundle args = new Bundle();
         args.putString(BillingFragment.ARG_TAG_SOURCE, from);
-        args.putString(VipBuyFragment.ARG_TAG_EXRA_TEXT, extratext);
+        args.putString(ARG_TAG_EXRA_TEXT, extratext);
         args.putBoolean(IS_VIP_PRODUCTS, true);
         purchasesFragment.setArguments(args);
         return purchasesFragment;
@@ -119,7 +120,6 @@ public class PurchasesFragment extends BaseFragment {
         LinkedList<Options.Tab> tabs;
         mResourcesInfo = (TextView) root.findViewById(R.id.payReason);
         if (mIsVip) {
-            mResourcesInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_rocket), null);
             tabs = new LinkedList<>(CacheProfile.getOptions().premiumTabs);
         } else {
             tabs = new LinkedList<>(CacheProfile.getOptions().otherTabs);
@@ -187,6 +187,7 @@ public class PurchasesFragment extends BaseFragment {
             int type = args.getInt(ARG_ITEM_TYPE);
             int coins = args.getInt(ARG_ITEM_PRICE);
             int diff = coins - CacheProfile.money;
+            String extraText = args.getString(ARG_TAG_EXRA_TEXT);
             switch (type) {
                 case TYPE_GIFT:
                     text = Utils.getQuantityString(R.plurals.buying_gift_you_need_coins, diff, diff);
@@ -198,7 +199,11 @@ public class PurchasesFragment extends BaseFragment {
                     text = Utils.getQuantityString(R.plurals.buying_unlock_likes_you_need_coins, diff, diff);
                     break;
                 default:
-                    text = getResources().getString(mIsVip? R.string.vip_state_off : R.string.buying_default_message);
+                    if (extraText != null) {
+                        text = extraText;
+                    } else {
+                        text = getResources().getString(mIsVip ? R.string.vip_state_off : R.string.buying_default_message);
+                    }
                     break;
             }
         } else {

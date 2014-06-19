@@ -38,7 +38,7 @@ import static android.view.View.OnClickListener;
 public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     public static final String ACTION_BAR_CONST = "needActionBar";
-    public static final String ARG_TAG_EXRA_TEXT = "extra_text";
+
     public static final String VIP_PURCHASED_INTENT = "com.topface.topface.VIP_PURCHASED";
     EditSwitcher mInvisSwitcher;
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -52,23 +52,18 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     };
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
-    private TextView mExtraText;
 
     /**
      * Создает новый инстанс фрагмента покупки VIP
      *
      * @param needActionBar включает показ ActionBar (он не нужен например в профиле
-     * @param text          сопроводительный текст фрагмента (нужен например что-бы объяснить, что определнная функция только для VIP)
      * @param from          параметр для статистики покупок, что бы определить откуда пользователь пришел
      * @return Фрагмент покупки VIP
      */
-    public static VipBuyFragment newInstance(boolean needActionBar, String text, String from) {
+    public static VipBuyFragment newInstance(boolean needActionBar, String from) {
         VipBuyFragment fragment = new VipBuyFragment();
         Bundle args = new Bundle();
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
-        if (text != null) {
-            args.putString(ARG_TAG_EXRA_TEXT, text);
-        }
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
         }
@@ -116,26 +111,14 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     }
 
     private void initViews(View root) {
-        initExtraText(root);
         initBuyVipViews(root);
         initEditVipViews(root);
         switchLayouts();
     }
 
-    private void initExtraText(View root) {
-        mExtraText = (TextView) root.findViewById(R.id.tvExtraText);
-        String text = null;
-        if (getArguments() != null) {
-            text = getArguments().getString(ARG_TAG_EXRA_TEXT);
-            mExtraText.setText(text);
-        }
-        mExtraText.setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
-    }
-
     private void switchLayouts() {
         if (mBuyVipViewsContainer != null && mEditPremiumContainer != null) {
             if (CacheProfile.premium) {
-                mExtraText.setVisibility(View.GONE);
                 mEditPremiumContainer.setVisibility(View.VISIBLE);
                 mBuyVipViewsContainer.setVisibility(View.GONE);
             } else {

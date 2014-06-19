@@ -120,7 +120,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static Intent getVipBuyIntent(String extraText, String from) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP_FRAGMENT);
-        intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
+        intent.putExtra(PurchasesFragment.ARG_TAG_EXRA_TEXT, extraText);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
         return intent;
     }
@@ -241,7 +241,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
             case INTENT_BUY_VIP_FRAGMENT:
 
                 fragment = PurchasesFragment.newInstance(
-                        intent.getStringExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT),
+                        intent.getStringExtra(PurchasesFragment.ARG_TAG_EXRA_TEXT),
                         intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE)
                 );
                 break;
