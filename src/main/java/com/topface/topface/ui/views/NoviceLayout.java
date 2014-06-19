@@ -61,10 +61,8 @@ public class NoviceLayout extends RelativeLayout {
         mMask = (ImageView) findViewById(R.id.ivMask);
         mBackground = (ImageView) findViewById(R.id.ivBackground);
         mBubbleText = (TextView) findViewById(R.id.ivBubble);
-        TextView extraText = (TextView) findViewById(R.id.tvExtraText);
         Typeface tf = Typeface.createFromAsset(mContext.getAssets(), "neucha.otf");
         if (mBubbleText != null) mBubbleText.setTypeface(tf);
-        if (extraText != null) extraText.setTypeface(tf);
 
         if (mMask != null) {
             ViewTreeObserver vto = mMask.getViewTreeObserver();
