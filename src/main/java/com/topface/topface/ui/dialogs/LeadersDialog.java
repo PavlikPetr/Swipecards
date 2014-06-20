@@ -12,6 +12,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.Leader;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
@@ -95,7 +96,7 @@ public class LeadersDialog extends AbstractModalDialog {
     }
 
     private void openChat() {
-        Intent intent = new Intent(getActivity(), ContainerActivity.class);
+        Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, user.id);
         intent.putExtra(ChatFragment.INTENT_USER_NAME, user.first_name);
         intent.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);

@@ -49,6 +49,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
@@ -539,7 +540,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void onFeedItemClick(FeedItem item) {
         //Open chat activity
         if (!item.user.isEmpty()) {
-            Intent intent = new Intent(getActivity(), ContainerActivity.class);
+            Intent intent = new Intent(getActivity(), ChatActivity.class);
             intent.putExtra(ChatFragment.INTENT_USER_ID, item.user.id);
             intent.putExtra(ChatFragment.INTENT_USER_NAME, item.user.first_name);
             intent.putExtra(ChatFragment.INTENT_USER_SEX, item.user.sex);

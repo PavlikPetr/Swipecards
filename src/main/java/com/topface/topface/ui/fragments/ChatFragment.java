@@ -235,10 +235,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
+        if (activity instanceof IUserOnlineListener) {
             mUserOnlineListener = (IUserOnlineListener) activity;
-        } catch (ClassCastException e) {
-            Debug.error(e.toString());
         }
         // do not recreate Adapter cause of steRetainInstance(true)
         if (mAdapter == null) {
@@ -249,6 +247,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        Intent intent = getActivity().getIntent();
+        mItemId = intent.getStringExtra(INTENT_ITEM_ID);
+        mUserId = intent.getIntExtra(INTENT_USER_ID, -1);
+        mUserName = intent.getStringExtra(INTENT_USER_NAME);
+        mUserSex = intent.getIntExtra(INTENT_USER_SEX, Static.BOY);
+        mUserAge = intent.getIntExtra(INTENT_USER_AGE, 0);
+        mUserCity = intent.getStringExtra(INTENT_USER_CITY);
+
         final KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @Override
@@ -301,16 +308,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public void onDestroyView() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
         super.onDestroyView();
-    }
-
-    @Override
-    protected void restoreState() {
-        mItemId = getArguments().getString(INTENT_ITEM_ID);
-        mUserId = getArguments().getInt(INTENT_USER_ID, -1);
-        mUserName = getArguments().getString(INTENT_USER_NAME);
-        mUserSex = getArguments().getInt(INTENT_USER_SEX, Static.BOY);
-        mUserAge = getArguments().getInt(INTENT_USER_AGE, 0);
-        mUserCity = getArguments().getString(INTENT_USER_CITY);
     }
 
     private void restoreData(Bundle savedInstanceState) {
@@ -426,6 +423,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putString(INTENT_ITEM_ID, mItemId);
+        outState.putInt(INTENT_USER_ID, mUserId);
+        outState.putInt(INTENT_USER_SEX, mUserSex);
+        outState.putString(INTENT_USER_NAME, mUserName);
+        outState.putInt(INTENT_USER_AGE, mUserAge);
+        outState.putString(INTENT_USER_CITY, mUserCity);
         outState.putBoolean(WAS_FAILED, wasFailed);
         outState.putBoolean(KEYBOARD_OPENED, mIsKeyboardOpened);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());

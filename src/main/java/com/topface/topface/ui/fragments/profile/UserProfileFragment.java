@@ -46,6 +46,7 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.dialogs.LeadersDialog;
@@ -718,7 +719,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private void openChat() {
         Profile profile = getProfile();
         if (profile != null) {
-            Intent intent = new Intent(getActivity(), ContainerActivity.class);
+            Intent intent = new Intent(getActivity(), ChatActivity.class);
             intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
             intent.putExtra(ChatFragment.INTENT_USER_NAME, profile.firstName != null ?
                     profile.firstName : Static.EMPTY);

@@ -56,6 +56,7 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.edit.EditAgeFragment;
@@ -683,7 +684,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void openChat(FragmentActivity activity) {
-        Intent intent = new Intent(activity, ContainerActivity.class);
+        Intent intent = new Intent(activity, ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mCurrentUser.id);
         intent.putExtra(ChatFragment.INTENT_USER_NAME, mCurrentUser.first_name);
         intent.putExtra(ChatFragment.INTENT_USER_SEX, mCurrentUser.sex);

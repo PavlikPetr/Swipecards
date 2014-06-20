@@ -184,6 +184,15 @@
         </activity>
 
         <activity
+            android:name=".ui.ChatActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:windowSoftInputMode="stateUnchanged|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
             android:name=".ui.PaymentwallActivity"
             android:screenOrientation="portrait" />
 
