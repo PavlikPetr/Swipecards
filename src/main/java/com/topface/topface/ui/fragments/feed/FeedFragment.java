@@ -771,7 +771,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
         ViewStub stub = getEmptyFeedViewStub();
         if (stub != null) stub.setVisibility(View.GONE);
-        setFilterEnabled(isPushUpdating ? mListView.getVisibility() == View.VISIBLE : mLens.isVisible());
+        setFilterEnabled(isPushUpdating ? mListView.getVisibility() == View.VISIBLE :
+                mLens != null && mLens.isVisible());
     }
 
     private View mInflated;
