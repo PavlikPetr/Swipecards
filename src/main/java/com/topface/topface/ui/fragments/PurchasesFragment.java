@@ -37,6 +37,7 @@ public class PurchasesFragment extends BaseFragment {
     private ViewPager mPager;
     private TextView mResourcesInfo;
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
+    public static final int TYPE_NONE = 0;
     public static final int TYPE_GIFT = 1;
     public static final int TYPE_LEADERS = 2;
     public static final int TYPE_UNLOCK_SYMPATHIES = 3;
@@ -206,9 +207,13 @@ public class PurchasesFragment extends BaseFragment {
                     }
                     break;
             }
+            if (diff <= 0 && type != TYPE_NONE) {
+                text = getResources().getString(R.string.buying_default_message);
+            }
         } else {
             text = getResources().getString(R.string.buying_default_message);
         }
+
         mResourcesInfo.setText(text);
     }
 
