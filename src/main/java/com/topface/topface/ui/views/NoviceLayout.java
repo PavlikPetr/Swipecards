@@ -120,7 +120,7 @@ public class NoviceLayout extends RelativeLayout {
             canvas.drawARGB(178, 0, 0, 0);
             paint.setXfermode(new PorterDuffXfermode(Mode.DST_OUT));
             canvas.drawBitmap(mask, maskPoint.x, maskPoint.y, paint);
-        } catch (OutOfMemoryError e) {
+        } catch (OutOfMemoryError | Exception e) {
             Debug.error(e);
         }
 
