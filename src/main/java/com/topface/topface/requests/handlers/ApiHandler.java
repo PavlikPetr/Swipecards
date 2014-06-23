@@ -55,10 +55,10 @@ abstract public class ApiHandler extends Handler {
                 } else if (result != ErrorCodes.RESULT_OK) {
                     fail(result, response);
                 } else {
+                    success(response);
+
                     setCounters(response);
                     sendUpdateIntent(response);
-
-                    success(response);
                 }
             } catch (Exception e) {
                 Debug.error("ApiHandler exception", e);
