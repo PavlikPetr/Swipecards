@@ -129,10 +129,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE)) {
                             ((User) profile).bookmarked = value;
                             mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-                            if (value) {
-                                ((User) profile).inBlackList = !value;
-                                ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(R.string.black_list_add_short);
-                            }
                         }
                         if (isAdded()) {
                             getView().findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
