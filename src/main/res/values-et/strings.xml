@@ -211,7 +211,6 @@ Sa oled müksanud.</string>
     <string name="dating_skip_button_ext">Järgmine</string>
     <string name="dating_search_empty_title">Kahjuks, ei ole midagi leitud.</string>
     <string name="general_close">Sulgeda</string>
-    <string name="vip_not_activated">Sinu VIP-staatust ei ole aktiveeritud.</string>
     <string name="vip_privileges">VIP-eelised</string>
     <string name="vip_text_visitors">Saa teada, kes on sinu vastu huvi tundnud - vaata oma külalisi!</string>
     <string name="vip_rest">Sa oled VIP\'i ära tellinud.</string>

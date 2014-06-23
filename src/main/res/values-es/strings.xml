@@ -246,7 +246,6 @@
     <string name="dating_search_empty_title">Lamentablemente no se ha encontrado nada</string>
     <string name="dating_search_empty_text">Puede intentar repetir la busqueda o cambiar opciones de filtración</string>
     <string name="general_close">Cerrar</string>
-    <string name="vip_not_activated">Tu estado VIP no está activado</string>
     <string name="vip_privileges">VIP-ventajas</string>
     <string name="vip_text_visitors">Descubra quién se interesó por ti - ¡vea tus visitantes!</string>
     <string name="vip_rest">Estás suscrito al VIP</string>

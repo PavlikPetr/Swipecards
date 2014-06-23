@@ -246,7 +246,6 @@
     <string name="dating_search_empty_title">Inget hittats, tyvärr.</string>
     <string name="dating_search_empty_text">Du kan antingen försöka söka igen eller ändra sökkriterier.</string>
     <string name="general_close">Stäng</string>
-    <string name="vip_not_activated">Din VIP-status är ej aktiverad</string>
     <string name="vip_privileges">VIP-förmåner</string>
     <string name="vip_text_visitors">Ta reda på vem som är intresserad av dig - se dina gäster!</string>
     <string name="vip_rest">Du är prenumererad på VIP</string>
