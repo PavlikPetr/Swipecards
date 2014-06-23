@@ -213,7 +213,6 @@
     <string name="dating_search_empty_title">유감스럽게도 아무것도 찾지 못했습니다.</string>
     <string name="dating_search_empty_text">재 검색을 시도하거나 검색 필터를 재설정 할 수 있습니다.</string>
     <string name="general_close">닫기</string>
-    <string name="vip_not_activated">당신의 VIP 상태가 아직 등록되지 않았습니다.</string>
     <string name="vip_privileges">VIP-특전</string>
     <string name="vip_text_visitors">누가 당신에게 흥미를 보이는지 알아보세요. 자신의 게스트가 누구인지 볼 수 있습니다.</string>
     <string name="vip_rest">당신은 VIP 등급에 가입되셨습니다.</string>

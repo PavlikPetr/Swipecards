@@ -219,7 +219,6 @@
     <string name="dating_search_empty_title">Na žalost, ništa nije pronađeno</string>
     <string name="dating_search_empty_text">Možete pokušati ponovo pretragu, ili izmeniti podešavanja filtera</string>
     <string name="general_close">Zatvoriti</string>
-    <string name="vip_not_activated">Vaš VIP status nije aktiviran</string>
     <string name="vip_privileges">VIP privilegija</string>
     <string name="vip_text_visitors">Saznaćete ko se vama interesovao - pogledajte svoje goste!</string>
     <string name="vip_rest">Pretplaćeni ste na VIP</string>
