@@ -3,6 +3,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@drawable/ico_drop_menu_delight_pressed" android:state_pressed="true" />
     <item android:drawable="@drawable/ico_drop_menu_delight_pressed" android:state_selected="true" />
-    <item android:drawable="@drawable/ico_drop_menu_delight_normal" android:state_enabled="false" />
+    <item android:drawable="@drawable/ico_drop_menu_delight_disabled" android:enabled="false" />
     <item android:drawable="@drawable/ico_drop_menu_delight_normal" />
 </selector>
