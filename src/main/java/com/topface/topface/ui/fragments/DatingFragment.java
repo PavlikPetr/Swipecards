@@ -55,7 +55,6 @@ import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
@@ -684,14 +683,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void openChat(FragmentActivity activity) {
-        Intent intent = new Intent(activity, ChatActivity.class);
-        intent.putExtra(ChatFragment.INTENT_USER_ID, mCurrentUser.id);
-        intent.putExtra(ChatFragment.INTENT_USER_NAME, mCurrentUser.first_name);
-        intent.putExtra(ChatFragment.INTENT_USER_SEX, mCurrentUser.sex);
-        intent.putExtra(ChatFragment.INTENT_USER_AGE, mCurrentUser.age);
-        intent.putExtra(ChatFragment.INTENT_USER_CITY, mCurrentUser.city.name);
-        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object) this).getClass().getSimpleName());
-        activity.startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+        Intent intent = ChatActivity.getChatIntent(activity, mCurrentUser);
+        activity.startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         EasyTracker.getTracker().sendEvent("Dating", "Additional", "Chat", 1L);
     }
 

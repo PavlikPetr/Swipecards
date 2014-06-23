@@ -16,7 +16,7 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils.User;
 import com.topface.topface.Static;
 import com.topface.topface.imageloader.DefaultImageLoader;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.utils.config.UserConfig;
 
 public class UserNotificationManager {
@@ -207,7 +207,7 @@ public class UserNotificationManager {
         }
 
         MessageStack messagesStack = new MessageStack();
-        if (intent != null && intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ContainerActivity.INTENT_CHAT_FRAGMENT) {
+        if (intent != null && intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ChatActivity.INTENT_CHAT) {
             id = MESSAGES_ID;
             messagesStack = saveMessageStack(message, user);
         }

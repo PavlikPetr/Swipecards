@@ -48,7 +48,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -540,15 +539,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void onFeedItemClick(FeedItem item) {
         //Open chat activity
         if (!item.user.isEmpty()) {
-            Intent intent = new Intent(getActivity(), ChatActivity.class);
-            intent.putExtra(ChatFragment.INTENT_USER_ID, item.user.id);
-            intent.putExtra(ChatFragment.INTENT_USER_NAME, item.user.first_name);
-            intent.putExtra(ChatFragment.INTENT_USER_SEX, item.user.sex);
-            intent.putExtra(ChatFragment.INTENT_USER_AGE, item.user.age);
-            intent.putExtra(ChatFragment.INTENT_USER_CITY, item.user.city.name);
-            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object) this).getClass().getSimpleName());
-            intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id);
-            getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+            Intent intent = ChatActivity.getChatIntent(getActivity(), item.user, item.id);
+            getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         }
     }
 

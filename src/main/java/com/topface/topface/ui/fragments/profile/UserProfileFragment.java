@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
@@ -45,7 +44,6 @@ import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
@@ -719,15 +717,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private void openChat() {
         Profile profile = getProfile();
         if (profile != null) {
-            Intent intent = new Intent(getActivity(), ChatActivity.class);
-            intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
-            intent.putExtra(ChatFragment.INTENT_USER_NAME, profile.firstName != null ?
-                    profile.firstName : Static.EMPTY);
-            intent.putExtra(ChatFragment.INTENT_USER_SEX, profile.sex);
-            intent.putExtra(ChatFragment.INTENT_USER_AGE, profile.age);
-            intent.putExtra(ChatFragment.INTENT_USER_CITY, profile.city == null ? "" : profile.city.name);
-            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object) this).getClass().getSimpleName());
-            startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+            Intent intent = ChatActivity.getChatIntent(getActivity(), profile);
+            startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         }
     }
 

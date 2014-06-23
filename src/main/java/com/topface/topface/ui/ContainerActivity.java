@@ -2,14 +2,11 @@ package com.topface.topface.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 
 import com.topface.billing.BillingFragment;
 import com.topface.framework.utils.Debug;
@@ -17,7 +14,6 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.ContactsFragment;
 import com.topface.topface.ui.fragments.EditorBannersFragment;
@@ -49,7 +45,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
      */
     public static final int INTENT_BUY_VIP_FRAGMENT = 1;
     public static final int INTENT_BUYING_FRAGMENT = 2;
-    public static final int INTENT_CHAT_FRAGMENT = 3;
     public static final int INTENT_REGISTRATION_FRAGMENT = 4;
     public static final int INTENT_RECOVER_PASSWORD = 5;
     public static final int INTENT_SETTINGS_FRAGMENT = 7;
@@ -192,7 +187,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     @Override
     protected void onResume() {
         super.onResume();
-        setRotationMode();
     }
 
     @Override
@@ -260,16 +254,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
             case INTENT_COINS_SUBSCRIPTION_FRAGMENT:
                 fragment = CoinsSubscriptionsFragment.newInstance(source);
                 break;
-            case INTENT_CHAT_FRAGMENT:
-                fragment = ChatFragment.newInstance(intent.getStringExtra(ChatFragment.INTENT_ITEM_ID),
-                        intent.getIntExtra(ChatFragment.INTENT_USER_ID, -1),
-                        false,
-                        intent.getIntExtra(ChatFragment.INTENT_USER_SEX, Static.BOY),
-                        intent.getStringExtra(ChatFragment.INTENT_USER_NAME),
-                        intent.getIntExtra(ChatFragment.INTENT_USER_AGE, 0),
-                        intent.getStringExtra(ChatFragment.INTENT_USER_CITY),
-                        intent.getStringExtra(BaseFragmentActivity.INTENT_PREV_ENTITY));
-                break;
             case INTENT_REGISTRATION_FRAGMENT:
                 getSupportActionBar().hide();
                 fragment = new RegistrationFragment();
@@ -336,27 +320,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         intent.putExtra(VALUE, value);
         intent.putExtra(FEED_IDS, userIds);
         return intent;
-    }
-
-    private void setRotationMode() {
-        if (mCurrentFragmentId == INTENT_CHAT_FRAGMENT) {
-            int rotationStatus = Settings.System.getInt(
-                    getContentResolver(),
-                    Settings.System.ACCELEROMETER_ROTATION,
-                    1
-            );
-
-            if (rotationStatus == 1) {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED);
-            } else {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            }
-
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-
     }
 
     @Override

@@ -11,10 +11,9 @@ import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.RegistrationTokenRequest;
-import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Settings;
@@ -293,14 +292,7 @@ public class GCMUtils {
                 if (showMessage) {
                     if (user.id != 0) {
                         lastNotificationType = GCM_TYPE_MESSAGE;
-                        i = new Intent(context, ContainerActivity.class);
-                        i.putExtra(ChatFragment.INTENT_USER_ID, user.id);
-                        i.putExtra(ChatFragment.INTENT_USER_NAME, user.name);
-                        i.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
-                        i.putExtra(ChatFragment.INTENT_USER_AGE, user.age);
-                        i.putExtra(ChatFragment.INTENT_USER_CITY, user.city);
-                        i.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, GCM_NOTIFICATION);
-                        i.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_CHAT_FRAGMENT);
+                        i = ChatActivity.getChatIntent(context, user);
                     } else {
                         i = new Intent(context, NavigationActivity.class);
                     }

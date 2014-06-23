@@ -62,7 +62,6 @@ import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
@@ -210,7 +209,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     public static ChatFragment newInstance(String itemId, int userId, boolean profileInvoke,
                                            int userSex, String userName, int userAge,
-                                           String userCity, String prevEntity) {
+                                           String userCity) {
         ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
         args.putString(INTENT_ITEM_ID, itemId);
@@ -220,7 +219,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         args.putString(INTENT_USER_NAME, userName);
         args.putInt(INTENT_USER_AGE, userAge);
         args.putString(INTENT_USER_CITY, userCity);
-        args.putString(BaseFragmentActivity.INTENT_PREV_ENTITY, prevEntity);
         fragment.setArguments(args);
         return fragment;
     }
