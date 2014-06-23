@@ -50,6 +50,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.MultiselectionController;
@@ -551,7 +552,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 adapter.onSelection(item);
             } else {
                 startActivity(
-                        ContainerActivity.getProfileIntent(item.user.id, item.id, getActivity())
+                        UserProfileActivity.getUserProfileIntent(item.user.id, item.id, getActivity())
                 );
             }
         }

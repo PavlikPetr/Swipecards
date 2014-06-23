@@ -91,7 +91,7 @@ public class LeadersBlock {
             LeadersDialog dialog = LeadersDialog.newInstance(leader);
             dialog.show(mFragment.getFragmentManager(), "Leaders_Dialog");
 //            mFragment.startActivity(
-//                    ContainerActivity.getProfileIntent(
+//                    ContainerActivity.getUserProfileIntent(
 //                            leader.id,
 //                            mFragment.getActivity()
 //                    )

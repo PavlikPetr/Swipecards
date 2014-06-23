@@ -162,6 +162,16 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Intent intent = activity.getIntent();
+        mProfileId = intent.getIntExtra(AbstractProfileFragment.INTENT_UID, 0);
+        mItemId = intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID);
+        mIgnoreSympathySent = intent.getBooleanExtra(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, false);
+        setCallingClass(intent.getStringExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT));
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
         if (mItemId != null) {
@@ -187,10 +197,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     @Override
     protected void restoreState() {
-        super.restoreState();
-        mProfileId = getArguments().getInt(ARG_TAG_PROFILE_ID);
-        mItemId = getArguments().getString(ARG_FEED_ITEM_ID);
-        mIgnoreSympathySent = getArguments().getBoolean(ARG_IGNORE_SYMPATHY_SENT);
+
     }
 
     @Override

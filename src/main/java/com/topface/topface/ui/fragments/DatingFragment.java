@@ -58,6 +58,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
@@ -635,9 +636,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
-                    Intent intent = ContainerActivity.getProfileIntent(mCurrentUser.id, DatingFragment.class, getActivity());
+                    Intent intent = UserProfileActivity.getUserProfileIntent(mCurrentUser.id, DatingFragment.class, getActivity());
                     intent.putExtra(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, !mCurrentUser.rated);
-                    startActivityForResult(intent, ContainerActivity.INTENT_PROFILE_FRAGMENT);
+                    startActivityForResult(intent, UserProfileActivity.INTENT_USER_PROFILE);
                     EasyTracker.getTracker().sendEvent("Dating", "Additional", "Profile", 1L);
                 }
             }

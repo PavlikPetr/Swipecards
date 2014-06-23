@@ -1,6 +1,5 @@
 package com.topface.topface.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,8 +22,6 @@ import com.topface.topface.ui.fragments.RegistrationFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
-import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
-import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -53,7 +50,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static final int INTENT_COINS_SUBSCRIPTION_FRAGMENT = 10;
     // Id для админки начиная со 101
     public static final int INTENT_EDITOR_BANNERS = 101;
-    public static final int INTENT_PROFILE_FRAGMENT = 6;
     public static final String TYPE = "type";
     public static final String CHANGED = "changed";
     public static final String VALUE = "value";
@@ -72,31 +68,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CONTACTS_FRAGMENT);
         intent.putParcelableArrayListExtra(CONTACTS_DATA, data);
         return intent;
-    }
-
-    public static Intent getProfileIntent(int userId, Context context) {
-        return getProfileIntent(userId, null, Static.EMPTY, context);
-    }
-
-    public static Intent getProfileIntent(int userId, String itemId, Context context) {
-        return getProfileIntent(userId, itemId, null, context);
-    }
-
-    public static Intent getProfileIntent(int userId, Class callingClass, Context context) {
-        return getProfileIntent(userId, null, callingClass.getName(), context);
-    }
-
-    public static Intent getProfileIntent(int userId, String itemId, String className, Context context) {
-        Intent i = new Intent(context, ContainerActivity.class);
-        i.putExtra(AbstractProfileFragment.INTENT_UID, userId);
-        if (className != null) {
-            i.putExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT, className);
-        }
-        if (itemId != null) {
-            i.putExtra(AbstractProfileFragment.INTENT_ITEM_ID, itemId);
-        }
-        i.putExtra(Static.INTENT_REQUEST_KEY, INTENT_PROFILE_FRAGMENT);
-        return i;
     }
 
     public static Intent getComplainIntent(int userId) {
@@ -261,16 +232,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
             case INTENT_RECOVER_PASSWORD:
                 getSupportActionBar().hide();
                 fragment = new RecoverPwdFragment();
-                break;
-            case INTENT_PROFILE_FRAGMENT:
-                //Открываем профиль
-                fragment = UserProfileFragment.newInstance(
-                        intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID),
-                        intent.getIntExtra(AbstractProfileFragment.INTENT_UID, 0),
-                        intent.getStringExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT),
-                        intent.getBooleanExtra(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, false)
-
-                );
                 break;
             case INTENT_SETTINGS_FRAGMENT:
                 fragment = new SettingsFragment();

@@ -12,8 +12,8 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.Leader;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
@@ -66,7 +66,7 @@ public class LeadersDialog extends AbstractModalDialog {
                         ((NavigationActivity) getActivity()).showFragment(FragmentId.F_PROFILE);
                         dialog.dismiss();
                     } else {
-                        startActivity(ContainerActivity.getProfileIntent(user.id, LeadersDialog.class, getActivity()));
+                        startActivity(UserProfileActivity.getUserProfileIntent(user.id, LeadersDialog.class, getActivity()));
                     }
                 }
             });

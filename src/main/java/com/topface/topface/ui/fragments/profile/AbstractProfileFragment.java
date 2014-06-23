@@ -14,7 +14,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
 import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
 import com.topface.topface.ui.views.DarkenImageView;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -105,6 +104,10 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         mHeaderPager.setCurrentItem(mStartHeaderPage);
         mBodyPager.setCurrentItem(mStartBodyPage);
         return root;
+    }
+
+    public void setCallingClass(String callingClass) {
+        this.mCallingClass = callingClass;
     }
 
     @Override

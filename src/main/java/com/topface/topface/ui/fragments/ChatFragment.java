@@ -65,6 +65,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -207,22 +208,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     };
     private ArrayList<UserActions.ActionItem> mChatActions;
 
-    public static ChatFragment newInstance(String itemId, int userId, boolean profileInvoke,
-                                           int userSex, String userName, int userAge,
-                                           String userCity) {
-        ChatFragment fragment = new ChatFragment();
-        Bundle args = new Bundle();
-        args.putString(INTENT_ITEM_ID, itemId);
-        args.putInt(INTENT_USER_ID, userId);
-        args.putBoolean(INTENT_PROFILE_INVOKE, profileInvoke);
-        args.putInt(INTENT_USER_SEX, userSex);
-        args.putString(INTENT_USER_NAME, userName);
-        args.putInt(INTENT_USER_AGE, userAge);
-        args.putString(INTENT_USER_CITY, userCity);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -240,11 +225,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (mAdapter == null) {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
 
         Intent intent = getActivity().getIntent();
         mItemId = intent.getStringExtra(INTENT_ITEM_ID);
@@ -253,7 +233,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mUserSex = intent.getIntExtra(INTENT_USER_SEX, Static.BOY);
         mUserAge = intent.getIntExtra(INTENT_USER_AGE, 0);
         mUserCity = intent.getStringExtra(INTENT_USER_CITY);
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         final KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @Override
@@ -421,12 +405,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(INTENT_ITEM_ID, mItemId);
-        outState.putInt(INTENT_USER_ID, mUserId);
-        outState.putInt(INTENT_USER_SEX, mUserSex);
-        outState.putString(INTENT_USER_NAME, mUserName);
-        outState.putInt(INTENT_USER_AGE, mUserAge);
-        outState.putString(INTENT_USER_CITY, mUserCity);
         outState.putBoolean(WAS_FAILED, wasFailed);
         outState.putBoolean(KEYBOARD_OPENED, mIsKeyboardOpened);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
@@ -690,7 +668,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.acWProfile:
             case R.id.acProfile:
-                Intent profileIntent = ContainerActivity.getProfileIntent(mUserId, getActivity());
+                Intent profileIntent = UserProfileActivity.getUserProfileIntent(mUserId, getActivity());
                 startActivity(profileIntent);
                 closeChatActions();
                 break;

@@ -26,6 +26,7 @@ import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
@@ -148,7 +149,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             public void onClick(View v) {
                 try {
                     getActivity().startActivity(
-                            ContainerActivity.getProfileIntent(
+                            UserProfileActivity.getUserProfileIntent(
                                     Integer.parseInt(profileId.getText().toString()),
                                     EditorFragment.class,
                                     getActivity()
