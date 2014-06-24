@@ -106,7 +106,16 @@ public class AuthToken {
         mTokenInfo.mExpiresIn = tokenInfo.mExpiresIn;
         mTokenInfo.mLogin = tokenInfo.mLogin;
         mTokenInfo.mPassword = tokenInfo.mPassword;
+        saveTokenInfo(tokenInfo);
         return this;
+    }
+
+    private void saveTokenInfo(TokenInfo tokenInfo) {
+        if (tokenInfo.getSocialNet().equals(SN_TOPFACE)) {
+            saveToken(tokenInfo.getUserSocialId(), tokenInfo.getLogin(), tokenInfo.getPassword());
+        } else {
+            saveToken(tokenInfo.getSocialNet(), tokenInfo.getUserSocialId(), tokenInfo.getTokenKey(), tokenInfo.getExpiresIn());
+        }
     }
 
     public String getSocialNet() {
