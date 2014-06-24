@@ -42,11 +42,6 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_grid, null);
         mGridView = (GridView) root.findViewById(R.id.usedGrid);
