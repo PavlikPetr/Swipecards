@@ -43,6 +43,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     public static ArrayList<Gift> mGiftsList = new ArrayList<>();
     private int mUserIdToSendGift;
     private boolean mNeedToSendGift;
+    private boolean mRequestingGifts;
 
     public GiftsCollection mGiftsCollection;
     private TripleButton mTripleButton;
@@ -128,6 +129,8 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }
         });
         mLockScreen.addView(mRetryView.getView());
+
+        loadGifts();
     }
 
     /**
@@ -139,6 +142,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             setSupportProgressBarIndeterminateVisibility(true);
             GiftsRequest giftRequest = new GiftsRequest(this);
             registerRequest(giftRequest);
+            mRequestingGifts = true;
             giftRequest.callback(new DataApiHandler<LinkedList<Gift>>() {
 
                 @Override
@@ -165,6 +169,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                     super.always(response);
                     mTripleButton.setEnabled(true);
                     setSupportProgressBarIndeterminateVisibility(false);
+                    mRequestingGifts = false;
                 }
             }).exec();
             mLockScreen.setVisibility(View.GONE);
@@ -190,10 +195,24 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             default:
                 break;
         }
+    }
 
-        if (mLockScreen.getVisibility() != View.VISIBLE) {
-            loadGifts();
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        /**
+         * setSupportProgressBarIndeterminateVisibility() doesn't work right after onCreate (first
+         * time loadGifts() is called). We need to show progress bar here.
+         */
+        if (mRequestingGifts) {
+            setSupportProgressBarIndeterminateVisibility(true);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mRequestingGifts = false;
     }
 
     @Override
