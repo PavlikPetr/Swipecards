@@ -19,7 +19,6 @@
     <string name="general_server_error">Error. Please try again later</string>
     <string name="general_data_error">Error. Please try again.</string>
     <string name="general_internet_off">No Internet connection. Please try again.</string>
-    <string name="general_purchasing_error">Please, report about this purchase error to support@topface.ru</string>
     <string name="general_msg_copied">Message copied</string>
     <string name="general_spinner_title">Choose action</string>
     <string name="general_profile_error">Error loading profile</string>

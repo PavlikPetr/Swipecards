@@ -19,7 +19,6 @@
     <string name="general_server_error">Greška. Pokušajte kasnije</string>
     <string name="general_data_error">Greška. Pokušajte još jednom</string>
     <string name="general_internet_off">Nema veze sa internetom</string>
-    <string name="general_purchasing_error">Molimo vas da napišete poruku o grešci u kupovini na support@topface.ru</string>
     <string name="general_msg_copied">tekst je kopiran</string>
     <string name="general_spinner_title">Odaberite radnje</string>
     <string name="general_profile_error">Greška kod učitavanja profila</string>

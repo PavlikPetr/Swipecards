@@ -19,7 +19,6 @@
     <string name="general_server_error">Hiba. Próbálja meg újra</string>
     <string name="general_data_error">Hiba. Próbálja meg újra</string>
     <string name="general_internet_off">Nincs internet kapcsolat</string>
-    <string name="general_purchasing_error">Kérjük, írjon üzenetet a vásárlási hibáról support@topface.ru email-re</string>
     <string name="general_msg_copied">A szöveg másolva</string>
     <string name="general_spinner_title">Válaszon egy műveletet</string>
     <string name="general_profile_error">Profil feltöltés hiba</string>
