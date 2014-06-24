@@ -53,8 +53,10 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
     @Override
     protected void postGiftsLoadInfoUpdate(Profile.Gifts gifts) {
         FeedList<FeedGift> data = mGridAdapter.getData();
-        data.add(0, FeedGift.getSendedGiftItem());
-        if (data.size() <= getMinItemsCount()) {
+        if (data.size() < getMinItemsCount() || data.get(0).gift.type != Gift.SEND_BTN) {
+            data.add(0, FeedGift.getSendedGiftItem());
+        }
+        if (data.size() == getMinItemsCount()) {
             mTitle.setText(R.string.user_does_not_have_gifts);
             mTitle.setVisibility(View.VISIBLE);
         } else {

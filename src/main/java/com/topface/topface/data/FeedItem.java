@@ -1,13 +1,20 @@
 package com.topface.topface.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.topface.framework.utils.Debug;
 import com.topface.topface.utils.DateUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Абстрактный класс, реализующий основные поля и возможности элеметнов ленты (Диалоги, Лайки, Симпатии)
  */
-abstract public class FeedItem extends LoaderData {
+abstract public class FeedItem extends LoaderData implements Parcelable {
+
+    public static final String NULL_USER = "null_user";
 
     /**
      * идентификатор события в ленте
@@ -50,6 +57,25 @@ abstract public class FeedItem extends LoaderData {
         }
     }
 
+    public FeedItem(Parcel in) {
+        super(in);
+        id = in.readString();
+        type = in.readInt();
+        created = in.readLong();
+        createdRelative = in.readString();
+        target = in.readInt();
+        unread = in.readByte() == 1;
+        unreadCounter = in.readInt();
+        String usr = in.readString();
+        if (!usr.equals(NULL_USER)) {
+            try {
+                user = new FeedUser(new JSONObject(usr));
+            } catch (JSONException e) {
+                Debug.error(e);
+            }
+        }
+    }
+
     public FeedItem(ItemType type) {
         super(type);
     }
@@ -78,5 +104,30 @@ abstract public class FeedItem extends LoaderData {
         return DateUtils.getRelativeDate(date, true);
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeString(id);
+        dest.writeInt(type);
+        dest.writeLong(created);
+        dest.writeString(createdRelative);
+        dest.writeInt(target);
+        dest.writeByte((byte) (unread ? 1 : 0));
+        dest.writeInt(unreadCounter);
+        if (user != null) {
+            try {
+                dest.writeString(user.toJson().toString());
+            } catch (JSONException e) {
+                Debug.error(e);
+            }
+        } else {
+            dest.writeString(NULL_USER);
+        }
+    }
 
 }

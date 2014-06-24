@@ -2,6 +2,8 @@ package com.topface.topface.data;
 
 import android.text.TextUtils;
 
+import com.topface.topface.Static;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -106,12 +108,12 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         json.put("sex", sex);
         json.put("age", age);
         json.put("online", online);
-        json.put("city", city.toJson());
-        json.put("photo", photo.toJson());
+        json.put("city", city != null ? city.toJson() : Static.EMPTY);
+        json.put("photo", photo != null ? photo.toJson() : Static.EMPTY);
         json.put("premium", premium);
         json.put("bookmarked", bookmarked);
         json.put("inBlacklist", blocked);
-        json.put("photos", photos.toJson());
+        json.put("photos", photos != null ? photos.toJson() : Static.EMPTY);
         json.put("feedItemId", feedItemId);
         return json;
     }
