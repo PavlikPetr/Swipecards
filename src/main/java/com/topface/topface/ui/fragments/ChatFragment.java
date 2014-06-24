@@ -133,13 +133,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     case BOOKMARK:
                         if (hasValue) {
                             TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
-                            if (mBookmarkAction != null) {
+                            if (mBookmarkAction != null && !mUser.blocked) {
                                 mUser.bookmarked = value;
                                 mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-                                if (value) {
-                                    mUser.blocked = false;
-                                    mBlackListActionController.switchAction();
-                                }
                             }
                         }
                         mActions.findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
