@@ -13,13 +13,8 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.ContactsFragment;
-import com.topface.topface.ui.fragments.EditorBannersFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.fragments.RecoverPwdFragment;
-import com.topface.topface.ui.fragments.RegistrationFragment;
-import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.ContactsProvider;
@@ -29,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements IUserOnlineListener {
+public class ContainerActivity extends CustomTitlesBaseFragmentActivity {
     public static final String UPDATE_USER_CATEGORY = "com.topface.topface.action.USER_CATEGORY";
 
     public static final String CONTACTS_DATA = "contacts_data";
@@ -42,14 +37,8 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
      */
     public static final int INTENT_BUY_VIP_FRAGMENT = 1;
     public static final int INTENT_BUYING_FRAGMENT = 2;
-    public static final int INTENT_REGISTRATION_FRAGMENT = 4;
-    public static final int INTENT_RECOVER_PASSWORD = 5;
-    public static final int INTENT_SETTINGS_FRAGMENT = 7;
     public static final int INTENT_CONTACTS_FRAGMENT = 8;
-    public static final int INTENT_COMPLAIN_FRAGMENT = 9;
     public static final int INTENT_COINS_SUBSCRIPTION_FRAGMENT = 10;
-    // Id для админки начиная со 101
-    public static final int INTENT_EDITOR_BANNERS = 101;
     public static final String TYPE = "type";
     public static final String CHANGED = "changed";
     public static final String VALUE = "value";
@@ -57,29 +46,10 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     private Fragment mCurrentFragment;
     private View mOnlineIcon;
 
-    public static Intent getNewIntent(int code) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, code);
-        return intent;
-    }
-
     public static Intent getIntentForContacts(ArrayList<ContactsProvider.Contact> data) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CONTACTS_FRAGMENT);
         intent.putParcelableArrayListExtra(CONTACTS_DATA, data);
-        return intent;
-    }
-
-    public static Intent getComplainIntent(int userId) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_COMPLAIN_FRAGMENT);
-        intent.putExtra(INTENT_USERID, userId);
-        return intent;
-    }
-
-    public static Intent getComplainIntent(int userId, String feedId) {
-        Intent intent = getComplainIntent(userId);
-        intent.putExtra(FEED_ID, feedId);
         return intent;
     }
 
@@ -225,32 +195,9 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
             case INTENT_COINS_SUBSCRIPTION_FRAGMENT:
                 fragment = CoinsSubscriptionsFragment.newInstance(source);
                 break;
-            case INTENT_REGISTRATION_FRAGMENT:
-                getSupportActionBar().hide();
-                fragment = new RegistrationFragment();
-                break;
-            case INTENT_RECOVER_PASSWORD:
-                getSupportActionBar().hide();
-                fragment = new RecoverPwdFragment();
-                break;
-            case INTENT_SETTINGS_FRAGMENT:
-                fragment = new SettingsFragment();
-                break;
             case INTENT_CONTACTS_FRAGMENT:
                 ArrayList<ContactsProvider.Contact> contacts = intent.getParcelableArrayListExtra(CONTACTS_DATA);
                 fragment = ContactsFragment.newInstance(contacts);
-                break;
-            case INTENT_COMPLAIN_FRAGMENT:
-                int userId = intent.getIntExtra(INTENT_USERID, 0);
-                String feedId = intent.getStringExtra(FEED_ID);
-                if (feedId != null) {
-                    fragment = ComplainsFragment.newInstance(userId, feedId);
-                } else {
-                    fragment = ComplainsFragment.newInstance(userId);
-                }
-                break;
-            case INTENT_EDITOR_BANNERS:
-                fragment = new EditorBannersFragment();
                 break;
         }
 
@@ -286,19 +233,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     @Override
     public boolean isTrackable() {
         return false;
-    }
-
-    @Override
-    protected boolean isNeedAuth() {
-        return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT &&
-                mCurrentFragmentId != INTENT_RECOVER_PASSWORD && super.isNeedAuth();
-    }
-
-    @Override
-    public void setUserOnline(boolean online) {
-        if (mOnlineIcon != null) {
-            mOnlineIcon.setVisibility(online ? View.VISIBLE : View.GONE);
-        }
     }
 
     @Override

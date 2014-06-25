@@ -4,15 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 
-public class UserProfileActivity extends CustomTitlesBaseFragmentActivity implements IUserOnlineListener {
-
-    private View mOnlineIcon;
+public class UserProfileActivity extends UserOnlineActivity {
 
     public static final int INTENT_USER_PROFILE = 6;
 
@@ -48,16 +45,6 @@ public class UserProfileActivity extends CustomTitlesBaseFragmentActivity implem
     }
 
     @Override
-    protected void initCustomActionBarView(View mCustomView) {
-        mOnlineIcon = mCustomView.findViewById(R.id.online);
-    }
-
-    @Override
-    protected int getActionBarCustomViewResId() {
-        return R.layout.actionbar_container_title_view;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -71,12 +58,5 @@ public class UserProfileActivity extends CustomTitlesBaseFragmentActivity implem
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void setUserOnline(boolean online) {
-        if (mOnlineIcon != null) {
-            mOnlineIcon.setVisibility(online ? View.VISIBLE : View.GONE);
-        }
     }
 }

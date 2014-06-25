@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -13,9 +12,7 @@ import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.fragments.ChatFragment;
 
-public class ChatActivity extends CustomTitlesBaseFragmentActivity implements IUserOnlineListener {
-
-    private View mOnlineIcon;
+public class ChatActivity extends UserOnlineActivity {
 
     public static final int INTENT_CHAT = 3;
 
@@ -23,16 +20,6 @@ public class ChatActivity extends CustomTitlesBaseFragmentActivity implements IU
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_chat);
-    }
-
-    @Override
-    protected void initCustomActionBarView(View mCustomView) {
-        mOnlineIcon = mCustomView.findViewById(R.id.online);
-    }
-
-    @Override
-    protected int getActionBarCustomViewResId() {
-        return R.layout.actionbar_container_title_view;
     }
 
     @Override
@@ -50,13 +37,6 @@ public class ChatActivity extends CustomTitlesBaseFragmentActivity implements IU
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void setUserOnline(boolean online) {
-        if (mOnlineIcon != null) {
-            mOnlineIcon.setVisibility(online ? View.VISIBLE : View.GONE);
-        }
     }
 
     public static Intent getChatIntent(Context context, FeedUser user) {

@@ -62,6 +62,7 @@ import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
@@ -346,7 +347,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                         EasyTracker.getTracker().sendEvent("Chat", "CopyItemText", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COMPLAINT:
-                                        startActivity(ContainerActivity.getComplainIntent(mUserId, mAdapter.getItem(position).id));
+                                        startActivity(ComplainsActivity.getComplainIntent(mUserId, mAdapter.getItem(position).id));
                                         EasyTracker.getTracker().sendEvent("Chat", "ComplainItemText", "", 1L);
                                         break;
                                 }
@@ -418,7 +419,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     }
 
     @Override
-    public void onViewStateRestored (Bundle savedInstanceState) {
+    public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
             mIsKeyboardOpened = savedInstanceState.getBoolean(KEYBOARD_OPENED);
@@ -689,7 +690,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 request.exec();
                 break;
             case R.id.complain_action:
-                startActivity(ContainerActivity.getComplainIntent(mUserId));
+                startActivity(ComplainsActivity.getComplainIntent(mUserId));
                 closeChatActions();
                 break;
             case R.id.ivBarAvatar:

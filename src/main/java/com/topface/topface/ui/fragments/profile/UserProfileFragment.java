@@ -45,6 +45,7 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.dialogs.LeadersDialog;
@@ -69,8 +70,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     public static final String IGNORE_SYMPATHY_SENT_EXTRA = "IGNORE_SYMPATHY_SENT_EXTRA";
 
 
-    private static final String ARG_TAG_PROFILE_ID = "profile_id";
-    private static final String ARG_IGNORE_SYMPATHY_SENT = "igmore_sympathy";
     private int mProfileId;
     private int mLastLoadedProfileId;
     private String mItemId;
@@ -147,19 +146,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         }
     };
     private int mActionsHeightHeuristic;
-
-    public static UserProfileFragment newInstance(String itemId, int id, String className, boolean ignoreSympathySent) {
-        UserProfileFragment fragment = new UserProfileFragment();
-
-        Bundle args = new Bundle();
-        args.putInt(ARG_TAG_PROFILE_ID, id);
-        args.putString(ARG_FEED_ITEM_ID, itemId);
-        args.putString(ARG_TAG_CALLING_CLASS, className);
-        args.putBoolean(ARG_IGNORE_SYMPATHY_SENT, ignoreSympathySent);
-        fragment.setArguments(args);
-
-        return fragment;
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -615,7 +601,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 request.exec();
                 break;
             case R.id.complain_action:
-                startActivity(ContainerActivity.getComplainIntent(mProfileId));
+                startActivity(ComplainsActivity.getComplainIntent(mProfileId));
                 break;
             default:
                 break;

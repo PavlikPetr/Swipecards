@@ -5,8 +5,8 @@
     android:background="@color/bg_main">
 
     <fragment
-        android:name="com.topface.topface.ui.fragments.profile.UserProfileFragment"
-        android:id="@+id/user_profile_fragment"
+        android:name="com.topface.topface.ui.fragments.ComplainsFragment"
+        android:id="@+id/complains_fragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 </RelativeLayout>
