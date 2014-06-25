@@ -447,11 +447,13 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         json.put("liked", mLiked);
         json.put("position", position);
         JSONObject jsonLinks = new JSONObject();
-        for (Map.Entry<String, String> entry : links.entrySet()) {
-            jsonLinks.put(
-                    entry.getKey(),
-                    entry.getValue()
-            );
+        if (links != null) {
+            for (Map.Entry<String, String> entry : links.entrySet()) {
+                jsonLinks.put(
+                        entry.getKey(),
+                        entry.getValue()
+                );
+            }
         }
         json.put("links", jsonLinks);
         return json;
