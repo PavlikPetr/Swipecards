@@ -22,3 +22,6 @@
 [submodule "libs/mopub-android-sdk"]
 	path = libs/mopub-android-sdk
 	url = git@github.com:Topface/mopub-android-sdk.git
+[submodule "libs/tf-offerwall"]
+	path = libs/tf-offerwall
+	url = git@github.com:iovorobiev/offerwall-android.git
