@@ -4,8 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="auto"
-    android:versionCode="109"
-    android:versionName="2.9.9"
+    android:versionCode="110"
+    android:versionName="2.9.10"
     tools:ignore="UnusedAttribute">
 
     <!-- permissions -->
