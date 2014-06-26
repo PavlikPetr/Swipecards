@@ -31,13 +31,14 @@ import android.widget.TextView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
+import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
 import com.topface.topface.requests.DataApiHandler;
@@ -297,7 +298,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         //Пауза загрузки изображений при прокрутке списка
         mListView.setOnScrollListener(
                 new PauseOnScrollListener(
-                        DefaultImageLoader.getInstance().getImageLoader(),
+                        DefaultImageLoader.getInstance(App.getContext()).getImageLoader(),
                         Static.PAUSE_DOWNLOAD_ON_SCROLL,
                         Static.PAUSE_DOWNLOAD_ON_FLING,
                         adapter
