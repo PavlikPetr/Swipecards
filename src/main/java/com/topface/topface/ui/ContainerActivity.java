@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.topface.billing.BillingFragment;
 import com.topface.framework.utils.Debug;
@@ -24,7 +25,6 @@ import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
 import com.topface.topface.ui.fragments.RegistrationFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
 import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
@@ -120,7 +120,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static Intent getVipBuyIntent(String extraText, String from) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP_FRAGMENT);
-        intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
+        intent.putExtra(PurchasesFragment.ARG_TAG_EXRA_TEXT, extraText);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
         return intent;
     }
@@ -241,7 +241,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
             case INTENT_BUY_VIP_FRAGMENT:
 
                 fragment = PurchasesFragment.newInstance(
-                        intent.getStringExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT),
+                        intent.getStringExtra(PurchasesFragment.ARG_TAG_EXRA_TEXT),
                         intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE)
                 );
                 break;
@@ -348,6 +348,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
 
             if (rotationStatus == 1) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED);
             } else {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
@@ -380,6 +381,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                mCurrentFragment.onOptionsItemSelected(item);
                 if (isTaskRoot()) {
                     Intent i = new Intent(this, NavigationActivity.class);
                     startActivity(i);

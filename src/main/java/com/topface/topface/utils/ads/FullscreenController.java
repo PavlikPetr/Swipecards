@@ -62,7 +62,7 @@ public class FullscreenController {
     private static final String MOPUB_INTERSTITIAL_ID = "00db7208a90811e281c11231392559e4";
     private static final String IVENGO_APP_ID = "aggeas97392g";
     private static final String LIFESTREET_TAG = "http://mobile-android.lfstmedia.com/m2/slot76331?ad_size=320x480&adkey=a25";
-    private static final String ADMOB_INTERSTITIAL_ID = "a153303efcaf2c6";
+    private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-3847865014365726/7595518694";
     private static final String ADMOB_MEDIATION_INTERSTITIAL_ID = "5161525f5e624978";
     private static boolean isFullScreenBannerVisible = false;
     private SharedPreferences mPreferences;

@@ -26,7 +26,6 @@
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_internet_off">Пытаемся восстановить соединение с интернетом. Пожалуйста, подождите.</string>
-    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
     <string name="general_msg_copied">Текст скопирован</string>
     <string name="general_spinner_title">Выберите действие</string>
     <string name="general_profile_error">Ошибка загрузки профиля</string>
@@ -323,7 +322,6 @@
     <string name="dating_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра.
     </string>
     <string name="general_close">Закрыть</string>
-    <string name="vip_not_activated">Ваш VIP-статус не активирован</string>
     <string name="vip_privileges">VIP-привилегии</string>
     <string name="vip_text_visitors">Узнаете, кто вами интересовался - смотрите своих гостей!</string>
     <string name="vip_rest">Вы подписаны на VIP</string>

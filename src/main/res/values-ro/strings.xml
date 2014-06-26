@@ -19,7 +19,6 @@
     <string name="general_server_error">Eroare. Incercati mai tarziu</string>
     <string name="general_data_error">Eroare. Mai incearca o data</string>
     <string name="general_internet_off">Conectare la Internet inaccesibila</string>
-    <string name="general_purchasing_error">Va rugam, sa trimiti mesaj despre eroarea cumparaturii la support@topface.ru</string>
     <string name="general_msg_copied">Textul a fost copiat</string>
     <string name="general_spinner_title">Alegeti actiunea</string>
     <string name="general_profile_error">Eroare la incarcarea profilului</string>
@@ -219,7 +218,6 @@
     <string name="dating_search_empty_title">Cu parere de rau cautare fara rezultat</string>
     <string name="dating_search_empty_text">Puteti incerca cautarea inca odata, sau sa schimbati setarile filtrului.</string>
     <string name="general_close">Inchide</string>
-    <string name="vip_not_activated">Statutul VIP nu este activ</string>
     <string name="vip_privileges">VIP - privilegii</string>
     <string name="vip_text_visitors">Afla, cine sa interesat de Dmv - vezi vizitatorii!</string>
     <string name="vip_rest">Sunteti abonati la VIP</string>

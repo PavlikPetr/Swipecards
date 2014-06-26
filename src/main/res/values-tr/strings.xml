@@ -19,7 +19,6 @@
     <string name="general_server_error">Hata. Daha sonra yeniden deneyin</string>
     <string name="general_data_error">Hata. Bir daha deneyin</string>
     <string name="general_internet_off">İnternete bağlı değil</string>
-    <string name="general_purchasing_error">Lütfen, alış veriş hatası hakkında support@topface.ru adresine yazın</string>
     <string name="general_msg_copied">Metin kopyalandı</string>
     <string name="general_spinner_title">Adımınızı seçin</string>
     <string name="general_profile_error">Profil yükleme hatası</string>
@@ -235,7 +234,6 @@
     <string name="dating_search_empty_title">Maalesef, hiçbir şey bulunamamış</string>
     <string name="dating_search_empty_text">Aramayı tekrar deneyebilirsiniz veya filrtenin ayarlarını değiştirebilirsiniz.</string>
     <string name="general_close">Kapatmak</string>
-    <string name="vip_not_activated">VIP-durumunuz güncellenmedi</string>
     <string name="vip_privileges">VIP-ayrıcalık</string>
     <string name="vip_text_visitors">Sizi merak edenleri öğrenin misafirlerinize göz atın!</string>
     <string name="vip_rest">VIP’e abone oldunuz</string>

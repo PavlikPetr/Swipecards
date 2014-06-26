@@ -42,13 +42,13 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
         Fragment fragment = mFragmentCache.get(position);
         if (fragment != null) return fragment;
         String from = mArguments.getString(BillingFragment.ARG_TAG_SOURCE);
-        String extraText = mArguments.getString(VipBuyFragment.ARG_TAG_EXRA_TEXT);
         switch (mTabs.get(position).type) {
             case Options.Tab.GPLAY:
+            case Options.Tab.AMAZON:
                 if (!mIsVip) {
                     fragment = GPlayBuyingFragment.newInstance(from);
                 } else {
-                    fragment = VipBuyFragment.newInstance(true, extraText, from);
+                    fragment = VipBuyFragment.newInstance(true, from);
                 }
                 break;
             case Options.Tab.BONUS:
@@ -60,14 +60,14 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
                 if (!mIsVip) {
                     fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.DIRECT);
                 } else {
-                    fragment = VipPWBuyFragment.newInstance(true, extraText, from, PaymentWallProducts.TYPE.DIRECT);
+                    fragment = VipPWBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.DIRECT);
                 }
                 break;
             case Options.Tab.PWALL_MOBILE:
                 if (!mIsVip) {
                     fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.MOBILE);
                 } else {
-                    fragment = VipPWBuyFragment.newInstance(true, extraText, from, PaymentWallProducts.TYPE.MOBILE);
+                    fragment = VipPWBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.MOBILE);
                 }
             default:
                 Debug.error("PurchasesFragmentsAdapter wrong position");

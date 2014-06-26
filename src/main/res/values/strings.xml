@@ -19,7 +19,6 @@
     <string name="general_server_error">Error. Please try again later</string>
     <string name="general_data_error">Error. Please try again.</string>
     <string name="general_internet_off">No Internet connection. Please try again.</string>
-    <string name="general_purchasing_error">Please, report about this purchase error to support@topface.ru</string>
     <string name="general_msg_copied">Message copied</string>
     <string name="general_spinner_title">Choose action</string>
     <string name="general_profile_error">Error loading profile</string>
@@ -246,7 +245,6 @@
     <string name="dating_search_empty_title">Nothing found unfortunately</string>
     <string name="dating_search_empty_text">You can try to run the search again or change the filter settings.</string>
     <string name="general_close">Close</string>
-    <string name="vip_not_activated">Your VIP-status is not activated</string>
     <string name="vip_privileges">VIP-privileges</string>
     <string name="vip_text_visitors">Find out who was interested in you - look through your guests!</string>
     <string name="vip_rest">You subscribed for VIP</string>
@@ -636,6 +634,8 @@
         <item quantity="other">and %d</item>
         <item quantity="one">and %d</item>
     </plurals>
+    <string name="subscription">Subscription</string>
+    <string name="coins">Coins</string>
     <string name="you_were_subscribed">Subscribed</string>
     <string name="subscriptions_can_be_changed">Subscribed. You can change your subscription on Google Play.</string>
     <string name="people_nearby">People nearby</string>

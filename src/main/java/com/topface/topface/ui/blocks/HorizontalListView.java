@@ -125,16 +125,18 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
     @Override
     public void setAdapter(ListAdapter adapter) {
-        if (mAdapter != null) {
-            mAdapter.unregisterDataSetObserver(mDataObserver);
-        }
+        if (!((mAdapter == null) ? (adapter == null) : mAdapter.equals(adapter))) {
+            if (mAdapter != null) {
+                mAdapter.unregisterDataSetObserver(mDataObserver);
+            }
 
-        mAdapter = adapter;
+            mAdapter = adapter;
 
-        if (adapter != null) {
-            mAdapter.registerDataSetObserver(mDataObserver);
+            if (adapter != null) {
+                mAdapter.registerDataSetObserver(mDataObserver);
+            }
+            reset();
         }
-        reset();
     }
 
     private synchronized void reset() {
@@ -296,7 +298,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
             for (int i = 0; i < getChildCount(); i++) {
                 View child = getChildAt(i);
                 int childWidth = child.getMeasuredWidth();
-                child.layout(left, 0, left + childWidth, child.getMeasuredHeight());
+                int padding = (getMeasuredHeight() - child.getMeasuredHeight()) / 2;
+                child.layout(left, padding, left + childWidth, child.getMeasuredHeight() + padding);
                 left += childWidth;
             }
         }

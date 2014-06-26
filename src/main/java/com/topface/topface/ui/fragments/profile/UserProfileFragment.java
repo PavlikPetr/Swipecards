@@ -119,20 +119,17 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(value ? R.string.black_list_delete : R.string.black_list_add_short);
                             if (value) {
                                 ((User) profile).bookmarked = !value;
-                                mBookmarkAction.setText(R.string.general_bookmarks_add);
                             }
+                            switchBookmarkEnabled(!value);
                         }
                         getView().findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
                         getView().findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
                         break;
                     case BOOKMARK:
-                        if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE)) {
-                            ((User) profile).bookmarked = value;
+                        User user = (User) profile;
+                        if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE) && !user.inBlackList) {
+                            user.bookmarked = value;
                             mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-                            if (value) {
-                                ((User) profile).inBlackList = !value;
-                                ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(R.string.black_list_add_short);
-                            }
                         }
                         if (isAdded()) {
                             getView().findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
@@ -143,6 +140,15 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             }
         }
     };
+
+    private void switchBookmarkEnabled(boolean enabled) {
+        if (mActions != null) {
+            mBookmarkAction.setText(((User)getProfile()).bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            mBookmarkAction.setTextColor(getResources().getColor(enabled? R.color.text_white : R.color.disabled_color));
+            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(enabled);
+        }
+    }
+
     private int mActionsHeightHeuristic;
 
     public static UserProfileFragment newInstance(String itemId, int id, String className, boolean ignoreSympathySent) {
@@ -233,6 +239,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 disableSympathyDelight();
             }
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
+            switchBookmarkEnabled(!((Profile)user).inBlackList);
         }
     }
 
@@ -425,13 +432,13 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     private void disableSympathyDelight() {
-        mSympathy.setSelected(true);
-        mSympathyText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+        mSympathyText.setTextColor(getResources().getColor(R.color.disabled_color));
         mSympathy.setEnabled(false);
+        mSympathy.findViewById(R.id.likeIcon).setEnabled(false);
 
-        mDelight.setSelected(true);
-        mDelightText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+        mDelightText.setTextColor(getResources().getColor(R.color.disabled_color));
         mDelight.setEnabled(false);
+        mDelight.findViewById(R.id.delIcon).setEnabled(false);
     }
 
 

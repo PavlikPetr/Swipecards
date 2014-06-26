@@ -19,7 +19,6 @@
     <string name="general_server_error">에러. 조금 후에 다시 시도해 보세요.</string>
     <string name="general_data_error">에러입니다. 다시 한번 시도해주세요.</string>
     <string name="general_internet_off">인터넷에 연결되지 않았습니다.</string>
-    <string name="general_purchasing_error">구입 에러 발생시 support@topface.ru 로 연락바랍니다.</string>
     <string name="general_msg_copied">텍스트가 복사되었습니다.</string>
     <string name="general_spinner_title">다음 행동을 선택하세요.</string>
     <string name="general_profile_error">프로필 로딩 에러입니다.</string>
@@ -213,7 +212,6 @@
     <string name="dating_search_empty_title">유감스럽게도 아무것도 찾지 못했습니다.</string>
     <string name="dating_search_empty_text">재 검색을 시도하거나 검색 필터를 재설정 할 수 있습니다.</string>
     <string name="general_close">닫기</string>
-    <string name="vip_not_activated">당신의 VIP 상태가 아직 등록되지 않았습니다.</string>
     <string name="vip_privileges">VIP-특전</string>
     <string name="vip_text_visitors">누가 당신에게 흥미를 보이는지 알아보세요. 자신의 게스트가 누구인지 볼 수 있습니다.</string>
     <string name="vip_rest">당신은 VIP 등급에 가입되셨습니다.</string>

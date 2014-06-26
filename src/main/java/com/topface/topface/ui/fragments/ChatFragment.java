@@ -25,6 +25,7 @@ import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -72,6 +73,7 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
@@ -94,6 +96,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
+    private static final String KEYBOARD_OPENED = "keyboard_opened";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_USER_SEX = "user_sex";
@@ -109,40 +112,48 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
+            boolean hasValue = intent.hasExtra(ContainerActivity.VALUE);
             boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
-            if (type != null) {
+            if (type != null && mActions != null) {
                 switch (type) {
                     case BLACK_LIST:
-                        if (intent.hasExtra(ContainerActivity.VALUE)) {
+                        if (hasValue) {
                             mUser.blocked = value;
                             mBlackListActionController.switchAction();
+                            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
                             if (value) {
                                 mUser.bookmarked = false;
-                                TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
-                                mBookmarkAction.setText(R.string.general_bookmarks_add);
+
                             }
+                            switchBookmarkEnabled(!value);
+                            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(!value);
                         }
                         mBlackListActionController.setViewsToNormalState();
                         break;
                     case BOOKMARK:
-                        if (intent.hasExtra(ContainerActivity.VALUE)) {
+                        if (hasValue) {
                             TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
-                            if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE)) {
+                            if (mBookmarkAction != null && !mUser.blocked) {
                                 mUser.bookmarked = value;
                                 mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-                                if (value) {
-                                    mUser.blocked = false;
-                                    mBlackListActionController.switchAction();
-                                }
                             }
                         }
-                        getView().findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
-                        getView().findViewById(R.id.favIcon).setVisibility(View.VISIBLE);
+                        mActions.findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
+                        mActions.findViewById(R.id.favIcon).setVisibility(View.VISIBLE);
                         break;
                 }
             }
         }
     };
+
+    private void switchBookmarkEnabled(boolean enabled) {
+        if (mActions != null) {
+            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
+            mBookmarkAction.setText(mUser.bookmarked? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            mBookmarkAction.setTextColor(getResources().getColor(enabled? R.color.text_white : R.color.disabled_color));
+            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(enabled);
+        }
+    }
 
     private IUserOnlineListener mUserOnlineListener;
 
@@ -161,6 +172,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     };
     private Handler mUpdater;
     private boolean mIsUpdating;
+    private boolean mIsKeyboardOpened;
+    private int mKeyboardFreeHeight;
+    private boolean mJustResumed;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedUser mUser;
@@ -238,7 +252,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(R.layout.fragment_chat, null);
+        final KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
+        root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
+            @Override
+            public void keyboardOpened() {
+                mIsKeyboardOpened = true;
+                if (mActions != null && mActions.getVisibility() == View.VISIBLE) {
+                    animateChatActions(ACTIONS_CLOSE_ANIMATION_TIME);
+                }
+                mKeyboardFreeHeight = getView().getHeight();
+            }
+
+            @Override
+            public void keyboardClosed() {
+                mIsKeyboardOpened = false;
+            }
+        });
         Debug.log(this, "+onCreate");
         // mChatActions
         mChatActionsStub = (ViewStub) root.findViewById(R.id.chat_actions_stub);
@@ -267,13 +296,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
         //регистрируем здесь, потому что может быть такая ситуация, что обновить надо, когда активити находится не на топе стека
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+        mJustResumed = false;
         return root;
     }
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
+        super.onDestroyView();
     }
 
     @Override
@@ -307,6 +337,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     mLockScreen.setVisibility(View.GONE);
                 }
                 hideLoading();
+                mIsKeyboardOpened = savedInstanceState.getBoolean(KEYBOARD_OPENED, false);
             } catch (Exception | OutOfMemoryError e) {
                 Debug.error(e);
             }
@@ -399,6 +430,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(WAS_FAILED, wasFailed);
+        outState.putBoolean(KEYBOARD_OPENED, mIsKeyboardOpened);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
         if (mUser != null) {
             try {
@@ -406,6 +438,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             } catch (Exception e) {
                 Debug.error(e);
             }
+        }
+    }
+
+    @Override
+    public void onViewStateRestored (Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            mIsKeyboardOpened = savedInstanceState.getBoolean(KEYBOARD_OPENED);
         }
     }
 
@@ -707,6 +747,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mUpdater = new Handler();
         startTimer();
         GCMUtils.lastUserId = mUserId;
+
+        if (getView().getHeight() == mKeyboardFreeHeight) {
+            mIsKeyboardOpened = true;
+        }
+        if (mIsKeyboardOpened && mJustResumed) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (inputMethodManager != null) {
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            }
+        }
     }
 
     @Override
@@ -715,7 +766,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         getActivity().unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
-        Utils.hideSoftKeyboard(getActivity(), mEditBox);
+        mJustResumed = true;
     }
 
     /**
@@ -893,13 +944,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         initActions(mChatActionsStub, mUser, getActions(mUser));
                         boolean checked = item.isChecked();
                         item.setChecked(!checked);
-                        animateChatActions(checked, ACTIONS_CLOSE_ANIMATION_TIME);
+                        animateChatActions(ACTIONS_CLOSE_ANIMATION_TIME);
                     } else {
                         Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                                 Toast.LENGTH_LONG).show();
                     }
                 }
                 return true;
+            case android.R.id.home:
+                Utils.hideSoftKeyboard(getActivity(), mEditBox);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -934,12 +987,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             mBlackListActionController = new AddToBlackListViewsController(mActions);
             mBlackListActionController.switchAction();
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            switchBookmarkEnabled(!mUser.blocked);
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
         }
     }
 
-    private void animateChatActions(final boolean needToClose, long time) {
+    private void animateChatActions(long time) {
         if (mActions != null) {
+            final boolean needToClose = mActions.getVisibility() == View.VISIBLE;
             TranslateAnimation ta;
             int height = getChatActionsViewHeight();
             if (needToClose) {

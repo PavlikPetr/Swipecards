@@ -64,12 +64,17 @@ public class RateController {
                  */
                 SearchCacheManager mCache = new SearchCacheManager();
                 @SuppressWarnings("unchecked") UsersList<SearchUser> searchUsers = mCache.getCache();
+                int currentPosition = mCache.getPosition();
 
                 if (searchUsers != null) {
                     boolean cacheUpdated = false;
                     for (SearchUser user : searchUsers) {
                         if (user.id == sendLike.getUserid()) {
-                            user.rated = true;
+                            if (searchUsers.indexOf(user) > currentPosition) {
+                                searchUsers.remove(user);
+                            } else {
+                                user.rated = true;
+                            }
                             cacheUpdated = true;
                             break;
                         }

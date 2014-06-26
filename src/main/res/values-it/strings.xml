@@ -19,7 +19,6 @@
     <string name="general_server_error">Errore. Riprova più tardi</string>
     <string name="general_data_error">Errore. Riprova più tardi</string>
     <string name="general_internet_off">Stiamo cercando di ripristinare il collegamento Internet. Attendere, prego.</string>
-    <string name="general_purchasing_error">Per favore, invia il messaggio sull’errore di acquisto a support@topface.ru</string>
     <string name="general_msg_copied">Il testo è stato copiato</string>
     <string name="general_spinner_title">Scegli l’azione</string>
     <string name="general_profile_error">Errore durante il caricamento del profilo</string>
@@ -246,7 +245,6 @@
     <string name="dating_search_empty_title">Purtroppo non abbiamo trovato nessuno</string>
     <string name="dating_search_empty_text">Puoi riprovare a fare la ricerca o cambia le impostazioni.</string>
     <string name="general_close">Chiudi</string>
-    <string name="vip_not_activated">Il tuo stato VIP non è attivo</string>
     <string name="vip_privileges">Privilegi di essere VIP</string>
     <string name="vip_text_visitors">Scopri chi si è interessato di te, guarda i tuoi visitatori!</string>
     <string name="vip_rest">Non hai abbonamento VIP</string>
@@ -630,6 +628,8 @@
         <item quantity="other">e ancora %d</item>
         <item quantity="one">e ancora %d</item>
     </plurals>
+    <string name="subscription">Abbonamento</string>
+    <string name="coins">Monete</string>
     <string name="you_were_subscribed">L’abbonamento è stato completato</string>
     <string name="subscriptions_can_be_changed">L’abbonamento è stato completato. Puoi cambiare le condizioni dell’abbonamento su Google Play</string>
     <string name="people_nearby">Persone attorno a te</string>

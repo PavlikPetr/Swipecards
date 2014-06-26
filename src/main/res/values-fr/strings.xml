@@ -19,7 +19,6 @@
     <string name="general_server_error">Erreur. Essayez plus tard</string>
     <string name="general_data_error">Erreur. Essayez encore une fois.</string>
     <string name="general_internet_off">Il n\'y a pas de connexion internet</string>
-    <string name="general_purchasing_error">Veuillez écrire un message sur l\'erreur de l\'achat à support@topface.ru</string>
     <string name="general_msg_copied">Le texte est copié</string>
     <string name="general_spinner_title">Choisissez l\'action</string>
     <string name="general_profile_error">Erreur de sauvegarde des données</string>
@@ -217,7 +216,6 @@
     <string name="dating_search_empty_title">Malheureusement rien n\'est trouvé</string>
     <string name="dating_search_empty_text">Vous pouvez essayer de répéter la recherche, soit changer les paramètres du filtre</string>
     <string name="general_close">Fermer</string>
-    <string name="vip_not_activated">Votre statut VIP n\'est pas activé</string>
     <string name="vip_privileges">Les privilèges VIP</string>
     <string name="vip_text_visitors">Découvrez qui s\'intéressait à vous, regardez vos hôtes!</string>
     <string name="vip_rest">Vous vous êtes abonné(e) à VIP</string>

@@ -19,7 +19,6 @@
     <string name="general_server_error">Помилка. Спробуйте пізніше</string>
     <string name="general_data_error">Помилка. Спробуйте ще раз</string>
     <string name="general_internet_off">Немає підключення до інтернету</string>
-    <string name="general_purchasing_error">Будь ласка, напишіть повідомлення про помилку покупки на support@topface.ru</string>
     <string name="general_msg_copied">Текст скопійований</string>
     <string name="general_spinner_title">Вибрати дію</string>
     <string name="general_profile_error">Помилка завантаження профілю</string>
@@ -219,7 +218,6 @@
     <string name="dating_search_empty_title">На жаль, нічого не знайдено</string>
     <string name="dating_search_empty_text">Ви можете спробувати повторити пошук, або змінити налаштування фільтра.</string>
     <string name="general_close">Закрити</string>
-    <string name="vip_not_activated">Ваш VIP-статус не активований</string>
     <string name="vip_privileges">VIP-привілеї</string>
     <string name="vip_text_visitors">Дізнайтеся, хто вами цікавився - дивіться своїх гостей!</string>
     <string name="vip_rest">Ви підписані на VIP</string>

@@ -19,7 +19,6 @@
     <string name="general_server_error">Tekkis viga. Proovi hiljem.</string>
     <string name="general_data_error">Tekkis viga. Proovi veel koord.</string>
     <string name="general_internet_off">Internetiühendus puudub.</string>
-    <string name="general_purchasing_error">Palun, kirjuta sõnum ostuveast aadressil support@topface.ru</string>
     <string name="general_msg_copied">Tekst on kopeeritud.</string>
     <string name="general_spinner_title">Vali toiming</string>
     <string name="general_profile_error">Konto laadimise viga</string>
@@ -211,7 +210,6 @@ Sa oled müksanud.</string>
     <string name="dating_skip_button_ext">Järgmine</string>
     <string name="dating_search_empty_title">Kahjuks, ei ole midagi leitud.</string>
     <string name="general_close">Sulgeda</string>
-    <string name="vip_not_activated">Sinu VIP-staatust ei ole aktiveeritud.</string>
     <string name="vip_privileges">VIP-eelised</string>
     <string name="vip_text_visitors">Saa teada, kes on sinu vastu huvi tundnud - vaata oma külalisi!</string>
     <string name="vip_rest">Sa oled VIP\'i ära tellinud.</string>

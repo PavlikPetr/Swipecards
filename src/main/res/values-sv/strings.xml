@@ -19,7 +19,6 @@
     <string name="general_server_error">Det har uppstått ett fel. Försök senare</string>
     <string name="general_data_error">Det har uppstått ett fel. Vänligen försök igen</string>
     <string name="general_internet_off">Anslutning till Internet saknas</string>
-    <string name="general_purchasing_error">Vänligen meddela inköpsfelet till support@topface.ru</string>
     <string name="general_msg_copied">Texten kopierad</string>
     <string name="general_spinner_title">Välj handling</string>
     <string name="general_profile_error">Det har uppstått ett fell vid profiluppladning</string>
@@ -92,6 +91,18 @@
     <string name="buying_header_title">Inköp</string>
     <string name="buying_you_have">Du har</string>
     <string name="buying_you_have_no_coins_for_gift">Du behöver fler %d {{coins}} för att köpa en gåva</string>
+    <plurals name="buying_gift_you_need_coins">
+        <item quantity="other">För att skicka en gåva, köp ytterligare %d mynt</item>
+        <item quantity="one">För att skicka en gåva, köp ytterligare %d mynt</item>
+    </plurals>
+    <plurals name="buying_unlock_likes_you_need_coins">
+        <item quantity="other">För att se vem som gillar dig, köp ytterligare %d mynt</item>
+        <item quantity="one">För att se vem som gillar dig, köp ytterligare %d mynt</item>
+    </plurals>
+    <plurals name="buying_leaders_you_need_coins">
+        <item quantity="other">För att bli sedd av alla, köp ytterligare %d mynt</item>
+        <item quantity="one">För att bli sedd av alla, köp ytterligare %d mynt</item>
+    </plurals>
     <string name="buying_default_message">För mynt kan du skicka gåvor och visa beundran</string>
     <string name="buying_money">Köp mynt</string>
     <string name="profile_header_title">Min profil</string>
@@ -234,7 +245,6 @@
     <string name="dating_search_empty_title">Inget hittats, tyvärr.</string>
     <string name="dating_search_empty_text">Du kan antingen försöka söka igen eller ändra sökkriterier.</string>
     <string name="general_close">Stäng</string>
-    <string name="vip_not_activated">Din VIP-status är ej aktiverad</string>
     <string name="vip_privileges">VIP-förmåner</string>
     <string name="vip_text_visitors">Ta reda på vem som är intresserad av dig - se dina gäster!</string>
     <string name="vip_rest">Du är prenumererad på VIP</string>
@@ -618,6 +628,8 @@
         <item quantity="other">och ytterligare %d</item>
         <item quantity="one">och ytterligare %d</item>
     </plurals>
+    <string name="subscription">Prenumeration</string>
+    <string name="coins">Mynt</string>
     <string name="you_were_subscribed">Prenumerationen är klar</string>
     <string name="subscriptions_can_be_changed">Prenumerationen är klar. Ändringar är möjliga på Google Play</string>
     <string name="people_nearby">Personer i närheten</string>
