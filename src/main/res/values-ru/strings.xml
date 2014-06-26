@@ -12,6 +12,12 @@
     <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
     <string name="general_ok">OK</string>
     <!--/ строки iOS -->
+    <plurals name="message_too_long">
+        <item quantity="one">Вы превысили лимит в %d символ на сообщение</item>
+        <item quantity="few">Вы превысили лимит в %d символа на сообщение</item>
+        <item quantity="many">Вы превысили лимит в %d символов на сообщение</item>
+        <item quantity="other">Вы превысили лимит в %d символов на сообщение</item>
+    </plurals>
     <string name="general_yes">Да</string>
     <string name="general_no">Нет</string>
     <string name="general_cancel">Отмена</string>
