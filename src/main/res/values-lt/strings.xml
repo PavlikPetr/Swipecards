@@ -60,6 +60,7 @@
     <string name="likes_background_text">Nėra simpatijų</string>
     <string name="visitors_background_text">Nėra svečių</string>
     <string name="mutual_background_text">Simpatijų nėra</string>
+    <string name="message_too_long">Jūs surinkote pernelyg ilgą pranešimą. Ženklų skaičius negali viršyti %d.</string>
     <string name="chat_background_text">Įeinančių pranešimų nėra</string>
     <string name="chat_comment">Parašyti pranešimą</string>
     <string name="chat_gift_in">Jūs gavote dovaną.</string>
