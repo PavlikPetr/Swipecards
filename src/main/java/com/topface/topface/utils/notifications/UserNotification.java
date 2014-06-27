@@ -19,6 +19,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
+import com.topface.framework.imageloader.BitmapUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.SerializableToJson;
@@ -281,7 +282,7 @@ public class UserNotification {
 
     private void setLargeIcon() {
         if (mImage != null) {
-            Bitmap scaledIcon = Utils.clipAndScaleBitmap(mImage, getIconSize(mContext), getIconSize(mContext));
+            Bitmap scaledIcon = BitmapUtils.clipAndScaleBitmap(mImage, getIconSize(mContext), getIconSize(mContext));
             if (scaledIcon != null) {
                 notificationBuilder.setLargeIcon(scaledIcon);
             } else {

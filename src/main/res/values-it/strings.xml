@@ -60,6 +60,7 @@
     <string name="likes_background_text">Non hai simpatie</string>
     <string name="visitors_background_text">Non ci sono le visite</string>
     <string name="mutual_background_text">Non ci sono simpatie</string>
+    <string name="message_too_long">Il messaggio composto è troppo lungo. Il messaggio non può superare %d caratteri.</string>
     <string name="chat_background_text">Non ci sono i messaggi in entrata</string>
     <string name="chat_comment">Scrivi messaggio</string>
     <string name="chat_gift_in">Hai ricevuto un regalo.</string>
