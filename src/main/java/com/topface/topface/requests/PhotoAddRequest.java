@@ -4,10 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.framework.imageloader.BitmapUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Base64;
-import com.topface.topface.utils.BitmapUtils;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 

@@ -101,7 +101,7 @@ public class ZoomImageViewRemote extends ImageViewRemote {
          * Дабы это побороть устаналвиваем зум (1 к 1) и после апдейта все отображается как нужно
          * В добавок отключаем зум
          */
-        boolean isPhotoError = resId == PHOTO_ERROR_RESOURCE;
+        boolean isPhotoError = resId == getPhotoErrorResourceId();
         mPhotoViewAttacher.setZoomable(!isPhotoError);
         if (isPhotoError) {
             mPhotoViewAttacher.setScale(1, 0, 0, true);

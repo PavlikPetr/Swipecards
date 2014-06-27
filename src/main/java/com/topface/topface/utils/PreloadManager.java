@@ -1,11 +1,12 @@
 package com.topface.topface.utils;
 
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.topface.framework.imageloader.DefaultImageLoader;
+import com.topface.topface.App;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.search.UsersList;
-import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 
 public class PreloadManager<T extends FeedUser> {
@@ -69,7 +70,7 @@ public class PreloadManager<T extends FeedUser> {
     }
 
     private DefaultImageLoader getImageLoader() {
-        return DefaultImageLoader.getInstance();
+        return DefaultImageLoader.getInstance(App.getContext());
     }
 
     public void checkConnectionType(int type) {

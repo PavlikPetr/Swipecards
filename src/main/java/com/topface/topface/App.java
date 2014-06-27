@@ -14,6 +14,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.nostra13.universalimageloader.core.ExtendedImageLoader;
+import com.topface.framework.imageloader.DefaultImageLoader;
+import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.statistics.ILogger;
@@ -54,7 +57,6 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.GeoLocationManager;
-import com.topface.topface.utils.social.AuthToken;
 
 import org.acra.ACRA;
 import org.acra.ACRAConfiguration;
@@ -322,6 +324,11 @@ public class App extends Application {
                 }
             });
         }
+        // Settings extenede image loader to send statistics
+        ImageLoaderStaticFactory.setExtendedImageLoader(ExtendedImageLoader.getInstance());
+        // Settings common image to display error
+        DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
+
         sendAppOptionsRequest();
 
         final Handler handler = new Handler();
