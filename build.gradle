@@ -19,7 +19,7 @@ repositories {
     mavenCentral()
 }
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
@@ -134,14 +134,14 @@ dependencies {
 }
 
 project(':libs:AndroidStatistics') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     repositories {
         mavenCentral()
     }
 }
 
 project(':libs:IllustratedTextView') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['src']
@@ -150,7 +150,7 @@ project(':libs:IllustratedTextView') {
 }
 
 project(':libs:Android-ViewPagerIndicator') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     dependencies {
         compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
         compile project(':libs:IllustratedTextView')
@@ -163,7 +163,7 @@ project(':libs:Android-ViewPagerIndicator') {
 }
 
 project(':libs:PullToRefresh') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'library/AndroidManifest.xml'
         java.srcDirs = ['library/src']
@@ -172,7 +172,7 @@ project(':libs:PullToRefresh') {
 }
 
 project(':libs:PhotoView') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'library/AndroidManifest.xml'
         java.srcDirs = ['library/src']
@@ -181,7 +181,7 @@ project(':libs:PhotoView') {
 }
 
 project(':libs:UniversalImageLoader') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'library/AndroidManifest.xml'
         java.srcDirs = ['library/src']
@@ -191,7 +191,7 @@ project(':libs:UniversalImageLoader') {
 
 //Social networks
 project(':libs:Facebook') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'facebook/AndroidManifest.xml'
         java.srcDirs = ['facebook/src']
@@ -200,7 +200,7 @@ project(':libs:Facebook') {
 }
 
 project(':libs:odnoklassniki') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['src']
@@ -210,7 +210,7 @@ project(':libs:odnoklassniki') {
 
 //Ad networks
 project(':libs:mopub-android-sdk') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     dependencies {
         compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
         compile files('../GoogleAdMobAdsSdk.jar')
@@ -223,7 +223,7 @@ project(':libs:mopub-android-sdk') {
 
 
 project(':libs:AdLabSDK') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     dependencies {
         compile files('libs/apache-mime4j-0.6.jar')
         compile files('libs/commons-io-1.4.jar')
