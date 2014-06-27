@@ -1,21 +1,21 @@
-package com.topface.topface.imageloader;
+package com.topface.topface.utils.imageloader;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.SparseArrayCompat;
 
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
+import com.topface.framework.imageloader.BitmapUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.utils.Utils;
 
 public class MaskClipProcessor implements BitmapProcessor {
 
     public static final int DEFAULT_MASK = R.drawable.user_mask_album;
     private Bitmap mMask;
     private Bitmap mBorder;
-    private static SparseArrayCompat<Bitmap> cachedMaskBitmaps = new SparseArrayCompat<Bitmap>();
+    private static SparseArrayCompat<Bitmap> cachedMaskBitmaps = new SparseArrayCompat<>();
 
     public MaskClipProcessor(int mask, int border) {
         mMask = cachedMaskBitmaps.get(mask);
@@ -31,7 +31,7 @@ public class MaskClipProcessor implements BitmapProcessor {
     @Override
     public Bitmap process(Bitmap bitmap) {
         try {
-            bitmap = Utils.getRoundedCornerBitmapByMask(bitmap, mMask, mBorder);
+            bitmap = BitmapUtils.getRoundedCornerBitmapByMask(bitmap, mMask, mBorder);
 
         } catch (OutOfMemoryError e) {
             Debug.error(e);

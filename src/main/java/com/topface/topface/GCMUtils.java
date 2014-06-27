@@ -77,30 +77,30 @@ public class GCMUtils {
 
     public static void init(final String serverToken, final Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-                new BackgroundThread() {
-                    @Override
-                    public void execute() {
-                        try {
-                            GCMRegistrar.checkDevice(context);
-                            GCMRegistrar.checkManifest(context);
-                            if (GCMRegistrar.isRegistered(context)) {
-                                final String regId = GCMRegistrar.getRegistrationId(context);
-                                Debug.log("GCM: Already registered, regID is " + regId);
+            new BackgroundThread() {
+                @Override
+                public void execute() {
+                    try {
+                        GCMRegistrar.checkDevice(context);
+                        GCMRegistrar.checkManifest(context);
+                        if (GCMRegistrar.isRegistered(context)) {
+                            final String regId = GCMRegistrar.getRegistrationId(context);
+                            Debug.log("GCM: Already registered, regID is " + regId);
 
-                                //Если токен с сервера отличается, отправляем новый.
-                                if (!TextUtils.equals(regId, serverToken)) {
-                                    Looper.prepare();
-                                    sendRegId(context, regId);
-                                    Looper.loop();
-                                }
-                            } else {
-                                GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
+                            //Если токен с сервера отличается, отправляем новый.
+                            if (!TextUtils.equals(regId, serverToken)) {
+                                Looper.prepare();
+                                sendRegId(context, regId);
+                                Looper.loop();
                             }
-                        } catch (Exception ex) {
-                            handleNoGcmSupport(ex);
+                        } else {
+                            GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
                         }
+                    } catch (Exception ex) {
+                        handleNoGcmSupport(ex);
                     }
-                };
+                }
+            };
         } else {
             handleNoGcmSupport(null);
         }
