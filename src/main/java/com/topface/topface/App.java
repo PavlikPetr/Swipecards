@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.statistics.ILogger;
@@ -81,6 +83,8 @@ public class App extends Application {
     private static Configurations mBaseConfig;
     private static AppOptions mAppOptions;
 
+    private static Tracker mTracker;
+
     /**
      * Множественный запрос Options и профиля
      */
@@ -123,6 +127,14 @@ public class App extends Application {
                         .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
             }
         });
+    }
+
+    public static Tracker getTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(getContext());
+            mTracker = analytics.newTracker(R.xml.ga);
+        }
+        return mTracker;
     }
 
     private static ApiRequest getProductsRequest() {

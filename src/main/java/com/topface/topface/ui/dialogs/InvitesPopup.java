@@ -10,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -22,6 +21,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -81,11 +81,11 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
             @Override
             public void onClick(View v) {
                 if (!invitesCheckBox.isChecked()) {
-                    EasyTracker.getTracker().sendEvent("InvitesPopup", "SendContactsBtnClick", "", 0L);
+                    EasyTracker.sendEvent("InvitesPopup", "SendContactsBtnClick", "", 0L);
                     startActivity(ContainerActivity.getIntentForContacts(contacts));
                     ((BaseFragmentActivity) activity).close(InvitesPopup.this);
                 } else {
-                    EasyTracker.getTracker().sendEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);
+                    EasyTracker.sendEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);
                     sendInvitesRequest();
                 }
             }
@@ -106,8 +106,8 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
             public void success(IApiResponse response) {
                 boolean isPremium = response.getJsonResult().optBoolean("premium");
                 if (isPremium) {
-                    EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long) contacts.size());
-                    EasyTracker.getTracker().sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
+                    EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long) contacts.size());
+                    EasyTracker.sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
                     if (getActivity() != null) {
 
                         Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_LONG).show();
@@ -115,14 +115,14 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
                         ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
                     }
                 } else {
-                    EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
+                    EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
                     Toast.makeText(getActivity(), getString(R.string.invalid_contacts), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                EasyTracker.getTracker().sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
+                EasyTracker.sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
             }
 
             @Override
@@ -156,7 +156,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
         switch (v.getId()) {
             case R.id.ivClose:
             case R.id.invitesTitle:
-                EasyTracker.getTracker().sendEvent("InvitesPopup", "ClosePopup", "", 0L);
+                EasyTracker.sendEvent("InvitesPopup", "ClosePopup", "", 0L);
                 if (isAdded()) {
                     ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
                 }

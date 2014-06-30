@@ -3,11 +3,11 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.net.Uri;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.BitmapUtils;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 
@@ -133,7 +133,7 @@ public class PhotoAddRequest extends ApiRequest {
     public void exec() {
         if (mUri != null) {
             super.exec();
-            EasyTracker.getTracker().sendEvent("Profile", "PhotoAdd", "", 1L);
+            EasyTracker.sendEvent("Profile", "PhotoAdd", "", 1L);
         } else {
             handleFail(ErrorCodes.MISSING_REQUIRE_PARAMETER, "Need set photo Uri");
         }

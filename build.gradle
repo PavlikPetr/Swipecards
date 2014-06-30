@@ -25,6 +25,7 @@ android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
     buildToolsVersion rootProject.ANDROID_BUILD_TOOLS_VERSION
 
+
     productFlavors {
         //Основной flavor, в нашем случае работает с Google Play
         google {
@@ -105,8 +106,11 @@ dependencies {
     compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
     compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
 
+    //Google play services
+    compile 'com.google.android.gms:play-services:4.4.52'
+
     //All jar libs
-    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'GoogleAdMobAdsSdk.jar')
+    compile fileTree(dir: 'libs', include: '*.jar')
 
     //Для Амазона нужна библиотека для поддержки in-app покупок
     compile files('libs/amazon/amazon-in-app-purchasing.jar')
@@ -130,7 +134,8 @@ dependencies {
     compile project(':libs:mopub-android-sdk')
     compile project(':libs:AdLabSDK')
 
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.+'
+    compile project(':libs:tf-offerwall:sdk')
+
 }
 
 project(':libs:AndroidStatistics') {
@@ -213,7 +218,7 @@ project(':libs:mopub-android-sdk') {
     apply plugin: 'android-library'
     dependencies {
         compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
-        compile files('../GoogleAdMobAdsSdk.jar')
+        compile 'com.google.android.gms:play-services:4.4.52'
     }
     android.sourceSets.main {
         manifest.srcFile 'mopub-sdk/AndroidManifest.xml'

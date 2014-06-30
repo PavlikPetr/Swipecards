@@ -12,7 +12,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
-import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.search.UsersList;
@@ -30,6 +32,7 @@ import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.utils.AnimationHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
 import java.util.Timer;
@@ -191,7 +194,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSkipAll:
-                EasyTracker.getTracker().sendEvent(getTrackName(), "SkipAll", "", 1L);
+                EasyTracker.sendEvent(getTrackName(), "SkipAll", "", 1L);
                 skipAllRequest(getSkipAllRequestType());
                 break;
             case R.id.btnSkip:
@@ -216,11 +219,11 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                 }
                 break;
             case R.id.btnChat:
-                EasyTracker.getTracker().sendEvent(getTrackName(), "Chat", "", 1L);
+                EasyTracker.sendEvent(getTrackName(), "Chat", "", 1L);
                 showChat();
                 break;
             case R.id.btnWatchAsList:
-                EasyTracker.getTracker().sendEvent(getTrackName(), "WatchAsList", "", 1L);
+                EasyTracker.sendEvent(getTrackName(), "WatchAsList", "", 1L);
                 Intent intent = ContainerActivity.getVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 break;
@@ -274,7 +277,9 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     @Override
     protected void onNotEmptyDataReturnedOnce() {
         super.onNotEmptyDataReturnedOnce();
-        EasyTracker.getTracker().sendView(getTrackName());
+        Tracker tracker = App.getTracker();
+        tracker.setScreenName(getTrackName());
+        tracker.send(new HitBuilders.AppViewBuilder().build());
     }
 
     @Override

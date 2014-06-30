@@ -8,13 +8,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RatingBar;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 
 /**
@@ -34,7 +34,7 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
         //Закрыть диалог можно
         setCancelable(true);
         setCloseButton(false);
-        EasyTracker.getTracker().sendEvent("RatePopup", "FeaturePopup", "Show", 1L);
+        EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Show", 1L);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
         // Send statistics onBackPressed or on tap outside the dialog
-        EasyTracker.getTracker().sendEvent("RatePopup", "FeaturePopup", "ManualCancel", 1L);
+        EasyTracker.sendEvent("RatePopup", "FeaturePopup", "ManualCancel", 1L);
     }
 
     @Override
@@ -70,13 +70,13 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
                 rate();
                 break;
             case R.id.btnAskLater:
-                EasyTracker.getTracker().sendEvent("RatePopup", "FeaturePopup", "Later", 1L);
+                EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Later", 1L);
                 saveRatingPopupStatus(System.currentTimeMillis());
                 getDialog().dismiss();
                 break;
             case R.id.btnNoThanx:
                 // Используем label: Cancel, как в iOS
-                EasyTracker.getTracker().sendEvent("RatePopup", "FeaturePopup", "Cancel", 1L);
+                EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Cancel", 1L);
                 saveRatingPopupStatus(0);
                 getDialog().dismiss();
                 break;
@@ -85,7 +85,7 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
 
     private void rate() {
         long rating = (long) mRatingBar.getRating();
-        EasyTracker.getTracker().sendEvent("RatePopup", "FeaturePopup", "Rate", rating);
+        EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Rate", rating);
         if (rating <= 0) {
             new AlertDialog.Builder(getActivity())
                     .setMessage(R.string.rate_popup_error)

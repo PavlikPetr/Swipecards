@@ -8,10 +8,10 @@ import android.widget.Toast;
 import com.facebook.topface.DialogError;
 import com.facebook.topface.Facebook;
 import com.facebook.topface.FacebookError;
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.VirusLikesRequest;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -96,7 +96,7 @@ public class VirusLike extends AbstractData {
                 @Override
                 public void onComplete(Bundle values) {
 
-                    EasyTracker.getTracker().sendEvent(
+                    EasyTracker.sendEvent(
                             "VirusLikeRequest", "Complete",
                             from, (long) socialIdForRequest.size()
                     );
@@ -117,7 +117,7 @@ public class VirusLike extends AbstractData {
                 public void onFacebookError(FacebookError e) {
                     super.onFacebookError(e);
 
-                    EasyTracker.getTracker().sendEvent(
+                    EasyTracker.sendEvent(
                             "VirusLikeRequest", "FacebookError_" + e.getErrorType(),
                             from, (long) socialIdForRequest.size()
                     );
@@ -129,7 +129,7 @@ public class VirusLike extends AbstractData {
                 public void onError(DialogError e) {
                     super.onError(e);
 
-                    EasyTracker.getTracker().sendEvent(
+                    EasyTracker.sendEvent(
                             "VirusLikeRequest", "DialogError",
                             from, 0L
                     );
@@ -141,7 +141,7 @@ public class VirusLike extends AbstractData {
                 public void onCancel() {
                     super.onCancel();
 
-                    EasyTracker.getTracker().sendEvent(
+                    EasyTracker.sendEvent(
                             "VirusLikeRequest", "Cancel",
                             from, 0L
                     );

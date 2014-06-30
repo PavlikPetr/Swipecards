@@ -10,7 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.analytics.HitBuilders;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
@@ -19,6 +19,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.EasyTracker;
 
 public abstract class PromoDialog extends AbstractDialogFragment implements View.OnClickListener, IPromoPopup {
 
@@ -88,7 +89,9 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
 
         TextView popupText = (TextView) root.findViewById(R.id.airMessagesText);
         popupText.setText(getMessage());
-        EasyTracker.getTracker().sendEvent(getMainTag(), "Show", "", 0L);
+        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder();
+
+        EasyTracker.sendEvent(getMainTag(), "Show", "", 0L);
     }
 
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
@@ -96,7 +99,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         public void onReceive(Context context, Intent intent) {
             Debug.log("Promo: Close fragment after VIP buy");
             closeFragment();
-            EasyTracker.getTracker().sendEvent(getMainTag(), "VipClose", "CloseAfterBuyVip", 1L);
+            EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterBuyVip", 1L);
         }
     };
     private BroadcastReceiver mProfileReceiver = new BroadcastReceiver() {
@@ -106,7 +109,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
             if (CacheProfile.premium) {
                 Debug.log("Promo: Close fragment after profile update");
                 closeFragment();
-                EasyTracker.getTracker().sendEvent(getMainTag(), "VipClose", "CloseAfterUpdateProfile", 1L);
+                EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterUpdateProfile", 1L);
             }
         }
     };
@@ -119,11 +122,11 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                         ContainerActivity.getVipBuyIntent(getMessage(), getTagForBuyingFragment()),
                         ContainerActivity.INTENT_BUY_VIP_FRAGMENT
                 );
-                EasyTracker.getTracker().sendEvent(getMainTag(), "ClickBuyVip", "", 0L);
+                EasyTracker.sendEvent(getMainTag(), "ClickBuyVip", "", 0L);
                 break;
             case R.id.deleteMessages:
                 deleteMessages();
-                EasyTracker.getTracker().sendEvent(getMainTag(), "Dismiss", "Delete", 0L);
+                EasyTracker.sendEvent(getMainTag(), "Dismiss", "Delete", 0L);
                 closeFragment();
                 break;
             default:

@@ -34,7 +34,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ValidateGetJarRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
 import com.topface.topface.utils.offerwalls.supersonicads.SupersonicWallActivity;
 
 import org.json.JSONObject;
@@ -111,15 +110,6 @@ public class OfferwallsManager {
             case SPONSORPAY:
                 startSponsorpay(activity);
                 break;
-            case CLICKKY:
-                //clickky работает только на Android >= 2.2
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ECLAIR_MR1) {
-                    startClickky(activity);
-                } else {
-                    //Если юзер использует более старую версию, то стартуем оффервол по умолчанию
-                    startDefault(activity);
-                }
-                break;
             case GETJAR:
                 startGetJar(activity);
                 break;
@@ -150,9 +140,6 @@ public class OfferwallsManager {
                 break;
             case 1:
                 startSponsorpay(activity);
-                break;
-            case 2:
-                startClickky(activity);
                 break;
             default:
                 startDefault(activity);
@@ -211,17 +198,6 @@ public class OfferwallsManager {
         }
     }
 
-    /**
-     * Clickky
-     */
-    public static void startClickky(Activity activity) {
-        try {
-            Intent offerWallIntent = new Intent(activity, ClickkyActivity.class);
-            activity.startActivity(offerWallIntent);
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-    }
 
     /**
      * GetJar

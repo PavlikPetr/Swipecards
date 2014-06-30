@@ -61,6 +61,11 @@
         android:logo="@drawable/ic_home_topface_white"
         android:theme="@style/Theme.Topface">
 
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"
+            tools:replace="value"
+            />
+
         <!-- activity -->
         <activity
             android:name=".ui.NavigationActivity"
@@ -211,7 +216,7 @@
             android:configChanges="orientation|screenSize" />
 
         <activity
-            android:name="com.google.ads.AdActivity"
+            android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
 
         <activity
@@ -232,8 +237,6 @@
         <meta-data
             android:name="CLICKKY_SITE_ID"
             android:value="3382" />
-        <!-- Оффервол Clickky -->
-        <activity android:name="com.topface.topface.utils.offerwalls.clickky.ClickkyActivity" />
 
         <activity
             android:name="com.getjar.sdk.rewards.GetJarActivity"
@@ -264,24 +267,6 @@
         <activity
             android:name=".utils.offerwalls.supersonicads.SupersonicWallActivity"
             android:theme="@style/Theme.Topface.NoActionBar" />
-
-        <activity
-            android:name="com.flurry.android.FlurryFullscreenTakeoverActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-
-        <activity
-            android:name="com.tapit.advertising.internal.TapItAdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
-
-        <activity
-            android:name="com.millennialmedia.android.MMActivity"
-            android:configChanges="keyboardHidden|orientation|keyboard"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <activity
-            android:name="com.inmobi.androidsdk.IMBrowserActivity"
-            android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize"
-            android:hardwareAccelerated="true" />
 
         <activity
             android:name="org.acra.CrashReportDialog"
@@ -369,10 +354,10 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="com.google.analytics.tracking.android.CampaignTrackingService" />
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
         <receiver
-            android:name="com.google.analytics.tracking.android.CampaignTrackingReceiver"
+            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
@@ -389,15 +374,6 @@
             </intent-filter>
         </receiver>
 
-        <receiver
-            android:name="com.inmobi.commons.analytics.androidsdk.IMAdTrackerReceiver"
-            android:enabled="true"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
 
     </application>
 

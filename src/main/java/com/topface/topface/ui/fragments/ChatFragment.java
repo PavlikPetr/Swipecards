@@ -35,7 +35,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.framework.utils.Debug;
@@ -77,6 +76,7 @@ import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -363,15 +363,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                 switch ((int) editAdapter.getItemId(which)) {
                                     case EditButtonsAdapter.ITEM_DELETE:
                                         deleteItem(position);
-                                        EasyTracker.getTracker().sendEvent("Chat", "DeleteItem", "", 1L);
+                                        EasyTracker.sendEvent("Chat", "DeleteItem", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COPY:
                                         mAdapter.copyText(((TextView) v).getText().toString());
-                                        EasyTracker.getTracker().sendEvent("Chat", "CopyItemText", "", 1L);
+                                        EasyTracker.sendEvent("Chat", "CopyItemText", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COMPLAINT:
                                         startActivity(ContainerActivity.getComplainIntent(mUserId, mAdapter.getItem(position).id));
-                                        EasyTracker.getTracker().sendEvent("Chat", "ComplainItemText", "", 1L);
+                                        EasyTracker.sendEvent("Chat", "ComplainItemText", "", 1L);
                                         break;
                                 }
                             }
@@ -677,7 +677,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             case R.id.btnSend:
                 if (mUserId > 0) {
                     sendMessage();
-                    EasyTracker.getTracker().sendEvent("Chat", "SendMessage", "", 1L);
+                    EasyTracker.sendEvent("Chat", "SendMessage", "", 1L);
                 }
                 break;
             case R.id.send_gift_button:
@@ -685,7 +685,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         GiftsActivity.getSendGiftIntent(getActivity(), mUserId, false),
                         GiftsActivity.INTENT_REQUEST_GIFT
                 );
-                EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
+                EasyTracker.sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
             case R.id.add_to_black_list_action:
                 mBlackListActionController.processActionFor(mUserId);

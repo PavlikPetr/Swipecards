@@ -2,9 +2,9 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Static;
 import com.topface.topface.data.DatingFilter;
+import com.topface.topface.utils.EasyTracker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +50,6 @@ public class FilterRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().sendEvent("Dating", "ChangeFilter", "", 1L);
+        EasyTracker.sendEvent("Dating", "ChangeFilter", "", 1L);
     }
 }

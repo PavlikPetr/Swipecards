@@ -10,6 +10,7 @@ import com.topface.topface.utils.Editor;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GCMIntentService extends GCMBaseIntentService {

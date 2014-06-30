@@ -11,10 +11,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.google.ads.Ad;
-import com.google.ads.AdListener;
-import com.google.ads.AdRequest;
-import com.google.ads.InterstitialAd;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.ivengo.adv.AdvListener;
 import com.ivengo.adv.AdvView;
 import com.lifestreet.android.lsmsdk.BannerAdapter;
@@ -165,42 +164,41 @@ public class FullscreenController {
         }
     }
 
-    private void requestAdmobFullscreen(String adUnitId) {
+    public void requestAdmobFullscreen(String adUnitId) {
         // Создание межстраничного объявления.
-        final InterstitialAd interstitial = new InterstitialAd(mActivity, adUnitId);
+        final InterstitialAd interstitial = new InterstitialAd(mActivity);
         // Создание запроса объявления.
-        AdRequest adRequest = new AdRequest();
-        adRequest.setGender(CacheProfile.getProfile().sex == Static.BOY ? AdRequest.Gender.MALE :
-                AdRequest.Gender.FEMALE);
+        AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+        adRequestBuilder.setGender(CacheProfile.getProfile().sex == Static.BOY ? AdRequest.GENDER_MALE :
+                AdRequest.GENDER_FEMALE);
         // Запуск загрузки межстраничного объявления.
-        interstitial.loadAd(adRequest);
+        interstitial.loadAd(adRequestBuilder.build());
         // AdListener будет использовать обратные вызовы, указанные ниже.
         interstitial.setAdListener(new AdListener() {
             @Override
-            public void onReceiveAd(Ad ad) {
-                if (ad == interstitial) {
-                    interstitial.show();
-                    addLastFullscreenShowedTime();
-                }
-            }
-
-            @Override
-            public void onFailedToReceiveAd(Ad ad, AdRequest.ErrorCode errorCode) {
-                requestFallbackFullscreen();
-            }
-
-            @Override
-            public void onPresentScreen(Ad ad) {
-                isFullScreenBannerVisible = true;
-            }
-
-            @Override
-            public void onDismissScreen(Ad ad) {
+            public void onAdClosed() {
                 isFullScreenBannerVisible = false;
             }
 
             @Override
-            public void onLeaveApplication(Ad ad) {
+            public void onAdFailedToLoad(int errorCode) {
+                requestFallbackFullscreen();
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                super.onAdLeftApplication();
+            }
+
+            @Override
+            public void onAdOpened() {
+                isFullScreenBannerVisible = true;
+            }
+
+            @Override
+            public void onAdLoaded() {
+                interstitial.show();
+                addLastFullscreenShowedTime();
             }
         });
     }
