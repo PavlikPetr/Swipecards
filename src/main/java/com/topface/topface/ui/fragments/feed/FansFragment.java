@@ -7,7 +7,7 @@ import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.List;
@@ -41,8 +41,8 @@ public class FansFragment extends BookmarksFragment {
             btnBuyVip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = ContainerActivity.getVipBuyIntent(null, "Fans");
-                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    Intent intent = PurchasesActivity.getVipBuyIntent(null, "Fans");
+                    startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 }
             });
         }

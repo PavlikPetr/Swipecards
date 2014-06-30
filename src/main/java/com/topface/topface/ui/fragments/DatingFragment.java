@@ -56,8 +56,8 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
@@ -548,7 +548,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().sendEvent("Dating", "BuyClick", "", 1L);
-                startActivity(ContainerActivity.getBuyingIntent("Dating"));
+                startActivity(PurchasesActivity.getBuyingIntent("Dating"));
             }
             break;
             case R.id.btnDatingAdmiration: {
@@ -674,11 +674,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             openChat(getActivity());
         } else {
             startActivityForResult(
-                    ContainerActivity.getVipBuyIntent(
+                    PurchasesActivity.getVipBuyIntent(
                             getString(R.string.chat_block_not_mutual),
                             "DatingChatLock"
                     ),
-                    ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                    PurchasesActivity.INTENT_BUY_VIP
             );
         }
     }

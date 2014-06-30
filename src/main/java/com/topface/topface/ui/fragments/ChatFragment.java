@@ -66,6 +66,7 @@ import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
@@ -804,7 +805,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     if (mAdapter != null) {
                         mAdapter.removeItem(loaderItem);
                     }
-                    Intent intent = ContainerActivity.getBuyingIntent("Chat");
+                    Intent intent = PurchasesActivity.getBuyingIntent("Chat");
                     intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
                     intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
                     startActivity(intent);
@@ -1049,7 +1050,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     request.exec();
                 }
             } else {
-                startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                startActivityForResult(PurchasesActivity.getVipBuyIntent(null, "Chat"), PurchasesActivity.INTENT_BUY_VIP);
                 closeChatActions();
             }
         }

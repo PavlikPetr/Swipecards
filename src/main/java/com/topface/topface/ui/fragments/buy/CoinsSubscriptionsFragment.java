@@ -94,7 +94,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                                 }
                             }
                             buySubscription(id);
-                            Bundle arguments = getArguments();
+                            Bundle arguments = getActivity().getIntent().getExtras();
                             String from = "";
                             if (arguments != null) {
                                 from = "From" + arguments.getString(ARG_TAG_SOURCE);

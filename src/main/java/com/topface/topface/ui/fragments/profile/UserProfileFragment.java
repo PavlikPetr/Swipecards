@@ -48,6 +48,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
@@ -553,8 +554,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (callingClass.equals(DatingFragment.class.getName()) || callingClass.equals(LeadersDialog.class.getName())) {
                             if (!((User) profile).mutual) {
                                 startActivityForResult(
-                                        ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
-                                        ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                                        PurchasesActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
+                                        PurchasesActivity.INTENT_BUY_VIP
                                 );
                                 break;
                             }
@@ -581,7 +582,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         request.exec();
                     }
                 } else {
-                    startActivityForResult(ContainerActivity.getVipBuyIntent(null, "ProfileSuperSkills"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    startActivityForResult(PurchasesActivity.getVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
                 }
                 break;
             case R.id.add_to_bookmark_action:
@@ -670,7 +671,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                             FragmentActivity activity = getActivity();
                             if (activity != null) {
-                                Intent intent = ContainerActivity.getBuyingIntent("Profile");
+                                Intent intent = PurchasesActivity.getBuyingIntent("Profile");
                                 intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
                                 intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
                                 startActivity(intent);

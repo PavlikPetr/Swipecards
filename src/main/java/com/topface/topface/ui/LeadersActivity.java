@@ -24,7 +24,6 @@ import com.topface.topface.requests.LeaderRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.adapters.LeadersPhotoGridAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
@@ -91,7 +90,7 @@ public class LeadersActivity extends BaseFragmentActivity {
                 int leadersPrice = CacheProfile.getOptions().priceLeader;
                 int selectedPhotoId = mUsePhotosAdapter.getSelectedPhotoId();
                 if (CacheProfile.money < leadersPrice) {
-                    startActivity(ContainerActivity.getBuyingIntent("Leaders", PurchasesFragment.TYPE_LEADERS, leadersPrice));
+                    startActivity(PurchasesActivity.getBuyingIntent("Leaders", PurchasesFragment.TYPE_LEADERS, leadersPrice));
                 } else if (selectedPhotoId != -1) {
                     mLoadingLocker.setVisibility(View.VISIBLE);
                     new LeaderRequest(selectedPhotoId, LeadersActivity.this)

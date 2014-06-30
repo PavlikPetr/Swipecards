@@ -21,7 +21,7 @@ import com.topface.topface.requests.PeopleNearbyAccessRequest;
 import com.topface.topface.requests.PeopleNearbyRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.utils.CacheProfile;
@@ -136,8 +136,8 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                         @Override
                         public void onClick(View v) {
                             startActivityForResult(
-                                    ContainerActivity.getVipBuyIntent(null, "PeopleNearby"),
-                                    ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                                    PurchasesActivity.getVipBuyIntent(null, "PeopleNearby"),
+                                    PurchasesActivity.INTENT_BUY_VIP
                             );
                         }
                     }
@@ -194,7 +194,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     private void openBuyScreenOnBlockedGeo(Options.BlockPeopleNearby blockPeopleNearby) {
         startActivity(
-                ContainerActivity.getBuyingIntent("PeoplePaidNearby", blockPeopleNearby.price)
+                PurchasesActivity.getBuyingIntent("PeoplePaidNearby", blockPeopleNearby.price)
         );
     }
 

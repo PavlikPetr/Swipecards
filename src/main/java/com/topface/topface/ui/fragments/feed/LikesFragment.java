@@ -31,7 +31,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.fragments.PurchasesFragment;
@@ -160,8 +160,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             currentView.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = ContainerActivity.getVipBuyIntent(null, "Likes");
-                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    Intent intent = PurchasesActivity.getVipBuyIntent(null, "Likes");
+                    startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 }
             });
             initAvatarImagesToEmptyView(currentView);
@@ -175,7 +175,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             currentView.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(ContainerActivity.getBuyingIntent("EmptyLikes"));
+                    startActivity(PurchasesActivity.getBuyingIntent("EmptyLikes"));
                 }
             });
         }
@@ -207,8 +207,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         @Override
                         public void onClick(View v) {
                             startActivityForResult(
-                                    ContainerActivity.getVipBuyIntent(null, "Likes"),
-                                    ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                                    PurchasesActivity.getVipBuyIntent(null, "Likes"),
+                                    PurchasesActivity.INTENT_BUY_VIP
                             );
                         }
                     }
@@ -270,7 +270,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 "OpenBuyingScreen", 1l
         );
         startActivity(
-                ContainerActivity.getBuyingIntent(
+                PurchasesActivity.getBuyingIntent(
                         "VipPaidSympathies." + group,
                         PurchasesFragment.TYPE_UNLOCK_SYMPATHIES,
                         blockSympathyOptions.price

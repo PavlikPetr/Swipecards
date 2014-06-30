@@ -7,90 +7,26 @@ import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.topface.billing.BillingFragment;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.ContactsFragment;
-import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
-import com.topface.topface.ui.fragments.buy.VipBuyFragment;
-import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-
 public class ContainerActivity extends CustomTitlesBaseFragmentActivity {
     public static final String UPDATE_USER_CATEGORY = "com.topface.topface.action.USER_CATEGORY";
 
-    public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
     public static final String FEED_ID = "FEED_ID";
     public static final String FEED_IDS = "FEED_IDS";
-    /**
-     * Constant keys for different fragments
-     * Values have to be > 0
-     */
-    public static final int INTENT_BUY_VIP_FRAGMENT = 1;
-    public static final int INTENT_BUYING_FRAGMENT = 2;
-    public static final int INTENT_CONTACTS_FRAGMENT = 8;
-    public static final int INTENT_COINS_SUBSCRIPTION_FRAGMENT = 10;
     public static final String TYPE = "type";
     public static final String CHANGED = "changed";
     public static final String VALUE = "value";
     private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
     private View mOnlineIcon;
-
-    public static Intent getIntentForContacts(ArrayList<ContactsProvider.Contact> data) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CONTACTS_FRAGMENT);
-        intent.putParcelableArrayListExtra(CONTACTS_DATA, data);
-        return intent;
-    }
-
-    public static Intent getVipBuyIntent(String extraText, String from) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP_FRAGMENT);
-        intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
-        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        return intent;
-    }
-
-    public static Intent getBuyingIntent(String from, int itemType, int itemPrice) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
-        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        if (itemType != -1) {
-            intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, itemType);
-        }
-        if (itemPrice != -1) {
-            intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, itemPrice);
-        }
-        return intent;
-    }
-
-    public static Intent getBuyingIntent(String from, int itemPrice) {
-        return getBuyingIntent(from, -1, itemPrice);
-
-    }
-
-    public static Intent getBuyingIntent(String from) {
-        return getBuyingIntent(from, -1, -1);
-
-    }
-
-    public static Intent getCoinsSubscriptionIntent(String from) {
-        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_COINS_SUBSCRIPTION_FRAGMENT);
-        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
-        return intent;
-
-    }
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -169,36 +105,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity {
     private Fragment getNewFragment(int id) {
         Fragment fragment = null;
         Intent intent = getIntent();
-
-        Bundle extras = getIntent().getExtras();
-        String source = intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE);
         switch (id) {
-            case INTENT_BUY_VIP_FRAGMENT:
-
-                fragment = PurchasesFragment.newInstance(
-                        intent.getStringExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT),
-                        intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE)
-                );
-                break;
-            case INTENT_BUYING_FRAGMENT:
-                if (extras != null && extras.containsKey(PurchasesFragment.ARG_ITEM_TYPE)
-                        && extras.containsKey(PurchasesFragment.ARG_ITEM_PRICE)) {
-                    fragment = PurchasesFragment.newInstance(
-                            extras.getInt(PurchasesFragment.ARG_ITEM_TYPE),
-                            extras.getInt(PurchasesFragment.ARG_ITEM_PRICE),
-                            source
-                    );
-                } else {
-                    fragment = PurchasesFragment.newInstance(source);
-                }
-                break;
-            case INTENT_COINS_SUBSCRIPTION_FRAGMENT:
-                fragment = CoinsSubscriptionsFragment.newInstance(source);
-                break;
-            case INTENT_CONTACTS_FRAGMENT:
-                ArrayList<ContactsProvider.Contact> contacts = intent.getParcelableArrayListExtra(CONTACTS_DATA);
-                fragment = ContactsFragment.newInstance(contacts);
-                break;
         }
 
         return fragment;

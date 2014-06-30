@@ -11,7 +11,7 @@ import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteVisitorsRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
 import com.topface.topface.utils.CacheProfile;
@@ -62,8 +62,8 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
             btnBuyVip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = ContainerActivity.getVipBuyIntent(null, "Visitors");
-                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    Intent intent = PurchasesActivity.getVipBuyIntent(null, "Visitors");
+                    startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 }
             });
         }
