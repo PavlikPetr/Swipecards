@@ -47,6 +47,7 @@ import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -71,6 +72,7 @@ import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
+import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
@@ -198,6 +200,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     // Managers
     private RelativeLayout mLockScreen;
     private ViewStub mChatActionsStub;
+    private FamousUserTalksController mFamousController = new FamousUserTalksController();
     private String mUserName;
     private int mUserAge;
     private String mUserCity;
@@ -526,6 +529,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
+                if (!data.items.isEmpty()) {
+                    if (mFamousController.block(data.items.getFirst())) {
+                        return;
+                    }
+                }
                 if (mItemId != null) {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
                     mItemId = null;
@@ -783,16 +791,31 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                    final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-                    final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
-                    sendGift(id, price);
+        switch (requestCode) {
+            case GiftsActivity.INTENT_REQUEST_GIFT:
+                if (resultCode == Activity.RESULT_OK) {
+                    Bundle extras = data.getExtras();
+                    if (extras != null) {
+                        if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+                            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+                            final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
+                            sendGift(id, price);
+                        }
+                    }
                 }
-            }
+                break;
+            case ContainerActivity.INTENT_BUY_VIP_FRAGMENT:
+                if (resultCode == Activity.RESULT_OK) {
+                    if (data.getBooleanExtra(PurchasesFragment.IS_VIP_EXTRA, false) == true) {
+                        if (mFamousController.isChatLocked()) {
+                            mLockScreen.setVisibility(View.GONE);
+                        }
+                        mFamousController.reset();
+                    }
+                }
+                break;
         }
+
     }
 
     private void sendGift(int id, final int price) {
@@ -849,6 +872,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private boolean sendMessage() {
+        if (mFamousController.showBlockDialog()) {
+            return false;
+        }
         Editable editText = mEditBox.getText();
         String editString = editText == null ? "" : editText.toString();
         if (editText == null || TextUtils.isEmpty(editString.trim()) || mUserId == 0) {
@@ -1082,5 +1108,113 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             actionLoader.setVisibility(View.INVISIBLE);
             actionIcon.setVisibility(View.VISIBLE);
         }
+    }
+
+    private class FamousUserTalksController {
+
+        public static final int NO_BLOCK = -1;
+        public static final int FIRST_STAGE = 35;
+        public static final int SECOND_STAGE = 36;
+
+        private int mStage = NO_BLOCK;
+
+        private View mFamousChatBlocker;
+        private PopularUserDialog mFamousMessageBlocker;
+        private String mMaleLockText;
+        private String mFemaleLockText;
+        private boolean isInExperement57_2;
+
+        public FamousUserTalksController() {
+            Options options = CacheProfile.getOptions();
+            isInExperement57_2 = options.popularUserLock != null;
+            if (isInExperement57_2) {
+                mMaleLockText = options.popularUserLock.maleLockText;
+                mFemaleLockText = options.popularUserLock.femaleLockText;
+            }
+        }
+
+        public boolean isAccessAllowed() {
+            return CacheProfile.premium || !isInExperement57_2;
+        }
+
+        public boolean checkChatBlock(History message) {
+            return (mStage = message.type) == FIRST_STAGE;
+        }
+
+        public boolean checkMessageBlock(History message) {
+            return (mStage = message.type) == SECOND_STAGE;
+        }
+
+        public boolean block(History message) {
+            if (!isAccessAllowed()) {
+                if (checkChatBlock(message)) {
+                    blockChat();
+                    return true;
+                } else if (checkMessageBlock(message)) {
+                    initBlockDialog();
+                    return false;
+                }
+            } else if (mFamousChatBlocker != null && mFamousChatBlocker.getVisibility() == View.VISIBLE) {
+                mFamousChatBlocker.setVisibility(View.GONE);
+                mLockScreen.setVisibility(View.GONE);
+            }
+            return false;
+        }
+
+        public void blockChat() {
+            ViewStub stub = (ViewStub) mLockScreen.findViewById(R.id.famousBlockerStub);
+            for (int i = 0; i < mLockScreen.getChildCount(); i++) {
+                View v = mLockScreen.getChildAt(i);
+                if (v != mFamousChatBlocker) {
+                    mLockScreen.getChildAt(i).setVisibility(View.GONE);
+                }
+            }
+            if (mFamousChatBlocker == null) {
+                mFamousChatBlocker = stub.inflate();
+                TextView lockText = (TextView) mFamousChatBlocker.findViewById(R.id.popular_user_lock_text);
+                lockText.setText(mUserName + " " + (mUserSex == Static.BOY ? mMaleLockText : mFemaleLockText));
+                mFamousChatBlocker.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switch (v.getId()) {
+                            case R.id.btnBuyVip:
+                                EasyTracker.getTracker().sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
+                                Intent intent = ContainerActivity.getVipBuyIntent(null, "PopularUserChatBlock");
+                                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                                break;
+                        }
+                    }
+                });
+                mFamousChatBlocker.requestLayout();
+                mFamousChatBlocker.invalidate();
+            }
+            mLockScreen.setVisibility(View.VISIBLE);
+        }
+
+        public void initBlockDialog() {
+            if (mFamousMessageBlocker == null) {
+                mFamousMessageBlocker = new PopularUserDialog(mUserName, mUserSex);
+            }
+        }
+
+        public boolean showBlockDialog() {
+            if (mStage == SECOND_STAGE) {
+                if (mFamousMessageBlocker == null) {
+                    initBlockDialog();
+                }
+                mFamousMessageBlocker.show(getFragmentManager(), "POPULAR_USER_DIALOG");
+                return true;
+            }
+            return false;
+        }
+
+        public boolean isChatLocked() {
+            return mStage == FIRST_STAGE;
+        }
+
+        public void reset() {
+            mStage = NO_BLOCK;
+        }
+
     }
 }

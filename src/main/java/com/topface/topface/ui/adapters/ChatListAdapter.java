@@ -51,6 +51,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private static final int T_USER_REQUEST = 11;
     private static final int T_FRIEND_REQUEST = 12;
     private static final int T_COUNT = 13;
+    private static final int T_USER_POPULAR_1 = 35;
+    private static final int T_USER_POPULAR_2 = 36;
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
@@ -157,6 +159,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 return output ? T_USER_MAP : T_FRIEND_MAP;
             case FeedDialog.LIKE_REQUEST:
                 return output ? T_USER_REQUEST : T_FRIEND_REQUEST;
+            case FeedDialog.MESSAGE_POPULAR_STAGE_1:
+                return T_USER_POPULAR_1;
+            case FeedDialog.MESSAGE_POPULAR_STAGE_2:
+                return T_USER_POPULAR_2;
             default:
                 return output ? T_USER : T_FRIEND;
         }
@@ -419,6 +425,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 return;
             case T_FRIEND:
             case T_USER:
+            case T_USER_POPULAR_1:
+            case T_USER_POPULAR_2:
                 holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
                 break;
             case T_FRIEND_GIFT:
@@ -467,6 +475,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         switch (type) {
             case T_FRIEND:
             case T_USER:
+            case T_USER_POPULAR_1:
+            case T_USER_POPULAR_2:
                 convertView = mInflater.inflate(output ? R.layout.chat_user : R.layout.chat_friend, null, false);
                 holder.userInfo = convertView.findViewById(R.id.user_info);
                 break;
@@ -539,6 +549,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case FeedDialog.DEFAULT:
             case FeedDialog.MESSAGE:
             case FeedDialog.PROMOTION:
+            case T_USER_POPULAR_1:
+            case T_USER_POPULAR_2:
             default:
                 if (holder != null && holder.message != null) {
                     holder.message.setText(
