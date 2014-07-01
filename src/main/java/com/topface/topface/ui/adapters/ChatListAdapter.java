@@ -50,9 +50,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private static final int T_FRIEND_MAP = 10;
     private static final int T_USER_REQUEST = 11;
     private static final int T_FRIEND_REQUEST = 12;
-    private static final int T_COUNT = 13;
-    private static final int T_USER_POPULAR_1 = 35;
-    private static final int T_USER_POPULAR_2 = 36;
+    private static final int T_USER_POPULAR_1 = 13;
+    private static final int T_USER_POPULAR_2 = 14;
+    private static final int T_COUNT = 15;
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
@@ -549,8 +549,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case FeedDialog.DEFAULT:
             case FeedDialog.MESSAGE:
             case FeedDialog.PROMOTION:
-            case T_USER_POPULAR_1:
-            case T_USER_POPULAR_2:
+            case FeedDialog.MESSAGE_POPULAR_STAGE_1:
+            case FeedDialog.MESSAGE_POPULAR_STAGE_2:
             default:
                 if (holder != null && holder.message != null) {
                     holder.message.setText(

@@ -10,18 +10,18 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icon_rocket"
-        android:layout_marginBottom="18dp" />
+        android:src="@drawable/icon_rocket" />
 
     <TextView
         android:id="@+id/popular_user_lock_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/with_vip_find_your_visitors"
         style="@style/ItemTitleText"
         android:gravity="center"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="36dp" />
 
     <Button
         android:id="@+id/btnBuyVip"
@@ -29,6 +29,6 @@
         android:layout_height="wrap_content"
         android:text="@string/buying_vip_status"
         style="@style/Widget.Topface.Button.Big.Blue"
-        android:layout_marginTop="17dp"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:minWidth="179dp" />
 </LinearLayout>
