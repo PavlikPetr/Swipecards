@@ -60,6 +60,7 @@
     <string name="likes_background_text">No likes</string>
     <string name="visitors_background_text">No guests</string>
     <string name="mutual_background_text">No likes</string>
+    <string name="message_too_long">The message you entered is too big. The amount of symbols can not be exceeded by %d.</string>
     <string name="chat_background_text">No incoming messages</string>
     <string name="chat_comment">Write a message</string>
     <string name="chat_gift_in">You have received a new gift</string>
