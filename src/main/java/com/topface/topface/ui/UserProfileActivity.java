@@ -3,7 +3,6 @@ package com.topface.topface.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -42,21 +41,5 @@ public class UserProfileActivity extends UserOnlineActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_user_profile);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (isTaskRoot()) {
-                    Intent i = new Intent(this, NavigationActivity.class);
-                    startActivity(i);
-                    finish();
-                } else {
-                    onBackPressed();
-                }
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

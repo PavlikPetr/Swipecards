@@ -43,10 +43,10 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
+import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
-import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.LeadersDialog;
@@ -107,8 +107,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
-            boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
+            AttitudeHandler.ActionTypes type = (AttitudeHandler.ActionTypes) intent.getSerializableExtra(AttitudeHandler.TYPE);
+            boolean value = intent.getBooleanExtra(AttitudeHandler.VALUE, false);
             Profile profile = getProfile();
             if (profile != null && type != null) {
                 switch (type) {
@@ -129,7 +129,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         getView().findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
                         break;
                     case BOOKMARK:
-                        if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE)) {
+                        if (mBookmarkAction != null && intent.hasExtra(AttitudeHandler.VALUE)) {
                             ((User) profile).bookmarked = value;
                             mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                             if (value) {
@@ -178,7 +178,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         });
         mLockScreen.addView(mRetryView.getView());
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
         return root;
     }
 

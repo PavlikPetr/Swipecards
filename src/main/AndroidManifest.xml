@@ -173,15 +173,6 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.BanActivity" />
         <activity android:name=".ui.BlackListActivity" />
-        <activity
-            android:name=".ui.ContainerActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.NavigationActivity" />
-        </activity>
 
         <activity
             android:name=".ui.ChatActivity"

@@ -44,7 +44,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
@@ -438,7 +437,7 @@ public class BannerBlock {
                 switch (banner.action) {
                     case Banner.ACTION_PAGE:
                         EasyTracker.getTracker().sendEvent("Purchase", "Banner", "", 0L);
-                        intent = new Intent(mFragment.getActivity(), ContainerActivity.class);
+                        intent = new Intent(mFragment.getActivity(), PurchasesActivity.class);
                         if (banner.parameter.equals("VIP")) {
                             intent.putExtra(Static.INTENT_REQUEST_KEY, PurchasesActivity.INTENT_BUY_VIP);
                         } else {

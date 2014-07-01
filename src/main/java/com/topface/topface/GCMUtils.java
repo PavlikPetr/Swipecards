@@ -12,7 +12,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -161,9 +160,7 @@ public class GCMUtils {
 
             if (intent != null) {
                 intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
-                if (!TextUtils.equals(intent.getComponent().getClassName(), ContainerActivity.class.getName())) {
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                }
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 showNotificationByType(extra, context, data, type, user, title, intent);
                 return true;
             }

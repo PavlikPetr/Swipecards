@@ -46,10 +46,10 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
@@ -87,12 +87,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.hasExtra(ContainerActivity.TYPE) &&
-                    intent.getSerializableExtra(ContainerActivity.TYPE)
-                            .equals(ContainerActivity.ActionTypes.BLACK_LIST) && isAdded()) {
-                int[] ids = intent.getIntArrayExtra(ContainerActivity.FEED_IDS);
-                boolean hasValue = intent.hasExtra(ContainerActivity.VALUE);
-                boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
+            if (intent.hasExtra(AttitudeHandler.TYPE) &&
+                    intent.getSerializableExtra(AttitudeHandler.TYPE)
+                            .equals(AttitudeHandler.ActionTypes.BLACK_LIST) && isAdded()) {
+                int[] ids = intent.getIntArrayExtra(AttitudeHandler.FEED_IDS);
+                boolean hasValue = intent.hasExtra(AttitudeHandler.VALUE);
+                boolean value = intent.getBooleanExtra(AttitudeHandler.VALUE, false);
                 if (ids != null && hasValue) {
                     if (value == whetherDeleteIfBlacklisted()) {
                         getListAdapter().removeByUserIds(ids);
@@ -207,7 +207,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
     }
 
     @Override

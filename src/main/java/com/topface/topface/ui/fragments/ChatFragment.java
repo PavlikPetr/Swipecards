@@ -61,9 +61,9 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ComplainsActivity;
-import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.PurchasesActivity;
@@ -113,9 +113,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
-            boolean hasValue = intent.hasExtra(ContainerActivity.VALUE);
-            boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
+            AttitudeHandler.ActionTypes type = (AttitudeHandler.ActionTypes) intent.getSerializableExtra(AttitudeHandler.TYPE);
+            boolean hasValue = intent.hasExtra(AttitudeHandler.VALUE);
+            boolean value = intent.getBooleanExtra(AttitudeHandler.VALUE, false);
             if (type != null && mActions != null) {
                 switch (type) {
                     case BLACK_LIST:
@@ -283,7 +283,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
         //регистрируем здесь, потому что может быть такая ситуация, что обновить надо, когда активити находится не на топе стека
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
         mJustResumed = false;
         return root;
     }
