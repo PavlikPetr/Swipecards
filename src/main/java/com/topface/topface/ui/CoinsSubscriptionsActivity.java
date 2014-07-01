@@ -1,12 +1,12 @@
 package com.topface.topface.ui;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
 
 public class CoinsSubscriptionsActivity extends CheckAuthActivity {
 
@@ -21,8 +21,7 @@ public class CoinsSubscriptionsActivity extends CheckAuthActivity {
     }
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.ac_coins_subscriptions);
+    protected Fragment createFragment() {
+        return new CoinsSubscriptionsFragment();
     }
 }

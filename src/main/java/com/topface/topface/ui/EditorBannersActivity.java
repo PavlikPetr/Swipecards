@@ -1,11 +1,11 @@
 package com.topface.topface.ui;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.ui.fragments.EditorBannersFragment;
 
 public class EditorBannersActivity extends CheckAuthActivity {
 
@@ -19,8 +19,7 @@ public class EditorBannersActivity extends CheckAuthActivity {
     }
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.ac_editor_banners);
+    protected Fragment createFragment() {
+        return new EditorBannersFragment();
     }
 }

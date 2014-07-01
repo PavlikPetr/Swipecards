@@ -36,14 +36,6 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
     private LinearLayout mContainer;
     private List<View> mButtonsViews = new ArrayList<>();
 
-    public static CoinsSubscriptionsFragment newInstance(String from) {
-        CoinsSubscriptionsFragment fragment = new CoinsSubscriptionsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_TAG_SOURCE, from);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +86,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                                 }
                             }
                             buySubscription(id);
-                            Bundle arguments = getActivity().getIntent().getExtras();
+                            Bundle arguments = getArguments();
                             String from = "";
                             if (arguments != null) {
                                 from = "From" + arguments.getString(ARG_TAG_SOURCE);

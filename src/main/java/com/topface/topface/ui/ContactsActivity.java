@@ -1,11 +1,11 @@
 package com.topface.topface.ui;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.ui.fragments.ContactsFragment;
 import com.topface.topface.utils.ContactsProvider;
 
 import java.util.ArrayList;
@@ -23,8 +23,7 @@ public class ContactsActivity extends CheckAuthActivity {
     }
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.ac_contacts);
+    protected Fragment createFragment() {
+        return new ContactsFragment();
     }
 }

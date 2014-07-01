@@ -72,8 +72,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     public static final String IGNORE_SYMPATHY_SENT_EXTRA = "IGNORE_SYMPATHY_SENT_EXTRA";
 
 
-    private static final String ARG_TAG_PROFILE_ID = "profile_id";
-    private static final String ARG_IGNORE_SYMPATHY_SENT = "igmore_sympathy";
     private int mProfileId;
     private int mLastLoadedProfileId;
     private String mItemId;
@@ -156,11 +154,11 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Intent intent = activity.getIntent();
-        mProfileId = intent.getIntExtra(AbstractProfileFragment.INTENT_UID, 0);
-        mItemId = intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID);
-        mIgnoreSympathySent = intent.getBooleanExtra(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, false);
-        setCallingClass(intent.getStringExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT));
+        Bundle args = getArguments();
+        mProfileId = args.getInt(AbstractProfileFragment.INTENT_UID, 0);
+        mItemId = args.getString(AbstractProfileFragment.INTENT_ITEM_ID);
+        mIgnoreSympathySent = args.getBoolean(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, false);
+        setCallingClass(args.getString(AbstractProfileFragment.INTENT_CALLING_FRAGMENT));
     }
 
     @Override

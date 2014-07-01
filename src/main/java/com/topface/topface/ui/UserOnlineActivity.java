@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Activity showing whether user online or not
  */
-public class UserOnlineActivity extends CheckAuthActivity implements IUserOnlineListener {
+public abstract class UserOnlineActivity extends CheckAuthActivity implements IUserOnlineListener {
 
     private View mOnlineIcon;
 

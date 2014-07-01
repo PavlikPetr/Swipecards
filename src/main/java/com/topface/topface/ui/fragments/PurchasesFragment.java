@@ -82,9 +82,9 @@ public class PurchasesFragment extends BaseFragment {
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
 
-        Intent intent = getActivity().getIntent();
+        Bundle args = getArguments();
 
-        mIsVip = intent.getBooleanExtra(IS_VIP_PRODUCTS, false);
+        mIsVip = args.getBoolean(IS_VIP_PRODUCTS, false);
 
         LinkedList<Options.Tab> tabs;
         mResourcesInfo = (TextView) root.findViewById(R.id.payReason);
@@ -97,7 +97,7 @@ public class PurchasesFragment extends BaseFragment {
 
         removeExcessTabs(tabs); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
 
-        PurchasesFragmentsAdapter pagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), intent.getExtras(), tabs);
+        PurchasesFragmentsAdapter pagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs);
         mPager.setAdapter(pagerAdapter);
         mTabIndicator.setViewPager(mPager);
         updateBalanceCounters();
@@ -110,7 +110,7 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
-        boolean isVip = getActivity().getIntent().getBooleanExtra(IS_VIP_PRODUCTS, false);
+        boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS, false);
         for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext(); ) {
             Options.Tab tab = iterator.next();
             Products products = getProductsByTab(tab);
@@ -147,7 +147,7 @@ public class PurchasesFragment extends BaseFragment {
 
     private void updateBalanceCounters() {
         String text;
-        Bundle args = getActivity().getIntent().getExtras();
+        Bundle args = getArguments();
         if (mCurCoins != null && mCurLikes != null) {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
             mCurLikes.setText(Integer.toString(CacheProfile.likes));

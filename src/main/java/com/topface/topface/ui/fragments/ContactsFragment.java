@@ -56,7 +56,7 @@ public class ContactsFragment extends BaseFragment {
 
         contactsView = (ListView) root.findViewById(R.id.contactsList);
         //Получаем список контактов из аргументов. Если он не пришел, закрываем фрагмент.
-        Bundle extras = getActivity().getIntent().getExtras();
+        Bundle extras = getArguments();
         if (extras != null) {
             data = extras.getParcelableArrayList(ContactsActivity.CONTACTS_DATA);
         } else {

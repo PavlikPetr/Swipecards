@@ -1,16 +1,15 @@
 package com.topface.topface.ui;
 
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
-import com.topface.topface.R;
+import com.topface.topface.ui.fragments.RecoverPwdFragment;
 
 public class PasswordRecoverActivity extends NoAuthActivity {
 
     public static final int INTENT_RECOVER_PASSWORD = 5;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_recover_password);
+    protected Fragment createFragment() {
+        return new RecoverPwdFragment();
     }
 }

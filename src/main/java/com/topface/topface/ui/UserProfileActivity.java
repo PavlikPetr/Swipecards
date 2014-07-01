@@ -2,11 +2,11 @@ package com.topface.topface.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
-import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 
 public class UserProfileActivity extends UserOnlineActivity {
 
@@ -38,8 +38,7 @@ public class UserProfileActivity extends UserOnlineActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_user_profile);
+    protected Fragment createFragment() {
+        return new UserProfileFragment();
     }
 }

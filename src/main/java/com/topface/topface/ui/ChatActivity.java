@@ -2,10 +2,9 @@ package com.topface.topface.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.topface.topface.GCMUtils;
-import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Profile;
@@ -16,9 +15,8 @@ public class ChatActivity extends UserOnlineActivity {
     public static final int INTENT_CHAT = 3;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_chat);
+    protected Fragment createFragment() {
+        return new ChatFragment();
     }
 
     public static Intent createIntent(Context context, FeedUser user) {

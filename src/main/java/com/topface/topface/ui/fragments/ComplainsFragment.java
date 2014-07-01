@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,9 +23,9 @@ public class ComplainsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.complains_fragment, container, false);
-        Intent intent = getActivity().getIntent();
-        userId = intent.getIntExtra(USERID, -1);
-        feedId = intent.getStringExtra(FEEDID);
+        Bundle args = getArguments();
+        userId = args.getInt(USERID, -1);
+        feedId = args.getString(FEEDID);
         initViews(root);
         if (userId == -1) {
             getActivity().finish();

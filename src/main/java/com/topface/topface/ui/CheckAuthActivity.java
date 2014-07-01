@@ -10,7 +10,7 @@ import com.topface.topface.utils.social.AuthToken;
 /**
  * Activity that checks auth
  */
-public class CheckAuthActivity extends CustomTitlesBaseFragmentActivity {
+public abstract class CheckAuthActivity extends SingleFragmentActivity {
 
     @Override
     protected void onCreate(Bundle bundle) {

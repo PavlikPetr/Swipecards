@@ -231,13 +231,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
         }
 
-        Intent intent = getActivity().getIntent();
-        mItemId = intent.getStringExtra(INTENT_ITEM_ID);
-        mUserId = intent.getIntExtra(INTENT_USER_ID, -1);
-        mUserName = intent.getStringExtra(INTENT_USER_NAME);
-        mUserSex = intent.getIntExtra(INTENT_USER_SEX, Static.BOY);
-        mUserAge = intent.getIntExtra(INTENT_USER_AGE, 0);
-        mUserCity = intent.getStringExtra(INTENT_USER_CITY);
+        Bundle args = getArguments();
+        mItemId = args.getString(INTENT_ITEM_ID);
+        mUserId = args.getInt(INTENT_USER_ID, -1);
+        mUserName = args.getString(INTENT_USER_NAME);
+        mUserSex = args.getInt(INTENT_USER_SEX, Static.BOY);
+        mUserAge = args.getInt(INTENT_USER_AGE, 0);
+        mUserCity = args.getString(INTENT_USER_CITY);
     }
 
     @Override

@@ -1,11 +1,11 @@
 package com.topface.topface.ui;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.ui.fragments.SettingsFragment;
 
 public class SettingsActivity extends CheckAuthActivity {
 
@@ -18,8 +18,7 @@ public class SettingsActivity extends CheckAuthActivity {
     }
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.ac_settings);
+    protected Fragment createFragment() {
+        return new SettingsFragment();
     }
 }
