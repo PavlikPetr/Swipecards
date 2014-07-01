@@ -126,6 +126,7 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        authReceiverRegistered = false;
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(authorizationReceiver);
     }
 
@@ -769,8 +770,6 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        authReceiverRegistered = false;
-
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionChangeListener);
     }
 

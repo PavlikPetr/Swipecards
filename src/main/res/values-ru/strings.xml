@@ -26,7 +26,6 @@
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_internet_off">Пытаемся восстановить соединение с интернетом. Пожалуйста, подождите.</string>
-    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
     <string name="general_msg_copied">Текст скопирован</string>
     <string name="general_spinner_title">Выберите действие</string>
     <string name="general_profile_error">Ошибка загрузки профиля</string>
@@ -82,6 +81,7 @@
     <string name="mutual_background_text">Взаимных симпатий нет</string>
 
     <!-- Chat -->
+    <string name="message_too_long">Вы набрали слишком длинное сообщение. Число знаков не может превышать %d.</string>
     <string name="chat_background_text">Входящих сообщений нет</string>
     <string name="chat_comment">Написать сообщение</string>
     <string name="chat_gift_in">Вы получили подарок.</string>

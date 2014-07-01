@@ -10,8 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.topface.framework.imageloader.BitmapUtils;
 import com.topface.topface.R;
-import com.topface.topface.utils.BitmapUtils;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 
 public class TakePhotoDialog extends AbstractModalDialog implements View.OnClickListener {
@@ -30,7 +30,7 @@ public class TakePhotoDialog extends AbstractModalDialog implements View.OnClick
     private IPhotoTakerWithDialog mPhotoTaker;
     private Bitmap mBitmap;
     private Bitmap mScaledBitmap;
-    
+
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (activity instanceof IPhotoTakerWithDialog) {

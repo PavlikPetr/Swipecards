@@ -22,7 +22,7 @@ public class PurchasesActivity extends CheckAuthActivity {
     public static Intent getVipBuyIntent(String extraText, String from) {
         Intent intent = new Intent(App.getContext(), PurchasesActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP);
-        intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
+        intent.putExtra(PurchasesFragment.ARG_TAG_EXRA_TEXT, extraText);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
         intent.putExtra(PurchasesFragment.IS_VIP_PRODUCTS, true);
         return intent;

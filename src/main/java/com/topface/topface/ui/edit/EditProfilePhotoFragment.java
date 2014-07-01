@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,7 +67,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
                 final Photo photo = (Photo) msg.obj;
                 if (CacheProfile.photos.isEmpty()) {
-                    mPhotoLinks.addFirst(photo);
                     CacheProfile.photo = photo;
                     mLastSelectedAsMainId = photo.getId();
                     CacheProfile.photos.addFirst(photo);
@@ -82,6 +80,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     mPhotoGridAdapter.addFirst(photo);
                 }
 
+                mPhotoLinks.addFirst(photo);
                 if (activity != null) {
                     Toast.makeText(activity, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
                     activity.setResult(Activity.RESULT_OK);

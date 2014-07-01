@@ -12,14 +12,11 @@ import com.topface.topface.utils.CacheProfile;
 
 public class VipPWBuyFragment extends VipBuyFragment {
 
-    public static VipPWBuyFragment newInstance(boolean needActionBar, String text, String from, PaymentWallProducts.TYPE type) {
+    public static VipPWBuyFragment newInstance(boolean needActionBar, String from, PaymentWallProducts.TYPE type) {
         VipPWBuyFragment fragment = new VipPWBuyFragment();
         Bundle args = new Bundle();
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
         args.putInt(PaymentWallBuyingFragment.PAGE_TYPE, type.ordinal());
-        if (text != null) {
-            args.putString(ARG_TAG_EXRA_TEXT, text);
-        }
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
         }

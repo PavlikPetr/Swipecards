@@ -11,11 +11,11 @@ import android.view.View;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils.User;
 import com.topface.topface.Static;
-import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.utils.config.UserConfig;
 
@@ -71,7 +71,7 @@ public class UserNotificationManager {
     public void showNotificationAsync(final String title, final String message, final boolean isTextNotification,
                                       String uri, final int unread, final Intent intent, final boolean doNeedReplace,
                                       final NotificationImageListener listener, final User user) {
-        DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, getTargetImageSize(), new ImageLoadingListener() {
+        DefaultImageLoader.getInstance(mContext).getImageLoader().loadImage(uri, getTargetImageSize(), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
             }
@@ -112,7 +112,7 @@ public class UserNotificationManager {
     }
 
     public void showProgressNotificationAsync(final String title, String uri, final Intent intent, final NotificationImageListener listener) {
-        DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, getTargetImageSize(), new ImageLoadingListener() {
+        DefaultImageLoader.getInstance(mContext).getImageLoader().loadImage(uri, getTargetImageSize(), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -164,7 +164,7 @@ public class UserNotificationManager {
     }
 
     public void showFailNotificationAsync(final String title, final String msg, final String iconUri, final Intent intent, final NotificationImageListener listener) {
-        DefaultImageLoader.getInstance().getImageLoader().loadImage(iconUri, getTargetImageSize(), new ImageLoadingListener() {
+        DefaultImageLoader.getInstance(mContext).getImageLoader().loadImage(iconUri, getTargetImageSize(), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 

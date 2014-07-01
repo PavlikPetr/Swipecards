@@ -1,18 +1,22 @@
-package com.topface.topface.imageloader;
+package com.topface.framework.imageloader;
 
 import android.view.View;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.topface.topface.R;
 
-public class DefaultImageLoaderListener extends SimpleImageLoadingListener {
+class DefaultImageLoaderListener extends SimpleImageLoadingListener {
+
+    private int mErrorResId = 0;
+
+    DefaultImageLoaderListener(int errorResId) {
+        mErrorResId = errorResId;
+    }
 
     @Override
     public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
         super.onLoadingFailed(imageUri, view, failReason);
-
-        ((ImageView) view).setImageResource(R.drawable.im_photo_error);
+        ((ImageView) view).setImageResource(mErrorResId);
     }
 }

@@ -19,7 +19,6 @@
     <string name="general_server_error">Fehler. Versuchen Sie später</string>
     <string name="general_data_error">Fehler! Versuchen Sie noch einmal</string>
     <string name="general_internet_off">Keine Internetverbindung. Bitte, warten Sie</string>
-    <string name="general_purchasing_error">Bitte senden Sie die Fehlermeldung beim Kauf an support@topface.ru</string>
     <string name="general_msg_copied">Text ist kopiert</string>
     <string name="general_spinner_title">Wählen Sie die Aktion</string>
     <string name="general_profile_error">Fehler bei der Ladung des Profils</string>
@@ -246,7 +245,6 @@
     <string name="dating_search_empty_title">Leider, nichts gefunden</string>
     <string name="dating_search_empty_text">Sie können Ihre Suche wiederholen, oder die Filter Einstellungen ändern</string>
     <string name="general_close">Schließen</string>
-    <string name="vip_not_activated">Ihr VIP-Status ist nicht aktiviert</string>
     <string name="vip_privileges">VIP-Privilegien</string>
     <string name="vip_text_visitors">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre Gäste durch!</string>
     <string name="vip_rest">Sie abonnieren VIP</string>

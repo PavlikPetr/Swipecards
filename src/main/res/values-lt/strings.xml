@@ -19,7 +19,6 @@
     <string name="general_server_error">Klaida. Bandykite vėliau</string>
     <string name="general_data_error">Klaida. Bandykite dar kartą</string>
     <string name="general_internet_off">Negalima prisijungti prie interneto</string>
-    <string name="general_purchasing_error">Prašome, parašyti pranešimą apie pirkimo klaidą adresu support@topface.ru</string>
     <string name="general_msg_copied">Tekstas nukopijuotas</string>
     <string name="general_spinner_title">Pasirinkite veiksmą</string>
     <string name="general_profile_error">Profilio užkrovimo klaida</string>
@@ -61,6 +60,7 @@
     <string name="likes_background_text">Nėra simpatijų</string>
     <string name="visitors_background_text">Nėra svečių</string>
     <string name="mutual_background_text">Simpatijų nėra</string>
+    <string name="message_too_long">Jūs surinkote pernelyg ilgą pranešimą. Ženklų skaičius negali viršyti %d.</string>
     <string name="chat_background_text">Įeinančių pranešimų nėra</string>
     <string name="chat_comment">Parašyti pranešimą</string>
     <string name="chat_gift_in">Jūs gavote dovaną.</string>
@@ -252,7 +252,6 @@
     <string name="dating_search_empty_title">Gaila, bet nieko nerasta</string>
     <string name="dating_search_empty_text">Jūs galite bandyti pakartoti paiešką arba pakeisti filtro nustatymus.</string>
     <string name="general_close">Uždaryti</string>
-    <string name="vip_not_activated">Jūsų VIP-statusas neaktyvuotas</string>
     <string name="vip_privileges">VIP privilegijos</string>
     <string name="vip_text_visitors">Sužinokite, kas jumis domėjosi - peržiūrėkite savo svečius!</string>
     <string name="vip_rest">Jūs prenumeruojate VIP</string>

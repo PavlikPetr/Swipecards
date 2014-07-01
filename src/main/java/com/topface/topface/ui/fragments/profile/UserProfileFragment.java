@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
@@ -45,6 +46,7 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
@@ -71,6 +73,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     public static final String IGNORE_SYMPATHY_SENT_EXTRA = "IGNORE_SYMPATHY_SENT_EXTRA";
 
 
+    private static final String ARG_TAG_PROFILE_ID = "profile_id";
+    private static final String ARG_IGNORE_SYMPATHY_SENT = "igmore_sympathy";
     private int mProfileId;
     private int mLastLoadedProfileId;
     private String mItemId;
@@ -118,24 +122,17 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(value ? R.string.black_list_delete : R.string.black_list_add_short);
                             if (value) {
                                 ((User) profile).bookmarked = !value;
-                                mBookmarkAction.setText(R.string.general_bookmarks_add);
-                                mBookmarkAction.setTextColor(getResources().getColor(R.color.disabled_color));
-                            } else {
-                                mBookmarkAction.setTextColor(getResources().getColor(R.color.text_white));
                             }
-                            mBookmarkAction.setEnabled(!value);
+                            switchBookmarkEnabled(!value);
                         }
                         getView().findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
                         getView().findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
                         break;
                     case BOOKMARK:
-                        if (mBookmarkAction != null && intent.hasExtra(AttitudeHandler.VALUE)) {
-                            ((User) profile).bookmarked = value;
+                        User user = (User) profile;
+                        if (mBookmarkAction != null && intent.hasExtra(AttitudeHandler.VALUE) && !user.inBlackList) {
+                            user.bookmarked = value;
                             mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-                            if (value) {
-                                ((User) profile).inBlackList = !value;
-                                ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(R.string.black_list_add_short);
-                            }
                         }
                         if (isAdded()) {
                             getView().findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
@@ -146,6 +143,15 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             }
         }
     };
+
+    private void switchBookmarkEnabled(boolean enabled) {
+        if (mActions != null) {
+            mBookmarkAction.setText(((User)getProfile()).bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            mBookmarkAction.setTextColor(getResources().getColor(enabled? R.color.text_white : R.color.disabled_color));
+            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(enabled);
+        }
+    }
+
     private int mActionsHeightHeuristic;
 
     @Override
@@ -230,6 +236,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 disableSympathyDelight();
             }
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
+            switchBookmarkEnabled(!((Profile)user).inBlackList);
         }
     }
 
@@ -424,9 +431,11 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private void disableSympathyDelight() {
         mSympathyText.setTextColor(getResources().getColor(R.color.disabled_color));
         mSympathy.setEnabled(false);
+        mSympathy.findViewById(R.id.likeIcon).setEnabled(false);
 
         mDelightText.setTextColor(getResources().getColor(R.color.disabled_color));
         mDelight.setEnabled(false);
+        mDelight.findViewById(R.id.delIcon).setEnabled(false);
     }
 
 
@@ -711,7 +720,13 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private void openChat() {
         Profile profile = getProfile();
         if (profile != null) {
-            Intent intent = ChatActivity.getChatIntent(getActivity(), profile);
+            Intent intent = new Intent(getActivity(), ChatActivity.class);
+            intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
+            intent.putExtra(ChatFragment.INTENT_USER_NAME, profile.firstName != null ?
+                    profile.firstName : Static.EMPTY);
+            intent.putExtra(ChatFragment.INTENT_USER_SEX, profile.sex);
+            intent.putExtra(ChatFragment.INTENT_USER_AGE, profile.age);
+            intent.putExtra(ChatFragment.INTENT_USER_CITY, profile.city == null ? "" : profile.city.name);
             startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         }
     }

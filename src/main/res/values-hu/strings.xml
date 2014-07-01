@@ -19,7 +19,6 @@
     <string name="general_server_error">Hiba. Próbálja meg újra</string>
     <string name="general_data_error">Hiba. Próbálja meg újra</string>
     <string name="general_internet_off">Nincs internet kapcsolat</string>
-    <string name="general_purchasing_error">Kérjük, írjon üzenetet a vásárlási hibáról support@topface.ru email-re</string>
     <string name="general_msg_copied">A szöveg másolva</string>
     <string name="general_spinner_title">Válaszon egy műveletet</string>
     <string name="general_profile_error">Profil feltöltés hiba</string>
@@ -213,7 +212,6 @@
     <string name="dating_search_empty_title">Sajnos, nincs találat</string>
     <string name="dating_search_empty_text">Próbáld újra a keresést, vagy módosítsd a szűrő beállításait.</string>
     <string name="general_close">Bezárás</string>
-    <string name="vip_not_activated">VIP-státuszod nem aktív</string>
     <string name="vip_privileges">VIP-privilégiumok</string>
     <string name="vip_text_visitors">Tudd meg, kit érdekeltél - ellenőrizd a vendégeidet!</string>
     <string name="vip_rest">Előfizetted a VIP-t</string>

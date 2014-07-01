@@ -3,6 +3,7 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.ApiResponse;
 
@@ -18,29 +19,26 @@ import java.util.regex.Pattern;
 /**
  * Фотографии пользователей из нашего стораджа фотографий (не напрямую из социальной сети)
  */
-public class Photo extends AbstractData implements Parcelable, SerializableToJson {
-
-    public static final String SIZE_ORIGINAL = "original";
-    public static final String SIZE_64 = "c64x64";
-    public static final String SIZE_150 = "r150x-";
-    public static final String SIZE_64_ONLY = "c64x-";
-    public static final String SIZE_128 = "c128x128";
-    @SuppressWarnings("UnusedDeclaration")
-    public static final String SIZE_192 = "c192x192";
-    @SuppressWarnings("UnusedDeclaration")
-    public static final String SIZE_256 = "c256x256";
-    public static final String SIZE_960 = "r640x960";
+public class Photo extends AbstractData implements Parcelable, SerializableToJson, IPhoto {
 
     public static final String PHOTO_KEY_SIZE_PATTERN = "(\\d+|-)x(\\d+|-)";
     public static final int MAX_SQUARE_DIFFERENCE = 2;
     public static final float MAX_DIFFERENCE = 1.5f;
     public static final int SMALL_PHOTO_SIZE = 100;
+    public static final String SIZE_128 = "c128x128";
+    public static final String SIZE_192 = "c192x192";
+    public static final String SIZE_256 = "c256x256";
+    public static final String SIZE_960 = "r640x960";
 
     private HashMap<Interval, String> intervals;
 
     //Этот флаг нужен для того, чтобы ставить пустые фото в поиске, которые, будут подгружаться после запроса альбома
     private boolean isFakePhoto = false;
 
+    public static final String SIZE_64_ONLY = "c64x-";
+    public static final String SIZE_150 = "r150x-";
+    public static final String SIZE_64 = "c64x64";
+    public static final String SIZE_ORIGINAL = "original";
     private String[] deprecatedSizes = {
             SIZE_64,
             SIZE_64_ONLY,
@@ -142,7 +140,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     }
 
     private void initIntervals() {
-        intervals = new HashMap<Interval, String>();
+        intervals = new HashMap<>();
         intervals.put(new Interval(new Size(30, 30), new Size(128, 128)), SIZE_128);
         intervals.put(new Interval(new Size(129, 129), new Size(192, 192)), SIZE_192);
         intervals.put(new Interval(new Size(193, 193), new Size(256, 256)), SIZE_256);
@@ -151,7 +149,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     //Конструктор по умолчанию создает фэйковую фотку
     public Photo() {
         isFakePhoto = true;
-        links = new HashMap<String, String>();
+        links = new HashMap<>();
         initIntervals();
     }
 
@@ -159,6 +157,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         fillData(response.jsonResult.optJSONObject("photo"));
     }
 
+    @Override
     public boolean isFake() {
         return isFakePhoto;
     }
@@ -170,7 +169,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
             if (linksJson != null) {
                 @SuppressWarnings("rawtypes")
                 Iterator photoKeys = linksJson.keys();
-                links = new HashMap<String, String>();
+                links = new HashMap<>();
 
                 while (photoKeys.hasNext()) {
                     String key = photoKeys.next().toString();
@@ -205,6 +204,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     /**
      * Возвращает наиболее подходящий размер фотографии из уже существующих
      */
+    @Override
     public String getSuitableLink(String sizeString) {
         String url = null;
         if (links != null) {
@@ -219,10 +219,15 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
                 url = links.get(SIZE_ORIGINAL);
             }
         }
-
         return url;
     }
 
+    @Override
+    public String getDefaultLink() {
+        return getSuitableLink(SIZE_960);
+    }
+
+    @Override
     public String getSuitableLink(int width, int height) {
         String url = null;
         Size windowSize = new Size(width, height);
@@ -357,7 +362,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
 
     protected Size getSizeFromKey(String key) {
         Size size = new Size();
-        if (Photo.SIZE_ORIGINAL.equals(key)) {
+        if (SIZE_ORIGINAL.equals(key)) {
             size.width = Integer.MAX_VALUE;
             size.height = Integer.MAX_VALUE;
         } else {
@@ -424,7 +429,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
                     int hashSize = in.readInt();
                     int liked = in.readInt();
                     int pos = in.readInt();
-                    HashMap<String, String> links = new HashMap<String, String>();
+                    HashMap<String, String> links = new HashMap<>();
 
                     for (int i = 0; i < hashSize; i++) {
                         links.put(in.readString(), in.readString());
@@ -447,11 +452,13 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         json.put("liked", mLiked);
         json.put("position", position);
         JSONObject jsonLinks = new JSONObject();
-        for (Map.Entry<String, String> entry : links.entrySet()) {
-            jsonLinks.put(
-                    entry.getKey(),
-                    entry.getValue()
-            );
+        if (links != null) {
+            for (Map.Entry<String, String> entry : links.entrySet()) {
+                jsonLinks.put(
+                        entry.getKey(),
+                        entry.getValue()
+                );
+            }
         }
         json.put("links", jsonLinks);
         return json;

@@ -1,10 +1,10 @@
-package com.topface.topface.imageloader;
+package com.topface.framework.imageloader.processor;
 
 import android.graphics.Bitmap;
 
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
+import com.topface.framework.imageloader.BitmapUtils;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.utils.Utils;
 
 /**
  * Базовый процессор изображений, скругляющий углы
@@ -15,7 +15,7 @@ public class CircumCircleProcessor implements BitmapProcessor {
     public Bitmap process(Bitmap bitmap) {
         try {
             if (bitmap != null) {
-                bitmap = Utils.getScaleAndRoundBitmapOut(bitmap, bitmap.getWidth(), bitmap.getWidth(), 1.2f);
+                bitmap = BitmapUtils.getScaleAndRoundBitmapOut(bitmap, bitmap.getWidth(), bitmap.getWidth(), 1.2f);
             }
         } catch (OutOfMemoryError e) {
             Debug.error(e);

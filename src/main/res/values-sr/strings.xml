@@ -19,7 +19,6 @@
     <string name="general_server_error">Greška. Pokušajte kasnije</string>
     <string name="general_data_error">Greška. Pokušajte još jednom</string>
     <string name="general_internet_off">Nema veze sa internetom</string>
-    <string name="general_purchasing_error">Molimo vas da napišete poruku o grešci u kupovini na support@topface.ru</string>
     <string name="general_msg_copied">tekst je kopiran</string>
     <string name="general_spinner_title">Odaberite radnje</string>
     <string name="general_profile_error">Greška kod učitavanja profila</string>
@@ -219,7 +218,6 @@
     <string name="dating_search_empty_title">Na žalost, ništa nije pronađeno</string>
     <string name="dating_search_empty_text">Možete pokušati ponovo pretragu, ili izmeniti podešavanja filtera</string>
     <string name="general_close">Zatvoriti</string>
-    <string name="vip_not_activated">Vaš VIP status nije aktiviran</string>
     <string name="vip_privileges">VIP privilegija</string>
     <string name="vip_text_visitors">Saznaćete ko se vama interesovao - pogledajte svoje goste!</string>
     <string name="vip_rest">Pretplaćeni ste na VIP</string>
