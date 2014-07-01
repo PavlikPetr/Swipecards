@@ -90,7 +90,7 @@ public class LeadersActivity extends BaseFragmentActivity {
                 int leadersPrice = CacheProfile.getOptions().priceLeader;
                 int selectedPhotoId = mUsePhotosAdapter.getSelectedPhotoId();
                 if (CacheProfile.money < leadersPrice) {
-                    startActivity(PurchasesActivity.getBuyingIntent("Leaders", PurchasesFragment.TYPE_LEADERS, leadersPrice));
+                    startActivity(PurchasesActivity.createBuyingIntent("Leaders", PurchasesFragment.TYPE_LEADERS, leadersPrice));
                 } else if (selectedPhotoId != -1) {
                     mLoadingLocker.setVisibility(View.VISIBLE);
                     new LeaderRequest(selectedPhotoId, LeadersActivity.this)

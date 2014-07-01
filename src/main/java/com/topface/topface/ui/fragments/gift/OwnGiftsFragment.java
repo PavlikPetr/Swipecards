@@ -19,7 +19,7 @@ public class OwnGiftsFragment extends UpdatableGiftsFragment {
             mBtnInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(PurchasesActivity.getBuyingIntent("ProfileGifts"));
+                    startActivity(PurchasesActivity.createBuyingIntent("ProfileGifts"));
                 }
             });
         } else {

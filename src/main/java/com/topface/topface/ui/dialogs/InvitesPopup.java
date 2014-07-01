@@ -82,7 +82,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
             public void onClick(View v) {
                 if (!invitesCheckBox.isChecked()) {
                     EasyTracker.getTracker().sendEvent("InvitesPopup", "SendContactsBtnClick", "", 0L);
-                    startActivity(ContactsActivity.getIntentForContacts(contacts));
+                    startActivity(ContactsActivity.createIntent(contacts));
                     ((BaseFragmentActivity) activity).close(InvitesPopup.this);
                 } else {
                     EasyTracker.getTracker().sendEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);

@@ -149,7 +149,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             public void onClick(View v) {
                 try {
                     getActivity().startActivity(
-                            UserProfileActivity.getUserProfileIntent(
+                            UserProfileActivity.createIntent(
                                     Integer.parseInt(profileId.getText().toString()),
                                     EditorFragment.class,
                                     getActivity()

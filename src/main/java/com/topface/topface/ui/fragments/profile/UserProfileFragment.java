@@ -46,7 +46,6 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
@@ -563,7 +562,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (callingClass.equals(DatingFragment.class.getName()) || callingClass.equals(LeadersDialog.class.getName())) {
                             if (!((User) profile).mutual) {
                                 startActivityForResult(
-                                        PurchasesActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
+                                        PurchasesActivity.createVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
                                         PurchasesActivity.INTENT_BUY_VIP
                                 );
                                 break;
@@ -591,7 +590,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         request.exec();
                     }
                 } else {
-                    startActivityForResult(PurchasesActivity.getVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
+                    startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
                 }
                 break;
             case R.id.add_to_bookmark_action:
@@ -611,7 +610,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 request.exec();
                 break;
             case R.id.complain_action:
-                startActivity(ComplainsActivity.getComplainIntent(mProfileId));
+                startActivity(ComplainsActivity.createIntent(mProfileId));
                 break;
             default:
                 break;
@@ -680,7 +679,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                             FragmentActivity activity = getActivity();
                             if (activity != null) {
-                                Intent intent = PurchasesActivity.getBuyingIntent("Profile");
+                                Intent intent = PurchasesActivity.createBuyingIntent("Profile");
                                 intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
                                 intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
                                 startActivity(intent);

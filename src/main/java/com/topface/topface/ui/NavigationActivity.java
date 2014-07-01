@@ -74,7 +74,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
-            startActivity(UserProfileActivity.getUserProfileIntent(profileID, NavigationActivity.this));
+            startActivity(UserProfileActivity.createIntent(profileID, NavigationActivity.this));
             getIntent().setData(null);
         }
 

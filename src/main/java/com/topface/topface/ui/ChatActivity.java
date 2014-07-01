@@ -21,7 +21,7 @@ public class ChatActivity extends UserOnlineActivity {
         setContentView(R.layout.ac_chat);
     }
 
-    public static Intent getChatIntent(Context context, FeedUser user) {
+    public static Intent createIntent(Context context, FeedUser user) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, user.id);
         intent.putExtra(ChatFragment.INTENT_USER_NAME, user.first_name);
@@ -31,13 +31,13 @@ public class ChatActivity extends UserOnlineActivity {
         return intent;
     }
 
-    public static Intent getChatIntent(Context context, FeedUser user, String feedItemId) {
-        Intent intent = getChatIntent(context, user);
+    public static Intent createIntent(Context context, FeedUser user, String feedItemId) {
+        Intent intent = createIntent(context, user);
         intent.putExtra(ChatFragment.INTENT_ITEM_ID, feedItemId);
         return intent;
     }
 
-    public static Intent getChatIntent(Context context, Profile profile) {
+    public static Intent createIntent(Context context, Profile profile) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
         intent.putExtra(ChatFragment.INTENT_USER_NAME, profile.firstName != null ?
@@ -48,7 +48,7 @@ public class ChatActivity extends UserOnlineActivity {
         return intent;
     }
 
-    public static Intent getChatIntent(Context context, GCMUtils.User user) {
+    public static Intent createIntent(Context context, GCMUtils.User user) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, user.id);
         intent.putExtra(ChatFragment.INTENT_USER_NAME, user.name);

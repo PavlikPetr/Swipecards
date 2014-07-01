@@ -12,19 +12,19 @@ public class UserProfileActivity extends UserOnlineActivity {
 
     public static final int INTENT_USER_PROFILE = 6;
 
-    public static Intent getUserProfileIntent(int userId, Context context) {
-        return getUserProfileIntent(userId, null, Static.EMPTY, context);
+    public static Intent createIntent(int userId, Context context) {
+        return createIntent(userId, null, Static.EMPTY, context);
     }
 
-    public static Intent getUserProfileIntent(int userId, String itemId, Context context) {
-        return getUserProfileIntent(userId, itemId, null, context);
+    public static Intent createIntent(int userId, String itemId, Context context) {
+        return createIntent(userId, itemId, null, context);
     }
 
-    public static Intent getUserProfileIntent(int userId, Class callingClass, Context context) {
-        return getUserProfileIntent(userId, null, callingClass.getName(), context);
+    public static Intent createIntent(int userId, Class callingClass, Context context) {
+        return createIntent(userId, null, callingClass.getName(), context);
     }
 
-    public static Intent getUserProfileIntent(int userId, String itemId, String className, Context context) {
+    public static Intent createIntent(int userId, String itemId, String className, Context context) {
         Intent i = new Intent(context, UserProfileActivity.class);
         i.putExtra(AbstractProfileFragment.INTENT_UID, userId);
         if (className != null) {

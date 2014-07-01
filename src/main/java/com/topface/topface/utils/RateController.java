@@ -35,7 +35,7 @@ public class RateController {
 
     public boolean onAdmiration(final int userId, final int mutualId, final OnRateRequestListener requestListener) {
         if (CacheProfile.money < CacheProfile.getOptions().priceAdmiration) {
-            mContext.startActivity(PurchasesActivity.getBuyingIntent("RateAdmiration"));
+            mContext.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration"));
             if (mOnRateControllerUiListener != null) {
                 mOnRateControllerUiListener.failRate();
             }

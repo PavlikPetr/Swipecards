@@ -79,7 +79,7 @@ public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.On
                 break;
             case R.id.btnBuyVip:
                 EasyTracker.getTracker().sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
-                Intent intent = PurchasesActivity.getVipBuyIntent(null, "ClosingDialogWatchAsList");
+                Intent intent = PurchasesActivity.createVipBuyIntent(null, "ClosingDialogWatchAsList");
                 startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 closeDialog();
                 break;

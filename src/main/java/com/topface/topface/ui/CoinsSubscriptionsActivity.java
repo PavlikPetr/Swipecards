@@ -12,7 +12,7 @@ public class CoinsSubscriptionsActivity extends CheckAuthActivity {
 
     public static final int INTENT_COINS_SUBSCRIPTION = 10;
 
-    public static Intent getCoinsSubscriptionIntent(String from) {
+    public static Intent createIntent(String from) {
         Intent intent = new Intent(App.getContext(), CoinsSubscriptionsActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_COINS_SUBSCRIPTION);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);

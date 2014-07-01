@@ -351,7 +351,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                         EasyTracker.getTracker().sendEvent("Chat", "CopyItemText", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COMPLAINT:
-                                        startActivity(ComplainsActivity.getComplainIntent(mUserId, mAdapter.getItem(position).id));
+                                        startActivity(ComplainsActivity.createIntent(mUserId, mAdapter.getItem(position).id));
                                         EasyTracker.getTracker().sendEvent("Chat", "ComplainItemText", "", 1L);
                                         break;
                                 }
@@ -673,7 +673,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.acWProfile:
             case R.id.acProfile:
-                Intent profileIntent = UserProfileActivity.getUserProfileIntent(mUserId, getActivity());
+                Intent profileIntent = UserProfileActivity.createIntent(mUserId, getActivity());
                 startActivity(profileIntent);
                 closeChatActions();
                 break;
@@ -694,7 +694,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 request.exec();
                 break;
             case R.id.complain_action:
-                startActivity(ComplainsActivity.getComplainIntent(mUserId));
+                startActivity(ComplainsActivity.createIntent(mUserId));
                 closeChatActions();
                 break;
             case R.id.ivBarAvatar:
@@ -808,7 +808,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     if (mAdapter != null) {
                         mAdapter.removeItem(loaderItem);
                     }
-                    Intent intent = PurchasesActivity.getBuyingIntent("Chat");
+                    Intent intent = PurchasesActivity.createBuyingIntent("Chat");
                     intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
                     intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
                     startActivity(intent);
@@ -1054,7 +1054,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     request.exec();
                 }
             } else {
-                startActivityForResult(PurchasesActivity.getVipBuyIntent(null, "Chat"), PurchasesActivity.INTENT_BUY_VIP);
+                startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "Chat"), PurchasesActivity.INTENT_BUY_VIP);
                 closeChatActions();
             }
         }

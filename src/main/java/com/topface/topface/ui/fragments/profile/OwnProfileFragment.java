@@ -145,7 +145,7 @@ public class OwnProfileFragment extends AbstractProfileFragment {
     }
 
     private void startSettingsActivity() {
-        startActivity(SettingsActivity.getSettingsIntent());
+        startActivity(SettingsActivity.createIntent());
     }
 
     @Override

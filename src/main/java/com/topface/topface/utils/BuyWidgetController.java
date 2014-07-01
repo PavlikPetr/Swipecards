@@ -22,7 +22,7 @@ public class BuyWidgetController {
         mBuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(PurchasesActivity.getBuyingIntent("Menu"));
+                context.startActivity(PurchasesActivity.createBuyingIntent("Menu"));
             }
         });
         updateBalance();

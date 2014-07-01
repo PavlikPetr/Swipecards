@@ -136,7 +136,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                         @Override
                         public void onClick(View v) {
                             startActivityForResult(
-                                    PurchasesActivity.getVipBuyIntent(null, "PeopleNearby"),
+                                    PurchasesActivity.createVipBuyIntent(null, "PeopleNearby"),
                                     PurchasesActivity.INTENT_BUY_VIP
                             );
                         }
@@ -194,7 +194,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     private void openBuyScreenOnBlockedGeo(Options.BlockPeopleNearby blockPeopleNearby) {
         startActivity(
-                PurchasesActivity.getBuyingIntent("PeoplePaidNearby", blockPeopleNearby.price)
+                PurchasesActivity.createBuyingIntent("PeoplePaidNearby", blockPeopleNearby.price)
         );
     }
 

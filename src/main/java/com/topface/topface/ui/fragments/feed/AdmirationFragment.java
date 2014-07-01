@@ -54,7 +54,7 @@ public class AdmirationFragment extends LikesFragment {
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(PurchasesActivity.getBuyingIntent("EmptyAdmirations"));
+                    startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
                 }
             });
         } else {
@@ -70,7 +70,7 @@ public class AdmirationFragment extends LikesFragment {
                 inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = PurchasesActivity.getVipBuyIntent(null, "Admirations");
+                        Intent intent = PurchasesActivity.createVipBuyIntent(null, "Admirations");
                         startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                     }
                 });
@@ -85,7 +85,7 @@ public class AdmirationFragment extends LikesFragment {
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(PurchasesActivity.getBuyingIntent("EmptyAdmirations"));
+                        startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
                     }
                 });
             }

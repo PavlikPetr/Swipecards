@@ -11,7 +11,7 @@ public class SettingsActivity extends CheckAuthActivity {
 
     public static final int INTENT_SETTINGS = 7;
 
-    public static Intent getSettingsIntent() {
+    public static Intent createIntent() {
         Intent intent = new Intent(App.getContext(), SettingsActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_SETTINGS);
         return intent;

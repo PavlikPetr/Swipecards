@@ -66,7 +66,7 @@ public class LeadersDialog extends AbstractModalDialog {
                         ((NavigationActivity) getActivity()).showFragment(FragmentId.F_PROFILE);
                         dialog.dismiss();
                     } else {
-                        startActivity(UserProfileActivity.getUserProfileIntent(user.id, LeadersDialog.class, getActivity()));
+                        startActivity(UserProfileActivity.createIntent(user.id, LeadersDialog.class, getActivity()));
                     }
                 }
             });
@@ -94,7 +94,7 @@ public class LeadersDialog extends AbstractModalDialog {
     }
 
     private void openChat() {
-        Intent intent = ChatActivity.getChatIntent(getActivity(), user);
+        Intent intent = ChatActivity.createIntent(getActivity(), user);
         getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         EasyTracker.getTracker().sendEvent("Leaders", "Dialog", "Chat", 1L);
     }

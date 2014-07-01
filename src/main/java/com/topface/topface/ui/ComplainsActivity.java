@@ -12,15 +12,15 @@ public class ComplainsActivity extends CheckAuthActivity {
 
     public static final int INTENT_COMPLAIN = 9;
 
-    public static Intent getComplainIntent(int userId) {
+    public static Intent createIntent(int userId) {
         Intent intent = new Intent(App.getContext(), ComplainsActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_COMPLAIN);
         intent.putExtra(ComplainsFragment.USERID, userId);
         return intent;
     }
 
-    public static Intent getComplainIntent(int userId, String feedId) {
-        Intent intent = getComplainIntent(userId);
+    public static Intent createIntent(int userId, String feedId) {
+        Intent intent = createIntent(userId);
         intent.putExtra(ComplainsFragment.FEEDID, feedId);
         return intent;
     }

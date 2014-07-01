@@ -541,7 +541,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void onFeedItemClick(FeedItem item) {
         //Open chat activity
         if (!item.user.isEmpty()) {
-            Intent intent = ChatActivity.getChatIntent(getActivity(), item.user, item.id);
+            Intent intent = ChatActivity.createIntent(getActivity(), item.user, item.id);
             getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         }
     }
@@ -553,7 +553,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 adapter.onSelection(item);
             } else {
                 startActivity(
-                        UserProfileActivity.getUserProfileIntent(item.user.id, item.id, getActivity())
+                        UserProfileActivity.createIntent(item.user.id, item.id, getActivity())
                 );
             }
         }

@@ -240,7 +240,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
                                 select(item, position);
                                 notifyDataSetChanged();
                             } else {
-                                Intent intent = PurchasesActivity.getVipBuyIntent(null, "VipBackground");
+                                Intent intent = PurchasesActivity.createVipBuyIntent(null, "VipBackground");
                                 startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                             }
                         } else {

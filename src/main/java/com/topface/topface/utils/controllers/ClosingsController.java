@@ -279,7 +279,7 @@ public class ClosingsController implements View.OnClickListener {
         } else {
             switch (v.getId()) {
                 case R.id.btnBuyVipFromClosingsWidget:
-                    mMenuFragment.startActivity(PurchasesActivity.getVipBuyIntent(null, "Menu"));
+                    mMenuFragment.startActivity(PurchasesActivity.createVipBuyIntent(null, "Menu"));
                     break;
                 default:
                     break;

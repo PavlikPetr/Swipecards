@@ -211,7 +211,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                     }
                     showNextUser();
                 } else {
-                    Intent intent = PurchasesActivity.getVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
+                    Intent intent = PurchasesActivity.createVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
                     startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 }
                 break;
@@ -221,7 +221,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                 break;
             case R.id.btnWatchAsList:
                 EasyTracker.getTracker().sendEvent(getTrackName(), "WatchAsList", "", 1L);
-                Intent intent = PurchasesActivity.getVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
+                Intent intent = PurchasesActivity.createVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
                 startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 break;
             default:

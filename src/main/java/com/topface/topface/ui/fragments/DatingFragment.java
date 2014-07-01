@@ -548,7 +548,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().sendEvent("Dating", "BuyClick", "", 1L);
-                startActivity(PurchasesActivity.getBuyingIntent("Dating"));
+                startActivity(PurchasesActivity.createBuyingIntent("Dating"));
             }
             break;
             case R.id.btnDatingAdmiration: {
@@ -636,7 +636,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
-                    Intent intent = UserProfileActivity.getUserProfileIntent(mCurrentUser.id, DatingFragment.class, getActivity());
+                    Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, DatingFragment.class, getActivity());
                     intent.putExtra(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, !mCurrentUser.rated);
                     startActivityForResult(intent, UserProfileActivity.INTENT_USER_PROFILE);
                     EasyTracker.getTracker().sendEvent("Dating", "Additional", "Profile", 1L);
@@ -674,7 +674,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             openChat(getActivity());
         } else {
             startActivityForResult(
-                    PurchasesActivity.getVipBuyIntent(
+                    PurchasesActivity.createVipBuyIntent(
                             getString(R.string.chat_block_not_mutual),
                             "DatingChatLock"
                     ),
@@ -684,7 +684,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void openChat(FragmentActivity activity) {
-        Intent intent = ChatActivity.getChatIntent(activity, mCurrentUser);
+        Intent intent = ChatActivity.createIntent(activity, mCurrentUser);
         activity.startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         EasyTracker.getTracker().sendEvent("Dating", "Additional", "Chat", 1L);
     }

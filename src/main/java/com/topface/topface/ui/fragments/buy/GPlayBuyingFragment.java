@@ -48,7 +48,7 @@ public class GPlayBuyingFragment extends AbstractBuyingFragment {
     private Products.BuyButtonClickListener mCoinsSubscriptionClickListener = new Products.BuyButtonClickListener() {
         @Override
         public void onClick(String id) {
-            startActivityForResult(CoinsSubscriptionsActivity.getCoinsSubscriptionIntent(getFrom()), CoinsSubscriptionsActivity.INTENT_COINS_SUBSCRIPTION);
+            startActivityForResult(CoinsSubscriptionsActivity.createIntent(getFrom()), CoinsSubscriptionsActivity.INTENT_COINS_SUBSCRIPTION);
         }
     };
 

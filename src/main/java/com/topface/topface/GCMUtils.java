@@ -289,7 +289,7 @@ public class GCMUtils {
                 if (showMessage) {
                     if (user.id != 0) {
                         lastNotificationType = GCM_TYPE_MESSAGE;
-                        i = ChatActivity.getChatIntent(context, user);
+                        i = ChatActivity.createIntent(context, user);
                     } else {
                         i = new Intent(context, NavigationActivity.class);
                     }

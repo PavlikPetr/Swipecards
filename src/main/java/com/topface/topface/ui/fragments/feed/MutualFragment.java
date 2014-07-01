@@ -58,7 +58,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
         inflated.findViewById(R.id.btnRefill).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(PurchasesActivity.getBuyingIntent("EmptyMutual"));
+                startActivity(PurchasesActivity.createBuyingIntent("EmptyMutual"));
             }
         });
     }

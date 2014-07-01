@@ -116,7 +116,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         switch (v.getId()) {
             case R.id.buyVip:
                 startActivityForResult(
-                        PurchasesActivity.getVipBuyIntent(getMessage(), getTagForBuyingFragment()),
+                        PurchasesActivity.createVipBuyIntent(getMessage(), getTagForBuyingFragment()),
                         PurchasesActivity.INTENT_BUY_VIP
                 );
                 EasyTracker.getTracker().sendEvent(getMainTag(), "ClickBuyVip", "", 0L);

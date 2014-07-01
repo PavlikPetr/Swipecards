@@ -160,7 +160,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             currentView.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = PurchasesActivity.getVipBuyIntent(null, "Likes");
+                    Intent intent = PurchasesActivity.createVipBuyIntent(null, "Likes");
                     startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 }
             });
@@ -175,7 +175,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             currentView.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(PurchasesActivity.getBuyingIntent("EmptyLikes"));
+                    startActivity(PurchasesActivity.createBuyingIntent("EmptyLikes"));
                 }
             });
         }
@@ -207,7 +207,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         @Override
                         public void onClick(View v) {
                             startActivityForResult(
-                                    PurchasesActivity.getVipBuyIntent(null, "Likes"),
+                                    PurchasesActivity.createVipBuyIntent(null, "Likes"),
                                     PurchasesActivity.INTENT_BUY_VIP
                             );
                         }
@@ -270,7 +270,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 "OpenBuyingScreen", 1l
         );
         startActivity(
-                PurchasesActivity.getBuyingIntent(
+                PurchasesActivity.createBuyingIntent(
                         "VipPaidSympathies." + group,
                         PurchasesFragment.TYPE_UNLOCK_SYMPATHIES,
                         blockSympathyOptions.price

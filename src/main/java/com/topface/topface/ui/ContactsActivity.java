@@ -15,7 +15,7 @@ public class ContactsActivity extends CheckAuthActivity {
     public static final int INTENT_CONTACTS = 8;
     public static final String CONTACTS_DATA = "contacts_data";
 
-    public static Intent getIntentForContacts(ArrayList<ContactsProvider.Contact> data) {
+    public static Intent createIntent(ArrayList<ContactsProvider.Contact> data) {
         Intent intent = new Intent(App.getContext(), ContactsActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CONTACTS);
         intent.putParcelableArrayListExtra(CONTACTS_DATA, data);
