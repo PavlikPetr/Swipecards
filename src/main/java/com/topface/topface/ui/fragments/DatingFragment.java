@@ -87,11 +87,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Button mDelightBtn;
     private Button mMutualBtn;
     private Button mSkipBtn;
-    private Button mPrevBtn;
     private Button mProfileBtn;
-    private Button mChatBtn;
-    private Button mSwitchNextBtn;
-    private Button mSwitchPrevBtn;
     private TextView mUserInfoName;
     private TextView mUserInfoCity;
     private TextView mUserInfoStatus;
@@ -106,7 +102,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Novice mNovice;
     private AlphaAnimation mAlphaAnimation;
     private RelativeLayout mDatingLoveBtnLayout;
-    private ViewFlipper mViewFlipper;
     private RetryViewCreator mRetryView;
     private ImageButton mRetryBtn;
     private PreloadManager<SearchUser> mPreloadManager;
@@ -266,8 +261,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
 
-        mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfDatingButtons);
-
         // Dating controls
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
@@ -338,16 +331,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mMutualBtn.setOnClickListener(this);
         mSkipBtn = (Button) view.findViewById(R.id.btnDatingSkip);
         mSkipBtn.setOnClickListener(this);
-        mPrevBtn = (Button) view.findViewById(R.id.btnDatingPrev);
-        mPrevBtn.setOnClickListener(this);
         mProfileBtn = (Button) view.findViewById(R.id.btnDatingProfile);
         mProfileBtn.setOnClickListener(this);
-        mChatBtn = (Button) view.findViewById(R.id.btnDatingChat);
-        mChatBtn.setOnClickListener(this);
-        mSwitchNextBtn = (Button) view.findViewById(R.id.btnDatingSwitchNext);
-        mSwitchNextBtn.setOnClickListener(this);
-        mSwitchPrevBtn = (Button) view.findViewById(R.id.btnDatingSwitchPrev);
-        mSwitchPrevBtn.setOnClickListener(this);
     }
 
     private void initActionBar() {
@@ -628,11 +613,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 showNextUser();
             }
             break;
-            case R.id.btnDatingPrev: {
-                prevUser();
-            }
-
-            break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
                     Intent intent = ContainerActivity.getProfileIntent(mCurrentUser.id, DatingFragment.class, getActivity());
@@ -640,22 +620,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     startActivityForResult(intent, ContainerActivity.INTENT_PROFILE_FRAGMENT);
                     EasyTracker.getTracker().sendEvent("Dating", "Additional", "Profile", 1L);
                 }
-            }
-            break;
-            case R.id.btnDatingChat: {
-                if (CacheProfile.premium || !CacheProfile.getOptions().block_chat_not_mutual) {
-                    openChat(getActivity());
-                } else {
-                    chatBlockLogic();
-                }
-            }
-            break;
-            case R.id.btnDatingSwitchNext: {
-                mViewFlipper.setDisplayedChild(1);
-            }
-            break;
-            case R.id.btnDatingSwitchPrev: {
-                mViewFlipper.setDisplayedChild(0);
             }
             break;
             case R.id.btnUpdate: {
@@ -908,12 +872,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mMutualBtn.setEnabled(false);
         mDelightBtn.setEnabled(false);
         mSkipBtn.setEnabled(false);
-        mPrevBtn.setEnabled(false);
         mProfileBtn.setEnabled(false);
-        mChatBtn.setEnabled(false);
         mDatingLoveBtnLayout.setEnabled(false);
-        mSwitchNextBtn.setEnabled(false);
-        mSwitchPrevBtn.setEnabled(false);
     }
 
     @Override
@@ -932,15 +892,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDelightBtn.setEnabled(enabled);
 
         mSkipBtn.setEnabled(true);
-        mPrevBtn.setEnabled(mUserSearchList.isHasRated());
 
         enabled = (mCurrentUser != null);
         mProfileBtn.setEnabled(enabled);
-        mChatBtn.setEnabled(enabled);
 
         mDatingLoveBtnLayout.setEnabled(true);
-        mSwitchNextBtn.setEnabled(true);
-        mSwitchPrevBtn.setEnabled(true);
     }
 
     @Override
