@@ -74,6 +74,7 @@ public class PopularUserDialog extends AbstractModalDialog {
         root.findViewById(R.id.unlock_message_sent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isOpened = false;
                 EasyTracker.getTracker().sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
                 Intent intent = ContainerActivity.getVipBuyIntent(null, "PopularUserBlockDialog");
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
@@ -103,5 +104,9 @@ public class PopularUserDialog extends AbstractModalDialog {
     protected void onCloseButtonClick(View v) {
         isOpened = false;
         getDialog().dismiss();
+    }
+
+    public boolean isOpened() {
+        return isOpened;
     }
 }

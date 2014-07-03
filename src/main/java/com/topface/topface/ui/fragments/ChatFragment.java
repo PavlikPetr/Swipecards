@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.text.Editable;
@@ -1232,7 +1233,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (mFamousMessageBlocker == null) {
                     initBlockDialog();
                 }
-                if (!mFamousMessageBlocker.getShowsDialog()) {
+                Fragment dialog = getFragmentManager().findFragmentByTag("POPULAR_USER_DIALOG");
+                if (dialog == null || !dialog.isAdded()) {
                     mFamousMessageBlocker.show(getFragmentManager(), "POPULAR_USER_DIALOG");
                 }
                 return true;
@@ -1241,7 +1243,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
 
         public boolean isDialogOpened() {
-            return mFamousMessageBlocker != null && mFamousMessageBlocker.getShowsDialog();
+            return mFamousMessageBlocker != null && mFamousMessageBlocker.isOpened();
         }
 
         public boolean isChatLocked() {
