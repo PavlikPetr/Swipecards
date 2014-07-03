@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PurchasesActivity;
 
 public class VipApiHandler extends SimpleApiHandler {
     @Override
@@ -18,8 +18,8 @@ public class VipApiHandler extends SimpleApiHandler {
             Context context = getContext();
             if (context instanceof Activity) {
                 ((Activity) context).startActivityForResult(
-                        ContainerActivity.getVipBuyIntent(null, "PremiumAccessOnly"),
-                        ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                        PurchasesActivity.createVipBuyIntent(null, "PremiumAccessOnly"),
+                        PurchasesActivity.INTENT_BUY_VIP
                 );
             }
         } else {

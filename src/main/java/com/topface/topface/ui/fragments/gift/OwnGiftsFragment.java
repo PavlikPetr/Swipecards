@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PurchasesActivity;
 
 /**
  * Fragment displaying your own gifts
@@ -19,7 +19,7 @@ public class OwnGiftsFragment extends UpdatableGiftsFragment {
             mBtnInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(ContainerActivity.getBuyingIntent("ProfileGifts"));
+                    startActivity(PurchasesActivity.createBuyingIntent("ProfileGifts"));
                 }
             });
         } else {

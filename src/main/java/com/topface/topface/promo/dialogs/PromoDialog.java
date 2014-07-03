@@ -14,8 +14,8 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -116,8 +116,8 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         switch (v.getId()) {
             case R.id.buyVip:
                 startActivityForResult(
-                        ContainerActivity.getVipBuyIntent(getMessage(), getTagForBuyingFragment()),
-                        ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                        PurchasesActivity.createVipBuyIntent(getMessage(), getTagForBuyingFragment()),
+                        PurchasesActivity.INTENT_BUY_VIP
                 );
                 EasyTracker.getTracker().sendEvent(getMainTag(), "ClickBuyVip", "", 0L);
                 break;

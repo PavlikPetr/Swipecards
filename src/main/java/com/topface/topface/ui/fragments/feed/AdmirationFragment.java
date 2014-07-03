@@ -14,7 +14,7 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteAdmirationsRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -54,7 +54,7 @@ public class AdmirationFragment extends LikesFragment {
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(ContainerActivity.getBuyingIntent("EmptyAdmirations"));
+                    startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
                 }
             });
         } else {
@@ -70,8 +70,8 @@ public class AdmirationFragment extends LikesFragment {
                 inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = ContainerActivity.getVipBuyIntent(null, "Admirations");
-                        startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                        Intent intent = PurchasesActivity.createVipBuyIntent(null, "Admirations");
+                        startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                     }
                 });
                 ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
@@ -85,7 +85,7 @@ public class AdmirationFragment extends LikesFragment {
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(ContainerActivity.getBuyingIntent("EmptyAdmirations"));
+                        startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
                     }
                 });
             }

@@ -44,10 +44,12 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
+import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
@@ -70,8 +72,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     public static final String IGNORE_SYMPATHY_SENT_EXTRA = "IGNORE_SYMPATHY_SENT_EXTRA";
 
 
-    private static final String ARG_TAG_PROFILE_ID = "profile_id";
-    private static final String ARG_IGNORE_SYMPATHY_SENT = "igmore_sympathy";
     private int mProfileId;
     private int mLastLoadedProfileId;
     private String mItemId;
@@ -108,8 +108,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
-            boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
+            AttitudeHandler.ActionTypes type = (AttitudeHandler.ActionTypes) intent.getSerializableExtra(AttitudeHandler.TYPE);
+            boolean value = intent.getBooleanExtra(AttitudeHandler.VALUE, false);
             Profile profile = getProfile();
             if (profile != null && type != null) {
                 switch (type) {
@@ -127,7 +127,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         break;
                     case BOOKMARK:
                         User user = (User) profile;
-                        if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE) && !user.inBlackList) {
+                        if (mBookmarkAction != null && intent.hasExtra(AttitudeHandler.VALUE) && !user.inBlackList) {
                             user.bookmarked = value;
                             mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                         }
@@ -151,17 +151,14 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     private int mActionsHeightHeuristic;
 
-    public static UserProfileFragment newInstance(String itemId, int id, String className, boolean ignoreSympathySent) {
-        UserProfileFragment fragment = new UserProfileFragment();
-
-        Bundle args = new Bundle();
-        args.putInt(ARG_TAG_PROFILE_ID, id);
-        args.putString(ARG_FEED_ITEM_ID, itemId);
-        args.putString(ARG_TAG_CALLING_CLASS, className);
-        args.putBoolean(ARG_IGNORE_SYMPATHY_SENT, ignoreSympathySent);
-        fragment.setArguments(args);
-
-        return fragment;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Bundle args = getArguments();
+        mProfileId = args.getInt(AbstractProfileFragment.INTENT_UID, 0);
+        mItemId = args.getString(AbstractProfileFragment.INTENT_ITEM_ID);
+        mIgnoreSympathySent = args.getBoolean(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, false);
+        setCallingClass(args.getString(AbstractProfileFragment.INTENT_CALLING_FRAGMENT));
     }
 
     @Override
@@ -184,16 +181,13 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         });
         mLockScreen.addView(mRetryView.getView());
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
         return root;
     }
 
     @Override
     protected void restoreState() {
-        super.restoreState();
-        mProfileId = getArguments().getInt(ARG_TAG_PROFILE_ID);
-        mItemId = getArguments().getString(ARG_FEED_ITEM_ID);
-        mIgnoreSympathySent = getArguments().getBoolean(ARG_IGNORE_SYMPATHY_SENT);
+
     }
 
     @Override
@@ -566,8 +560,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (callingClass.equals(DatingFragment.class.getName()) || callingClass.equals(LeadersDialog.class.getName())) {
                             if (!((User) profile).mutual) {
                                 startActivityForResult(
-                                        ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
-                                        ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                                        PurchasesActivity.createVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
+                                        PurchasesActivity.INTENT_BUY_VIP
                                 );
                                 break;
                             }
@@ -594,7 +588,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         request.exec();
                     }
                 } else {
-                    startActivityForResult(ContainerActivity.getVipBuyIntent(null, "ProfileSuperSkills"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
                 }
                 break;
             case R.id.add_to_bookmark_action:
@@ -614,7 +608,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 request.exec();
                 break;
             case R.id.complain_action:
-                startActivity(ContainerActivity.getComplainIntent(mProfileId));
+                startActivity(ComplainsActivity.createIntent(mProfileId));
                 break;
             default:
                 break;
@@ -683,7 +677,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                             FragmentActivity activity = getActivity();
                             if (activity != null) {
-                                Intent intent = ContainerActivity.getBuyingIntent("Profile");
+                                Intent intent = PurchasesActivity.createBuyingIntent("Profile");
                                 intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
                                 intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
                                 startActivity(intent);
@@ -723,15 +717,14 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private void openChat() {
         Profile profile = getProfile();
         if (profile != null) {
-            Intent intent = new Intent(getActivity(), ContainerActivity.class);
+            Intent intent = new Intent(getActivity(), ChatActivity.class);
             intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
             intent.putExtra(ChatFragment.INTENT_USER_NAME, profile.firstName != null ?
                     profile.firstName : Static.EMPTY);
             intent.putExtra(ChatFragment.INTENT_USER_SEX, profile.sex);
             intent.putExtra(ChatFragment.INTENT_USER_AGE, profile.age);
             intent.putExtra(ChatFragment.INTENT_USER_CITY, profile.city == null ? "" : profile.city.name);
-            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object) this).getClass().getSimpleName());
-            startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+            startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         }
     }
 

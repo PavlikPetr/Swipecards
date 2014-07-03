@@ -22,7 +22,7 @@ import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.http.ProfileBackgrounds.BackgroundItem;
@@ -240,8 +240,8 @@ public class EditBackgroundFragment extends AbstractEditFragment {
                                 select(item, position);
                                 notifyDataSetChanged();
                             } else {
-                                Intent intent = ContainerActivity.getVipBuyIntent(null, "VipBackground");
-                                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                                Intent intent = PurchasesActivity.createVipBuyIntent(null, "VipBackground");
+                                startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                             }
                         } else {
                             select(item, position);
