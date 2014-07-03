@@ -200,7 +200,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     // Managers
     private RelativeLayout mLockScreen;
     private ViewStub mChatActionsStub;
-    private FamousUserTalksController mFamousController = new FamousUserTalksController();
+    private FamousUserTalksController mPopularUserLockController = new FamousUserTalksController();
     private String mUserName;
     private int mUserAge;
     private String mUserCity;
@@ -306,6 +306,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDestroyView() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
+        mPopularUserLockController.releaseLock();
         super.onDestroyView();
     }
 
@@ -409,6 +410,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         }, getResources().getColor(R.color.bg_main));
         mLockScreen.addView(retryView.getView());
+        checkPopularUserLock();
+    }
+
+    private boolean checkPopularUserLock() {
+        if (mPopularUserLockController.isChatLocked()) {
+            mPopularUserLockController.blockChat();
+            return true;
+        } else if (mPopularUserLockController.isDialogOpened()) {
+            mPopularUserLockController.showBlockDialog();
+        }
+        return false;
     }
 
     private void initNavigationbar(String userName, int userAge, String userCity) {
@@ -504,7 +516,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
         mIsUpdating = true;
-        if (!pullToRefresh && !scrollRefresh) {
+        if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
             showLoading();
         }
         HistoryRequest historyRequest = new HistoryRequest(getActivity());
@@ -530,7 +542,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
                 if (!data.items.isEmpty()) {
-                    if (mFamousController.block(data.items.getFirst())) {
+                    if (mPopularUserLockController.block(data.items.getFirst())) {
+                        mIsUpdating = false;
+                        wasFailed = false;
+                        mUser = data.user;
+                        if (!mUser.isEmpty()) {
+                            onUserLoaded(mUser);
+                        }
                         return;
                     }
                 }
@@ -741,12 +759,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             getActivity().finish();
         }
 
+        checkPopularUserLock();
+
         // Если адаптер пустой или пользователя нет, грузим с сервера
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
         } else {
-            update(true, "resume update");
-            mAdapter.notifyDataSetChanged();
+            if (mPopularUserLockController.isChatLocked()) {
+                update(true, "resume update");
+                mAdapter.notifyDataSetChanged();
+            }
         }
 
         IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
@@ -807,10 +829,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             case ContainerActivity.INTENT_BUY_VIP_FRAGMENT:
                 if (resultCode == Activity.RESULT_OK) {
                     if (data.getBooleanExtra(PurchasesFragment.IS_VIP_EXTRA, false) == true) {
-                        if (mFamousController.isChatLocked()) {
+                        if (mPopularUserLockController.isChatLocked()) {
                             mLockScreen.setVisibility(View.GONE);
                         }
-                        mFamousController.reset();
+                        mPopularUserLockController.reset();
                     }
                 }
                 break;
@@ -872,7 +894,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private boolean sendMessage() {
-        if (mFamousController.showBlockDialog()) {
+        if (mPopularUserLockController.showBlockDialog()) {
             return false;
         }
         Editable editText = mEditBox.getText();
@@ -1185,10 +1207,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         }
                     }
                 });
-                mFamousChatBlocker.requestLayout();
-                mFamousChatBlocker.invalidate();
+            } else {
+                if (mLockScreen != mFamousChatBlocker.getParent()) {
+                    mLockScreen.addView(mFamousChatBlocker);
+                }
             }
+            mLockScreen.requestLayout();
+            mLockScreen.invalidate();
             mLockScreen.setVisibility(View.VISIBLE);
+        }
+
+        public void releaseLock() {
+            mLockScreen.removeView(mFamousChatBlocker);
         }
 
         public void initBlockDialog() {
@@ -1198,14 +1228,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
 
         public boolean showBlockDialog() {
-            if (mStage == SECOND_STAGE) {
+            if (mStage != NO_BLOCK) {
                 if (mFamousMessageBlocker == null) {
                     initBlockDialog();
                 }
-                mFamousMessageBlocker.show(getFragmentManager(), "POPULAR_USER_DIALOG");
+                if (!mFamousMessageBlocker.getShowsDialog()) {
+                    mFamousMessageBlocker.show(getFragmentManager(), "POPULAR_USER_DIALOG");
+                }
                 return true;
             }
             return false;
+        }
+
+        public boolean isDialogOpened() {
+            return mFamousMessageBlocker != null && mFamousMessageBlocker.getShowsDialog();
         }
 
         public boolean isChatLocked() {
