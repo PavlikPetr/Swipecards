@@ -808,7 +808,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     }
                 }
                 break;
-            case ContainerActivity.INTENT_BUY_VIP_FRAGMENT:
+            case PurchasesActivity.INTENT_BUY_VIP:
                 if (resultCode == Activity.RESULT_OK) {
                     if (data.getBooleanExtra(PurchasesFragment.IS_VIP_EXTRA, false) == true) {
                         if (mPopularUserLockController.isChatLocked()) {
@@ -1183,8 +1183,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         switch (v.getId()) {
                             case R.id.btnBuyVip:
                                 EasyTracker.getTracker().sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
-                                Intent intent = ContainerActivity.getVipBuyIntent(null, "PopularUserChatBlock");
-                                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                                Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
+                                startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                                 break;
                         }
                     }

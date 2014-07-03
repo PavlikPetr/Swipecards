@@ -14,7 +14,7 @@
         style="@style/ItemTitleText"
         android:textAlignment="center"
         android:shadowColor="#F2000000"
-        android:shadowDx="-1px" />
+        android:shadowDx="-1" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,8 +27,8 @@
         android:textAlignment="center"
         android:textSize="13sp"
         android:shadowColor="#F2000000"
-        android:shadowDx="-1px"
-        android:shadowRadius="1px" />
+        android:shadowDx="-1"
+        android:shadowRadius="1" />
 
     <Button
         android:id="@+id/unlock_message_sent"

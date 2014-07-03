@@ -11,7 +11,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
 
 public class PopularUserDialog extends AbstractModalDialog {
@@ -76,8 +76,8 @@ public class PopularUserDialog extends AbstractModalDialog {
             public void onClick(View v) {
                 isOpened = false;
                 EasyTracker.getTracker().sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
-                Intent intent = ContainerActivity.getVipBuyIntent(null, "PopularUserBlockDialog");
-                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserBlockDialog");
+                startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 getDialog().dismiss();
             }
         });
