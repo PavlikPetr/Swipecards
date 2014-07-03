@@ -17,11 +17,17 @@ public abstract class NoAuthActivity extends SingleFragmentActivity {
         return false;
     }
 
+    /**
+     * Empty initialization because no action bar needed here.
+     */
     @Override
     protected void initCustomActionBarView(View mCustomView) {
-
+        // Empty initialization because no action bar needed here
     }
 
+    /**
+     * 0 resource id because no action bar needed here.
+     */
     @Override
     protected int getActionBarCustomViewResId() {
         return 0;
