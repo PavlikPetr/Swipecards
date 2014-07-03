@@ -10,7 +10,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/popular_user_title"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        style="@style/ItemTitleText"
+        android:textAlignment="center"
+        android:shadowColor="#F2000000"
+        android:shadowDx="-1px" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,7 +23,12 @@
         android:layout_below="@id/popular_user_title"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textSize="13sp"
+        android:shadowColor="#F2000000"
+        android:shadowDx="-1px"
+        android:shadowRadius="1px" />
 
     <Button
         android:id="@+id/unlock_message_sent"
