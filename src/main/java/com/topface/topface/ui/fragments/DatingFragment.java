@@ -55,9 +55,10 @@ import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
+import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
@@ -547,7 +548,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().sendEvent("Dating", "BuyClick", "", 1L);
-                startActivity(ContainerActivity.getBuyingIntent("Dating"));
+                startActivity(PurchasesActivity.createBuyingIntent("Dating"));
             }
             break;
             case R.id.btnDatingAdmiration: {
@@ -635,9 +636,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
-                    Intent intent = ContainerActivity.getProfileIntent(mCurrentUser.id, DatingFragment.class, getActivity());
+                    Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, DatingFragment.class, getActivity());
                     intent.putExtra(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, !mCurrentUser.rated);
-                    startActivityForResult(intent, ContainerActivity.INTENT_PROFILE_FRAGMENT);
+                    startActivityForResult(intent, UserProfileActivity.INTENT_USER_PROFILE);
                     EasyTracker.getTracker().sendEvent("Dating", "Additional", "Profile", 1L);
                 }
             }
@@ -673,24 +674,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             openChat(getActivity());
         } else {
             startActivityForResult(
-                    ContainerActivity.getVipBuyIntent(
+                    PurchasesActivity.createVipBuyIntent(
                             getString(R.string.chat_block_not_mutual),
                             "DatingChatLock"
                     ),
-                    ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                    PurchasesActivity.INTENT_BUY_VIP
             );
         }
     }
 
     private void openChat(FragmentActivity activity) {
-        Intent intent = new Intent(activity, ContainerActivity.class);
-        intent.putExtra(ChatFragment.INTENT_USER_ID, mCurrentUser.id);
-        intent.putExtra(ChatFragment.INTENT_USER_NAME, mCurrentUser.first_name);
-        intent.putExtra(ChatFragment.INTENT_USER_SEX, mCurrentUser.sex);
-        intent.putExtra(ChatFragment.INTENT_USER_AGE, mCurrentUser.age);
-        intent.putExtra(ChatFragment.INTENT_USER_CITY, mCurrentUser.city.name);
-        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object) this).getClass().getSimpleName());
-        activity.startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+        Intent intent = ChatActivity.createIntent(activity, mCurrentUser);
+        activity.startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         EasyTracker.getTracker().sendEvent("Dating", "Additional", "Chat", 1L);
     }
 

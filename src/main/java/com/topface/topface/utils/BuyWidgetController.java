@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.topface.topface.R;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 
 public class BuyWidgetController {
@@ -22,7 +22,7 @@ public class BuyWidgetController {
         mBuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(ContainerActivity.getBuyingIntent("Menu"));
+                context.startActivity(PurchasesActivity.createBuyingIntent("Menu"));
             }
         });
         updateBalance();

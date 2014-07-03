@@ -252,7 +252,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 public void fail(int codeError, final IApiResponse response) {
                     setSupportProgressBarIndeterminateVisibility(false);
                     if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                        startActivity(ContainerActivity.getBuyingIntent("Gifts", PurchasesFragment.TYPE_GIFT, item.price));
+                        startActivity(PurchasesActivity.createBuyingIntent("Gifts", PurchasesFragment.TYPE_GIFT, item.price));
                     }
                 }
             }).exec();
