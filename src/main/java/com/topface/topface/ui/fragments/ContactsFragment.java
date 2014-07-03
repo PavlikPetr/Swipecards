@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -31,6 +30,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ContactsActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.EasyTracker;
@@ -39,22 +39,12 @@ import com.topface.topface.utils.Utils;
 import java.util.ArrayList;
 
 public class ContactsFragment extends BaseFragment {
-    public static final String CONTACTS = "contacts";
     ListView contactsView;
     private Button addButton;
     private Button mContactsVip;
     private ArrayList<ContactsProvider.Contact> data;
     private View mLockerView;
     private CheckBox mCheckBox;
-
-    public static ContactsFragment newInstance(ArrayList<ContactsProvider.Contact> contacts) {
-        Bundle args = new Bundle();
-        args.putParcelableArrayList(CONTACTS, contacts);
-        ContactsFragment fragment = new ContactsFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,8 +56,9 @@ public class ContactsFragment extends BaseFragment {
 
         contactsView = (ListView) root.findViewById(R.id.contactsList);
         //Получаем список контактов из аргументов. Если он не пришел, закрываем фрагмент.
-        if (getArguments() != null) {
-            data = getArguments().getParcelableArrayList(CONTACTS);
+        Bundle extras = getArguments();
+        if (extras != null) {
+            data = extras.getParcelableArrayList(ContactsActivity.CONTACTS_DATA);
         } else {
             ((BaseFragmentActivity) getActivity()).close(this, false);
         }

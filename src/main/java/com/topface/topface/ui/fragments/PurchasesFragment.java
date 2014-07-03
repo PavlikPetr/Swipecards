@@ -13,13 +13,11 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
-import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
-import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
@@ -53,38 +51,6 @@ public class PurchasesFragment extends BaseFragment {
     };
     private boolean mIsVip;
 
-    public static PurchasesFragment newInstance(int type, int coins, String from) {
-        PurchasesFragment fragment = new PurchasesFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_ITEM_TYPE, type);
-        args.putInt(ARG_ITEM_PRICE, coins);
-        if (from != null) {
-            args.putString(BillingFragment.ARG_TAG_SOURCE, from);
-        }
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static PurchasesFragment newInstance(String from) {
-        PurchasesFragment purchasesFragment = new PurchasesFragment();
-        if (from != null) {
-            Bundle args = new Bundle();
-            args.putString(BillingFragment.ARG_TAG_SOURCE, from);
-            purchasesFragment.setArguments(args);
-        }
-        return purchasesFragment;
-    }
-
-    public static PurchasesFragment newInstance(String extratext, String from) {
-        PurchasesFragment purchasesFragment = new PurchasesFragment();
-        Bundle args = new Bundle();
-        args.putString(BillingFragment.ARG_TAG_SOURCE, from);
-        args.putString(ARG_TAG_EXRA_TEXT, extratext);
-        args.putBoolean(IS_VIP_PRODUCTS, true);
-        purchasesFragment.setArguments(args);
-        return purchasesFragment;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -116,7 +82,9 @@ public class PurchasesFragment extends BaseFragment {
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
 
-        mIsVip = getArguments().getBoolean(IS_VIP_PRODUCTS);
+        Bundle args = getArguments();
+
+        mIsVip = args.getBoolean(IS_VIP_PRODUCTS, false);
 
         LinkedList<Options.Tab> tabs;
         mResourcesInfo = (TextView) root.findViewById(R.id.payReason);
@@ -129,7 +97,7 @@ public class PurchasesFragment extends BaseFragment {
 
         removeExcessTabs(tabs); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
 
-        PurchasesFragmentsAdapter pagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), getArguments(), tabs);
+        PurchasesFragmentsAdapter pagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs);
         mPager.setAdapter(pagerAdapter);
         mTabIndicator.setViewPager(mPager);
         updateBalanceCounters();
@@ -142,7 +110,7 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
-        boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS);
+        boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS, false);
         for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext(); ) {
             Options.Tab tab = iterator.next();
             Products products = getProductsByTab(tab);

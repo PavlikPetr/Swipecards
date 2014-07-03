@@ -41,7 +41,8 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PasswordRecoverActivity;
+import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AuthButtonsController;
 import com.topface.topface.utils.CacheProfile;
@@ -231,9 +232,9 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
-                Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                startActivityForResult(intent, ContainerActivity.INTENT_REGISTRATION_FRAGMENT);
+                EasyTracker.sendEvent("Registration", "StartActivity","FromAuth", 1L);
+                Intent intent = new Intent(getActivity(), RegistrationActivity.class);
+                startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
             }
         });
 
@@ -346,8 +347,8 @@ public class AuthFragment extends BaseFragment {
             mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
         }
         if (resultCode == Activity.RESULT_OK &&
-                (requestCode == ContainerActivity.INTENT_RECOVER_PASSWORD
-                        || requestCode == ContainerActivity.INTENT_REGISTRATION_FRAGMENT)) {
+                (requestCode == PasswordRecoverActivity.INTENT_RECOVER_PASSWORD
+                        || requestCode == RegistrationActivity.INTENT_REGISTRATION)) {
             if (data != null) {
                 Bundle extras = data.getExtras();
                 if (extras != null) {
@@ -374,8 +375,8 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
-                Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                startActivityForResult(intent, ContainerActivity.INTENT_REGISTRATION_FRAGMENT);
+                Intent intent = new Intent(getActivity(), RegistrationActivity.class);
+                startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
             }
         });
         mLogin = (EditText) root.findViewById(R.id.edLogin);
@@ -398,8 +399,8 @@ public class AuthFragment extends BaseFragment {
         mRecoverPwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                startActivityForResult(intent, ContainerActivity.INTENT_RECOVER_PASSWORD);
+                Intent intent = new Intent(getActivity(), PasswordRecoverActivity.class);
+                startActivityForResult(intent, PasswordRecoverActivity.INTENT_RECOVER_PASSWORD);
             }
         });
         mRecoverPwd.setVisibility(View.GONE);

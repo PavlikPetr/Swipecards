@@ -60,11 +60,13 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
+import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -111,9 +113,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
-            boolean hasValue = intent.hasExtra(ContainerActivity.VALUE);
-            boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
+            AttitudeHandler.ActionTypes type = (AttitudeHandler.ActionTypes) intent.getSerializableExtra(AttitudeHandler.TYPE);
+            boolean hasValue = intent.hasExtra(AttitudeHandler.VALUE);
+            boolean value = intent.getBooleanExtra(AttitudeHandler.VALUE, false);
             if (type != null && mActions != null) {
                 switch (type) {
                     case BLACK_LIST:
@@ -211,23 +213,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     };
     private ArrayList<UserActions.ActionItem> mChatActions;
 
-    public static ChatFragment newInstance(String itemId, int userId, boolean profileInvoke,
-                                           int userSex, String userName, int userAge,
-                                           String userCity, String prevEntity) {
-        ChatFragment fragment = new ChatFragment();
-        Bundle args = new Bundle();
-        args.putString(INTENT_ITEM_ID, itemId);
-        args.putInt(INTENT_USER_ID, userId);
-        args.putBoolean(INTENT_PROFILE_INVOKE, profileInvoke);
-        args.putInt(INTENT_USER_SEX, userSex);
-        args.putString(INTENT_USER_NAME, userName);
-        args.putInt(INTENT_USER_AGE, userAge);
-        args.putString(INTENT_USER_CITY, userCity);
-        args.putString(BaseFragmentActivity.INTENT_PREV_ENTITY, prevEntity);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -238,15 +223,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
+        if (activity instanceof IUserOnlineListener) {
             mUserOnlineListener = (IUserOnlineListener) activity;
-        } catch (ClassCastException e) {
-            Debug.error(e.toString());
         }
         // do not recreate Adapter cause of steRetainInstance(true)
         if (mAdapter == null) {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
         }
+
+        Bundle args = getArguments();
+        mItemId = args.getString(INTENT_ITEM_ID);
+        mUserId = args.getInt(INTENT_USER_ID, -1);
+        mUserName = args.getString(INTENT_USER_NAME);
+        mUserSex = args.getInt(INTENT_USER_SEX, Static.BOY);
+        mUserAge = args.getInt(INTENT_USER_AGE, 0);
+        mUserCity = args.getString(INTENT_USER_CITY);
     }
 
     @Override
@@ -295,7 +286,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
         //регистрируем здесь, потому что может быть такая ситуация, что обновить надо, когда активити находится не на топе стека
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
         mJustResumed = false;
         return root;
     }
@@ -304,16 +295,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public void onDestroyView() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
         super.onDestroyView();
-    }
-
-    @Override
-    protected void restoreState() {
-        mItemId = getArguments().getString(INTENT_ITEM_ID);
-        mUserId = getArguments().getInt(INTENT_USER_ID, -1);
-        mUserName = getArguments().getString(INTENT_USER_NAME);
-        mUserSex = getArguments().getInt(INTENT_USER_SEX, Static.BOY);
-        mUserAge = getArguments().getInt(INTENT_USER_AGE, 0);
-        mUserCity = getArguments().getString(INTENT_USER_CITY);
     }
 
     private void restoreData(Bundle savedInstanceState) {
@@ -370,7 +351,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                         EasyTracker.sendEvent("Chat", "CopyItemText", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COMPLAINT:
-                                        startActivity(ContainerActivity.getComplainIntent(mUserId, mAdapter.getItem(position).id));
+                                        startActivity(ComplainsActivity.createIntent(mUserId, mAdapter.getItem(position).id));
                                         EasyTracker.sendEvent("Chat", "ComplainItemText", "", 1L);
                                         break;
                                 }
@@ -442,7 +423,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     }
 
     @Override
-    public void onViewStateRestored (Bundle savedInstanceState) {
+    public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
             mIsKeyboardOpened = savedInstanceState.getBoolean(KEYBOARD_OPENED);
@@ -692,7 +673,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.acWProfile:
             case R.id.acProfile:
-                Intent profileIntent = ContainerActivity.getProfileIntent(mUserId, getActivity());
+                Intent profileIntent = UserProfileActivity.createIntent(mUserId, getActivity());
                 startActivity(profileIntent);
                 closeChatActions();
                 break;
@@ -713,7 +694,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 request.exec();
                 break;
             case R.id.complain_action:
-                startActivity(ContainerActivity.getComplainIntent(mUserId));
+                startActivity(ComplainsActivity.createIntent(mUserId));
                 closeChatActions();
                 break;
             case R.id.ivBarAvatar:
@@ -825,7 +806,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     if (mAdapter != null) {
                         mAdapter.removeItem(loaderItem);
                     }
-                    Intent intent = ContainerActivity.getBuyingIntent("Chat");
+                    Intent intent = PurchasesActivity.createBuyingIntent("Chat");
                     intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
                     intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
                     startActivity(intent);
@@ -1071,7 +1052,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     request.exec();
                 }
             } else {
-                startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "Chat"), PurchasesActivity.INTENT_BUY_VIP);
                 closeChatActions();
             }
         }

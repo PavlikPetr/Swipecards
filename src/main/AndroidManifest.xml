@@ -176,8 +176,92 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.BanActivity" />
         <activity android:name=".ui.BlackListActivity" />
+
         <activity
-            android:name=".ui.ContainerActivity"
+            android:name=".ui.ChatActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:windowSoftInputMode="stateUnchanged|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.UserProfileActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.ComplainsActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.EditorBannersActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.RegistrationActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.PasswordRecoverActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.PurchasesActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.CoinsSubscriptionsActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.ContactsActivity"
             android:parentActivityName=".ui.NavigationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">

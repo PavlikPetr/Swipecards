@@ -18,10 +18,8 @@ import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.RegistrationTokenRequest;
-import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Settings;
@@ -225,9 +223,7 @@ public class GCMUtils {
 
             if (intent != null) {
                 intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
-                if (!TextUtils.equals(intent.getComponent().getClassName(), ContainerActivity.class.getName())) {
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                }
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 showNotificationByType(extra, context, data, type, user, title, intent);
                 return true;
             }
@@ -356,14 +352,7 @@ public class GCMUtils {
                 if (showMessage) {
                     if (user.id != 0) {
                         lastNotificationType = GCM_TYPE_MESSAGE;
-                        i = new Intent(context, ContainerActivity.class);
-                        i.putExtra(ChatFragment.INTENT_USER_ID, user.id);
-                        i.putExtra(ChatFragment.INTENT_USER_NAME, user.name);
-                        i.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
-                        i.putExtra(ChatFragment.INTENT_USER_AGE, user.age);
-                        i.putExtra(ChatFragment.INTENT_USER_CITY, user.city);
-                        i.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, GCM_NOTIFICATION);
-                        i.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_CHAT_FRAGMENT);
+                        i = ChatActivity.createIntent(context, user);
                     } else {
                         i = new Intent(context, NavigationActivity.class);
                     }

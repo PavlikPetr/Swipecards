@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.ContainerActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +48,7 @@ public class BlackListAddRequest extends ApiRequest {
         for (int i = 0; i < ids.length; i++) {
             ids[i] = mUserIds.get(i);
         }
-        callback(new AttitudeHandler(getContext(), ContainerActivity.ActionTypes.BLACK_LIST, ids, true));
+        callback(new AttitudeHandler(getContext(), AttitudeHandler.ActionTypes.BLACK_LIST, ids, true));
     }
 
     @Override

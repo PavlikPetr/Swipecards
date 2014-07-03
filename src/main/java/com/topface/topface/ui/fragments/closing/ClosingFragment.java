@@ -24,8 +24,8 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SkipAllClosedRequest;
 import com.topface.topface.requests.SkipClosedRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
@@ -214,8 +214,8 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                     }
                     showNextUser();
                 } else {
-                    Intent intent = ContainerActivity.getVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
-                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    Intent intent = PurchasesActivity.createVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
+                    startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 }
                 break;
             case R.id.btnChat:
@@ -224,8 +224,8 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                 break;
             case R.id.btnWatchAsList:
                 EasyTracker.sendEvent(getTrackName(), "WatchAsList", "", 1L);
-                Intent intent = ContainerActivity.getVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
-                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                Intent intent = PurchasesActivity.createVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
+                startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 break;
             default:
                 break;
