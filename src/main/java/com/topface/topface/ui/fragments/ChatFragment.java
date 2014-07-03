@@ -201,7 +201,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     // Managers
     private RelativeLayout mLockScreen;
     private ViewStub mChatActionsStub;
-    private FamousUserTalksController mPopularUserLockController = new FamousUserTalksController();
+    private PopularUserChatController mPopularUserLockController = new PopularUserChatController();
     private String mUserName;
     private int mUserAge;
     private String mUserCity;
@@ -1133,7 +1133,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
-    private class FamousUserTalksController {
+    private class PopularUserChatController {
 
         public static final int NO_BLOCK = -1;
         public static final int FIRST_STAGE = 35;
@@ -1141,13 +1141,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         private int mStage = NO_BLOCK;
 
-        private View mFamousChatBlocker;
-        private PopularUserDialog mFamousMessageBlocker;
+        private View mPopularChatBlocker;
+        private PopularUserDialog mPopularMessageBlocker;
         private String mMaleLockText;
         private String mFemaleLockText;
         private boolean isInExperement57_2;
 
-        public FamousUserTalksController() {
+        public PopularUserChatController() {
             Options options = CacheProfile.getOptions();
             isInExperement57_2 = options.popularUserLock != null;
             if (isInExperement57_2) {
@@ -1177,8 +1177,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     initBlockDialog();
                     return false;
                 }
-            } else if (mFamousChatBlocker != null && mFamousChatBlocker.getVisibility() == View.VISIBLE) {
-                mFamousChatBlocker.setVisibility(View.GONE);
+            } else if (mPopularChatBlocker != null && mPopularChatBlocker.getVisibility() == View.VISIBLE) {
+                mPopularChatBlocker.setVisibility(View.GONE);
                 mLockScreen.setVisibility(View.GONE);
             }
             return false;
@@ -1188,15 +1188,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             ViewStub stub = (ViewStub) mLockScreen.findViewById(R.id.famousBlockerStub);
             for (int i = 0; i < mLockScreen.getChildCount(); i++) {
                 View v = mLockScreen.getChildAt(i);
-                if (v != mFamousChatBlocker) {
+                if (v != mPopularChatBlocker) {
                     mLockScreen.getChildAt(i).setVisibility(View.GONE);
                 }
             }
-            if (mFamousChatBlocker == null) {
-                mFamousChatBlocker = stub.inflate();
-                TextView lockText = (TextView) mFamousChatBlocker.findViewById(R.id.popular_user_lock_text);
+            if (mPopularChatBlocker == null) {
+                mPopularChatBlocker = stub.inflate();
+                TextView lockText = (TextView) mPopularChatBlocker.findViewById(R.id.popular_user_lock_text);
                 lockText.setText(mUserName + " " + (mUserSex == Static.BOY ? mMaleLockText : mFemaleLockText));
-                mFamousChatBlocker.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
+                mPopularChatBlocker.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         switch (v.getId()) {
@@ -1209,8 +1209,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     }
                 });
             } else {
-                if (mLockScreen != mFamousChatBlocker.getParent()) {
-                    mLockScreen.addView(mFamousChatBlocker);
+                if (mLockScreen != mPopularChatBlocker.getParent()) {
+                    mLockScreen.addView(mPopularChatBlocker);
                 }
             }
             mLockScreen.requestLayout();
@@ -1219,23 +1219,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
 
         public void releaseLock() {
-            mLockScreen.removeView(mFamousChatBlocker);
+            mLockScreen.removeView(mPopularChatBlocker);
         }
 
         public void initBlockDialog() {
-            if (mFamousMessageBlocker == null) {
-                mFamousMessageBlocker = new PopularUserDialog(mUserName, mUserSex);
+            if (mPopularMessageBlocker == null) {
+                mPopularMessageBlocker = new PopularUserDialog(mUserName, mUserSex);
             }
         }
 
         public boolean showBlockDialog() {
             if (mStage != NO_BLOCK) {
-                if (mFamousMessageBlocker == null) {
+                if (mPopularMessageBlocker == null) {
                     initBlockDialog();
                 }
                 Fragment dialog = getFragmentManager().findFragmentByTag("POPULAR_USER_DIALOG");
                 if (dialog == null || !dialog.isAdded()) {
-                    mFamousMessageBlocker.show(getFragmentManager(), "POPULAR_USER_DIALOG");
+                    mPopularMessageBlocker.show(getFragmentManager(), "POPULAR_USER_DIALOG");
                 }
                 return true;
             }
@@ -1243,7 +1243,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
 
         public boolean isDialogOpened() {
-            return mFamousMessageBlocker != null && mFamousMessageBlocker.isOpened();
+            return mPopularMessageBlocker != null && mPopularMessageBlocker.isOpened();
         }
 
         public boolean isChatLocked() {
