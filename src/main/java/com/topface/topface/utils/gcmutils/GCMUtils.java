@@ -156,9 +156,6 @@ public class GCMUtils {
             Debug.log("No reg id");
             return "";
         }
-        // Check if app was updated; if so, it must clear the registration ID
-        // since the existing regID is not guaranteed to work with the new
-        // app version.
         int registeredVersion = App.getAppConfig().getLastAppVersion();
         int currentVersion = getAppVersion(mContext);
         if (registeredVersion != currentVersion) {
@@ -176,7 +173,6 @@ public class GCMUtils {
                     .getPackageInfo(context.getPackageName(), 0);
             return packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            // should never happen
             throw new RuntimeException("Could not get package name: " + e);
         }
     }
