@@ -39,7 +39,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
@@ -746,7 +746,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         mUpdater = new Handler();
         startTimer();
-        GCMUtils.lastUserId = mUserId;
 
         if (getView().getHeight() == mKeyboardFreeHeight) {
             mIsKeyboardOpened = true;
@@ -765,7 +764,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         super.onPause();
         getActivity().unregisterReceiver(mNewMessageReceiver);
         stopTimer();
-        GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
         mJustResumed = true;
     }
 

@@ -19,7 +19,6 @@
     <string name="general_server_error">Error. Intente más tarde</string>
     <string name="general_data_error">Error. Intenta una vez más</string>
     <string name="general_internet_off">No hay conexión a Internet</string>
-    <string name="general_purchasing_error">Por favor, envía el mensaje de error de la compra a support@topface.ru</string>
     <string name="general_msg_copied">Mensaje copiado</string>
     <string name="general_spinner_title">Elige la acción</string>
     <string name="general_profile_error">Error de carga del perfil</string>
@@ -61,6 +60,7 @@
     <string name="likes_background_text">No hay simpatías</string>
     <string name="visitors_background_text">No hay huéspedes</string>
     <string name="mutual_background_text">No hay simpatías</string>
+    <string name="message_too_long">Has escrito un mensaje demasiado largo. La cantidad de signos no puede superar %d.</string>
     <string name="chat_background_text">No hay mensajes entrantes</string>
     <string name="chat_comment">Escribir mensaje</string>
     <string name="chat_gift_in">Has recibido un regalo</string>

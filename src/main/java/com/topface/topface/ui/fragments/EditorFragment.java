@@ -15,10 +15,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gcm.GCMRegistrar;
+
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -363,8 +363,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 CacheProfile.getOptions().premiumMessages.clearPopupShowTime();
                 break;
             case R.id.EditorSendGCMToken:
-                GCMRegistrar.setRegisteredOnServer(getActivity(), false);
-                GCMUtils.init("", getActivity());
+                new GCMUtils(getActivity()).registerGCM("");
                 break;
             case R.id.EditorSendAuth:
                 new AuthRequest(AuthToken.getInstance().getTokenInfo(), getActivity()).callback(new ApiHandler() {

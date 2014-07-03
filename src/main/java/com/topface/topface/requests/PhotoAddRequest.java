@@ -6,7 +6,7 @@ import android.net.Uri;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Base64;
-import com.topface.topface.utils.BitmapUtils;
+import com.topface.framework.imageloader.BitmapUtils;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;

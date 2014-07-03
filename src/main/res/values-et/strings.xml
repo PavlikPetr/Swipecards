@@ -19,7 +19,6 @@
     <string name="general_server_error">Tekkis viga. Proovi hiljem.</string>
     <string name="general_data_error">Tekkis viga. Proovi veel koord.</string>
     <string name="general_internet_off">Internetiühendus puudub.</string>
-    <string name="general_purchasing_error">Palun, kirjuta sõnum ostuveast aadressil support@topface.ru</string>
     <string name="general_msg_copied">Tekst on kopeeritud.</string>
     <string name="general_spinner_title">Vali toiming</string>
     <string name="general_profile_error">Konto laadimise viga</string>

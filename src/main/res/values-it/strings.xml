@@ -19,7 +19,6 @@
     <string name="general_server_error">Errore. Riprova più tardi</string>
     <string name="general_data_error">Errore. Riprova più tardi</string>
     <string name="general_internet_off">Stiamo cercando di ripristinare il collegamento Internet. Attendere, prego.</string>
-    <string name="general_purchasing_error">Per favore, invia il messaggio sull’errore di acquisto a support@topface.ru</string>
     <string name="general_msg_copied">Il testo è stato copiato</string>
     <string name="general_spinner_title">Scegli l’azione</string>
     <string name="general_profile_error">Errore durante il caricamento del profilo</string>
@@ -61,6 +60,7 @@
     <string name="likes_background_text">Non hai simpatie</string>
     <string name="visitors_background_text">Non ci sono le visite</string>
     <string name="mutual_background_text">Non ci sono simpatie</string>
+    <string name="message_too_long">Il messaggio composto è troppo lungo. Il messaggio non può superare %d caratteri.</string>
     <string name="chat_background_text">Non ci sono i messaggi in entrata</string>
     <string name="chat_comment">Scrivi messaggio</string>
     <string name="chat_gift_in">Hai ricevuto un regalo.</string>

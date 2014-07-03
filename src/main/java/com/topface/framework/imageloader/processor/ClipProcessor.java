@@ -1,9 +1,9 @@
-package com.topface.topface.imageloader;
+package com.topface.framework.imageloader.processor;
 
 import android.graphics.Bitmap;
 
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
-import com.topface.topface.utils.Utils;
+import com.topface.framework.imageloader.BitmapUtils;
 
 @SuppressWarnings("UnusedDeclaration")
 public class ClipProcessor implements BitmapProcessor {
@@ -18,6 +18,6 @@ public class ClipProcessor implements BitmapProcessor {
 
     @Override
     public Bitmap process(Bitmap bitmap) {
-        return Utils.clipAndScaleBitmap(bitmap, mWidth, mHeight);
+        return BitmapUtils.clipAndScaleBitmap(bitmap, mWidth, mHeight);
     }
 }

@@ -16,6 +16,9 @@ import android.text.TextUtils;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.nostra13.universalimageloader.core.ExtendedImageLoader;
+import com.topface.framework.imageloader.DefaultImageLoader;
+import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.statistics.ILogger;
@@ -56,7 +59,6 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.GeoLocationManager;
-import com.topface.topface.utils.social.AuthToken;
 
 import org.acra.ACRA;
 import org.acra.ACRAConfiguration;
@@ -334,6 +336,11 @@ public class App extends Application {
                 }
             });
         }
+        // Settings extenede image loader to send statistics
+        ImageLoaderStaticFactory.setExtendedImageLoader(ExtendedImageLoader.getInstance());
+        // Settings common image to display error
+        DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
+
         sendAppOptionsRequest();
 
         final Handler handler = new Handler();
@@ -359,7 +366,7 @@ public class App extends Application {
         CacheProfile.loadProfile();
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-        if (!GCMIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
+        if (!GcmIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {

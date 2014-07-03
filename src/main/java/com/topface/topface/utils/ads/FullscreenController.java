@@ -167,6 +167,7 @@ public class FullscreenController {
     public void requestAdmobFullscreen(String adUnitId) {
         // Создание межстраничного объявления.
         final InterstitialAd interstitial = new InterstitialAd(mActivity);
+        interstitial.setAdUnitId(ADMOB_INTERSTITIAL_ID);
         // Создание запроса объявления.
         AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
         adRequestBuilder.setGender(CacheProfile.getProfile().sex == Static.BOY ? AdRequest.GENDER_MALE :

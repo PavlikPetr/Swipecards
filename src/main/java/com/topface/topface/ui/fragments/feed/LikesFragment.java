@@ -15,7 +15,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.topface.framework.utils.BackgroundThread;
-import com.topface.topface.GCMUtils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;

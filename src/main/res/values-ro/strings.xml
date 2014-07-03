@@ -19,7 +19,6 @@
     <string name="general_server_error">Eroare. Incercati mai tarziu</string>
     <string name="general_data_error">Eroare. Mai incearca o data</string>
     <string name="general_internet_off">Conectare la Internet inaccesibila</string>
-    <string name="general_purchasing_error">Va rugam, sa trimiti mesaj despre eroarea cumparaturii la support@topface.ru</string>
     <string name="general_msg_copied">Textul a fost copiat</string>
     <string name="general_spinner_title">Alegeti actiunea</string>
     <string name="general_profile_error">Eroare la incarcarea profilului</string>

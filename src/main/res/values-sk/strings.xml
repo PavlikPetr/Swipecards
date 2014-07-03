@@ -19,7 +19,6 @@
     <string name="general_server_error">Chyba, skúste to neskôr</string>
     <string name="general_data_error">Chyba. Skúste ešte raz</string>
     <string name="general_internet_off">Nie je pripojenie k internetu</string>
-    <string name="general_purchasing_error">Prosím, napíšte správu o chybnom nákupe na support@topface.ru</string>
     <string name="general_msg_copied">Text je skopírovaný</string>
     <string name="general_spinner_title">Vyberte činnosť</string>
     <string name="general_profile_error">Chyba pri načítaní profilu</string>

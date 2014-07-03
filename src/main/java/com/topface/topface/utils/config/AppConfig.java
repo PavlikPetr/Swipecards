@@ -3,9 +3,11 @@ package com.topface.topface.utils.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.mopub.mobileads.util.Strings;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
+import com.topface.topface.requests.multipart.Streams;
 import com.topface.topface.utils.Editor;
 
 /**
@@ -32,6 +34,8 @@ public class AppConfig extends AbstractConfig {
     private static final String DATA_API_VERSION = "data_api_version";
     private static final String DATA_TEST_NETWORK = "data_test_network_mode";
     private static final String DATA_APP_OPTIONS = "data_app_options";
+    private static final String GCM_REG_ID = "gcm_reg_id";
+    private static final String LAST_APP_VERSION = "last_app_version";
 
     public AppConfig(Context context) {
         super(context);
@@ -59,6 +63,10 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, DATA_TEST_NETWORK, false);
         // app options
         addField(settingsMap, DATA_APP_OPTIONS, Static.EMPTY);
+        //GCM registration id
+        addField(settingsMap, GCM_REG_ID, Static.EMPTY);
+        //Last app version
+        addField(settingsMap, LAST_APP_VERSION, 0);
     }
 
     protected SharedPreferences getPreferences() {
@@ -224,6 +232,32 @@ public class AppConfig extends AbstractConfig {
      */
     public void setAppOptions(String value) {
         setField(getSettingsMap(), DATA_APP_OPTIONS, value);
+    }
+
+    /**
+     * Sets GCM registration id
+     *
+     * @param regId
+     */
+    public void setGcmRegId(String regId) {
+        setField(getSettingsMap(), GCM_REG_ID, regId);
+    }
+
+    /**
+     * GCM registration id
+     *
+     * @return gsm registration id
+     */
+    public String getGcmRegId() {
+        return getStringField(getSettingsMap(), GCM_REG_ID);
+    }
+
+    public int getLastAppVersion() {
+        return getIntegerField(getSettingsMap(), LAST_APP_VERSION);
+    }
+
+    public void setLastAppVersion(int version) {
+        setField(getSettingsMap(), LAST_APP_VERSION, version);
     }
 
     @Override
