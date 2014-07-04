@@ -1,5 +1,6 @@
 package com.topface.topface.ui.blocks;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.inneractive.api.ads.InneractiveAd;
 import com.inneractive.api.ads.InneractiveAdListener;
 import com.lifestreet.android.lsmsdk.BannerAdapter;
@@ -31,7 +31,6 @@ import com.mopub.mobileads.MoPubView;
 import com.topface.billing.BillingFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
@@ -63,9 +62,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ad.labs.sdk.AdBanner;
-import ad.labs.sdk.AdInitializer;
-import ad.labs.sdk.tasks.BannerLoader;
 import ru.adcamp.ads.AdsManager;
 import ru.adcamp.ads.BannerAdView;
 import ru.ideast.adwired.AWView;
@@ -91,43 +87,35 @@ public class BannerBlock {
     public static final String BANNER_IVENGO = "IVENGO";
     public static final String BANNER_ADCAMP = "ADCAMP";
     public static final String BANNER_LIFESTREET = "LIFESTREET";
-    public static final String BANNER_ADLAB = "ADLAB";
     public static final String BANNER_INNERACTIVE = "INNERACTIVE";
-    public static final String BANNER_ADMOB_MEDIATION = "ADMOB_MEDIATION";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
     public final static String[] BANNERS = new String[]{
             BANNER_TOPFACE,
             BANNER_ADMOB,
-            BANNER_ADMOB_MEDIATION,
             BANNER_ADWIRED,
             BANNER_MOPUB,
             BANNER_IVENGO,
             BANNER_ADCAMP,
             BANNER_LIFESTREET,
-            BANNER_ADLAB,
             BANNER_GAG,
             BANNER_NONE
     };
 
     private static final String MOPUB_AD_UNIT_ID = "4ec8274ea73811e295fa123138070049";
     private static final String LIFESTREET_SLOT_TAG = "http://mobile-android.lfstmedia.com/m2/slot76330?ad_size=320x50&adkey=3f6";
-    private static final String ADLAB_IDENTIFICATOR = "399375";
 
     private LayoutInflater mInflater;
     ViewGroup mBannerLayout;
     private Fragment mFragment;
-    private Context mContext;
     private View mBannerView;
     private static boolean mAdcampInitialized = false;
 
     private Map<String, Character> mAdwiredMap = new HashMap<>();
-    private AdInitializer mAdlabInitializer;
 
     public BannerBlock(Fragment fragment, ViewGroup layout) {
         super();
         mFragment = fragment;
-        mContext = mFragment.getActivity();
         mInflater = (LayoutInflater) mFragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mBannerLayout = (ViewGroup) layout.findViewById(R.id.loBannerContainer);
         setBannersMap();
@@ -188,6 +176,7 @@ public class BannerBlock {
         }
     }
 
+    @SuppressLint("InflateParams")
     private View getBannerView(String bannerType) {
         try {
             switch (bannerType) {
@@ -196,8 +185,6 @@ public class BannerBlock {
                     return mInflater.inflate(R.layout.banner_topface, mBannerLayout, false);
                 case BANNER_ADMOB:
                     return mInflater.inflate(R.layout.banner_admob, mBannerLayout, false);
-                case BANNER_ADMOB_MEDIATION:
-                    return mInflater.inflate(R.layout.banner_admob_mediation, mBannerLayout, false);
                 case BANNER_ADWIRED:
                     return mInflater.inflate(R.layout.banner_adwired, mBannerLayout, false);
                 case BANNER_MOPUB:
@@ -206,8 +193,6 @@ public class BannerBlock {
                     return mInflater.inflate(R.layout.banner_adcamp, mBannerLayout, false);
                 case BANNER_LIFESTREET:
                     return mInflater.inflate(R.layout.banner_lifestreet, mBannerLayout, false);
-                case BANNER_ADLAB:
-                    return mInflater.inflate(R.layout.banner_adlab, null);
                 case BANNER_INNERACTIVE:
                     return mInflater.inflate(R.layout.banner_inneractive, null);
                 default:
@@ -261,8 +246,6 @@ public class BannerBlock {
             showAdcamp();
         } else if (mBannerView instanceof SlotView) {
             showLifeStreet();
-        } else if (mBannerView instanceof AdBanner) {
-            showAdlab();
         } else if (mBannerView instanceof InneractiveAd) {
             showInneractive();
         } else if (mBannerView instanceof ImageView) {
@@ -346,18 +329,6 @@ public class BannerBlock {
         slotView.loadAd();
     }
 
-    private void showAdlab() {
-        AdBanner adBanner = (AdBanner) mBannerView;
-        mAdlabInitializer = new AdInitializer(mContext, adBanner, ADLAB_IDENTIFICATOR);
-        mAdlabInitializer.setOnBannerRequestListener(new BannerLoader.OnBannerRequestListener() {
-            @Override
-            public void onFailedBannerRequest(String s) {
-                requestBannerGag();
-                mAdlabInitializer.pause();
-                mAdlabInitializer = null;
-            }
-        });
-    }
 
     private void showMopub() {
         MoPubView adView = (MoPubView) mBannerView;
@@ -498,6 +469,7 @@ public class BannerBlock {
     private void showAdMob() {
         mBannerView.setVisibility(View.VISIBLE);
         AdView adView = (AdView) mBannerView;
+
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdFailedToLoad(int errorCode) {
@@ -506,6 +478,16 @@ public class BannerBlock {
 
         });
         ((AdView) mBannerView).loadAd(new AdRequest.Builder().build());
+        //Если нужно, то можно указать id своего девайса для запроса тестовой рекламы
+        /*
+        ((AdView) mBannerView).loadAd(new AdRequest.Builder()
+                //Эмулятор
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                        //А тут можно указать id свего девайса
+                .addTestDevice('hex id твоего девайса')
+                .build()
+        );
+        */
     }
 
     private void showAdcamp() {
@@ -630,7 +612,7 @@ public class BannerBlock {
 
     private String getBannerName(String bannerUrl) {
         String name = null;
-        Pattern pattern = Pattern.compile(".*\\/(.*)\\..+$");
+        Pattern pattern = Pattern.compile(".*/(.*)\\..+$");
         Matcher matcher = pattern.matcher(bannerUrl);
         if (matcher.find() && matcher.matches()) {
             name = matcher.group(1);
@@ -675,7 +657,6 @@ public class BannerBlock {
         if (mBannerView instanceof SlotView) {
             ((SlotView) mBannerView).pause();
         }
-        if (mAdlabInitializer != null) mAdlabInitializer.pause();
     }
 
     public void onDestroy() {
@@ -695,6 +676,5 @@ public class BannerBlock {
         if (mBannerView instanceof SlotView) {
             ((SlotView) mBannerView).resume();
         }
-        if (mAdlabInitializer != null) mAdlabInitializer.resume();
     }
 }

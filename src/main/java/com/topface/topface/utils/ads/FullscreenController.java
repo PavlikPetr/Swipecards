@@ -23,7 +23,6 @@ import com.lifestreet.android.lsmsdk.InterstitialSlot;
 import com.lifestreet.android.lsmsdk.SlotView;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubInterstitial;
-import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -62,7 +61,6 @@ public class FullscreenController {
     private static final String IVENGO_APP_ID = "aggeas97392g";
     private static final String LIFESTREET_TAG = "http://mobile-android.lfstmedia.com/m2/slot76331?ad_size=320x480&adkey=a25";
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-3847865014365726/7595518694";
-    private static final String ADMOB_MEDIATION_INTERSTITIAL_ID = "5161525f5e624978";
     private static boolean isFullScreenBannerVisible = false;
     private SharedPreferences mPreferences;
     private Activity mActivity;
@@ -111,14 +109,9 @@ public class FullscreenController {
     }
 
     private void addLastFullscreenShowedTime() {
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                SharedPreferences.Editor editor = getPreferences().edit();
-                editor.putLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, System.currentTimeMillis());
-                editor.commit();
-            }
-        };
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, System.currentTimeMillis());
+        editor.apply();
     }
 
     private void addNewUrlToFullscreenSet(String url) {
@@ -126,7 +119,7 @@ public class FullscreenController {
         urlSet.add(url);
         SharedPreferences.Editor editor = getPreferences().edit();
         editor.putString(Static.PREFERENCES_FULLSCREEN_URLS_SET, TextUtils.join(URL_SEPARATOR, urlSet));
-        editor.commit();
+        editor.apply();
     }
 
     private void requestGagFullscreen() {
@@ -138,11 +131,8 @@ public class FullscreenController {
         switch (type) {
             case BannerBlock.BANNER_NONE:
                 return;
-            case BannerBlock.BANNER_ADMOB_MEDIATION:
-                requestAdmobFullscreen(ADMOB_MEDIATION_INTERSTITIAL_ID);
-                break;
             case BannerBlock.BANNER_ADMOB:
-                requestAdmobFullscreen(ADMOB_INTERSTITIAL_ID);
+                requestAdmobFullscreen();
                 break;
             case BannerBlock.BANNER_ADWIRED:
                 requestAdwiredFullscreen();
@@ -164,7 +154,7 @@ public class FullscreenController {
         }
     }
 
-    public void requestAdmobFullscreen(String adUnitId) {
+    public void requestAdmobFullscreen() {
         // Создание межстраничного объявления.
         final InterstitialAd interstitial = new InterstitialAd(mActivity);
         interstitial.setAdUnitId(ADMOB_INTERSTITIAL_ID);
