@@ -136,7 +136,6 @@ dependencies {
     compile project(':libs:AdLabSDK')
 
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.+'
-    compile project(':libs:tf-offerwall:sdk')
 
 }
 
