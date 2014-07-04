@@ -112,10 +112,12 @@ public class GCMUtils {
             }
 
             @Override
-            protected void onPostExecute(String o) {
-                if (!serverToken.equals(mRegId)) {
+            protected void onPostExecute(String regId) {
+                if (regId != null && !serverToken.equals(regId)) {
                     sendRegistrationIdToBackend();
                     storeRegistrationId();
+                } else if (regId == null) {
+                    Debug.log("Registration id is null");
                 }
             }
         }.execute(null, null, null);
