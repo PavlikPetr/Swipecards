@@ -3,8 +3,7 @@ package com.topface.topface.robotiumTests;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.test.ActivityInstrumentationTestCase2;
-
-import com.jayway.android.robotium.solo.Solo;
+import com.robotium.solo.Solo;
 import com.topface.topface.ui.NavigationActivity;
 
 @TargetApi(Build.VERSION_CODES.FROYO)

@@ -39,7 +39,7 @@ public abstract class UserOnlineActivity extends CheckAuthActivity implements IU
             case android.R.id.home:
                 List<Fragment> fragments = getSupportFragmentManager().getFragments();
                 for (Fragment f : fragments) {
-                    if (f.getActivity() == this) {
+                    if (f != null && f.getActivity() == this) {
                         f.onOptionsItemSelected(item);
                     }
                 }

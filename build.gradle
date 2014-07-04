@@ -25,7 +25,6 @@ android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
     buildToolsVersion rootProject.ANDROID_BUILD_TOOLS_VERSION
 
-
     productFlavors {
         //Основной flavor, в нашем случае работает с Google Play
         google {
@@ -136,9 +135,9 @@ dependencies {
     compile project(':libs:mopub-android-sdk')
     compile project(':libs:AdLabSDK')
 
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.+'
     compile project(':libs:tf-offerwall:sdk')
 
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.+'
 }
 
 project(':libs:AndroidStatistics') {
