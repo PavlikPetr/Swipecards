@@ -110,7 +110,7 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     }
 
     @Override
-    protected String getTrackName() {
+    public String getTrackName() {
         return "MutualsClosing";
     }
 }
