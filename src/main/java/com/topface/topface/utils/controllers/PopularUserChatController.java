@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.History;
@@ -16,6 +15,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.EasyTracker;
 
 /**
  * This controller blocks messages from popular users.
@@ -96,7 +96,7 @@ public class PopularUserChatController {
                 public void onClick(View v) {
                     switch (v.getId()) {
                         case R.id.btnBuyVip:
-                            EasyTracker.getTracker().sendEvent(mChatFragment.getTrackName(), "BuyVipStatus", "", 1L);
+                            EasyTracker.sendEvent(mChatFragment.getTrackName(), "BuyVipStatus", "", 1L);
                             Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
                             mChatFragment.startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                             break;
