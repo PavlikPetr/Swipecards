@@ -47,12 +47,6 @@ public class GCMUtils {
     private GoogleCloudMessaging mGcmObject;
     private String mRegId;
 
-    public boolean isGCMSupported() {
-        return mIsGCMSupported;
-    }
-
-    private boolean mIsGCMSupported = true;
-
     public static final int GCM_TYPE_UNKNOWN = -1;
     public static final int GCM_TYPE_MESSAGE = 0;
     public static final int GCM_TYPE_MUTUAL = 1;
@@ -87,13 +81,10 @@ public class GCMUtils {
 
     public GCMUtils(Context context) {
         mContext = context;
-        if (!checkPlayServices(mContext)) {
-            mIsGCMSupported = false;
-        }
     }
 
     public boolean registerGCM(String serverToken) {
-        if (mIsGCMSupported) {
+        if (App.isGmsEnabled()) {
             mGcmObject = GoogleCloudMessaging.getInstance(mContext);
             mRegId = getRegistrationId();
             if (mRegId.isEmpty()) {
@@ -105,9 +96,9 @@ public class GCMUtils {
     }
 
     private void registerInBackground(final String serverToken) {
-        new AsyncTask() {
+        new AsyncTask<Void, Void, String>() {
             @Override
-            protected Object doInBackground(Object[] params) {
+            protected String doInBackground(Void... params) {
                 try {
                     if (mGcmObject == null) {
                         mGcmObject = GoogleCloudMessaging.getInstance(mContext);
@@ -117,12 +108,12 @@ public class GCMUtils {
                 } catch (IOException ex) {
                     Debug.error(ex);
                 }
-                return null;
+                return mRegId;
             }
 
             @Override
-            protected void onPostExecute(Object o) {
-                if (serverToken.equals(mRegId)) {
+            protected void onPostExecute(String o) {
+                if (!serverToken.equals(mRegId)) {
                     sendRegistrationIdToBackend();
                     storeRegistrationId();
                 }
@@ -137,7 +128,7 @@ public class GCMUtils {
             }
             mGcmObject.unregister();
         } catch (IOException e) {
-            Debug.error("Can't unregister gcm");
+            Debug.error("Can't unregister gcm", e);
         }
     }
 
@@ -147,16 +138,16 @@ public class GCMUtils {
     }
 
     private void storeRegistrationId() {
-        App.getAppConfig().setGcmRegId(mRegId);
+        App.getUserConfig().setGcmRegId(mRegId);
     }
 
     private String getRegistrationId() {
-        String registrationId = App.getAppConfig().getGcmRegId();
+        String registrationId = App.getUserConfig().getGcmRegId();
         if (registrationId.isEmpty()) {
             Debug.log("No reg id");
             return "";
         }
-        int registeredVersion = App.getAppConfig().getLastAppVersion();
+        int registeredVersion = App.getUserConfig().getLastAppVersion();
         int currentVersion = getAppVersion(mContext);
         if (registeredVersion != currentVersion) {
             Debug.log("App version changed.");
@@ -173,6 +164,7 @@ public class GCMUtils {
                     .getPackageInfo(context.getPackageName(), 0);
             return packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
+            // should never happen
             throw new RuntimeException("Could not get package name: " + e);
         }
     }
@@ -423,15 +415,6 @@ public class GCMUtils {
             }
         }, NOTIFICATION_CANCEL_DELAY);
 
-    }
-
-    public static boolean checkPlayServices(Context context) {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            Debug.log("Play services are not supported");
-            return false;
-        }
-        return true;
     }
 
     public static class User {

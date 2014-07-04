@@ -277,7 +277,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     @Override
     protected void onNotEmptyDataReturnedOnce() {
         super.onNotEmptyDataReturnedOnce();
-        Tracker tracker = App.getTracker();
+        Tracker tracker = EasyTracker.getTracker();
         tracker.setScreenName(getTrackName());
         tracker.send(new HitBuilders.AppViewBuilder().build());
     }

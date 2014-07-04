@@ -129,7 +129,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         boolean mail;
         boolean apns;
         mGcmUtils = new GCMUtils(getActivity());
-        if (!CacheProfile.email && !mGcmUtils.isGCMSupported()) {
+        if (!CacheProfile.email && !App.isGmsEnabled()) {
             root.findViewById(R.id.tvNoNotification).setVisibility(View.VISIBLE);
             root.findViewById(R.id.loNotificationsHeader).setVisibility(View.GONE);
             root.findViewById(R.id.loLikes).setVisibility(View.GONE);
@@ -211,7 +211,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             frame.setOnClickListener(this);
         }
 
-        if (!mGcmUtils.isGCMSupported()) {
+        if (!App.isGmsEnabled()) {
             root.findViewById(R.id.loVibration).setVisibility(View.GONE);
             root.findViewById(R.id.loLED).setVisibility(View.GONE);
             root.findViewById(R.id.loMelody).setVisibility(View.GONE);
@@ -272,7 +272,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         ProgressBar prsPhone = (ProgressBar) frame.findViewWithTag("prsPhone");
         String phoneNotifierKey = Options.generateKey(key, false);
         hashNotifiersProgressBars.put(phoneNotifierKey, prsPhone);
-        if (mGcmUtils.isGCMSupported()) {
+        if (App.isGmsEnabled()) {
             checkBox.setTag(phoneNotifierKey);
             checkBox.setChecked(phoneChecked);
             checkBox.setOnCheckedChangeListener(this);

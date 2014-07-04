@@ -6,13 +6,14 @@ import android.support.v4.app.DialogFragment;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.topface.topface.App;
+import com.topface.topface.utils.EasyTracker;
 
 public class TrackedDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (isTrackable()) {
-            Tracker tracker = App.getTracker();
+            Tracker tracker = EasyTracker.getTracker();
             tracker.setScreenName(getTrackName());
             tracker.send(new HitBuilders.AppViewBuilder().build());
         }

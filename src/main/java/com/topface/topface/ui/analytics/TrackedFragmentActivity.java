@@ -8,6 +8,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 
 public class TrackedFragmentActivity extends ActionBarActivity {
@@ -17,7 +18,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     public void onStart() {
         super.onStart();
         if (isTrackable()) {
-            Tracker tracker = App.getTracker();
+            Tracker tracker = EasyTracker.getTracker();
             tracker.setScreenName(getTrackName());
             tracker.send(setCustomMeticsAndDimensions().build());
         }
