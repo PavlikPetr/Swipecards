@@ -128,6 +128,7 @@ public class Options extends AbstractData {
     public boolean forceCoinsSubscriptions;
 
     public boolean unlockAllForPremium;
+    public int maxMessageSize;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -291,6 +292,7 @@ public class Options extends AbstractData {
 
             forceCoinsSubscriptions = response.optBoolean("forceCoinsSubscriptions");
             unlockAllForPremium = response.optBoolean("unlockAllForPremium");
+            maxMessageSize = response.optInt("maxMessageSize");
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }

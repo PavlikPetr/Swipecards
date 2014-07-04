@@ -14,6 +14,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -270,6 +271,28 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         // Edit Box
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
         mEditBox.setOnEditorActionListener(mEditorActionListener);
+        mEditBox.addTextChangedListener(new TextWatcher() {
+            private int mMaxLength = CacheProfile.getOptions().maxMessageSize;
+            private Toast toast = Toast.makeText(getActivity(),
+                    String.format(getString(R.string.message_too_long), mMaxLength),
+                    Toast.LENGTH_SHORT);
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > mMaxLength) {
+                    toast.show();
+                    s.delete(mMaxLength - 1, s.length() - 1);
+                }
+            }
+        });
         //LockScreen
         initLockScreen(root);
         //Send Button
