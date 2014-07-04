@@ -99,21 +99,23 @@ public class GCMUtils {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
+                String regId = null;
                 try {
                     if (mGcmObject == null) {
                         mGcmObject = GoogleCloudMessaging.getInstance(mContext);
                     }
-                    mRegId = mGcmObject.register(SENDER_ID);
+                    regId = mGcmObject.register(SENDER_ID);
 
                 } catch (IOException ex) {
                     Debug.error(ex);
                 }
-                return mRegId;
+                return regId;
             }
 
             @Override
             protected void onPostExecute(String regId) {
                 if (regId != null && !serverToken.equals(regId)) {
+                    mRegId = regId;
                     sendRegistrationIdToBackend();
                     storeRegistrationId();
                 } else if (regId == null) {
