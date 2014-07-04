@@ -103,7 +103,10 @@ public class PopularUserDialog extends AbstractModalDialog {
     @Override
     protected void onCloseButtonClick(View v) {
         isOpened = false;
-        getDialog().dismiss();
+        Dialog d = getDialog();
+        if (d != null) {
+            d.dismiss();
+        }
     }
 
     public boolean isOpened() {

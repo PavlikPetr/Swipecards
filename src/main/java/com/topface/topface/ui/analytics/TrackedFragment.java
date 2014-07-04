@@ -15,7 +15,7 @@ public class TrackedFragment extends Fragment {
         }
     }
 
-    protected String getTrackName() {
+    public String getTrackName() {
         return ((Object) this).getClass().getSimpleName().replace("Fragment", "");
     }
 

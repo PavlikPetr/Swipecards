@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.text.Editable;
@@ -48,7 +47,6 @@ import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -75,7 +73,6 @@ import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
-import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
@@ -84,6 +81,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.controllers.PopularUserChatController;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONObject;
@@ -203,7 +201,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     // Managers
     private RelativeLayout mLockScreen;
     private ViewStub mChatActionsStub;
-    private PopularUserChatController mPopularUserLockController = new PopularUserChatController();
+    private PopularUserChatController mPopularUserLockController;
     private String mUserName;
     private int mUserAge;
     private String mUserCity;
@@ -242,6 +240,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mUserSex = args.getInt(INTENT_USER_SEX, Static.BOY);
         mUserAge = args.getInt(INTENT_USER_AGE, 0);
         mUserCity = args.getString(INTENT_USER_CITY);
+
+        mPopularUserLockController = new PopularUserChatController(this, mLockScreen, mUserName, mUserSex);
     }
 
     @Override
@@ -877,6 +877,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private boolean sendMessage() {
         if (mPopularUserLockController.showBlockDialog()) {
+            Debug.log("Message not sent because user is too popular.");
             return false;
         }
         Editable editText = mEditBox.getText();
@@ -1114,126 +1115,4 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
-    private class PopularUserChatController {
-
-        public static final int NO_BLOCK = -1;
-        public static final int FIRST_STAGE = 35;
-        public static final int SECOND_STAGE = 36;
-
-        private int mStage = NO_BLOCK;
-
-        private View mPopularChatBlocker;
-        private PopularUserDialog mPopularMessageBlocker;
-        private String mMaleLockText;
-        private String mFemaleLockText;
-        private boolean isInExperement57_2;
-
-        public PopularUserChatController() {
-            Options options = CacheProfile.getOptions();
-            isInExperement57_2 = options.popularUserLock != null;
-            if (isInExperement57_2) {
-                mMaleLockText = options.popularUserLock.maleLockText;
-                mFemaleLockText = options.popularUserLock.femaleLockText;
-            }
-        }
-
-        public boolean isAccessAllowed() {
-            return CacheProfile.premium || !isInExperement57_2;
-        }
-
-        public boolean checkChatBlock(History message) {
-            return (mStage = message.type) == FIRST_STAGE;
-        }
-
-        public boolean checkMessageBlock(History message) {
-            return (mStage = message.type) == SECOND_STAGE;
-        }
-
-        public boolean block(History message) {
-            if (!isAccessAllowed()) {
-                if (checkChatBlock(message)) {
-                    blockChat();
-                    return true;
-                } else if (checkMessageBlock(message)) {
-                    initBlockDialog();
-                    return false;
-                }
-            } else if (mPopularChatBlocker != null && mPopularChatBlocker.getVisibility() == View.VISIBLE) {
-                mPopularChatBlocker.setVisibility(View.GONE);
-                mLockScreen.setVisibility(View.GONE);
-            }
-            return false;
-        }
-
-        public void blockChat() {
-            ViewStub stub = (ViewStub) mLockScreen.findViewById(R.id.famousBlockerStub);
-            for (int i = 0; i < mLockScreen.getChildCount(); i++) {
-                View v = mLockScreen.getChildAt(i);
-                if (v != mPopularChatBlocker) {
-                    mLockScreen.getChildAt(i).setVisibility(View.GONE);
-                }
-            }
-            if (mPopularChatBlocker == null) {
-                mPopularChatBlocker = stub.inflate();
-                TextView lockText = (TextView) mPopularChatBlocker.findViewById(R.id.popular_user_lock_text);
-                lockText.setText(mUserName + " " + (mUserSex == Static.BOY ? mMaleLockText : mFemaleLockText));
-                mPopularChatBlocker.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        switch (v.getId()) {
-                            case R.id.btnBuyVip:
-                                EasyTracker.getTracker().sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
-                                Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
-                                startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
-                                break;
-                        }
-                    }
-                });
-            } else {
-                if (mLockScreen != mPopularChatBlocker.getParent()) {
-                    mLockScreen.addView(mPopularChatBlocker);
-                }
-            }
-            mLockScreen.requestLayout();
-            mLockScreen.invalidate();
-            mLockScreen.setVisibility(View.VISIBLE);
-        }
-
-        public void releaseLock() {
-            mLockScreen.removeView(mPopularChatBlocker);
-        }
-
-        public void initBlockDialog() {
-            if (mPopularMessageBlocker == null) {
-                mPopularMessageBlocker = new PopularUserDialog(mUserName, mUserSex);
-            }
-        }
-
-        public boolean showBlockDialog() {
-            if (mStage != NO_BLOCK) {
-                if (mPopularMessageBlocker == null) {
-                    initBlockDialog();
-                }
-                Fragment dialog = getFragmentManager().findFragmentByTag("POPULAR_USER_DIALOG");
-                if (dialog == null || !dialog.isAdded()) {
-                    mPopularMessageBlocker.show(getFragmentManager(), "POPULAR_USER_DIALOG");
-                }
-                return true;
-            }
-            return false;
-        }
-
-        public boolean isDialogOpened() {
-            return mPopularMessageBlocker != null && mPopularMessageBlocker.isOpened();
-        }
-
-        public boolean isChatLocked() {
-            return mStage == FIRST_STAGE;
-        }
-
-        public void reset() {
-            mStage = NO_BLOCK;
-        }
-
-    }
 }
