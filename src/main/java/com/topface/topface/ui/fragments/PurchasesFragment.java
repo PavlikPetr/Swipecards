@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import java.util.LinkedList;
 
 public class PurchasesFragment extends BaseFragment {
 
+    public static final String IS_VIP_EXTRA = "IS_VIP_EXTRA";
     public static final String IS_VIP_PRODUCTS = "is_vip_products";
     public static final String LAST_PAGE = "LAST_PAGE";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
@@ -76,6 +78,9 @@ public class PurchasesFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
+        Intent result = new Intent();
+        result.putExtra(IS_VIP_EXTRA, mIsVip);
+        getActivity().setResult(Activity.RESULT_OK, result);
     }
 
     private void initViews(View root, Bundle savedInstanceState) {

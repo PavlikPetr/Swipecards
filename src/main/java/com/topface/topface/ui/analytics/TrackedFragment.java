@@ -3,19 +3,23 @@ package com.topface.topface.ui.analytics;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 
-import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.topface.topface.App;
+import com.topface.topface.utils.EasyTracker;
 
 public class TrackedFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        EasyTracker.getInstance().setContext(getActivity());
         if (isTrackable()) {
-            EasyTracker.getTracker().sendView(getTrackName());
+            Tracker tracker = EasyTracker.getTracker();
+            tracker.setScreenName(getTrackName());
+            tracker.send(new HitBuilders.AppViewBuilder().build());
         }
     }
 
-    protected String getTrackName() {
+    public String getTrackName() {
         return ((Object) this).getClass().getSimpleName().replace("Fragment", "");
     }
 

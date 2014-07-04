@@ -24,7 +24,6 @@ import com.appsflyer.AppsFlyerLib;
 import com.topface.billing.BillingUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -51,6 +50,7 @@ import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 

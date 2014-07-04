@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.Leader;
@@ -17,6 +16,7 @@ import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.EasyTracker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -96,6 +96,6 @@ public class LeadersDialog extends AbstractModalDialog {
     private void openChat() {
         Intent intent = ChatActivity.createIntent(getActivity(), user);
         getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
-        EasyTracker.getTracker().sendEvent("Leaders", "Dialog", "Chat", 1L);
+        EasyTracker.sendEvent("Leaders", "Dialog", "Chat", 1L);
     }
 }

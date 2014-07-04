@@ -2,8 +2,8 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.EasyTracker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +30,6 @@ public class LeaderRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().sendEvent("Leaders", "Buy", "", (long) CacheProfile.getOptions().priceLeader);
+        EasyTracker.sendEvent("Leaders", "Buy", "", (long) CacheProfile.getOptions().priceLeader);
     }
 }

@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
@@ -46,6 +48,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.GMSUtils;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.Utils;
@@ -82,6 +85,9 @@ public class App extends Application {
     private static long mLastProfileUpdate;
     private static Configurations mBaseConfig;
     private static AppOptions mAppOptions;
+
+    private static Boolean mIsGmsSupported;
+
 
     /**
      * Множественный запрос Options и профиля
@@ -329,6 +335,8 @@ public class App extends Application {
         // Settings common image to display error
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
 
+        mIsGmsSupported = GMSUtils.checkPlayServices(getContext());
+
         sendAppOptionsRequest();
 
         final Handler handler = new Handler();
@@ -354,7 +362,7 @@ public class App extends Application {
         CacheProfile.loadProfile();
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-        if (!GCMIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
+        if (!GcmIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -439,6 +447,13 @@ public class App extends Application {
         }
     }
 
+    public static boolean isGmsEnabled() {
+        if (mIsGmsSupported == null) {
+            mIsGmsSupported = GMSUtils.checkPlayServices(getContext());
+        }
+        return mIsGmsSupported;
+    }
+
     @Override
     public void onTerminate() {
         super.onTerminate();
@@ -447,5 +462,7 @@ public class App extends Application {
             unregisterReceiver(mConnectionReceiver);
         }
     }
+
+
 }
 

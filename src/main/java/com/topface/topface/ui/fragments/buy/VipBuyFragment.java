@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.billing.BillingDriver;
 import com.topface.billing.BillingDriverManager;
 import com.topface.billing.BillingFragment;
@@ -32,6 +31,7 @@ import com.topface.topface.ui.BlackListActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.EasyTracker;
 
 import static android.view.View.OnClickListener;
 
@@ -159,7 +159,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         if (arguments != null) {
             from = "From" + arguments.getString(ARG_TAG_SOURCE);
         }
-        EasyTracker.getTracker().sendEvent("Subscription", "ButtonClick" + from, id, 0L);
+        EasyTracker.sendEvent("Subscription", "ButtonClick" + from, id, 0L);
     }
 
     protected Products getProducts() {

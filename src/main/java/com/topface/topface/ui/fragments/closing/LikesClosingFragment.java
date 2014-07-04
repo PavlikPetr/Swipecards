@@ -5,7 +5,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
@@ -14,6 +13,7 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipAllClosedRequest;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.ClosingsController;
@@ -97,7 +97,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMutual:
-                EasyTracker.getTracker().sendEvent(getTrackName(), "Mutual", "", 1L);
+                EasyTracker.sendEvent(getTrackName(), "Mutual", "", 1L);
                 FeedUser currentUser = getCurrentUser();
                 if (currentUser != null) {
                     getRateController().onLike(
@@ -145,7 +145,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     }
 
     @Override
-    protected String getTrackName() {
+    public String getTrackName() {
         return "LikesClosing";
     }
 }

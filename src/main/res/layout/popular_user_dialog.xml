@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="24dp"
+    android:paddingBottom="18dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/popular_user_title"
+        android:layout_centerHorizontal="true"
+        style="@style/ItemTitleText"
+        android:textAlignment="center"
+        android:shadowColor="#F2000000"
+        android:shadowDx="-1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/popular_user_message"
+        android:layout_below="@id/popular_user_title"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textSize="13sp"
+        android:shadowColor="#F2000000"
+        android:shadowDx="-1"
+        android:shadowRadius="1" />
+
+    <Button
+        android:id="@+id/unlock_message_sent"
+        android:layout_width="179dp"
+        android:layout_height="43dp"
+        style="@style/Widget.Topface.Button.Big.Blue"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:text="@string/vip_buy_vip"
+        android:layout_below="@id/popular_user_message"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -31,6 +30,7 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.geo.AddressesCache;
 
@@ -50,7 +50,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private static final int T_FRIEND_MAP = 10;
     private static final int T_USER_REQUEST = 11;
     private static final int T_FRIEND_REQUEST = 12;
-    private static final int T_COUNT = 13;
+    private static final int T_USER_POPULAR_1 = 13;
+    private static final int T_USER_POPULAR_2 = 14;
+    private static final int T_COUNT = 15;
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
@@ -65,7 +67,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             final ProgressBar prsLoader = (ProgressBar) v.getTag(R.id.prsLoader);
             final History item = getItem(position);
             if (item != null) {
-                EasyTracker.getTracker().sendEvent("VirusLike", "Click", "Chat", 0L);
+                EasyTracker.sendEvent("VirusLike", "Click", "Chat", 0L);
 
                 prsLoader.setVisibility(View.VISIBLE);
                 v.setVisibility(View.INVISIBLE);
@@ -73,7 +75,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
                     @Override
                     protected void success(VirusLike data, IApiResponse response) {
-                        EasyTracker.getTracker().sendEvent("VirusLike", "Success", "Chat", 0L);
+                        EasyTracker.sendEvent("VirusLike", "Success", "Chat", 0L);
                         //После заврешения запроса удаляем элемент
                         removeItem(getPosition(position));
                         //И предлагаем отправить пользователю запрос своим друзьям не из приложения
@@ -116,7 +118,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
-                        EasyTracker.getTracker().sendEvent("VirusLike", "Fail", "Chat", 0L);
+                        EasyTracker.sendEvent("VirusLike", "Fail", "Chat", 0L);
                         Utils.showErrorMessage();
                     }
 
@@ -157,6 +159,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 return output ? T_USER_MAP : T_FRIEND_MAP;
             case FeedDialog.LIKE_REQUEST:
                 return output ? T_USER_REQUEST : T_FRIEND_REQUEST;
+            case FeedDialog.MESSAGE_POPULAR_STAGE_1:
+                return T_USER_POPULAR_1;
+            case FeedDialog.MESSAGE_POPULAR_STAGE_2:
+                return T_USER_POPULAR_2;
             default:
                 return output ? T_USER : T_FRIEND;
         }
@@ -419,6 +425,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 return;
             case T_FRIEND:
             case T_USER:
+            case T_USER_POPULAR_1:
+            case T_USER_POPULAR_2:
                 holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
                 break;
             case T_FRIEND_GIFT:
@@ -467,6 +475,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         switch (type) {
             case T_FRIEND:
             case T_USER:
+            case T_USER_POPULAR_1:
+            case T_USER_POPULAR_2:
                 convertView = mInflater.inflate(output ? R.layout.chat_user : R.layout.chat_friend, null, false);
                 holder.userInfo = convertView.findViewById(R.id.user_info);
                 break;
@@ -539,6 +549,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case FeedDialog.DEFAULT:
             case FeedDialog.MESSAGE:
             case FeedDialog.PROMOTION:
+            case FeedDialog.MESSAGE_POPULAR_STAGE_1:
+            case FeedDialog.MESSAGE_POPULAR_STAGE_2:
             default:
                 if (holder != null && holder.message != null) {
                     holder.message.setText(

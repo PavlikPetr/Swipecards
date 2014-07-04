@@ -27,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -70,6 +69,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AnimationHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
@@ -242,7 +242,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onPause() {
         super.onPause();
         if (mRetryView.isVisible()) {
-            EasyTracker.getTracker().sendEvent("EmptySearch", "DismissScreen", "", 0L);
+            EasyTracker.sendEvent("EmptySearch", "DismissScreen", "", 0L);
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBalanceReceiver);
@@ -373,7 +373,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EasyTracker.getTracker().sendEvent("EmptySearch", "ClickTryAgain", "", 0L);
+                        EasyTracker.sendEvent("EmptySearch", "ClickTryAgain", "", 0L);
                         updateData(false);
                     }
                 },
@@ -382,7 +382,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        EasyTracker.getTracker().sendEvent("EmptySearch", "ClickChangeFilter", "", 0L);
+                        EasyTracker.sendEvent("EmptySearch", "ClickChangeFilter", "", 0L);
                         startDatingFilterActivity();
                     }
                 },
@@ -532,7 +532,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
         switch (view.getId()) {
             case R.id.loDatingResources: {
-                EasyTracker.getTracker().sendEvent("Dating", "BuyClick", "", 1L);
+                EasyTracker.sendEvent("Dating", "BuyClick", "", 1L);
                 startActivity(PurchasesActivity.createBuyingIntent("Dating"));
             }
             break;
@@ -551,7 +551,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 new RateController.OnRateRequestListener() {
                                     @Override
                                     public void onRateCompleted(int mutualId) {
-                                        EasyTracker.getTracker().sendEvent("Dating", "Rate",
+                                        EasyTracker.sendEvent("Dating", "Rate",
                                                 "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
                                                 (long) CacheProfile.getOptions().priceAdmiration);
                                     }
@@ -619,7 +619,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, DatingFragment.class, getActivity());
                     intent.putExtra(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, !mCurrentUser.rated);
                     startActivityForResult(intent, UserProfileActivity.INTENT_USER_PROFILE);
-                    EasyTracker.getTracker().sendEvent("Dating", "Additional", "Profile", 1L);
+                    EasyTracker.sendEvent("Dating", "Additional", "Profile", 1L);
                 }
             }
             break;
@@ -650,7 +650,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void openChat(FragmentActivity activity) {
         Intent intent = ChatActivity.createIntent(activity, mCurrentUser);
         activity.startActivityForResult(intent, ChatActivity.INTENT_CHAT);
-        EasyTracker.getTracker().sendEvent("Dating", "Additional", "Chat", 1L);
+        EasyTracker.sendEvent("Dating", "Additional", "Chat", 1L);
     }
 
     private void showUser(SearchUser user) {
@@ -1121,7 +1121,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void showEmptySearchDialog() {
         Debug.log("Search:: showEmptySearchDialog");
-        EasyTracker.getTracker().sendEvent("EmptySearch", "Show", "", 0L);
+        EasyTracker.sendEvent("EmptySearch", "Show", "", 0L);
         mProgressBar.setVisibility(View.GONE);
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);

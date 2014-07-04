@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.GCMUtils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;

@@ -54,6 +54,8 @@ android {
         //noinspection GroovyAssignabilityCheck
         targetSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
 
+        versionCode Integer.parseInt(rootProject.VERSION_CODE)
+        versionName rootProject.VERSION_NAME
         //noinspection GroovyAssignabilityCheck
         testApplicationId "com.topface.topface.test"
         //noinspection GroovyAssignabilityCheck
@@ -105,8 +107,11 @@ dependencies {
     compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
     compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
 
+    //Google play services
+    compile rootProject.GOOGLE_PLAY_SERVICES_VERSION
+
     //All jar libs
-    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'GoogleAdMobAdsSdk.jar')
+    compile fileTree(dir: 'libs', include: '*.jar')
 
     //Для Амазона нужна библиотека для поддержки in-app покупок
     compile files('libs/amazon/amazon-in-app-purchasing.jar')
@@ -130,7 +135,8 @@ dependencies {
     compile project(':libs:mopub-android-sdk')
     compile project(':libs:AdLabSDK')
 
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.+'
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.+'
+
 }
 
 project(':libs:AndroidStatistics') {
@@ -213,7 +219,6 @@ project(':libs:mopub-android-sdk') {
     apply plugin: 'com.android.library'
     dependencies {
         compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
-        compile files('../GoogleAdMobAdsSdk.jar')
     }
     android.sourceSets.main {
         manifest.srcFile 'mopub-sdk/AndroidManifest.xml'

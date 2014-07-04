@@ -3,9 +3,11 @@ package com.topface.topface.utils.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.mopub.mobileads.util.Strings;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
+import com.topface.topface.requests.multipart.Streams;
 import com.topface.topface.utils.Editor;
 
 /**
@@ -33,6 +35,7 @@ public class AppConfig extends AbstractConfig {
     private static final String DATA_TEST_NETWORK = "data_test_network_mode";
     private static final String DATA_APP_OPTIONS = "data_app_options";
 
+
     public AppConfig(Context context) {
         super(context);
     }
@@ -59,6 +62,7 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, DATA_TEST_NETWORK, false);
         // app options
         addField(settingsMap, DATA_APP_OPTIONS, Static.EMPTY);
+
     }
 
     protected SharedPreferences getPreferences() {
@@ -225,6 +229,8 @@ public class AppConfig extends AbstractConfig {
     public void setAppOptions(String value) {
         setField(getSettingsMap(), DATA_APP_OPTIONS, value);
     }
+
+
 
     @Override
     public String toString() {

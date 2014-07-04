@@ -17,11 +17,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.ads.Ad;
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
-import com.google.analytics.tracking.android.EasyTracker;
-import com.inmobi.commons.InMobi;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.inneractive.api.ads.InneractiveAd;
 import com.inneractive.api.ads.InneractiveAdListener;
 import com.lifestreet.android.lsmsdk.BannerAdapter;
@@ -55,6 +54,7 @@ import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Device;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
@@ -134,9 +134,6 @@ public class BannerBlock {
     }
 
     public static void init() {
-        if (BuildConfig.DEBUG) {
-            InMobi.setLogLevel(InMobi.LOG_LEVEL.DEBUG);
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             if (CacheProfile.getOptions().containsBannerType(BANNER_ADCAMP)) {
                 AdsManager.getInstance().initialize(App.getContext());
@@ -436,7 +433,7 @@ public class BannerBlock {
                 Intent intent = null;
                 switch (banner.action) {
                     case Banner.ACTION_PAGE:
-                        EasyTracker.getTracker().sendEvent("Purchase", "Banner", "", 0L);
+                        EasyTracker.sendEvent("Purchase", "Banner", "", 0L);
                         intent = new Intent(mFragment.getActivity(), PurchasesActivity.class);
                         if (banner.parameter.equals("VIP")) {
                             intent.putExtra(Static.INTENT_REQUEST_KEY, PurchasesActivity.INTENT_BUY_VIP);
@@ -501,29 +498,14 @@ public class BannerBlock {
     private void showAdMob() {
         mBannerView.setVisibility(View.VISIBLE);
         AdView adView = (AdView) mBannerView;
-        adView.setAdListener(new com.google.ads.AdListener() {
+        adView.setAdListener(new AdListener() {
             @Override
-            public void onReceiveAd(Ad ad) {
-            }
-
-            @Override
-            public void onFailedToReceiveAd(Ad ad, AdRequest.ErrorCode errorCode) {
+            public void onAdFailedToLoad(int errorCode) {
                 requestBannerGag();
             }
 
-            @Override
-            public void onPresentScreen(Ad ad) {
-            }
-
-            @Override
-            public void onDismissScreen(Ad ad) {
-            }
-
-            @Override
-            public void onLeaveApplication(Ad ad) {
-            }
         });
-        ((AdView) mBannerView).loadAd(new AdRequest());
+        ((AdView) mBannerView).loadAd(new AdRequest.Builder().build());
     }
 
     private void showAdcamp() {
@@ -583,12 +565,12 @@ public class BannerBlock {
         dialog.setMessage(mFragment.getString(R.string.general_dialog_loading));
         dialog.show();
 
-        EasyTracker.getTracker().sendEvent("VirusLike", "Click", "Banner", 0L);
+        EasyTracker.sendEvent("VirusLike", "Click", "Banner", 0L);
 
         new VirusLikesRequest(mFragment.getActivity()).callback(new DataApiHandler<VirusLike>() {
             @Override
             protected void success(VirusLike data, IApiResponse response) {
-                EasyTracker.getTracker().sendEvent("VirusLike", "Success", "Banner", 0L);
+                EasyTracker.sendEvent("VirusLike", "Success", "Banner", 0L);
                 //И предлагаем отправить пользователю запрос своим друзьям не из приложения
                 new VirusLike((ApiResponse) response).sendFacebookRequest(
                         "Banner",
@@ -610,7 +592,7 @@ public class BannerBlock {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                EasyTracker.getTracker().sendEvent("VirusLike", "Fail", "Banner", 0L);
+                EasyTracker.sendEvent("VirusLike", "Fail", "Banner", 0L);
 
                 if (response.isCodeEqual(ErrorCodes.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
                     Toast.makeText(getContext(), R.string.virus_error, Toast.LENGTH_LONG).show();
@@ -643,7 +625,7 @@ public class BannerBlock {
     private void sendStat(String action, String label) {
         action = action == null ? "" : action;
         label = label == null ? "" : label;
-        EasyTracker.getTracker().sendEvent("Banner", action, label, TextUtils.equals(label, "click") ? 1L : 0L);
+        EasyTracker.sendEvent("Banner", action, label, TextUtils.equals(label, "click") ? 1L : 0L);
     }
 
     private String getBannerName(String bannerUrl) {

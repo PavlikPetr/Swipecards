@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.billing.BillingDriver;
 import com.topface.billing.BillingDriverManager;
 import com.topface.billing.BillingFragment;
@@ -23,6 +22,7 @@ import com.topface.topface.data.Products.ProductsInfo.CoinsSubscriptionInfo.Mont
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.EasyTracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +91,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                             if (arguments != null) {
                                 from = "From" + arguments.getString(ARG_TAG_SOURCE);
                             }
-                            EasyTracker.getTracker().sendEvent("Coins Subscription", "ButtonClick" + from, id, 0L);
+                            EasyTracker.sendEvent("Coins Subscription", "ButtonClick" + from, id, 0L);
                         }
                     }
             ));

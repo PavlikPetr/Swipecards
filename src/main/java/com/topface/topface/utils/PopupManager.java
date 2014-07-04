@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.text.TextUtils;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -179,7 +178,7 @@ public class PopupManager {
 
                 InvitesPopup popup = InvitesPopup.newInstance(contacts);
                 popup.show(mActivity.getSupportFragmentManager(), InvitesPopup.TAG);
-                EasyTracker.getTracker().sendEvent("InvitesPopup", "Show", "", 0L);
+                EasyTracker.sendEvent("InvitesPopup", "Show", "", 0L);
 
             }
         };

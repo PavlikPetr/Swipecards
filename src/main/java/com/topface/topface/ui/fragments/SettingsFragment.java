@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -78,6 +78,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         }
     };
     private TextView melodyName;
+    private GCMUtils mGcmUtils;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -127,7 +128,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
         boolean mail;
         boolean apns;
-        if (!CacheProfile.email && !GCMUtils.GCM_SUPPORTED) {
+        mGcmUtils = new GCMUtils(getActivity());
+        if (!CacheProfile.email && !App.isGmsEnabled()) {
             root.findViewById(R.id.tvNoNotification).setVisibility(View.VISIBLE);
             root.findViewById(R.id.loNotificationsHeader).setVisibility(View.GONE);
             root.findViewById(R.id.loLikes).setVisibility(View.GONE);
@@ -209,7 +211,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             frame.setOnClickListener(this);
         }
 
-        if (!GCMUtils.GCM_SUPPORTED) {
+        if (!App.isGmsEnabled()) {
             root.findViewById(R.id.loVibration).setVisibility(View.GONE);
             root.findViewById(R.id.loLED).setVisibility(View.GONE);
             root.findViewById(R.id.loMelody).setVisibility(View.GONE);
@@ -270,7 +272,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         ProgressBar prsPhone = (ProgressBar) frame.findViewWithTag("prsPhone");
         String phoneNotifierKey = Options.generateKey(key, false);
         hashNotifiersProgressBars.put(phoneNotifierKey, prsPhone);
-        if (GCMUtils.GCM_SUPPORTED) {
+        if (App.isGmsEnabled()) {
             checkBox.setTag(phoneNotifierKey);
             checkBox.setChecked(phoneChecked);
             checkBox.setOnCheckedChangeListener(this);
