@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 
 public abstract class SingleFragmentActivity extends CustomTitlesBaseFragmentActivity {
@@ -28,6 +29,8 @@ public abstract class SingleFragmentActivity extends CustomTitlesBaseFragmentAct
     protected void addToLayout() {
         if (!mFragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().add(getContainerId(), mFragment, getFragmentTag()).commit();
+        } else {
+            Debug.log(mFragment, "Fragment was already added to activity " + getClass().getSimpleName());
         }
     }
 
