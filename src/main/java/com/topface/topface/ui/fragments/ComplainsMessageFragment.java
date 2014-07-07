@@ -32,33 +32,6 @@ public class ComplainsMessageFragment extends BaseFragment {
     private String feedId;
     private MenuItem mSendMenuItem;
 
-    public static ComplainsMessageFragment newInstance(int uid, ComplainRequest.ClassNames className, ComplainRequest.TypesNames typeName) {
-        ComplainsMessageFragment fragment = new ComplainsMessageFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(CLASS_NAME, className);
-        args.putSerializable(TYPE_NAME, typeName);
-        args.putInt(USER_ID, uid);
-
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static ComplainsMessageFragment newInstance(int uid, String feedId, ComplainRequest.ClassNames className, ComplainRequest.TypesNames typeName) {
-        if (feedId == null) {
-            return newInstance(uid, className, typeName);
-        }
-        ComplainsMessageFragment fragment = new ComplainsMessageFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(CLASS_NAME, className);
-        args.putSerializable(TYPE_NAME, typeName);
-        args.putString(FEED_ID, feedId);
-        args.putInt(USER_ID, uid);
-
-        fragment.setArguments(args);
-
-        return fragment;
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();

@@ -15,6 +15,11 @@ public class ChatActivity extends UserOnlineActivity {
     public static final int INTENT_CHAT = 3;
 
     @Override
+    protected String getFragmentTag() {
+        return ChatFragment.class.getSimpleName();
+    }
+
+    @Override
     protected Fragment createFragment() {
         return new ChatFragment();
     }
