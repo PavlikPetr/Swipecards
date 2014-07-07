@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.requests.ComplainRequest;
-import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ComplainsMessageActivity;
 
 public class ComplainsFragment extends BaseFragment {
 
@@ -70,7 +70,7 @@ public class ComplainsFragment extends BaseFragment {
                 frame.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((BaseFragmentActivity) getActivity()).startFragment(ComplainsMessageFragment.newInstance(userId, feedId, className, typeName));
+                        startActivity(ComplainsMessageActivity.createIntent(getActivity(), userId, feedId, className, typeName));
                     }
                 });
             }

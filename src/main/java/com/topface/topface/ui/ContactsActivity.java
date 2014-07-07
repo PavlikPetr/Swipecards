@@ -23,6 +23,11 @@ public class ContactsActivity extends CheckAuthActivity {
     }
 
     @Override
+    protected String getFragmentTag() {
+        return ContactsFragment.class.getSimpleName();
+    }
+
+    @Override
     protected Fragment createFragment() {
         return new ContactsFragment();
     }

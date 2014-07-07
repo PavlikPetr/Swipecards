@@ -19,6 +19,11 @@ public class EditorBannersActivity extends CheckAuthActivity {
     }
 
     @Override
+    protected String getFragmentTag() {
+        return EditorBannersFragment.class.getSimpleName();
+    }
+
+    @Override
     protected Fragment createFragment() {
         return new EditorBannersFragment();
     }

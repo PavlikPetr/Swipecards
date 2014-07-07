@@ -9,6 +9,11 @@ public class RegistrationActivity extends NoAuthActivity {
     public static final int INTENT_REGISTRATION = 4;
 
     @Override
+    protected String getFragmentTag() {
+        return RegistrationFragment.class.getSimpleName();
+    }
+
+    @Override
     protected Fragment createFragment() {
         return new RegistrationFragment();
     }
