@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import com.topface.topface.R;
 
@@ -13,14 +14,24 @@ public abstract class SingleFragmentActivity extends CustomTitlesBaseFragmentAct
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initLayout();
-        mFragment = createFragment();
-        setArguments();
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment oldFragment = fm.findFragmentByTag(getFragmentTag());
+        if (oldFragment != null) {
+            mFragment = oldFragment;
+        } else {
+            mFragment = createFragment();
+            setArguments();
+        }
         addToLayout();
     }
 
-    protected int addToLayout() {
-        return getSupportFragmentManager().beginTransaction().add(getContainerId(), mFragment).commit();
+    protected void addToLayout() {
+        if (!mFragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction().add(getContainerId(), mFragment, getFragmentTag()).commit();
+        }
     }
+
+    protected abstract String getFragmentTag();
 
     protected int getContainerId() {
         return R.id.loFrame;

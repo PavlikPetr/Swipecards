@@ -80,7 +80,6 @@ public class PopularUserChatController {
     }
 
     public void blockChat() {
-        ViewStub stub = (ViewStub) mLockScreen.findViewById(R.id.famousBlockerStub);
         for (int i = 0; i < mLockScreen.getChildCount(); i++) {
             View v = mLockScreen.getChildAt(i);
             if (v != mPopularChatBlocker) {
@@ -88,6 +87,7 @@ public class PopularUserChatController {
             }
         }
         if (mPopularChatBlocker == null) {
+            ViewStub stub = (ViewStub) mLockScreen.findViewById(R.id.famousBlockerStub);
             mPopularChatBlocker = stub.inflate();
             TextView lockText = (TextView) mPopularChatBlocker.findViewById(R.id.popular_user_lock_text);
             lockText.setText(mUserName + " " + (mUserSex == Static.BOY ? mMaleLockText : mFemaleLockText));
@@ -96,25 +96,17 @@ public class PopularUserChatController {
                 public void onClick(View v) {
                     switch (v.getId()) {
                         case R.id.btnBuyVip:
-                            EasyTracker.getTracker().sendEvent(mChatFragment.getTrackName(), "BuyVipStatus", "", 1L);
+                            EasyTracker.getTracker().sendEvent("Chat", "BuyVipStatus", "", 1L);
                             Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
                             mChatFragment.startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                             break;
                     }
                 }
             });
-        } else {
-            if (mLockScreen != mPopularChatBlocker.getParent()) {
-                mLockScreen.addView(mPopularChatBlocker);
-            }
+            mLockScreen.requestLayout();
+            mLockScreen.invalidate();
         }
-        mLockScreen.requestLayout();
-        mLockScreen.invalidate();
         mLockScreen.setVisibility(View.VISIBLE);
-    }
-
-    public void releaseLock() {
-        mLockScreen.removeView(mPopularChatBlocker);
     }
 
     public void initBlockDialog() {

@@ -152,8 +152,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private void switchBookmarkEnabled(boolean enabled) {
         if (mActions != null) {
             TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
-            mBookmarkAction.setText(mUser.bookmarked? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-            mBookmarkAction.setTextColor(getResources().getColor(enabled? R.color.text_white : R.color.disabled_color));
+            mBookmarkAction.setText(mUser.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            mBookmarkAction.setTextColor(getResources().getColor(enabled ? R.color.text_white : R.color.disabled_color));
             mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(enabled);
         }
     }
@@ -241,7 +241,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mUserAge = args.getInt(INTENT_USER_AGE, 0);
         mUserCity = args.getString(INTENT_USER_CITY);
 
-        mPopularUserLockController = new PopularUserChatController(this, mLockScreen, mUserName, mUserSex);
+        if (mPopularUserLockController == null) {
+            mPopularUserLockController = new PopularUserChatController(this, mLockScreen, mUserName, mUserSex);
+        }
     }
 
     @Override
@@ -298,7 +300,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDestroyView() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
-        mPopularUserLockController.releaseLock();
         super.onDestroyView();
     }
 
