@@ -184,6 +184,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private EditText mEditBox;
     private String mItemId;
     private boolean wasFailed = false;
+    private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -884,6 +885,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         Editable editText = mEditBox.getText();
         String editString = editText == null ? "" : editText.toString();
         if (editText == null || TextUtils.isEmpty(editString.trim()) || mUserId == 0) {
+            return false;
+        }
+        if (editText.length() > mMaxMessageSize) {
+            Toast.makeText(getActivity(),
+                    String.format(getString(R.string.message_too_long), mMaxMessageSize),
+                    Toast.LENGTH_SHORT).show();
             return false;
         }
         editText.clear();

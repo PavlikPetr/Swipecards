@@ -130,6 +130,7 @@ public class Options extends AbstractData {
     public boolean forceCoinsSubscriptions;
 
     public boolean unlockAllForPremium;
+    public int maxMessageSize;
 
     public PopularUserMessage popularUserLock;
 
@@ -300,6 +301,7 @@ public class Options extends AbstractData {
             if (popularMessageObject != null) {
                 popularUserLock = new PopularUserMessage(popularMessageObject);
             }
+            maxMessageSize = response.optInt("maxMessageSize");
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
