@@ -888,10 +888,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             return false;
         }
         if (editText.length() > mMaxMessageSize) {
-            Toast toast = Toast.makeText(getActivity(),
+            Toast.makeText(getActivity(),
                     String.format(getString(R.string.message_too_long), mMaxMessageSize),
-                    Toast.LENGTH_SHORT);
-            toast.show();
+                    Toast.LENGTH_SHORT).show();
             return false;
         }
         editText.clear();
