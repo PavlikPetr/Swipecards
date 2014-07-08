@@ -241,10 +241,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mUserSex = args.getInt(INTENT_USER_SEX, Static.BOY);
         mUserAge = args.getInt(INTENT_USER_AGE, 0);
         mUserCity = args.getString(INTENT_USER_CITY);
-
-        if (mPopularUserLockController == null) {
-            mPopularUserLockController = new PopularUserChatController(this, mLockScreen, mUserName, mUserSex);
-        }
     }
 
     @Override
@@ -394,6 +390,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         }, getResources().getColor(R.color.bg_main));
         mLockScreen.addView(retryView.getView());
+
+        mPopularUserLockController = new PopularUserChatController(this, mLockScreen, mUserName, mUserSex);
         checkPopularUserLock();
     }
 
@@ -742,8 +740,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             getActivity().setResult(Activity.RESULT_CANCELED);
             getActivity().finish();
         }
-
-        checkPopularUserLock();
 
         // Если адаптер пустой или пользователя нет, грузим с сервера
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
