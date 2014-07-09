@@ -9,29 +9,26 @@ import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.data.Options;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.utils.CacheProfile;
 
 public class PopularUserDialog extends AbstractModalDialog {
 
-    private static final String USER_NAME_ARG = "USER_NAME_ARG";
-    private static final String USER_SEX_ARG = "USER_SEX_ARG";
+    private static final String DIALOG_TITLE_ARG = "DIALOG_TITLE_ARG";
+    private static final String BLOCK_TEXT_ARG = "BLOCK_TEXT_ARG";
     private static final String IS_OPENED = "IS_OPENED";
 
-    private String mUserName;
-    private int mUserSex;
+    private String mDialogTitle;
+    private String mBlockText;
     private TextView mTitle;
     private TextView mMessage;
     private boolean isOpened;
 
-    public PopularUserDialog(String userName, int userSex) {
-        mUserName = userName;
-        mUserSex = userSex;
+    public PopularUserDialog(String dialogTitle, String blockText) {
+        mDialogTitle = dialogTitle;
+        mBlockText = blockText;
         Bundle args = new Bundle();
-        args.putString(USER_NAME_ARG, mUserName);
-        args.putInt(USER_SEX_ARG, mUserSex);
+        args.putString(DIALOG_TITLE_ARG, mDialogTitle);
+        args.putString(BLOCK_TEXT_ARG, mBlockText);
         setArguments(args);
     }
 
@@ -43,8 +40,8 @@ public class PopularUserDialog extends AbstractModalDialog {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            mUserName = args.getString(USER_NAME_ARG);
-            mUserSex = args.getInt(USER_SEX_ARG);
+            mDialogTitle = args.getString(DIALOG_TITLE_ARG);
+            mBlockText = args.getString(BLOCK_TEXT_ARG);
         }
         if (savedInstanceState != null) {
             isOpened = savedInstanceState.getBoolean(IS_OPENED, false);
@@ -65,11 +62,8 @@ public class PopularUserDialog extends AbstractModalDialog {
         mTitle = (TextView) root.findViewById(R.id.popular_user_title);
         mMessage = (TextView) root.findViewById(R.id.popular_user_message);
 
-        Options options = CacheProfile.getOptions();
-
-        mTitle.setText(options.popularUserLock.dialogTitle);
-        mMessage.setText(mUserName + " " + (mUserSex == Static.BOY ?
-                options.popularUserLock.maleLockText : options.popularUserLock.femaleLockText));
+        mTitle.setText(mDialogTitle);
+        mMessage.setText(mBlockText);
 
         root.findViewById(R.id.unlock_message_sent).setOnClickListener(new View.OnClickListener() {
             @Override

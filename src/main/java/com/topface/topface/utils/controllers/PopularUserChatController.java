@@ -9,9 +9,7 @@ import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.History;
-import com.topface.topface.data.Options;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
@@ -30,29 +28,23 @@ public class PopularUserChatController {
 
     private View mPopularChatBlocker;
     private PopularUserDialog mPopularMessageBlocker;
-    private String mMaleLockText;
-    private String mFemaleLockText;
-    private boolean isInExperement57_2;
+    private String mBlockText;
+    private String mDialogTitle;
     private ChatFragment mChatFragment;
     private ViewGroup mLockScreen;
-    private String mUserName;
-    private int mUserSex;
 
-    public PopularUserChatController(ChatFragment chatFragment, ViewGroup lockScreen, String userName, int userSex) {
+    public PopularUserChatController(ChatFragment chatFragment, ViewGroup lockScreen) {
         mChatFragment = chatFragment;
         mLockScreen = lockScreen;
-        mUserName = userName;
-        mUserSex = userSex;
-        Options options = CacheProfile.getOptions();
-        isInExperement57_2 = options.popularUserLock != null;
-        if (isInExperement57_2) {
-            mMaleLockText = options.popularUserLock.maleLockText;
-            mFemaleLockText = options.popularUserLock.femaleLockText;
-        }
+    }
+
+    public void setTexts(String dialogTitle, String blockText) {
+        mBlockText = blockText;
+        mDialogTitle = dialogTitle;
     }
 
     public boolean isAccessAllowed() {
-        return CacheProfile.premium || !isInExperement57_2;
+        return CacheProfile.premium || mBlockText == null || !mBlockText.equals("");
     }
 
     public boolean checkChatBlock(History message) {
@@ -90,7 +82,7 @@ public class PopularUserChatController {
             ViewStub stub = (ViewStub) mLockScreen.findViewById(R.id.famousBlockerStub);
             mPopularChatBlocker = stub.inflate();
             TextView lockText = (TextView) mPopularChatBlocker.findViewById(R.id.popular_user_lock_text);
-            lockText.setText(mUserName + " " + (mUserSex == Static.BOY ? mMaleLockText : mFemaleLockText));
+            lockText.setText(mBlockText);
             mPopularChatBlocker.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -109,9 +101,13 @@ public class PopularUserChatController {
         mLockScreen.setVisibility(View.VISIBLE);
     }
 
+    public void setState(int state) {
+        mStage = state;
+    }
+
     public void initBlockDialog() {
         if (mPopularMessageBlocker == null) {
-            mPopularMessageBlocker = new PopularUserDialog(mUserName, mUserSex);
+            mPopularMessageBlocker = new PopularUserDialog(mDialogTitle, mBlockText);
         }
     }
 

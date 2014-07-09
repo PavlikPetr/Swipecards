@@ -100,6 +100,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
     private static final String KEYBOARD_OPENED = "keyboard_opened";
+    private static final String CHAT_BLOCKED = "chat_blocked";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_USER_SEX = "user_sex";
@@ -275,6 +276,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         //LockScreen
         initLockScreen(root);
+        if (savedInstanceState != null && savedInstanceState.getBoolean(CHAT_BLOCKED, false)) {
+            mPopularUserLockController.setState(PopularUserChatController.FIRST_STAGE);
+        }
+        checkPopularUserLock();
         //Send Button
         Button sendButton = (Button) root.findViewById(R.id.btnSend);
         sendButton.setOnClickListener(this);
@@ -391,8 +396,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }, getResources().getColor(R.color.bg_main));
         mLockScreen.addView(retryView.getView());
 
-        mPopularUserLockController = new PopularUserChatController(this, mLockScreen, mUserName, mUserSex);
-        checkPopularUserLock();
+        mPopularUserLockController = new PopularUserChatController(this, mLockScreen);
     }
 
     private boolean checkPopularUserLock() {
@@ -436,6 +440,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 Debug.error(e);
             }
         }
+        outState.putBoolean(CHAT_BLOCKED, mPopularUserLockController.isChatLocked());
     }
 
     @Override
@@ -524,7 +529,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
                 if (!data.items.isEmpty()) {
-                    if (mPopularUserLockController.block(data.items.getFirst())) {
+                    History firstMessage = data.items.getFirst();
+                    mPopularUserLockController.setTexts(firstMessage.dialogTitle, firstMessage.blockText);
+                    if (mPopularUserLockController.block(firstMessage)) {
                         mIsUpdating = false;
                         wasFailed = false;
                         mUser = data.user;

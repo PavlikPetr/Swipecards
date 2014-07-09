@@ -66,8 +66,6 @@ public class Options extends AbstractData {
     public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
     public static final String PREMIUM_ADMIRATION_POPUP_SHOW_TIME = "premium_admirations_popup_last_show";
 
-    public static final String EXPEREMENTAL_MESSAGE_FROM_POPULAR_USER = "experimentMessageFromPopularUser";
-
     /**
      * Настройки для каждого типа страниц
      */
@@ -131,8 +129,6 @@ public class Options extends AbstractData {
 
     public boolean unlockAllForPremium;
     public int maxMessageSize;
-
-    public PopularUserMessage popularUserLock;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -297,10 +293,6 @@ public class Options extends AbstractData {
             forceCoinsSubscriptions = response.optBoolean("forceCoinsSubscriptions");
             unlockAllForPremium = response.optBoolean("unlockAllForPremium");
 
-            JSONObject popularMessageObject = response.optJSONObject(EXPEREMENTAL_MESSAGE_FROM_POPULAR_USER);
-            if (popularMessageObject != null) {
-                popularUserLock = new PopularUserMessage(popularMessageObject);
-            }
             maxMessageSize = response.optInt("maxMessageSize");
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -616,24 +608,4 @@ public class Options extends AbstractData {
             return !mainOffers.isEmpty() && !extraOffers.isEmpty();
         }
     }
-
-    public static class PopularUserMessage {
-        public static final String TITLE = "title";
-        public static final String TEXT_MALE = "textMale";
-        public static final String TEXT_FEMALE = "textFemale";
-
-        public String dialogTitle;
-        public String maleLockText;
-        public String femaleLockText;
-
-        public PopularUserMessage(JSONObject jsonObj) {
-            if (jsonObj != null) {
-                dialogTitle = jsonObj.optString(TITLE);
-                maleLockText = jsonObj.optString(TEXT_MALE);
-                femaleLockText = jsonObj.optString(TEXT_FEMALE);
-            }
-        }
-    }
-
-
 }
