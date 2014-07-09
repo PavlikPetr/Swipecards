@@ -493,6 +493,12 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name="com.topface.topface.receivers.NotificationClosedReceiver">
+            <intent-filter>
+                <action android:name="com.topface.topface.NOTIFICATION_CLOSED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

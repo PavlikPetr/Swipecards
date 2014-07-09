@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.NotificationStatistics;
 import com.topface.topface.utils.Editor;
 
 import org.json.JSONException;
@@ -36,6 +37,8 @@ public class GCMIntentService extends GCMBaseIntentService {
                     broadcastReceiver.putExtra(GCMUtils.USER_ID_EXTRA, userId);
                     context.sendBroadcast(broadcastReceiver);
                     Intent updateIntent = null;
+                    int type = GCMUtils.getType(intent);
+                    NotificationStatistics.send(NotificationStatistics.SEND_KEY, type, GCMUtils.getLabel(intent));
                     switch (GCMUtils.getType(intent)) {
                         case GCMUtils.GCM_TYPE_MESSAGE:
                         case GCMUtils.GCM_TYPE_DIALOGS:
