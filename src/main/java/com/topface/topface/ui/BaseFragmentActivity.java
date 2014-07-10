@@ -170,7 +170,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         Intent intent = getIntent();
         if (!intent.getBooleanExtra(IGNORE_NOTIFICATION_INTENT, false) &&
                 intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
-            NotificationStatistics.sendOpened(intent.getStringExtra(GCMUtils.GCM_TYPE),
+            NotificationStatistics.sendOpened(intent.getIntExtra(GCMUtils.GCM_TYPE, -1),
                     intent.getStringExtra(GCMUtils.GCM_LABEL));
             intent.putExtra(IGNORE_NOTIFICATION_INTENT, true);
             setIntent(intent);
