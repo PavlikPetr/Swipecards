@@ -44,7 +44,7 @@ public class PopularUserChatController {
     }
 
     public boolean isAccessAllowed() {
-        return CacheProfile.premium || mBlockText == null || !mBlockText.equals("");
+        return CacheProfile.premium || mBlockText == null || mBlockText.equals("");
     }
 
     public boolean checkChatBlock(History message) {
