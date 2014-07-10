@@ -225,6 +225,10 @@ public class UserNotificationManager {
         notification.setOngoing(ongoing);
         notification.setMessages(messagesStack);
         notification.setIntent(intent);
+        /*
+        onDeleteIntent triggers when notification is deleted by user. We need it to gather
+        statistics about deleted notifications.
+         */
         Intent onDeleteIntent = new Intent(NotificationClosedReceiver.NOTIFICATION_CLOSED);
         onDeleteIntent.putExtra(GCMUtils.GCM_TYPE, intent.getIntExtra(GCMUtils.GCM_TYPE, -1));
         onDeleteIntent.putExtra(GCMUtils.GCM_LABEL, intent.getStringExtra(GCMUtils.GCM_LABEL));

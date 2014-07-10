@@ -71,7 +71,13 @@ public class GCMUtils {
     private static boolean showSympathy = false;
     private static boolean showVisitors = false;
     public static final String NOTIFICATION_INTENT = "GCM";
+    /**
+     * Extras key for gcm type.
+     */
     public static final String GCM_TYPE = "GCM_TYPE";
+    /**
+     * Extras key for additon gcm message label.
+     */
     public static final String GCM_LABEL = "GCM_LABEL";
     public static boolean GCM_SUPPORTED = true;
 
@@ -377,8 +383,7 @@ public class GCMUtils {
     }
 
     public static String getLabel(Intent intent) {
-        String label = intent.getStringExtra("label");
-        return label != null ? label : "";
+        return intent.getStringExtra("label");
     }
 
 

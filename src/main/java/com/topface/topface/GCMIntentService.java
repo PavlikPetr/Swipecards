@@ -38,7 +38,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                     context.sendBroadcast(broadcastReceiver);
                     Intent updateIntent = null;
                     int type = GCMUtils.getType(intent);
-                    NotificationStatistics.send(NotificationStatistics.SEND_KEY, type, GCMUtils.getLabel(intent));
+                    NotificationStatistics.sendReceived(type, GCMUtils.getLabel(intent));
                     switch (GCMUtils.getType(intent)) {
                         case GCMUtils.GCM_TYPE_MESSAGE:
                         case GCMUtils.GCM_TYPE_DIALOGS:

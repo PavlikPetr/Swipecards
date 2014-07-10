@@ -163,11 +163,15 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
 
+        /*
+        Sending notification open event to statistics. Only done once when activity started from notification.
+        Then IGNORE_NOTIFICATION_INTENT prevents from repeated sending.
+         */
         Intent intent = getIntent();
         if (!intent.getBooleanExtra(IGNORE_NOTIFICATION_INTENT, false) &&
                 intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
-            NotificationStatistics.send(NotificationStatistics.OPEN_KEY,
-                    intent.getStringExtra(GCMUtils.GCM_TYPE), intent.getStringExtra(GCMUtils.GCM_LABEL));
+            NotificationStatistics.sendOpened(intent.getStringExtra(GCMUtils.GCM_TYPE),
+                    intent.getStringExtra(GCMUtils.GCM_LABEL));
             intent.putExtra(IGNORE_NOTIFICATION_INTENT, true);
             setIntent(intent);
         }

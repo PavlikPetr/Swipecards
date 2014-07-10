@@ -17,8 +17,8 @@ public class NotificationClosedReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        NotificationStatistics.send(NotificationStatistics.DELETE_KEY,
-                intent.getIntExtra(GCMUtils.GCM_TYPE, -1), intent.getStringExtra(GCMUtils.GCM_LABEL));
+        NotificationStatistics.sendDeleted(intent.getIntExtra(GCMUtils.GCM_TYPE, -1),
+                intent.getStringExtra(GCMUtils.GCM_LABEL));
         Debug.log("Notification deleted");
     }
 }
