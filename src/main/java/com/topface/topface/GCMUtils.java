@@ -71,6 +71,14 @@ public class GCMUtils {
     private static boolean showSympathy = false;
     private static boolean showVisitors = false;
     public static final String NOTIFICATION_INTENT = "GCM";
+    /**
+     * Extras key for gcm type.
+     */
+    public static final String GCM_TYPE = "GCM_TYPE";
+    /**
+     * Extras key for additon gcm message label.
+     */
+    public static final String GCM_LABEL = "GCM_LABEL";
     public static boolean GCM_SUPPORTED = true;
 
     public static void init(final String serverToken, final Context context) {
@@ -160,6 +168,8 @@ public class GCMUtils {
 
             if (intent != null) {
                 intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
+                intent.putExtra(GCM_TYPE, type);
+                intent.putExtra(GCM_LABEL, getLabel(extra));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 showNotificationByType(extra, context, data, type, user, title, intent);
                 return true;
@@ -370,6 +380,10 @@ public class GCMUtils {
         Debug.log("GCM: Try send regId to server: ", registrationId);
 
         new RegistrationTokenRequest(registrationId, context).exec();
+    }
+
+    public static String getLabel(Intent intent) {
+        return intent.getStringExtra("label");
     }
 
 
