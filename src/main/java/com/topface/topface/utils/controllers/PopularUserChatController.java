@@ -32,6 +32,17 @@ public class PopularUserChatController {
     private String mDialogTitle;
     private ChatFragment mChatFragment;
     private ViewGroup mLockScreen;
+    private boolean mOff;
+
+    public static PopularUserChatController createStateDuplicateController(
+            PopularUserChatController oldOne, ChatFragment chatFragment, ViewGroup lockScreen) {
+        PopularUserChatController controller = new PopularUserChatController(chatFragment, lockScreen);
+        controller.mStage = oldOne.mStage;
+        controller.mBlockText = oldOne.mBlockText;
+        controller.mDialogTitle = oldOne.mDialogTitle;
+        controller.mOff = oldOne.mOff;
+        return controller;
+    }
 
     public PopularUserChatController(ChatFragment chatFragment, ViewGroup lockScreen) {
         mChatFragment = chatFragment;
@@ -44,34 +55,43 @@ public class PopularUserChatController {
     }
 
     public boolean isAccessAllowed() {
-        return CacheProfile.premium || mBlockText == null || mBlockText.equals("");
+        return CacheProfile.premium || mBlockText == null || mBlockText.equals("") || mOff;
     }
 
     public boolean checkChatBlock(History message) {
-        return (mStage = message.type) == FIRST_STAGE;
+        return message.type == FIRST_STAGE;
     }
 
     public boolean checkMessageBlock(History message) {
-        return (mStage = message.type) == SECOND_STAGE;
+        return message.type == SECOND_STAGE;
     }
 
     public boolean block(History message) {
         if (!isAccessAllowed()) {
             if (checkChatBlock(message)) {
+                mStage = FIRST_STAGE;
                 blockChat();
                 return true;
             } else if (checkMessageBlock(message)) {
+                mStage = SECOND_STAGE;
                 initBlockDialog();
                 return false;
             }
-        } else if (mPopularChatBlocker != null && mPopularChatBlocker.getVisibility() == View.VISIBLE) {
-            mPopularChatBlocker.setVisibility(View.GONE);
-            mLockScreen.setVisibility(View.GONE);
         }
         return false;
     }
 
+    public void unlockChat() {
+        if (mPopularChatBlocker != null && mPopularChatBlocker.getVisibility() == View.VISIBLE) {
+            mPopularChatBlocker.setVisibility(View.GONE);
+            mLockScreen.setVisibility(View.GONE);
+        }
+    }
+
     public void blockChat() {
+        if (isAccessAllowed()) {
+            return;
+        }
         for (int i = 0; i < mLockScreen.getChildCount(); i++) {
             View v = mLockScreen.getChildAt(i);
             if (v != mPopularChatBlocker) {
@@ -112,7 +132,7 @@ public class PopularUserChatController {
     }
 
     public boolean showBlockDialog() {
-        if (mStage != NO_BLOCK) {
+        if (!isAccessAllowed() && mStage != NO_BLOCK) {
             if (mPopularMessageBlocker == null) {
                 initBlockDialog();
             }
@@ -135,6 +155,9 @@ public class PopularUserChatController {
 
     public void reset() {
         mStage = NO_BLOCK;
+        mDialogTitle = null;
+        mBlockText = null;
+        mOff = true;
     }
 
 }
