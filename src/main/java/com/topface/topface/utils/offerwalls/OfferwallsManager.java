@@ -28,6 +28,8 @@ import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
 import com.topface.framework.utils.Debug;
+import com.topface.offerwall.TFOfferSDK;
+import com.topface.offerwall.TFOfferwallSDK;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
@@ -52,6 +54,7 @@ public class OfferwallsManager {
     public static final String RANDOM = "RANDOM";
     public static final String GETJAR = "GETJAR";
     public static final String SUPERSONIC = "SUPERSONIC";
+    public static final String TFOFFERWALL = "TFOFFERWALL";
     @SuppressWarnings("UnusedDeclaration")
     public final static String[] OFFERWALLS = new String[]{
             TAPJOY,
@@ -59,6 +62,7 @@ public class OfferwallsManager {
             CLICKKY,
             GETJAR,
             SUPERSONIC,
+            TFOFFERWALL,
             RANDOM
     };
 
@@ -87,9 +91,13 @@ public class OfferwallsManager {
                 case GETJAR:
                     initGetJar(context);
                     break;
+                case TFOFFERWALL:
+                    initTfOfferwall(context);
             }
         }
     }
+
+
 
     public static void startOfferwall(Activity activity) {
         startOfferwall(activity, getOfferWallType());
@@ -198,6 +206,9 @@ public class OfferwallsManager {
         }
     }
 
+    private static void initTfOfferwall(Context context) {
+        TFOfferwallSDK.initialize(this, Integer.toString(CacheProfile.uid), (String) mPublishersSpinner.getSelectedItem());
+    }
 
     /**
      * GetJar
