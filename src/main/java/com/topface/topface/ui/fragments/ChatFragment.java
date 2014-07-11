@@ -397,8 +397,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mLockScreen.addView(retryView.getView());
 
         if (mPopularUserLockController != null) {
-            mPopularUserLockController = PopularUserChatController.createStateDuplicateController(
-                    mPopularUserLockController, this, mLockScreen);
+            mPopularUserLockController.setLockScreen(mLockScreen);
         } else {
             mPopularUserLockController = new PopularUserChatController(this, mLockScreen);
         }

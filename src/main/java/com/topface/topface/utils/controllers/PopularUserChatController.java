@@ -15,6 +15,8 @@ import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.CacheProfile;
 
+import java.lang.ref.WeakReference;
+
 /**
  * This controller blocks messages from popular users.
  */
@@ -31,27 +33,24 @@ public class PopularUserChatController {
     private String mBlockText;
     private String mDialogTitle;
     private ChatFragment mChatFragment;
-    private ViewGroup mLockScreen;
+    private WeakReference<ViewGroup> mLockScreenRef;
     private boolean mOff;
-
-    public static PopularUserChatController createStateDuplicateController(
-            PopularUserChatController oldOne, ChatFragment chatFragment, ViewGroup lockScreen) {
-        PopularUserChatController controller = new PopularUserChatController(chatFragment, lockScreen);
-        controller.mStage = oldOne.mStage;
-        controller.mBlockText = oldOne.mBlockText;
-        controller.mDialogTitle = oldOne.mDialogTitle;
-        controller.mOff = oldOne.mOff;
-        return controller;
-    }
 
     public PopularUserChatController(ChatFragment chatFragment, ViewGroup lockScreen) {
         mChatFragment = chatFragment;
-        mLockScreen = lockScreen;
+        mLockScreenRef = new WeakReference<ViewGroup>(lockScreen);
     }
 
     public void setTexts(String dialogTitle, String blockText) {
         mBlockText = blockText;
         mDialogTitle = dialogTitle;
+    }
+
+    public void setLockScreen(ViewGroup lockScreen) {
+        mLockScreenRef = new WeakReference<ViewGroup>(lockScreen);
+        if (isChatLocked()) {
+            blockChat();
+        }
     }
 
     public boolean isAccessAllowed() {
@@ -84,7 +83,10 @@ public class PopularUserChatController {
     public void unlockChat() {
         if (mPopularChatBlocker != null && mPopularChatBlocker.getVisibility() == View.VISIBLE) {
             mPopularChatBlocker.setVisibility(View.GONE);
-            mLockScreen.setVisibility(View.GONE);
+            ViewGroup lockScreen = mLockScreenRef.get();
+            if (lockScreen != null) {
+                lockScreen.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -92,14 +94,12 @@ public class PopularUserChatController {
         if (isAccessAllowed()) {
             return;
         }
-        for (int i = 0; i < mLockScreen.getChildCount(); i++) {
-            View v = mLockScreen.getChildAt(i);
-            if (v != mPopularChatBlocker) {
-                mLockScreen.getChildAt(i).setVisibility(View.GONE);
-            }
+        ViewGroup lockScreen = mLockScreenRef.get();
+        for (int i = 0; i < lockScreen.getChildCount(); i++) {
+            lockScreen.getChildAt(i).setVisibility(View.GONE);
         }
-        if (mPopularChatBlocker == null) {
-            ViewStub stub = (ViewStub) mLockScreen.findViewById(R.id.famousBlockerStub);
+        ViewStub stub = (ViewStub) lockScreen.findViewById(R.id.famousBlockerStub);
+        if (stub != null) {
             mPopularChatBlocker = stub.inflate();
             TextView lockText = (TextView) mPopularChatBlocker.findViewById(R.id.popular_user_lock_text);
             lockText.setText(mBlockText);
@@ -115,10 +115,11 @@ public class PopularUserChatController {
                     }
                 }
             });
-            mLockScreen.requestLayout();
-            mLockScreen.invalidate();
+            lockScreen.requestLayout();
+            lockScreen.invalidate();
         }
-        mLockScreen.setVisibility(View.VISIBLE);
+        mPopularChatBlocker.setVisibility(View.VISIBLE);
+        lockScreen.setVisibility(View.VISIBLE);
     }
 
     public void setState(int state) {
