@@ -20,17 +20,13 @@ public class NotificationStatistics {
     public static final String NOTIFICATION_API_LEVEL = "plc";
 
     private static void send(String key, int type, String label) {
-        /*
-        If there is no label, no statistics sent.
-         */
-        if (label == null) {
-            return;
+        Slices slices = new Slices();
+        slices.putSlice(NOTIFICATION_TYPE, String.valueOf(type)).
+                putSlice(NOTIFICATION_API_LEVEL, String.valueOf(Build.VERSION.SDK_INT));
+        if (label != null) {
+            slices.putSlice(NOTIFICATION_LABEL, label);
         }
-        StatisticsTracker.getInstance().setContext(App.getContext()).
-                sendEvent(key, 1, new Slices().
-                        putSlice(NOTIFICATION_TYPE, String.valueOf(type)).
-                        putSlice(NOTIFICATION_LABEL, label).
-                        putSlice(NOTIFICATION_API_LEVEL, String.valueOf(Build.VERSION.SDK_INT)));
+        StatisticsTracker.getInstance().setContext(App.getContext()).sendEvent(key, 1, slices);
     }
 
     public static void sendReceived(int type, String label) {
