@@ -44,12 +44,12 @@
             android:id="@+id/tvDatingLovePrice"
             android:layout_alignBottom="@id/btnDatingAdmiration"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="9sp"
+            android:layout_marginBottom="12sp"
             android:layout_width="wrap_content"
             android:text="@integer/love_dating_button"
             android:textStyle="bold"
             android:layout_centerHorizontal="true"
-            android:paddingLeft="40dp" />
+            android:paddingLeft="25dp" />
     </RelativeLayout>
 
     <Button
