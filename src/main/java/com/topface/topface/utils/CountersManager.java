@@ -13,6 +13,7 @@ import org.json.JSONObject;
 public class CountersManager {
     public static final String UPDATE_BALANCE = "com.topface.topface.UPDATE_BALANCE";
     public final static String UPDATE_COUNTERS = "com.topface.topface.UPDATE_COUNTERS";
+    public static final String UPDATE_VIP_STATUS = "com.topface.topface.UPDATE_VIP_STATUS";
     private static int likesCounter;
     private static int sympathyCounter;
     private static int visitorsCounter;
@@ -28,6 +29,7 @@ public class CountersManager {
     public final static String NULL_METHOD = "null_method";
     public final static String CHANGED_BY_GCM = "gcm_changed";
     public final static String METHOD_INTENT_STRING = "method";
+    public static final String VIP_STATUS_EXTRA = "vip_status";
 
     public final static int UNKNOWN_TYPE = -1;
     public final static int LIKES = 0;
@@ -113,6 +115,9 @@ public class CountersManager {
         if (premiumStatus != CacheProfile.premium) {
             CacheProfile.premium = premiumStatus;
             App.sendProfileAndOptionsRequests();
+            Intent intent = new Intent(UPDATE_VIP_STATUS);
+            intent.putExtra(VIP_STATUS_EXTRA, premiumStatus);
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
         updateBalanceCounters();
     }
