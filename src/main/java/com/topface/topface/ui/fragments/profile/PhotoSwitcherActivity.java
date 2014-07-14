@@ -40,6 +40,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static final String INTENT_ALBUM_POS = "album_position";
     public static final String INTENT_PHOTOS = "album_photos";
     public static final String INTENT_PHOTOS_COUNT = "photos_count";
+    public static final String CONTROL_VISIBILITY = "CONTROL_VISIBILITY";
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -55,6 +56,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     };
     private TextView mCounter;
     private ViewGroup mPhotoAlbumControl;
+    private int mPhotoAlbumControlVisibility = View.GONE;
     private Photos mPhotoLinks;
     private PreloadManager mPreloadManager;
     private Photos mDeletedPhotos = new Photos();
@@ -149,6 +151,18 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         deletePhotoRequest();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CONTROL_VISIBILITY, mPhotoAlbumControl.getVisibility());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mPhotoAlbumControlVisibility = savedInstanceState.getInt(CONTROL_VISIBILITY, View.GONE);
+    }
+
     private void initControls() {
         // Control layout
         mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
@@ -160,7 +174,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 finish();
             }
         });
-        mPhotoAlbumControl.setVisibility(View.GONE);
+        mPhotoAlbumControl.setVisibility(mPhotoAlbumControlVisibility);
         if (mUid == CacheProfile.uid) {
             // - set avatar button
             mSetAvatarButton = (TextView) mPhotoAlbumControl.findViewById(R.id.btnSetAvatar);
