@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:clickable="true">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_rocket" />
+
+    <TextView
+        android:id="@+id/popular_user_lock_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ItemTitleText"
+        android:gravity="center"
+        android:textSize="17sp"
+        android:lineSpacingExtra="4sp"
+        android:shadowColor="#000000"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="@dimen/popular_dialog_text_margin"
+        android:layout_marginBottom="@dimen/popular_dialog_text_margin" />
+
+    <Button
+        android:id="@+id/btnBuyVip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/buying_vip_status"
+        style="@style/Widget.Topface.Button.Big.Blue"
+        android:singleLine="true"
+        android:minWidth="179dp" />
+</LinearLayout>

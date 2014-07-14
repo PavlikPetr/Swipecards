@@ -38,6 +38,11 @@ public class UserProfileActivity extends UserOnlineActivity {
     }
 
     @Override
+    protected String getFragmentTag() {
+        return UserProfileFragment.class.getSimpleName();
+    }
+
+    @Override
     protected Fragment createFragment() {
         return new UserProfileFragment();
     }

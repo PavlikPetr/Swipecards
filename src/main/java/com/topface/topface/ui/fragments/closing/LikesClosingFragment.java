@@ -145,7 +145,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     }
 
     @Override
-    protected String getTrackName() {
+    public String getTrackName() {
         return "LikesClosing";
     }
 }

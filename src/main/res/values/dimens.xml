@@ -10,4 +10,6 @@
     <dimen name="counter_badge_width">32dp</dimen>
     <dimen name="counter_badge_negative_margin">-32dp</dimen>
 
+    <dimen name="popular_dialog_text_margin">36dp</dimen>
+
 </resources>

@@ -124,6 +124,8 @@ public class OfferwallsManager {
             case SUPERSONIC:
                 startSupersonic(activity);
                 break;
+            case TFOFFERWALL:
+                startTfOfferwall(activity);
             case RANDOM:
                 startRandomOfferwall(activity);
                 break;
@@ -149,6 +151,8 @@ public class OfferwallsManager {
             case 1:
                 startSponsorpay(activity);
                 break;
+            case 2:
+                startTfOfferwall(activity);
             default:
                 startDefault(activity);
                 break;
@@ -207,7 +211,12 @@ public class OfferwallsManager {
     }
 
     private static void initTfOfferwall(Context context) {
-        TFOfferwallSDK.initialize(this, Integer.toString(CacheProfile.uid), (String) mPublishersSpinner.getSelectedItem());
+        TFOfferwallSDK.initialize(context, Integer.toString(CacheProfile.uid), "5391b6a154b6f");
+    }
+
+    public static void startTfOfferwall(Context context) {
+        TFOfferwallSDK.setTarget(new TFOfferwallSDK.Target().setAge(CacheProfile.age).setSex(CacheProfile.sex));
+        TFOfferwallSDK.showOffers(context);
     }
 
     /**

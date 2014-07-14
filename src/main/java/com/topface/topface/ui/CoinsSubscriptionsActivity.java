@@ -21,6 +21,11 @@ public class CoinsSubscriptionsActivity extends CheckAuthActivity {
     }
 
     @Override
+    protected String getFragmentTag() {
+        return CoinsSubscriptionsFragment.class.getSimpleName();
+    }
+
+    @Override
     protected Fragment createFragment() {
         return new CoinsSubscriptionsFragment();
     }
