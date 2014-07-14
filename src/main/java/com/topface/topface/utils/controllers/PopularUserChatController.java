@@ -1,5 +1,7 @@
 package com.topface.topface.utils.controllers;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -14,13 +16,14 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 
 import java.lang.ref.WeakReference;
 
 /**
  * This controller blocks messages from popular users.
  */
-public class PopularUserChatController {
+public class PopularUserChatController extends BroadcastReceiver {
 
     public static final int NO_BLOCK = -1;
     public static final int FIRST_STAGE = 35;
@@ -110,7 +113,7 @@ public class PopularUserChatController {
                         case R.id.btnBuyVip:
                             EasyTracker.getTracker().sendEvent("Chat", "BuyVipStatus", "", 1L);
                             Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
-                            mChatFragment.startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
+                            mChatFragment.startActivity(intent);
                             break;
                     }
                 }
@@ -161,4 +164,13 @@ public class PopularUserChatController {
         mOff = true;
     }
 
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (intent.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false)) {
+            if (isChatLocked()) {
+                unlockChat();
+            }
+            reset();
+        }
+    }
 }
