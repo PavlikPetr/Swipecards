@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.text.Editable;
@@ -101,7 +102,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
     private static final String KEYBOARD_OPENED = "keyboard_opened";
-    private static final String CHAT_BLOCKED = "chat_blocked";
+    private static final String POPULAR_LOCK_STATE = "chat_blocked";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_USER_SEX = "user_sex";
@@ -277,8 +278,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         //LockScreen
         initLockScreen(root);
-        if (savedInstanceState != null && savedInstanceState.getBoolean(CHAT_BLOCKED, false)) {
-            mPopularUserLockController.setState(PopularUserChatController.FIRST_STAGE);
+        if (savedInstanceState != null) {
+            Parcelable popularLockState = savedInstanceState.getParcelable(POPULAR_LOCK_STATE);
+            if (popularLockState != null) {
+                mPopularUserLockController.setState((PopularUserChatController.SavedState) popularLockState);
+            }
         }
         checkPopularUserLock();
         //Send Button
@@ -447,7 +451,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 Debug.error(e);
             }
         }
-        outState.putBoolean(CHAT_BLOCKED, mPopularUserLockController.isChatLocked());
+        outState.putParcelable(POPULAR_LOCK_STATE, mPopularUserLockController.getSavedState()
+        );
     }
 
     @Override
@@ -539,7 +544,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (!data.items.isEmpty()) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
-                        if (mPopularUserLockController.block(message)) {
+                        int blockStage = mPopularUserLockController.block(message);
+                        if (blockStage == PopularUserChatController.FIRST_STAGE) {
                             mIsUpdating = false;
                             wasFailed = false;
                             mUser = data.user;
@@ -547,6 +553,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                 onUserLoaded(mUser);
                             }
                             return;
+                        } else if (blockStage == PopularUserChatController.SECOND_STAGE) {
+                            break;
                         }
                     }
                     mPopularUserLockController.unlockChat();
