@@ -3,6 +3,8 @@ package com.topface.topface.utils.controllers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +41,48 @@ public class PopularUserChatController extends BroadcastReceiver {
     private WeakReference<ViewGroup> mLockScreenRef;
     private boolean mOff;
 
+    public static class SavedState implements Parcelable {
+
+        public int stage;
+        public String dialogTitle;
+        public String blockText;
+        public boolean off;
+
+        public static final Parcelable.Creator<SavedState> CREATOR
+                = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+
+        private SavedState() {
+        }
+
+        private SavedState(Parcel in) {
+            stage = in.readInt();
+            dialogTitle = in.readString();
+            blockText = in.readString();
+            off = in.readByte() == 1;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(stage);
+            dest.writeString(dialogTitle);
+            dest.writeString(blockText);
+            dest.writeByte((byte) (off ? 1 : 0));
+        }
+    }
+
     public PopularUserChatController(ChatFragment chatFragment, ViewGroup lockScreen) {
         mChatFragment = chatFragment;
         mLockScreenRef = new WeakReference<ViewGroup>(lockScreen);
@@ -56,6 +100,15 @@ public class PopularUserChatController extends BroadcastReceiver {
         }
     }
 
+    public SavedState getSavedState() {
+        SavedState ss = new SavedState();
+        ss.stage = mStage;
+        ss.dialogTitle = mDialogTitle;
+        ss.blockText = mBlockText;
+        ss.off = mOff;
+        return ss;
+    }
+
     public boolean isAccessAllowed() {
         return CacheProfile.premium || mBlockText == null || mBlockText.equals("") || mOff;
     }
@@ -68,19 +121,19 @@ public class PopularUserChatController extends BroadcastReceiver {
         return message.type == SECOND_STAGE;
     }
 
-    public boolean block(History message) {
+    public int block(History message) {
         if (!isAccessAllowed()) {
             if (checkChatBlock(message)) {
                 mStage = FIRST_STAGE;
                 blockChat();
-                return true;
             } else if (checkMessageBlock(message)) {
                 mStage = SECOND_STAGE;
                 initBlockDialog();
-                return false;
+            } else {
+                mStage = NO_BLOCK;
             }
         }
-        return false;
+        return mStage;
     }
 
     public void unlockChat() {
@@ -125,8 +178,11 @@ public class PopularUserChatController extends BroadcastReceiver {
         lockScreen.setVisibility(View.VISIBLE);
     }
 
-    public void setState(int state) {
-        mStage = state;
+    public void setState(SavedState ss) {
+        mStage = ss.stage;
+        mDialogTitle = ss.dialogTitle;
+        mBlockText = ss.blockText;
+        mOff = ss.off;
     }
 
     public void initBlockDialog() {
