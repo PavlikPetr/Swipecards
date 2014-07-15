@@ -78,6 +78,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
@@ -400,6 +401,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             mPopularUserLockController.setLockScreen(mLockScreen);
         } else {
             mPopularUserLockController = new PopularUserChatController(this, mLockScreen);
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+                    mPopularUserLockController, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
         }
     }
 
@@ -493,6 +496,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         release();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPopularUserLockController);
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
@@ -820,16 +824,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                             final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
                             sendGift(id, price);
                         }
-                    }
-                }
-                break;
-            case PurchasesActivity.INTENT_BUY_VIP:
-                if (resultCode == Activity.RESULT_OK) {
-                    if (data.getBooleanExtra(PurchasesFragment.IS_VIP_EXTRA, false)) {
-                        if (mPopularUserLockController.isChatLocked()) {
-                            mPopularUserLockController.unlockChat();
-                        }
-                        mPopularUserLockController.reset();
                     }
                 }
                 break;

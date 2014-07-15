@@ -71,7 +71,7 @@ public class PopularUserDialog extends AbstractModalDialog {
                 isOpened = false;
                 EasyTracker.getTracker().sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
                 Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserBlockDialog");
-                startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
+                startActivity(intent);
                 getDialog().dismiss();
             }
         });
