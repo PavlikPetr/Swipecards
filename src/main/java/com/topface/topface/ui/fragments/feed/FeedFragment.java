@@ -29,8 +29,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.topface.PullToRefreshBase;
+import com.topface.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;

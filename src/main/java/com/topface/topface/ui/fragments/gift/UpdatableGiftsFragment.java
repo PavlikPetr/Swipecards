@@ -57,9 +57,12 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        FeedList<FeedGift> data = mGridAdapter.getData();
-        outState.putParcelableArray(DATA, data.toArray(new FeedGift[data.size()]));
-        outState.putInt(PROFILE_ID, mProfileId);
+        if (mGridAdapter != null) {
+            FeedList<FeedGift> data = mGridAdapter.getData();
+            outState.putParcelableArray(DATA, data.toArray(new FeedGift[data.size()]));
+            outState.putInt(PROFILE_ID, mProfileId);
+        }
+       
     }
 
     @Override
