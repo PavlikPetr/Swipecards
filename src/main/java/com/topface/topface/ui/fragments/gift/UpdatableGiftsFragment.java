@@ -27,7 +27,7 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
     private static final String PROFILE_ID = "profile_id";
     private static final String DATA = "data";
 
-    private Profile mProfile;
+    private int mProfileId;
     private boolean mIsUpdating = false;
 
     @Override
@@ -57,11 +57,12 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mProfile != null && mGridAdapter != null) {
+        if (mGridAdapter != null) {
             FeedList<FeedGift> data = mGridAdapter.getData();
             outState.putParcelableArray(DATA, data.toArray(new FeedGift[data.size()]));
-            outState.putInt(PROFILE_ID, mProfile.uid);
+            outState.putInt(PROFILE_ID, mProfileId);
         }
+       
     }
 
     @Override
@@ -85,16 +86,20 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
     }
 
     public void setProfile(Profile profile) {
-        mProfile = profile;
+        mProfileId = profile.uid;
         setGifts(profile.gifts);
     }
 
-    public Profile getProfile() {
-        return mProfile;
+    public int getProfileId() {
+        return mProfileId;
+    }
+
+    public FeedList<FeedGift> getGifts() {
+        return mGridAdapter.getData();
     }
 
     private void onNewFeeds() {
-        onNewFeeds(mProfile.uid);
+        onNewFeeds(mProfileId);
     }
 
     private void onNewFeeds(int userId) {

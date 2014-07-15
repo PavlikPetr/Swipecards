@@ -71,7 +71,7 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
 
     public void sendGift() {
         getParentFragment().startActivityForResult(
-                GiftsActivity.getSendGiftIntent(getActivity(), getProfile().uid, true),
+                GiftsActivity.getSendGiftIntent(getActivity(), getProfileId(), true),
                 GiftsActivity.INTENT_REQUEST_GIFT
         );
     }
@@ -104,7 +104,8 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
             mGridAdapter.add(sendedGift);
             mTitle.setVisibility(View.GONE);
         }
-        if (getProfile().gifts != null) getProfile().gifts.add(0, sendedGift.gift);
+        FeedList<FeedGift> gifts = getGifts();
+        if (gifts != null) gifts.add(0, sendedGift);
         mGridAdapter.notifyDataSetChanged();
         if (getActivity() != null) {
             Toast.makeText(getActivity(), R.string.chat_gift_out, Toast.LENGTH_LONG).show();

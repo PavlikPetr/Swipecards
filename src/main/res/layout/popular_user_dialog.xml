@@ -12,7 +12,7 @@
         android:id="@+id/popular_user_title"
         android:layout_centerHorizontal="true"
         style="@style/ItemTitleText"
-        android:textAlignment="center"
+        android:gravity="center"
         android:shadowColor="#F2000000"
         android:shadowDx="-1" />
 
@@ -24,7 +24,7 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:layout_centerHorizontal="true"
-        android:textAlignment="center"
+        android:gravity="center"
         android:textSize="13sp"
         android:shadowColor="#F2000000"
         android:shadowDx="-1"

@@ -36,8 +36,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.topface.PullToRefreshBase;
+import com.topface.PullToRefreshListView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
@@ -396,7 +396,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }, getResources().getColor(R.color.bg_main));
         mLockScreen.addView(retryView.getView());
 
-        mPopularUserLockController = new PopularUserChatController(this, mLockScreen);
+        if (mPopularUserLockController != null) {
+            mPopularUserLockController.setLockScreen(mLockScreen);
+        } else {
+            mPopularUserLockController = new PopularUserChatController(this, mLockScreen);
+        }
     }
 
     private boolean checkPopularUserLock() {
@@ -529,17 +533,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
                 if (!data.items.isEmpty()) {
-                    History firstMessage = data.items.getFirst();
-                    mPopularUserLockController.setTexts(firstMessage.dialogTitle, firstMessage.blockText);
-                    if (mPopularUserLockController.block(firstMessage)) {
-                        mIsUpdating = false;
-                        wasFailed = false;
-                        mUser = data.user;
-                        if (!mUser.isEmpty()) {
-                            onUserLoaded(mUser);
+                    for (History message : data.items) {
+                        mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
+                        if (mPopularUserLockController.block(message)) {
+                            mIsUpdating = false;
+                            wasFailed = false;
+                            mUser = data.user;
+                            if (!mUser.isEmpty()) {
+                                onUserLoaded(mUser);
+                            }
+                            return;
                         }
-                        return;
                     }
+                    mPopularUserLockController.unlockChat();
                 }
                 if (mItemId != null) {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
@@ -696,6 +702,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 }
                 break;
             case R.id.send_gift_button:
+                if (mPopularUserLockController.showBlockDialog()) {
+                    Debug.log("Gift can't be sent because user is too popular.");
+                    break;
+                }
                 startActivityForResult(
                         GiftsActivity.getSendGiftIntent(getActivity(), mUserId, false),
                         GiftsActivity.INTENT_REQUEST_GIFT
@@ -752,7 +762,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
         } else {
-            if (mPopularUserLockController.isChatLocked()) {
+            if (!mPopularUserLockController.isChatLocked()) {
                 update(true, "resume update");
                 mAdapter.notifyDataSetChanged();
             }
@@ -815,9 +825,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case PurchasesActivity.INTENT_BUY_VIP:
                 if (resultCode == Activity.RESULT_OK) {
-                    if (data.getBooleanExtra(PurchasesFragment.IS_VIP_EXTRA, false) == true) {
+                    if (data.getBooleanExtra(PurchasesFragment.IS_VIP_EXTRA, false)) {
                         if (mPopularUserLockController.isChatLocked()) {
-                            mLockScreen.setVisibility(View.GONE);
+                            mPopularUserLockController.unlockChat();
                         }
                         mPopularUserLockController.reset();
                     }

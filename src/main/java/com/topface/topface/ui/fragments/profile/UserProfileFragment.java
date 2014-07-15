@@ -131,7 +131,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             user.bookmarked = value;
                             mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                         }
-                        if (isAdded()) {
+                        if (isAdded() && getView() != null) {
                             getView().findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
                             getView().findViewById(R.id.favIcon).setVisibility(View.VISIBLE);
                         }
