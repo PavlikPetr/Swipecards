@@ -516,6 +516,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
         mIsUpdating = true;
+        final boolean isPopularLockOn;
+        if (mAdapter != null && !mAdapter.isEmpty() && (mPopularUserLockController.isChatLocked() ||
+                mPopularUserLockController.isResponseLocked()) && pullToRefresh) {
+            isPopularLockOn = true;
+        } else {
+            isPopularLockOn = false;
+        }
         if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
             showLoading();
         }
@@ -541,7 +548,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
-                if (!data.items.isEmpty()) {
+                if (!data.items.isEmpty() && !isPopularLockOn) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
                         int blockStage = mPopularUserLockController.block(message);
@@ -624,6 +631,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         }).exec();
     }
+
 
     private void removeOutdatedItems(HistoryListData data) {
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
