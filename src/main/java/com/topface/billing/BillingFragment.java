@@ -172,7 +172,7 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
                 Products.ProductsInventory serverSubs = CacheProfile.getMarketProducts().inventory;
                 for (String sku : marketSubs) {
                     //Если на сервере нет какой то подписки, которая есть в маркете, то отправляем ее повторно
-                    if (serverSubs != null || !serverSubs.containsSku(sku)) {
+                    if (serverSubs == null || !serverSubs.containsSku(sku)) {
                         verifyPurchase(inventory.getPurchase(sku), getActivity());
                     }
                 }
