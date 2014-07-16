@@ -29,6 +29,9 @@ import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.PreloadManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 public class PhotoSwitcherActivity extends BaseFragmentActivity {
@@ -42,6 +45,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static final String INTENT_PHOTOS_COUNT = "photos_count";
     public static final String CONTROL_VISIBILITY = "CONTROL_VISIBILITY";
     public static final String OWN_PHOTOS_CONTROL_VISIBILITY = "OWN_PHOTOS_CONTROL_VISIBILITY";
+    public static final String DELETED_PHOTOS = "DELETED_PHOTOS";
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -134,6 +138,17 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         // Control layout
         mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
         mOwnPhotosControl = (ViewGroup) mPhotoAlbumControl.findViewById(R.id.loBottomPanel);
+
+        // - close button
+        mPhotoAlbumControl.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deletePhotoRequest();
+                setResult(Activity.RESULT_CANCELED);
+                finish();
+            }
+        });
+
         mLoadedCount = mPhotoLinks.getRealPhotosCount();
         mNeedMore = photosCount > mLoadedCount;
         int rest = photosCount - mPhotoLinks.size();
@@ -162,7 +177,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        deletePhotoRequest();
     }
 
     @Override
@@ -170,6 +184,11 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         super.onSaveInstanceState(outState);
         outState.putInt(CONTROL_VISIBILITY, mPhotoAlbumControl.getVisibility());
         outState.putInt(OWN_PHOTOS_CONTROL_VISIBILITY, mOwnPhotosControl.getVisibility());
+        try {
+            outState.putString(DELETED_PHOTOS, mDeletedPhotos.toJson().toString());
+        } catch (JSONException e) {
+            Debug.error(e);
+        }
     }
 
     @Override
@@ -177,18 +196,20 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         super.onRestoreInstanceState(savedInstanceState);
         mPhotoAlbumControlVisibility = savedInstanceState.getInt(CONTROL_VISIBILITY, View.GONE);
         mOwnPhotosControlVisibility = savedInstanceState.getInt(OWN_PHOTOS_CONTROL_VISIBILITY, View.GONE);
+        try {
+            mDeletedPhotos = new Photos(new JSONArray(savedInstanceState.getString(DELETED_PHOTOS)));
+        } catch (JSONException e) {
+            Debug.error(e);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        deletePhotoRequest();
+        super.onBackPressed();
     }
 
     private void initControls() {
-        // - close button
-        mPhotoAlbumControl.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(Activity.RESULT_CANCELED);
-                finish();
-            }
-        });
-        mPhotoAlbumControl.setVisibility(mPhotoAlbumControlVisibility);
         if (mUid == CacheProfile.uid) {
             // - set avatar button
             mSetAvatarButton = (TextView) mPhotoAlbumControl.findViewById(R.id.btnSetAvatar);
@@ -214,7 +235,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                     final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
                     if (currentPhoto != null) {
                         if (mDeletedPhotos.contains(currentPhoto)) {
-                            mDeletedPhotos.remove(currentPhoto);
+                            mDeletedPhotos.removeById(currentPhoto.getId());
                         } else {
                             mDeletedPhotos.add(currentPhoto);
                         }
