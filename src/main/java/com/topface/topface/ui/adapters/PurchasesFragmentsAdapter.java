@@ -10,11 +10,13 @@ import com.topface.billing.BillingFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
-import com.topface.topface.ui.fragments.*;
-import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
+import com.topface.topface.ui.fragments.BonusFragment;
+import com.topface.topface.ui.fragments.PurchasesFragment;
+import com.topface.topface.ui.fragments.buy.AmazonBuyingFragment;
+import com.topface.topface.ui.fragments.buy.GooglePlayBuyingFragment;
 import com.topface.topface.ui.fragments.buy.PaymentWallBuyingFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
-import com.topface.topface.ui.fragments.buy.VipPWBuyFragment;
+import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
 
 import java.util.LinkedList;
 
@@ -44,9 +46,15 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
         String from = mArguments.getString(BillingFragment.ARG_TAG_SOURCE);
         switch (mTabs.get(position).type) {
             case Options.Tab.GPLAY:
+                if (!mIsVip) {
+                    fragment = GooglePlayBuyingFragment.newInstance(from);
+                } else {
+                    fragment = VipBuyFragment.newInstance(true, from);
+                }
+                break;
             case Options.Tab.AMAZON:
                 if (!mIsVip) {
-                    fragment = GPlayBuyingFragment.newInstance(from);
+                    fragment = AmazonBuyingFragment.newInstance(from);
                 } else {
                     fragment = VipBuyFragment.newInstance(true, from);
                 }
@@ -60,14 +68,14 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
                 if (!mIsVip) {
                     fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.DIRECT);
                 } else {
-                    fragment = VipPWBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.DIRECT);
+                    fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.DIRECT);
                 }
                 break;
             case Options.Tab.PWALL_MOBILE:
                 if (!mIsVip) {
                     fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.MOBILE);
                 } else {
-                    fragment = VipPWBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.MOBILE);
+                    fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.MOBILE);
                 }
             default:
                 Debug.error("PurchasesFragmentsAdapter wrong position");

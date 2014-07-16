@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.topface.billing.BillingDriver;
-import com.topface.billing.BillingDriverManager;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -75,11 +72,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNeedTitles(false);
-    }
-
-    @Override
-    protected BillingDriver getBillingDriver() {
-        return  BillingDriverManager.getInstance().createMainBillingDriver(getActivity(), this, this);
     }
 
     @Override
@@ -153,7 +145,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     }
 
     protected void buy(String id, Products.BuyButton curBtn) {
-        buySubscription(id);
+        buy(id);
         Bundle arguments = getArguments();
         String from = "";
         if (arguments != null) {
@@ -309,14 +301,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public void onPurchased(String productId) {
         switchLayouts();
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(VIP_PURCHASED_INTENT));
-    }
-
-    @Override
-    public void onError() {
-    }
-
-    @Override
-    public void onCancel() {
     }
 
     @Override

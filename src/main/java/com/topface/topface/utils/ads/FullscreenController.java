@@ -160,8 +160,11 @@ public class FullscreenController {
         interstitial.setAdUnitId(ADMOB_INTERSTITIAL_ID);
         // Создание запроса объявления.
         AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-        adRequestBuilder.setGender(CacheProfile.getProfile().sex == Static.BOY ? AdRequest.GENDER_MALE :
-                AdRequest.GENDER_FEMALE);
+        adRequestBuilder.setGender(
+                CacheProfile.getProfile().sex == Static.BOY ?
+                        AdRequest.GENDER_MALE :
+                        AdRequest.GENDER_FEMALE
+        );
         // Запуск загрузки межстраничного объявления.
         interstitial.loadAd(adRequestBuilder.build());
         // AdListener будет использовать обратные вызовы, указанные ниже.

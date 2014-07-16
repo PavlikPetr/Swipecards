@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.buy;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.topface.billing.BillingDriver;
-import com.topface.billing.BillingDriverManager;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -43,14 +42,9 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
     }
 
     @Override
-    protected BillingDriver getBillingDriver() {
-        return  BillingDriverManager.getInstance().createMainBillingDriver(getActivity(), this, this);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(R.layout.fragment_coins_subscription, null);
+        @SuppressLint("InflateParams") View root = inflater.inflate(R.layout.fragment_coins_subscription, null);
         mContainer = (LinearLayout) root.findViewById(R.id.loContainer);
         Products products = CacheProfile.getMarketProducts();
         if (products != null) {
@@ -85,7 +79,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                                     return;
                                 }
                             }
-                            buySubscription(id);
+                            buy(id);
                             Bundle arguments = getArguments();
                             String from = "";
                             if (arguments != null) {
@@ -147,15 +141,6 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
         }
     }
 
-    @Override
-    public void onError() {
-
-    }
-
-    @Override
-    public void onCancel() {
-
-    }
 
     @Override
     public void onInAppBillingSupported() {

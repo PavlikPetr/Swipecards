@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -64,6 +65,8 @@ public class Products extends AbstractData {
     public LinkedList<BuyButton> others = new LinkedList<>();
     public LinkedList<BuyButton> coinsSubscriptions = new LinkedList<>();
     public LinkedList<BuyButton> coinsSubscriptionsMasked = new LinkedList<>();
+    //Список всех подписок пользователя
+    public ProductsInventory inventory;
     public ProductsInfo info;
 
     public Products() {
@@ -103,11 +106,19 @@ public class Products extends AbstractData {
                 if (CacheProfile.getOptions().forceCoinsSubscriptions) {
                     saleExists = false;
                 }
+
+                //Парсим список всех подписок
+                inventory = JsonUtils.fromJson(
+                        data.optJSONArray("subscriptions").toString(),
+                        ProductsInventory.class
+                );
+
             }
             fillProductsArray(coins, data.optJSONArray(ProductType.COINS.getName()));
             fillProductsArray(likes, data.optJSONArray(ProductType.LIKES.getName()));
             fillProductsArray(premium, data.optJSONArray(ProductType.PREMIUM.getName()));
             fillProductsArray(others, data.optJSONArray(ProductType.OTHERS.getName()));
+
         } catch (Exception e) {
             Debug.error("Products parsing error", e);
         }
@@ -477,5 +488,26 @@ public class Products extends AbstractData {
                 }
             }
         }
+    }
+
+    public class ProductsInventory extends ArrayList<ProductInfo> {
+        /**
+         * Присутствует ли указанный id продукта (sku) в списке
+         */
+        public boolean containsSku(String sku) {
+            for (ProductInfo product : this) {
+                if (TextUtils.equals(product.sku, sku)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    private class ProductInfo {
+        public String sku;
+        public String orderId;
+        public String status;
     }
 }

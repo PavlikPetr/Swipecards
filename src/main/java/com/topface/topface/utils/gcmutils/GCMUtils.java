@@ -1,18 +1,16 @@
 package com.topface.topface.utils.gcmutils;
 
-import android.app.Activity;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.text.TextUtils;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -152,26 +150,13 @@ public class GCMUtils {
             return "";
         }
         int registeredVersion = App.getUserConfig().getLastAppVersion();
-        int currentVersion = getAppVersion(mContext);
-        if (registeredVersion != currentVersion) {
+        if (registeredVersion != BuildConfig.VERSION_CODE) {
             Debug.log("App version changed.");
             return "";
         }
         return registrationId;
     }
 
-
-
-    private static int getAppVersion(Context context) {
-        try {
-            PackageInfo packageInfo = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            // should never happen
-            throw new RuntimeException("Could not get package name: " + e);
-        }
-    }
 
     public static boolean showNotificationIfNeed(final Intent extra, Context context) {
         //Проверяем, не отключены ли уведомления
@@ -191,6 +176,7 @@ public class GCMUtils {
         return false;
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static boolean showNotification(final Intent extra, Context context) {
         String uid = Integer.toString(CacheProfile.uid);
         String targetUserId = extra.getStringExtra("receiver");

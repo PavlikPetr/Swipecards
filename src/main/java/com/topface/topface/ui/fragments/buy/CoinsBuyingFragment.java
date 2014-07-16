@@ -1,8 +1,7 @@
 package com.topface.topface.ui.fragments.buy;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -25,21 +24,9 @@ import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class AbstractBuyingFragment extends BillingFragment{
+public abstract class CoinsBuyingFragment extends BillingFragment {
     private LinkedList<View> purchaseButtons = new LinkedList<>();
     private View mCoinsSubscriptionButton;
-
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-
-                case Products.INTENT_UPDATE_PRODUCTS:
-                    updateCoinsSubscriptionButton();
-                    break;
-            }
-        }
-    };
 
     private String mFrom;
 
@@ -57,13 +44,9 @@ public abstract class AbstractBuyingFragment extends BillingFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(R.layout.fragment_buy, null);
-        initViews(root);
-        return root;
-    }
-
-    protected void initViews(View root) {
+        @SuppressLint("InflateParams") View root = inflater.inflate(R.layout.fragment_buy, null);
         initButtons(root);
+        return root;
     }
 
     private void initButtons(View root) {
@@ -181,14 +164,14 @@ public abstract class AbstractBuyingFragment extends BillingFragment{
 
     @Override
     public void onSubscriptionSupported() {
-        //TODO: добавить поддержку подписок
+        //В этом типе фрагментов подписок нет
     }
 
 
 
     @Override
     public void onSubscriptionUnsupported() {
-        //TODO: добавить поддержку подписок
+        //В этом типе фрагментов подписок нет
     }
 
     @Override
@@ -208,15 +191,6 @@ public abstract class AbstractBuyingFragment extends BillingFragment{
                 }
             });
         }
-    }
-
-    @Override
-    public void onError() {
-    }
-
-    @Override
-    public void onCancel() {
-        //Возможно стоит добавить реакцию на отмену покупки пользователем
     }
 
     protected abstract View getCoinsSubscriptionsButton(Products products, LinearLayout coinsButtonsContainer);

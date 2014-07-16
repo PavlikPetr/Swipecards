@@ -477,17 +477,18 @@ public class BannerBlock {
             }
 
         });
-        ((AdView) mBannerView).loadAd(new AdRequest.Builder().build());
-        //Если нужно, то можно указать id своего девайса для запроса тестовой рекламы
-        /*
-        ((AdView) mBannerView).loadAd(new AdRequest.Builder()
-                //Эмулятор
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                        //А тут можно указать id свего девайса
-                .addTestDevice('hex id твоего девайса')
-                .build()
+        AdRequest.Builder adRequest = new AdRequest.Builder().setGender(
+                CacheProfile.getProfile().sex == Static.BOY ?
+                        AdRequest.GENDER_MALE :
+                        AdRequest.GENDER_FEMALE
         );
+        /*
+        //Если нужно, то можно указать id девайса (например эмулятор) для запроса тестовой рекламы
+        adRequest.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+        //или id свего девайса
+        adRequest.addTestDevice("hex id твоего девайса");
         */
+        ((AdView) mBannerView).loadAd(adRequest.build());
     }
 
     private void showAdcamp() {

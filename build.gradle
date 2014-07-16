@@ -114,10 +114,7 @@ dependencies {
     compile rootProject.GOOGLE_PLAY_SERVICES_VERSION
 
     //All jar libs
-    compile fileTree(dir: 'libs', include: '*.jar')
-
-    //Для Амазона нужна библиотека для поддержки in-app покупок
-    compile files('libs/amazon/amazon-in-app-purchasing.jar')
+    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'amazon/*.jar')
 
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
@@ -125,6 +122,7 @@ dependencies {
 
     //Third party libs
     compile 'ch.acra:acra:4.5.0'
+    compile 'com.google.code.gson:gson:2.2.+'
     compile project(':libs:Android-ViewPagerIndicator')
     compile project(':libs:PullToRefresh')
     compile project(':libs:PhotoView')
@@ -136,6 +134,9 @@ dependencies {
 
     //Ad networks SDK
     compile project(':libs:mopub-android-sdk')
+
+    //Для Амазона нужна библиотека для поддержки in-app покупок
+    amazonCompile files('libs/amazon/*.jar')
 
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.+'
 

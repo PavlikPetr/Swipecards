@@ -5,8 +5,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.topface.billing.BillingDriver;
-import com.topface.billing.PaymentwallBillingDriver;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
 import com.topface.topface.ui.PaymentwallActivity;
@@ -15,11 +13,11 @@ import com.topface.topface.utils.CacheProfile;
 
 import java.util.List;
 
-public class PaymentWallBuyingFragment extends AbstractBuyingFragment{
+public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
 
     public static final String PAGE_TYPE = "page_type";
 
-    public static AbstractBuyingFragment newInstance(String from, PaymentWallProducts.TYPE type) {
+    public static CoinsBuyingFragment newInstance(String from, PaymentWallProducts.TYPE type) {
         PaymentWallBuyingFragment buyingFragment = new PaymentWallBuyingFragment();
         if (from != null) {
             Bundle args = new Bundle();
@@ -31,7 +29,7 @@ public class PaymentWallBuyingFragment extends AbstractBuyingFragment{
     }
 
 
-    public static AbstractBuyingFragment newInstance(int type, int coins, String from) {
+    public static CoinsBuyingFragment newInstance(int type, int coins, String from) {
         PaymentWallBuyingFragment fragment = new PaymentWallBuyingFragment();
         Bundle args = new Bundle();
         args.putInt(PurchasesFragment.ARG_ITEM_TYPE, type);
@@ -44,7 +42,7 @@ public class PaymentWallBuyingFragment extends AbstractBuyingFragment{
     }
 
     @Override
-    protected void buy(Products.BuyButton btn) {
+    public void buy(Products.BuyButton btn) {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             activity.startActivityForResult(
@@ -58,8 +56,8 @@ public class PaymentWallBuyingFragment extends AbstractBuyingFragment{
     }
 
     @Override
-    protected BillingDriver getBillingDriver() {
-        return new PaymentwallBillingDriver(getActivity(), this);
+    public boolean isTestPurchasesAvailable() {
+        return false;
     }
 
     @Override
@@ -75,7 +73,11 @@ public class PaymentWallBuyingFragment extends AbstractBuyingFragment{
     @Override
     public Products getProducts() {
         int type = getArguments().getInt(PAGE_TYPE);
-        return CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.DIRECT.ordinal() == type ? PaymentWallProducts.TYPE.DIRECT : PaymentWallProducts.TYPE.MOBILE);
+        return CacheProfile.getPaymentWallProducts(
+                PaymentWallProducts.TYPE.DIRECT.ordinal() == type ?
+                        PaymentWallProducts.TYPE.DIRECT :
+                        PaymentWallProducts.TYPE.MOBILE
+        );
     }
 
     @Override

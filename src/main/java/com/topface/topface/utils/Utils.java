@@ -22,7 +22,6 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
@@ -43,7 +42,6 @@ public class Utils {
                     ")+"
     );
     private static PluralResources mPluralResources;
-    private static String mClientVersion;
     private static float mDensity = App.getContext().getResources().getDisplayMetrics().density;
 
     public static int unixtimeInSeconds() {
@@ -127,22 +125,6 @@ public class Utils {
         return new Intent(Intent.ACTION_VIEW, Uri.parse(link));
     }
 
-    public static String getClientVersion() {
-        if (mClientVersion == null) {
-            try {
-                Context context = App.getContext();
-                PackageManager pManager = context.getPackageManager();
-                if (pManager != null) {
-                    mClientVersion = pManager.getPackageInfo(context.getPackageName(), 0).versionName;
-                }
-            } catch (Exception e) {
-                Debug.error(e);
-                mClientVersion = AuthRequest.FALLBACK_CLIENT_VERSION;
-            }
-        }
-        return mClientVersion;
-    }
-
     public static String getClientDeviceName() {
         return Build.MANUFACTURER + " " + Build.MODEL + " " + Build.PRODUCT;
 
@@ -210,4 +192,5 @@ public class Utils {
         }
         return text.toString();
     }
+
 }

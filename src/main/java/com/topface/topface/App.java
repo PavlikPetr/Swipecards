@@ -14,8 +14,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
@@ -51,7 +49,6 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GMSUtils;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
@@ -322,7 +319,7 @@ public class App extends Application {
         // Инициализируем общие срезы для статистики
         StatisticsTracker.getInstance().setContext(mContext)
                 .putPredefinedSlice("app", BuildConfig.STATISTICS_APP)
-                .putPredefinedSlice("cvn", Utils.getClientVersion());
+                .putPredefinedSlice("cvn", BuildConfig.VERSION_NAME);
         if (BuildConfig.DEBUG) {
             StatisticsTracker.getInstance().setLogger(new ILogger() {
                 public void log(String msg) {
