@@ -108,7 +108,7 @@ public class PopularUserChatController {
                 public void onClick(View v) {
                     switch (v.getId()) {
                         case R.id.btnBuyVip:
-                            EasyTracker.getTracker().sendEvent("Chat", "BuyVipStatus", "", 1L);
+                            EasyTracker.sendEvent("Chat", "BuyVipStatus", "", 1L);
                             Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
                             mChatFragment.startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                             break;
