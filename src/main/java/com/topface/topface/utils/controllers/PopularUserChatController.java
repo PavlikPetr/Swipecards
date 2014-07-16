@@ -122,6 +122,7 @@ public class PopularUserChatController extends BroadcastReceiver {
     }
 
     public int block(History message) {
+        mStage = NO_BLOCK;
         if (!isAccessAllowed()) {
             if (checkChatBlock(message)) {
                 mStage = FIRST_STAGE;
@@ -129,8 +130,6 @@ public class PopularUserChatController extends BroadcastReceiver {
             } else if (checkMessageBlock(message)) {
                 mStage = SECOND_STAGE;
                 initBlockDialog();
-            } else {
-                mStage = NO_BLOCK;
             }
         }
         return mStage;
@@ -210,7 +209,11 @@ public class PopularUserChatController extends BroadcastReceiver {
     }
 
     public boolean isChatLocked() {
-        return mStage == FIRST_STAGE;
+        return !isAccessAllowed() && mStage == FIRST_STAGE;
+    }
+
+    public boolean isResponseLocked() {
+        return !isAccessAllowed() && mStage == SECOND_STAGE;
     }
 
     public void reset() {
