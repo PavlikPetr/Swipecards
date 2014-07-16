@@ -126,27 +126,34 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
                 onLoadProfile();
             } else {
-                if (mProfileLoadReceiver == null) {
-                    mProfileLoadReceiver = new BroadcastReceiver() {
-                        @Override
-                        public void onReceive(Context context, Intent intent) {
-                            //Уведомлять о загрузке профиля следует только если мы авторизованы
-                            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
-                                checkProfileLoad();
-                            }
-                        }
-                    };
-                    LocalBroadcastManager.getInstance(this).registerReceiver(
-                            mProfileLoadReceiver,
-                            new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
-                    );
-                }
+                registerLoadProfileReceiver();
                 startAuth();
             }
+        } else {
+            registerLoadProfileReceiver();
+        }
+    }
+
+    private void registerLoadProfileReceiver() {
+        if (mProfileLoadReceiver == null) {
+            mProfileLoadReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    //Уведомлять о загрузке профиля следует только если мы авторизованы
+                    if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+                        checkProfileLoad();
+                    }
+                }
+            };
+            LocalBroadcastManager.getInstance(this).registerReceiver(
+                    mProfileLoadReceiver,
+                    new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
+            );
         }
     }
 
     protected void onLoadProfile() {
+        Debug.log("onLoadProfile in " + getClass().getSimpleName());
         AuthorizationManager.extendAccessToken(this);
         if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
             startAuth();

@@ -41,6 +41,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static final String INTENT_PHOTOS = "album_photos";
     public static final String INTENT_PHOTOS_COUNT = "photos_count";
     public static final String CONTROL_VISIBILITY = "CONTROL_VISIBILITY";
+    public static final String OWN_PHOTOS_CONTROL_VISIBILITY = "OWN_PHOTOS_CONTROL_VISIBILITY";
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -51,12 +52,16 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                                 View.VISIBLE :
                                 View.GONE
                 );
+                mPhotoAlbumControlVisibility = mPhotoAlbumControl.getVisibility();
+                mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
             }
         }
     };
     private TextView mCounter;
     private ViewGroup mPhotoAlbumControl;
+    private ViewGroup mOwnPhotosControl;
     private int mPhotoAlbumControlVisibility = View.GONE;
+    private int mOwnPhotosControlVisibility = View.GONE;
     private Photos mPhotoLinks;
     private PreloadManager mPreloadManager;
     private Photos mDeletedPhotos = new Photos();
@@ -126,6 +131,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
 
+        // Control layout
+        mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
+        mOwnPhotosControl = (ViewGroup) mPhotoAlbumControl.findViewById(R.id.loBottomPanel);
         mLoadedCount = mPhotoLinks.getRealPhotosCount();
         mNeedMore = photosCount > mLoadedCount;
         int rest = photosCount - mPhotoLinks.size();
@@ -136,6 +144,12 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         mImageSwitcher.setCurrentItem(position, false);
 
         setCounter(position);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPhotoAlbumControl.setVisibility(mPhotoAlbumControlVisibility);
     }
 
     @Override
@@ -155,17 +169,17 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(CONTROL_VISIBILITY, mPhotoAlbumControl.getVisibility());
+        outState.putInt(OWN_PHOTOS_CONTROL_VISIBILITY, mOwnPhotosControl.getVisibility());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mPhotoAlbumControlVisibility = savedInstanceState.getInt(CONTROL_VISIBILITY, View.GONE);
+        mOwnPhotosControlVisibility = savedInstanceState.getInt(OWN_PHOTOS_CONTROL_VISIBILITY, View.GONE);
     }
 
     private void initControls() {
-        // Control layout
-        mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
         // - close button
         mPhotoAlbumControl.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,7 +224,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             });
             if (mPhotoLinks.size() <= 1) mDeleteButton.setVisibility(View.GONE);
         } else {
-            mPhotoAlbumControl.findViewById(R.id.loBottomPanel).setVisibility(View.GONE);
+            mPhotoAlbumControl.findViewById(R.id.loBottomPanel).setVisibility(mOwnPhotosControlVisibility);
         }
     }
 
