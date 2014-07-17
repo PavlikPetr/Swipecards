@@ -182,10 +182,14 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(CONTROL_VISIBILITY, mPhotoAlbumControl.getVisibility());
-        outState.putInt(OWN_PHOTOS_CONTROL_VISIBILITY, mOwnPhotosControl.getVisibility());
+        if (mPhotoAlbumControl != null) {
+            outState.putInt(CONTROL_VISIBILITY, mPhotoAlbumControl.getVisibility());
+            outState.putInt(OWN_PHOTOS_CONTROL_VISIBILITY, mOwnPhotosControl.getVisibility());
+        }
         try {
-            outState.putString(DELETED_PHOTOS, mDeletedPhotos.toJson().toString());
+            if (mDeletedPhotos != null) {
+                outState.putString(DELETED_PHOTOS, mDeletedPhotos.toJson().toString());
+            }
         } catch (JSONException e) {
             Debug.error(e);
         }
@@ -233,7 +237,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 @Override
                 public void onClick(View v) {
                     final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
-                    if (currentPhoto != null) {
+                    if (currentPhoto != null && mDeletedPhotos != null) {
                         if (mDeletedPhotos.contains(currentPhoto)) {
                             mDeletedPhotos.removeById(currentPhoto.getId());
                         } else {
