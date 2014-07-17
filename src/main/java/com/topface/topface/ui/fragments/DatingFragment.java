@@ -162,7 +162,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private INavigationFragmentsListener mFragmentSwitcherListener;
     private AnimationHelper mAnimationHelper;
 
-    private void startDatingFilterActivity() {
+    private void startDatingFilterAcFtivity() {
         Intent intent = new Intent(getActivity().getApplicationContext(),
                 EditContainerActivity.class);
         startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
@@ -557,12 +557,20 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
                                     @Override
                                     public void onRateFailed(int userId, int mutualId) {
+
                                         if (moneyDecreased.get()) {
                                             moneyDecreased.set(false);
                                             new SendLikeRequest(getActivity(),
                                                     userId,
                                                     mutualId,
-                                                    SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler()).exec();
+                                                    SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler() {
+                                                @Override
+                                                public void fail(int codeError, IApiResponse response) {
+                                                    unlockControls();
+                                                }
+                                            }).exec();
+                                        } else {
+                                            unlockControls();
                                         }
 
                                     }
