@@ -126,6 +126,7 @@ public class OfferwallsManager {
                 break;
             case TFOFFERWALL:
                 startTfOfferwall(activity);
+                break;
             case RANDOM:
                 startRandomOfferwall(activity);
                 break;

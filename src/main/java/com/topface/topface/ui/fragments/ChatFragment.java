@@ -35,8 +35,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.topface.PullToRefreshBase;
-import com.topface.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.utils.gcmutils.GCMUtils;

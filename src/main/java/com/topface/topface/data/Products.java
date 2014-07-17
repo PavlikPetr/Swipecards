@@ -108,10 +108,13 @@ public class Products extends AbstractData {
                 }
 
                 //Парсим список всех подписок
-                inventory = JsonUtils.fromJson(
-                        data.optJSONArray("subscriptions").toString(),
-                        ProductsInventory.class
-                );
+                JSONArray jsonArray = data.optJSONArray("subscriptions");
+                if (jsonArray != null) {
+                    inventory = JsonUtils.fromJson(
+                            data.optJSONArray("subscriptions").toString(),
+                            ProductsInventory.class
+                    );
+                }
 
             }
             fillProductsArray(coins, data.optJSONArray(ProductType.COINS.getName()));
