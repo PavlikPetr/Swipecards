@@ -562,7 +562,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                             new SendLikeRequest(getActivity(),
                                                     userId,
                                                     mutualId,
-                                                    SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler()).exec();
+                                                    SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler(){
+                                                @Override
+                                                public void fail(int codeError, IApiResponse response) {
+                                                    super.fail(codeError, response);
+                                                    unlockControls();
+                                                }
+                                            }).exec();
+                                        } else {
+                                            unlockControls();
                                         }
 
                                     }
