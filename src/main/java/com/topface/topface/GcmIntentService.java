@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.NotificationStatistics;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.gcmutils.GcmBroadcastReceiver;
@@ -40,6 +41,8 @@ public class GcmIntentService extends IntentService {
                     broadcastReceiver.putExtra(GCMUtils.USER_ID_EXTRA, userId);
                     context.sendBroadcast(broadcastReceiver);
                     Intent updateIntent = null;
+                    int type = GCMUtils.getType(intent);
+                    NotificationStatistics.sendReceived(type, GCMUtils.getLabel(intent));
                     switch (GCMUtils.getType(intent)) {
                         case GCMUtils.GCM_TYPE_MESSAGE:
                         case GCMUtils.GCM_TYPE_DIALOGS:

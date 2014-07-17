@@ -18,6 +18,11 @@ public class SettingsActivity extends CheckAuthActivity {
     }
 
     @Override
+    protected String getFragmentTag() {
+        return SettingsFragment.class.getSimpleName();
+    }
+
+    @Override
     protected Fragment createFragment() {
         return new SettingsFragment();
     }

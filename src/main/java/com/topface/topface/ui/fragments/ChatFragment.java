@@ -35,8 +35,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.topface.PullToRefreshBase;
+import com.topface.PullToRefreshListView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -100,6 +100,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
     private static final String KEYBOARD_OPENED = "keyboard_opened";
+    private static final String CHAT_BLOCKED = "chat_blocked";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_USER_SEX = "user_sex";
@@ -152,8 +153,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private void switchBookmarkEnabled(boolean enabled) {
         if (mActions != null) {
             TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
-            mBookmarkAction.setText(mUser.bookmarked? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-            mBookmarkAction.setTextColor(getResources().getColor(enabled? R.color.text_white : R.color.disabled_color));
+            mBookmarkAction.setText(mUser.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            mBookmarkAction.setTextColor(getResources().getColor(enabled ? R.color.text_white : R.color.disabled_color));
             mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(enabled);
         }
     }
@@ -184,6 +185,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private EditText mEditBox;
     private String mItemId;
     private boolean wasFailed = false;
+    private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -240,8 +242,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mUserSex = args.getInt(INTENT_USER_SEX, Static.BOY);
         mUserAge = args.getInt(INTENT_USER_AGE, 0);
         mUserCity = args.getString(INTENT_USER_CITY);
-
-        mPopularUserLockController = new PopularUserChatController(this, mLockScreen, mUserName, mUserSex);
     }
 
     @Override
@@ -276,6 +276,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         //LockScreen
         initLockScreen(root);
+        if (savedInstanceState != null && savedInstanceState.getBoolean(CHAT_BLOCKED, false)) {
+            mPopularUserLockController.setState(PopularUserChatController.FIRST_STAGE);
+        }
+        checkPopularUserLock();
         //Send Button
         Button sendButton = (Button) root.findViewById(R.id.btnSend);
         sendButton.setOnClickListener(this);
@@ -298,7 +302,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDestroyView() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
-        mPopularUserLockController.releaseLock();
         super.onDestroyView();
     }
 
@@ -392,7 +395,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         }, getResources().getColor(R.color.bg_main));
         mLockScreen.addView(retryView.getView());
-        checkPopularUserLock();
+
+        if (mPopularUserLockController != null) {
+            mPopularUserLockController.setLockScreen(mLockScreen);
+        } else {
+            mPopularUserLockController = new PopularUserChatController(this, mLockScreen);
+        }
     }
 
     private boolean checkPopularUserLock() {
@@ -436,6 +444,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 Debug.error(e);
             }
         }
+        outState.putBoolean(CHAT_BLOCKED, mPopularUserLockController.isChatLocked());
     }
 
     @Override
@@ -524,15 +533,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
                 if (!data.items.isEmpty()) {
-                    if (mPopularUserLockController.block(data.items.getFirst())) {
-                        mIsUpdating = false;
-                        wasFailed = false;
-                        mUser = data.user;
-                        if (!mUser.isEmpty()) {
-                            onUserLoaded(mUser);
+                    for (History message : data.items) {
+                        mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
+                        if (mPopularUserLockController.block(message)) {
+                            mIsUpdating = false;
+                            wasFailed = false;
+                            mUser = data.user;
+                            if (!mUser.isEmpty()) {
+                                onUserLoaded(mUser);
+                            }
+                            return;
                         }
-                        return;
                     }
+                    mPopularUserLockController.unlockChat();
                 }
                 if (mItemId != null) {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
@@ -689,6 +702,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 }
                 break;
             case R.id.send_gift_button:
+                if (mPopularUserLockController.showBlockDialog()) {
+                    Debug.log("Gift can't be sent because user is too popular.");
+                    break;
+                }
                 startActivityForResult(
                         GiftsActivity.getSendGiftIntent(getActivity(), mUserId, false),
                         GiftsActivity.INTENT_REQUEST_GIFT
@@ -741,13 +758,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             getActivity().finish();
         }
 
-        checkPopularUserLock();
-
         // Если адаптер пустой или пользователя нет, грузим с сервера
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
         } else {
-            if (mPopularUserLockController.isChatLocked()) {
+            if (!mPopularUserLockController.isChatLocked()) {
                 update(true, "resume update");
                 mAdapter.notifyDataSetChanged();
             }
@@ -808,9 +823,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case PurchasesActivity.INTENT_BUY_VIP:
                 if (resultCode == Activity.RESULT_OK) {
-                    if (data.getBooleanExtra(PurchasesFragment.IS_VIP_EXTRA, false) == true) {
+                    if (data.getBooleanExtra(PurchasesFragment.IS_VIP_EXTRA, false)) {
                         if (mPopularUserLockController.isChatLocked()) {
-                            mLockScreen.setVisibility(View.GONE);
+                            mPopularUserLockController.unlockChat();
                         }
                         mPopularUserLockController.reset();
                     }
@@ -881,6 +896,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         Editable editText = mEditBox.getText();
         String editString = editText == null ? "" : editText.toString();
         if (editText == null || TextUtils.isEmpty(editString.trim()) || mUserId == 0) {
+            return false;
+        }
+        if (editText.length() > mMaxMessageSize) {
+            Toast.makeText(getActivity(),
+                    String.format(getString(R.string.message_too_long), mMaxMessageSize),
+                    Toast.LENGTH_SHORT).show();
             return false;
         }
         editText.clear();

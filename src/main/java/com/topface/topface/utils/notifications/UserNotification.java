@@ -37,6 +37,7 @@ public class UserNotification {
 
 
     private Intent mIntent;
+    private PendingIntent mDeleteIntent;
     private int mId;
     private boolean mOngoing;
 
@@ -92,6 +93,10 @@ public class UserNotification {
 
     public void setIntent(Intent intent) {
         mIntent = intent;
+    }
+
+    public void setDeleteIntent(PendingIntent intent) {
+        mDeleteIntent = intent;
     }
 
     public int getId() {
@@ -159,6 +164,10 @@ public class UserNotification {
         }
         notificationBuilder.setAutoCancel(true);
         notificationBuilder.setContentIntent(getPendingIntent(mIntent));
+
+        if (mDeleteIntent != null) {
+            notificationBuilder.setDeleteIntent(mDeleteIntent);
+        }
 
         generatedNotification = notificationBuilder.build();
         return generatedNotification;

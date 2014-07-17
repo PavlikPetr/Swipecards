@@ -29,9 +29,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
+import com.topface.PullToRefreshBase;
+import com.topface.PullToRefreshListView;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -158,7 +158,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         for (int type : getTypesForGCM()) {
             GCMUtils.cancelNotification(getActivity(), type);
         }
-        registerGcmReceiver();
         return root;
     }
 
@@ -221,6 +220,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mFloatBlock != null) {
             mFloatBlock.onResume();
         }
+        registerGcmReceiver();
     }
 
     @Override
@@ -232,6 +232,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mActionMode != null) mActionMode.finish();
         if (mListView.isRefreshing()) {
             mListView.onRefreshComplete();
+        }
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(readItemReceiver);
+        if (getGcmUpdateAction() != null) {
+            getActivity().unregisterReceiver(mGcmReceiver);
         }
     }
 
@@ -261,15 +265,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                         drawables[3]
                 );
             }
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(readItemReceiver);
-        if (getGcmUpdateAction() != null) {
-            getActivity().unregisterReceiver(mGcmReceiver);
         }
     }
 

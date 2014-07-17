@@ -8,14 +8,14 @@ import android.view.ViewStub;
 import android.widget.TextView;
 
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.History;
-import com.topface.topface.data.Options;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
+
+import java.lang.ref.WeakReference;
 
 /**
  * This controller blocks messages from popular users.
@@ -30,67 +30,79 @@ public class PopularUserChatController {
 
     private View mPopularChatBlocker;
     private PopularUserDialog mPopularMessageBlocker;
-    private String mMaleLockText;
-    private String mFemaleLockText;
-    private boolean isInExperement57_2;
+    private String mBlockText;
+    private String mDialogTitle;
     private ChatFragment mChatFragment;
-    private ViewGroup mLockScreen;
-    private String mUserName;
-    private int mUserSex;
+    private WeakReference<ViewGroup> mLockScreenRef;
+    private boolean mOff;
 
-    public PopularUserChatController(ChatFragment chatFragment, ViewGroup lockScreen, String userName, int userSex) {
+    public PopularUserChatController(ChatFragment chatFragment, ViewGroup lockScreen) {
         mChatFragment = chatFragment;
-        mLockScreen = lockScreen;
-        mUserName = userName;
-        mUserSex = userSex;
-        Options options = CacheProfile.getOptions();
-        isInExperement57_2 = options.popularUserLock != null;
-        if (isInExperement57_2) {
-            mMaleLockText = options.popularUserLock.maleLockText;
-            mFemaleLockText = options.popularUserLock.femaleLockText;
+        mLockScreenRef = new WeakReference<ViewGroup>(lockScreen);
+    }
+
+    public void setTexts(String dialogTitle, String blockText) {
+        mBlockText = blockText;
+        mDialogTitle = dialogTitle;
+    }
+
+    public void setLockScreen(ViewGroup lockScreen) {
+        mLockScreenRef = new WeakReference<ViewGroup>(lockScreen);
+        if (isChatLocked()) {
+            blockChat();
         }
     }
 
     public boolean isAccessAllowed() {
-        return CacheProfile.premium || !isInExperement57_2;
+        return CacheProfile.premium || mBlockText == null || mBlockText.equals("") || mOff;
     }
 
     public boolean checkChatBlock(History message) {
-        return (mStage = message.type) == FIRST_STAGE;
+        return message.type == FIRST_STAGE;
     }
 
     public boolean checkMessageBlock(History message) {
-        return (mStage = message.type) == SECOND_STAGE;
+        return message.type == SECOND_STAGE;
     }
 
     public boolean block(History message) {
         if (!isAccessAllowed()) {
             if (checkChatBlock(message)) {
+                mStage = FIRST_STAGE;
                 blockChat();
                 return true;
             } else if (checkMessageBlock(message)) {
+                mStage = SECOND_STAGE;
                 initBlockDialog();
                 return false;
             }
-        } else if (mPopularChatBlocker != null && mPopularChatBlocker.getVisibility() == View.VISIBLE) {
-            mPopularChatBlocker.setVisibility(View.GONE);
-            mLockScreen.setVisibility(View.GONE);
         }
         return false;
     }
 
-    public void blockChat() {
-        ViewStub stub = (ViewStub) mLockScreen.findViewById(R.id.famousBlockerStub);
-        for (int i = 0; i < mLockScreen.getChildCount(); i++) {
-            View v = mLockScreen.getChildAt(i);
-            if (v != mPopularChatBlocker) {
-                mLockScreen.getChildAt(i).setVisibility(View.GONE);
+    public void unlockChat() {
+        if (mPopularChatBlocker != null && mPopularChatBlocker.getVisibility() == View.VISIBLE) {
+            mPopularChatBlocker.setVisibility(View.GONE);
+            ViewGroup lockScreen = mLockScreenRef.get();
+            if (lockScreen != null) {
+                lockScreen.setVisibility(View.GONE);
             }
         }
-        if (mPopularChatBlocker == null) {
+    }
+
+    public void blockChat() {
+        if (isAccessAllowed()) {
+            return;
+        }
+        ViewGroup lockScreen = mLockScreenRef.get();
+        for (int i = 0; i < lockScreen.getChildCount(); i++) {
+            lockScreen.getChildAt(i).setVisibility(View.GONE);
+        }
+        ViewStub stub = (ViewStub) lockScreen.findViewById(R.id.famousBlockerStub);
+        if (stub != null) {
             mPopularChatBlocker = stub.inflate();
             TextView lockText = (TextView) mPopularChatBlocker.findViewById(R.id.popular_user_lock_text);
-            lockText.setText(mUserName + " " + (mUserSex == Static.BOY ? mMaleLockText : mFemaleLockText));
+            lockText.setText(mBlockText);
             mPopularChatBlocker.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -103,28 +115,25 @@ public class PopularUserChatController {
                     }
                 }
             });
-        } else {
-            if (mLockScreen != mPopularChatBlocker.getParent()) {
-                mLockScreen.addView(mPopularChatBlocker);
-            }
+            lockScreen.requestLayout();
+            lockScreen.invalidate();
         }
-        mLockScreen.requestLayout();
-        mLockScreen.invalidate();
-        mLockScreen.setVisibility(View.VISIBLE);
+        mPopularChatBlocker.setVisibility(View.VISIBLE);
+        lockScreen.setVisibility(View.VISIBLE);
     }
 
-    public void releaseLock() {
-        mLockScreen.removeView(mPopularChatBlocker);
+    public void setState(int state) {
+        mStage = state;
     }
 
     public void initBlockDialog() {
         if (mPopularMessageBlocker == null) {
-            mPopularMessageBlocker = new PopularUserDialog(mUserName, mUserSex);
+            mPopularMessageBlocker = new PopularUserDialog(mDialogTitle, mBlockText);
         }
     }
 
     public boolean showBlockDialog() {
-        if (mStage != NO_BLOCK) {
+        if (!isAccessAllowed() && mStage != NO_BLOCK) {
             if (mPopularMessageBlocker == null) {
                 initBlockDialog();
             }
@@ -147,6 +156,9 @@ public class PopularUserChatController {
 
     public void reset() {
         mStage = NO_BLOCK;
+        mDialogTitle = null;
+        mBlockText = null;
+        mOff = true;
     }
 
 }

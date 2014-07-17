@@ -25,7 +25,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
@@ -608,9 +607,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingSkip: {
                 skipUser(mCurrentUser);
-                if (mCurrentUser != null && !mCurrentUser.rated) {
-                    mCurrentUser.skipped = true;
-                }
                 showNextUser();
             }
             break;
@@ -753,7 +749,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
             registerRequest(skipRateRequest);
             skipRateRequest.userid = currentSearch.id;
-            skipRateRequest.callback(new SimpleApiHandler()).exec();
+            skipRateRequest.callback(new SimpleApiHandler() {
+
+                @Override
+                public void success(IApiResponse response) {
+                    mCurrentUser.skipped = true;
+                }
+            }).exec();
         }
     }
 

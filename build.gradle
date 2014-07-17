@@ -138,8 +138,9 @@ dependencies {
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile files('libs/amazon/*.jar')
 
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.+'
+    compile project(':libs:tf-offerwall:sdk')
 
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.+'
 }
 
 project(':libs:AndroidStatistics') {

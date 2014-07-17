@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.offerwall.TFOfferwallSDK;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
@@ -127,7 +128,7 @@ public class BonusFragment extends BaseFragment {
         return createButton(activity, style, offer.text, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfferwallsManager.startOfferwall(activity, offer.action);
+                OfferwallsManager.startOfferwall(activity, OfferwallsManager.TFOFFERWALL);
             }
         });
     }
