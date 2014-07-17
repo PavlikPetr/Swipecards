@@ -108,7 +108,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static final String INTENT_USER_SEX = "user_sex";
     public static final String INTENT_USER_AGE = "user_age";
     public static final String INTENT_USER_CITY = "user_city";
-    public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
 
@@ -126,10 +125,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         if (hasValue) {
                             mUser.blocked = value;
                             mBlackListActionController.switchAction();
-                            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
                             if (value) {
                                 mUser.bookmarked = false;
-
                             }
                             switchBookmarkEnabled(!value);
                             mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(!value);
@@ -476,8 +473,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         } else if (item == null) {
             return;
         }
-        DeleteMessagesRequest dr = new DeleteMessagesRequest(item.id, getActivity());
-        dr.callback(new ApiHandler() {
+        new DeleteMessagesRequest(item.id, getActivity()).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
                 if (isAdded()) {
@@ -517,12 +513,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
         mIsUpdating = true;
         final boolean isPopularLockOn;
-        if (mAdapter != null && !mAdapter.isEmpty() && (mPopularUserLockController.isChatLocked() ||
-                mPopularUserLockController.isResponseLocked()) && pullToRefresh) {
-            isPopularLockOn = true;
-        } else {
-            isPopularLockOn = false;
-        }
+        isPopularLockOn = mAdapter != null &&
+                !mAdapter.isEmpty() &&
+                (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
+                pullToRefresh;
+
         if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
             showLoading();
         }
@@ -835,11 +830,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle extras = data.getExtras();
                     if (extras != null) {
-                        if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-                            final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
-                            sendGift(id, price);
-                        }
+                        final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+                        final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
+                        sendGift(id, price);
                     }
                 }
                 break;
@@ -866,6 +859,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(loaderItem, data.history, mListView.getRefreshableView());
                 }
+                LocalBroadcastManager.getInstance(getActivity())
+                        .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
             }
 
             @Override
@@ -929,6 +924,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
                 }
+                LocalBroadcastManager.getInstance(getActivity())
+                        .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
             }
 
             @Override

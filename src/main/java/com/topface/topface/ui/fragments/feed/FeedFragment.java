@@ -29,9 +29,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
-import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -84,7 +84,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private MenuItem mLens;
     private View mFilters;
 
-    private BroadcastReceiver readItemReceiver;
+    private BroadcastReceiver mReadItemReceiver;
     private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -136,8 +136,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         init();
 
         initViews(root);
-        readItemReceiver = new BroadcastReceiver() {
-
+        mReadItemReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String itemId = intent.getStringExtra(ChatFragment.INTENT_ITEM_ID);
@@ -154,7 +153,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         };
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver, filter);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter);
         for (int type : getTypesForGCM()) {
             GCMUtils.cancelNotification(getActivity(), type);
         }
@@ -233,7 +232,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mListView.isRefreshing()) {
             mListView.onRefreshComplete();
         }
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(readItemReceiver);
         if (getGcmUpdateAction() != null) {
             getActivity().unregisterReceiver(mGcmReceiver);
         }
@@ -245,6 +243,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mFloatBlock != null) {
             mFloatBlock.onDestroy();
         }
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
     }
 
