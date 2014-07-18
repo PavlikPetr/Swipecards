@@ -559,6 +559,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                     public void onRateFailed(int userId, int mutualId) {
                                         if (moneyDecreased.get()) {
                                             moneyDecreased.set(false);
+                                            CacheProfile.money +=CacheProfile.getOptions().priceAdmiration;
                                             new SendLikeRequest(getActivity(),
                                                     userId,
                                                     mutualId,

@@ -55,7 +55,7 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
     public void dismiss() {
         super.dismiss();
         mInstance = null;
-
+        mIsShowing = false;
     }
 
     @Override
