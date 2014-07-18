@@ -104,7 +104,7 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
 
     private void onNewFeeds(int userId) {
         mIsUpdating = true;
-        FeedGiftsRequest request = new FeedGiftsRequest(getActivity());
+        final FeedGiftsRequest request = new FeedGiftsRequest(getActivity());
         request.limit = GIFTS_LOAD_COUNT;
         request.uid = userId;
         final FeedList<FeedGift> data = mGridAdapter.getData();
@@ -121,6 +121,16 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
             protected void success(FeedListData<FeedGift> gifts, IApiResponse response) {
 
                 removeLoaderItem();
+                if (request.from == 0) {
+                    FeedList<FeedGift> noFeedIdGifts = new FeedList<FeedGift>();
+                    for (int i = getMinItemsCount(); i < data.size(); i++) {
+                        FeedGift gift = data.get(i);
+                        if (gift.gift.feedId == 0) {
+                            noFeedIdGifts.add(gift);
+                        }
+                    }
+                    data.removeAll(noFeedIdGifts);
+                }
                 data.addAll(gifts.items);
                 if (!gifts.items.isEmpty()) {
                     mGroupInfo.setVisibility(View.GONE);

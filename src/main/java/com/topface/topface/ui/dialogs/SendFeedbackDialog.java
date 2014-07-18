@@ -96,7 +96,9 @@ public class SendFeedbackDialog extends AbstractModalDialog implements View.OnCl
                     @Override
                     public void execute() {
                         if (!TextUtils.isEmpty(message)) {
-                            FeedbackMessageFragment.Report report = new FeedbackMessageFragment.Report();
+                            FeedbackMessageFragment.Report report = new FeedbackMessageFragment.Report(
+                                    FeedbackMessageFragment.FeedbackType.LOW_RATE_MESSAGE
+                            );
                             report.setSubject(mSubject);
                             report.setBody(message);
                             report.setEmail(Settings.getInstance().getSocialAccountEmail());
