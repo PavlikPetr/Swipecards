@@ -379,6 +379,9 @@
             android:name=".ui.AuthActivity"
             android:targetActivity=".ui.NavigationActivity"/>
 
+        <!-- Topface offerwall -->
+        <activity android:name="com.topface.offerwall.TFOfferwallActivity"/>
+
         <!-- services -->
         <service android:name="com.getjar.sdk.rewards.GetJarService"/>
 
