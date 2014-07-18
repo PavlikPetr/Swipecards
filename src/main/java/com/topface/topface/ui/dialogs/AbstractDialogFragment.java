@@ -55,7 +55,9 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     @Override
     public void show(FragmentManager manager, String tag) {
         try {
-            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+
+            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()
+                    && manager.findFragmentByTag(tag) == null) {
                 super.show(manager, tag);
             }
         } catch (Exception e) {
