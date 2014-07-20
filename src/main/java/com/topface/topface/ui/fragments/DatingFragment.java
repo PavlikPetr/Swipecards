@@ -537,79 +537,69 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingAdmiration: {
                 if (mCurrentUser != null) {
-                    if (mUserSearchList == null || mUserSearchList.isEnded()) {
-                        updateData(true);
-                        return;
-                    } else {
-                        lockControls();
-                        boolean canSendAdmiration = mRateController.onAdmiration(
-                                mCurrentUser.id,
-                                mCurrentUser.mutual ?
-                                        SendLikeRequest.DEFAULT_MUTUAL
-                                        : SendLikeRequest.DEFAULT_NO_MUTUAL,
-                                new RateController.OnRateRequestListener() {
-                                    @Override
-                                    public void onRateCompleted(int mutualId) {
-                                        EasyTracker.getTracker().sendEvent("Dating", "Rate",
-                                                "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
-                                                (long) CacheProfile.getOptions().priceAdmiration);
-                                    }
-
-                                    @Override
-                                    public void onRateFailed(int userId, int mutualId) {
-                                        if (moneyDecreased.get()) {
-                                            moneyDecreased.set(false);
-                                            new SendLikeRequest(getActivity(),
-                                                    userId,
-                                                    mutualId,
-                                                    SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler(){
-                                                @Override
-                                                public void fail(int codeError, IApiResponse response) {
-                                                    super.fail(codeError, response);
-                                                    unlockControls();
-                                                }
-                                            }).exec();
-                                        } else {
-                                            unlockControls();
-                                        }
-
-                                    }
+                    lockControls();
+                    boolean canSendAdmiration = mRateController.onAdmiration(
+                            mCurrentUser.id,
+                            mCurrentUser.mutual ?
+                                    SendLikeRequest.DEFAULT_MUTUAL
+                                    : SendLikeRequest.DEFAULT_NO_MUTUAL,
+                            new RateController.OnRateRequestListener() {
+                                @Override
+                                public void onRateCompleted(int mutualId) {
+                                    EasyTracker.getTracker().sendEvent("Dating", "Rate",
+                                            "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
+                                            (long) CacheProfile.getOptions().priceAdmiration);
                                 }
-                        );
-                        if (canSendAdmiration) {
-                            CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().priceAdmiration;
-                            moneyDecreased.set(true);
-                            updateResources();
-                        }
+
+                                @Override
+                                public void onRateFailed(int userId, int mutualId) {
+                                    if (moneyDecreased.get()) {
+                                        moneyDecreased.set(false);
+                                        new SendLikeRequest(getActivity(),
+                                                userId,
+                                                mutualId,
+                                                SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler() {
+                                            @Override
+                                            public void fail(int codeError, IApiResponse response) {
+                                                super.fail(codeError, response);
+                                                unlockControls();
+                                            }
+                                        }).exec();
+                                    } else {
+                                        unlockControls();
+                                    }
+
+                                }
+                            }
+                    );
+                    if (canSendAdmiration) {
+                        CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().priceAdmiration;
+                        moneyDecreased.set(true);
+                        updateResources();
                     }
                 }
             }
             break;
             case R.id.btnDatingSympathy: {
                 if (mCurrentUser != null) {
-                    if (mUserSearchList == null || mUserSearchList.isEnded()) {
-                        updateData(true);
-                        return;
-                    } else {
-                        lockControls();
-                        mRateController.onLike(mCurrentUser.id,
-                                mCurrentUser.mutual ?
-                                        SendLikeRequest.DEFAULT_MUTUAL
-                                        : SendLikeRequest.DEFAULT_NO_MUTUAL,
-                                new RateController.OnRateRequestListener() {
-                                    @Override
-                                    public void onRateCompleted(int mutualId) {
+                    lockControls();
+                    mRateController.onLike(mCurrentUser.id,
+                            mCurrentUser.mutual ?
+                                    SendLikeRequest.DEFAULT_MUTUAL
+                                    : SendLikeRequest.DEFAULT_NO_MUTUAL,
+                            new RateController.OnRateRequestListener() {
+                                @Override
+                                public void onRateCompleted(int mutualId) {
 
-                                    }
-
-                                    @Override
-                                    public void onRateFailed(int userId, int mutualId) {
-                                        mCurrentUser.rated = false;
-                                        unlockControls();
-                                    }
                                 }
-                        );
-                    }
+
+                                @Override
+                                public void onRateFailed(int userId, int mutualId) {
+                                    mCurrentUser.rated = false;
+                                    unlockControls();
+                                }
+                            }
+                    );
                 }
             }
             break;
