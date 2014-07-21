@@ -314,7 +314,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         private AuthToken authToken = AuthToken.getInstance();
 
         public Report() {
-            userDeviceAccounts = ClientUtils.getClientAccounts();
         }
 
         public Report(FeedbackType type) {
@@ -346,7 +345,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
             strBuilder.append("<p>Email for answer: ").append(email).append(";</p>\n");
             strBuilder.append("<p>Device accounts: ");
-            strBuilder.append(TextUtils.join(", ", userDeviceAccounts));
+            strBuilder.append(TextUtils.join(", ", getUserDeviceAccounts()));
             strBuilder.append(";</p>\n");
             strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode)
                     .append(";</p>\n");
@@ -378,6 +377,9 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         }
 
         public List<String> getUserDeviceAccounts() {
+            if (userDeviceAccounts == null) {
+                userDeviceAccounts = ClientUtils.getClientAccounts();
+            }
             return userDeviceAccounts;
         }
 
