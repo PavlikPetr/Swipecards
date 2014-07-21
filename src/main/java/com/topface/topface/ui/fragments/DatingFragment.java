@@ -555,10 +555,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 public void onRateFailed(int userId, int mutualId) {
                                     if (moneyDecreased.get()) {
                                         moneyDecreased.set(false);
+                                        CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
                                         new SendLikeRequest(getActivity(),
                                                 userId,
                                                 mutualId,
-                                                SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler() {
+                                                SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler(){
                                             @Override
                                             public void fail(int codeError, IApiResponse response) {
                                                 super.fail(codeError, response);
@@ -568,7 +569,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                     } else {
                                         unlockControls();
                                     }
-
                                 }
                             }
                     );
