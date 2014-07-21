@@ -540,7 +540,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     lockControls();
                     boolean canSendAdmiration = mRateController.onAdmiration(
                             mCurrentUser.id,
-                            mCurrentUser.mutual ?
+                            mCurrentUser.isMutualPossible ?
                                     SendLikeRequest.DEFAULT_MUTUAL
                                     : SendLikeRequest.DEFAULT_NO_MUTUAL,
                             new RateController.OnRateRequestListener() {
@@ -584,7 +584,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 if (mCurrentUser != null) {
                     lockControls();
                     mRateController.onLike(mCurrentUser.id,
-                            mCurrentUser.mutual ?
+                            mCurrentUser.isMutualPossible ?
                                     SendLikeRequest.DEFAULT_MUTUAL
                                     : SendLikeRequest.DEFAULT_NO_MUTUAL,
                             new RateController.OnRateRequestListener() {
@@ -628,7 +628,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void chatBlockLogic() {
-        if (mCurrentUser.mutual) {
+        if (mCurrentUser.isMutualPossible) {
             openChat(getActivity());
         } else {
             startActivityForResult(
@@ -722,13 +722,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void setLikeButtonDrawables(SearchUser currUser) {
         // buttons drawables
-        mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual
+        mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.isMutualPossible ? doubleMutual
                 : singleMutual, null, null);
-        mMutualBtn.setText(currUser.mutual ? App.getContext().getString(R.string.general_mutual)
+        mMutualBtn.setText(currUser.isMutualPossible ? App.getContext().getString(R.string.general_mutual)
                 : App.getContext().getString(R.string.general_sympathy));
 
         mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                currUser.mutual ? doubleDelight : singleDelight, null, null);
+                currUser.isMutualPossible ? doubleDelight : singleDelight, null, null);
     }
 
     private void setUserPhotos(SearchUser currUser) {
