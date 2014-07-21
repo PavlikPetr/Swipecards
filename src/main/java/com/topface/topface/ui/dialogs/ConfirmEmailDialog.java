@@ -24,8 +24,6 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
     private EditText mEditEmailText;
     private Button mConfirmButton;
     private ProgressBar mProgressBar;
-    private static ConfirmEmailDialog mInstance;
-    private boolean mIsShowing;
 
     @Override
     protected void initContentViews(View root) {
@@ -51,12 +49,7 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
         Utils.hideSoftKeyboard(getActivity(), mEditEmailText);
     }
 
-    @Override
-    public void dismiss() {
-        super.dismiss();
-        mInstance = null;
-        mIsShowing = false;
-    }
+
 
     @Override
     protected void onCloseButtonClick(View v) {
@@ -87,14 +80,6 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
                 }
                 break;
 
-        }
-    }
-
-    @Override
-    public void show(FragmentManager manager, String tag) {
-        if (!mIsShowing) {
-            super.show(manager, tag);
-            mIsShowing = true;
         }
     }
 
@@ -143,11 +128,9 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
     }
 
     public static ConfirmEmailDialog newInstance() {
-        if (mInstance == null) {
-            mInstance = new ConfirmEmailDialog();
-            mInstance.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Topface);
-        }
-        return mInstance;
+        ConfirmEmailDialog dialog = new ConfirmEmailDialog();
+        dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Topface);
+        return dialog;
     }
 
     private void onRequestStart() {
