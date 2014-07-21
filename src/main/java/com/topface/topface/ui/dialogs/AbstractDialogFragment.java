@@ -56,11 +56,6 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         return root;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
     /**
      * Don't show popup, when user logged out
      */
@@ -78,11 +73,6 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         } catch (Exception e) {
             Debug.error("AbstractDialogFragment " + tag + " show error: " + e.getMessage());
         }
-    }
-
-    @Override
-    public void dismiss() {
-        super.dismiss();
     }
 
     @Override
