@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -106,12 +107,6 @@ public class Products extends AbstractData {
                 if (CacheProfile.getOptions().forceCoinsSubscriptions) {
                     saleExists = false;
                 }
-
-                //Парсим список всех подписок
-                inventory = JsonUtils.fromJson(
-                        data.optJSONArray("subscriptions").toString(),
-                        ProductsInventory.class
-                );
 
             }
             fillProductsArray(coins, data.optJSONArray(ProductType.COINS.getName()));
@@ -351,7 +346,7 @@ public class Products extends AbstractData {
     /**
      * Can check if this product id is in on of subscriptions list
      *
-     * @param productId sku for product
+     * @param productId productId for product
      * @return true if productId refers to subscriptions
      */
     public boolean isSubscription(String productId) {
@@ -431,6 +426,16 @@ public class Products extends AbstractData {
         public ProductsInfo(JSONObject infoJson) {
             coinsSubscription = new CoinsSubscriptionInfo(infoJson.optJSONObject(ProductType.COINS_SUBSCRIPTION.getName()));
             coinsSubscriptionMasked = new CoinsSubscriptionInfo(infoJson.optJSONObject(ProductType.COINS_SUBSCRIPTION_MASKED.getName()));
+            //Парсим список всех подписок
+            JSONArray inventoryArray = infoJson.optJSONArray("inventory");
+            if (inventoryArray != null) {
+                InventoryItem[] inventoryItems = JsonUtils.fromJson(
+                        inventoryArray.toString(),
+                        InventoryItem[].class
+                );
+                inventory = new ProductsInventory(inventoryItems);
+            }
+
         }
 
         public class CoinsSubscriptionInfo {
@@ -490,13 +495,17 @@ public class Products extends AbstractData {
         }
     }
 
-    public class ProductsInventory extends ArrayList<ProductInfo> {
+    public class ProductsInventory extends ArrayList<InventoryItem> {
+        public ProductsInventory(InventoryItem[] items) {
+            super(Arrays.asList(items));
+        }
+
         /**
-         * Присутствует ли указанный id продукта (sku) в списке
+         * Присутствует ли указанный id продукта (productId) в списке
          */
         public boolean containsSku(String sku) {
-            for (ProductInfo product : this) {
-                if (TextUtils.equals(product.sku, sku)) {
+            for (InventoryItem product : this) {
+                if (TextUtils.equals(product.productId, sku)) {
                     return true;
                 }
             }
@@ -505,9 +514,8 @@ public class Products extends AbstractData {
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    private class ProductInfo {
-        public String sku;
-        public String orderId;
+    private class InventoryItem {
+        public String productId;
         public String status;
     }
 }

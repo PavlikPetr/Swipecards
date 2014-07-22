@@ -77,6 +77,7 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
                 } else {
                     fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.MOBILE);
                 }
+                break;
             default:
                 Debug.error("PurchasesFragmentsAdapter wrong position");
                 break;

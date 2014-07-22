@@ -100,20 +100,28 @@ public class App extends Application {
     }
 
     private static ApiRequest getPaymentwallProductsRequest() {
-        return new PaymentwallProductsRequest(App.getContext()).callback(new ApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                //При создании нового объекта продуктов, все данные о них записываются в кэш,
-                //поэтому здесь просто создаются два объекта продуктов.
-                new PaymentWallProducts(response, PaymentWallProducts.TYPE.DIRECT);
-                new PaymentWallProducts(response, PaymentWallProducts.TYPE.MOBILE);
-            }
+        switch (BuildConfig.BILLING_TYPE) {
+            //Для амазона и nokia Paymentwall не должен включаться
+            case NOKIA_STORE:
+            case AMAZON:
+                return null;
+            case GOOGLE_PLAY:
+            default:
+                return new PaymentwallProductsRequest(App.getContext()).callback(new ApiHandler() {
+                    @Override
+                    public void success(IApiResponse response) {
+                        //При создании нового объекта продуктов, все данные о них записываются в кэш,
+                        //поэтому здесь просто создаются два объекта продуктов.
+                        new PaymentWallProducts(response, PaymentWallProducts.TYPE.DIRECT);
+                        new PaymentWallProducts(response, PaymentWallProducts.TYPE.MOBILE);
+                    }
 
-            @Override
-            public void fail(int codeError, IApiResponse response) {
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
 
-            }
-        });
+                    }
+                });
+        }
     }
 
     /**

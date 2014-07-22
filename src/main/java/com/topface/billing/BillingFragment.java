@@ -162,7 +162,7 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
         if (iabResult.isSuccess()) {
             if (inventory != null) {
                 //Запрашиваем покупки, что бы их потратить
-                List<String> allOwnedSkus = inventory.getAllOwnedSkus();
+                List<String> allOwnedSkus = inventory.getAllOwnedSkus(IabHelper.ITEM_TYPE_INAPP);
                 for (String sku : allOwnedSkus) {
                     verifyPurchase(inventory.getPurchase(sku), getActivity());
                 }
@@ -318,7 +318,10 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
     public void verifyPurchase(final Purchase purchase, final Context context) {
         if (purchase == null) {
             Debug.error("BillingFragment: purchase is empty");
+            return;
         }
+        Debug.log("BillingFragment: try verify purchase " + purchase);
+
         // Отправлем покупку на сервер для проверки и начисления
         PurchaseRequest.getValidateRequest(purchase, context).callback(new DataApiHandler<Verify>() {
             @Override
