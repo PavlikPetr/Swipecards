@@ -380,7 +380,8 @@
             android:targetActivity=".ui.NavigationActivity"/>
 
         <!-- Topface offerwall -->
-        <activity android:name="com.topface.offerwall.TFOfferwallActivity"/>
+        <activity android:name="com.topface.offerwall.TFOfferwallActivity"
+            android:theme="@style/Theme.Topface.ActionbarOverlay"/>
 
         <!-- services -->
         <service android:name="com.getjar.sdk.rewards.GetJarService"/>
