@@ -60,6 +60,7 @@
     <string name="likes_background_text">Inga sympatier</string>
     <string name="visitors_background_text">Inga gäster</string>
     <string name="mutual_background_text">Inga sympatier</string>
+    <string name="message_too_long">Meddelandet du skrivit är för långt. Antal tecken får inte överskrida %d.</string>
     <string name="chat_background_text">Inga inkommande meddelanden</string>
     <string name="chat_comment">Skriva ett meddelande</string>
     <string name="chat_gift_in">Har du fått gåvan?</string>

@@ -630,6 +630,7 @@
         <item quantity="one">e ancora %d</item>
     </plurals>
     <string name="subscription">Abbonamento</string>
+    <string name="autorefill">Ricarica automatica</string>
     <string name="coins">Monete</string>
     <string name="you_were_subscribed">L’abbonamento è stato completato</string>
     <string name="subscriptions_can_be_changed">L’abbonamento è stato completato. Puoi cambiare le condizioni dell’abbonamento su Google Play</string>
