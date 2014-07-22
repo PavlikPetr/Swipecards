@@ -524,6 +524,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         return DatingFilter.getOnlyOnlineField();
     }
 
+    AtomicBoolean isAdmirationFailed = new AtomicBoolean(false);
+
     @Override
     public void onClick(View view) {
         if (!CacheProfile.isLoaded()) {
@@ -538,6 +540,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.btnDatingAdmiration: {
                 if (mCurrentUser != null) {
                     lockControls();
+                    isAdmirationFailed.set(false);
                     boolean canSendAdmiration = mRateController.onAdmiration(
                             mCurrentUser.id,
                             mCurrentUser.isMutualPossible ?
@@ -546,6 +549,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             new RateController.OnRateRequestListener() {
                                 @Override
                                 public void onRateCompleted(int mutualId) {
+                                    isAdmirationFailed.set(true);
                                     EasyTracker.getTracker().sendEvent("Dating", "Rate",
                                             "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
                                             (long) CacheProfile.getOptions().priceAdmiration);
@@ -556,10 +560,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                     if (moneyDecreased.get()) {
                                         moneyDecreased.set(false);
                                         CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
+                                        updateResources();
                                         new SendLikeRequest(getActivity(),
                                                 userId,
                                                 mutualId,
-                                                SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler(){
+                                                SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler() {
                                             @Override
                                             public void fail(int codeError, IApiResponse response) {
                                                 super.fail(codeError, response);
@@ -567,12 +572,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                             }
                                         }).exec();
                                     } else {
+                                        isAdmirationFailed.set(true);
                                         unlockControls();
                                     }
                                 }
                             }
                     );
-                    if (canSendAdmiration) {
+                    if (canSendAdmiration && !isAdmirationFailed.get()) {
                         CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().priceAdmiration;
                         moneyDecreased.set(true);
                         updateResources();
