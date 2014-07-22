@@ -636,6 +636,7 @@
         <item quantity="one">and %d</item>
     </plurals>
     <string name="subscription">Subscription</string>
+    <string name="autorefill">Auto refill</string>
     <string name="coins">Coins</string>
     <string name="you_were_subscribed">Subscribed</string>
     <string name="subscriptions_can_be_changed">Subscribed. You can change your subscription on Google Play.</string>
