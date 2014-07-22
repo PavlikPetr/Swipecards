@@ -538,7 +538,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.btnDatingAdmiration: {
                 if (mCurrentUser != null) {
                     lockControls();
-                    boolean canSendAdmiration = mRateController.onAdmiration(
+                    final boolean[] canSendAdmiration = {mRateController.onAdmiration(
                             mCurrentUser.id,
                             mCurrentUser.isMutualPossible ?
                                     SendLikeRequest.DEFAULT_MUTUAL
@@ -556,10 +556,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                     if (moneyDecreased.get()) {
                                         moneyDecreased.set(false);
                                         CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
+                                        updateResources();
                                         new SendLikeRequest(getActivity(),
                                                 userId,
                                                 mutualId,
-                                                SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler(){
+                                                SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler() {
                                             @Override
                                             public void fail(int codeError, IApiResponse response) {
                                                 super.fail(codeError, response);
@@ -571,8 +572,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                     }
                                 }
                             }
-                    );
-                    if (canSendAdmiration) {
+                    )};
+                    if (canSendAdmiration[0]) {
                         CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().priceAdmiration;
                         moneyDecreased.set(true);
                         updateResources();
