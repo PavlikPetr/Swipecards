@@ -524,6 +524,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         return DatingFilter.getOnlyOnlineField();
     }
 
+    AtomicBoolean isAdmirationFailed = new AtomicBoolean(false);
+
     @Override
     public void onClick(View view) {
         if (!CacheProfile.isLoaded()) {
@@ -538,7 +540,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.btnDatingAdmiration: {
                 if (mCurrentUser != null) {
                     lockControls();
-                    final boolean[] canSendAdmiration = {mRateController.onAdmiration(
+                    isAdmirationFailed.set(false);
+                    boolean canSendAdmiration = mRateController.onAdmiration(
                             mCurrentUser.id,
                             mCurrentUser.isMutualPossible ?
                                     SendLikeRequest.DEFAULT_MUTUAL
@@ -546,6 +549,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             new RateController.OnRateRequestListener() {
                                 @Override
                                 public void onRateCompleted(int mutualId) {
+                                    isAdmirationFailed.set(true);
                                     EasyTracker.getTracker().sendEvent("Dating", "Rate",
                                             "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
                                             (long) CacheProfile.getOptions().priceAdmiration);
@@ -568,12 +572,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                             }
                                         }).exec();
                                     } else {
+                                        isAdmirationFailed.set(true);
                                         unlockControls();
                                     }
                                 }
                             }
-                    )};
-                    if (canSendAdmiration[0]) {
+                    );
+                    if (canSendAdmiration && !isAdmirationFailed.get()) {
                         CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().priceAdmiration;
                         moneyDecreased.set(true);
                         updateResources();
