@@ -30,6 +30,7 @@ import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.utils.ClientUtils;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.social.AuthToken;
 
 import java.util.List;
 import java.util.Locale;
@@ -295,6 +296,8 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         }
     }
 
+
+
     public static class Report {
         String email;
         List<String> userDeviceAccounts;
@@ -302,8 +305,15 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         String body = Static.EMPTY;
         String topface_version = "unknown";
         int topface_versionCode = 0;
+        String android_SDK = "API " + android.os.Build.VERSION.SDK_INT;
+        String android_RELEASE = android.os.Build.VERSION.RELEASE;
+        String android_CODENAME = android.os.Build.VERSION.CODENAME;
+        String device = android.os.Build.DEVICE;
+        String model = android.os.Build.MODEL;
         String transactionId = null;
         FeedbackType type;
+
+        private AuthToken authToken = AuthToken.getInstance();
 
         public Report() {
         }
