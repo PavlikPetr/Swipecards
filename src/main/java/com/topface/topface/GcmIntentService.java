@@ -36,13 +36,14 @@ public class GcmIntentService extends IntentService {
                 Intent broadcastReceiver = new Intent(GCMUtils.GCM_NOTIFICATION);
                 String user = intent.getStringExtra("user");
 
+                int type = GCMUtils.getType(intent);
+                NotificationStatistics.sendReceived(type, GCMUtils.getLabel(intent));
+
                 if (user != null) {
                     String userId = getUserId(user);
                     broadcastReceiver.putExtra(GCMUtils.USER_ID_EXTRA, userId);
                     context.sendBroadcast(broadcastReceiver);
                     Intent updateIntent = null;
-                    int type = GCMUtils.getType(intent);
-                    NotificationStatistics.sendReceived(type, GCMUtils.getLabel(intent));
                     switch (GCMUtils.getType(intent)) {
                         case GCMUtils.GCM_TYPE_MESSAGE:
                         case GCMUtils.GCM_TYPE_DIALOGS:

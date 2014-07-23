@@ -24,7 +24,7 @@ public class History extends FeedDialog implements Parcelable {
     public String createdFormatted;
 
     public History(ItemType type) {
-        super(null);
+        super((JSONObject) null);
         setLoaderTypeFlags(type);
     }
 
@@ -39,7 +39,7 @@ public class History extends FeedDialog implements Parcelable {
     }
 
     public History() {
-        super(null);
+        super((JSONObject) null);
     }
 
     @Override

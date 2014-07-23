@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.text.Editable;
@@ -35,8 +36,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.PullToRefreshBase;
+import com.topface.PullToRefreshListView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -77,6 +79,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.UserActions;
@@ -100,13 +103,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
     private static final String KEYBOARD_OPENED = "keyboard_opened";
-    private static final String CHAT_BLOCKED = "chat_blocked";
+    private static final String POPULAR_LOCK_STATE = "chat_blocked";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_USER_SEX = "user_sex";
     public static final String INTENT_USER_AGE = "user_age";
     public static final String INTENT_USER_CITY = "user_city";
-    public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
 
@@ -124,10 +126,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         if (hasValue) {
                             mUser.blocked = value;
                             mBlackListActionController.switchAction();
-                            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
                             if (value) {
                                 mUser.bookmarked = false;
-
                             }
                             switchBookmarkEnabled(!value);
                             mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(!value);
@@ -276,8 +276,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         //LockScreen
         initLockScreen(root);
-        if (savedInstanceState != null && savedInstanceState.getBoolean(CHAT_BLOCKED, false)) {
-            mPopularUserLockController.setState(PopularUserChatController.FIRST_STAGE);
+        if (savedInstanceState != null) {
+            Parcelable popularLockState = savedInstanceState.getParcelable(POPULAR_LOCK_STATE);
+            if (popularLockState != null) {
+                mPopularUserLockController.setState((PopularUserChatController.SavedState) popularLockState);
+            }
         }
         checkPopularUserLock();
         //Send Button
@@ -400,6 +403,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             mPopularUserLockController.setLockScreen(mLockScreen);
         } else {
             mPopularUserLockController = new PopularUserChatController(this, mLockScreen);
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+                    mPopularUserLockController, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
         }
     }
 
@@ -444,7 +449,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 Debug.error(e);
             }
         }
-        outState.putBoolean(CHAT_BLOCKED, mPopularUserLockController.isChatLocked());
+        outState.putParcelable(POPULAR_LOCK_STATE, mPopularUserLockController.getSavedState()
+        );
     }
 
     @Override
@@ -468,8 +474,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         } else if (item == null) {
             return;
         }
-        DeleteMessagesRequest dr = new DeleteMessagesRequest(item.id, getActivity());
-        dr.callback(new ApiHandler() {
+        new DeleteMessagesRequest(item.id, getActivity()).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
                 if (isAdded()) {
@@ -493,6 +498,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         release();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPopularUserLockController);
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
@@ -507,6 +513,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
         mIsUpdating = true;
+        final boolean isPopularLockOn;
+        isPopularLockOn = mAdapter != null &&
+                !mAdapter.isEmpty() &&
+                (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
+                pullToRefresh;
+
         if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
             showLoading();
         }
@@ -532,10 +544,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
-                if (!data.items.isEmpty()) {
+                if (!data.items.isEmpty() && !isPopularLockOn) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
-                        if (mPopularUserLockController.block(message)) {
+                        int blockStage = mPopularUserLockController.block(message);
+                        if (blockStage == PopularUserChatController.FIRST_STAGE) {
                             mIsUpdating = false;
                             wasFailed = false;
                             mUser = data.user;
@@ -543,6 +556,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                 onUserLoaded(mUser);
                             }
                             return;
+                        } else if (blockStage == PopularUserChatController.SECOND_STAGE) {
+                            break;
                         }
                     }
                     mPopularUserLockController.unlockChat();
@@ -612,6 +627,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             }
         }).exec();
     }
+
 
     private void removeOutdatedItems(HistoryListData data) {
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
@@ -813,21 +829,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle extras = data.getExtras();
                     if (extras != null) {
-                        if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-                            final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
-                            sendGift(id, price);
-                        }
-                    }
-                }
-                break;
-            case PurchasesActivity.INTENT_BUY_VIP:
-                if (resultCode == Activity.RESULT_OK) {
-                    if (data.getBooleanExtra(PurchasesFragment.IS_VIP_EXTRA, false)) {
-                        if (mPopularUserLockController.isChatLocked()) {
-                            mPopularUserLockController.unlockChat();
-                        }
-                        mPopularUserLockController.reset();
+                        final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+                        final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
+                        sendGift(id, price);
                     }
                 }
                 break;
@@ -854,6 +858,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(loaderItem, data.history, mListView.getRefreshableView());
                 }
+                LocalBroadcastManager.getInstance(getActivity())
+                        .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
             }
 
             @Override
@@ -917,6 +923,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
                 }
+                LocalBroadcastManager.getInstance(getActivity())
+                        .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
             }
 
             @Override

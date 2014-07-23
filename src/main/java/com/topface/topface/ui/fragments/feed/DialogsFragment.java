@@ -31,10 +31,21 @@ import java.util.List;
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     public static final String UPDATE_DIALOGS = "update_dialogs";
+    public static final String REFRESH_DIALOGS = "refresh_dialogs";
+
+    private boolean mNeedRefresh = false;
+
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateData(false, true);
+        }
+    };
+
+    private BroadcastReceiver mRefreshReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mNeedRefresh = true;
         }
     };
 
@@ -46,13 +57,26 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(UPDATE_DIALOGS));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRefreshReceiver, new IntentFilter(REFRESH_DIALOGS));
         return super.onCreateView(inflater, container, saved);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //Проверяем флаг, нужно ли обновлять диалоги
+        if (mNeedRefresh) {
+            updateData(true, false);
+            mNeedRefresh = false;
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRefreshReceiver);
     }
 
     @Override

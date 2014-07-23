@@ -1,6 +1,10 @@
 package com.topface.topface.utils.controllers;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
 
 import java.lang.ref.WeakReference;
@@ -20,7 +25,7 @@ import java.lang.ref.WeakReference;
 /**
  * This controller blocks messages from popular users.
  */
-public class PopularUserChatController {
+public class PopularUserChatController extends BroadcastReceiver {
 
     public static final int NO_BLOCK = -1;
     public static final int FIRST_STAGE = 35;
@@ -35,6 +40,48 @@ public class PopularUserChatController {
     private ChatFragment mChatFragment;
     private WeakReference<ViewGroup> mLockScreenRef;
     private boolean mOff;
+
+    public static class SavedState implements Parcelable {
+
+        public int stage;
+        public String dialogTitle;
+        public String blockText;
+        public boolean off;
+
+        public static final Parcelable.Creator<SavedState> CREATOR
+                = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+
+        private SavedState() {
+        }
+
+        private SavedState(Parcel in) {
+            stage = in.readInt();
+            dialogTitle = in.readString();
+            blockText = in.readString();
+            off = in.readByte() == 1;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(stage);
+            dest.writeString(dialogTitle);
+            dest.writeString(blockText);
+            dest.writeByte((byte) (off ? 1 : 0));
+        }
+    }
 
     public PopularUserChatController(ChatFragment chatFragment, ViewGroup lockScreen) {
         mChatFragment = chatFragment;
@@ -53,6 +100,15 @@ public class PopularUserChatController {
         }
     }
 
+    public SavedState getSavedState() {
+        SavedState ss = new SavedState();
+        ss.stage = mStage;
+        ss.dialogTitle = mDialogTitle;
+        ss.blockText = mBlockText;
+        ss.off = mOff;
+        return ss;
+    }
+
     public boolean isAccessAllowed() {
         return CacheProfile.premium || mBlockText == null || mBlockText.equals("") || mOff;
     }
@@ -65,19 +121,18 @@ public class PopularUserChatController {
         return message.type == SECOND_STAGE;
     }
 
-    public boolean block(History message) {
+    public int block(History message) {
+        mStage = NO_BLOCK;
         if (!isAccessAllowed()) {
             if (checkChatBlock(message)) {
                 mStage = FIRST_STAGE;
                 blockChat();
-                return true;
             } else if (checkMessageBlock(message)) {
                 mStage = SECOND_STAGE;
                 initBlockDialog();
-                return false;
             }
         }
-        return false;
+        return mStage;
     }
 
     public void unlockChat() {
@@ -110,7 +165,7 @@ public class PopularUserChatController {
                         case R.id.btnBuyVip:
                             EasyTracker.sendEvent(mChatFragment.getTrackName(), "BuyVipStatus", "", 1L);
                             Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
-                            mChatFragment.startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
+                            mChatFragment.startActivity(intent);
                             break;
                     }
                 }
@@ -122,8 +177,11 @@ public class PopularUserChatController {
         lockScreen.setVisibility(View.VISIBLE);
     }
 
-    public void setState(int state) {
-        mStage = state;
+    public void setState(SavedState ss) {
+        mStage = ss.stage;
+        mDialogTitle = ss.dialogTitle;
+        mBlockText = ss.blockText;
+        mOff = ss.off;
     }
 
     public void initBlockDialog() {
@@ -151,7 +209,11 @@ public class PopularUserChatController {
     }
 
     public boolean isChatLocked() {
-        return mStage == FIRST_STAGE;
+        return !isAccessAllowed() && mStage == FIRST_STAGE;
+    }
+
+    public boolean isResponseLocked() {
+        return !isAccessAllowed() && mStage == SECOND_STAGE;
     }
 
     public void reset() {
@@ -161,4 +223,13 @@ public class PopularUserChatController {
         mOff = true;
     }
 
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (intent.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false)) {
+            if (isChatLocked()) {
+                unlockChat();
+            }
+            reset();
+        }
+    }
 }

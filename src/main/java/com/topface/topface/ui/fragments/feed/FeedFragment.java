@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
@@ -29,9 +30,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
+import com.topface.PullToRefreshBase;
+import com.topface.PullToRefreshListView;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -53,6 +54,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.MultiselectionController;
 import com.topface.topface.ui.blocks.FilterBlock;
@@ -73,6 +75,9 @@ import static android.widget.AdapterView.OnItemClickListener;
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
     private static final int FEED_MULTI_SELECTION_LIMIT = 100;
 
+    private static final String FEEDS = "FEEDS";
+    private static final String POSITION = "POSITION";
+
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
     private TextView mBackgroundText;
@@ -84,7 +89,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private MenuItem mLens;
     private View mFilters;
 
-    private BroadcastReceiver readItemReceiver;
+    private BroadcastReceiver mReadItemReceiver;
     private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -136,8 +141,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         init();
 
         initViews(root);
-        readItemReceiver = new BroadcastReceiver() {
-
+        restoreInstanceState(saved);
+        mReadItemReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String itemId = intent.getStringExtra(ChatFragment.INTENT_ITEM_ID);
@@ -154,11 +159,24 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         };
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver, filter);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter);
         for (int type : getTypesForGCM()) {
             GCMUtils.cancelNotification(getActivity(), type);
         }
         return root;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void restoreInstanceState(Bundle saved) {
+        if (saved != null) {
+            Parcelable[] feeds = saved.getParcelableArray(FEEDS);
+            FeedList<T> feedsList = new FeedList<>();
+            for (Parcelable feed : feeds) {
+                feedsList.add((T) feed);
+            }
+            mListAdapter.setData(feedsList);
+            mListView.getRefreshableView().setSelection(saved.getInt(POSITION, 0));
+        }
     }
 
     private void registerGcmReceiver() {
@@ -233,7 +251,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mListView.isRefreshing()) {
             mListView.onRefreshComplete();
         }
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(readItemReceiver);
         if (getGcmUpdateAction() != null) {
             getActivity().unregisterReceiver(mGcmReceiver);
         }
@@ -245,7 +262,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mFloatBlock != null) {
             mFloatBlock.onDestroy();
         }
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mListAdapter != null) {
+            FeedList<T> data = mListAdapter.getData();
+            outState.putParcelableArray(FEEDS, data.toArray(new Parcelable[data.size()]));
+            outState.putInt(POSITION, mListView.getRefreshableView().getFirstVisiblePosition());
+        }
     }
 
     protected void init() {
