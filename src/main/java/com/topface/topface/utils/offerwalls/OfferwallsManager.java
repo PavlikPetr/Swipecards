@@ -212,7 +212,7 @@ public class OfferwallsManager {
     }
 
     private static void initTfOfferwall(Context context) {
-        TFOfferwallSDK.initialize(context, Integer.toString(CacheProfile.uid), "53c7c07b1937c");
+        TFOfferSDK.initialize(context);
     }
 
     public static void startTfOfferwall(Context context) {
