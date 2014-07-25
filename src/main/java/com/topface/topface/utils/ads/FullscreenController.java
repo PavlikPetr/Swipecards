@@ -126,31 +126,34 @@ public class FullscreenController {
         requestFullscreen(CacheProfile.getOptions().gagTypeFullscreen);
     }
 
-    @SuppressWarnings("UnnecessaryReturnStatement")
     public void requestFullscreen(String type) {
-        switch (type) {
-            case BannerBlock.BANNER_NONE:
-                return;
-            case BannerBlock.BANNER_ADMOB:
-                requestAdmobFullscreen();
-                break;
-            case BannerBlock.BANNER_ADWIRED:
-                requestAdwiredFullscreen();
-                break;
-            case BannerBlock.BANNER_TOPFACE:
-                requestTopfaceFullscreen();
-                break;
-            case BannerBlock.BANNER_MOPUB:
-                requestMopubFullscreen();
-                break;
-            case BannerBlock.BANNER_IVENGO:
-                requestIvengoFullscreen();
-                break;
-            case BannerBlock.BANNER_LIFESTREET:
-                requestLifestreetFullscreen();
-                break;
-            default:
-                break;
+        try {
+            switch (type) {
+                case BannerBlock.BANNER_NONE:
+                    return;
+                case BannerBlock.BANNER_ADMOB:
+                    requestAdmobFullscreen();
+                    break;
+                case BannerBlock.BANNER_ADWIRED:
+                    requestAdwiredFullscreen();
+                    break;
+                case BannerBlock.BANNER_TOPFACE:
+                    requestTopfaceFullscreen();
+                    break;
+                case BannerBlock.BANNER_MOPUB:
+                    requestMopubFullscreen();
+                    break;
+                case BannerBlock.BANNER_IVENGO:
+                    requestIvengoFullscreen();
+                    break;
+                case BannerBlock.BANNER_LIFESTREET:
+                    requestLifestreetFullscreen();
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            Debug.error("Request fullscreen error", e);
         }
     }
 
