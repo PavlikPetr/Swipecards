@@ -136,32 +136,36 @@ public class FullscreenController {
 
     @SuppressWarnings("UnnecessaryReturnStatement")
     public void requestFullscreen(String type) {
-        switch (type) {
-            case BannerBlock.BANNER_NONE:
-                return;
-            case BannerBlock.BANNER_ADMOB_MEDIATION:
-                requestAdmobFullscreen(ADMOB_MEDIATION_INTERSTITIAL_ID);
-                break;
-            case BannerBlock.BANNER_ADMOB:
-                requestAdmobFullscreen(ADMOB_INTERSTITIAL_ID);
-                break;
-            case BannerBlock.BANNER_ADWIRED:
-                requestAdwiredFullscreen();
-                break;
-            case BannerBlock.BANNER_TOPFACE:
-                requestTopfaceFullscreen();
-                break;
-            case BannerBlock.BANNER_MOPUB:
-                requestMopubFullscreen();
-                break;
-            case BannerBlock.BANNER_IVENGO:
-                requestIvengoFullscreen();
-                break;
-            case BannerBlock.BANNER_LIFESTREET:
-                requestLifestreetFullscreen();
-                break;
-            default:
-                break;
+        try {
+            switch (type) {
+                case BannerBlock.BANNER_NONE:
+                    return;
+                case BannerBlock.BANNER_ADMOB_MEDIATION:
+                    requestAdmobFullscreen(ADMOB_MEDIATION_INTERSTITIAL_ID);
+                    break;
+                case BannerBlock.BANNER_ADMOB:
+                    requestAdmobFullscreen(ADMOB_INTERSTITIAL_ID);
+                    break;
+                case BannerBlock.BANNER_ADWIRED:
+                    requestAdwiredFullscreen();
+                    break;
+                case BannerBlock.BANNER_TOPFACE:
+                    requestTopfaceFullscreen();
+                    break;
+                case BannerBlock.BANNER_MOPUB:
+                    requestMopubFullscreen();
+                    break;
+                case BannerBlock.BANNER_IVENGO:
+                    requestIvengoFullscreen();
+                    break;
+                case BannerBlock.BANNER_LIFESTREET:
+                    requestLifestreetFullscreen();
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            Debug.error("Fullscreen request error", e);
         }
     }
 
