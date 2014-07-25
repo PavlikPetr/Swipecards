@@ -128,7 +128,7 @@ public class BonusFragment extends BaseFragment {
         return createButton(activity, style, offer.text, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfferwallsManager.startOfferwall(activity, offer.action);
+                OfferwallsManager.startOfferwall(activity, OfferwallsManager.TFOFFERWALL);
             }
         });
     }
