@@ -17,6 +17,8 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 
+import static com.topface.topface.ui.settings.FeedbackMessageFragment.FeedbackType.LOW_RATE_MESSAGE;
+
 /**
  * Created by kirussell on 25.12.13.
  * User can rate an app through this dialog
@@ -103,7 +105,7 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
             saveRatingPopupStatus(0);
             AbstractDialogFragment dialog = SendFeedbackDialog.newInstance(
                     R.string.feedback_popup_title,
-                    String.format(getResources().getString(R.string.settings_low_rate_internal), (int) rating)
+                    String.format(LOW_RATE_MESSAGE.getTitle(), (int) rating)
             );
             dialog.show(getActivity().getSupportFragmentManager(), SendFeedbackDialog.TAG);
             dismiss();

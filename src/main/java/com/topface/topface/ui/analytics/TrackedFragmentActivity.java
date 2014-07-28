@@ -34,6 +34,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
         builder.setCustomDimension(4, CacheProfile.emailConfirmed ? "Yes" : "No");
         builder.setCustomDimension(5, CacheProfile.premium ? "Yes" : "No");
         builder.setCustomDimension(6, Integer.toString(CacheProfile.age));
+        builder.set(EasyTracker.SESSION_CONTROL, "start");
         /**
          * Абстрактное поле для подсчета статистики экспериментов
          * Т.е. сервер может прислать любые данные для п
@@ -48,7 +49,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     @Override
     public void onStop() {
         super.onStop();
-//        EasyTracker.getInstance().activityStop(this);
+        EasyTracker.getTracker().send(new HitBuilders.AppViewBuilder().set(EasyTracker.SESSION_CONTROL, "end").build());
     }
 
     public boolean isTrackable() {

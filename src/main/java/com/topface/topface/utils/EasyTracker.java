@@ -9,6 +9,8 @@ import com.topface.topface.R;
 public class EasyTracker {
     private static Tracker mTracker;
 
+    public static String SESSION_CONTROL = "session_control";
+
     public static Tracker getTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(App.getContext());
@@ -16,6 +18,7 @@ public class EasyTracker {
         }
         return mTracker;
     }
+
 
     public static void sendEvent(String category, String action, String label, long value) {
         HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder();

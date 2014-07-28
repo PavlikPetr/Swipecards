@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 
 public class PopularUserDialog extends AbstractModalDialog {
