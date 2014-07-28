@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.NotificationStatistics;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
@@ -38,6 +39,7 @@ import java.util.LinkedList;
 public class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
 
     public static final String AUTH_TAG = "AUTH";
+    public static final String IGNORE_NOTIFICATION_INTENT = "IGNORE_NOTIFICATION_INTENT";
 
     private boolean mIndeterminateSupported = false;
 
@@ -124,27 +126,34 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
                 onLoadProfile();
             } else {
-                if (mProfileLoadReceiver == null) {
-                    mProfileLoadReceiver = new BroadcastReceiver() {
-                        @Override
-                        public void onReceive(Context context, Intent intent) {
-                            //Уведомлять о загрузке профиля следует только если мы авторизованы
-                            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
-                                checkProfileLoad();
-                            }
-                        }
-                    };
-                    LocalBroadcastManager.getInstance(this).registerReceiver(
-                            mProfileLoadReceiver,
-                            new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
-                    );
-                }
+                registerLoadProfileReceiver();
                 startAuth();
             }
+        } else {
+            registerLoadProfileReceiver();
+        }
+    }
+
+    private void registerLoadProfileReceiver() {
+        if (mProfileLoadReceiver == null) {
+            mProfileLoadReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    //Уведомлять о загрузке профиля следует только если мы авторизованы
+                    if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+                        checkProfileLoad();
+                    }
+                }
+            };
+            LocalBroadcastManager.getInstance(this).registerReceiver(
+                    mProfileLoadReceiver,
+                    new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
+            );
         }
     }
 
     protected void onLoadProfile() {
+        Debug.log("onLoadProfile in " + getClass().getSimpleName());
         AuthorizationManager.extendAccessToken(this);
         if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
             startAuth();
@@ -160,6 +169,19 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         registerReauthReceiver();
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+
+        /*
+        Sending notification open event to statistics. Only done once when activity started from notification.
+        Then IGNORE_NOTIFICATION_INTENT prevents from repeated sending.
+         */
+        Intent intent = getIntent();
+        if (!intent.getBooleanExtra(IGNORE_NOTIFICATION_INTENT, false) &&
+                intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
+            NotificationStatistics.sendOpened(intent.getIntExtra(GCMUtils.GCM_TYPE, -1),
+                    intent.getStringExtra(GCMUtils.GCM_LABEL));
+            intent.putExtra(IGNORE_NOTIFICATION_INTENT, true);
+            setIntent(intent);
+        }
     }
 
     private void registerReauthReceiver() {

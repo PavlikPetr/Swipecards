@@ -1,8 +1,10 @@
 package com.topface.topface.ui.dialogs;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +18,20 @@ import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.util.HashSet;
+
 /**
  * Extend this class if you need DialogFragment
  * with semi-transparent-black background
  * shifted under actionbar
+ * This class allows to show fragment with tag only in one instance at once
  */
 public abstract class AbstractDialogFragment extends TrackedDialogFragment {
 
     private boolean mNeedActionBarIndent = true;
     private int mActionBarSize;
+    private static HashSet<String> mShowingDialogs = new HashSet<>();
+    private String mTag;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,12 +62,23 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     @Override
     public void show(FragmentManager manager, String tag) {
         try {
-            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
-                super.show(manager, tag);
+            Fragment dialog = manager.findFragmentByTag(tag);
+            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty() && !mShowingDialogs.contains(tag) &&
+                    ((dialog != null && !dialog.isAdded()) || dialog == null)
+                    ) {
+                    mTag = tag;
+                    mShowingDialogs.add(tag);
+                    super.show(manager, tag);
             }
         } catch (Exception e) {
             Debug.error("AbstractDialogFragment " + tag + " show error: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mShowingDialogs.remove(mTag);
     }
 
     /**

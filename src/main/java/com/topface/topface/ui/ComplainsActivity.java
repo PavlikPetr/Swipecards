@@ -25,6 +25,11 @@ public class ComplainsActivity extends CheckAuthActivity {
     }
 
     @Override
+    protected String getFragmentTag() {
+        return ComplainsFragment.class.getSimpleName();
+    }
+
+    @Override
     protected Fragment createFragment() {
         return new ComplainsFragment();
     }

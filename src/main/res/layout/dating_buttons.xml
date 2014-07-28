@@ -15,7 +15,7 @@
         android:id="@+id/btnDatingProfile"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:text="@string/general_profile" />
 
     <RelativeLayout
@@ -25,7 +25,7 @@
         android:id="@+id/loDatingLove"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
-        android:layout_width="wrap_content">
+        android:layout_width="0dp">
 
         <Button
             style="@style/DatingButtonsText"
@@ -43,12 +43,13 @@
             android:drawableRight="@drawable/coins"
             android:id="@+id/tvDatingLovePrice"
             android:layout_alignBottom="@id/btnDatingAdmiration"
-            android:layout_alignRight="@id/btnDatingAdmiration"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="9sp"
+            android:layout_marginBottom="12sp"
             android:layout_width="wrap_content"
             android:text="@integer/love_dating_button"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="25dp" />
     </RelativeLayout>
 
     <Button
@@ -58,7 +59,7 @@
         android:id="@+id/btnDatingSympathy"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:text="@string/general_sympathy" />
 
     <Button
@@ -68,6 +69,6 @@
         android:id="@+id/btnDatingSkip"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:text="@string/dating_skip_button" />
 </LinearLayout>

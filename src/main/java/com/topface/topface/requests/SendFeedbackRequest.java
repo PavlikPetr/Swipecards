@@ -4,9 +4,11 @@ import android.content.Context;
 
 import com.topface.topface.ui.settings.FeedbackMessageFragment;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class SendFeedbackRequest extends ApiRequest {
@@ -17,15 +19,17 @@ public class SendFeedbackRequest extends ApiRequest {
     public String message;
     public List<String> extraEmails;
     public String email;
-    public String[] tags;
+    public String extra;
+    public List<String> tags;
 
     public SendFeedbackRequest(Context context, FeedbackMessageFragment.Report report) {
         super(context);
+        extra = report.getExtra();
         email = report.getEmail();
         subject = report.getSubject();
         message = report.getBody();
         extraEmails = report.getUserDeviceAccounts();
-        tags = new String[]{report.getType().getTag()};
+        tags = Arrays.asList(report.getType().getTag());
     }
 
     @Override
@@ -34,8 +38,9 @@ public class SendFeedbackRequest extends ApiRequest {
                 .put("email", email)
                 .put("subject", subject)
                 .put("message", message)
-                .put("extraEmails", extraEmails)
-                .put("tags", tags);
+                .put("extraEmails", new JSONArray(extraEmails))
+                .put("extra", extra)
+                .put("tags", new JSONArray(tags));
     }
 
     @Override

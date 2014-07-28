@@ -2,6 +2,7 @@ package com.topface.topface.utils.notifications;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,10 +15,12 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.utils.gcmutils.GCMUtils.User;
 import com.topface.topface.Static;
+import com.topface.topface.receivers.NotificationClosedReceiver;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.gcmutils.GCMUtils;
+import com.topface.topface.utils.gcmutils.GCMUtils.User;
 
 public class UserNotificationManager {
     public static final int NOTIFICATION_ID = 1312; //Completely random number
@@ -222,6 +225,14 @@ public class UserNotificationManager {
         notification.setOngoing(ongoing);
         notification.setMessages(messagesStack);
         notification.setIntent(intent);
+        /*
+        onDeleteIntent triggers when notification is deleted by user. We need it to gather
+        statistics about deleted notifications.
+         */
+        Intent onDeleteIntent = new Intent(NotificationClosedReceiver.NOTIFICATION_CLOSED);
+        onDeleteIntent.putExtra(GCMUtils.GCM_TYPE, intent.getIntExtra(GCMUtils.GCM_TYPE, -1));
+        onDeleteIntent.putExtra(GCMUtils.GCM_LABEL, intent.getStringExtra(GCMUtils.GCM_LABEL));
+        notification.setDeleteIntent(PendingIntent.getBroadcast(mContext, 0, onDeleteIntent, 0));
         try {
             mNotificationManager.notify(id, notification.generate(actions));
         } catch (Exception e) {

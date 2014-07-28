@@ -376,6 +376,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             }
         });
         builder.create().show();
+        ageIncorrect = nameIncorrect = false;
     }
 
     private SettingsRequest getSettigsRequest() {

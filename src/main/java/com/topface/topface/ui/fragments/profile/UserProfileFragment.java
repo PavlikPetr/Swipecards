@@ -118,7 +118,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (mBlocked != null) {
                             ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(value ? R.string.black_list_delete : R.string.black_list_add_short);
                             if (value) {
-                                ((User) profile).bookmarked = !value;
+                                ((User) profile).bookmarked = false;
                             }
                             switchBookmarkEnabled(!value);
                         }
@@ -131,9 +131,17 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             user.bookmarked = value;
                             mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                         }
-                        if (isAdded()) {
-                            getView().findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
-                            getView().findViewById(R.id.favIcon).setVisibility(View.VISIBLE);
+                        View root = getView();
+                        if (root != null) {
+                            //Они могут быть Null, т.к. находятся внутри ViewStub
+                            View favPrBar = root.findViewById(R.id.favPrBar);
+                            if (favPrBar != null) {
+                                favPrBar.setVisibility(View.INVISIBLE);
+                            }
+                            View favIcon = root.findViewById(R.id.favIcon);
+                            if (favIcon != null) {
+                                favIcon.setVisibility(View.VISIBLE);
+                            }
                         }
                         break;
                 }
@@ -233,7 +241,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 disableSympathyDelight();
             }
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
-            switchBookmarkEnabled(!((Profile)user).inBlackList);
+            switchBookmarkEnabled(!user.inBlackList);
         }
     }
 
@@ -556,7 +564,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     openChat();
                 } else {
                     String callingClass = getCallingClassName();
-                    if (callingClass != null && profile != null && (profile instanceof User)) {
+                    if (callingClass != null && (profile instanceof User)) {
                         if (callingClass.equals(DatingFragment.class.getName()) || callingClass.equals(LeadersDialog.class.getName())) {
                             if (!((User) profile).mutual) {
                                 startActivityForResult(
@@ -573,7 +581,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             case R.id.add_to_black_list_action:
                 if (CacheProfile.premium) {
                     if (profile.uid > 0) {
-                        final TextView textView = (TextView) v.findViewById(R.id.block_action_text);
                         final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
                         final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
 

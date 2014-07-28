@@ -1,6 +1,10 @@
 package com.topface.topface.utils.controllers;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,19 +12,20 @@ import android.view.ViewStub;
 import android.widget.TextView;
 
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.History;
-import com.topface.topface.data.Options;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
+
+import java.lang.ref.WeakReference;
 
 /**
  * This controller blocks messages from popular users.
  */
-public class PopularUserChatController {
+public class PopularUserChatController extends BroadcastReceiver {
 
     public static final int NO_BLOCK = -1;
     public static final int FIRST_STAGE = 35;
@@ -30,67 +35,129 @@ public class PopularUserChatController {
 
     private View mPopularChatBlocker;
     private PopularUserDialog mPopularMessageBlocker;
-    private String mMaleLockText;
-    private String mFemaleLockText;
-    private boolean isInExperement57_2;
+    private String mBlockText;
+    private String mDialogTitle;
     private ChatFragment mChatFragment;
-    private ViewGroup mLockScreen;
-    private String mUserName;
-    private int mUserSex;
+    private WeakReference<ViewGroup> mLockScreenRef;
+    private boolean mOff;
 
-    public PopularUserChatController(ChatFragment chatFragment, ViewGroup lockScreen, String userName, int userSex) {
-        mChatFragment = chatFragment;
-        mLockScreen = lockScreen;
-        mUserName = userName;
-        mUserSex = userSex;
-        Options options = CacheProfile.getOptions();
-        isInExperement57_2 = options.popularUserLock != null;
-        if (isInExperement57_2) {
-            mMaleLockText = options.popularUserLock.maleLockText;
-            mFemaleLockText = options.popularUserLock.femaleLockText;
+    public static class SavedState implements Parcelable {
+
+        public int stage;
+        public String dialogTitle;
+        public String blockText;
+        public boolean off;
+
+        public static final Parcelable.Creator<SavedState> CREATOR
+                = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+
+        private SavedState() {
         }
+
+        private SavedState(Parcel in) {
+            stage = in.readInt();
+            dialogTitle = in.readString();
+            blockText = in.readString();
+            off = in.readByte() == 1;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(stage);
+            dest.writeString(dialogTitle);
+            dest.writeString(blockText);
+            dest.writeByte((byte) (off ? 1 : 0));
+        }
+    }
+
+    public PopularUserChatController(ChatFragment chatFragment, ViewGroup lockScreen) {
+        mChatFragment = chatFragment;
+        mLockScreenRef = new WeakReference<ViewGroup>(lockScreen);
+    }
+
+    public void setTexts(String dialogTitle, String blockText) {
+        mBlockText = blockText;
+        mDialogTitle = dialogTitle;
+    }
+
+    public void setLockScreen(ViewGroup lockScreen) {
+        mLockScreenRef = new WeakReference<ViewGroup>(lockScreen);
+        if (isChatLocked()) {
+            blockChat();
+        }
+    }
+
+    public SavedState getSavedState() {
+        SavedState ss = new SavedState();
+        ss.stage = mStage;
+        ss.dialogTitle = mDialogTitle;
+        ss.blockText = mBlockText;
+        ss.off = mOff;
+        return ss;
     }
 
     public boolean isAccessAllowed() {
-        return CacheProfile.premium || !isInExperement57_2;
+        return CacheProfile.premium || mBlockText == null || mBlockText.equals("") || mOff;
     }
 
     public boolean checkChatBlock(History message) {
-        return (mStage = message.type) == FIRST_STAGE;
+        return message.type == FIRST_STAGE;
     }
 
     public boolean checkMessageBlock(History message) {
-        return (mStage = message.type) == SECOND_STAGE;
+        return message.type == SECOND_STAGE;
     }
 
-    public boolean block(History message) {
+    public int block(History message) {
+        mStage = NO_BLOCK;
         if (!isAccessAllowed()) {
             if (checkChatBlock(message)) {
+                mStage = FIRST_STAGE;
                 blockChat();
-                return true;
             } else if (checkMessageBlock(message)) {
+                mStage = SECOND_STAGE;
                 initBlockDialog();
-                return false;
             }
-        } else if (mPopularChatBlocker != null && mPopularChatBlocker.getVisibility() == View.VISIBLE) {
-            mPopularChatBlocker.setVisibility(View.GONE);
-            mLockScreen.setVisibility(View.GONE);
         }
-        return false;
+        return mStage;
+    }
+
+    public void unlockChat() {
+        if (mPopularChatBlocker != null && mPopularChatBlocker.getVisibility() == View.VISIBLE) {
+            mPopularChatBlocker.setVisibility(View.GONE);
+            ViewGroup lockScreen = mLockScreenRef.get();
+            if (lockScreen != null) {
+                lockScreen.setVisibility(View.GONE);
+            }
+        }
     }
 
     public void blockChat() {
-        ViewStub stub = (ViewStub) mLockScreen.findViewById(R.id.famousBlockerStub);
-        for (int i = 0; i < mLockScreen.getChildCount(); i++) {
-            View v = mLockScreen.getChildAt(i);
-            if (v != mPopularChatBlocker) {
-                mLockScreen.getChildAt(i).setVisibility(View.GONE);
-            }
+        if (isAccessAllowed()) {
+            return;
         }
-        if (mPopularChatBlocker == null) {
+        ViewGroup lockScreen = mLockScreenRef.get();
+        for (int i = 0; i < lockScreen.getChildCount(); i++) {
+            lockScreen.getChildAt(i).setVisibility(View.GONE);
+        }
+        ViewStub stub = (ViewStub) lockScreen.findViewById(R.id.famousBlockerStub);
+        if (stub != null) {
             mPopularChatBlocker = stub.inflate();
             TextView lockText = (TextView) mPopularChatBlocker.findViewById(R.id.popular_user_lock_text);
-            lockText.setText(mUserName + " " + (mUserSex == Static.BOY ? mMaleLockText : mFemaleLockText));
+            lockText.setText(mBlockText);
             mPopularChatBlocker.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -98,33 +165,33 @@ public class PopularUserChatController {
                         case R.id.btnBuyVip:
                             EasyTracker.sendEvent(mChatFragment.getTrackName(), "BuyVipStatus", "", 1L);
                             Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
-                            mChatFragment.startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
+                            mChatFragment.startActivity(intent);
                             break;
                     }
                 }
             });
-        } else {
-            if (mLockScreen != mPopularChatBlocker.getParent()) {
-                mLockScreen.addView(mPopularChatBlocker);
-            }
+            lockScreen.requestLayout();
+            lockScreen.invalidate();
         }
-        mLockScreen.requestLayout();
-        mLockScreen.invalidate();
-        mLockScreen.setVisibility(View.VISIBLE);
+        mPopularChatBlocker.setVisibility(View.VISIBLE);
+        lockScreen.setVisibility(View.VISIBLE);
     }
 
-    public void releaseLock() {
-        mLockScreen.removeView(mPopularChatBlocker);
+    public void setState(SavedState ss) {
+        mStage = ss.stage;
+        mDialogTitle = ss.dialogTitle;
+        mBlockText = ss.blockText;
+        mOff = ss.off;
     }
 
     public void initBlockDialog() {
         if (mPopularMessageBlocker == null) {
-            mPopularMessageBlocker = new PopularUserDialog(mUserName, mUserSex);
+            mPopularMessageBlocker = new PopularUserDialog(mDialogTitle, mBlockText);
         }
     }
 
     public boolean showBlockDialog() {
-        if (mStage != NO_BLOCK) {
+        if (!isAccessAllowed() && mStage != NO_BLOCK) {
             if (mPopularMessageBlocker == null) {
                 initBlockDialog();
             }
@@ -142,11 +209,27 @@ public class PopularUserChatController {
     }
 
     public boolean isChatLocked() {
-        return mStage == FIRST_STAGE;
+        return !isAccessAllowed() && mStage == FIRST_STAGE;
+    }
+
+    public boolean isResponseLocked() {
+        return !isAccessAllowed() && mStage == SECOND_STAGE;
     }
 
     public void reset() {
         mStage = NO_BLOCK;
+        mDialogTitle = null;
+        mBlockText = null;
+        mOff = true;
     }
 
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (intent.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false)) {
+            if (isChatLocked()) {
+                unlockChat();
+            }
+            reset();
+        }
+    }
 }

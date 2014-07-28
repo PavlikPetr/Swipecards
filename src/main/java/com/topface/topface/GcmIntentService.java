@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.NotificationStatistics;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.gcmutils.GcmBroadcastReceiver;
@@ -34,6 +35,9 @@ public class GcmIntentService extends IntentService {
                 //Сообщаем о том что есть новое уведомление и нужно обновить список
                 Intent broadcastReceiver = new Intent(GCMUtils.GCM_NOTIFICATION);
                 String user = intent.getStringExtra("user");
+
+                int type = GCMUtils.getType(intent);
+                NotificationStatistics.sendReceived(type, GCMUtils.getLabel(intent));
 
                 if (user != null) {
                     String userId = getUserId(user);

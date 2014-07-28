@@ -827,6 +827,7 @@
         <item quantity="other">и еще %d</item>
     </plurals>
     <string name="subscription">Подписка</string>
+    <string name="autorefill">Автопополнение</string>
     <string name="coins">Монеты</string>
     <string name="you_were_subscribed">Подписка оформлена</string>
     <string name="subscriptions_can_be_changed">Подписка оформлена. Изменить условия подписки можно в Google Play</string>

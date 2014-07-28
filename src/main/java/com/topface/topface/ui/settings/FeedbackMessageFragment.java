@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendFeedbackRequest;
@@ -29,6 +30,7 @@ import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.utils.ClientUtils;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.social.AuthToken;
 
 import java.util.List;
 import java.util.Locale;
@@ -275,13 +277,13 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     }
 
     public enum FeedbackType {
-        UNKNOWN("none"),
-        ERROR_MESSAGE("error"),
-        DEVELOPERS_MESSAGE("question"),
-        PAYMENT_MESSAGE("payment_issue"),
-        COOPERATION_MESSAGE("cooperation"),
-        BAN("ban"),
-        LOW_RATE_MESSAGE("low_rate");
+        UNKNOWN("mobile_none"),
+        ERROR_MESSAGE("mobile_error"),
+        DEVELOPERS_MESSAGE("mobile_question"),
+        PAYMENT_MESSAGE("mobile_payment_issue"),
+        COOPERATION_MESSAGE("mobile_cooperation"),
+        BAN("mobile_ban"),
+        LOW_RATE_MESSAGE("mobile_low_rate");
 
         private final String mTypeTag;
 
@@ -301,11 +303,17 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         String body = Static.EMPTY;
         String topface_version = "unknown";
         int topface_versionCode = 0;
+        String android_SDK = "API " + android.os.Build.VERSION.SDK_INT;
+        String android_RELEASE = android.os.Build.VERSION.RELEASE;
+        String android_CODENAME = android.os.Build.VERSION.CODENAME;
+        String device = android.os.Build.DEVICE;
+        String model = android.os.Build.MODEL;
         String transactionId = null;
         FeedbackType type;
 
+        private AuthToken authToken = AuthToken.getInstance();
+
         public Report() {
-            userDeviceAccounts = ClientUtils.getClientAccounts();
         }
 
         public Report(FeedbackType type) {
@@ -317,7 +325,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         }
 
         public String getSubject() {
-            return subject;
+            return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserSocialId() + "}";
         }
 
         public void setSubject(String subject) {
@@ -332,7 +340,46 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
             this.body = body;
         }
 
+        public String getExtra() {
+            StringBuilder strBuilder = new StringBuilder();
+
+            strBuilder.append("<p>Email for answer: ").append(email).append(";</p>\n");
+            strBuilder.append("<p>Device accounts: ");
+            strBuilder.append(TextUtils.join(", ", getUserDeviceAccounts()));
+            strBuilder.append(";</p>\n");
+            strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode)
+                    .append(";</p>\n");
+            strBuilder.append("<p>Device: ").append(device).append("/").append(model).append(";</p>\n");
+            strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append(";</p>\n");
+
+            strBuilder.append("<p>Topface SSID: ").append(Ssid.get()).append(";</p>\n");
+            strBuilder.append("<p>Social net: ").append(authToken.getSocialNet()).append(";</p>\n");
+            if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+                strBuilder.append("<p>Topface login: ").append(authToken.getLogin()).append(";</p>\n");
+            } else {
+                strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append(";</p>\n");
+            }
+
+            strBuilder.append("<p>Social id: ").append(authToken.getUserSocialId()).append(";</p>\n");
+
+            strBuilder.append("<p>Android version: ").append(android_CODENAME).append("/");
+            strBuilder.append(android_RELEASE).append("/").append(android_SDK).append(";</p>\n");
+
+            strBuilder.append("<p>Build type: ")
+                    .append(BuildConfig.BILLING_TYPE.getClientType())
+                    .append(android_SDK)
+                    .append(";</p>\n");
+            if (transactionId != null) {
+                strBuilder.append("<p>Transaction Id: ").append(transactionId).append(";</p>\n");
+            }
+
+            return strBuilder.toString();
+        }
+
         public List<String> getUserDeviceAccounts() {
+            if (userDeviceAccounts == null) {
+                userDeviceAccounts = ClientUtils.getClientAccounts();
+            }
             return userDeviceAccounts;
         }
 

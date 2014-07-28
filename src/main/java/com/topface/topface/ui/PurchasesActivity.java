@@ -48,6 +48,11 @@ public class PurchasesActivity extends CheckAuthActivity {
     }
 
     @Override
+    protected String getFragmentTag() {
+        return PurchasesFragment.class.getSimpleName();
+    }
+
+    @Override
     protected Fragment createFragment() {
         return new PurchasesFragment();
     }
