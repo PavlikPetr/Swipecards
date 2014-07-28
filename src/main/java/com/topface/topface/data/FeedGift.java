@@ -35,7 +35,7 @@ public class FeedGift extends FeedItem implements Parcelable {
 
     public FeedGift(Parcel in) {
         super(in);
-        gift = in.readParcelable(getClass().getClassLoader());
+        gift = (Gift) in.readParcelable(((Object) this).getClass().getClassLoader());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class FeedGift extends FeedItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeParcelable(gift, 0);
+        dest.writeParcelable(gift, flags);
     }
 
 }

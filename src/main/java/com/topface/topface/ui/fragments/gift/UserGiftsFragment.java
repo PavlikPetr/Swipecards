@@ -38,7 +38,7 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
 
     @Override
     protected void initViews() {
-        if (mGridAdapter.getData().size() < getMinItemsCount()) {
+        if (mGridAdapter.getData().size() == getMinItemsCount()) {
             mTitle.setText(R.string.user_does_not_have_gifts);
             mTitle.setVisibility(View.VISIBLE);
         }
