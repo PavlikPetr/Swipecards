@@ -28,7 +28,7 @@ import java.util.List;
 public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragment {
 
     private static final String DATA = "data";
-    private static final String POSOTION = "position";
+    private static final String POSITION = "position";
 
     protected TextView mTitle;
     protected View mGroupInfo;
@@ -115,7 +115,7 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(DATA, mGridAdapter.getData());
-        outState.putInt(POSOTION, mGridView.getFirstVisiblePosition());
+        outState.putInt(POSITION, mGridView.getFirstVisiblePosition());
     }
 
     protected void restoreInstanceState(Bundle savedState) {
@@ -128,7 +128,7 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         postGiftsLoadInfoUpdate(null);
         mGridAdapter.notifyDataSetChanged();
         initViews();
-        mGridView.setSelection(savedState.getInt(POSOTION, 0));
+        mGridView.setSelection(savedState.getInt(POSITION, 0));
     }
 
     public void setGifts(final T gifts) {
