@@ -382,7 +382,7 @@
             android:targetActivity=".ui.NavigationActivity"/>
 
         <!-- Topface offerwall -->
-        <activity android:name="com.topface.offerwall.TFOfferwallActivity"
+        <activity android:name="com.topface.general.TFOfferwallActivity"
             />
 
         <!-- services -->
