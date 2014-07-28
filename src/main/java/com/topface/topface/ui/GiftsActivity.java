@@ -61,7 +61,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         mNeedToSendGift = getIntent().getBooleanExtra(INTENT_SEND_GIFT, true);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (fragment == null || !(fragment.getClass().equals(PlainGiftsFragment.class))) {
+        if (fragment == null || !(((Object) fragment).getClass().equals(PlainGiftsFragment.class))) {
             mGiftFragment = new PlainGiftsFragment();
             transaction.add(R.id.giftGrid, mGiftFragment);
         } else {

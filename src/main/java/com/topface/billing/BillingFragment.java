@@ -16,8 +16,12 @@ import com.topface.topface.utils.Utils;
  */
 abstract public class BillingFragment extends BaseFragment implements BillingListener, BillingSupportListener {
 
+    private static final String IS_EDITOR = "IS_EDITOR";
+    private static final String IS_TEST_PURCHASES_ENABLED = "IS_TEST_PURCHASES_ENABLED";
+
     public static final String ARG_TAG_SOURCE = "from_value";
     private BillingDriver mBillingDriver;
+    private boolean mIsTestPurchasesEnabled;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,10 +32,18 @@ abstract public class BillingFragment extends BaseFragment implements BillingLis
     protected abstract BillingDriver getBillingDriver();
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         //После того как View создано проверяем, нужно ли показывать переключатель тестовых покупок
-        if (mBillingDriver.isTestPurchasesAvailable()) {
+
+        boolean isEditor = false;
+        boolean isTestPurchases = false;
+        if (savedInstanceState != null) {
+            isEditor = savedInstanceState.getBoolean(IS_EDITOR, false);
+            isTestPurchases = savedInstanceState.getBoolean(IS_TEST_PURCHASES_ENABLED, false);
+        }
+
+        if (mBillingDriver.isTestPurchasesAvailable() || isEditor) {
             ViewStub stub = (ViewStub) getView().findViewById(R.id.EditorTestStub);
             if (stub != null) {
                 View layout = stub.inflate();
@@ -41,7 +53,10 @@ abstract public class BillingFragment extends BaseFragment implements BillingLis
                         getResources().getString(R.string.editor_test_buy)
                 );
                 //Выставляем значение по умолчанию
-                checkBox.setChecked(mBillingDriver.isTestPurchasesEnabled());
+                if (isTestPurchases) {
+                    BillingDriver.setTestPaymentsState(true);
+                }
+                checkBox.setChecked(mBillingDriver.isTestPurchasesEnabled() || isTestPurchases);
 
                 layout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -49,10 +64,18 @@ abstract public class BillingFragment extends BaseFragment implements BillingLis
                         BillingDriver.setTestPaymentsState(
                                 checkBox.doSwitch()
                         );
+                        mIsTestPurchasesEnabled = checkBox.isChecked();
                     }
                 });
             }
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_EDITOR, mBillingDriver.isTestPurchasesAvailable());
+        outState.putBoolean(IS_TEST_PURCHASES_ENABLED, mIsTestPurchasesEnabled);
     }
 
     @Override

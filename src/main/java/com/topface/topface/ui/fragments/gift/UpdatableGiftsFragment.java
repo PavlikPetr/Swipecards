@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.gift;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -16,8 +15,6 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 
-import java.util.ArrayList;
-
 /**
  * Fragment displaying updatable gifts feed
  */
@@ -25,7 +22,6 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
 
     private static final int GIFTS_LOAD_COUNT = 30;
     private static final String PROFILE_ID = "profile_id";
-    private static final String DATA = "data";
 
     private int mProfileId;
     private boolean mIsUpdating = false;
@@ -58,30 +54,17 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mGridAdapter != null) {
-            FeedList<FeedGift> data = mGridAdapter.getData();
-            outState.putParcelableArray(DATA, data.toArray(new FeedGift[data.size()]));
             outState.putInt(PROFILE_ID, mProfileId);
         }
        
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (savedInstanceState != null) {
-            Parcelable[] gfts = savedInstanceState.getParcelableArray(DATA);
-            ArrayList<FeedGift> g = new ArrayList<>(gfts.length);
-            for (Parcelable p : gfts) {
-                g.add((FeedGift) p);
-            }
-            mGridAdapter.setData(g, false);
-            postGiftsLoadInfoUpdate(null);
-            mGridAdapter.notifyDataSetChanged();
-            initViews();
-
-            if (!mIsUpdating) {
-                onNewFeeds(savedInstanceState.getInt(PROFILE_ID));
-            }
+    protected void restoreInstanceState(Bundle savedState) {
+        super.restoreInstanceState(savedState);
+        mProfileId = savedState.getInt(PROFILE_ID);
+        if (!mIsUpdating) {
+            onNewFeeds(mProfileId);
         }
     }
 
@@ -135,6 +118,7 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
                 if (!gifts.items.isEmpty()) {
                     mGroupInfo.setVisibility(View.GONE);
                     mTextInfo.setVisibility(View.GONE);
+                    mTitle.setVisibility(View.GONE);
                 }
                 if (gifts.more) {
                     data.add(new FeedGift(IListLoader.ItemType.LOADER));
