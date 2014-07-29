@@ -53,7 +53,7 @@ public class OfferwallsManager {
     public static final String RANDOM = "RANDOM";
     public static final String GETJAR = "GETJAR";
     public static final String SUPERSONIC = "SUPERSONIC";
-    public static final String TFOFFERWALL = "TFOFFERWALL";
+    public static final String TFOFFERWALL = "TOPFACE";
     @SuppressWarnings("UnusedDeclaration")
     public final static String[] OFFERWALLS = new String[]{
             TAPJOY,
