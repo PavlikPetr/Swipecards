@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -28,13 +27,14 @@ import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
 import com.topface.framework.utils.Debug;
+import com.topface.offer.TFOfferSDK;
+import com.topface.offerwall.TFOfferwallSDK;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ValidateGetJarRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
 import com.topface.topface.utils.offerwalls.supersonicads.SupersonicWallActivity;
 
 import org.json.JSONObject;
@@ -53,6 +53,7 @@ public class OfferwallsManager {
     public static final String RANDOM = "RANDOM";
     public static final String GETJAR = "GETJAR";
     public static final String SUPERSONIC = "SUPERSONIC";
+    public static final String TFOFFERWALL = "TOPFACE";
     @SuppressWarnings("UnusedDeclaration")
     public final static String[] OFFERWALLS = new String[]{
             TAPJOY,
@@ -60,6 +61,7 @@ public class OfferwallsManager {
             CLICKKY,
             GETJAR,
             SUPERSONIC,
+            TFOFFERWALL,
             RANDOM
     };
 
@@ -88,9 +90,13 @@ public class OfferwallsManager {
                 case GETJAR:
                     initGetJar(context);
                     break;
+                case TFOFFERWALL:
+                    initTfOfferwall(context);
             }
         }
     }
+
+
 
     public static void startOfferwall(Activity activity) {
         startOfferwall(activity, getOfferWallType());
@@ -111,20 +117,14 @@ public class OfferwallsManager {
             case SPONSORPAY:
                 startSponsorpay(activity);
                 break;
-            case CLICKKY:
-                //clickky работает только на Android >= 2.2
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ECLAIR_MR1) {
-                    startClickky(activity);
-                } else {
-                    //Если юзер использует более старую версию, то стартуем оффервол по умолчанию
-                    startDefault(activity);
-                }
-                break;
             case GETJAR:
                 startGetJar(activity);
                 break;
             case SUPERSONIC:
                 startSupersonic(activity);
+                break;
+            case TFOFFERWALL:
+                startTfOfferwall(activity);
                 break;
             case RANDOM:
                 startRandomOfferwall(activity);
@@ -152,8 +152,7 @@ public class OfferwallsManager {
                 startSponsorpay(activity);
                 break;
             case 2:
-                startClickky(activity);
-                break;
+                startTfOfferwall(activity);
             default:
                 startDefault(activity);
                 break;
@@ -211,16 +210,14 @@ public class OfferwallsManager {
         }
     }
 
-    /**
-     * Clickky
-     */
-    public static void startClickky(Activity activity) {
-        try {
-            Intent offerWallIntent = new Intent(activity, ClickkyActivity.class);
-            activity.startActivity(offerWallIntent);
-        } catch (Exception e) {
-            Debug.error(e);
-        }
+    private static void initTfOfferwall(Context context) {
+        TFOfferSDK.initialize(context);
+    }
+
+    public static void startTfOfferwall(Context context) {
+        TFOfferwallSDK.initialize(context, Integer.toString(CacheProfile.uid), "53c7c07b1937c");
+        TFOfferwallSDK.setTarget(new TFOfferwallSDK.Target().setAge(CacheProfile.age).setSex(CacheProfile.sex));
+        TFOfferwallSDK.showOffers(context, true, context.getResources().getString(R.string.general_bonus));
     }
 
     /**

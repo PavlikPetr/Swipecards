@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
@@ -95,7 +95,7 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.showAd = resp.optBoolean("showAd", true);
                 profile.canInvite = resp.optBoolean("canInvite");
 
-                GCMUtils.init(resp.optString("notificationToken"), App.getContext());
+                new GCMUtils(App.getContext()).registerGCM(resp.optString("notificationToken"));
             }
 
             profile.setEditor(resp.optBoolean("editor", false));

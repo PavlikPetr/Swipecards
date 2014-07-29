@@ -3,17 +3,15 @@ package com.topface.topface.ui.fragments.buy;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.topface.billing.BillingDriver;
-import com.topface.billing.PaymentwallBillingDriver;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.utils.CacheProfile;
 
-public class VipPWBuyFragment extends VipBuyFragment {
+public class VipPaymentWallBuyFragment extends VipBuyFragment {
 
-    public static VipPWBuyFragment newInstance(boolean needActionBar, String from, PaymentWallProducts.TYPE type) {
-        VipPWBuyFragment fragment = new VipPWBuyFragment();
+    public static VipPaymentWallBuyFragment newInstance(boolean needActionBar, String from, PaymentWallProducts.TYPE type) {
+        VipPaymentWallBuyFragment fragment = new VipPaymentWallBuyFragment();
         Bundle args = new Bundle();
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
         args.putInt(PaymentWallBuyingFragment.PAGE_TYPE, type.ordinal());
@@ -32,11 +30,6 @@ public class VipPWBuyFragment extends VipBuyFragment {
     }
 
     @Override
-    protected BillingDriver getBillingDriver() {
-        return new PaymentwallBillingDriver(getActivity(), this);
-    }
-
-    @Override
     protected void buy(String id, Products.BuyButton btn) {
         FragmentActivity activity = getActivity();
         if (activity != null) {
@@ -48,5 +41,10 @@ public class VipPWBuyFragment extends VipBuyFragment {
                     PaymentwallActivity.ACTION_BUY
             );
         }
+    }
+
+    @Override
+    public boolean isTestPurchasesAvailable() {
+        return false;
     }
 }

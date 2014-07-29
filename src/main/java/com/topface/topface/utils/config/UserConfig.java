@@ -32,6 +32,8 @@ public class UserConfig extends AbstractUniqueConfig {
     private static final String DATA_BONUS_LAST_SHOW_TIME = "data_bonus_last_show_time";
     public static final String NOTIFICATIONS_MESSAGES_STACK = "notifications_messages_stack";
     public static final String NOTIFICATION_REST_MESSAGES = "notifications_rest_messages";
+    private static final String GCM_REG_ID = "gcm_reg_id";
+    private static final String LAST_APP_VERSION = "last_app_version";
 
     public UserConfig(Context context) {
         super(context);
@@ -71,6 +73,10 @@ public class UserConfig extends AbstractUniqueConfig {
         addField(settingsMap, NOTIFICATION_REST_MESSAGES, 0);
         // время последнего сброса счетчика вкладки бонусов
         addField(settingsMap, DATA_BONUS_LAST_SHOW_TIME, 0L);
+        //GCM registration id
+        addField(settingsMap, GCM_REG_ID, Static.EMPTY);
+        //Last app version
+        addField(settingsMap, LAST_APP_VERSION, 0);
     }
 
     @Override
@@ -290,6 +296,32 @@ public class UserConfig extends AbstractUniqueConfig {
     public void resetNotificationMessagesStack() {
         resetAndSaveConfig(NOTIFICATIONS_MESSAGES_STACK);
         resetAndSaveConfig(NOTIFICATION_REST_MESSAGES);
+    }
+
+    /**
+     * Sets GCM registration id
+     *
+     * @param regId
+     */
+    public void setGcmRegId(String regId) {
+        setField(getSettingsMap(), GCM_REG_ID, regId);
+    }
+
+    /**
+     * GCM registration id
+     *
+     * @return gsm registration id
+     */
+    public String getGcmRegId() {
+        return getStringField(getSettingsMap(), GCM_REG_ID);
+    }
+
+    public int getLastAppVersion() {
+        return getIntegerField(getSettingsMap(), LAST_APP_VERSION);
+    }
+
+    public void setLastAppVersion(int version) {
+        setField(getSettingsMap(), LAST_APP_VERSION, version);
     }
 
     // =====================================================

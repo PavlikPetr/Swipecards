@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
-import com.topface.topface.GCMUtils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Profile;

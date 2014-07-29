@@ -46,9 +46,9 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.GMSUtils;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
@@ -83,6 +83,9 @@ public class App extends Application {
     private static Configurations mBaseConfig;
     private static AppOptions mAppOptions;
 
+    private static Boolean mIsGmsSupported;
+
+
     /**
      * Множественный запрос Options и профиля
      */
@@ -97,20 +100,28 @@ public class App extends Application {
     }
 
     private static ApiRequest getPaymentwallProductsRequest() {
-        return new PaymentwallProductsRequest(App.getContext()).callback(new ApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                //При создании нового объекта продуктов, все данные о них записываются в кэш,
-                //поэтому здесь просто создаются два объекта продуктов.
-                new PaymentWallProducts(response, PaymentWallProducts.TYPE.DIRECT);
-                new PaymentWallProducts(response, PaymentWallProducts.TYPE.MOBILE);
-            }
+        switch (BuildConfig.BILLING_TYPE) {
+            //Для амазона и nokia Paymentwall не должен включаться
+            case NOKIA_STORE:
+            case AMAZON:
+                return null;
+            case GOOGLE_PLAY:
+            default:
+                return new PaymentwallProductsRequest(App.getContext()).callback(new ApiHandler() {
+                    @Override
+                    public void success(IApiResponse response) {
+                        //При создании нового объекта продуктов, все данные о них записываются в кэш,
+                        //поэтому здесь просто создаются два объекта продуктов.
+                        new PaymentWallProducts(response, PaymentWallProducts.TYPE.DIRECT);
+                        new PaymentWallProducts(response, PaymentWallProducts.TYPE.MOBILE);
+                    }
 
-            @Override
-            public void fail(int codeError, IApiResponse response) {
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
 
-            }
-        });
+                    }
+                });
+        }
     }
 
     /**
@@ -316,7 +327,7 @@ public class App extends Application {
         // Инициализируем общие срезы для статистики
         StatisticsTracker.getInstance().setContext(mContext)
                 .putPredefinedSlice("app", BuildConfig.STATISTICS_APP)
-                .putPredefinedSlice("cvn", Utils.getClientVersion());
+                .putPredefinedSlice("cvn", BuildConfig.VERSION_NAME);
         if (BuildConfig.DEBUG) {
             StatisticsTracker.getInstance().setLogger(new ILogger() {
                 public void log(String msg) {
@@ -328,6 +339,8 @@ public class App extends Application {
         ImageLoaderStaticFactory.setExtendedImageLoader(ExtendedImageLoader.getInstance());
         // Settings common image to display error
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
+
+        mIsGmsSupported = GMSUtils.checkPlayServices(getContext());
 
         sendAppOptionsRequest();
 
@@ -354,7 +367,7 @@ public class App extends Application {
         CacheProfile.loadProfile();
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-        if (!GCMIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
+        if (!GcmIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -439,6 +452,13 @@ public class App extends Application {
         }
     }
 
+    public static boolean isGmsEnabled() {
+        if (mIsGmsSupported == null) {
+            mIsGmsSupported = GMSUtils.checkPlayServices(getContext());
+        }
+        return mIsGmsSupported;
+    }
+
     @Override
     public void onTerminate() {
         super.onTerminate();
@@ -447,5 +467,7 @@ public class App extends Application {
             unregisterReceiver(mConnectionReceiver);
         }
     }
+
+
 }
 

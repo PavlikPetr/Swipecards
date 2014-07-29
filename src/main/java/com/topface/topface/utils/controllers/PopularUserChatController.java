@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.ui.PurchasesActivity;
@@ -19,6 +18,7 @@ import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.EasyTracker;
 
 import java.lang.ref.WeakReference;
 
@@ -163,7 +163,7 @@ public class PopularUserChatController extends BroadcastReceiver {
                 public void onClick(View v) {
                     switch (v.getId()) {
                         case R.id.btnBuyVip:
-                            EasyTracker.getTracker().sendEvent("Chat", "BuyVipStatus", "", 1L);
+                            EasyTracker.sendEvent(mChatFragment.getTrackName(), "BuyVipStatus", "", 1L);
                             Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
                             mChatFragment.startActivity(intent);
                             break;

@@ -18,7 +18,6 @@ import com.facebook.topface.DialogError;
 import com.facebook.topface.Facebook;
 import com.facebook.topface.Facebook.DialogListener;
 import com.facebook.topface.FacebookError;
-import com.google.android.gcm.GCMRegistrar;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -34,6 +33,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.controllers.StartActionsController;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONArray;
@@ -411,7 +411,7 @@ public class AuthorizationManager {
 
 
     public static void logout(Activity activity) {
-        GCMRegistrar.unregister(activity);
+        new GCMUtils(activity).unregister();
         Ssid.remove();
         AuthToken authToken = AuthToken.getInstance();
         if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
