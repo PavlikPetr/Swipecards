@@ -19,7 +19,6 @@
     <string name="general_server_error">Chyba, skúste to neskôr</string>
     <string name="general_data_error">Chyba. Skúste ešte raz</string>
     <string name="general_internet_off">Nie je pripojenie k internetu</string>
-    <string name="general_purchasing_error">Prosím, napíšte správu o chybnom nákupe na support@topface.ru</string>
     <string name="general_msg_copied">Text je skopírovaný</string>
     <string name="general_spinner_title">Vyberte činnosť</string>
     <string name="general_profile_error">Chyba pri načítaní profilu</string>
@@ -219,7 +218,6 @@
     <string name="dating_search_empty_title">Bohužiaľ, nič nebolo nájdené</string>
     <string name="dating_search_empty_text">Môžete zadať nové vyhľadávanie alebo zmeniť nastavenia filtra.</string>
     <string name="general_close">Zatvoriť</string>
-    <string name="vip_not_activated">Váš VIP status nie je aktivovaný</string>
     <string name="vip_privileges">VIP privilégiá</string>
     <string name="vip_text_visitors">Zistite, kto sa o Vás zaujíma - prezrite si svojich návštevníkov!</string>
     <string name="vip_rest">Ste prihlásení na odber VIP</string>

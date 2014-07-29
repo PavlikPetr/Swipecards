@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
@@ -61,10 +62,8 @@ public class NoviceLayout extends RelativeLayout {
         mMask = (ImageView) findViewById(R.id.ivMask);
         mBackground = (ImageView) findViewById(R.id.ivBackground);
         mBubbleText = (TextView) findViewById(R.id.ivBubble);
-        TextView extraText = (TextView) findViewById(R.id.tvExtraText);
         Typeface tf = Typeface.createFromAsset(mContext.getAssets(), "neucha.otf");
         if (mBubbleText != null) mBubbleText.setTypeface(tf);
-        if (extraText != null) extraText.setTypeface(tf);
 
         if (mMask != null) {
             ViewTreeObserver vto = mMask.getViewTreeObserver();
@@ -73,9 +72,7 @@ public class NoviceLayout extends RelativeLayout {
                 @SuppressWarnings("deprecation")
                 @Override
                 public void onGlobalLayout() {
-                    int[] point = new int[2];
-                    mMask.getLocationInWindow(point);
-                    mBackground.setImageBitmap(getMaskedBackgroundBitmap(point));
+                    mBackground.setImageBitmap(getMaskedBackgroundBitmap());
                     ViewTreeObserver obs = mMask.getViewTreeObserver();
                     invalidate();
                     obs.removeGlobalOnLayoutListener(this);
@@ -105,28 +102,38 @@ public class NoviceLayout extends RelativeLayout {
         if (mBubbleText != null) mBubbleText.setText(bubbleText);
     }
 
-    private Bitmap getMaskedBackgroundBitmap(int[] point) {
+    private Bitmap getMaskedBackgroundBitmap() {
         Bitmap output = null;
         try {
             Bitmap mask = ((BitmapDrawable) mMask.getDrawable()).getBitmap();
             Point windowSizes = Utils.getSrceenSize(mContext);
             int width = getWidth();
             int height = getHeight();
-            Point maskPoint = new Point(
-                    point[0] - windowSizes.x + width,
-                    point[1] - windowSizes.y + height
-            );
+            Point maskPoint = getMaskPoint();
             output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
             Canvas canvas = new Canvas(output);
             Paint paint = new Paint();
             canvas.drawARGB(178, 0, 0, 0);
             paint.setXfermode(new PorterDuffXfermode(Mode.DST_OUT));
             canvas.drawBitmap(mask, maskPoint.x, maskPoint.y, paint);
-        } catch (OutOfMemoryError e) {
+        } catch (OutOfMemoryError | Exception e) {
             Debug.error(e);
         }
 
         return output;
+    }
+
+    private Point getMaskPoint() {
+        int x = mMask.getLeft();
+        int y = mMask.getTop();
+
+        for (ViewParent parent = mMask.getParent(); parent != this; parent = parent.getParent()) {
+            if (parent instanceof View) {
+                x += ((View) parent).getLeft();
+                y += ((View) parent).getTop();
+            }
+        }
+        return new Point(x, y);
     }
 
     @Override

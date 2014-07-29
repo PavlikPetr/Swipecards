@@ -8,10 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
 
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.SendGiftAnswer;
@@ -23,7 +22,7 @@ import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
-import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.TripleButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,10 +43,13 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     public static ArrayList<Gift> mGiftsList = new ArrayList<>();
     private int mUserIdToSendGift;
     private boolean mNeedToSendGift;
+    private boolean mRequestingGifts;
 
     public GiftsCollection mGiftsCollection;
     private TripleButton mTripleButton;
     private PlainGiftsFragment mGiftFragment;
+    private RelativeLayout mLockScreen;
+    private RetryViewCreator mRetryView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         mNeedToSendGift = getIntent().getBooleanExtra(INTENT_SEND_GIFT, true);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (fragment == null || !(fragment.getClass().equals(PlainGiftsFragment.class))) {
+        if (fragment == null || !(((Object) fragment).getClass().equals(PlainGiftsFragment.class))) {
             mGiftFragment = new PlainGiftsFragment();
             transaction.add(R.id.giftGrid, mGiftFragment);
         } else {
@@ -117,6 +119,17 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }
         });
 
+        mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
+
+        mLockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
+        mRetryView = RetryViewCreator.createDefaultRetryView(this, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadGifts();
+            }
+        });
+        mLockScreen.addView(mRetryView.getView());
+
         loadGifts();
     }
 
@@ -125,11 +138,11 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
      */
     private void loadGifts() {
         if (mGiftsList.isEmpty()) {
-            mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
             mTripleButton.setEnabled(false);
             setSupportProgressBarIndeterminateVisibility(true);
             GiftsRequest giftRequest = new GiftsRequest(this);
             registerRequest(giftRequest);
+            mRequestingGifts = true;
             giftRequest.callback(new DataApiHandler<LinkedList<Gift>>() {
 
                 @Override
@@ -146,11 +159,9 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    Toast.makeText(
-                            App.getContext(),
-                            R.string.general_data_error,
-                            Toast.LENGTH_SHORT
-                    ).show();
+                    mLockScreen.setVisibility(View.VISIBLE);
+                    mRetryView.setText(getText(R.string.general_error_try_again_later).toString());
+                    mRetryView.showRetryButton(true);
                 }
 
                 @Override
@@ -158,8 +169,10 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                     super.always(response);
                     mTripleButton.setEnabled(true);
                     setSupportProgressBarIndeterminateVisibility(false);
+                    mRequestingGifts = false;
                 }
             }).exec();
+            mLockScreen.setVisibility(View.GONE);
         } else {
             mGiftsCollection.add(mGiftsList);
             mGiftFragment.setGifts(mGiftsCollection.getGifts());
@@ -182,6 +195,24 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        /**
+         * setSupportProgressBarIndeterminateVisibility() doesn't work right after onCreate (first
+         * time loadGifts() is called). We need to show progress bar here.
+         */
+        if (mRequestingGifts) {
+            setSupportProgressBarIndeterminateVisibility(true);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mRequestingGifts = false;
     }
 
     @Override
@@ -221,7 +252,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 public void fail(int codeError, final IApiResponse response) {
                     setSupportProgressBarIndeterminateVisibility(false);
                     if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                        startActivity(ContainerActivity.getBuyingIntent("Gifts", PurchasesFragment.TYPE_GIFT, item.price));
+                        startActivity(PurchasesActivity.createBuyingIntent("Gifts", PurchasesFragment.TYPE_GIFT, item.price));
                     }
                 }
             }).exec();

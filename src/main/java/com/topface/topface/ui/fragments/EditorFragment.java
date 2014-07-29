@@ -25,7 +25,8 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.EditorBannersActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
@@ -148,7 +149,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             public void onClick(View v) {
                 try {
                     getActivity().startActivity(
-                            ContainerActivity.getProfileIntent(
+                            UserProfileActivity.createIntent(
                                     Integer.parseInt(profileId.getText().toString()),
                                     EditorFragment.class,
                                     getActivity()
@@ -312,7 +313,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 showCompleteMessage();
                 break;
             case R.id.EditorConfigureBanners:
-                getActivity().startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_EDITOR_BANNERS));
+                getActivity().startActivity(EditorBannersActivity.getEditorBannersIntent());
                 break;
             case R.id.EditorResetSettings:
                 mConfigInited = false;

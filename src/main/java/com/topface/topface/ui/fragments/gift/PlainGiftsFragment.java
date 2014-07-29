@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.gift;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +22,14 @@ import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragment {
+
+    private static final String DATA = "data";
+    private static final String POSITION = "position";
+
     protected TextView mTitle;
     protected View mGroupInfo;
     protected TextView mTextInfo;
@@ -39,11 +45,6 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         if (activity instanceof IGiftSendListener) {
             mGiftSendListener = (IGiftSendListener) activity;
         }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -100,15 +101,34 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (mGiftsFirstPortion != null) {
+            setGifts(mGiftsFirstPortion);
+            mGiftsFirstPortion = null;
+        } else if (savedInstanceState != null) {
+            restoreInstanceState(savedInstanceState);
+        }
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setGifts(mGiftsFirstPortion);
-        mGiftsFirstPortion = null;
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(DATA, mGridAdapter.getData());
+        outState.putInt(POSITION, mGridView.getFirstVisiblePosition());
+    }
+
+    protected void restoreInstanceState(Bundle savedState) {
+        ArrayList<Parcelable> gfts = savedState.getParcelableArrayList(DATA);
+        ArrayList<FeedGift> g = new ArrayList<>(gfts.size());
+        for (Parcelable p : gfts) {
+            g.add((FeedGift) p);
+        }
+        mGridAdapter.setData(g, false);
+        postGiftsLoadInfoUpdate(null);
+        mGridAdapter.notifyDataSetChanged();
+        initViews();
+        mGridView.setSelection(savedState.getInt(POSITION, 0));
     }
 
     public void setGifts(final T gifts) {

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.requests.ComplainRequest;
-import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ComplainsMessageActivity;
 
 public class ComplainsFragment extends BaseFragment {
 
@@ -19,33 +19,15 @@ public class ComplainsFragment extends BaseFragment {
     private int userId;
     private String feedId;
 
-    public static ComplainsFragment newInstance(int userId) {
-        ComplainsFragment fragment = new ComplainsFragment();
-        Bundle arguments = new Bundle();
-        arguments.putInt(USERID, userId);
-        fragment.setArguments(arguments);
-        return fragment;
-    }
-
-    public static ComplainsFragment newInstance(int userId, String feedId) {
-        ComplainsFragment fragment = new ComplainsFragment();
-        Bundle arguments = new Bundle();
-        arguments.putInt(USERID, userId);
-        arguments.putString(FEEDID, feedId);
-        fragment.setArguments(arguments);
-        return fragment;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.complains_fragment, container, false);
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            userId = arguments.getInt(USERID);
-            feedId = arguments.getString(FEEDID);
-            initViews(root);
-        } else {
+        Bundle args = getArguments();
+        userId = args.getInt(USERID, -1);
+        feedId = args.getString(FEEDID);
+        initViews(root);
+        if (userId == -1) {
             getActivity().finish();
         }
         return root;
@@ -88,7 +70,7 @@ public class ComplainsFragment extends BaseFragment {
                 frame.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((BaseFragmentActivity) getActivity()).startFragment(ComplainsMessageFragment.newInstance(userId, feedId, className, typeName));
+                        startActivity(ComplainsMessageActivity.createIntent(getActivity(), userId, feedId, className, typeName));
                     }
                 });
             }

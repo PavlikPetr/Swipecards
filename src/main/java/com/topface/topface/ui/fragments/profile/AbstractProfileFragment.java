@@ -14,7 +14,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
 import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
 import com.topface.topface.ui.views.DarkenImageView;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -34,6 +33,8 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     protected static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
     protected static final String ARG_TAG_CALLING_CLASS = "intent_profile_calling_fragment";
     protected static final String ARG_FEED_ITEM_ID = "item_id";
+    private static final String CURRENT_BODY_PAGE = "CURRENT_BODY_PAGE";
+    private static final String CURRENT_HEADER_PAGE = "CURRENT_HEADER_PAGE";
     // state
     protected HeaderMainFragment mHeaderMainFragment;
     protected ProfilePageAdapter mHeaderPagerAdapter;
@@ -108,6 +109,19 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null) {
+            mBodyPager.setCurrentItem(savedInstanceState.getInt(CURRENT_BODY_PAGE, 0));
+            mHeaderPager.setCurrentItem(savedInstanceState.getInt(CURRENT_HEADER_PAGE, 0));
+        }
+    }
+
+    public void setCallingClass(String callingClass) {
+        this.mCallingClass = callingClass;
+    }
+
+    @Override
     protected void restoreState() {
         mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
         mHeaderStartPageClassName = getArguments().getString(ARG_TAG_INIT_HEADER_PAGE);
@@ -157,6 +171,13 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         }
         mBodyPager = null;
         mHeaderPager = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_BODY_PAGE, mBodyPager.getCurrentItem());
+        outState.putInt(CURRENT_HEADER_PAGE, mHeaderPager.getCurrentItem());
     }
 
     protected Profile getProfile() {
@@ -235,9 +256,6 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
                 BODY_PAGES_TITLES, mProfileUpdater);
         mBodyPager.setAdapter(mBodyPagerAdapter);
-        //Мы отключаем сохранеие state у фрагментов, т.к. мы устанавливаем данные в методе getItem() адаптера,
-        //что приводит к пустым фрагментам. Поэтому мы не пытаемся сохранять и восстанавливать состояние фрагмента
-        mBodyPager.setSaveEnabled(false);
         //Tabs for Body
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
         mTabIndicator.setViewPager(mBodyPager);

@@ -19,7 +19,6 @@
     <string name="general_server_error">Erro. Tente mais tarde</string>
     <string name="general_data_error">Erro. Tente mais uma vez</string>
     <string name="general_internet_off">Tentamos reinstalar a conexão com a internet. Por favor, espere.</string>
-    <string name="general_purchasing_error">Por favor, escreva mensagem sobre erro de compra em support@topface.ru</string>
     <string name="general_msg_copied">O texto foi copiado</string>
     <string name="general_spinner_title">Seleccione uma ação</string>
     <string name="general_profile_error">Erro no carregamento de perfil</string>
@@ -61,6 +60,7 @@
     <string name="likes_background_text">Não há simpatias</string>
     <string name="visitors_background_text">Não há visitantes</string>
     <string name="mutual_background_text">Não há simpatias</string>
+    <string name="message_too_long">Você marcou a mensagem demasiada longa. O número de caracteres não pode exceder %d.</string>
     <string name="chat_background_text">Não há mensagens recebidas</string>
     <string name="chat_comment">Escrever mensagem</string>
     <string name="chat_gift_in">Você recebeu um presente.</string>
@@ -235,7 +235,6 @@
     <string name="dating_search_empty_title">Infelizmente, não foi encontrado algo</string>
     <string name="dating_search_empty_text">Você pode tentar repetir a busca, ou alterar as configurações do filtro.</string>
     <string name="general_close">Fechar</string>
-    <string name="vip_not_activated">O seu status-VIP não está ativado</string>
     <string name="vip_privileges">VIP-privilégios</string>
     <string name="vip_text_visitors">Descubra, quem está interessado em você - veja os seus visitantes!</string>
     <string name="vip_rest">Você está inscrito para VIP</string>
@@ -569,6 +568,8 @@
     <string name="pincode_will_be_reset">Perante uma autorização de sucesso todas as configurações do aplicativo serão reiniciadas.</string>
     <string name="ok_label">Condiscípulos</string>
     <string name="coins_subscription">Assinatura para moedas</string>
+    <string name="subscription">Assinatura</string>
+    <string name="coins">Moedas</string>
     <string name="you_were_subscribed">Assinatura formalizada</string>
     <string name="subscriptions_can_be_changed">Assinatura foi formalizada. Alterar os termos de assinatura pode ser no Google Play</string>
     <string name="people_nearby">Pessoas próximas</string>

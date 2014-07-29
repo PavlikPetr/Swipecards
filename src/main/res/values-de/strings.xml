@@ -19,7 +19,6 @@
     <string name="general_server_error">Fehler. Versuchen Sie später</string>
     <string name="general_data_error">Fehler! Versuchen Sie noch einmal</string>
     <string name="general_internet_off">Keine Internetverbindung. Bitte, warten Sie</string>
-    <string name="general_purchasing_error">Bitte senden Sie die Fehlermeldung beim Kauf an support@topface.ru</string>
     <string name="general_msg_copied">Text ist kopiert</string>
     <string name="general_spinner_title">Wählen Sie die Aktion</string>
     <string name="general_profile_error">Fehler bei der Ladung des Profils</string>
@@ -43,6 +42,7 @@
     <string name="general_visitors">Gäste</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Einstellungen</string>
+    <string name="general_settings_abbr">Einst.</string>
     <string name="general_chat">Chat</string>
     <string name="general_allow">Erlauben</string>
     <string name="notification_popup_title">Erlauben Sie die Benachrichtigungen, und erfahren Sie sofort über neue Sympathien, Bewunderungen oder Nachrichten</string>
@@ -91,6 +91,18 @@
     <string name="buying_header_title">Käufe</string>
     <string name="buying_you_have">Sie haben</string>
     <string name="buying_you_have_no_coins_for_gift">Sie brauchen %d {{coins}}, um ein Geschenk zu kaufen</string>
+    <plurals name="buying_gift_you_need_coins">
+        <item quantity="other">Um ein Geschenk zu senden, kaufen Sie noch %d Coins</item>
+        <item quantity="one">Um ein Geschenk zu senden, kaufen Sie noch %d Coin</item>
+    </plurals>
+    <plurals name="buying_unlock_likes_you_need_coins">
+        <item quantity="other">Um zu sehen, wem Sie gefallen, kaufen Sie noch %d Coins</item>
+        <item quantity="one">Um zu sehen, wem Sie gefallen, kaufen Sie noch %d Coin</item>
+    </plurals>
+    <plurals name="buying_leaders_you_need_coins">
+        <item quantity="other">Damit alle Sie gesehen haben, kaufen Sie noch %d Coins</item>
+        <item quantity="one">Damit alle Sie gesehen haben, kaufen Sie noch %d Coin</item>
+    </plurals>
     <string name="buying_default_message">Sie können Geschenke und Bewunderungen für Coins senden</string>
     <string name="buying_money">Coins kaufen</string>
     <string name="profile_header_title">Mein Profil</string>
@@ -176,6 +188,8 @@
     <string name="settings_feedback_success_msg">Danke, die Nachricht wurde erfolgreich gesendet</string>
     <string name="settings_switch_on">on</string>
     <string name="settings_switch_off">off</string>
+    <string name="settings_block_main">Haupteinst.</string>
+    <string name="settings_block_additional">Zusätzlich</string>
     <string name="leaders_go_date">Will hierher</string>
     <string name="leaders_leader_now">Jeztz werden alle Sie sehen!</string>
     <string name="leaders_need_photo">Zuerst muss man ein Foto wählen!</string>
@@ -221,6 +235,7 @@
     <string name="settings_melody">Sound-Benachrichtigungen</string>
     <string name="edit_refresh_status">Den Status aktualisieren</string>
     <string name="ban_title">Gratulation! Sie sind gebannt</string>
+    <string name="ban_complain">Auf Ban beklagen</string>
     <string name="general_ready">Fertig</string>
     <string name="profile_deleted_user">Nutzer ist gelöscht</string>
     <string name="filter_main_parameters">Ich interessiere mich für</string>
@@ -230,7 +245,6 @@
     <string name="dating_search_empty_title">Leider, nichts gefunden</string>
     <string name="dating_search_empty_text">Sie können Ihre Suche wiederholen, oder die Filter Einstellungen ändern</string>
     <string name="general_close">Schließen</string>
-    <string name="vip_not_activated">Ihr VIP-Status ist nicht aktiviert</string>
     <string name="vip_privileges">VIP-Privilegien</string>
     <string name="vip_text_visitors">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre Gäste durch!</string>
     <string name="vip_rest">Sie abonnieren VIP</string>
@@ -486,6 +500,7 @@
     <string name="general_type_complain">Meldung Betreff</string>
     <string name="confirm_email_for_dating">Wir sind gegen Spam. Bestätigen Sie Ihre E-Mail-Adresse, um in Topface sich kennen zu lernen!</string>
     <string name="confirm">Bestätigen</string>
+    <string name="send_confirm_link">Link für die Bestätigung senden</string>
     <string name="complain_type_swearing_msg">Grobheit, Bedrohung, Fluhen</string>
     <string name="general_bookmarks_is_deleted">Nutzer wurde aus Favoriten entfernt</string>
     <string name="general_blacklist_is_deleted">Der Nutzer ist aus der schwarzen Liste gelöscht</string>
@@ -568,6 +583,8 @@
     <string name="default_ringtone">Standard</string>
     <string name="photo_info_deleted">Ist gelöscht</string>
     <string name="user_deleted_or_banned">Nutzer ist gelöscht oder gebannt</string>
+    <string name="locking_popup_title">Zugang zu «%s» ist begrenzt</string>
+    <string name="locking_popup_message">Um Zugang zu bekommen, antworten Sie auf alle empfangenen Sympathien oder bekommen Sie VIP</string>
     <string name="locking_popup_button_answer">Antworten</string>
     <string name="locking_menu_message">Der Zugang zu einigen Seiten der App ist begrenzt. Falls Sie sich von allen Begrenzungen befreien wollen, antworten Sie auf alle empfangene Sympathien oder bekommen Sie VIP.</string>
     <string name="locking_likes_message">Achtung! Der Zugang zu einigen Seiten der App ist begrenzt. Falls Sie sich von allen Begrenzungen befreien wollen, antworten Sie auf alle empfangene Sympathien oder bekommen Sie VIP.</string>
@@ -609,12 +626,24 @@
         <item quantity="other">%d neue Nachrichten</item>
         <item quantity="one">%d neue Nachricht</item>
     </plurals>
+    <string name="coins_subscription">Abonnement auf Coins</string>
     <plurals name="general_some_more">
         <item quantity="other">und noch %d</item>
         <item quantity="one">und noch %d</item>
     </plurals>
+    <string name="subscription">Abonnement</string>
+    <string name="coins">Coins</string>
+    <string name="you_were_subscribed">Sie haben jetzt ein Abonnement</string>
+    <string name="people_nearby">Menschen in der Nähe</string>
+    <string name="nobody_nearby">Keine Menschenseele in der Nähe!</string>
     <string name="general_distance_km">%.02f km</string>
     <string name="general_distance_m">%d m</string>
+    <string name="cannot_get_geo">Es ist misslungen, die Lage festzustellen</string>
+    <string name="press_back_more_to_close_app">Klicken Sie noch einmal, um Topface zu verlassen</string>
+    <string name="loading_photo_percent">Foto wird hochgeladen %d%%</string>
+    <string name="profile_update_error">Fehler beim Update</string>
+    <string name="user_does_not_exist">Nutzer ist nicht gefunden</string>
+    <string name="feedback_subject_ban">Meldung auf ungerechtes Ban</string>
     <string name="settings_led">LED Benachrichtigung</string>
     <string name="buying_not_enough_coins">Sie brauchen noch %d {{coins}}</string>
 </resources>

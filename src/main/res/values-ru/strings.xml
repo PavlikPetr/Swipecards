@@ -26,7 +26,6 @@
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_internet_off">Пытаемся восстановить соединение с интернетом. Пожалуйста, подождите.</string>
-    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
     <string name="general_msg_copied">Текст скопирован</string>
     <string name="general_spinner_title">Выберите действие</string>
     <string name="general_profile_error">Ошибка загрузки профиля</string>
@@ -82,6 +81,7 @@
     <string name="mutual_background_text">Взаимных симпатий нет</string>
 
     <!-- Chat -->
+    <string name="message_too_long">Вы набрали слишком длинное сообщение. Число знаков не может превышать %d.</string>
     <string name="chat_background_text">Входящих сообщений нет</string>
     <string name="chat_comment">Написать сообщение</string>
     <string name="chat_gift_in">Вы получили подарок.</string>
@@ -323,7 +323,6 @@
     <string name="dating_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра.
     </string>
     <string name="general_close">Закрыть</string>
-    <string name="vip_not_activated">Ваш VIP-статус не активирован</string>
     <string name="vip_privileges">VIP-привилегии</string>
     <string name="vip_text_visitors">Узнаете, кто вами интересовался - смотрите своих гостей!</string>
     <string name="vip_rest">Вы подписаны на VIP</string>
@@ -827,6 +826,9 @@
         <item quantity="few">и еще %d</item>
         <item quantity="other">и еще %d</item>
     </plurals>
+    <string name="subscription">Подписка</string>
+    <string name="autorefill">Автопополнение</string>
+    <string name="coins">Монеты</string>
     <string name="you_were_subscribed">Подписка оформлена</string>
     <string name="subscriptions_can_be_changed">Подписка оформлена. Изменить условия подписки можно в Google Play</string>
     <string name="people_nearby">Люди рядом</string>

@@ -14,6 +14,8 @@ public class History extends FeedDialog implements Parcelable {
 
     private boolean mEmptyRepeatItem = false;
     private boolean mEmptyWaitingItem = false;
+    public String blockText;
+    public String dialogTitle;
 
     private String mJsonForParse;
     /**
@@ -22,7 +24,7 @@ public class History extends FeedDialog implements Parcelable {
     public String createdFormatted;
 
     public History(ItemType type) {
-        super(null);
+        super((JSONObject) null);
         setLoaderTypeFlags(type);
     }
 
@@ -37,7 +39,7 @@ public class History extends FeedDialog implements Parcelable {
     }
 
     public History() {
-        super(null);
+        super((JSONObject) null);
     }
 
     @Override
@@ -45,6 +47,8 @@ public class History extends FeedDialog implements Parcelable {
         super.fillData(item);
         createdRelative = getRelativeCreatedDate(created);
         createdFormatted = DateUtils.getFormattedTime(created);
+        blockText = item.optString("blockText");
+        dialogTitle = item.optString("dialogTitle");
     }
 
     public boolean isWaitingItem() {

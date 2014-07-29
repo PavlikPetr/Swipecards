@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.ResourcesUtils;
 
@@ -79,8 +79,8 @@ public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.On
                 break;
             case R.id.btnBuyVip:
                 EasyTracker.getTracker().sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
-                Intent intent = ContainerActivity.getVipBuyIntent(null, "ClosingDialogWatchAsList");
-                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                Intent intent = PurchasesActivity.createVipBuyIntent(null, "ClosingDialogWatchAsList");
+                startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 closeDialog();
                 break;
             default:

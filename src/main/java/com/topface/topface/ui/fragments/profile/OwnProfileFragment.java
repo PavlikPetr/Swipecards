@@ -11,8 +11,6 @@ import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +20,9 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
-import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.fragments.gift.OwnGiftsFragment;
-import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
+import com.topface.topface.ui.SettingsActivity;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
-import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
+import com.topface.topface.ui.fragments.gift.OwnGiftsFragment;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 
@@ -149,7 +145,7 @@ public class OwnProfileFragment extends AbstractProfileFragment {
     }
 
     private void startSettingsActivity() {
-        startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_SETTINGS_FRAGMENT));
+        startActivity(SettingsActivity.createIntent());
     }
 
     @Override

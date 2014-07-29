@@ -1,77 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/loParent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loParent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ImageView
-            android:id="@+id/ivBackground"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:scaleType="fitXY"
-            />
+        android:id="@+id/ivBackground"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY" />
 
     <LinearLayout
-            android:id="@+id/loPointer"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+        android:id="@+id/loPointer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/ivBubble"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <View
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"/>
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="380dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="-30dp"
-            android:layout_marginBottom="10dp">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="25dp"
+            android:layout_weight="3">
 
             <ImageView
                 android:id="@+id/ivMask"
-                android:layout_width="75.5dp"
-                android:layout_height="70dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/tip_sympathy_mask" />
 
             <ImageView
-                    android:id="@+id/ivArrow"
-                    android:layout_width="160.5dp"
-                    android:layout_height="304.5dp"
-                    android:layout_above="@id/ivMask"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/tip_sympathy_arrow"
-                    android:layout_marginBottom="10dp"/>
+                android:id="@+id/ivArrow"
+                android:layout_width="160.5dp"
+                android:layout_height="304.5dp"
+                android:layout_above="@id/ivMask"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/tip_sympathy_arrow" />
 
         </RelativeLayout>
-
-        <View
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                android:layout_weight="2"/>
     </LinearLayout>
 
     <com.topface.topface.ui.views.AutoResizeTextView
-            android:id="@+id/ivBubble"
-            android:layout_width="341dp"
-            android:layout_height="112.5dp"
-            android:background="@drawable/tip_sympathy_bubble"
-            android:layout_above="@id/loPointer"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
-            android:lines="3"
-            android:textSize="22sp"
-            android:textColor="#000000"
-            android:gravity="center"
-            android:text="@string/novice_sympathy"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"/>
+        android:id="@id/ivBubble"
+        android:layout_width="341dp"
+        android:layout_height="112.5dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/tip_sympathy_bubble"
+        android:gravity="center"
+        android:lines="3"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/novice_sympathy"
+        android:textColor="#000000"
+        android:textSize="22sp" />
 </RelativeLayout>

@@ -265,23 +265,19 @@ public class AddPhotoHelper {
         final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext, new Base64.ProgressListener() {
             @Override
             public void onProgress(final int percentage) {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (notificationListener.notification != null) {
-                            //Видимо из-за ошибок в прошивке на редких девайсах с Android 4.0.4
-                            //падает - https://rink.hockeyapp.net/manage/apps/26531/app_versions/62/crash_reasons/12857941?type=overview
-                            //поэтому ловим все ошибки
-                            try {
-                                notificationListener.notification.updateProgress(percentage);
-                                mNotificationManager.showBuildedNotification(notificationListener.notification);
-                            } catch (Exception e) {
-                                Debug.error(e);
-                            }
-                        }
 
+                if (notificationListener.notification != null) {
+                    //Видимо из-за ошибок в прошивке на редких девайсах с Android 4.0.4
+                    //падает - https://rink.hockeyapp.net/manage/apps/26531/app_versions/62/crash_reasons/12857941?type=overview
+                    //поэтому ловим все ошибки
+                    try {
+                        notificationListener.notification.updateProgress(percentage);
+                        mNotificationManager.showBuildedNotification(notificationListener.notification);
+                    } catch (Exception e) {
+                        Debug.error(e);
                     }
-                });
+                }
+
             }
 
             @Override

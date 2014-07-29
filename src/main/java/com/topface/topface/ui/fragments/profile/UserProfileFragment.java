@@ -44,19 +44,16 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
+import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.requests.handlers.VipApiHandler;
-import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
-import com.topface.topface.ui.fragments.buy.GPlayBuyingFragment;
-import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
 import com.topface.topface.ui.fragments.gift.UserGiftsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
@@ -72,12 +69,14 @@ import java.util.ArrayList;
  */
 public class UserProfileFragment extends AbstractProfileFragment implements View.OnClickListener {
 
+    public static final String IGNORE_SYMPATHY_SENT_EXTRA = "IGNORE_SYMPATHY_SENT_EXTRA";
 
-    private static final String ARG_TAG_PROFILE_ID = "profile_id";
+
     private int mProfileId;
     private int mLastLoadedProfileId;
     private String mItemId;
     private ArrayList<UserActions.ActionItem> mUserActions;
+    private boolean mIgnoreSympathySent;
     // views
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
@@ -109,8 +108,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ContainerActivity.ActionTypes type = (ContainerActivity.ActionTypes) intent.getSerializableExtra(ContainerActivity.TYPE);
-            boolean value = intent.getBooleanExtra(ContainerActivity.VALUE, false);
+            AttitudeHandler.ActionTypes type = (AttitudeHandler.ActionTypes) intent.getSerializableExtra(AttitudeHandler.TYPE);
+            boolean value = intent.getBooleanExtra(AttitudeHandler.VALUE, false);
             Profile profile = getProfile();
             if (profile != null && type != null) {
                 switch (type) {
@@ -118,36 +117,56 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         ((User) profile).inBlackList = value;
                         if (mBlocked != null) {
                             ((TextView) mBlocked.findViewById(R.id.block_action_text)).setText(value ? R.string.black_list_delete : R.string.black_list_add_short);
+                            if (value) {
+                                ((User) profile).bookmarked = false;
+                            }
+                            switchBookmarkEnabled(!value);
                         }
                         getView().findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
                         getView().findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
                         break;
                     case BOOKMARK:
-                        if (mBookmarkAction != null && intent.hasExtra(ContainerActivity.VALUE)) {
-                            ((User) profile).bookmarked = value;
+                        User user = (User) profile;
+                        if (mBookmarkAction != null && intent.hasExtra(AttitudeHandler.VALUE) && !user.inBlackList) {
+                            user.bookmarked = value;
                             mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                         }
-                        if (isAdded()) {
-                            getView().findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
-                            getView().findViewById(R.id.favIcon).setVisibility(View.VISIBLE);
+                        View root = getView();
+                        if (root != null) {
+                            //Они могут быть Null, т.к. находятся внутри ViewStub
+                            View favPrBar = root.findViewById(R.id.favPrBar);
+                            if (favPrBar != null) {
+                                favPrBar.setVisibility(View.INVISIBLE);
+                            }
+                            View favIcon = root.findViewById(R.id.favIcon);
+                            if (favIcon != null) {
+                                favIcon.setVisibility(View.VISIBLE);
+                            }
                         }
                         break;
                 }
             }
         }
     };
+
+    private void switchBookmarkEnabled(boolean enabled) {
+        if (mActions != null) {
+            mBookmarkAction.setText(((User)getProfile()).bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            mBookmarkAction.setTextColor(getResources().getColor(enabled? R.color.text_white : R.color.disabled_color));
+            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(enabled);
+        }
+    }
+
     private int mActionsHeightHeuristic;
 
-    public static UserProfileFragment newInstance(String itemId, int id, String className) {
-        UserProfileFragment fragment = new UserProfileFragment();
-
-        Bundle args = new Bundle();
-        args.putInt(ARG_TAG_PROFILE_ID, id);
-        args.putString(ARG_FEED_ITEM_ID, itemId);
-        args.putString(ARG_TAG_CALLING_CLASS, className);
-        fragment.setArguments(args);
-
-        return fragment;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Bundle args = getArguments();
+        mProfileId = args.getInt(AbstractProfileFragment.INTENT_UID, 0);
+        mItemId = args.getString(AbstractProfileFragment.INTENT_ITEM_ID);
+        mIgnoreSympathySent = args.getBoolean(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, false);
+        setCallingClass(args.getString(AbstractProfileFragment.INTENT_CALLING_FRAGMENT));
     }
 
     @Override
@@ -166,20 +185,17 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             @Override
             public void onClick(View v) {
                 getUserProfile(mProfileId);
-                mLockScreen.setVisibility(View.GONE);
             }
         });
         mLockScreen.addView(mRetryView.getView());
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(ContainerActivity.UPDATE_USER_CATEGORY));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
         return root;
     }
 
     @Override
     protected void restoreState() {
-        super.restoreState();
-        mProfileId = getArguments().getInt(ARG_TAG_PROFILE_ID);
-        mItemId = getArguments().getString(ARG_FEED_ITEM_ID);
+
     }
 
     @Override
@@ -221,10 +237,11 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             mSympathyText = (TextView) mSympathy.findViewById(R.id.likeTV);
             mDelight = (RelativeLayout) mActions.findViewById(R.id.send_admiration_action);
             mDelightText = (TextView) mDelight.findViewById(R.id.delTV);
-            if (user.isSympathySent) {
+            if (user.isSympathySent && !mIgnoreSympathySent) {
                 disableSympathyDelight();
             }
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
+            switchBookmarkEnabled(!user.inBlackList);
         }
     }
 
@@ -290,6 +307,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     private void getUserProfile(final int profileId) {
         if (isLoaded(profileId)) return;
+        mLockScreen.setVisibility(View.GONE);
         mLoaderView.setVisibility(View.VISIBLE);
         UserRequest userRequest = new UserRequest(profileId, getActivity());
         registerRequest(userRequest);
@@ -314,9 +332,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (status == null || TextUtils.isEmpty(status)) {
                             mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
                         }
-                    }
-                    if (user.isSympathySent) {
-                        mRateController.userRateBroadcast(user.uid);
                     }
                 }
                 mLastLoadedProfileId = mProfileId;
@@ -360,7 +375,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     private void showLockWithText(String text) {
-        showLockWithText(text, false);
+        showLockWithText(text, true);
     }
 
     private void showRetryBtn() {
@@ -419,13 +434,13 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     private void disableSympathyDelight() {
-        mSympathy.setSelected(true);
-        mSympathyText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+        mSympathyText.setTextColor(getResources().getColor(R.color.disabled_color));
         mSympathy.setEnabled(false);
+        mSympathy.findViewById(R.id.likeIcon).setEnabled(false);
 
-        mDelight.setSelected(true);
-        mDelightText.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+        mDelightText.setTextColor(getResources().getColor(R.color.disabled_color));
         mDelight.setEnabled(false);
+        mDelight.findViewById(R.id.delIcon).setEnabled(false);
     }
 
 
@@ -549,12 +564,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     openChat();
                 } else {
                     String callingClass = getCallingClassName();
-                    if (callingClass != null && profile != null && (profile instanceof User)) {
+                    if (callingClass != null && (profile instanceof User)) {
                         if (callingClass.equals(DatingFragment.class.getName()) || callingClass.equals(LeadersDialog.class.getName())) {
                             if (!((User) profile).mutual) {
                                 startActivityForResult(
-                                        ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
-                                        ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                                        PurchasesActivity.createVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
+                                        PurchasesActivity.INTENT_BUY_VIP
                                 );
                                 break;
                             }
@@ -566,7 +581,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             case R.id.add_to_black_list_action:
                 if (CacheProfile.premium) {
                     if (profile.uid > 0) {
-                        final TextView textView = (TextView) v.findViewById(R.id.block_action_text);
                         final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
                         final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
 
@@ -581,7 +595,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         request.exec();
                     }
                 } else {
-                    startActivityForResult(ContainerActivity.getVipBuyIntent(null, "ProfileSuperSkills"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
                 }
                 break;
             case R.id.add_to_bookmark_action:
@@ -601,7 +615,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 request.exec();
                 break;
             case R.id.complain_action:
-                startActivity(ContainerActivity.getComplainIntent(mProfileId));
+                startActivity(ComplainsActivity.createIntent(mProfileId));
                 break;
             default:
                 break;
@@ -670,7 +684,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                             FragmentActivity activity = getActivity();
                             if (activity != null) {
-                                Intent intent = ContainerActivity.getBuyingIntent("Profile");
+                                Intent intent = PurchasesActivity.createBuyingIntent("Profile");
                                 intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
                                 intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
                                 startActivity(intent);
@@ -710,15 +724,14 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private void openChat() {
         Profile profile = getProfile();
         if (profile != null) {
-            Intent intent = new Intent(getActivity(), ContainerActivity.class);
+            Intent intent = new Intent(getActivity(), ChatActivity.class);
             intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
             intent.putExtra(ChatFragment.INTENT_USER_NAME, profile.firstName != null ?
                     profile.firstName : Static.EMPTY);
             intent.putExtra(ChatFragment.INTENT_USER_SEX, profile.sex);
             intent.putExtra(ChatFragment.INTENT_USER_AGE, profile.age);
             intent.putExtra(ChatFragment.INTENT_USER_CITY, profile.city == null ? "" : profile.city.name);
-            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object) this).getClass().getSimpleName());
-            startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+            startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         }
     }
 

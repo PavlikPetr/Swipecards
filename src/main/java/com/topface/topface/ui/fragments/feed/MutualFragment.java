@@ -10,7 +10,7 @@ import com.topface.topface.data.FeedMutual;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteMutualsRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.MutualListAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
@@ -58,7 +58,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
         inflated.findViewById(R.id.btnRefill).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ContainerActivity.getBuyingIntent("EmptyMutual"));
+                startActivity(PurchasesActivity.createBuyingIntent("EmptyMutual"));
             }
         });
     }

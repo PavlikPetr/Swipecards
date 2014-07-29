@@ -128,6 +128,7 @@ public class Options extends AbstractData {
     public boolean forceCoinsSubscriptions;
 
     public boolean unlockAllForPremium;
+    public int maxMessageSize;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -291,6 +292,8 @@ public class Options extends AbstractData {
 
             forceCoinsSubscriptions = response.optBoolean("forceCoinsSubscriptions");
             unlockAllForPremium = response.optBoolean("unlockAllForPremium");
+
+            maxMessageSize = response.optInt("maxMessageSize");
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
@@ -573,6 +576,7 @@ public class Options extends AbstractData {
 
     public static class Tab {
         public static final String GPLAY = "google-play";
+        public static final String AMAZON = "amazon";
         public static final String PWALL_MOBILE = "paymentwall-mobile";
         public static final String PWALL = "paymentwall-direct";
         public static final String BONUS = "bonus";
@@ -604,6 +608,4 @@ public class Options extends AbstractData {
             return !mainOffers.isEmpty() && !extraOffers.isEmpty();
         }
     }
-
-
 }

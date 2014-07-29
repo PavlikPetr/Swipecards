@@ -1,9 +1,3 @@
-//Константы для сборки приложения. В подмодулях следует использовать именно их, а не хардкодить значения
-def defaultCompileSdkVersion = 19
-def defaultBuildToolsVersion = "19.1.0"
-
-def supportLibrary = "com.android.support:support-v4:19.1.0"
-
 def getGitHeadSha() {
     return 'git rev-parse --short HEAD'.execute().text.trim();
 }
@@ -17,7 +11,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.11.+'
+        classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
     }
 }
 
@@ -25,11 +19,11 @@ repositories {
     mavenCentral()
 }
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion defaultCompileSdkVersion
-    buildToolsVersion defaultBuildToolsVersion
+    compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
+    buildToolsVersion rootProject.ANDROID_BUILD_TOOLS_VERSION
 
     productFlavors {
         //Основной flavor, в нашем случае работает с Google Play
@@ -56,12 +50,12 @@ android {
 
     defaultConfig {
         //noinspection GroovyAssignabilityCheck
-        minSdkVersion 7
+        minSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MIN_SDK_VERSION)
         //noinspection GroovyAssignabilityCheck
-        targetSdkVersion 19
+        targetSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
 
         //noinspection GroovyAssignabilityCheck
-        testPackageName "com.topface.topface.test"
+        testApplicationId "com.topface.topface.test"
         //noinspection GroovyAssignabilityCheck
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
 
@@ -108,8 +102,8 @@ android {
 
 dependencies {
     //Android Support libs
-    compile supportLibrary
-    compile 'com.android.support:appcompat-v7:19.0.+'
+    compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
+    compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
 
     //All jar libs
     compile fileTree(dir: 'libs', include: '*.jar', exclude: 'GoogleAdMobAdsSdk.jar')
@@ -136,18 +130,18 @@ dependencies {
     compile project(':libs:mopub-android-sdk')
     compile project(':libs:AdLabSDK')
 
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.+'
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.+'
 }
 
 project(':libs:AndroidStatistics') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     repositories {
         mavenCentral()
     }
 }
 
 project(':libs:IllustratedTextView') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['src']
@@ -156,9 +150,9 @@ project(':libs:IllustratedTextView') {
 }
 
 project(':libs:Android-ViewPagerIndicator') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     dependencies {
-        compile supportLibrary
+        compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
         compile project(':libs:IllustratedTextView')
     }
     android.sourceSets.main {
@@ -169,7 +163,7 @@ project(':libs:Android-ViewPagerIndicator') {
 }
 
 project(':libs:PullToRefresh') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'library/AndroidManifest.xml'
         java.srcDirs = ['library/src']
@@ -178,7 +172,7 @@ project(':libs:PullToRefresh') {
 }
 
 project(':libs:PhotoView') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'library/AndroidManifest.xml'
         java.srcDirs = ['library/src']
@@ -187,7 +181,7 @@ project(':libs:PhotoView') {
 }
 
 project(':libs:UniversalImageLoader') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'library/AndroidManifest.xml'
         java.srcDirs = ['library/src']
@@ -195,9 +189,9 @@ project(':libs:UniversalImageLoader') {
     }
 }
 
-//Social networks 
+//Social networks
 project(':libs:Facebook') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'facebook/AndroidManifest.xml'
         java.srcDirs = ['facebook/src']
@@ -206,7 +200,7 @@ project(':libs:Facebook') {
 }
 
 project(':libs:odnoklassniki') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['src']
@@ -216,9 +210,9 @@ project(':libs:odnoklassniki') {
 
 //Ad networks
 project(':libs:mopub-android-sdk') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     dependencies {
-        compile supportLibrary
+        compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
         compile files('../GoogleAdMobAdsSdk.jar')
     }
     android.sourceSets.main {
@@ -229,7 +223,7 @@ project(':libs:mopub-android-sdk') {
 
 
 project(':libs:AdLabSDK') {
-    apply plugin: 'android-library'
+    apply plugin: 'com.android.library'
     dependencies {
         compile files('libs/apache-mime4j-0.6.jar')
         compile files('libs/commons-io-1.4.jar')
@@ -247,8 +241,8 @@ subprojects {
     //До лучших времен закоментировал эту строку, пока Idea отказывается делать такие штуки, как папка сборки вне пределов проекта
     //buildDir "../../build/projects/$project.name"
     android {
-        compileSdkVersion defaultCompileSdkVersion
-        buildToolsVersion defaultBuildToolsVersion
+        compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
+        buildToolsVersion rootProject.ANDROID_BUILD_TOOLS_VERSION
     }
 }
 

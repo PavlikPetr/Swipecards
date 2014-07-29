@@ -19,7 +19,6 @@
     <string name="general_server_error">Σφάλμα. Προσπαθήστε αργότερα</string>
     <string name="general_data_error">Σφάλμα. Προσπαθήστε ξανά</string>
     <string name="general_internet_off">Δεν υπάρχει σύνδεση με το Internet. Παρακαλώ να περιμένετε.</string>
-    <string name="general_purchasing_error">Παρακαλώ, γράψετε ένα μήνυμα σφάλματος για την αγορά support@topface.ru</string>
     <string name="general_msg_copied">Αντιγραφεί</string>
     <string name="general_spinner_title">Επιλέξτε μια δράση</string>
     <string name="general_profile_error">Λάθους τη φόρτωση του προφίλ</string>
@@ -61,6 +60,7 @@
     <string name="likes_background_text">Δεν υπάρχουν συμπάθειας</string>
     <string name="visitors_background_text">ΟΙ επισκέπτες δεν υπάρχουν</string>
     <string name="mutual_background_text">Συμπάθειες δεν υπάρχουν</string>
+    <string name="message_too_long">Το μήνυμά σας είναι πολύ μεγάλο. Ο αριθμός των χαρακτήρων δεν μπορεί να υπερβαίνει %d.</string>
     <string name="chat_background_text">Δεν υπάρχουν εισερχόμενα μηνύματα</string>
     <string name="chat_comment">Στείλτε ένα μήνυμα</string>
     <string name="chat_gift_in">Πήρατε ένα δώρο.</string>
@@ -92,6 +92,18 @@
     <string name="buying_header_title">Αγορά</string>
     <string name="buying_you_have">Έχετε</string>
     <string name="buying_you_have_no_coins_for_gift">Σας λείπουν %d {{coins}} κέρματα για να αγοράσετε ένα δώρο</string>
+    <plurals name="buying_gift_you_need_coins">
+        <item quantity="other">Για να στείλετε ένα δώρο, θα αγοράσει %d νομίσματα</item>
+        <item quantity="one">Για να στείλετε ένα δώρο, μπορείτε να αγοράσετε %d κέρμα</item>
+    </plurals>
+    <plurals name="buying_unlock_likes_you_need_coins">
+        <item quantity="other">Για να δείτε ποιος σας αρέσει, να αγοράσει άλλα %d νομίσματα</item>
+        <item quantity="one">Για να δείτε ποιος σας αρέσει, μπορείτε να αγοράσετε %d κέρμα</item>
+    </plurals>
+    <plurals name="buying_leaders_you_need_coins">
+        <item quantity="other">Σε όλους εσάς έχετε δει, έχετε αγοράσει %d νομίσματα</item>
+        <item quantity="one">Σε όλους εσάς έχετε δει, έχετε αγοράσει %d κέρμα</item>
+    </plurals>
     <string name="buying_default_message">Μπορείτε να στείλετε τα δώρα και το θαυμασμό για τα κέρματα</string>
     <string name="buying_money">Αγορά κερμάτων</string>
     <string name="profile_header_title">Το προφίλ μου</string>
@@ -234,7 +246,6 @@
     <string name="dating_search_empty_title">Δυστυχώς, τίποτα δεν βρέθηκε</string>
     <string name="dating_search_empty_text">Μπορείτε να δοκιμάσετε την αναζήτηση ξανά, ή να αλλάξετε τις ρυθμίσεις του φίλτρου.</string>
     <string name="general_close">Κλείστε</string>
-    <string name="vip_not_activated">Η κατάστασή σας-VIP δεν είναι ενεργοποιημένη</string>
     <string name="vip_privileges">VIP τα προνόμια</string>
     <string name="vip_text_visitors">Μάθετε ποιος είναι ενδιαφέρεται για σας - δείτε τους καλεσμένους σας!</string>
     <string name="vip_rest">Έχετε εγγραφεί στη VIP</string>
@@ -571,6 +582,7 @@
     <string name="photo_info_deleted">Διαγράφεται</string>
     <string name="user_deleted_or_banned">Ο χρήστης απαγορεύεται ή να διαγραφεί</string>
     <string name="locking_popup_title">Η μετάβαση στο τμήμα «%s» είναι περιορισμένη</string>
+    <string name="locking_popup_message">Για να αποκτήσετε πρόσβαση, ανταποκριθείτε σε όλες τις αμοιβαίες συμπάθειες ή πάρτε VIP</string>
     <string name="locking_popup_button_answer">Απαντήστε σε νέες συμπάθειες</string>
     <string name="locking_menu_message">Η πρόσβαση σε ορισμένες σελίδες της εφαρμογής είναι περιορισμένη. Για κατάργηση όλων των περιορισμών, απαντήστε σε όλες τις νέες συμπάθειες ή αποκτήστε VIP.</string>
     <string name="locking_likes_message">Προσοχή! Η πρόσβαση σε ορισμένες σελίδες της εφαρμογής είναι περιορισμένη. Για κατάργηση όλων των περιορισμών, απαντήστε σε όλες τις νέες συμπάθειες ή αποκτήστε VIP.</string>
@@ -601,6 +613,7 @@
     <string name="pincode_repeat">Επανάληψη κωδικού PIN</string>
     <string name="pincode_forget">Ξεχάσατε τον κωδικό σας PIN?</string>
     <string name="pincode_auth_input">Θα πρέπει να εισάγετε το όνομα χρήστη και τον κωδικό πρόσβασης.</string>
+    <string name="pincode_will_be_reset">Εάν η άδεια είναι επιτυχής, όλες οι ρυθμίσεις της εφαρμογής θα επανέλθουν.</string>
     <plurals name="pincode_interval">
         <item quantity="zero">αμέσως μετά το κλείσιμο</item>
         <item quantity="other">%d λεπτά.</item>
@@ -616,8 +629,11 @@
         <item quantity="other">και ακόμα %d</item>
         <item quantity="one">και ακόμα %d</item>
     </plurals>
+    <string name="subscription">Εγγραφή</string>
+    <string name="coins">Τα κέρματα</string>
     <string name="you_were_subscribed">Η Εγγραφή ολοκληρώθηκε</string>
     <string name="subscriptions_can_be_changed">Η Εγγραφή ολοκληρώθηκε. Αλλαγή των όρων εγγραφής στο Google Play</string>
+    <string name="people_nearby">Οι ανθρώπους που βρίσκονται κοντά</string>
     <string name="nobody_nearby">Ούτε ψυχή γύρω!</string>
     <string name="general_distance_km">%.02f χιλ.</string>
     <string name="general_distance_m">%d μ</string>
@@ -625,6 +641,8 @@
     <string name="press_back_more_to_close_app">Πατήστε το κουμπί ξανά για να βγείτε από Topface</string>
     <string name="waiting_for_load">Αναμονή φόρτωσης</string>
     <string name="loading_photo_percent">Ανέβασμα εικόνας %d%%</string>
+    <string name="profile_update_error">Απέτυχε η ενημέρωση της βάσης δεδομένων</string>
     <string name="user_does_not_exist">Ο χρήστης δεν βρέθηκε</string>
+    <string name="feedback_subject_ban">Καταγγελία για την άδικη απαγόρευση</string>
     <string name="settings_led">LED κοινοποίηση</string>
 </resources>

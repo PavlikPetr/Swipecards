@@ -2,6 +2,7 @@ package com.topface.topface.utils.notifications;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,12 +12,14 @@ import android.view.View;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.GCMUtils.User;
 import com.topface.topface.Static;
-import com.topface.topface.imageloader.DefaultImageLoader;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.receivers.NotificationClosedReceiver;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.utils.config.UserConfig;
 
 public class UserNotificationManager {
@@ -71,7 +74,7 @@ public class UserNotificationManager {
     public void showNotificationAsync(final String title, final String message, final boolean isTextNotification,
                                       String uri, final int unread, final Intent intent, final boolean doNeedReplace,
                                       final NotificationImageListener listener, final User user) {
-        DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, getTargetImageSize(), new ImageLoadingListener() {
+        DefaultImageLoader.getInstance(mContext).getImageLoader().loadImage(uri, getTargetImageSize(), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
             }
@@ -112,7 +115,7 @@ public class UserNotificationManager {
     }
 
     public void showProgressNotificationAsync(final String title, String uri, final Intent intent, final NotificationImageListener listener) {
-        DefaultImageLoader.getInstance().getImageLoader().loadImage(uri, getTargetImageSize(), new ImageLoadingListener() {
+        DefaultImageLoader.getInstance(mContext).getImageLoader().loadImage(uri, getTargetImageSize(), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -164,7 +167,7 @@ public class UserNotificationManager {
     }
 
     public void showFailNotificationAsync(final String title, final String msg, final String iconUri, final Intent intent, final NotificationImageListener listener) {
-        DefaultImageLoader.getInstance().getImageLoader().loadImage(iconUri, getTargetImageSize(), new ImageLoadingListener() {
+        DefaultImageLoader.getInstance(mContext).getImageLoader().loadImage(iconUri, getTargetImageSize(), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -207,7 +210,7 @@ public class UserNotificationManager {
         }
 
         MessageStack messagesStack = new MessageStack();
-        if (intent != null && intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ContainerActivity.INTENT_CHAT_FRAGMENT) {
+        if (intent != null && intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ChatActivity.INTENT_CHAT) {
             id = MESSAGES_ID;
             messagesStack = saveMessageStack(message, user);
         }
@@ -222,6 +225,14 @@ public class UserNotificationManager {
         notification.setOngoing(ongoing);
         notification.setMessages(messagesStack);
         notification.setIntent(intent);
+        /*
+        onDeleteIntent triggers when notification is deleted by user. We need it to gather
+        statistics about deleted notifications.
+         */
+        Intent onDeleteIntent = new Intent(NotificationClosedReceiver.NOTIFICATION_CLOSED);
+        onDeleteIntent.putExtra(GCMUtils.GCM_TYPE, intent.getIntExtra(GCMUtils.GCM_TYPE, -1));
+        onDeleteIntent.putExtra(GCMUtils.GCM_LABEL, intent.getStringExtra(GCMUtils.GCM_LABEL));
+        notification.setDeleteIntent(PendingIntent.getBroadcast(mContext, 0, onDeleteIntent, 0));
         try {
             mNotificationManager.notify(id, notification.generate(actions));
         } catch (Exception e) {

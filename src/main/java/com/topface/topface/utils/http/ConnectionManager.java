@@ -135,7 +135,7 @@ public class ConnectionManager {
             //Проверяем, нет ли в конечном запросе ошибок авторизации (т.е. не верного токена, пароля и т.п.)
             checkAuthError(request, response);
             //Обрабатываем ответ от сервера
-            needResend = processResponse(request, response);
+            needResend = processResponse(request, response );
         } catch (Exception e) {
             //Мы отлавливаем все ошибки, возникшие при запросе, не хотим что бы приложение падало из-за них
             Debug.error(TAG + "::REQUEST::ERROR", e);

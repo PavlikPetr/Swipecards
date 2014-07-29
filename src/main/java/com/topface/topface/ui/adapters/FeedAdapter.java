@@ -338,7 +338,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         FeedList<T> feeds = getData();
         for (int id : userIds) {
             for (T feed : feeds) {
-                if (feed.user.id == id) {
+                if (feed.user != null && feed.user.id == id) {
                     result |= feeds.remove(feed);
                     break;
                 }

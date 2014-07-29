@@ -103,17 +103,20 @@ public class Gift extends AbstractDataWithPhotos implements Parcelable {
         dest.writeInt(type);
         dest.writeString(link);
         dest.writeInt(price);
+        dest.writeInt(feedId);
     }
 
     @SuppressWarnings("rawtypes")
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+    public static final Parcelable.Creator<Gift> CREATOR = new Parcelable.Creator<Gift>() {
         public Gift createFromParcel(Parcel in) {
-            return new Gift(
+            Gift gift = new Gift(
                     in.readInt(),
                     in.readInt(),
                     in.readString(),
                     in.readInt()
             );
+            gift.feedId = in.readInt();
+            return gift;
         }
 
         @Override

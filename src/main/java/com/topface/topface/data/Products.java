@@ -194,7 +194,7 @@ public class Products extends AbstractData {
         } else {
             value = String.format(
                     App.getContext().getString(R.string.default_price_format),
-                    (float) (buyBtn.price / 100)
+                    ((float) buyBtn.price / 100)
             );
             economy = buyBtn.hint;
         }

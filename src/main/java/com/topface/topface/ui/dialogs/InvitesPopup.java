@@ -18,7 +18,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.ContactsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
@@ -82,7 +82,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
             public void onClick(View v) {
                 if (!invitesCheckBox.isChecked()) {
                     EasyTracker.getTracker().sendEvent("InvitesPopup", "SendContactsBtnClick", "", 0L);
-                    startActivity(ContainerActivity.getIntentForContacts(contacts));
+                    startActivity(ContactsActivity.createIntent(contacts));
                     ((BaseFragmentActivity) activity).close(InvitesPopup.this);
                 } else {
                     EasyTracker.getTracker().sendEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);

@@ -1,9 +1,6 @@
 package com.topface.topface.ui.settings;
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -20,7 +17,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
@@ -51,17 +47,8 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public static void fillVersion(Context context, Report report) {
         if (context != null && report != null) {
-            try {
-                PackageInfo pInfo;
-                PackageManager pManager = context.getPackageManager();
-                if (pManager != null) {
-                    pInfo = pManager.getPackageInfo(context.getPackageName(), 0);
-                    report.topface_version = pInfo.versionName;
-                    report.topface_versionCode = pInfo.versionCode;
-                }
-            } catch (NameNotFoundException e) {
-                Debug.error(e);
-            }
+            report.topface_version = BuildConfig.VERSION_NAME;
+            report.topface_versionCode = BuildConfig.VERSION_CODE;
         }
     }
 
@@ -126,6 +113,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         if (extras != null) {
             mFeedbackType = (FeedbackType) extras.getSerializable(INTENT_FEEDBACK_TYPE);
             mFeedbackType = mFeedbackType == null ? FeedbackType.UNKNOWN : mFeedbackType;
+            mReport.setType(mFeedbackType);
             switch (mFeedbackType) {
                 case ERROR_MESSAGE:
                     mReport.subject = getString(R.string.settings_error_message_internal);
@@ -289,7 +277,23 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     }
 
     public enum FeedbackType {
-        UNKNOWN, ERROR_MESSAGE, DEVELOPERS_MESSAGE, PAYMENT_MESSAGE, COOPERATION_MESSAGE, BAN
+        UNKNOWN("mobile_none"),
+        ERROR_MESSAGE("mobile_error"),
+        DEVELOPERS_MESSAGE("mobile_question"),
+        PAYMENT_MESSAGE("mobile_payment_issue"),
+        COOPERATION_MESSAGE("mobile_cooperation"),
+        BAN("mobile_ban"),
+        LOW_RATE_MESSAGE("mobile_low_rate");
+
+        private final String mTypeTag;
+
+        FeedbackType(String tag) {
+            mTypeTag = tag;
+        }
+
+        public String getTag() {
+            return mTypeTag;
+        }
     }
 
     public static class Report {
@@ -305,11 +309,19 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         String device = android.os.Build.DEVICE;
         String model = android.os.Build.MODEL;
         String transactionId = null;
+        FeedbackType type;
 
         private AuthToken authToken = AuthToken.getInstance();
 
         public Report() {
-            userDeviceAccounts = ClientUtils.getClientAccounts();
+        }
+
+        public Report(FeedbackType type) {
+            setType(type);
+        }
+
+        public void setType(FeedbackType type) {
+            this.type = type;
         }
 
         public String getSubject() {
@@ -333,7 +345,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
             strBuilder.append("<p>Email for answer: ").append(email).append(";</p>\n");
             strBuilder.append("<p>Device accounts: ");
-            strBuilder.append(TextUtils.join(", ", userDeviceAccounts));
+            strBuilder.append(TextUtils.join(", ", getUserDeviceAccounts()));
             strBuilder.append(";</p>\n");
             strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode)
                     .append(";</p>\n");
@@ -362,6 +374,17 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
             }
 
             return strBuilder.toString();
+        }
+
+        public List<String> getUserDeviceAccounts() {
+            if (userDeviceAccounts == null) {
+                userDeviceAccounts = ClientUtils.getClientAccounts();
+            }
+            return userDeviceAccounts;
+        }
+
+        public FeedbackType getType() {
+            return type;
         }
 
         public String getEmail() {

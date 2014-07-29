@@ -5,7 +5,7 @@
     android:id="@+id/adMobView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    ads:adUnitId="a1506c2c0d9899a"
+    ads:adUnitId="ca-app-pub-3847865014365726/9072251892"
     ads:adSize="SMART_BANNER"
     ads:testDevices="99000200906025"
     ads:loadAdOnCreate="false"

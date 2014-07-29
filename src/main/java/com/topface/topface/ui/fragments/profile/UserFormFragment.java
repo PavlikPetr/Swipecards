@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.profile;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,10 +20,19 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class UserFormFragment extends ProfileInnerFragment implements OnClickListener {
-    private User mUser;
+
+    private static final String FORM_ITEMS = "FORM_ITEMS";
+    private static final String POSITION = "POSITION";
+    private static final String USER_ID = "USER_ID";
+    private static final String MATCHES = "MATCHES";
+
+    private int mUserId;
+    private LinkedList<FormItem> mForms;
+    private int mFormMatches;
     private UserFormListAdapter mUserFormListAdapter;
     private View mTitleLayout;
     private TextView mTitle;
@@ -31,6 +41,7 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
     private Button mAskToFillForm;
     private ProgressBar mPgb;
     private TextView mSuccessText;
+    private ListView mListQuestionnaire;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,8 +53,8 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_form, container, false);
-        ListView listQuestionnaire = (ListView) root.findViewById(R.id.fragmentFormList);
-        listQuestionnaire.setAdapter(mUserFormListAdapter);
+        mListQuestionnaire = (ListView) root.findViewById(R.id.fragmentFormList);
+        mListQuestionnaire.setAdapter(mUserFormListAdapter);
 
         mEmptyFormLayout = (ViewGroup) root.findViewById(R.id.loEmptyForm);
 
@@ -57,8 +68,13 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
         mTitleLayout = root.findViewById(R.id.loUserTitle);
         mTitle = (TextView) root.findViewById(R.id.tvTitle);
         mState = (ImageView) root.findViewById(R.id.ivState);
-        if (mUser != null) {
-            setUserData(mUser);
+        if (mForms != null) {
+            setUserData(mUserId, mForms, mFormMatches);
+        } else if (savedInstanceState != null) {
+            setUserData(savedInstanceState.getInt(USER_ID, 0),
+                    savedInstanceState.getParcelableArrayList(FORM_ITEMS),
+                    savedInstanceState.getInt(MATCHES, 0));
+            mListQuestionnaire.setSelection(savedInstanceState.getInt(POSITION, 0));
         } else {
             mTitle.setText(Utils.getQuantityString(R.plurals.form_matches, 0, 0));
             mState.setImageResource(R.drawable.user_cell);
@@ -69,24 +85,46 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
         return root;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(USER_ID, mUserId);
+        outState.putInt(MATCHES, mFormMatches);
+        outState.putParcelableArrayList(FORM_ITEMS, mUserFormListAdapter.saveState());
+        outState.putInt(POSITION, mListQuestionnaire.getFirstVisiblePosition());
+    }
+
     public void setUserData(User user) {
-        if (mUser != user)
-            mUser = user;
-        mUserFormListAdapter.setUserData(mUser);
+        setUserData(user.uid, user.forms, user.formMatches);
+    }
+
+    public void setUserData(int userId, LinkedList<FormItem> forms, int formMatches) {
+        mUserId = userId;
+        mForms = forms;
+        mFormMatches = formMatches;
+        mUserFormListAdapter.setUserData(mForms);
         mUserFormListAdapter.notifyDataSetChanged();
 
         initFormHeader();
     }
 
+    private void setUserData(int userId, ArrayList<Parcelable> forms, int formMatches) {
+        LinkedList<FormItem> llForms = new LinkedList<>();
+        for (Parcelable form : forms) {
+            llForms.add((FormItem) form);
+        }
+        setUserData(userId, llForms, formMatches);
+    }
+
     private void initFormHeader() {
         mTitle.setText(
-                Utils.getQuantityString(R.plurals.form_matches, mUser.formMatches, mUser.formMatches)
+                Utils.getQuantityString(R.plurals.form_matches, mFormMatches, mFormMatches)
         );
 
-        if (formIsEmpty(mUser.forms)) {
+        if (formIsEmpty(mForms)) {
             mEmptyFormLayout.setVisibility(View.VISIBLE);
         } else {
-            if (mUser.formMatches > 0) {
+            if (mFormMatches > 0) {
                 mState.setImageResource(R.drawable.user_cell_on);
                 mTitleLayout.setOnClickListener(this);
             } else {
@@ -115,8 +153,8 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
                 mUserFormListAdapter.notifyDataSetChanged();
                 break;
             case R.id.btnEmptyForm:
-                if (mUser.uid == 0) break;
-                StandardMessageSendRequest request = new StandardMessageSendRequest(getActivity(), StandardMessageSendRequest.MESSAGE_FILL_INTERESTS, mUser.uid);
+                if (mUserId == 0) break;
+                StandardMessageSendRequest request = new StandardMessageSendRequest(getActivity(), StandardMessageSendRequest.MESSAGE_FILL_INTERESTS, mUserId);
                 registerRequest(request);
                 mAskToFillForm.setVisibility(View.GONE);
                 mPgb.setVisibility(View.VISIBLE);

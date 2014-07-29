@@ -11,10 +11,8 @@ import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.RegistrationTokenRequest;
-import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Settings;
@@ -73,34 +71,42 @@ public class GCMUtils {
     private static boolean showSympathy = false;
     private static boolean showVisitors = false;
     public static final String NOTIFICATION_INTENT = "GCM";
+    /**
+     * Extras key for gcm type.
+     */
+    public static final String GCM_TYPE = "GCM_TYPE";
+    /**
+     * Extras key for additon gcm message label.
+     */
+    public static final String GCM_LABEL = "GCM_LABEL";
     public static boolean GCM_SUPPORTED = true;
 
     public static void init(final String serverToken, final Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-                new BackgroundThread() {
-                    @Override
-                    public void execute() {
-                        try {
-                            GCMRegistrar.checkDevice(context);
-                            GCMRegistrar.checkManifest(context);
-                            if (GCMRegistrar.isRegistered(context)) {
-                                final String regId = GCMRegistrar.getRegistrationId(context);
-                                Debug.log("GCM: Already registered, regID is " + regId);
+            new BackgroundThread() {
+                @Override
+                public void execute() {
+                    try {
+                        GCMRegistrar.checkDevice(context);
+                        GCMRegistrar.checkManifest(context);
+                        if (GCMRegistrar.isRegistered(context)) {
+                            final String regId = GCMRegistrar.getRegistrationId(context);
+                            Debug.log("GCM: Already registered, regID is " + regId);
 
-                                //Если токен с сервера отличается, отправляем новый.
-                                if (!TextUtils.equals(regId, serverToken)) {
-                                    Looper.prepare();
-                                    sendRegId(context, regId);
-                                    Looper.loop();
-                                }
-                            } else {
-                                GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
+                            //Если токен с сервера отличается, отправляем новый.
+                            if (!TextUtils.equals(regId, serverToken)) {
+                                Looper.prepare();
+                                sendRegId(context, regId);
+                                Looper.loop();
                             }
-                        } catch (Exception ex) {
-                            handleNoGcmSupport(ex);
+                        } else {
+                            GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
                         }
+                    } catch (Exception ex) {
+                        handleNoGcmSupport(ex);
                     }
-                };
+                }
+            };
         } else {
             handleNoGcmSupport(null);
         }
@@ -162,9 +168,9 @@ public class GCMUtils {
 
             if (intent != null) {
                 intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
-                if (!TextUtils.equals(intent.getComponent().getClassName(), ContainerActivity.class.getName())) {
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                }
+                intent.putExtra(GCM_TYPE, type);
+                intent.putExtra(GCM_LABEL, getLabel(extra));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 showNotificationByType(extra, context, data, type, user, title, intent);
                 return true;
             }
@@ -293,14 +299,7 @@ public class GCMUtils {
                 if (showMessage) {
                     if (user.id != 0) {
                         lastNotificationType = GCM_TYPE_MESSAGE;
-                        i = new Intent(context, ContainerActivity.class);
-                        i.putExtra(ChatFragment.INTENT_USER_ID, user.id);
-                        i.putExtra(ChatFragment.INTENT_USER_NAME, user.name);
-                        i.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
-                        i.putExtra(ChatFragment.INTENT_USER_AGE, user.age);
-                        i.putExtra(ChatFragment.INTENT_USER_CITY, user.city);
-                        i.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, GCM_NOTIFICATION);
-                        i.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_CHAT_FRAGMENT);
+                        i = ChatActivity.createIntent(context, user);
                     } else {
                         i = new Intent(context, NavigationActivity.class);
                     }
@@ -381,6 +380,10 @@ public class GCMUtils {
         Debug.log("GCM: Try send regId to server: ", registrationId);
 
         new RegistrationTokenRequest(registrationId, context).exec();
+    }
+
+    public static String getLabel(Intent intent) {
+        return intent.getStringExtra("label");
     }
 
 

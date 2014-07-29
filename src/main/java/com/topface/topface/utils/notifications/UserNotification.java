@@ -19,6 +19,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
+import com.topface.framework.imageloader.BitmapUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.SerializableToJson;
@@ -36,6 +37,7 @@ public class UserNotification {
 
 
     private Intent mIntent;
+    private PendingIntent mDeleteIntent;
     private int mId;
     private boolean mOngoing;
 
@@ -91,6 +93,10 @@ public class UserNotification {
 
     public void setIntent(Intent intent) {
         mIntent = intent;
+    }
+
+    public void setDeleteIntent(PendingIntent intent) {
+        mDeleteIntent = intent;
     }
 
     public int getId() {
@@ -158,6 +164,10 @@ public class UserNotification {
         }
         notificationBuilder.setAutoCancel(true);
         notificationBuilder.setContentIntent(getPendingIntent(mIntent));
+
+        if (mDeleteIntent != null) {
+            notificationBuilder.setDeleteIntent(mDeleteIntent);
+        }
 
         generatedNotification = notificationBuilder.build();
         return generatedNotification;
@@ -281,7 +291,7 @@ public class UserNotification {
 
     private void setLargeIcon() {
         if (mImage != null) {
-            Bitmap scaledIcon = Utils.clipAndScaleBitmap(mImage, getIconSize(mContext), getIconSize(mContext));
+            Bitmap scaledIcon = BitmapUtils.clipAndScaleBitmap(mImage, getIconSize(mContext), getIconSize(mContext));
             if (scaledIcon != null) {
                 notificationBuilder.setLargeIcon(scaledIcon);
             } else {

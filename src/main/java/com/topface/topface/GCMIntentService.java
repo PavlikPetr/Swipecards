@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.NotificationStatistics;
 import com.topface.topface.utils.Editor;
 
 import org.json.JSONException;
@@ -30,6 +31,9 @@ public class GCMIntentService extends GCMBaseIntentService {
                 //Сообщаем о том что есть новое уведомление и нужно обновить список
                 Intent broadcastReceiver = new Intent(GCMUtils.GCM_NOTIFICATION);
                 String user = intent.getStringExtra("user");
+
+                int type = GCMUtils.getType(intent);
+                NotificationStatistics.sendReceived(type, GCMUtils.getLabel(intent));
 
                 if (user != null) {
                     String userId = getUserId(user);

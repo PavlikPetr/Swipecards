@@ -7,10 +7,9 @@ import android.widget.LinearLayout;
 
 import com.topface.billing.BillingDriver;
 import com.topface.billing.BillingDriverManager;
-import com.topface.topface.R;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Products.ProductsInfo.CoinsSubscriptionInfo;
-import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.CoinsSubscriptionsActivity;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
 
@@ -49,7 +48,7 @@ public class GPlayBuyingFragment extends AbstractBuyingFragment {
     private Products.BuyButtonClickListener mCoinsSubscriptionClickListener = new Products.BuyButtonClickListener() {
         @Override
         public void onClick(String id) {
-            startActivityForResult(ContainerActivity.getCoinsSubscriptionIntent(getFrom()), ContainerActivity.INTENT_COINS_SUBSCRIPTION_FRAGMENT);
+            startActivityForResult(CoinsSubscriptionsActivity.createIntent(getFrom()), CoinsSubscriptionsActivity.INTENT_COINS_SUBSCRIPTION);
         }
     };
 

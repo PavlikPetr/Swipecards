@@ -4,8 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="auto"
-    android:versionCode="108"
-    android:versionName="2.9.9"
+    android:versionCode="111"
+    android:versionName="2.9.11"
     tools:ignore="UnusedAttribute">
 
     <!-- permissions -->
@@ -37,7 +37,7 @@
         android:name="android.hardware.location.network"
         android:required="false" />
 
-    <!-- Разрешения для Fortumo -->
+    <!-- Fortumo permissions -->
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
@@ -173,14 +173,108 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.BanActivity" />
         <activity android:name=".ui.BlackListActivity" />
+
         <activity
-            android:name=".ui.ContainerActivity"
+            android:name=".ui.ChatActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:windowSoftInputMode="stateUnchanged|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.UserProfileActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.ComplainsActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.EditorBannersActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.RegistrationActivity"
             android:parentActivityName=".ui.NavigationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.PasswordRecoverActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.PurchasesActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.CoinsSubscriptionsActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+        <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.ContactsActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.ComplainsMessageActivity"
+            android:parentActivityName=".ui.ComplainsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.ComplainsActivity" />
         </activity>
 
         <activity
@@ -225,14 +319,14 @@
             android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
             android:configChanges="orientation" />
 
-        <!-- Мета-данные для clickky -->
+        <!-- Keys for clickky -->
         <meta-data
             android:name="CLICKKY_API_KEY"
             android:value="c2441dedd5b0e62a7acadbdb5a43c8d2" />
         <meta-data
             android:name="CLICKKY_SITE_ID"
             android:value="3382" />
-        <!-- Оффервол Clickky -->
+        <!-- Clickky offerwall -->
         <activity android:name="com.topface.topface.utils.offerwalls.clickky.ClickkyActivity" />
 
         <activity
@@ -290,7 +384,7 @@
             android:launchMode="singleInstance"
             android:theme="@style/Theme.Topface.NoActionBar" />
 
-        <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
+        <!-- Alias for main Activity from first version. Just in case of previous problems with FB -->
         <activity-alias
             android:name=".ui.MainActivity"
             android:targetActivity=".ui.NavigationActivity" />
@@ -396,6 +490,12 @@
             tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.topface.topface.receivers.NotificationClosedReceiver">
+            <intent-filter>
+                <action android:name="com.topface.topface.NOTIFICATION_CLOSED" />
             </intent-filter>
         </receiver>
 

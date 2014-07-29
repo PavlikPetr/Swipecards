@@ -58,4 +58,8 @@ public class LeadersAdapter extends BaseAdapter {
         return view;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof LeadersAdapter && ((LeadersAdapter) o).mLeaders.equals(mLeaders);
+    }
 }

@@ -1,23 +1,22 @@
-def supportLibrary = "com.android.support:support-v4:19.0.+"
-
 buildscript {
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.0'
+        classpath 'com.android.tools.build:gradle:0.12.+'
     }
 }
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.1"
+    buildToolsVersion "20"
 }
 
 dependencies {
     //Android Support libs
-    compile supportLibrary
+    //noinspection GradleDependency
+    compile "com.android.support:support-v4:19.1.+"
 }
