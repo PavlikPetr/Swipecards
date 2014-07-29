@@ -4,9 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.text.style.ImageSpan;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
 
@@ -22,7 +21,7 @@ public class TfImageSpan extends ImageSpan {
     }
 
     @Override
-    public void draw(@NotNull Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
+    public void draw(@NonNull Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
 //        super.draw(canvas, text, start, end, x, top, y, bottom, paint);
         Drawable b = getCachedDrawable();
 

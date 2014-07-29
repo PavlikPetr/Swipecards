@@ -12,6 +12,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,8 +27,6 @@ import android.widget.TextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.utils.Utils;
-
-import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("UnusedDeclaration")
 public class NoviceLayout extends RelativeLayout {
@@ -137,7 +136,7 @@ public class NoviceLayout extends RelativeLayout {
     }
 
     @Override
-    public boolean onTouchEvent(@NotNull MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (mBackgroundListener != null) mBackgroundListener.onClick(this);
 
