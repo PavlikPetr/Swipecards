@@ -1,6 +1,8 @@
 package com.topface.topface.data;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +18,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -74,7 +74,7 @@ public class Products extends AbstractData {
 
     }
 
-    public Products(@NotNull IApiResponse data) {
+    public Products(@NonNull IApiResponse data) {
         fillData(data.getJsonResult());
     }
 

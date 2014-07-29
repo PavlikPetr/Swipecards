@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -15,8 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.topface.R;
-
-import org.jetbrains.annotations.NotNull;
 
 /**
  * LockView - descendant of RelativeLayout with internal TextView for message.
@@ -137,7 +136,7 @@ public class LockerView extends RelativeLayout {
     }
 
     @Override
-    public boolean onTouchEvent(@NotNull MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         return true;
     }
 }

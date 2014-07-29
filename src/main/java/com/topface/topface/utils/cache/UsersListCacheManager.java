@@ -1,6 +1,7 @@
 package com.topface.topface.utils.cache;
 
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.BackgroundThread;
@@ -8,7 +9,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.Static;
 import com.topface.topface.data.search.UsersList;
 
-import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 

@@ -2,6 +2,7 @@ package com.topface.topface.ui.adapters;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,6 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ResourcesUtils;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -134,13 +133,10 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     public boolean hasFragment(BaseFragment.FragmentId id) {
-        if (mItems.size() <= id.getId()) {
-            return false;
-        }
-        return mItems.valueAt(id.getId()) != null;
+        return mItems.size() > id.getId() && mItems.valueAt(id.getId()) != null;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // initialize holder and convertView
