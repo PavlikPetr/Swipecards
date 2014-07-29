@@ -1,5 +1,6 @@
 package com.topface.framework.utils;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.topface.topface.App;
@@ -122,7 +123,7 @@ public class Debug {
             for (StackTraceElement st : e.getStackTrace()) {
                 stack.append(st.toString()).append("\n");
             }
-            msg = msg != null && !msg.equals("") ? msg + " : " : "";
+            msg = !TextUtils.isEmpty(msg) ? msg + " : " : "";
             String errorText = e.toString();
             errorText = "\n" + errorText + "\n";
             showChunkedLogError(App.TAG, msg + errorText + stack.toString());
@@ -135,7 +136,7 @@ public class Debug {
             for (StackTraceElement st : e.getStackTrace()) {
                 stack.append(st.toString()).append("\n");
             }
-            msg = msg != null && !msg.equals("") ? msg + " : " : "";
+            msg = !TextUtils.isEmpty(msg) ? msg + " : " : "";
             String errorText = e.toString();
             errorText = "\n" + errorText + "\n";
             showChunkedLogError(App.TAG, msg + errorText + stack.toString());

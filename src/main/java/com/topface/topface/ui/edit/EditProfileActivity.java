@@ -25,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -41,6 +40,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
 import org.json.JSONException;
@@ -384,7 +384,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
             // set text
             if (type == T_HEADER) {
-                if (!item.getTitle().equals(Static.EMPTY)) {
+                if (!item.getTitle().isEmpty()) {
                     holder.mTitle.setText(item.getTitle());
                     holder.mTitle.setVisibility(View.VISIBLE);
                 } else {

@@ -87,7 +87,7 @@ public class AuthToken {
     }
 
     public boolean isEmpty() {
-        return mTokenInfo.mSnType.equals(Static.EMPTY) || !isToken();
+        return mTokenInfo.mSnType.isEmpty() || !isToken();
     }
 
     public TokenInfo getTokenInfo() {

@@ -315,7 +315,7 @@ public class GCMUtils {
     }
 
     private static String getTitle(Context context, String title) {
-        if (title == null || title.equals("")) {
+        if (TextUtils.isEmpty(title)) {
             title = context.getString(R.string.app_name);
         }
         return title;

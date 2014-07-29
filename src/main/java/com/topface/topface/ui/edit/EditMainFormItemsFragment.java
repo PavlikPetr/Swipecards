@@ -396,7 +396,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         break;
                     case AGE:
                         try {
-                            if (changedValue.equals("")) {
+                            if (changedValue.isEmpty()) {
                                 changedValue = "0";
                             }
                             if (isAgeValid(Integer.parseInt(changedValue))) {
@@ -424,7 +424,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     }
 
     private boolean isNameValid(String name) {
-        return !name.trim().equals("");
+        return !name.trim().isEmpty();
     }
 
     @Override

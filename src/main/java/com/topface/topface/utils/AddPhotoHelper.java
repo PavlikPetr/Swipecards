@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
@@ -29,6 +28,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
@@ -211,13 +211,13 @@ public class AddPhotoHelper {
                     } else {
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
                         String filename = preferences.getString(FILENAME_CONST, "");
-                        if (!filename.equals("")) {
+                        if (!filename.isEmpty()) {
                             File outputDirectory = new File(PATH_TO_FILE);
                             //noinspection ResultOfMethodCallIgnored
                             if (outputDirectory.exists()) {
                                 outputFile = new File(outputDirectory, filename);
                                 photoUri = Uri.fromFile(outputFile);
-                                preferences.edit().remove(FILENAME_CONST).commit();
+                                preferences.edit().remove(FILENAME_CONST).apply();
                             }
 
                         }
@@ -396,6 +396,7 @@ public class AddPhotoHelper {
             }
         }
         setOnResultHandler(new Handler() {
+            @SuppressWarnings("ConstantConditions")
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);

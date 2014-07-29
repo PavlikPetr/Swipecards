@@ -8,6 +8,7 @@ import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
+import android.text.TextUtils;
 
 import com.topface.framework.utils.BackgroundThread;
 
@@ -21,7 +22,7 @@ public class ContactsProvider {
 
     public ContactsProvider(Context ctx) {
         this.ctx = ctx;
-        contacts = new ArrayList<Contact>();
+        contacts = new ArrayList<>();
     }
 
     public void getContacts(final int limit, final int offset, GetContactsHandler handler) {
@@ -58,7 +59,7 @@ public class ContactsProvider {
                     }
                     emailCur.close();
                 }
-                if (email != null && !email.equals("")) {
+                if (!TextUtils.isEmpty(email)) {
                     contacts.add(new Contact(name, email, true));
                 } else {
                     Cursor phoneCursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(id)}, null);

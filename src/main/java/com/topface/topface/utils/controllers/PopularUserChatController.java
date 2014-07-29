@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -85,7 +86,7 @@ public class PopularUserChatController extends BroadcastReceiver {
 
     public PopularUserChatController(ChatFragment chatFragment, ViewGroup lockScreen) {
         mChatFragment = chatFragment;
-        mLockScreenRef = new WeakReference<ViewGroup>(lockScreen);
+        mLockScreenRef = new WeakReference<>(lockScreen);
     }
 
     public void setTexts(String dialogTitle, String blockText) {
@@ -94,7 +95,7 @@ public class PopularUserChatController extends BroadcastReceiver {
     }
 
     public void setLockScreen(ViewGroup lockScreen) {
-        mLockScreenRef = new WeakReference<ViewGroup>(lockScreen);
+        mLockScreenRef = new WeakReference<>(lockScreen);
         if (isChatLocked()) {
             blockChat();
         }
@@ -110,7 +111,7 @@ public class PopularUserChatController extends BroadcastReceiver {
     }
 
     public boolean isAccessAllowed() {
-        return CacheProfile.premium || mBlockText == null || mBlockText.equals("") || mOff;
+        return CacheProfile.premium || TextUtils.isEmpty(mBlockText) || mOff;
     }
 
     public boolean checkChatBlock(History message) {
