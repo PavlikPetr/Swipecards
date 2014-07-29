@@ -246,6 +246,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         startActionsController.registerAction(popupManager.createInvitePopupStartAction(AC_PRIORITY_LOW));
         // fullscreen
         startActionsController.registerAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
+        startActionsController.registerDebugAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
     }
 
     private void initFullscreen() {

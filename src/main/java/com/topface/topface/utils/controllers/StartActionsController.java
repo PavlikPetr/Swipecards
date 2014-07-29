@@ -52,7 +52,7 @@ public class StartActionsController {
                     Debug.log(TAG, "some action already processed for this session");
                 }
                 if (BuildConfig.DEBUG) {
-                    if (mDebugAction != null) {
+                    if (mDebugAction != null && mDebugAction.isApplicable()) {
                         processAction(mDebugAction);
                     }
                 }

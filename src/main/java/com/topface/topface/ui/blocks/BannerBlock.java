@@ -91,6 +91,7 @@ public class BannerBlock {
     public static final String BANNER_IVENGO = "IVENGO";
     public static final String BANNER_ADCAMP = "ADCAMP";
     public static final String BANNER_LIFESTREET = "LIFESTREET";
+    public static final String BANNER_VIDIGER = "VIDIGER";
     public static final String BANNER_ADLAB = "ADLAB";
     public static final String BANNER_INNERACTIVE = "INNERACTIVE";
     public static final String BANNER_ADMOB_MEDIATION = "ADMOB_MEDIATION";
