@@ -36,12 +36,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
@@ -81,6 +80,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.PopularUserChatController;
@@ -354,15 +354,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                                 switch ((int) editAdapter.getItemId(which)) {
                                     case EditButtonsAdapter.ITEM_DELETE:
                                         deleteItem(position);
-                                        EasyTracker.getTracker().sendEvent("Chat", "DeleteItem", "", 1L);
+                                        EasyTracker.sendEvent("Chat", "DeleteItem", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COPY:
                                         mAdapter.copyText(((TextView) v).getText().toString());
-                                        EasyTracker.getTracker().sendEvent("Chat", "CopyItemText", "", 1L);
+                                        EasyTracker.sendEvent("Chat", "CopyItemText", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COMPLAINT:
                                         startActivity(ComplainsActivity.createIntent(mUserId, mAdapter.getItem(position).id));
-                                        EasyTracker.getTracker().sendEvent("Chat", "ComplainItemText", "", 1L);
+                                        EasyTracker.sendEvent("Chat", "ComplainItemText", "", 1L);
                                         break;
                                 }
                             }
@@ -713,7 +713,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             case R.id.btnSend:
                 if (mUserId > 0) {
                     sendMessage();
-                    EasyTracker.getTracker().sendEvent("Chat", "SendMessage", "", 1L);
+                    EasyTracker.sendEvent("Chat", "SendMessage", "", 1L);
                 }
                 break;
             case R.id.send_gift_button:
@@ -725,7 +725,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         GiftsActivity.getSendGiftIntent(getActivity(), mUserId, false),
                         GiftsActivity.INTENT_REQUEST_GIFT
                 );
-                EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
+                EasyTracker.sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
             case R.id.add_to_black_list_action:
                 mBlackListActionController.processActionFor(mUserId);
@@ -788,7 +788,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
         mUpdater = new Handler();
         startTimer();
-        GCMUtils.lastUserId = mUserId;
 
         if (getView().getHeight() == mKeyboardFreeHeight) {
             mIsKeyboardOpened = true;
@@ -807,7 +806,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         super.onPause();
         getActivity().unregisterReceiver(mNewMessageReceiver);
         stopTimer();
-        GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
         mJustResumed = true;
     }
 

@@ -3,10 +3,12 @@ package com.topface.topface.ui.analytics;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 
 public class TrackedFragmentActivity extends ActionBarActivity {
@@ -15,38 +17,39 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     @Override
     public void onStart() {
         super.onStart();
-        EasyTracker.getInstance().activityStart(this);
-        setCustomMeticsAndDimensions();
         if (isTrackable()) {
-            EasyTracker.getTracker().sendView(getTrackName());
+            Tracker tracker = EasyTracker.getTracker();
+            tracker.setScreenName(getTrackName());
+            tracker.send(setCustomMeticsAndDimensions().build());
         }
     }
 
-    public static void setCustomMeticsAndDimensions() {
+    public static HitBuilders.AppViewBuilder setCustomMeticsAndDimensions() {
         //Дополнительные параметры для статистики
-        Tracker tracker = EasyTracker.getTracker();
-
+        HitBuilders.AppViewBuilder builder = new HitBuilders.AppViewBuilder();
         String socialNet = AuthToken.getInstance().getSocialNet();
-        tracker.setCustomDimension(1, TextUtils.isEmpty(socialNet) ? "Unauthorized" : socialNet);
-        tracker.setCustomDimension(2, CacheProfile.sex == 0 ? "Female" : "Male");
-        tracker.setCustomDimension(3, CacheProfile.paid ? "Yes" : "No");
-        tracker.setCustomDimension(4, CacheProfile.emailConfirmed ? "Yes" : "No");
-        tracker.setCustomDimension(5, CacheProfile.premium ? "Yes" : "No");
-        tracker.setCustomDimension(6, Integer.toString(CacheProfile.age));
+        builder.setCustomDimension(1, TextUtils.isEmpty(socialNet) ? "Unauthorized" : socialNet);
+        builder.setCustomDimension(2, CacheProfile.sex == 0 ? "Female" : "Male");
+        builder.setCustomDimension(3, CacheProfile.paid ? "Yes" : "No");
+        builder.setCustomDimension(4, CacheProfile.emailConfirmed ? "Yes" : "No");
+        builder.setCustomDimension(5, CacheProfile.premium ? "Yes" : "No");
+        builder.setCustomDimension(6, Integer.toString(CacheProfile.age));
+        builder.set(EasyTracker.SESSION_CONTROL, "start");
         /**
          * Абстрактное поле для подсчета статистики экспериментов
          * Т.е. сервер может прислать любые данные для п
          */
         ExperimentTags tags = CacheProfile.getOptions().experimentTags;
         if (tags != null) {
-            tags.setToStatistics(tracker);
+            tags.setToStatistics(builder);
         }
+        return builder;
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        EasyTracker.getInstance().activityStop(this);
+        EasyTracker.getTracker().send(new HitBuilders.AppViewBuilder().set(EasyTracker.SESSION_CONTROL, "end").build());
     }
 
     public boolean isTrackable() {
@@ -56,4 +59,5 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     protected String getTrackName() {
         return ((Object) this).getClass().getSimpleName().replace("Activity", "");
     }
+
 }

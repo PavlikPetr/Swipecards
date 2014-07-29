@@ -2,7 +2,7 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.topface.utils.EasyTracker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +39,6 @@ public class PhotoDeleteRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().sendEvent("Profile", "PhotoDelete", "", 1L);
+        EasyTracker.sendEvent("Profile", "PhotoDelete", "", 1L);
     }
 }

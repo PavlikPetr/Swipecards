@@ -3,7 +3,7 @@ package com.topface.topface.data;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.HitBuilders;
 
 import org.json.JSONObject;
 
@@ -35,10 +35,10 @@ public class ExperimentTags {
     /**
      * Устанавливает ключи экспериментов в статистику GA для разделению юзеров по экспериментам
      */
-    public void setToStatistics(Tracker tracker) {
+    public void setToStatistics(HitBuilders.AppViewBuilder builder) {
         for (int i = 0; i < experiments.size(); i++) {
             int key = experiments.keyAt(i);
-            tracker.setCustomDimension(key, experiments.get(key));
+            builder.setCustomDimension(key, experiments.get(key));
         }
     }
 }

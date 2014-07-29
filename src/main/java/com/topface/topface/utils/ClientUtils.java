@@ -3,7 +3,6 @@ package com.topface.topface.utils;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
-import android.os.Build;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -15,11 +14,6 @@ import java.util.List;
 public class ClientUtils {
     public static final String FALLBACK_LOCALE = "en_US";
 
-
-    public static String getClientDeviceName() {
-        return Build.MANUFACTURER + " " + Build.MODEL + " " + Build.PRODUCT +
-                " (Android " + Build.VERSION.RELEASE + ", build " + Build.ID + ")";
-    }
 
     public static String getClientLocale(Context context) {
         String locale;
@@ -38,7 +32,7 @@ public class ClientUtils {
         try {
             Account[] accounts = AccountManager.get(App.getContext()).getAccounts();
             for (Account account : accounts) {
-                if (Utils.isValidEmail(account.name)) {
+                if (Utils.isValidEmail(account.name) && !result.contains(account.name)) {
                     result.add(account.name);
                 }
             }

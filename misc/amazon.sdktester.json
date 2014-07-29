@@ -1,59 +1,53 @@
 {
-    "com.topface.topface.buy.premium.month.1": {
-        "itemType": "SUBSCRIPTION",
-        "price": 10,
-        "title": "Topface 1 month subscription",
-        "description": "Subscription for VIP status!",
-        "smallIconUrl": "http://some/image.jpg",
-        "subscriptionParent": "com.topface.topface.buy.premium"
-    },
-
-    "com.topface.topface.buy.premium.year.1": {
-        "itemType": "SUBSCRIPTION",
-        "price": 100,
-        "title": "Topface 1 year subscription",
-        "description": "Subscription for VIP status!",
-        "smallIconUrl": "http://some/image.jpg",
-        "subscriptionParent": "com.topface.topface.buy.premium"
-    },
-
-    "com.topface.topface.buy.coins.6": {
-        "itemType": "CONSUMABLE",
-        "price": 1,
-        "title": "6 coins",
-        "description": "Buy 6 coins!",
-        "smallIconUrl": "http://some/image.jpg"
-    },
-
     "com.topface.topface.buy.coins.40": {
-        "itemType": "CONSUMABLE",
-        "price": 5,
-        "title": "40 coins",
-        "description": "Buy 40 coins!",
-        "smallIconUrl": "http://some/image.jpg"
+        "description": "Pack of 40 Coins",
+        "smallIconUrl": "https://s3-external-1.amazonaws.com/com-amazon-mas-catalog/M2KP2TXD0JPGHE%2FM2O6PDO9WYB3CR%2Fimages%2F_e8dcfb1f-b2ba-4569-b3e3-fc5d4ee398e5_c247c64eba72cec5fbb13a54e80145eb",
+        "price": 5.0,
+        "title": "Pack of 40 Coins",
+        "itemType": "CONSUMABLE"
     },
-
-    "com.topface.topface.buy.coins.100": {
-        "itemType": "CONSUMABLE",
-        "price": 10,
-        "title": "100 coins",
-        "description": "Buy 100 coins!",
-        "smallIconUrl": "http://some/image.jpg"
-    },
-
     "com.topface.topface.buy.coins.300": {
-        "itemType": "CONSUMABLE",
-        "price": 25,
-        "title": "300 coins",
-        "description": "Buy 300 coins!",
-        "smallIconUrl": "http://some/image.jpg"
+        "description": "Pack of 300 Coins",
+        "smallIconUrl": "https://s3-external-1.amazonaws.com/com-amazon-mas-catalog/M2KP2TXD0JPGHE%2FM3FP9NWF53IEYZ%2Fimages%2F_3d4f2ce1-f037-4429-87c3-a7f7c736c19f_c247c64eba72cec5fbb13a54e80145eb",
+        "price": 25.0,
+        "title": "Pack of 300 Coins",
+        "itemType": "CONSUMABLE"
     },
-
-    "com.topface.topface.buy.10000": {
-        "itemType": "CONSUMABLE",
-        "price": 3,
-        "title": "10000 energy",
-        "description": "Buy 10000 coins!",
-        "smallIconUrl": "http://some/image.jpg"
+    "com.topface.topface.buy.likes.1": {
+        "description": "Pack of likes",
+        "smallIconUrl": "https://s3-external-1.amazonaws.com/com-amazon-mas-catalog/M2KP2TXD0JPGHE%2FM29IW4DNA6II4X%2Fimages%2F_4750b42f-80c2-4fd5-8a0b-d6d236919ff6_1f166267465a02b6c586bb4412c24ef7",
+        "price": 3.0,
+        "title": "Pack of Likes",
+        "itemType": "CONSUMABLE"
+    },
+    "com.topface.topface.buy.premium.month.1": {
+        "description": "Why you need to be VIP:\r\n— Send admiration’s for free — maximum express of feelings!\r\n— Find out who was interested in you — look through your guests!\r\n— Stay unnoticed looking through other people’s profiles by «invisible» mode\r\n— Receive odds — your messages will be notable against general background!\r\n— Get rid of annoying individuals with the help of «black list»\r\n— Be notable with your VIP status while searching as well as your profile!",
+        "smallIconUrl": "https://s3-external-1.amazonaws.com/com-amazon-mas-catalog/M2KP2TXD0JPGHE%2FM2YYY1ZUGSVU10%2Fimages%2F_ca721a4a-e4e0-463f-8874-5c1382ff7b1c_bd78e7933db8de3ec078921ef7808cb2",
+        "subscriptionParent": "com.topface.topface.buy.premium",
+        "price": 10.0,
+        "title": "VIP Subscription",
+        "itemType": "SUBSCRIPTION"
+    },
+    "com.topface.topface.buy.premium.year.1": {
+        "description": "Why you need to be VIP:\r\n— Send admiration’s for free — maximum express of feelings!\r\n— Find out who was interested in you — look through your guests!\r\n— Stay unnoticed looking through other people’s profiles by «invisible» mode\r\n— Receive odds — your messages will be notable against general background!\r\n— Get rid of annoying individuals with the help of «black list»\r\n— Be notable with your VIP status while searching as well as your profile!",
+        "smallIconUrl": "https://s3-external-1.amazonaws.com/com-amazon-mas-catalog/M2KP2TXD0JPGHE%2FM2YYY1ZUGSVU10%2Fimages%2F_ca721a4a-e4e0-463f-8874-5c1382ff7b1c_bd78e7933db8de3ec078921ef7808cb2",
+        "subscriptionParent": "com.topface.topface.buy.premium",
+        "price": 100.0,
+        "title": "VIP Subscription",
+        "itemType": "SUBSCRIPTION"
+    },
+    "com.topface.topface.buy.coins.100": {
+        "description": "Pack of 100 Coins",
+        "smallIconUrl": "https://s3-external-1.amazonaws.com/com-amazon-mas-catalog/M2KP2TXD0JPGHE%2FM30I8KVWG2QC00%2Fimages%2F_9cb4c30a-2dd5-4b88-b6a4-889e44d298db_c247c64eba72cec5fbb13a54e80145eb",
+        "price": 10.0,
+        "title": "Pack of 100 Coins",
+        "itemType": "CONSUMABLE"
+    },
+    "com.topface.topface.buy.coins.6": {
+        "description": "Pack of 6 Coins",
+        "smallIconUrl": "https://s3-external-1.amazonaws.com/com-amazon-mas-catalog/M2KP2TXD0JPGHE%2FM3OEVDDO2N2I4N%2Fimages%2F_30b5ba48-f291-4cbc-8fcf-e79df9d6bca7_c247c64eba72cec5fbb13a54e80145eb",
+        "price": 1.0,
+        "title": "Pack of 6 Coins",
+        "itemType": "CONSUMABLE"
     }
 }

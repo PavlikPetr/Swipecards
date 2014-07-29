@@ -24,7 +24,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
@@ -34,6 +33,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContactsActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -138,8 +138,8 @@ public class ContactsFragment extends BaseFragment {
                 public void success(IApiResponse response) {
                     boolean isPremium = response.getJsonResult().optBoolean("premium");
                     if (isPremium) {
-                        EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithChecked", "premiumTrue", (long) contacts.size());
-                        EasyTracker.getTracker().sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
+                        EasyTracker.sendEvent("InvitesPopup", "SuccessWithChecked", "premiumTrue", (long) contacts.size());
+                        EasyTracker.sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
                         App.sendProfileAndOptionsRequests(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
@@ -161,7 +161,7 @@ public class ContactsFragment extends BaseFragment {
                             }
                         });
                     } else {
-                        EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithChecked", "premiumFalse", (long) contacts.size());
+                        EasyTracker.sendEvent("InvitesPopup", "SuccessWithChecked", "premiumFalse", (long) contacts.size());
                         Toast.makeText(getActivity(), getString(R.string.invalid_contacts), Toast.LENGTH_LONG).show();
                         if (mContactsVip != null) {
                             mContactsVip.setEnabled(true);
@@ -172,7 +172,7 @@ public class ContactsFragment extends BaseFragment {
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    EasyTracker.getTracker().sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
+                    EasyTracker.sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
                     if (mContactsVip != null) {
                         mContactsVip.setEnabled(true);
                     }

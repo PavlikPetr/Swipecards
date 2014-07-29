@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -31,6 +30,7 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.geo.AddressesCache;
 
@@ -67,7 +67,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             final ProgressBar prsLoader = (ProgressBar) v.getTag(R.id.prsLoader);
             final History item = getItem(position);
             if (item != null) {
-                EasyTracker.getTracker().sendEvent("VirusLike", "Click", "Chat", 0L);
+                EasyTracker.sendEvent("VirusLike", "Click", "Chat", 0L);
 
                 prsLoader.setVisibility(View.VISIBLE);
                 v.setVisibility(View.INVISIBLE);
@@ -75,7 +75,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
                     @Override
                     protected void success(VirusLike data, IApiResponse response) {
-                        EasyTracker.getTracker().sendEvent("VirusLike", "Success", "Chat", 0L);
+                        EasyTracker.sendEvent("VirusLike", "Success", "Chat", 0L);
                         //После заврешения запроса удаляем элемент
                         removeItem(getPosition(position));
                         //И предлагаем отправить пользователю запрос своим друзьям не из приложения
@@ -118,7 +118,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
-                        EasyTracker.getTracker().sendEvent("VirusLike", "Fail", "Chat", 0L);
+                        EasyTracker.sendEvent("VirusLike", "Fail", "Chat", 0L);
                         Utils.showErrorMessage();
                     }
 

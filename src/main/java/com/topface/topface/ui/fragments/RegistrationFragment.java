@@ -18,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Register;
@@ -29,6 +28,7 @@ import com.topface.topface.requests.RegisterRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 
 import java.util.Calendar;
@@ -170,7 +170,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                     intent.putExtra(INTENT_PASSWORD, password);
                     intent.putExtra(INTENT_USER_ID, data.getUserId());
 
-                    EasyTracker.getTracker().sendEvent(
+                    EasyTracker.sendEvent(
                             "Registration",
                             "SubmitRegister",
                             mEdPassword.getVisibility() == View.VISIBLE ? "PasswordEntered" : "PasswordGenerated",

@@ -14,9 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.framework.utils.BackgroundThread;
-import com.topface.topface.GCMUtils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
@@ -38,6 +37,7 @@ import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 
@@ -228,7 +228,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 if (CacheProfile.money >= blockSympathyOptions.price) {
                     btnBuy.setVisibility(View.INVISIBLE);
                     progress.setVisibility(View.VISIBLE);
-                    EasyTracker.getTracker().sendEvent(
+                    EasyTracker.sendEvent(
                             getTrackName(), "VipPaidSympathies." + blockSympathyOptions.group,
                             "Buying", 1l
                     );
@@ -265,7 +265,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     private void openBuyScreenOnBlockedLikes(Options.BlockSympathy blockSympathyOptions) {
         String group = blockSympathyOptions.group;
-        EasyTracker.getTracker().sendEvent(
+        EasyTracker.sendEvent(
                 getTrackName(), "VipPaidSympathies." + group,
                 "OpenBuyingScreen", 1l
         );
@@ -286,12 +286,12 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         .getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                 final long showsCount = prefs.getLong(Static.PREFERENCES_PAID_LIKES_COUNT, 1l);
                 if (showsCount > 1l) {
-                    EasyTracker.getTracker().sendEvent(
+                    EasyTracker.sendEvent(
                             getTrackName(), "VipPaidSympathies." + blockSympathyOptions.group,
                             "ShownOnce", 1l
                     );
                 } else {
-                    EasyTracker.getTracker().sendEvent(
+                    EasyTracker.sendEvent(
                             getTrackName(), "VipPaidSympathies." + blockSympathyOptions.group,
                             "ShownMoreThanOnce", showsCount
                     );

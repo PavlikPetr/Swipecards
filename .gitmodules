@@ -16,9 +16,9 @@
 [submodule "libs/odnoklassniki"]
 	path = libs/odnoklassniki
 	url = git@github.com:Topface/Odnoklassniki-Android-SDK.git
-[submodule "libs/AdLabSDK"]
-	path = libs/AdLabSDK
-	url = git@github.com:Topface/AdLabSDK.git
 [submodule "libs/mopub-android-sdk"]
 	path = libs/mopub-android-sdk
 	url = git@github.com:Topface/mopub-android-sdk.git
+[submodule "libs/tf-offerwall"]
+	path = libs/tf-offerwall
+	url = git@github.com:iovorobiev/offerwall-android.git

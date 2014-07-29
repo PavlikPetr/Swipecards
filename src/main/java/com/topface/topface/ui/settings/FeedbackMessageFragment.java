@@ -3,6 +3,7 @@ package com.topface.topface.ui.settings;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
@@ -114,27 +115,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
             mFeedbackType = (FeedbackType) extras.getSerializable(INTENT_FEEDBACK_TYPE);
             mFeedbackType = mFeedbackType == null ? FeedbackType.UNKNOWN : mFeedbackType;
             mReport.setType(mFeedbackType);
-            switch (mFeedbackType) {
-                case ERROR_MESSAGE:
-                    mReport.subject = getString(R.string.settings_error_message_internal);
-                    break;
-                case DEVELOPERS_MESSAGE:
-                    mReport.subject = getString(R.string.settings_ask_developer_internal);
-                    break;
-                case PAYMENT_MESSAGE:
-                    mReport.subject = getString(R.string.settings_payment_problems_internal);
-                    break;
-                case COOPERATION_MESSAGE:
-                    mReport.subject = getString(R.string.settings_cooperation_internal);
-                    break;
-                case BAN:
-                    mReport.subject = getString(R.string.feedback_subject_ban_internal);
-                    break;
-                case UNKNOWN:
-                default:
-                    mReport.subject = getString(R.string.settings_feedback_internal);
-                    break;
-            }
+            mReport.subject = mFeedbackType.getTitle();
         }
     }
 
@@ -277,24 +258,33 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     }
 
     public enum FeedbackType {
-        UNKNOWN("mobile_none"),
-        ERROR_MESSAGE("mobile_error"),
-        DEVELOPERS_MESSAGE("mobile_question"),
-        PAYMENT_MESSAGE("mobile_payment_issue"),
-        COOPERATION_MESSAGE("mobile_cooperation"),
-        BAN("mobile_ban"),
-        LOW_RATE_MESSAGE("mobile_low_rate");
+        UNKNOWN("mobile_none", R.string.settings_feedback_internal),
+        ERROR_MESSAGE("mobile_error", R.string.settings_error_message_internal),
+        DEVELOPERS_MESSAGE("mobile_question", R.string.settings_ask_developer_internal),
+        PAYMENT_MESSAGE("mobile_payment_issue", R.string.settings_payment_problems_internal),
+        COOPERATION_MESSAGE("mobile_cooperation", R.string.settings_cooperation_internal),
+        BAN("mobile_ban", R.string.feedback_subject_ban_internal),
+        LOW_RATE_MESSAGE("mobile_low_rate", R.string.settings_low_rate_internal);
 
         private final String mTypeTag;
+        private final int mTitleRes;
 
-        FeedbackType(String tag) {
+        FeedbackType(String tag, @StringRes int title) {
             mTypeTag = tag;
+            mTitleRes = title;
         }
 
         public String getTag() {
             return mTypeTag;
         }
+
+
+        public String getTitle() {
+            return App.getContext().getResources().getString(mTitleRes);
+        }
     }
+
+
 
     public static class Report {
         String email;
@@ -339,7 +329,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         public void setBody(String body) {
             this.body = body;
         }
-
+        
         public String getExtra() {
             StringBuilder strBuilder = new StringBuilder();
 

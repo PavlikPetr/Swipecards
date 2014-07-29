@@ -191,9 +191,10 @@ public class HttpUtils {
         if (mUserAgent == null) {
             final Locale locale = Locale.getDefault();
             mUserAgent = String.format(
-                    USER_AGENT_APP_NAME + "/%s%s (%s; %s; %s-%s)",
-                    Utils.getClientVersion(),
+                    USER_AGENT_APP_NAME + "/%s%s v%d (%s; %s; %s-%s)",
+                    BuildConfig.VERSION_NAME,
                     TextUtils.equals(BuildConfig.BUILD_TYPE, "release") ? "" : "-" + BuildConfig.BUILD_TYPE,
+                    BuildConfig.VERSION_CODE,
                     BuildConfig.BILLING_TYPE.getClientType(),
                     Utils.getClientOsVersion(),
                     locale.getLanguage(),

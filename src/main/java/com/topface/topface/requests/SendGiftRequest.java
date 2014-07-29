@@ -2,7 +2,8 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.google.analytics.tracking.android.EasyTracker;
+
+import com.topface.topface.utils.EasyTracker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +34,6 @@ public class SendGiftRequest extends ConfirmedApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().sendEvent("Gifts", "Send", Integer.toString(giftId), 1L);
+        EasyTracker.sendEvent("Gifts", "Send", Integer.toString(giftId), 1L);
     }
 }
