@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -389,6 +391,12 @@ public class FullscreenController {
     }
 
     private void requestVidigerFullscreen() {
+        ConnectivityManager connManager = (ConnectivityManager) mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (!networkInfo.isConnected()) {
+            Debug.log("Ignore Vidiger ad because of no wifi");
+            return;
+        }
         Debug.log("Configure Vidiger");
         FAAN.configure(mActivity, VIDIGER_APP_ID, VIDIGER_ZONES);
         new Handler().postDelayed(new Runnable() {
@@ -473,7 +481,9 @@ public class FullscreenController {
 
             @Override
             public void callOnUi() {
-                FullscreenController.this.requestFullscreen(BannerBlock.BANNER_VIDIGER);
+                if (isApplicable()) {
+                    FullscreenController.this.requestFullscreen(BannerBlock.BANNER_VIDIGER);
+                }
             }
 
             @Override

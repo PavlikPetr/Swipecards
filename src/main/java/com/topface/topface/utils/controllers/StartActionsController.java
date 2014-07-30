@@ -26,10 +26,12 @@ public class StartActionsController {
     private final Activity mActivity;
 
     private List<IStartAction> mPendingActions;
+    private List<IStartAction> mMandatoryActions;
     private IStartAction mDebugAction;
 
     public StartActionsController(Activity activity) {
         mPendingActions = new LinkedList<>();
+        mMandatoryActions = new LinkedList<>();
         mActivity = activity;
     }
 
@@ -48,6 +50,11 @@ public class StartActionsController {
                 Debug.log(TAG, "try to process start action");
                 if (!processedActionForSession) {
                     processedActionForSession = startAction();
+                    for (IStartAction action : mMandatoryActions) {
+                        if (action.isApplicable()) {
+                            processedActionForSession |= processAction(action);
+                        }
+                    }
                 } else {
                     Debug.log(TAG, "some action already processed for this session");
                 }
@@ -106,6 +113,16 @@ public class StartActionsController {
     public void registerAction(IStartAction action) {
         mPendingActions.add(action);
         Debug.log(TAG, "register " + action.toString());
+    }
+
+    /**
+     * Adds action to list of mandatory actions
+     *
+     * @param action which is needed to be process on start
+     */
+    public void registerMandatoryAction(IStartAction action) {
+        mMandatoryActions.add(action);
+        Debug.log(TAG, "register mandatory " + action.toString());
     }
 
     /**
