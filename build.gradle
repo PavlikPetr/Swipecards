@@ -249,7 +249,7 @@ subprojects {
 android {
     lintOptions {
         checkReleaseBuilds true
-        abortOnError true
+        abortOnError false
         ignore "MissingTranslation", "ValidFragment"
         /*ValidFragment пока игнорируем, но нужно будет исправить*/
     }
