@@ -9,11 +9,11 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.ResourcesUtils;
 
 public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.OnClickListener {
@@ -65,7 +65,7 @@ public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.On
 
     @Override
     protected void onCloseButtonClick(View v) {
-        EasyTracker.getTracker().sendEvent(getTrackName(), "Close", "", 1L);
+        EasyTracker.sendEvent(getTrackName(), "Close", "", 1L);
         closeDialog();
     }
 
@@ -73,12 +73,12 @@ public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnRespondToLikes:
-                EasyTracker.getTracker().sendEvent(getTrackName(), "AnswerOnLikes", "", 1L);
+                EasyTracker.sendEvent(getTrackName(), "AnswerOnLikes", "", 1L);
                 if (mWatchSequentialyListener != null) mWatchSequentialyListener.onRespondToLikes();
                 closeDialog();
                 break;
             case R.id.btnBuyVip:
-                EasyTracker.getTracker().sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
+                EasyTracker.sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
                 Intent intent = PurchasesActivity.createVipBuyIntent(null, "ClosingDialogWatchAsList");
                 startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 closeDialog();

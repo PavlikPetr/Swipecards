@@ -69,7 +69,7 @@ public class ComplainsMessageFragment extends BaseFragment {
         Utils.hideSoftKeyboard(getActivity(), description);
         mSendMenuItem.setEnabled(false);
         ComplainRequest request = new ComplainRequest(getActivity(), userId, className, typeName);
-        if (!description.getText().toString().equals("")) {
+        if (!description.getText().toString().isEmpty()) {
             request.setDescription(description.getText().toString());
         }
         if (feedId != null) {

@@ -12,10 +12,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.google.ads.Ad;
-import com.google.ads.AdListener;
-import com.google.ads.AdRequest;
-import com.google.ads.InterstitialAd;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.ivengo.adv.AdvListener;
 import com.ivengo.adv.AdvView;
 import com.lifestreet.android.lsmsdk.BannerAdapter;
@@ -25,7 +24,6 @@ import com.lifestreet.android.lsmsdk.InterstitialSlot;
 import com.lifestreet.android.lsmsdk.SlotView;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubInterstitial;
-import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -67,7 +65,6 @@ public class FullscreenController {
     private static final String IVENGO_APP_ID = "aggeas97392g";
     private static final String LIFESTREET_TAG = "http://mobile-android.lfstmedia.com/m2/slot76331?ad_size=320x480&adkey=a25";
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-3847865014365726/7595518694";
-    private static final String ADMOB_MEDIATION_INTERSTITIAL_ID = "5161525f5e624978";
     private static final String VIDIGER_APP_ID = "473379e6-3cf3-4405-abfc-564fadc00752";
     private static final String[] VIDIGER_ZONES = new String[]{"692a2d36-bbdb-4b6e-b0c5-009a2818f6da"};
     private static boolean isFullScreenBannerVisible = false;
@@ -79,7 +76,6 @@ public class FullscreenController {
 
     public FullscreenController(Activity activity) {
         mActivity = activity;
-        FAAN.configure(mActivity, VIDIGER_APP_ID, VIDIGER_ZONES);
     }
 
     private void requestFallbackFullscreen() {
@@ -119,14 +115,9 @@ public class FullscreenController {
     }
 
     private void addLastFullscreenShowedTime() {
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                SharedPreferences.Editor editor = getPreferences().edit();
-                editor.putLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, System.currentTimeMillis());
-                editor.commit();
-            }
-        };
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, System.currentTimeMillis());
+        editor.apply();
     }
 
     private void addNewUrlToFullscreenSet(String url) {
@@ -134,24 +125,20 @@ public class FullscreenController {
         urlSet.add(url);
         SharedPreferences.Editor editor = getPreferences().edit();
         editor.putString(Static.PREFERENCES_FULLSCREEN_URLS_SET, TextUtils.join(URL_SEPARATOR, urlSet));
-        editor.commit();
+        editor.apply();
     }
 
     private void requestGagFullscreen() {
         requestFullscreen(CacheProfile.getOptions().gagTypeFullscreen);
     }
 
-    @SuppressWarnings("UnnecessaryReturnStatement")
     public void requestFullscreen(String type) {
         try {
             switch (type) {
                 case BannerBlock.BANNER_NONE:
                     return;
-                case BannerBlock.BANNER_ADMOB_MEDIATION:
-                    requestAdmobFullscreen(ADMOB_MEDIATION_INTERSTITIAL_ID);
-                    break;
                 case BannerBlock.BANNER_ADMOB:
-                    requestAdmobFullscreen(ADMOB_INTERSTITIAL_ID);
+                    requestAdmobFullscreen();
                     break;
                 case BannerBlock.BANNER_ADWIRED:
                     requestAdwiredFullscreen();
@@ -175,46 +162,49 @@ public class FullscreenController {
                     break;
             }
         } catch (Exception e) {
-            Debug.error("Fullscreen request error", e);
+            Debug.error("Request fullscreen error", e);
         }
     }
 
-    private void requestAdmobFullscreen(String adUnitId) {
+    public void requestAdmobFullscreen() {
         // Создание межстраничного объявления.
-        final InterstitialAd interstitial = new InterstitialAd(mActivity, adUnitId);
+        final InterstitialAd interstitial = new InterstitialAd(mActivity);
+        interstitial.setAdUnitId(ADMOB_INTERSTITIAL_ID);
         // Создание запроса объявления.
-        AdRequest adRequest = new AdRequest();
-        adRequest.setGender(CacheProfile.getProfile().sex == Static.BOY ? AdRequest.Gender.MALE :
-                AdRequest.Gender.FEMALE);
+        AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+        adRequestBuilder.setGender(
+                CacheProfile.getProfile().sex == Static.BOY ?
+                        AdRequest.GENDER_MALE :
+                        AdRequest.GENDER_FEMALE
+        );
         // Запуск загрузки межстраничного объявления.
-        interstitial.loadAd(adRequest);
+        interstitial.loadAd(adRequestBuilder.build());
         // AdListener будет использовать обратные вызовы, указанные ниже.
         interstitial.setAdListener(new AdListener() {
             @Override
-            public void onReceiveAd(Ad ad) {
-                if (ad == interstitial) {
-                    interstitial.show();
-                    addLastFullscreenShowedTime();
-                }
-            }
-
-            @Override
-            public void onFailedToReceiveAd(Ad ad, AdRequest.ErrorCode errorCode) {
-                requestFallbackFullscreen();
-            }
-
-            @Override
-            public void onPresentScreen(Ad ad) {
-                isFullScreenBannerVisible = true;
-            }
-
-            @Override
-            public void onDismissScreen(Ad ad) {
+            public void onAdClosed() {
                 isFullScreenBannerVisible = false;
             }
 
             @Override
-            public void onLeaveApplication(Ad ad) {
+            public void onAdFailedToLoad(int errorCode) {
+                requestFallbackFullscreen();
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                super.onAdLeftApplication();
+            }
+
+            @Override
+            public void onAdOpened() {
+                isFullScreenBannerVisible = true;
+            }
+
+            @Override
+            public void onAdLoaded() {
+                interstitial.show();
+                addLastFullscreenShowedTime();
             }
         });
     }

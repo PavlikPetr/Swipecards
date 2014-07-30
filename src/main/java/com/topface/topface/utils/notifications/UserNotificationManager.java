@@ -15,12 +15,12 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
-import com.topface.topface.GCMUtils.User;
 import com.topface.topface.Static;
 import com.topface.topface.receivers.NotificationClosedReceiver;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.gcmutils.GCMUtils;
+import com.topface.topface.utils.gcmutils.GCMUtils.User;
 
 public class UserNotificationManager {
     public static final int NOTIFICATION_ID = 1312; //Completely random number

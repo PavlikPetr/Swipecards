@@ -18,7 +18,9 @@ public class MaskClipProcessor implements BitmapProcessor {
     private static SparseArrayCompat<Bitmap> cachedMaskBitmaps = new SparseArrayCompat<>();
 
     public MaskClipProcessor(int mask, int border) {
-        mMask = cachedMaskBitmaps.get(mask);
+        if (cachedMaskBitmaps != null) {
+            mMask = cachedMaskBitmaps.get(mask);
+        }
         if (mMask == null) {
             mMask = BitmapFactory.decodeResource(App.getContext().getResources(), mask);
             cachedMaskBitmaps.put(mask, mMask);

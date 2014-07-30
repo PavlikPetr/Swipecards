@@ -49,11 +49,14 @@ android {
     }
 
     defaultConfig {
+        applicationId 'com.topface.topface'
         //noinspection GroovyAssignabilityCheck
         minSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MIN_SDK_VERSION)
         //noinspection GroovyAssignabilityCheck
         targetSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
 
+        versionCode Integer.parseInt(rootProject.VERSION_CODE)
+        versionName rootProject.VERSION_NAME
         //noinspection GroovyAssignabilityCheck
         testApplicationId "com.topface.topface.test"
         //noinspection GroovyAssignabilityCheck
@@ -80,10 +83,12 @@ android {
 
     buildTypes {
         release {
+            //noinspection GroovyAssignabilityCheck
             signingConfig signingConfigs.release
         }
         //Специальный тип сборки для тестирования отделом QA,
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
+        //noinspection GroovyAssignabilityCheck
         qa.initWith(buildTypes.debug)
         qa {
             buildConfigField "long", "BUILD_TIME", "${getTimestamp()}L";
@@ -105,11 +110,11 @@ dependencies {
     compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
     compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
 
-    //All jar libs
-    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'GoogleAdMobAdsSdk.jar')
+    //Google play services
+    compile rootProject.GOOGLE_PLAY_SERVICES_VERSION
 
-    //Для Амазона нужна библиотека для поддержки in-app покупок
-    compile files('libs/amazon/amazon-in-app-purchasing.jar')
+    //All jar libs
+    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'amazon/*.jar')
 
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
@@ -117,6 +122,7 @@ dependencies {
 
     //Third party libs
     compile 'ch.acra:acra:4.5.0'
+    compile 'com.google.code.gson:gson:2.2.+'
     compile project(':libs:Android-ViewPagerIndicator')
     compile project(':libs:PullToRefresh')
     compile project(':libs:PhotoView')
@@ -128,13 +134,21 @@ dependencies {
 
     //Ad networks SDK
     compile project(':libs:mopub-android-sdk')
-    compile project(':libs:AdLabSDK')
+
+    //Аннотации вроде @NonNull и @*Res для обозначения переменных
+    compile 'com.android.support:support-annotations:+'
+
+    //Для Амазона нужна библиотека для поддержки in-app покупок
+    amazonCompile files('libs/amazon/*.jar')
+
+    compile project(':libs:tf-offerwall:sdk')
 
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.+'
 }
 
 project(':libs:AndroidStatistics') {
     apply plugin: 'com.android.library'
+    //noinspection GradleMisplacedStatement
     repositories {
         mavenCentral()
     }
@@ -151,6 +165,7 @@ project(':libs:IllustratedTextView') {
 
 project(':libs:Android-ViewPagerIndicator') {
     apply plugin: 'com.android.library'
+    //noinspection GradleMisplacedStatement
     dependencies {
         compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
         compile project(':libs:IllustratedTextView')
@@ -211,28 +226,13 @@ project(':libs:odnoklassniki') {
 //Ad networks
 project(':libs:mopub-android-sdk') {
     apply plugin: 'com.android.library'
+    //noinspection GradleMisplacedStatement
     dependencies {
         compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
-        compile files('../GoogleAdMobAdsSdk.jar')
     }
     android.sourceSets.main {
         manifest.srcFile 'mopub-sdk/AndroidManifest.xml'
         java.srcDirs = ['mopub-sdk/src/main/java']
-    }
-}
-
-
-project(':libs:AdLabSDK') {
-    apply plugin: 'com.android.library'
-    dependencies {
-        compile files('libs/apache-mime4j-0.6.jar')
-        compile files('libs/commons-io-1.4.jar')
-        compile files('libs/httpmime-4.0.jar')
-    }
-    android.sourceSets.main {
-        manifest.srcFile 'AndroidManifest.xml'
-        java.srcDirs = ['src']
-        res.srcDirs = ['res']
     }
 }
 

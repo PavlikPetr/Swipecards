@@ -21,7 +21,6 @@ import java.util.TimeZone;
 public class AuthRequest extends ApiRequest {
     // Data
     public static final String SERVICE_NAME = "auth.login";
-    public static final String FALLBACK_CLIENT_VERSION = "2.9.0.1";
     public static final String FALLBACK_LOCALE = "en_US";
     /**
      * Временная зона девайса по умолчанию, отправляем каждый раз на сервер при авторизации
@@ -46,7 +45,7 @@ public class AuthRequest extends ApiRequest {
         doNeedAlert(false);
         clienttype = BuildConfig.BILLING_TYPE.getClientType();
         locale = getClientLocale(context);
-        clientversion = Utils.getClientVersion();
+        clientversion = BuildConfig.VERSION_NAME;
         clientosversion = Utils.getClientOsVersion();
         clientdevice = Utils.getClientDeviceName();
         tablet = context.getResources().getBoolean(R.bool.is_tablet);
@@ -94,6 +93,7 @@ public class AuthRequest extends ApiRequest {
                 .put("locale", locale)
                 .put("clientType", clienttype)
                 .put("clientVersion", clientversion)
+                .put("clientCodeVersion", BuildConfig.VERSION_CODE)
                 .put("clientOsVersion", clientosversion)
                 .put("clientDevice", clientdevice)
                 .put("login", login)

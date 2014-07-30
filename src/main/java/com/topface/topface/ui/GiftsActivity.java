@@ -4,13 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.SendGiftAnswer;
@@ -24,8 +24,7 @@ import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.TripleButton;
-
-import org.jetbrains.annotations.NotNull;
+import com.topface.topface.utils.EasyTracker;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -222,14 +221,14 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     }
 
     @Override
-    protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mGiftsList = savedInstanceState.getParcelableArrayList(GIFTS_LIST);
     }
 
     @Override
     public void onSendGift(final Gift item) {
-        EasyTracker.getTracker().sendEvent("Gifts", "Send", "GiftId=" + item.id, (long) item.price);
+        EasyTracker.sendEvent("Gifts", "Send", "GiftId=" + item.id, (long) item.price);
         if (mNeedToSendGift) {
             final SendGiftRequest sendGiftRequest = new SendGiftRequest(this);
             sendGiftRequest.giftId = item.id;

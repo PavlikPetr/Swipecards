@@ -28,7 +28,6 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.appsflyer.AppsFlyerLib;
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -47,6 +46,7 @@ import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AuthButtonsController;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -210,7 +210,7 @@ public class AuthFragment extends BaseFragment {
                 additionalButtonsScreen = true;
                 if (btnsController != null) {
                     btnsController.switchSettings();
-                    EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, "OtherWaysButtonClicked", btnsController.getLocaleTag(), 1L);
+                    EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "OtherWaysButtonClicked", btnsController.getLocaleTag(), 1L);
                 }
                 setAuthInterface();
             }
@@ -232,7 +232,7 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EasyTracker.getTracker().sendEvent("Registration", "StartActivity", "FromAuth", 1L);
+                EasyTracker.sendEvent("Registration", "StartActivity","FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), RegistrationActivity.class);
                 startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
             }
@@ -374,7 +374,7 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EasyTracker.getTracker().sendEvent("Registration", "StartActivity", "FromAuth", 1L);
+                EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), RegistrationActivity.class);
                 startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
             }
@@ -420,7 +420,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void auth(final AuthToken token) {
-        EasyTracker.getTracker().sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
+        EasyTracker.sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
         App.getConfig().onAuthTokenReceived();
         hideButtons();
         final AuthRequest authRequest = new AuthRequest(token.getTokenInfo(), getActivity());
@@ -683,7 +683,7 @@ public class AuthFragment extends BaseFragment {
     private void btnVKClick() {
         // костыль, надо избавить от viewflipper к чертовой бабушке
         mProcessingTFReg = false;
-        EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalVk" : "LoginMainVk", btnsController.getLocaleTag(), 1L);
+        EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalVk" : "LoginMainVk", btnsController.getLocaleTag(), 1L);
 
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
@@ -694,7 +694,7 @@ public class AuthFragment extends BaseFragment {
     private void btnFBClick() {
         // костыль, надо избавить от viewflipper к чертовой бабушке
         mProcessingTFReg = false;
-        EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalFb" : "LoginMainFb", btnsController.getLocaleTag(), 1L);
+        EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalFb" : "LoginMainFb", btnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.facebookAuth();
@@ -704,7 +704,7 @@ public class AuthFragment extends BaseFragment {
 
     private void btnOKClick() {
         mProcessingTFReg = false;
-        EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalOk" : "LoginMainOk", btnsController.getLocaleTag(), 1L);
+        EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalOk" : "LoginMainOk", btnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
             mAuthorizationManager.odnoklassnikiAuth(new AuthorizationManager.OnTokenReceivedListener() {
                 @Override
@@ -781,7 +781,7 @@ public class AuthFragment extends BaseFragment {
             actionBar.show();
         }
         if (!hasAuthorized) {
-            EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "DismissAdditional" : "DismissMain", btnsController.getLocaleTag(), 1L);
+            EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "DismissAdditional" : "DismissMain", btnsController.getLocaleTag(), 1L);
         }
     }
 

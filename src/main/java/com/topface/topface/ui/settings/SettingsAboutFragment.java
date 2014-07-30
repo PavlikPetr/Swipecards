@@ -37,7 +37,7 @@ public class SettingsAboutFragment extends BaseFragment {
         try {
             PackageManager packageManager = activity.getPackageManager();
             String packageName = activity.getPackageName();
-            versionNumber = packageManager.getPackageInfo(packageName, 0).versionName;
+            versionNumber = BuildConfig.VERSION_NAME;
 
             //Дополнительную информацию показываем только в дебаг режиме
             if (BuildConfig.DEBUG) {

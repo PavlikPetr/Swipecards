@@ -1,6 +1,7 @@
 package com.topface.topface.utils.controllers;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewStub;
@@ -37,8 +38,6 @@ import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +68,7 @@ public class ClosingsController implements View.OnClickListener {
     private static boolean mLogoutWasInitiated = false;
     private INavigationFragmentsListener mNavigationFragmentsListener;
 
-    public ClosingsController(@NotNull final MenuFragment menuFragment, @NotNull ViewStub mHeaderViewStub, @NotNull LeftMenuAdapter adapter) {
+    public ClosingsController(@NonNull final MenuFragment menuFragment, @NonNull ViewStub mHeaderViewStub, @NonNull LeftMenuAdapter adapter) {
         mMenuFragment = menuFragment;
         mNavigationFragmentsListener = mMenuFragment.getNavigationFragmentsListener();
         mViewStub = mHeaderViewStub;
@@ -86,7 +85,7 @@ public class ClosingsController implements View.OnClickListener {
      * but still after retrieving feeds there can be no closings at all
      */
     public boolean show() {
-        return canShowClosings() ? showInner() : false;
+        return canShowClosings() && showInner();
     }
 
     /**

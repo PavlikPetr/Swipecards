@@ -21,7 +21,6 @@ import android.widget.FrameLayout;
 
 import com.topface.framework.utils.Debug;
 import com.topface.statistics.NotificationStatistics;
-import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
@@ -30,6 +29,7 @@ import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.controllers.StartActionsController;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;

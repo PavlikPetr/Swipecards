@@ -1,14 +1,19 @@
-package com.topface.topface;
+package com.topface.topface.utils.gcmutils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Looper;
 import android.text.TextUtils;
 
-import com.google.android.gcm.GCMRegistrar;
-import com.topface.framework.utils.BackgroundThread;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
+import com.topface.topface.R;
+import com.topface.topface.Ssid;
+import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.ui.ChatActivity;
@@ -22,6 +27,7 @@ import com.topface.topface.utils.notifications.UserNotificationManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,9 +40,10 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITOR
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
 
-    /**
-     * Типы уведомлений с сервера. У разных типов - разные действия
-     */
+    private static final String SENDER_ID = "932206034265";
+    private Context mContext;
+    private GoogleCloudMessaging mGcmObject;
+    private String mRegId;
 
     public static final int GCM_TYPE_UNKNOWN = -1;
     public static final int GCM_TYPE_MESSAGE = 0;
@@ -64,8 +71,6 @@ public class GCMUtils {
 
     public static int lastNotificationType = GCM_TYPE_UNKNOWN;
 
-    public static int lastUserId = -1;
-
     private static boolean showMessage = false;
     private static boolean showLikes = false;
     private static boolean showSympathy = false;
@@ -79,53 +84,88 @@ public class GCMUtils {
      * Extras key for additon gcm message label.
      */
     public static final String GCM_LABEL = "GCM_LABEL";
-    public static boolean GCM_SUPPORTED = true;
 
-    public static void init(final String serverToken, final Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    try {
-                        GCMRegistrar.checkDevice(context);
-                        GCMRegistrar.checkManifest(context);
-                        if (GCMRegistrar.isRegistered(context)) {
-                            final String regId = GCMRegistrar.getRegistrationId(context);
-                            Debug.log("GCM: Already registered, regID is " + regId);
+    public GCMUtils(Context context) {
+        mContext = context;
+    }
 
-                            //Если токен с сервера отличается, отправляем новый.
-                            if (!TextUtils.equals(regId, serverToken)) {
-                                Looper.prepare();
-                                sendRegId(context, regId);
-                                Looper.loop();
-                            }
-                        } else {
-                            GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
-                        }
-                    } catch (Exception ex) {
-                        handleNoGcmSupport(ex);
+    public boolean registerGCM(String serverToken) {
+        if (App.isGmsEnabled()) {
+            mGcmObject = GoogleCloudMessaging.getInstance(mContext);
+            mRegId = getRegistrationId();
+            if (mRegId.isEmpty()) {
+                registerInBackground(serverToken);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void registerInBackground(final String serverToken) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String regId = null;
+                try {
+                    if (mGcmObject == null) {
+                        mGcmObject = GoogleCloudMessaging.getInstance(mContext);
                     }
+                    regId = mGcmObject.register(SENDER_ID);
+
+                } catch (IOException ex) {
+                    Debug.error(ex);
                 }
-            };
-        } else {
-            handleNoGcmSupport(null);
+                return regId;
+            }
+
+            @Override
+            protected void onPostExecute(String regId) {
+                if (regId != null && !serverToken.equals(regId)) {
+                    mRegId = regId;
+                    sendRegistrationIdToBackend();
+                    storeRegistrationId();
+                } else if (regId == null) {
+                    Debug.log("Registration id is null");
+                }
+            }
+        }.execute(null, null, null);
+    }
+
+    public void unregister() {
+        try {
+            if (mGcmObject == null) {
+                mGcmObject = GoogleCloudMessaging.getInstance(mContext);
+            }
+            mGcmObject.unregister();
+        } catch (IOException e) {
+            Debug.error("Can't unregister gcm", e);
         }
     }
 
-    private static void handleNoGcmSupport(Exception exc) {
-        GCM_SUPPORTED = false;
-        if (exc != null) {
-            Debug.error("GCM: GCM not supported", exc);
-        } else {
-            Debug.error("GCM: GCM not supported");
-        }
+    private void sendRegistrationIdToBackend() {
+        Debug.log("GCM: Try send regId to server: ", mRegId);
+        new RegistrationTokenRequest(mRegId, mContext).exec();
     }
 
-    /**
-     * Метод для тестирования GCM сообщений
-     *
-     * @param context контекст приложения
-     */
+    private void storeRegistrationId() {
+        App.getUserConfig().setGcmRegId(mRegId);
+    }
+
+    private String getRegistrationId() {
+        String registrationId = App.getUserConfig().getGcmRegId();
+        if (registrationId.isEmpty()) {
+            Debug.log("No reg id");
+            return "";
+        }
+        int registeredVersion = App.getUserConfig().getLastAppVersion();
+        if (registeredVersion != BuildConfig.VERSION_CODE) {
+            Debug.log("App version changed.");
+            return "";
+        }
+        return registrationId;
+    }
+
+
     public static boolean showNotificationIfNeed(final Intent extra, Context context) {
         //Проверяем, не отключены ли уведомления
         if (!Settings.getInstance().isNotificationEnabled()) {
@@ -144,6 +184,7 @@ public class GCMUtils {
         return false;
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static boolean showNotification(final Intent extra, Context context) {
         String uid = Integer.toString(CacheProfile.uid);
         String targetUserId = extra.getStringExtra("receiver");
@@ -215,7 +256,7 @@ public class GCMUtils {
         }
     }
 
-    static int getType(Intent extra) {
+    public static int getType(Intent extra) {
         String typeString = extra.getStringExtra("type");
         try {
             return typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
@@ -274,7 +315,7 @@ public class GCMUtils {
     }
 
     private static String getTitle(Context context, String title) {
-        if (title == null || title.equals("")) {
+        if (TextUtils.isEmpty(title)) {
             title = context.getString(R.string.app_name);
         }
         return title;
@@ -374,12 +415,6 @@ public class GCMUtils {
             }
         }, NOTIFICATION_CANCEL_DELAY);
 
-    }
-
-    public static void sendRegId(final Context context, final String registrationId) {
-        Debug.log("GCM: Try send regId to server: ", registrationId);
-
-        new RegistrationTokenRequest(registrationId, context).exec();
     }
 
     public static String getLabel(Intent intent) {

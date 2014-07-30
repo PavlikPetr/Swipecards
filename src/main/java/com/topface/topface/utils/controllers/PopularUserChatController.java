@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.ui.PurchasesActivity;
@@ -19,6 +19,7 @@ import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.EasyTracker;
 
 import java.lang.ref.WeakReference;
 
@@ -85,7 +86,7 @@ public class PopularUserChatController extends BroadcastReceiver {
 
     public PopularUserChatController(ChatFragment chatFragment, ViewGroup lockScreen) {
         mChatFragment = chatFragment;
-        mLockScreenRef = new WeakReference<ViewGroup>(lockScreen);
+        mLockScreenRef = new WeakReference<>(lockScreen);
     }
 
     public void setTexts(String dialogTitle, String blockText) {
@@ -94,7 +95,7 @@ public class PopularUserChatController extends BroadcastReceiver {
     }
 
     public void setLockScreen(ViewGroup lockScreen) {
-        mLockScreenRef = new WeakReference<ViewGroup>(lockScreen);
+        mLockScreenRef = new WeakReference<>(lockScreen);
         if (isChatLocked()) {
             blockChat();
         }
@@ -110,7 +111,7 @@ public class PopularUserChatController extends BroadcastReceiver {
     }
 
     public boolean isAccessAllowed() {
-        return CacheProfile.premium || mBlockText == null || mBlockText.equals("") || mOff;
+        return CacheProfile.premium || TextUtils.isEmpty(mBlockText) || mOff;
     }
 
     public boolean checkChatBlock(History message) {
@@ -163,7 +164,7 @@ public class PopularUserChatController extends BroadcastReceiver {
                 public void onClick(View v) {
                     switch (v.getId()) {
                         case R.id.btnBuyVip:
-                            EasyTracker.getTracker().sendEvent("Chat", "BuyVipStatus", "", 1L);
+                            EasyTracker.sendEvent(mChatFragment.getTrackName(), "BuyVipStatus", "", 1L);
                             Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
                             mChatFragment.startActivity(intent);
                             break;

@@ -4,12 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.text.TextUtils;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -76,8 +75,7 @@ public class PopupManager {
 
     private boolean isOldVersion(String version) {
         try {
-            PackageInfo pInfo = mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), 0);
-            String curVersion = pInfo.versionName;
+            String curVersion = BuildConfig.VERSION_NAME;
             if (!TextUtils.isEmpty(version) && !TextUtils.isEmpty(curVersion)) {
                 String[] splittedVersion = TextUtils.split(version, "\\.");
                 String[] splittedCurVersion = TextUtils.split(curVersion, "\\.");
@@ -179,7 +177,7 @@ public class PopupManager {
 
                 InvitesPopup popup = InvitesPopup.newInstance(contacts);
                 popup.show(mActivity.getSupportFragmentManager(), InvitesPopup.TAG);
-                EasyTracker.getTracker().sendEvent("InvitesPopup", "Show", "", 0L);
+                EasyTracker.sendEvent("InvitesPopup", "Show", "", 0L);
 
             }
         };
