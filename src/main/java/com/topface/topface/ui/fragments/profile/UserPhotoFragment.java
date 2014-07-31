@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.Photos;
@@ -21,8 +22,18 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.utils.Utils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 public class UserPhotoFragment extends ProfileInnerFragment {
-    private User mUser;
+
+    private static final String USER_ID = "USER_ID";
+    private static final String PHOTOS_COUNT = "PHOTOS_COUNT";
+    private static final String PHOTO_LINKS = "PHOTO_LINKS";
+    private static final String POSITION = "POSITION";
+
+    private int mUserId;
+    private int mPhotosCount;
     private UserPhotoGridAdapter mUserPhotoGridAdapter;
     private TextView mTitle;
     private Photos mPhotoLinks;
@@ -32,9 +43,9 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
             Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUserId);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS_COUNT, mUser.photosCount);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS_COUNT, mPhotosCount);
             intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
             Fragment parentFrag = getParentFragment();
             if (parentFrag != null) {
@@ -53,7 +64,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
             public void onUpdate() {
                 if (mGridAlbum != null) {
                     Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData();
-                    AlbumRequest request = new AlbumRequest(getActivity(), mUser.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM);
+                    AlbumRequest request = new AlbumRequest(getActivity(), mUserId, AlbumRequest.DEFAULT_PHOTOS_LIMIT, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM);
                     request.callback(new DataApiHandler<AlbumPhotos>() {
 
                         @Override
@@ -88,7 +99,22 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         mTitle.setVisibility(View.VISIBLE);
         // album
         mGridAlbum = (GridView) root.findViewById(R.id.usedGrid);
+
+        int position = 0;
+        if (savedInstanceState != null) {
+            mUserId = savedInstanceState.getInt(USER_ID, 0);
+            mPhotosCount = savedInstanceState.getInt(PHOTOS_COUNT, 0);
+            try {
+                mPhotoLinks = new Photos(new JSONArray(savedInstanceState.getString(PHOTO_LINKS)));
+            } catch (JSONException e) {
+                Debug.error(e);
+            }
+            setPhotos(mPhotoLinks);
+            position = savedInstanceState.getInt(POSITION, 0);
+        }
+
         mGridAlbum.setAdapter(mUserPhotoGridAdapter);
+        mGridAlbum.setSelection(position);
         mGridAlbum.setOnItemClickListener(mOnItemClickListener);
         if (mUserPhotoGridAdapter != null) {
             mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
@@ -97,8 +123,22 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         return root;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(USER_ID, mUserId);
+        outState.putInt(PHOTOS_COUNT, mPhotosCount);
+        try {
+            outState.putString(PHOTO_LINKS, mPhotoLinks.toJson().toString());
+        } catch (JSONException e) {
+            Debug.error(e);
+        }
+        outState.putInt(POSITION, mGridAlbum.getFirstVisiblePosition());
+    }
+
     public void setUserData(User user) {
-        mUser = user;
+        mUserId = user.uid;
+        mPhotosCount = user.photosCount;
         mPhotoLinks = user.photos;
         if (mGridAlbum != null && mGridAlbum.getAdapter() == null) {
             setPhotos(mPhotoLinks);
@@ -113,14 +153,14 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         if (mUserPhotoGridAdapter == null) {
             mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext(),
                     photos,
-                    mUser.photosCount,
+                    mPhotosCount,
                     mUpdater);
         }
     }
 
     private void initTitle(Photos photos) {
         if (mTitle != null && photos != null) {
-            mTitle.setText(Utils.formatPhotoQuantity(mUser == null ? 0 : mUser.photosCount));
+            mTitle.setText(Utils.formatPhotoQuantity(mPhotosCount));
         }
     }
 

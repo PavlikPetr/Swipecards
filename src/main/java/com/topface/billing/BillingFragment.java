@@ -42,6 +42,9 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
         IabHelper.OnConsumeFinishedListener,
         IabHelper.OnIabSetupFinishedListener {
 
+    private static final String IS_TEST_PURCHASES_AVAILABLE = "IS_TEST_PURCHASES_AVAILABLE";
+    private static final String IS_TEST_PURCHASES_ENABLED = "IS_TEST_PURCHASES_ENABLED";
+
     public static final String ARG_TAG_SOURCE = "from_value";
     private static final int BUYING_REQUEST = 1001;
     public static final String TEST_PURCHASED_PRODUCT_ID = "android.test.purchased";
@@ -49,6 +52,8 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
     private OpenIabHelper mHelper;
     private static boolean mIsTestPayments = false;
+    private boolean mIsTestPurchasesAvailable = false;
+    private boolean mIabSetupFinished = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,8 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
             onInAppBillingUnsupported();
             return;
         }
+
+        mIabSetupFinished = true;
 
         Debug.log("BillingFragment: Setup successful");
 
@@ -185,6 +192,10 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            mIsTestPurchasesAvailable = savedInstanceState.getBoolean(IS_TEST_PURCHASES_AVAILABLE, false);
+            mIsTestPayments = savedInstanceState.getBoolean(IS_TEST_PURCHASES_ENABLED, false);
+        }
         //После того как View создано проверяем, нужно ли показывать переключатель тестовых покупок
         if (isTestPurchasesAvailable()) {
             ViewStub stub = (ViewStub) getView().findViewById(R.id.EditorTestStub);
@@ -205,10 +216,18 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
                         setTestPaymentsState(
                                 checkBox.doSwitch()
                         );
+                        setTestPaymentsState(checkBox.isChecked());
                     }
                 });
             }
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_TEST_PURCHASES_AVAILABLE, isTestPurchasesAvailable());
+        outState.putBoolean(IS_TEST_PURCHASES_ENABLED, isTestPurchasesEnabled());
     }
 
     /**
@@ -230,7 +249,7 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
      * @param id for buy
      */                    //Дополнительная информация о покупке
     public void buy(final String id) {
-        if (id != null) {
+        if (id != null && mIabSetupFinished) {
             mHelper.launchPurchaseFlow(
                     getActivity(),
                     //Если тестовые покупки, то подменяем id продукта на тестовый
@@ -373,7 +392,7 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
      * Доступны ли тестовые платежи
      */
     public boolean isTestPurchasesAvailable() {
-        return CacheProfile.isEditor();
+        return mIsTestPurchasesAvailable;
     }
 
     public static void setTestPaymentsState(boolean testPaymentsState) {

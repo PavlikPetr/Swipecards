@@ -2,7 +2,7 @@ package com.topface.topface.ui.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.HackyFragmentStatePagerAdapter;
 import android.support.v4.util.SparseArrayCompat;
 
 import com.topface.framework.utils.Debug;
@@ -13,7 +13,7 @@ import com.viewpagerindicator.PageIndicator;
 
 import java.util.ArrayList;
 
-public class ProfilePageAdapter extends FragmentStatePagerAdapter {
+public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
 
     private ArrayList<String> mFragmentsClasses = new ArrayList<>();
     private ArrayList<String> mFragmentsTitles = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.buy;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -10,8 +11,6 @@ import com.topface.topface.data.Products.ProductsInfo.CoinsSubscriptionInfo;
 import com.topface.topface.ui.CoinsSubscriptionsActivity;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 
@@ -54,7 +53,7 @@ public class GooglePlayBuyingFragment extends CoinsBuyingFragment {
         }
     };
 
-    protected LinkedList<BuyButton> getCoinsProducts(@NotNull Products products, boolean coinsMaskedExperiment) {
+    protected LinkedList<BuyButton> getCoinsProducts(@NonNull Products products, boolean coinsMaskedExperiment) {
         boolean hasMaskedCoinsSubs = products.info != null
                 && products.info.coinsSubscriptionMasked != null
                 && products.info.coinsSubscriptionMasked.status != null

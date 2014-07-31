@@ -91,7 +91,7 @@ public class ContactsFragment extends BaseFragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!emailView.getText().toString().equals("")) {
+                if (!emailView.getText().toString().isEmpty()) {
                     ContactsProvider.Contact contact = new ContactsProvider.Contact(emailView.getText().toString(), emailView.getText().toString(), true);
                     ((ContactsListAdapter) contactsView.getAdapter()).addFirst(contact);
                     ((ContactsListAdapter) contactsView.getAdapter()).changeButtonState();

@@ -35,26 +35,24 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     }
 
     public void updateData() {
-        mPhotoLinks.clear();
-        mPhotoLinks.add(null);
-        if (CacheProfile.photos != null) {
-            for (Photo photo : CacheProfile.photos) {
-                mPhotoLinks.add(photo);
-            }
+        if (mPhotoLinks.isEmpty()) {
+            mPhotoLinks.add(new Photo());
         }
-        notifyDataSetChanged();
+        if (CacheProfile.photo != null) {
+            Photos photos = (Photos) CacheProfile.photos.clone();
+            photos.removeAll(mPhotoLinks);
+            mPhotoLinks.addAll(1, photos);
+            notifyDataSetChanged();
+        }
     }
 
     public void setData(Photos photoLinks, boolean needMore) {
-        if (mPhotoLinks.size() > photoLinks.size()) {
-            mPhotoLinks.clear();
-        }
-
+        mPhotoLinks.clear();
         addPhotos(photoLinks, needMore, false);
     }
 
     public void addData(Photos photoLinks, boolean needMore) {
-        if (mPhotoLinks.size() > 0 && mPhotoLinks.get(mPhotoLinks.size() - 1) != null) {
+        if (mPhotoLinks.size() > 0 && !mPhotoLinks.get(mPhotoLinks.size() - 1).isFake()) {
             if (mPhotoLinks.get(mPhotoLinks.size() - 1).getId() == 0) {
                 mPhotoLinks.remove(mPhotoLinks.size() - 1);
             }
@@ -64,7 +62,7 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     }
 
     public void addPhotos(Photos photoLinks, boolean needMore, boolean isReversed) {
-        if (mPhotoLinks.size() > 1 && mPhotoLinks.get(mPhotoLinks.size() - 1) == null) {
+        if (mPhotoLinks.size() > 1 && mPhotoLinks.get(mPhotoLinks.size() - 1).isFake()) {
             mPhotoLinks.remove(mPhotoLinks.size() - 1);
         }
 

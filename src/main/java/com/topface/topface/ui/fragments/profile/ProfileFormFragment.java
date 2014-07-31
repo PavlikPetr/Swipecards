@@ -18,6 +18,11 @@ import com.topface.topface.utils.FormItem;
 
 public class ProfileFormFragment extends ProfileInnerFragment {
 
+    private static final String FORM_ITEMS = "FORM_ITEMS";
+    private static final String POSITION = "POSITION";
+
+    private ListView mFormListView;
+
     View.OnClickListener mOnFillClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -61,15 +66,15 @@ public class ProfileFormFragment extends ProfileInnerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mProfileFormListAdapter = new ProfileFormListAdapter(getActivity().getApplicationContext());
+        mProfileFormListAdapter = new ProfileFormListAdapter(getActivity());
         mProfileFormListAdapter.setOnFillListener(mOnFillClickListener);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_form, container, false);
-        ListView formListView = (ListView) root.findViewById(R.id.fragmentFormList);
-        formListView.setAdapter(mProfileFormListAdapter);
+        mFormListView = (ListView) root.findViewById(R.id.fragmentFormList);
+        mFormListView.setAdapter(mProfileFormListAdapter);
 
         View titleLayout = root.findViewById(R.id.loUserTitle);
         titleLayout.setVisibility(View.GONE);
@@ -79,10 +84,18 @@ public class ProfileFormFragment extends ProfileInnerFragment {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null) {
+            mProfileFormListAdapter.restoreState(savedInstanceState.getParcelableArrayList(FORM_ITEMS));
+            mProfileFormListAdapter.notifyDataSetChanged();
+            mFormListView.setSelection(savedInstanceState.getInt(POSITION, 0));
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        mProfileFormListAdapter.refillData();
-        mProfileFormListAdapter.notifyDataSetChanged();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
@@ -90,5 +103,12 @@ public class ProfileFormFragment extends ProfileInnerFragment {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(FORM_ITEMS, mProfileFormListAdapter.saveState());
+        outState.putInt(POSITION, mFormListView.getFirstVisiblePosition());
     }
 }

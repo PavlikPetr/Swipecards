@@ -115,7 +115,7 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
     public JSONArray toJson() throws JSONException {
         JSONArray jsonArray = new JSONArray();
         for (Photo photo : this) {
-            if (!photo.isFake()) {
+            if (photo != null) {
                 jsonArray.put(photo.toJson());
             }
         }

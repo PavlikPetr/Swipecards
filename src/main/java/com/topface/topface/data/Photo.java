@@ -181,6 +181,10 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
             position = photoItem.optInt("position", 0);
             //TODO clarify parameter: added
             initIntervals();
+        } else if (photoItem != null && photoItem.has("fake")) {
+            isFakePhoto = photoItem.optBoolean("fake");
+            links = new HashMap<>();
+            initIntervals();
         }
     }
 
@@ -448,19 +452,23 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     @Override
     public JSONObject toJson() throws JSONException {
         JSONObject json = new JSONObject();
-        json.put("id", mId);
-        json.put("liked", mLiked);
-        json.put("position", position);
-        JSONObject jsonLinks = new JSONObject();
-        if (links != null) {
-            for (Map.Entry<String, String> entry : links.entrySet()) {
-                jsonLinks.put(
-                        entry.getKey(),
-                        entry.getValue()
-                );
+        if (!isFakePhoto) {
+            json.put("id", mId);
+            json.put("liked", mLiked);
+            json.put("position", position);
+            JSONObject jsonLinks = new JSONObject();
+            if (links != null) {
+                for (Map.Entry<String, String> entry : links.entrySet()) {
+                    jsonLinks.put(
+                            entry.getKey(),
+                            entry.getValue()
+                    );
+                }
             }
+            json.put("links", jsonLinks);
+        } else {
+            json.put("fake", isFakePhoto);
         }
-        json.put("links", jsonLinks);
         return json;
     }
 
@@ -471,5 +479,14 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
 
     public boolean isEmpty() {
         return links == null || links.isEmpty();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof Photo) {
+            Photo p = (Photo) o;
+            return p.mId == mId && p.isFakePhoto == isFakePhoto;
+        }
+        return false;
     }
 }

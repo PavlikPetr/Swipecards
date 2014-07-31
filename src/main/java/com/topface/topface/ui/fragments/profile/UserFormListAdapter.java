@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.profile;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.topface.topface.R;
-import com.topface.topface.data.User;
 import com.topface.topface.utils.FormItem;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class UserFormListAdapter extends BaseAdapter {
@@ -117,8 +118,8 @@ public class UserFormListAdapter extends BaseAdapter {
     }
 
     @SuppressWarnings("unchecked")
-    public void setUserData(User user) {
-        mInitialUserForms = removeEmptyHeaders((LinkedList<FormItem>) user.forms.clone());
+    public void setUserData(LinkedList<FormItem> forms) {
+        mInitialUserForms = removeEmptyHeaders((LinkedList<FormItem>) forms.clone());
         mMatchedUserForms = removeEmptyHeaders(removeNotMatchedItems((LinkedList<FormItem>) mInitialUserForms.clone()));
         setAllData();
     }
@@ -204,6 +205,19 @@ public class UserFormListAdapter extends BaseAdapter {
                 return R.drawable.user_details;
         }
         return 0;
+    }
+
+    public ArrayList<FormItem> saveState() {
+        return new ArrayList<FormItem>(mInitialUserForms);
+    }
+
+    public void restoreState(ArrayList<Parcelable> userForms) {
+        mInitialUserForms = new LinkedList<FormItem>();
+        mMatchedUserForms = new LinkedList<FormItem>();
+        for (Parcelable form : userForms) {
+            mInitialUserForms.add((FormItem) form);
+        }
+        mMatchedUserForms = removeNotMatchedItems((LinkedList<FormItem>) mInitialUserForms.clone());
     }
 
     // class ViewHolder

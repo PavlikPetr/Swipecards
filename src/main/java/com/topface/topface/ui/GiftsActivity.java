@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.SendGiftAnswer;
@@ -26,8 +25,6 @@ import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.TripleButton;
 import com.topface.topface.utils.EasyTracker;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -63,7 +60,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         mNeedToSendGift = getIntent().getBooleanExtra(INTENT_SEND_GIFT, true);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (fragment == null || !(fragment.getClass().equals(PlainGiftsFragment.class))) {
+        if (fragment == null || !(((Object) fragment).getClass().equals(PlainGiftsFragment.class))) {
             mGiftFragment = new PlainGiftsFragment();
             transaction.add(R.id.giftGrid, mGiftFragment);
         } else {
@@ -224,7 +221,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     }
 
     @Override
-    protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mGiftsList = savedInstanceState.getParcelableArrayList(GIFTS_LIST);
     }

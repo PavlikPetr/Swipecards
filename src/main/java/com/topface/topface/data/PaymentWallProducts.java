@@ -1,10 +1,11 @@
 package com.topface.topface.data;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 public class PaymentWallProducts extends Products {
@@ -17,7 +18,7 @@ public class PaymentWallProducts extends Products {
         fillData(data);
     }
 
-    public PaymentWallProducts(@NotNull IApiResponse data, TYPE type) {
+    public PaymentWallProducts(@NonNull IApiResponse data, TYPE type) {
         super();
         mType = type;
         fillData(data.getJsonResult());

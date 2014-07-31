@@ -40,7 +40,6 @@ import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
@@ -84,6 +83,7 @@ import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.PopularUserChatController;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONObject;
@@ -166,7 +166,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             String id = intent.getStringExtra(GCMUtils.USER_ID_EXTRA);
-            if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
+            if (!TextUtils.isEmpty(id) && Integer.parseInt(id) == mUserId) {
                 update(true, "update counters");
                 startTimer();
                 GCMUtils.cancelNotification(getActivity(), GCMUtils.GCM_TYPE_MESSAGE);
