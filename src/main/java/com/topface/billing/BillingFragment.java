@@ -392,7 +392,7 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
      * Доступны ли тестовые платежи
      */
     public boolean isTestPurchasesAvailable() {
-        return mIsTestPurchasesAvailable;
+        return mIsTestPurchasesAvailable || (!CacheProfile.isEmpty() && CacheProfile.isEditor());
     }
 
     public static void setTestPaymentsState(boolean testPaymentsState) {
