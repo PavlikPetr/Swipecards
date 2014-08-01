@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.SparseArrayCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractProfileFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
     public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
@@ -134,29 +134,10 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     @Override
     public void onPause() {
         super.onPause();
-        int key;
-        Fragment fragment;
-        SparseArrayCompat<Fragment> fragments;
-        //Вручную прокидываем событие onPause() в ViewPager, т.к. на onPause() мы отписываемся от событий
-        if (mBodyPagerAdapter != null) {
-            fragments = mBodyPagerAdapter.getFragmentCache();
-            for (int i = 0; i < fragments.size(); i++) {
-                key = fragments.keyAt(i);
-                fragment = fragments.get(key);
-                if (fragment != null) {
-                    fragment.onPause();
-                }
-            }
-        }
-
-        if (mHeaderPagerAdapter != null) {
-            fragments = mHeaderPagerAdapter.getFragmentCache();
-            for (int i = 0; i < fragments.size(); i++) {
-                key = fragments.keyAt(i);
-                fragment = fragments.get(key);
-                if (fragment != null) {
-                    fragment.onPause();
-                }
+        List<Fragment> mBodyFragments = getChildFragmentManager().getFragments();
+        for (Fragment fragment : mBodyFragments) {
+            if (fragment != null) {
+                fragment.onPause();
             }
         }
     }
@@ -287,13 +268,11 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     }
 
     public void resultToNestedFragments(int requestCode, int resultCode, Intent data) {
-        int key;
-        Fragment fragment;
-        SparseArrayCompat<Fragment> mBodyFragments = mBodyPagerAdapter.getFragmentCache();
-        for (int i = 0; i < mBodyFragments.size(); i++) {
-            key = mBodyFragments.keyAt(i);
-            fragment = mBodyFragments.get(key);
-            fragment.onActivityResult(requestCode, resultCode, data);
+        List<Fragment> mBodyFragments = getChildFragmentManager().getFragments();
+        for (Fragment fragment : mBodyFragments) {
+            if (fragment != null) {
+                fragment.onActivityResult(requestCode, resultCode, data);
+            }
         }
     }
 

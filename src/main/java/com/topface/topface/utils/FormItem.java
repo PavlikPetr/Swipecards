@@ -103,6 +103,36 @@ public class FormItem implements Parcelable {
         dest.writeInt(equal ? 1 : 0);
         dest.writeInt(titleId);
         dest.writeInt(dataId);
+        dest.writeParcelable(header, flags);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof FormItem) {
+            FormItem formItem = (FormItem) o;
+            return formItem.type == type &&
+                    (formItem.title == null ? title == null : formItem.title.equals(title)) &&
+                    (formItem.value == null ? value == null : formItem.value.equals(value)) &&
+                    (formItem.header == null ? header == null : formItem.header.equals(header)) &&
+                    formItem.equal == equal &&
+                    formItem.titleId == titleId &&
+                    formItem.dataId == dataId;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 31 + type;
+        hash = hash * 31 + (title == null ? 0 : title.hashCode());
+        hash = hash * 31 + (value == null ? 0 : value.hashCode());
+        hash = hash * 31 + (header == null ? 0 : header.hashCode());
+        hash = hash * 31 + (equal ? 1 : 0);
+        hash = hash * 31 + titleId;
+        hash = hash * 31 + dataId;
+        return hash;
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -116,6 +146,7 @@ public class FormItem implements Parcelable {
                     result.equal = in.readInt() == 1;
                     result.titleId = in.readInt();
                     result.dataId = in.readInt();
+                    result.header = (FormItem) in.readParcelable(FormItem.class.getClassLoader());
                     return result;
                 }
 
