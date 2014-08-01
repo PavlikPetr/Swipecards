@@ -3,11 +3,9 @@ package com.topface.topface.utils.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.mopub.mobileads.util.Strings;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
-import com.topface.topface.requests.multipart.Streams;
 import com.topface.topface.utils.Editor;
 
 /**

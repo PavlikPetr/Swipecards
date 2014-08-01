@@ -1,6 +1,5 @@
 package com.topface.topface.ui.dialogs;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;

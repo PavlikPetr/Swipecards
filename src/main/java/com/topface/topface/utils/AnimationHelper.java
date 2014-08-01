@@ -5,10 +5,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.topface.topface.R;
-
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class AnimationHelper {
