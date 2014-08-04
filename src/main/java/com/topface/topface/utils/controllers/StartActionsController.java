@@ -23,7 +23,7 @@ public class StartActionsController {
      * Static field will die with App session
      */
     private static boolean processedActionForSession = false;
-    private static boolean processedFullscreenActionForSession = false;
+    private static boolean processedMandatoryActionForSession = false;
     private final Activity mActivity;
 
     private List<IStartAction> mPendingActions;
@@ -54,15 +54,15 @@ public class StartActionsController {
                 } else {
                     Debug.log(TAG, "some action already processed for this session");
                 }
-                if (!processedFullscreenActionForSession) {
+                if (!processedMandatoryActionForSession) {
                     for (IStartAction action : mMandatoryActions) {
                         if (action.isApplicable()) {
-                            processedFullscreenActionForSession |= processAction(action);
+                            processedMandatoryActionForSession |= processAction(action);
                         }
                     }
                 }
                 if (BuildConfig.DEBUG) {
-                    if (mDebugAction != null && mDebugAction.isApplicable()) {
+                    if (mDebugAction != null) {
                         processAction(mDebugAction);
                     }
                 }

@@ -76,6 +76,50 @@ public class FullscreenController {
     private MoPubInterstitial mInterstitial;
     private AdvView advViewIvengo;
 
+    private class FullscreenStartAction extends AbstractStartAction {
+        private Options.Page startPage;
+        private int priority;
+
+        public FullscreenStartAction(int priority) {
+            this.priority = priority;
+            if (!CacheProfile.isEmpty()) {
+                startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
+            }
+        }
+
+        @Override
+        public void callInBackground() {
+            if (startPage != null) {
+                Debug.log(TAG, startPage.banner);
+            }
+        }
+
+        @Override
+        public void callOnUi() {
+            if (isApplicable() && startPage != null) {
+                FullscreenController.this.requestFullscreen(startPage.banner);
+            }
+        }
+
+        @Override
+        public boolean isApplicable() {
+            if (CacheProfile.show_ad && FullscreenController.this.isTimePassed()) {
+                return startPage != null && startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER);
+            }
+            return false;
+        }
+
+        @Override
+        public int getPriority() {
+            return priority;
+        }
+
+        @Override
+        public String getActionName() {
+            return "Fullscreen";
+        }
+    }
+
     public FullscreenController(Activity activity) {
         mActivity = activity;
     }
@@ -471,45 +515,6 @@ public class FullscreenController {
     }
 
     public IStartAction createFullscreenStartAction(final int priority) {
-        return new AbstractStartAction() {
-            Options.Page startPage;
-
-            @Override
-            public void callInBackground() {
-                Debug.log(TAG, startPage.banner);
-            }
-
-            @Override
-            public void callOnUi() {
-                if (isApplicable()) {
-                    FullscreenController.this.requestFullscreen(startPage.banner);
-                }
-            }
-
-            @Override
-            public boolean isApplicable() {
-                if (CacheProfile.show_ad) {
-                    if (!CacheProfile.isEmpty() && FullscreenController.this.isTimePassed()) {
-                        startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
-                        if (startPage != null) {
-                            if (startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER)) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public int getPriority() {
-                return priority;
-            }
-
-            @Override
-            public String getActionName() {
-                return "Fullscreen";
-            }
-        };
+        return new FullscreenStartAction(priority);
     }
 }
