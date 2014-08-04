@@ -19,7 +19,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.CoinsSubscriptionsActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +32,6 @@ public abstract class CoinsBuyingFragment extends BillingFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OfferwallsManager.init(getActivity());
         setNeedTitles(false);
         Bundle args = getArguments();
         if (args != null) {
@@ -140,17 +138,6 @@ public abstract class CoinsBuyingFragment extends BillingFragment {
         }
     }
 
-
-    @Override
-    public void onInAppBillingUnsupported() {
-        //Если платежи не поддерживаются, то скрываем все кнопки
-        getView().findViewById(R.id.likes_title).setVisibility(View.GONE);
-        getView().findViewById(R.id.coins_title).setVisibility(View.GONE);
-        getView().findViewById(R.id.fbCoins).setVisibility(View.GONE);
-        getView().findViewById(R.id.fbLikes).setVisibility(View.GONE);
-        getView().findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
-    }
-
     public String getFrom() {
         return mFrom;
     }
@@ -166,7 +153,6 @@ public abstract class CoinsBuyingFragment extends BillingFragment {
     public void onSubscriptionSupported() {
         //В этом типе фрагментов подписок нет
     }
-
 
 
     @Override

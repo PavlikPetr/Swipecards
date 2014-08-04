@@ -1,6 +1,12 @@
 package com.topface.statistics.tests;
 
-import com.topface.statistics.*;
+import com.topface.statistics.Hit;
+import com.topface.statistics.IAsyncStorage;
+import com.topface.statistics.IDataDispatcher;
+import com.topface.statistics.IHitDataBuilder;
+import com.topface.statistics.ILogger;
+import com.topface.statistics.Statistics;
+
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -85,6 +91,11 @@ public class StatisticsTest extends TestCase {
 
         @Override
         public IDataDispatcher setDataBuilder(IHitDataBuilder builder) {
+            return this;
+        }
+
+        @Override
+        public IDataDispatcher setLogger(ILogger logger) {
             return this;
         }
 

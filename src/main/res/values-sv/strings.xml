@@ -630,6 +630,7 @@
         <item quantity="one">och ytterligare %d</item>
     </plurals>
     <string name="subscription">Prenumeration</string>
+    <string name="autorefill">Autopåfyllning</string>
     <string name="coins">Mynt</string>
     <string name="you_were_subscribed">Prenumerationen är klar</string>
     <string name="subscriptions_can_be_changed">Prenumerationen är klar. Ändringar är möjliga på Google Play</string>

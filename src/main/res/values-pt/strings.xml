@@ -569,6 +569,7 @@
     <string name="ok_label">Condiscípulos</string>
     <string name="coins_subscription">Assinatura para moedas</string>
     <string name="subscription">Assinatura</string>
+    <string name="autorefill">Autocarregamento</string>
     <string name="coins">Moedas</string>
     <string name="you_were_subscribed">Assinatura formalizada</string>
     <string name="subscriptions_can_be_changed">Assinatura foi formalizada. Alterar os termos de assinatura pode ser no Google Play</string>

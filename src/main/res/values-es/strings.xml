@@ -634,6 +634,7 @@
         <item quantity="one">y %d más</item>
     </plurals>
     <string name="subscription">Suscripción</string>
+    <string name="autorefill">Recarga automática</string>
     <string name="coins">Monedas</string>
     <string name="you_were_subscribed">Suscripción tramitada</string>
     <string name="subscriptions_can_be_changed">Suscripción tramitada. Puedes cambiar las condiciones de la suscripción en Google Play</string>
