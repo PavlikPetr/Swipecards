@@ -117,7 +117,10 @@ dependencies {
     compile project(':libs:IllustratedTextView')
     compile project(':libs:AndroidStatistics')
     //Third party libs
-    compile 'ch.acra:acra:4.5.0'
+    compile('ch.acra:acra:4.5.0') {
+        //Удаляем зависимость
+        exclude group: 'org.json'
+    }
     compile 'com.google.code.gson:gson:2.2.+'
     compile project(':libs:Android-ViewPagerIndicator')
     compile project(':libs:PullToRefresh')
@@ -137,6 +140,7 @@ dependencies {
 
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.+'
 }
+
 
 project(':libs:AndroidStatistics') {
     apply plugin: 'com.android.library'
