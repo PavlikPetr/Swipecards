@@ -43,7 +43,7 @@ public class GooglePlayPurchaseRequest extends PurchaseRequest {
                 .put("data", data)
                 .put("signature", signature)
                 .put("source", payload.source)
-                .put("appsflyer", new AppsFlyerData(context));
+                .put("appsflyer", new AppsFlyerData(context).toJson());
 
         //Если включены тестовые платежи, то отправляем еще и id оригинального платежа,
         //что бы нам начислил сервер нужную покупку

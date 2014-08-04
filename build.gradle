@@ -122,7 +122,8 @@ dependencies {
 
     //Third party libs
     compile('ch.acra:acra:4.5.0') {
-        //Удаляем зависимость
+        //Удаляем предоставляемыю acra зависимость org.json, так как она все рвно не нужна
+        //и на нее ругается gradle
         exclude group: 'org.json'
     }
     compile 'com.google.code.gson:gson:2.2.+'
