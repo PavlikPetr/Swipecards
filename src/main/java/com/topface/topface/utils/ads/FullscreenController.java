@@ -410,7 +410,7 @@ public class FullscreenController {
                 });
                 Debug.log("Vidiger is " + (isOk ? "ready" : "not ready"));
             }
-        }, 60000);
+        }, 3000);
 
     }
 
@@ -482,14 +482,14 @@ public class FullscreenController {
             @Override
             public void callOnUi() {
                 if (isApplicable()) {
-                    FullscreenController.this.requestFullscreen(BannerBlock.BANNER_VIDIGER);
+                    FullscreenController.this.requestFullscreen(startPage.banner);
                 }
             }
 
             @Override
             public boolean isApplicable() {
-                if (true) {
-                    if (!CacheProfile.isEmpty()) {
+                if (CacheProfile.show_ad) {
+                    if (!CacheProfile.isEmpty() && FullscreenController.this.isTimePassed()) {
                         startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
                         if (startPage != null) {
                             if (startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER)) {
