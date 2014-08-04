@@ -197,13 +197,15 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoAlbum));
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
+                        new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoAlbum));
             }
         });
         root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoCamera));
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
+                        new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoCamera));
             }
         });
         root.findViewById(R.id.btnCancel).setOnClickListener(new OnClickListener() {
@@ -325,6 +327,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             mViewFlipper.setDisplayedChild(0);
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            mViewFlipper.setDisplayedChild(1);
         }
     }
 

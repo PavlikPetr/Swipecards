@@ -264,17 +264,26 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     @Override
     public void setData(ArrayList<History> dataList, boolean more) {
-        super.setData(dataList, more, false);
-        prepareDates();
-        notifyDataSetChanged();
+        setData(dataList, more, null);
     }
 
     public void setData(ArrayList<History> dataList, boolean more, ListView parentView) {
         super.setData(dataList, more, false);
+        identifyUnrealItems();
         prepareDates();
         notifyDataSetChanged();
-        parentView.setSelection(getCount() - 1);
-        updateHeaderState(parentView);
+        if (parentView != null) {
+            parentView.setSelection(getCount() - 1);
+            updateHeaderState(parentView);
+        }
+    }
+
+    private void identifyUnrealItems() {
+        for (History item : mData) {
+            if ("0".equals(item.id)) {
+                mUnrealItems.add(item);
+            }
+        }
     }
 
     private void updateHeaderState(ListView parentView) {

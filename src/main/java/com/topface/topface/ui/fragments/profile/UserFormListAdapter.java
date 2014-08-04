@@ -186,7 +186,7 @@ public class UserFormListAdapter extends BaseAdapter {
 
     private boolean hasRelatedFormItem(FormItem header, LinkedList<FormItem> userForms, int startPos) {
         for (int i = startPos; i < userForms.size(); i++) {
-            if (userForms.get(i).header == header) return true;
+            if (header != null && header.equals(userForms.get(i).header)) return true;
         }
         return false;
     }
