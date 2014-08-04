@@ -263,7 +263,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
             List<Fragment> bodyFragments = childFragmentManager.getFragments();
             if (bodyFragments != null) {
                 for (Fragment fragment : bodyFragments) {
-                    if (fragment != null) {
+                    if (fragment != null && !fragment.isDetached()) {
                         fragment.onActivityResult(requestCode, resultCode, data);
                     }
                 }
