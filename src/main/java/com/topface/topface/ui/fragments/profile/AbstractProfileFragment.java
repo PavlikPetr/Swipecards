@@ -260,9 +260,9 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     public void resultToNestedFragments(int requestCode, int resultCode, Intent data) {
         FragmentManager childFragmentManager = getChildFragmentManager();
         if (childFragmentManager != null) {
-            List<Fragment> mBodyFragments = childFragmentManager.getFragments();
-            if (mBodyFragments != null) {
-                for (Fragment fragment : mBodyFragments) {
+            List<Fragment> bodyFragments = childFragmentManager.getFragments();
+            if (bodyFragments != null) {
+                for (Fragment fragment : bodyFragments) {
                     if (fragment != null) {
                         fragment.onActivityResult(requestCode, resultCode, data);
                     }
