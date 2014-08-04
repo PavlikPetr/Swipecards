@@ -60,6 +60,7 @@
     <string name="likes_background_text">Sempati yok</string>
     <string name="visitors_background_text">Misafirler yok</string>
     <string name="mutual_background_text">Sempati yok</string>
+    <string name="message_too_long">Mesajınız çok uzun.Sembol %d miktarı sınırı aştı.</string>
     <string name="chat_background_text">Gelen mesaj yok</string>
     <string name="chat_comment">Mesaj yazmak</string>
     <string name="chat_gift_in">Siz hediye aldınız.</string>
@@ -91,6 +92,20 @@
     <string name="buying_header_title">Alış verişler</string>
     <string name="buying_you_have">Sizde</string>
     <string name="buying_you_have_no_coins_for_gift">Hediye almak için size %d {{coins}} yetmiyor</string>
+    <plurals name="buying_gift_you_need_coins">
+        <item quantity="other">Bir hediye yollamak için daha fazla % para gerek</item>
+        <item quantity="one">Bir hediye yollamak için daha fazla % para gerek</item>
+    </plurals>
+    <plurals name="buying_unlock_likes_you_need_coins">
+        <item quantity="zero">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
+        <item quantity="other">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
+        <item quantity="one">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
+    </plurals>
+    <plurals name="buying_leaders_you_need_coins">
+        <item quantity="zero">Görünmek için daha fazla %d para gerekli</item>
+        <item quantity="other">Görünmek için daha fazla %d para gerekli</item>
+        <item quantity="one">Görünmek için daha fazla %d para gerekli</item>
+    </plurals>
     <string name="buying_default_message">Siz, hediyelerinizi ve hayranlığınızı para karşına gönderebilirsiniz</string>
     <string name="buying_money">Para alış verişi</string>
     <string name="profile_header_title">Profilim</string>
@@ -632,6 +647,9 @@
         <item quantity="other">ve daha %d</item>
         <item quantity="one">ve daha %d</item>
     </plurals>
+    <string name="subscription">Abonelik</string>
+    <string name="autorefill">Otomatik tekrar doldu</string>
+    <string name="coins">Paralar</string>
     <string name="you_were_subscribed">Abonelik oluşmuştur.</string>
     <string name="subscriptions_can_be_changed">Abonelik oluşmuştur.</string>
     <string name="people_nearby">İnsanlar yakında</string>

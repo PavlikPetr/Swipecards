@@ -3,11 +3,12 @@ package com.topface.topface.utils.gcmutils;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Looper;
 import android.text.TextUtils;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
@@ -102,9 +103,9 @@ public class GCMUtils {
     }
 
     private void registerInBackground(final String serverToken) {
-        new AsyncTask<Void, Void, String>() {
+        new BackgroundThread() {
             @Override
-            protected String doInBackground(Void... params) {
+            public void execute() {
                 String regId = null;
                 try {
                     if (mGcmObject == null) {
@@ -115,20 +116,19 @@ public class GCMUtils {
                 } catch (IOException ex) {
                     Debug.error(ex);
                 }
-                return regId;
-            }
 
-            @Override
-            protected void onPostExecute(String regId) {
                 if (regId != null && !serverToken.equals(regId)) {
                     mRegId = regId;
-                    sendRegistrationIdToBackend();
                     storeRegistrationId();
+                    //Отправляем запрос в основном потоке
+                    Looper.prepare();
+                    sendRegistrationIdToBackend();
+                    Looper.loop();
                 } else if (regId == null) {
                     Debug.log("Registration id is null");
                 }
             }
-        }.execute(null, null, null);
+        };
     }
 
     public void unregister() {
@@ -378,6 +378,10 @@ public class GCMUtils {
                 break;
             case GCM_TYPE_UPDATE:
                 i = Utils.getMarketIntent(context);
+                //Есть шанс что ссылка на маркет не будет поддерживаться
+                if (!Utils.isCallableIntent(i, context)) {
+                    i = new Intent(context, NavigationActivity.class);
+                }
                 break;
             case GCM_TYPE_DIALOGS:
                 lastNotificationType = GCM_TYPE_DIALOGS;

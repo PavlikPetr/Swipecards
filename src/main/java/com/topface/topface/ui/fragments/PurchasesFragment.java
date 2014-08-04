@@ -7,12 +7,14 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
@@ -113,10 +115,15 @@ public class PurchasesFragment extends BaseFragment {
         boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS, false);
         for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext(); ) {
             Options.Tab tab = iterator.next();
-            Products products = getProductsByTab(tab);
-            if (products != null) {
-                if ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) || (isVip && products.premium.isEmpty())) {
-                    iterator.remove();
+            //Удаляем вкладку Google Play, если не доступны Play Services
+            if (TextUtils.equals(tab.type, Options.Tab.GPLAY) && !App.isGmsEnabled()) {
+                iterator.remove();
+            } else {
+                Products products = getProductsByTab(tab);
+                if (products != null) {
+                    if ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) || (isVip && products.premium.isEmpty())) {
+                        iterator.remove();
+                    }
                 }
             }
         }

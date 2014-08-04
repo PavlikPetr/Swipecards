@@ -28,7 +28,6 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
         return buyingFragment;
     }
 
-
     public static CoinsBuyingFragment newInstance(int type, int coins, String from) {
         PaymentWallBuyingFragment fragment = new PaymentWallBuyingFragment();
         Bundle args = new Bundle();
@@ -39,6 +38,11 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
         }
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    protected void initOpenIabHelper() {
+        //Для PW нам не нужно иницилизировать OpenIAB, но нужно отнаследоваться от CoinsBuyingFragment
     }
 
     @Override
@@ -53,6 +57,12 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
                     PaymentwallActivity.ACTION_BUY
             );
         }
+    }
+
+
+    @Override
+    public void onInAppBillingUnsupported() {
+        //У нас всегда платежи доступны для PW
     }
 
     @Override

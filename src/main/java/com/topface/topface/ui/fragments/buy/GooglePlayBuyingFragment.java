@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.topface.topface.R;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Products.ProductsInfo.CoinsSubscriptionInfo;
 import com.topface.topface.ui.CoinsSubscriptionsActivity;
@@ -68,6 +69,17 @@ public class GooglePlayBuyingFragment extends CoinsBuyingFragment {
     @Override
     public Products getProducts() {
         return CacheProfile.getMarketProducts();
+    }
+
+
+    @Override
+    public void onInAppBillingUnsupported() {
+        //Если платежи не поддерживаются, то скрываем все кнопки
+        getView().findViewById(R.id.likes_title).setVisibility(View.GONE);
+        getView().findViewById(R.id.coins_title).setVisibility(View.GONE);
+        getView().findViewById(R.id.fbCoins).setVisibility(View.GONE);
+        getView().findViewById(R.id.fbLikes).setVisibility(View.GONE);
+        getView().findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
     }
 
     @Override

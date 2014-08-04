@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
@@ -20,7 +21,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PurchaseRequest;
 import com.topface.topface.ui.edit.EditSwitcher;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -37,13 +37,10 @@ import java.util.List;
 /**
  * Абстрактный фрагмент с интегрированным In-App billing
  */
-public abstract class BillingFragment extends BaseFragment implements IabHelper.QueryInventoryFinishedListener,
+public abstract class BillingFragment extends AbstractBillingFragment implements IabHelper.QueryInventoryFinishedListener,
         IabHelper.OnIabPurchaseFinishedListener,
         IabHelper.OnConsumeFinishedListener,
         IabHelper.OnIabSetupFinishedListener {
-
-    private static final String IS_TEST_PURCHASES_AVAILABLE = "IS_TEST_PURCHASES_AVAILABLE";
-    private static final String IS_TEST_PURCHASES_ENABLED = "IS_TEST_PURCHASES_ENABLED";
 
     public static final String ARG_TAG_SOURCE = "from_value";
     private static final int BUYING_REQUEST = 1001;
@@ -51,8 +48,6 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
     public static final int PURCHASE_CANCEL = 1;
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
     private OpenIabHelper mHelper;
-    private static boolean mIsTestPayments = false;
-    private boolean mIsTestPurchasesAvailable = false;
     private boolean mIabSetupFinished = false;
 
     @Override
@@ -61,7 +56,10 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
         initOpenIabHelper();
     }
 
-    private void initOpenIabHelper() {
+    /**
+     * Инициализируем OpenIAB
+     */
+    protected void initOpenIabHelper() {
         OpenIabHelper.Options opts = new OpenIabHelper.Options();
         //Проверять локально покупку мы не будем, пускай сервер проверит
         opts.verifyMode = OpenIabHelper.Options.VERIFY_SKIP;
@@ -139,8 +137,9 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
             //Если пользователь пытается купить еще не потраченый продукт
             switch (result.getResponse()) {
                 case PURCHASE_ERROR_ITEM_ALREADY_OWNED:
-                    setWaitScreen(true);
-                    onError("У вас есть купленная, но не начисленная покупка, пожалуйста подождите и попробуйте еще раз");
+                    if (isAdded()) {
+                        onError(getActivity().getString(R.string.billing_item_already_owned));
+                    }
                     Debug.error("BillingFragment: " + result + ". Try verify purchase");
                     //Перезапрашиваем покупки и начислеяем при необходимости
                     requestInventory();
@@ -149,8 +148,10 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
                     Debug.log("BillingFragment: User cancel purchase");
                     break;
                 default:
-                    onError("Error purchasing: " + result);
-                    setWaitScreen(false);
+                    if (isAdded()) {
+                        onError("Error purchasing: " + result);
+                        setWaitScreen(false);
+                    }
             }
             return;
         }
@@ -278,11 +279,6 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
         return payload.toJson();
     }
 
-    @Override
-    public boolean isTrackable() {
-        return false;
-    }
-
     protected void editSubscriptions() {
         Utils.goToMarket(getActivity());
     }
@@ -295,14 +291,6 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
         bld.setNeutralButton("OK", null);
         bld.create().show();
     }
-
-    abstract public void onSubscriptionSupported();
-
-    abstract public void onSubscriptionUnsupported();
-
-    abstract public void onInAppBillingSupported();
-
-    abstract public void onInAppBillingUnsupported();
 
     /**
      * Метод вызывается когда мы хотим заблокировать или разблокировать интерфейс для пользователя
@@ -378,24 +366,11 @@ public abstract class BillingFragment extends BaseFragment implements IabHelper.
         }).exec();
     }
 
-    abstract public void onPurchased(final String productId);
-
-    /**
-     * Включен ли режим тестовых покупок
-     */
-    public boolean isTestPurchasesEnabled() {
-        //На всякий случай проверяем, что доступны тестовые платежи
-        return isTestPurchasesAvailable() && mIsTestPayments;
-    }
-
-    /**
-     * Доступны ли тестовые платежи
-     */
-    public boolean isTestPurchasesAvailable() {
-        return mIsTestPurchasesAvailable;
-    }
-
-    public static void setTestPaymentsState(boolean testPaymentsState) {
-        mIsTestPayments = testPaymentsState;
+    @Override
+    public void onPurchased(String productId) {
+        if (isAdded()) {
+            Toast.makeText(getActivity(), R.string.buying_store_ok, Toast.LENGTH_LONG).show();
+        }
     }
 }
+

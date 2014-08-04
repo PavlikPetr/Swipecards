@@ -286,6 +286,8 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             Toast.makeText(App.getContext(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)
                     .show();
         }
+
+        getView().findViewById(R.id.fbpBuyingDisabled).setVisibility(View.VISIBLE);
     }
 
     @Override

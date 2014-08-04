@@ -107,7 +107,18 @@ public class Utils {
     }
 
     public static void goToMarket(Context context) {
-        context.startActivity(getMarketIntent(context));
+        Intent marketIntent = getMarketIntent(context);
+        if (isCallableIntent(marketIntent, context)) {
+            context.startActivity(marketIntent);
+        } else {
+            Toast.makeText(context, R.string.open_market_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static boolean isCallableIntent(Intent intent, Context context) {
+        List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
     }
 
     public static Intent getMarketIntent(Context context) {

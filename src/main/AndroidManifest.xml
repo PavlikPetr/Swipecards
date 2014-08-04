@@ -28,7 +28,10 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
     <uses-permission android:name="com.android.vending.BILLING"/>
+    <uses-permission android:name="com.nokia.payment.BILLING"/>
     <uses-permission android:name="org.onepf.openiab.permission.BILLING"/>
+
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
 
     <uses-feature
         android:name="android.hardware.location.gps"
@@ -385,7 +388,7 @@
             android:targetActivity=".ui.NavigationActivity"/>
 
         <!-- Topface offerwall -->
-        <activity android:name="com.topface.general.TFOfferwallActivity"
+        <activity android:name="com.topface.offerwall.TFOfferwallActivity"
             />
 
         <!-- services -->
@@ -421,8 +424,6 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
-
                 <category android:name="com.topface.topface"/>
             </intent-filter>
         </receiver>
