@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
+import com.topface.offerwall.advertizer.TFOfferSDK;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;

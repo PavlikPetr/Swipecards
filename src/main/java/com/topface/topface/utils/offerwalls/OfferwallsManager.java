@@ -27,7 +27,7 @@ import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
 import com.topface.framework.utils.Debug;
-import com.topface.offerwall.adertizer.TFOfferSDK;
+import com.topface.offerwall.advertizer.TFOfferSDK;
 import com.topface.offerwall.publisher.TFOfferwallSDK;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
