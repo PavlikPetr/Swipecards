@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,17 +133,6 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        List<Fragment> mBodyFragments = getChildFragmentManager().getFragments();
-        for (Fragment fragment : mBodyFragments) {
-            if (fragment != null) {
-                fragment.onPause();
-            }
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mTabIndicator != null) {
@@ -268,10 +258,15 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     }
 
     public void resultToNestedFragments(int requestCode, int resultCode, Intent data) {
-        List<Fragment> mBodyFragments = getChildFragmentManager().getFragments();
-        for (Fragment fragment : mBodyFragments) {
-            if (fragment != null) {
-                fragment.onActivityResult(requestCode, resultCode, data);
+        FragmentManager childFragmentManager = getChildFragmentManager();
+        if (childFragmentManager != null) {
+            List<Fragment> mBodyFragments = childFragmentManager.getFragments();
+            if (mBodyFragments != null) {
+                for (Fragment fragment : mBodyFragments) {
+                    if (fragment != null) {
+                        fragment.onActivityResult(requestCode, resultCode, data);
+                    }
+                }
             }
         }
     }
