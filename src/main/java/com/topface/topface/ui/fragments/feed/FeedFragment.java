@@ -36,7 +36,6 @@ import com.topface.PullToRefreshListView;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
@@ -65,6 +64,7 @@ import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
 
@@ -77,6 +77,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private static final String FEEDS = "FEEDS";
     private static final String POSITION = "POSITION";
+    private static final String IS_FILTER_ON = "IS_FILTER_ON";
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
@@ -126,6 +127,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private AnimationDrawable mLoader;
     private ViewStub mEmptyScreenStub;
     private boolean needUpdate = false;
+    private boolean mRestoredFilterState;
 
     private ActionMode mActionMode;
     private FilterBlock mFilterBlock;
@@ -176,6 +178,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
             mListAdapter.setData(feedsList);
             mListView.getRefreshableView().setSelection(saved.getInt(POSITION, 0));
+            mRestoredFilterState = saved.getBoolean(IS_FILTER_ON, false);
+            if (!mListAdapter.isEmpty()) {
+                mBackgroundText.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -274,6 +280,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             outState.putParcelableArray(FEEDS, data.toArray(new Parcelable[data.size()]));
             outState.putInt(POSITION, mListView.getRefreshableView().getFirstVisiblePosition());
         }
+        if (mLens != null) {
+            outState.putBoolean(IS_FILTER_ON, mLens.isVisible());
+        }
     }
 
     protected void init() {
@@ -301,7 +310,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         super.onCreateOptionsMenu(menu, inflater);
         mLens = menu.findItem(R.id.action_filter);
         if (mLens != null) {
-            mLens.setVisible(false);
+            mLens.setVisible(mRestoredFilterState);
         }
     }
 
@@ -813,7 +822,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             initEmptyFeedView(mInflated, errorCode);
         }
         if (mInflated != null) {
-            mInflated.setVisibility(View.VISIBLE);
+            mInflated.setVisibility(mListAdapter != null && mListAdapter.isEmpty() ? View.VISIBLE : View.GONE);
             initEmptyFeedView(mInflated, errorCode);
         }
         if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);

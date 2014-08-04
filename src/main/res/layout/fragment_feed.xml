@@ -11,34 +11,34 @@
     <include layout="@layout/leaders" />
 
     <RelativeLayout
+        android:id="@+id/feedContainer"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/feedContainer">
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/tvBackgroundText"
+            style="@style/BackgroundFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:minWidth="150dp"
             android:paddingRight="25dp"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:singleLine="true"
-            style="@style/BackgroundFont" />
+            android:singleLine="true" />
 
-            <com.topface.PullToRefreshListView xmlns:p2r="http://schemas.android.com/apk/res-auto"
-                p2r:ptrShowIndicator="false"
-                p2r:ptrOverScroll="false"
-                android:id="@+id/lvFeedList"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:cacheColorHint="#00000000"
-                android:dividerHeight="0dp"
-                android:divider="@android:color/transparent"
-                android:fadeScrollbars="true"
-                android:fadingEdge="none" />
+        <com.topface.PullToRefreshListView xmlns:p2r="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/lvFeedList"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:cacheColorHint="#00000000"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:fadeScrollbars="true"
+            android:fadingEdge="none"
+            p2r:ptrOverScroll="false"
+            p2r:ptrShowIndicator="false" />
 
         <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvFeedLoading"
@@ -52,5 +52,5 @@
             android:layout_height="fill_parent" />
     </RelativeLayout>
 
-    <include layout="@layout/banner"/>
+    <include layout="@layout/banner" />
 </LinearLayout>

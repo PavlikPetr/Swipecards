@@ -29,6 +29,7 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
     private static final String POSITION = "POSITION";
     private static final String USER_ID = "USER_ID";
     private static final String MATCHES = "MATCHES";
+    private static final String MATCHED_DATA_ONLY = "MATCHED_DATA_ONLY";
 
     private int mUserId;
     private LinkedList<FormItem> mForms;
@@ -75,6 +76,9 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
                     savedInstanceState.getParcelableArrayList(FORM_ITEMS),
                     savedInstanceState.getInt(MATCHES, 0));
             mListQuestionnaire.setSelection(savedInstanceState.getInt(POSITION, 0));
+            if (savedInstanceState.getBoolean(MATCHED_DATA_ONLY, false)) {
+                mUserFormListAdapter.setMatchedDataOnly();
+            }
         } else {
             mTitle.setText(Utils.getQuantityString(R.plurals.form_matches, 0, 0));
             mState.setImageResource(R.drawable.user_cell);
@@ -92,6 +96,7 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
         outState.putInt(MATCHES, mFormMatches);
         outState.putParcelableArrayList(FORM_ITEMS, mUserFormListAdapter.saveState());
         outState.putInt(POSITION, mListQuestionnaire.getFirstVisiblePosition());
+        outState.putBoolean(MATCHED_DATA_ONLY, mUserFormListAdapter.isMatchedDataOnly());
     }
 
     public void setUserData(User user) {
