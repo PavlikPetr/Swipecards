@@ -71,6 +71,12 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             mFragmentSwitchListener = (INavigationFragmentsListener) activity;
         }
     }
+    
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mFragmentSwitchListener = null;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
