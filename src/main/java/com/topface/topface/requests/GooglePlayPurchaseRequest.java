@@ -24,7 +24,9 @@ public class GooglePlayPurchaseRequest extends PurchaseRequest {
         this.data = product.getOriginalJson();
         this.signature = product.getSignature();
         DeveloperPayload developerPayload = getDeveloperPayload();
-        if (developerPayload != null) {
+        //Если SKU из DeveloperPayload не соответсвует тому, что мы купили, то это тестовая покупка
+        //и нам нужно добавить соответсвующий параметр, что бы сервер нам корректно начислил продукт
+        if (developerPayload != null && !TextUtils.equals(developerPayload.sku, product.getSku())) {
             this.testProductId = developerPayload.sku;
         }
     }
@@ -44,7 +46,7 @@ public class GooglePlayPurchaseRequest extends PurchaseRequest {
                 .put("appsflyer", new AppsFlyerData(context).toJson());
 
         //Если включены тестовые платежи, то отправляем еще и id оригинального платежа,
-        //что бы нам начислил сервер нужную покупку
+        //что бы нам начислил реальный продукт
         if (!TextUtils.isEmpty(testProductId)) {
             requestData.put("testProductId", testProductId);
         }
