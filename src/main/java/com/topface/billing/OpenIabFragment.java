@@ -414,10 +414,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 // Если кто-то попытался купить android.test.purchased вне тестового режима,
                 // то возникнет ситуация, что сервер не может валидировать покупку.
                 // Поэтому мы тратим такую покупку после ошибки, если это тестовая покупка
-                if (TextUtils.equals(
-                        validateRequest.getDeveloperPayload().sku,
-                        TEST_PURCHASED_PRODUCT_ID
-                )) {
+                DeveloperPayload developerPayload = validateRequest.getDeveloperPayload();
+                if (developerPayload != null && TextUtils.equals(developerPayload.sku, TEST_PURCHASED_PRODUCT_ID)) {
                     mHelper.consumeAsync(purchase, OpenIabFragment.this);
                 } else {
                     Debug.error("BillindFragment: verify error: " + response);
