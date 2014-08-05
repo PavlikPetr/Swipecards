@@ -242,6 +242,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mUserAge = args.getInt(INTENT_USER_AGE, 0);
         mUserCity = args.getString(INTENT_USER_CITY);
     }
+    
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mUserOnlineListener = null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
