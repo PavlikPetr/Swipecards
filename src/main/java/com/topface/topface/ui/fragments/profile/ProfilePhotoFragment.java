@@ -45,10 +45,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private static final String PHOTOS = "PHOTOS";
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
-    private static final String NEED_MORE = "NEED_MORE";
 
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
-    private boolean mMore;
 
     private ViewFlipper mViewFlipper;
     private GridView mGridAlbum;
@@ -103,8 +101,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         if (photoLinks == null || photoLinks.size() < 2) {
             return;
         }
-        Photo photo = mProfilePhotoGridAdapter.getLastItem();
-        if (photo.isFake()) return;
+        if (!mProfilePhotoGridAdapter.getLastItem().isFake()) return;
+        Photo photo = mProfilePhotoGridAdapter.getItem(photoLinks.size() - 2);
         int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
                 getActivity(),
@@ -119,7 +117,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
             protected void success(AlbumPhotos data, IApiResponse response) {
                 if (mProfilePhotoGridAdapter != null) {
                     mProfilePhotoGridAdapter.addPhotos(data, data.more, false);
-                    mMore = data.more;
                 }
             }
 
@@ -164,8 +161,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         int position = 0;
         if (savedInstanceState != null) {
             try {
-                mProfilePhotoGridAdapter.setData(new Photos(new JSONArray(savedInstanceState.getString(PHOTOS))),
-                        savedInstanceState.getBoolean(NEED_MORE));
+                mProfilePhotoGridAdapter.setData(new Photos(
+                        new JSONArray(savedInstanceState.getString(PHOTOS))), false);
             } catch (JSONException e) {
                 Debug.error(e);
             }
@@ -231,7 +228,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         }
         outState.putInt(POSITION, mGridAlbum.getFirstVisiblePosition());
         outState.putInt(FLIPPER_VISIBLE_CHILD, mViewFlipper.getDisplayedChild());
-        outState.putBoolean(NEED_MORE, mMore);
     }
 
     public void startPhotoDialog(final Photo photo) {
@@ -299,9 +295,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private void initTitleText(TextView title) {
         if (title != null) {
             title.setVisibility(View.VISIBLE);
-            int size = mProfilePhotoGridAdapter.getCount();
-            if (size > 1) {
-                title.setText(Utils.formatPhotoQuantity(size - 1));
+            int size = CacheProfile.totalPhotos;
+            if (size > 0) {
+                title.setText(Utils.formatPhotoQuantity(size));
                 return;
             }
             title.setText(R.string.upload_photos);

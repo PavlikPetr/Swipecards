@@ -176,15 +176,13 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
         boolean result = true;
         mLoader = loader;
 
-        if (photo != null) {
-            if (!photo.isFake()) {
-                int size = Math.max(getLayoutParams().height, getLayoutParams().width);
-                if (size > 0) {
-                    //noinspection SuspiciousNameCombination
-                    result = setRemoteSrc(photo.getSuitableLink(getLayoutParams().height, getLayoutParams().width), handler);
-                } else {
-                    result = setRemoteSrc(photo.getDefaultLink(), handler);
-                }
+        if (photo != null && !photo.isFake()) {
+            int size = Math.max(getLayoutParams().height, getLayoutParams().width);
+            if (size > 0) {
+                //noinspection SuspiciousNameCombination
+                result = setRemoteSrc(photo.getSuitableLink(getLayoutParams().height, getLayoutParams().width), handler);
+            } else {
+                result = setRemoteSrc(photo.getDefaultLink(), handler);
             }
         } else {
             setImageBitmap(null);
