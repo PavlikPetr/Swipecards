@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +49,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import me.faan.sdk.FAAN;
+import me.faan.sdk.FAANAdListener;
+import me.faan.sdk.FAANAttemptStatus;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
@@ -61,12 +67,58 @@ public class FullscreenController {
     private static final String IVENGO_APP_ID = "aggeas97392g";
     private static final String LIFESTREET_TAG = "http://mobile-android.lfstmedia.com/m2/slot76331?ad_size=320x480&adkey=a25";
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-3847865014365726/7595518694";
+    private static final String VIDIGER_APP_ID = "473379e6-3cf3-4405-abfc-564fadc00752";
+    private static final String[] VIDIGER_ZONES = new String[]{"692a2d36-bbdb-4b6e-b0c5-009a2818f6da"};
     private static boolean isFullScreenBannerVisible = false;
     private SharedPreferences mPreferences;
     private Activity mActivity;
 
     private MoPubInterstitial mInterstitial;
     private AdvView advViewIvengo;
+
+    private class FullscreenStartAction extends AbstractStartAction {
+        private Options.Page startPage;
+        private int priority;
+
+        public FullscreenStartAction(int priority) {
+            this.priority = priority;
+            if (!CacheProfile.isEmpty()) {
+                startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
+            }
+        }
+
+        @Override
+        public void callInBackground() {
+            if (startPage != null) {
+                Debug.log(TAG, startPage.banner);
+            }
+        }
+
+        @Override
+        public void callOnUi() {
+            if (startPage != null) {
+                FullscreenController.this.requestFullscreen(startPage.banner);
+            }
+        }
+
+        @Override
+        public boolean isApplicable() {
+            if (CacheProfile.show_ad && FullscreenController.this.isTimePassed()) {
+                return startPage != null && startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER);
+            }
+            return false;
+        }
+
+        @Override
+        public int getPriority() {
+            return priority;
+        }
+
+        @Override
+        public String getActionName() {
+            return "Fullscreen";
+        }
+    }
 
     public FullscreenController(Activity activity) {
         mActivity = activity;
@@ -148,6 +200,9 @@ public class FullscreenController {
                     break;
                 case BannerBlock.BANNER_LIFESTREET:
                     requestLifestreetFullscreen();
+                    break;
+                case BannerBlock.BANNER_VIDIGER:
+                    requestVidigerFullscreen();
                     break;
                 default:
                     break;
@@ -379,6 +434,30 @@ public class FullscreenController {
         }).exec();
     }
 
+    private void requestVidigerFullscreen() {
+        ConnectivityManager connManager = (ConnectivityManager) mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (!networkInfo.isConnected()) {
+            Debug.log("Ignore Vidiger ad because of no wifi");
+            return;
+        }
+        Debug.log("Configure Vidiger");
+        FAAN.configure(mActivity, VIDIGER_APP_ID, VIDIGER_ZONES);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                boolean isOk = FAAN.play(VIDIGER_ZONES[0], new FAANAdListener() {
+                    @Override
+                    public void onFAANAdAttempt(String s, FAANAttemptStatus faanAttemptStatus) {
+                        Debug.log("Vidiger status is " + faanAttemptStatus);
+                    }
+                });
+                Debug.log("Vidiger is " + (isOk ? "ready" : "not ready"));
+            }
+        }, 3000);
+
+    }
+
     public void hideFullscreenBanner(final ViewGroup bannerContainer) {
         if (bannerContainer != null) {
             Animation animation = AnimationUtils.loadAnimation(App.getContext(), android.R.anim.fade_out);
@@ -436,43 +515,6 @@ public class FullscreenController {
     }
 
     public IStartAction createFullscreenStartAction(final int priority) {
-        return new AbstractStartAction() {
-            Options.Page startPage;
-
-            @Override
-            public void callInBackground() {
-                Debug.log(TAG, startPage.banner);
-            }
-
-            @Override
-            public void callOnUi() {
-                FullscreenController.this.requestFullscreen(startPage.banner);
-            }
-
-            @Override
-            public boolean isApplicable() {
-                if (CacheProfile.show_ad) {
-                    if (!CacheProfile.isEmpty() && FullscreenController.this.isTimePassed()) {
-                        startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
-                        if (startPage != null) {
-                            if (startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER)) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public int getPriority() {
-                return priority;
-            }
-
-            @Override
-            public String getActionName() {
-                return "Fullscreen";
-            }
-        };
+        return new FullscreenStartAction(priority);
     }
 }

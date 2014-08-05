@@ -23,18 +23,22 @@ public class StartActionsController {
      * Static field will die with App session
      */
     private static boolean processedActionForSession = false;
+    private static boolean processedMandatoryActionForSession = false;
     private final Activity mActivity;
 
     private List<IStartAction> mPendingActions;
+    private List<IStartAction> mMandatoryActions;
     private IStartAction mDebugAction;
 
     public StartActionsController(Activity activity) {
         mPendingActions = new LinkedList<>();
+        mMandatoryActions = new LinkedList<>();
         mActivity = activity;
     }
 
     public static void onLogout() {
         processedActionForSession = false;
+        processedMandatoryActionForSession = false;
     }
 
     /**
@@ -50,6 +54,13 @@ public class StartActionsController {
                     processedActionForSession = startAction();
                 } else {
                     Debug.log(TAG, "some action already processed for this session");
+                }
+                if (!processedMandatoryActionForSession) {
+                    for (IStartAction action : mMandatoryActions) {
+                        if (action.isApplicable()) {
+                            processedMandatoryActionForSession |= processAction(action);
+                        }
+                    }
                 }
                 if (BuildConfig.DEBUG) {
                     if (mDebugAction != null) {
@@ -106,6 +117,16 @@ public class StartActionsController {
     public void registerAction(IStartAction action) {
         mPendingActions.add(action);
         Debug.log(TAG, "register " + action.toString());
+    }
+
+    /**
+     * Adds action to list of mandatory actions
+     *
+     * @param action which is needed to be process on start
+     */
+    public void registerMandatoryAction(IStartAction action) {
+        mMandatoryActions.add(action);
+        Debug.log(TAG, "register mandatory " + action.toString());
     }
 
     /**
