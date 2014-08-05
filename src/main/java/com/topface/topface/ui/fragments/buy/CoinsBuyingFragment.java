@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.topface.billing.BillingFragment;
+import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -23,7 +23,7 @@ import com.topface.topface.utils.CacheProfile;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class CoinsBuyingFragment extends BillingFragment {
+public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private LinkedList<View> purchaseButtons = new LinkedList<>();
     private View mCoinsSubscriptionButton;
 
@@ -162,6 +162,7 @@ public abstract class CoinsBuyingFragment extends BillingFragment {
 
     @Override
     public void onPurchased(String productId) {
+        super.onPurchased(productId);
         Debug.log("Purchased item with ID:" + productId);
         final Products products = getProducts();
         if (products != null && products.isSubscription(productId)) {

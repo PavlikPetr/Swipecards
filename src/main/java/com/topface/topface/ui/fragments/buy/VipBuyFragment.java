@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.topface.billing.BillingFragment;
+import com.topface.billing.OpenIabFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -32,7 +32,7 @@ import com.topface.topface.utils.EasyTracker;
 
 import static android.view.View.OnClickListener;
 
-public class VipBuyFragment extends BillingFragment implements OnClickListener {
+public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     public static final String ACTION_BAR_CONST = "needActionBar";
 
@@ -145,7 +145,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     }
 
     protected void buy(String id, Products.BuyButton curBtn) {
-        buy(id);
+        buy(curBtn);
         Bundle arguments = getArguments();
         String from = "";
         if (arguments != null) {

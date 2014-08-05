@@ -28,7 +28,7 @@ import com.lifestreet.android.lsmsdk.BasicSlotListener;
 import com.lifestreet.android.lsmsdk.SlotView;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
-import com.topface.billing.BillingFragment;
+import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -411,7 +411,7 @@ public class BannerBlock {
                         } else {
                             intent.putExtra(Static.INTENT_REQUEST_KEY, PurchasesActivity.INTENT_BUY);
                         }
-                        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, "Banner_" + banner.name);
+                        intent.putExtra(OpenIabFragment.ARG_TAG_SOURCE, "Banner_" + banner.name);
                         break;
                     case Banner.ACTION_URL:
                         intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));

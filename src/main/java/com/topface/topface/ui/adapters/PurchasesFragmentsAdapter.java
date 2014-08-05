@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.util.SparseArrayCompat;
 
-import com.topface.billing.BillingFragment;
+import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
@@ -43,7 +43,7 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment = mFragmentCache.get(position);
         if (fragment != null) return fragment;
-        String from = mArguments.getString(BillingFragment.ARG_TAG_SOURCE);
+        String from = mArguments.getString(OpenIabFragment.ARG_TAG_SOURCE);
         switch (mTabs.get(position).type) {
             case Options.Tab.GPLAY:
                 if (!mIsVip) {

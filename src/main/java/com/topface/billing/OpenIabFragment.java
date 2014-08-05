@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,17 +38,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Абстрактный фрагмент с интегрированным In-App billing
+ * Абстрактный фрагмент, реализующий процесс покупки черес библиотеку OpenIAB
+ * Если вам нужны покупки через GP, Amazon, Nokia и все остальное, что поддерживает OpenIAB, то
+ * это именно тот фрагмент, который вам нужен.
+ * Наследуемся, подписываемся на коллбэки и просто вызываем метод buy для покупки
+ * https://github.com/onepf/OpenIAB
  */
-public abstract class BillingFragment extends AbstractBillingFragment implements IabHelper.QueryInventoryFinishedListener,
+public abstract class OpenIabFragment extends AbstractBillingFragment implements IabHelper.QueryInventoryFinishedListener,
         IabHelper.OnIabPurchaseFinishedListener,
         IabHelper.OnConsumeFinishedListener,
         IabHelper.OnIabSetupFinishedListener {
 
     public static final String ARG_TAG_SOURCE = "from_value";
-    private static final int BUYING_REQUEST = 1001;
+    public static final int BUYING_REQUEST = 1001;
     public static final String TEST_PURCHASED_PRODUCT_ID = "android.test.purchased";
+    /**
+     * Результат запроса из OpenIAB: Пользователь отменил покупку
+     */
     public static final int PURCHASE_CANCEL = 1;
+    /**
+     * Результат запроса из Google Play: Пользователь отменил покупку
+     */
+    public static final int PURCHASE_CANCEL_GP = -1005;
+    /**
+     * Результат запроса из OpenIAB: Товар уже куплен, но не потрачен
+     */
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
     private OpenIabHelper mHelper;
     private boolean mIabSetupFinished = false;
@@ -100,19 +117,19 @@ public abstract class BillingFragment extends AbstractBillingFragment implements
 
         Debug.log("BillingFragment: Setup successful");
 
-        //Запрашиваем список покупок
-        requestInventory();
+        if (isAdded()) {
+            requestInventory();
 
-        //Вызываем колбэки, оповещая, что покупки доступны
-        onInAppBillingSupported();
+            //Вызываем колбэки, оповещая, что покупки доступны
+            onInAppBillingSupported();
 
-        if (mHelper.subscriptionsSupported()) {
-            onSubscriptionSupported();
-        } else {
-            onSubscriptionUnsupported();
+            if (mHelper.subscriptionsSupported()) {
+                onSubscriptionSupported();
+            } else {
+                onSubscriptionUnsupported();
+            }
         }
 
-        requestInventory();
     }
 
 
@@ -122,8 +139,16 @@ public abstract class BillingFragment extends AbstractBillingFragment implements
     @Override
     public void onConsumeFinished(Purchase purchase, IabResult iabResult) {
         Debug.log("BillingFragment: onConsumeFinished " + iabResult + purchase);
-        //Перезапрашиваем список покупок
-        requestInventory();
+        if (isAdded()) {
+            //Запрашиваем список покупок с небольшой задержкой,
+            //что бы успели обновится данные в Google Play
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    requestInventory();
+                }
+            }, 2000);
+        }
     }
 
     private void requestInventory() {
@@ -145,11 +170,12 @@ public abstract class BillingFragment extends AbstractBillingFragment implements
                     requestInventory();
                     break;
                 case PURCHASE_CANCEL:
+                case PURCHASE_CANCEL_GP:
                     Debug.log("BillingFragment: User cancel purchase");
                     break;
                 default:
                     if (isAdded()) {
-                        onError("Error purchasing: " + result);
+                        onError(getActivity().getString(R.string.general_buying_disabled) + " " + result);
                         setWaitScreen(false);
                     }
             }
@@ -172,6 +198,7 @@ public abstract class BillingFragment extends AbstractBillingFragment implements
                 //Запрашиваем покупки, что бы их потратить
                 List<String> allOwnedSkus = inventory.getAllOwnedSkus(IabHelper.ITEM_TYPE_INAPP);
                 for (String sku : allOwnedSkus) {
+                    Debug.log("BillingFragment: restore in-app item: " + sku);
                     verifyPurchase(inventory.getPurchase(sku), getActivity());
                 }
 
@@ -181,6 +208,7 @@ public abstract class BillingFragment extends AbstractBillingFragment implements
                 for (String sku : marketSubs) {
                     //Если на сервере нет какой то подписки, которая есть в маркете, то отправляем ее повторно
                     if (serverSubs != null && !serverSubs.containsSku(sku)) {
+                        Debug.log("BillingFragment: restore subscription: " + sku);
                         verifyPurchase(inventory.getPurchase(sku), getActivity());
                     }
                 }
@@ -239,19 +267,41 @@ public abstract class BillingFragment extends AbstractBillingFragment implements
      */
     public void buy(Products.BuyButton btn) {
         if (btn.id != null) {
-            buy(btn.id);
+            if (btn.type.isSubscription() && !isTestPurchasesEnabled()) {
+                buySubscription(btn.id);
+            } else {
+                buyItem(btn.id);
+            }
         }
     }
 
     /**
-     * Chooses buyItem or buySubscription based on btn class type
-     * (@link(Products.SubscriptionBuyButton) or Products.BuyButton)
-     *
-     * @param id for buy
-     */                    //Дополнительная информация о покупке
-    public void buy(final String id) {
+     * Покупка обычного продукта (не подписки)
+     * @param id sku продукта
+     */
+    public void buyItem(final String id) {
+        Debug.log("BillingFragment: buyItem " + id + " test: " + isTestPurchasesEnabled());
         if (id != null && mIabSetupFinished) {
             mHelper.launchPurchaseFlow(
+                    getActivity(),
+                    //Если тестовые покупки, то подменяем id продукта на тестовый
+                    isTestPurchasesEnabled() ? TEST_PURCHASED_PRODUCT_ID : id,
+                    BUYING_REQUEST,
+                    this,
+                    getDeveloperPayload(id)
+            );
+        }
+    }
+
+    /**
+     * Покупка подписки
+     *
+     * @param id sku продукта
+     */
+    public void buySubscription(final String id) {
+        Debug.log("BillingFragment: buySubscription " + id + " test: " + isTestPurchasesEnabled());
+        if (id != null && mIabSetupFinished) {
+            mHelper.launchSubscriptionPurchaseFlow(
                     getActivity(),
                     //Если тестовые покупки, то подменяем id продукта на тестовый
                     isTestPurchasesEnabled() ? TEST_PURCHASED_PRODUCT_ID : id,
@@ -330,13 +380,14 @@ public abstract class BillingFragment extends AbstractBillingFragment implements
         Debug.log("BillingFragment: try verify purchase " + purchase);
 
         // Отправлем покупку на сервер для проверки и начисления
-        PurchaseRequest.getValidateRequest(purchase, context).callback(new DataApiHandler<Verify>() {
+        final PurchaseRequest validateRequest = PurchaseRequest.getValidateRequest(purchase, context);
+        validateRequest.callback(new DataApiHandler<Verify>() {
             @Override
             protected void success(Verify verify, IApiResponse response) {
                 //Послу удачной покупки (не подписки), которая была проверена сервером,
                 //нужно "потратить" элемент, что бы можно было купить следующий
                 if (TextUtils.equals(purchase.getItemType(), IabHelper.ITEM_TYPE_INAPP)) {
-                    mHelper.consumeAsync(purchase, BillingFragment.this);
+                    mHelper.consumeAsync(purchase, OpenIabFragment.this);
                 }
                 onPurchased(purchase.getSku());
                 //Статистика AppsFlyer
@@ -360,7 +411,19 @@ public abstract class BillingFragment extends AbstractBillingFragment implements
 
             @Override
             public void fail(int codeError, final IApiResponse response) {
-                Debug.error("BillindFragment: verify error: " + response);
+                // Если кто-то попытался купить android.test.purchased вне тестового режима,
+                // то возникнет ситуация, что сервер не может валидировать покупку.
+                // Поэтому мы тратим такую покупку после ошибки, если это тестовая покупка
+                if (TextUtils.equals(
+                        validateRequest.getDeveloperPayload().sku,
+                        TEST_PURCHASED_PRODUCT_ID
+                )) {
+                    mHelper.consumeAsync(purchase, OpenIabFragment.this);
+                } else {
+                    Debug.error("BillindFragment: verify error: " + response);
+                }
+
+
             }
 
         }).exec();
@@ -371,6 +434,47 @@ public abstract class BillingFragment extends AbstractBillingFragment implements
         if (isAdded()) {
             Toast.makeText(getActivity(), R.string.buying_store_ok, Toast.LENGTH_LONG).show();
         }
+    }
+
+    /**
+     * Дада, это супер грязный хак для работы Google Play In-App Billing внутри фрагмента
+     * см. http://stackoverflow.com/questions/23238360/implementing-android-in-app-purchase-with-fragments
+     * <p/>
+     * Если вы хотите добавить в вашу активити BillingFragment, то нужно вызывать этот метод внутри onActivityResult,
+     * передав все параметры из него.
+     * <p/>
+     * Если же вы хотите использовать BillingFragment вложенным в другой фрагмент, то придется еще и прокинуть
+     * onActivityResult в фрагмент предка, но данный метод умеет это делать автоматически, если вы
+     * вызовите этот метод в активити и последним параметром parentFragmentClass
+     * укажите родительский фрагмент, внутри которого находится BillingFragment
+     * см. пример в PurchaseActivity.onActivityResult
+     *
+     * @param manager             FragmentManager, в котором нужно найти фрагмент, для поиска фрагментов нужно передавать getChildFragmentManager
+     * @param requestCode         параметр requestCode из onActivityResult
+     * @param resultCode          параметр resultCode из onActivityResult
+     * @param data                параметр data из onActivityResult
+     * @param parentFragmentClass клас родительского фрагмента, где содержится BillingFragment, если не задан,
+     *                            то будем искать в manager именно BillinFragment. Если же задан, то сперва найдем
+     *                            соответсвующий параметру parentFragment фрагмент и будем искать в его ChildFragmentManager
+     */
+    public static boolean processRequestCode(FragmentManager manager, int requestCode, int resultCode, Intent data, Class<? extends Fragment> parentFragmentClass) {
+        //Сперва проверяем что это наш код запроса
+        if (OpenIabFragment.BUYING_REQUEST == requestCode) {
+            //Если наш запрос, то ищем среди всех фрагментов BillingFragment
+            List<Fragment> fragments = manager.getFragments();
+            for (Fragment fragment : fragments) {
+                if (parentFragmentClass != null && parentFragmentClass.isInstance(fragment)) {
+                    //Да, вам не показалось, это рекурсивный вызов, но с пустым последним парметром
+                    processRequestCode(fragment.getChildFragmentManager(), requestCode, resultCode, data, null);
+                    return true;
+                } else if (fragment instanceof OpenIabFragment) {
+                    fragment.onActivityResult(requestCode, resultCode, data);
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
 
