@@ -38,6 +38,7 @@ public class StartActionsController {
 
     public static void onLogout() {
         processedActionForSession = false;
+        processedMandatoryActionForSession = false;
     }
 
     /**
