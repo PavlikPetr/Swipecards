@@ -96,7 +96,7 @@ public class FullscreenController {
 
         @Override
         public void callOnUi() {
-            if (isApplicable() && startPage != null) {
+            if (startPage != null) {
                 FullscreenController.this.requestFullscreen(startPage.banner);
             }
         }
