@@ -154,6 +154,12 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             mFragmentSwitchListener = (INavigationFragmentsListener) activity;
         }
     }
+    
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mFragmentSwitchListener = null;
+    }
 
     public INavigationFragmentsListener getNavigationFragmentsListener() {
         return mFragmentSwitchListener;
