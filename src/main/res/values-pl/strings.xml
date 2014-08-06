@@ -131,6 +131,7 @@
         <item quantity="few">Macie %d pokrywania</item>
         <item quantity="zero">Nie macie pokrywań</item>
         <item quantity="other">Macie %d pokrywań</item>
+        <item quantity="many">Macie %d pokrywań</item>
         <item quantity="one">Macie %d pokrywanie</item>
     </plurals>
     <string name="invite_search_hint">Znajdź znajomych</string>
@@ -178,6 +179,7 @@
     <plurals name="leaders_price">
         <item quantity="few">Wstać za %d monety</item>
         <item quantity="other">Wstać za %d monet</item>
+        <item quantity="many">Wstać za %d monet</item>
         <item quantity="one">Wstać za %d monetę</item>
     </plurals>
     <string name="photo_add_or">Zdjęcie zostało dodane</string>
@@ -186,6 +188,7 @@
         <item quantity="few">%d zdjęcia</item>
         <item quantity="zero">Brak zdjęć</item>
         <item quantity="other">%d zdjęć</item>
+        <item quantity="many">%d zdjęć</item>
         <item quantity="one">%d zdjęcie</item>
     </plurals>
     <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby zacząć miłą znajomość</string>
@@ -385,6 +388,7 @@
     <plurals name="get_free_money">
         <item quantity="few">%d monety za darmo</item>
         <item quantity="other">%d monet za darmo</item>
+        <item quantity="many">%d monet za darmo</item>
         <item quantity="one">%d moneta za darmo</item>
     </plurals>
     <string name="settings_edit_profile">Redaguj profil</string>
@@ -411,21 +415,25 @@
     <plurals name="vip_status_period">
         <item quantity="few">Zdobyłeś VIP-status na %d dni</item>
         <item quantity="other">Zdobyłeś VIP-status na %d dni</item>
+        <item quantity="many">Zdobyłeś VIP-status na %d dni</item>
         <item quantity="one">Zdobyłeś VIP-status na %d dzień</item>
     </plurals>
     <plurals name="vip_status_period_btn">
         <item quantity="few">Zdobądź VIP na %d dni</item>
         <item quantity="other">Zdobądź VIP na %d dni</item>
+        <item quantity="many">Zdobądź VIP na %d dni</item>
         <item quantity="one">Zdobądź VIP na %d dzień</item>
     </plurals>
     <plurals name="invite_friends_plurals">
         <item quantity="few">Zaproś %1$d znajomych a zdobędziesz VIP-status na %2$d dni</item>
         <item quantity="other">Zaproś %1$d znajomych a zdobędziesz VIP-status na %2$d dni</item>
+        <item quantity="many">Zaproś %1$d znajomych a zdobędziesz VIP-status na %2$d dni</item>
         <item quantity="one">Zaproś %1$d znajomych a zdobędziesz VIP-status na %2$d dzień</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="few">Zdobądź VIP za darmo za %d zaproszenia</item>
         <item quantity="other">Zdobądź VIP za darmo za %d zaproszeń</item>
+        <item quantity="many">Zdobądź VIP za darmo za %d zaproszeń</item>
         <item quantity="one">Zdobądź VIP za darmo za %d zaproszenie</item>
     </plurals>
     <string name="filter_hint">Wpisz imię</string>
@@ -462,6 +470,7 @@
     <plurals name="vip_add_more_friends">
         <item quantity="few">Zaproś jeszcze %d znajomych</item>
         <item quantity="other">Zaproś jeszcze %d znajomych</item>
+        <item quantity="many">Zaproś jeszcze %d znajomych</item>
         <item quantity="one">Zaproś jeszcze %d znajomego</item>
     </plurals>
     <string name="general_bookmarks_add_short">Do ulubionych</string>
@@ -481,6 +490,7 @@
     <plurals name="you_were_liked">
         <item quantity="few">Podobasz się %d ludziom</item>
         <item quantity="other">Podobasz się %d ludziom</item>
+        <item quantity="many">Podobasz się %d ludziom</item>
         <item quantity="one">Podobasz się %d osobie</item>
     </plurals>
     <string name="to_see_likes_by_vip">Aby natychmiast się dowiedzieć, komu się podobasz, aktywuj VIP-account</string>

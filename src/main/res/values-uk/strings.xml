@@ -131,6 +131,7 @@
         <item quantity="few">У вас %d збіги</item>
         <item quantity="zero">У вас немає збігів</item>
         <item quantity="other">У вас %d збігів</item>
+        <item quantity="many">У вас %d збігів</item>
         <item quantity="one">У вас %d збіг</item>
     </plurals>
     <string name="invite_search_hint">Знайти друзів</string>
@@ -178,6 +179,7 @@
     <plurals name="leaders_price">
         <item quantity="few">Встати за %d монети</item>
         <item quantity="other">Встати за %d монет</item>
+        <item quantity="many">Встати за %d монет</item>
         <item quantity="one">Встати за %d монету</item>
     </plurals>
     <string name="photo_add_or">Фотографія додана</string>
@@ -186,6 +188,7 @@
         <item quantity="few">%d фотографії</item>
         <item quantity="zero">Немає фотографій</item>
         <item quantity="other">%d фотографій</item>
+        <item quantity="many">%d фотографій</item>
         <item quantity="one">%d фотографія</item>
     </plurals>
     <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб почати приємне знайомство</string>
@@ -388,6 +391,7 @@
     <plurals name="get_free_money">
         <item quantity="few">%d монети безкоштовно</item>
         <item quantity="other">%d монет безкоштовно</item>
+        <item quantity="many">%d монет безкоштовно</item>
         <item quantity="one">%d монета безкоштовно</item>
     </plurals>
     <string name="settings_edit_profile">Редагувати профіль</string>
@@ -415,21 +419,25 @@
     <plurals name="vip_status_period">
         <item quantity="few">Ви отримали VIP статус на %d дня</item>
         <item quantity="other">Ви отримали VIP статус на %d днів</item>
+        <item quantity="many">Ви отримали VIP статус на %d днів</item>
         <item quantity="one">Ви отримали VIP статус на %d день</item>
     </plurals>
     <plurals name="vip_status_period_btn">
         <item quantity="few">Отримати VIP на %d дня</item>
         <item quantity="other">Отримати VIP на %d днів</item>
+        <item quantity="many">Отримати VIP на %d днів</item>
         <item quantity="one">Отримати VIP на %d день</item>
     </plurals>
     <plurals name="invite_friends_plurals">
         <item quantity="few">Запросіть %1$d друзів, щоб отримати VIP-статус на %2$d дня</item>
         <item quantity="other">Запросіть %1$d друзів, щоб отримати VIP-статус на %2$d днів</item>
+        <item quantity="many">Запросіть %1$d друзів, щоб отримати VIP-статус на %2$d днів</item>
         <item quantity="one">Запросіть %1$d друзів, щоб отримати VIP-статус на %2$d день</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="few">Отримай VIP безкоштовно за %d запрошення</item>
         <item quantity="other">Отримай VIP безкоштовно за %d запрошень</item>
+        <item quantity="many">Отримай VIP безкоштовно за %d запрошень</item>
         <item quantity="one">Отримай VIP безкоштовно за %d запрошення</item>
     </plurals>
     <string name="filter_hint">Введіть ім\'я</string>
@@ -465,6 +473,7 @@
     <plurals name="vip_add_more_friends">
         <item quantity="few">Запросіть ще %d друга</item>
         <item quantity="other">Запросіть ще %d друзів</item>
+        <item quantity="many">Запросіть ще %d друзів</item>
         <item quantity="one">Запросіть ще %d друга</item>
     </plurals>
     <string name="general_bookmarks_add_short">В обрані</string>

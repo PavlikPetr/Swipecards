@@ -387,6 +387,7 @@
     <string name="general_no_fans">Nu sunt admiratori</string>
     <plurals name="get_free_money">
         <item quantity="one">%d monede gratis</item>
+        <item quantity="few">%d monede gratis</item>
     </plurals>
     <string name="settings_edit_profile">Redacteaza profilul</string>
     <string name="general_bookmarks_delete">Sterge din alese</string>
@@ -410,6 +411,7 @@
     <string name="invalid_contacts">Careva din contacte sunt incorecte. Va rugam, sa trimiteti date corecte</string>
     <string name="general_choose_action">Alege actiunea</string>
     <plurals name="vip_status_period_btn">
+        <item quantity="one">Primeste VIP pe %d zile</item>
         <item quantity="few">Primeste VIP pe %d zile</item>
         <item quantity="other">Primeste VIP pe %d zile</item>
     </plurals>
