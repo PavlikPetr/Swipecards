@@ -30,11 +30,13 @@ import java.util.LinkedList;
 
 public class PurchasesFragment extends BaseFragment {
 
+    private static final String SKIP_BONUS = "SKIP_BONUS";
     public static final String IS_VIP_PRODUCTS = "is_vip_products";
     public static final String LAST_PAGE = "LAST_PAGE";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
     private TabPageIndicator mTabIndicator;
     private ViewPager mPager;
+    private PurchasesFragmentsAdapter mPagerAdapter;
     private TextView mResourcesInfo;
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_NONE = 0;
@@ -45,6 +47,8 @@ public class PurchasesFragment extends BaseFragment {
     private TextView mCurCoins;
     private TextView mCurLikes;
 
+    private boolean mSkipBonus;
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -52,6 +56,14 @@ public class PurchasesFragment extends BaseFragment {
         }
     };
     private boolean mIsVip;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mSkipBonus = savedInstanceState.getBoolean(SKIP_BONUS, false);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +77,9 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(LAST_PAGE, mPager.getCurrentItem());
+        outState.putBoolean(SKIP_BONUS, mSkipBonus);
     }
+
 
     @Override
     public void onResume() {
@@ -78,6 +92,21 @@ public class PurchasesFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
+    }
+
+    public boolean forceBonusScreen() {
+        if (!mSkipBonus) {
+            int bonusTabIndex = mPagerAdapter.getTabIndex(Options.Tab.BONUS);
+            if (mPagerAdapter.hasTab(Options.Tab.BONUS) && mPager.getCurrentItem() != bonusTabIndex) {
+                mPager.setCurrentItem(bonusTabIndex);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void skipBonus() {
+        mSkipBonus = true;
     }
 
     private void initViews(View root, Bundle savedInstanceState) {
@@ -99,8 +128,8 @@ public class PurchasesFragment extends BaseFragment {
 
         removeExcessTabs(tabs); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
 
-        PurchasesFragmentsAdapter pagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs);
-        mPager.setAdapter(pagerAdapter);
+        mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs);
+        mPager.setAdapter(mPagerAdapter);
         mTabIndicator.setViewPager(mPager);
         updateBalanceCounters();
         if (savedInstanceState != null) {

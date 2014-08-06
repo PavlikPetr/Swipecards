@@ -1,13 +1,12 @@
 package com.topface.topface.ui;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 
-public class ComplainsActivity extends CheckAuthActivity {
+public class ComplainsActivity extends CheckAuthActivity<ComplainsFragment> {
 
     public static final int INTENT_COMPLAIN = 9;
 
@@ -30,7 +29,7 @@ public class ComplainsActivity extends CheckAuthActivity {
     }
 
     @Override
-    protected Fragment createFragment() {
+    protected ComplainsFragment createFragment() {
         return new ComplainsFragment();
     }
 }

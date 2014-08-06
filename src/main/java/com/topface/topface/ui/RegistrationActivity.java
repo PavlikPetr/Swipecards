@@ -1,10 +1,8 @@
 package com.topface.topface.ui;
 
-import android.support.v4.app.Fragment;
-
 import com.topface.topface.ui.fragments.RegistrationFragment;
 
-public class RegistrationActivity extends NoAuthActivity {
+public class RegistrationActivity extends NoAuthActivity<RegistrationFragment> {
 
     public static final int INTENT_REGISTRATION = 4;
 
@@ -14,7 +12,7 @@ public class RegistrationActivity extends NoAuthActivity {
     }
 
     @Override
-    protected Fragment createFragment() {
+    protected RegistrationFragment createFragment() {
         return new RegistrationFragment();
     }
 }

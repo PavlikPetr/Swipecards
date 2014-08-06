@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.topface.topface.R;
@@ -10,7 +11,7 @@ import com.topface.topface.utils.social.AuthToken;
 /**
  * Activity that checks auth
  */
-public abstract class CheckAuthActivity extends SingleFragmentActivity {
+public abstract class CheckAuthActivity<T extends Fragment> extends SingleFragmentActivity<T> {
 
     @Override
     protected void onCreate(Bundle bundle) {

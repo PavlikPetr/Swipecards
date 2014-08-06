@@ -1,14 +1,14 @@
 package com.topface.topface.ui;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
+import android.view.MenuItem;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 
-public class PurchasesActivity extends CheckAuthActivity {
+public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     /**
      * Constant keys for different fragments
@@ -16,6 +16,26 @@ public class PurchasesActivity extends CheckAuthActivity {
      */
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (!getFragment().forceBonusScreen()) {
+            return super.onOptionsItemSelected(item);
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!getFragment().forceBonusScreen()) {
+            super.onBackPressed();
+        }
+    }
+
+    public void skipBonus() {
+        getFragment().skipBonus();
+    }
 
     public static Intent createVipBuyIntent(String extraText, String from) {
         Intent intent = new Intent(App.getContext(), PurchasesActivity.class);
@@ -53,7 +73,7 @@ public class PurchasesActivity extends CheckAuthActivity {
     }
 
     @Override
-    protected Fragment createFragment() {
+    protected PurchasesFragment createFragment() {
         return new PurchasesFragment();
     }
 
