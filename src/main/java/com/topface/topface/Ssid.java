@@ -6,9 +6,6 @@ import android.text.TextUtils;
 
 import com.topface.framework.utils.BackgroundThread;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Ssid {
     public static final String PREFERENCES_SSID_KEY = "ssid";
     private static final String PREFERENCES_LAST_UPDATE_KEY = "ssid_last_update";
@@ -16,7 +13,6 @@ public class Ssid {
     private static volatile String mSsid;
     private static Context mContext = App.getContext();
     private static long mLastUpdate;
-    private static List<ISsidUpdateListener> updateListeners = new ArrayList<ISsidUpdateListener>();
 
 
     public static boolean isLoaded() {
@@ -48,13 +44,10 @@ public class Ssid {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(PREFERENCES_SSID_KEY, mSsid);
                 editor.putLong(PREFERENCES_LAST_UPDATE_KEY, mLastUpdate);
-                editor.commit();
+                editor.apply();
             }
         };
 
-        for (ISsidUpdateListener listener : updateListeners) {
-            listener.onUpdate();
-        }
     }
 
     public synchronized static void remove() {
@@ -66,7 +59,7 @@ public class Ssid {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(PREFERENCES_SSID_KEY, Static.EMPTY);
                 editor.putLong(PREFERENCES_LAST_UPDATE_KEY, 0);
-                editor.commit();
+                editor.apply();
             }
         };
     }
@@ -81,10 +74,6 @@ public class Ssid {
     public synchronized static boolean isOlderThan(int minutes) {
         int millis = minutes * 60 * 1000;
         return System.currentTimeMillis() > (millis + mLastUpdate);
-    }
-
-    public synchronized static void addUpdateListener(ISsidUpdateListener listener) {
-        updateListeners.add(listener);
     }
 
     public interface ISsidUpdateListener {

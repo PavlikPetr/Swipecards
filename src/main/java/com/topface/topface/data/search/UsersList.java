@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Locale;
 
 public class UsersList<T extends FeedUser> extends LinkedList<T> implements SerializableToJson {
 
@@ -133,13 +134,13 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
      * @param collection списко в который нужно добавить
      */
     private void removeDublicates(Collection<? extends T> collection) {
-        LinkedList<T> needRemove = new LinkedList<T>();
+        LinkedList<T> needRemove = new LinkedList<>();
 
         //Ищем пользователей, которые уже есть в списке
         for (T user : collection) {
             if (contains(user)) {
                 needRemove.add(user);
-                log(String.format("Remove dublicate user #%d %s", user.id, user.getNameAndAge()));
+                log(String.format(Locale.ENGLISH, "Remove dublicate user #%d %s", user.id, user.getNameAndAge()));
             }
         }
         //Удаляем их из списка на добавление
@@ -212,7 +213,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         T user = null;
         if (mPosition >= 0 && mPosition < size()) {
             user = get(mPosition);
-            log(String.format("Get current user #%d %s from %s id%d", mPosition, user.getNameAndAge(), user.city.name, user.id));
+            log(String.format(Locale.ENGLISH, "Get current user #%d %s from %s id%d", mPosition, user.getNameAndAge(), user.city.name, user.id));
         }
 
         if (mOnEmptyListener != null) {
@@ -232,6 +233,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         return mPosition >= size() - 1;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public boolean isHasRated() {
         return !isEmpty() && mPosition > 0;
     }
@@ -323,7 +325,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
 
     private void checkPreload() {
         if (isNeedPreload()) {
-            log(String.format("Search preload on position #%d with size %d", mPosition, size()));
+            log(String.format(Locale.ENGLISH, "Search preload on position #%d with size %d", mPosition, size()));
             mOnEmptyListener.onPreload(this);
         }
     }

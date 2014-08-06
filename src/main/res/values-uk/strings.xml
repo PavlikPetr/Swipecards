@@ -24,6 +24,8 @@
     <string name="general_profile_error">Помилка завантаження профілю</string>
     <string name="general_dbl_all">Усі</string>
     <string name="general_dbl_unread">Непрочитані</string>
+    <string name="time_yesterday">Вчора</string>
+    <string name="time_today">Сьогодні</string>
     <string name="general_edit_button">Ред.</string>
     <string name="general_save_button">Збер.</string>
     <string name="general_send_button">Відісл.</string>

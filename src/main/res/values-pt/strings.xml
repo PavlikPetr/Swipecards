@@ -25,6 +25,8 @@
     <string name="general_dbl_all">Todos</string>
     <string name="general_dbl_unread">Não lidos</string>
     <string name="general_dbl_new">Novos</string>
+    <string name="time_yesterday">Ontem</string>
+    <string name="time_today">Hoje</string>
     <string name="general_edit_button">Editar</string>
     <string name="general_save_button">Guardar</string>
     <string name="general_send_button">Enviar</string>

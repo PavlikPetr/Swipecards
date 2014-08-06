@@ -89,10 +89,10 @@ case "${DPI}" in
 	cp ${SOURCE}/*png res/drawable-hdpi
 	cp ${SOURCE}/*png res/drawable-mdpi
 	cp ${SOURCE}/*png res/drawable-ldpi
-	mogrify -resize 75% -format png res/drawable-xhdpi/*
+	mogrify -resize 66.666666% -format png res/drawable-xhdpi/*
 	mogrify -resize 50% -format png res/drawable-hdpi/*
-	mogrify -resize 33.3% -format png res/drawable-mdpi/*
-	mogrify -resize 20% -format png res/drawable-ldpi/*
+	mogrify -resize 33.333333% -format png res/drawable-mdpi/*
+	mogrify -resize 25% -format png res/drawable-ldpi/*
 	;;
 	* )
 	echo ${USAGE}

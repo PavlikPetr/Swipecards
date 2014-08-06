@@ -55,7 +55,7 @@ public class BannersConfig {
         for (String pageName : options.pages.keySet()) {
             editor.putString(pageName, options.pages.get(pageName).toString());
         }
-        editor.commit();
+        editor.apply();
     }
 
     public void restoreBannersSettings() {

@@ -24,6 +24,8 @@
     <string name="general_profile_error">프로필 로딩 에러입니다.</string>
     <string name="general_dbl_all">전체</string>
     <string name="general_dbl_unread">읽지않은 메세지가 있습니다.</string>
+    <string name="time_yesterday">어제</string>
+    <string name="time_today">오늘</string>
     <string name="general_edit_button">편집</string>
     <string name="general_save_button">저장</string>
     <string name="general_send_button">전송</string>

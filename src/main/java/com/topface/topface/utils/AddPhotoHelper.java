@@ -118,7 +118,7 @@ public class AddPhotoHelper {
 
                 UUID uuid = UUID.randomUUID();
                 mFileName = "/" + uuid.toString() + ".jpg";
-                preferences.edit().putString(FILENAME_CONST, mFileName).commit();
+                preferences.edit().putString(FILENAME_CONST, mFileName).apply();
                 File outputDirectory = new File(PATH_TO_FILE);
                 //noinspection ResultOfMethodCallIgnored
                 if (!outputDirectory.exists()) {

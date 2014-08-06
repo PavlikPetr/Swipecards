@@ -381,7 +381,7 @@ public class BannerBlock {
                             ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
                             int maxHeight = 0;
                             if (mBannerView instanceof ImageViewRemote) {
-                                maxHeight = ((ImageViewRemote) mBannerView).getMaxHeight();
+                                maxHeight = ((ImageViewRemote) mBannerView).getImageMaxHeight();
                             }
                             int scaledHeight = (int) ((deviceWidth / imageWidth) * imageHeight);
                             if (maxHeight > scaledHeight) {

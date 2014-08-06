@@ -1,5 +1,6 @@
 package com.topface.topface.ui.blocks;
 
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,11 +37,16 @@ public class FilterBlock {
                 if (y != 0) {
                     mControlGroup.setPadding(mControlGroup.getPaddingLeft(), -y, mControlGroup.getPaddingRight(), mControlGroup.getPaddingBottom());
                     ViewTreeObserver obs = mControlGroup.getViewTreeObserver();
-                    if (Build.VERSION.SDK_INT >= 16) {
-                        obs.removeOnGlobalLayoutListener(this);
-                    } else {
-                        obs.removeGlobalOnLayoutListener(this);
-                    }
+                    removeGlobalLayoutListener(obs);
+                }
+            }
+
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            private void removeGlobalLayoutListener(ViewTreeObserver obs) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    obs.removeOnGlobalLayoutListener(this);
+                } else {
+                    obs.removeGlobalOnLayoutListener(this);
                 }
             }
         });

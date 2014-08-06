@@ -30,6 +30,7 @@ package com.topface.topface.ui.blocks;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -54,16 +55,23 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
     private int mDisplayOffset = 0;
     protected Scroller mScroller;
     private GestureDetector mGesture;
-    private Queue<View> mRemovedViewQueue = new LinkedList<View>();
+    private Queue<View> mRemovedViewQueue = new LinkedList<>();
     private OnItemSelectedListener mOnItemSelected;
     private OnItemClickListener mOnItemClicked;
     private OnItemLongClickListener mOnItemLongClicked;
     private boolean mDataChanged = false;
+    private Runnable mRequestLayout;
 
 
     public HorizontalListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView();
+        mRequestLayout = new Runnable() {
+            @Override
+            public void run() {
+                requestLayout();
+            }
+        };
     }
 
     private synchronized void initView() {
@@ -214,13 +222,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         mCurrentX = mNextX;
 
         if (!mScroller.isFinished()) {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    requestLayout();
-                }
-            });
-
+            post(mRequestLayout);
         }
     }
 
@@ -305,18 +307,12 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         }
     }
 
-    public synchronized void scrollTo(int x) {
-        mScroller.startScroll(mNextX, 0, x - mNextX, 0);
-        requestLayout();
-    }
-
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
+    public boolean dispatchTouchEvent(@NonNull MotionEvent ev) {
         return mGesture.onTouchEvent(ev);
     }
 
-    protected boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                              float velocityY) {
+    protected boolean onFling(float velocityX) {
         synchronized (HorizontalListView.this) {
             mScroller.fling(mNextX, 0, (int) -velocityX, 0, 0, mMaxX, 0, 0);
         }
@@ -325,7 +321,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         return true;
     }
 
-    protected boolean onDown(MotionEvent e) {
+    protected boolean onDown() {
         mScroller.forceFinished(true);
         return true;
     }
@@ -334,13 +330,13 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
         @Override
         public boolean onDown(MotionEvent e) {
-            return HorizontalListView.this.onDown(e);
+            return HorizontalListView.this.onDown();
         }
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                                float velocityY) {
-            return HorizontalListView.this.onFling(e1, e2, velocityX, velocityY);
+            return HorizontalListView.this.onFling(velocityX);
         }
 
         @Override

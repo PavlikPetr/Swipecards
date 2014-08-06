@@ -1,5 +1,6 @@
 package com.topface.topface.ui.adapters;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -124,7 +125,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return resultView;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
 
@@ -197,11 +197,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (mSelectionController.isSelected(position)) {
             convertView.setBackgroundResource(R.drawable.background_list_selected);
         } else {
-            if (Build.VERSION.SDK_INT >= 16) {
-                convertView.setBackground(holder.background);
-            } else {
-                convertView.setBackgroundDrawable(holder.background);
-            }
+            setBackground(convertView, holder);
         }
         return convertView;
     }
@@ -215,6 +211,16 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                     mOnAvatarClickListener.onAvatarClick(item, v);
                 }
             });
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void setBackground(View convertView, FeedViewHolder holder) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            convertView.setBackground(holder.background);
+        } else {
+            convertView.setBackgroundDrawable(holder.background);
         }
     }
 
@@ -314,10 +320,11 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return result;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public boolean removeByUserId(int userId) {
         boolean result = false;
         FeedList<T> feeds = getData();
-        for (T feed: feeds) {
+        for (T feed : feeds) {
             if (feed.user.id == userId) {
                 result = feeds.remove(feed);
                 notifyDataSetChanged();

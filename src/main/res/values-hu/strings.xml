@@ -24,6 +24,8 @@
     <string name="general_profile_error">Profil feltöltés hiba</string>
     <string name="general_dbl_all">Össze</string>
     <string name="general_dbl_unread">Helytelen</string>
+    <string name="time_yesterday">Tegnap</string>
+    <string name="time_today">Ma</string>
     <string name="general_edit_button">Szerkeztés</string>
     <string name="general_save_button">Mentés</string>
     <string name="general_send_button">Küldés</string>

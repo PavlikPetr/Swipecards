@@ -1,6 +1,7 @@
 package com.topface.topface.utils.social;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -134,6 +135,11 @@ public class VkAuthActivity extends Activity {
             mHandler = handler;
             webView.loadUrl(mUrl);
             webView.setBackgroundColor(0x00000000);
+            setLayerType(webView);
+        }
+
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        private void setLayerType(WebView webView) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
             }

@@ -10,5 +10,5 @@
     <item
         android:id="@+id/add_to_black_list"
         android:title="@string/black_list_add_short"
-        android:icon="@drawable/ic_blacklist_selector"/>
+        android:icon="@drawable/ic_blacklist_normal"/>
 </menu>

@@ -25,6 +25,8 @@
     <string name="general_dbl_all">Bütün</string>
     <string name="general_dbl_unread">Okunmamış</string>
     <string name="general_dbl_new">Yeni</string>
+    <string name="time_yesterday">Dün</string>
+    <string name="time_today">Bugün</string>
     <string name="general_edit_button">Düzelt</string>
     <string name="general_save_button">Kaydet</string>
     <string name="general_send_button">Gönder</string>
@@ -666,4 +668,6 @@
     <string name="feedback_subject_ban">İftira engellemeye karşı şikayet</string>
     <string name="settings_led">LED bildirim</string>
     <string name="buying_not_enough_coins">Size %d {{coins}} yetmiyor</string>
+    <string name="open_market_error">Uygulama sayfası açılamıyor</string>
+    <string name="billing_item_already_owned">Önceki satım alınınız uygulanıyor lütfen bekleyiniz</string>
 </resources>

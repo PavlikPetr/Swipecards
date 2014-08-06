@@ -145,7 +145,7 @@ public class PopupManager {
                 );
                 preferences.edit()
                         .putLong(InvitesPopup.INVITE_POPUP_PREF_KEY, System.currentTimeMillis())
-                        .commit();
+                        .apply();
             }
 
             @Override

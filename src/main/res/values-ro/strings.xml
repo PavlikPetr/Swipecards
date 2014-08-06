@@ -24,6 +24,8 @@
     <string name="general_profile_error">Eroare la incarcarea profilului</string>
     <string name="general_dbl_all">Toate</string>
     <string name="general_dbl_unread">Necitite</string>
+    <string name="time_yesterday">Ieri</string>
+    <string name="time_today">Azi</string>
     <string name="general_edit_button">Red.</string>
     <string name="general_save_button">Salv.</string>
     <string name="general_send_button">Trim.</string>

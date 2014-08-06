@@ -255,7 +255,7 @@ android {
     lintOptions {
         checkReleaseBuilds true
         abortOnError false
-        ignore "MissingTranslation", "ValidFragment"
+        ignore "MissingTranslation", "ContentDescription", "SmallSp", "HandlerLeak", "InflateParams", "UnusedQuantity", "ClickableViewAccessibility"
         /*ValidFragment пока игнорируем, но нужно будет исправить*/
     }
     aaptOptions.useAaptPngCruncher = true

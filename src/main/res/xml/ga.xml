@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="https://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources xmlns:tools="https://schemas.android.com/tools"
+           tools:ignore="UnusedResources,MissingTranslation">
     <!-- Настройки Google Analytics - https://developers.google.com/analytics/devguides/collection/android/v4/parameters -->
 
     <!-- The Google Analytics tracking ID to which to send your data. Dashes in the ID must be unencoded. You can disable your tracking by not providing this value. -->

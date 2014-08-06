@@ -25,6 +25,8 @@
     <string name="general_dbl_all">Tutti</string>
     <string name="general_dbl_unread">Non letti</string>
     <string name="general_dbl_new">Nuovi</string>
+    <string name="time_yesterday">Ieri</string>
+    <string name="time_today">Oggi</string>
     <string name="general_edit_button">Mod.</string>
     <string name="general_save_button">Salv.</string>
     <string name="general_send_button">Inv.</string>
@@ -648,4 +650,6 @@
     <string name="feedback_subject_ban">Reclamo di un ban ingiusto</string>
     <string name="settings_led">Notifica LED</string>
     <string name="buying_not_enough_coins">Ti mancano %d {{coins}}</string>
+    <string name="open_market_error">La pagina momentaneamente non è disponibile</string>
+    <string name="billing_item_already_owned">Il tuo ordine precedente è in elaborazione, si prega di attendere</string>
 </resources>

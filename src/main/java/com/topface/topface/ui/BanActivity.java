@@ -23,6 +23,7 @@ import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -58,6 +59,7 @@ public class BanActivity extends TrackedFragmentActivity implements View.OnClick
         initViews();
     }
 
+    @SuppressWarnings("deprecation")
     private void setWindowOptions() {
         // supportRequestWindowFeature() вызывать только до setContent(),
         // метод setSupportProgressBarIndeterminateVisibility(boolean) вызывать строго после setContent();
@@ -150,7 +152,7 @@ public class BanActivity extends TrackedFragmentActivity implements View.OnClick
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
 
-                mTimerTextView.setText(String.format("%d:%02d", minutes, seconds));
+                mTimerTextView.setText(String.format(Locale.getDefault(), "%d:%02d", minutes, seconds));
             }
 
             public void onFinish() {

@@ -1,5 +1,6 @@
 package com.topface.topface.ui;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,8 +31,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     private String mWidgetUrl;
 
     public static Intent getIntent(Context context) {
-        Intent intent = new Intent(context, PaymentwallActivity.class);
-        return intent;
+        return new Intent(context, PaymentwallActivity.class);
     }
 
     public static Intent getIntent(Context context, String url) {
@@ -92,6 +93,11 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         public PaymentwallClient(WebView webView) {
             super();
             webView.loadUrl(mWidgetUrl);
+            setLayerType(webView);
+        }
+
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        private void setLayerType(WebView webView) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
             }
@@ -100,7 +106,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
-            Debug.log(String.format("PW: error load page %s %d: %s", failingUrl, errorCode, description));
+            Debug.log(String.format(Locale.ENGLISH, "PW: error load page %s %d: %s", failingUrl, errorCode, description));
             onFatalError();
         }
 

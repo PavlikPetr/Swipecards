@@ -1,7 +1,9 @@
 package com.topface.topface.ui.fragments;
 
 import android.animation.LayoutTransition;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -138,10 +140,14 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             initSpinnersContainer(root);
             initFloatTypeSpinner(root);
             initBannerTypeSpinner(root);
+            setTransition(this);
+        }
 
-            if (android.os.Build.VERSION.SDK_INT >= 16) {
-                setLayoutTransition(new LayoutTransition());
-                LayoutTransition transition = getLayoutTransition();
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        private void setTransition(ViewGroup viewGroup) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                viewGroup.setLayoutTransition(new LayoutTransition());
+                LayoutTransition transition = viewGroup.getLayoutTransition();
                 transition.enableTransitionType(LayoutTransition.CHANGING);
             }
         }
@@ -163,11 +169,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
         private void initSpinnersContainer(View root) {
             mSpinnersContainer = (ViewGroup) root.findViewById(R.id.loSpinners);
             mSpinnersContainer.setLayoutParams(mCompressedParams);
-            if (android.os.Build.VERSION.SDK_INT >= 16) {
-                mSpinnersContainer.setLayoutTransition(new LayoutTransition());
-                LayoutTransition transition = mSpinnersContainer.getLayoutTransition();
-                transition.enableTransitionType(LayoutTransition.CHANGING);
-            }
+            setTransition(mSpinnersContainer);
         }
 
         private void initBannerTypeSpinner(View root) {

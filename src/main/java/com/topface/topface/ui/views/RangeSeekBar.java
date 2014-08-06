@@ -1,5 +1,6 @@
 package com.topface.topface.ui.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,7 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.widget.ImageView;
@@ -36,18 +38,13 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private final Bitmap thumbPressedImage = BitmapFactory.decodeResource(getResources(), R.drawable.triangle_thumb);
     private final float thumbWidth = thumbImage.getWidth();
     private final float thumbHalfWidth = 0.5f * thumbWidth;
-    private final float thumbHalfHeight = 0.5f * thumbImage.getHeight();
-    private final float lineHeight = 0.3f * thumbHalfHeight;
-    private final float barHeight = 5f;
     private final float topPadding = 0.4f * (float) bg.getHeight();
     private final float leftPadding = 0.04f * (float) bg.getWidth();
-    private final T absoluteMinValue, absoluteMaxValue;
     private final NumberType numberType;
     private final double absoluteMinValuePrim, absoluteMaxValuePrim;
     private double normalizedMinValue = 0d;
     private double normalizedMaxValue = 1d;
     private Thumb pressedThumb = null;
-    private boolean notifyWhileDragging = false;
     private OnRangeSeekBarChangeListener<T> listener;
     private T minimalRange;
     private double normalizedMinimalRange = 0;
@@ -63,78 +60,44 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      */
     public static final int INVALID_POINTER_ID = 255;
 
-    // Localized constants from MotionEvent for compatibility
-    // with API < 8 "Froyo".
-    public static final int ACTION_POINTER_UP = 0x6, ACTION_POINTER_INDEX_MASK = 0x0000ff00, ACTION_POINTER_INDEX_SHIFT = 8;
+    public static final int ACTION_POINTER_INDEX_MASK = 0x0000ff00;
+    public static final int ACTION_POINTER_INDEX_SHIFT = 8;
 
     private float mDownMotionX;
     private int mActivePointerId = INVALID_POINTER_ID;
 
-    /**
-     * On touch, this offset plus the scaled value from the position of the touch will form the progress value. Usually 0.
-     */
-    float mTouchProgressOffset;
-
     private int mScaledTouchSlop;
     private boolean mIsDragging;
+    private
+    @SuppressLint("DrawAllocation")
+    RectF mRect;
 
     /**
      * Creates a new RangeSeekBar.
      *
-     * @param absoluteMinValue The minimum value of the selectable range.
-     * @param absoluteMaxValue The maximum value of the selectable range.
-     * @param context
      * @throws IllegalArgumentException Will be thrown if min/max value type is not one of Long, Double, Integer, Float, Short, Byte or BigDecimal.
      */
     public RangeSeekBar(T absoluteMinValue, T absoluteMaxValue, Context context) throws IllegalArgumentException {
         super(context);
-        this.absoluteMinValue = absoluteMinValue;
-        this.absoluteMaxValue = absoluteMaxValue;
         absoluteMinValuePrim = absoluteMinValue.doubleValue();
         absoluteMaxValuePrim = absoluteMaxValue.doubleValue();
         numberType = NumberType.fromNumber(absoluteMinValue);
-//        topPadding  = getHeight()/2f - barHeight/2f;
-//        setMinimumHeight(bg.getHeight());
-        // make RangeSeekBar focusable. This solves focus handling issues in case EditText widgets are being used along with the RangeSeekBar within ScollViews.
         setFocusable(true);
         setFocusableInTouchMode(true);
-
+        mRect = new RectF();
         init();
+    }
+
+    /**
+     * This constructor need only for tools (UI Designer)
+     */
+    @SuppressWarnings("UnusedDeclaration")
+    public RangeSeekBar(Context context) {
+        this(null, null, context);
     }
 
     private void init() {
         mScaledTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-    }
-
-    public boolean isNotifyWhileDragging() {
-        return notifyWhileDragging;
-    }
-
-    /**
-     * Should the widget notify the listener callback while the user is still dragging a thumb? Default is false.
-     *
-     * @param flag
-     */
-    public void setNotifyWhileDragging(boolean flag) {
-        this.notifyWhileDragging = flag;
-    }
-
-    /**
-     * Returns the absolute minimum value of the range that has been set at construction time.
-     *
-     * @return The absolute minimum value of the range.
-     */
-    public T getAbsoluteMinValue() {
-        return absoluteMinValue;
-    }
-
-    /**
-     * Returns the absolute maximum value of the range that has been set at construction time.
-     *
-     * @return The absolute maximum value of the range.
-     */
-    public T getAbsoluteMaxValue() {
-        return absoluteMaxValue;
     }
 
     public void setMinimalRange(T minimalRange) {
@@ -205,7 +168,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * Handles thumb selection and movement. Notifies listener callback on certain events.
      */
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
 
         if (!isEnabled())
             return false;
@@ -368,12 +331,11 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * Draws the widget on the given canvas.
      */
     @Override
-    protected synchronized void onDraw(Canvas canvas) {
+    protected synchronized void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
         drawBackground(canvas);
-        // draw seek bar background line
-        final RectF rect = new RectF(leftPadding, topPadding, getWidth() - 2 * leftPadding, bg.getHeight() - topPadding);
+        mRect.set(leftPadding, topPadding, getWidth() - 2 * leftPadding, bg.getHeight() - topPadding);
 
         paint.setStyle(Style.FILL);
         paint.setColor(Color.GRAY);
@@ -381,12 +343,12 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 //        canvas.drawRect(rect, paint);
 
         // draw seek bar active range line
-        rect.left = normalizedToScreen(normalizedMinValue);
-        rect.right = normalizedToScreen(normalizedMaxValue);
+        mRect.left = normalizedToScreen(normalizedMinValue);
+        mRect.right = normalizedToScreen(normalizedMaxValue);
 
         // orange color
         paint.setColor(DEFAULT_COLOR);
-        canvas.drawRect(rect, paint);
+        canvas.drawRect(mRect, paint);
 
         // draw minimum thumb
         drawThumb(normalizedToScreen(normalizedMinValue), Thumb.MIN.equals(pressedThumb), canvas);
@@ -512,9 +474,6 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
     /**
      * Converts a normalized value to a Number object in the value space between absolute minimum and maximum.
-     *
-     * @param normalized
-     * @return
      */
     @SuppressWarnings("unchecked")
     private T normalizedToValue(double normalized) {

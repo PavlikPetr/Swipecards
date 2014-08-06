@@ -25,6 +25,8 @@
     <string name="general_dbl_all">Visi</string>
     <string name="general_dbl_unread">Neperskaityti</string>
     <string name="general_dbl_new">Nauji</string>
+    <string name="time_yesterday">Vakar</string>
+    <string name="time_today">Šiandien</string>
     <string name="general_edit_button">Red.</string>
     <string name="general_save_button">Išsaugoti</string>
     <string name="general_send_button">Išsiųsti</string>
@@ -671,4 +673,6 @@
     <string name="feedback_subject_ban">Skundas dėl neteisingo bano</string>
     <string name="settings_led">LED pranešimas</string>
     <string name="buying_not_enough_coins">Jums neužtenka %d {{coins}}</string>
+    <string name="open_market_error">Nepavyksta atverti programos lango</string>
+    <string name="billing_item_already_owned">Jūsų praeitas pirkinys apdorojamas, prašome palaukti</string>
 </resources>

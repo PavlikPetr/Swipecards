@@ -25,6 +25,8 @@
     <string name="general_dbl_all">\'Ολα</string>
     <string name="general_dbl_unread">Αδιάβαστος</string>
     <string name="general_dbl_new">Νέες</string>
+    <string name="time_yesterday">Χτες</string>
+    <string name="time_today">σήμερα</string>
     <string name="general_edit_button">Επ.</string>
     <string name="general_save_button">Αποθήκευση.</string>
     <string name="general_send_button">Στείλ.</string>

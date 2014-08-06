@@ -24,6 +24,8 @@
     <string name="general_profile_error">Konto laadimise viga</string>
     <string name="general_dbl_all">Kõik</string>
     <string name="general_dbl_unread">Lugemata</string>
+    <string name="time_yesterday">Eile</string>
+    <string name="time_today">Täna</string>
     <string name="general_edit_button">Toimetada</string>
     <string name="general_save_button">Salvestada</string>
     <string name="general_send_button">Saata</string>

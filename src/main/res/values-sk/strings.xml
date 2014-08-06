@@ -24,6 +24,8 @@
     <string name="general_profile_error">Chyba pri načítaní profilu</string>
     <string name="general_dbl_all">Všetci</string>
     <string name="general_dbl_unread">Neprečítané</string>
+    <string name="time_yesterday">Včera</string>
+    <string name="time_today">Dnes</string>
     <string name="general_edit_button">Ed.</string>
     <string name="general_save_button">Ulož.</string>
     <string name="general_send_button">Odosl.</string>

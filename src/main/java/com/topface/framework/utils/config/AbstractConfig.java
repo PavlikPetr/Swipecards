@@ -192,7 +192,7 @@ public abstract class AbstractConfig {
                             break;
                     }
                 }
-                editor.commit();
+                editor.apply();
                 Debug.log(this.getClass().getName() + toString());
             }
         };

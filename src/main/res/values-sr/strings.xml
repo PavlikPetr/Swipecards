@@ -24,6 +24,8 @@
     <string name="general_profile_error">Greška kod učitavanja profila</string>
     <string name="general_dbl_all">Svi</string>
     <string name="general_dbl_unread">Nepročitani</string>
+    <string name="time_yesterday">Juče</string>
+    <string name="time_today">Danas</string>
     <string name="general_edit_button">Red.</string>
     <string name="general_save_button">Sačuv.</string>
     <string name="general_send_button">Posl.</string>

@@ -24,6 +24,8 @@
     <string name="general_profile_error">Błąd przy ładowaniu profilu</string>
     <string name="general_dbl_all">Wszystkie</string>
     <string name="general_dbl_unread">Nieprzeczytane</string>
+    <string name="time_yesterday">Wczoraj</string>
+    <string name="time_today">Dziś</string>
     <string name="general_edit_button">Edyt.</string>
     <string name="general_save_button">Zapisz</string>
     <string name="general_send_button">Wyśl.</string>

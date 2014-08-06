@@ -33,6 +33,9 @@
     <string name="general_dbl_unread">Непрочитанные</string>
     <string name="general_dbl_new">Новые</string>
 
+    <string name="time_yesterday">Вчера</string>
+    <string name="time_today">Сегодня</string>
+
     <string name="general_edit_button">Ред.</string>
     <string name="general_save_button">Сохр.</string>
     <string name="general_send_button">Отпр.</string>

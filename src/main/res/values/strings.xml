@@ -25,6 +25,8 @@
     <string name="general_dbl_all">All</string>
     <string name="general_dbl_unread">Unread</string>
     <string name="general_dbl_new">New</string>
+    <string name="time_yesterday">Yesterday</string>
+    <string name="time_today">Today</string>
     <string name="general_edit_button">Edit</string>
     <string name="general_save_button">Save</string>
     <string name="general_send_button">Send</string>
@@ -654,4 +656,6 @@
     <string name="feedback_subject_ban">Complaint on unfair ban</string>
     <string name="settings_led">LED notification</string>
     <string name="buying_not_enough_coins">You are missing %d {{coins}}</string>
+    <string name="open_market_error">Cannot open the application page</string>
+    <string name="billing_item_already_owned">Your previous purchase is now processing, please wait</string>
 </resources>

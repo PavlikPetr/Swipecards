@@ -5,8 +5,6 @@
     <dimen name="indicator_corner_radius">12dp</dimen>
     <dimen name="indicator_internal_padding">4dp</dimen>
 
-    <dimen name="default_gap">16dip</dimen>
-
     <dimen name="counter_badge_width">32dp</dimen>
     <dimen name="counter_badge_negative_margin">-32dp</dimen>
 

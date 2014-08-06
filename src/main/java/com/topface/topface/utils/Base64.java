@@ -2,6 +2,8 @@ package com.topface.topface.utils;
 
 import com.topface.framework.utils.Debug;
 
+import java.util.Locale;
+
 @SuppressWarnings("ALL")
 public class Base64 {
 
@@ -774,7 +776,7 @@ public class Base64 {
 
         if (off + len > source.length) {
             throw new IllegalArgumentException(
-                    String.format("Cannot have offset of %d and length of %d with array of length %d", off, len, source.length));
+                    String.format(Locale.ENGLISH, "Cannot have offset of %d and length of %d with array of length %d", off, len, source.length));
         }   // end if: off < 0
 
 
