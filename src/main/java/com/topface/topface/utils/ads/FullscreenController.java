@@ -146,8 +146,12 @@ public class FullscreenController {
     private boolean isTimePassed() {
         long currentTime = System.currentTimeMillis();
         long lastCall = getPreferences().getLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, currentTime);
-        return !getPreferences().contains(Static.PREFERENCES_LAST_FULLSCREEN_TIME)
-                || Math.abs(currentTime - lastCall) > DateUtils.DAY_IN_MILLISECONDS;
+        if (!getPreferences().contains(Static.PREFERENCES_LAST_FULLSCREEN_TIME)) {
+            addLastFullscreenShowedTime();
+            return false;
+        } else {
+            return Math.abs(currentTime - lastCall) > DateUtils.DAY_IN_MILLISECONDS;
+        }
     }
 
     private boolean passFullScreenByUrl(String url) {
