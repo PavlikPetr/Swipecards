@@ -55,9 +55,11 @@ public class EditButtonsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        TextView editOption = (TextView) mInflater.inflate(android.R.layout.select_dialog_item, null);
+        if (convertView == null) {
+            convertView = mInflater.inflate(android.R.layout.select_dialog_item, null);
+        }
 
-        editOption.setText(getItem(position).toString());
-        return editOption;
+        ((TextView) convertView).setText(getItem(position).toString());
+        return convertView;
     }
 }

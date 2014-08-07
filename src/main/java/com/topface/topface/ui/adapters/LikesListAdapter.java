@@ -1,6 +1,8 @@
 package com.topface.topface.ui.adapters;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -47,6 +49,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         return (super.getViewTypeCount() + T_COUNT);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected View getContentView(final int position, View convertView, ViewGroup viewGroup) {
         convertView = super.getContentView(position, convertView, viewGroup);
@@ -72,7 +75,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
             vf.setInAnimation(getContext(), R.anim.slide_in_from_right);
             vf.setOutAnimation(getContext(), android.R.anim.fade_out);
             vf.setDisplayedChild(1);
-            if (android.os.Build.VERSION.SDK_INT > 11) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 convertView.setActivated(true);
             } else {
                 if (super.getItemViewType(position) == T_VIP || super.getItemViewType(position) == T_NEW_VIP) {
@@ -98,7 +101,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
                 vf.setInAnimation(getContext(), android.R.anim.fade_in);
                 vf.setOutAnimation(getContext(), R.anim.slide_out_right);
                 vf.setDisplayedChild(0);
-                if (android.os.Build.VERSION.SDK_INT > 11) {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                     convertView.setActivated(false);
                 } else {
                     if (super.getItemViewType(position) == T_VIP || super.getItemViewType(position) == T_NEW_VIP) {

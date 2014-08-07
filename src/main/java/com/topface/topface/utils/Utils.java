@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -72,12 +73,13 @@ public class Utils {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     @SuppressWarnings("deprecation")
     public static Point getSrceenSize(Context context) {
         Point size;
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
-        if (Build.VERSION.SDK_INT < 13) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR2) {
             size = new Point(display.getWidth(), display.getHeight());
         } else {
             size = new Point();

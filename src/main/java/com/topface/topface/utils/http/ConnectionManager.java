@@ -27,6 +27,7 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -135,7 +136,7 @@ public class ConnectionManager {
             //Проверяем, нет ли в конечном запросе ошибок авторизации (т.е. не верного токена, пароля и т.п.)
             checkAuthError(request, response);
             //Обрабатываем ответ от сервера
-            needResend = processResponse(request, response );
+            needResend = processResponse(request, response);
         } catch (Exception e) {
             //Мы отлавливаем все ошибки, возникшие при запросе, не хотим что бы приложение падало из-за них
             Debug.error(TAG + "::REQUEST::ERROR", e);
@@ -209,7 +210,7 @@ public class ConnectionManager {
      */
     private void addToPendign(IApiRequest apiRequest) {
         synchronized (mPendingRequests) {
-            Debug.log(String.format("add request %s to pending (canceled: %b)", apiRequest.getId(), apiRequest.isCanceled()));
+            Debug.log(String.format(Locale.ENGLISH, "add request %s to pending (canceled: %b)", apiRequest.getId(), apiRequest.isCanceled()));
             mPendingRequests.put(apiRequest.getId(), apiRequest);
         }
     }

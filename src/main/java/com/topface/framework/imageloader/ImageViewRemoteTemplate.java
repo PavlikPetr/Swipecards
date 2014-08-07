@@ -276,13 +276,12 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
         }
     }
 
-    @Override
-    public int getMaxHeight() {
+    public int getImageMaxHeight() {
         return maxHeight;
     }
 
-    @Override
-    public int getMaxWidth() {
+    @SuppressWarnings("UnusedDeclaration")
+    public int getImageMaxWidth() {
         return maxWidth;
     }
 }

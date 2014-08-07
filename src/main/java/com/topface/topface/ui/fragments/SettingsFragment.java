@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -78,7 +77,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         }
     };
     private TextView melodyName;
-    private GCMUtils mGcmUtils;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -128,7 +126,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
         boolean mail;
         boolean apns;
-        mGcmUtils = new GCMUtils(getActivity());
         if (!CacheProfile.email && !App.isGmsEnabled()) {
             root.findViewById(R.id.tvNoNotification).setVisibility(View.VISIBLE);
             root.findViewById(R.id.loNotificationsHeader).setVisibility(View.GONE);
@@ -294,7 +291,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         if (hasMail) {
             checkBoxEmail.setTag(mailNotifierKey);
             checkBoxEmail.setChecked(mailChecked);
-            checkBoxEmail.setEnabled(hasMail);
+            checkBoxEmail.setEnabled(true);
             checkBoxEmail.setOnCheckedChangeListener(this);
         } else {
             checkBoxEmail.setVisibility(View.GONE);
@@ -431,7 +428,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         final ProgressBar prs = hashNotifiersProgressBars.get(key);
 
         if (isMail) {
-            SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(type, isMail, isChecked, getActivity().getApplicationContext());
+            SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(type, true, isChecked, getActivity().getApplicationContext());
             if (request != null) {
                 buttonView.post(new Runnable() {
 
@@ -458,7 +455,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
-                        //TODO: Здесь нужно что-то делать, чтобы пользователь понял, что у него не получилось отменить нотификации.
+                        //NOTE: Здесь нужно что-то делать, чтобы пользователь понял, что у него не получилось отменить нотификации.
                         buttonView.post(new Runnable() {
 
                             @Override

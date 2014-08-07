@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public class ApiResponse implements IApiResponse, SerializableToJson {
     private boolean mIsNeedUpdateCounters = true;
@@ -107,7 +108,7 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
     @Override
     public String toString() {
         if (method == null && jsonResult != null) {
-            return String.format("Response error #%d: %s", code, message);
+            return String.format(Locale.ENGLISH, "Response error #%d: %s", code, message);
         } else if (jsonResult != null) {
             return jsonResult.toString();
         } else {

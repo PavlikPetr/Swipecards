@@ -146,7 +146,7 @@ public class UserNotification {
     }
 
     private android.app.Notification generateStandard() {
-        notificationBuilder.setSmallIcon(R.drawable.ic_notification);
+        notificationBuilder.setSmallIcon(R.drawable.ic_stat_notify);
         setLargeIcon();
         notificationBuilder.setContentTitle(mTitle);
         notificationBuilder.setContentText(mText);
@@ -174,7 +174,7 @@ public class UserNotification {
     }
 
     private android.app.Notification generateFail() {
-        notificationBuilder.setSmallIcon(R.drawable.ic_notification);
+        notificationBuilder.setSmallIcon(R.drawable.ic_stat_notify);
         notificationBuilder.setContentTitle(mTitle);
         notificationBuilder.setContentText(mText);
         notificationBuilder.setAutoCancel(true);
@@ -227,7 +227,7 @@ public class UserNotification {
     }
 
     public android.app.Notification generateWithActions(NotificationAction[] actions) {
-        notificationBuilder.setSmallIcon(R.drawable.ic_notification);
+        notificationBuilder.setSmallIcon(R.drawable.ic_stat_notify);
         notificationBuilder.setContentTitle(mTitle)
                 .setContentText(mText)
                 .setOngoing(mOngoing);
@@ -242,7 +242,7 @@ public class UserNotification {
     private void generateBigPicture() {
         NotificationCompat.BigPictureStyle inboxStyle =
                 new NotificationCompat.BigPictureStyle(notificationBuilder.setContentTitle(mTitle));
-        Drawable blankDrawable = mContext.getResources().getDrawable(R.drawable.ic_notification);
+        Drawable blankDrawable = mContext.getResources().getDrawable(R.drawable.ic_stat_notify);
         if (blankDrawable != null) {
             Bitmap blankBitmap = ((BitmapDrawable) blankDrawable).getBitmap();
             inboxStyle.bigLargeIcon(blankBitmap);
@@ -296,11 +296,11 @@ public class UserNotification {
                 notificationBuilder.setLargeIcon(scaledIcon);
             } else {
                 notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),
-                        R.drawable.ic_notification));
+                        R.drawable.ic_stat_notify));
             }
         } else {
             notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),
-                    R.drawable.ic_notification));
+                    R.drawable.ic_stat_notify));
         }
     }
 

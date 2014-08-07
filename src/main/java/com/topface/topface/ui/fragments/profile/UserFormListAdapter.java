@@ -14,6 +14,7 @@ import com.topface.topface.utils.FormItem;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Locale;
 
 public class UserFormListAdapter extends BaseAdapter {
 
@@ -104,8 +105,8 @@ public class UserFormListAdapter extends BaseAdapter {
                 holder.mValue.setVisibility(View.GONE);
                 break;
             case T_DATA:
-                holder.mTitle.setText(item.title.toUpperCase());
-                holder.mValue.setText(item.value.toLowerCase());
+                holder.mTitle.setText(item.title.toUpperCase(Locale.getDefault()));
+                holder.mValue.setText(item.value.toLowerCase(Locale.getDefault()));
                 if (item.equal)
                     holder.mState.setImageResource(R.drawable.user_cell_on);  // GREEN POINT
                 else
@@ -208,12 +209,13 @@ public class UserFormListAdapter extends BaseAdapter {
     }
 
     public ArrayList<FormItem> saveState() {
-        return new ArrayList<FormItem>(mInitialUserForms);
+        return new ArrayList<>(mInitialUserForms);
     }
 
+    @SuppressWarnings("unchecked")
     public void restoreState(ArrayList<Parcelable> userForms) {
-        mInitialUserForms = new LinkedList<FormItem>();
-        mMatchedUserForms = new LinkedList<FormItem>();
+        mInitialUserForms = new LinkedList<>();
+        mMatchedUserForms = new LinkedList<>();
         for (Parcelable form : userForms) {
             mInitialUserForms.add((FormItem) form);
         }

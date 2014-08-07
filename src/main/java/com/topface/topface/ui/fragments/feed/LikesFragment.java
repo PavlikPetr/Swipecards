@@ -15,7 +15,6 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.topface.framework.utils.BackgroundThread;
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
@@ -40,6 +39,7 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
 
@@ -297,7 +297,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                     );
                 }
                 prefs.edit().putLong(Static.PREFERENCES_PAID_LIKES_COUNT, showsCount + 1l)
-                        .commit();
+                        .apply();
             }
         };
     }

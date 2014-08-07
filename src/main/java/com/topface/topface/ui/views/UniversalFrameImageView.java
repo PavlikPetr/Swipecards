@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 
 import com.topface.topface.R;
@@ -18,6 +19,7 @@ public class UniversalFrameImageView extends ImageViewRemote {
 
         TypedArray styled = context.obtainStyledAttributes(attrs, R.styleable.UniversalFrameImageView);
         int frameSrc = styled.getResourceId(R.styleable.UniversalFrameImageView_frameSrc, 0);
+        styled.recycle();
 
         if (frameSrc > 0) {
             mFrame = BitmapFactory.decodeResource(context.getResources(), frameSrc);
@@ -33,7 +35,7 @@ public class UniversalFrameImageView extends ImageViewRemote {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
         if (mFrame != null) {
             canvas.drawBitmap(mFrame, 0, 0, null);

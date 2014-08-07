@@ -9,6 +9,8 @@ import com.topface.topface.utils.DateUtils;
 
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 
 public class History extends FeedDialog implements Parcelable {
 
@@ -87,16 +89,13 @@ public class History extends FeedDialog implements Parcelable {
             new Parcelable.Creator() {
                 public History createFromParcel(Parcel in) {
                     History result = null;
-                    String jsonResult = in.readString();
-
-                    if (jsonResult != null) {
-                        try {
-                            result = new History(new JSONObject(jsonResult));
-                        } catch (Exception ex) {
-                            Debug.error(ex);
-                        }
-
+                    try {
+                        String jsonResult = in.readString();
+                        result = new History(new JSONObject(jsonResult));
+                    } catch (Exception ex) {
+                        Debug.error(ex);
                     }
+
                     return result;
                 }
 
@@ -118,6 +117,6 @@ public class History extends FeedDialog implements Parcelable {
 
     @Override
     protected String getRelativeCreatedDate(long date) {
-        return DateUtils.getRelativeDate(date, false).toUpperCase();
+        return DateUtils.getRelativeDate(date, false).toUpperCase(Locale.getDefault());
     }
 }

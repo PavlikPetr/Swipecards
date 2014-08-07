@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
     <ViewFlipper
         android:id="@+id/vfFlipper"
@@ -20,7 +20,7 @@
                 style="@style/BackgroundTitleText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp" />
+                android:layout_marginLeft="6dp"/>
 
             <GridView
                 android:id="@+id/usedGrid"
@@ -37,7 +37,7 @@
                 android:numColumns="auto_fit"
                 android:padding="0dp"
                 android:stretchMode="columnWidth"
-                android:verticalSpacing="0px" />
+                android:verticalSpacing="0px"/>
 
         </RelativeLayout>
 
@@ -45,9 +45,9 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <Button
@@ -58,7 +58,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="26dp"
-                    android:text="@string/profile_add_camera" />
+                    android:text="@string/profile_add_camera"/>
 
                 <Button
                     android:id="@+id/btnAddPhotoAlbum"
@@ -68,7 +68,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="14dp"
-                    android:text="@string/profile_add_album" />
+                    android:text="@string/profile_add_album"/>
 
                 <Button
                     android:id="@+id/btnCancel"
@@ -78,7 +78,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="26dp"
-                    android:text="@string/general_cancel" />
+                    android:text="@string/general_cancel"/>
             </LinearLayout>
         </ScrollView>
     </ViewFlipper>
@@ -88,5 +88,5 @@
         style="@style/LoadingLocker"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 </RelativeLayout>

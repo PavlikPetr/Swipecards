@@ -68,7 +68,7 @@ public class AuthToken {
         editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = Static.EMPTY);
         editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = login);
         editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword = password);
-        editor.commit();
+        editor.apply();
     }
 
     public void saveToken(String snType, String userSocialId, String tokenKey, String expiresIn) {
@@ -79,7 +79,7 @@ public class AuthToken {
         editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = expiresIn);
         editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = Static.EMPTY);
         editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword = Static.EMPTY);
-        editor.commit();
+        editor.apply();
     }
 
     public void removeToken() {

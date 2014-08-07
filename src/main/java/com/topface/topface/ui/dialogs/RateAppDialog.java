@@ -125,7 +125,7 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
                         Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE
                 ).edit();
                 editor.putLong(RATING_POPUP, value);
-                editor.commit();
+                editor.apply();
             }
         };
     }

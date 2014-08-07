@@ -254,9 +254,19 @@ subprojects {
 android {
     lintOptions {
         checkReleaseBuilds true
+        //Отключено, что бы не валилась сборка на CI сервере
         abortOnError false
-        ignore "MissingTranslation", "ValidFragment"
-        /*ValidFragment пока игнорируем, но нужно будет исправить*/
+
+        //Отключаем ненужные нам проверки lint
+        ignore "MissingTranslation", //Об отсутсвующих переводах. У нас есть всегда языки без переводов
+                "ContentDescription", //О том что к каждой картинке нужно описание
+                "SmallSp", //Проверка на маленький размер шрифта. Это вотчина дизайнеров
+                "HandlerLeak", //Предупреждение об использовании анонимного Handler
+                "InflateParams", //Проверка того, что  передан view root при inflate. Отключен, т.к. все предупреждения касаются inflate в ListView, где нет root view
+                "UnusedQuantity", //Предупреждение о не используемой форме в переводах. Мы используем zero во всех языках, поэтому нам не актуально
+                "ClickableViewAccessibility", //Предупреждение о том, что нужно определить performClick, если переопределяешь onTouchEvent
+                "MissingQuantity"
+        //Временно отключена проверка из-за того, что нет many формы в польском и украинском в дальнейшем поправим (пока many = other)
     }
     aaptOptions.useAaptPngCruncher = true
 }

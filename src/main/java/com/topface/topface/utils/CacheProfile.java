@@ -278,7 +278,7 @@ public class CacheProfile {
     }
 
     public static Products getPaymentWallProducts(PaymentWallProducts.TYPE type) {
-        PaymentWallProducts products = type == PaymentWallProducts.TYPE.MOBILE? mPWMobileProducts : mPWProducts;
+        PaymentWallProducts products = type == PaymentWallProducts.TYPE.MOBILE ? mPWMobileProducts : mPWProducts;
         if (products == null) {
             SessionConfig config = App.getSessionConfig();
             String productsCache = config.getPaymentwallProductsData(type);
@@ -387,7 +387,7 @@ public class CacheProfile {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Static.PREFERENCES_NEED_CHANGE_PASSWORD, false);
-        editor.commit();
+        editor.apply();
     }
 
     public static boolean needCityConfirmation(Context context) {
@@ -399,7 +399,7 @@ public class CacheProfile {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Static.PREFERENCES_NEED_CITY_CONFIRM, false);
-        editor.commit();
+        editor.apply();
     }
 
     public static void onRegistration(Context context) {
@@ -407,7 +407,7 @@ public class CacheProfile {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Static.PREFERENCES_NEED_CHANGE_PASSWORD, false);
         editor.putBoolean(Static.PREFERENCES_NEED_CITY_CONFIRM, true);
-        editor.commit();
+        editor.apply();
     }
 
     public static boolean isEditor() {

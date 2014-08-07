@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -237,7 +238,7 @@ public class MultipartApiResponse implements IApiResponse {
                 result += "\nresponse #" + value.id + "\n" + value.toString() + "\n";
             }
         } else {
-            result = String.format("MultipartResponse error #%d: %s", code, message);
+            result = String.format(Locale.ENGLISH, "MultipartResponse error #%d: %s", code, message);
         }
         return result;
     }

@@ -17,6 +17,7 @@ import com.topface.topface.utils.FormItem;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Locale;
 
 public class ProfileFormListAdapter extends BaseAdapter {
     // Constants
@@ -127,10 +128,10 @@ public class ProfileFormListAdapter extends BaseAdapter {
                 break;
             case T_DATA:
                 holder.header.setVisibility(View.GONE);
-                holder.title.setText(item.title.toUpperCase());
+                holder.title.setText(item.title.toUpperCase(Locale.getDefault()));
                 if (item.value != null && !TextUtils.isEmpty(item.value.trim()) && item.dataId != FormItem.NOT_SPECIFIED_ID) {
                     holder.state.setImageResource(R.drawable.user_cell);
-                    holder.value.setText(item.value.toLowerCase());
+                    holder.value.setText(item.value.toLowerCase(Locale.getDefault()));
                     holder.value.setVisibility(View.VISIBLE);
                     holder.fill.setVisibility(View.GONE);
                 } else {
@@ -143,7 +144,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
                 break;
             case T_STATUS:
                 holder.header.setVisibility(View.GONE);
-                holder.title.setText(item.title.toUpperCase());
+                holder.title.setText(item.title.toUpperCase(Locale.getDefault()));
                 holder.state.setImageResource(R.drawable.user_cell);
                 if (item.value != null && !TextUtils.isEmpty(item.value.trim())) {
                     holder.value.setText(item.value);
