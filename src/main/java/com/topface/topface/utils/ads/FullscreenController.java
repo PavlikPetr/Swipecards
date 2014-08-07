@@ -3,12 +3,10 @@ package com.topface.topface.utils.ads;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -42,12 +40,9 @@ import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import me.faan.sdk.FAAN;
 import me.faan.sdk.FAANAdListener;
@@ -62,7 +57,6 @@ import ru.ideast.adwired.events.OnStopListener;
 public class FullscreenController {
 
     private static final String TAG = "FullscreenController";
-    public static final String URL_SEPARATOR = "::";
     private static final String MOPUB_INTERSTITIAL_ID = "00db7208a90811e281c11231392559e4";
     private static final String IVENGO_APP_ID = "aggeas97392g";
     private static final String LIFESTREET_TAG = "http://mobile-android.lfstmedia.com/m2/slot76331?ad_size=320x480&adkey=a25";
@@ -70,7 +64,6 @@ public class FullscreenController {
     private static final String VIDIGER_APP_ID = "473379e6-3cf3-4405-abfc-564fadc00752";
     private static final String[] VIDIGER_ZONES = new String[]{"692a2d36-bbdb-4b6e-b0c5-009a2818f6da"};
     private static boolean isFullScreenBannerVisible = false;
-    private SharedPreferences mPreferences;
     private Activity mActivity;
 
     private MoPubInterstitial mInterstitial;
@@ -145,8 +138,8 @@ public class FullscreenController {
 
     private boolean isTimePassed() {
         long currentTime = System.currentTimeMillis();
-        long lastCall = getPreferences().getLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, currentTime);
-        if (!getPreferences().contains(Static.PREFERENCES_LAST_FULLSCREEN_TIME)) {
+        long lastCall = App.getAppConfig().getLastFullscreenTime();
+        if (lastCall == 0) {
             addLastFullscreenShowedTime();
             return false;
         } else {
@@ -155,27 +148,13 @@ public class FullscreenController {
     }
 
     private boolean passFullScreenByUrl(String url) {
-        return !getFullscreenUrls().contains(url);
-    }
-
-    private Set<String> getFullscreenUrls() {
-        String urls = getPreferences().getString(Static.PREFERENCES_FULLSCREEN_URLS_SET, "");
-        String[] urlList = TextUtils.split(urls, URL_SEPARATOR);
-        return new HashSet<>(Arrays.asList(urlList));
+        return !App.getAppConfig().getFullscreenUrlsSet().contains(url);
     }
 
     private void addLastFullscreenShowedTime() {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, System.currentTimeMillis());
-        editor.apply();
-    }
-
-    private void addNewUrlToFullscreenSet(String url) {
-        Set<String> urlSet = getFullscreenUrls();
-        urlSet.add(url);
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putString(Static.PREFERENCES_FULLSCREEN_URLS_SET, TextUtils.join(URL_SEPARATOR, urlSet));
-        editor.apply();
+        AppConfig config = App.getAppConfig();
+        config.setLastFullscreenTime(System.currentTimeMillis());
+        config.saveConfig();
     }
 
     private void requestGagFullscreen() {
@@ -407,7 +386,9 @@ public class FullscreenController {
                         fullscreenImage.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                addNewUrlToFullscreenSet(data.parameter);
+                                AppConfig config = App.getAppConfig();
+                                config.addFullscreenUrl(data.parameter);
+                                config.saveConfig();
                                 hideFullscreenBanner(bannerContainer);
                                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(data.parameter));
                                 mActivity.startActivity(intent);
@@ -486,13 +467,6 @@ public class FullscreenController {
             }
         }
         isFullScreenBannerVisible = false;
-    }
-
-    private SharedPreferences getPreferences() {
-        if (mPreferences == null) {
-            mPreferences = mActivity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        }
-        return mPreferences;
     }
 
     public boolean isFullScreenBannerVisible() {

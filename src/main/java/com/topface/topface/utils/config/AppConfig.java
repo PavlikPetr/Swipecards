@@ -2,13 +2,16 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
-import com.mopub.mobileads.util.Strings;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
-import com.topface.topface.requests.multipart.Streams;
 import com.topface.topface.utils.Editor;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Класс для хранения в SharedPreferences тех настроек, которые обязательны для работы приложения,
@@ -34,6 +37,9 @@ public class AppConfig extends AbstractConfig {
     private static final String DATA_API_VERSION = "data_api_version";
     private static final String DATA_TEST_NETWORK = "data_test_network_mode";
     private static final String DATA_APP_OPTIONS = "data_app_options";
+    private static final String LAST_FULLSCREEN_TIME = "fullScreeenBanner_last_time";
+    private static final String FULLSCREEN_URLS_SET = "fullscreen_urls_string";
+    private static final String URL_SEPARATOR = "::";
 
 
     public AppConfig(Context context) {
@@ -62,7 +68,10 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, DATA_TEST_NETWORK, false);
         // app options
         addField(settingsMap, DATA_APP_OPTIONS, Static.EMPTY);
-
+        // last fullscreen time
+        addField(settingsMap, LAST_FULLSCREEN_TIME, 0L);
+        // fullscreen urls
+        addField(settingsMap, FULLSCREEN_URLS_SET, Static.EMPTY);
     }
 
     protected SharedPreferences getPreferences() {
@@ -230,7 +239,24 @@ public class AppConfig extends AbstractConfig {
         setField(getSettingsMap(), DATA_APP_OPTIONS, value);
     }
 
+    public long getLastFullscreenTime() {
+        return getLongField(getSettingsMap(), LAST_FULLSCREEN_TIME);
+    }
 
+    public void setLastFullscreenTime(long time) {
+        setField(getSettingsMap(), LAST_FULLSCREEN_TIME, time);
+    }
+
+    public Set<String> getFullscreenUrlsSet() {
+        String urls = getStringField(getSettingsMap(), FULLSCREEN_URLS_SET);
+        String[] urlList = TextUtils.split(urls, URL_SEPARATOR);
+        return new HashSet<>(Arrays.asList(urlList));
+    }
+
+    public void addFullscreenUrl(String url) {
+        String urls = getStringField(getSettingsMap(), FULLSCREEN_URLS_SET);
+        setField(getSettingsMap(), FULLSCREEN_URLS_SET, urls.concat(URL_SEPARATOR).concat(url));
+    }
 
     @Override
     public String toString() {
