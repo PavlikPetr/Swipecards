@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,7 +126,14 @@ public class BannerBlock {
     public static void init() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             if (CacheProfile.getOptions().containsBannerType(BANNER_ADCAMP)) {
-                AdsManager.getInstance().initialize(App.getContext());
+                Context context = App.getContext();
+                AdsManager.getInstance().initialize(
+                        context,
+                        context.getString(R.string.adcamp_app_id),
+                        context.getString(R.string.adcamp_app_secret),
+                        context.getResources().getBoolean(R.bool.adcamp_logging_enabled),
+                        Log.VERBOSE
+                );
                 mAdcampInitialized = true;
             }
         }

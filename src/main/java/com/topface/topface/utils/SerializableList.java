@@ -20,7 +20,7 @@ public class SerializableList extends LinkedList<SerializableToJson> {
                 array.put(jsonItem.toJson().toString());
             }
         } catch (JSONException e) {
-
+            Debug.error(e);
         }
         return array.toString();
     }
