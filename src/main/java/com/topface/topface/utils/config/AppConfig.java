@@ -239,20 +239,38 @@ public class AppConfig extends AbstractConfig {
         setField(getSettingsMap(), DATA_APP_OPTIONS, value);
     }
 
+    /**
+     * Last fullscreen ad show time
+     *
+     * @return last show time
+     */
     public long getLastFullscreenTime() {
         return getLongField(getSettingsMap(), LAST_FULLSCREEN_TIME);
     }
 
+    /**
+     * Sets last fullscreen ad show time
+     *
+     * @param time
+     */
     public void setLastFullscreenTime(long time) {
         setField(getSettingsMap(), LAST_FULLSCREEN_TIME, time);
     }
 
+    /**
+     * Fullscreen ad url set
+     * @return url set
+     */
     public Set<String> getFullscreenUrlsSet() {
         String urls = getStringField(getSettingsMap(), FULLSCREEN_URLS_SET);
         String[] urlList = TextUtils.split(urls, URL_SEPARATOR);
         return new HashSet<>(Arrays.asList(urlList));
     }
 
+    /**
+     * Adds url to fullscreen ad url set
+     * @param url
+     */
     public void addFullscreenUrl(String url) {
         String urls = getStringField(getSettingsMap(), FULLSCREEN_URLS_SET);
         setField(getSettingsMap(), FULLSCREEN_URLS_SET, urls.concat(URL_SEPARATOR).concat(url));
