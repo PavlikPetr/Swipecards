@@ -18,7 +18,6 @@ import com.topface.topface.utils.FormItem;
 
 public class ProfileFormFragment extends ProfileInnerFragment {
 
-    private static final String FORM_ITEMS = "FORM_ITEMS";
     private static final String POSITION = "POSITION";
 
     private ListView mFormListView;
@@ -87,8 +86,6 @@ public class ProfileFormFragment extends ProfileInnerFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
-            mProfileFormListAdapter.restoreState(savedInstanceState.getParcelableArrayList(FORM_ITEMS));
-            mProfileFormListAdapter.notifyDataSetChanged();
             mFormListView.setSelection(savedInstanceState.getInt(POSITION, 0));
         }
     }
@@ -108,7 +105,6 @@ public class ProfileFormFragment extends ProfileInnerFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(FORM_ITEMS, mProfileFormListAdapter.saveState());
         outState.putInt(POSITION, mFormListView.getFirstVisiblePosition());
     }
 }
