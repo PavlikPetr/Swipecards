@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.topface.topface.App;
 import com.topface.topface.utils.EasyTracker;
 
 public class TrackedFragment extends Fragment {

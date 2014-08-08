@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;

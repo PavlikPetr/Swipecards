@@ -14,7 +14,6 @@ import android.view.View;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.search.UsersList;
