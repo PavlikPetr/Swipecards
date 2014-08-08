@@ -130,6 +130,8 @@ public class Options extends AbstractData {
     public boolean unlockAllForPremium;
     public int maxMessageSize;
 
+    public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -294,6 +296,12 @@ public class Options extends AbstractData {
             unlockAllForPremium = response.optBoolean("unlockAllForPremium");
 
             maxMessageSize = response.optInt("maxMessageSize");
+
+            JSONObject jsonForceOfferwallRedirect = response.optJSONObject("forceOfferwallRedirect");
+            if (jsonForceOfferwallRedirect != null) {
+                forceOfferwallRedirect.enebled = jsonForceOfferwallRedirect.optBoolean("enabled");
+                forceOfferwallRedirect.text = jsonForceOfferwallRedirect.optString("text", "");
+            }
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
@@ -607,5 +615,10 @@ public class Options extends AbstractData {
         public boolean hasOffers() {
             return !mainOffers.isEmpty() && !extraOffers.isEmpty();
         }
+    }
+
+    public static class ForceOfferwallRedirect {
+        public boolean enebled;
+        public String text = "";
     }
 }

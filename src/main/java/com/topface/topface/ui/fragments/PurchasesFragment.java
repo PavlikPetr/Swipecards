@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
@@ -94,11 +95,12 @@ public class PurchasesFragment extends BaseFragment {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
     }
 
-    public boolean forceBonusScreen() {
+    public boolean forceBonusScreen(String infoText) {
         if (!mSkipBonus) {
             int bonusTabIndex = mPagerAdapter.getTabIndex(Options.Tab.BONUS);
             if (mPagerAdapter.hasTab(Options.Tab.BONUS) && mPager.getCurrentItem() != bonusTabIndex) {
                 mPager.setCurrentItem(bonusTabIndex);
+                changeInfoText(infoText);
                 return true;
             }
         }
@@ -130,14 +132,33 @@ public class PurchasesFragment extends BaseFragment {
 
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs);
         mPager.setAdapter(mPagerAdapter);
+        mTabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                changeInfoText(getInfoText());
+                if (position == mPagerAdapter.getTabIndex(Options.Tab.BONUS)) {
+                    mSkipBonus = true;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mTabIndicator.setViewPager(mPager);
-        updateBalanceCounters();
+        initBalanceCounters(getSupportActionBar().getCustomView());
+        changeInfoText(getInfoText());
         if (savedInstanceState != null) {
             mPager.setCurrentItem(savedInstanceState.getInt(LAST_PAGE, 0));
         } else {
             mPager.setCurrentItem(0);
         }
-        initBalanceCounters(getSupportActionBar().getCustomView());
     }
 
     private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
@@ -182,12 +203,39 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void updateBalanceCounters() {
-        String text;
-        Bundle args = getArguments();
         if (mCurCoins != null && mCurLikes != null) {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
             mCurLikes.setText(Integer.toString(CacheProfile.likes));
         }
+    }
+
+    private void changeInfoText(final String text) {
+        if (!mResourcesInfo.getText().toString().equals(text)) {
+            Animation pullUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.pull_up);
+            pullUpAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mResourcesInfo.setText(text);
+                    mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            mResourcesInfo.startAnimation(pullUpAnimation);
+        }
+    }
+
+    private String getInfoText() {
+        String text;
+        Bundle args = getArguments();
         if (args != null) {
             int type = args.getInt(ARG_ITEM_TYPE);
             int coins = args.getInt(ARG_ITEM_PRICE);
@@ -217,8 +265,7 @@ public class PurchasesFragment extends BaseFragment {
         } else {
             text = getResources().getString(R.string.buying_default_message);
         }
-
-        mResourcesInfo.setText(text);
+        return text;
     }
 
     @Override
