@@ -1,7 +1,6 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 

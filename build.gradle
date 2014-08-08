@@ -109,17 +109,13 @@ dependencies {
     //Android Support libs
     compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
     compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
-
     //Google play services
     compile rootProject.GOOGLE_PLAY_SERVICES_VERSION
-
     //All jar libs
-    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'amazon/*.jar')
-
+    compile fileTree(dir: 'libs', exclude: 'amazon/*.jar', include: '*.jar')
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
     compile project(':libs:AndroidStatistics')
-
     //Third party libs
     compile('ch.acra:acra:4.5.0') {
         //Удаляем предоставляемыю acra зависимость org.json, так как она все рвно не нужна
@@ -131,17 +127,13 @@ dependencies {
     compile project(':libs:PullToRefresh')
     compile project(':libs:PhotoView')
     compile project(':libs:UniversalImageLoader')
-
     //Social networks SDK
     compile project(':libs:Facebook')
     compile project(':libs:odnoklassniki')
-
     //Ad networks SDK
     compile project(':libs:mopub-android-sdk')
-
     //Аннотации вроде @NonNull и @*Res для обозначения переменных
     compile 'com.android.support:support-annotations:+'
-
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile files('libs/amazon/*.jar')
 
