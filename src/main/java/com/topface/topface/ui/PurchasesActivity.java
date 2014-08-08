@@ -1,14 +1,16 @@
 package com.topface.topface.ui;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
+import android.view.MenuItem;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.PurchasesFragment;
+import com.topface.topface.utils.CacheProfile;
 
-public class PurchasesActivity extends CheckAuthActivity {
+public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     /**
      * Constant keys for different fragments
@@ -16,6 +18,34 @@ public class PurchasesActivity extends CheckAuthActivity {
      */
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
+
+    private Options.ForceOfferwallRedirect mBonusRedirect;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mBonusRedirect == null || !mBonusRedirect.enebled || !getFragment().forceBonusScreen(mBonusRedirect.text)) {
+            return super.onOptionsItemSelected(item);
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mBonusRedirect == null || !mBonusRedirect.enebled || !getFragment().forceBonusScreen(mBonusRedirect.text)) {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onLoadProfile() {
+        super.onLoadProfile();
+        mBonusRedirect = CacheProfile.getOptions().forceOfferwallRedirect;
+    }
+
+    public void skipBonus() {
+        getFragment().skipBonus();
+    }
 
     public static Intent createVipBuyIntent(String extraText, String from) {
         Intent intent = new Intent(App.getContext(), PurchasesActivity.class);
@@ -53,7 +83,7 @@ public class PurchasesActivity extends CheckAuthActivity {
     }
 
     @Override
-    protected Fragment createFragment() {
+    protected PurchasesFragment createFragment() {
         return new PurchasesFragment();
     }
 

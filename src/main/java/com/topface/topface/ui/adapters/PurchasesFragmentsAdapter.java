@@ -3,8 +3,7 @@ package com.topface.topface.ui.adapters;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.util.SparseArrayCompat;
+import android.support.v4.app.HackyFragmentStatePagerAdapter;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
@@ -20,10 +19,9 @@ import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
 
 import java.util.LinkedList;
 
-public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
+public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
 
     private final boolean mIsVip;
-    private SparseArrayCompat<Fragment> mFragmentCache = new SparseArrayCompat<>();
     private Bundle mArguments;
     private LinkedList<Options.Tab> mTabs;
 
@@ -34,6 +32,26 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
         mTabs = tabs;
     }
 
+    public boolean hasTab(String tabName) {
+        for (Options.Tab tab : mTabs) {
+            if (tab.type.equals(tabName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getTabIndex(String tabName) {
+        if (hasTab(tabName)) {
+            for (Options.Tab tab : mTabs) {
+                if (tab.type.equals(tabName)) {
+                    return mTabs.indexOf(tab);
+                }
+            }
+        }
+        return -1;
+    }
+
     @Override
     public CharSequence getPageTitle(int position) {
         return mTabs.get(position).name;
@@ -41,8 +59,7 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = mFragmentCache.get(position);
-        if (fragment != null) return fragment;
+        Fragment fragment = null;
         String from = mArguments.getString(OpenIabFragment.ARG_TAG_SOURCE);
         switch (mTabs.get(position).type) {
             case Options.Tab.GPLAY:
@@ -82,7 +99,6 @@ public class PurchasesFragmentsAdapter extends FragmentStatePagerAdapter {
                 Debug.error("PurchasesFragmentsAdapter wrong position");
                 break;
         }
-        mFragmentCache.put(position, fragment);
         return fragment;
     }
 

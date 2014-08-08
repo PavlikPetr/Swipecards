@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentManager;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 
-public abstract class SingleFragmentActivity extends CustomTitlesBaseFragmentActivity {
+public abstract class SingleFragmentActivity<T extends Fragment> extends CustomTitlesBaseFragmentActivity {
 
-    private Fragment mFragment;
+    private T mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public abstract class SingleFragmentActivity extends CustomTitlesBaseFragmentAct
         FragmentManager fm = getSupportFragmentManager();
         Fragment oldFragment = fm.findFragmentByTag(getFragmentTag());
         if (oldFragment != null) {
-            mFragment = oldFragment;
+            mFragment = (T) oldFragment;
         } else {
             mFragment = createFragment();
             setArguments();
@@ -48,9 +48,9 @@ public abstract class SingleFragmentActivity extends CustomTitlesBaseFragmentAct
         setContentView(R.layout.ac_fragment_frame);
     }
 
-    protected Fragment getFragment() {
+    protected T getFragment() {
         return mFragment;
     }
 
-    protected abstract Fragment createFragment();
+    protected abstract T createFragment();
 }

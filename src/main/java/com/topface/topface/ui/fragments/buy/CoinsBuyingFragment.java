@@ -18,6 +18,7 @@ import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.CoinsSubscriptionsActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.LinkedList;
@@ -69,6 +70,10 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                         @Override
                         public void onClick(String id) {
                             buy(curButton);
+                            Activity activity = getActivity();
+                            if (activity instanceof PurchasesActivity) {
+                                ((PurchasesActivity) activity).skipBonus();
+                            }
                         }
                     }
             );
@@ -105,6 +110,10 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                         @Override
                         public void onClick(String id) {
                             buy(curButton);
+                            Activity activity = getActivity();
+                            if (activity instanceof PurchasesActivity) {
+                                ((PurchasesActivity) activity).skipBonus();
+                            }
                         }
                     }
             );

@@ -2,15 +2,14 @@ package com.topface.topface.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 
-public class ChatActivity extends UserOnlineActivity {
+public class ChatActivity extends UserOnlineActivity<ChatFragment> {
 
     public static final int INTENT_CHAT = 3;
 
@@ -20,7 +19,7 @@ public class ChatActivity extends UserOnlineActivity {
     }
 
     @Override
-    protected Fragment createFragment() {
+    protected ChatFragment createFragment() {
         return new ChatFragment();
     }
 

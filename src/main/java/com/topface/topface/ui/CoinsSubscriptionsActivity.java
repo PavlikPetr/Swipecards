@@ -1,14 +1,13 @@
 package com.topface.topface.ui;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.buy.CoinsSubscriptionsFragment;
 
-public class CoinsSubscriptionsActivity extends CheckAuthActivity {
+public class CoinsSubscriptionsActivity extends CheckAuthActivity<CoinsSubscriptionsFragment> {
 
     public static final int INTENT_COINS_SUBSCRIPTION = 10;
 
@@ -26,7 +25,7 @@ public class CoinsSubscriptionsActivity extends CheckAuthActivity {
     }
 
     @Override
-    protected Fragment createFragment() {
+    protected CoinsSubscriptionsFragment createFragment() {
         return new CoinsSubscriptionsFragment();
     }
 }
