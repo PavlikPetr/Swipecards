@@ -31,6 +31,11 @@
     <string name="editor_send_gcm">Послать GCM токен</string>
     <string name="editor_send_auth">Перепослать авторизацию</string>
     <string name="editor_offerwall_title">Offerwall Type:</string>
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
+    <string name="cancel">Cancel</string>
+    <string name="nerwork_errors">Network Errors</string>
+    <string name="network_error_message">all requests will be returning errors</string>
 
     <string-array name="editor_debug_titles">
         <item>Только в debug режиме</item>

@@ -15,10 +15,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -33,6 +31,7 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -62,8 +61,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private long standard_timeout;
     private EditSwitcher switcherTestNetwork;
 
-    private static int testNetworkNotificationId = UserNotificationManager
-            .getInstance(App.getContext()).newNotificationId();
+    private static int NETWORK_ERROR_NOTIFICATION_ID = 800;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -342,22 +340,24 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 if (switcherTestNetwork.isChecked()) {
                     mAppConfig.setTestNetwork(true);
                     UserNotification.NotificationAction[] actions = new UserNotification.NotificationAction[]{
-                            new UserNotification.NotificationAction(0, "Enable",
+                            new UserNotification.NotificationAction(0, getString(R.string.enable),
                                     createBroadcastPendingIntent(ACTION_TEST_NETWORK_ERRORS_ON)),
-                            new UserNotification.NotificationAction(0, "Disable",
+                            new UserNotification.NotificationAction(0, getString(R.string.disable),
                                     createBroadcastPendingIntent(ACTION_TEST_NETWORK_ERRORS_OFF)),
-                            new UserNotification.NotificationAction(R.drawable.ic_close_dialog, "Cancel",
+                            new UserNotification.NotificationAction(R.drawable.ic_close_dialog, getString(R.string.cancel),
                                     createBroadcastPendingIntent(ACTION_CANCEL_TEST_NETWORK_ERRORS,
-                                            testNetworkNotificationId)
+                                            NETWORK_ERROR_NOTIFICATION_ID)
                             ),
                     };
-                    testNetworkNotificationId = notificationManager.showNotificationWithActions(
+                    notificationManager.showNotificationWithActions(
                             "Network Errors", "all requests will be returning errors", null,
                             true,
-                            actions).getId();
+                            actions,
+                            NETWORK_ERROR_NOTIFICATION_ID
+                    );
                 } else {
                     mAppConfig.setTestNetwork(false);
-                    notificationManager.cancelNotification(testNetworkNotificationId);
+                    notificationManager.cancelNotification(NETWORK_ERROR_NOTIFICATION_ID);
                 }
                 break;
             case R.id.EditorClearAirMessages:
