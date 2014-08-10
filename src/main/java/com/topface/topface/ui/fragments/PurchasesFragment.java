@@ -211,26 +211,32 @@ public class PurchasesFragment extends BaseFragment {
 
     private void changeInfoText(final String text) {
         if (!mResourcesInfo.getText().toString().equals(text)) {
-            Animation pullUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.pull_up);
-            pullUpAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
+            if (mResourcesInfo.getText().length() == 0) {
+                showNewInfo(text);
+            } else {
+                Animation pullUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.pull_up);
+                pullUpAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
 
-                }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        showNewInfo(text);
+                    }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    mResourcesInfo.setText(text);
-                    mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-            mResourcesInfo.startAnimation(pullUpAnimation);
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
+                mResourcesInfo.startAnimation(pullUpAnimation);
+            }
         }
+    }
+
+    private void showNewInfo(String text) {
+        mResourcesInfo.setText(text);
+        mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
     }
 
     private String getInfoText() {
