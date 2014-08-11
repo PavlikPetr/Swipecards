@@ -38,6 +38,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     public static final String INTENT_USER_ID_TO_SEND_GIFT = "user_id_to_send_gift";
     private static final String INTENT_SEND_GIFT = "send_gitft_request";
     public static final String GIFTS_LIST = "gifts_list";
+    private static final String GIFTS_LOADING = "gifts_loading";
 
     public static ArrayList<Gift> mGiftsList = new ArrayList<>();
     private int mUserIdToSendGift;
@@ -221,6 +222,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(GIFTS_LIST, mGiftsList);
+        outState.putBoolean(GIFTS_LOADING, mRequestingGifts);
     }
 
     @Override
