@@ -181,6 +181,9 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     protected void onResume() {
         super.onResume();
+        if (mGiftsList.isEmpty() && !mRequestingGifts) {
+            loadGifts();
+        }
         switch (GiftsCollection.currentType) {
             case Gift.ROMANTIC:
                 mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
@@ -224,6 +227,10 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mGiftsList = savedInstanceState.getParcelableArrayList(GIFTS_LIST);
+        mRequestingGifts = savedInstanceState.getBoolean(GIFTS_LOADING, false);
+        if (mRequestingGifts) {
+            loadGifts();
+        }
     }
 
     @Override
