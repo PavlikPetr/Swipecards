@@ -202,7 +202,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     verifyPurchase(inventory.getPurchase(sku), getActivity());
                 }
 
-                //Проверяем VIP
+                //Проверяем подписки
                 List<String> marketSubs = inventory.getAllOwnedSkus(IabHelper.ITEM_TYPE_SUBS);
                 Products.ProductsInventory serverSubs = CacheProfile.getMarketProducts().inventory;
                 for (String sku : marketSubs) {

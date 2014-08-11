@@ -121,6 +121,8 @@ public class PurchasesFragment extends BaseFragment {
 
         LinkedList<Options.Tab> tabs;
         mResourcesInfo = (TextView) root.findViewById(R.id.payReason);
+        //Для того, что бы при изменении текста плавно менялся лейаут, без скачков
+        Utils.enableLayoutChangingTransition((ViewGroup) root.findViewById(R.id.purchaseLayout));
         if (mIsVip) {
             tabs = new LinkedList<>(CacheProfile.getOptions().premiumTabs);
         } else {
