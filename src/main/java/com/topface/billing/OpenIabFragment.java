@@ -110,6 +110,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             //При инциализации произошла ошибка!
             Debug.error("BillingFragment: IAB setup is not success: " + result);
             onInAppBillingUnsupported();
+            onSubscriptionUnsupported();
             return;
         }
 

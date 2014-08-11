@@ -14,10 +14,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.topface.billing.OpenIabFragment;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Products;
@@ -281,13 +279,8 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     @Override
     public void onSubscriptionUnsupported() {
-        //Если подписка не поддерживается, сообщаем об этом пользователю
-        if (!CacheProfile.premium) {
-            Toast.makeText(App.getContext(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)
-                    .show();
-        }
-
         getView().findViewById(R.id.fbpBuyingDisabled).setVisibility(View.VISIBLE);
+        getView().findViewById(R.id.fbpBtnContainer).setVisibility(View.GONE);
     }
 
     @Override

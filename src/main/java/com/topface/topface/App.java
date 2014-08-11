@@ -341,8 +341,6 @@ public class App extends Application {
         // Settings common image to display error
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
 
-        mIsGmsSupported = GMSUtils.checkPlayServices(getContext());
-
         sendAppOptionsRequest();
 
         final Handler handler = new Handler();
