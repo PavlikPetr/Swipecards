@@ -229,10 +229,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mGiftsList = savedInstanceState.getParcelableArrayList(GIFTS_LIST);
-        mRequestingGifts = savedInstanceState.getBoolean(GIFTS_LOADING, false);
-        if (mRequestingGifts) {
-            loadGifts();
-        }
     }
 
     @Override
