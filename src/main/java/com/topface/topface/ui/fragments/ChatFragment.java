@@ -27,8 +27,8 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -289,7 +289,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
         checkPopularUserLock();
         //Send Button
-        Button sendButton = (Button) root.findViewById(R.id.btnSend);
+        ImageButton sendButton = (ImageButton) root.findViewById(R.id.btnSend);
         sendButton.setOnClickListener(this);
         //init data
         restoreData(savedInstanceState);

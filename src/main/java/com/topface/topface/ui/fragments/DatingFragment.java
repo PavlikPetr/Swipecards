@@ -291,6 +291,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mAnimationHelper.addView(userInfo);
 
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
+
+        if (false) {
+            root.findViewById(R.id.message_send).setVisibility(View.GONE);
+        }
     }
 
     private void initMutualDrawables() {

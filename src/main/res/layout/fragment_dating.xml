@@ -28,8 +28,15 @@
             layout="@layout/dating_buttons"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/message_send"
             android:layout_centerHorizontal="true" />
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@id/message_send"
+            layout="@layout/chat_footer_send"
+            android:layout_alignParentBottom="true" />
 
         <include
             android:id="@+id/loDatingResources"
