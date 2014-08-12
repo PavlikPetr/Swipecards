@@ -91,7 +91,6 @@ public class OfferwallsManager {
                 case GETJAR:
                     initGetJar(context);
                     break;
-//                case TFOFFERWALL:
             }
         }
     }
