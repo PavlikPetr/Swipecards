@@ -28,6 +28,7 @@ import com.topface.topface.utils.EasyTracker;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class GiftsActivity extends BaseFragmentActivity implements IGiftSendListener {
 
@@ -38,7 +39,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     public static final String INTENT_USER_ID_TO_SEND_GIFT = "user_id_to_send_gift";
     private static final String INTENT_SEND_GIFT = "send_gitft_request";
     public static final String GIFTS_LIST = "gifts_list";
-    private static final String GIFTS_LOADING = "gifts_loading";
 
     public static ArrayList<Gift> mGiftsList = new ArrayList<>();
     private int mUserIdToSendGift;
@@ -47,10 +47,11 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
     public GiftsCollection mGiftsCollection;
     private TripleButton mTripleButton;
-    private PlainGiftsFragment mGiftFragment;
+    private PlainGiftsFragment<List<Gift>> mGiftFragment;
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,11 +62,11 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         mNeedToSendGift = getIntent().getBooleanExtra(INTENT_SEND_GIFT, true);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (fragment == null || !(((Object) fragment).getClass().equals(PlainGiftsFragment.class))) {
-            mGiftFragment = new PlainGiftsFragment();
+        if (fragment == null) {
+            mGiftFragment = new PlainGiftsFragment<>();
             transaction.add(R.id.giftGrid, mGiftFragment);
         } else {
-            mGiftFragment = (PlainGiftsFragment) fragment;
+            mGiftFragment = (PlainGiftsFragment<List<Gift>>) fragment;
             transaction.replace(R.id.giftGrid, mGiftFragment);
         }
         transaction.commit();
@@ -222,7 +223,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(GIFTS_LIST, mGiftsList);
-        outState.putBoolean(GIFTS_LOADING, mRequestingGifts);
     }
 
     @Override
