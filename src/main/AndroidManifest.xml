@@ -389,6 +389,7 @@
 
         <!-- Topface offerwall -->
         <activity android:name="com.topface.offerwall.publisher.TFOfferwallActivity"
+            android:icon="@drawable/ic_home_topface_white"
             />
 
         <!-- services -->
