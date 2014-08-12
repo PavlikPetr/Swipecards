@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
@@ -23,6 +22,7 @@ import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
 
@@ -30,17 +30,9 @@ import java.util.List;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
-    public static final String UPDATE_DIALOGS = "update_dialogs";
     public static final String REFRESH_DIALOGS = "refresh_dialogs";
 
     private boolean mNeedRefresh = false;
-
-    private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateData(false, true);
-        }
-    };
 
     private BroadcastReceiver mRefreshReceiver = new BroadcastReceiver() {
         @Override
@@ -56,7 +48,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(UPDATE_DIALOGS));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRefreshReceiver, new IntentFilter(REFRESH_DIALOGS));
         return super.onCreateView(inflater, container, saved);
     }
@@ -75,7 +66,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRefreshReceiver);
     }
 
@@ -173,5 +163,10 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_DIALOGS_UPDATE;
+    }
+
+    @Override
+    protected boolean considerDublicates(FeedDialog first, FeedDialog second) {
+        return first.user == null ? second.user == null : first.user.id == second.user.id;
     }
 }
