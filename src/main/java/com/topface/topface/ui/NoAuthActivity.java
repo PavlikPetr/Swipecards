@@ -1,12 +1,13 @@
 package com.topface.topface.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 
 /**
  * Activity which doesn't need to be auth
  */
-public abstract class NoAuthActivity extends SingleFragmentActivity {
+public abstract class NoAuthActivity<T extends Fragment> extends SingleFragmentActivity<T> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

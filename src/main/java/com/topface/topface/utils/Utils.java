@@ -1,5 +1,7 @@
 package com.topface.topface.utils;
 
+import android.animation.LayoutTransition;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +15,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -74,12 +77,13 @@ public class Utils {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     @SuppressWarnings("deprecation")
     public static Point getSrceenSize(Context context) {
         Point size;
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
-        if (Build.VERSION.SDK_INT < 13) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR2) {
             size = new Point(display.getWidth(), display.getHeight());
         } else {
             size = new Point();
@@ -227,4 +231,12 @@ public class Utils {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public static void enableLayoutChangingTransition(ViewGroup viewGroup) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            viewGroup.setLayoutTransition(new LayoutTransition());
+            LayoutTransition transition = viewGroup.getLayoutTransition();
+            transition.enableTransitionType(LayoutTransition.CHANGING);
+        }
+    }
 }

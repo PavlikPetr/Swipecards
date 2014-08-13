@@ -24,11 +24,18 @@ public class DeveloperPayload {
      */
     public String sku;
 
+    /**
+     * Случайный id покупки, нужен что бы идентифицировать одинаковые запросы (например тестовые)
+     */
+    @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
+    private final int hash;
+
     public DeveloperPayload(int uid, String sku, String source) {
         this.uid = uid;
         this.source = source;
         this.sku = sku;
         this.codeVersion = BuildConfig.VERSION_CODE;
+        this.hash = hashCode();
 
     }
 

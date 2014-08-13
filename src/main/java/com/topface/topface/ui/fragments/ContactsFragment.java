@@ -37,10 +37,10 @@ import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ContactsFragment extends BaseFragment {
     ListView contactsView;
-    private Button addButton;
     private Button mContactsVip;
     private ArrayList<ContactsProvider.Contact> data;
     private View mLockerView;
@@ -63,7 +63,7 @@ public class ContactsFragment extends BaseFragment {
             ((BaseFragmentActivity) getActivity()).close(this, false);
         }
 
-        addButton = (Button) root.findViewById(R.id.addButton);
+        Button addButton = (Button) root.findViewById(R.id.addButton);
         final EditText emailView = (EditText) root.findViewById(R.id.addInput);
         if (data.size() > CacheProfile.getOptions().contacts_count) {
             emailView.setHint(getString(R.string.input_contact_name));
@@ -227,19 +227,24 @@ public class ContactsFragment extends BaseFragment {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.contact_item_layout, parent, false);
-            // text
-            TextView text = (TextView) convertView.findViewById(R.id.contactName);
+            final ViewHolder holder;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.contact_item_layout, parent, false);
+                holder = new ViewHolder();
+                holder.text = (TextView) convertView.findViewById(R.id.contactName);
+                holder.checkBox = (CheckBox) convertView.findViewById(R.id.contactCheckbox);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
             final ContactsProvider.Contact contact = filteredContacts.get(filteredContacts.size() - position - 1);
-            text.setText(contact.getName());
-            // checkbox
-            final CheckBox currCheckBox = (CheckBox) convertView.findViewById(R.id.contactCheckbox);
-            currCheckBox.setChecked(contact.isChecked());
+            holder.text.setText(contact.getName());
+
+            holder.checkBox.setChecked(contact.isChecked());
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    contact.setChecked(!currCheckBox.isChecked());
-                    currCheckBox.setChecked(!currCheckBox.isChecked());
+                    contact.setChecked(!holder.checkBox.isChecked());
+                    holder.checkBox.setChecked(!holder.checkBox.isChecked());
                     mWasChanges = true;
                     changeButtonState();
                 }
@@ -318,12 +323,12 @@ public class ContactsFragment extends BaseFragment {
                 }
 
                 ArrayList<ContactsProvider.Contact> Filtered_Names = new ArrayList<>();
-                String filterString = constraint.toString().toLowerCase();
+                String filterString = constraint.toString().toLowerCase(Locale.getDefault());
                 String filterableString;
 
                 for (ContactsProvider.Contact aData : mData) {
                     filterableString = aData.getName();
-                    if (filterableString.toLowerCase().contains(filterString)) {
+                    if (filterableString.toLowerCase(Locale.getDefault()).contains(filterString)) {
                         Filtered_Names.add(aData);
                     }
                 }
@@ -387,5 +392,10 @@ public class ContactsFragment extends BaseFragment {
     @Override
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_invite_contacts;
+    }
+
+    private class ViewHolder {
+        public TextView text;
+        public CheckBox checkBox;
     }
 }

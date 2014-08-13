@@ -21,7 +21,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
+import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
+import com.topface.offerwall.advertizer.TFOfferSDK;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -34,6 +36,7 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -245,7 +248,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         startActionsController.registerAction(popupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(popupManager.createInvitePopupStartAction(AC_PRIORITY_LOW));
         // fullscreen
-        startActionsController.registerAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
+        startActionsController.registerMandatoryAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
     }
 
     private void initFullscreen() {
@@ -523,10 +526,21 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Need explicitly pass activity results to nested fragments
-        Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
+        //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
+        boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(
+                getSupportFragmentManager(),
+                requestCode,
+                resultCode,
+                data,
+                OwnProfileFragment.class
+        );
 
-        if (resultCode == Activity.RESULT_OK) {
+        // Need explicitly pass activity results to nested fragments
+        if (!isBillingRequestProcessed) {
+            Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
+        }
+
+        if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
             switch (requestCode) {
                 case CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION:
                 case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:

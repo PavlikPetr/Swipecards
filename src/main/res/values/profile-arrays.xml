@@ -604,11 +604,6 @@
         <!-- own_female -->
     </string-array>
 
-    <string-array name="form_main_personal_status">
-        <item>@string/form_main_personal_status_0</item>
-        <!-- all -->
-    </string-array>
-
     <string-array name="form_main_about_status">
         <!-- male -->
         <item>@string/form_main_about_status_0</item>

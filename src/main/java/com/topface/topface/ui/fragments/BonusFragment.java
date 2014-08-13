@@ -15,12 +15,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
-import com.topface.offerwall.TFOfferwallSDK;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
+
+import java.util.Locale;
 
 public class BonusFragment extends BaseFragment {
 
@@ -164,7 +165,7 @@ public class BonusFragment extends BaseFragment {
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
-            Debug.log(String.format("PW: error load page %s %d: %s", failingUrl, errorCode, description));
+            Debug.log(String.format(Locale.ENGLISH, "PW: error load page %s %d: %s", failingUrl, errorCode, description));
         }
 
         @Override

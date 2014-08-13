@@ -244,6 +244,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        mUserOnlineListener = null;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
@@ -478,10 +484,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             public void success(IApiResponse response) {
                 if (isAdded()) {
                     int invertedPosition = mAdapter.getPosition(position);
-                    if (mAdapter.getFirstItemId().equals(mAdapter.getData().get(invertedPosition).id)) {
-                        LocalBroadcastManager.getInstance(getActivity())
-                                .sendBroadcast(new Intent(DialogsFragment.UPDATE_DIALOGS));
-                    }
                     mAdapter.removeItem(invertedPosition);
                 }
             }

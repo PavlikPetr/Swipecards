@@ -473,31 +473,27 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private View inflateConvertView(ViewHolder holder, int type, History item) {
         boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
-        View convertView = null;
+        View convertView;
+        int prsLoaderId = R.id.prsLoader;
+        int chatImageId = R.id.chat_image;
+
         if (type == T_WAIT_OR_RETRY) {
             convertView = mInflater.inflate(R.layout.item_chat_list_loader_retrier, null, false);
             holder.retrier = convertView.findViewById(R.id.tvLoaderText);
-            holder.loader = convertView.findViewById(R.id.prsLoader);
+            holder.loader = convertView.findViewById(prsLoaderId);
             return convertView;
         }
 
         switch (type) {
-            case T_FRIEND:
-            case T_USER:
-            case T_USER_POPULAR_1:
-            case T_USER_POPULAR_2:
-                convertView = mInflater.inflate(output ? R.layout.chat_user : R.layout.chat_friend, null, false);
-                holder.userInfo = convertView.findViewById(R.id.user_info);
-                break;
             case T_FRIEND_GIFT:
             case T_USER_GIFT:
                 convertView = mInflater.inflate(output ? R.layout.chat_user_gift : R.layout.chat_friend_gift, null, false);
-                holder.gift = (ImageViewRemote) convertView.findViewById(R.id.chat_image);
+                holder.gift = (ImageViewRemote) convertView.findViewById(chatImageId);
                 break;
             case T_FRIEND_MAP:
             case T_USER_MAP:
                 convertView = mInflater.inflate(output ? R.layout.chat_user_map : R.layout.chat_friend_map, null, false);
-                holder.mapBackground = (ImageViewRemote) convertView.findViewById(R.id.chat_image);
+                holder.mapBackground = (ImageViewRemote) convertView.findViewById(chatImageId);
                 holder.prgsLoader = (ProgressBar) convertView.findViewById(R.id.chat_text_progress);
                 break;
             case T_FRIEND_REQUEST:
@@ -505,11 +501,19 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 holder.date = (TextView) convertView.findViewById(R.id.chat_date);
                 holder.userInfo = convertView.findViewById(R.id.user_info);
                 holder.likeRequest = (Button) convertView.findViewById(R.id.btn_chat_like_request);
-                holder.prgsLoader = (ProgressBar) convertView.findViewById(R.id.prsLoader);
-                holder.likeRequest.setTag(R.id.prsLoader, holder.prgsLoader);
+                holder.prgsLoader = (ProgressBar) convertView.findViewById(prsLoaderId);
+                holder.likeRequest.setTag(prsLoaderId, holder.prgsLoader);
                 break;
             case T_USER_REQUEST:
                 convertView = mInflater.inflate(R.layout.chat_user, null, false);
+                holder.userInfo = convertView.findViewById(R.id.user_info);
+                break;
+            case T_FRIEND:
+            case T_USER:
+            case T_USER_POPULAR_1:
+            case T_USER_POPULAR_2:
+            default:
+                convertView = mInflater.inflate(output ? R.layout.chat_user : R.layout.chat_friend, null, false);
                 holder.userInfo = convertView.findViewById(R.id.user_info);
                 break;
         }

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    android:id="@+id/layout"
-    android:gravity="left">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:id="@+id/layout"
+                android:gravity="left">
 
     <include
         layout="@layout/chat_date_divider"
-        android:id="@+id/loDateDivider"
-        android:layout_alignParentTop="true" />
+        android:id="@+id/loDateDivider"/>
 
     <LinearLayout
         android:layout_below="@id/loDateDivider"
@@ -23,7 +22,7 @@
         <!-- message -->
         <TextView
             android:id="@+id/chat_message"
-            style="@style/chat_message" />
+            style="@style/chat_message"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -32,7 +31,7 @@
             <Button
                 android:id="@+id/btn_chat_like_request"
                 android:text="@string/virus_chat_btn"
-                style="@style/LikeRequestButton" />
+                style="@style/LikeRequestButton"/>
 
             <ProgressBar
                 android:id="@+id/prsLoader"
@@ -40,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -49,6 +48,6 @@
         android:id="@+id/chat_date"
         style="@style/chat_date"
         android:layout_toRightOf="@id/user_info"
-        android:layout_alignBottom="@id/user_info" />
+        android:layout_alignBottom="@id/user_info"/>
 
 </RelativeLayout>

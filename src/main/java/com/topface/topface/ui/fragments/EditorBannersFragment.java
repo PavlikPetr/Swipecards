@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import android.animation.LayoutTransition;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -22,6 +21,7 @@ import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.BannersConfig;
 
 public class EditorBannersFragment extends BaseFragment implements View.OnClickListener {
@@ -138,12 +138,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             initSpinnersContainer(root);
             initFloatTypeSpinner(root);
             initBannerTypeSpinner(root);
-
-            if (android.os.Build.VERSION.SDK_INT >= 16) {
-                setLayoutTransition(new LayoutTransition());
-                LayoutTransition transition = getLayoutTransition();
-                transition.enableTransitionType(LayoutTransition.CHANGING);
-            }
+            Utils.enableLayoutChangingTransition(this);
         }
 
         private void initTitleText(View root) {
@@ -163,11 +158,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
         private void initSpinnersContainer(View root) {
             mSpinnersContainer = (ViewGroup) root.findViewById(R.id.loSpinners);
             mSpinnersContainer.setLayoutParams(mCompressedParams);
-            if (android.os.Build.VERSION.SDK_INT >= 16) {
-                mSpinnersContainer.setLayoutTransition(new LayoutTransition());
-                LayoutTransition transition = mSpinnersContainer.getLayoutTransition();
-                transition.enableTransitionType(LayoutTransition.CHANGING);
-            }
+            Utils.enableLayoutChangingTransition(mSpinnersContainer);
         }
 
         private void initBannerTypeSpinner(View root) {

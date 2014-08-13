@@ -84,7 +84,7 @@ public class AuthButtonsController {
             @Override
             public void execute() {
                 mPreferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_BUTTONS, Context.MODE_PRIVATE);
-                mPreferences.edit().putString(BUTTON_SETTINGS, toJson()).commit();
+                mPreferences.edit().putString(BUTTON_SETTINGS, toJson()).apply();
 
             }
 

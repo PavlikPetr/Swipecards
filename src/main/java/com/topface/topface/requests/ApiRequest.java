@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Locale;
 
 public abstract class ApiRequest implements IApiRequest {
     /**
@@ -329,7 +330,7 @@ public abstract class ApiRequest implements IApiRequest {
             HttpUtils.sendPostData(requestData, connection);
             return true;
         } else {
-            Debug.error(String.format("ConnectionManager: Api request %s is empty", getServiceName()));
+            Debug.error(String.format(Locale.ENGLISH, "ConnectionManager: Api request %s is empty", getServiceName()));
             return false;
         }
     }

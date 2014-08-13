@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -340,8 +341,6 @@ public class App extends Application {
         // Settings common image to display error
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
 
-        mIsGmsSupported = GMSUtils.checkPlayServices(getContext());
-
         sendAppOptionsRequest();
 
         final Handler handler = new Handler();
@@ -399,12 +398,19 @@ public class App extends Application {
     }
 
     private void sendLocation() {
-        Location curLocation = GeoLocationManager.getLastKnownLocation(mContext);
-        if (curLocation != null) {
-            SettingsRequest settingsRequest = new SettingsRequest(this);
-            settingsRequest.location = curLocation;
-            settingsRequest.exec();
-        }
+        new BackgroundThread(Thread.MIN_PRIORITY) {
+            @Override
+            public void execute() {
+                Location curLocation = GeoLocationManager.getLastKnownLocation(mContext);
+                if (curLocation != null) {
+                    Looper.prepare();
+                    SettingsRequest settingsRequest = new SettingsRequest(getContext());
+                    settingsRequest.location = curLocation;
+                    settingsRequest.exec();
+                    Looper.loop();
+                }
+            }
+        };
     }
 
     private void initAcra() {

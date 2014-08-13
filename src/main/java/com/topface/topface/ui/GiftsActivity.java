@@ -28,6 +28,7 @@ import com.topface.topface.utils.EasyTracker;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class GiftsActivity extends BaseFragmentActivity implements IGiftSendListener {
 
@@ -46,10 +47,11 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
     public GiftsCollection mGiftsCollection;
     private TripleButton mTripleButton;
-    private PlainGiftsFragment mGiftFragment;
+    private PlainGiftsFragment<List<Gift>> mGiftFragment;
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +62,11 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         mNeedToSendGift = getIntent().getBooleanExtra(INTENT_SEND_GIFT, true);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (fragment == null || !(((Object) fragment).getClass().equals(PlainGiftsFragment.class))) {
-            mGiftFragment = new PlainGiftsFragment();
+        if (fragment == null) {
+            mGiftFragment = new PlainGiftsFragment<>();
             transaction.add(R.id.giftGrid, mGiftFragment);
         } else {
-            mGiftFragment = (PlainGiftsFragment) fragment;
+            mGiftFragment = (PlainGiftsFragment<List<Gift>>) fragment;
             transaction.replace(R.id.giftGrid, mGiftFragment);
         }
         transaction.commit();
@@ -181,6 +183,9 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     protected void onResume() {
         super.onResume();
+        if (mGiftsList.isEmpty() && !mRequestingGifts) {
+            loadGifts();
+        }
         switch (GiftsCollection.currentType) {
             case Gift.ROMANTIC:
                 mTripleButton.setChecked(TripleButton.LEFT_BUTTON);

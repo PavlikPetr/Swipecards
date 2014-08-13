@@ -187,7 +187,7 @@ public class PopularUserChatController extends BroadcastReceiver {
 
     public void initBlockDialog() {
         if (mPopularMessageBlocker == null) {
-            mPopularMessageBlocker = new PopularUserDialog(mDialogTitle, mBlockText);
+            mPopularMessageBlocker = PopularUserDialog.newInstance(mDialogTitle, mBlockText);
         }
     }
 

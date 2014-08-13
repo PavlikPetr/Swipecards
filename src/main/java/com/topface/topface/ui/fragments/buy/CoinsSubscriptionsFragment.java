@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.topface.billing.BillingFragment;
+import com.topface.billing.OpenIabFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Products;
@@ -31,7 +31,7 @@ import java.util.List;
  * Subscriptions on packs of coins.
  * UI configures based on server options from Products object
  */
-public class CoinsSubscriptionsFragment extends BillingFragment {
+public class CoinsSubscriptionsFragment extends OpenIabFragment {
     private LinearLayout mContainer;
     private List<View> mButtonsViews = new ArrayList<>();
 
@@ -79,7 +79,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
                                     return;
                                 }
                             }
-                            buy(id);
+                            buy(curBtn);
                             Bundle arguments = getArguments();
                             String from = "";
                             if (arguments != null) {
@@ -120,6 +120,7 @@ public class CoinsSubscriptionsFragment extends BillingFragment {
 
     @Override
     public void onPurchased(final String productId) {
+        super.onPurchased(productId);
         Activity activity = getActivity();
         if (activity != null) {
             activity.setResult(Activity.RESULT_OK);

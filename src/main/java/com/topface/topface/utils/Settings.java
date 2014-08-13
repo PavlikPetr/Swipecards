@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
@@ -42,6 +43,7 @@ public class Settings {
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mEditor;
 
+    @SuppressLint("CommitPrefEdits")
     private Settings() {
         mSettings = PreferenceManager.getDefaultSharedPreferences(App.getContext());
         mEditor = mSettings.edit();

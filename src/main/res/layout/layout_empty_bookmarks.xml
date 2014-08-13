@@ -1,34 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:clickable="true"
-    android:orientation="vertical">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:clickable="true"
+                android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tvText"
+        style="@style/ItemTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_centerInParent="true"
+        android:layout_marginLeft="16dp"
+        android:drawableTop="@drawable/favorite"
+        android:drawablePadding="18dp"
+        android:layout_marginRight="16dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:text="@string/add_bookmarks_to_be_connected"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/favorite"/>
-
-        <TextView
-            android:id="@+id/tvText"
-            style="@style/ItemTitleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:gravity="center"
-            android:text="@string/add_bookmarks_to_be_connected"/>
-
-    </LinearLayout>
 </RelativeLayout>

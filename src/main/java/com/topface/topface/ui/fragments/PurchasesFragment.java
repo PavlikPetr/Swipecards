@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
@@ -30,11 +31,13 @@ import java.util.LinkedList;
 
 public class PurchasesFragment extends BaseFragment {
 
+    private static final String SKIP_BONUS = "SKIP_BONUS";
     public static final String IS_VIP_PRODUCTS = "is_vip_products";
     public static final String LAST_PAGE = "LAST_PAGE";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
     private TabPageIndicator mTabIndicator;
     private ViewPager mPager;
+    private PurchasesFragmentsAdapter mPagerAdapter;
     private TextView mResourcesInfo;
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_NONE = 0;
@@ -45,6 +48,8 @@ public class PurchasesFragment extends BaseFragment {
     private TextView mCurCoins;
     private TextView mCurLikes;
 
+    private boolean mSkipBonus;
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -52,6 +57,14 @@ public class PurchasesFragment extends BaseFragment {
         }
     };
     private boolean mIsVip;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mSkipBonus = savedInstanceState.getBoolean(SKIP_BONUS, false);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +78,9 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(LAST_PAGE, mPager.getCurrentItem());
+        outState.putBoolean(SKIP_BONUS, mSkipBonus);
     }
+
 
     @Override
     public void onResume() {
@@ -80,6 +95,22 @@ public class PurchasesFragment extends BaseFragment {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
     }
 
+    public boolean forceBonusScreen(String infoText) {
+        if (!mSkipBonus) {
+            int bonusTabIndex = mPagerAdapter.getTabIndex(Options.Tab.BONUS);
+            if (mPagerAdapter.hasTab(Options.Tab.BONUS) && mPager.getCurrentItem() != bonusTabIndex) {
+                mPager.setCurrentItem(bonusTabIndex);
+                changeInfoText(infoText);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void skipBonus() {
+        mSkipBonus = true;
+    }
+
     private void initViews(View root, Bundle savedInstanceState) {
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
@@ -90,6 +121,8 @@ public class PurchasesFragment extends BaseFragment {
 
         LinkedList<Options.Tab> tabs;
         mResourcesInfo = (TextView) root.findViewById(R.id.payReason);
+        //Для того, что бы при изменении текста плавно менялся лейаут, без скачков
+        Utils.enableLayoutChangingTransition((ViewGroup) root.findViewById(R.id.purchaseLayout));
         if (mIsVip) {
             tabs = new LinkedList<>(CacheProfile.getOptions().premiumTabs);
         } else {
@@ -99,16 +132,35 @@ public class PurchasesFragment extends BaseFragment {
 
         removeExcessTabs(tabs); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
 
-        PurchasesFragmentsAdapter pagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs);
-        mPager.setAdapter(pagerAdapter);
+        mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs);
+        mPager.setAdapter(mPagerAdapter);
+        mTabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                changeInfoText(getInfoText());
+                if (position == mPagerAdapter.getTabIndex(Options.Tab.BONUS)) {
+                    mSkipBonus = true;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mTabIndicator.setViewPager(mPager);
-        updateBalanceCounters();
+        initBalanceCounters(getSupportActionBar().getCustomView());
+        changeInfoText(getInfoText());
         if (savedInstanceState != null) {
             mPager.setCurrentItem(savedInstanceState.getInt(LAST_PAGE, 0));
         } else {
             mPager.setCurrentItem(0);
         }
-        initBalanceCounters(getSupportActionBar().getCustomView());
     }
 
     private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
@@ -153,12 +205,45 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void updateBalanceCounters() {
-        String text;
-        Bundle args = getArguments();
         if (mCurCoins != null && mCurLikes != null) {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
             mCurLikes.setText(Integer.toString(CacheProfile.likes));
         }
+    }
+
+    private void changeInfoText(final String text) {
+        if (!mResourcesInfo.getText().toString().equals(text)) {
+            if (mResourcesInfo.getText().length() == 0) {
+                showNewInfo(text);
+            } else {
+                Animation pullUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.pull_up);
+                pullUpAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        showNewInfo(text);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
+                mResourcesInfo.startAnimation(pullUpAnimation);
+            }
+        }
+    }
+
+    private void showNewInfo(String text) {
+        mResourcesInfo.setText(text);
+        mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
+    }
+
+    private String getInfoText() {
+        String text;
+        Bundle args = getArguments();
         if (args != null) {
             int type = args.getInt(ARG_ITEM_TYPE);
             int coins = args.getInt(ARG_ITEM_PRICE);
@@ -188,8 +273,7 @@ public class PurchasesFragment extends BaseFragment {
         } else {
             text = getResources().getString(R.string.buying_default_message);
         }
-
-        mResourcesInfo.setText(text);
+        return text;
     }
 
     @Override

@@ -20,6 +20,7 @@ public class Switcher extends Button {
     private int mBackgrounOff;
 
     private boolean mChecked;
+    private Paint mMeter;
 
     public Switcher(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -27,14 +28,15 @@ public class Switcher extends Button {
         mTextOff = context.getString(R.string.settings_switch_off);
         mBackgroundOn = R.drawable.edit_switch_on;
         mBackgrounOff = R.drawable.edit_switch_off;
+        mMeter = new Paint();
         syncState();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         CharSequence defaultText = getText();
-        Paint meter = new Paint();
-        if (meter.measureText(mTextOn, 0, mTextOn.length()) > meter.measureText(mTextOff, 0, mTextOff.length())) {
+
+        if (mMeter.measureText(mTextOn, 0, mTextOn.length()) > mMeter.measureText(mTextOff, 0, mTextOff.length())) {
             setText(mTextOn);
         } else {
             setText(mTextOff);

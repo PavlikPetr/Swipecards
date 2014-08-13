@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ import com.lifestreet.android.lsmsdk.BasicSlotListener;
 import com.lifestreet.android.lsmsdk.SlotView;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
-import com.topface.billing.BillingFragment;
+import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -87,6 +88,7 @@ public class BannerBlock {
     public static final String BANNER_IVENGO = "IVENGO";
     public static final String BANNER_ADCAMP = "ADCAMP";
     public static final String BANNER_LIFESTREET = "LIFESTREET";
+    public static final String BANNER_VIDIGER = "VIDIGER";
     public static final String BANNER_INNERACTIVE = "INNERACTIVE";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
@@ -124,7 +126,14 @@ public class BannerBlock {
     public static void init() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             if (CacheProfile.getOptions().containsBannerType(BANNER_ADCAMP)) {
-                AdsManager.getInstance().initialize(App.getContext());
+                Context context = App.getContext();
+                AdsManager.getInstance().initialize(
+                        context,
+                        context.getString(R.string.adcamp_app_id),
+                        context.getString(R.string.adcamp_app_secret),
+                        context.getResources().getBoolean(R.bool.adcamp_logging_enabled),
+                        Log.VERBOSE
+                );
                 mAdcampInitialized = true;
             }
         }
@@ -380,7 +389,7 @@ public class BannerBlock {
                             ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
                             int maxHeight = 0;
                             if (mBannerView instanceof ImageViewRemote) {
-                                maxHeight = ((ImageViewRemote) mBannerView).getMaxHeight();
+                                maxHeight = ((ImageViewRemote) mBannerView).getImageMaxHeight();
                             }
                             int scaledHeight = (int) ((deviceWidth / imageWidth) * imageHeight);
                             if (maxHeight > scaledHeight) {
@@ -411,7 +420,7 @@ public class BannerBlock {
                         } else {
                             intent.putExtra(Static.INTENT_REQUEST_KEY, PurchasesActivity.INTENT_BUY);
                         }
-                        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, "Banner_" + banner.name);
+                        intent.putExtra(OpenIabFragment.ARG_TAG_SOURCE, "Banner_" + banner.name);
                         break;
                     case Banner.ACTION_URL:
                         intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));

@@ -44,6 +44,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
+import java.util.Locale;
 
 import ru.ok.android.sdk.Odnoklassniki;
 import ru.ok.android.sdk.OkTokenRequestListener;
@@ -346,7 +347,7 @@ public class AuthorizationManager {
         new BackgroundThread() {
             @Override
             public void execute() {
-                String responseRaw = HttpUtils.httpGetRequest(String.format(VK_NAME_URL, user_id, token));
+                String responseRaw = HttpUtils.httpGetRequest(String.format(Locale.ENGLISH, VK_NAME_URL, user_id, token));
                 try {
                     String result = "";
                     JSONObject response = new JSONObject(responseRaw);
@@ -425,7 +426,7 @@ public class AuthorizationManager {
         StartActionsController.onLogout();
         SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         if (preferences != null) {
-            preferences.edit().clear().commit();
+            preferences.edit().clear().apply();
         }
         LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
         //Чистим список тех, кого нужно оценить

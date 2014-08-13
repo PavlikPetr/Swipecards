@@ -19,21 +19,17 @@ public class PopularUserDialog extends AbstractModalDialog {
 
     private String mDialogTitle;
     private String mBlockText;
-    private TextView mTitle;
-    private TextView mMessage;
     private boolean isOpened;
 
-    public PopularUserDialog(String dialogTitle, String blockText) {
-        mDialogTitle = dialogTitle;
-        mBlockText = blockText;
+    public static PopularUserDialog newInstance(String dialogTitle, String blockText) {
+        PopularUserDialog fragment = new PopularUserDialog();
         Bundle args = new Bundle();
-        args.putString(DIALOG_TITLE_ARG, mDialogTitle);
-        args.putString(BLOCK_TEXT_ARG, mBlockText);
-        setArguments(args);
+        args.putString(DIALOG_TITLE_ARG, dialogTitle);
+        args.putString(BLOCK_TEXT_ARG, blockText);
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    public PopularUserDialog() {
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,11 +55,11 @@ public class PopularUserDialog extends AbstractModalDialog {
 
     @Override
     protected void initContentViews(View root) {
-        mTitle = (TextView) root.findViewById(R.id.popular_user_title);
-        mMessage = (TextView) root.findViewById(R.id.popular_user_message);
+        TextView title = (TextView) root.findViewById(R.id.popular_user_title);
+        TextView message = (TextView) root.findViewById(R.id.popular_user_message);
 
-        mTitle.setText(mDialogTitle);
-        mMessage.setText(mBlockText);
+        title.setText(mDialogTitle);
+        message.setText(mBlockText);
 
         root.findViewById(R.id.unlock_message_sent).setOnClickListener(new View.OnClickListener() {
             @Override

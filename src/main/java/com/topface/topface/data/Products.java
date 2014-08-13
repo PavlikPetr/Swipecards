@@ -103,10 +103,6 @@ public class Products extends AbstractData {
                         data.optJSONArray(ProductType.COINS_SUBSCRIPTION_MASKED.getName()),
                         info.coinsSubscriptionMasked.status.userSubscriptions
                 );
-                // skip sale flag if there is an active forceCoinsSubscription experiment
-                if (CacheProfile.getOptions().forceCoinsSubscriptions) {
-                    saleExists = false;
-                }
 
             }
             fillProductsArray(coins, data.optJSONArray(ProductType.COINS.getName()));
@@ -138,8 +134,6 @@ public class Products extends AbstractData {
                 buyButtonFromJSON = createSubscriptionBuyButtonFromJSON(coinsJSON.optJSONObject(i), false);
                 if (buyButtonFromJSON != null) {
                     if (userSubscriptions.contains(buyButtonFromJSON.id)) {
-                        buyButtonFromJSON.price = 0;
-                        buyButtonFromJSON.hint = App.getContext().getString(R.string.you_were_subscribed);
                         buyButtonFromJSON.activated = true;
                     }
                     list.add(buyButtonFromJSON);
@@ -217,7 +211,7 @@ public class Products extends AbstractData {
      * @param id       unique good's id from google play in-app billing system
      * @param title    for button
      * @param discount true if button background has to be with sale badge
-     * @param showType 0 - gray, 1 - blue button
+     * @param showType 0 - gray, 1 - blue button, 2 - disabled button
      * @param economy  hint under button with highlighted background
      * @param value    hint under button
      * @param listener to process click
@@ -240,9 +234,18 @@ public class Products extends AbstractData {
 
     private static int getBuyButtonTextColor(int showType) {
         Context context = App.getContext();
-        return showType == 0 ?
-                context.getResources().getColor(R.color.text_light_gray) :
-                context.getResources().getColor(R.color.text_white);
+        int color;
+        switch (showType) {
+            case 1:
+                color = context.getResources().getColor(R.color.text_white);
+                break;
+            case 2:
+            case 0:
+            default:
+                color = context.getResources().getColor(R.color.text_light_gray);
+                break;
+        }
+        return color;
     }
 
     private static int getBuyButtonBackground(boolean discount, int showType) {
@@ -250,9 +253,18 @@ public class Products extends AbstractData {
         if (discount) {
             bgResource = R.drawable.btn_sale_selector;
         } else {
-            bgResource = showType == 0 ?
-                    R.drawable.btn_gray_selector :
-                    R.drawable.btn_blue_selector;
+            switch (showType) {
+                case 1:
+                    bgResource = R.drawable.btn_blue_selector;
+                    break;
+                case 2:
+                    bgResource = R.drawable.btn_blue_disabled;
+                    break;
+                case 0:
+                default:
+                    bgResource = R.drawable.btn_gray_selector;
+                    break;
+            }
         }
         return bgResource;
     }
@@ -389,7 +401,7 @@ public class Products extends AbstractData {
         public String id;
         public String title;
         public int price;
-        protected int showType;
+        public int showType;
         public String hint;
         public ProductType type;
         public int discount;

@@ -67,7 +67,7 @@ public class BlackListAddTest extends AbstractThreadTest {
                                 userIsFound = true;
                             }
                         }
-                        assertTrue(String.format("BlackList user %s is not found", TEST_USER_ID), userIsFound);
+                        assertTrue("BlackList user " + TEST_USER_ID + " not found", userIsFound);
                         stopTest("checkUserIsAdded");
                     }
 

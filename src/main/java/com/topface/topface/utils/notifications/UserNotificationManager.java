@@ -106,8 +106,9 @@ public class UserNotificationManager {
 
     public UserNotification showNotificationWithActions(String title, String message, Bitmap icon,
                                                         boolean ongoing,
-                                                        UserNotification.NotificationAction[] actions) {
-        return showNotification(title, message, false, icon, 0, null, true, ongoing, UserNotification.Type.ACTIONS, actions, null);
+                                                        UserNotification.NotificationAction[] actions,
+                                                        int notificationId) {
+        return showNotification(title, message, false, icon, 0, null, notificationId, ongoing, UserNotification.Type.ACTIONS, actions, null);
     }
 
     public UserNotification showProgressNotification(String title, Bitmap icon, Intent intent) {
@@ -204,10 +205,25 @@ public class UserNotificationManager {
                                               Bitmap icon, int unread, Intent intent, boolean createNew,
                                               boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions,
                                               User user) {
-        int id = NOTIFICATION_ID;
-        if (createNew) {
-            id = newNotificationId();
-        }
+        return showNotification(
+                title,
+                message,
+                isTextNotification,
+                icon,
+                unread,
+                intent,
+                createNew ? newNotificationId() : NOTIFICATION_ID,
+                ongoing,
+                type,
+                actions,
+                user
+        );
+    }
+
+    private UserNotification showNotification(String title, String message, boolean isTextNotification,
+                                              Bitmap icon, int unread, Intent intent, int id,
+                                              boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions,
+                                              User user) {
 
         MessageStack messagesStack = new MessageStack();
         if (intent != null && intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ChatActivity.INTENT_CHAT) {
@@ -229,10 +245,12 @@ public class UserNotificationManager {
         onDeleteIntent triggers when notification is deleted by user. We need it to gather
         statistics about deleted notifications.
          */
-        Intent onDeleteIntent = new Intent(NotificationClosedReceiver.NOTIFICATION_CLOSED);
-        onDeleteIntent.putExtra(GCMUtils.GCM_TYPE, intent.getIntExtra(GCMUtils.GCM_TYPE, -1));
-        onDeleteIntent.putExtra(GCMUtils.GCM_LABEL, intent.getStringExtra(GCMUtils.GCM_LABEL));
-        notification.setDeleteIntent(PendingIntent.getBroadcast(mContext, 0, onDeleteIntent, 0));
+        if (intent != null) {
+            Intent onDeleteIntent = new Intent(NotificationClosedReceiver.NOTIFICATION_CLOSED);
+            onDeleteIntent.putExtra(GCMUtils.GCM_TYPE, intent.getIntExtra(GCMUtils.GCM_TYPE, -1));
+            onDeleteIntent.putExtra(GCMUtils.GCM_LABEL, intent.getStringExtra(GCMUtils.GCM_LABEL));
+            notification.setDeleteIntent(PendingIntent.getBroadcast(mContext, 0, onDeleteIntent, 0));
+        }
         try {
             mNotificationManager.notify(id, notification.generate(actions));
         } catch (Exception e) {

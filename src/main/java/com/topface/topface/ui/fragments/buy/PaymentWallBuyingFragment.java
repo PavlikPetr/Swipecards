@@ -66,6 +66,11 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
     }
 
     @Override
+    public void onSubscriptionUnsupported() {
+        //У нас всегда платежи доступны для PW
+    }
+
+    @Override
     public boolean isTestPurchasesAvailable() {
         return false;
     }

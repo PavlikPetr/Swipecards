@@ -1,5 +1,6 @@
 package com.topface.topface.ui.views;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -24,25 +25,6 @@ import com.topface.topface.R;
  * Attribute gravity used for positioning internal TextView
  *
  * @author kirussell
- * @attr ref android.R.styleable#LockerView_android_gravity
- * <p/>
- * Attributes for internal TextView
- * @attr ref android.R.styleable#LockerView_android_text
- * @attr ref android.R.styleable#LockerView_android_textColor
- * @attr ref android.R.styleable#LockerView_android_textSize
- * @attr ref android.R.styleable#LockerView_android_shadowColor
- * @attr ref android.R.styleable#LockerView_android_shadowDx
- * @attr ref android.R.styleable#LockerView_android_shadowDy
- * @attr ref android.R.styleable#LockerView_android_drawableLeft
- * @attr ref android.R.styleable#LockerView_android_drawableTop
- * @attr ref android.R.styleable#LockerView_android_drawableRight
- * @attr ref android.R.styleable#LockerView_android_drawableBottom
- * @attr ref android.R.styleable#LockerView_messageBackground
- * @attr ref android.R.styleable#LockerView_messagePadding
- * @attr ref android.R.styleable#LockerView_messagePaddingLeft
- * @attr ref android.R.styleable#LockerView_messagePaddingTop
- * @attr ref android.R.styleable#LockerView_messagePaddingRight
- * @attr ref android.R.styleable#LockerView_messagePaddingBottom
  */
 
 public class LockerView extends RelativeLayout {
@@ -68,6 +50,7 @@ public class LockerView extends RelativeLayout {
         this.addView(mTextView);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @SuppressWarnings("deprecation")
     private void setAttrs(AttributeSet attrs) {
         Context context = getContext();

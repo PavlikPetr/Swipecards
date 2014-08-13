@@ -177,6 +177,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mFragmentSwitcherListener = (INavigationFragmentsListener) activity;
         }
     }
+    
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mFragmentSwitcherListener = null;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

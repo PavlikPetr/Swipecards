@@ -68,6 +68,7 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static android.widget.AdapterView.OnItemClickListener;
@@ -151,7 +152,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 if (itemId != null) {
                     makeItemReadWithId(itemId);
                 } else {
-                    needUpdate = true;
                     String lastMethod = intent.getStringExtra(CountersManager.METHOD_INTENT_STRING);
                     if (lastMethod != null) {
                         updateDataAfterReceivingCounters(lastMethod);
@@ -664,6 +664,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void processSuccessUpdate(FeedListData<T> data, boolean isHistoryLoad, boolean isPullToRefreshUpdating, boolean makeItemsRead, int limit) {
         FeedAdapter<T> adapter = getListAdapter();
         if (isHistoryLoad) {
+            removeOldDublicates(data);
             adapter.addData(data);
         } else if (isPullToRefreshUpdating) {
             if (makeItemsRead) {
@@ -673,6 +674,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 if (adapter.getCount() >= limit) {
                     data.more = true;
                 }
+                removeOldDublicates(data);
                 adapter.addDataFirst(data);
             } else {
                 adapter.notifyDataSetChanged();
@@ -684,6 +686,23 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         mListView.onRefreshComplete();
         mListView.setVisibility(View.VISIBLE);
         setFilterEnabled(true);
+    }
+
+    protected void removeOldDublicates(FeedListData<T> data) {
+        Iterator<T> feedsIterator = getListAdapter().getData().iterator();
+        while (feedsIterator.hasNext()) {
+            T feed = feedsIterator.next();
+            for (T newFeed : data.items) {
+                if (considerDublicates(feed, newFeed)) {
+                    feedsIterator.remove();
+                    break;
+                }
+            }
+        }
+    }
+
+    protected boolean considerDublicates(T first, T second) {
+        return first.id == null ? second.id == null : first.id.equals(second.id);
     }
 
     protected boolean isForPremium() {
