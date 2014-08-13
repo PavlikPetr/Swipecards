@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -46,6 +45,7 @@ import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.PopupManager;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
@@ -58,7 +58,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -525,16 +524,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         super.onActivityResult(requestCode, resultCode, data);
 
         // Need explicitly pass activity results to nested fragments
-        FragmentManager fm = getSupportFragmentManager();
-        if (fm != null) {
-            List<Fragment> fragments = fm.getFragments();
-            for (Fragment fragment : fragments) {
-                if (fragment != null && fragment.isAdded()) {
-                    fragment.onActivityResult(requestCode, resultCode, data);
-                }
-            }
-        }
-        
+        Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
+
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION:
