@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -106,5 +107,13 @@ public class ProfileFormFragment extends ProfileInnerFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(POSITION, mFormListView.getFirstVisiblePosition());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK && mProfileFormListAdapter != null) {
+            mProfileFormListAdapter.refillData();
+            mProfileFormListAdapter.notifyDataSetChanged();
+        }
     }
 }

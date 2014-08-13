@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -57,6 +58,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -521,6 +523,18 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Need explicitly pass activity results to nested fragments
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm != null) {
+            List<Fragment> fragments = fm.getFragments();
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment.isAdded()) {
+                    fragment.onActivityResult(requestCode, resultCode, data);
+                }
+            }
+        }
+        
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION:
