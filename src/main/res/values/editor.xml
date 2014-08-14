@@ -34,8 +34,6 @@
     <string name="enable">Enable</string>
     <string name="disable">Disable</string>
     <string name="cancel">Cancel</string>
-    <string name="nerwork_errors">Network Errors</string>
-    <string name="network_error_message">all requests will be returning errors</string>
 
     <string-array name="editor_debug_titles">
         <item>Только в debug режиме</item>

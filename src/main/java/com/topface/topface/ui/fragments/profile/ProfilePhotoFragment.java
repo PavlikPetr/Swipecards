@@ -76,11 +76,12 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                 mViewFlipper.setDisplayedChild(1);
                 return;
             }
-            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, CacheProfile.uid);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
-            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
-            startActivity(intent);
+            startActivity(PhotoSwitcherActivity.getPhotoSwitcherIntent(
+                    position,
+                    CacheProfile.uid,
+                    CacheProfile.totalPhotos,
+                    (ProfileGridAdapter) mGridAlbum.getAdapter()
+            ));
         }
     };
 
@@ -98,10 +99,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
 
     private void sendAlbumRequest() {
         Photos photoLinks = mProfilePhotoGridAdapter.getData();
-        if (photoLinks == null || photoLinks.size() < 2) {
+        if (photoLinks == null || photoLinks.size() < 2 || !mProfilePhotoGridAdapter.getLastItem().isFake()) {
             return;
         }
-        if (!mProfilePhotoGridAdapter.getLastItem().isFake()) return;
         Photo photo = mProfilePhotoGridAdapter.getItem(photoLinks.size() - 2);
         int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(

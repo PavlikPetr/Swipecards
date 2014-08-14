@@ -70,7 +70,7 @@
     <string name="popup_version_message">É tempo de renovar sua versão!</string>
     <string name="leaders_select_photo_info">Seleccione a foto mais efectiva! Não se deve seleccionar fotografias de baixa classificação</string>
     <string name="map_popup_address">Adreço</string>
-    <string name="black_list_info">Você adicionou seu correspondente à lista negra. Cancelar isso só é possivel no seu perfil, nas definições de status-VIP</string>
+    <string name="black_list_info">Você adicionou seu correspondente à lista negra. Cancelar isso só é possível no seu perfil, nas definições de status-VIP</string>
     <string name="general_place">Lugar</string>
     <string name="general_soon">Será em breve</string>
     <string name="black_list_activation">Ative status-VIP e use a lista negra</string>
@@ -84,7 +84,7 @@
     <string name="general_bookmarks_title">Escolhidos</string>
     <string name="general_no_fans">Não há fãs</string>
     <string name="general_user_bookmarkadd">O usuário foi adicionado aos favoritos</string>
-    <string name="settings_invalid_name">O nome contem simbolos  incorretos</string>
+    <string name="settings_invalid_name">O nome contem símbolos  incorretos</string>
     <string name="filter_hint">Introduza o nome</string>
     <plurals name="get_free_money">
         <item quantity="other">%d de moeda grátis</item>
@@ -159,7 +159,7 @@
     <string name="chat_mutual_out">Você enviou uma admiração</string>
     <string name="chat_wish_in">Enviaram para você um desejo secreto.</string>
     <string name="chat_wish_out">Você enviou um desejo secreto.</string>
-    <string name="chat_sexuality_in">Avaliaram a sua sexulidade.</string>
+    <string name="chat_sexuality_in">Avaliaram a sua sexualidade.</string>
     <string name="chat_sexuality_out">Você avaliou a sexualidade.</string>
     <string name="chat_wink_in">Piscaram-lhe o olho</string>
     <string name="chat_wink_out">Você piscou o olho.</string>
@@ -175,7 +175,7 @@
     <string name="buying_money">Compra de moedas</string>
     <string name="profile_header_title">Meu perfil</string>
     <string name="profile_add_title">Adicionar fotografia</string>
-    <string name="profile_add_album">Seleccionar dos disponiveis</string>
+    <string name="profile_add_album">Seleccionar dos disponíveis</string>
     <string name="profile_add_camera">Tirar a foto</string>
     <string name="profile_photo">Foto</string>
     <string name="profile_form">Questonário</string>
@@ -185,7 +185,7 @@
     <string name="profile_ask_form">Apelar preencher o questionário</string>
     <string name="edit_title">Edição</string>
     <string name="edit_bg_photo">Fotografia de fundo</string>
-    <string name="edit_album">Album</string>
+    <string name="edit_album">Álbum</string>
     <string name="edit_profile_photo">Mudar a foto</string>
     <string name="edit_interests">interesses</string>
     <string name="edit_selected">Selecionada</string>
@@ -244,7 +244,7 @@
         <item quantity="one">Ser por % de moedas</item>
     </plurals>
     <string name="photo_add_or">A fotografia está adicionada</string>
-    <string name="photo_add_error">Não foi possivel adicionar fotografia</string>
+    <string name="photo_add_error">Não foi possível adicionar fotografia</string>
     <plurals name="photo">
         <item quantity="zero">Não há fotografias</item>
         <item quantity="other">%d de fotografias</item>
@@ -255,7 +255,7 @@
     <string name="general_premium_access_error">É preciso Premium para esta função</string>
     <string name="general_search_null_response_error">Nada foi encontrado. Tente mudar filtros</string>
     <string name="change_filters">Modificar filtros</string>
-    <string name="general_sex">Genero</string>
+    <string name="general_sex">Gênero</string>
     <string name="general_girl">Feminino</string>
     <string name="general_boy">Masculino</string>
     <string name="filter_city_fail">Não foi encontrada nenhuma cidade que se começa com «%s»</string>
