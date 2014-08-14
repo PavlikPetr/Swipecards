@@ -3,6 +3,7 @@ package com.topface.topface.ui.views;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.AttributeSet;
+import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
 /**
@@ -27,33 +28,38 @@ public class KeyboardListenerLayout extends RelativeLayout {
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
-        if (changed && mKeyboardListener != null) {
-            if (mKeyboardOpened) {
-                mKeyboardListener.keyboardOpened();
-            } else {
-                mKeyboardListener.keyboardClosed();
-            }
-        }
-    }
-
-
-
     public void setKeyboardListener(KeyboardListener keyboardListener) {
         mKeyboardListener = keyboardListener;
     }
+
+    @SuppressWarnings("unused")
     public KeyboardListenerLayout(Context context) {
         super(context);
     }
 
+    @SuppressWarnings("unused")
     public KeyboardListenerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
+    @SuppressWarnings("unused")
     public KeyboardListenerLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+    }
+
+    {
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (mKeyboardListener != null) {
+                    if (mKeyboardOpened) {
+                        mKeyboardListener.keyboardOpened();
+                    } else {
+                        mKeyboardListener.keyboardClosed();
+                    }
+                }
+            }
+        });
     }
 
     public interface KeyboardListener {

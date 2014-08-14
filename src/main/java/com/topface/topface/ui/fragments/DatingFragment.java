@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -35,6 +38,7 @@ import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.DatingFilter;
+import com.topface.topface.data.History;
 import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
@@ -48,21 +52,25 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FilterRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.NoviceLikesRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AnimationHelper;
@@ -94,6 +102,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mDatingCounter;
     private TextView mDatingLovePrice;
     private View mDatingResources;
+    private View mDatingButtons;
+    private View mUserInfo;
 
     private RateController mRateController;
     private ImageSwitcher mImageSwitcher;
@@ -105,6 +115,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RetryViewCreator mRetryView;
     private ImageButton mRetryBtn;
     private PreloadManager<SearchUser> mPreloadManager;
+    private EditText mInstantMessageText;
 
     private Drawable singleMutual;
     private Drawable singleDelight;
@@ -123,6 +134,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private BroadcastReceiver mProfileReceiver;
     private boolean mNeedMore;
     private int mLoadedCount;
+    private int mMaxMessageSize;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -213,7 +225,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
 
-        View root = inflater.inflate(R.layout.fragment_dating, null);
+        KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_dating, null);
 
         initViews(root);
         initActionBar();
@@ -263,7 +275,20 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void initViews(View root) {
+    private void initViews(final KeyboardListenerLayout root) {
+        root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
+            @Override
+            public void keyboardOpened() {
+                mDatingButtons.setVisibility(View.GONE);
+                mUserInfoStatus.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void keyboardClosed() {
+                mDatingButtons.setVisibility(View.VISIBLE);
+                mUserInfoStatus.setVisibility(View.VISIBLE);
+            }
+        });
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
 
@@ -271,10 +296,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
         // User Info
-        View userInfo = root.findViewById(R.id.loUserInfo);
-        mUserInfoName = ((TextView) userInfo.findViewById(R.id.tvDatingUserName));
-        mUserInfoCity = ((TextView) userInfo.findViewById(R.id.tvDatingUserCity));
-        mUserInfoStatus = ((TextView) userInfo.findViewById(R.id.tvDatingUserStatus));
+        mUserInfo = root.findViewById(R.id.loUserInfo);
+        mUserInfoName = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserName));
+        mUserInfoCity = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserCity));
+        mUserInfoStatus = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserStatus));
 
         // Counter
         mDatingCounter = ((TextView) root.findViewById(R.id.tvDatingCounter));
@@ -288,12 +313,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
         mAnimationHelper.addView(mDatingCounter);
         mAnimationHelper.addView(mDatingResources);
-        mAnimationHelper.addView(userInfo);
+        mAnimationHelper.addView(mUserInfo);
 
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
 
-        if (false) {
+        mDatingButtons = root.findViewById(R.id.vfDatingButtons);
+
+        if (false) { // TODO: Check experiment flag
             root.findViewById(R.id.message_send).setVisibility(View.GONE);
+        } else {
+            mInstantMessageText = (EditText) root.findViewById(R.id.edChatBox);
+            root.findViewById(R.id.btnSend).setOnClickListener(this);
+            root.findViewById(R.id.send_gift_button).setOnClickListener(this);
         }
     }
 
@@ -522,6 +553,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             updateFilterData();
         }
+        mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
     }
 
     private SearchRequest getSearchRequest() {
@@ -639,13 +671,67 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 mProgressBar.setVisibility(View.VISIBLE);
             }
             break;
+            case R.id.btnSend: {
+                if (mCurrentUser.id > 0) {
+                    sendMessage();
+                    EasyTracker.sendEvent("Dating", "SendMessage", "", 1L);
+                }
+            }
+            break;
+            case R.id.send_gift_button: {
+                startActivityForResult(
+                        GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id, false),
+                        GiftsActivity.INTENT_REQUEST_GIFT
+                );
+                EasyTracker.sendEvent("Dating", "SendGiftClick", "", 1L);
+            }
+            break;
             default:
         }
     }
 
-    private void chatBlockLogic() {
-        if (mCurrentUser.isMutualPossible) {
-            openChat(getActivity());
+    private boolean sendMessage() {
+        if (!tryChat()) {
+            return false;
+        }
+        final Editable editText = mInstantMessageText.getText();
+        String editString = editText == null ? "" : editText.toString();
+        if (editText == null || TextUtils.isEmpty(editString.trim()) || mCurrentUser.id == 0) {
+            return false;
+        }
+        if (editText.length() > mMaxMessageSize) {
+            Toast.makeText(getActivity(),
+                    String.format(getString(R.string.message_too_long), mMaxMessageSize),
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        final MessageRequest messageRequest = new MessageRequest(mCurrentUser.id, editString, getActivity());
+        registerRequest(messageRequest);
+        messageRequest.callback(new DataApiHandler<History>() {
+            @Override
+            protected void success(History data, IApiResponse response) {
+                LocalBroadcastManager.getInstance(getActivity())
+                        .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
+                editText.clear();
+            }
+
+            @Override
+            protected History parseResponse(ApiResponse response) {
+                return new History(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+            }
+        }).exec();
+        return true;
+    }
+
+    private boolean tryChat() {
+        if (CacheProfile.premium || mCurrentUser.isMutualPossible) {
+            return true;
         } else {
             startActivityForResult(
                     PurchasesActivity.createVipBuyIntent(
@@ -654,6 +740,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     ),
                     PurchasesActivity.INTENT_BUY_VIP
             );
+            return false;
         }
     }
 
