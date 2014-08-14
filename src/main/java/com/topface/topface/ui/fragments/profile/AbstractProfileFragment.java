@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +15,12 @@ import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
 import com.topface.topface.ui.views.DarkenImageView;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class AbstractProfileFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
     public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
@@ -257,18 +256,10 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         if (mUserFormFragment != null) mUserFormFragment.clearContent();
     }
 
-    public void resultToNestedFragments(int requestCode, int resultCode, Intent data) {
-        FragmentManager childFragmentManager = getChildFragmentManager();
-        if (childFragmentManager != null) {
-            List<Fragment> bodyFragments = childFragmentManager.getFragments();
-            if (bodyFragments != null) {
-                for (Fragment fragment : bodyFragments) {
-                    if (fragment != null && !fragment.isDetached() && !fragment.isRemoving()) {
-                        fragment.onActivityResult(requestCode, resultCode, data);
-                    }
-                }
-            }
-        }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Utils.activityResultToNestedFragments(getChildFragmentManager(), requestCode, resultCode, data);
     }
 
     protected abstract int getProfileType();

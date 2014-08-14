@@ -48,6 +48,7 @@ import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.PopupManager;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
@@ -524,6 +525,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
         boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(
                 getSupportFragmentManager(),
@@ -532,6 +534,12 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
                 data,
                 OwnProfileFragment.class
         );
+
+        // Need explicitly pass activity results to nested fragments
+        if (!isBillingRequestProcessed) {
+            Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
+        }
+
         if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
             switch (requestCode) {
                 case CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION:

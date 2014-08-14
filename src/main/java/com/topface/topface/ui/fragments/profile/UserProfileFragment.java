@@ -151,8 +151,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     private void switchBookmarkEnabled(boolean enabled) {
         if (mActions != null) {
-            mBookmarkAction.setText(((User)getProfile()).bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-            mBookmarkAction.setTextColor(getResources().getColor(enabled? R.color.text_white : R.color.disabled_color));
+            mBookmarkAction.setText(((User) getProfile()).bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            mBookmarkAction.setTextColor(getResources().getColor(enabled ? R.color.text_white : R.color.disabled_color));
             mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(enabled);
         }
     }
@@ -635,7 +635,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     }
                     break;
             }
-            resultToNestedFragments(requestCode, resultCode, data);
         } else if (resultCode == Activity.RESULT_CANCELED) {
             mGiftsReceivedListener.onReceived();
         }

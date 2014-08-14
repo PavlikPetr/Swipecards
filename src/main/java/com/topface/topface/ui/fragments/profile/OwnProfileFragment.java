@@ -166,7 +166,6 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                     break;
             }
         }
-        resultToNestedFragments(requestCode, resultCode, data);
     }
 
     @Override
