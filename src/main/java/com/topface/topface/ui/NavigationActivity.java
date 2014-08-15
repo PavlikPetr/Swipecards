@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.appsflyer.AppsFlyerLib;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
-import com.topface.offerwall.advertizer.TFOfferSDK;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -48,7 +47,6 @@ import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.PopupManager;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
@@ -534,11 +532,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
                 data,
                 OwnProfileFragment.class
         );
-
-        // Need explicitly pass activity results to nested fragments
-        if (!isBillingRequestProcessed) {
-            Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
-        }
 
         if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
             switch (requestCode) {
