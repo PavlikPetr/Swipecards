@@ -263,6 +263,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                             @Override
                             public void success(IApiResponse response) {
                                 super.success(response);
+                                //Декрементим общее количество фотографий
+                                CacheProfile.totalPhotos -= 1;
                                 CacheProfile.photos.remove(photo);
                                 Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
                                 Photos newPhotos = new Photos();

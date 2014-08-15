@@ -277,6 +277,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 for (Photo currentPhoto : mDeletedPhotos) {
                     CacheProfile.photos.removeById(currentPhoto.getId());
                 }
+                CacheProfile.totalPhotos -= mDeletedPhotos.size();
                 LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
                         .putExtra(INTENT_PHOTOS, CacheProfile.photos)
                         .putExtra(INTENT_MORE, CacheProfile.photos.size() < CacheProfile.totalPhotos - mDeletedPhotos.size())

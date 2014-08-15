@@ -23,7 +23,6 @@ import com.viewpagerindicator.TabPageIndicator;
 import java.util.ArrayList;
 
 public abstract class AbstractProfileFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
-    public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
     public static final String DEFAULT_NON_ACTIVATED = "#FFFFFF";
     public static final String INTENT_UID = "intent_profile_uid";
     public static final String INTENT_ITEM_ID = "intent_profile_item_id";
@@ -32,7 +31,6 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     protected static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
     protected static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
     protected static final String ARG_TAG_CALLING_CLASS = "intent_profile_calling_fragment";
-    protected static final String ARG_FEED_ITEM_ID = "item_id";
     private static final String CURRENT_BODY_PAGE = "CURRENT_BODY_PAGE";
     private static final String CURRENT_HEADER_PAGE = "CURRENT_HEADER_PAGE";
     // state

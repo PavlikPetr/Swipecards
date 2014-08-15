@@ -73,6 +73,8 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     mLastSelectedAsMainId = photo.getId();
                     CacheProfile.photos.addFirst(photo);
                     mPhotoGridAdapter.addFirst(photo);
+                    //Увеличиваем общее количество фотографий юзера
+                    CacheProfile.totalPhotos += 1;
                     CacheProfile.sendUpdateProfileBroadcast();
                     PhotoMainRequest request = new PhotoMainRequest(getActivity());
                     request.photoId = photo.getId();
@@ -169,6 +171,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     @Override
                     public void success(IApiResponse response) {
                         CacheProfile.photos.removeAll(mDeleted);
+                        CacheProfile.totalPhotos -= mDeleted.size();
                         mDeleted.clear();
                         CacheProfile.sendUpdateProfileBroadcast();
 
