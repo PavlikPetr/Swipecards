@@ -15,8 +15,11 @@ import android.view.animation.AnimationUtils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.ivengo.adv.AdvListener;
-import com.ivengo.adv.AdvView;
+import com.ivengo.ads.AdManager;
+import com.ivengo.ads.AdType;
+import com.ivengo.ads.Interstitial;
+import com.ivengo.ads.InterstitialListener;
+import com.ivengo.ads.Request;
 import com.lifestreet.android.lsmsdk.BannerAdapter;
 import com.lifestreet.android.lsmsdk.BasicSlotListener;
 import com.lifestreet.android.lsmsdk.InterstitialAdapter;
@@ -44,6 +47,8 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 
+import java.net.URL;
+
 import me.faan.sdk.FAAN;
 import me.faan.sdk.FAANAdListener;
 import me.faan.sdk.FAANAttemptStatus;
@@ -67,7 +72,6 @@ public class FullscreenController {
     private Activity mActivity;
 
     private MoPubInterstitial mInterstitial;
-    private AdvView advViewIvengo;
 
     private class FullscreenStartAction extends AbstractStartAction {
         private Options.Page startPage;
@@ -96,10 +100,10 @@ public class FullscreenController {
 
         @Override
         public boolean isApplicable() {
-            if (CacheProfile.show_ad && FullscreenController.this.isTimePassed()) {
-                return startPage != null && startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER);
-            }
-            return false;
+            return CacheProfile.show_ad &&
+                    FullscreenController.this.isTimePassed() &&
+                    startPage != null &&
+                    startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER);
         }
 
         @Override
@@ -272,27 +276,48 @@ public class FullscreenController {
     }
 
     private void requestIvengoFullscreen() {
-        advViewIvengo = AdvView.create(mActivity, IVENGO_APP_ID);
-        advViewIvengo.showBanner();
-        advViewIvengo.setAdvListener(new AdvListener() {
+        AdManager.getInstance().initialize(mActivity);
+        Interstitial advViewIvengo = new Interstitial(AdType.BANNER_FULLSCREEN);
+        Request request = new Request();
+        request.setAppId(IVENGO_APP_ID);
+        advViewIvengo.setInterstitialListener(new InterstitialListener() {
             @Override
-            public void onDisplayAd() {
-                addLastFullscreenShowedTime();
+            public void onInterstitialReceiveAd(Interstitial interstitial) {
+                interstitial.showFromActivity(mActivity);
             }
 
             @Override
-            public void onAdClick(String s) {
-            }
-
-            @Override
-            public void onFailedToReceiveAd(AdvView.ErrorCode errorCode) {
+            public void onInterstitialFailWithError(Interstitial interstitial, com.ivengo.ads.Error error) {
                 requestFallbackFullscreen();
             }
 
             @Override
-            public void onCloseAd(int i) {
+            public void onInterstitialShowAd(Interstitial interstitial) {
+
+            }
+
+            @Override
+            public void onInterstitialSkipAd(Interstitial interstitial) {
+                requestFallbackFullscreen();
+            }
+
+            @Override
+            public void onInterstitialWillLeaveApplicationWithUrl(Interstitial interstitial, URL url) {
+
+            }
+
+            @Override
+            public void onInterstitialWillReturnToApplication(Interstitial interstitial) {
+
+            }
+
+            @Override
+            public void onInterstitialDidFinishAd(Interstitial interstitial) {
+
             }
         });
+
+        advViewIvengo.loadRequest(request);
     }
 
     private void requestMopubFullscreen() {
@@ -487,9 +512,6 @@ public class FullscreenController {
     }
 
     public void onPause() {
-        if (advViewIvengo != null) {
-            advViewIvengo.dismiss();
-        }
     }
 
     public IStartAction createFullscreenStartAction(final int priority) {
