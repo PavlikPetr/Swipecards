@@ -20,6 +20,7 @@ import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
+import com.topface.offerwall.advertizer.TFOfferSDK;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
@@ -299,7 +300,7 @@ public class App extends Application {
         enableDebugLogs();
         //Включаем логирование ошибок
         initAcra();
-
+        TFOfferSDK.initialize(getApplicationContext());
         //Базовые настройки приложения, инитим их один раз при старте приложения
         Configurations baseConfig = getConfig();
         Editor.setConfig(baseConfig.getAppConfig());
