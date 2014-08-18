@@ -214,7 +214,6 @@ public class OfferwallsManager {
     }
 
     public static void startTfOfferwall(Context context) {
-//        TFOfferwallSDK.initialize(context, Integer.toString(CacheProfile.uid), "53edb54b0fdc7");
         TFOfferwallSDK.setTarget(new TFOfferwallSDK.Target().setAge(CacheProfile.age).setSex(CacheProfile.sex));
         TFOfferwallSDK.showOffers(context, true, context.getResources().getString(R.string.general_bonus));
     }
