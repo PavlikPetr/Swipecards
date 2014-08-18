@@ -300,7 +300,6 @@ public class App extends Application {
         enableDebugLogs();
         //Включаем логирование ошибок
         initAcra();
-        TFOfferSDK.initialize(getApplicationContext());
         //Базовые настройки приложения, инитим их один раз при старте приложения
         Configurations baseConfig = getConfig();
         Editor.setConfig(baseConfig.getAppConfig());
