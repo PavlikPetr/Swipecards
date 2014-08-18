@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.offerwall.common.TFCredentials;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
@@ -101,7 +102,9 @@ public class BonusFragment extends BaseFragment {
             extraOffersContainer.setVisibility(View.GONE);
         }
         for (Options.Offerwalls.Offer offer : offerwalls.extraOffers) {
-            extraOffersContainer.addView(createButton(getActivity(), offer));
+            if (!offer.action.equals(OfferwallsManager.TFOFFERWALL) || TFCredentials.getAdId() != null) {
+                extraOffersContainer.addView(createButton(getActivity(), offer));
+            }
         }
         return root;
     }
