@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.appsflyer.AppsFlyerLib;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
-import com.topface.offerwall.advertizer.TFOfferSDK;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -524,6 +523,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
         boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(
                 getSupportFragmentManager(),
@@ -532,6 +532,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
                 data,
                 OwnProfileFragment.class
         );
+
         if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
             switch (requestCode) {
                 case CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION:

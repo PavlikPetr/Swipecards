@@ -242,7 +242,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mUserAge = args.getInt(INTENT_USER_AGE, 0);
         mUserCity = args.getString(INTENT_USER_CITY);
     }
-    
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -484,10 +484,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             public void success(IApiResponse response) {
                 if (isAdded()) {
                     int invertedPosition = mAdapter.getPosition(position);
-                    if (mAdapter.getFirstItemId().equals(mAdapter.getData().get(invertedPosition).id)) {
-                        LocalBroadcastManager.getInstance(getActivity())
-                                .sendBroadcast(new Intent(DialogsFragment.UPDATE_DIALOGS));
-                    }
                     mAdapter.removeItem(invertedPosition);
                 }
             }

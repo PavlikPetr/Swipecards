@@ -30,6 +30,7 @@
     <string name="buying_store_purchase">Verarbeitung der Kauf in iTunes Store</string>
     <string name="buying_tf_ack_sending">Sende die Informationen über den Kauf in Topface</string>
     <string name="ok_label">Odnoklassniki</string>
+    <string name="autorefill">Autorefill</string>
     <string name="coins">Coins</string>
     <string name="photo_info_deleted">Ist gelöscht</string>
     <string name="settings_block_main">Haupteinst.</string>
@@ -154,6 +155,7 @@
     <string name="dating_header_girls">Frauen von %1$d bis %2$d</string>
     <string name="dating_header_guys">Männer von %1$d bis %2$d</string>
     <string name="dating_skip_button">Nächste</string>
+    <string name="message_too_long">Die Nachricht is zu lang. Die Anzahl der Zeichen muss weniger sein als %d.</string>
     <string name="chat_gift_in">Sie haben ein Geschenk bekommen.</string>
     <string name="chat_gift_out">Sie haben ein Geschenk gesendet.</string>
     <string name="chat_like_in">Jemand sendete Ihnen eine Sympathie</string>
@@ -547,15 +549,20 @@
         <item quantity="one">und noch %d</item>
     </plurals>
     <string name="you_were_subscribed">Sie haben jetzt ein Abonnement</string>
+    <string name="subscriptions_can_be_changed">Das Abonnement ist erledigt. Abonnementsbedingungen können Sie im Google Play ändern</string>
     <string name="people_nearby">Menschen in der Nähe</string>
     <string name="nobody_nearby">Keine Menschenseele in der Nähe!</string>
     <string name="general_distance_km">%.02f km</string>
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Es ist misslungen, die Lage festzustellen</string>
     <string name="press_back_more_to_close_app">Klicken Sie noch einmal, um Topface zu verlassen</string>
+    <string name="waiting_for_load">Warten auf Download…</string>
     <string name="loading_photo_percent">Foto wird hochgeladen %d%%</string>
     <string name="profile_update_error">Fehler beim Update</string>
+    <string name="retry_cancel_editing">Fehler beim Senden von Daten an den Server. Beenden ohne Speichern oder nochmal versuchen?</string>
     <string name="user_does_not_exist">Nutzer ist nicht gefunden</string>
     <string name="feedback_subject_ban">Meldung auf ungerechtes Ban</string>
     <string name="settings_led">LED Benachrichtigung</string>
+    <string name="open_market_error">Fehler bei der Öffnung der App</string>
+    <string name="billing_item_already_owned">Ihr voriger Kauf ist in der Bearbeitung, bitte warten Sie</string>
 </resources>

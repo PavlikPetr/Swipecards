@@ -339,7 +339,10 @@
         <activity
             android:name="com.getjar.sdk.rewards.GetJarActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|screenSize|smallestScreenSize"/>
-
+        <activity
+            android:hardwareAccelerated="true"
+            android:name="com.ivengo.ads.InterstitialActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
         <activity
             android:name="com.mopub.mobileads.MoPubActivity"
             android:configChanges="keyboardHidden|orientation"/>

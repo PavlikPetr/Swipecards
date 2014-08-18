@@ -231,7 +231,7 @@ public class AddPhotoHelper {
             }
 
             //Отправляем запрос
-            if (sendPhotoRequest) {
+            if (sendPhotoRequest && photoUri != null) {
                 sendRequest(photoUri);
             }
         }

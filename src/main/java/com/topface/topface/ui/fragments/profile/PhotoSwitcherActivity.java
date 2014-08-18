@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.profile;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
@@ -103,6 +105,17 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private int mCurrentPosition = 0;
     private TextView mSetAvatarButton;
     private ImageButton mDeleteButton;
+
+    public static Intent getPhotoSwitcherIntent(int position, int userId, int photosCount, ProfileGridAdapter adapter) {
+        Intent intent = new Intent(App.getContext(), PhotoSwitcherActivity.class);
+        intent.putExtra(INTENT_USER_ID, userId);
+        //Если первый элемент - это фейковая фотка, то смещаем позицию показа
+        position = adapter.getItem(0).isFake() ? position - 1 : position;
+        intent.putExtra(INTENT_ALBUM_POS, position);
+        intent.putExtra(INTENT_PHOTOS_COUNT, photosCount);
+        intent.putParcelableArrayListExtra(INTENT_PHOTOS, adapter.getPhotos());
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,7 +209,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mPhotoAlbumControlVisibility = savedInstanceState.getInt(CONTROL_VISIBILITY, View.GONE);
         mOwnPhotosControlVisibility = savedInstanceState.getInt(OWN_PHOTOS_CONTROL_VISIBILITY, View.GONE);
@@ -264,6 +277,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 for (Photo currentPhoto : mDeletedPhotos) {
                     CacheProfile.photos.removeById(currentPhoto.getId());
                 }
+                CacheProfile.totalPhotos -= mDeletedPhotos.size();
                 LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
                         .putExtra(INTENT_PHOTOS, CacheProfile.photos)
                         .putExtra(INTENT_MORE, CacheProfile.photos.size() < CacheProfile.totalPhotos - mDeletedPhotos.size())

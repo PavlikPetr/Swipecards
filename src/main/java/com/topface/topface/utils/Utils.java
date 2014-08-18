@@ -9,6 +9,8 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -206,6 +208,27 @@ public class Utils {
             return Static.EMPTY;
         }
         return text.toString();
+    }
+
+    /**
+     * Method to pass activity results to nested fragments.
+     *
+     * @param fm          Can be general or child fragment manager.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public static void activityResultToNestedFragments(FragmentManager fm, int requestCode, int resultCode, Intent data) {
+        if (fm != null) {
+            List<Fragment> bodyFragments = fm.getFragments();
+            if (bodyFragments != null) {
+                for (Fragment fragment : bodyFragments) {
+                    if (fragment != null && !fragment.isDetached() && !fragment.isRemoving()) {
+                        fragment.onActivityResult(requestCode, resultCode, data);
+                    }
+                }
+            }
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

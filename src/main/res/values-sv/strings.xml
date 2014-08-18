@@ -560,4 +560,6 @@
     <string name="user_does_not_exist">Användaren ej hittats</string>
     <string name="feedback_subject_ban">Klaga på orättvis bannlysning</string>
     <string name="settings_led">LED notifikation</string>
+    <string name="open_market_error">Applikationens sida kan inte öppnas</string>
+    <string name="billing_item_already_owned">Ditt föregående inköp bearbetas just nu, vänligen vänta</string>
 </resources>

@@ -92,6 +92,15 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
         return mPhotoLinks;
     }
 
+    public Photos getPhotos() {
+        Photos photoLinks = (Photos) mPhotoLinks.clone();
+        //Убираем первую фейковую фотографию
+        if (photoLinks != null && photoLinks.size() > 0 && photoLinks.get(0).isFake()) {
+            photoLinks.remove(0);
+        }
+        return photoLinks;
+    }
+
     @Override
     public Photo getItem(int position) {
         return mPhotoLinks.get(position);
