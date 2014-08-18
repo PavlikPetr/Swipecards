@@ -736,4 +736,5 @@
     <string name="settings_led">LED уведомление</string>
     <string name="open_market_error">Не удается открыть страницу приложения</string>
     <string name="billing_item_already_owned">Ваша предыдущая покупка в обработке, пожалуйста подождите</string>
+    <string name="dialog">Переписка</string>
 </resources>

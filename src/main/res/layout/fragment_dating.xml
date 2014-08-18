@@ -8,13 +8,15 @@
     <com.topface.topface.ui.views.ImageSwitcher
         android:id="@+id/glrDatingAlbum"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/dating_footer" />
 
     <RelativeLayout
         android:id="@+id/ac_dating_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_above="@+id/dating_footer">
 
         <ImageView
             android:layout_width="fill_parent"
@@ -28,15 +30,8 @@
             layout="@layout/dating_buttons"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/message_send"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
-
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@id/message_send"
-            layout="@layout/chat_footer_send"
-            android:layout_alignParentBottom="true" />
 
         <include
             android:id="@+id/loDatingResources"
@@ -90,4 +85,24 @@
             android:layout_height="fill_parent"
             android:visibility="gone" />
     </RelativeLayout>
+
+    <ViewFlipper
+        android:id="@id/dating_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <include
+            android:id="@+id/message_send"
+            layout="@layout/chat_footer_send"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/chat_buttons"
+            layout="@layout/existing_chat_dating_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </ViewFlipper>
 </com.topface.topface.ui.views.KeyboardListenerLayout>

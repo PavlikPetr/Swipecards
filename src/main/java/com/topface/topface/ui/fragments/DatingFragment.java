@@ -28,9 +28,11 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.DatingMessageStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryRequestReceiver;
@@ -39,6 +41,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.History;
+import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
@@ -51,6 +54,7 @@ import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FilterRequest;
+import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.NoviceLikesRequest;
@@ -81,6 +85,7 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -104,6 +109,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private View mDatingResources;
     private View mDatingButtons;
     private View mUserInfo;
+    private View mMessageSend;
+    private View mGiftSend;
+    private ViewFlipper mFooterFlipper;
 
     private RateController mRateController;
     private ImageSwitcher mImageSwitcher;
@@ -115,7 +123,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RetryViewCreator mRetryView;
     private ImageButton mRetryBtn;
     private PreloadManager<SearchUser> mPreloadManager;
-    private EditText mInstantMessageText;
+    private EditText mMessageText;
 
     private Drawable singleMutual;
     private Drawable singleDelight;
@@ -319,12 +327,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         mDatingButtons = root.findViewById(R.id.vfDatingButtons);
 
-        if (false) { // TODO: Check experiment flag
-            root.findViewById(R.id.message_send).setVisibility(View.GONE);
-        } else {
-            mInstantMessageText = (EditText) root.findViewById(R.id.edChatBox);
-            root.findViewById(R.id.btnSend).setOnClickListener(this);
-            root.findViewById(R.id.send_gift_button).setOnClickListener(this);
+        if (true) { // TODO: Check experiment flag
+            mFooterFlipper = (ViewFlipper) root.findViewById(R.id.dating_footer);
+            mFooterFlipper.setVisibility(View.VISIBLE);
+            mMessageText = (EditText) root.findViewById(R.id.edChatBox);
+            mMessageSend = root.findViewById(R.id.btnSend);
+            mGiftSend = root.findViewById(R.id.send_gift_button);
+            mMessageSend.setOnClickListener(this);
+            mGiftSend.setOnClickListener(this);
+            root.findViewById(R.id.chat_btn).setOnClickListener(this);
+            root.findViewById(R.id.skip_btn).setOnClickListener(this);
+
         }
     }
 
@@ -651,6 +664,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
             }
             break;
+            case R.id.skip_btn:
             case R.id.btnDatingSkip: {
                 skipUser(mCurrentUser);
                 showNextUser();
@@ -673,7 +687,40 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnSend: {
                 if (mCurrentUser.id > 0) {
-                    sendMessage();
+                    HistoryRequest chatRequest = new HistoryRequest(getActivity());
+                    registerRequest(chatRequest);
+                    chatRequest.userid = mCurrentUser.id;
+                    chatRequest.limit = 1;
+                    mMessageText.setEnabled(false);
+                    mMessageSend.setEnabled(false);
+                    chatRequest.callback(new DataApiHandler<HistoryListData>() {
+
+                        @Override
+                        protected void success(HistoryListData data, IApiResponse response) {
+                            if (data != null && !data.items.isEmpty()) {
+                                mFooterFlipper.setDisplayedChild(1);
+                            } else {
+                                DatingFragment.this.sendMessage();
+                            }
+                        }
+
+                        @Override
+                        protected HistoryListData parseResponse(ApiResponse response) {
+                            return new HistoryListData(response.jsonResult, History.class);
+                        }
+
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+
+                        }
+
+                        @Override
+                        public void always(IApiResponse response) {
+                            super.always(response);
+                            mMessageText.setEnabled(true);
+                            mMessageSend.setEnabled(true);
+                        }
+                    }).exec();
                     EasyTracker.sendEvent("Dating", "SendMessage", "", 1L);
                 }
             }
@@ -686,6 +733,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 EasyTracker.sendEvent("Dating", "SendGiftClick", "", 1L);
             }
             break;
+            case R.id.chat_btn: {
+                openChat(getActivity());
+            }
+            break;
             default:
         }
     }
@@ -694,7 +745,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (!tryChat()) {
             return false;
         }
-        final Editable editText = mInstantMessageText.getText();
+        final Editable editText = mMessageText.getText();
         String editString = editText == null ? "" : editText.toString();
         if (editText == null || TextUtils.isEmpty(editString.trim()) || mCurrentUser.id == 0) {
             return false;
@@ -714,6 +765,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 LocalBroadcastManager.getInstance(getActivity())
                         .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
                 editText.clear();
+                Utils.hideSoftKeyboard(getActivity(), mMessageText);
+
+                DatingMessageStatistics.sendDatingMessageSent();
             }
 
             @Override
@@ -736,10 +790,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             startActivityForResult(
                     PurchasesActivity.createVipBuyIntent(
                             getString(R.string.chat_block_not_mutual),
-                            "DatingChatLock"
+                            "DatingInstantMessage"
                     ),
                     PurchasesActivity.INTENT_BUY_VIP
             );
+            DatingMessageStatistics.sendVipBuyScreenTransition();
             return false;
         }
     }
@@ -757,6 +812,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             unlockControls();
             showNovice();
             hasOneSympathyOrDelight = true;
+            mFooterFlipper.setDisplayedChild(0);
         }
 
         mPreloadManager.preloadPhoto(mUserSearchList);
@@ -765,6 +821,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void showNextUser() {
         if (mUserSearchList != null) {
             showUser(mUserSearchList.nextUser());
+            mMessageText.getText().clear();
         }
     }
 
@@ -864,8 +921,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mNovice == null) return;
         if (!isAdded()) return;
 
-        if (mNovice.isDatingCompleted())
-            return;
+//        if (mNovice.isDatingCompleted())
+//            return;
+
+        setMessageFooterEnabled(false);
 
         if (mNoviceLayout == null) {
             mNoviceLayout = new NoviceLayout(getActivity());
@@ -880,6 +939,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 @Override
                 public void onClick(View v) {
                     mNovice.completeShowSympathy();
+                    setMessageFooterEnabled(true);
                 }
             };
             mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, completeShowSympathylistener,
@@ -905,6 +965,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             @Override
                             public void onClick(View v) {
                                 mNovice.completeShowNoviceSympathiesBonus();
+                                setMessageFooterEnabled(true);
                             }
                         };
                         mNoviceLayout.setLayoutRes(
@@ -938,11 +999,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         public void onClick(View v) {
                             mNovice.completeShowBuySympathies();
                             mDatingResources.performClick();
+                            setMessageFooterEnabled(true);
                         }
                     }, new OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             mNovice.completeShowBuySympathies();
+                            setMessageFooterEnabled(true);
                         }
                     }
             );
@@ -972,6 +1035,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSkipBtn.setEnabled(false);
         mProfileBtn.setEnabled(false);
         mDatingLoveBtnLayout.setEnabled(false);
+        if (mMessageSend != null) {
+            mMessageSend.setEnabled(false);
+        }
+        if (mGiftSend != null) {
+            mGiftSend.setEnabled(false);
+        }
+        if (mMessageText != null) {
+            mMessageText.setEnabled(false);
+        }
     }
 
     @Override
@@ -995,6 +1067,24 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProfileBtn.setEnabled(enabled);
 
         mDatingLoveBtnLayout.setEnabled(true);
+
+        if (mNoviceLayout != null && mNoviceLayout.getVisibility() == View.GONE) {
+            if (mMessageSend != null) {
+                mMessageSend.setEnabled(true);
+            }
+            if (mGiftSend != null) {
+                mGiftSend.setEnabled(true);
+            }
+            if (mMessageText != null) {
+                mMessageText.setEnabled(true);
+            }
+        }
+    }
+
+    private void setMessageFooterEnabled(boolean isEnabled) {
+        mGiftSend.setEnabled(isEnabled);
+        mMessageText.setEnabled(isEnabled);
+        mMessageSend.setEnabled(isEnabled);
     }
 
     @Override
