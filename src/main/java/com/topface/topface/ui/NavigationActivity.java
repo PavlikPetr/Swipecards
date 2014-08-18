@@ -131,6 +131,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         public void onTakePhotoDialogSentSuccess(final Photo photo) {
             if (CacheProfile.photos != null) {
                 CacheProfile.photos.add(photo);
+                CacheProfile.totalPhotos += 1;
                 Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
                 intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
                 LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
