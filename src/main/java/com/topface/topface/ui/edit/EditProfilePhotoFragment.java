@@ -73,8 +73,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     mLastSelectedAsMainId = photo.getId();
                     CacheProfile.photos.addFirst(photo);
                     mPhotoGridAdapter.addFirst(photo);
-                    //Увеличиваем общее количество фотографий юзера
-                    CacheProfile.totalPhotos += 1;
                     CacheProfile.sendUpdateProfileBroadcast();
                     PhotoMainRequest request = new PhotoMainRequest(getActivity());
                     request.photoId = photo.getId();
@@ -83,6 +81,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     CacheProfile.photos.addFirst(photo);
                     mPhotoGridAdapter.addFirst(photo);
                 }
+
+                //Увеличиваем общее количество фотографий юзера
+                CacheProfile.totalPhotos += 1;
 
                 mPhotoLinks.addFirst(photo);
                 if (activity != null) {
@@ -106,7 +107,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         mLastSelectedAsMainId = mSelectedAsMainId;
         CacheProfile.sendUpdateProfileBroadcast();
         mPhotoLinks = new Photos();
-        mPhotoLinks.add(null);
+        mPhotoLinks.add(new Photo());
         if (CacheProfile.photos != null) {
             mPhotoLinks.addAll(CacheProfile.photos);
         }
