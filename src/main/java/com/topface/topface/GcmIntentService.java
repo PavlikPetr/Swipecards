@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.topface.framework.utils.Debug;
-import com.topface.statistics.NotificationStatistics;
+import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.gcmutils.GcmBroadcastReceiver;
@@ -75,7 +75,6 @@ public class GcmIntentService extends IntentService {
 
         }
     }
-
 
 
     private String getUserId(String user) {

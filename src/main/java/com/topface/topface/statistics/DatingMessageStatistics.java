@@ -1,4 +1,4 @@
-package com.topface.statistics;
+package com.topface.topface.statistics;
 
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;

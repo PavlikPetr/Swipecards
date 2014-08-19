@@ -110,6 +110,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public static final String INTENT_USER_CITY = "user_city";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
+    public static final String INITIAL_MESSAGE = "initial_message";
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
@@ -183,6 +184,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private FeedUser mUser;
     private EditText mEditBox;
     private String mItemId;
+    private String mInitialMessage;
     private boolean wasFailed = false;
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
     TimerTask mUpdaterTask = new TimerTask() {
@@ -241,6 +243,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mUserSex = args.getInt(INTENT_USER_SEX, Static.BOY);
         mUserAge = args.getInt(INTENT_USER_AGE, 0);
         mUserCity = args.getString(INTENT_USER_CITY);
+        mInitialMessage = args.getString(INITIAL_MESSAGE);
     }
 
     @Override
@@ -278,6 +281,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         root.findViewById(R.id.send_gift_button).setOnClickListener(this);
         // Edit Box
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
+        if (mInitialMessage != null) {
+            mEditBox.setText(mInitialMessage);
+        }
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         //LockScreen
         initLockScreen(root);

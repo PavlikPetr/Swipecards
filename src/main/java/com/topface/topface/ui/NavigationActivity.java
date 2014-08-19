@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.appsflyer.AppsFlyerLib;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
-import com.topface.offerwall.advertizer.TFOfferSDK;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -48,6 +47,7 @@ import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.PopupManager;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
@@ -301,7 +301,14 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
                 R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
                 R.string.app_name,  /* "open drawer" description */
                 R.string.app_name  /* "close drawer" description */
-        );
+        ) {
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getWindowToken());
+            }
+        };
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }

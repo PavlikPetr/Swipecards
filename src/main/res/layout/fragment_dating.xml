@@ -26,14 +26,6 @@
             android:src="@drawable/dating_shadow" />
 
         <include
-            android:id="@+id/vfDatingButtons"
-            layout="@layout/dating_buttons"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
-
-        <include
             android:id="@+id/loDatingResources"
             layout="@layout/resources_dating"
             android:layout_width="wrap_content"
@@ -41,14 +33,29 @@
             android:layout_marginLeft="6dp"
             android:layout_marginTop="6dp" />
 
-        <include
-            android:id="@+id/loUserInfo"
-            layout="@layout/dating_user_info"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/vfDatingButtons"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="6dp" />
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/loUserInfo"
+                layout="@layout/dating_user_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="6dp" />
+
+            <include
+                android:id="@+id/vfDatingButtons"
+                layout="@layout/dating_buttons"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvDatingCounter"
@@ -90,7 +97,8 @@
         android:id="@id/dating_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
 
         <include
             android:id="@+id/message_send"
