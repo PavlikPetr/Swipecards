@@ -180,6 +180,11 @@ public class DatingInstantMessageController {
     public void setSendEnabled(boolean isEnabled) {
         mMessageText.setEnabled(isEnabled);
         mMessageSend.setEnabled(isEnabled && !mMessageText.getText().toString().trim().isEmpty());
+        if (isEnabled) {
+            mMessageSend.setBackgroundResource(R.drawable.btn_send_message_selector);
+        } else {
+            mMessageSend.setBackgroundResource(R.drawable.progress_small_white);
+        }
     }
 
     public void displayMessageField() {
@@ -201,14 +206,17 @@ public class DatingInstantMessageController {
             chatRequest.userid = user.id;
             chatRequest.limit = 1;
             setSendEnabled(false);
+            EasyTracker.sendEvent("Dating", "SendMessage", "try-sent", 1L); // Event for clicking send button
             chatRequest.callback(new DataApiHandler<HistoryListData>() {
 
                 @Override
                 protected void success(HistoryListData data, IApiResponse response) {
                     if (data != null && !data.items.isEmpty()) {
                         displayExistingDialogButtons();
+                        EasyTracker.sendEvent("Dating", "SendMessage", "dialog-exists", 1L); // Event for existing dialog
                     } else {
                         DatingInstantMessageController.this.sendMessage(user);
+                        EasyTracker.sendEvent("Dating", "SendMessage", "message-sent", 1L); // Event for successfull sent
                     }
                 }
 
@@ -228,7 +236,6 @@ public class DatingInstantMessageController {
                     setSendEnabled(true);
                 }
             }).exec();
-            EasyTracker.sendEvent("Dating", "SendMessage", "", 1L);
         }
     }
 }
