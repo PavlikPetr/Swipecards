@@ -28,6 +28,7 @@ import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
 import com.topface.framework.utils.Debug;
 import com.topface.offerwall.advertizer.TFOfferSDK;
+import com.topface.offerwall.common.TFCredentials;
 import com.topface.offerwall.publisher.TFOfferwallSDK;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
@@ -79,7 +80,6 @@ public class OfferwallsManager {
 
     public static void init(Context context) {
         String offerwall = getOfferWallType();
-        initTfOfferwall(context);
         if (!TextUtils.isEmpty(offerwall)) {
             switch (offerwall) {
                 case TAPJOY:
@@ -209,8 +209,8 @@ public class OfferwallsManager {
         }
     }
 
-    private static void initTfOfferwall(Context context) {
-        TFOfferwallSDK.initialize(context, Integer.toString(CacheProfile.uid), "53edb54b0fdc7");
+    public static void initTfOfferwall(Context context, TFCredentials.OnInitializeListener listener) {
+        TFOfferwallSDK.initialize(context, Integer.toString(CacheProfile.uid), "53edb54b0fdc7", listener);
     }
 
     public static void startTfOfferwall(Context context) {
