@@ -317,29 +317,12 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
-
-        <!-- TapJoy-->
         <activity
             android:name="com.tapjoy.TJCOffersWebView"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
-        <activity
-            android:name="com.tapjoy.TapjoyFullScreenAdWebView"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
+            android:configChanges="keyboardHidden|orientation"/>
         <activity
             android:name="com.tapjoy.TapjoyVideoView"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
-        <activity
-            android:name="com.tapjoy.TJAdUnitView"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-            android:hardwareAccelerated="true"/>
-        <activity
-            android:name="com.tapjoy.mraid.view.ActionHandler"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
-        <activity
-            android:name="com.tapjoy.mraid.view.Browser"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
-        <!-- /TapJoy-->
+            android:configChanges="keyboardHidden|orientation"/>
 
         <activity
             android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
@@ -360,8 +343,6 @@
             android:hardwareAccelerated="true"
             android:name="com.ivengo.ads.InterstitialActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
-
-        <!-- MoPub -->
         <activity
             android:name="com.mopub.mobileads.MoPubActivity"
             android:configChanges="keyboardHidden|orientation"/>
@@ -369,12 +350,8 @@
             android:name="com.mopub.mobileads.MraidActivity"
             android:configChanges="keyboardHidden|orientation"/>
         <activity
-            android:name="com.mopub.common.MoPubBrowser"
+            android:name="com.mopub.mobileads.MraidBrowser"
             android:configChanges="keyboardHidden|orientation"/>
-        <activity
-            android:name="com.mopub.mobileads.MraidVideoPlayerActivity"
-            android:configChanges="keyboardHidden|orientation"/>
-        <!-- /MoPub -->
 
         <activity
             android:name="com.lifestreet.android.lsmsdk.ads.InterstitialAdActivity"
