@@ -28,10 +28,6 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
     <uses-permission android:name="com.android.vending.BILLING"/>
-    <uses-permission android:name="com.nokia.payment.BILLING"/>
-    <uses-permission android:name="org.onepf.openiab.permission.BILLING"/>
-
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
 
     <uses-feature
         android:name="android.hardware.location.gps"
@@ -283,7 +279,7 @@
             android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.ComplainsActivity" />
+                android:value=".ui.ComplainsActivity"/>
         </activity>
 
         <activity
@@ -384,7 +380,7 @@
         <activity
             android:name="me.faan.sdk.PlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>
 
         <!-- Alias for main Activity from first version. Just in case of previous problems with FB -->
         <activity-alias
@@ -396,7 +392,8 @@
             android:targetActivity=".ui.NavigationActivity"/>
 
         <!-- Topface offerwall -->
-        <activity android:name="com.topface.offerwall.publisher.TFOfferwallActivity"
+        <activity
+            android:name="com.topface.offerwall.publisher.TFOfferwallActivity"
             android:icon="@drawable/ic_home_topface_white"
             />
 
@@ -477,9 +474,11 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="com.topface.topface.receivers.NotificationClosedReceiver" tools:ignore="ExportedReceiver">
+        <receiver
+            android:name="com.topface.topface.receivers.NotificationClosedReceiver"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
-                <action android:name="com.topface.topface.NOTIFICATION_CLOSED" />
+                <action android:name="com.topface.topface.NOTIFICATION_CLOSED"/>
             </intent-filter>
         </receiver>
 
