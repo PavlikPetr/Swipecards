@@ -160,11 +160,6 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
 
     @Override
     public void onSubscriptionUnsupported() {
-        //Если подписка не поддерживается, сообщаем об этом пользователю
-        if (!CacheProfile.premium) {
-            Toast.makeText(App.getContext(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)
-                    .show();
-        }
     }
 
     @Override

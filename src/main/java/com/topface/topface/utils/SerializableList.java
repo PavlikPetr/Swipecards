@@ -26,6 +26,9 @@ public class SerializableList extends LinkedList<SerializableToJson> {
     }
 
     public void fromJSON(String json, String className) {
+        if (json == null) {
+            return;
+        }
         try {
             JSONArray jsonArray = new JSONArray(json);
             Class<?> serializableClass = Class.forName(className);
@@ -39,7 +42,7 @@ public class SerializableList extends LinkedList<SerializableToJson> {
             }
 
         } catch (Exception e) {
-            Debug.error(e);
+            Debug.error("SerializableList parse error: " + json, e);
         }
     }
 }

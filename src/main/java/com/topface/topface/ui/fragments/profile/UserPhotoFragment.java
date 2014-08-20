@@ -130,11 +130,11 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         outState.putInt(USER_ID, mUserId);
         outState.putInt(PHOTOS_COUNT, mPhotosCount);
         try {
-            outState.putString(PHOTO_LINKS, mPhotoLinks.toJson().toString());
+            outState.putString(PHOTO_LINKS, mPhotoLinks != null ? mPhotoLinks.toJson().toString() : null);
         } catch (JSONException e) {
             Debug.error(e);
         }
-        outState.putInt(POSITION, mGridAlbum.getFirstVisiblePosition());
+        outState.putInt(POSITION, mGridAlbum != null ? mGridAlbum.getFirstVisiblePosition() : null);
     }
 
     public void setUserData(User user) {

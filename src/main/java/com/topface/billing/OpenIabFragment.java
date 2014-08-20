@@ -109,8 +109,10 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         if (result.isFailure()) {
             //При инциализации произошла ошибка!
             Debug.error("BillingFragment: IAB setup is not success: " + result);
-            onInAppBillingUnsupported();
-            onSubscriptionUnsupported();
+            if (isAdded()) {
+                onInAppBillingUnsupported();
+                onSubscriptionUnsupported();
+            }
             return;
         }
 
@@ -278,6 +280,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     /**
      * Покупка обычного продукта (не подписки)
+     *
      * @param id sku продукта
      */
     public void buyItem(final String id) {
