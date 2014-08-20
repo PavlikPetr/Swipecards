@@ -49,6 +49,9 @@ public class MultipartApiResponse implements IApiResponse {
             }
         } catch (IOException e) {
             Debug.error(e);
+            setError(ErrorCodes.NETWORK_CONNECT_ERROR, "Read response error");
+        } catch (Exception e) {
+            Debug.error(e);
             setError(ErrorCodes.ERRORS_PROCCESED, "Parse response error");
         }
     }
