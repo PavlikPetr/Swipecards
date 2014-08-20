@@ -28,6 +28,7 @@ import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
 import com.topface.framework.utils.Debug;
 import com.topface.offerwall.advertizer.TFOfferSDK;
+import com.topface.offerwall.common.TFCredentials;
 import com.topface.offerwall.publisher.TFOfferwallSDK;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
@@ -90,8 +91,6 @@ public class OfferwallsManager {
                 case GETJAR:
                     initGetJar(context);
                     break;
-                case TFOFFERWALL:
-                    initTfOfferwall(context);
             }
         }
     }
@@ -210,12 +209,11 @@ public class OfferwallsManager {
         }
     }
 
-    private static void initTfOfferwall(Context context) {
-        TFOfferSDK.initialize(context);
+    public static void initTfOfferwall(Context context, TFCredentials.OnInitializeListener listener) {
+        TFOfferwallSDK.initialize(context, Integer.toString(CacheProfile.uid), "53edb54b0fdc7", listener);
     }
 
     public static void startTfOfferwall(Context context) {
-        TFOfferwallSDK.initialize(context, Integer.toString(CacheProfile.uid), "53c7c07b1937c");
         TFOfferwallSDK.setTarget(new TFOfferwallSDK.Target().setAge(CacheProfile.age).setSex(CacheProfile.sex));
         TFOfferwallSDK.showOffers(context, true, context.getResources().getString(R.string.general_bonus));
     }

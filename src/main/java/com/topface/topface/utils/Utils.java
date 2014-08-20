@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +10,13 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -214,4 +218,33 @@ public class Utils {
         return text.toString();
     }
 
+    /**
+     * Method to pass activity results to nested fragments.
+     *
+     * @param fm          Can be general or child fragment manager.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public static void activityResultToNestedFragments(FragmentManager fm, int requestCode, int resultCode, Intent data) {
+        if (fm != null) {
+            List<Fragment> bodyFragments = fm.getFragments();
+            if (bodyFragments != null) {
+                for (Fragment fragment : bodyFragments) {
+                    if (fragment != null && !fragment.isDetached() && !fragment.isRemoving()) {
+                        fragment.onActivityResult(requestCode, resultCode, data);
+                    }
+                }
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public static void enableLayoutChangingTransition(ViewGroup viewGroup) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            viewGroup.setLayoutTransition(new LayoutTransition());
+            LayoutTransition transition = viewGroup.getLayoutTransition();
+            transition.enableTransitionType(LayoutTransition.CHANGING);
+        }
+    }
 }

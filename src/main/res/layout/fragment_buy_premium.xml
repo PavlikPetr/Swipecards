@@ -37,11 +37,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
 
-            <ViewStub
-                android:id="@+id/mobilePayments"
-                android:layout="@layout/mobile_payments_layout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"/>
 
             <TextView
                 android:layout_width="wrap_content"

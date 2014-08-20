@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,7 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -80,6 +82,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     mPhotoGridAdapter.addFirst(photo);
                 }
 
+                //Увеличиваем общее количество фотографий юзера
+                CacheProfile.totalPhotos += 1;
+
                 mPhotoLinks.addFirst(photo);
                 if (activity != null) {
                     Toast.makeText(activity, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
@@ -102,7 +107,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         mLastSelectedAsMainId = mSelectedAsMainId;
         CacheProfile.sendUpdateProfileBroadcast();
         mPhotoLinks = new Photos();
-        mPhotoLinks.add(null);
+        mPhotoLinks.add(new Photo());
         if (CacheProfile.photos != null) {
             mPhotoLinks.addAll(CacheProfile.photos);
         }
@@ -167,8 +172,15 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     @Override
                     public void success(IApiResponse response) {
                         CacheProfile.photos.removeAll(mDeleted);
+                        CacheProfile.totalPhotos -= mDeleted.size();
                         mDeleted.clear();
                         CacheProfile.sendUpdateProfileBroadcast();
+
+                        Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                        intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
+                        intent.putExtra(PhotoSwitcherActivity.INTENT_CLEAR, true);
+                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+
                         finishOperations(handler);
 
                     }

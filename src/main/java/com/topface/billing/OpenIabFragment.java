@@ -110,6 +110,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             //При инциализации произошла ошибка!
             Debug.error("BillingFragment: IAB setup is not success: " + result);
             onInAppBillingUnsupported();
+            onSubscriptionUnsupported();
             return;
         }
 
@@ -202,7 +203,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     verifyPurchase(inventory.getPurchase(sku), getActivity());
                 }
 
-                //Проверяем VIP
+                //Проверяем подписки
                 List<String> marketSubs = inventory.getAllOwnedSkus(IabHelper.ITEM_TYPE_SUBS);
                 Products.ProductsInventory serverSubs = CacheProfile.getMarketProducts().inventory;
                 for (String sku : marketSubs) {

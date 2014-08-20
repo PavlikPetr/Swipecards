@@ -3,6 +3,7 @@ package com.topface.topface.requests;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.multipart.MultipartStream;
 import com.topface.topface.utils.http.FlushedInputStream;
@@ -86,6 +87,14 @@ public class MultipartApiResponse implements IApiResponse {
                 BufferedInputStream is = new BufferedInputStream(new FlushedInputStream(stream), HttpUtils.BUFFER_SIZE);
                 String boundary = getBoundary(connection.getContentType());
                 if (TextUtils.isEmpty(boundary)) {
+                    //В дебаг режиме еще читаем ответ сервера, что бы понять в чем проблема и куда делся boundary
+                    if (BuildConfig.DEBUG) {
+                        try {
+                            Debug.error("Boundary not found in response:\n" + getStringFromInputStream(is));
+                        } catch (Exception e) {
+                            Debug.error(e);
+                        }
+                    }
                     setError(ErrorCodes.WRONG_RESPONSE, "Boundary not found");
                     return null;
                 }
@@ -109,6 +118,15 @@ public class MultipartApiResponse implements IApiResponse {
         }
 
         return parts;
+    }
+
+    private String getStringFromInputStream(BufferedInputStream is) throws IOException {
+        int ch;
+        StringBuilder sb = new StringBuilder();
+        while ((ch = is.read()) != -1) {
+            sb.append((char) ch);
+        }
+        return sb.toString();
     }
 
     public HashMap<String, ApiResponse> getResponses() {

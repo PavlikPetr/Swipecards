@@ -132,6 +132,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         public void onTakePhotoDialogSentSuccess(final Photo photo) {
             if (CacheProfile.photos != null) {
                 CacheProfile.photos.add(photo);
+                CacheProfile.totalPhotos += 1;
                 Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
                 intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
                 LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
@@ -531,6 +532,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
         boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(
                 getSupportFragmentManager(),
@@ -539,6 +541,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
                 data,
                 OwnProfileFragment.class
         );
+
         if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
             switch (requestCode) {
                 case CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION:

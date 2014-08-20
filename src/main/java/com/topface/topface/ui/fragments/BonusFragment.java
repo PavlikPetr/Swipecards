@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.offerwall.common.TFCredentials;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
@@ -28,6 +29,7 @@ public class BonusFragment extends BaseFragment {
     public static final String NEED_SHOW_TITLE = "need_show_title";
     private View mProgressBar;
     private String mIntegrationUrl;
+    private Button tfOfferwallButton;
 
     public static BonusFragment newInstance(boolean needShowTitle) {
         BonusFragment fragment = new BonusFragment();
@@ -45,6 +47,14 @@ public class BonusFragment extends BaseFragment {
             setNeedTitles(args.getBoolean(NEED_SHOW_TITLE));
         }
         OfferwallsManager.init(getActivity());
+        OfferwallsManager.initTfOfferwall(getActivity(), new TFCredentials.OnInitializeListener() {
+            @Override
+            public void onInitialized() {
+                if (tfOfferwallButton != null) {
+                    tfOfferwallButton.setEnabled(true);
+                }
+            }
+        });
     }
 
     @Override
@@ -101,7 +111,12 @@ public class BonusFragment extends BaseFragment {
             extraOffersContainer.setVisibility(View.GONE);
         }
         for (Options.Offerwalls.Offer offer : offerwalls.extraOffers) {
-            extraOffersContainer.addView(createButton(getActivity(), offer));
+            Button offerwallButton = createButton(getActivity(), offer);
+            extraOffersContainer.addView(offerwallButton);
+            if (offer.action == OfferwallsManager.TFOFFERWALL && TFCredentials.getAdId() == null) {
+                tfOfferwallButton = offerwallButton;
+                tfOfferwallButton.setEnabled(false);
+            }
         }
         return root;
     }

@@ -67,6 +67,7 @@ public class ProfileFormFragment extends ProfileInnerFragment {
         super.onCreate(savedInstanceState);
         mProfileFormListAdapter = new ProfileFormListAdapter(getActivity());
         mProfileFormListAdapter.setOnFillListener(mOnFillClickListener);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     @Override
@@ -91,14 +92,8 @@ public class ProfileFormFragment extends ProfileInnerFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
     }
 

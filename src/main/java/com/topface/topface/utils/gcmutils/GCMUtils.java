@@ -132,14 +132,20 @@ public class GCMUtils {
     }
 
     public void unregister() {
-        try {
-            if (mGcmObject == null) {
-                mGcmObject = GoogleCloudMessaging.getInstance(mContext);
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                try {
+                    if (mGcmObject == null) {
+                        mGcmObject = GoogleCloudMessaging.getInstance(mContext);
+                    }
+                    mGcmObject.unregister();
+                } catch (IOException e) {
+                    Debug.error("Can't unregister gcm", e);
+                }
             }
-            mGcmObject.unregister();
-        } catch (IOException e) {
-            Debug.error("Can't unregister gcm", e);
-        }
+        };
+
     }
 
     private void sendRegistrationIdToBackend() {

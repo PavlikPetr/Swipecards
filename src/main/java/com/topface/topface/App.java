@@ -20,6 +20,7 @@ import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
+import com.topface.offerwall.advertizer.TFOfferSDK;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
@@ -299,7 +300,6 @@ public class App extends Application {
         enableDebugLogs();
         //Включаем логирование ошибок
         initAcra();
-
         //Базовые настройки приложения, инитим их один раз при старте приложения
         Configurations baseConfig = getConfig();
         Editor.setConfig(baseConfig.getAppConfig());
@@ -340,8 +340,6 @@ public class App extends Application {
         ImageLoaderStaticFactory.setExtendedImageLoader(ExtendedImageLoader.getInstance());
         // Settings common image to display error
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
-
-        mIsGmsSupported = GMSUtils.checkPlayServices(getContext());
 
         sendAppOptionsRequest();
 

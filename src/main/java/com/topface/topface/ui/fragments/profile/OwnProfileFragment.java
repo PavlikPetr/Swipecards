@@ -48,6 +48,8 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                 }
                 // добавляется фото в начало списка
                 CacheProfile.photos.addFirst(photo);
+                //Увеличиваем общее количество фотографий юзера
+                CacheProfile.totalPhotos += 1;
                 ArrayList<Photo> photosForAdd = new ArrayList<>();
                 photosForAdd.add(photo);
                 Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
@@ -166,7 +168,6 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                     break;
             }
         }
-        resultToNestedFragments(requestCode, resultCode, data);
     }
 
     @Override

@@ -42,11 +42,12 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUserId);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS_COUNT, mPhotosCount);
-            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
+            Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(
+                    position,
+                    mUserId,
+                    mPhotosCount,
+                    (ProfileGridAdapter) mGridAlbum.getAdapter()
+            );
             Fragment parentFrag = getParentFragment();
             if (parentFrag != null) {
                 parentFrag.startActivity(intent);
