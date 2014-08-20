@@ -13,6 +13,7 @@ public class Static {
     public static final String API_DELTA_URL = "https://api-delta.stage.tf/";
     public static final String API_URL = "https://api.core.tf/";
     public static final String API_500_ERROR_URL = "http://httpstat.us/500";
+    public static final String API_STAGE_AKI_URL = "https://aki.stage.tf/";
 
     /**
      * Ревизия серверной части, используется толькро при тестировании на бете
