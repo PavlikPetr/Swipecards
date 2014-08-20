@@ -69,14 +69,14 @@ import java.util.ArrayList;
  */
 public class UserProfileFragment extends AbstractProfileFragment implements View.OnClickListener {
 
-    public static final String IGNORE_SYMPATHY_SENT_EXTRA = "IGNORE_SYMPATHY_SENT_EXTRA";
+    public static final String USER_RATED_EXTRA = "USER_RATED_EXTRA";
 
 
     private int mProfileId;
     private int mLastLoadedProfileId;
     private String mItemId;
     private ArrayList<UserActions.ActionItem> mUserActions;
-    private boolean mIgnoreSympathySent;
+    private boolean mUserRated;
     // views
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
@@ -165,7 +165,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         Bundle args = getArguments();
         mProfileId = args.getInt(AbstractProfileFragment.INTENT_UID, 0);
         mItemId = args.getString(AbstractProfileFragment.INTENT_ITEM_ID);
-        mIgnoreSympathySent = args.getBoolean(UserProfileFragment.IGNORE_SYMPATHY_SENT_EXTRA, false);
+        mUserRated = args.getBoolean(UserProfileFragment.USER_RATED_EXTRA, false);
         setCallingClass(args.getString(AbstractProfileFragment.INTENT_CALLING_FRAGMENT));
     }
 
@@ -237,7 +237,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             mSympathyText = (TextView) mSympathy.findViewById(R.id.likeTV);
             mDelight = (RelativeLayout) mActions.findViewById(R.id.send_admiration_action);
             mDelightText = (TextView) mDelight.findViewById(R.id.delTV);
-            if (user.isSympathySent && !mIgnoreSympathySent) {
+            if (mUserRated || user.isSympathySent) {
                 disableSympathyDelight();
             }
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
