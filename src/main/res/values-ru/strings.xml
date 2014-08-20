@@ -405,6 +405,7 @@
     <string name="settings_feedback_email">E-mail для связи</string>
     <string name="settings_invalid_email">Некорректный e-mail</string>
     <string name="chat_write_message">Написать сообщение</string>
+    <string name="dating_message">Сообщение...</string>
 
     <string name="buying_sympathies">Покупка симпатии</string>
 

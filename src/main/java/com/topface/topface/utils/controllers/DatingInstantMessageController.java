@@ -25,7 +25,6 @@ import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.statistics.DatingMessageStatistics;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.utils.CacheProfile;
@@ -93,6 +92,7 @@ public class DatingInstantMessageController {
         });
         String defaultMessage = App.getAppConfig().getDefaultDatingMessage();
         mMessageText.setText(defaultMessage.isEmpty() ? text : defaultMessage);
+        mMessageText.setHint(activity.getString(R.string.dating_message));
         mMessageSend.setOnClickListener(clickListener);
         mGiftSend.setOnClickListener(clickListener);
         root.findViewById(R.id.chat_btn).setOnClickListener(clickListener);
@@ -125,12 +125,13 @@ public class DatingInstantMessageController {
             protected void success(History data, IApiResponse response) {
                 LocalBroadcastManager.getInstance(mActivity)
                         .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
-                mMessageText.setHint(editString);
                 editText.clear();
                 Utils.hideSoftKeyboard(mActivity, mMessageText);
 
-                App.getAppConfig().setDefaultDatingMessage(editString);
-                App.getAppConfig().saveConfig();
+                if (!App.getAppConfig().getDefaultDatingMessage().equals(editString)) {
+                    App.getAppConfig().setDefaultDatingMessage(editString);
+                    App.getAppConfig().saveConfig();
+                }
 
                 DatingMessageStatistics.sendDatingMessageSent();
             }
@@ -149,7 +150,7 @@ public class DatingInstantMessageController {
     }
 
     private boolean tryChat(SearchUser user) {
-        if (CacheProfile.premium || user.isMutualPossible) {
+        if (CacheProfile.premium || user.isMutualPossible || !CacheProfile.getOptions().block_chat_not_mutual) {
             return true;
         } else {
             mActivity.startActivityForResult(
@@ -165,8 +166,8 @@ public class DatingInstantMessageController {
     }
 
     public void openChat(FragmentActivity activity, SearchUser user) {
-        Intent intent = ChatActivity.createIntent(activity, user);
-        intent.putExtra(ChatFragment.INITIAL_MESSAGE, mMessageText.getText().toString());
+        Intent intent = new ChatActivity.IntentBuilder(activity).feedUser(user).
+                initialMessage(mMessageText.getText().toString()).build();
         activity.startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         EasyTracker.sendEvent("Dating", "Additional", "Chat", 1L);
     }
@@ -174,12 +175,16 @@ public class DatingInstantMessageController {
     public void setEnabled(boolean isEnabled) {
         mGiftSend.setEnabled(isEnabled);
         mMessageText.setEnabled(isEnabled);
-        mMessageSend.setEnabled(isEnabled && !mMessageText.getText().toString().trim().isEmpty());
+        mMessageSend.setEnabled(isEnabled && isMessageValid());
+    }
+
+    private boolean isMessageValid() {
+        return !mMessageText.getText().toString().trim().isEmpty();
     }
 
     public void setSendEnabled(boolean isEnabled) {
         mMessageText.setEnabled(isEnabled);
-        mMessageSend.setEnabled(isEnabled && !mMessageText.getText().toString().trim().isEmpty());
+        mMessageSend.setEnabled(isEnabled && isMessageValid());
         if (isEnabled) {
             mMessageSend.setBackgroundResource(R.drawable.btn_send_message_selector);
         } else {
@@ -201,9 +206,8 @@ public class DatingInstantMessageController {
 
     public void instantSend(final SearchUser user) {
         if (user.id > 0) {
-            HistoryRequest chatRequest = new HistoryRequest(mActivity);
+            HistoryRequest chatRequest = new HistoryRequest(mActivity, user.id);
             mRequestClient.registerRequest(chatRequest);
-            chatRequest.userid = user.id;
             chatRequest.limit = 1;
             setSendEnabled(false);
             EasyTracker.sendEvent("Dating", "SendMessage", "try-sent", 1L); // Event for clicking send button

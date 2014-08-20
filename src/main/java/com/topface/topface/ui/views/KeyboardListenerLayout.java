@@ -19,9 +19,9 @@ public class KeyboardListenerLayout extends RelativeLayout {
         if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mKeyboardOpened = false;
         } else if (w == oldw) {
-            if (h < oldh) {
+            if ((float) oldh / h > 1.25) {
                 mKeyboardOpened = true;
-            } else if (h > oldh) {
+            } else if ((float) oldh / h < 0.75) {
                 mKeyboardOpened = false;
             }
         }

@@ -529,9 +529,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
             showLoading();
         }
-        HistoryRequest historyRequest = new HistoryRequest(getActivity());
+        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId);
         registerRequest(historyRequest);
-        historyRequest.userid = mUserId;
         historyRequest.debug = type;
         historyRequest.limit = LIMIT;
         if (mAdapter != null) {
