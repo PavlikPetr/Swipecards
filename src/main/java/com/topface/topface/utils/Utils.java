@@ -9,6 +9,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
@@ -159,6 +160,13 @@ public class Utils {
                     imm.hideSoftInputFromWindow(edText.getWindowToken(), 0);
                 }
             }
+        }
+    }
+
+    public static void hideSoftKeyboard(Context context, IBinder windowToken) {
+        if (context != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(windowToken, 0);
         }
     }
 

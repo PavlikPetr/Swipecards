@@ -1,53 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:padding="6dp"
-              android:orientation="horizontal"
-              android:background="@drawable/bg_chat_footer_send">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_chat_footer_send"
+    android:orientation="horizontal"
+    android:padding="6dp">
 
     <ImageButton
         android:id="@+id/send_gift_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/btn_send_gift_selector"
         android:background="@android:color/transparent"
         android:paddingLeft="3dp"
-        android:paddingRight="3dp"/>
+        android:paddingRight="3dp"
+        android:src="@drawable/btn_send_gift_selector" />
 
     <EditText
         android:id="@+id/edChatBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:minHeight="34dp"
-        android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:hint="@string/chat_write_message"
+        android:imeOptions="actionSend"
+        android:inputType="textCapSentences"
+        android:maxLines="5"
+        android:minHeight="34dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:singleLine="false"
-        android:textSize="14sp"
-        android:maxLines="5"
-        android:imeOptions="actionSend"
-        android:inputType="textCapSentences"
         android:textColor="#000000"
-        android:hint="@string/chat_write_message"
-        android:gravity="center_vertical">
+        android:textSize="14sp">
 
-        <requestFocus/>
+        <requestFocus />
     </EditText>
 
-    <Button
+    <ImageButton
         android:id="@+id/btnSend"
         android:layout_width="wrap_content"
-        android:layout_height="34dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="6dp"
-        android:text="@string/general_send_button"
-        android:textSize="12sp"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/btn_chat_send_selector"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:src="@drawable/btn_send_message_selector" />
 
 </LinearLayout>

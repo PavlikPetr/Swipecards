@@ -1,4 +1,4 @@
-package com.topface.statistics;
+package com.topface.topface.statistics;
 
 import com.nostra13.universalimageloader.core.ExtendedLoadAndDisplayImageTask;
 import com.topface.topface.requests.AuthRequest;
@@ -7,7 +7,6 @@ import com.topface.topface.utils.Connectivity;
 
 /**
  * Created by kirussell on 24.04.2014.
- *
  */
 public class TfStatConsts {
     // statistics slices
