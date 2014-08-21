@@ -18,6 +18,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -79,7 +80,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITOR
  * Left menu for switching NavigationActivity fragments
  * extends ListFragment and does not have any xml layout
  */
-public class MenuFragment extends ListFragment implements View.OnClickListener {
+public class MenuFragment extends Fragment implements View.OnClickListener {
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
     public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
     private static final String CURRENT_FRAGMENT_STATE = "menu_fragment_current_fragment";
@@ -146,6 +147,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
     };
     private INavigationFragmentsListener mFragmentSwitchListener;
+    private ListView mListView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -155,6 +157,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
     }
     
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -186,23 +189,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // init & add header with profile selector view
-        initHeader();
-        // init adapter
-        initAdapter();
-        // init & add footer
-        initFooter();
-        // set listview settings
-        ListView list = getListView();
-        list.setVerticalFadingEdgeEnabled(true);
-        list.setFadingEdgeLength((int) (20 * getResources().getDisplayMetrics().density));
-        list.setDividerHeight(0);
-        list.setDivider(null);
-        list.setBackgroundColor(getResources().getColor(R.color.bg_left_menu));
-        list.setCacheColorHint(0);
-        list.setVerticalScrollBarEnabled(false);
-        // controller for closings uses ViewStub in header to be inflated
-        mClosingsController = new ClosingsController(this, mHeaderViewStub, mAdapter);
+
     }
 
     private void initEditor() {
@@ -230,7 +217,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         mHeaderView = View.inflate(getActivity(), R.layout.layout_left_menu_header, null);
         initProfileMenuItem(mHeaderView);
         mHeaderViewStub = (ViewStub) mHeaderView.findViewById(R.id.vsHeaderStub);
-        getListView().addHeaderView(mHeaderView);
+        mListView.addHeaderView(mHeaderView);
     }
 
     private void initAdapter() {
@@ -259,14 +246,36 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                     R.drawable.ic_bonus_1));
         }
         mAdapter = new LeftMenuAdapter(this, menuItems);
-        setListAdapter(mAdapter);
+        mListView.setAdapter(mAdapter);
     }
 
-    private void initFooter() {
-        mFooterView = (ViewGroup) View.inflate(getActivity(), R.layout.layout_left_menu_footer, null);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_menu, null);
+        mListView = (ListView) root.findViewById(R.id.lvMenu);
+        // init & add header with profile selector view
+        initHeader();
+        // init adapter
+        initAdapter();
+        // init & add footer
+        initFooter(root);
+        // set listview settings
+        mListView.setVerticalFadingEdgeEnabled(true);
+        mListView.setFadingEdgeLength((int) (20 * getResources().getDisplayMetrics().density));
+        mListView.setDividerHeight(0);
+        mListView.setDivider(null);
+        mListView.setBackgroundColor(getResources().getColor(R.color.bg_left_menu));
+        mListView.setCacheColorHint(0);
+        mListView.setVerticalScrollBarEnabled(false);
+        // controller for closings uses ViewStub in header to be inflated
+        mClosingsController = new ClosingsController(this, mHeaderViewStub, mAdapter);
+        return root;
+    }
+
+    private void initFooter(View root) {
+        mFooterView = (ViewGroup) root.findViewById(R.id.llCounters);
         mBuyWidgetController = new BuyWidgetController(getActivity(),
                 mFooterView.findViewById(R.id.countersLayout));
-        getListView().addFooterView(mFooterView);
 
         Products products = CacheProfile.getMarketProducts();
         mBuyWidgetController.setSalesEnabled(products != null && products.saleExists);
@@ -572,7 +581,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (getListView().isClickable()) {
+        if (mListView.isClickable()) {
             FragmentId id = (FragmentId) v.getTag();
             //Тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
             //его локально, а не серверно, как это происходит с остальными счетчиками.
@@ -613,7 +622,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     }
 
     public void setClickable(boolean clickable) {
-        getListView().setClickable(clickable);
+        mListView.setClickable(clickable);
     }
 
     public void showClosingsDialog() {
