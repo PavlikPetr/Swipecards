@@ -508,4 +508,6 @@
     <string name="user_does_not_exist">O usuário não foi encontrado</string>
     <string name="feedback_subject_ban">Reclamação sobre proibição injusta</string>
     <string name="settings_led">LED notificação</string>
+    <string name="open_market_error">Não está a ser possível abrir uma página do aplicativo</string>
+    <string name="billing_item_already_owned">A sua compra anterior está em processamento, por favor aguarde</string>
 </resources>

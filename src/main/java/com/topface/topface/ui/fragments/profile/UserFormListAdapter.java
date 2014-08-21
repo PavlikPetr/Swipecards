@@ -209,7 +209,7 @@ public class UserFormListAdapter extends BaseAdapter {
     }
 
     public ArrayList<FormItem> saveState() {
-        return new ArrayList<>(mInitialUserForms);
+        return mInitialUserForms != null ? new ArrayList<>(mInitialUserForms) : null;
     }
 
     @SuppressWarnings("unchecked")

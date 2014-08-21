@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_chat_footer_send"
+    android:orientation="horizontal"
+    android:padding="6dp">
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="34dp"
+        android:id="@+id/chat_btn"
+        android:text="@string/dialog"
+        style="@style/Widget.Topface.Button.Big.Blue"
+        android:layout_weight="1"
+        android:textSize="13sp"
+        android:padding="0dp" />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="34dp"
+        android:id="@+id/skip_btn"
+        android:text="@string/skip"
+        style="@style/Widget.Topface.Button.Big.Gray"
+        android:layout_weight="1"
+        android:textSize="13sp"
+        android:padding="0dp" />
+
+</LinearLayout>

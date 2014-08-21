@@ -1,9 +1,9 @@
 package com.topface.topface.utils;
 
-import com.topface.statistics.TfStatConsts;
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
+import com.topface.topface.statistics.TfStatConsts;
 
 /**
  * Created by kirussell on 28.04.2014.

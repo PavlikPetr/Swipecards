@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.topface.framework.utils.Debug;
-import com.topface.statistics.NotificationStatistics;
+import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 /**

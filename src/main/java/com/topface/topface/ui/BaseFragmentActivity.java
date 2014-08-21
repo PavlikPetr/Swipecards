@@ -20,10 +20,10 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.topface.framework.utils.Debug;
-import com.topface.statistics.NotificationStatistics;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;

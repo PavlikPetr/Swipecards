@@ -405,6 +405,7 @@
     <string name="settings_feedback_email">E-mail для связи</string>
     <string name="settings_invalid_email">Некорректный e-mail</string>
     <string name="chat_write_message">Написать сообщение</string>
+    <string name="dating_message">Сообщение...</string>
 
     <string name="buying_sympathies">Покупка симпатии</string>
 
@@ -736,4 +737,5 @@
     <string name="settings_led">LED уведомление</string>
     <string name="open_market_error">Не удается открыть страницу приложения</string>
     <string name="billing_item_already_owned">Ваша предыдущая покупка в обработке, пожалуйста подождите</string>
+    <string name="dialog">Переписка</string>
 </resources>

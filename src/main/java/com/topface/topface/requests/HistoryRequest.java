@@ -15,8 +15,9 @@ public class HistoryRequest extends ApiRequest {
     public String from; //идентификатор сообщения после которого будет осуществляться выборка истории
     public String debug;
 
-    public HistoryRequest(Context context) {
+    public HistoryRequest(Context context, int userId) {
         super(context);
+        userid = userId;
     }
 
     @Override

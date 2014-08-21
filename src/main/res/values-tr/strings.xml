@@ -178,8 +178,8 @@
     <string name="filter_cities_all">Bütün şehirlerde</string>
     <string name="buying_header_title">Alış verişler</string>
     <plurals name="buying_gift_you_need_coins">
-        <item quantity="other">Bir hediye yollamak için daha fazla % para gerek</item>
-        <item quantity="one">Bir hediye yollamak için daha fazla % para gerek</item>
+        <item quantity="other">Bir hediye yollamak için daha fazla %d para gerek</item>
+        <item quantity="one">Bir hediye yollamak için daha fazla %d para gerek</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="zero">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
