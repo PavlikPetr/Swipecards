@@ -76,6 +76,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private int mLastLoadedProfileId;
     private String mItemId;
     private ArrayList<UserActions.ActionItem> mUserActions;
+    private boolean mUserRate;
     private boolean mUserRated;
     // views
     private RelativeLayout mLockScreen;
@@ -165,7 +166,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         Bundle args = getArguments();
         mProfileId = args.getInt(AbstractProfileFragment.INTENT_UID, 0);
         mItemId = args.getString(AbstractProfileFragment.INTENT_ITEM_ID);
-        mUserRated = args.getBoolean(UserProfileFragment.USER_RATED_EXTRA, false);
+        mUserRated = args.containsKey(USER_RATED_EXTRA);
+        mUserRate = args.getBoolean(USER_RATED_EXTRA, false);
         setCallingClass(args.getString(AbstractProfileFragment.INTENT_CALLING_FRAGMENT));
     }
 
@@ -237,7 +239,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             mSympathyText = (TextView) mSympathy.findViewById(R.id.likeTV);
             mDelight = (RelativeLayout) mActions.findViewById(R.id.send_admiration_action);
             mDelightText = (TextView) mDelight.findViewById(R.id.delTV);
-            if (mUserRated || user.isSympathySent) {
+            if (mUserRated ? mUserRate : user.isSympathySent) {
                 disableSympathyDelight();
             }
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
