@@ -554,7 +554,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     giftsFragment.sendGift(mGiftsReceivedListener);
                 } else {
                     startActivityForResult(
-                            GiftsActivity.getSendGiftIntent(getActivity(), mProfileId, false),
+                            GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
                             GiftsActivity.INTENT_REQUEST_GIFT
                     );
                 }

@@ -657,7 +657,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.send_gift_button: {
                 startActivityForResult(
-                        GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id, false),
+                        GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id),
                         GiftsActivity.INTENT_REQUEST_GIFT
                 );
                 EasyTracker.sendEvent("Dating", "SendGiftClick", "", 1L);
