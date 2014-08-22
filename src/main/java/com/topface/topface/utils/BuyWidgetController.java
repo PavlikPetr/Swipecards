@@ -9,6 +9,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 
 public class BuyWidgetController {
+    private final View mRoot;
     Button mBuyButton;
     public boolean salesEnabled = false;
     ServicesTextView mCoins;
@@ -16,6 +17,7 @@ public class BuyWidgetController {
 
 
     public BuyWidgetController(final Context context, View root) {
+        mRoot = root;
         mCoins = (ServicesTextView) root.findViewById(R.id.menuCurCoins);
         mLikes = (ServicesTextView) root.findViewById(R.id.menuCurLikes);
         mBuyButton = (Button) root.findViewById(R.id.menuBuyBtn);
@@ -31,6 +33,14 @@ public class BuyWidgetController {
     public void updateBalance() {
         mCoins.setText(Integer.toString(CacheProfile.money));
         mLikes.setText(Integer.toString(CacheProfile.likes));
+    }
+
+    public void hide() {
+        mRoot.setVisibility(View.GONE);
+    }
+
+    public void show() {
+        mRoot.setVisibility(View.VISIBLE);
     }
 
     public void setSalesEnabled(boolean salesEnabled) {
