@@ -71,7 +71,7 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
 
     public void sendGift() {
         getParentFragment().startActivityForResult(
-                GiftsActivity.getSendGiftIntent(getActivity(), getProfileId(), true),
+                GiftsActivity.getSendGiftIntent(getActivity(), getProfileId()),
                 GiftsActivity.INTENT_REQUEST_GIFT
         );
     }

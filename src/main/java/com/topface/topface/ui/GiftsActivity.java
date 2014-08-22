@@ -37,12 +37,11 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     public static final String INTENT_GIFT_URL = "gift_url";
     public static final String INTENT_GIFT_PRICE = "gift_price";
     public static final String INTENT_USER_ID_TO_SEND_GIFT = "user_id_to_send_gift";
-    private static final String INTENT_SEND_GIFT = "send_gitft_request";
     public static final String GIFTS_LIST = "gifts_list";
+    public static final String INTENT_SEND_GIFT_ANSWER = "send_gift_answer";
 
     public static ArrayList<Gift> mGiftsList = new ArrayList<>();
     private int mUserIdToSendGift;
-    private boolean mNeedToSendGift;
     private boolean mRequestingGifts;
 
     public GiftsCollection mGiftsCollection;
@@ -59,7 +58,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         getSupportActionBar().setTitle(getString(R.string.gifts_title));
 
         mUserIdToSendGift = getIntent().getIntExtra(INTENT_USER_ID_TO_SEND_GIFT, 0);
-        mNeedToSendGift = getIntent().getBooleanExtra(INTENT_SEND_GIFT, true);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (fragment == null) {
@@ -234,44 +232,34 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     public void onSendGift(final Gift item) {
         EasyTracker.sendEvent("Gifts", "Send", "GiftId=" + item.id, (long) item.price);
-        if (mNeedToSendGift) {
-            final SendGiftRequest sendGiftRequest = new SendGiftRequest(this);
-            sendGiftRequest.giftId = item.id;
-            sendGiftRequest.userId = mUserIdToSendGift;
-            registerRequest(sendGiftRequest);
-            setSupportProgressBarIndeterminateVisibility(true);
-            sendGiftRequest.callback(new DataApiHandler<SendGiftAnswer>() {
+        final SendGiftRequest sendGiftRequest = new SendGiftRequest(this);
+        sendGiftRequest.giftId = item.id;
+        sendGiftRequest.userId = mUserIdToSendGift;
+        registerRequest(sendGiftRequest);
+        setSupportProgressBarIndeterminateVisibility(true);
+        sendGiftRequest.callback(new DataApiHandler<SendGiftAnswer>() {
 
-                @Override
-                protected void success(SendGiftAnswer answer, IApiResponse response) {
-                    processResult(item);
+            @Override
+            protected void success(SendGiftAnswer answer, IApiResponse response) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra(INTENT_SEND_GIFT_ANSWER, answer);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            }
+
+            @Override
+            protected SendGiftAnswer parseResponse(ApiResponse response) {
+                return SendGiftAnswer.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, final IApiResponse response) {
+                setSupportProgressBarIndeterminateVisibility(false);
+                if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
+                    startActivity(PurchasesActivity.createBuyingIntent("Gifts", PurchasesFragment.TYPE_GIFT, item.price));
                 }
-
-                @Override
-                protected SendGiftAnswer parseResponse(ApiResponse response) {
-                    return SendGiftAnswer.parse(response);
-                }
-
-                @Override
-                public void fail(int codeError, final IApiResponse response) {
-                    setSupportProgressBarIndeterminateVisibility(false);
-                    if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                        startActivity(PurchasesActivity.createBuyingIntent("Gifts", PurchasesFragment.TYPE_GIFT, item.price));
-                    }
-                }
-            }).exec();
-        } else {
-            processResult(item);
-        }
-    }
-
-    private void processResult(Gift item) {
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra(INTENT_GIFT_ID, item.id);
-        resultIntent.putExtra(INTENT_GIFT_URL, item.link);
-        resultIntent.putExtra(INTENT_GIFT_PRICE, item.price);
-        setResult(Activity.RESULT_OK, resultIntent);
-        finish();
+            }
+        }).exec();
     }
 
     /**
@@ -280,13 +268,11 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
      *
      * @param context  lauch context
      * @param userId   profile id to send gift
-     * @param sendGift false to send gift request yourself
      * @return intent
      */
-    public static Intent getSendGiftIntent(Context context, int userId, boolean sendGift) {
+    public static Intent getSendGiftIntent(Context context, int userId) {
         Intent result = new Intent(context, GiftsActivity.class);
         result.putExtra(INTENT_USER_ID_TO_SEND_GIFT, userId);
-        result.putExtra(INTENT_SEND_GIFT, sendGift);
         return result;
     }
 

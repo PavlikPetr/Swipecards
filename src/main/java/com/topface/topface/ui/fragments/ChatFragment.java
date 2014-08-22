@@ -58,10 +58,8 @@ import com.topface.topface.requests.DeleteMessagesRequest;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
-import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.AttitudeHandler;
-import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
@@ -729,7 +727,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     break;
                 }
                 startActivityForResult(
-                        GiftsActivity.getSendGiftIntent(getActivity(), mUserId, false),
+                        GiftsActivity.getSendGiftIntent(getActivity(), mUserId),
                         GiftsActivity.INTENT_REQUEST_GIFT
                 );
                 EasyTracker.sendEvent("Chat", "SendGiftClick", "", 1L);
@@ -835,65 +833,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle extras = data.getExtras();
                     if (extras != null) {
-                        final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-                        final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
-                        sendGift(id, price);
+                        SendGiftAnswer sendGiftAnswer = (SendGiftAnswer) extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
+                        sendGiftAnswer.history.target = FeedDialog.OUTPUT_USER_MESSAGE;
+                        addSentMessage(sendGiftAnswer.history, null);
+                        LocalBroadcastManager.getInstance(getActivity())
+                                .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
                     }
                 }
                 break;
         }
 
-    }
-
-    private void sendGift(int id, final int price) {
-        if (id <= 0) {
-            hideLoading();
-            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
-        registerRequest(sendGift);
-        sendGift.giftId = id;
-        sendGift.userId = mUserId;
-        final History loaderItem = new History(IListLoader.ItemType.WAITING);
-        addSentMessage(loaderItem, sendGift);
-        sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
-            @Override
-            protected void success(SendGiftAnswer data, IApiResponse response) {
-                data.history.target = FeedDialog.OUTPUT_USER_MESSAGE;
-                if (mAdapter != null) {
-                    mAdapter.replaceMessage(loaderItem, data.history, mListView.getRefreshableView());
-                }
-                LocalBroadcastManager.getInstance(getActivity())
-                        .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
-            }
-
-            @Override
-            protected SendGiftAnswer parseResponse(ApiResponse response) {
-                return SendGiftAnswer.parse(response);
-            }
-
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                    if (mAdapter != null) {
-                        mAdapter.removeItem(loaderItem);
-                    }
-                    Intent intent = PurchasesActivity.createBuyingIntent("Chat");
-                    intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
-                    intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
-                    startActivity(intent);
-                } else if (mAdapter != null) {
-                    mAdapter.showRetrySendMessage(loaderItem, sendGift);
-                }
-            }
-
-            @Override
-            public void always(IApiResponse response) {
-                super.always(response);
-                hideLoading();
-            }
-        }).exec();
     }
 
     private void addSentMessage(History loaderItem, ApiRequest request) {
