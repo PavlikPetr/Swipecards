@@ -122,7 +122,8 @@ dependencies {
         //и на нее ругается gradle
         exclude group: 'org.json'
     }
-    compile 'com.google.code.gson:gson:2.2.+'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'org.onepf:openiab:0.9.7.1:noFortumo'
     compile project(':libs:Android-ViewPagerIndicator')
     compile project(':libs:PullToRefresh')
     compile project(':libs:PhotoView')
@@ -133,13 +134,13 @@ dependencies {
     //Ad networks SDK
     compile project(':libs:mopub-android-sdk')
     //Аннотации вроде @NonNull и @*Res для обозначения переменных
-    compile 'com.android.support:support-annotations:+'
+    compile 'com.android.support:support-annotations:19.1.0'
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile files('libs/amazon/*.jar')
 
     compile project(':libs:tf-offerwall:sdk')
 
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.+'
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.1'
 }
 
 

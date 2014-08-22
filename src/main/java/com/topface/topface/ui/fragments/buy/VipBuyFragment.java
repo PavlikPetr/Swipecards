@@ -280,7 +280,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onSubscriptionUnsupported() {
         View view = getView();
-        if (isAdded() && view != null) {
+        if (view != null) {
             view.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.VISIBLE);
             view.findViewById(R.id.fbpBtnContainer).setVisibility(View.GONE);
         }

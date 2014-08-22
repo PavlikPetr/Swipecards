@@ -221,6 +221,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     private void initBodyPages(View root) {
         initBody();
         mBodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
+        mBodyPager.setSaveEnabled(false);
         mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
                 BODY_PAGES_TITLES, mProfileUpdater);
         mBodyPager.setAdapter(mBodyPagerAdapter);

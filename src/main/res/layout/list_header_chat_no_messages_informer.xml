@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center">
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center">
 
     <com.topface.topface.ui.views.ImageViewRemote
         android:id="@+id/ivFriendAvatar"
         android:layout_marginTop="8dp"
-        style="@style/FeedAvatar" />
+        style="@style/FeedAvatar"
+        android:layout_width="match_parent"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/chat_bubble_background"
-        android:gravity="left|center"
+        android:gravity="start|center"
         android:orientation="vertical"
         android:layout_margin="8dp">
 
@@ -25,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="@string/chat_no_message_title"
             style="@style/ItemTitleText"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/tvFirstMessageText"
@@ -33,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="@string/chat_no_message_text"
             style="@style/ItemTitleText"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
     </LinearLayout>
 

@@ -75,11 +75,12 @@ public class GooglePlayBuyingFragment extends CoinsBuyingFragment {
     @Override
     public void onInAppBillingUnsupported() {
         //Если платежи не поддерживаются, то скрываем все кнопки
-        getView().findViewById(R.id.likes_title).setVisibility(View.GONE);
-        getView().findViewById(R.id.coins_title).setVisibility(View.GONE);
-        getView().findViewById(R.id.fbCoins).setVisibility(View.GONE);
-        getView().findViewById(R.id.fbLikes).setVisibility(View.GONE);
-        getView().findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
+        View view = getView();
+        view.findViewById(R.id.likes_title).setVisibility(View.GONE);
+        view.findViewById(R.id.coins_title).setVisibility(View.GONE);
+        view.findViewById(R.id.fbCoins).setVisibility(View.GONE);
+        view.findViewById(R.id.fbLikes).setVisibility(View.GONE);
+        view.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
     }
 
     @Override

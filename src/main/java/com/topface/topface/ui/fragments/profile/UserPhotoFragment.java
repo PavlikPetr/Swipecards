@@ -106,7 +106,8 @@ public class UserPhotoFragment extends ProfileInnerFragment {
             mUserId = savedInstanceState.getInt(USER_ID, 0);
             mPhotosCount = savedInstanceState.getInt(PHOTOS_COUNT, 0);
             try {
-                mPhotoLinks = new Photos(new JSONArray(savedInstanceState.getString(PHOTO_LINKS)));
+                String linksString = savedInstanceState.getString(PHOTO_LINKS);
+                mPhotoLinks = linksString != null ? new Photos(new JSONArray(linksString)) : new Photos();
             } catch (JSONException e) {
                 Debug.error(e);
             }
