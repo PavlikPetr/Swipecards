@@ -98,7 +98,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
     @Override
     protected void saveChanges(final Handler handler) {
-        if (hasChanges()) {
+        if (hasChanges() && CacheProfile.forms != null) {
             for (int i = 0; i < CacheProfile.forms.size(); i++) {
                 if (CacheProfile.forms.get(i).titleId == mTitleId) {
                     final FormItem item = CacheProfile.forms.get(i);

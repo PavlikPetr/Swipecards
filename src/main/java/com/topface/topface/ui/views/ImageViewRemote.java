@@ -69,24 +69,26 @@ public class ImageViewRemote extends ImageViewRemoteTemplate {
 
     @Override
     protected void setPostProcessor(int postProcessorId, float cornerRadius, int maskId) {
-        switch (postProcessorId) {
-            case POST_PROCESSOR_ROUNDED:
-                mPostProcessor = new RoundProcessor();
-                break;
-            case POST_PROCESSOR_ROUND_CORNERS:
-                mPostProcessor = new RoundCornersProcessor(cornerRadius);
-                break;
-            case POST_PROCESSOR_MASK:
-                mPostProcessor = new MaskClipProcessor(maskId, borderResId);
-                break;
-            case POST_PROCESSOR_CIRCUMCIRCLE:
-                mPostProcessor = new CircumCircleProcessor();
-                break;
-            case POST_PROCESSOR_LEFTMENUCLIP:
-                mPostProcessor = new LeftMenuClipProcessor();
-                break;
-            default:
-                mPostProcessor = null;
+        if (!isInEditMode()) {
+            switch (postProcessorId) {
+                case POST_PROCESSOR_ROUNDED:
+                    mPostProcessor = new RoundProcessor();
+                    break;
+                case POST_PROCESSOR_ROUND_CORNERS:
+                    mPostProcessor = new RoundCornersProcessor(cornerRadius);
+                    break;
+                case POST_PROCESSOR_MASK:
+                    mPostProcessor = new MaskClipProcessor(maskId, borderResId);
+                    break;
+                case POST_PROCESSOR_CIRCUMCIRCLE:
+                    mPostProcessor = new CircumCircleProcessor();
+                    break;
+                case POST_PROCESSOR_LEFTMENUCLIP:
+                    mPostProcessor = new LeftMenuClipProcessor();
+                    break;
+                default:
+                    mPostProcessor = null;
+            }
         }
     }
 

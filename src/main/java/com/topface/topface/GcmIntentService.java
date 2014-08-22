@@ -77,7 +77,6 @@ public class GcmIntentService extends IntentService {
     }
 
 
-
     private String getUserId(String user) {
         String id = "";
         try {
@@ -92,6 +91,9 @@ public class GcmIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        if (intent == null) {
+            return;
+        }
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
 

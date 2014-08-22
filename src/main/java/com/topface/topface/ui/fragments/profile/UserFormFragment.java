@@ -47,7 +47,7 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserFormListAdapter = new UserFormListAdapter(getActivity().getApplicationContext());
+        mUserFormListAdapter = new UserFormListAdapter(getActivity());
     }
 
     @Override
@@ -72,12 +72,15 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
         if (mForms != null) {
             setUserData(mUserId, mForms, mFormMatches);
         } else if (savedInstanceState != null) {
-            setUserData(savedInstanceState.getInt(USER_ID, 0),
-                    savedInstanceState.getParcelableArrayList(FORM_ITEMS),
-                    savedInstanceState.getInt(MATCHES, 0));
-            mListQuestionnaire.setSelection(savedInstanceState.getInt(POSITION, 0));
-            if (savedInstanceState.getBoolean(MATCHED_DATA_ONLY, false)) {
-                mUserFormListAdapter.setMatchedDataOnly();
+            ArrayList<Parcelable> parcelableArrayList = savedInstanceState.getParcelableArrayList(FORM_ITEMS);
+            if (parcelableArrayList != null) {
+                setUserData(savedInstanceState.getInt(USER_ID, 0),
+                        parcelableArrayList,
+                        savedInstanceState.getInt(MATCHES, 0));
+                mListQuestionnaire.setSelection(savedInstanceState.getInt(POSITION, 0));
+                if (savedInstanceState.getBoolean(MATCHED_DATA_ONLY, false)) {
+                    mUserFormListAdapter.setMatchedDataOnly();
+                }
             }
         } else {
             mTitle.setText(Utils.getQuantityString(R.plurals.form_matches, 0, 0));
