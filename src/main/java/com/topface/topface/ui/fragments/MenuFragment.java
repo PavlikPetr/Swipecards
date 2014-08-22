@@ -260,13 +260,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         // init & add footer
         initFooter(root);
         // set listview settings
-        mListView.setVerticalFadingEdgeEnabled(true);
-        mListView.setFadingEdgeLength((int) (20 * getResources().getDisplayMetrics().density));
-        mListView.setDividerHeight(0);
-        mListView.setDivider(null);
-        mListView.setBackgroundColor(getResources().getColor(R.color.bg_left_menu));
-        mListView.setCacheColorHint(0);
-        mListView.setVerticalScrollBarEnabled(false);
         // controller for closings uses ViewStub in header to be inflated
         mClosingsController = new ClosingsController(this, mHeaderViewStub, mAdapter);
         return root;
