@@ -13,18 +13,28 @@ public class MessageRequest extends ConfirmedApiRequest {
     public static final String service = "message.send";
     private int mUserId; // идентификатор пользователя, кому послали сообщение
     private String mMessage; // текст сообщения в UTF-8. min размер текста - 1 символ, max - 1024
+    private boolean mIsInstant; // Flag for dating screen instant messages
 
     public MessageRequest(int userId, String message, Context context) {
         super(context);
         mUserId = userId;
         mMessage = message;
+        mIsInstant = false;
+    }
+
+    public MessageRequest(int userId, String message, Context context, boolean isInstant) {
+        super(context);
+        mUserId = userId;
+        mMessage = message;
+        mIsInstant = isInstant;
     }
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
                 .put("userId", mUserId)
-                .put("message", mMessage);
+                .put("message", mMessage)
+                .put("isInstant", mIsInstant);
     }
 
     @Override
