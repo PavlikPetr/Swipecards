@@ -41,4 +41,18 @@ public class ClientUtils {
         }
         return result;
     }
+
+    /**
+     * @return user's social account email
+     */
+    public static String getSocialAccountEmail() {
+        String email = App.getUserConfig().getSocialAccountEmail();
+        if (!Utils.isValidEmail(email)) {
+            List<String> accountsEmails = getClientAccounts();
+            if (!accountsEmails.isEmpty()) {
+                email = accountsEmails.get(0);
+            }
+        }
+        return email;
+    }
 }

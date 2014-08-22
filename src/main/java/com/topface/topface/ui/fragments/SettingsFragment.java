@@ -11,6 +11,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -37,10 +40,12 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
+import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
+import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.HashMap;
@@ -48,7 +53,9 @@ import java.util.Locale;
 
 public class SettingsFragment extends BaseFragment implements OnClickListener, OnCheckedChangeListener {
 
-    private Settings mSettings;
+    public static final int REQUEST_CODE_RINGTONE = 333;
+    private AppConfig mSettings;
+    private UserConfig mUserSettings;
     private EditSwitcher mSwitchVibration;
     private EditSwitcher mSwitchLED;
     private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<>();
@@ -61,7 +68,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         public void onFinish() {
             Activity activity = getActivity();
             if (activity != null) {
-                SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(activity);
+                SendMailNotificationsRequest request = getMailNotificationRequest(activity);
                 if (request != null) {
                     request.callback(new ApiHandler() {
                         @Override
@@ -82,7 +89,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.fragment_settings, null);
-        mSettings = Settings.getInstance();
+        mSettings = App.getAppConfig();
+        mUserSettings = App.getUserConfig();
 
         // Init settings views
         initViews(view);
@@ -187,7 +195,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             setBackground(R.drawable.edit_big_btn_top, frame);
             setText(R.string.settings_vibration, frame);
             mSwitchVibration = new EditSwitcher(frame);
-            mSwitchVibration.setChecked(mSettings.isVibrationEnabled());
+            mSwitchVibration.setChecked(mUserSettings.isVibrationEnabled());
             frame.setOnClickListener(this);
 
             //LED
@@ -195,7 +203,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             setBackground(R.drawable.edit_big_btn_middle, frame);
             setText(R.string.settings_led, frame);
             mSwitchLED = new EditSwitcher(frame);
-            mSwitchLED.setChecked(mSettings.isLEDEnabled());
+            mSwitchLED.setChecked(mUserSettings.isLEDEnabled());
             frame.setOnClickListener(this);
 
             //Melody
@@ -204,7 +212,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_melody);
             melodyName = (TextView) frame.findViewWithTag("tvText");
             melodyName.setVisibility(View.VISIBLE);
-            setRingtonNameByUri(mSettings.getRingtone());
+            setRingtonNameByUri(mUserSettings.getRingtone());
             frame.setOnClickListener(this);
         }
 
@@ -254,8 +262,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         setBackground(R.drawable.edit_big_btn_top_selector, frame);
         ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_account);
         TextView socialNameText = (TextView) frame.findViewWithTag("tvText");
-        mSettings.getSocialAccountName(socialNameText);
-        mSettings.getSocialAccountIcon(socialNameText);
+        getSocialAccountName(socialNameText);
+        getSocialAccountIcon(socialNameText);
         socialNameText.setVisibility(View.VISIBLE);
         frame.setOnClickListener(this);
     }
@@ -338,7 +346,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 break;
             case R.id.loVibration:
                 mSwitchVibration.doSwitch();
-                mSettings.setSetting(Settings.SETTINGS_GCM_VIBRATION, mSwitchVibration.isChecked());
+                mUserSettings.setGCMVibrationEnabled(mSwitchVibration.isChecked());
+                mSettings.saveConfig();
 
                 // Send empty vibro notification to demonstrate
                 if (mSwitchVibration.isChecked()) {
@@ -350,14 +359,15 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 break;
             case R.id.loLED:
                 mSwitchLED.doSwitch();
-                mSettings.setSetting(Settings.SETTINGS_GCM_LED, mSwitchLED.isChecked());
+                mUserSettings.setLEDEnabled(mSwitchLED.isChecked());
+                mSettings.saveConfig();
                 break;
             case R.id.loMelody:
                 intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.settings_melody));
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mSettings.getRingtone());
-                startActivityForResult(intent, Settings.REQUEST_CODE_RINGTONE);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mUserSettings.getRingtone());
+                startActivityForResult(intent, REQUEST_CODE_RINGTONE);
                 break;
             case R.id.loLanguage:
                 startLanguageSelection();
@@ -428,7 +438,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         final ProgressBar prs = hashNotifiersProgressBars.get(key);
 
         if (isMail) {
-            SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(type, true, isChecked, getActivity().getApplicationContext());
+            SendMailNotificationsRequest request = getMailNotificationRequest(type, true, isChecked, getActivity().getApplicationContext());
             if (request != null) {
                 buttonView.post(new Runnable() {
 
@@ -483,7 +493,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Settings.REQUEST_CODE_RINGTONE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_CODE_RINGTONE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                 setRingtonNameByUri(uri);
@@ -518,10 +528,125 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 if (mCursor != null) mCursor.close();
             }
         }
-        //TODO 2 settings and Settings.NOTIFICATION_MELODY is never used???
-        mSettings.setSetting(Settings.NOTIFICATION_MELODY, ringtoneName);
         melodyName.setText(ringtoneName);
-        mSettings.setSetting(Settings.SETTINGS_GCM_RINGTONE, uri == null ? Settings.SILENT : uri.toString());
+        mUserSettings.setGCMRingtone(uri == null ? UserConfig.SILENT : uri.toString());
+        mSettings.saveConfig();
+    }
+
+    /**
+     * @param key
+     * @param isMail
+     * @param value
+     * @param context
+     * @return SendMailNotificationRequest depending on a key
+     */
+    public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {
+        SendMailNotificationsRequest request = getMailNotificationRequest(context);
+
+        switch (key) {
+            case CacheProfile.NOTIFICATIONS_LIKES:
+                if (isMail) request.mailSympathy = value;
+                else request.apnsSympathy = value;
+                break;
+            case CacheProfile.NOTIFICATIONS_MESSAGE:
+                if (isMail) request.mailChat = value;
+                else request.apnsChat = value;
+                break;
+            case CacheProfile.NOTIFICATIONS_SYMPATHY:
+                if (isMail) request.mailMutual = value;
+                else request.apnsMutual = value;
+                break;
+            case CacheProfile.NOTIFICATIONS_VISITOR:
+                if (isMail) request.mailGuests = value;
+                else request.apnsVisitors = value;
+                break;
+            default:
+                return null;
+        }
+
+        return request;
+    }
+
+    /**
+     * @param context
+     * @return new SendMailNotificationRequest
+     */
+    public SendMailNotificationsRequest getMailNotificationRequest(Context context) {
+        SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
+        if (CacheProfile.notifications != null) {
+            try {
+                request.mailSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
+                request.mailMutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
+                request.mailChat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
+                request.mailGuests = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
+            } catch (Exception e) {
+                Debug.error(e);
+            }
+
+            try {
+                request.apnsSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+                request.apnsMutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
+                request.apnsChat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
+                request.apnsVisitors = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
+            } catch (Exception e) {
+                Debug.error(e);
+            }
+        }
+        return request;
+    }
+
+    public void getSocialAccountName(final TextView textView) {
+        AuthToken authToken = AuthToken.getInstance();
+        if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            textView.setText(authToken.getLogin());
+        } else {
+            String name = mUserSettings.getSocialAccountName();
+            if (TextUtils.isEmpty(name)) {
+                getSocialAccountNameAsync(new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        final String socialName = (String) msg.obj;
+                        textView.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                textView.setText(socialName);
+                            }
+                        });
+                        mUserSettings.setSocialAccountName(socialName);
+                    }
+                });
+            } else {
+                textView.setText(name);
+            }
+        }
+    }
+
+    public void getSocialAccountNameAsync(final Handler handler) {
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                AuthorizationManager.getAccountName(handler);
+            }
+        };
+    }
+
+    /**
+     * Sets drawable with social network icon to textView
+     *
+     * @param textView
+     */
+    public void getSocialAccountIcon(final TextView textView) {
+        AuthToken authToken = AuthToken.getInstance();
+        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fb, 0, 0, 0);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vk, 0, 0, 0);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tf, 0, 0, 0);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_ok_settings, 0, 0, 0);
+        }
     }
 
     @Override

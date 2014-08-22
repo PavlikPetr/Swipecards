@@ -40,7 +40,6 @@ public class AppConfig extends AbstractConfig {
     private static final String LAST_FULLSCREEN_TIME = "fullScreeenBanner_last_time";
     private static final String FULLSCREEN_URLS_SET = "fullscreen_urls_string";
     private static final String URL_SEPARATOR = "::";
-    private static final String DEFAULT_DATING_MESSAGE = "default_dating_message";
 
     public AppConfig(Context context) {
         super(context);
@@ -72,8 +71,6 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, LAST_FULLSCREEN_TIME, 0L);
         // fullscreen urls
         addField(settingsMap, FULLSCREEN_URLS_SET, Static.EMPTY);
-        // default text for instant message on dating screen
-        addField(settingsMap, DEFAULT_DATING_MESSAGE, Static.EMPTY);
     }
 
     protected SharedPreferences getPreferences() {
@@ -261,6 +258,7 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Fullscreen ad url set
+     *
      * @return url set
      */
     public Set<String> getFullscreenUrlsSet() {
@@ -271,27 +269,12 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Adds url to fullscreen ad url set
+     *
      * @param url
      */
     public void addFullscreenUrl(String url) {
         String urls = getStringField(getSettingsMap(), FULLSCREEN_URLS_SET);
         setField(getSettingsMap(), FULLSCREEN_URLS_SET, urls.concat(URL_SEPARATOR).concat(url));
-    }
-
-    /**
-     * @return Default text for dating screen message
-     */
-    public String getDefaultDatingMessage() {
-        return getStringField(getSettingsMap(), DEFAULT_DATING_MESSAGE);
-    }
-
-    /**
-     * Sets new default text for dating screen message
-     *
-     * @param message
-     */
-    public void setDefaultDatingMessage(String message) {
-        setField(getSettingsMap(), DEFAULT_DATING_MESSAGE, message);
     }
 
     @Override

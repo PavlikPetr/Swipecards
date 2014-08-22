@@ -2,6 +2,8 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 
 import com.topface.framework.utils.config.AbstractUniqueConfig;
 import com.topface.topface.Static;
@@ -34,6 +36,15 @@ public class UserConfig extends AbstractUniqueConfig {
     public static final String NOTIFICATION_REST_MESSAGES = "notifications_rest_messages";
     private static final String GCM_REG_ID = "gcm_reg_id";
     private static final String LAST_APP_VERSION = "last_app_version";
+    public static final String SETTINGS_SOCIAL_ACCOUNT_NAME = "social_account_name";
+    public static final String SETTINGS_SOCIAL_ACCOUNT_EMAIL = "social_account_email";
+    private static final String DEFAULT_DATING_MESSAGE = "default_dating_message";
+    public static final String SETTINGS_GCM_RINGTONE = "settings_c2dm_ringtone";
+    public static final String SETTINGS_GCM_VIBRATION = "settings_c2dm_vibration";
+    public static final String SETTINGS_GCM = "settings_c2dm";
+    public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
+    public static final String SETTINGS_GCM_LED = "settings_gcm_led";
+    public static final String SILENT = "silent";
 
     public UserConfig(Context context) {
         super(context);
@@ -77,6 +88,20 @@ public class UserConfig extends AbstractUniqueConfig {
         addField(settingsMap, GCM_REG_ID, Static.EMPTY);
         //Last app version
         addField(settingsMap, LAST_APP_VERSION, 0);
+        //Social network account name
+        addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
+        //Social network account email
+        addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_EMAIL, Static.EMPTY);
+        // default text for instant message on dating screen
+        addField(settingsMap, DEFAULT_DATING_MESSAGE, Static.EMPTY);
+        // push notification melody
+        addField(settingsMap, SETTINGS_GCM_RINGTONE, DEFAULT_SOUND);
+        // is vibration for notification enabled
+        addField(settingsMap, SETTINGS_GCM_VIBRATION, true);
+        // is led blinking for notification enabled
+        addField(settingsMap, SETTINGS_GCM_LED, true);
+        // is push notification enabled or not
+        addField(settingsMap, SETTINGS_GCM, true);
     }
 
     @Override
@@ -314,6 +339,122 @@ public class UserConfig extends AbstractUniqueConfig {
      */
     public String getGcmRegId() {
         return getStringField(getSettingsMap(), GCM_REG_ID);
+    }
+
+    /**
+     * Sets social account name
+     *
+     * @param name
+     */
+    public void setSocialAccountName(String name) {
+        setField(getSettingsMap(), SETTINGS_SOCIAL_ACCOUNT_NAME, name);
+    }
+
+    /**
+     * @return users's social account name
+     */
+    public String getSocialAccountName() {
+        return getStringField(getSettingsMap(), SETTINGS_SOCIAL_ACCOUNT_NAME);
+    }
+
+    /**
+     * Sets social account email
+     *
+     * @param email
+     */
+    public void setSocialAccountEmail(String email) {
+        setField(getSettingsMap(), SETTINGS_SOCIAL_ACCOUNT_EMAIL, email);
+    }
+
+    /**
+     * @return user's social account email
+     */
+    public String getSocialAccountEmail() {
+        return getStringField(getSettingsMap(), UserConfig.SETTINGS_SOCIAL_ACCOUNT_EMAIL);
+    }
+
+    /**
+     * @return Default text for dating screen message
+     */
+    public String getDefaultDatingMessage() {
+        return getStringField(getSettingsMap(), DEFAULT_DATING_MESSAGE);
+    }
+
+    /**
+     * Sets new default text for dating screen message
+     *
+     * @param message
+     */
+    public void setDefaultDatingMessage(String message) {
+        setField(getSettingsMap(), DEFAULT_DATING_MESSAGE, message);
+    }
+
+    /**
+     * @return push notification melody name
+     */
+    public Uri getRingtone() {
+        if (getStringField(getSettingsMap(), SETTINGS_GCM_RINGTONE).equals(SILENT)) {
+            return null;
+        }
+        String ringtone = getStringField(getSettingsMap(), SETTINGS_GCM_RINGTONE);
+        return ringtone.equals(DEFAULT_SOUND) ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) : Uri.parse(ringtone);
+    }
+
+    /**
+     * Sets push notification melody name
+     *
+     * @param ringtoneName
+     */
+    public void setGCMRingtone(String ringtoneName) {
+        setField(getSettingsMap(), SETTINGS_GCM_RINGTONE, ringtoneName);
+    }
+
+    /**
+     * @return true if vibration for push notification enabled
+     */
+    public Boolean isVibrationEnabled() {
+        return getBooleanField(getSettingsMap(), SETTINGS_GCM_VIBRATION);
+    }
+
+    /**
+     * Sets vibration for push notification enabled or not
+     *
+     * @param enabled
+     */
+    public void setGCMVibrationEnabled(boolean enabled) {
+        setField(getSettingsMap(), SETTINGS_GCM_VIBRATION, enabled);
+    }
+
+    /**
+     * @return true if led blinking for push notification enabled
+     */
+    public boolean isLEDEnabled() {
+        return getBooleanField(getSettingsMap(), SETTINGS_GCM_LED);
+    }
+
+    /**
+     * Sets led blinking for push notification enabled or not
+     *
+     * @param enabled
+     */
+    public void setLEDEnabled(boolean enabled) {
+        setField(getSettingsMap(), SETTINGS_GCM_LED, enabled);
+    }
+
+    /**
+     * @return true if push notification enabled
+     */
+    public boolean isNotificationEnabled() {
+        return getBooleanField(getSettingsMap(), SETTINGS_GCM);
+    }
+
+    /**
+     * Sets push notification enabled or not
+     *
+     * @param enabled
+     */
+    public void setNotificationEnabled(boolean enabled) {
+        setField(getSettingsMap(), SETTINGS_GCM, enabled);
     }
 
     public int getLastAppVersion() {
