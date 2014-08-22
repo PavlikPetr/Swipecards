@@ -132,6 +132,7 @@ public class ClosingsController implements View.OnClickListener {
                         mAdapter.hideItem(FragmentId.F_MUTUAL);
                         mMutualClosingsActive = true;
                     }
+                    mMenuFragment.hideBuyWidget();
                     mAdapter.setEnabled(false);
                     mAdapter.notifyDataSetChanged();
                     lockLeftMenu();
@@ -348,6 +349,7 @@ public class ClosingsController implements View.OnClickListener {
     private void removeClosings(FragmentId currentSelectedFragmentInLeftMenu) {
         if (mClosingsWidget != null) mClosingsWidget.setVisibility(View.GONE);
         if (mAdapter != null) {
+            mMenuFragment.showBuyWidjet();
             mAdapter.setEnabled(true);
             mAdapter.showAllItems();
             mAdapter.notifyDataSetChanged();

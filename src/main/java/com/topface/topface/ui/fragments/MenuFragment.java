@@ -136,12 +136,15 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     break;
                 case LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED:
                     mClosingsController.onClosingsProcessed(FeedRequest.FeedService.LIKES);
+
                     break;
                 case MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED:
                     mClosingsController.onClosingsProcessed(FeedRequest.FeedService.MUTUAL);
                     break;
                 case Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION:
-                    if (!CacheProfile.premium) mClosingsController.show();
+                    if (!CacheProfile.premium) {
+                        mClosingsController.show();
+                    }
                     break;
             }
         }
@@ -359,6 +362,18 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 CURRENT_FRAGMENT_STATE,
                 getCurrentFragmentId()
         );
+    }
+
+    public void hideBuyWidget() {
+        if (mBuyWidgetController != null) {
+            mBuyWidgetController.hide();
+        }
+    }
+
+    public void showBuyWidjet() {
+        if (mBuyWidgetController != null) {
+            mBuyWidgetController.show();
+        }
     }
 
     @Override
@@ -624,7 +639,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     public void showClosingsDialog(FragmentId selectedFragment) {
         if (ClosingsBuyVipDialog.opened) return;
+
         ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(selectedFragment);
+        
         newFragment.setOnRespondToLikesListener(new ClosingsBuyVipDialog.IRespondToLikesListener() {
             @Override
             public void onRespondToLikes() {
