@@ -11,6 +11,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -42,6 +45,7 @@ import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
+import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.HashMap;
@@ -258,8 +262,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         setBackground(R.drawable.edit_big_btn_top_selector, frame);
         ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_account);
         TextView socialNameText = (TextView) frame.findViewWithTag("tvText");
-        mUserSettings.getSocialAccountName(socialNameText);
-        mUserSettings.getSocialAccountIcon(socialNameText);
+        getSocialAccountName(socialNameText);
+        getSocialAccountIcon(socialNameText);
         socialNameText.setVisibility(View.VISIBLE);
         frame.setOnClickListener(this);
     }
@@ -589,6 +593,60 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             }
         }
         return request;
+    }
+
+    public void getSocialAccountName(final TextView textView) {
+        AuthToken authToken = AuthToken.getInstance();
+        if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            textView.setText(authToken.getLogin());
+        } else {
+            String name = mUserSettings.getSocialAccountName();
+            if (TextUtils.isEmpty(name)) {
+                getSocialAccountNameAsync(new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        final String socialName = (String) msg.obj;
+                        textView.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                textView.setText(socialName);
+                            }
+                        });
+                        mUserSettings.setSocialAccountName(socialName);
+                    }
+                });
+            } else {
+                textView.setText(name);
+            }
+        }
+    }
+
+    public void getSocialAccountNameAsync(final Handler handler) {
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                AuthorizationManager.getAccountName(handler);
+            }
+        };
+    }
+
+    /**
+     * Sets drawable with social network icon to textView
+     *
+     * @param textView
+     */
+    public void getSocialAccountIcon(final TextView textView) {
+        AuthToken authToken = AuthToken.getInstance();
+        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fb, 0, 0, 0);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vk, 0, 0, 0);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tf, 0, 0, 0);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_ok_settings, 0, 0, 0);
+        }
     }
 
     @Override

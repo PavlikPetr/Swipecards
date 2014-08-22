@@ -4,23 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Message;
-import android.text.TextUtils;
-import android.widget.TextView;
 
-import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.config.AbstractUniqueConfig;
-import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.utils.ClientUtils;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
-import com.topface.topface.utils.social.AuthorizationManager;
-
-import java.util.List;
 
 /**
  * Created by kirussell on 06.01.14.
@@ -368,45 +357,8 @@ public class UserConfig extends AbstractUniqueConfig {
         return getStringField(getSettingsMap(), SETTINGS_SOCIAL_ACCOUNT_NAME);
     }
 
-    public void getSocialAccountName(final TextView textView) {
-        AuthToken authToken = AuthToken.getInstance();
-        if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            textView.setText(authToken.getLogin());
-        } else {
-            String name = getSocialAccountName();
-            if (TextUtils.isEmpty(name)) {
-                getSocialAccountNameAsync(new Handler() {
-                    @Override
-                    public void handleMessage(Message msg) {
-                        final String socialName = (String) msg.obj;
-                        textView.post(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                textView.setText(socialName);
-                            }
-                        });
-                        setSocialAccountName(socialName);
-                    }
-                });
-            } else {
-                textView.setText(name);
-            }
-        }
-    }
-
-    public void getSocialAccountNameAsync(final Handler handler) {
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                AuthorizationManager.getAccountName(handler);
-            }
-        };
-    }
-
     /**
      * Sets social account email
-     *
      * @param email
      */
     public void setSocialAccountEmail(String email) {
@@ -417,32 +369,7 @@ public class UserConfig extends AbstractUniqueConfig {
      * @return user's social account email
      */
     public String getSocialAccountEmail() {
-        String email = getStringField(getSettingsMap(), UserConfig.SETTINGS_SOCIAL_ACCOUNT_EMAIL);
-        if (!Utils.isValidEmail(email)) {
-            List<String> accountsEmails = ClientUtils.getClientAccounts();
-            if (!accountsEmails.isEmpty()) {
-                email = accountsEmails.get(0);
-            }
-        }
-        return email;
-    }
-
-    /**
-     * Sets drawable with social network icon to textView
-     *
-     * @param textView
-     */
-    public void getSocialAccountIcon(final TextView textView) {
-        AuthToken authToken = AuthToken.getInstance();
-        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fb, 0, 0, 0);
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vk, 0, 0, 0);
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tf, 0, 0, 0);
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
-            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_ok_settings, 0, 0, 0);
-        }
+        return getStringField(getSettingsMap(), UserConfig.SETTINGS_SOCIAL_ACCOUNT_EMAIL);
     }
 
     /**

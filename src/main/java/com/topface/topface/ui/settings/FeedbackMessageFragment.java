@@ -143,7 +143,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     private void initTextViews(View root, FeedbackType feedbackType) {
         mEditEmail = (EditText) root.findViewById(R.id.edEmail);
         mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
-        mEditEmail.setText(App.getUserConfig().getSocialAccountEmail());
+        mEditEmail.setText(ClientUtils.getSocialAccountEmail());
         mTransactionIdEditText = (EditText) root.findViewById(R.id.edTransactionId);
         switch (feedbackType) {
             case DEVELOPERS_MESSAGE:

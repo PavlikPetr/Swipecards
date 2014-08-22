@@ -16,6 +16,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.settings.FeedbackMessageFragment;
+import com.topface.topface.utils.ClientUtils;
 import com.topface.topface.utils.Utils;
 
 /**
@@ -100,7 +101,7 @@ public class SendFeedbackDialog extends AbstractModalDialog implements View.OnCl
                             );
                             report.setSubject(mSubject);
                             report.setBody(message);
-                            report.setEmail(App.getUserConfig().getSocialAccountEmail());
+                            report.setEmail(ClientUtils.getSocialAccountEmail());
                             FeedbackMessageFragment.fillVersion(getActivity(), report);
                             SendFeedbackRequest feedbackRequest = new SendFeedbackRequest(getActivity(), report);
                             feedbackRequest.callback(handler).exec();
