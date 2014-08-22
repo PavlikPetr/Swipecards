@@ -30,6 +30,7 @@ import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.http.IRequestClient;
 
 /**
@@ -90,7 +91,7 @@ public class DatingInstantMessageController {
                 }
             }
         });
-        String defaultMessage = App.getAppConfig().getDefaultDatingMessage();
+        String defaultMessage = App.getUserConfig().getDefaultDatingMessage();
         mMessageText.setText(defaultMessage.isEmpty() ? text : defaultMessage);
         mMessageText.setHint(activity.getString(R.string.dating_message));
         mMessageSend.setOnClickListener(clickListener);
@@ -128,9 +129,10 @@ public class DatingInstantMessageController {
                 editText.clear();
                 Utils.hideSoftKeyboard(mActivity, mMessageText);
 
-                if (!App.getAppConfig().getDefaultDatingMessage().equals(editString)) {
-                    App.getAppConfig().setDefaultDatingMessage(editString);
-                    App.getAppConfig().saveConfig();
+                UserConfig userConfig = App.getUserConfig();
+                if (!userConfig.getDefaultDatingMessage().equals(editString)) {
+                    userConfig.setDefaultDatingMessage(editString);
+                    userConfig.saveConfig();
                 }
 
                 DatingMessageStatistics.sendDatingMessageSent();
@@ -201,7 +203,7 @@ public class DatingInstantMessageController {
     }
 
     public void reset() {
-        mMessageText.setText(App.getAppConfig().getDefaultDatingMessage());
+        mMessageText.setText(App.getUserConfig().getDefaultDatingMessage());
     }
 
     public void instantSend(final SearchUser user) {

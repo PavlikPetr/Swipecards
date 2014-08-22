@@ -64,7 +64,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         public void onFinish() {
             Activity activity = getActivity();
             if (activity != null) {
-                SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(activity);
+                SendMailNotificationsRequest request = getMailNotificationRequest(activity);
                 if (request != null) {
                     request.callback(new ApiHandler() {
                         @Override
@@ -191,7 +191,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             setBackground(R.drawable.edit_big_btn_top, frame);
             setText(R.string.settings_vibration, frame);
             mSwitchVibration = new EditSwitcher(frame);
-            mSwitchVibration.setChecked(mSettings.isVibrationEnabled());
+            mSwitchVibration.setChecked(mUserSettings.isVibrationEnabled());
             frame.setOnClickListener(this);
 
             //LED
@@ -199,7 +199,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             setBackground(R.drawable.edit_big_btn_middle, frame);
             setText(R.string.settings_led, frame);
             mSwitchLED = new EditSwitcher(frame);
-            mSwitchLED.setChecked(mSettings.isLEDEnabled());
+            mSwitchLED.setChecked(mUserSettings.isLEDEnabled());
             frame.setOnClickListener(this);
 
             //Melody
@@ -208,7 +208,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_melody);
             melodyName = (TextView) frame.findViewWithTag("tvText");
             melodyName.setVisibility(View.VISIBLE);
-            setRingtonNameByUri(mSettings.getRingtone());
+            setRingtonNameByUri(mUserSettings.getRingtone());
             frame.setOnClickListener(this);
         }
 
@@ -342,7 +342,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 break;
             case R.id.loVibration:
                 mSwitchVibration.doSwitch();
-                mSettings.setGCMVibrationEnabled(mSwitchVibration.isChecked());
+                mUserSettings.setGCMVibrationEnabled(mSwitchVibration.isChecked());
                 mSettings.saveConfig();
 
                 // Send empty vibro notification to demonstrate
@@ -355,14 +355,14 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 break;
             case R.id.loLED:
                 mSwitchLED.doSwitch();
-                mSettings.setLEDEnabled(mSwitchLED.isChecked());
+                mUserSettings.setLEDEnabled(mSwitchLED.isChecked());
                 mSettings.saveConfig();
                 break;
             case R.id.loMelody:
                 intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.settings_melody));
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mSettings.getRingtone());
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mUserSettings.getRingtone());
                 startActivityForResult(intent, REQUEST_CODE_RINGTONE);
                 break;
             case R.id.loLanguage:
@@ -434,7 +434,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         final ProgressBar prs = hashNotifiersProgressBars.get(key);
 
         if (isMail) {
-            SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(type, true, isChecked, getActivity().getApplicationContext());
+            SendMailNotificationsRequest request = getMailNotificationRequest(type, true, isChecked, getActivity().getApplicationContext());
             if (request != null) {
                 buttonView.post(new Runnable() {
 
@@ -525,8 +525,70 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             }
         }
         melodyName.setText(ringtoneName);
-        mSettings.setGCMRingtone(uri == null ? AppConfig.SILENT : uri.toString());
+        mUserSettings.setGCMRingtone(uri == null ? UserConfig.SILENT : uri.toString());
         mSettings.saveConfig();
+    }
+
+    /**
+     * @param key
+     * @param isMail
+     * @param value
+     * @param context
+     * @return SendMailNotificationRequest depending on a key
+     */
+    public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {
+        SendMailNotificationsRequest request = getMailNotificationRequest(context);
+
+        switch (key) {
+            case CacheProfile.NOTIFICATIONS_LIKES:
+                if (isMail) request.mailSympathy = value;
+                else request.apnsSympathy = value;
+                break;
+            case CacheProfile.NOTIFICATIONS_MESSAGE:
+                if (isMail) request.mailChat = value;
+                else request.apnsChat = value;
+                break;
+            case CacheProfile.NOTIFICATIONS_SYMPATHY:
+                if (isMail) request.mailMutual = value;
+                else request.apnsMutual = value;
+                break;
+            case CacheProfile.NOTIFICATIONS_VISITOR:
+                if (isMail) request.mailGuests = value;
+                else request.apnsVisitors = value;
+                break;
+            default:
+                return null;
+        }
+
+        return request;
+    }
+
+    /**
+     * @param context
+     * @return new SendMailNotificationRequest
+     */
+    public SendMailNotificationsRequest getMailNotificationRequest(Context context) {
+        SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
+        if (CacheProfile.notifications != null) {
+            try {
+                request.mailSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
+                request.mailMutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
+                request.mailChat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
+                request.mailGuests = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
+            } catch (Exception e) {
+                Debug.error(e);
+            }
+
+            try {
+                request.apnsSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+                request.apnsMutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
+                request.apnsChat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
+                request.apnsVisitors = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
+            } catch (Exception e) {
+                Debug.error(e);
+            }
+        }
+        return request;
     }
 
     @Override

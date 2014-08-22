@@ -173,7 +173,7 @@ public class GCMUtils {
 
     public static boolean showNotificationIfNeed(final Intent extra, Context context) {
         //Проверяем, не отключены ли уведомления
-        if (!App.getAppConfig().isNotificationEnabled()) {
+        if (!App.getUserConfig().isNotificationEnabled()) {
             Debug.log("GCM: notification is disabled");
             return false;
         } else if (extra == null) {
