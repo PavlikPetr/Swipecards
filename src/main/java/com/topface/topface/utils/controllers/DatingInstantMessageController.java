@@ -118,7 +118,7 @@ public class DatingInstantMessageController {
             return false;
         }
 
-        final MessageRequest messageRequest = new MessageRequest(user.id, editString, mActivity);
+        final MessageRequest messageRequest = new MessageRequest(user.id, editString, mActivity, true);
         mRequestClient.registerRequest(messageRequest);
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
