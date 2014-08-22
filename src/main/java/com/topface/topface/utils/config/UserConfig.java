@@ -359,6 +359,7 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Sets social account email
+     *
      * @param email
      */
     public void setSocialAccountEmail(String email) {
@@ -370,14 +371,6 @@ public class UserConfig extends AbstractUniqueConfig {
      */
     public String getSocialAccountEmail() {
         return getStringField(getSettingsMap(), UserConfig.SETTINGS_SOCIAL_ACCOUNT_EMAIL);
-    }
-
-    /**
-     * Resets social account name and email
-     */
-    public void resetSettings() {
-        setSocialAccountName(Static.EMPTY);
-        setSocialAccountEmail(Static.EMPTY);
     }
 
     /**

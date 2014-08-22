@@ -425,7 +425,6 @@ public class AuthorizationManager {
             new FacebookLogoutTask().execute();
         }
         authToken.removeToken();
-        App.getUserConfig().resetSettings();
         CacheProfile.clearProfileAndOptions();
         App.getConfig().onLogout();
         StartActionsController.onLogout();
