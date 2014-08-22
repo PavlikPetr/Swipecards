@@ -2,11 +2,15 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
+import com.topface.topface.requests.SendMailNotificationsRequest;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
 
 import java.util.Arrays;
@@ -30,6 +34,12 @@ public class AppConfig extends AbstractConfig {
     public static final String DATA_AUTH_VK_API = "data_auth_vk_api";
     public static final String DATA_AUTH_FB_API = "data_auth_fb_api";
     public static final String FLOOD_ENDS_TIME = "flood_ens_time";
+    public static final String SILENT = "silent";
+    public static final String SETTINGS_GCM_RINGTONE = "settings_c2dm_ringtone";
+    public static final String SETTINGS_GCM_VIBRATION = "settings_c2dm_vibration";
+    public static final String SETTINGS_GCM = "settings_c2dm";
+    public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
+    public static final String SETTINGS_GCM_LED = "settings_gcm_led";
     private static final String DATA_API_REVISION = "data_api_revision";
     private static final String DATA_EDITOR_MODE = "data_editor_mode";
     private static final String DATA_DEBUG_MODE = "data_debug_mode";
@@ -74,6 +84,14 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, FULLSCREEN_URLS_SET, Static.EMPTY);
         // default text for instant message on dating screen
         addField(settingsMap, DEFAULT_DATING_MESSAGE, Static.EMPTY);
+        // push notification melody
+        addField(settingsMap, SETTINGS_GCM_RINGTONE, DEFAULT_SOUND);
+        // is vibration for notification enabled
+        addField(settingsMap, SETTINGS_GCM_VIBRATION, true);
+        // is led blinking for notification enabled
+        addField(settingsMap, SETTINGS_GCM_LED, true);
+        // is push notification enabled or not
+        addField(settingsMap, SETTINGS_GCM, true);
     }
 
     protected SharedPreferences getPreferences() {
@@ -292,6 +310,136 @@ public class AppConfig extends AbstractConfig {
      */
     public void setDefaultDatingMessage(String message) {
         setField(getSettingsMap(), DEFAULT_DATING_MESSAGE, message);
+    }
+
+    /**
+     * @return push notification melody name
+     */
+    public Uri getRingtone() {
+        if (getStringField(getSettingsMap(), SETTINGS_GCM_RINGTONE).equals(SILENT)) {
+            return null;
+        }
+        String ringtone = getStringField(getSettingsMap(), SETTINGS_GCM_RINGTONE);
+        return ringtone.equals(DEFAULT_SOUND) ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) : Uri.parse(ringtone);
+    }
+
+    /**
+     * Sets push notification melody name
+     *
+     * @param ringtoneName
+     */
+    public void setGCMRingtone(String ringtoneName) {
+        setField(getSettingsMap(), SETTINGS_GCM_RINGTONE, ringtoneName);
+    }
+
+    /**
+     * @return true if vibration for push notification enabled
+     */
+    public Boolean isVibrationEnabled() {
+        return getBooleanField(getSettingsMap(), SETTINGS_GCM_VIBRATION);
+    }
+
+    /**
+     * Sets vibration for push notification enabled or not
+     *
+     * @param enabled
+     */
+    public void setGCMVibrationEnabled(boolean enabled) {
+        setField(getSettingsMap(), SETTINGS_GCM_VIBRATION, enabled);
+    }
+
+    /**
+     * @return true if led blinking for push notification enabled
+     */
+    public boolean isLEDEnabled() {
+        return getBooleanField(getSettingsMap(), SETTINGS_GCM_LED);
+    }
+
+    /**
+     * Sets led blinking for push notification enabled or not
+     *
+     * @param enabled
+     */
+    public void setLEDEnabled(boolean enabled) {
+        setField(getSettingsMap(), SETTINGS_GCM_LED, enabled);
+    }
+
+    /**
+     * @return true if push notification enabled
+     */
+    public boolean isNotificationEnabled() {
+        return getBooleanField(getSettingsMap(), SETTINGS_GCM);
+    }
+
+    /**
+     * Sets push notification enabled or not
+     *
+     * @param enabled
+     */
+    public void setNotificationEnabled(boolean enabled) {
+        setField(getSettingsMap(), SETTINGS_GCM, enabled);
+    }
+
+    /**
+     * @param key
+     * @param isMail
+     * @param value
+     * @param context
+     * @return SendMailNotificationRequest depending on a key
+     */
+    public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {
+        SendMailNotificationsRequest request = getMailNotificationRequest(context);
+
+        switch (key) {
+            case CacheProfile.NOTIFICATIONS_LIKES:
+                if (isMail) request.mailSympathy = value;
+                else request.apnsSympathy = value;
+                break;
+            case CacheProfile.NOTIFICATIONS_MESSAGE:
+                if (isMail) request.mailChat = value;
+                else request.apnsChat = value;
+                break;
+            case CacheProfile.NOTIFICATIONS_SYMPATHY:
+                if (isMail) request.mailMutual = value;
+                else request.apnsMutual = value;
+                break;
+            case CacheProfile.NOTIFICATIONS_VISITOR:
+                if (isMail) request.mailGuests = value;
+                else request.apnsVisitors = value;
+                break;
+            default:
+                return null;
+        }
+
+        return request;
+    }
+
+    /**
+     * @param context
+     * @return new SendMailNotificationRequest
+     */
+    public SendMailNotificationsRequest getMailNotificationRequest(Context context) {
+        SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
+        if (CacheProfile.notifications != null) {
+            try {
+                request.mailSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
+                request.mailMutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
+                request.mailChat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
+                request.mailGuests = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
+            } catch (Exception e) {
+                Debug.error(e);
+            }
+
+            try {
+                request.apnsSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+                request.apnsMutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
+                request.apnsChat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
+                request.apnsVisitors = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
+            } catch (Exception e) {
+                Debug.error(e);
+            }
+        }
+        return request;
     }
 
     @Override

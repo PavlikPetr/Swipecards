@@ -12,13 +12,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -46,7 +46,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
             icon = getResources().getDrawable(R.drawable.ico_ok_account);
         }
         TextView textName = (TextView) root.findViewById(R.id.tvText);
-        textName.setText(Settings.getInstance().getSocialAccountName());
+        textName.setText(App.getUserConfig().getSocialAccountName());
         textName.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
         root.findViewById(R.id.btnLogout).setOnClickListener(this);

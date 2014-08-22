@@ -29,7 +29,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.utils.ClientUtils;
-import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -144,7 +143,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     private void initTextViews(View root, FeedbackType feedbackType) {
         mEditEmail = (EditText) root.findViewById(R.id.edEmail);
         mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
-        mEditEmail.setText(Settings.getInstance().getSocialAccountEmail());
+        mEditEmail.setText(App.getUserConfig().getSocialAccountEmail());
         mTransactionIdEditText = (EditText) root.findViewById(R.id.edTransactionId);
         switch (feedbackType) {
             case DEVELOPERS_MESSAGE:
@@ -218,7 +217,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     private boolean emailConfirmed(String email) {
         if (Utils.isValidEmail(email)) {
             mReport.email = email;
-            Settings.getInstance().setSocialAccountEmail(mReport.email);
+            App.getUserConfig().setSocialAccountEmail(mReport.email);
             return true;
         } else {
             return false;

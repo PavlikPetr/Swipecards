@@ -37,9 +37,10 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
+import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -48,7 +49,9 @@ import java.util.Locale;
 
 public class SettingsFragment extends BaseFragment implements OnClickListener, OnCheckedChangeListener {
 
-    private Settings mSettings;
+    public static final int REQUEST_CODE_RINGTONE = 333;
+    private AppConfig mSettings;
+    private UserConfig mUserSettings;
     private EditSwitcher mSwitchVibration;
     private EditSwitcher mSwitchLED;
     private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<>();
@@ -82,7 +85,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.fragment_settings, null);
-        mSettings = Settings.getInstance();
+        mSettings = App.getAppConfig();
+        mUserSettings = App.getUserConfig();
 
         // Init settings views
         initViews(view);
@@ -254,8 +258,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         setBackground(R.drawable.edit_big_btn_top_selector, frame);
         ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_account);
         TextView socialNameText = (TextView) frame.findViewWithTag("tvText");
-        mSettings.getSocialAccountName(socialNameText);
-        mSettings.getSocialAccountIcon(socialNameText);
+        mUserSettings.getSocialAccountName(socialNameText);
+        mUserSettings.getSocialAccountIcon(socialNameText);
         socialNameText.setVisibility(View.VISIBLE);
         frame.setOnClickListener(this);
     }
@@ -338,7 +342,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 break;
             case R.id.loVibration:
                 mSwitchVibration.doSwitch();
-                mSettings.setSetting(Settings.SETTINGS_GCM_VIBRATION, mSwitchVibration.isChecked());
+                mSettings.setGCMVibrationEnabled(mSwitchVibration.isChecked());
+                mSettings.saveConfig();
 
                 // Send empty vibro notification to demonstrate
                 if (mSwitchVibration.isChecked()) {
@@ -350,14 +355,15 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 break;
             case R.id.loLED:
                 mSwitchLED.doSwitch();
-                mSettings.setSetting(Settings.SETTINGS_GCM_LED, mSwitchLED.isChecked());
+                mSettings.setLEDEnabled(mSwitchLED.isChecked());
+                mSettings.saveConfig();
                 break;
             case R.id.loMelody:
                 intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.settings_melody));
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mSettings.getRingtone());
-                startActivityForResult(intent, Settings.REQUEST_CODE_RINGTONE);
+                startActivityForResult(intent, REQUEST_CODE_RINGTONE);
                 break;
             case R.id.loLanguage:
                 startLanguageSelection();
@@ -483,7 +489,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Settings.REQUEST_CODE_RINGTONE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_CODE_RINGTONE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                 setRingtonNameByUri(uri);
@@ -518,10 +524,9 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 if (mCursor != null) mCursor.close();
             }
         }
-        //TODO 2 settings and Settings.NOTIFICATION_MELODY is never used???
-        mSettings.setSetting(Settings.NOTIFICATION_MELODY, ringtoneName);
         melodyName.setText(ringtoneName);
-        mSettings.setSetting(Settings.SETTINGS_GCM_RINGTONE, uri == null ? Settings.SILENT : uri.toString());
+        mSettings.setGCMRingtone(uri == null ? AppConfig.SILENT : uri.toString());
+        mSettings.saveConfig();
     }
 
     @Override

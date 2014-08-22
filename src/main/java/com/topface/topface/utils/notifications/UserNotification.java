@@ -21,11 +21,11 @@ import android.text.style.StyleSpan;
 
 import com.topface.framework.imageloader.BitmapUtils;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 
 public class UserNotification {
@@ -120,14 +120,14 @@ public class UserNotification {
             notificationBuilder = new NotificationCompat.Builder(mContext);
 
             int notification = 0;
-            if (Settings.getInstance().isVibrationEnabled()) {
+            if (App.getAppConfig().isVibrationEnabled()) {
                 notification |= android.app.Notification.DEFAULT_VIBRATE;
             }
-            if (Settings.getInstance().isLEDEnabled()) {
+            if (App.getAppConfig().isLEDEnabled()) {
                 notification |= Notification.DEFAULT_LIGHTS;
             }
             notificationBuilder.setDefaults(notification);
-            notificationBuilder.setSound(Settings.getInstance().getRingtone());
+            notificationBuilder.setSound(App.getAppConfig().getRingtone());
             notificationBuilder.setOngoing(mOngoing);
             switch (mType) {
                 case PROGRESS:

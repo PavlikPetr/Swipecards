@@ -21,7 +21,6 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
@@ -174,7 +173,7 @@ public class GCMUtils {
 
     public static boolean showNotificationIfNeed(final Intent extra, Context context) {
         //Проверяем, не отключены ли уведомления
-        if (!Settings.getInstance().isNotificationEnabled()) {
+        if (!App.getAppConfig().isNotificationEnabled()) {
             Debug.log("GCM: notification is disabled");
             return false;
         } else if (extra == null) {
