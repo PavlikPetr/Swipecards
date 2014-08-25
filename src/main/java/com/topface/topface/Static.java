@@ -15,6 +15,7 @@ public class Static {
     public static final String API_500_ERROR_URL = "http://httpstat.us/500";
     public static final String API_STAGE_AKI_URL = "https://api-aki.stage.tf/";
     public static final String API_STAGE_MKRASILNIKOV_URL = "https://api-mkrasilnikov.stage.tf/";
+    public static final String API_STAGE_POCHTAR_URL = "https://api-pochtar.stage.tf//";
 
     /**
      * Ревизия серверной части, используется толькро при тестировании на бете

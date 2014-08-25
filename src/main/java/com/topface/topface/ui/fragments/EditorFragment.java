@@ -74,9 +74,10 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mApiUrlsMap.put(2, Static.API_BETA_URL);
         mApiUrlsMap.put(3, Static.API_GAMMA_URL);
         mApiUrlsMap.put(4, Static.API_DELTA_URL);
-        mApiUrlsMap.put(5, Static.API_500_ERROR_URL);
         mApiUrlsMap.put(6, Static.API_STAGE_AKI_URL);
         mApiUrlsMap.put(7, Static.API_STAGE_MKRASILNIKOV_URL);
+        mApiUrlsMap.put(8, Static.API_STAGE_POCHTAR_URL);
+        mApiUrlsMap.put(5, Static.API_500_ERROR_URL);
     }
 
     @Override
