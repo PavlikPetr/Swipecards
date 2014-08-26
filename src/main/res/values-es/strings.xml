@@ -311,6 +311,7 @@
     <string name="settings_feedback_email">Email para contacto</string>
     <string name="settings_invalid_email">E-mail incorrecto</string>
     <string name="chat_write_message">Escribir mensaje</string>
+    <string name="dating_message">Mensaje…</string>
     <string name="buying_sympathies">Compra de simpatías</string>
     <string name="novice_sympathies_bonus">¡Recibes %1$d simpatías de\nregalo! Esto significa que\nseguro les gustarás a las %2$d personas,\nque te mostrarán su simpatía</string>
     <string name="novice_buy_sympathies">Si quieres\nrecibir simpatías\nde forma garantizada ¡cómpralas ahora mismo!</string>
@@ -478,7 +479,6 @@
         <item quantity="other">Les has gustado a %d personas</item>
         <item quantity="one">Le has gustado a %d persona</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Para descubrir ahora mismo a quién te has gustado, activa la cuenta VIP</string>
     <string name="or">o</string>
     <string name="settings_delete_account">Eliminar la cuenta</string>
     <string name="chat_block_not_mutual">Empezar la comunicación con un usuario es posible, si este te ha mandado una simpatía o si tienes el estado VIP</string>
@@ -565,4 +565,5 @@
     <string name="settings_led">Notificación LED</string>
     <string name="open_market_error">No se puede abrir la página de la aplicación</string>
     <string name="billing_item_already_owned">Tu anterior compra está procesandose, espera por favor</string>
+    <string name="dialog">Diálogo</string>
 </resources>

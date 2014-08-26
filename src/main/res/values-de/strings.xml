@@ -478,7 +478,6 @@
         <item quantity="other">Sie gefallen %d Menschen</item>
         <item quantity="one">Sie gefallen %d Menschen</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Wollen Sie gerade jetzt erfahren, wem Sie gefallen? Aktivieren Sie einen VIP-Account</string>
     <string name="or">oder</string>
     <string name="settings_delete_account">Account löschen</string>
     <string name="chat_block_not_mutual">Sie können sich mit dem Nutzer unterhalten, falls er eine Sympathie Ihnen gesendet hat oder falls Sie einen VIP-Status haben</string>

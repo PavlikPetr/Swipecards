@@ -422,7 +422,6 @@
         <item quantity="other">Líbíte se %d lidem</item>
         <item quantity="one">Líbíte se %d člověku</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Abyste ihned zjistili, komu se líbíte, aktivujte VIP-účet</string>
     <string name="or">nebo</string>
     <string name="settings_delete_account">Odstranit účet</string>
     <string name="chat_block_not_mutual">Zahájit konverzaci s uživatelem můžete v případě, pokud jste od něj dostali sympatii nebo máte-VIP status</string>

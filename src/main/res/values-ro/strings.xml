@@ -398,7 +398,6 @@
     <string name="settings_select_language">Alege limba aplicarii</string>
     <string name="restart_to_change_locale">Pentru a schimba limba aplicarea va fi restartata</string>
     <string name="locale_changing">Schimba limba</string>
-    <string name="to_see_likes_by_vip">Pentru a afla acum, cui ati placut, activati VIP - acaunt</string>
     <string name="or">sau</string>
     <string name="settings_delete_account">Sterge acaunt</string>
     <string name="chat_block_not_mutual">A incepe conversarea cu utilizatorul se poate, numai daca el va trimis simpatie sau in caz ca aveti VIP - statut</string>

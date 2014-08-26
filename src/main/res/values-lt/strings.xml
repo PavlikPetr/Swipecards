@@ -489,7 +489,6 @@
         <item quantity="other">Jūs patikote %d žmonėms</item>
         <item quantity="one">Jūs patikote %d žmogui</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Suaktyvinkite VIP-paskyrą, kad tuojau pat sužinotumėte, kam jūs patikote!</string>
     <string name="or">arba</string>
     <string name="settings_delete_account">Pašalinti paskyrą</string>
     <string name="chat_block_not_mutual">Pradėti bendravimą su vartotoju galima, jei jis išsiuntė jums simpatiją arba jūs turite VIP-statusą</string>
