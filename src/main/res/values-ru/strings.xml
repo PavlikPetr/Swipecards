@@ -628,7 +628,7 @@
         <item quantity="few">Вы понравились %d людям</item>
         <item quantity="other">Вы понравились %d людям</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Чтобы прямо сейчас узнать, кому вы понравились, активируйте VIP-аккаунт</string>
+    <string name="likes_buy_vip">Чтобы прямо сейчас узнать, кому вы понравились, активируйте VIP-статус</string>
     <string name="or">или</string>
     <string name="settings_delete_account">Удалить аккаунт</string>
     <string name="chat_block_not_mutual">Начать общение с пользователем можно, если он отправил вам симпатию или у вас есть VIP-статус</string>

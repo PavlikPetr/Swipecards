@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/to_see_likes_by_vip"
+            android:text="@string/likes_buy_vip"
             android:layout_marginTop="16dp"
             style="@style/ItemWhiteText"
             android:maxWidth="300dp" />
