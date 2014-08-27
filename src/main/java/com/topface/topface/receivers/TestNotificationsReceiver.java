@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.utils.config.AppConfig;
@@ -29,11 +30,11 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
         if (action == null) return;
         switch (action) {
             case ACTION_TEST_NETWORK_ERRORS_ON:
-                config.setApiUrl(Static.API_500_ERROR_URL, 0, "");
+                config.setApiUrl(Static.API_500_ERROR_URL, "");
                 Toast.makeText(context, "Network errors: ON", Toast.LENGTH_LONG).show();
                 break;
             case ACTION_TEST_NETWORK_ERRORS_OFF:
-                config.setApiUrl(Static.API_URL, Static.API_VERSION, null);
+                config.setApiUrl(Static.API_URL, null);
                 Toast.makeText(context, "Network errors: OFF", Toast.LENGTH_LONG).show();
                 break;
             case ACTION_CANCEL_TEST_NETWORK_ERRORS:
@@ -41,7 +42,7 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
                 UserNotificationManager.getInstance(App.getContext())
                         .cancelNotification(notificationId);
                 config.setTestNetwork(false);
-                config.setApiUrl(Static.API_URL, Static.API_VERSION, null);
+                config.setApiUrl(Static.API_URL, null);
                 config.saveConfig();
                 Toast.makeText(context, "All requests will be OK. No more errors.", Toast.LENGTH_LONG).show();
                 break;

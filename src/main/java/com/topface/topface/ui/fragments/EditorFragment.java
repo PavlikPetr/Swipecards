@@ -40,8 +40,6 @@ import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import org.w3c.dom.Text;
-
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_CANCEL_TEST_NETWORK_ERRORS;
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_OFF;
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_ON;
@@ -68,7 +66,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private static int NETWORK_ERROR_NOTIFICATION_ID = 800;
     private CheckBox mCustomApiCheckBox;
     private EditText mCustomApi;
-    private int VERSION = 7;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -305,13 +303,12 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 if (!mCustomApiCheckBox.isChecked()) {
                     mAppConfig.setApiUrl(
                             (String) mApiUrl.getSelectedItem(),
-                            VERSION,
                             revision.toString()
                     );
                 } else {
                     if (!TextUtils.isEmpty(customApi)) {
-                        mAppConfig.setApiUrl(String.format(API_STAGE_TF, customApi), VERSION,
-                                Static.EMPTY);
+                        mAppConfig.setApiUrl(String.format(API_STAGE_TF, customApi),
+                                null);
                     }
                 }
                 showCompleteMessage();

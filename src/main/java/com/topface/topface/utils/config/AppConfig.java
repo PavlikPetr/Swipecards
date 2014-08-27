@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.Editor;
 
 import java.util.Arrays;
@@ -43,6 +44,7 @@ public class AppConfig extends AbstractConfig {
     public static final String STAGE_LOGIN = "stage_login";
     public static final String STAGE_CHECKED = "stage_checked";
 
+
     public AppConfig(Context context) {
         super(context);
     }
@@ -52,7 +54,7 @@ public class AppConfig extends AbstractConfig {
         // api url: https://api.topface.com/
         addField(settingsMap, DATA_API_URL, Static.API_URL);
         // api version number
-        addField(settingsMap, DATA_API_VERSION, Static.API_VERSION);
+        addField(settingsMap, DATA_API_VERSION, ApiRequest.API_VERSION);
         // api revision for test platforms
         addField(settingsMap, DATA_API_REVISION, null);
         // vk api id
@@ -206,13 +208,11 @@ public class AppConfig extends AbstractConfig {
      * Сохраняет все настройки, связаные с доступок к API
      *
      * @param url      путь к API
-     * @param version  Версия API
      * @param revision Ревизия (будет работать только для тестовых платформ)
      */
-    public void setApiUrl(String url, Integer version, String revision) {
+    public void setApiUrl(String url, String revision) {
         SettingsMap settingsMap = getSettingsMap();
         setField(settingsMap, DATA_API_URL, url);
-        setField(settingsMap, DATA_API_VERSION, version);
         setField(settingsMap, DATA_API_REVISION, revision);
     }
 
@@ -236,7 +236,7 @@ public class AppConfig extends AbstractConfig {
      */
     public String getApiUrl() {
         SettingsMap settingsMap = getSettingsMap();
-        return getStringField(settingsMap, DATA_API_URL) + "?v=" + getIntegerField(settingsMap, DATA_API_VERSION);
+        return getStringField(settingsMap, DATA_API_URL) + "?v=" + ApiRequest.API_VERSION;
     }
 
     /**
