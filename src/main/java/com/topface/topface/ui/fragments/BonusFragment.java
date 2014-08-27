@@ -52,12 +52,7 @@ public class BonusFragment extends BaseFragment {
             @Override
             public void onInitialized() {
                 if (tfOfferwallButton != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            tfOfferwallButton.setEnabled(true);
-                        }
-                    });
+                    tfOfferwallButton.setEnabled(true);
                 }
             }
         });
