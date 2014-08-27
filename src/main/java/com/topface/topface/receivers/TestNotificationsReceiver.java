@@ -31,10 +31,12 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
         switch (action) {
             case ACTION_TEST_NETWORK_ERRORS_ON:
                 config.setApiUrl(Static.API_500_ERROR_URL, "");
+                config.saveConfig();
                 Toast.makeText(context, "Network errors: ON", Toast.LENGTH_LONG).show();
                 break;
             case ACTION_TEST_NETWORK_ERRORS_OFF:
                 config.setApiUrl(Static.API_URL, null);
+                config.saveConfig();
                 Toast.makeText(context, "Network errors: OFF", Toast.LENGTH_LONG).show();
                 break;
             case ACTION_CANCEL_TEST_NETWORK_ERRORS:

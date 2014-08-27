@@ -312,6 +312,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                     }
                 }
                 showCompleteMessage();
+                mAppConfig.saveConfig();
             } else {
                 showError();
             }
