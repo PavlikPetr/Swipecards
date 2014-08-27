@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,6 +40,8 @@ import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
+import org.w3c.dom.Text;
+
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_CANCEL_TEST_NETWORK_ERRORS;
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_OFF;
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_ON;
@@ -48,9 +52,9 @@ import static com.topface.topface.utils.notifications.UserNotificationManager.ge
  * Фрагмент админки. Доступен только для редакторов.
  */
 public class EditorFragment extends BaseFragment implements View.OnClickListener {
+    public static final String API_STAGE_TF = "https://api-%s.stage.tf";
     private Spinner mApiUrl;
     private Spinner mOfferwallTypeChoose;
-    private EditText mApiVersion;
     private EditText mApiRevision;
     private AppConfig mAppConfig;
     private Spinner mDebugModeSpinner;
@@ -62,6 +66,9 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private EditSwitcher switcherTestNetwork;
 
     private static int NETWORK_ERROR_NOTIFICATION_ID = 800;
+    private CheckBox mCustomApiCheckBox;
+    private EditText mCustomApi;
+    private int VERSION = 7;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +99,12 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         root.findViewById(R.id.EditorClearAirMessages).setOnClickListener(this);
         root.findViewById(R.id.EditorSendGCMToken).setOnClickListener(this);
         root.findViewById(R.id.EditorSendAuth).setOnClickListener(this);
+        mCustomApi = (EditText) root.findViewById(R.id.EditorLogin);
+        mCustomApi.setText(mAppConfig.getStageLogin());
+
+        mCustomApiCheckBox = (CheckBox) root.findViewById(R.id.EditorApiCheckbox);
+        mCustomApiCheckBox.setOnClickListener(this);
+        mCustomApiCheckBox.setChecked(mAppConfig.getStageChecked());
         // попап приглашений
         ViewGroup switcherView = (ViewGroup) root.findViewById(R.id.loPopupSwitcher);
         ((TextView) switcherView.findViewWithTag("tvTitle")).setText("Показывать попап приглашений");
@@ -252,10 +265,11 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             }
         };
 
-        mApiVersion = (EditText) rootLayout.findViewById(R.id.EditorApiVersion);
-        mApiVersion.addTextChangedListener(watcher);
         mApiRevision = (EditText) rootLayout.findViewById(R.id.EditorApiRevision);
         mApiRevision.addTextChangedListener(watcher);
+
+        mCustomApi.addTextChangedListener(watcher);
+
 
         //Создаем стандартный адаптер
         @SuppressWarnings("unchecked") ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
@@ -281,14 +295,24 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
     private void saveApiUrl() {
         try {
-            Editable version = mApiVersion.getText();
             Editable revision = mApiRevision.getText();
-            if (version != null && revision != null) {
-                mAppConfig.setApiUrl(
-                        (String) mApiUrl.getSelectedItem(),
-                        Integer.parseInt(version.toString()),
-                        revision.toString()
-                );
+            String customApi = mCustomApi.getText().toString();
+            if (!TextUtils.isEmpty(customApi)) {
+                mAppConfig.setStageLogin(customApi, mCustomApiCheckBox.isChecked());
+            }
+            if (revision != null) {
+                if (!mCustomApiCheckBox.isChecked()) {
+                    mAppConfig.setApiUrl(
+                            (String) mApiUrl.getSelectedItem(),
+                            VERSION,
+                            revision.toString()
+                    );
+                } else {
+                    if (!TextUtils.isEmpty(customApi)) {
+                        mAppConfig.setApiUrl(String.format(API_STAGE_TF, customApi), VERSION,
+                                Static.EMPTY);
+                    }
+                }
                 showCompleteMessage();
             } else {
                 showError();
@@ -382,6 +406,9 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                     }
                 }).exec();
                 break;
+            case R.id.EditorApiCheckbox:
+                saveApiUrl();
+                break;
             default:
                 showError();
         }
@@ -396,7 +423,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setConfigValues() {
-        mApiVersion.setText(Integer.toString(mAppConfig.getApiVersion()));
         mApiRevision.setText(mAppConfig.getApiRevision());
         mApiUrl.setSelection(mApiUrlsMap.indexOfValue(mAppConfig.getApiDomain()));
         mEditorModeSpinner.setSelection(mAppConfig.getEditorMode());

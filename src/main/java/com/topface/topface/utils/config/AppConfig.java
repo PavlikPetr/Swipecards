@@ -40,6 +40,8 @@ public class AppConfig extends AbstractConfig {
     private static final String LAST_FULLSCREEN_TIME = "fullScreeenBanner_last_time";
     private static final String FULLSCREEN_URLS_SET = "fullscreen_urls_string";
     private static final String URL_SEPARATOR = "::";
+    public static final String STAGE_LOGIN = "stage_login";
+    public static final String STAGE_CHECKED = "stage_checked";
 
     public AppConfig(Context context) {
         super(context);
@@ -71,6 +73,10 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, LAST_FULLSCREEN_TIME, 0L);
         // fullscreen urls
         addField(settingsMap, FULLSCREEN_URLS_SET, Static.EMPTY);
+        //stage login for admin
+        addField(settingsMap, STAGE_LOGIN, Static.EMPTY);
+        //state of checkbox of stagelogin
+        addField(settingsMap, STAGE_CHECKED, false);
     }
 
     protected SharedPreferences getPreferences() {
@@ -210,6 +216,19 @@ public class AppConfig extends AbstractConfig {
         setField(settingsMap, DATA_API_REVISION, revision);
     }
 
+    public void setStageLogin(String login, boolean checked) {
+        SettingsMap settingsMap = getSettingsMap();
+        setField(settingsMap, STAGE_LOGIN, login);
+        setField(settingsMap, STAGE_CHECKED, checked);
+    }
+
+    public String getStageLogin() {
+        return  getStringField(getSettingsMap(), STAGE_LOGIN);
+    }
+
+    public boolean getStageChecked() {
+        return getBooleanField(getSettingsMap(), STAGE_CHECKED);
+    }
     /**
      * Url for api request with current saved version
      *
