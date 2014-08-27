@@ -89,6 +89,9 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         //Нам нужен конкретный AppStore, т.к. у каждого типа сборки свои продукты и поддержка других маркетов все равно не нужна
         switch (BuildConfig.BILLING_TYPE) {
             case GOOGLE_PLAY:
+                //#FORTUMO: Тут нужно разные магазины на разных вкладках инициировать
+                //Это нужно добавить для включения Fortumo
+                //optsBuilder.addAvailableStores(new FortumoStore(activity));
                 optsBuilder.addAvailableStores(new GooglePlay(activity, null));
                 break;
             case AMAZON:

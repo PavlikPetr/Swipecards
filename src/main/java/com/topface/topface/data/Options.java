@@ -597,6 +597,7 @@ public class Options extends AbstractData {
         public static final String PWALL_MOBILE = "paymentwall-mobile";
         public static final String PWALL = "paymentwall-direct";
         public static final String BONUS = "bonus";
+        public static final String FORTUMO = "fortumo";
 
         public String name;
         public String type;

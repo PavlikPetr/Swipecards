@@ -17,6 +17,7 @@ public class SessionConfig extends AbstractConfig {
     private static final String DATA_PROFILE = "data_profile_user_data";
     private static final String DATA_OPTIONS = "data_options";
     private static final String DATA_MARKET_PRODUCTS = "data_google_products";
+    private static final String DATA_FORTUMO_PRODUCTS = "data_fortumo_products";
     private static final String DATA_PAYMENTWALL_PRODUCTS = "data_pw_products";
     private static final String DATA_PAYMENTWALL_MOBILE_PRODUCTS = "data_pw_mobile_products";
 
@@ -32,6 +33,7 @@ public class SessionConfig extends AbstractConfig {
         addField(settingsMap, DATA_OPTIONS, Static.EMPTY);
         // use market and paymentwall products
         addField(settingsMap, DATA_MARKET_PRODUCTS, Static.EMPTY);
+        addField(settingsMap, DATA_FORTUMO_PRODUCTS, Static.EMPTY);
         addField(settingsMap, DATA_PAYMENTWALL_PRODUCTS, Static.EMPTY);
         addField(settingsMap, DATA_PAYMENTWALL_MOBILE_PRODUCTS, Static.EMPTY);
     }
@@ -112,6 +114,16 @@ public class SessionConfig extends AbstractConfig {
         return setField(getSettingsMap(), DATA_MARKET_PRODUCTS, googleProductsResponseJson);
     }
 
+    /**
+     * Sets Fortumo cache from fortumo products request
+     *
+     * @param productsResponseJson google play products json response
+     * @return true on success
+     */
+    public boolean setFortumoProductsData(String productsResponseJson) {
+        return setField(getSettingsMap(), DATA_FORTUMO_PRODUCTS, productsResponseJson);
+    }
+
     public boolean setPaymentWallProductsData(String pwProductsResponseJson, PaymentWallProducts.TYPE type) {
         return setField(getSettingsMap(), type == PaymentWallProducts.TYPE.MOBILE ? DATA_PAYMENTWALL_MOBILE_PRODUCTS :
                 DATA_PAYMENTWALL_PRODUCTS, pwProductsResponseJson);
@@ -124,6 +136,15 @@ public class SessionConfig extends AbstractConfig {
      */
     public String getProductsData() {
         return getStringField(getSettingsMap(), DATA_MARKET_PRODUCTS);
+    }
+
+    /**
+     * Fortumo products cached json response
+     *
+     * @return fortumo products json
+     */
+    public String getFortumoProductsData() {
+        return getStringField(getSettingsMap(), DATA_FORTUMO_PRODUCTS);
     }
 
     public String getPaymentwallProductsData(PaymentWallProducts.TYPE type) {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fortumo-products>
+    <!-- #FORTUMO: Это просто тестовый продукт, но с реальными service-id и service-inapp-secret -->
+    <!--
+    <product                    // mapping for particular fortumo service
+        id="sku_gas"            // SKU with rules same to app store SKU
+        service-id="61730610ade8f2f754bb3bd4b0c1fd0e"           // Fortumo serviceId need to be copy-pasted from Dashboard
+        service-inapp-secret="cbc0da3763e59eee2d5a523fe5761346" // Fortumo inapp-secret need to be copy-pasted from Dashboard
+        nook-service-id="61730610ade8f2f754bb3bd4b0c1fd0e"           // Fortumo NOOK serviceId need to be copy-pasted from Dashboard
+        nook-service-inapp-secret="cbc0da3763e59eee2d5a523fe5761346" // Fortumo NOOK inapp-secret need to be copy-pasted from Dashboard
+        consumable="true"/>     // consumable or not - currently is necessary parameter as wellas for Amazon
+    -->
+    <product
+        id="coins40"
+        service-id="5a9c9345f17607b982d855113a5bfc57"
+        service-inapp-secret="e1ee2015ae8969f34dce98f4c8bd58ae"
+        consumable="true"/>
+</fortumo-products>

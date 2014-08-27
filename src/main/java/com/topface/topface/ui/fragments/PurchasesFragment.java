@@ -193,6 +193,9 @@ public class PurchasesFragment extends BaseFragment {
             case Options.Tab.PWALL_MOBILE:
                 products = CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.MOBILE);
                 break;
+            case Options.Tab.FORTUMO:
+                products = CacheProfile.getFortumoProducts();
+                break;
         }
         return products;
     }

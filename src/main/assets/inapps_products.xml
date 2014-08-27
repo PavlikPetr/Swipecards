@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inapp-products>
+    <!--#FORTUMO: Описание тестового продукта -->
+    <items>
+        <!--Zero or more repetitions:-->
+        <item id="coins40"
+              publish-state="published"> <!-- id: the same format as Google SKU, required; published: "published" or "unpublushed", required by the xsd, but is not actually used it the current implementation-->
+            <summary><!--encapsulates all elements related to description, required-->
+                <summary-base><!--default strings elements, required-->
+                    <title>1/4 of gas tank</title>
+                    <!-- default title, required-->
+                    <description>Some gas to go further</description>
+                    <!-- default description, required-->
+                </summary-base>
+                <!--Zero or more repetitions:-->
+                <summary-localization locale="ru_RU"> <!-- locale: [a-z]_[A-Z], required-->
+                    <title>Четверть бака бензина</title>
+                    <!-- required -->
+                    <description>Немного топлива, чтобы проехать еще</description>
+                    <!-- required -->
+                </summary-localization>
+                <summary-localization locale="en_US">
+                    <title>1/4 of gas tank</title>
+                    <description>Some gas to go further</description>
+                </summary-localization>
+            </summary>
+            <price
+                autofill="false"> <!-- autofill: true or false, required by the xsd, but is not used in the current implementation-->
+                <price-base>0.10</price-base>
+                <!-- default price, required-->
+                <!--Zero or more repetitions:-->
+                <price-local country="RU"> <!-- country: [A-Z][A_Z], required-->
+                    3.00
+                </price-local>
+                <price-local country="EN">1.00</price-local>
+            </price>
+        </item>
+    </items>
+</inapp-products>

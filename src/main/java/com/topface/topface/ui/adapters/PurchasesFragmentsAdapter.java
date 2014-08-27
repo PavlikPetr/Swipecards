@@ -12,9 +12,11 @@ import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.AmazonBuyingFragment;
+import com.topface.topface.ui.fragments.buy.FortumoBuyingFragment;
 import com.topface.topface.ui.fragments.buy.GooglePlayBuyingFragment;
 import com.topface.topface.ui.fragments.buy.PaymentWallBuyingFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
+import com.topface.topface.ui.fragments.buy.VipFortumoBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
 
 import java.util.LinkedList;
@@ -93,6 +95,13 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
                     fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.MOBILE);
                 } else {
                     fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.MOBILE);
+                }
+                break;
+            case Options.Tab.FORTUMO:
+                if (!mIsVip) {
+                    fragment = FortumoBuyingFragment.newInstance(from);
+                } else {
+                    fragment = VipFortumoBuyFragment.newInstance(true, from);
                 }
                 break;
             default:

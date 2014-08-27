@@ -38,6 +38,9 @@ abstract public class PurchaseRequest extends ApiRequest {
                 return new GooglePlayPurchaseRequest(purchase, context);
             case OpenIabHelper.NAME_AMAZON:
                 return new AmazonPurchaseRequest(purchase, context);
+            case OpenIabHelper.NAME_FORTUMO:
+                //#FORTUMO: Запроса валидации Fortumo пока нет
+                return new GooglePlayPurchaseRequest(purchase, context);
             default:
                 throw new RuntimeException("Unknown purchase app store");
         }
