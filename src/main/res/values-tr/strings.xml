@@ -194,7 +194,7 @@
     <string name="buying_default_message">Siz, hediyelerinizi ve hayranlığınızı para karşına gönderebilirsiniz</string>
     <string name="buying_money">Para alış verişi</string>
     <string name="profile_header_title">Profilim</string>
-    <string name="profile_add_title">Fotoğraf eklemek</string>
+    <string name="album_add_photo_title">Foto eklemek</string>
     <string name="profile_add_album">Mevcut olanlardan seçmek</string>
     <string name="profile_add_camera">Resim çekmek</string>
     <string name="profile_photo">Foto</string>

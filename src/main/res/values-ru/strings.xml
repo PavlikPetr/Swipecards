@@ -239,7 +239,7 @@
     <!-- Profile  -->
     <string name="profile_header_title">Мой профиль</string>
 
-    <string name="profile_add_title">Добавить фотографию</string>
+    <string name="album_add_photo_title">Добавить фото</string>
     <string name="profile_add_album">Выбрать из имеющихся</string>
     <string name="profile_add_camera">Сделать снимок</string>
     <string name="profile_photo">Фото</string>

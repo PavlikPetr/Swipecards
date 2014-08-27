@@ -138,7 +138,7 @@
     <string name="buying_default_message">선물을 보낼 수 있으며, 코인 선물에 대한 감탄을 보낼 수 있습니다.</string>
     <string name="buying_money">코인 구입</string>
     <string name="profile_header_title">내 프로필</string>
-    <string name="profile_add_title">사진을 추가하기</string>
+    <string name="album_add_photo_title">사진을 추가하세요.</string>
     <string name="profile_add_album">사진 앨범에서 선택하기</string>
     <string name="profile_add_camera">카메라에서 촬영하기</string>
     <string name="profile_photo">사진</string>

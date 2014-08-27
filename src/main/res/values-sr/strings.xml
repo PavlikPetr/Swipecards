@@ -142,7 +142,7 @@
     <string name="buying_default_message">Možete slati poklone i ushićenja za monete</string>
     <string name="buying_money">Kupovina moneta</string>
     <string name="profile_header_title">Moj profil</string>
-    <string name="profile_add_title">Dodati fotografiju</string>
+    <string name="album_add_photo_title">Dodati fotografiju</string>
     <string name="profile_add_album">Odabrati od postojećih</string>
     <string name="profile_add_camera">Načiniti snimak</string>
     <string name="profile_photo">Foto</string>

@@ -37,7 +37,7 @@
         style="@style/Widget.Topface.Button.Big.Blue"
         android:singleLine="true"
         android:ellipsize="end"
-        android:text="@string/vip_buy_vip"
+        android:text="@string/buying_vip_status"
         android:layout_below="@id/popular_user_message"
         android:layout_centerHorizontal="true" />
 
