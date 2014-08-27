@@ -142,7 +142,7 @@
     <string name="buying_default_message">Môžete odosielať darčeky a obdivy za mince</string>
     <string name="buying_money">Nákup mincí</string>
     <string name="profile_header_title">Môj profil</string>
-    <string name="profile_add_title">Pridať fotografiu</string>
+    <string name="album_add_photo_title">Pridať fotografiu</string>
     <string name="profile_add_album">Vybrať z toho, čo je k dispozícii</string>
     <string name="profile_add_camera">Vyfotografovať</string>
     <string name="profile_photo">Fotografia</string>

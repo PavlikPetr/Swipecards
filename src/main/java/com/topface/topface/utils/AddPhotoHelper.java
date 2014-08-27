@@ -134,7 +134,7 @@ public class AddPhotoHelper {
                 }
                 outputFile = new File(outputDirectory, mFileName);
                 intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputFile));
-                intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
+                intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.album_add_photo_title));
 
                 if (Utils.isIntentAvailable(mContext, intent.getAction())) {
                     if (mFragment != null) {
@@ -167,7 +167,7 @@ public class AddPhotoHelper {
         int requestCode = withDialog ? GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG :
                 GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY;
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
+        intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.album_add_photo_title));
         if (mFragment != null) {
             if (mFragment instanceof ProfilePhotoFragment) {
                 mFragment.getParentFragment().startActivityForResult(intent, requestCode);

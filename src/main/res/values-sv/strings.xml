@@ -190,7 +190,7 @@
     <string name="buying_default_message">För mynt kan du skicka gåvor och visa beundran</string>
     <string name="buying_money">Köp mynt</string>
     <string name="profile_header_title">Min profil</string>
-    <string name="profile_add_title">Lägg till foto</string>
+    <string name="album_add_photo_title">Lägg till foto</string>
     <string name="profile_add_album">Välj av de befintliga</string>
     <string name="profile_add_camera">Ta bild</string>
     <string name="profile_photo">Foto</string>
