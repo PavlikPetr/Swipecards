@@ -422,7 +422,6 @@
         <item quantity="other">Dopali ste se %d ljudima</item>
         <item quantity="one">Dopali ste se %d čpveku</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Da bi odmah saznali kome ste se dopali, aktivirajte VIP akaunt.</string>
     <string name="or">ili</string>
     <string name="settings_delete_account">Ukloniti akaunt</string>
     <string name="chat_block_not_mutual">Započeti komunikaciju sa korisnikom moguće je samo ako vam je on poslao simpatiju ili ako imate VIP status</string>

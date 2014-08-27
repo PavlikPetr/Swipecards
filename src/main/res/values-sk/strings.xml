@@ -421,7 +421,6 @@
         <item quantity="other">Páčite sa %d ľuďom</item>
         <item quantity="one">Páčite sa %d človeku</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Ak chcete okamžite zistiť, komu sa páčite, aktivujte si VIP účet.</string>
     <string name="or">alebo</string>
     <string name="settings_delete_account">Vymazať účet</string>
     <string name="chat_block_not_mutual">Začať sa rozprávať s užívateľom je možné iba vtedy, ak Vám poslal sympatiu alebo máte VIP status</string>

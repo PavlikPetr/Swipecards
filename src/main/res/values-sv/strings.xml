@@ -475,7 +475,6 @@
         <item quantity="other">%d personer gillar dig</item>
         <item quantity="one">%d person gillar dig</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Aktivera VIP för att alldeles strax ta reda på vem som gillar dig</string>
     <string name="or">eller</string>
     <string name="settings_delete_account">Radera konto</string>
     <string name="chat_block_not_mutual">Du kan börja umgås med andra användare endast om de har skickat dig sympatier eller om du har VIP-status</string>

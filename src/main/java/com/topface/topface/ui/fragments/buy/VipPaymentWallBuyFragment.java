@@ -44,6 +44,16 @@ public class VipPaymentWallBuyFragment extends VipBuyFragment {
     }
 
     @Override
+    public void onInAppBillingUnsupported() {
+        //Покупки вип у нас всегда поддеоживаются
+    }
+
+    @Override
+    public void onSubscriptionUnsupported() {
+        //Покупки на вип у нас всегда поддерживаются
+    }
+
+    @Override
     public boolean isTestPurchasesAvailable() {
         return false;
     }

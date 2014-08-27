@@ -486,7 +486,6 @@
         <item quantity="other">Sizden %d kişi hoşlandı</item>
         <item quantity="one">Sizden %d kişi hoşlandı</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Sizden hoşlandığı kişileri hemen şimdi öğrenmek için VIP-profili güncelleyin</string>
     <string name="or">veya</string>
     <string name="settings_delete_account">Hesap silmek</string>
     <string name="chat_block_not_mutual">Kullanıcı size sempati gönderdiyse veya VİP-durumunuz varsa o zaman onunla sohbete başlayabilirsiniz</string>

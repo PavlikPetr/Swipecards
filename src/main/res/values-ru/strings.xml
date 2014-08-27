@@ -196,7 +196,7 @@
     <string name="chat_like_out">Вы отправили симпатию</string>
     <string name="chat_mutual_in">Вам прислали восхищение</string>
     <string name="chat_mutual_out">Вы отправили восхищение</string>
-    <string name="chat_wish_in">Вам отправили Тайное Желанgие.</string>
+    <string name="chat_wish_in">Вам отправили Тайное Желание.</string>
     <string name="chat_wish_out">Вы отправили Тайное Желание.</string>
     <string name="chat_sexuality_in">Вашу сексуальность оценили.</string>
     <string name="chat_sexuality_out">Вы оценили сексуальность.</string>
@@ -405,7 +405,7 @@
     <string name="settings_feedback_email">E-mail для связи</string>
     <string name="settings_invalid_email">Некорректный e-mail</string>
     <string name="chat_write_message">Написать сообщение</string>
-    <string name="dating_message">Сообщение...</string>
+    <string name="dating_message">Сообщение…</string>
 
     <string name="buying_sympathies">Покупка симпатии</string>
 
@@ -628,7 +628,7 @@
         <item quantity="few">Вы понравились %d людям</item>
         <item quantity="other">Вы понравились %d людям</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Чтобы прямо сейчас узнать, кому вы понравились, активируйте VIP-аккаунт</string>
+    <string name="likes_buy_vip">Чтобы прямо сейчас узнать, кому вы понравились, активируйте VIP-статус</string>
     <string name="or">или</string>
     <string name="settings_delete_account">Удалить аккаунт</string>
     <string name="chat_block_not_mutual">Начать общение с пользователем можно, если он отправил вам симпатию или у вас есть VIP-статус</string>

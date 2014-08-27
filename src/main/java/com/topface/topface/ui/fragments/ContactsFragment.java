@@ -233,23 +233,23 @@ public class ContactsFragment extends BaseFragment {
                 holder = new ViewHolder();
                 holder.text = (TextView) convertView.findViewById(R.id.contactName);
                 holder.checkBox = (CheckBox) convertView.findViewById(R.id.contactCheckbox);
+                convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
+
             final ContactsProvider.Contact contact = filteredContacts.get(filteredContacts.size() - position - 1);
-            if (contact != null) {
-                holder.text.setText(contact.getName());
-                holder.checkBox.setChecked(contact.isChecked());
-                convertView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        contact.setChecked(!holder.checkBox.isChecked());
-                        holder.checkBox.setChecked(!holder.checkBox.isChecked());
-                        mWasChanges = true;
-                        changeButtonState();
-                    }
-                });
-            }
+            holder.text.setText(contact.getName());
+            holder.checkBox.setChecked(contact.isChecked());
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    contact.setChecked(!holder.checkBox.isChecked());
+                    holder.checkBox.setChecked(!holder.checkBox.isChecked());
+                    mWasChanges = true;
+                    changeButtonState();
+                }
+            });
 
             return convertView;
         }

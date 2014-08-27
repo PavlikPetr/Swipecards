@@ -475,7 +475,6 @@
         <item quantity="other">Piaci a %d persone</item>
         <item quantity="one">Piaci a %d persona</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Attiva l’account VIP per scoprire ora a chi piaci</string>
     <string name="or">o</string>
     <string name="settings_delete_account">Cancella l’account</string>
     <string name="chat_block_not_mutual">Puoi iniziare la conversazione con l’utente solo se ti ha inviato una simpatia o se sei utente VIP</string>
@@ -562,4 +561,5 @@
     <string name="settings_led">Notifica LED</string>
     <string name="open_market_error">La pagina momentaneamente non è disponibile</string>
     <string name="billing_item_already_owned">Il tuo ordine precedente è in elaborazione, si prega di attendere</string>
+    <string name="dialog">Dialoghi</string>
 </resources>
