@@ -66,4 +66,8 @@ public class KeyboardListenerLayout extends RelativeLayout {
         void keyboardOpened();
         void keyboardClosed();
     }
+
+    public boolean isKeyboardOpened() {
+        return mKeyboardOpened;
+    }
 }
