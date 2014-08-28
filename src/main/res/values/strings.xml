@@ -569,5 +569,6 @@
     <string name="settings_led">LED notification</string>
     <string name="open_market_error">Cannot open the application page</string>
     <string name="billing_item_already_owned">Your previous purchase is now processing, please wait</string>
+    <string name="general_admin_login">Login</string>
     <string name="dialog">Conversation</string>
 </resources>

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.topface.R;
@@ -119,6 +120,13 @@ public class BonusFragment extends BaseFragment {
             }
         }
         return root;
+    }
+
+    private Options.Offerwalls.Offer getFakeTfOfferwall() {
+        Options.Offerwalls.Offer offer = new Options.Offerwalls.Offer();
+        offer.action = OfferwallsManager.TFOFFERWALL;
+        offer.text = "tf offerwall";
+        return offer;
     }
 
     /**
