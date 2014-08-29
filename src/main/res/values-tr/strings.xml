@@ -115,6 +115,11 @@
     <string name="pincode_forget">PIN-kod mu unuttunuz?</string>
     <string name="pincode_auth_input">Login ve parolaya girmelisiniz</string>
     <string name="pincode_will_be_reset">Başarılı üye girişinden sonra uygulamanın tüm ayarları sıfırlanacak.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">kapanıştan hemen sonra</item>
+        <item quantity="other">%d dak.</item>
+        <item quantity="one">%d dak.</item>
+    </plurals>
     <string name="general_error">HATA</string>
     <string name="general_yes">Evet</string>
     <string name="general_no">Hayır</string>

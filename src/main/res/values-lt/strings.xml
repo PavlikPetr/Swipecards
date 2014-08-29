@@ -115,6 +115,12 @@
     <string name="pincode_forget">Pamiršote PIN-kodą?</string>
     <string name="pincode_auth_input">Jums būtina įvesti loginą ir slaptažodį.</string>
     <string name="pincode_will_be_reset">Sėkmingai autorizavus, visi programos nustatymai bus atstatyti į pradinius.</string>
+    <plurals name="pincode_interval">
+        <item quantity="few">%d min.</item>
+        <item quantity="zero">iškart po uždarymo</item>
+        <item quantity="other">%d min.</item>
+        <item quantity="one">%d min.</item>
+    </plurals>
     <string name="general_error">KLAIDA</string>
     <string name="general_yes">Taip</string>
     <string name="general_no">Ne</string>
@@ -319,6 +325,7 @@
     <string name="settings_feedback_email">El. paštas kontaktams</string>
     <string name="settings_invalid_email">Neteisingas el. paštas</string>
     <string name="chat_write_message">Parašyti pranešimą</string>
+    <string name="dating_message">Pranešimas…</string>
     <string name="buying_sympathies">Simpatijų pirkimas</string>
     <string name="novice_sympathies_bonus">Jūs gaunate %1$d simpatijų\ndovanų! Tai reiškia, kad jūs\ntikrai patinkate %2$d žmonių,\nkurie išreikš jums savo simpatiją</string>
     <string name="novice_buy_sympathies">Jei norite garantuotai\ngauti simpatijų,\nįsigykite jų tiesiog dabar!</string>
@@ -489,6 +496,7 @@
         <item quantity="other">Jūs patikote %d žmonėms</item>
         <item quantity="one">Jūs patikote %d žmogui</item>
     </plurals>
+    <string name="likes_buy_vip">Kad nedelsiant sužinotumėte, kam jūs patikote, suaktyvinkite VIP-statusą</string>
     <string name="or">arba</string>
     <string name="settings_delete_account">Pašalinti paskyrą</string>
     <string name="chat_block_not_mutual">Pradėti bendravimą su vartotoju galima, jei jis išsiuntė jums simpatiją arba jūs turite VIP-statusą</string>
@@ -582,4 +590,5 @@
     <string name="settings_led">LED pranešimas</string>
     <string name="open_market_error">Nepavyksta atverti programos lango</string>
     <string name="billing_item_already_owned">Jūsų praeitas pirkinys apdorojamas, prašome palaukti</string>
+    <string name="dialog">Susirašinėjimas</string>
 </resources>

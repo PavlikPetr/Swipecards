@@ -112,6 +112,11 @@
     <string name="pincode_forget">Ξεχάσατε τον κωδικό σας PIN?</string>
     <string name="pincode_auth_input">Θα πρέπει να εισάγετε το όνομα χρήστη και τον κωδικό πρόσβασης.</string>
     <string name="pincode_will_be_reset">Εάν η άδεια είναι επιτυχής, όλες οι ρυθμίσεις της εφαρμογής θα επανέλθουν.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">αμέσως μετά το κλείσιμο</item>
+        <item quantity="other">%d λεπτά.</item>
+        <item quantity="one">%d λεπτό.</item>
+    </plurals>
     <string name="general_error">ΣΦΆΛΜΑ</string>
     <string name="general_yes">Ναί</string>
     <string name="general_no">\'Οχι</string>
