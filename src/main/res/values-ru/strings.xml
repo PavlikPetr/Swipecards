@@ -259,6 +259,7 @@
     <string name="edit_selected">Выбрана</string>
     <string name="edit_name">Имя</string>
     <string name="edit_age">Возраст</string>
+    <string name="edit_age_error">Чтобы использовать приложение, ваш возраст должен быть от 16 до 99</string>
     <string name="edit_status">Статус</string>
     <string name="edit_set_as_main">Сделать главной</string>
     <string name="edit_delete">Удалить</string>
