@@ -232,7 +232,7 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EasyTracker.sendEvent("Registration", "StartActivity","FromAuth", 1L);
+                EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), RegistrationActivity.class);
                 startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
             }
@@ -473,7 +473,6 @@ public class AuthFragment extends BaseFragment {
                     showButtons();
                 } else {
                     authorizationFailed(codeError, null);
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -761,7 +760,7 @@ public class AuthFragment extends BaseFragment {
         removeRedAlert();
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             loadAllProfileData();
-        } else if (mNeedShowButtonsOnResume){
+        } else if (mNeedShowButtonsOnResume) {
             showButtons();
 
         } else {
