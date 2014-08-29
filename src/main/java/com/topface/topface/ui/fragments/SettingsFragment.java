@@ -42,7 +42,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
-import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.social.AuthToken;
@@ -54,8 +54,8 @@ import java.util.Locale;
 public class SettingsFragment extends BaseFragment implements OnClickListener, OnCheckedChangeListener {
 
     public static final int REQUEST_CODE_RINGTONE = 333;
-    private AppConfig mSettings;
     private UserConfig mUserSettings;
+    private SessionConfig mSessionSettings;
     private EditSwitcher mSwitchVibration;
     private EditSwitcher mSwitchLED;
     private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<>();
@@ -89,7 +89,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.fragment_settings, null);
-        mSettings = App.getAppConfig();
+        mSessionSettings = App.getSessionConfig();
         mUserSettings = App.getUserConfig();
 
         // Init settings views
@@ -347,7 +347,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             case R.id.loVibration:
                 mSwitchVibration.doSwitch();
                 mUserSettings.setGCMVibrationEnabled(mSwitchVibration.isChecked());
-                mSettings.saveConfig();
+                mUserSettings.saveConfig();
+                Debug.log(mUserSettings, "UserConfig changed");
 
                 // Send empty vibro notification to demonstrate
                 if (mSwitchVibration.isChecked()) {
@@ -360,7 +361,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             case R.id.loLED:
                 mSwitchLED.doSwitch();
                 mUserSettings.setLEDEnabled(mSwitchLED.isChecked());
-                mSettings.saveConfig();
+                mUserSettings.saveConfig();
+                Debug.log(mUserSettings, "UserConfig changed");
                 break;
             case R.id.loMelody:
                 intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
@@ -530,7 +532,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         }
         melodyName.setText(ringtoneName);
         mUserSettings.setGCMRingtone(uri == null ? UserConfig.SILENT : uri.toString());
-        mSettings.saveConfig();
+        mUserSettings.saveConfig();
+        Debug.log(mUserSettings, "UserConfig changed");
     }
 
     /**
@@ -600,7 +603,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             textView.setText(authToken.getLogin());
         } else {
-            String name = mUserSettings.getSocialAccountName();
+            String name = mSessionSettings.getSocialAccountName();
             if (TextUtils.isEmpty(name)) {
                 getSocialAccountNameAsync(new Handler() {
                     @Override
@@ -613,7 +616,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                                 textView.setText(socialName);
                             }
                         });
-                        mUserSettings.setSocialAccountName(socialName);
+                        mSessionSettings.setSocialAccountName(socialName);
                     }
                 });
             } else {
