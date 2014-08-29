@@ -142,7 +142,7 @@
     <string name="buying_default_message">Můžete odesílat dárky a obdivy za mince</string>
     <string name="buying_money">Nákup mincí</string>
     <string name="profile_header_title">Můj profil</string>
-    <string name="profile_add_title">Přidat fotku</string>
+    <string name="album_add_photo_title">Přidat fotku</string>
     <string name="profile_add_album">Vybrat z toho, co je k dispozici</string>
     <string name="profile_add_camera">Vytvořit fotku</string>
     <string name="profile_photo">Fotky</string>
@@ -422,7 +422,6 @@
         <item quantity="other">Líbíte se %d lidem</item>
         <item quantity="one">Líbíte se %d člověku</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Abyste ihned zjistili, komu se líbíte, aktivujte VIP-účet</string>
     <string name="or">nebo</string>
     <string name="settings_delete_account">Odstranit účet</string>
     <string name="chat_block_not_mutual">Zahájit konverzaci s uživatelem můžete v případě, pokud jste od něj dostali sympatii nebo máte-VIP status</string>

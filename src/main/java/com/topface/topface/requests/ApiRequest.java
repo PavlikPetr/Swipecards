@@ -37,6 +37,7 @@ public abstract class ApiRequest implements IApiRequest {
      */
     public static final int RESEND_WAITING_TIME = 2000;
 
+    public static final int API_VERSION = 7;
     /**
      * Mime type наших запросов к серверу
      */

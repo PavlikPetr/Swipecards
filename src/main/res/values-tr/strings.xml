@@ -194,7 +194,7 @@
     <string name="buying_default_message">Siz, hediyelerinizi ve hayranlığınızı para karşına gönderebilirsiniz</string>
     <string name="buying_money">Para alış verişi</string>
     <string name="profile_header_title">Profilim</string>
-    <string name="profile_add_title">Fotoğraf eklemek</string>
+    <string name="album_add_photo_title">Foto eklemek</string>
     <string name="profile_add_album">Mevcut olanlardan seçmek</string>
     <string name="profile_add_camera">Resim çekmek</string>
     <string name="profile_photo">Foto</string>
@@ -486,7 +486,6 @@
         <item quantity="other">Sizden %d kişi hoşlandı</item>
         <item quantity="one">Sizden %d kişi hoşlandı</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Sizden hoşlandığı kişileri hemen şimdi öğrenmek için VIP-profili güncelleyin</string>
     <string name="or">veya</string>
     <string name="settings_delete_account">Hesap silmek</string>
     <string name="chat_block_not_mutual">Kullanıcı size sempati gönderdiyse veya VİP-durumunuz varsa o zaman onunla sohbete başlayabilirsiniz</string>

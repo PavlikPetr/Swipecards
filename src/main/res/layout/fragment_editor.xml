@@ -71,25 +71,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/EditorApiTitleVersion"
-                android:layout_toRightOf="@id/EditorApiUrl"
-                android:layout_marginTop="15dp"
-                android:text="@string/editor_api_title_version"/>
-
-            <EditText
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:id="@+id/EditorApiVersion"
-                android:singleLine="true"
-                android:maxLength="10"
-                android:hint="@string/editor_api_version_hint"
-                android:layout_alignTop="@id/EditorApiUrl"
-                android:layout_toRightOf="@id/EditorApiTitleVersion"/>
-
             <EditText
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
@@ -99,6 +80,33 @@
                 android:hint="@string/editor_api_rev_hint"
                 android:layout_alignLeft="@id/EditorApiUrl"
                 android:layout_below="@id/EditorApiUrl"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_below="@id/EditorApiRevision"
+                android:id="@+id/EditorApiCheckbox"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/general_admin_login"
+                android:layout_toRightOf="@id/EditorApiCheckbox"
+                android:layout_below="@id/EditorApiRevision"
+                android:layout_margin="5dp"
+                android:textSize="16sp"
+                android:id="@+id/EditorLoginText"
+                />
+            <EditText
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_toRightOf="@id/EditorLoginText"
+                android:layout_below="@id/EditorApiRevision"
+                android:id="@+id/EditorLogin"
+                />
+
 
         </RelativeLayout>
 

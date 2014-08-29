@@ -191,7 +191,7 @@
     <string name="buying_default_message">You can send gifts and admirations for coins</string>
     <string name="buying_money">Purchase coins</string>
     <string name="profile_header_title">My profile</string>
-    <string name="profile_add_title">Add a photo</string>
+    <string name="album_add_photo_title">Add photo</string>
     <string name="profile_add_album">Choose from available</string>
     <string name="profile_add_camera">Take a photo</string>
     <string name="profile_photo">Photo</string>
@@ -312,6 +312,7 @@
     <string name="settings_feedback_email">E-mail for feedback</string>
     <string name="settings_invalid_email">Invalid e-mail</string>
     <string name="chat_write_message">Write a message</string>
+    <string name="dating_message">Message…</string>
     <string name="buying_sympathies">Purchase likes</string>
     <string name="novice_sympathies_bonus">You are getting %1$d for likes as a gift! It means, that you will impress %2$d people and they\'ll tell you they like you.</string>
     <string name="novice_buy_sympathies">If you want to be sure, that\nyou\'ll get likes,\nbuy them right now!</string>
@@ -471,15 +472,15 @@
     <string name="general_get_dating">Meet</string>
     <string name="settings_select_language">Select application language</string>
     <string name="restart_to_change_locale">Application will be restarted to change language</string>
-    <string name="locale_changing">Changing the language</string>
+    <string name="locale_changing">Change the language</string>
     <plurals name="you_were_liked">
         <item quantity="other">%d people liked you</item>
         <item quantity="one">%d person liked you</item>
     </plurals>
-    <string name="to_see_likes_by_vip">To find out right now who likes you, activate a VIP- account</string>
+    <string name="likes_buy_vip">To find out who likes you right now, activate the VIP-status</string>
     <string name="or">or</string>
     <string name="settings_delete_account">Delete account</string>
-    <string name="chat_block_not_mutual">You can only start chatting with a user if he sent you a like or you have VIP- status</string>
+    <string name="chat_block_not_mutual">You can only start chatting with a user if he sent you a like or you have VIP-status</string>
     <string name="delete_account_are_you_sure">Are you sure?</string>
     <string name="delete">Delete</string>
     <string name="delete_account_warning">Attention! You are trying to delete your profile on Topface.</string>
@@ -538,7 +539,7 @@
     <string name="locking_popup_title">Entrance to the section «%s» is restricted</string>
     <string name="locking_popup_message">For availability, respond to incoming likes or get VIP</string>
     <string name="locking_popup_button_answer">Respond to likes</string>
-    <string name="locking_menu_message">Access to certain pages of the application is restricted. To remove these restrictions, answer all incoming likes or get VIP.</string>
+    <string name="locking_menu_message">Access to certain pages of the application is restricted. To remove these restrictions respond to incoming likes or get VIP.</string>
     <string name="current_city">Current city</string>
     <string name="general_bonus">Bonus</string>
     <plurals name="notification_many_messages">
@@ -568,4 +569,6 @@
     <string name="settings_led">LED notification</string>
     <string name="open_market_error">Cannot open the application page</string>
     <string name="billing_item_already_owned">Your previous purchase is now processing, please wait</string>
+    <string name="general_admin_login">Login</string>
+    <string name="dialog">Conversation</string>
 </resources>

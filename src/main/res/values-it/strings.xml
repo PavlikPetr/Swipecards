@@ -190,7 +190,7 @@
     <string name="buying_default_message">Puoi inviare regali e ammirazioni pagando con le monete</string>
     <string name="buying_money">Acquisto monete</string>
     <string name="profile_header_title">Mio profilo</string>
-    <string name="profile_add_title">Aggiungere foto</string>
+    <string name="album_add_photo_title">Aggiungere foto</string>
     <string name="profile_add_album">Scegliere dagli esistenti</string>
     <string name="profile_add_camera">Scattare la foto</string>
     <string name="profile_photo">Foto</string>
@@ -311,6 +311,7 @@
     <string name="settings_feedback_email">E-mail</string>
     <string name="settings_invalid_email">E-mail erronea</string>
     <string name="chat_write_message">Scrivi un messaggio</string>
+    <string name="dating_message">Messaggio…</string>
     <string name="buying_sympathies">Acquisto simpatie</string>
     <string name="novice_sympathies_bonus">Riceverai %1$d simpatie in\nregalo! Significa che\ndi sicuro piacerai a %2$d persone\nche ti dimostreranno la loro simpatia</string>
     <string name="novice_buy_sympathies">Se vuoi ricevere\nle simpatie sicure,\nacquistale ora!</string>
@@ -475,7 +476,7 @@
         <item quantity="other">Piaci a %d persone</item>
         <item quantity="one">Piaci a %d persona</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Attiva l’account VIP per scoprire ora a chi piaci</string>
+    <string name="likes_buy_vip">Attiva l’account VIP per scoprire subito a chi piaci</string>
     <string name="or">o</string>
     <string name="settings_delete_account">Cancella l’account</string>
     <string name="chat_block_not_mutual">Puoi iniziare la conversazione con l’utente solo se ti ha inviato una simpatia o se sei utente VIP</string>
@@ -562,4 +563,5 @@
     <string name="settings_led">Notifica LED</string>
     <string name="open_market_error">La pagina momentaneamente non è disponibile</string>
     <string name="billing_item_already_owned">Il tuo ordine precedente è in elaborazione, si prega di attendere</string>
+    <string name="dialog">Dialoghi</string>
 </resources>

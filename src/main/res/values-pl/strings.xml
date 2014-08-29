@@ -141,7 +141,7 @@
     <string name="buying_default_message">Możesz wysyłać prezenty i podziwy za monety</string>
     <string name="buying_money">Zakup monet</string>
     <string name="profile_header_title">Mój profil</string>
-    <string name="profile_add_title">Dodaj zdjęcie</string>
+    <string name="album_add_photo_title">Dodaj zdjęcie</string>
     <string name="profile_add_album">Wybierz z istniejących</string>
     <string name="profile_add_camera">Zrób zdjęcie</string>
     <string name="profile_photo">Zdjęcie</string>
@@ -417,7 +417,6 @@
         <item quantity="other">Podobasz się %d ludziom</item>
         <item quantity="one">Podobasz się %d osobie</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Aby natychmiast się dowiedzieć, komu się podobasz, aktywuj VIP-account</string>
     <string name="or">lub</string>
     <string name="auth_btn_ok">Zaloguj się za pomocą Odnoklassniki</string>
 </resources>

@@ -189,7 +189,7 @@
     <string name="buying_default_message">Μπορείτε να στείλετε τα δώρα και το θαυμασμό για τα κέρματα</string>
     <string name="buying_money">Αγορά κερμάτων</string>
     <string name="profile_header_title">Το προφίλ μου</string>
-    <string name="profile_add_title">Προσθέστε μια φωτογραφία</string>
+    <string name="album_add_photo_title">Προσθέστε μια φωτογραφία</string>
     <string name="profile_add_album">Επιλέξτε από τις διαθέσιμες</string>
     <string name="profile_add_camera">Τραβήξτε μια εικόνα</string>
     <string name="profile_photo">Φωτογραφία</string>
@@ -474,7 +474,6 @@
         <item quantity="other">Αρέσετε σε %d ανθρώπους</item>
         <item quantity="one">Αρέσετε σε %d άνθρωπο</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Για να ανακαλύψετε τούς ανθρώπους, για ποιόν αρέσετε, ενεργοποιήστε VIP λογαριασμός</string>
     <string name="or">ή</string>
     <string name="settings_delete_account">Διαγραφή του λογαριασμού σας</string>
     <string name="chat_block_not_mutual">Για να ξεκινήσετε συνομιλία με τον χρήστη μπορείτε, αν αυτός σας στείλει μια συμπάθεια ή αν έχετε VIP-κατάσταση</string>

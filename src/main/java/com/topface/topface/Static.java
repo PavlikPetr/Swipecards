@@ -4,7 +4,6 @@ package com.topface.topface;
 public class Static {
     // Constants
 
-    public static final int API_VERSION = 7;
     public static final String PLATFORM = "Android";
 
     public static final String API_ALPHA_URL = "https://api-alpha.stage.tf/";
