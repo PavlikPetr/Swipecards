@@ -113,6 +113,11 @@
     <string name="pincode_forget">Hai dimenticato il codice PIN?</string>
     <string name="pincode_auth_input">Bisogna inserire login e password.</string>
     <string name="pincode_will_be_reset">All\'autorizzazione avvenuta con successo tutte le impostazioni dell’applicazione verranno azzerate.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">subito dopo la chiusura</item>
+        <item quantity="other">%d min</item>
+        <item quantity="one">%d min</item>
+    </plurals>
     <string name="general_error">ERRORE</string>
     <string name="general_yes">Sì</string>
     <string name="general_no">No</string>

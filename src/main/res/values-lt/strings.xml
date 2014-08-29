@@ -115,6 +115,12 @@
     <string name="pincode_forget">Pamiršote PIN-kodą?</string>
     <string name="pincode_auth_input">Jums būtina įvesti loginą ir slaptažodį.</string>
     <string name="pincode_will_be_reset">Sėkmingai autorizavus, visi programos nustatymai bus atstatyti į pradinius.</string>
+    <plurals name="pincode_interval">
+        <item quantity="few">%d min.</item>
+        <item quantity="zero">iškart po uždarymo</item>
+        <item quantity="other">%d min.</item>
+        <item quantity="one">%d min.</item>
+    </plurals>
     <string name="general_error">KLAIDA</string>
     <string name="general_yes">Taip</string>
     <string name="general_no">Ne</string>

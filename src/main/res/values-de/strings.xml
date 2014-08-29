@@ -114,6 +114,11 @@
     <string name="pincode_forget">PIN-Code vergessen?</string>
     <string name="pincode_auth_input">Sie müssen Login und Passwort eingeben.</string>
     <string name="pincode_will_be_reset">Bei erfolgreicher Autorisierung werden alle App-Einstellungen zurückgesetzt.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">sofort nach dem Schließen</item>
+        <item quantity="other">%d Min.</item>
+        <item quantity="one">%d Min.</item>
+    </plurals>
     <string name="general_error">FEHLER</string>
     <string name="general_yes">Ja</string>
     <string name="general_no">Nein</string>

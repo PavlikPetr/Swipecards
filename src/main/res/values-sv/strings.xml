@@ -113,6 +113,11 @@
     <string name="pincode_forget">Glömt PIN-kod?</string>
     <string name="pincode_auth_input">Du behöver ange dina login och lösenord</string>
     <string name="pincode_will_be_reset">Vid lyckad auktorisation återställs applikationens samtliga inställningar.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">strax när du stänger</item>
+        <item quantity="other">%d min.</item>
+        <item quantity="one">%d min.</item>
+    </plurals>
     <string name="general_error">FEL</string>
     <string name="general_yes">Ja</string>
     <string name="general_no">Nej</string>
