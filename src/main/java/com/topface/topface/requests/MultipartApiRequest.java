@@ -126,23 +126,28 @@ abstract public class MultipartApiRequest extends ApiRequest {
         //Не обрабатываем ответы с ошибками
         if (multipartResponse instanceof MultipartApiResponse) {
             MultipartApiResponse response = (MultipartApiResponse) multipartResponse;
-            HashMap<String, ApiResponse> responses = response.getResponses();
-            for (Map.Entry<String, ApiResponse> entry : responses.entrySet()) {
-                String key = entry.getKey();
-                //Проверяем, что ответ без ошибки и содержится в списке запросов
-                if (entry.getValue().isCompleted() && mRequests.containsKey(key)) {
-                    //Отправляем в handler подзапроса результат
-                    mRequests.get(key).sendHandlerMessage(entry.getValue());
-                    //И удаляем из списка запросов
-                    mRequests.remove(key);
-                }
-            }
-
-            if (mRequests.isEmpty()) {
-                super.sendHandlerMessage(multipartResponse);
-            }
+            //У нас могут остаться запросы с ошибками (удачные мы уже разобрали в методе readResponse)
+            //нужно им тоже ответы отправить
+            sendHandlerMessageToRequests(response, false);
+            //И отправляем ответ в основной листенер запроса (который выполняется после обработки всех вложеных запросов)
+            super.sendHandlerMessage(multipartResponse);
         } else {
             super.sendHandlerMessage(multipartResponse);
+        }
+    }
+
+    private void sendHandlerMessageToRequests(MultipartApiResponse response, boolean onlyCompleted) {
+        HashMap<String, ApiResponse> responses = response.getResponses();
+        for (Map.Entry<String, ApiResponse> entry : responses.entrySet()) {
+            String key = entry.getKey();
+            //В зависимости от параметра onlyCompleted отправляем ответ в только успешные запросы или во все
+            boolean needSendHandler = !onlyCompleted || entry.getValue().isCompleted();
+            if (needSendHandler && mRequests.containsKey(key)) {
+                //Отправляем в handler подзапроса результат
+                mRequests.get(key).sendHandlerMessage(entry.getValue());
+                //И удаляем из списка запросов
+                mRequests.remove(key);
+            }
         }
     }
 
@@ -165,7 +170,10 @@ abstract public class MultipartApiRequest extends ApiRequest {
     @Override
     public IApiResponse readResponse() throws IOException {
         //Multipart запрос читает данные из подключения, мы не получаем данные заранее
-        return new MultipartApiResponse(mURLConnection);
+        MultipartApiResponse multipartApiResponse = new MultipartApiResponse(mURLConnection);
+        //Отпправляем удачные ответы в подзапросы, что бы в случае ошибки одного из запросов не переотправлять остальные
+        sendHandlerMessageToRequests(multipartApiResponse, true);
+        return multipartApiResponse;
     }
 
 
