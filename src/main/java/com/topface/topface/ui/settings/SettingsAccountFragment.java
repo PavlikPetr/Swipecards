@@ -46,7 +46,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
             icon = getResources().getDrawable(R.drawable.ico_ok_account);
         }
         TextView textName = (TextView) root.findViewById(R.id.tvText);
-        textName.setText(App.getUserConfig().getSocialAccountName());
+        textName.setText(App.getSessionConfig().getSocialAccountName());
         textName.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
         root.findViewById(R.id.btnLogout).setOnClickListener(this);
