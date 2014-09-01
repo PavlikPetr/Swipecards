@@ -18,10 +18,10 @@ import java.util.LinkedList;
 import static com.topface.topface.data.Products.BuyButton;
 import static com.topface.topface.data.Products.BuyButtonClickListener;
 
-public class GooglePlayBuyingFragment extends CoinsBuyingFragment {
+public class MarketBuyingFragment extends CoinsBuyingFragment {
 
-    public static GooglePlayBuyingFragment newInstance(String from) {
-        GooglePlayBuyingFragment buyingFragment = new GooglePlayBuyingFragment();
+    public static MarketBuyingFragment newInstance(String from) {
+        MarketBuyingFragment buyingFragment = new MarketBuyingFragment();
         if (from != null) {
             Bundle args = new Bundle();
             args.putString(ARG_TAG_SOURCE, from);
@@ -31,13 +31,13 @@ public class GooglePlayBuyingFragment extends CoinsBuyingFragment {
     }
 
 
-    public static GooglePlayBuyingFragment newInstance(int type, int coins, String from) {
-        GooglePlayBuyingFragment fragment = new GooglePlayBuyingFragment();
+    public static MarketBuyingFragment newInstance(int type, int coins, String from) {
+        MarketBuyingFragment fragment = new MarketBuyingFragment();
         setArguments(type, coins, from, fragment);
         return fragment;
     }
 
-    protected static void setArguments(int type, int coins, String from, GooglePlayBuyingFragment fragment) {
+    protected static void setArguments(int type, int coins, String from, MarketBuyingFragment fragment) {
         Bundle args = new Bundle();
         args.putInt(PurchasesFragment.ARG_ITEM_TYPE, type);
         args.putInt(PurchasesFragment.ARG_ITEM_PRICE, coins);

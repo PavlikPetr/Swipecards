@@ -12,7 +12,7 @@
     -->
     <product
         id="coins40"
-        service-id="5a9c9345f17607b982d855113a5bfc57"
-        service-inapp-secret="e1ee2015ae8969f34dce98f4c8bd58ae"
+        service-id="6e5d1adf7d21ef22d9d47652c240fa7d"
+        service-inapp-secret="4bf2ac2b4af7dacf4e74975a2adf4a73"
         consumable="true"/>
 </fortumo-products>

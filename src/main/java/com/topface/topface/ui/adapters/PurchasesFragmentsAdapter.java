@@ -13,7 +13,7 @@ import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.AmazonBuyingFragment;
 import com.topface.topface.ui.fragments.buy.FortumoBuyingFragment;
-import com.topface.topface.ui.fragments.buy.GooglePlayBuyingFragment;
+import com.topface.topface.ui.fragments.buy.MarketBuyingFragment;
 import com.topface.topface.ui.fragments.buy.PaymentWallBuyingFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipFortumoBuyFragment;
@@ -66,7 +66,7 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
         switch (mTabs.get(position).type) {
             case Options.Tab.GPLAY:
                 if (!mIsVip) {
-                    fragment = GooglePlayBuyingFragment.newInstance(from);
+                    fragment = MarketBuyingFragment.newInstance(from);
                 } else {
                     fragment = VipBuyFragment.newInstance(true, from);
                 }

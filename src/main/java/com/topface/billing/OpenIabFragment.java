@@ -86,6 +86,17 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         OpenIabHelper.Options.Builder optsBuilder = new OpenIabHelper.Options.Builder().addAvailableStores();
         //Проверять локально покупку мы не будем, пускай сервер проверит
         optsBuilder.setVerifyMode(OpenIabHelper.Options.VERIFY_ONLY_KNOWN);
+        addAvailableStores(activity, optsBuilder);
+
+        //Включаем/выключаем логи
+        Logger.setLoggable(Debug.isDebugLogsEnabled());
+
+        //Создаем хелпер
+        mHelper = new OpenIabHelper(activity, optsBuilder.build());
+        mHelper.startSetup(this);
+    }
+
+    protected void addAvailableStores(final FragmentActivity activity, OpenIabHelper.Options.Builder optsBuilder) {
         //Нам нужен конкретный AppStore, т.к. у каждого типа сборки свои продукты и поддержка других маркетов все равно не нужна
         switch (BuildConfig.BILLING_TYPE) {
             case GOOGLE_PLAY:
@@ -110,13 +121,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 optsBuilder.addAvailableStores(new NokiaStore(activity));
                 break;
         }
-
-        //Включаем/выключаем логи
-        Logger.setLoggable(Debug.isDebugLogsEnabled());
-
-        //Создаем хелпер
-        mHelper = new OpenIabHelper(activity, optsBuilder.build());
-        mHelper.startSetup(this);
     }
 
     @Override
