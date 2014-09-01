@@ -12,6 +12,8 @@ import com.topface.topface.data.PaymentWallProducts;
  * Config for data in current session (from login[receive AuthToken] to logout[AuthorizationManager])
  */
 public class SessionConfig extends AbstractConfig {
+    public static final String SETTINGS_SOCIAL_ACCOUNT_NAME = "social_account_name";
+    public static final String SETTINGS_SOCIAL_ACCOUNT_EMAIL = "social_account_email";
     private static final String SESSION_CONFIG_SETTINGS = "session_config_settings";
 
     private static final String DATA_PROFILE = "data_profile_user_data";
@@ -36,6 +38,10 @@ public class SessionConfig extends AbstractConfig {
         addField(settingsMap, DATA_FORTUMO_PRODUCTS, Static.EMPTY);
         addField(settingsMap, DATA_PAYMENTWALL_PRODUCTS, Static.EMPTY);
         addField(settingsMap, DATA_PAYMENTWALL_MOBILE_PRODUCTS, Static.EMPTY);
+        //Social network account name
+        addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
+        //Social network account email
+        addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_EMAIL, Static.EMPTY);
     }
 
     @Override
@@ -157,5 +163,37 @@ public class SessionConfig extends AbstractConfig {
      */
     public void resetGoogleProductsData() {
         resetAndSaveConfig(DATA_MARKET_PRODUCTS);
+    }
+
+    /**
+     * Sets social account name
+     *
+     * @param name
+     */
+    public void setSocialAccountName(String name) {
+        setField(getSettingsMap(), SETTINGS_SOCIAL_ACCOUNT_NAME, name);
+    }
+
+    /**
+     * @return users's social account name
+     */
+    public String getSocialAccountName() {
+        return getStringField(getSettingsMap(), SETTINGS_SOCIAL_ACCOUNT_NAME);
+    }
+
+    /**
+     * Sets social account email
+     *
+     * @param email
+     */
+    public void setSocialAccountEmail(String email) {
+        setField(getSettingsMap(), SETTINGS_SOCIAL_ACCOUNT_EMAIL, email);
+    }
+
+    /**
+     * @return user's social account email
+     */
+    public String getSocialAccountEmail() {
+        return getStringField(getSettingsMap(), SETTINGS_SOCIAL_ACCOUNT_EMAIL);
     }
 }

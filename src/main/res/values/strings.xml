@@ -114,6 +114,11 @@
     <string name="pincode_forget">Forgot PIN-code?</string>
     <string name="pincode_auth_input">You need to enter your login and password</string>
     <string name="pincode_will_be_reset">If the authorization is successful, all application settings will be reset.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">right after closing</item>
+        <item quantity="other">%d min.</item>
+        <item quantity="one">%d min.</item>
+    </plurals>
     <string name="general_error">ERROR</string>
     <string name="general_yes">Yes</string>
     <string name="general_no">No</string>

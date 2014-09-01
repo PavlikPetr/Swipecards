@@ -114,6 +114,11 @@
     <string name="pincode_forget">PIN-Code vergessen?</string>
     <string name="pincode_auth_input">Sie müssen Login und Passwort eingeben.</string>
     <string name="pincode_will_be_reset">Bei erfolgreicher Autorisierung werden alle App-Einstellungen zurückgesetzt.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">sofort nach dem Schließen</item>
+        <item quantity="other">%d Min.</item>
+        <item quantity="one">%d Min.</item>
+    </plurals>
     <string name="general_error">FEHLER</string>
     <string name="general_yes">Ja</string>
     <string name="general_no">Nein</string>
@@ -312,6 +317,7 @@
     <string name="settings_feedback_email">E-Mail für die Verbindung</string>
     <string name="settings_invalid_email">E-Mail ist unkorrekt</string>
     <string name="chat_write_message">Nachricht schreiben</string>
+    <string name="dating_message">Nachricht…</string>
     <string name="buying_sympathies">Sympathien kaufen</string>
     <string name="novice_sympathies_bonus">Sie bekommen %1$d Sympathien als\nGeschenk! Das heißt, dass Sie\ngenau %2$d Menschen gefallen,\ndie Ihnen ihre Sympathie zeigen werden</string>
     <string name="novice_buy_sympathies">Falls Sie garantiert\nSympathien erhalten möchten,\nkaufen Sie sie gearde
@@ -478,6 +484,7 @@
         <item quantity="other">Sie gefallen %d Menschen</item>
         <item quantity="one">Sie gefallen %d Menschen</item>
     </plurals>
+    <string name="likes_buy_vip">Falls Sie gerade jetzt erfahren wollen, wem Sie gefallen, aktivieren Sie den VIP-Status</string>
     <string name="or">oder</string>
     <string name="settings_delete_account">Account löschen</string>
     <string name="chat_block_not_mutual">Sie können sich mit dem Nutzer unterhalten, falls er eine Sympathie Ihnen gesendet hat oder falls Sie einen VIP-Status haben</string>
@@ -564,4 +571,5 @@
     <string name="settings_led">LED Benachrichtigung</string>
     <string name="open_market_error">Fehler bei der Öffnung der App</string>
     <string name="billing_item_already_owned">Ihr voriger Kauf ist in der Bearbeitung, bitte warten Sie</string>
+    <string name="dialog">Dialog</string>
 </resources>

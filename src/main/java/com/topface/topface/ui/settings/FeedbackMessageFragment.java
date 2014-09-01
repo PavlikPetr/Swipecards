@@ -217,7 +217,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     private boolean emailConfirmed(String email) {
         if (Utils.isValidEmail(email)) {
             mReport.email = email;
-            App.getUserConfig().setSocialAccountEmail(mReport.email);
+            App.getSessionConfig().setSocialAccountEmail(mReport.email);
             return true;
         } else {
             return false;

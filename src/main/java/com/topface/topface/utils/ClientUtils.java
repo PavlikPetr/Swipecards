@@ -46,7 +46,7 @@ public class ClientUtils {
      * @return user's social account email
      */
     public static String getSocialAccountEmail() {
-        String email = App.getUserConfig().getSocialAccountEmail();
+        String email = App.getSessionConfig().getSocialAccountEmail();
         if (!Utils.isValidEmail(email)) {
             List<String> accountsEmails = getClientAccounts();
             if (!accountsEmails.isEmpty()) {

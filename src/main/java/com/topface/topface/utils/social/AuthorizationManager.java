@@ -31,7 +31,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.cache.SearchCacheManager;
-import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.HttpUtils;
@@ -124,9 +124,9 @@ public class AuthorizationManager {
                         String user_id = extras.getString(VkAuthActivity.USER_ID);
                         String expires_in = extras.getString(VkAuthActivity.EXPIRES_IN);
                         String user_name = extras.getString(VkAuthActivity.USER_NAME);
-                        UserConfig userConfig = App.getUserConfig();
-                        userConfig.setSocialAccountName(user_name);
-                        userConfig.saveConfig();
+                        SessionConfig sessionConfig = App.getSessionConfig();
+                        sessionConfig.setSocialAccountName(user_name);
+                        sessionConfig.saveConfig();
 
                         AuthToken authToken = AuthToken.getInstance();
                         authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
@@ -229,9 +229,9 @@ public class AuthorizationManager {
                     Field f = odnoklassniki.getClass().getDeclaredField("mRefreshToken");
                     f.setAccessible(true);
                     authToken.saveToken(AuthToken.SN_ODNOKLASSNIKI, user.optString("uid"), token, (String) f.get(odnoklassniki));
-                    UserConfig userConfig = App.getUserConfig();
-                    userConfig.setSocialAccountName(user.optString("name"));
-                    userConfig.saveConfig();
+                    SessionConfig sessionConfig = App.getSessionConfig();
+                    sessionConfig.setSocialAccountName(user.optString("name"));
+                    sessionConfig.saveConfig();
                     receiveToken();
                 } catch (Exception e) {
                     mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
@@ -294,10 +294,10 @@ public class AuthorizationManager {
                         mFacebook.getAccessToken(),
                         Long.toString(mFacebook.getAccessExpires())
                 );
-                UserConfig userConfig = App.getUserConfig();
-                userConfig.setSocialAccountName(jsonResult.optString("name", ""));
-                userConfig.setSocialAccountEmail(jsonResult.optString("email", ""));
-                userConfig.saveConfig();
+                SessionConfig sessionConfig = App.getSessionConfig();
+                sessionConfig.setSocialAccountName(jsonResult.optString("name", ""));
+                sessionConfig.setSocialAccountEmail(jsonResult.optString("email", ""));
+                sessionConfig.saveConfig();
                 receiveToken();
             } catch (JSONException e) {
                 Debug.error("FB login mRequestListener::onComplete:error", e);
