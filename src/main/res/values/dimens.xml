@@ -11,6 +11,4 @@
     <dimen name="popular_dialog_text_margin">36dp</dimen>
     <dimen name="action_bar_title_size">18sp</dimen>
 
-    <dimen name="gift_button_padding">3dp</dimen>
-
 </resources>

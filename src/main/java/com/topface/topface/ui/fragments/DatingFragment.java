@@ -301,18 +301,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         mDatingButtons = root.findViewById(R.id.vfDatingButtons);
 
-        Options.InstantMessageFromSearch instantMessageFromSearch = CacheProfile.getOptions().instantMessageFromSearch;
-        if (instantMessageFromSearch.enabled) {
-            mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
-                    this, this, instantMessageFromSearch.text,
-                    mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
-                @Override
-                public void sendLike() {
-                    sendSympathy();
-                }
-            }
-            );
-        }
+        initInstantMessageController(mRoot);
     }
 
     private void initMutualDrawables() {
@@ -539,6 +528,25 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
 
             updateFilterData();
+        }
+
+        if (mRoot != null && mDatingInstantMessageController == null) {
+            initInstantMessageController(mRoot);
+        }
+    }
+
+    private void initInstantMessageController(KeyboardListenerLayout root) {
+        Options.InstantMessageFromSearch instantMessageFromSearch = CacheProfile.getOptions().instantMessageFromSearch;
+        if (instantMessageFromSearch.enabled) {
+            mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
+                    this, this, instantMessageFromSearch.text,
+                    mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
+                @Override
+                public void sendLike() {
+                    sendSympathy();
+                }
+            }
+            );
         }
     }
 

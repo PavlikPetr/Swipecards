@@ -123,6 +123,7 @@ public class DatingInstantMessageController {
 
     public boolean sendMessage(SearchUser user) {
         if (!tryChat(user)) {
+            setSendEnabled(true);
             return false;
         }
         final Editable editText = mMessageText.getText();
@@ -210,6 +211,7 @@ public class DatingInstantMessageController {
     }
 
     public void setSendEnabled(boolean isEnabled) {
+        mGiftSend.setEnabled(isEnabled);
         mMessageText.setEnabled(isEnabled);
         mMessageSend.setEnabled(isEnabled && isMessageValid());
         int sendWidth = mMessageSend.getWidth();
