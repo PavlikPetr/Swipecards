@@ -189,14 +189,9 @@ public class PopupManager {
                 InvitesPopup popup = InvitesPopup.newInstance(contacts);
                 popup.show(mActivity.getSupportFragmentManager(), InvitesPopup.TAG);
                 mCurrentDialog = popup;
-                popup.onDismiss(new DialogInterface() {
+                popup.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
-                    public void cancel() {
-
-                    }
-
-                    @Override
-                    public void dismiss() {
+                    public void onDismiss(DialogInterface dialog) {
                         mCurrentDialog = null;
                     }
                 });

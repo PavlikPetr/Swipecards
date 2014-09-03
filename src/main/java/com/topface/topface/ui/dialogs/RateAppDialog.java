@@ -110,7 +110,6 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
         } else if (rating >= 4) {
             saveRatingPopupStatus(0);
             Utils.goToMarket(getActivity(), GPLAY_ACTIVITY);
-//            dismiss();
         } else {
             saveRatingPopupStatus(0);
             AbstractDialogFragment dialog = SendFeedbackDialog.newInstance(
