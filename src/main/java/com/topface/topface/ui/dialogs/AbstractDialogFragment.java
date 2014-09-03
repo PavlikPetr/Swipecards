@@ -1,5 +1,6 @@
 package com.topface.topface.ui.dialogs;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     private int mActionBarSize;
     private static HashSet<String> mShowingDialogs = new HashSet<>();
     private String mTag;
+    private DialogInterface.OnDismissListener mDismissListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,12 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         View view = stub.inflate();
         initViews(view);
         return root;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        mDismissListener.onDismiss(dialog);
     }
 
     /**
@@ -78,6 +86,10 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     public void onDetach() {
         super.onDetach();
         mShowingDialogs.remove(mTag);
+    }
+
+    public void setOnDismissListener (DialogInterface.OnDismissListener listener) {
+        mDismissListener = listener;
     }
 
     /**

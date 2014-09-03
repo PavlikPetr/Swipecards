@@ -3,6 +3,7 @@ package com.topface.topface.ui.dialogs;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,7 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
         DialogInterface.OnCancelListener {
     public static final String TAG = "RateAppDialog";
     public static final String RATING_POPUP = "RATING_POPUP";
+    public static final int GPLAY_ACTIVITY = 9999;
 
     private RatingBar mRatingBar;
 
@@ -85,6 +87,14 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GPLAY_ACTIVITY) {
+            dismiss();
+        }
+    }
+
     private void rate() {
         long rating = (long) mRatingBar.getRating();
         EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Rate", rating);
@@ -99,8 +109,7 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
                     .show();
         } else if (rating >= 4) {
             saveRatingPopupStatus(0);
-            Utils.goToMarket(getActivity());
-            dismiss();
+            Utils.goToMarket(getActivity(), GPLAY_ACTIVITY);
         } else {
             saveRatingPopupStatus(0);
             AbstractDialogFragment dialog = SendFeedbackDialog.newInstance(

@@ -401,7 +401,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
-                        Toast.makeText(getActivity(), R.string.general_error, Toast.LENGTH_LONG).show();
+                        Toast.makeText(App.getContext(), R.string.general_error, Toast.LENGTH_LONG).show();
                     }
                 }).exec();
                 break;
