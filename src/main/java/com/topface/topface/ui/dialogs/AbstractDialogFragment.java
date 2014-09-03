@@ -60,7 +60,9 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        mDismissListener.onDismiss(dialog);
+        if (mDismissListener != null) {
+            mDismissListener.onDismiss(dialog);
+        }
     }
 
     /**
