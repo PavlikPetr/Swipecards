@@ -134,6 +134,13 @@
     <string name="pincode_forget">Забыли PIN-код?</string>
     <string name="pincode_auth_input">Вам необходимо ввести логин и пароль.</string>
     <string name="pincode_will_be_reset">При удачной авторизации все настройки приложения будут сброшены.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">сразу после закрытия</item>
+        <item quantity="one">%d мин.</item>
+        <item quantity="many">%d мин.</item>
+        <item quantity="few">%d мин.</item>
+        <item quantity="other">%d мин.</item>
+    </plurals>
     <!-- / Pin code -->
 
     <!--/ строки iOS -->
@@ -259,6 +266,7 @@
     <string name="edit_selected">Выбрана</string>
     <string name="edit_name">Имя</string>
     <string name="edit_age">Возраст</string>
+    <string name="edit_age_error">Чтобы использовать приложение, ваш возраст должен быть от %1$d до %2$d</string>
     <string name="edit_status">Статус</string>
     <string name="edit_set_as_main">Сделать главной</string>
     <string name="edit_delete">Удалить</string>

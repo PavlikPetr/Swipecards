@@ -86,6 +86,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
 
+    private KeyboardListenerLayout mRoot;
     private TextView mResourcesLikes;
     private TextView mResourcesMoney;
     private Button mDelightBtn;
@@ -220,13 +221,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
 
-        KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_dating, null);
+        mRoot = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_dating, null);
 
-        initViews(root);
+        initViews(mRoot);
         initActionBar();
-        initEmptySearchDialog(root);
-        initImageSwitcher(root);
-        return root;
+        initEmptySearchDialog(mRoot);
+        initImageSwitcher(mRoot);
+        return mRoot;
     }
 
     @Override
@@ -301,12 +302,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         mDatingButtons = root.findViewById(R.id.vfDatingButtons);
 
-        Options.InstantMessageFromSearch instantMessageFromSearch = CacheProfile.getOptions().instantMessageFromSearch;
-        if (instantMessageFromSearch.enabled) {
-            mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
-                    this, this, instantMessageFromSearch.text,
-                    mDatingButtons, mUserInfoStatus);
-        }
+        initInstantMessageController(mRoot);
     }
 
     private void initMutualDrawables() {
@@ -534,6 +530,25 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             updateFilterData();
         }
+
+        if (mRoot != null && mDatingInstantMessageController == null) {
+            initInstantMessageController(mRoot);
+        }
+    }
+
+    private void initInstantMessageController(KeyboardListenerLayout root) {
+        Options.InstantMessageFromSearch instantMessageFromSearch = CacheProfile.getOptions().instantMessageFromSearch;
+        if (instantMessageFromSearch.enabled) {
+            mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
+                    this, this, instantMessageFromSearch.text,
+                    mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
+                @Override
+                public void sendLike() {
+                    sendSympathy();
+                }
+            }
+            );
+        }
     }
 
     private SearchRequest getSearchRequest() {
@@ -609,26 +624,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingSympathy: {
-                if (mCurrentUser != null) {
-                    lockControls();
-                    mRateController.onLike(mCurrentUser.id,
-                            mCurrentUser.isMutualPossible ?
-                                    SendLikeRequest.DEFAULT_MUTUAL
-                                    : SendLikeRequest.DEFAULT_NO_MUTUAL,
-                            new RateController.OnRateRequestListener() {
-                                @Override
-                                public void onRateCompleted(int mutualId) {
-
-                                }
-
-                                @Override
-                                public void onRateFailed(int userId, int mutualId) {
-                                    mCurrentUser.rated = false;
-                                    unlockControls();
-                                }
-                            }
-                    );
-                }
+                sendSympathy();
             }
             break;
             case R.id.skip_btn:
@@ -672,6 +668,32 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    private void sendSympathy() {
+        if (mCurrentUser != null) {
+            if (!mCurrentUser.rated) {
+                lockControls();
+                mRateController.onLike(mCurrentUser.id,
+                        mCurrentUser.isMutualPossible ?
+                                SendLikeRequest.DEFAULT_MUTUAL
+                                : SendLikeRequest.DEFAULT_NO_MUTUAL,
+                        new RateController.OnRateRequestListener() {
+                            @Override
+                            public void onRateCompleted(int mutualId) {
+
+                            }
+
+                            @Override
+                            public void onRateFailed(int userId, int mutualId) {
+                                mCurrentUser.rated = false;
+                                unlockControls();
+                            }
+                        }
+                );
+            } else {
+                showNextUser();
+            }
+        }
+    }
 
 
     private void showUser(SearchUser user) {
@@ -929,7 +951,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (!mIsHide) mDatingCounter.setVisibility(View.VISIBLE);
         mUserInfoName.setVisibility(mCurrentUser != null ? View.VISIBLE : View.GONE);
         mUserInfoCity.setVisibility(mCurrentUser != null ? View.VISIBLE : View.GONE);
-        mUserInfoStatus.setVisibility(View.VISIBLE);
+        if (!mRoot.isKeyboardOpened()) {
+            mUserInfoStatus.setVisibility(View.VISIBLE);
+        }
 
         boolean enabled = false;
         if (mCurrentUser != null) {

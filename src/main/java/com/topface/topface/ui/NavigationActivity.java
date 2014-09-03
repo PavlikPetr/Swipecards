@@ -309,8 +309,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         ) {
 
             @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
                 Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getWindowToken());
             }
         };

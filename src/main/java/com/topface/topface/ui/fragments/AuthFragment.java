@@ -48,7 +48,7 @@ import com.topface.topface.utils.AuthButtonsController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -232,7 +232,7 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EasyTracker.sendEvent("Registration", "StartActivity","FromAuth", 1L);
+                EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), RegistrationActivity.class);
                 startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
             }
@@ -473,7 +473,6 @@ public class AuthFragment extends BaseFragment {
                     showButtons();
                 } else {
                     authorizationFailed(codeError, null);
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -741,9 +740,9 @@ public class AuthFragment extends BaseFragment {
             }
             AuthToken token = AuthToken.getInstance();
             token.saveToken(emailLogin, emailLogin, password);
-            UserConfig userConfig = App.getUserConfig();
-            userConfig.setSocialAccountEmail(emailLogin);
-            userConfig.saveConfig();
+            SessionConfig sessionConfig = App.getSessionConfig();
+            sessionConfig.setSocialAccountEmail(emailLogin);
+            sessionConfig.saveConfig();
             auth(token);
         }
     }
@@ -761,7 +760,7 @@ public class AuthFragment extends BaseFragment {
         removeRedAlert();
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             loadAllProfileData();
-        } else if (mNeedShowButtonsOnResume){
+        } else if (mNeedShowButtonsOnResume) {
             showButtons();
 
         } else {

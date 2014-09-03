@@ -8,7 +8,10 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -41,17 +44,26 @@ public class DatingInstantMessageController {
     private Activity mActivity;
     private IRequestClient mRequestClient;
 
-    private View mMessageSend;
+    private ImageButton mMessageSend;
     private View mGiftSend;
     private ViewFlipper mFooterFlipper;
     private EditText mMessageText;
     private int mMaxMessageSize;
+    private SendLikeAction mSendLikeAction;
+    private Animation mSpin;
+
+    public interface SendLikeAction {
+
+        void sendLike();
+    }
 
     public DatingInstantMessageController(Activity activity, KeyboardListenerLayout root,
                                           View.OnClickListener clickListener,
                                           IRequestClient requestClient, String text,
-                                          final View datingButtons, final View userInfoStatus) {
+                                          final View datingButtons, final View userInfoStatus,
+                                          SendLikeAction sendLikeAction) {
         mActivity = activity;
+        mSendLikeAction = sendLikeAction;
 
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @Override
@@ -70,7 +82,8 @@ public class DatingInstantMessageController {
         mFooterFlipper.setVisibility(View.VISIBLE);
         mGiftSend = root.findViewById(R.id.send_gift_button);
         mMessageText = (EditText) root.findViewById(R.id.edChatBox);
-        mMessageSend = root.findViewById(R.id.btnSend);
+        mMessageSend = (ImageButton) root.findViewById(R.id.btnSend);
+        mSpin = AnimationUtils.loadAnimation(mActivity, R.anim.loader_rotate);
         mMessageText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -91,7 +104,12 @@ public class DatingInstantMessageController {
                 }
             }
         });
-        String defaultMessage = App.getUserConfig().getDefaultDatingMessage();
+        UserConfig userConfig = App.getUserConfig();
+        String defaultMessage = userConfig.getDefaultDatingMessage();
+        if (defaultMessage.isEmpty()) {
+            userConfig.setDefaultDatingMessage(text);
+            userConfig.saveConfig();
+        }
         mMessageText.setText(defaultMessage.isEmpty() ? text : defaultMessage);
         mMessageText.setHint(activity.getString(R.string.dating_message));
         mMessageSend.setOnClickListener(clickListener);
@@ -105,6 +123,7 @@ public class DatingInstantMessageController {
 
     public boolean sendMessage(SearchUser user) {
         if (!tryChat(user)) {
+            setSendEnabled(true);
             return false;
         }
         final Editable editText = mMessageText.getText();
@@ -136,6 +155,7 @@ public class DatingInstantMessageController {
                 }
 
                 DatingMessageStatistics.sendDatingMessageSent();
+                mSendLikeAction.sendLike();
             }
 
             @Override
@@ -146,6 +166,12 @@ public class DatingInstantMessageController {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void always(IApiResponse response) {
+                super.always(response);
+                setSendEnabled(true);
             }
         }).exec();
         return true;
@@ -185,13 +211,20 @@ public class DatingInstantMessageController {
     }
 
     public void setSendEnabled(boolean isEnabled) {
+        mGiftSend.setEnabled(isEnabled);
         mMessageText.setEnabled(isEnabled);
         mMessageSend.setEnabled(isEnabled && isMessageValid());
+        int sendWidth = mMessageSend.getWidth();
+        int sendHeight = mMessageSend.getHeight();
         if (isEnabled) {
-            mMessageSend.setBackgroundResource(R.drawable.btn_send_message_selector);
+            mMessageSend.clearAnimation();
+            mMessageSend.setImageResource(R.drawable.btn_send_message_selector);
         } else {
-            mMessageSend.setBackgroundResource(R.drawable.progress_small_white);
+            mMessageSend.setImageResource(R.drawable.spinner_white_16);
+            mMessageSend.startAnimation(mSpin);
         }
+        mMessageSend.setMinimumWidth(sendWidth);
+        mMessageSend.setMinimumHeight(sendHeight);
     }
 
     public void displayMessageField() {
@@ -220,6 +253,7 @@ public class DatingInstantMessageController {
                     if (data != null && !data.items.isEmpty()) {
                         displayExistingDialogButtons();
                         EasyTracker.sendEvent("Dating", "SendMessage", "dialog-exists", 1L); // Event for existing dialog
+                        setSendEnabled(true);
                     } else {
                         DatingInstantMessageController.this.sendMessage(user);
                         EasyTracker.sendEvent("Dating", "SendMessage", "message-sent", 1L); // Event for successfull sent
@@ -233,12 +267,6 @@ public class DatingInstantMessageController {
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-
-                }
-
-                @Override
-                public void always(IApiResponse response) {
-                    super.always(response);
                     setSendEnabled(true);
                 }
             }).exec();
