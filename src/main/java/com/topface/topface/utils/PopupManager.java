@@ -12,6 +12,8 @@ import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.dialogs.AbstractDialogFragment;
+import com.topface.topface.ui.dialogs.AbstractModalDialog;
 import com.topface.topface.ui.dialogs.InvitesPopup;
 import com.topface.topface.ui.dialogs.RateAppDialog;
 import com.topface.topface.utils.controllers.AbstractStartAction;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 
 public class PopupManager {
     private BaseFragmentActivity mActivity;
+
+    private AbstractDialogFragment mCurrentDialog;
 
     public PopupManager(BaseFragmentActivity activity) {
         mActivity = activity;
@@ -133,6 +137,13 @@ public class PopupManager {
     private void showRatePopup() {
         RateAppDialog rateAppDialog = new RateAppDialog();
         rateAppDialog.show(mActivity.getSupportFragmentManager(), RateAppDialog.TAG);
+        rateAppDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                mCurrentDialog = null;
+            }
+        });
+        mCurrentDialog = rateAppDialog;
     }
 
     public IStartAction createInvitePopupStartAction(final int priority) {
@@ -177,6 +188,18 @@ public class PopupManager {
 
                 InvitesPopup popup = InvitesPopup.newInstance(contacts);
                 popup.show(mActivity.getSupportFragmentManager(), InvitesPopup.TAG);
+                mCurrentDialog = popup;
+                popup.onDismiss(new DialogInterface() {
+                    @Override
+                    public void cancel() {
+
+                    }
+
+                    @Override
+                    public void dismiss() {
+                        mCurrentDialog = null;
+                    }
+                });
                 EasyTracker.sendEvent("InvitesPopup", "Show", "", 0L);
 
             }
@@ -184,5 +207,9 @@ public class PopupManager {
 
         ContactsProvider provider = new ContactsProvider(mActivity);
         provider.getContacts(-1, 0, handler);
+    }
+
+    public AbstractDialogFragment getCurrentDialog() {
+        return mCurrentDialog;
     }
 }

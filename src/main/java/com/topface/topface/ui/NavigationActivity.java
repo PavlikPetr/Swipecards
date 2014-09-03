@@ -34,6 +34,7 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
@@ -195,6 +196,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
             return getSupportFragmentManager();
         }
     };
+    private PopupManager mPopupManager;
 
     public static void onLogout() {
         MenuFragment.onLogout();
@@ -243,10 +245,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
         startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
         // popups
-        PopupManager popupManager = new PopupManager(this);
-        startActionsController.registerAction(popupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
-        startActionsController.registerAction(popupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
-        startActionsController.registerAction(popupManager.createInvitePopupStartAction(AC_PRIORITY_LOW));
+        mPopupManager = new PopupManager(this);
+        startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
+        startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
+        startActionsController.registerAction(mPopupManager.createInvitePopupStartAction(AC_PRIORITY_LOW));
         // fullscreen
         if (mFullscreenController != null) {
             startActionsController.registerMandatoryAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
@@ -534,7 +536,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        AbstractDialogFragment currentPopup = mPopupManager.getCurrentDialog();
+        if (currentPopup != null) {
+            currentPopup.onActivityResult(requestCode, resultCode, data);
+        }
         //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
         boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(
                 getSupportFragmentManager(),

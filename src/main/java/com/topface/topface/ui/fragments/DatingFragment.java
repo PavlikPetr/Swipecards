@@ -75,6 +75,7 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.social.AuthToken;
 

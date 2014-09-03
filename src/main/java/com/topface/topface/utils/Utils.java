@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -28,6 +29,7 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.ui.dialogs.RateAppDialog;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
@@ -113,10 +115,18 @@ public class Utils {
         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
-    public static void goToMarket(Context context) {
+    public static void goToMarket(Activity context) {
+        goToMarket(context, null);
+    }
+
+    public static void goToMarket(Activity context, Integer requestCode) {
         Intent marketIntent = getMarketIntent(context);
         if (isCallableIntent(marketIntent, context)) {
-            context.startActivity(marketIntent);
+            if (requestCode == null) {
+                context.startActivity(marketIntent);
+            } else {
+                context.startActivityForResult(marketIntent, requestCode);
+            }
         } else {
             Toast.makeText(context, R.string.open_market_error, Toast.LENGTH_SHORT).show();
         }
