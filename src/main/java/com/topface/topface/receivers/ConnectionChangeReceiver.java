@@ -16,6 +16,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
     public static final String CONNECTION_TYPE = "connection_type";
     public static final String REAUTH = "reauth_after_internet_connected";
     private static int mConnectionType = 0;
+
     public boolean mIsConnected = false;
     private Context mContext;
 
@@ -79,5 +80,9 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 
     public boolean isConnected() {
         return mIsConnected;
+    }
+
+    public static interface OnConnectionChangedListener {
+
     }
 }
