@@ -3,7 +3,7 @@
     <!--#FORTUMO: Описание тестового продукта -->
     <items>
         <!--Zero or more repetitions:-->
-        <item id="coins40"
+        <item id="com_topface_topface_buy_coins_6"
               publish-state="published"> <!-- id: the same format as Google SKU, required; published: "published" or "unpublushed", required by the xsd, but is not actually used it the current implementation-->
             <summary><!--encapsulates all elements related to description, required-->
                 <summary-base><!--default strings elements, required-->
@@ -17,6 +17,72 @@
                     <title>Четверть бака бензина</title>
                     <!-- required -->
                     <description>Немного топлива, чтобы проехать еще</description>
+                    <!-- required -->
+                </summary-localization>
+                <summary-localization locale="en_US">
+                    <title>1/4 of gas tank</title>
+                    <description>Some gas to go further</description>
+                </summary-localization>
+            </summary>
+            <price
+                autofill="false"> <!-- autofill: true or false, required by the xsd, but is not used in the current implementation-->
+                <price-base>0.10</price-base>
+                <!-- default price, required-->
+                <!--Zero or more repetitions:-->
+                <price-local country="RU"> <!-- country: [A-Z][A_Z], required-->
+                    3.00
+                </price-local>
+                <price-local country="EN">1.00</price-local>
+            </price>
+        </item>
+
+        <item id="com_topface_topface_buy_coins_12"
+            publish-state="published"> <!-- id: the same format as Google SKU, required; published: "published" or "unpublushed", required by the xsd, but is not actually used it the current implementation-->
+            <summary><!--encapsulates all elements related to description, required-->
+                <summary-base><!--default strings elements, required-->
+                    <title>2/4 of gas tank</title>
+                    <!-- default title, required-->
+                    <description>Some gas to go further</description>
+                    <!-- default description, required-->
+                </summary-base>
+                <!--Zero or more repetitions:-->
+                <summary-localization locale="ru_RU"> <!-- locale: [a-z]_[A-Z], required-->
+                    <title>Четверть бака бензина</title>
+                    <!-- required -->
+                    <description>Немного топлива, чтобы проехать еще</description>
+                    <!-- required -->
+                </summary-localization>
+                <summary-localization locale="en_US">
+                    <title>1/4 of gas tank</title>
+                    <description>Some gas to go further</description>
+                </summary-localization>
+            </summary>
+            <price
+                autofill="false"> <!-- autofill: true or false, required by the xsd, but is not used in the current implementation-->
+                <price-base>0.10</price-base>
+                <!-- default price, required-->
+                <!--Zero or more repetitions:-->
+                <price-local country="RU"> <!-- country: [A-Z][A_Z], required-->
+                    3.00
+                </price-local>
+                <price-local country="EN">1.00</price-local>
+            </price>
+        </item>
+
+        <item id="com_topface_topface_buy_premium_1"
+            publish-state="published"> <!-- id: the same format as Google SKU, required; published: "published" or "unpublushed", required by the xsd, but is not actually used it the current implementation-->
+            <summary><!--encapsulates all elements related to description, required-->
+                <summary-base><!--default strings elements, required-->
+                    <title>VIP status</title>
+                    <!-- default title, required-->
+                    <description>Vip status</description>
+                    <!-- default description, required-->
+                </summary-base>
+                <!--Zero or more repetitions:-->
+                <summary-localization locale="ru_RU"> <!-- locale: [a-z]_[A-Z], required-->
+                    <title>Вип статус</title>
+                    <!-- required -->
+                    <description>Вип статус</description>
                     <!-- required -->
                 </summary-localization>
                 <summary-localization locale="en_US">

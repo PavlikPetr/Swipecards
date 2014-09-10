@@ -97,8 +97,7 @@ public class App extends Application {
                 .addRequest(getOptionsRequest())
                 .addRequest(getProductsRequest())
                 .addRequest(getFortumoProductsRequest())
-                        //#FORTUMO: Закоментировано, т.к. упираемся в лимит запросов! Нужно что бы серверные исправили
-                        //.addRequest(getPaymentwallProductsRequest())
+                .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .callback(handler)
                 .exec();
