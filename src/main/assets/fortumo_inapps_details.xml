@@ -10,9 +10,11 @@
         nook-service-inapp-secret="cbc0da3763e59eee2d5a523fe5761346" // Fortumo NOOK inapp-secret need to be copy-pasted from Dashboard
         consumable="true"/>     // consumable or not - currently is necessary parameter as wellas for Amazon
     -->
-    <product
-        id="coins40"
-        service-id="6e5d1adf7d21ef22d9d47652c240fa7d"
-        service-inapp-secret="4bf2ac2b4af7dacf4e74975a2adf4a73"
+    <product id="com_topface_topface_buy_coins_6" service-id="2a8cb3e7067c4c2d247159dd5c5038fe"
+        service-inapp-secret="340bb8169dd6c2bca71b6f9f0ebce5a1" consumable="true" />
+    <product id="com_topface_topface_buy_coins_12" service-id="ff1961fddd100c4b0091828daeb251c3"
+        service-inapp-secret="bf606981dcb2b7720a3fb88c766b42a4" consumable="true" />
+    <product id="com_topface_topface_buy_premium_1" service-id="5a9c9345f17607b982d855113a5bfc57"
+        service-inapp-secret="e1ee2015ae8969f34dce98f4c8bd58ae"
         consumable="true"/>
 </fortumo-products>

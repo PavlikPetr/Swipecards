@@ -67,6 +67,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      * Результат запроса из OpenIAB: Товар уже куплен, но не потрачен
      */
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
+    public static final int PURCHASE_CANCEL_FORTUMO = 5;
+    public static final int PURCHASE_IMPOSSIBLE_FORTUMO = 6;
     private static final String ITEM_TYPE_SUBS = "subs";
     private static final CharSequence ITEM_TYPE_INAPP = "inapp";
     private OpenIabHelper mHelper;
@@ -100,9 +102,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         //Нам нужен конкретный AppStore, т.к. у каждого типа сборки свои продукты и поддержка других маркетов все равно не нужна
         switch (BuildConfig.BILLING_TYPE) {
             case GOOGLE_PLAY:
-                //#FORTUMO: Тут нужно разные магазины на разных вкладках инициировать
-                //Это нужно добавить для включения Fortumo
-                //optsBuilder.addAvailableStores(new FortumoStore(activity));
                 optsBuilder.addAvailableStores(new GooglePlay(activity, null));
                 break;
             case AMAZON:
@@ -197,7 +196,11 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     break;
                 case PURCHASE_CANCEL:
                 case PURCHASE_CANCEL_GP:
+                case PURCHASE_CANCEL_FORTUMO:
                     Debug.log("BillingFragment: User cancel purchase");
+                    break;
+                case PURCHASE_IMPOSSIBLE_FORTUMO:
+                    Debug.log("BillingFragment: Fortumo purchase impossible now");
                     break;
                 default:
                     if (isAdded()) {
@@ -317,7 +320,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     getActivity(),
                     //Если тестовые покупки, то подменяем id продукта на тестовый
                     isTestPurchasesEnabled() ? TEST_PURCHASED_PRODUCT_ID : id,
-                    BUYING_REQUEST,
+                    getRequestCode(),
                     this,
                     getDeveloperPayload(id)
             );
@@ -336,7 +339,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     getActivity(),
                     //Если тестовые покупки, то подменяем id продукта на тестовый
                     isTestPurchasesEnabled() ? TEST_PURCHASED_PRODUCT_ID : id,
-                    BUYING_REQUEST,
+                    getRequestCode(),
                     this,
                     getDeveloperPayload(id)
             );
@@ -384,7 +387,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Debug.log("BillingFragment: onActivityResult requestCode: " + requestCode + " resultCode: " + resultCode + " data: " + data);
+        Debug.log("BillingFragment(" + ((Object) this).getClass().getSimpleName() + "): onActivityResult requestCode: " + requestCode + " resultCode: " + resultCode + " data: " + data);
 
         // Pass on the activity result to the helper for handling
         if (mHelper != null && !mHelper.handleActivityResult(requestCode, resultCode, data)) {
@@ -487,23 +490,22 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      *                            соответсвующий параметру parentFragment фрагмент и будем искать в его ChildFragmentManager
      */
     public static boolean processRequestCode(FragmentManager manager, int requestCode, int resultCode, Intent data, Class<? extends Fragment> parentFragmentClass) {
-        //Сперва проверяем что это наш код запроса
-        if (OpenIabFragment.BUYING_REQUEST == requestCode) {
-            //Если наш запрос, то ищем среди всех фрагментов BillingFragment
-            List<Fragment> fragments = manager.getFragments();
-            for (Fragment fragment : fragments) {
-                if (parentFragmentClass != null && parentFragmentClass.isInstance(fragment)) {
-                    //Да, вам не показалось, это рекурсивный вызов, но с пустым последним парметром
-                    processRequestCode(fragment.getChildFragmentManager(), requestCode, resultCode, data, null);
-                    return true;
-                } else if (fragment instanceof OpenIabFragment) {
-                    fragment.onActivityResult(requestCode, resultCode, data);
-                    return true;
-                }
+        List<Fragment> fragments = manager.getFragments();
+        for (Fragment fragment : fragments) {
+            if (parentFragmentClass != null && parentFragmentClass.isInstance(fragment)) {
+                //Да, вам не показалось, это рекурсивный вызов, но с пустым последним парметром
+                processRequestCode(fragment.getChildFragmentManager(), requestCode, resultCode, data, null);
+                return true;
+            } else if (fragment instanceof OpenIabFragment && ((OpenIabFragment) fragment).getRequestCode() == requestCode) {
+                fragment.onActivityResult(requestCode, resultCode, data);
+                return true;
             }
         }
-
         return false;
+    }
+
+    protected int getRequestCode() {
+        return OpenIabFragment.BUYING_REQUEST;
     }
 }
 

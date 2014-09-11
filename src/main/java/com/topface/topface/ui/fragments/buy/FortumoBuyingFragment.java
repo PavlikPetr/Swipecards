@@ -13,6 +13,9 @@ import org.onepf.oms.appstore.FortumoStore;
  * Фрагмент покупки монет и симпатий через Fortumo
  */
 public class FortumoBuyingFragment extends MarketBuyingFragment {
+
+    public static final int FORTUMO_BUYING_REQUEST = 1002;
+
     public static FortumoBuyingFragment newInstance(String from) {
         FortumoBuyingFragment fragment = new FortumoBuyingFragment();
         Bundle args = new Bundle();
@@ -30,8 +33,13 @@ public class FortumoBuyingFragment extends MarketBuyingFragment {
 
     @Override
     protected void addAvailableStores(FragmentActivity activity, OpenIabHelper.Options.Builder optsBuilder) {
+        optsBuilder.setSupportFortumo(true);
         //Используем всю ту же логику что в MarketBuyingFragment, но устанавливаем свой тип магазина
         optsBuilder.addAvailableStores(new FortumoStore(activity));
     }
 
+    @Override
+    protected int getRequestCode() {
+        return FORTUMO_BUYING_REQUEST;
+    }
 }
