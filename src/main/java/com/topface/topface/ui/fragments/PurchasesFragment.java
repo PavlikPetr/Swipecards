@@ -173,7 +173,8 @@ public class PurchasesFragment extends BaseFragment {
             } else {
                 Products products = getProductsByTab(tab);
                 if (products != null) {
-                    if ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) || (isVip && products.premium.isEmpty())) {
+                    if ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) ||
+                            (isVip && products.premium.isEmpty()) || !Options.Tab.markets.contains(tab.type)) {
                         iterator.remove();
                     }
                 }

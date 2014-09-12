@@ -6,21 +6,17 @@
         <item id="com_topface_topface_buy_coins_8" publish-state="published">
             <summary>
                 <summary-base>
-                    <title>1/4 of gas tank</title>
+                    <title>8 coins</title>
 
-                    <description>Some gas to go further</description>
+                    <description>Coins - Topface internal currency</description>
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
-                    <title>Четверть бака бензина</title>
+                    <title>8 монет</title>
 
-                    <description>Немного топлива, чтобы проехать еще</description>
+                    <description>Монеты – внутренняя валюта Topface</description>
 
-                </summary-localization>
-                <summary-localization locale="en_US">
-                    <title>1/4 of gas tank</title>
-                    <description>Some gas to go further</description>
                 </summary-localization>
             </summary>
             <price autofill="false">
@@ -37,21 +33,17 @@
         <item id="com_topface_topface_buy_coins_22" publish-state="published">
             <summary>
                 <summary-base>
-                    <title>2/4 of gas tank</title>
+                    <title>22 coins</title>
 
-                    <description>Some gas to go further</description>
+                    <description>Coins - Topface internal currency</description>
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
-                    <title>Четверть бака бензина</title>
+                    <title>22 монеты</title>
 
-                    <description>Немного топлива, чтобы проехать еще</description>
+                    <description>Монеты – внутренняя валюта Topface</description>
 
-                </summary-localization>
-                <summary-localization locale="en_US">
-                    <title>1/4 of gas tank</title>
-                    <description>Some gas to go further</description>
                 </summary-localization>
             </summary>
             <price autofill="false">
@@ -68,21 +60,17 @@
         <item id="com_topface_topface_buy_coins_30" publish-state="published">
             <summary>
                 <summary-base>
-                    <title>VIP status</title>
+                    <title>30 coins</title>
 
-                    <description>Vip status</description>
+                    <description>Coins - Topface internal currency</description>
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
-                    <title>Вип статус</title>
+                    <title>30 монет</title>
 
-                    <description>Вип статус</description>
+                    <description>Монеты – внутренняя валюта Topface</description>
 
-                </summary-localization>
-                <summary-localization locale="en_US">
-                    <title>1/4 of gas tank</title>
-                    <description>Some gas to go further</description>
                 </summary-localization>
             </summary>
             <price autofill="false">
@@ -99,21 +87,18 @@
         <item id="com_topface_topface_buy_premium_day_1" publish-state="published">
             <summary>
                 <summary-base>
-                    <title>1/4 of gas tank</title>
+                    <title>VIP-status for 1 day</title>
 
-                    <description>Some gas to go further</description>
+                    <description>You will always have access to all Topface features</description>
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
-                    <title>Четверть бака бензина</title>
+                    <title>VIP-статус на один день</title>
 
-                    <description>Немного топлива, чтобы проехать еще</description>
+                    <description>Вы всё время будете иметь доступ ко всем возможностям Topface
+                    </description>
 
-                </summary-localization>
-                <summary-localization locale="en_US">
-                    <title>1/4 of gas tank</title>
-                    <description>Some gas to go further</description>
                 </summary-localization>
             </summary>
             <price autofill="false">
@@ -130,21 +115,18 @@
         <item id="com_topface_topface_buy_premium_day_6" publish-state="published">
             <summary>
                 <summary-base>
-                    <title>1/4 of gas tank</title>
+                    <title>VIP-status for six days</title>
 
-                    <description>Some gas to go further</description>
+                    <description>You will always have access to all Topface features</description>
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
-                    <title>Четверть бака бензина</title>
+                    <title>VIP-статус на шесть дней</title>
 
-                    <description>Немного топлива, чтобы проехать еще</description>
+                    <description>Вы всё время будете иметь доступ ко всем возможностям Topface
+                    </description>
 
-                </summary-localization>
-                <summary-localization locale="en_US">
-                    <title>1/4 of gas tank</title>
-                    <description>Some gas to go further</description>
                 </summary-localization>
             </summary>
             <price autofill="false">
@@ -161,21 +143,18 @@
         <item id="com_topface_topface_buy_premium_day_10" publish-state="published">
             <summary>
                 <summary-base>
-                    <title>1/4 of gas tank</title>
+                    <title>VIP-status for ten days</title>
 
-                    <description>Some gas to go further</description>
+                    <description>You will always have access to all Topface features</description>
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
-                    <title>Четверть бака бензина</title>
+                    <title>VIP-статус на десять дней</title>
 
-                    <description>Немного топлива, чтобы проехать еще</description>
+                    <description>Вы всё время будете иметь доступ ко всем возможностям Topface
+                    </description>
 
-                </summary-localization>
-                <summary-localization locale="en_US">
-                    <title>1/4 of gas tank</title>
-                    <description>Some gas to go further</description>
                 </summary-localization>
             </summary>
             <price autofill="false">
@@ -192,21 +171,21 @@
         <item id="com_topface_topface_buy_likes_1" publish-state="published">
             <summary>
                 <summary-base>
-                    <title>1/4 of gas tank</title>
+                    <title>Pack of likes</title>
 
-                    <description>Some gas to go further</description>
+                    <description>The number of likes mentioned in the "Pack" guarantees that this
+                        number of people will like you
+                    </description>
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
-                    <title>Четверть бака бензина</title>
+                    <title>Пакет симпатий</title>
 
-                    <description>Немного топлива, чтобы проехать еще</description>
+                    <description>Количество симпатий, указанных в «Пакете», гарантирует, что вы
+                        понравитесь этому количеству людей
+                    </description>
 
-                </summary-localization>
-                <summary-localization locale="en_US">
-                    <title>1/4 of gas tank</title>
-                    <description>Some gas to go further</description>
                 </summary-localization>
             </summary>
             <price autofill="false">
