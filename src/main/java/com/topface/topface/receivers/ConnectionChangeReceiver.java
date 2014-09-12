@@ -9,16 +9,49 @@ import com.topface.topface.App;
 import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.utils.Connectivity;
 
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
+
 public class ConnectionChangeReceiver extends BroadcastReceiver {
-    public static final int CONNECTION_OFFLINE = 0;
-    public static final int CONNECTION_MOBILE = 1;
-    public static final int CONNECTION_WIFI = 2;
+    public static enum ConnectionType {
+        CONNECTION_OFFLINE(0),
+        CONNECTION_MOBILE_3G(1),
+        CONNECTION_MOBILE_EDGE(2),
+        CONNECTION_WIFI(3);
+
+        int type;
+
+        ConnectionType(int i) {
+            type = i;
+        }
+
+        private static Map<Integer, ConnectionType> map = new HashMap<Integer, ConnectionType>();
+
+        static {
+            for (ConnectionType connectionType : ConnectionType.values()) {
+                map.put(connectionType.type, connectionType);
+            }
+        }
+
+        public static ConnectionType valueOf(int type) {
+            return map.get(type);
+        }
+
+        public int getInt() {
+            return type;
+        }
+
+    }
     public static final String CONNECTION_TYPE = "connection_type";
     public static final String REAUTH = "reauth_after_internet_connected";
-    private static int mConnectionType = 0;
+    private static ConnectionType mConnectionType;
+
 
     public boolean mIsConnected = false;
     private Context mContext;
+
+    private static OnConnectionChangedListener mListener;
 
     public ConnectionChangeReceiver(Context context) {
         super();
@@ -26,7 +59,11 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         updateConnectionStatus();
     }
 
-    public static int getConnectionType() {
+    public static void setOnConnectionChangedListener(OnConnectionChangedListener l) {
+        mListener = l;
+    }
+
+    public static ConnectionType getConnectionType() {
         return mConnectionType;
     }
 
@@ -44,15 +81,20 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
             connectionType = Connectivity.getConnType(mContext);
             switch (connectionType) {
                 case WIFI:
-                    mConnectionType = CONNECTION_WIFI;
+                    mConnectionType = ConnectionType.CONNECTION_WIFI;
                     break;
                 case THREE_G:
+                    mConnectionType = ConnectionType.CONNECTION_MOBILE_3G;
+                    break;
                 case EDGE:
-                    mConnectionType = CONNECTION_MOBILE;
+                    mConnectionType = ConnectionType.CONNECTION_MOBILE_EDGE;
                     break;
             }
         } else {
-            mConnectionType = CONNECTION_OFFLINE;
+            mConnectionType = ConnectionType.CONNECTION_OFFLINE;
+        }
+        if (mListener != null) {
+            mListener.onConnectionChanged(mConnectionType);
         }
         sendBroadCastToActiveActivity();
         return connectionType;
@@ -83,6 +125,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
     }
 
     public static interface OnConnectionChangedListener {
+        public void onConnectionChanged(ConnectionType type);
 
     }
 }

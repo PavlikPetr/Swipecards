@@ -11,6 +11,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.FeedLoadController;
 
 public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsListView.OnScrollListener {
 

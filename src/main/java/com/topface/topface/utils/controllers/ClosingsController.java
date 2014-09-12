@@ -36,6 +36,7 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FeedLoadController;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public class ClosingsController implements View.OnClickListener {
     private boolean mLeftMenuLocked = false;
     private static boolean mLogoutWasInitiated = false;
     private INavigationFragmentsListener mNavigationFragmentsListener;
+    private FeedLoadController mLoadController = new FeedLoadController();
 
     public ClosingsController(@NonNull final MenuFragment menuFragment, @NonNull ViewStub mHeaderViewStub, @NonNull LeftMenuAdapter adapter) {
         mMenuFragment = menuFragment;
@@ -214,7 +216,7 @@ public class ClosingsController implements View.OnClickListener {
 
     protected ApiRequest getUsersListRequest(FeedRequest.FeedService feedType, Context context) {
         FeedRequest request = new FeedRequest(feedType, context);
-        request.limit = ViewUsersListFragment.LIMIT;
+        request.limit = mLoadController.getFeedCountByConnectionType();
         request.unread = true;
         request.leave = true;
         return request;

@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
+import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -30,6 +32,7 @@ import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.FeedLoadController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.AppConfig;
@@ -66,6 +69,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private static int NETWORK_ERROR_NOTIFICATION_ID = 800;
     private CheckBox mCustomApiCheckBox;
     private EditText mCustomApi;
+    private Spinner mConnectionTypeChoose;
+    private CheckBox mConnectionCheckbox;
 
 
     @Override
@@ -124,10 +129,54 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         initEditorMode(root);
         initUserInfo(root);
         initOfferwall(root);
+        initConnections(root);
         //После инита всех элементов заполняем их значениями по умолчанию
         setConfigValues();
         mConfigInited = true;
         return root;
+    }
+
+    private void initConnections(View root) {
+        final AppConfig config = App.getAppConfig();
+        mConnectionTypeChoose = (Spinner) root.findViewById(R.id.spConnection);
+        mConnectionCheckbox = (CheckBox) root.findViewById(R.id.debugConnectionEnabled);
+        mConnectionCheckbox.setOnClickListener(this);
+        mConnectionCheckbox.setChecked(config.getDebugConnectionChecked());
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_spinner_item,
+                new String[]{"Offline", "3G", "Edge", "WiFi"});
+
+        mConnectionTypeChoose.setAdapter(adapter);
+
+        int connectionType = mConnectionCheckbox.isChecked()? config.getDebugConnection() : ConnectionChangeReceiver.getConnectionType().getInt();
+        mConnectionTypeChoose.setSelection(connectionType);
+
+        mConnectionCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    config.setDebugConnection(mConnectionTypeChoose.getSelectedItemPosition());
+                }
+                config.setDebugConnectionChecked(isChecked);
+            }
+        });
+
+        mConnectionTypeChoose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mConnectionCheckbox.isChecked()) {
+                    config.setDebugConnection(position);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void initOfferwall(View root) {

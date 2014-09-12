@@ -31,6 +31,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.FeedLoadController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.geo.AddressesCache;
 

@@ -2,6 +2,8 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
+import com.topface.topface.utils.FeedLoadController;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,6 +17,7 @@ public class FeedRequest extends ApiRequest {
     public boolean unread;  // параметр получения только тех диалогов, в которых есть непрочитанные сообщения
     private FeedService mService;
     public boolean leave; //Оставить сообщения не прочитанными
+    private FeedLoadController mFeedLoadController;
 
     public static enum FeedService {
         DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST, BOOKMARKS, FANS, ADMIRATIONS, GEO
@@ -23,6 +26,8 @@ public class FeedRequest extends ApiRequest {
     public FeedRequest(FeedService service, Context context) {
         super(context);
         mService = service;
+        mFeedLoadController = new FeedLoadController();
+        limit = mFeedLoadController.getFeedCountByConnectionType();
     }
 
     @Override
@@ -40,6 +45,10 @@ public class FeedRequest extends ApiRequest {
         }
 
         return data;
+    }
+
+    public int getLimit() {
+        return limit;
     }
 
     @Override

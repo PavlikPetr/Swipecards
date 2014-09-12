@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.LoaderData;
+import com.topface.topface.utils.FeedLoadController;
 
 import java.util.ArrayList;
 
@@ -38,8 +39,12 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     protected TextView mLoaderRetrierText;
     protected ProgressBar mLoaderRetrierProgress;
 
+
+    protected FeedLoadController mLoadController;
+
     public LoadingListAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         mContext = context;
+        mLoadController = new FeedLoadController();
         mInflater = LayoutInflater.from(context);
         mData = new FeedList<>();
         if (data != null) {
