@@ -228,7 +228,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 List<String> allOwnedSkus = inventory.getAllOwnedSkus();
                 Debug.log("BillingFragment: inventory " + allOwnedSkus);
                 //И подписки, что бы их проверить
-                Products marketProducts = CacheProfile.getMarketProducts();
+                Products marketProducts = getProducts();
                 //Покупки юзера на сервере
                 Products.ProductsInventory serverSubs = marketProducts != null ? marketProducts.inventory : null;
                 for (String sku : allOwnedSkus) {
@@ -250,6 +250,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             Debug.error("BillingFragment: onQueryInventoryFinished error: " + iabResult);
         }
     }
+
+    protected abstract Products getProducts();
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

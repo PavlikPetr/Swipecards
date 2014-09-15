@@ -8,25 +8,19 @@
                 <summary-base>
                     <title>8 coins</title>
 
-                    <description>Coins - Topface internal currency</description>
+                    <description />
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
                     <title>8 монет</title>
 
-                    <description>Монеты – внутренняя валюта Topface</description>
+                    <description />
 
                 </summary-localization>
             </summary>
             <price autofill="false">
-                <price-base>0.10</price-base>
-
-
-                <price-local country="RU">
-                3.00
-                </price-local>
-                <price-local country="EN">1.00</price-local>
+                <price-base>2.34</price-base>
             </price>
         </item>
 
@@ -35,25 +29,19 @@
                 <summary-base>
                     <title>22 coins</title>
 
-                    <description>Coins - Topface internal currency</description>
+                    <description />
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
                     <title>22 монеты</title>
 
-                    <description>Монеты – внутренняя валюта Topface</description>
+                    <description />
 
                 </summary-localization>
             </summary>
             <price autofill="false">
-                <price-base>0.10</price-base>
-
-
-                <price-local country="RU">
-                3.00
-                </price-local>
-                <price-local country="EN">1.00</price-local>
+                <price-base>3.9</price-base>
             </price>
         </item>
 
@@ -62,25 +50,19 @@
                 <summary-base>
                     <title>30 coins</title>
 
-                    <description>Coins - Topface internal currency</description>
+                    <description />
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
                     <title>30 монет</title>
 
-                    <description>Монеты – внутренняя валюта Topface</description>
+                    <description />
 
                 </summary-localization>
             </summary>
             <price autofill="false">
-                <price-base>0.10</price-base>
-
-
-                <price-local country="RU">
-                    3.00
-                </price-local>
-                <price-local country="EN">1.00</price-local>
+                <price-base>5.16</price-base>
             </price>
         </item>
 
@@ -89,82 +71,61 @@
                 <summary-base>
                     <title>VIP-status for 1 day</title>
 
-                    <description>You will always have access to all Topface features</description>
+                    <description />
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
                     <title>VIP-статус на один день</title>
 
-                    <description>Вы всё время будете иметь доступ ко всем возможностям Topface
-                    </description>
+                    <description />
 
                 </summary-localization>
             </summary>
             <price autofill="false">
-                <price-base>0.10</price-base>
-
-
-                <price-local country="RU">
-                    3.00
-                </price-local>
-                <price-local country="EN">1.00</price-local>
+                <price-base>2.34</price-base>
             </price>
         </item>
 
         <item id="com_topface_topface_buy_premium_day_6" publish-state="published">
             <summary>
                 <summary-base>
-                    <title>VIP-status for six days</title>
+                    <title>VIP-status for 6 days</title>
 
-                    <description>You will always have access to all Topface features</description>
+                    <description />
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
-                    <title>VIP-статус на шесть дней</title>
+                    <title>VIP-статус на 6 дней</title>
 
-                    <description>Вы всё время будете иметь доступ ко всем возможностям Topface
-                    </description>
+                    <description />
 
                 </summary-localization>
             </summary>
             <price autofill="false">
-                <price-base>0.10</price-base>
-
-
-                <price-local country="RU">
-                    3.00
-                </price-local>
-                <price-local country="EN">1.00</price-local>
+                <price-base>3.84</price-base>
             </price>
         </item>
 
         <item id="com_topface_topface_buy_premium_day_10" publish-state="published">
             <summary>
                 <summary-base>
-                    <title>VIP-status for ten days</title>
+                    <title>VIP-status for 10 days</title>
 
-                    <description>You will always have access to all Topface features</description>
+                    <description />
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
-                    <title>VIP-статус на десять дней</title>
+                    <title>VIP-статус на 10 дней</title>
 
-                    <description>Вы всё время будете иметь доступ ко всем возможностям Topface
-                    </description>
+                    <description />
 
                 </summary-localization>
             </summary>
             <price autofill="false">
-                <price-base>0.10</price-base>
-
-
-                <price-local country="RU">
-                    3.00
-                </price-local>
-                <price-local country="EN">1.00</price-local>
+                <price-base>5.1</price-base>
             </price>
         </item>
 
@@ -173,29 +134,19 @@
                 <summary-base>
                     <title>Pack of likes</title>
 
-                    <description>The number of likes mentioned in the "Pack" guarantees that this
-                        number of people will like you
-                    </description>
+                    <description />
 
                 </summary-base>
 
                 <summary-localization locale="ru_RU">
                     <title>Пакет симпатий</title>
 
-                    <description>Количество симпатий, указанных в «Пакете», гарантирует, что вы
-                        понравитесь этому количеству людей
-                    </description>
+                    <description />
 
                 </summary-localization>
             </summary>
             <price autofill="false">
-                <price-base>0.10</price-base>
-
-
-                <price-local country="RU">
-                3.00
-                </price-local>
-                <price-local country="EN">1.00</price-local>
+                <price-base>5.16</price-base>
             </price>
         </item>
     </items>

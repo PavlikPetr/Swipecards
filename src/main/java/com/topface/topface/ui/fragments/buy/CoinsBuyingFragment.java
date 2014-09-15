@@ -193,7 +193,5 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
 
     protected abstract List<Products.BuyButton> getCoinsProducts(Products products, boolean coinsMaskedExperiment);
 
-    public abstract Products getProducts();
-
     public abstract Products.BuyButtonClickListener getCoinsSubscriptionClickListener();
 }
