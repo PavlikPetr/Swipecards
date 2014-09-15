@@ -498,7 +498,6 @@ public class AuthFragment extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         mRetryView.setVisibility(View.GONE);
-                        mProgressBar.setVisibility(View.VISIBLE);
                         resendRequest(request);
                     }
                 }, strBuilder.toString());
@@ -508,7 +507,6 @@ public class AuthFragment extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         mRetryView.setVisibility(View.GONE);
-                        mProgressBar.setVisibility(View.VISIBLE);
                         resendRequest(request);
                     }
                 }, strBuilder.toString());
@@ -546,7 +544,6 @@ public class AuthFragment extends BaseFragment {
                     public void onClick(View v) {
                         mRetryView.setVisibility(View.GONE);
                         mAuthViewsFlipper.setVisibility(View.VISIBLE);
-                        mProgressBar.setVisibility(View.VISIBLE);
                         resendRequest(request);
                     }
                 }, strBuilder.toString());
@@ -668,7 +665,9 @@ public class AuthFragment extends BaseFragment {
             mTFButton.setVisibility(View.INVISIBLE);
             if (mProcessingTFReg) {
                 mLoginSendingProgress.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
             } else {
+                mLoginSendingProgress.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
             mRecoverPwd.setEnabled(false);
