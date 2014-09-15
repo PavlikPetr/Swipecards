@@ -268,7 +268,7 @@ public class CacheProfile {
             if (!TextUtils.isEmpty(productsCache)) {
                 //Получаем опции из кэша
                 try {
-                    mMarketProducts = new FortumoProducts(
+                    mMarketProducts = new Products(
                             new JSONObject(productsCache)
                     );
                 } catch (JSONException e) {
