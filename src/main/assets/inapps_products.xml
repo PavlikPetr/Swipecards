@@ -3,8 +3,8 @@
 
     <items>
 
-        <item id="com_topface_topface_buy_coins_8" publish-state="published">
-            <summary>
+        <item id="com_topface_coins_8" publish-state="published">
+        <summary>
                 <summary-base>
                     <title>8 coins</title>
 
@@ -24,8 +24,8 @@
             </price>
         </item>
 
-        <item id="com_topface_topface_buy_coins_22" publish-state="published">
-            <summary>
+        <item id="com_topface_coins_22" publish-state="published">
+        <summary>
                 <summary-base>
                     <title>22 coins</title>
 
@@ -45,8 +45,8 @@
             </price>
         </item>
 
-        <item id="com_topface_topface_buy_coins_30" publish-state="published">
-            <summary>
+        <item id="com_topface_coins_30" publish-state="published">
+        <summary>
                 <summary-base>
                     <title>30 coins</title>
 
@@ -66,8 +66,8 @@
             </price>
         </item>
 
-        <item id="com_topface_topface_buy_premium_day_1" publish-state="published">
-            <summary>
+        <item id="com_topface_premium_day_1" publish-state="published">
+        <summary>
                 <summary-base>
                     <title>VIP-status for 1 day</title>
 
@@ -87,8 +87,8 @@
             </price>
         </item>
 
-        <item id="com_topface_topface_buy_premium_day_6" publish-state="published">
-            <summary>
+        <item id="com_topface_premium_day_6" publish-state="published">
+        <summary>
                 <summary-base>
                     <title>VIP-status for 6 days</title>
 
@@ -108,8 +108,8 @@
             </price>
         </item>
 
-        <item id="com_topface_topface_buy_premium_day_10" publish-state="published">
-            <summary>
+        <item id="com_topface_premium_day_10" publish-state="published">
+        <summary>
                 <summary-base>
                     <title>VIP-status for 10 days</title>
 
@@ -129,8 +129,8 @@
             </price>
         </item>
 
-        <item id="com_topface_topface_buy_likes_1" publish-state="published">
-            <summary>
+        <item id="com_topface_likes_1" publish-state="published">
+        <summary>
                 <summary-base>
                     <title>Pack of likes</title>
 

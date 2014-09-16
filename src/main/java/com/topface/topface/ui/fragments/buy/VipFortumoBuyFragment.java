@@ -40,4 +40,9 @@ public class VipFortumoBuyFragment extends VipBuyFragment {
     public void onSubscriptionUnsupported() {
 
     }
+
+    @Override
+    protected int getRequestCode() {
+        return FortumoBuyingFragment.FORTUMO_BUYING_REQUEST;
+    }
 }
