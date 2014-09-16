@@ -19,7 +19,8 @@ import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.FeedLoadController;
+import com.topface.topface.utils.loadcontollers.FeedLoadController;
+import com.topface.topface.utils.loadcontollers.LoadController;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,6 +74,11 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public FeedAdapter(Context context, Updater updateCallback) {
         this(context, null, updateCallback);
+    }
+
+    @Override
+    protected LoadController initLoadController() {
+        return new FeedLoadController();
     }
 
     @Override
@@ -241,10 +247,12 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     @Override
     public final void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1 - mLoadController.getFeedOffsetByConnectionType()) {
+        if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1 - mLoadController.getItemsOffsetByConnectionType()) {
             loadOlderItems();
         }
     }
+
+
 
     /**
      * Method tries to load older items (if there is loader item at the end of listView)

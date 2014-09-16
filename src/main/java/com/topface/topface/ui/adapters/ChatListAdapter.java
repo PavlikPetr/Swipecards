@@ -31,9 +31,10 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.FeedLoadController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.geo.AddressesCache;
+import com.topface.topface.utils.loadcontollers.ChatLoadController;
+import com.topface.topface.utils.loadcontollers.LoadController;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -147,6 +148,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 mUnrealItems.add(item);
             }
         }
+    }
+
+    @Override
+    protected LoadController initLoadController() {
+        return new ChatLoadController();
     }
 
     public static int getItemType(History item) {

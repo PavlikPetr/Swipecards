@@ -78,7 +78,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.FeedLoadController;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.PopularUserChatController;
@@ -531,7 +530,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId);
         registerRequest(historyRequest);
         historyRequest.debug = type;
-        historyRequest.limit = LIMIT;
         if (mAdapter != null) {
             if (pullToRefresh) {
                 String id = mAdapter.getFirstItemId();

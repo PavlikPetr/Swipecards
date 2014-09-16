@@ -77,6 +77,7 @@ import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
+import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -1136,8 +1137,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         final SearchUser currentSearchUser = mUserSearchList.getCurrentUser();
         if (currentSearchUser != null) {
             int limit = defaultLoading ? ViewUsersListFragment.PHOTOS_LIMIT : getCurrentPhotosLimit();
-            AlbumRequest request = new AlbumRequest(getActivity(), currentSearchUser.id,
-                    limit, loadedPosition, AlbumRequest.MODE_SEARCH);
+            AlbumRequest request = new AlbumRequest(getActivity(), currentSearchUser.id, loadedPosition, AlbumRequest.MODE_SEARCH, AlbumLoadController.FOR_PREVIEW);
             final int uid = currentSearchUser.id;
             request.callback(new DataApiHandler<AlbumPhotos>() {
                 @Override

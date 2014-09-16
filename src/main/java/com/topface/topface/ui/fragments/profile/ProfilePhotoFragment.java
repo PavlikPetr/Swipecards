@@ -107,7 +107,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         AlbumRequest request = new AlbumRequest(
                 getActivity(),
                 CacheProfile.uid,
-                AlbumRequest.DEFAULT_PHOTOS_LIMIT,
                 position + 1,
                 AlbumRequest.MODE_ALBUM
         );

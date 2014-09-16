@@ -51,16 +51,10 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
     public boolean mIsConnected = false;
     private Context mContext;
 
-    private static OnConnectionChangedListener mListener;
-
     public ConnectionChangeReceiver(Context context) {
         super();
         mContext = context;
         updateConnectionStatus();
-    }
-
-    public static void setOnConnectionChangedListener(OnConnectionChangedListener l) {
-        mListener = l;
     }
 
     public static ConnectionType getConnectionType() {
@@ -92,9 +86,6 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
             }
         } else {
             mConnectionType = ConnectionType.CONNECTION_OFFLINE;
-        }
-        if (mListener != null) {
-            mListener.onConnectionChanged(mConnectionType);
         }
         sendBroadCastToActiveActivity();
         return connectionType;

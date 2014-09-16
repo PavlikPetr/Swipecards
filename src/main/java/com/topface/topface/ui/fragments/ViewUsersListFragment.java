@@ -41,11 +41,11 @@ import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFragment {
-    public static final int LIMIT = 40;
     public static final int PHOTOS_LIMIT = 20;
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
 
@@ -397,8 +397,8 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         int position = photos.get(mLoadedCount - 1).getPosition() + 1;
         final T currentUser = usersList.getCurrentUser();
         if (currentUser != null) {
-            AlbumRequest request = new AlbumRequest(getActivity(), currentUser.id, PHOTOS_LIMIT,
-                    position, AlbumRequest.MODE_SEARCH);
+            AlbumRequest request = new AlbumRequest(getActivity(), currentUser.id,
+                    position, AlbumRequest.MODE_SEARCH, AlbumLoadController.FOR_PREVIEW);
             final int uid = currentUser.id;
             request.callback(new DataApiHandler<AlbumPhotos>() {
 

@@ -32,7 +32,7 @@ import com.topface.topface.utils.AnimationHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.FeedLoadController;
+import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
 import java.util.Timer;
@@ -254,7 +254,6 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     @Override
     protected ApiRequest getUsersListRequest() {
         FeedRequest request = new FeedRequest(getFeedType(), getActivity());
-        request.limit = mLoadController.getFeedCountByConnectionType();
         request.unread = true;
         request.leave = true;
         String lastFeedId = getLastFeedId();
