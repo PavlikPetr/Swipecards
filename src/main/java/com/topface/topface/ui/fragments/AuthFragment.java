@@ -327,7 +327,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, -1);
-                if (mConnectionType != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
+                if (ConnectionChangeReceiver.ConnectionType.valueOf(mConnectionType) != ConnectionChangeReceiver.ConnectionType.CONNECTION_OFFLINE) {
                     if (mRetryView != null) mRetryView.performClick();
                 }
             }

@@ -531,7 +531,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId);
         registerRequest(historyRequest);
         historyRequest.debug = type;
-        historyRequest.limit = LIMIT;
         if (mAdapter != null) {
             if (pullToRefresh) {
                 String id = mAdapter.getFirstItemId();

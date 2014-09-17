@@ -255,7 +255,6 @@ public class DatingInstantMessageController {
         if (user.id > 0) {
             HistoryRequest chatRequest = new HistoryRequest(mActivity, user.id);
             mRequestClient.registerRequest(chatRequest);
-            chatRequest.limit = 1;
             setSendEnabled(false);
             EasyTracker.sendEvent("Dating", "SendMessage", "try-sent", 1L); // Event for clicking send button
             chatRequest.callback(new DataApiHandler<HistoryListData>() {

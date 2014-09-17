@@ -73,13 +73,14 @@ public class PreloadManager<T extends FeedUser> {
         return DefaultImageLoader.getInstance(App.getContext());
     }
 
-    public void checkConnectionType(int type) {
+    public void checkConnectionType(ConnectionChangeReceiver.ConnectionType type) {
         switch (type) {
-            case ConnectionChangeReceiver.CONNECTION_WIFI:
+            case CONNECTION_WIFI:
                 canLoad = true;
                 break;
-            case ConnectionChangeReceiver.CONNECTION_OFFLINE:
-            case ConnectionChangeReceiver.CONNECTION_MOBILE:
+            case CONNECTION_OFFLINE:
+            case CONNECTION_MOBILE_3G:
+            case CONNECTION_MOBILE_EDGE:
                 canLoad = false;
                 break;
         }

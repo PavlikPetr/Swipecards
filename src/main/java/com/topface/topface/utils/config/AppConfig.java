@@ -43,6 +43,8 @@ public class AppConfig extends AbstractConfig {
     private static final String URL_SEPARATOR = "::";
     public static final String STAGE_LOGIN = "stage_login";
     public static final String STAGE_CHECKED = "stage_checked";
+    public static final String DEBUG_CONNECTION = "debug_connection";
+    public static final String DEBUG_CONNECTION_CHECKED = "debug_connection_checked";
 
 
     public AppConfig(Context context) {
@@ -79,6 +81,10 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, STAGE_LOGIN, Static.EMPTY);
         //state of checkbox of stagelogin
         addField(settingsMap, STAGE_CHECKED, false);
+        //debug connection type
+        addField(settingsMap, DEBUG_CONNECTION, 0);
+        //debug connection is checked
+        addField(settingsMap, DEBUG_CONNECTION_CHECKED, false);
     }
 
     protected SharedPreferences getPreferences() {
@@ -294,6 +300,22 @@ public class AppConfig extends AbstractConfig {
     public void addFullscreenUrl(String url) {
         String urls = getStringField(getSettingsMap(), FULLSCREEN_URLS_SET);
         setField(getSettingsMap(), FULLSCREEN_URLS_SET, urls.concat(URL_SEPARATOR).concat(url));
+    }
+
+    public int getDebugConnection() {
+        return getIntegerField(getSettingsMap(), DEBUG_CONNECTION);
+    }
+
+    public void setDebugConnection(int type) {
+        setField(getSettingsMap(), DEBUG_CONNECTION, type);
+    }
+
+    public boolean getDebugConnectionChecked() {
+        return getBooleanField(getSettingsMap(), DEBUG_CONNECTION_CHECKED);
+    }
+
+    public void setDebugConnectionChecked(boolean checked) {
+        setField(getSettingsMap(), DEBUG_CONNECTION_CHECKED, checked);
     }
 
     @Override

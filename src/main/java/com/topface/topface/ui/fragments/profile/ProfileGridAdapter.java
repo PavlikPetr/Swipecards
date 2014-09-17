@@ -9,9 +9,11 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
     private final LoadingListAdapter.Updater mUpdater;
+    private final AlbumLoadController mLoadController;
     private Photos mPhotoLinks;
     private boolean needLoadNewItems = false;
 
@@ -23,6 +25,7 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
         if (photoLinks != null) {
             setData(photoLinks, totalPhotos > photoLinks.size());
         }
+        mLoadController = new AlbumLoadController(AlbumLoadController.FOR_GALLERY);
     }
 
     public void addFirst(Photo photo) {
@@ -128,7 +131,7 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1 && needLoadNewItems) {
+        if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1 - mLoadController.getItemsOffsetByConnectionType() && needLoadNewItems) {
             if (mUpdater != null && !mPhotoLinks.isEmpty()) {
                 needLoadNewItems = false;
                 mUpdater.onUpdate();

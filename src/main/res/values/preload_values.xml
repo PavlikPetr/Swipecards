@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        0 - WiFi
+        1 - 3g
+        2 - Edge
+    -->
+    <integer-array name="feed_limit">
+        <item>40</item>
+        <item>30</item>
+        <item>20</item>
+    </integer-array>
+
+    <integer-array name="dating_limit">
+        <item>20</item>
+        <item>10</item>
+        <item>10</item>
+    </integer-array>
+
+    <integer-array name="chat_limit">
+        <item>30</item>
+        <item>20</item>
+        <item>15</item>
+    </integer-array>
+
+    <integer-array name="album_gallery_limit">
+        <item>36</item>
+        <item>24</item>
+        <item>12</item>
+    </integer-array>
+
+    <integer-array name="album_preview_limit">
+        <item>20</item>
+        <item>15</item>
+        <item>10</item>
+    </integer-array>
+
+    <integer-array name="feed_offset">
+        <item>10</item>
+        <item>5</item>
+        <item>3</item>
+    </integer-array>
+
+    <integer-array name="dating_offset">
+        <item>5</item>
+        <item>3</item>
+        <item>3</item>
+    </integer-array>
+
+    <integer-array name="chat_offset">
+        <item>5</item>
+        <item>3</item>
+        <item>3</item>
+    </integer-array>
+
+    <integer-array name="album_gallery_offset">
+        <item>6</item>
+        <item>6</item>
+        <item>3</item>
+    </integer-array>
+
+    <integer-array name="album_preview_offset">
+        <item>4</item>
+        <item>3</item>
+        <item>2</item>
+    </integer-array>
+</resources>
