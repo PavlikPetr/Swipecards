@@ -30,6 +30,7 @@
     <string name="buying_store_purchase">Κάνω καταχώρηση αγοράς από το iTunes Store</string>
     <string name="buying_tf_ack_sending">Στέλνω πληροφορίες σχετικά με την αγορά στο Topface</string>
     <string name="ok_label">Odnoklassniki</string>
+    <string name="autorefill">Αυτόματη αναπλήρωση</string>
     <string name="coins">Τα κέρματα</string>
     <string name="photo_info_deleted">Διαγράφεται</string>
     <string name="settings_block_main">Βασικές</string>
@@ -211,6 +212,7 @@
     <string name="edit_selected">Επιλεγμένη</string>
     <string name="edit_name">\'Ονομα</string>
     <string name="edit_age">Ηλικία</string>
+    <string name="edit_age_error">Για να αρχίσετε να χρησιμοποιείτε την εφαρμογή,</string>
     <string name="edit_status">Η κατάσταση</string>
     <string name="edit_set_as_main">Κάντε τη κύρια</string>
     <string name="edit_delete">Κατάργηστε</string>
@@ -315,6 +317,7 @@
     <string name="settings_feedback_email">Email για να επικοινωνήσετε</string>
     <string name="settings_invalid_email">Εσφαλμένος e-mail</string>
     <string name="chat_write_message">Στείλτε ένα μήνυμα</string>
+    <string name="dating_message">Μήνυμα…</string>
     <string name="buying_sympathies">Αγορά τις συμπάθειες</string>
     <string name="novice_sympathies_bonus">Παίρνετε %1$d συμπάθειες για\nδωρεάν!  Αυτό σημαίνει ότι, εσέις\n θα αρέσετε ακριβώς για %2$d τους ανθρώπους,\nοποίοι θα εκφράζουν την συμπάθεια για σας</string>
     <string name="novice_buy_sympathies">Αν θέλετε να είστε εγγυημένος για\nνα λαμβάνετε συμπάθειες,\nνα τις αγοράσετε τώρα!</string>
@@ -479,6 +482,7 @@
         <item quantity="other">Αρέσετε σε %d ανθρώπους</item>
         <item quantity="one">Αρέσετε σε %d άνθρωπο</item>
     </plurals>
+    <string name="likes_buy_vip">Για να ανακαλύψετε τούς ανθρώπους, στους οποίους αρέσετε, ενεργοποιήστε την κατάσταση VIP</string>
     <string name="or">ή</string>
     <string name="settings_delete_account">Διαγραφή του λογαριασμού σας</string>
     <string name="chat_block_not_mutual">Για να ξεκινήσετε συνομιλία με τον χρήστη μπορείτε, αν αυτός σας στείλει μια συμπάθεια ή αν έχετε VIP-κατάσταση</string>
@@ -559,7 +563,11 @@
     <string name="waiting_for_load">Αναμονή φόρτωσης</string>
     <string name="loading_photo_percent">Ανέβασμα εικόνας %d%%</string>
     <string name="profile_update_error">Απέτυχε η ενημέρωση της βάσης δεδομένων</string>
+    <string name="retry_cancel_editing">Κατά τη διαρκέια της αποστολής, παρουσιάστηκε σφάλμα σύνδεσης με τη βάση δεδομένων. Θέλετε να δοκιμάσετε ξανά, ή να βγείτε χωρίς να αποθηκεύσετε τα δεδομένα?</string>
     <string name="user_does_not_exist">Ο χρήστης δεν βρέθηκε</string>
     <string name="feedback_subject_ban">Καταγγελία για την άδικη απαγόρευση</string>
     <string name="settings_led">LED κοινοποίηση</string>
+    <string name="open_market_error">Δεν μπορείτε να ανοίξετε τη σελίδα εφαρμογής</string>
+    <string name="billing_item_already_owned">Προηγούμενη αγορά σας είναι σε επεξεργασία, παρακαλώ περιμένετε</string>
+    <string name="dialog">Μηνύματα</string>
 </resources>

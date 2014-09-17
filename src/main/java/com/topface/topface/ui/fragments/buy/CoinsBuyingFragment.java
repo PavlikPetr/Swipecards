@@ -79,6 +79,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             );
             if (btnView != null) {
                 purchaseButtons.add(btnView);
+                btnView.setTag(curButton);
             }
         }
         // coins buttons
@@ -119,6 +120,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             );
             if (btnView != null) {
                 purchaseButtons.add(btnView);
+                btnView.setTag(curButton);
             }
         }
         coinsButtonsContainer.requestLayout();
@@ -192,8 +194,6 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     protected abstract View getCoinsSubscriptionsButton(Products products, LinearLayout coinsButtonsContainer);
 
     protected abstract List<Products.BuyButton> getCoinsProducts(Products products, boolean coinsMaskedExperiment);
-
-    public abstract Products getProducts();
 
     public abstract Products.BuyButtonClickListener getCoinsSubscriptionClickListener();
 }

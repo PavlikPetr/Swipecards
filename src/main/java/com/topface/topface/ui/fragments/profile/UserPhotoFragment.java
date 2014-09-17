@@ -21,6 +21,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,7 +66,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
             public void onUpdate() {
                 if (mGridAlbum != null) {
                     Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData();
-                    AlbumRequest request = new AlbumRequest(getActivity(), mUserId, AlbumRequest.DEFAULT_PHOTOS_LIMIT, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM);
+                    AlbumRequest request = new AlbumRequest(getActivity(), mUserId, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM, AlbumLoadController.FOR_GALLERY);
                     request.callback(new DataApiHandler<AlbumPhotos>() {
 
                         @Override

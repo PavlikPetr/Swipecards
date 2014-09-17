@@ -281,6 +281,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
         if (mInitialMessage != null) {
             mEditBox.setText(mInitialMessage);
+            mEditBox.setSelection(mInitialMessage.length());
         }
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         //LockScreen
@@ -530,7 +531,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId);
         registerRequest(historyRequest);
         historyRequest.debug = type;
-        historyRequest.limit = LIMIT;
         if (mAdapter != null) {
             if (pullToRefresh) {
                 String id = mAdapter.getFirstItemId();

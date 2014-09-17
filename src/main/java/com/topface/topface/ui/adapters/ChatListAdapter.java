@@ -33,6 +33,8 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.geo.AddressesCache;
+import com.topface.topface.utils.loadcontollers.ChatLoadController;
+import com.topface.topface.utils.loadcontollers.LoadController;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -146,6 +148,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 mUnrealItems.add(item);
             }
         }
+    }
+
+    @Override
+    protected LoadController initLoadController() {
+        return new ChatLoadController();
     }
 
     public static int getItemType(History item) {
@@ -705,12 +712,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem == 0) {
             FeedList<History> data = getData();
-            if (mUpdateCallback != null && !data.isEmpty() && data.getLast().isLoader()) {
+            if (mUpdateCallback != null && !data.isEmpty() && firstVisibleItem <= mLoadController.getItemsOffsetByConnectionType()) {
                 mUpdateCallback.onUpdate();
             }
-        }
     }
 
     @Override

@@ -86,6 +86,11 @@
     <string name="general_user_bookmarkadd">O usuário foi adicionado aos favoritos</string>
     <string name="settings_invalid_name">O nome contem símbolos  incorretos</string>
     <string name="filter_hint">Introduza o nome</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="zero">Convide mais %d amigo</item>
+        <item quantity="other">Convide mais %d amigos</item>
+        <item quantity="one">Convide mais %d amigo</item>
+    </plurals>
     <plurals name="get_free_money">
         <item quantity="other">%d de moeda grátis</item>
         <item quantity="one">%d de moeda grátis</item>
@@ -109,6 +114,11 @@
     <string name="pincode_forget">Você esqueceu o código PIN?</string>
     <string name="pincode_auth_input">Você precisa introduzir o nome de usuário e senha.</string>
     <string name="pincode_will_be_reset">Perante uma autorização de sucesso todas as configurações do aplicativo serão reiniciadas.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">imediatamente após o fechamento</item>
+        <item quantity="other">%d min.</item>
+        <item quantity="one">%d min.</item>
+    </plurals>
     <string name="general_error">ERRO</string>
     <string name="general_yes">Sim</string>
     <string name="general_no">Não</string>
@@ -172,7 +182,19 @@
     <string name="filter_cities_all">Para todas as cidades</string>
     <string name="buying_header_title">Compras</string>
     <plurals name="buying_gift_you_need_coins">
-        <item quantity="one">Чтобы отправить подарок, купите еще %d монету</item>
+        <item quantity="zero">Para enviar um presente, compre mais %d de moeda</item>
+        <item quantity="other">Para enviar um presente, compre mais %d de moedas</item>
+        <item quantity="one">Para enviar um presente, compre mais %d de moedas</item>
+    </plurals>
+    <plurals name="buying_unlock_likes_you_need_coins">
+        <item quantity="zero">Para ver quem você gosta, compre mais %d de moeda</item>
+        <item quantity="other">Para ver quem você gosta, compre mais %d de moedas</item>
+        <item quantity="one">Para ver quem você gosta, compre mais %d de moedas</item>
+    </plurals>
+    <plurals name="buying_leaders_you_need_coins">
+        <item quantity="zero">Para ser visto por todos, compre mais %d de moeda</item>
+        <item quantity="other">Para ser visto por todos, compre mais %d de moedas</item>
+        <item quantity="one">Para ser visto por todos, compre mais %d de moedas</item>
     </plurals>
     <string name="buying_default_message">Você pode enviar presentes e admirações por moedas</string>
     <string name="buying_money">Compra de moedas</string>
@@ -194,6 +216,7 @@
     <string name="edit_selected">Selecionada</string>
     <string name="edit_name">NOME</string>
     <string name="edit_age">Idade</string>
+    <string name="edit_age_error">Para usar o aplicativo a sua idade deve ser de %1$d à %2$d</string>
     <string name="edit_status">Status</string>
     <string name="edit_set_as_main">Definir como</string>
     <string name="edit_delete">Eliminar</string>
@@ -299,6 +322,7 @@
     <string name="settings_feedback_email">E-mail para a ligação</string>
     <string name="settings_invalid_email">E-mail incorrecto</string>
     <string name="chat_write_message">Escrever mensagem</string>
+    <string name="dating_message">Mensagem…</string>
     <string name="buying_sympathies">Compra de simpatias</string>
     <string name="novice_sympathies_bonus">Você recebe %1$d de simpatias em \nprresente! Isto significa que %2$d de pessoas certamente gostam de você, \nque lhe revelam as suas simpatias</string>
     <string name="novice_buy_sympathies">Se você quiser garantidamente\nreceber simpatias, \nadquira as mesmo agora!</string>
@@ -310,6 +334,11 @@
     <string name="virus_chat_likes_request_title">Dar presente de simpatias para seus amigos</string>
     <string name="virus_chat_btn">Receber simpatias</string>
     <string name="virus_request_error">Não foi possível enviar simpatias para seus amigos</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="zero">Agora você tem %d de simpatia!</item>
+        <item quantity="other">Agora você tem %d de simpatias!</item>
+        <item quantity="one">Agora você tem %d de simpatias!</item>
+    </plurals>
     <string name="profile_ask_sent">Pedido enviado</string>
     <string name="virus_error">O seu amigo pode dar presente de simpatias só uma vez por dia! Tente amanhã!</string>
     <string name="popup_version_update">Renovar</string>
@@ -455,6 +484,12 @@
     <string name="settings_select_language">Escolha de idioma para o aplicativo</string>
     <string name="restart_to_change_locale">Para a alteração de idioma, o aplicativo terá que ser reiniciado</string>
     <string name="locale_changing">Alteração de idioma</string>
+    <plurals name="you_were_liked">
+        <item quantity="zero">%d pessoa gosta de você</item>
+        <item quantity="other">%d pessoas gostam de você</item>
+        <item quantity="one">%d pessoas gostam de você</item>
+    </plurals>
+    <string name="likes_buy_vip">Para descobrir agora mesmo quem gosta de você, ative status-VIP</string>
     <string name="or">ou</string>
     <string name="settings_delete_account">Eliminar conta</string>
     <string name="chat_block_not_mutual">Iniciar uma conversação com o usuário só é possível, se ele lhe mandou uma simpatia ou se você tiver um VIP-status</string>
@@ -468,6 +503,21 @@
     <string name="getjar_auth_title">Selecione uma conta</string>
     <string name="skip">deixar passar</string>
     <string name="chat">Escrever</string>
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d simpatias</item>
+        <item quantity="other">%d simpatias</item>
+        <item quantity="one">%d simpatias</item>
+    </plurals>
+    <plurals name="popup_vip_messages">
+        <item quantity="zero">Recebido %d mensagem com entrega expressa</item>
+        <item quantity="other">Recebido %d mensagens com entrega expressa</item>
+        <item quantity="one">Recebido %d mensagens com entrega expressa</item>
+    </plurals>
+    <plurals name="popup_vip_visitors">
+        <item quantity="zero">Você tem %d visitante</item>
+        <item quantity="other">Você tem %d visitantes</item>
+        <item quantity="one">Você tem %d visitantes</item>
+    </plurals>
     <string name="general_attention">Atenção!</string>
     <string name="general_delete_messages">Eliminar mensagens</string>
     <string name="mutual_sympathies">Mutuamente</string>
@@ -483,8 +533,18 @@
     <string name="delete_visitors">Eliminar visitantes</string>
     <string name="delete_admirations">Remover admirações</string>
     <string name="general_admirations">Admirações</string>
+    <plurals name="popup_vip_admirations">
+        <item quantity="zero">Enviou-lhe admiração %d pessoas</item>
+        <item quantity="other">Enviou-lhe admiração %d pessoas</item>
+        <item quantity="one">Enviou-lhe admiração %d pessoas</item>
+    </plurals>
     <string name="select_all">Selecionar todos</string>
     <string name="silent_ringtone">Sem som</string>
+    <plurals name="selected">
+        <item quantity="zero">%d selecionado</item>
+        <item quantity="other">%d selecionado</item>
+        <item quantity="one">%d selecionado</item>
+    </plurals>
     <string name="photo_is_uploading">Carregamento de fotos</string>
     <string name="default_ringtone">Por silêncio</string>
     <string name="user_deleted_or_banned">O Usuário foi banido ou excluído</string>
@@ -494,7 +554,17 @@
     <string name="locking_menu_message">O acesso a determinadas páginas da aplicação é limitado. Para remover as restrições, responda a todas as simpatias recebidas ou obtenha VIP.</string>
     <string name="current_city">Cidade atual</string>
     <string name="general_bonus">Bónus</string>
+    <plurals name="notification_many_messages">
+        <item quantity="zero">%d uma nova mensagem</item>
+        <item quantity="other">%d novas mensagens</item>
+        <item quantity="one">%d novas mensagens</item>
+    </plurals>
     <string name="coins_subscription">Assinatura para moedas</string>
+    <plurals name="general_some_more">
+        <item quantity="zero">e mais %d</item>
+        <item quantity="other">e mais %d</item>
+        <item quantity="one">e mais %d</item>
+    </plurals>
     <string name="you_were_subscribed">Assinatura formalizada</string>
     <string name="subscriptions_can_be_changed">Assinatura foi formalizada. Alterar os termos de assinatura pode ser no Google Play</string>
     <string name="people_nearby">Pessoas próximas</string>
@@ -512,4 +582,5 @@
     <string name="settings_led">LED notificação</string>
     <string name="open_market_error">Não está a ser possível abrir uma página do aplicativo</string>
     <string name="billing_item_already_owned">A sua compra anterior está em processamento, por favor aguarde</string>
+    <string name="dialog">Correspondência</string>
 </resources>

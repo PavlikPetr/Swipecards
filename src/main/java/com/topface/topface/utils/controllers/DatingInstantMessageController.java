@@ -110,7 +110,7 @@ public class DatingInstantMessageController {
             userConfig.setDefaultDatingMessage(text);
             userConfig.saveConfig();
         }
-        mMessageText.setText(defaultMessage.isEmpty() ? text : defaultMessage);
+        setInstantMessageText(defaultMessage.isEmpty() ? text : defaultMessage);
         mMessageText.setHint(activity.getString(R.string.dating_message));
         mMessageSend.setOnClickListener(clickListener);
         mGiftSend.setOnClickListener(clickListener);
@@ -171,6 +171,12 @@ public class DatingInstantMessageController {
             @Override
             public void always(IApiResponse response) {
                 super.always(response);
+                setSendEnabled(true);
+            }
+
+            @Override
+            public void cancel() {
+                super.cancel();
                 setSendEnabled(true);
             }
         }).exec();
@@ -235,15 +241,20 @@ public class DatingInstantMessageController {
         mFooterFlipper.setDisplayedChild(1);
     }
 
+    private void setInstantMessageText(String text) {
+        mMessageText.setText(text);
+        mMessageText.setSelection(text.length());
+    }
+
     public void reset() {
-        mMessageText.setText(App.getUserConfig().getDefaultDatingMessage());
+        String defaultMessage = App.getUserConfig().getDefaultDatingMessage();
+        setInstantMessageText(defaultMessage);
     }
 
     public void instantSend(final SearchUser user) {
         if (user.id > 0) {
             HistoryRequest chatRequest = new HistoryRequest(mActivity, user.id);
             mRequestClient.registerRequest(chatRequest);
-            chatRequest.limit = 1;
             setSendEnabled(false);
             EasyTracker.sendEvent("Dating", "SendMessage", "try-sent", 1L); // Event for clicking send button
             chatRequest.callback(new DataApiHandler<HistoryListData>() {
@@ -267,6 +278,12 @@ public class DatingInstantMessageController {
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
+                    setSendEnabled(true);
+                }
+
+                @Override
+                public void cancel() {
+                    super.cancel();
                     setSendEnabled(true);
                 }
             }).exec();

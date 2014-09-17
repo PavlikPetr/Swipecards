@@ -19,8 +19,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Опции приложения
@@ -597,6 +599,23 @@ public class Options extends AbstractData {
         public static final String PWALL_MOBILE = "paymentwall-mobile";
         public static final String PWALL = "paymentwall-direct";
         public static final String BONUS = "bonus";
+        public static final String FORTUMO = "fortumo";
+
+        /**
+         * !!! IMPORTANT !!!
+         * markets stores all available markets. Used to delete missing tabs on older client versions.
+         * Add all new purchase tabs to markets.
+         */
+        public static Set<String> markets = new HashSet<>();
+
+        static {
+            markets.add(GPLAY);
+            markets.add(AMAZON);
+            markets.add(PWALL_MOBILE);
+            markets.add(PWALL);
+            markets.add(BONUS);
+            markets.add(FORTUMO);
+        }
 
         public String name;
         public String type;
