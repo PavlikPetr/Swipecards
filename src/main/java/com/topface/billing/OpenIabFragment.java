@@ -24,7 +24,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PurchaseRequest;
-import com.topface.topface.requests.handlers.DeferredPurchaseHandler;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -74,7 +73,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     private static final CharSequence ITEM_TYPE_INAPP = "inapp";
     private OpenIabHelper mHelper;
     private boolean mIabSetupFinished = false;
-    private DeferredPurchaseHandler mDeferredPurchaseHandler = new DeferredPurchaseHandler();
+    private boolean mHasDeferredPurchase = false;
+    private View mDeferredPurchaseButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -155,10 +155,28 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             }
         }
 
-        if (mDeferredPurchaseHandler != null) {
-            mDeferredPurchaseHandler.sendEmptyMessage(0);
+        if (mHasDeferredPurchase) {
+            stopWaiting();
+            buyNow((Products.BuyButton) mDeferredPurchaseButton.getTag());
+            mHasDeferredPurchase = false;
         }
 
+    }
+
+    private void startWaiting() {
+        if (mDeferredPurchaseButton != null) {
+            mDeferredPurchaseButton.findViewById(R.id.itText).setVisibility(View.INVISIBLE);
+            mDeferredPurchaseButton.findViewById(R.id.marketWaiter).setVisibility(View.VISIBLE);
+            mDeferredPurchaseButton.findViewById(R.id.itContainer).setEnabled(false);
+        }
+    }
+
+    private void stopWaiting() {
+        if (mDeferredPurchaseButton != null) {
+            mDeferredPurchaseButton.findViewById(R.id.itText).setVisibility(View.VISIBLE);
+            mDeferredPurchaseButton.findViewById(R.id.marketWaiter).setVisibility(View.GONE);
+            mDeferredPurchaseButton.findViewById(R.id.itContainer).setEnabled(true);
+        }
     }
 
 
@@ -326,14 +344,12 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     }
 
     private void buyDeferred(final Products.BuyButton btn) {
-        mDeferredPurchaseHandler.setBuyButton(getView().findViewWithTag(btn));
-        mDeferredPurchaseHandler.setStartPurchase(new DeferredPurchaseHandler.StartPurchase() {
-            @Override
-            public void buy() {
-                buyNow(btn);
-            }
-        });
-        mDeferredPurchaseHandler.startWaiting();
+        if (mDeferredPurchaseButton != null) {
+            stopWaiting();
+        }
+        mHasDeferredPurchase = true;
+        mDeferredPurchaseButton = getView().findViewWithTag(btn);
+        startWaiting();
     }
 
     /**
