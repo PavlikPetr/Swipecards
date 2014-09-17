@@ -46,7 +46,7 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         @SuppressLint("InflateParams") View root = inflater.inflate(R.layout.fragment_coins_subscription, null);
         mContainer = (LinearLayout) root.findViewById(R.id.loContainer);
-        Products products = CacheProfile.getMarketProducts();
+        Products products = getProducts();
         if (products != null) {
             CoinsSubscriptionInfo info = products.info.coinsSubscription;
             // info text
@@ -57,6 +57,11 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
             initButtonsViews(products);
         }
         return root;
+    }
+
+    @Override
+    protected Products getProducts() {
+        return CacheProfile.getMarketProducts();
     }
 
     private void removeAllBuyButtons() {
@@ -130,7 +135,7 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
                     super.success(response);
                     if (isAdded()) {
                         removeAllBuyButtons();
-                        Products products = CacheProfile.getMarketProducts();
+                        Products products = getProducts();
                         if (products != null) {
                             initButtonsViews(products);
                         }

@@ -212,6 +212,7 @@
     <string name="edit_selected">Valt</string>
     <string name="edit_name">Namn</string>
     <string name="edit_age">Ålder</string>
+    <string name="edit_age_error">För att använda applikationen behöver du vara mellan %1$d och %2$d år</string>
     <string name="edit_status">Status</string>
     <string name="edit_set_as_main">Välja till profilbild</string>
     <string name="edit_delete">Radera</string>
@@ -316,6 +317,7 @@
     <string name="settings_feedback_email">Email för kontakter</string>
     <string name="settings_invalid_email">Inkorrekt epost-adress</string>
     <string name="chat_write_message">Skriv ett meddelande</string>
+    <string name="dating_message">Meddelande…</string>
     <string name="buying_sympathies">Köp sympatier</string>
     <string name="novice_sympathies_bonus">Du får %1$d sympatier i\npresent! Detta innebär, att\n%2$d personer kommer att gilla dig\noch visa sin sympati för dig</string>
     <string name="novice_buy_sympathies">Om du vill garanterat\nfå sympatier,\nköp dem redan nu!</string>
@@ -480,6 +482,7 @@
         <item quantity="other">%d personer gillar dig</item>
         <item quantity="one">%d person gillar dig</item>
     </plurals>
+    <string name="likes_buy_vip">Aktivera VIP-status för att ta redan på vem som gillar dig alldeles strax</string>
     <string name="or">eller</string>
     <string name="settings_delete_account">Radera konto</string>
     <string name="chat_block_not_mutual">Du kan börja umgås med andra användare endast om de har skickat dig sympatier eller om du har VIP-status</string>
@@ -566,4 +569,5 @@
     <string name="settings_led">LED notifikation</string>
     <string name="open_market_error">Applikationens sida kan inte öppnas</string>
     <string name="billing_item_already_owned">Ditt föregående inköp bearbetas just nu, vänligen vänta</string>
+    <string name="dialog">Korrespondens</string>
 </resources>

@@ -212,6 +212,7 @@
     <string name="edit_selected">Selezionata</string>
     <string name="edit_name">Nome</string>
     <string name="edit_age">Età</string>
+    <string name="edit_age_error">Per utilizzare l’applicazione devi avere un’età compresa tra i %1$d e i %2$d anni</string>
     <string name="edit_status">Stato</string>
     <string name="edit_set_as_main">Imposta come la foto principale</string>
     <string name="edit_delete">Elimina</string>
