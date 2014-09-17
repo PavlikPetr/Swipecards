@@ -25,6 +25,13 @@
             android:gravity="center"
             android:layout_centerInParent="true"/>
 
+        <ProgressBar
+            android:id="@+id/marketWaiter"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
     <LinearLayout

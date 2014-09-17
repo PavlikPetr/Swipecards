@@ -73,7 +73,7 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
 
     private void initButtonsViews(Products products) {
         for (final Products.BuyButton curBtn : products.coinsSubscriptions) {
-            mButtonsViews.add(Products.setBuyButton(mContainer, curBtn, getActivity(),
+            View buyBtn = Products.setBuyButton(mContainer, curBtn, getActivity(),
                     new Products.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
@@ -93,7 +93,9 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
                             EasyTracker.sendEvent("Coins Subscription", "ButtonClick" + from, id, 0L);
                         }
                     }
-            ));
+            );
+            mButtonsViews.add(buyBtn);
+            buyBtn.setTag(curBtn);
         }
     }
 

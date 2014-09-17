@@ -73,6 +73,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     private static final CharSequence ITEM_TYPE_INAPP = "inapp";
     private OpenIabHelper mHelper;
     private boolean mIabSetupFinished = false;
+    private boolean mHasDeferredPurchase = false;
+    private View mDeferredPurchaseButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -153,6 +155,28 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             }
         }
 
+        if (mHasDeferredPurchase) {
+            stopWaiting();
+            buyNow((Products.BuyButton) mDeferredPurchaseButton.getTag());
+            mHasDeferredPurchase = false;
+        }
+
+    }
+
+    private void startWaiting() {
+        if (mDeferredPurchaseButton != null) {
+            mDeferredPurchaseButton.findViewById(R.id.itText).setVisibility(View.INVISIBLE);
+            mDeferredPurchaseButton.findViewById(R.id.marketWaiter).setVisibility(View.VISIBLE);
+            mDeferredPurchaseButton.findViewById(R.id.itContainer).setEnabled(false);
+        }
+    }
+
+    private void stopWaiting() {
+        if (mDeferredPurchaseButton != null) {
+            mDeferredPurchaseButton.findViewById(R.id.itText).setVisibility(View.VISIBLE);
+            mDeferredPurchaseButton.findViewById(R.id.marketWaiter).setVisibility(View.GONE);
+            mDeferredPurchaseButton.findViewById(R.id.itContainer).setEnabled(true);
+        }
     }
 
 
@@ -301,6 +325,15 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      * @param btn BuyButton object to determine which type of buy is processing
      */
     public void buy(Products.BuyButton btn) {
+        if (mHelper.getSetupState() == OpenIabHelper.SETUP_RESULT_SUCCESSFUL ||
+                mHelper.getSetupState() == OpenIabHelper.SETUP_RESULT_FAILED) {
+            buyNow(btn);
+        } else {
+            buyDeferred(btn);
+        }
+    }
+
+    private void buyNow(Products.BuyButton btn) {
         if (btn.id != null) {
             if (btn.type.isSubscription() && !isTestPurchasesEnabled()) {
                 buySubscription(btn.id);
@@ -308,6 +341,15 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 buyItem(btn.id);
             }
         }
+    }
+
+    private void buyDeferred(final Products.BuyButton btn) {
+        if (mDeferredPurchaseButton != null) {
+            stopWaiting();
+        }
+        mHasDeferredPurchase = true;
+        mDeferredPurchaseButton = getView().findViewWithTag(btn);
+        startWaiting();
     }
 
     /**
