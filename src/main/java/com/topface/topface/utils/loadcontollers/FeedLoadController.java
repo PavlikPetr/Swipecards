@@ -1,5 +1,7 @@
 package com.topface.topface.utils.loadcontollers;
 
+import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 
 import java.util.HashMap;
@@ -7,18 +9,12 @@ import java.util.HashMap;
 public class FeedLoadController extends LoadController{
 
     @Override
-    protected void feelOffsetMap(HashMap<ConnectionChangeReceiver.ConnectionType, Integer> offsetMap) {
-        offsetMap.put(ConnectionChangeReceiver.ConnectionType.CONNECTION_WIFI, 10);
-        offsetMap.put(ConnectionChangeReceiver.ConnectionType.CONNECTION_MOBILE_3G, 5);
-        offsetMap.put(ConnectionChangeReceiver.ConnectionType.CONNECTION_MOBILE_EDGE,0);
-        offsetMap.put(ConnectionChangeReceiver.ConnectionType.CONNECTION_OFFLINE, 0);
+    protected int[] getPreloadLimits() {
+        return App.getContext().getResources().getIntArray(R.array.feed_limit);
     }
 
     @Override
-    protected void feelPreloadLimitMap(HashMap<ConnectionChangeReceiver.ConnectionType, Integer> preloadMap) {
-        preloadMap.put(ConnectionChangeReceiver.ConnectionType.CONNECTION_WIFI, 40);
-        preloadMap.put(ConnectionChangeReceiver.ConnectionType.CONNECTION_MOBILE_3G, 20);
-        preloadMap.put(ConnectionChangeReceiver.ConnectionType.CONNECTION_MOBILE_EDGE, 10);
-        preloadMap.put(ConnectionChangeReceiver.ConnectionType.CONNECTION_OFFLINE, 0);
+    protected int[] getPreloadOffset() {
+         return App.getContext().getResources().getIntArray(R.array.feed_offset);
     }
 }

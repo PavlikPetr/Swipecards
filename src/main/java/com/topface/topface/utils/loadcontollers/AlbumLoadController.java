@@ -1,5 +1,10 @@
 package com.topface.topface.utils.loadcontollers;
 
+import android.content.Context;
+import android.content.res.Resources;
+
+import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 
 import java.util.HashMap;
@@ -19,57 +24,30 @@ public class AlbumLoadController extends LoadController{
 
     public AlbumLoadController(int type) {
         mType = type;
+        init();
     }
 
     @Override
-    protected void feelOffsetMap(HashMap<ConnectionChangeReceiver.ConnectionType, Integer> offsetMap) {
+    protected int[] getPreloadLimits() {
+        Resources resources = App.getContext().getResources();
         switch (mType) {
-            case FOR_GALLERY:
-                feelOffsetMapForGallery(offsetMap);
-                break;
             case FOR_PREVIEW:
-                feelOffsetMapForPreview(offsetMap);
-                break;
+                return resources.getIntArray(R.array.album_preview_limit);
+            case FOR_GALLERY:
+                return resources.getIntArray(R.array.album_gallery_limit);
         }
-    }
-
-    private void feelOffsetMapForGallery(HashMap<ConnectionChangeReceiver.ConnectionType, Integer> offsetMap) {
-        offsetMap.put(CONNECTION_WIFI, 0);
-        offsetMap.put(CONNECTION_MOBILE_3G, 0);
-        offsetMap.put(CONNECTION_MOBILE_EDGE,5);
-        offsetMap.put(CONNECTION_OFFLINE, 0);
-    }
-
-    private void feelOffsetMapForPreview(HashMap<ConnectionChangeReceiver.ConnectionType, Integer> offsetMap) {
-        offsetMap.put(CONNECTION_WIFI, 0);
-        offsetMap.put(CONNECTION_MOBILE_3G, 0);
-        offsetMap.put(CONNECTION_MOBILE_EDGE,5);
-        offsetMap.put(CONNECTION_OFFLINE, 0);
+        return null;
     }
 
     @Override
-    protected void feelPreloadLimitMap(HashMap<ConnectionChangeReceiver.ConnectionType, Integer> preloadMap) {
+    protected int[] getPreloadOffset() {
+        Resources resources = App.getContext().getResources();
         switch (mType) {
-            case FOR_GALLERY:
-                feelPreloadLimitMapForGallery(preloadMap);
-                break;
             case FOR_PREVIEW:
-                feelPreloadLimitMapForPreview(preloadMap);
-                break;
+                return resources.getIntArray(R.array.album_preview_offset);
+            case FOR_GALLERY:
+                return resources.getIntArray(R.array.album_gallery_offset);
         }
-    }
-
-    private void feelPreloadLimitMapForGallery(HashMap<ConnectionChangeReceiver.ConnectionType, Integer> preloadMap) {
-        preloadMap.put(CONNECTION_WIFI, 40);
-        preloadMap.put(CONNECTION_MOBILE_3G, 20);
-        preloadMap.put(CONNECTION_MOBILE_EDGE, 10);
-        preloadMap.put(CONNECTION_OFFLINE, 0);
-    }
-
-    private void feelPreloadLimitMapForPreview(HashMap<ConnectionChangeReceiver.ConnectionType, Integer> preloadMap) {
-        preloadMap.put(CONNECTION_WIFI, 40);
-        preloadMap.put(CONNECTION_MOBILE_3G, 20);
-        preloadMap.put(CONNECTION_MOBILE_EDGE, 10);
-        preloadMap.put(CONNECTION_OFFLINE, 0);
+        return null;
     }
 }

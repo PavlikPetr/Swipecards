@@ -34,6 +34,7 @@ import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -108,7 +109,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                 getActivity(),
                 CacheProfile.uid,
                 position + 1,
-                AlbumRequest.MODE_ALBUM
+                AlbumRequest.MODE_ALBUM,
+                AlbumLoadController.FOR_GALLERY
         );
         request.callback(new DataApiHandler<AlbumPhotos>() {
 

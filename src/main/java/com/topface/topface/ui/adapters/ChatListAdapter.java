@@ -712,12 +712,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem == 0) {
             FeedList<History> data = getData();
-            if (mUpdateCallback != null && !data.isEmpty() && data.getLast().isLoader()) {
+            if (mUpdateCallback != null && !data.isEmpty() && firstVisibleItem <= mLoadController.getItemsOffsetByConnectionType()) {
                 mUpdateCallback.onUpdate();
             }
-        }
     }
 
     @Override

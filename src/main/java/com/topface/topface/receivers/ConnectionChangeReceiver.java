@@ -15,10 +15,10 @@ import java.util.Map;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
     public static enum ConnectionType {
-        CONNECTION_OFFLINE(0),
-        CONNECTION_MOBILE_3G(1),
-        CONNECTION_MOBILE_EDGE(2),
-        CONNECTION_WIFI(3);
+        CONNECTION_OFFLINE(3),
+        CONNECTION_MOBILE_3G(2),
+        CONNECTION_MOBILE_EDGE(1),
+        CONNECTION_WIFI(0);
 
         int type;
 
