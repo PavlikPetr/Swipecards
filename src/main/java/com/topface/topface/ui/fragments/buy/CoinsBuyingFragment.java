@@ -79,6 +79,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             );
             if (btnView != null) {
                 purchaseButtons.add(btnView);
+                btnView.setTag(curButton);
             }
         }
         // coins buttons
@@ -119,6 +120,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             );
             if (btnView != null) {
                 purchaseButtons.add(btnView);
+                btnView.setTag(curButton);
             }
         }
         coinsButtonsContainer.requestLayout();

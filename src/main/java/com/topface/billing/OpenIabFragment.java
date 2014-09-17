@@ -24,6 +24,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PurchaseRequest;
+import com.topface.topface.requests.handlers.DeferredPurchaseHandler;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -73,6 +74,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     private static final CharSequence ITEM_TYPE_INAPP = "inapp";
     private OpenIabHelper mHelper;
     private boolean mIabSetupFinished = false;
+    private DeferredPurchaseHandler mDeferredPurchaseHandler = new DeferredPurchaseHandler();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -151,6 +153,10 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             } else {
                 onSubscriptionUnsupported();
             }
+        }
+
+        if (mDeferredPurchaseHandler != null) {
+            mDeferredPurchaseHandler.sendEmptyMessage(0);
         }
 
     }
@@ -301,6 +307,15 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      * @param btn BuyButton object to determine which type of buy is processing
      */
     public void buy(Products.BuyButton btn) {
+        if (mHelper.getSetupState() == OpenIabHelper.SETUP_RESULT_SUCCESSFUL ||
+                mHelper.getSetupState() == OpenIabHelper.SETUP_RESULT_FAILED) {
+            buyNow(btn);
+        } else {
+            buyDeferred(btn);
+        }
+    }
+
+    private void buyNow(Products.BuyButton btn) {
         if (btn.id != null) {
             if (btn.type.isSubscription() && !isTestPurchasesEnabled()) {
                 buySubscription(btn.id);
@@ -308,6 +323,17 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 buyItem(btn.id);
             }
         }
+    }
+
+    private void buyDeferred(final Products.BuyButton btn) {
+        mDeferredPurchaseHandler.setBuyButton(getView().findViewWithTag(btn));
+        mDeferredPurchaseHandler.setStartPurchase(new DeferredPurchaseHandler.StartPurchase() {
+            @Override
+            public void buy() {
+                buyNow(btn);
+            }
+        });
+        mDeferredPurchaseHandler.startWaiting();
     }
 
     /**
