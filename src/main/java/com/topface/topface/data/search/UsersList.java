@@ -9,6 +9,7 @@ import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.loadcontollers.DatingLoadController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,11 +47,13 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
     private boolean useSignature;
     private boolean mNeedPreload = true;
     private final Class<T> mClass;
+    private DatingLoadController mLoadController;
 
     public UsersList(Class<T> itemClass) {
         super();
         mClass = itemClass;
         useSignature = mClass == SearchUser.class;
+        mLoadController = new DatingLoadController();
     }
 
     @SuppressWarnings("unchecked")
@@ -95,7 +98,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
             setSearchPosition(position + collection.size());
         }
 
-        mNeedPreload = collection.size() >= USERS_FOR_PRELOAD_CNT;
+        mNeedPreload = collection.size() >= mLoadController.getItemsOffsetByConnectionType();
 
         return result;
     }
@@ -103,7 +106,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
     @Override
     public boolean addAll(Collection<? extends T> collection) {
         removeDublicates(collection);
-        mNeedPreload = collection.size() >= USERS_FOR_PRELOAD_CNT;
+        mNeedPreload = collection.size() >= mLoadController.getItemsOffsetByConnectionType();
         return super.addAll(collection);
     }
 
@@ -265,7 +268,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
     }
 
     private boolean isNeedPreload() {
-        return mNeedPreload && size() > 0 && mPosition > size() - USERS_FOR_PRELOAD_CNT;
+        return mNeedPreload && size() > 0 && mPosition > size() - mLoadController.getItemsOffsetByConnectionType();
     }
 
     /**

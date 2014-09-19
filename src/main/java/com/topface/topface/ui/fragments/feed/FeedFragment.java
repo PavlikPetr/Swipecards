@@ -63,6 +63,7 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -132,6 +133,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private ActionMode mActionMode;
     private FilterBlock mFilterBlock;
+    private FeedLoadController mLoadController;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -141,6 +143,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         initNavigationBar();
         mLockView = root.findViewById(R.id.llvFeedLoading);
         mLockView.setVisibility(View.GONE);
+        mLoadController = new FeedLoadController();
         init();
 
         initViews(root);
@@ -596,7 +599,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         mIsUpdating = true;
         onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
 
-        FeedRequest request = getRequest();
+        final FeedRequest request = getRequest();
         registerRequest(request);
 
         final FeedAdapter<T> adapter = getListAdapter();
@@ -610,8 +613,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             request.from = firstItem.id;
         }
 
-        final int limit = adapter.getLimit();
-        request.limit = limit;
         request.unread = isShowUnreadItemsSelected();
         request.callback(new DataApiHandler<FeedListData<T>>() {
 
@@ -622,7 +623,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
             @Override
             protected void success(FeedListData<T> data, IApiResponse response) {
-                processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, limit);
+                processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
             }
 
             @Override

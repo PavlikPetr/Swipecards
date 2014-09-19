@@ -173,7 +173,8 @@ public class PurchasesFragment extends BaseFragment {
             } else {
                 Products products = getProductsByTab(tab);
                 if (products != null) {
-                    if ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) || (isVip && products.premium.isEmpty())) {
+                    if ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) ||
+                            (isVip && products.premium.isEmpty()) || !Options.Tab.markets.contains(tab.type)) {
                         iterator.remove();
                     }
                 }
@@ -192,6 +193,9 @@ public class PurchasesFragment extends BaseFragment {
                 break;
             case Options.Tab.PWALL_MOBILE:
                 products = CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.MOBILE);
+                break;
+            case Options.Tab.FORTUMO:
+                products = CacheProfile.getFortumoProducts();
                 break;
         }
         return products;

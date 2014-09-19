@@ -2,10 +2,13 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
+import com.topface.topface.utils.loadcontollers.AlbumLoadController;
+import com.topface.topface.utils.loadcontollers.LoadController;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AlbumRequest extends ApiRequest {
+public class AlbumRequest extends LimitedApiRequest {
 
     public static final String SERVICE_NAME = "photo.getList";
 
@@ -15,39 +18,45 @@ public class AlbumRequest extends ApiRequest {
 
     public static final int DEFAULT_PHOTOS_LIMIT = 50;
 
-    private int uid;
-    private int limit;
-    private int from;
-    private String mode;
+    private int mUid;
+    private int mFrom;
+    private String mMode;
+    private int mType;
 
-    public AlbumRequest(Context context, int uid, int limit, String mode) {
+
+    public AlbumRequest(Context context, int uid, String mode, int type) {
         super(context);
-        this.uid = uid;
-        this.limit = limit;
-        this.mode = mode;
+        mUid = uid;
+        mMode = mode;
+        mType = type;
     }
 
-    public AlbumRequest(Context context, int uid, int limit, int from, String mode) {
+    public AlbumRequest(Context context, int uid, int from, String mode, int type) {
         super(context);
-        this.uid = uid;
-        this.limit = limit;
-        this.from = from;
-        this.mode = mode;
+        mUid = uid;
+        mFrom = from;
+        mMode = mode;
+        mType = type;
     }
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONObject response = new JSONObject().put("limit", limit)
-                .put("userId", uid);
-        if (from != 0) {
-            response.put("from", from);
+        JSONObject response = super.getRequestData()
+                .put("userId", mUid);
+        if (mFrom != 0) {
+            response.put("from", mFrom);
         }
-        if (mode != null) {
-            response.put("mode", mode);
+        if (mMode != null) {
+            response.put("mode", mMode);
         }
 
         return response;
 
+    }
+
+    @Override
+    protected LoadController getLoadController() {
+        return new AlbumLoadController(mType);
     }
 
     @Override

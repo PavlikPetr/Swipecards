@@ -69,13 +69,7 @@
             android:textSize="10sp"
             android:visibility="gone" />
 
-        <ProgressBar
-            android:id="@+id/prsDatingLoading"
-            style="@android:style/Widget.ProgressBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone" />
+
 
         <ImageButton
             android:id="@+id/btnUpdate"
@@ -92,6 +86,14 @@
             android:layout_height="fill_parent"
             android:visibility="gone" />
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/prsDatingLoading"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
     <ViewFlipper
         android:id="@id/dating_footer"

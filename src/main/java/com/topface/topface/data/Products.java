@@ -90,6 +90,10 @@ public class Products extends AbstractData {
     }
 
     private void fillProducts(JSONObject data) {
+        if (data == null) {
+            Debug.error("Products data is empty");
+            return;
+        }
         try {
             fillProductsInfo(data.optJSONObject("info"));
             if (info != null) {
@@ -117,7 +121,7 @@ public class Products extends AbstractData {
 
     protected void updateCache(JSONObject data) {
         //Обновляем кэш
-        CacheProfile.setGooglePlayProducts(this, data);
+        CacheProfile.setMarketProducts(this, data);
     }
 
     protected void fillProductsInfo(JSONObject infoJson) {

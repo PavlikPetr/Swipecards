@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inapp-products>
+
+    <items>
+
+        <item id="com_topface_coins_8" publish-state="published">
+        <summary>
+                <summary-base>
+                    <title>8 coins</title>
+
+                    <description />
+
+                </summary-base>
+
+                <summary-localization locale="ru_RU">
+                    <title>8 монет</title>
+
+                    <description />
+
+                </summary-localization>
+            </summary>
+            <price autofill="false">
+                <price-base>2.34</price-base>
+            </price>
+        </item>
+
+        <item id="com_topface_coins_22" publish-state="published">
+        <summary>
+                <summary-base>
+                    <title>22 coins</title>
+
+                    <description />
+
+                </summary-base>
+
+                <summary-localization locale="ru_RU">
+                    <title>22 монеты</title>
+
+                    <description />
+
+                </summary-localization>
+            </summary>
+            <price autofill="false">
+                <price-base>3.9</price-base>
+            </price>
+        </item>
+
+        <item id="com_topface_coins_30" publish-state="published">
+        <summary>
+                <summary-base>
+                    <title>30 coins</title>
+
+                    <description />
+
+                </summary-base>
+
+                <summary-localization locale="ru_RU">
+                    <title>30 монет</title>
+
+                    <description />
+
+                </summary-localization>
+            </summary>
+            <price autofill="false">
+                <price-base>5.16</price-base>
+            </price>
+        </item>
+
+        <item id="com_topface_premium_day_1" publish-state="published">
+        <summary>
+                <summary-base>
+                    <title>VIP-status for 1 day</title>
+
+                    <description />
+
+                </summary-base>
+
+                <summary-localization locale="ru_RU">
+                    <title>VIP-статус на один день</title>
+
+                    <description />
+
+                </summary-localization>
+            </summary>
+            <price autofill="false">
+                <price-base>2.34</price-base>
+            </price>
+        </item>
+
+        <item id="com_topface_premium_day_6" publish-state="published">
+        <summary>
+                <summary-base>
+                    <title>VIP-status for 6 days</title>
+
+                    <description />
+
+                </summary-base>
+
+                <summary-localization locale="ru_RU">
+                    <title>VIP-статус на 6 дней</title>
+
+                    <description />
+
+                </summary-localization>
+            </summary>
+            <price autofill="false">
+                <price-base>3.84</price-base>
+            </price>
+        </item>
+
+        <item id="com_topface_premium_day_10" publish-state="published">
+        <summary>
+                <summary-base>
+                    <title>VIP-status for 10 days</title>
+
+                    <description />
+
+                </summary-base>
+
+                <summary-localization locale="ru_RU">
+                    <title>VIP-статус на 10 дней</title>
+
+                    <description />
+
+                </summary-localization>
+            </summary>
+            <price autofill="false">
+                <price-base>5.1</price-base>
+            </price>
+        </item>
+
+        <item id="com_topface_likes_1" publish-state="published">
+        <summary>
+                <summary-base>
+                    <title>Pack of likes</title>
+
+                    <description />
+
+                </summary-base>
+
+                <summary-localization locale="ru_RU">
+                    <title>Пакет симпатий</title>
+
+                    <description />
+
+                </summary-localization>
+            </summary>
+            <price autofill="false">
+                <price-base>5.16</price-base>
+            </price>
+        </item>
+    </items>
+</inapp-products>

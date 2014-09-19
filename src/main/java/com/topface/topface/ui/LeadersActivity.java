@@ -28,6 +28,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 public class LeadersActivity extends BaseFragmentActivity {
     private GridView mGridView;
@@ -117,7 +118,7 @@ public class LeadersActivity extends BaseFragmentActivity {
 
     private void updateProfileInfo(Profile profile) {
         mLoadingLocker.setVisibility(View.VISIBLE);
-        final AlbumRequest request = new AlbumRequest(this, profile.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, AlbumRequest.MODE_LEADER);
+        final AlbumRequest request = new AlbumRequest(this, profile.uid, AlbumRequest.MODE_LEADER, AlbumLoadController.FOR_GALLERY);
         final RetryViewCreator rv = RetryViewCreator.createDefaultRetryView(this, new OnClickListener() {
             @Override
             public void onClick(View view) {

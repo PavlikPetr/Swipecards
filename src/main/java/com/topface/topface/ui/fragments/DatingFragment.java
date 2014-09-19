@@ -75,16 +75,14 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
+import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
-
-    public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
 
     private KeyboardListenerLayout mRoot;
     private TextView mResourcesLikes;
@@ -136,7 +134,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mPreloadManager != null) {
-                mPreloadManager.checkConnectionType(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0));
+                int connectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0);
+                mPreloadManager.checkConnectionType(ConnectionChangeReceiver.ConnectionType.valueOf(connectionType));
             }
         }
     };
@@ -169,6 +168,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private INavigationFragmentsListener mFragmentSwitcherListener;
     private AnimationHelper mAnimationHelper;
+    private AlbumLoadController mController;
 
     private void startDatingFilterActivity() {
         Intent intent = new Intent(getActivity().getApplicationContext(),
@@ -199,6 +199,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
         mAlphaAnimation.setDuration(400L);
+        mController = new AlbumLoadController(AlbumLoadController.FOR_PREVIEW);
         initMutualDrawables();
         // Rate Controller
         mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_SEARCH);
@@ -1097,7 +1098,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         @Override
         public void onPageSelected(int position) {
 
-            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == (mLoadedCount - 1)) {
+            if (position + mController.getItemsOffsetByConnectionType() == (mLoadedCount - 1)) {
                 final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
 
                 if (mNeedMore && mCanSendAlbumReq) {
@@ -1134,9 +1135,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         int loadedPosition = data.get(mLoadedCount - 1).getPosition() + 1;
         final SearchUser currentSearchUser = mUserSearchList.getCurrentUser();
         if (currentSearchUser != null) {
-            int limit = defaultLoading ? ViewUsersListFragment.PHOTOS_LIMIT : getCurrentPhotosLimit();
-            AlbumRequest request = new AlbumRequest(getActivity(), currentSearchUser.id,
-                    limit, loadedPosition, AlbumRequest.MODE_SEARCH);
+            AlbumRequest request = new AlbumRequest(getActivity(), currentSearchUser.id, loadedPosition, AlbumRequest.MODE_SEARCH, AlbumLoadController.FOR_PREVIEW);
             final int uid = currentSearchUser.id;
             request.callback(new DataApiHandler<AlbumPhotos>() {
                 @Override
@@ -1152,7 +1151,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         }
                         mLoadedCount += newPhotos.size();
 
-                        if (mImageSwitcher.getSelectedPosition() > mLoadedCount + DEFAULT_PRELOAD_ALBUM_RANGE) {
+
+                        if (mImageSwitcher.getSelectedPosition() > mLoadedCount + mController.getItemsOffsetByConnectionType()) {
                             sendAlbumRequest(data, false);
                         }
 
@@ -1174,11 +1174,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
             }).exec();
         }
-    }
-
-    private int getCurrentPhotosLimit() {
-        int limit = mImageSwitcher.getSelectedPosition() - mLoadedCount + DEFAULT_PRELOAD_ALBUM_RANGE;
-        return limit > AlbumRequest.DEFAULT_PHOTOS_LIMIT ? AlbumRequest.DEFAULT_PHOTOS_LIMIT : limit;
     }
 
     private void updateResources() {

@@ -327,7 +327,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, -1);
-                if (mConnectionType != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
+                if (ConnectionChangeReceiver.ConnectionType.valueOf(mConnectionType) != ConnectionChangeReceiver.ConnectionType.CONNECTION_OFFLINE) {
                     if (mRetryView != null) mRetryView.performClick();
                 }
             }
@@ -494,24 +494,10 @@ public class AuthFragment extends BaseFragment {
         strBuilder.append(RetryViewCreator.REFRESH_TEMPLATE).append(getString(R.string.general_dialog_retry));
         switch (codeError) {
             case ErrorCodes.NETWORK_CONNECT_ERROR:
-                fillRetryView(getString(R.string.general_reconnect_social), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mRetryView.setVisibility(View.GONE);
-                        mProgressBar.setVisibility(View.VISIBLE);
-                        resendRequest(request);
-                    }
-                }, strBuilder.toString());
+                showRetryView(getString(R.string.general_reconnect_social), strBuilder.toString(), request);
                 break;
             case ErrorCodes.MAINTENANCE:
-                fillRetryView(getString(R.string.general_maintenance), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mRetryView.setVisibility(View.GONE);
-                        mProgressBar.setVisibility(View.VISIBLE);
-                        resendRequest(request);
-                    }
-                }, strBuilder.toString());
+                showRetryView(getString(R.string.general_maintenance), strBuilder.toString(), request);
                 break;
             case ErrorCodes.CODE_OLD_APPLICATION_VERSION:
                 fillRetryView(getString(R.string.general_version_not_supported), new View.OnClickListener() {
@@ -540,16 +526,7 @@ public class AuthFragment extends BaseFragment {
                 break;
             case ErrorCodes.WRONG_RESPONSE:
             default:
-                mAuthViewsFlipper.setVisibility(View.GONE);
-                fillRetryView(getString(R.string.general_data_error), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mRetryView.setVisibility(View.GONE);
-                        mAuthViewsFlipper.setVisibility(View.VISIBLE);
-                        mProgressBar.setVisibility(View.VISIBLE);
-                        resendRequest(request);
-                    }
-                }, strBuilder.toString());
+                showRetryView(getString(R.string.general_data_error), strBuilder.toString(), request);
                 break;
         }
 
@@ -565,6 +542,21 @@ public class AuthFragment extends BaseFragment {
         mRetryView.setText(text);
         mRetryView.setButtonText(btnText);
         mRetryView.setListener(listener);
+    }
+
+    private void showRetryView(String text, String btnText, final ApiRequest request) {
+        mAuthViewsFlipper.setVisibility(View.GONE);
+        fillRetryView(text, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRetryView.setVisibility(View.GONE);
+                mAuthViewsFlipper.setVisibility(View.VISIBLE);
+                if (mAuthViewsFlipper.getDisplayedChild() == 0) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                }
+                resendRequest(request);
+            }
+        }, btnText);
     }
 
     private void resendRequest(ApiRequest request) {
@@ -668,7 +660,9 @@ public class AuthFragment extends BaseFragment {
             mTFButton.setVisibility(View.INVISIBLE);
             if (mProcessingTFReg) {
                 mLoginSendingProgress.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
             } else {
+                mLoginSendingProgress.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
             mRecoverPwd.setEnabled(false);

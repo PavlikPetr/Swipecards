@@ -46,7 +46,7 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         @SuppressLint("InflateParams") View root = inflater.inflate(R.layout.fragment_coins_subscription, null);
         mContainer = (LinearLayout) root.findViewById(R.id.loContainer);
-        Products products = CacheProfile.getMarketProducts();
+        Products products = getProducts();
         if (products != null) {
             CoinsSubscriptionInfo info = products.info.coinsSubscription;
             // info text
@@ -59,6 +59,11 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
         return root;
     }
 
+    @Override
+    protected Products getProducts() {
+        return CacheProfile.getMarketProducts();
+    }
+
     private void removeAllBuyButtons() {
         for (View button : mButtonsViews) {
             mContainer.removeView(button);
@@ -68,7 +73,7 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
 
     private void initButtonsViews(Products products) {
         for (final Products.BuyButton curBtn : products.coinsSubscriptions) {
-            mButtonsViews.add(Products.setBuyButton(mContainer, curBtn, getActivity(),
+            View buyBtn = Products.setBuyButton(mContainer, curBtn, getActivity(),
                     new Products.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
@@ -88,7 +93,9 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
                             EasyTracker.sendEvent("Coins Subscription", "ButtonClick" + from, id, 0L);
                         }
                     }
-            ));
+            );
+            mButtonsViews.add(buyBtn);
+            buyBtn.setTag(curBtn);
         }
     }
 
@@ -130,7 +137,7 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
                     super.success(response);
                     if (isAdded()) {
                         removeAllBuyButtons();
-                        Products products = CacheProfile.getMarketProducts();
+                        Products products = getProducts();
                         if (products != null) {
                             initButtonsViews(products);
                         }

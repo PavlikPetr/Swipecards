@@ -205,6 +205,24 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/editor_emulate_connection"/>
+            <Spinner
+                android:id="@+id/spConnection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/debugConnectionEnabled"/>
+        </LinearLayout>
+
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

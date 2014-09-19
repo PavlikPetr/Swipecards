@@ -2,19 +2,20 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
+import com.topface.topface.utils.loadcontollers.DatingLoadController;
+import com.topface.topface.utils.loadcontollers.LoadController;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SearchRequest extends ApiRequest {
+public class SearchRequest extends LimitedApiRequest {
     public static final int SEARCH_LIMIT = 30;
     // Data
     public static final String SERVICE_NAME = "search.getList";
-    private int limit; // размер получаемой выборки 10 <= limit <= 50
     private boolean onlyOnline = false; // необходимость выборки только онлайн-пользователей
 
     public SearchRequest(int limit, boolean onlyOnline, Context context) {
         super(context);
-        this.limit = limit;
         this.onlyOnline = onlyOnline;
     }
 
@@ -24,9 +25,13 @@ public class SearchRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject()
-                .put("limit", limit)
+        return super.getRequestData()
                 .put("online", onlyOnline);
+    }
+
+    @Override
+    protected LoadController getLoadController() {
+        return new DatingLoadController();
     }
 
     @Override
