@@ -48,12 +48,12 @@
     <string name="profile_form_character_female_6">Nessuno si è lamentato prima</string>
     <string name="profile_form_alcohol_male_0">Sono allegro senza</string>
     <string name="profile_form_alcohol_male_1">Ho smesso</string>
-    <string name="profile_form_alcohol_male_2">Penso che qualche volta si può bere un goccino</string>
+    <string name="profile_form_alcohol_male_2">Qualche volta</string>
     <string name="profile_form_alcohol_male_3">Sto cercando di smettere</string>
     <string name="profile_form_alcohol_male_4">Bevevo, bevo e berrò in futuro</string>
     <string name="profile_form_alcohol_female_0">Sono allegra senza</string>
     <string name="profile_form_alcohol_female_1">Ho smesso</string>
-    <string name="profile_form_alcohol_female_2">Penso che qualche volta si può bere un goccino</string>
+    <string name="profile_form_alcohol_female_2">Qualche volta</string>
     <string name="profile_form_alcohol_female_3">Sto cercando di smettere</string>
     <string name="profile_form_alcohol_female_4">Bevevo, bevo e berrò in futuro</string>
     <string name="profile_form_fitness_male_0">Muscoloso</string>

@@ -218,6 +218,7 @@
     <string name="edit_selected">Pasirinkta</string>
     <string name="edit_name">Vardas</string>
     <string name="edit_age">Amžius</string>
+    <string name="edit_age_error">Kad naudotis programa, jūsų amžius turi būti nuo %1$d iki %2$d</string>
     <string name="edit_status">Statusas</string>
     <string name="edit_set_as_main">Padaryti pagrindine</string>
     <string name="edit_delete">Pašalinti</string>
