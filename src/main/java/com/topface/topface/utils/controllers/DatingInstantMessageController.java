@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
@@ -112,6 +113,7 @@ public class DatingInstantMessageController {
         }
         setInstantMessageText(defaultMessage.isEmpty() ? text : defaultMessage);
         mMessageText.setHint(activity.getString(R.string.dating_message));
+        mMessageText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         mMessageSend.setOnClickListener(clickListener);
         mGiftSend.setOnClickListener(clickListener);
         root.findViewById(R.id.chat_btn).setOnClickListener(clickListener);

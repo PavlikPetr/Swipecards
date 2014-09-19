@@ -6,7 +6,9 @@
     <string name="general_ok">OK</string>
     <string name="general_dbl_new">New</string>
     <string name="general_settings_abbr">Sett.</string>
+    <string name="general_disallow">Forbid</string>
     <string name="general_allow">Allow</string>
+    <string name="notification_denied_popup_title">Allow notifications to find out about new messages, likes, and other news.</string>
     <string name="notification_popup_title">Allow us to send you notifications, so you will instantly find out about new likes, admirations or new messages.</string>
     <string name="email_successfully_changed">Your email was successfully changed.</string>
     <string name="auth_vk_name">VK</string>
