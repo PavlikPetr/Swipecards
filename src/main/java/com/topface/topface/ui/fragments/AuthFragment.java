@@ -551,6 +551,9 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 mRetryView.setVisibility(View.GONE);
                 mAuthViewsFlipper.setVisibility(View.VISIBLE);
+                if (mAuthViewsFlipper.getDisplayedChild() == 0) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                }
                 resendRequest(request);
             }
         }, btnText);
