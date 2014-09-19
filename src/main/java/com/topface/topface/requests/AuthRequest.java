@@ -39,6 +39,7 @@ public class AuthRequest extends ApiRequest {
     private String adId; // ad id from google play services
     private int androidApiVersion; // версия апи
     private Integer googlePlayServicesVersion; // версия google play services
+    private Integer codeVersion; // версия кода
     private String login;  // логин для нашей авторизации
     private String password; // пароль для нашей авторизации
     private String refresh; // еще один токен для одноклассников
@@ -51,6 +52,7 @@ public class AuthRequest extends ApiRequest {
         clienttype = BuildConfig.BILLING_TYPE.getClientType();
         locale = getClientLocale(context);
         androidApiVersion = Build.VERSION.SDK_INT;
+        codeVersion = BuildConfig.VERSION_CODE;
         adId = App.getAppConfig().getAdId();
         googlePlayServicesVersion = Utils.getGooglePlayServicesVersion(context);
         clientversion = BuildConfig.VERSION_NAME;
@@ -110,7 +112,8 @@ public class AuthRequest extends ApiRequest {
                 .put("timezone", timezone)
                 .put("android_api_level", Build.VERSION.SDK_INT)
                 .put("tablet", tablet)
-                .put("androidApiVersion", androidApiVersion);
+                .put("androidApiVersion", androidApiVersion)
+                .put("codeVersion", codeVersion);
         if (!TextUtils.isEmpty(adId)) {
             data.put("adId", adId);
         }
