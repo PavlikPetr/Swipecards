@@ -6,7 +6,9 @@
     <string name="general_ok">OK</string>
     <string name="general_dbl_new">Nuovi</string>
     <string name="general_settings_abbr">Impost.</string>
+    <string name="general_disallow">Non abilitare</string>
     <string name="general_allow">Abilitare</string>
+    <string name="notification_denied_popup_title">Abilitare l’invio di avviso per sapere subito che hai un nuovo messaggio, simpatia e altre notifiche</string>
     <string name="notification_popup_title">Abilitare l’invio di avviso per sapere subito che hai una nuova simpatia, un’ammirazione o un messaggio non letto</string>
     <string name="email_successfully_changed">La tua e-mail è stata modificata con successo</string>
     <string name="auth_vk_name">Social network</string>
