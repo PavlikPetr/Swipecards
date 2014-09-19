@@ -1,6 +1,6 @@
 package com.topface.topface.ui.fragments.buy;
 
-public class AmazonBuyingFragment extends GooglePlayBuyingFragment {
+public class AmazonBuyingFragment extends MarketBuyingFragment {
 
     public static AmazonBuyingFragment newInstance(int type, int coins, String from) {
         AmazonBuyingFragment fragment = new AmazonBuyingFragment();

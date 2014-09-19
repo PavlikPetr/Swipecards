@@ -30,6 +30,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.PreloadManager;
+import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -369,7 +370,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     private void sendAlbumRequest(final Photos data) {
         int position = data.get(mLoadedCount - 2).getPosition() + 1;
-        AlbumRequest request = new AlbumRequest(this, mUid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
+        AlbumRequest request = new AlbumRequest(this, mUid, position, AlbumRequest.MODE_SEARCH, AlbumLoadController.FOR_PREVIEW);
         request.callback(new DataApiHandler<AlbumPhotos>() {
 
             @Override

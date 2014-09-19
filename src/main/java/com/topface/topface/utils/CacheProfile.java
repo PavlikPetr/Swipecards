@@ -13,6 +13,7 @@ import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
+import com.topface.topface.data.FortumoProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Photo;
@@ -84,6 +85,8 @@ public class CacheProfile {
     public static boolean wasCityAsked = false;         // был ли показан экран выбора города новичку
     public static boolean needShowBonusCounter = false;
     private static AtomicBoolean mIsLoaded = new AtomicBoolean(false);
+    @SuppressWarnings("FieldCanBeLocal")
+    private static Products mFortumoProducts;
 
     private static void setProfileCache(final ApiResponse response) {
         if (response != null) {
@@ -297,6 +300,26 @@ public class CacheProfile {
         return products;
     }
 
+    public static Products getFortumoProducts() {
+        if (mFortumoProducts == null) {
+            SessionConfig config = App.getSessionConfig();
+            String productsCache = config.getFortumoProductsData();
+            if (!TextUtils.isEmpty(productsCache)) {
+                //Получаем опции из кэша
+                try {
+                    mFortumoProducts = new FortumoProducts(
+                            new JSONObject(productsCache)
+                    );
+                } catch (JSONException e) {
+                    config.resetGoogleProductsData();
+                    Debug.error(e);
+                }
+            }
+
+        }
+        return mFortumoProducts;
+    }
+
 
     public static boolean isDataFilled() {
         return city != null && !city.isEmpty() && age != 0 && first_name != null && photo != null;
@@ -337,11 +360,22 @@ public class CacheProfile {
         }
     }
 
-    public static void setGooglePlayProducts(Products products, final JSONObject response) {
+    public static void setMarketProducts(Products products, final JSONObject response) {
         mMarketProducts = products;
         //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
         if (response != null) {
             App.getSessionConfig().setMarketProductsData(response.toString());
+            LocalBroadcastManager.getInstance(App.getContext())
+                    .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
+
+        }
+    }
+
+    public static void setFortumoProducts(Products products, final String response) {
+        mFortumoProducts = products;
+        //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
+        if (response != null) {
+            App.getSessionConfig().setFortumoProductsData(response);
             LocalBroadcastManager.getInstance(App.getContext())
                     .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
 
@@ -465,4 +499,5 @@ public class CacheProfile {
                         && !CacheProfile.wasCityAsked
         );
     }
+
 }

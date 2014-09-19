@@ -2,14 +2,16 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
+import com.topface.topface.utils.loadcontollers.FeedLoadController;
+import com.topface.topface.utils.loadcontollers.LoadController;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FeedRequest extends ApiRequest {
+public class FeedRequest extends LimitedApiRequest {
 
 
     // Data
-    public int limit;   // максимальное количество запрашиваемых диалогов. ОДЗ: 0 < limit <= 50
     public String to;  // идентификатор последнего диалога для отображения. В случае отсутствия параметра диалоги возвращаются от последнего
     public String from;  // идентификатор последнего диалога для запроса новых сообщений после данного идентификатора
     public boolean unread;  // параметр получения только тех диалогов, в которых есть непрочитанные сообщения
@@ -27,8 +29,7 @@ public class FeedRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONObject data = new JSONObject();
-        data.put("limit", limit);
+        JSONObject data = super.getRequestData();
         data.put("unread", unread);
         data.put("leave", leave);
         if (to != null) {
@@ -40,6 +41,15 @@ public class FeedRequest extends ApiRequest {
         }
 
         return data;
+    }
+
+    @Override
+    protected LoadController getLoadController() {
+        return new FeedLoadController();
+    }
+
+    public int getLimit() {
+        return mLimit;
     }
 
     @Override

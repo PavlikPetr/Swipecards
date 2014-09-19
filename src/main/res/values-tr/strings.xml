@@ -216,6 +216,7 @@
     <string name="edit_selected">Seçilmiş</string>
     <string name="edit_name">Ad</string>
     <string name="edit_age">Yaş</string>
+    <string name="edit_age_error">Uygulamayı kullanmak için yaş arasında</string>
     <string name="edit_status">Durum</string>
     <string name="edit_set_as_main">Genel yapmak</string>
     <string name="edit_delete">Silmek</string>
@@ -321,6 +322,7 @@
     <string name="settings_feedback_email">İletişim için e-mail</string>
     <string name="settings_invalid_email">Uygunsun e-mail</string>
     <string name="chat_write_message">Mesaj yazmak</string>
+    <string name="dating_message">Mesaj…</string>
     <string name="buying_sympathies">Sempati satın alımı</string>
     <string name="novice_sympathies_bonus">Siz %1$d \nhediye olarak kazandınız! – Bu demek ki %2$d kişi sizi \nkesinlikle beğenir ve sempatileri size \ngösterir.</string>
     <string name="novice_buy_sympathies">Sempati garanti olarak\nalmak istiyorsanız hemen şimdi \nsatın alın!</string>
@@ -491,6 +493,7 @@
         <item quantity="other">Sizden %d kişi hoşlandı</item>
         <item quantity="one">Sizden %d kişi hoşlandı</item>
     </plurals>
+    <string name="likes_buy_vip">Kim sizi sevdi öğrenmek için VIP üyeliği harekete geçirin</string>
     <string name="or">veya</string>
     <string name="settings_delete_account">Hesap silmek</string>
     <string name="chat_block_not_mutual">Kullanıcı size sempati gönderdiyse veya VİP-durumunuz varsa o zaman onunla sohbete başlayabilirsiniz</string>
@@ -583,4 +586,5 @@
     <string name="settings_led">LED bildirim</string>
     <string name="open_market_error">Uygulama sayfası açılamıyor</string>
     <string name="billing_item_already_owned">Önceki satım alınınız uygulanıyor lütfen bekleyiniz</string>
+    <string name="dialog">Sohbet</string>
 </resources>

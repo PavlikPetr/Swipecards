@@ -10,8 +10,9 @@
     <string name="general_ok">OK</string>
     <string name="general_dbl_new">Новые</string>
     <string name="general_settings_abbr">Настр.</string>
-
+    <string name="general_disallow">Запретить</string>
     <string name="general_allow">Разрешить</string>
+    <string name="notification_denied_popup_title">Разрешите уведомления, чтобы узнавать о входящих сообщениях, симпатиях и других новостях.</string>
     <string name="notification_popup_title">Разрешите присылать вам уведомления, чтобы вы мгновенно могли узнать о новой симпатии, восхищении или непрочитанном сообщении</string>
     <string name="email_successfully_changed">Ваш e-mail успешно изменен</string>
     <string name="auth_vk_name">ВКонтакте</string>g

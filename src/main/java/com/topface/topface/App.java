@@ -25,6 +25,7 @@ import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
+import com.topface.topface.data.FortumoProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
@@ -35,6 +36,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AppGetOptionsRequest;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.FortumoProductsRequest;
 import com.topface.topface.requests.GooglePlayProductsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
@@ -96,27 +98,25 @@ public class App extends Application {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getOptionsRequest())
                 .addRequest(getProductsRequest())
+                .addRequest(getFortumoProductsRequest())
                 .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .callback(handler)
                 .exec();
     }
 
-    private static ApiRequest getPaymentwallProductsRequest() {
+    private static ApiRequest getFortumoProductsRequest() {
         switch (BuildConfig.BILLING_TYPE) {
-            //Для амазона и nokia Paymentwall не должен включаться
-            case NOKIA_STORE:
-            case AMAZON:
-                return null;
             case GOOGLE_PLAY:
-            default:
-                return new PaymentwallProductsRequest(App.getContext()).callback(new ApiHandler() {
+                return new FortumoProductsRequest(App.getContext()).callback(new DataApiHandler<FortumoProducts>() {
                     @Override
-                    public void success(IApiResponse response) {
-                        //При создании нового объекта продуктов, все данные о них записываются в кэш,
-                        //поэтому здесь просто создаются два объекта продуктов.
-                        new PaymentWallProducts(response, PaymentWallProducts.TYPE.DIRECT);
-                        new PaymentWallProducts(response, PaymentWallProducts.TYPE.MOBILE);
+                    protected void success(FortumoProducts data, IApiResponse response) {
+
+                    }
+
+                    @Override
+                    protected FortumoProducts parseResponse(ApiResponse response) {
+                        return new FortumoProducts(response);
                     }
 
                     @Override
@@ -124,6 +124,42 @@ public class App extends Application {
 
                     }
                 });
+            //Для амазона и nokia Fortumeo не поддерживается
+            case NOKIA_STORE:
+            case AMAZON:
+            default:
+                return null;
+        }
+    }
+
+    private static ApiRequest getPaymentwallProductsRequest() {
+        switch (BuildConfig.BILLING_TYPE) {
+            case GOOGLE_PLAY:
+                return new PaymentwallProductsRequest(App.getContext()).callback(new DataApiHandler<PaymentWallProducts>() {
+                    @Override
+                    protected void success(PaymentWallProducts data, IApiResponse response) {
+                        //ВНИМАНИЕ! Сюда возвращается только Direct продукты,
+                        //парсим и записываем в кэш мы их внутри конструктора PaymentWallProducts
+                    }
+
+                    @Override
+                    protected PaymentWallProducts parseResponse(ApiResponse response) {
+                        //При создании нового объекта продуктов, все данные о них записываются в кэш,
+                        //поэтому здесь просто создаются два объекта продуктов.
+                        new PaymentWallProducts(response, PaymentWallProducts.TYPE.MOBILE);
+                        return new PaymentWallProducts(response, PaymentWallProducts.TYPE.DIRECT);
+                    }
+
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+
+                    }
+                });
+            //Для амазона и nokia Paymentwall не должен включаться
+            case NOKIA_STORE:
+            case AMAZON:
+            default:
+                return null;
         }
     }
 
