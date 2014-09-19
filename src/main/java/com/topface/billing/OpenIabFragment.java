@@ -153,12 +153,12 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             } else {
                 onSubscriptionUnsupported();
             }
-        }
 
-        if (mHasDeferredPurchase) {
-            stopWaiting();
-            buyNow((Products.BuyButton) mDeferredPurchaseButton.getTag());
-            mHasDeferredPurchase = false;
+            if (mHasDeferredPurchase) {
+                stopWaiting();
+                buyNow((Products.BuyButton) mDeferredPurchaseButton.getTag());
+                mHasDeferredPurchase = false;
+            }
         }
 
     }
