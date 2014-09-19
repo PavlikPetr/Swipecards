@@ -123,7 +123,7 @@ dependencies {
         exclude group: 'org.json'
     }
     compile 'com.google.code.gson:gson:2.2.4'
-    compile 'org.onepf:openiab:0.9.7.1'
+    compile 'org.onepf:openiab:0.9.7.2-fortumo'
     compile project(':libs:Android-ViewPagerIndicator')
     compile project(':libs:PullToRefresh')
     compile project(':libs:PhotoView')
