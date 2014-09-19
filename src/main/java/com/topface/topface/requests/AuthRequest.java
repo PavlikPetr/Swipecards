@@ -52,13 +52,7 @@ public class AuthRequest extends ApiRequest {
         locale = getClientLocale(context);
         androidApiVersion = Build.VERSION.SDK_INT;
         adId = App.getAppConfig().getAdId();
-        try {
-            googlePlayServicesVersion = context.getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode;
-
-        } catch (PackageManager.NameNotFoundException e) {
-            Debug.error(e);
-        }
-
+        googlePlayServicesVersion = Utils.getGooglePlayServicesVersion(context);
         clientversion = BuildConfig.VERSION_NAME;
         clientosversion = Utils.getClientOsVersion();
         clientdevice = Utils.getClientDeviceName();
