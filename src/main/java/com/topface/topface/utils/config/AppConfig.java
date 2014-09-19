@@ -43,6 +43,7 @@ public class AppConfig extends AbstractConfig {
     private static final String URL_SEPARATOR = "::";
     public static final String STAGE_LOGIN = "stage_login";
     public static final String STAGE_CHECKED = "stage_checked";
+    public static final String AD_ID = "ad_id";
     public static final String DEBUG_CONNECTION = "debug_connection";
     public static final String DEBUG_CONNECTION_CHECKED = "debug_connection_checked";
 
@@ -81,6 +82,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, STAGE_LOGIN, Static.EMPTY);
         //state of checkbox of stagelogin
         addField(settingsMap, STAGE_CHECKED, false);
+        //ad id from google play services
+        addField(settingsMap, AD_ID, null);
         //debug connection type
         addField(settingsMap, DEBUG_CONNECTION, 0);
         //debug connection is checked
@@ -292,6 +295,13 @@ public class AppConfig extends AbstractConfig {
         return new HashSet<>(Arrays.asList(urlList));
     }
 
+    public void setAdId(String adId) {
+        setField(getSettingsMap(), AD_ID, adId);
+    }
+
+    public String getAdId() {
+        return getStringField(getSettingsMap(), AD_ID);
+    }
     /**
      * Adds url to fullscreen ad url set
      *

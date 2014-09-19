@@ -106,6 +106,16 @@ public class Utils {
         }
     }
 
+    public static Integer getGooglePlayServicesVersion(Context context) {
+        try {
+            return context.getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode;
+
+        } catch (PackageManager.NameNotFoundException e) {
+            Debug.error(e);
+        }
+        return null;
+    }
+
     public static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }

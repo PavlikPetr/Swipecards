@@ -1,11 +1,13 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.data.AppsFlyerData;
@@ -34,6 +36,10 @@ public class AuthRequest extends ApiRequest {
     private String clientversion; // версия клиента
     private String clientosversion; // версия операционной системы
     private String clientdevice; // тип устройства клиента
+    private String adId; // ad id from google play services
+    private int androidApiVersion; // версия апи
+    private Integer googlePlayServicesVersion; // версия google play services
+    private Integer codeVersion; // версия кода
     private String login;  // логин для нашей авторизации
     private String password; // пароль для нашей авторизации
     private String refresh; // еще один токен для одноклассников
@@ -45,6 +51,10 @@ public class AuthRequest extends ApiRequest {
         doNeedAlert(false);
         clienttype = BuildConfig.BILLING_TYPE.getClientType();
         locale = getClientLocale(context);
+        androidApiVersion = Build.VERSION.SDK_INT;
+        codeVersion = BuildConfig.VERSION_CODE;
+        adId = App.getAppConfig().getAdId();
+        googlePlayServicesVersion = Utils.getGooglePlayServicesVersion(context);
         clientversion = BuildConfig.VERSION_NAME;
         clientosversion = Utils.getClientOsVersion();
         clientdevice = Utils.getClientDeviceName();
@@ -101,7 +111,15 @@ public class AuthRequest extends ApiRequest {
                 .put("refresh", refresh)
                 .put("timezone", timezone)
                 .put("android_api_level", Build.VERSION.SDK_INT)
-                .put("tablet", tablet);
+                .put("tablet", tablet)
+                .put("androidApiVersion", androidApiVersion)
+                .put("codeVersion", codeVersion);
+        if (!TextUtils.isEmpty(adId)) {
+            data.put("adId", adId);
+        }
+        if (googlePlayServicesVersion != null) {
+            data.put("googlePlayServicesVersion", googlePlayServicesVersion);
+        }
 
         //Устанавливаем clientDeviceId
         try {
