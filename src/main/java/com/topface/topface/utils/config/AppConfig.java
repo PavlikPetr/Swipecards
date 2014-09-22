@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.Editor;
@@ -46,6 +47,9 @@ public class AppConfig extends AbstractConfig {
     public static final String AD_ID = "ad_id";
     public static final String DEBUG_CONNECTION = "debug_connection";
     public static final String DEBUG_CONNECTION_CHECKED = "debug_connection_checked";
+    private static final String LAST_APP_VERSION = "last_app_version";
+    private static final String GCM_REG_ID = "gcm_reg_id";
+
 
 
     public AppConfig(Context context) {
@@ -88,6 +92,10 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, DEBUG_CONNECTION, 0);
         //debug connection is checked
         addField(settingsMap, DEBUG_CONNECTION_CHECKED, false);
+        //Last app version
+        addField(settingsMap, LAST_APP_VERSION, 0);
+        //GCM registration id
+        addField(settingsMap, GCM_REG_ID, Static.EMPTY);
     }
 
     protected SharedPreferences getPreferences() {
@@ -327,6 +335,33 @@ public class AppConfig extends AbstractConfig {
     public void setDebugConnectionChecked(boolean checked) {
         setField(getSettingsMap(), DEBUG_CONNECTION_CHECKED, checked);
     }
+
+    public int getLastAppVersion() {
+        return getIntegerField(getSettingsMap(), LAST_APP_VERSION);
+    }
+
+    public void saveLastAppVersion() {
+        setField(getSettingsMap(), LAST_APP_VERSION, BuildConfig.VERSION_CODE);
+    }
+
+    /**
+     * Sets GCM registration id
+     *
+     * @param regId
+     */
+    public void setGcmRegId(String regId) {
+        setField(getSettingsMap(), GCM_REG_ID, regId);
+    }
+
+    /**
+     * GCM registration id
+     *
+     * @return gsm registration id
+     */
+    public String getGcmRegId() {
+        return getStringField(getSettingsMap(), GCM_REG_ID);
+    }
+
 
     @Override
     public String toString() {
