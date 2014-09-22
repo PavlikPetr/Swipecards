@@ -153,12 +153,12 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             } else {
                 onSubscriptionUnsupported();
             }
-        }
 
-        if (mHasDeferredPurchase) {
-            stopWaiting();
-            buyNow((Products.BuyButton) mDeferredPurchaseButton.getTag());
-            mHasDeferredPurchase = false;
+            if (mHasDeferredPurchase) {
+                stopWaiting();
+                buyNow((Products.BuyButton) mDeferredPurchaseButton.getTag());
+                mHasDeferredPurchase = false;
+            }
         }
 
     }
@@ -362,14 +362,18 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public void buyItem(final String id) {
         Debug.log("BillingFragment: buyItem " + id + " test: " + isTestPurchasesEnabled());
         if (id != null && mIabSetupFinished) {
-            mHelper.launchPurchaseFlow(
-                    getActivity(),
-                    //Если тестовые покупки, то подменяем id продукта на тестовый
-                    isTestPurchasesEnabled() ? TEST_PURCHASED_PRODUCT_ID : id,
-                    getRequestCode(),
-                    this,
-                    getDeveloperPayload(id)
-            );
+            try {
+                mHelper.launchPurchaseFlow(
+                        getActivity(),
+                        //Если тестовые покупки, то подменяем id продукта на тестовый
+                        isTestPurchasesEnabled() ? TEST_PURCHASED_PRODUCT_ID : id,
+                        getRequestCode(),
+                        this,
+                        getDeveloperPayload(id)
+                );
+            } catch (NullPointerException e) {
+                Debug.log("OMG! Misterious NPE in OpenIabHelper");
+            }
         }
     }
 
