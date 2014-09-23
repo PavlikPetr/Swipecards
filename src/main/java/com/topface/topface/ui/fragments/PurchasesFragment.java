@@ -172,6 +172,7 @@ public class PurchasesFragment extends BaseFragment {
             if (TextUtils.equals(tab.type, Options.Tab.GPLAY) && !App.isGmsEnabled()) {
                 iterator.remove();
             } else if (TextUtils.equals(tab.type, Options.Tab.FORTUMO)) {
+                // Deleting fortumo tab if no sim available
                 TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
                 if (telephonyManager.getSimState() != TelephonyManager.SIM_STATE_READY) {
                     iterator.remove();
