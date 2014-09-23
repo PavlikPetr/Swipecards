@@ -2,6 +2,8 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
+import com.topface.framework.utils.Debug;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.onepf.oms.OpenIabHelper;
@@ -14,12 +16,17 @@ public class FortumoPurchaseRequest extends PurchaseRequest {
 
     public static final String SERVICE_NAME = "fortumo.purchase";
 
-    private String developerPayload;
+    private String source;
     private String orderId;
 
     protected FortumoPurchaseRequest(Purchase purchase, Context context) {
         super(purchase, context);
-        developerPayload = purchase.getDeveloperPayload();
+        try {
+            source = new JSONObject(purchase.getDeveloperPayload()).optString("source");
+        } catch (JSONException e) {
+            Debug.error(e);
+            source = "";
+        }
         orderId = purchase.getOrderId();
     }
 
@@ -31,7 +38,7 @@ public class FortumoPurchaseRequest extends PurchaseRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
-                .put("developerPayload", developerPayload)
+                .put("source", source)
                 .put("orderId", orderId);
     }
 
