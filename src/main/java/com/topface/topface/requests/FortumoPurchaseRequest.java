@@ -22,7 +22,12 @@ public class FortumoPurchaseRequest extends PurchaseRequest {
 
     protected FortumoPurchaseRequest(Purchase purchase, Context context) {
         super(purchase, context);
-        source = JsonUtils.fromJson(purchase.getDeveloperPayload(), DeveloperPayload.class).source;
+        DeveloperPayload payload = JsonUtils.fromJson(purchase.getDeveloperPayload(), DeveloperPayload.class);
+        if (payload != null) {
+            source = payload.source;
+        } else {
+            source = "";
+        }
         orderId = purchase.getOrderId();
     }
 
