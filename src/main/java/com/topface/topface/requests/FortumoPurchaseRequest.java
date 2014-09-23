@@ -2,7 +2,8 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.topface.framework.utils.Debug;
+import com.topface.billing.DeveloperPayload;
+import com.topface.framework.JsonUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,12 +22,7 @@ public class FortumoPurchaseRequest extends PurchaseRequest {
 
     protected FortumoPurchaseRequest(Purchase purchase, Context context) {
         super(purchase, context);
-        try {
-            source = new JSONObject(purchase.getDeveloperPayload()).optString("source");
-        } catch (JSONException e) {
-            Debug.error(e);
-            source = "";
-        }
+        source = JsonUtils.fromJson(purchase.getDeveloperPayload(), DeveloperPayload.class).source;
         orderId = purchase.getOrderId();
     }
 
