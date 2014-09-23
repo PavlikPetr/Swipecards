@@ -22,6 +22,8 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import org.json.JSONException;
@@ -153,16 +155,19 @@ public class GCMUtils {
     }
 
     private void storeRegistrationId() {
-        App.getUserConfig().setGcmRegId(mRegId);
+        AppConfig config = App.getAppConfig();
+        config.setGcmRegId(mRegId);
+        config.saveLastAppVersion();
+        config.saveConfig();
     }
 
     private String getRegistrationId() {
-        String registrationId = App.getUserConfig().getGcmRegId();
+        String registrationId = App.getAppConfig().getGcmRegId();
         if (registrationId.isEmpty()) {
             Debug.log("No reg id");
             return "";
         }
-        int registeredVersion = App.getUserConfig().getLastAppVersion();
+        int registeredVersion = App.getAppConfig().getLastAppVersion();
         if (registeredVersion != BuildConfig.VERSION_CODE) {
             Debug.log("App version changed.");
             return "";

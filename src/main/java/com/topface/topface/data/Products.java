@@ -315,6 +315,7 @@ public class Products extends AbstractData {
         View view = createBuyButtonLayout(context, buyBtn, listener);
         if (view != null) {
             root.addView(view);
+            view.setTag(buyBtn);
             return view;
         } else {
             return null;
