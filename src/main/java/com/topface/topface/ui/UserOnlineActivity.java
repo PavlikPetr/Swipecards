@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.topface.topface.R;
-
 import java.util.List;
 
 /**
@@ -15,16 +13,6 @@ import java.util.List;
 public abstract class UserOnlineActivity<T extends Fragment> extends CheckAuthActivity<T> implements IUserOnlineListener {
 
     private View mOnlineIcon;
-
-    @Override
-    protected void initCustomActionBarView(View mCustomView) {
-        mOnlineIcon = mCustomView.findViewById(R.id.online);
-    }
-
-    @Override
-    protected int getActionBarCustomViewResId() {
-        return R.layout.actionbar_container_title_view;
-    }
 
     @Override
     public void setUserOnline(boolean online) {

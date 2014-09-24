@@ -9,7 +9,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -46,9 +45,8 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.ExternalLinkExecuter;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.NavigationBarController;
+import com.topface.topface.utils.NavigationDrawerController;
 import com.topface.topface.utils.PopupManager;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
@@ -70,7 +68,7 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends CustomTitlesBaseFragmentActivity implements INavigationFragmentsListener {
+public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener {
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String INTENT_EXIT = "EXIT";
     private static NavigationActivity instance = null;
@@ -108,12 +106,11 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     private boolean mActionBarOverlayed = false;
     private int mInitialTopMargin = 0;
 
-    private ActionBarDrawerToggle mDrawerToggle;
-    private NavigationBarController mNavBarController;
+    private NavigationDrawerController mNavToggleController;
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mNavBarController != null) mNavBarController.refreshNotificators();
+            if (mNavToggleController != null) mNavToggleController.refreshNotificators();
         }
     };
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
@@ -233,6 +230,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         initDrawerLayout();
         initFullscreen();
         initAppsFlyer();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -257,18 +255,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
 
     private void initFullscreen() {
         mFullscreenController = new FullscreenController(this);
-    }
-
-    @Override
-    protected void initCustomActionBarView(View mCustomView) {
-        mNavBarController = new NavigationBarController(
-                (ViewGroup) getCustomActionBarView().findViewById(R.id.loCounters)
-        );
-    }
-
-    @Override
-    protected int getActionBarCustomViewResId() {
-        return R.layout.actionbar_navigation_title_view;
     }
 
     private void initBonusCounterConfig() {
@@ -300,22 +286,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         mDrawerLayout = (HackyDrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
-                R.string.app_name,  /* "open drawer" description */
-                R.string.app_name  /* "close drawer" description */
-        ) {
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                super.onDrawerStateChanged(newState);
-                Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getWindowToken());
-            }
-        };
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mNavToggleController = new NavigationDrawerController(this, mDrawerLayout);
     }
 
     private void initAppsFlyer() {
@@ -330,19 +301,19 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        if (mDrawerToggle != null) mDrawerToggle.syncState();
+        if (mNavToggleController != null) mNavToggleController.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (mDrawerToggle != null) mDrawerToggle.onConfigurationChanged(newConfig);
+        if (mNavToggleController != null) mNavToggleController.onConfigurationChanged(newConfig);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) == DrawerLayout.LOCK_MODE_UNLOCKED) {
-            return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+            return mNavToggleController.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
         } else {
             switch (item.getItemId()) {
                 case android.R.id.home:
@@ -398,8 +369,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
         new ExternalLinkExecuter(mListener).execute(getIntent());
         App.checkProfileUpdate();
-        if (mNavBarController != null) {
-            mNavBarController.refreshNotificators();
+        if (mNavToggleController != null) {
+            mNavToggleController.refreshNotificators();
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
@@ -510,6 +481,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
             }
             Debug.log("Current User ID:" + CacheProfile.getProfile().uid);
         }
+        mNavToggleController.syncState();
         mMenuFragment.onLoadProfile();
     }
 

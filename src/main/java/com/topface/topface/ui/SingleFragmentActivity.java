@@ -7,10 +7,11 @@ import android.support.v4.app.FragmentManager;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 
-public abstract class SingleFragmentActivity<T extends Fragment> extends CustomTitlesBaseFragmentActivity {
+public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFragmentActivity {
 
     private T mFragment;
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +31,7 @@ public abstract class SingleFragmentActivity<T extends Fragment> extends CustomT
         if (!mFragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().add(getContainerId(), mFragment, getFragmentTag()).commit();
         } else {
-            Debug.log(mFragment, "Fragment was already added to activity " + getClass().getSimpleName());
+            Debug.log(mFragment, "Fragment was already added to activity " + ((Object) this).getClass().getSimpleName());
         }
     }
 
