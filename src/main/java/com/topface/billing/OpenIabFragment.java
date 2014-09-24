@@ -158,6 +158,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 stopWaiting();
                 buyNow((Products.BuyButton) mDeferredPurchaseButton.getTag());
                 mHasDeferredPurchase = false;
+                mDeferredPurchaseButton = null;
             }
         }
 
