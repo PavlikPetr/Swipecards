@@ -23,7 +23,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import org.json.JSONException;
@@ -57,6 +56,7 @@ public class GCMUtils {
     public static final int GCM_TYPE_GIFT = 7;
     public static final int GCM_TYPE_DIALOGS = 8;
     public static final int GCM_TYPE_PEOPLE_NEARBY = 9;
+    public static final int GCM_TYPE_UPDATE_COUNTERS_BALANCE = 10;
 
 
     public static final String NEXT_INTENT = "com.topface.topface_next";
@@ -98,6 +98,15 @@ public class GCMUtils {
             if (mRegId.isEmpty()) {
                 registerInBackground(serverToken);
                 return true;
+            } else if (!mRegId.equals(serverToken)) {
+                new BackgroundThread() {
+                    @Override
+                    public void execute() {
+                        Looper.prepare();
+                        sendRegistrationIdToBackend();
+                        Looper.loop();
+                    }
+                };
             }
         }
         return false;
@@ -132,6 +141,7 @@ public class GCMUtils {
         };
     }
 
+    @SuppressWarnings("unused")
     public void unregister() {
         new BackgroundThread() {
             @Override
@@ -183,6 +193,9 @@ public class GCMUtils {
             return false;
         } else if (extra == null) {
             Debug.log("GCM: intent is null");
+            return false;
+        } else if (getType(extra) == GCM_TYPE_UPDATE_COUNTERS_BALANCE) {
+            setCounters(extra, context);
             return false;
         }
         try {
