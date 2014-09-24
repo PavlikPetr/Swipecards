@@ -99,14 +99,7 @@ public class GCMUtils {
                 registerInBackground(serverToken);
                 return true;
             } else if (!mRegId.equals(serverToken)) {
-                new BackgroundThread() {
-                    @Override
-                    public void execute() {
-                        Looper.prepare();
-                        sendRegistrationIdToBackend();
-                        Looper.loop();
-                    }
-                };
+                sendRegistrationIdToBackend();
             }
         }
         return false;
