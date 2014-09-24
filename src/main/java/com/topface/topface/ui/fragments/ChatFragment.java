@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
@@ -201,7 +202,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     };
     // Managers
     private RelativeLayout mLockScreen;
-    private ViewStub mChatActionsStub;
     private PopularUserChatController mPopularUserLockController;
     private String mUserName;
     private int mUserAge;
@@ -271,7 +271,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         });
         Debug.log(this, "+onCreate");
         // mChatActions
-        mChatActionsStub = (ViewStub) root.findViewById(R.id.chat_actions_stub);
         mActions = null;
         // Navigation bar
         initNavigationbar(mUserName, mUserAge, mUserCity);
@@ -548,7 +547,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
-                if (!data.items.isEmpty() && !isPopularLockOn) {
+                 if (!data.items.isEmpty() && !isPopularLockOn) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
                         int blockStage = mPopularUserLockController.block(message);
@@ -599,6 +598,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
                     if (mAdapter.getCount() <= 0) {
                         mAdapter.setUser(mUser);
+                        Utils.showSoftKeyboard(getActivity(), mEditBox);
                     }
                 }
 
@@ -739,7 +739,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             case R.id.acProfile:
                 Intent profileIntent = UserProfileActivity.createIntent(mUserId, getActivity());
                 startActivity(profileIntent);
-                closeChatActions();
                 break;
             case R.id.add_to_bookmark_action:
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
@@ -759,7 +758,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.complain_action:
                 startActivity(ComplainsActivity.createIntent(mUserId));
-                closeChatActions();
                 break;
             case R.id.ivBarAvatar:
                 onOptionsItemSelected(mBarAvatar);
@@ -812,17 +810,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         getActivity().unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         mJustResumed = true;
-    }
-
-    /**
-     * Note: if you starting new activity and need actions' menu to be closed after,
-     * then first call this method. Actions' menu view will fully disappear before new
-     * activity will be shown
-     */
-    private void closeChatActions() {
-        if (mBarAvatar.isChecked()) {
-            onOptionsItemSelected(mBarAvatar);
-        }
     }
 
     @Override
@@ -954,10 +941,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             case R.id.action_profile:
                 if (mUser != null) {
                     if (!(mUser.deleted || mUser.banned)) {
-                        initActions(mChatActionsStub, mUser, getActions(mUser));
-                        boolean checked = item.isChecked();
-                        item.setChecked(!checked);
-                        animateChatActions(ACTIONS_CLOSE_ANIMATION_TIME);
+                        Intent profileIntent = UserProfileActivity.createIntent(mUserId, getActivity());
+                        startActivity(profileIntent);
                     } else {
                         Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                                 Toast.LENGTH_LONG).show();
@@ -1087,7 +1072,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 }
             } else {
                 startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "Chat"), PurchasesActivity.INTENT_BUY_VIP);
-                closeChatActions();
             }
         }
 
