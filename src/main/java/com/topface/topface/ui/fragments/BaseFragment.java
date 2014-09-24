@@ -22,6 +22,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.http.IRequestClient;
 
 import java.util.LinkedList;
@@ -32,6 +33,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private ActionBar mSupportActionBar;
     private BroadcastReceiver mProfileLoadReceiver;
+    private ActionBarTitleSetterDelegate mTitleSetter;
 
     public static enum FragmentId {
         F_VIP_PROFILE(0),
@@ -92,6 +94,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onCreate(Bundle savedInstanceState) {
         restoreState();
         setHasOptionsMenu(needOptionsMenu());
+        mTitleSetter = new ActionBarTitleSetterDelegate(getSupportActionBar());
         super.onCreate(savedInstanceState);
     }
 
@@ -270,28 +273,20 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void setActionBarTitles(String title, String subtitle) {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(title);
-        actionBar.setSubtitle(subtitle);
+        mTitleSetter.setActionBarTitles(title, subtitle);
     }
 
     @SuppressWarnings("UnusedDeclaration")
     protected void setActionBarTitles(int title, int subtitle) {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(title);
-        actionBar.setSubtitle(subtitle);
+        mTitleSetter.setActionBarTitles(title, subtitle);
     }
 
     protected void setActionBarTitles(String title) {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(title);
-        actionBar.setSubtitle(null);
+        mTitleSetter.setActionBarTitles(title, null);
     }
 
     protected void setActionBarTitles(int title) {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(title);
-        actionBar.setSubtitle(null);
+        mTitleSetter.setActionBarTitles(title, null);
     }
 
     protected String getTitle() {
