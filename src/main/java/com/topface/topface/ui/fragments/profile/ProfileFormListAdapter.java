@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
 import android.content.Context;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Locale;
 
@@ -151,12 +149,11 @@ public class ProfileFormListAdapter extends BaseAdapter {
                     holder.value.setVisibility(View.VISIBLE);
                 } else {
                     holder.value.setVisibility(View.GONE);
+                    holder.fill.setText(R.string.edit_refresh_status);
+                    holder.fill.setVisibility(View.VISIBLE);
+                    holder.fill.setOnClickListener(mOnFillListener);
+                    holder.fill.setTag(item);
                 }
-
-                holder.fill.setText(R.string.edit_refresh_status);
-                holder.fill.setVisibility(View.VISIBLE);
-                holder.fill.setOnClickListener(mOnFillListener);
-                holder.fill.setTag(item);
                 break;
         }
         if (convertView != null) {
@@ -183,21 +180,6 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
     public void setOnFillListener(View.OnClickListener onFillListener) {
         mOnFillListener = onFillListener;
-    }
-
-    public ArrayList<FormItem> saveState() {
-        ArrayList<FormItem> formItems = new ArrayList<>(getCount());
-        for (int i = 0; i < getCount(); i++) {
-            formItems.add(getItem(i));
-        }
-        return formItems;
-    }
-
-    public void restoreState(ArrayList<Parcelable> formItems) {
-        mProfileForms.clear();
-        for (Parcelable formItem : formItems) {
-            mProfileForms.add((FormItem) formItem);
-        }
     }
 
     // class ViewHolder
