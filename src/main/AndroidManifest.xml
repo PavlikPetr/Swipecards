@@ -162,7 +162,7 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".ui.fragments.profile.PhotoSwitcherActivity"
-            android:theme="@style/Theme.Topface.NoActionBar.Fullscreen"/>
+            />
         <activity
             android:name=".ui.edit.EditProfileActivity"
             android:screenOrientation="portrait"/>

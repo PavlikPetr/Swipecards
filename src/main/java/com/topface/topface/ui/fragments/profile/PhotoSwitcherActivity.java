@@ -27,6 +27,7 @@ import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.PreloadManager;
@@ -37,7 +38,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-public class PhotoSwitcherActivity extends BaseFragmentActivity {
+public class PhotoSwitcherActivity extends CustomTitlesBaseFragmentActivity {
 
     public static final String INTENT_MORE = "more";
     public static final String INTENT_CLEAR = "clear";
@@ -402,5 +403,15 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 mCanSendAlbumReq = true;
             }
         }).exec();
+    }
+
+    @Override
+    protected void initCustomActionBarView(View mCustomView) {
+
+    }
+
+    @Override
+    protected int getActionBarCustomViewResId() {
+        return R.layout.actionbar_container_title_view;
     }
 }
