@@ -7,16 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
+import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.views.ImageViewRemote;
 
 /**
  * Фрагмент с аватркой и именем пользователя в профиле
  */
-public class HeaderMainFragment extends ProfileInnerFragment {
+public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnlineListener {
     private static final String ARG_TAG_AVATAR = "avatar";
     private static final String ARG_TAG_NAME = "name";
     private static final String ARG_TAG_CITY = "city";
@@ -62,6 +64,7 @@ public class HeaderMainFragment extends ProfileInnerFragment {
         return root;
     }
 
+    @Override
     public void setOnline(boolean online) {
         // установка иконки онлайн
         mNameView.setCompoundDrawablesWithIntrinsicBounds(

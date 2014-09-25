@@ -7,7 +7,7 @@ import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 
-public class UserProfileActivity extends UserOnlineActivity<UserProfileFragment> {
+public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> {
 
     public static final int INTENT_USER_PROFILE = 6;
 

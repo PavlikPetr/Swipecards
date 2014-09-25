@@ -1,11 +1,15 @@
 package com.topface.topface.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.MenuItem;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
+
+import java.util.List;
 
 public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFragmentActivity {
 
@@ -25,6 +29,33 @@ public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFra
             setArguments();
         }
         addToLayout();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                FragmentManager fm = getSupportFragmentManager();
+                if (fm != null) {
+                    List<Fragment> fragments = fm.getFragments();
+                    if (fragments != null) {
+                        for (Fragment f : fragments) {
+                            if (f != null && f.getActivity() == this) {
+                                f.onOptionsItemSelected(item);
+                            }
+                        }
+                    }
+                }
+                if (isTaskRoot()) {
+                    Intent i = new Intent(this, NavigationActivity.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    onBackPressed();
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     protected void addToLayout() {

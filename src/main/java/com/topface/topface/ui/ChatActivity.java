@@ -9,7 +9,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
-public class ChatActivity extends UserOnlineActivity<ChatFragment> {
+public class ChatActivity extends CheckAuthActivity<ChatFragment> {
 
     public static final int INTENT_CHAT = 3;
 

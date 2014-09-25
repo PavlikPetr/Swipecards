@@ -23,6 +23,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
+import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.http.IRequestClient;
 
 import java.util.LinkedList;
@@ -33,7 +34,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private ActionBar mSupportActionBar;
     private BroadcastReceiver mProfileLoadReceiver;
-    private ActionBarTitleSetterDelegate mTitleSetter;
+    private IActionBarTitleSetter mTitleSetter;
 
     public static enum FragmentId {
         F_VIP_PROFILE(0),
@@ -94,8 +95,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onCreate(Bundle savedInstanceState) {
         restoreState();
         setHasOptionsMenu(needOptionsMenu());
-        mTitleSetter = new ActionBarTitleSetterDelegate(getSupportActionBar());
+        mTitleSetter = createTitleSetter(getSupportActionBar());
         super.onCreate(savedInstanceState);
+    }
+
+    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
+        return new ActionBarTitleSetterDelegate(actionBar);
     }
 
     protected boolean needOptionsMenu() {
