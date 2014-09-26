@@ -2,8 +2,10 @@ package com.topface.topface.ui.edit;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -136,6 +138,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                             finishRequestSend();
                             if (handler == null) getActivity().finish();
                             else handler.sendEmptyMessage(0);
+                            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(CacheProfile.PROFILE_UPDATE_ACTION));
                         }
 
                         @Override
