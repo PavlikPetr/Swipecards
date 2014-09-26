@@ -25,9 +25,9 @@ public abstract class CustomTitlesBaseFragmentActivity extends BaseFragmentActiv
         if (actionBarResId != 0) {
             super.initActionBar(actionBar);
             if (actionBar != null) {
-                actionBar.setDisplayHomeAsUpEnabled(true);
                 actionBar.setDisplayShowTitleEnabled(false);
                 actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setDisplayHomeAsUpEnabled(true);
                 mCustomView = getLayoutInflater().inflate(actionBarResId, null);
                 actionBar.setCustomView(mCustomView);
                 mActioBarTitleSetter = new CustomActionBarTitleSetter(

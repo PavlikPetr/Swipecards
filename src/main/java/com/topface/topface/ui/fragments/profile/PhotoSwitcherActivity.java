@@ -2,10 +2,12 @@ package com.topface.topface.ui.fragments.profile;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -403,6 +405,14 @@ public class PhotoSwitcherActivity extends CustomTitlesBaseFragmentActivity {
                 mCanSendAlbumReq = true;
             }
         }).exec();
+    }
+
+    @Override
+    protected void initActionBar(ActionBar actionBar) {
+        super.initActionBar(actionBar);
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setIcon(android.R.color.transparent);
+
     }
 
     @Override
