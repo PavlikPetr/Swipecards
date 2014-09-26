@@ -19,7 +19,9 @@ public class ActionBarOnlineSetterDelegate extends ActionBarTitleSetterDelegate 
         if (activity != null) {
             final int abTitleId = activity.getResources().getIdentifier("action_bar_title", "id", "android");
             mAbTitile = (TextView) activity.findViewById(abTitleId);
-            mAbTitile.setCompoundDrawablePadding(10);
+            if (mAbTitile != null) {
+                mAbTitile.setCompoundDrawablePadding(10);
+            }
         }
     }
 
