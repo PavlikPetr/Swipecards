@@ -557,7 +557,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         mWasNotEmptyHistory = true;
                     }
                 }
-
                 mIsUpdating = false;
             }
 
