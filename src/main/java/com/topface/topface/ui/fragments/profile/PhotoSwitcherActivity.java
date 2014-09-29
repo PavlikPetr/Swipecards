@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -27,6 +28,7 @@ import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.PreloadManager;
@@ -37,7 +39,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-public class PhotoSwitcherActivity extends BaseFragmentActivity {
+public class PhotoSwitcherActivity extends CustomTitlesBaseFragmentActivity {
 
     public static final String INTENT_MORE = "more";
     public static final String INTENT_CLEAR = "clear";
@@ -338,7 +340,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         int photosLinksSize = mPhotoLinks.size();
         if (mPhotoLinks != null) {
             mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
-            mCounter.setText((mCurrentPosition + 1) + "/" + photosLinksSize);
+            getActionBarTitleSetterDelegate().setActionBarTitles((mCurrentPosition + 1) + "/" + photosLinksSize, null);
         }
     }
 
@@ -402,5 +404,25 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 mCanSendAlbumReq = true;
             }
         }).exec();
+    }
+
+    @Override
+    protected void initActionBar(ActionBar actionBar) {
+        super.initActionBar(actionBar);
+        if (actionBar != null) {
+            actionBar.setDisplayUseLogoEnabled(false);
+//            actionBar.setIcon(android.R.color.transparent);
+//            actionBar.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.screen_background_dark_transparent));
+        }
+    }
+
+    @Override
+    protected void initCustomActionBarView(View mCustomView) {
+
+    }
+
+    @Override
+    protected int getActionBarCustomViewResId() {
+        return R.layout.actionbar_navigation_title_view;
     }
 }
