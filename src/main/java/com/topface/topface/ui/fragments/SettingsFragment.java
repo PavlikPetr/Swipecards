@@ -516,7 +516,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             try {
                 mCursor = getActivity().getContentResolver().query(uri, null, null, null, null);
 
-                if (mCursor.moveToFirst()) {
+                if (mCursor!= null && mCursor.moveToFirst()) {
                     if (mCursor.getColumnIndex("title") >= 0) {
                         ringtoneName = mCursor.getString(mCursor.getColumnIndex("title"));
                     } else {

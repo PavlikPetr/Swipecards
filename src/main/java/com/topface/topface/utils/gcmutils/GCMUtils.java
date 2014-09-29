@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
@@ -99,7 +100,13 @@ public class GCMUtils {
                 registerInBackground(serverToken);
                 return true;
             } else if (!mRegId.equals(serverToken)) {
-                sendRegistrationIdToBackend();
+                new Handler(mContext.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendRegistrationIdToBackend();
+
+                    }
+                });
             }
         }
         return false;
