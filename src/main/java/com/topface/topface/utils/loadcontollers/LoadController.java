@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import static com.topface.topface.receivers.ConnectionChangeReceiver.ConnectionType.CONNECTION_MOBILE_3G;
 import static com.topface.topface.receivers.ConnectionChangeReceiver.ConnectionType.CONNECTION_MOBILE_EDGE;
+import static com.topface.topface.receivers.ConnectionChangeReceiver.ConnectionType.CONNECTION_OFFLINE;
 import static com.topface.topface.receivers.ConnectionChangeReceiver.ConnectionType.CONNECTION_WIFI;
 
 /**
@@ -34,6 +35,7 @@ public abstract class LoadController {
             mOffsetItemsCount.put(CONNECTION_WIFI, offset[CONNECTION_WIFI.getInt()]);
             mOffsetItemsCount.put(CONNECTION_MOBILE_3G, offset[CONNECTION_MOBILE_3G.getInt()]);
             mOffsetItemsCount.put(CONNECTION_MOBILE_EDGE, offset[CONNECTION_MOBILE_EDGE.getInt()]);
+            mOffsetItemsCount.put(CONNECTION_OFFLINE, 0);
         }
     }
 
@@ -43,6 +45,7 @@ public abstract class LoadController {
             mPreloadItemsLimit.put(CONNECTION_WIFI, limits[CONNECTION_WIFI.getInt()]);
             mPreloadItemsLimit.put(CONNECTION_MOBILE_3G, limits[CONNECTION_MOBILE_3G.getInt()]);
             mPreloadItemsLimit.put(CONNECTION_MOBILE_EDGE, limits[CONNECTION_MOBILE_EDGE.getInt()]);
+            mPreloadItemsLimit.put(CONNECTION_OFFLINE, 0);
         }
     }
 

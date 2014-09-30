@@ -1,7 +1,6 @@
 package com.topface.topface.ui;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +16,8 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,7 +67,8 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
     private void onFatalError() {
         Toast.makeText(this, R.string.general_data_error, Toast.LENGTH_SHORT).show();
-        finishActivity(RESULT_ERROR);
+        setResult(RESULT_ERROR);
+        finish();
     }
 
     private String getSuccessUrl(String url) {
@@ -75,6 +77,12 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         Matcher matcher = pattern.matcher(url);
         if (matcher.find()) {
             result = matcher.group(1);
+            try {
+                //Декодим URL, что бы потом сравнивать с URL WebView
+                result = URLDecoder.decode(result, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                Debug.error(e);
+            }
         }
 
         return result;
@@ -116,12 +124,11 @@ public class PaymentwallActivity extends BaseFragmentActivity {
             Debug.log("PW: start load page " + url);
             if (TextUtils.equals(url, mSuccessUrl)) {
                 Debug.log("PW: buy is completed " + url);
-                finishActivity(Activity.RESULT_OK);
+                setResult(RESULT_OK);
+                finish();
 
             } else {
                 mProgressBar.setVisibility(View.VISIBLE);
-
-
             }
         }
 
@@ -130,7 +137,8 @@ public class PaymentwallActivity extends BaseFragmentActivity {
             super.onPageFinished(view, url);
             if (TextUtils.equals(url, mSuccessUrl)) {
                 Debug.log("PW: finish buy is completed " + url);
-                finishActivity(Activity.RESULT_OK);
+                setResult(RESULT_OK);
+                finish();
             }
             mProgressBar.setVisibility(View.GONE);
         }

@@ -6,7 +6,9 @@
     <string name="general_ok">OK</string>
     <string name="general_dbl_new">Nauji</string>
     <string name="general_settings_abbr">Nustat.</string>
+    <string name="general_disallow">Uždrausti</string>
     <string name="general_allow">Leisti</string>
+    <string name="notification_denied_popup_title">Įgalinkite pranešimus. kad sužinoti apie įeinančias žinutes, simpatijas ir kitas naujienas.</string>
     <string name="notification_popup_title">Laiskite atsiųsti jums pranešimą, kad jūs galėtumėte sužinoti apie naują simpatiją, susižavėjimą ar neperskaitytą pranešimą</string>
     <string name="email_successfully_changed">Jūsų el. paštas sėkmingai pakeistas</string>
     <string name="auth_vk_name">VKontakte</string>

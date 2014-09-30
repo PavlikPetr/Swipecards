@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
@@ -117,50 +118,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
-    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            AttitudeHandler.ActionTypes type = (AttitudeHandler.ActionTypes) intent.getSerializableExtra(AttitudeHandler.TYPE);
-            boolean hasValue = intent.hasExtra(AttitudeHandler.VALUE);
-            boolean value = intent.getBooleanExtra(AttitudeHandler.VALUE, false);
-            if (type != null && mActions != null) {
-                switch (type) {
-                    case BLACK_LIST:
-                        if (hasValue) {
-                            mUser.blocked = value;
-                            mBlackListActionController.switchAction();
-                            if (value) {
-                                mUser.bookmarked = false;
-                            }
-                            switchBookmarkEnabled(!value);
-                            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(!value);
-                        }
-                        mBlackListActionController.setViewsToNormalState();
-                        break;
-                    case BOOKMARK:
-                        if (hasValue) {
-                            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
-                            if (mBookmarkAction != null && !mUser.blocked) {
-                                mUser.bookmarked = value;
-                                mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-                            }
-                        }
-                        mActions.findViewById(R.id.favPrBar).setVisibility(View.INVISIBLE);
-                        mActions.findViewById(R.id.favIcon).setVisibility(View.VISIBLE);
-                        break;
-                }
-            }
-        }
-    };
-
-    private void switchBookmarkEnabled(boolean enabled) {
-        if (mActions != null) {
-            TextView mBookmarkAction = ((TextView) mActions.findViewById(R.id.bookmark_action_text));
-            mBookmarkAction.setText(mUser.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-            mBookmarkAction.setTextColor(getResources().getColor(enabled ? R.color.text_white : R.color.disabled_color));
-            mActions.findViewById(R.id.add_to_bookmark_action).setEnabled(enabled);
-        }
-    }
 
     // Data
     private int mUserId;
@@ -205,7 +162,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     // Managers
     private ActionBarOnlineSetterDelegate mOnlineSetter;
     private RelativeLayout mLockScreen;
-    private ViewStub mChatActionsStub;
     private PopularUserChatController mPopularUserLockController;
     private String mUserName;
     private int mUserAge;
@@ -219,6 +175,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private ArrayList<UserActions.ActionItem> mChatActions;
+    private boolean mWasNotEmptyHistory;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -258,9 +215,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void keyboardOpened() {
                 mIsKeyboardOpened = true;
-                if (mActions != null && mActions.getVisibility() == View.VISIBLE) {
-                    animateChatActions(ACTIONS_CLOSE_ANIMATION_TIME);
-                }
                 mKeyboardFreeHeight = getView().getHeight();
             }
 
@@ -270,9 +224,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
         Debug.log(this, "+onCreate");
-        // mChatActions
-        mChatActionsStub = (ViewStub) root.findViewById(R.id.chat_actions_stub);
-        mActions = null;
         // Navigation bar
         initNavigationbar(mUserName, mUserAge, mUserCity);
         // Swap Control
@@ -307,14 +258,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
         //регистрируем здесь, потому что может быть такая ситуация, что обновить надо, когда активити находится не на топе стека
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
         mJustResumed = false;
         return root;
     }
 
     @Override
     public void onDestroyView() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
         super.onDestroyView();
     }
 
@@ -548,7 +497,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
-                if (!data.items.isEmpty() && !isPopularLockOn) {
+                 if (!data.items.isEmpty() && !isPopularLockOn) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
                         int blockStage = mPopularUserLockController.block(message);
@@ -599,9 +548,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                     if (mAdapter.getCount() <= 0) {
                         mAdapter.setUser(mUser);
+                        if (!mIsKeyboardOpened && !mWasNotEmptyHistory) {
+                            Utils.showSoftKeyboard(getActivity(), mEditBox);
+                            mIsKeyboardOpened = true;
+                            mWasNotEmptyHistory = false;
+                        }
+                    } else {
+                        mWasNotEmptyHistory = true;
                     }
                 }
-
                 mIsUpdating = false;
             }
 
@@ -747,35 +702,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 );
                 EasyTracker.sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
-            case R.id.add_to_black_list_action:
-                mBlackListActionController.processActionFor(mUserId);
-                break;
-            case R.id.acWProfile:
-            case R.id.acProfile:
-                Intent profileIntent = UserProfileActivity.createIntent(mUserId, getActivity());
-                startActivity(profileIntent);
-                closeChatActions();
-                break;
-            case R.id.add_to_bookmark_action:
-                final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
-                final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
-
-                loader.setVisibility(View.VISIBLE);
-                icon.setVisibility(View.GONE);
-                ApiRequest request;
-
-                if (mUser.bookmarked) {
-                    request = new DeleteBookmarksRequest(mUserId, getActivity());
-                } else {
-                    request = new BookmarkAddRequest(mUserId, getActivity());
-                }
-
-                request.exec();
-                break;
-            case R.id.complain_action:
-                startActivity(ComplainsActivity.createIntent(mUserId));
-                closeChatActions();
-                break;
             case R.id.ivBarAvatar:
                 onOptionsItemSelected(mBarAvatar);
                 break;
@@ -826,18 +752,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onPause();
         getActivity().unregisterReceiver(mNewMessageReceiver);
         stopTimer();
+        Utils.hideSoftKeyboard(getActivity(), mEditBox);
+        mIsKeyboardOpened = false;
         mJustResumed = true;
-    }
-
-    /**
-     * Note: if you starting new activity and need actions' menu to be closed after,
-     * then first call this method. Actions' menu view will fully disappear before new
-     * activity will be shown
-     */
-    private void closeChatActions() {
-        if (mBarAvatar.isChecked()) {
-            onOptionsItemSelected(mBarAvatar);
-        }
     }
 
     @Override
@@ -969,10 +886,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.action_profile:
                 if (mUser != null) {
                     if (!(mUser.deleted || mUser.banned)) {
-                        initActions(mChatActionsStub, mUser, getActions(mUser));
-                        boolean checked = item.isChecked();
-                        item.setChecked(!checked);
-                        animateChatActions(ACTIONS_CLOSE_ANIMATION_TIME);
+                        Intent profileIntent = UserProfileActivity.createIntent(mUserId, getActivity());
+                        startActivity(profileIntent);
                     } else {
                         Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                                 Toast.LENGTH_LONG).show();
@@ -999,117 +914,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mChatActions.add(new UserActions.ActionItem(R.id.add_to_bookmark_action, this));
         }
         return mChatActions;
-    }
-
-    private View mActions;
-    private int mActionsHeightHeuristic;
-    private AddToBlackListViewsController mBlackListActionController;
-
-    private void initActions(ViewStub actionsStub, FeedUser user, ArrayList<UserActions.ActionItem> actions) {
-        if (mActions == null) {
-            actionsStub.setLayoutResource(R.layout.user_actions_layout);
-            mActions = actionsStub.inflate();
-            // список действий в контекстном меню
-            UserActions userActions = new UserActions(mActions, actions);
-            TextView bookmarksTv = (TextView) userActions.getViewById(R.id.add_to_bookmark_action).findViewById(R.id.bookmark_action_text);
-            mBlackListActionController = new AddToBlackListViewsController(mActions);
-            mBlackListActionController.switchAction();
-            bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-            switchBookmarkEnabled(!mUser.blocked);
-            mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);
-        }
-    }
-
-    private void animateChatActions(long time) {
-        if (mActions != null) {
-            final boolean needToClose = mActions.getVisibility() == View.VISIBLE;
-            TranslateAnimation ta;
-            int height = getChatActionsViewHeight();
-            if (needToClose) {
-                ta = new TranslateAnimation(0, 0, 0, -height);
-            } else {
-                ta = new TranslateAnimation(0, 0, -height, 0);
-            }
-            ta.setDuration(time);
-            ta.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                    if (!needToClose) {
-                        mActions.setVisibility(View.VISIBLE);
-                    }
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    mActions.clearAnimation();
-                    if (needToClose) {
-                        mActions.setVisibility(View.INVISIBLE);
-                    }
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
-            if (!needToClose) {
-                Utils.hideSoftKeyboard(getActivity(), mEditBox);
-            }
-            mActions.startAnimation(ta);
-        }
-    }
-
-    private int getChatActionsViewHeight() {
-        int height = mActions.getHeight();
-        if (height <= 0) {
-            return mActionsHeightHeuristic;
-        }
-        return height;
-    }
-
-    private class AddToBlackListViewsController {
-
-        final TextView actionText;
-        final View actionLoader;
-        final View actionIcon;
-
-        AddToBlackListViewsController(View root) {
-            View actionView = root.findViewById(R.id.add_to_black_list_action);
-            actionText = (TextView) actionView.findViewById(R.id.block_action_text);
-            actionLoader = actionView.findViewById(R.id.blockPrBar);
-            actionIcon = actionView.findViewById(R.id.blockIcon);
-            // click listener for actionView is set through UserActions
-            // set states for views
-            switchAction();
-        }
-
-        public void switchAction() {
-            actionText.setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
-        }
-
-        public void processActionFor(int userId) {
-            if (CacheProfile.premium) {
-                if (userId > 0) {
-                    actionLoader.setVisibility(View.VISIBLE);
-                    actionIcon.setVisibility(View.GONE);
-
-                    ApiRequest request;
-                    if (mUser.blocked) {
-                        request = new DeleteBlackListRequest(userId, getActivity());
-                    } else {
-                        request = new BlackListAddRequest(userId, getActivity());
-                    }
-                    request.exec();
-                }
-            } else {
-                startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "Chat"), PurchasesActivity.INTENT_BUY_VIP);
-                closeChatActions();
-            }
-        }
-
-        public void setViewsToNormalState() {
-            actionLoader.setVisibility(View.INVISIBLE);
-            actionIcon.setVisibility(View.VISIBLE);
-        }
     }
 
 }

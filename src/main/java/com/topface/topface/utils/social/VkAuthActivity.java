@@ -13,6 +13,7 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.RelativeLayout;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -47,6 +48,7 @@ public class VkAuthActivity extends Activity {
     private final Pattern mRegExpLogout = Pattern.compile("(.*act=logout.+)$");
     // Constants
     public static final int INTENT_WEB_AUTH = 101;
+    private RelativeLayout mContainer;
 
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -54,7 +56,7 @@ public class VkAuthActivity extends Activity {
         super.onCreate(savedInstanceState);
         Debug.log(this, "+onCreate");
         setContentView(R.layout.ac_web_auth);
-
+        mContainer = (RelativeLayout)findViewById(R.id.rlWebViewContainer);
         // Progress
         mProgressBar = findViewById(R.id.prsWebLoading);
 
@@ -69,6 +71,8 @@ public class VkAuthActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        mContainer.removeView(mWebView);
+        mWebView.removeAllViews();
         mWebView.destroy();
         mWebView = null;
         mProgressBar = null;

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -173,6 +174,12 @@ public class PurchasesFragment extends BaseFragment {
             //Удаляем вкладку Google Play, если не доступны Play Services
             if (TextUtils.equals(tab.type, Options.Tab.GPLAY) && !App.isGmsEnabled()) {
                 iterator.remove();
+            } else if (TextUtils.equals(tab.type, Options.Tab.FORTUMO)) {
+                // Deleting fortumo tab if no sim available
+                TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+                if (telephonyManager.getSimState() != TelephonyManager.SIM_STATE_READY) {
+                    iterator.remove();
+                }
             } else {
                 Products products = getProductsByTab(tab);
                 if (products != null) {
