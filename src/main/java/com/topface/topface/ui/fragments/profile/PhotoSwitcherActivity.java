@@ -155,16 +155,6 @@ public class PhotoSwitcherActivity extends CustomTitlesBaseFragmentActivity {
         mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
         mOwnPhotosControl = (ViewGroup) mPhotoAlbumControl.findViewById(R.id.loBottomPanel);
 
-        // - close button
-        mPhotoAlbumControl.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deletePhotoRequest();
-                setResult(Activity.RESULT_CANCELED);
-                finish();
-            }
-        });
-
         mLoadedCount = mPhotoLinks.getRealPhotosCount();
         mNeedMore = photosCount > mLoadedCount;
         int rest = photosCount - mPhotoLinks.size();
@@ -411,8 +401,8 @@ public class PhotoSwitcherActivity extends CustomTitlesBaseFragmentActivity {
         super.initActionBar(actionBar);
         if (actionBar != null) {
             actionBar.setDisplayUseLogoEnabled(false);
-//            actionBar.setIcon(android.R.color.transparent);
-//            actionBar.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.screen_background_dark_transparent));
+            actionBar.setIcon(android.R.color.transparent);
+            actionBar.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.screen_background_dark_transparent));
         }
     }
 
