@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,8 @@ import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
+import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.Iterator;
@@ -213,6 +216,11 @@ public class PurchasesFragment extends BaseFragment {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
             mCurLikes.setText(Integer.toString(CacheProfile.likes));
         }
+    }
+
+    @Override
+    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
+        return new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
     }
 
     private void changeInfoText(final String text) {

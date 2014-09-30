@@ -1,7 +1,7 @@
 package com.topface.topface.utils.actionbar;
 
-import android.app.Activity;
 import android.support.v7.app.ActionBar;
+import android.view.View;
 import android.widget.TextView;
 
 import com.topface.topface.R;
@@ -14,13 +14,29 @@ public class ActionBarOnlineSetterDelegate extends ActionBarTitleSetterDelegate 
     private boolean mOnline;
     private TextView mAbTitile;
 
-    public ActionBarOnlineSetterDelegate(Activity activity, ActionBar actionBar) {
+    public ActionBarOnlineSetterDelegate(ActionBar actionBar) {
         super(actionBar);
-        if (activity != null) {
-            final int abTitleId = activity.getResources().getIdentifier("action_bar_title", "id", "android");
-            mAbTitile = (TextView) activity.findViewById(abTitleId);
-            if (mAbTitile != null) {
-                mAbTitile.setCompoundDrawablePadding(10);
+        if (actionBar != null) {
+            View customView = actionBar.getCustomView();
+            if (customView != null) {
+                final int abTitleId = customView.getResources().getIdentifier("action_bar_title", "id", "android");
+                mAbTitile = (TextView) customView.findViewById(abTitleId);
+                if (mAbTitile != null) {
+                    mAbTitile.setCompoundDrawablePadding(10);
+                }
+            }
+        }
+    }
+
+    public ActionBarOnlineSetterDelegate(ActionBar actionBar, int titleId) {
+        super(actionBar);
+        if (actionBar != null) {
+            View customView = actionBar.getCustomView();
+            if (customView != null) {
+                mAbTitile = (TextView) customView.findViewById(titleId);
+                if (mAbTitile != null) {
+                    mAbTitile.setCompoundDrawablePadding(10);
+                }
             }
         }
     }
@@ -35,33 +51,21 @@ public class ActionBarOnlineSetterDelegate extends ActionBarTitleSetterDelegate 
     @Override
     public void setActionBarTitles(String title, String subtitle) {
         super.setActionBarTitles(title, subtitle);
-        if (mAbTitile != null) {
-            mAbTitile.setCompoundDrawablesWithIntrinsicBounds(0, 0, mOnline ? R.drawable.ico_online : 0, 0);
-        }
     }
 
     @Override
     public void setActionBarTitles(int title, int subtitle) {
         super.setActionBarTitles(title, subtitle);
-        if (mAbTitile != null) {
-            mAbTitile.setCompoundDrawablesWithIntrinsicBounds(0, 0, mOnline ? R.drawable.ico_online : 0, 0);
-        }
     }
 
     @Override
     public void setActionBarTitles(String title, int subtitle) {
         super.setActionBarTitles(title, subtitle);
-        if (mAbTitile != null) {
-            mAbTitile.setCompoundDrawablesWithIntrinsicBounds(0, 0, mOnline ? R.drawable.ico_online : 0, 0);
-        }
     }
 
     @Override
     public void setActionBarTitles(int title, String subtitle) {
         super.setActionBarTitles(title, subtitle);
-        if (mAbTitile != null) {
-            mAbTitile.setCompoundDrawablesWithIntrinsicBounds(0, 0, mOnline ? R.drawable.ico_online : 0, 0);
-        }
     }
 
 

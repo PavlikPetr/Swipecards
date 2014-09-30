@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -81,6 +82,7 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.ActionBarOnlineSetterDelegate;
 import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.controllers.PopularUserChatController;
@@ -677,7 +679,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
-        mOnlineSetter = new ActionBarOnlineSetterDelegate(getActivity(), actionBar);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            mOnlineSetter = new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar,
+                    R.id.title_clickable, R.id.title, R.id.subtitle);
+        } else {
+            mOnlineSetter = new ActionBarOnlineSetterDelegate(actionBar);
+        }
         return mOnlineSetter;
     }
 

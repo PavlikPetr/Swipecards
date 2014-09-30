@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
@@ -17,11 +18,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.http.IRequestClient;
@@ -100,7 +103,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
-        return new ActionBarTitleSetterDelegate(actionBar);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return new ActionBarCustomViewTitleSetterDelegate(getActivity(),
+                    actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
+        } else {
+            return new ActionBarTitleSetterDelegate(actionBar);
+        }
     }
 
     protected boolean needOptionsMenu() {
