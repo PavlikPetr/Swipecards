@@ -63,6 +63,11 @@ public class PhotoSwitcherActivity extends CustomTitlesBaseFragmentActivity {
                 );
                 mPhotoAlbumControlVisibility = mPhotoAlbumControl.getVisibility();
                 mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
+                if (mPhotoAlbumControlVisibility == View.VISIBLE) {
+                    getSupportActionBar().show();
+                } else {
+                    getSupportActionBar().hide();
+                }
             }
         }
     };
@@ -402,7 +407,7 @@ public class PhotoSwitcherActivity extends CustomTitlesBaseFragmentActivity {
         if (actionBar != null) {
             actionBar.setDisplayUseLogoEnabled(false);
             actionBar.setIcon(android.R.color.transparent);
-            actionBar.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.screen_background_dark_transparent));
+            actionBar.hide();
         }
     }
 
