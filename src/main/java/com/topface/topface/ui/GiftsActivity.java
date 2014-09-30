@@ -33,8 +33,6 @@ import java.util.List;
 public class GiftsActivity extends BaseFragmentActivity implements IGiftSendListener {
 
     public static final int INTENT_REQUEST_GIFT = 111;
-    public static final String INTENT_GIFT_ID = "gift_id";
-    public static final String INTENT_GIFT_URL = "gift_url";
     public static final String INTENT_GIFT_PRICE = "gift_price";
     public static final String INTENT_USER_ID_TO_SEND_GIFT = "user_id_to_send_gift";
     public static final String GIFTS_LIST = "gifts_list";
@@ -243,8 +241,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             protected void success(SendGiftAnswer answer, IApiResponse response) {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(INTENT_SEND_GIFT_ANSWER, answer);
-                resultIntent.putExtra(INTENT_GIFT_ID, answer.history.gift);
-                resultIntent.putExtra(INTENT_GIFT_URL, answer.history.link);
+                resultIntent.putExtra(INTENT_GIFT_PRICE, item.price);
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }

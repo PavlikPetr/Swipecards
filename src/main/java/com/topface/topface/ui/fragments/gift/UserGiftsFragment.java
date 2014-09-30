@@ -11,6 +11,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
@@ -82,8 +83,9 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
                 Bundle extras = data.getExtras();
                 if (extras != null) {
-                    int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-                    String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+                    SendGiftAnswer giftAnswer = (SendGiftAnswer) extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
+                    int id = giftAnswer.history.gift;
+                    String url = giftAnswer.history.link;
                     FeedGift sended = new FeedGift();
                     sended.gift = new Gift(id, Gift.PROFILE_NEW, url, 0);
                     addGift(sended);
