@@ -243,6 +243,8 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             protected void success(SendGiftAnswer answer, IApiResponse response) {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(INTENT_SEND_GIFT_ANSWER, answer);
+                resultIntent.putExtra(INTENT_GIFT_ID, answer.history.gift);
+                resultIntent.putExtra(INTENT_GIFT_URL, answer.history.link);
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
