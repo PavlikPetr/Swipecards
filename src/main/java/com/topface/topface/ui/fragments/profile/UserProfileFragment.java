@@ -645,8 +645,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private void sendGift(Intent data) {
         Bundle extras = data.getExtras();
         if (extras != null) {
-            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+            SendGiftAnswer giftAnswer = (SendGiftAnswer) extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
+            int id = giftAnswer.history.gift;
+            String url = giftAnswer.history.link;
             final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
 
             final Profile profile = getProfile();
