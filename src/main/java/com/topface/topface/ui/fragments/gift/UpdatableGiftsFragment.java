@@ -69,8 +69,10 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
     }
 
     public void setProfile(Profile profile) {
-        mProfileId = profile.uid;
-        setGifts(profile.gifts);
+        if (mProfileId != profile.uid || mGridAdapter.isEmpty()) {
+            mProfileId = profile.uid;
+            setGifts(profile.gifts);
+        }
     }
 
     public int getProfileId() {
