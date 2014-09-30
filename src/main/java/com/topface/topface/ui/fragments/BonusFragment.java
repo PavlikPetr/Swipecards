@@ -55,6 +55,9 @@ public class BonusFragment extends BaseFragment {
                     tfOfferwallButton.setEnabled(true);
                 }
             }
+
+            @Override
+            public void onError() {}
         });
     }
 
