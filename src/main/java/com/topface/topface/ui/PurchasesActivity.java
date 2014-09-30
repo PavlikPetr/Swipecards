@@ -1,10 +1,13 @@
 package com.topface.topface.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.PurchasesFragment;
@@ -20,6 +23,11 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     public static final int INTENT_BUY = 2;
 
     private Options.ForceOfferwallRedirect mBonusRedirect;
+
+    @Override
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -99,5 +107,16 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         )) {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    protected void initActionBar(ActionBar actionBar) {
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setCustomView(R.layout.actionbar_container_title_view);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setIcon(android.R.color.transparent);
+        actionBar.setLogo(android.R.color.transparent);
     }
 }

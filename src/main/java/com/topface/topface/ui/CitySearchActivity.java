@@ -209,7 +209,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
     private void initHeader() {
-        getSupportActionBar().setTitle(R.string.general_city);
+        getTitleSetter().setActionBarTitles(R.string.general_city, null);
     }
 
     private void initMyCity() {

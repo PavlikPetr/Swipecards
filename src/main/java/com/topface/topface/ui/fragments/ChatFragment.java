@@ -8,11 +8,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -81,6 +83,9 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
+import com.topface.topface.utils.actionbar.ActionBarOnlineSetterDelegate;
+import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.controllers.PopularUserChatController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.social.AuthToken;
@@ -92,7 +97,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimerTask;
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener {
+public class ChatFragment extends BaseFragment implements View.OnClickListener, IUserOnlineListener {
 
     public static final int LIMIT = 50;
     public static final int ACTIONS_CLOSE_ANIMATION_TIME = 500;
@@ -113,8 +118,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
-
-    private IUserOnlineListener mUserOnlineListener;
 
     // Data
     private int mUserId;
@@ -157,6 +160,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
     };
     // Managers
+    private ActionBarOnlineSetterDelegate mOnlineSetter;
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
     private String mUserName;
@@ -183,9 +187,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (activity instanceof IUserOnlineListener) {
-            mUserOnlineListener = (IUserOnlineListener) activity;
-        }
         // do not recreate Adapter cause of steRetainInstance(true)
         if (mAdapter == null) {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
@@ -204,7 +205,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDetach() {
         super.onDetach();
-        mUserOnlineListener = null;
     }
 
     @Override
@@ -620,12 +620,27 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private void onUserLoaded(FeedUser user) {
         if (!(user.deleted || user.banned)) {
             // ставим значок онлайн в нужное состояние
-            if (mUserOnlineListener != null) {
-                mUserOnlineListener.setUserOnline(user.online);
-            }
+            setOnline(user.online);
         }
         // ставим фото пользователя в иконку в actionbar
         setActionBarAvatar(user);
+    }
+
+    @Override
+    public void setOnline(boolean online) {
+        if (mOnlineSetter != null) {
+            mOnlineSetter.setOnline(online);
+        }
+    }
+
+    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            mOnlineSetter = new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar,
+                    R.id.title_clickable, R.id.title, R.id.subtitle);
+        } else {
+            mOnlineSetter = new ActionBarOnlineSetterDelegate(actionBar);
+        }
+        return mOnlineSetter;
     }
 
     private void setActionBarAvatar(FeedUser user) {

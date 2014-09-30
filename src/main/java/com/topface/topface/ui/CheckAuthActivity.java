@@ -3,9 +3,7 @@ package com.topface.topface.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.View;
 
-import com.topface.topface.R;
 import com.topface.topface.utils.social.AuthToken;
 
 /**
@@ -34,15 +32,5 @@ public abstract class CheckAuthActivity<T extends Fragment> extends SingleFragme
     @Override
     public boolean isTrackable() {
         return false;
-    }
-
-    @Override
-    protected void initCustomActionBarView(View mCustomView) {
-
-    }
-
-    @Override
-    protected int getActionBarCustomViewResId() {
-        return R.layout.actionbar_container_title_view;
     }
 }
