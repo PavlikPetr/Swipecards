@@ -71,4 +71,13 @@
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:editTextStyle">@style/topfaceEditText</item>
     </style>
+
+    <style name="Topface.Theme.TransparentActionBarActivity" parent="@style/Theme.AppCompat">
+        <item name="actionBarStyle">@style/Widget.Topface.TransparentActionBar</item>
+        <item name="android:actionBarStyle" tools:ignore="NewApi">
+            @style/Widget.Topface.TransparentActionBar
+        </item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
+    </style>
 </resources>

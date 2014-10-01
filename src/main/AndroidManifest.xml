@@ -162,6 +162,7 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".ui.fragments.profile.PhotoSwitcherActivity"
+            android:theme="@style/Topface.Theme.TransparentActionBarActivity"
             />
         <activity
             android:name=".ui.edit.EditProfileActivity"
