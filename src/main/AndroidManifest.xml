@@ -377,11 +377,6 @@
             android:launchMode="singleInstance"
             android:theme="@style/Theme.Topface.NoActionBar"/>
 
-        <activity
-            android:name="me.faan.sdk.PlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>
-
         <!-- Alias for main Activity from first version. Just in case of previous problems with FB -->
         <activity-alias
             android:name=".ui.MainActivity"
@@ -437,6 +432,7 @@
         </receiver>
 
         <!-- Amazon In-App Purchasing -->
+        <!--suppress AndroidDomInspection -->
         <receiver
             android:name="com.amazon.inapp.purchasing.ResponseReceiver"
             tools:ignore="ExportedReceiver">

@@ -99,6 +99,7 @@
                 android:id="@+id/EditorLoginText"
                 />
             <EditText
+                android:inputType="text"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
