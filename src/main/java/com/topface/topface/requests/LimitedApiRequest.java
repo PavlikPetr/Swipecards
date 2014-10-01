@@ -7,9 +7,6 @@ import com.topface.topface.utils.loadcontollers.LoadController;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by ilya on 12.09.14.
- */
 public abstract class LimitedApiRequest extends ApiRequest {
     protected int mLimit;
 

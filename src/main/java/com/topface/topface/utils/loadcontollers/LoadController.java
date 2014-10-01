@@ -11,9 +11,6 @@ import static com.topface.topface.receivers.ConnectionChangeReceiver.ConnectionT
 import static com.topface.topface.receivers.ConnectionChangeReceiver.ConnectionType.CONNECTION_OFFLINE;
 import static com.topface.topface.receivers.ConnectionChangeReceiver.ConnectionType.CONNECTION_WIFI;
 
-/**
- * Created by ilya on 12.09.14.
- */
 public abstract class LoadController {
 
     HashMap<ConnectionChangeReceiver.ConnectionType, Integer> mPreloadItemsLimit = new HashMap<>(); //Число элементов которые надо подгрузить
@@ -35,7 +32,7 @@ public abstract class LoadController {
             mOffsetItemsCount.put(CONNECTION_WIFI, offset[CONNECTION_WIFI.getInt()]);
             mOffsetItemsCount.put(CONNECTION_MOBILE_3G, offset[CONNECTION_MOBILE_3G.getInt()]);
             mOffsetItemsCount.put(CONNECTION_MOBILE_EDGE, offset[CONNECTION_MOBILE_EDGE.getInt()]);
-            mOffsetItemsCount.put(CONNECTION_OFFLINE, 0);
+            mOffsetItemsCount.put(CONNECTION_OFFLINE, offset[CONNECTION_MOBILE_EDGE.getInt()]);
         }
     }
 
@@ -45,7 +42,7 @@ public abstract class LoadController {
             mPreloadItemsLimit.put(CONNECTION_WIFI, limits[CONNECTION_WIFI.getInt()]);
             mPreloadItemsLimit.put(CONNECTION_MOBILE_3G, limits[CONNECTION_MOBILE_3G.getInt()]);
             mPreloadItemsLimit.put(CONNECTION_MOBILE_EDGE, limits[CONNECTION_MOBILE_EDGE.getInt()]);
-            mPreloadItemsLimit.put(CONNECTION_OFFLINE, 0);
+            mPreloadItemsLimit.put(CONNECTION_OFFLINE, limits[CONNECTION_MOBILE_EDGE.getInt()]);
         }
     }
 

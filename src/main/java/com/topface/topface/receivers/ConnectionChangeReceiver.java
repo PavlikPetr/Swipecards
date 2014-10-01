@@ -4,14 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.SparseArray;
+
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.utils.Connectivity;
-
-import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
     public static enum ConnectionType {
@@ -26,16 +24,16 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
             type = i;
         }
 
-        private static Map<Integer, ConnectionType> map = new HashMap<Integer, ConnectionType>();
+        private static SparseArray<ConnectionType> mConnectionMap = new SparseArray<>();
 
         static {
             for (ConnectionType connectionType : ConnectionType.values()) {
-                map.put(connectionType.type, connectionType);
+                mConnectionMap.put(connectionType.type, connectionType);
             }
         }
 
         public static ConnectionType valueOf(int type) {
-            return map.get(type);
+            return mConnectionMap.get(type);
         }
 
         public int getInt() {
@@ -69,23 +67,22 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
     }
 
     private Connectivity.Conn updateConnectionStatus() {
-        Connectivity.Conn connectionType = Connectivity.Conn.UNKNOWN;
         mIsConnected = Connectivity.isConnected(mContext);
-        if (mIsConnected) {
-            connectionType = Connectivity.getConnType(mContext);
-            switch (connectionType) {
-                case WIFI:
-                    mConnectionType = ConnectionType.CONNECTION_WIFI;
-                    break;
-                case THREE_G:
-                    mConnectionType = ConnectionType.CONNECTION_MOBILE_3G;
-                    break;
-                case EDGE:
-                    mConnectionType = ConnectionType.CONNECTION_MOBILE_EDGE;
-                    break;
-            }
-        } else {
-            mConnectionType = ConnectionType.CONNECTION_OFFLINE;
+        Connectivity.Conn connectionType = Connectivity.getConnType(mContext);
+        switch (connectionType) {
+            case THREE_G:
+                mConnectionType = ConnectionType.CONNECTION_MOBILE_3G;
+                break;
+            case EDGE:
+                mConnectionType = ConnectionType.CONNECTION_MOBILE_EDGE;
+                break;
+            case OFF:
+                mConnectionType = ConnectionType.CONNECTION_OFFLINE;
+            case WIFI:
+            case UNKNOWN:
+            default:
+                //Все неизвестные типы подключения считаем WiFi
+                mConnectionType = ConnectionType.CONNECTION_WIFI;
         }
         sendBroadCastToActiveActivity();
         return connectionType;
@@ -113,10 +110,5 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 
     public boolean isConnected() {
         return mIsConnected;
-    }
-
-    public static interface OnConnectionChangedListener {
-        public void onConnectionChanged(ConnectionType type);
-
     }
 }
