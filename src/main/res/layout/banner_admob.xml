@@ -5,6 +5,6 @@
     android:id="@+id/adMobView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    ads:adUnitId="ca-app-pub-3847865014365726/9072251892"
+    ads:adUnitId="ca-app-pub-9530442067223936/8256188006"
     ads:adSize="SMART_BANNER"
     android:visibility="gone" />
