@@ -232,7 +232,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     protected void initActionBar(ActionBar actionBar) {
         super.initActionBar(actionBar);
         if (actionBar != null) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 View customView = actionBar.getCustomView();
                 if (customView != null) {
                     View upIcon = customView.findViewById(R.id.up_icon);
@@ -330,7 +330,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
-                android.R.color.transparent,  /* nav drawer icon to replace 'Up' caret */
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 ? android.R.color.transparent : R.drawable.empty_home_as_up,  /* nav drawer icon to replace 'Up' caret */
                 R.string.app_name,  /* "open drawer" description */
                 R.string.app_name  /* "close drawer" description */
         ) {

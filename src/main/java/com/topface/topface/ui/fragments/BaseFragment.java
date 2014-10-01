@@ -103,7 +103,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
             return new ActionBarCustomViewTitleSetterDelegate(getActivity(),
                     actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
         } else {
