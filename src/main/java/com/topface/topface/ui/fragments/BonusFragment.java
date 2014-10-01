@@ -55,6 +55,9 @@ public class BonusFragment extends BaseFragment {
                     tfOfferwallButton.setEnabled(true);
                 }
             }
+
+            @Override
+            public void onError() {}
         });
     }
 
@@ -114,7 +117,7 @@ public class BonusFragment extends BaseFragment {
         for (Options.Offerwalls.Offer offer : offerwalls.extraOffers) {
             Button offerwallButton = createButton(getActivity(), offer);
             extraOffersContainer.addView(offerwallButton);
-            if (offer.action == OfferwallsManager.TFOFFERWALL && TFCredentials.getAdId() == null) {
+            if (offer.action.equals(OfferwallsManager.TFOFFERWALL) && TFCredentials.getAdId() == null) {
                 tfOfferwallButton = offerwallButton;
                 tfOfferwallButton.setEnabled(false);
             }

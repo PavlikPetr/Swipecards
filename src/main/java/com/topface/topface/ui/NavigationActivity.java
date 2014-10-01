@@ -8,16 +8,19 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
@@ -43,10 +46,12 @@ import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.ExternalLinkExecuter;
+import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
+import com.topface.topface.utils.IconNotificationController;
 import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.FullscreenController;
@@ -70,7 +75,8 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends CustomTitlesBaseFragmentActivity implements INavigationFragmentsListener {
+public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener {
+    public static final String OPEN_MENU = "com.topface.topface.open.menu";
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String INTENT_EXIT = "EXIT";
     private static NavigationActivity instance = null;
@@ -109,11 +115,22 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     private int mInitialTopMargin = 0;
 
     private ActionBarDrawerToggle mDrawerToggle;
-    private NavigationBarController mNavBarController;
+    private IActionbarNotifier mNotificationController;
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mNavBarController != null) mNavBarController.refreshNotificators();
+            if (mNotificationController != null) mNotificationController.refreshNotificator();
+        }
+    };
+    private BroadcastReceiver mOpenMenuReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                mDrawerLayout.openDrawer(GravityCompat.START);
+            }
+            mDrawerToggle.syncState();
         }
     };
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
@@ -212,6 +229,28 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
     }
 
     @Override
+    protected void initActionBar(ActionBar actionBar) {
+        super.initActionBar(actionBar);
+        if (actionBar != null) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                View customView = actionBar.getCustomView();
+                if (customView != null) {
+                    View upIcon = customView.findViewById(R.id.up_icon);
+                    if (upIcon instanceof ImageView) {
+                        ((ImageView) upIcon).setImageResource(R.drawable.ic_home);
+                    }
+                }
+                mNotificationController = new CustomViewNotificationController(actionBar);
+            } else {
+                actionBar.setLogo(R.drawable.ic_home);
+                actionBar.setDisplayUseLogoEnabled(true);
+                mNotificationController = new IconNotificationController(actionBar);
+            }
+            mNotificationController.refreshNotificator();
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         if (getIntent().getBooleanExtra(INTENT_EXIT, false)) {
             finish();
@@ -259,18 +298,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         mFullscreenController = new FullscreenController(this);
     }
 
-    @Override
-    protected void initCustomActionBarView(View mCustomView) {
-        mNavBarController = new NavigationBarController(
-                (ViewGroup) getCustomActionBarView().findViewById(R.id.loCounters)
-        );
-    }
-
-    @Override
-    protected int getActionBarCustomViewResId() {
-        return R.layout.actionbar_navigation_title_view;
-    }
-
     private void initBonusCounterConfig() {
         long lastTime = App.getUserConfig().getBonusCounterLastShowTime();
         CacheProfile.needShowBonusCounter = lastTime < CacheProfile.getOptions().bonus.timestamp;
@@ -303,7 +330,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 ? android.R.color.transparent : R.drawable.empty_home_as_up,  /* nav drawer icon to replace 'Up' caret */
                 R.string.app_name,  /* "open drawer" description */
                 R.string.app_name  /* "close drawer" description */
         ) {
@@ -377,6 +404,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
             mFullscreenController.onPause();
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mCountersReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mOpenMenuReceiver);
     }
 
     @Override
@@ -398,16 +426,19 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
         new ExternalLinkExecuter(mListener).execute(getIntent());
         App.checkProfileUpdate();
-        if (mNavBarController != null) {
-            mNavBarController.refreshNotificators();
+        if (mNotificationController != null) {
+            mNotificationController.refreshNotificator();
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mOpenMenuReceiver, new IntentFilter(OPEN_MENU));
     }
 
     @Override
     protected void onProfileUpdated() {
         initBonusCounterConfig();
+        mNotificationController.refreshNotificator();
     }
 
     /**
@@ -510,6 +541,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity impleme
             }
             Debug.log("Current User ID:" + CacheProfile.getProfile().uid);
         }
+        mDrawerToggle.syncState();
         mMenuFragment.onLoadProfile();
     }
 

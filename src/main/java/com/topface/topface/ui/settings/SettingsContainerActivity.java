@@ -4,16 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.View;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.social.AuthToken;
 
 import static com.topface.topface.ui.settings.FeedbackMessageFragment.FeedbackType;
 
-public class SettingsContainerActivity extends CustomTitlesBaseFragmentActivity {
+public class SettingsContainerActivity extends BaseFragmentActivity {
 
     public static final String CONFIRMATION_CODE = "confirmation";
 
@@ -68,15 +67,6 @@ public class SettingsContainerActivity extends CustomTitlesBaseFragmentActivity 
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.loFrame, fragment).commit();
         }
-    }
-
-    @Override
-    protected void initCustomActionBarView(View mCustomView) {
-    }
-
-    @Override
-    protected int getActionBarCustomViewResId() {
-        return R.layout.actionbar_container_title_view;
     }
 
     public String getConfirmationCode() {

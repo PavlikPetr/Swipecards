@@ -28,7 +28,6 @@ import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.PreloadManager;
@@ -39,7 +38,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-public class PhotoSwitcherActivity extends CustomTitlesBaseFragmentActivity {
+public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     public static final String INTENT_MORE = "more";
     public static final String INTENT_CLEAR = "clear";
@@ -74,7 +73,7 @@ public class PhotoSwitcherActivity extends CustomTitlesBaseFragmentActivity {
     private TextView mCounter;
     private ViewGroup mPhotoAlbumControl;
     private ViewGroup mOwnPhotosControl;
-    private int mPhotoAlbumControlVisibility = View.GONE;
+    private int mPhotoAlbumControlVisibility = View.VISIBLE;
     private int mOwnPhotosControlVisibility = View.GONE;
     private Photos mPhotoLinks;
     private PreloadManager mPreloadManager;
@@ -259,6 +258,7 @@ public class PhotoSwitcherActivity extends CustomTitlesBaseFragmentActivity {
                 }
             });
             if (mPhotoLinks.size() <= 1) mDeleteButton.setVisibility(View.GONE);
+            mOwnPhotosControlVisibility = View.VISIBLE;
         } else {
             mPhotoAlbumControl.findViewById(R.id.loBottomPanel).setVisibility(mOwnPhotosControlVisibility);
         }
@@ -335,7 +335,7 @@ public class PhotoSwitcherActivity extends CustomTitlesBaseFragmentActivity {
         int photosLinksSize = mPhotoLinks.size();
         if (mPhotoLinks != null) {
             mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
-            getActionBarTitleSetterDelegate().setActionBarTitles((mCurrentPosition + 1) + "/" + photosLinksSize, null);
+            getTitleSetter().setActionBarTitles((mCurrentPosition + 1) + "/" + photosLinksSize, null);
         }
     }
 
@@ -407,17 +407,6 @@ public class PhotoSwitcherActivity extends CustomTitlesBaseFragmentActivity {
         if (actionBar != null) {
             actionBar.setDisplayUseLogoEnabled(false);
             actionBar.setIcon(android.R.color.transparent);
-            actionBar.hide();
         }
-    }
-
-    @Override
-    protected void initCustomActionBarView(View mCustomView) {
-
-    }
-
-    @Override
-    protected int getActionBarCustomViewResId() {
-        return R.layout.actionbar_navigation_title_view;
     }
 }

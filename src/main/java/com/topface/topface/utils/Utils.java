@@ -29,7 +29,6 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.dialogs.RateAppDialog;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
@@ -109,9 +108,8 @@ public class Utils {
     public static Integer getGooglePlayServicesVersion(Context context) {
         try {
             return context.getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode;
-
-        } catch (PackageManager.NameNotFoundException e) {
-            Debug.error(e);
+        } catch (Exception e) {
+            Debug.error("Can't obtain google play services version", e);
         }
         return null;
     }

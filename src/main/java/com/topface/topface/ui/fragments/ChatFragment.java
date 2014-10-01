@@ -8,11 +8,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -22,17 +24,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,21 +47,15 @@ import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackListAddRequest;
-import com.topface.topface.requests.BookmarkAddRequest;
 import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.DeleteBlackListRequest;
-import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.DeleteMessagesRequest;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
-import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
@@ -79,8 +70,10 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
+import com.topface.topface.utils.actionbar.ActionBarOnlineSetterDelegate;
+import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.controllers.PopularUserChatController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.social.AuthToken;
@@ -92,10 +85,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimerTask;
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener {
+public class ChatFragment extends BaseFragment implements View.OnClickListener, IUserOnlineListener {
 
     public static final int LIMIT = 50;
-    public static final int ACTIONS_CLOSE_ANIMATION_TIME = 500;
 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
@@ -113,8 +105,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
-
-    private IUserOnlineListener mUserOnlineListener;
 
     // Data
     private int mUserId;
@@ -157,6 +147,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         }
     };
     // Managers
+    private ActionBarOnlineSetterDelegate mOnlineSetter;
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
     private String mUserName;
@@ -170,7 +161,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             return actionId == EditorInfo.IME_ACTION_SEND && sendMessage();
         }
     };
-    private ArrayList<UserActions.ActionItem> mChatActions;
     private boolean mWasNotEmptyHistory;
 
     @Override
@@ -183,9 +173,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (activity instanceof IUserOnlineListener) {
-            mUserOnlineListener = (IUserOnlineListener) activity;
-        }
         // do not recreate Adapter cause of steRetainInstance(true)
         if (mAdapter == null) {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
@@ -204,7 +191,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDetach() {
         super.onDetach();
-        mUserOnlineListener = null;
     }
 
     @Override
@@ -557,7 +543,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                         mWasNotEmptyHistory = true;
                     }
                 }
-
                 mIsUpdating = false;
             }
 
@@ -621,12 +606,27 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private void onUserLoaded(FeedUser user) {
         if (!(user.deleted || user.banned)) {
             // ставим значок онлайн в нужное состояние
-            if (mUserOnlineListener != null) {
-                mUserOnlineListener.setUserOnline(user.online);
-            }
+            setOnline(user.online);
         }
         // ставим фото пользователя в иконку в actionbar
         setActionBarAvatar(user);
+    }
+
+    @Override
+    public void setOnline(boolean online) {
+        if (mOnlineSetter != null) {
+            mOnlineSetter.setOnline(online);
+        }
+    }
+
+    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            mOnlineSetter = new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar,
+                    R.id.title_clickable, R.id.title, R.id.subtitle);
+        } else {
+            mOnlineSetter = new ActionBarOnlineSetterDelegate(actionBar);
+        }
+        return mOnlineSetter;
     }
 
     private void setActionBarAvatar(FeedUser user) {
@@ -889,17 +889,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     public interface OnListViewItemLongClickListener {
         public void onLongClick(int position, View v);
-    }
-
-    private ArrayList<UserActions.ActionItem> getActions(FeedUser user) {
-        if (mChatActions == null) {
-            mChatActions = new ArrayList<>();
-            mChatActions.add(new UserActions.ActionItem(user.sex == 1 ? R.id.acProfile : R.id.acWProfile, this));
-            mChatActions.add(new UserActions.ActionItem(R.id.add_to_black_list_action, this));
-            mChatActions.add(new UserActions.ActionItem(R.id.complain_action, this));
-            mChatActions.add(new UserActions.ActionItem(R.id.add_to_bookmark_action, this));
-        }
-        return mChatActions;
     }
 
 }

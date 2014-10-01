@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
@@ -17,12 +18,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.http.IRequestClient;
@@ -33,9 +35,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
 
-    private IActionBarTitleSetter mTitleSetter;
     private ActionBar mSupportActionBar;
     private BroadcastReceiver mProfileLoadReceiver;
+    private IActionBarTitleSetter mTitleSetter;
 
     public static enum FragmentId {
         F_VIP_PROFILE(0),
@@ -96,7 +98,17 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onCreate(Bundle savedInstanceState) {
         restoreState();
         setHasOptionsMenu(needOptionsMenu());
+        mTitleSetter = createTitleSetter(getSupportActionBar());
         super.onCreate(savedInstanceState);
+    }
+
+    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            return new ActionBarCustomViewTitleSetterDelegate(getActivity(),
+                    actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
+        } else {
+            return new ActionBarTitleSetterDelegate(actionBar);
+        }
     }
 
     protected boolean needOptionsMenu() {
@@ -112,19 +124,21 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private void clearPreviousState() {
         mSupportActionBar = null;
-        mTitleSetter = null;
     }
 
     public void refreshActionBarTitles() {
         if (mNeedTitles) setActionBarTitles(getTitle(), getSubtitle());
     }
 
+    @SuppressWarnings("unused")
     protected void onUpdateStart(boolean isFlyUpdating) {
     }
 
+    @SuppressWarnings("unused")
     protected void onUpdateSuccess(boolean isFlyUpdating) {
     }
 
+    @SuppressWarnings("unused")
     protected void onUpdateFail(boolean isFlyUpdating) {
     }
 
@@ -272,20 +286,20 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void setActionBarTitles(String title, String subtitle) {
-        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title, subtitle);
+        mTitleSetter.setActionBarTitles(title, subtitle);
     }
 
     @SuppressWarnings("UnusedDeclaration")
     protected void setActionBarTitles(int title, int subtitle) {
-        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title, subtitle);
+        mTitleSetter.setActionBarTitles(title, subtitle);
     }
 
     protected void setActionBarTitles(String title) {
-        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title, null);
+        mTitleSetter.setActionBarTitles(title, null);
     }
 
     protected void setActionBarTitles(int title) {
-        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title, null);
+        mTitleSetter.setActionBarTitles(title, null);
     }
 
     protected String getTitle() {
@@ -301,17 +315,5 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected void setNeedTitles(boolean needTitles) {
         mNeedTitles = needTitles;
-    }
-
-    protected IActionBarTitleSetter getActionBarTitleSetter(ActionBar actionBar) {
-        if (mTitleSetter == null) {
-            Activity activity = getActivity();
-            if (activity instanceof CustomTitlesBaseFragmentActivity) {
-                mTitleSetter = ((CustomTitlesBaseFragmentActivity) activity).getActionBarTitleSetterDelegate();
-            } else {
-                mTitleSetter = new ActionBarTitleSetterDelegate(actionBar);
-            }
-        }
-        return mTitleSetter;
     }
 }
