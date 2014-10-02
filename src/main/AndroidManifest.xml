@@ -177,7 +177,9 @@
         <activity
             android:name=".ui.settings.SettingsContainerActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.BanActivity"/>
+        <activity
+            android:name=".ui.BanActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.BlackListActivity"/>
 
         <activity

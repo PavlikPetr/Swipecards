@@ -50,7 +50,7 @@ public class LeadersActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_leaders_layout);
 
-        getSupportActionBar().setTitle(getString(R.string.leaders_go_date));
+        getTitleSetter().setActionBarTitles(R.string.leaders_go_date, null);
 
         mContainer = (RelativeLayout) findViewById(R.id.leadersCont);
 

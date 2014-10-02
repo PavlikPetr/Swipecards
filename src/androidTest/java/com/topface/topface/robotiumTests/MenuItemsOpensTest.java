@@ -3,6 +3,7 @@ package com.topface.topface.robotiumTests;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.test.ActivityInstrumentationTestCase2;
+
 import com.robotium.solo.Solo;
 import com.topface.topface.R;
 import com.topface.topface.ui.NavigationActivity;
@@ -27,7 +28,7 @@ public class MenuItemsOpensTest extends ActivityInstrumentationTestCase2<Navigat
             solo.clickOnButton(getActivity().getString(R.string.general_profile));
             solo.clickOnButton(getActivity().getString(R.string.general_dating));
             solo.clickOnButton(getActivity().getString(R.string.general_likes));
-            solo.clickOnButton(getActivity().getString(R.string.general_dialogs));
+            solo.clickOnButton(getActivity().getString(R.string.settings_messages));
             solo.clickOnButton(getActivity().getString(R.string.general_bookmarks));
             solo.clickOnButton(getActivity().getString(R.string.general_fans));
             solo.clickOnButton(getActivity().getString(R.string.general_visitors));

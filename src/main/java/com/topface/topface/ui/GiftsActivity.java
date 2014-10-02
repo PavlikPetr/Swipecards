@@ -53,7 +53,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_gifts);
-        getSupportActionBar().setTitle(getString(R.string.gifts_title));
+        getTitleSetter().setActionBarTitles(getString(R.string.gifts_title), null);
 
         mUserIdToSendGift = getIntent().getIntExtra(INTENT_USER_ID_TO_SEND_GIFT, 0);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);

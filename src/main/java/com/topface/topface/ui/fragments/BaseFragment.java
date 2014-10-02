@@ -43,15 +43,15 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         F_VIP_PROFILE(0),
         F_PROFILE(1),
         F_DATING(2, true),
-        F_LIKES(3),
-        F_ADMIRATIONS(4),
-        F_MUTUAL(5),
-        F_LIKES_CLOSINGS(6, true),
-        F_MUTUAL_CLOSINGS(7, true),
-        F_DIALOGS(8),
-        F_BOOKMARKS(9),
-        F_FANS(10),
-        F_VISITORS(11),
+        F_DIALOGS(3),
+        F_VISITORS(4),
+        F_LIKES(5),
+        F_ADMIRATIONS(6),
+        F_MUTUAL(7),
+        F_LIKES_CLOSINGS(8, true),
+        F_MUTUAL_CLOSINGS(9, true),
+        F_BOOKMARKS(10),
+        F_FANS(11),
         F_GEO(12),
         F_BONUS(13),
         F_EDITOR(1000),
@@ -98,7 +98,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onCreate(Bundle savedInstanceState) {
         restoreState();
         setHasOptionsMenu(needOptionsMenu());
-        mTitleSetter = createTitleSetter(getSupportActionBar());
         super.onCreate(savedInstanceState);
     }
 
@@ -118,12 +117,14 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         clearPreviousState();
+        mTitleSetter = createTitleSetter(getSupportActionBar());
         refreshActionBarTitles();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     private void clearPreviousState() {
         mSupportActionBar = null;
+        mTitleSetter = null;
     }
 
     public void refreshActionBarTitles() {
@@ -164,6 +165,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
         checkProfileLoad();
+        refreshActionBarTitles();
     }
 
     @Override

@@ -65,7 +65,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         LocaleConfig.updateConfiguration(getBaseContext());
         setWindowOptions();
         initActionBar(getSupportActionBar());
-        initTitleSetter(getSupportActionBar());
+        mTitleSetter = initTitleSetter(getSupportActionBar());
+        if (mTitleSetter != null) {
+            mTitleSetter.setActionBarTitles(String.valueOf(getTitle()), null);
+        }
     }
 
     @Override
@@ -114,15 +117,15 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    protected void initTitleSetter(ActionBar actionBar) {
+    protected ActionBarTitleSetterDelegate initTitleSetter(ActionBar actionBar) {
         if (actionBar != null) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                mTitleSetter = new ActionBarCustomViewTitleSetterDelegate(this, actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
+                return new ActionBarCustomViewTitleSetterDelegate(this, actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
             } else {
-                mTitleSetter = new ActionBarTitleSetterDelegate(actionBar);
+                return new ActionBarTitleSetterDelegate(actionBar);
             }
-            mTitleSetter.setActionBarTitles(String.valueOf(getTitle()), null);
         }
+        return null;
     }
 
     public ActionBarTitleSetterDelegate getTitleSetter() {

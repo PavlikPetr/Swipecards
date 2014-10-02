@@ -201,10 +201,10 @@
     <string name="form_social_finances_1">Income</string>
     <string name="form_social_finances_2">Your income</string>
     <string name="form_social_finances_3">Your income</string>
-    <string name="form_social_residence_0">Accomodations</string>
-    <string name="form_social_residence_1">Accomodations</string>
-    <string name="form_social_residence_2">Your accomodations</string>
-    <string name="form_social_residence_3">Your accomodations</string>
+    <string name="form_social_residence_0">Accommodations</string>
+    <string name="form_social_residence_1">Accommodations</string>
+    <string name="form_social_residence_2">Your accommodations</string>
+    <string name="form_social_residence_3">Your accommodations</string>
     <string name="form_social_car_0">Car</string>
     <string name="form_social_car_1">Car</string>
     <string name="form_social_car_2">Do you have a car?</string>
