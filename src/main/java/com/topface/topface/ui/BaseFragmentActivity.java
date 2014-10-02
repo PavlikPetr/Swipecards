@@ -103,7 +103,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected void initActionBar(ActionBar actionBar) {
         if (actionBar != null) {
             actionBar.setIcon(android.R.color.transparent);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 actionBar.setDisplayHomeAsUpEnabled(false);
                 actionBar.setDisplayUseLogoEnabled(true);
                 actionBar.setCustomView(R.layout.actionbar_container_title_view);
@@ -119,7 +119,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected ActionBarTitleSetterDelegate initTitleSetter(ActionBar actionBar) {
         if (actionBar != null) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 return new ActionBarCustomViewTitleSetterDelegate(this, actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
             } else {
                 return new ActionBarTitleSetterDelegate(actionBar);
@@ -401,7 +401,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
      * attribute.
      */
     private void setWindowContentOverlayCompat() {
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR2) {
             // Get the content view
             View contentView = findViewById(android.R.id.content);
 
