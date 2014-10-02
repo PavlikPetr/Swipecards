@@ -210,8 +210,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
         Debug.log(this, "+onCreate");
-        // Navigation bar
-        initNavigationbar(mUserName, mUserAge, mUserCity);
         // Swap Control
         root.findViewById(R.id.send_gift_button).setOnClickListener(this);
         // Edit Box
@@ -363,21 +361,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         return false;
     }
 
-    private void initNavigationbar(String userName, int userAge, String userCity) {
-        setNavigationTitles(userName, userAge, userCity);
-    }
-
-    private void setNavigationTitles(String userName, int userAge, String userCity) {
-        String userTitle = (TextUtils.isEmpty(userName) && userAge == 0) ? Static.EMPTY : (userName + ", " + userAge);
-        setActionBarTitles(userTitle, userCity);
-    }
-
     @Override
     protected String getTitle() {
         if (TextUtils.isEmpty(mUserName) && mUserAge == 0) {
             return Static.EMPTY;
         } else {
             return mUserName + ", " + mUserAge;
+        }
+    }
+
+    @Override
+    protected String getSubtitle() {
+        if (TextUtils.isEmpty(mUserCity)) {
+            return Static.EMPTY;
+        } else {
+            return mUserCity;
         }
     }
 
@@ -513,7 +511,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     removeAlreadyLoadedItems(data);
                 }
 
-                setNavigationTitles(data.user.first_name, data.user.age, data.user.city.name);
+                refreshActionBarTitles();
+                mOnlineSetter.setOnline(data.user.online);
                 wasFailed = false;
                 mUser = data.user;
                 if (!mUser.isEmpty()) {
@@ -624,7 +623,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mOnlineSetter = new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar,
                     R.id.title_clickable, R.id.title, R.id.subtitle);
         } else {
-            mOnlineSetter = new ActionBarOnlineSetterDelegate(actionBar);
+            mOnlineSetter = new ActionBarOnlineSetterDelegate(actionBar, getActivity());
         }
         return mOnlineSetter;
     }

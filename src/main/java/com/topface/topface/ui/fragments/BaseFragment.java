@@ -98,7 +98,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onCreate(Bundle savedInstanceState) {
         restoreState();
         setHasOptionsMenu(needOptionsMenu());
-        mTitleSetter = createTitleSetter(getSupportActionBar());
         super.onCreate(savedInstanceState);
     }
 
@@ -118,12 +117,14 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         clearPreviousState();
+        mTitleSetter = createTitleSetter(getSupportActionBar());
         refreshActionBarTitles();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     private void clearPreviousState() {
         mSupportActionBar = null;
+        mTitleSetter = null;
     }
 
     public void refreshActionBarTitles() {
@@ -164,6 +165,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
         checkProfileLoad();
+        refreshActionBarTitles();
     }
 
     @Override

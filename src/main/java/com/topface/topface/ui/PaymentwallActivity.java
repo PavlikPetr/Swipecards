@@ -49,7 +49,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
             return;
         }
         mSuccessUrl = getSuccessUrl(mWidgetUrl);
-        getSupportActionBar().setTitle(R.string.buying_header_title);
+        getTitleSetter().setActionBarTitles(R.string.buying_header_title, null);
 
         setContentView(R.layout.ac_web_auth);
 
