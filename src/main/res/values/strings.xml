@@ -176,7 +176,7 @@
     <string name="chat_wink_out">You have sent a wink.</string>
     <string name="filter_filter">Filter</string>
     <string name="filter_age_string">From %1$d to %2$d</string>
-    <string name="filter_only_beautiful">Beautiful only</string>
+    <string name="filter_only_beautiful">Attractive only</string>
     <string name="filter_extra_parameters">Advanced search</string>
     <string name="filter_age">Select age</string>
     <string name="filter_online">Online</string>
@@ -462,7 +462,7 @@
     <string name="complain_type_picture">Not a photo</string>
     <string name="complain_type_fake_user">A famous person</string>
     <string name="complain_type_spam_msg">Commercial offers, spam, advertisements, website links, phone numbers</string>
-    <string name="complain_type_spam_profile">The fields \"status\", \"about yourself\" contains a commercial offer</string>
+    <string name="complain_type_spam_profile">The fields \"status\", \"about yourself\" contain a commercial offer</string>
     <string name="complain_type_swearing_profile">The fields \"status\", \"about yourself\" contain offensive language, links to social networks</string>
     <string name="complain_type_fake_data">Name, sex, age, or photo don\'t match</string>
     <string name="complain_description">Tell us the details about the cause of the complaint.</string>

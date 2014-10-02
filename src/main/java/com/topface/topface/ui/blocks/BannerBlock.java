@@ -58,6 +58,7 @@ import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -485,11 +486,18 @@ public class BannerBlock {
             }
 
         });
-        AdRequest.Builder adRequest = new AdRequest.Builder().setGender(
-                CacheProfile.getProfile().sex == Static.BOY ?
-                        AdRequest.GENDER_MALE :
-                        AdRequest.GENDER_FEMALE
-        );
+        //Считаем год рождения юзера
+        Calendar rightNow = Calendar.getInstance();
+        int year = rightNow.get(Calendar.YEAR);
+        rightNow.set(Calendar.YEAR, year - CacheProfile.getProfile().age);
+
+        AdRequest.Builder adRequest = new AdRequest.Builder()
+                .setGender(
+                        CacheProfile.getProfile().sex == Static.BOY ?
+                                AdRequest.GENDER_MALE :
+                                AdRequest.GENDER_FEMALE
+                )
+                .setBirthday(rightNow.getTime());
         /*
         //Если нужно, то можно указать id девайса (например эмулятор) для запроса тестовой рекламы
         adRequest.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);

@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,7 +60,6 @@ import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
-import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
@@ -75,6 +76,9 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
+import com.topface.topface.utils.actionbar.ActionBarOnlineSetterDelegate;
+import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.social.AuthToken;
@@ -91,8 +95,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Button mMutualBtn;
     private Button mSkipBtn;
     private Button mProfileBtn;
-    private TextView mUserInfoName;
-    private TextView mUserInfoCity;
     private TextView mUserInfoStatus;
     private TextView mDatingCounter;
     private TextView mDatingLovePrice;
@@ -169,6 +171,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private INavigationFragmentsListener mFragmentSwitcherListener;
     private AnimationHelper mAnimationHelper;
     private AlbumLoadController mController;
+    private ActionBarOnlineSetterDelegate mOnlineSetter;
 
     private void startDatingFilterActivity() {
         Intent intent = new Intent(getActivity().getApplicationContext(),
@@ -225,7 +228,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRoot = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_dating, null);
 
         initViews(mRoot);
-        initActionBar();
+        updateActionBar();
         initEmptySearchDialog(mRoot);
         initImageSwitcher(mRoot);
         return mRoot;
@@ -234,6 +237,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+        if (mOnlineSetter != null) {
+            mOnlineSetter.setOnline(mCurrentUser == null ? false : mCurrentUser.online);
+        }
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
         LocalBroadcastManager.getInstance(getActivity())
@@ -255,6 +261,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onPause() {
         super.onPause();
+        mOnlineSetter.setOnline(false);
         if (mRetryView.isVisible()) {
             EasyTracker.sendEvent("EmptySearch", "DismissScreen", "", 0L);
         }
@@ -276,13 +283,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
 
+
+
         // Dating controls
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
         // User Info
         mUserInfo = root.findViewById(R.id.loUserInfo);
-        mUserInfoName = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserName));
-        mUserInfoCity = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserCity));
         mUserInfoStatus = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserStatus));
 
         // Counter
@@ -354,31 +361,32 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProfileBtn.setOnClickListener(this);
     }
 
-    private void initActionBar() {
+    @Override
+    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            mOnlineSetter = new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar,
+                    R.id.title_clickable, R.id.title, R.id.subtitle);
+        } else {
+            mOnlineSetter = new ActionBarOnlineSetterDelegate(actionBar, getActivity());
+        }
+        return mOnlineSetter;
+    }
+
+    private void updateActionBar() {
         // Navigation Header
         setActionBarTitles(getTitle(), getSubtitle());
     }
 
     protected String getTitle() {
-        if (CacheProfile.dating != null) {
-            int age = CacheProfile.dating.ageEnd == DatingFilter.MAX_AGE ?
-                    EditAgeFragment.absoluteMax : CacheProfile.dating.ageEnd;
-            String headerText = getString(CacheProfile.dating.sex == Static.BOY ?
-                            R.string.dating_header_guys : R.string.dating_header_girls,
-                    CacheProfile.dating.ageStart, age
-            );
-            String plus = CacheProfile.dating.ageEnd == DatingFilter.MAX_AGE ? "+" : "";
-            return headerText + plus;
+        if (mCurrentUser != null) {
+            return mCurrentUser.getNameAndAge();
         }
         return Static.EMPTY;
     }
 
     protected String getSubtitle() {
-        if (CacheProfile.dating != null) {
-            String cityString = CacheProfile.dating.city == null || CacheProfile.dating.city.isEmpty() ?
-                    getString(R.string.filter_cities_all) : CacheProfile.dating.city.name;
-            String onlineString = DatingFilter.getOnlyOnlineField() ? getString(R.string.dating_online_only) : "%s";
-            return String.format(onlineString, cityString);
+        if (mCurrentUser != null && mCurrentUser.city != null) {
+            return mCurrentUser.city.getName();
         }
         return Static.EMPTY;
     }
@@ -734,19 +742,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (currUser == null || !isAdded()) {
             return;
         }
+        updateActionBar();
         lockControls();
-
-        if (currUser.city != null) {
-            mUserInfoCity.setText(currUser.city.name);
-        }
         //Устанавливаем статус пользователя.
         mUserInfoStatus.setText(currUser.getStatus());
-        //Имя и возраст пользователя
-        mUserInfoName.setText(currUser.getNameAndAge());
 
         Resources res = getResources();
 
-        setUserOnlineStatus(currUser, res);
+        setUserOnlineStatus(currUser);
         setUserSex(currUser, res);
         setLikeButtonDrawables(currUser);
         setUserPhotos(currUser);
@@ -756,13 +759,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         setCounter(0);
     }
 
-    private void setUserOnlineStatus(SearchUser currUser, Resources res) {
+    private void setUserOnlineStatus(SearchUser currUser) {
         if (currUser.online) {
-            mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
-                    res.getDrawable(R.drawable.im_online), null, null, null);
+            mOnlineSetter.setOnline(true);
         } else {
-            mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
-                    res.getDrawable(R.drawable.im_offline), null, null, null);
+            mOnlineSetter.setOnline(false);
         }
     }
 
@@ -933,8 +934,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void lockControls() {
         mProgressBar.setVisibility(View.VISIBLE);
         if (!mIsHide) mDatingCounter.setVisibility(View.GONE);
-        mUserInfoName.setVisibility(View.GONE);
-        mUserInfoCity.setVisibility(View.GONE);
         mUserInfoStatus.setVisibility(View.GONE);
         mMutualBtn.setEnabled(false);
         mDelightBtn.setEnabled(false);
@@ -950,8 +949,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void unlockControls() {
         mProgressBar.setVisibility(View.GONE);
         if (!mIsHide) mDatingCounter.setVisibility(View.VISIBLE);
-        mUserInfoName.setVisibility(mCurrentUser != null ? View.VISIBLE : View.GONE);
-        mUserInfoCity.setVisibility(mCurrentUser != null ? View.VISIBLE : View.GONE);
         if (!mRoot.isKeyboardOpened()) {
             mUserInfoStatus.setVisibility(View.VISIBLE);
         }

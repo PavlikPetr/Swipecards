@@ -52,14 +52,23 @@ public class ContactsFragment extends BaseFragment {
         mLockerView = root.findViewById(R.id.clLocker);
 
         TextView title = (TextView) root.findViewById(R.id.inviteText);
-        title.setText(Utils.getQuantityString(R.plurals.invite_friends_plurals, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().contacts_count, CacheProfile.getOptions().premium_period));
+        title.setText(
+                Utils.getQuantityString(
+                        R.plurals.invite_friends_plurals,
+                        CacheProfile.getOptions().premium_period,
+                        CacheProfile.getOptions().contacts_count,
+                        CacheProfile.getOptions().premium_period
+                )
+        );
 
         contactsView = (ListView) root.findViewById(R.id.contactsList);
         //Получаем список контактов из аргументов. Если он не пришел, закрываем фрагмент.
         Bundle extras = getArguments();
         if (extras != null) {
             data = extras.getParcelableArrayList(ContactsActivity.CONTACTS_DATA);
-        } else {
+        }
+
+        if (data == null) {
             ((BaseFragmentActivity) getActivity()).close(this, false);
         }
 
