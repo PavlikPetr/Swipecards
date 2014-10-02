@@ -237,6 +237,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+        if (mOnlineSetter != null) {
+            mOnlineSetter.setOnline(mCurrentUser == null ? false : mCurrentUser.online);
+        }
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
         LocalBroadcastManager.getInstance(getActivity())
@@ -258,6 +261,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onPause() {
         super.onPause();
+        mOnlineSetter.setOnline(false);
         if (mRetryView.isVisible()) {
             EasyTracker.sendEvent("EmptySearch", "DismissScreen", "", 0L);
         }
