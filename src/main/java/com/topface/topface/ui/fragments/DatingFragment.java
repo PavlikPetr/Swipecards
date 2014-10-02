@@ -363,7 +363,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mOnlineSetter = new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar,
                     R.id.title_clickable, R.id.title, R.id.subtitle);
         } else {
-            mOnlineSetter = new ActionBarOnlineSetterDelegate(actionBar);
+            mOnlineSetter = new ActionBarOnlineSetterDelegate(actionBar, getActivity());
         }
         return mOnlineSetter;
     }
