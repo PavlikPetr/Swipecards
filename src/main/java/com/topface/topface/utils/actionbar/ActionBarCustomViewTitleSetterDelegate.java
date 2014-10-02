@@ -20,7 +20,7 @@ public class ActionBarCustomViewTitleSetterDelegate extends ActionBarOnlineSette
 
     public ActionBarCustomViewTitleSetterDelegate(final Activity activity, ActionBar actionBar,
                                                   int clickableTitleId, int titleId, int subtitleId) {
-        super(actionBar, titleId);
+        super(actionBar, activity, titleId);
         if (actionBar != null) {
             View customView = actionBar.getCustomView();
             if (customView != null) {
