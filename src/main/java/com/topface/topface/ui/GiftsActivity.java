@@ -10,7 +10,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.SendGiftAnswer;
@@ -25,6 +27,7 @@ import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.TripleButton;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -243,6 +246,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 resultIntent.putExtra(INTENT_SEND_GIFT_ANSWER, answer);
                 resultIntent.putExtra(INTENT_GIFT_PRICE, item.price);
                 setResult(Activity.RESULT_OK, resultIntent);
+                Toast.makeText(App.getContext(), R.string.chat_gift_out, Toast.LENGTH_SHORT).show();
                 finish();
             }
 
@@ -256,6 +260,8 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 setSupportProgressBarIndeterminateVisibility(false);
                 if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                     startActivity(PurchasesActivity.createBuyingIntent("Gifts", PurchasesFragment.TYPE_GIFT, item.price));
+                } else {
+                    Utils.showErrorMessage();
                 }
             }
         }).exec();
