@@ -194,6 +194,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onDetach() {
         super.onDetach();
         mFragmentSwitcherListener = null;
+        mOnlineSetter.setOnline(false);
     }
 
     @Override
@@ -250,7 +251,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         setHighRatePrice();
 
         updateResources();
-        refreshActionBarTitles();
+        updateActionBar();
     }
 
     @Override
@@ -262,7 +263,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onPause() {
         super.onPause();
-        mOnlineSetter.setOnline(false);
+
         if (mRetryView.isVisible()) {
             EasyTracker.sendEvent("EmptySearch", "DismissScreen", "", 0L);
         }
@@ -379,7 +380,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (TextUtils.isEmpty(subtitle)) {
             setActionBarTitles(getTitle());
         } else {
-            setActionBarTitles(getTitle(), getSubtitle());
+            setActionBarTitles(getTitle(), subtitle);
         }
     }
 
