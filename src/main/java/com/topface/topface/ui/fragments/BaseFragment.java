@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -115,11 +114,11 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         clearPreviousState();
         mTitleSetter = createTitleSetter(getSupportActionBar());
         refreshActionBarTitles();
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     private void clearPreviousState() {
