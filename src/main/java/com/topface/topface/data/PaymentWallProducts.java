@@ -12,6 +12,7 @@ public class PaymentWallProducts extends Products {
     public enum TYPE {DIRECT, MOBILE}
     private TYPE mType;
 
+    //Сюда передавать только json объект содержащий ОДИН типа продуктов либо мобайл либо директ
     public PaymentWallProducts(@Nullable JSONObject data, TYPE type) {
         super();
         mType = type;
