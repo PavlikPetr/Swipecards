@@ -15,7 +15,7 @@ public class PaymentWallProducts extends Products {
     public PaymentWallProducts(@Nullable JSONObject data, TYPE type) {
         super();
         mType = type;
-        fillData(data);
+        super.fillData(data);
     }
 
     public PaymentWallProducts(@NonNull IApiResponse data, TYPE type) {
