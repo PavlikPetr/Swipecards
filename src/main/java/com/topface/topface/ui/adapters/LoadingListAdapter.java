@@ -225,6 +225,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     protected void addLoaderItem(boolean hasMore) {
         FeedList<T> currentData = getData();
+        mMore = hasMore;
         if (hasMore && !currentData.isEmpty()) {
             currentData.add(getLoaderItem());
         }
