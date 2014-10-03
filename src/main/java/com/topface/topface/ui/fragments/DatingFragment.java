@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -193,6 +194,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onDetach() {
         super.onDetach();
         mFragmentSwitcherListener = null;
+        mOnlineSetter.setOnline(false);
     }
 
     @Override
@@ -247,9 +249,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         setHighRatePrice();
-        setActionBarTitles(getTitle(), getSubtitle());
+
         updateResources();
-        refreshActionBarTitles();
+        updateActionBar();
     }
 
     @Override
@@ -261,7 +263,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onPause() {
         super.onPause();
-        mOnlineSetter.setOnline(false);
+
         if (mRetryView.isVisible()) {
             EasyTracker.sendEvent("EmptySearch", "DismissScreen", "", 0L);
         }
@@ -374,14 +376,19 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void updateActionBar() {
         // Navigation Header
-        setActionBarTitles(getTitle(), getSubtitle());
+        String subtitle = getSubtitle();
+        if (TextUtils.isEmpty(subtitle)) {
+            setActionBarTitles(getTitle());
+        } else {
+            setActionBarTitles(getTitle(), subtitle);
+        }
     }
 
     protected String getTitle() {
         if (mCurrentUser != null) {
             return mCurrentUser.getNameAndAge();
         }
-        return Static.EMPTY;
+        return getString(R.string.general_dating);
     }
 
     protected String getSubtitle() {
@@ -435,7 +442,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mUserSearchList != null) {
             mUserSearchList.updateSignatureAndUpdate();
         }
-        setActionBarTitles(getTitle(), getSubtitle());
+
+        updateActionBar();
     }
 
     private void updateData(final boolean isAddition) {
@@ -1199,6 +1207,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProgressBar.setVisibility(View.GONE);
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);
+        setActionBarTitles(getString(R.string.general_dating));
+        mOnlineSetter.setOnline(false);
         mFragmentSwitcherListener.onShowActionBar();
     }
 
