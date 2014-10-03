@@ -288,20 +288,28 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void setActionBarTitles(String title, String subtitle) {
-        mTitleSetter.setActionBarTitles(title, subtitle);
+        if (mTitleSetter != null) {
+            mTitleSetter.setActionBarTitles(title, subtitle);
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
     protected void setActionBarTitles(int title, int subtitle) {
-        mTitleSetter.setActionBarTitles(title, subtitle);
+        if (mTitleSetter != null) {
+            mTitleSetter.setActionBarTitles(title, subtitle);
+        }
     }
 
     protected void setActionBarTitles(String title) {
-        mTitleSetter.setActionBarTitles(title, null);
+        if (mTitleSetter != null) {
+            mTitleSetter.setActionBarTitles(title, null);
+        }
     }
 
     protected void setActionBarTitles(int title) {
-        mTitleSetter.setActionBarTitles(title, null);
+        if (mTitleSetter != null) {
+            mTitleSetter.setActionBarTitles(title, null);
+        }
     }
 
     protected String getTitle() {
