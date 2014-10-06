@@ -57,10 +57,11 @@ android {
 
         versionCode Integer.parseInt(rootProject.VERSION_CODE)
         versionName rootProject.VERSION_NAME
-        //noinspection GroovyAssignabilityCheck
+
         testApplicationId "com.topface.topface.test"
-        //noinspection GroovyAssignabilityCheck
-        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+
+        testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
+
 
         buildConfigField "long", "BUILD_TIME", "0L";
         buildConfigField "String", "GIT_HEAD_SHA", "null";
@@ -101,6 +102,7 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/NOTICE'
+        exclude 'LICENSE.txt'
     }
 
 }
@@ -122,7 +124,7 @@ dependencies {
         //и на нее ругается gradle
         exclude group: 'org.json'
     }
-    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.google.code.gson:gson:2.3'
     compile 'org.onepf:openiab:0.9.7.2-fortumo'
     compile project(':libs:Android-ViewPagerIndicator')
     compile project(':libs:PullToRefresh')
@@ -140,7 +142,7 @@ dependencies {
 
     compile project(':libs:tf-offerwall:sdk')
 
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.1'
+    androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
 }
 
 
