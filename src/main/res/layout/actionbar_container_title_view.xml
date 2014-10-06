@@ -20,7 +20,7 @@
             android:id="@+id/up_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ico_back_normal"
+            android:src="@drawable/arrow_with_paddings"
             android:layout_gravity="center_vertical" />
 
         <LinearLayout
