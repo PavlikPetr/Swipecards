@@ -53,6 +53,9 @@ public class DatingInstantMessageController {
     private SendLikeAction mSendLikeAction;
     private Animation mSpin;
 
+    private boolean mIsEnabled;
+    private boolean mIsSendEnadled;
+
     public interface SendLikeAction {
 
         void sendLike();
@@ -98,10 +101,10 @@ public class DatingInstantMessageController {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().trim().isEmpty()) {
-                    mMessageSend.setEnabled(false);
-                } else {
+                if (mIsEnabled && mIsSendEnadled && isMessageValid()) {
                     mMessageSend.setEnabled(true);
+                } else {
+                    mMessageSend.setEnabled(false);
                 }
             }
         });
@@ -212,6 +215,8 @@ public class DatingInstantMessageController {
         mGiftSend.setEnabled(isEnabled);
         mMessageText.setEnabled(isEnabled);
         mMessageSend.setEnabled(isEnabled && isMessageValid());
+
+        mIsSendEnadled = mIsEnabled = isEnabled;
     }
 
     private boolean isMessageValid() {
@@ -233,6 +238,8 @@ public class DatingInstantMessageController {
         }
         mMessageSend.setMinimumWidth(sendWidth);
         mMessageSend.setMinimumHeight(sendHeight);
+
+        mIsSendEnadled = isEnabled;
     }
 
     public void displayMessageField() {
@@ -254,7 +261,7 @@ public class DatingInstantMessageController {
     }
 
     public void instantSend(final SearchUser user) {
-        if (user.id > 0) {
+        if (user != null && user.id > 0) {
             HistoryRequest chatRequest = new HistoryRequest(mActivity, user.id);
             mRequestClient.registerRequest(chatRequest);
             setSendEnabled(false);
