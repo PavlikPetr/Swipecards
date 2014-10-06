@@ -186,7 +186,7 @@ public class DatingInstantMessageController {
     }
 
     private boolean tryChat(SearchUser user) {
-        if (CacheProfile.premium || user.isMutualPossible || !CacheProfile.getOptions().block_chat_not_mutual) {
+        if (CacheProfile.premium || user.isMutualPossible || !CacheProfile.getOptions().blockChatNotMutual) {
             return true;
         } else {
             mActivity.startActivityForResult(

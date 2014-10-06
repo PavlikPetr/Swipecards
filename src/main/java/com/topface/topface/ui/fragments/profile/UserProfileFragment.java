@@ -539,7 +539,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
                 break;
             case R.id.open_chat_action:
-                if (CacheProfile.premium || !CacheProfile.getOptions().block_chat_not_mutual) {
+                if (CacheProfile.premium || !CacheProfile.getOptions().blockChatNotMutual) {
                     openChat();
                 } else {
                     String callingClass = getCallingClassName();

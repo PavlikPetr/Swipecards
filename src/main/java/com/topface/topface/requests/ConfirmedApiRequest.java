@@ -42,7 +42,7 @@ abstract public class ConfirmedApiRequest extends ApiRequest {
 
     private boolean isNeedBlock() {
         Options options = CacheProfile.getOptions();
-        return options.block_unconfirmed && !CacheProfile.getProfile().emailConfirmed;
+        return options.blockUnconfirmed && !CacheProfile.getProfile().emailConfirmed;
     }
 
     private boolean isTopfaceProfile(String socialNet) {
