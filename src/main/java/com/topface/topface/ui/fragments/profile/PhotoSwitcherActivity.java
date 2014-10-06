@@ -1,12 +1,12 @@
 package com.topface.topface.ui.fragments.profile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -70,7 +70,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             }
         }
     };
-    private TextView mCounter;
     private ViewGroup mPhotoAlbumControl;
     private ViewGroup mOwnPhotosControl;
     private int mPhotoAlbumControlVisibility = View.VISIBLE;
@@ -147,9 +146,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             return;
         }
 
-        // Title Header
-        mCounter = ((TextView) findViewById(R.id.tvPhotoCounter));
-
         // Gallery
         mImageSwitcher = ((ImageSwitcher) findViewById(R.id.galleryAlbum));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
@@ -221,6 +217,16 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public void onBackPressed() {
         deletePhotoRequest();
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.home:
+                deletePhotoRequest();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void initControls() {
