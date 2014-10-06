@@ -5,18 +5,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <TextView
-        android:id="@+id/tvPhotoCounter"
-        style="@style/DatingButtonsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:drawablePadding="4dp"
-        android:gravity="center_vertical"
-        android:textSize="10sp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true" />
-
     <RelativeLayout
         android:id="@+id/loBottomPanel"
         android:layout_height="wrap_content"
