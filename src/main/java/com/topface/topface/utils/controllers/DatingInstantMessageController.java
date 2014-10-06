@@ -205,10 +205,12 @@ public class DatingInstantMessageController {
     }
 
     public void openChat(FragmentActivity activity, SearchUser user) {
-        Intent intent = new ChatActivity.IntentBuilder(activity).feedUser(user).
-                initialMessage(mMessageText.getText().toString()).build();
-        activity.startActivityForResult(intent, ChatActivity.INTENT_CHAT);
-        EasyTracker.sendEvent("Dating", "Additional", "Chat", 1L);
+        if (user != null) {
+            Intent intent = new ChatActivity.IntentBuilder(activity).feedUser(user).
+                    initialMessage(mMessageText.getText().toString()).build();
+            activity.startActivityForResult(intent, ChatActivity.INTENT_CHAT);
+            EasyTracker.sendEvent("Dating", "Additional", "Chat", 1L);
+        }
     }
 
     public void setEnabled(boolean isEnabled) {
