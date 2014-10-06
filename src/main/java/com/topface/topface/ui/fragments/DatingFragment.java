@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -230,7 +229,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRoot = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_dating, null);
 
         initViews(mRoot);
-        updateActionBar();
         initEmptySearchDialog(mRoot);
         initImageSwitcher(mRoot);
         return mRoot;
@@ -240,7 +238,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
         if (mOnlineSetter != null) {
-            mOnlineSetter.setOnline(mCurrentUser == null ? false : mCurrentUser.online);
+            mOnlineSetter.setOnline(mCurrentUser != null && mCurrentUser.online);
         }
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
@@ -251,7 +249,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         setHighRatePrice();
 
         updateResources();
-        updateActionBar();
     }
 
     @Override
@@ -365,23 +362,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
             mOnlineSetter = new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar,
                     R.id.title_clickable, R.id.title, R.id.subtitle);
         } else {
             mOnlineSetter = new ActionBarOnlineSetterDelegate(actionBar, getActivity());
         }
         return mOnlineSetter;
-    }
-
-    private void updateActionBar() {
-        // Navigation Header
-        String subtitle = getSubtitle();
-        if (TextUtils.isEmpty(subtitle)) {
-            setActionBarTitles(getTitle());
-        } else {
-            setActionBarTitles(getTitle(), subtitle);
-        }
     }
 
     protected String getTitle() {
@@ -395,7 +382,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mCurrentUser != null && mCurrentUser.city != null) {
             return mCurrentUser.city.getName();
         }
-        return Static.EMPTY;
+        return null;
     }
 
     private void initEmptySearchDialog(View view) {
@@ -442,8 +429,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mUserSearchList != null) {
             mUserSearchList.updateSignatureAndUpdate();
         }
-
-        updateActionBar();
     }
 
     private void updateData(final boolean isAddition) {
@@ -750,7 +735,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (currUser == null || !isAdded()) {
             return;
         }
-        updateActionBar();
+        refreshActionBarTitles();
         lockControls();
         //Устанавливаем статус пользователя.
         mUserInfoStatus.setText(currUser.getStatus());
@@ -768,11 +753,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setUserOnlineStatus(SearchUser currUser) {
-        if (currUser.online) {
-            mOnlineSetter.setOnline(true);
-        } else {
-            mOnlineSetter.setOnline(false);
-        }
+        mOnlineSetter.setOnline(currUser != null && currUser.online);
     }
 
     private void setUserSex(SearchUser currUser, Resources res) {
