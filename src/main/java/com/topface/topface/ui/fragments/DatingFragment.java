@@ -238,7 +238,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
         if (mOnlineSetter != null) {
-            mOnlineSetter.setOnline(mCurrentUser == null && mCurrentUser.online);
+            mOnlineSetter.setOnline(mCurrentUser != null && mCurrentUser.online);
         }
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
@@ -753,7 +753,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setUserOnlineStatus(SearchUser currUser) {
-        mOnlineSetter.setOnline(currUser.online);
+        mOnlineSetter.setOnline(currUser != null && currUser.online);
     }
 
     private void setUserSex(SearchUser currUser, Resources res) {
