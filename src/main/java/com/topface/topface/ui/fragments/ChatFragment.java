@@ -333,13 +333,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void initLockScreen(View root) {
         mLockScreen = (RelativeLayout) root.findViewById(R.id.llvLockScreen);
-        RetryViewCreator retryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
+        RetryViewCreator retryView = new RetryViewCreator.Builder(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 update(false, "retry");
                 mLockScreen.setVisibility(View.GONE);
             }
-        }, getResources().getColor(R.color.bg_main));
+        }).backgroundColor(getResources().getColor(R.color.bg_main)).build();
         mLockScreen.addView(retryView.getView());
 
         if (mPopularUserLockController != null) {

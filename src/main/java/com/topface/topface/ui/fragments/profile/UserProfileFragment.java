@@ -164,12 +164,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_PROFILE);
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         mLockScreen = (RelativeLayout) root.findViewById(R.id.lockScreen);
-        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
+        mRetryView = new RetryViewCreator.Builder(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getUserProfile(mProfileId);
             }
-        });
+        }).build();
         mLockScreen.addView(mRetryView.getView());
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));

@@ -52,6 +52,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FilterRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.NoviceLikesRequest;
+import com.topface.topface.requests.ResetFilterRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
@@ -130,6 +131,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private BroadcastReceiver mProfileReceiver;
     private boolean mNeedMore;
     private int mLoadedCount;
+    private boolean mNewFilter;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -171,6 +173,33 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private AnimationHelper mAnimationHelper;
     private AlbumLoadController mController;
     private ActionBarOnlineSetterDelegate mOnlineSetter;
+
+    public class FilterHandler extends DataApiHandler<DatingFilter> {
+
+        @Override
+        protected void success(DatingFilter filter, IApiResponse response) {
+            CacheProfile.dating = filter;
+            updateFilterData();
+            updateData(false);
+        }
+
+        @Override
+        protected DatingFilter parseResponse(ApiResponse response) {
+            return new DatingFilter(response.getJsonResult());
+        }
+
+        @Override
+        public void fail(int codeError, IApiResponse response) {
+            showEmptySearchDialog();
+            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void always(IApiResponse response) {
+            super.always(response);
+            mNewFilter = false;
+        }
+    }
 
     private void startDatingFilterActivity() {
         Intent intent = new Intent(getActivity().getApplicationContext(),
@@ -384,28 +413,26 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initEmptySearchDialog(View view) {
-        mRetryView = RetryViewCreator.createDefaultRetryView(
-                getActivity(),
-                /* Первая кнопка - "Попробовать еще раз" */
-                getString(R.string.general_search_null_response_error),
-                new OnClickListener() {
+        RetryViewCreator.Builder rvcBuilder = new RetryViewCreator.Builder(getActivity(), new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EasyTracker.sendEvent("EmptySearch", "ClickTryAgain", "", 0L);
+                updateData(false);
+            }
+        }).message(getString(R.string.general_search_null_response_error))
+                .orientation(LinearLayout.VERTICAL)
+                .button(getString(R.string.reset_filter), new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EasyTracker.sendEvent("EmptySearch", "ClickTryAgain", "", 0L);
-                        updateData(false);
+                        EasyTracker.sendEvent("EmptySearch", "ClickResetFilter", "", 0L);
+                        ResetFilterRequest resetRequest = new ResetFilterRequest(getActivity());
+                        registerRequest(resetRequest);
+                        hideEmptySearchDialog();
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        resetRequest.callback(new FilterHandler()).exec();
                     }
-                },
-                /* Вторая кнопка - "Изменить фильтр" */
-                getString(R.string.change_filters),
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        EasyTracker.sendEvent("EmptySearch", "ClickChangeFilter", "", 0L);
-                        startDatingFilterActivity();
-                    }
-                },
-                LinearLayout.VERTICAL
-        );
+                });
+        mRetryView = rvcBuilder.build();
 
         hideEmptySearchDialog();
         ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(mRetryView.getView());
@@ -1029,30 +1056,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             lockControls();
             hideEmptySearchDialog();
+            mProgressBar.setVisibility(View.VISIBLE);
             if (data != null && data.getExtras() != null) {
                 final DatingFilter filter = data.getExtras().getParcelable(FilterFragment.INTENT_DATING_FILTER);
                 FilterRequest filterRequest = new FilterRequest(filter, getActivity());
                 registerRequest(filterRequest);
-                filterRequest.callback(new DataApiHandler<DatingFilter>() {
-
-                    @Override
-                    protected void success(DatingFilter filter, IApiResponse response) {
-                        CacheProfile.dating = filter;
-                        updateFilterData();
-                        updateData(false);
-                    }
-
-                    @Override
-                    protected DatingFilter parseResponse(ApiResponse response) {
-                        return new DatingFilter(response.getJsonResult());
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-                        Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_LONG).show();
-                        unlockControls();
-                    }
-                }).exec();
+                filterRequest.callback(new FilterHandler()).exec();
+                mNewFilter = true;
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -1174,14 +1184,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private OnUsersListEventsListener mSearchListener = new OnUsersListEventsListener() {
         @Override
         public void onEmptyList(UsersList usersList) {
-            lockControls();
-            updateData(false);
-
+            if (!mNewFilter) {
+                lockControls();
+                updateData(false);
+            }
         }
 
         @Override
         public void onPreload(UsersList usersList) {
-            updateData(true);
+            if (!mNewFilter) {
+                updateData(true);
+            }
         }
 
     };

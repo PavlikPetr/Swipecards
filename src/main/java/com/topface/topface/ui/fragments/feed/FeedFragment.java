@@ -63,9 +63,9 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.gcmutils.GCMUtils;
+import com.topface.topface.utils.loadcontollers.FeedLoadController;
 
 import org.json.JSONObject;
 
@@ -916,12 +916,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void initRetryViews() {
         if (mRetryView == null) {
-            mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
+            mRetryView = new RetryViewCreator.Builder(getActivity(), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     retryButtonClick(mRetryView.getView());
                 }
-            }, getResources().getColor(R.color.bg_main));
+            }).backgroundColor(getResources().getColor(R.color.bg_main)).build();
             mRetryView.setVisibility(View.GONE);
             mContainer.addView(mRetryView.getView());
         }

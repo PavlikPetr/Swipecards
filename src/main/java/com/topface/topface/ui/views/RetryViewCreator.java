@@ -11,73 +11,91 @@ import android.widget.TextView;
 import com.topface.IllustratedTextView.IllustratedTextView;
 import com.topface.topface.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RetryViewCreator {
     public static final String REFRESH_TEMPLATE = "{{refresh}} ";
     private static int buttonsOrientation = LinearLayout.HORIZONTAL;
 
     private View mRetryView;
-    private InnerButton mBtn1;
+    private InnerButton[] mBtns;
 
-    private RetryViewCreator(View retryView, InnerButton btn1) {
+    public static class Builder {
+
+        private Context mContext;
+        private String mMessage;
+        private List<String> mTitles = new ArrayList<>();
+        private List<View.OnClickListener> mListeners = new ArrayList<>();
+        private int mOrientation = buttonsOrientation;
+        private Integer mBackgroungColor;
+
+        public Builder(Context context, View.OnClickListener listener) {
+            mContext = context;
+            mListeners.add(listener);
+            mTitles.add(mContext.getString(R.string.general_dialog_retry));
+            mMessage = context.getString(R.string.general_data_error);
+        }
+
+        public Builder message(String message) {
+            mMessage = message;
+            return this;
+        }
+
+        public Builder button(String title, View.OnClickListener listener) {
+            mTitles.add(title);
+            mListeners.add(listener);
+            return this;
+        }
+
+        public Builder orientation(int orientation) {
+            mOrientation = orientation;
+            return this;
+        }
+
+        public Builder backgroundColor(Integer backgroundColor) {
+            mBackgroungColor = backgroundColor;
+            return this;
+        }
+
+        public RetryViewCreator build() {
+            LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            ViewGroup retryView = (ViewGroup) mInflater.inflate(R.layout.layout_retryview, null);
+            if (mBackgroungColor != null) {
+                retryView.setBackgroundColor(mBackgroungColor);
+            }
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            params.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
+            retryView.setLayoutParams(params);
+
+            if (mMessage != null) {
+                ((TextView) retryView.findViewById(R.id.tvMessage)).setText(mMessage);
+            } else {
+                retryView.findViewById(R.id.tvMessage).setVisibility(View.GONE);
+            }
+
+            LinearLayout buttonsContainer = (LinearLayout) retryView.findViewById(R.id.loButtonsContainer);
+            //noinspection ResourceType
+            buttonsContainer.setOrientation(mOrientation);
+
+            List<InnerButton> btns = new ArrayList<>(mTitles.size());
+
+            btns.add(new InnerButton(InnerButton.Type.GRAY, REFRESH_TEMPLATE + mTitles.get(0), mListeners.isEmpty() ? null : mListeners.get(0)));
+            for (int i = 1; i < mTitles.size(); i++) {
+                btns.add(new InnerButton(InnerButton.Type.GRAY, mTitles.get(i), mListeners.size() > i ? mListeners.get(i) : null));
+            }
+            for (InnerButton btn : btns) {
+                if (btn != null) buttonsContainer.addView(btn.createButtonView(retryView));
+            }
+
+            return new RetryViewCreator(retryView, btns.toArray(new InnerButton[btns.size()]));
+        }
+
+    }
+
+    private RetryViewCreator(View retryView, InnerButton[] btns) {
         mRetryView = retryView;
-        mBtn1 = btn1;
-    }
-
-    private static RetryViewCreator createRetryView(Context context, String text, InnerButton btn1, InnerButton btn2, Integer backgroundColor) {
-        LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ViewGroup retryView = (ViewGroup) mInflater.inflate(R.layout.layout_retryview, null);
-        if (backgroundColor != null) {
-            retryView.setBackgroundColor(backgroundColor);
-        }
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
-        retryView.setLayoutParams(params);
-
-        if (text != null) {
-            ((TextView) retryView.findViewById(R.id.tvMessage)).setText(text);
-        } else {
-            retryView.findViewById(R.id.tvMessage).setVisibility(View.GONE);
-        }
-
-        LinearLayout buttonsContainer = (LinearLayout) retryView.findViewById(R.id.loButtonsContainer);
-        buttonsContainer.setOrientation(buttonsOrientation);
-        if (btn1 != null) buttonsContainer.addView(btn1.createButtonView(retryView));
-        if (btn2 != null) buttonsContainer.addView(btn2.createButtonView(retryView));
-        return new RetryViewCreator(retryView, btn1);
-    }
-
-    private static RetryViewCreator createRetryView(Context context, String text, InnerButton btn, Integer backgroundColor) {
-        return createRetryView(context, text, btn, null, backgroundColor);
-    }
-
-    public static RetryViewCreator createDefaultRetryView(Context context, View.OnClickListener listener) {
-        return createDefaultRetryView(context, listener, null);
-    }
-
-    public static RetryViewCreator createDefaultRetryView(Context context, View.OnClickListener listener, Integer backgroundColor) {
-        return createRetryView(
-                context,
-                context.getString(R.string.general_data_error),
-                new InnerButton(InnerButton.Type.GRAY, REFRESH_TEMPLATE + context.getString(R.string.general_dialog_retry), listener),
-                backgroundColor
-        );
-    }
-
-    public static RetryViewCreator createDefaultRetryView(Context context, String text, View.OnClickListener listener,
-                                                          String textBtn2, View.OnClickListener listener2, int orientation) {
-        return createDefaultRetryView(context, text, listener, textBtn2, listener2, orientation, null);
-    }
-
-    public static RetryViewCreator createDefaultRetryView(Context context, String text, View.OnClickListener listener,
-                                                          String textBtn2, View.OnClickListener listener2, int orientation, Integer backgroundColor) {
-        buttonsOrientation = orientation;
-        return createRetryView(
-                context,
-                text,
-                new InnerButton(InnerButton.Type.GRAY, REFRESH_TEMPLATE + context.getString(R.string.general_dialog_retry), listener),
-                new InnerButton(InnerButton.Type.GRAY, textBtn2, listener2),
-                backgroundColor
-        );
+        mBtns = btns;
     }
 
     public void setText(String text) {
@@ -87,7 +105,7 @@ public class RetryViewCreator {
     }
 
     public void setListener(View.OnClickListener listener) {
-        if (mBtn1 != null) mBtn1.setListener(listener);
+        if (mBtns != null && mBtns.length > 0) mBtns[0].setListener(listener);
     }
 
     public View getView() {
@@ -100,13 +118,14 @@ public class RetryViewCreator {
     }
 
     public void performClick() {
-        mBtn1.performClick();
+        if (mBtns != null && mBtns.length > 0) mBtns[0].performClick();
     }
 
     public void setButtonText(String btnText) {
-        mBtn1.setText(btnText);
+        if (mBtns != null && mBtns.length > 0) mBtns[0].setText(btnText);
     }
 
+    @SuppressWarnings("unused")
     public void showOnlyMessage(boolean isVisible) {
         if (mRetryView != null) {
             mRetryView.findViewById(R.id.tvMessage).setVisibility(isVisible ? View.VISIBLE : View.GONE);
@@ -114,8 +133,8 @@ public class RetryViewCreator {
     }
 
     public void showRetryButton(boolean showRetry) {
-        if (mRetryView != null && mBtn1 != null) {
-            mBtn1.setVisibility(showRetry ? View.VISIBLE : View.GONE);
+        if (mRetryView != null && mBtns != null && mBtns.length > 0) {
+            mBtns[0].setVisibility(showRetry ? View.VISIBLE : View.GONE);
         }
     }
 
