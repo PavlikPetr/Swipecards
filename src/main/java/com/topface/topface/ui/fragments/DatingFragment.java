@@ -187,7 +187,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mFragmentSwitcherListener = (INavigationFragmentsListener) activity;
         }
     }
-    
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -282,7 +282,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRetryBtn.setOnClickListener(this);
 
 
-
         // Dating controls
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
@@ -301,7 +300,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
         mAnimationHelper.addView(mDatingCounter);
         mAnimationHelper.addView(mDatingResources);
-        mAnimationHelper.addView(mUserInfoStatus);
 
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
 
