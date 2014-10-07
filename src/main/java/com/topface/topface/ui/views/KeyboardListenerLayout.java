@@ -15,6 +15,7 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
 
     private KeyboardListener mKeyboardListener;
     private boolean mKeyboardOpened;
+    private boolean mWasToggled;
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -23,8 +24,10 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
         } else if (w == oldw) {
             if ((float) oldh / h > 1.25) {
                 mKeyboardOpened = true;
+                mWasToggled = true;
             } else if ((float) oldh / h < 0.75) {
                 mKeyboardOpened = false;
+                mWasToggled = true;
             }
         }
         super.onSizeChanged(w, h, oldw, oldh);
@@ -43,12 +46,13 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
 
     @Override
     public void onGlobalLayout() {
-        if (mKeyboardListener != null) {
+        if (mKeyboardListener != null && mWasToggled) {
             if (mKeyboardOpened) {
                 mKeyboardListener.keyboardOpened();
             } else {
                 mKeyboardListener.keyboardClosed();
             }
+            mWasToggled = false;
         }
     }
 

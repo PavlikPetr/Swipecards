@@ -100,7 +100,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mDatingLovePrice;
     private View mDatingResources;
     private View mDatingButtons;
-    private View mUserInfo;
 
     private RateController mRateController;
     private ImageSwitcher mImageSwitcher;
@@ -288,8 +287,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
         // User Info
-        mUserInfo = root.findViewById(R.id.loUserInfo);
-        mUserInfoStatus = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserStatus));
+        mUserInfoStatus = ((TextView) root.findViewById(R.id.tvDatingUserStatus));
 
         // Counter
         mDatingCounter = ((TextView) root.findViewById(R.id.tvDatingCounter));
@@ -303,7 +301,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
         mAnimationHelper.addView(mDatingCounter);
         mAnimationHelper.addView(mDatingResources);
-        mAnimationHelper.addView(mUserInfo);
+        mAnimationHelper.addView(mUserInfoStatus);
 
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
 
@@ -655,11 +653,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.send_gift_button: {
-                startActivityForResult(
-                        GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id),
-                        GiftsActivity.INTENT_REQUEST_GIFT
-                );
-                EasyTracker.sendEvent("Dating", "SendGiftClick", "", 1L);
+                if (mCurrentUser != null) {
+                    startActivityForResult(
+                            GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id),
+                            GiftsActivity.INTENT_REQUEST_GIFT
+                    );
+                    EasyTracker.sendEvent("Dating", "SendGiftClick", "", 1L);
+                }
             }
             break;
             case R.id.chat_btn: {
@@ -1002,6 +1002,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (!isPushUpdating) {
             mProgressBar.setVisibility(View.VISIBLE);
             mImageSwitcher.setVisibility(View.GONE);
+            mCurrentUser = null;
+            refreshActionBarTitles();
+            mOnlineSetter.setOnline(false);
+            mUserInfoStatus.setText(Static.EMPTY);
         }
     }
 
