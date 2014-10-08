@@ -122,12 +122,12 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
 
         mLockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
-        mRetryView = RetryViewCreator.createDefaultRetryView(this, new View.OnClickListener() {
+        mRetryView = new RetryViewCreator.Builder(this, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadGifts();
             }
-        });
+        }).build();
         mLockScreen.addView(mRetryView.getView());
 
         loadGifts();

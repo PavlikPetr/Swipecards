@@ -312,12 +312,12 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void initRetryView(View root) {
-        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
+        mRetryView = new RetryViewCreator.Builder(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // инициализация обработчика происходит в методе authorizationFailed()
             }
-        });
+        }).build();
         mRetryView.setVisibility(View.GONE);
 
         RelativeLayout rootLayout = (RelativeLayout) root.findViewById(R.id.authContainer);
