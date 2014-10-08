@@ -130,6 +130,10 @@ public class VkAuthActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         VKUIHelper.onActivityResult(this, requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_CANCELED) {
+            setResult(resultCode);
+            finish();
+        }
     }
 
     @Override
