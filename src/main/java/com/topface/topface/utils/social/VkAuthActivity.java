@@ -6,13 +6,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.Static;
+import com.topface.topface.utils.http.HttpUtils;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.Locale;
 
 public class VkAuthActivity extends Activity {
 
@@ -21,6 +28,7 @@ public class VkAuthActivity extends Activity {
     private String[] VK_SCOPE = new String[]{"notify", "photos", "offline"};
     private Intent mResult = new Intent();
     // Constants
+    private static final String VK_NAME_URL = "https://api.vk.com/method/getProfiles?uid=%s&access_token=%s";
     public static final int INTENT_VK_AUTH = 101;
     public final static String ACCESS_TOKEN = "access_token";
     public final static String USER_ID = "user_id";
@@ -47,7 +55,7 @@ public class VkAuthActivity extends Activity {
         public void onReceiveNewToken(VKAccessToken newToken) {
             super.onReceiveNewToken(newToken);
             mToken = newToken;
-            AuthorizationManager.getVkName(mToken.accessToken, mToken.userId, new Handler(new Handler.Callback() {
+            getVkName(mToken.accessToken, mToken.userId, new Handler(new Handler.Callback() {
                 @Override
                 public boolean handleMessage(Message msg) {
                     mResult.putExtra(USER_NAME, (String) msg.obj);
@@ -68,6 +76,32 @@ public class VkAuthActivity extends Activity {
             mToken = token;
         }
     };
+
+    public static void getVkName(final String token, final String user_id, final Handler handler) {
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                String responseRaw = HttpUtils.httpGetRequest(String.format(Locale.ENGLISH, VK_NAME_URL, user_id, token));
+                try {
+                    String result = "";
+                    JSONObject response = new JSONObject(responseRaw);
+                    JSONArray responseArr = response.optJSONArray("response");
+                    if (responseArr != null) {
+                        if (responseArr.length() > 0) {
+                            JSONObject profile = responseArr.getJSONObject(0);
+                            result = profile.optString("first_name") + " " + profile.optString("last_name");
+                        }
+                        handler.sendMessage(Message.obtain(null, AuthorizationManager.SUCCESS_GET_NAME, result));
+                    } else {
+                        handler.sendMessage(Message.obtain(null, AuthorizationManager.FAILURE_GET_NAME, ""));
+                    }
+                } catch (Exception e) {
+                    Debug.error("AuthorizationManager can't get name in vk", e);
+                    handler.sendMessage(Message.obtain(null, AuthorizationManager.FAILURE_GET_NAME, ""));
+                }
+            }
+        };
+    }
 
 
     public void onCreate(Bundle savedInstanceState) {
