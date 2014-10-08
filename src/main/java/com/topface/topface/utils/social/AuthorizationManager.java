@@ -115,7 +115,7 @@ public class AuthorizationManager {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == VkAuthActivity.INTENT_WEB_AUTH) {
+            if (requestCode == VkAuthActivity.INTENT_VK_AUTH) {
                 if (data != null) {
                     Bundle extras = data.getExtras();
                     if (extras != null) {
@@ -141,7 +141,7 @@ public class AuthorizationManager {
     // vkontakte methods
     public void vkontakteAuth() {
         Intent intent = new Intent(mParentActivity.getApplicationContext(), VkAuthActivity.class);
-        mParentActivity.startActivityForResult(intent, VkAuthActivity.INTENT_WEB_AUTH);
+        mParentActivity.startActivityForResult(intent, VkAuthActivity.INTENT_VK_AUTH);
     }
 
     // Facebook methods
