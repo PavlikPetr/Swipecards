@@ -174,7 +174,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private AlbumLoadController mController;
     private ActionBarOnlineSetterDelegate mOnlineSetter;
 
-    public class FilterHandler extends DataApiHandler<DatingFilter> {
+    private class FilterHandler extends DataApiHandler<DatingFilter> {
 
         @Override
         protected void success(DatingFilter filter, IApiResponse response) {
@@ -198,6 +198,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void always(IApiResponse response) {
             super.always(response);
             mNewFilter = false;
+        }
+
+        @Override
+        public void cancel() {
+            super.cancel();
+            mProgressBar.setVisibility(View.GONE);
+            if (mCurrentUser != null) {
+                unlockControls();
+            }
         }
     }
 
