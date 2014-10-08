@@ -106,6 +106,7 @@ public class VkAuthActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        VKUIHelper.onCreate(this);
         Debug.log(this, "+onCreate");
         VKSdk.initialize(vkSdkListener, Static.AUTH_VK_ID);
     }
