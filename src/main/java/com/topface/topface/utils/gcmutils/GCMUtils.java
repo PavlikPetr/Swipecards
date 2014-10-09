@@ -97,7 +97,7 @@ public class GCMUtils {
             mGcmObject = GoogleCloudMessaging.getInstance(mContext);
             mRegId = getRegistrationId();
             if (mRegId.isEmpty()) {
-                registerInBackground(serverToken);
+                registerInBackground();
                 return true;
             } else if (!mRegId.equals(serverToken)) {
                 new Handler(mContext.getMainLooper()).post(new Runnable() {
@@ -112,7 +112,7 @@ public class GCMUtils {
         return false;
     }
 
-    private void registerInBackground(final String serverToken) {
+    private void registerInBackground() {
         new BackgroundThread() {
             @Override
             public void execute() {
@@ -127,14 +127,14 @@ public class GCMUtils {
                     Debug.error(ex);
                 }
 
-                if (regId != null && !serverToken.equals(regId)) {
+                if (regId != null) {
                     mRegId = regId;
                     storeRegistrationId();
                     //Отправляем запрос в основном потоке
                     Looper.prepare();
                     sendRegistrationIdToBackend();
                     Looper.loop();
-                } else if (regId == null) {
+                } else {
                     Debug.log("Registration id is null");
                 }
             }
