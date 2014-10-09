@@ -127,7 +127,7 @@ public class GCMUtils {
                     Debug.error(ex);
                 }
 
-                if (regId != null) {
+                if (!TextUtils.isEmpty(regId)) {
                     mRegId = regId;
                     storeRegistrationId();
                     if (!regId.equals(serverToken)) {
@@ -137,7 +137,7 @@ public class GCMUtils {
                         Looper.loop();
                     }
                 } else {
-                    Debug.log("Registration id is null");
+                    Debug.log("Registration id is " + (regId == null ? "null" : "empty"));
                 }
             }
         };
