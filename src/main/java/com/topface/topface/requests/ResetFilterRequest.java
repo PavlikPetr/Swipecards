@@ -10,7 +10,7 @@ import org.json.JSONObject;
  */
 public class ResetFilterRequest extends ApiRequest {
 
-    private static final String SERVICE_NAME = "search.resetFilter";
+    private static final String SERVICE_NAME = "search.expandFilter";
 
     public ResetFilterRequest(Context context) {
         super(context);
