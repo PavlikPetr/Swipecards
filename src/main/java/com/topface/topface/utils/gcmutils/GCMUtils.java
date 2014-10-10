@@ -127,15 +127,17 @@ public class GCMUtils {
                     Debug.error(ex);
                 }
 
-                if (regId != null && !serverToken.equals(regId)) {
+                if (!TextUtils.isEmpty(regId)) {
                     mRegId = regId;
                     storeRegistrationId();
-                    //Отправляем запрос в основном потоке
-                    Looper.prepare();
-                    sendRegistrationIdToBackend();
-                    Looper.loop();
-                } else if (regId == null) {
-                    Debug.log("Registration id is null");
+                    if (!regId.equals(serverToken)) {
+                        //Отправляем запрос в основном потоке
+                        Looper.prepare();
+                        sendRegistrationIdToBackend();
+                        Looper.loop();
+                    }
+                } else {
+                    Debug.log("Registration id is " + (regId == null ? "null" : "empty"));
                 }
             }
         };
