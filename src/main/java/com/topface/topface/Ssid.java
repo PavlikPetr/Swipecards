@@ -76,6 +76,10 @@ public class Ssid {
         return System.currentTimeMillis() > (millis + mLastUpdate);
     }
 
+    public static boolean isOverdue() {
+        return true;
+    }
+
     public interface ISsidUpdateListener {
         void onUpdate();
     }

@@ -18,6 +18,8 @@ public interface IApiRequest {
 
     public void setFinished();
 
+    String toPostData();
+
     public Context getContext();
 
     public ApiHandler getHandler();

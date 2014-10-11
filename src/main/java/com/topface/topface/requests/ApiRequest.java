@@ -161,6 +161,7 @@ public abstract class ApiRequest implements IApiRequest {
         mPostData = null;
     }
 
+    @Override
     public String toPostData() {
         //Непосредственно перед отправкой запроса устанавливаем новый SSID
         setSsid(Ssid.get());

@@ -15,6 +15,8 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.MultipartApiResponse;
+import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BanActivity;
@@ -108,7 +110,7 @@ public class ConnectionManager {
         try {
             IApiResponse response;
             //Отправляем запрос, если есть SSID и Токен или если запрос не требует авторизации
-            if (Ssid.isLoaded() || !request.isNeedAuth()) {
+            if ((Ssid.isLoaded() && !Ssid.isOverdue()) || !request.isNeedAuth()) {
                 response = executeRequest(request);
             } else {
                 //Если у нас нет авторизационного токена, то выкидываем на авторизацию
@@ -117,7 +119,7 @@ public class ConnectionManager {
                     response = request.constructApiResponse(ErrorCodes.UNKNOWN_SOCIAL_USER, "AuthToken is empty");
                 } else {
                     //Если SSID пустой, то сразу пишим ответ
-                    response = request.constructApiResponse(ErrorCodes.SESSION_NOT_FOUND, "SSID is empty");
+                    response = resendAfterAuth(request);
                 }
 
             }
@@ -399,34 +401,33 @@ public class ConnectionManager {
      */
     private IApiResponse sendAuthAndExecute(IApiRequest request) {
         Debug.log(TAG + "::Reauth");
-        IApiResponse response = null;
         Context context = request.getContext();
+        ParallelApiRequest requestWithAuth = new ParallelApiRequest(context);
+        AuthRequest authRequest = new AuthRequest(AuthToken.getInstance().getTokenInfo(), context);
+        requestWithAuth.addRequest(authRequest);
+
+        if (request instanceof ParallelApiRequest) {
+            ParallelApiRequest parallelApiRequest = (ParallelApiRequest) request;
+            requestWithAuth.addRequests(parallelApiRequest.getRequests());
+        } else {
+            requestWithAuth.addRequest(request);
+        }
 
         //Отправляем запрос авторизации
-        IApiResponse authResponse = executeRequest(
-                new AuthRequest(AuthToken.getInstance().getTokenInfo(), context)
-        );
+        MultipartApiResponse response = (MultipartApiResponse) executeRequest(requestWithAuth);
 
         //Проверяем, что авторизация прошла и нет ошибки
-        if (authResponse.isCodeEqual(ErrorCodes.RESULT_OK)) {
-            Auth auth = new Auth(authResponse);
+        if (response.isCodeEqual(ErrorCodes.RESULT_OK)) {
+            Auth auth = new Auth(response.getResponses().get(authRequest.getId()));
             //Сохраняем новый SSID в SharedPreferences
             Ssid.save(auth.ssid);
             //Снимаем блокировку
             mAuthUpdateFlag.set(false);
-            //Заново отправляем исходный запрос с уже новым SSID
-            response = executeRequest(request);
             //После этого выполняем все отложенные запросы
             runPendingRequests();
-        } else if (authResponse.isWrongAuthError()) {
-            //Пробрасываем ошибку авторизации в основной запрос, может не очень красиво, зато работает
-            //Может стоит сделать отдельный, внутренний, тип ошибки
-            response = request.constructApiResponse(authResponse.getResultCode(), "Auth error: " + authResponse.getErrorMessage());
-        } else if (authResponse.isCodeEqual(ErrorCodes.USER_DELETED)) {
-            response = request.constructApiResponse(authResponse.getResultCode(), "Auth error: " + authResponse.getErrorMessage());
         }
 
-        return response;
+        return request instanceof ParallelApiRequest ? response : response.getResponses().get(request.getId());
     }
 
     private void sendBroadcastReauth(Context context) {
