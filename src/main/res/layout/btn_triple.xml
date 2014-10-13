@@ -16,7 +16,9 @@
             android:button="@android:color/transparent"
             android:gravity="center"
             android:textSize="12sp"
-            android:textScaleX="0.9" />
+            android:textScaleX="0.9"
+            android:singleLine="true"
+            android:ellipsize="end" />
 
         <RadioButton
             android:id="@+id/trplMiddle"
@@ -27,7 +29,9 @@
             android:button="@android:color/transparent"
             android:gravity="center"
             android:textSize="12sp"
-            android:textScaleX="0.9" />
+            android:textScaleX="0.9"
+            android:singleLine="true"
+            android:ellipsize="end" />
 
         <RadioButton
             android:id="@+id/trplRight"
@@ -38,7 +42,9 @@
             android:button="@android:color/transparent"
             android:gravity="center"
             android:textSize="12sp"
-            android:textScaleX="0.9" />
+            android:textScaleX="0.9"
+            android:singleLine="true"
+            android:ellipsize="end" />
     </RadioGroup>
 
 </merge>
