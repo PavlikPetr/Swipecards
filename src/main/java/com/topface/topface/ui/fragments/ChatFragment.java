@@ -197,6 +197,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
+        //Анимация изменения лейаута
+        Utils.enableLayoutChangingTransition(root);
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @Override
             public void keyboardOpened() {
@@ -750,7 +752,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle extras = data.getExtras();
                     if (extras != null) {
-                        SendGiftAnswer sendGiftAnswer = (SendGiftAnswer) extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
+                        SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
                         sendGiftAnswer.history.target = FeedDialog.OUTPUT_USER_MESSAGE;
                         addSentMessage(sendGiftAnswer.history, null);
                         LocalBroadcastManager.getInstance(getActivity())
