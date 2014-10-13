@@ -8,7 +8,9 @@ import android.os.Message;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.http.HttpUtils;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
@@ -58,7 +60,9 @@ public class VkAuthActivity extends Activity {
             getVkName(mToken.accessToken, mToken.userId, new Handler(new Handler.Callback() {
                 @Override
                 public boolean handleMessage(Message msg) {
-                    mResult.putExtra(USER_NAME, (String) msg.obj);
+                    SessionConfig sessionConfig = App.getSessionConfig();
+                    sessionConfig.setSocialAccountName((String) msg.obj);
+                    sessionConfig.saveConfig();
                     return true;
                 }
             }));

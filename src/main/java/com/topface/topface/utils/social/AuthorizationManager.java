@@ -120,9 +120,11 @@ public class AuthorizationManager {
                         String user_id = extras.getString(VkAuthActivity.USER_ID);
                         String expires_in = extras.getString(VkAuthActivity.EXPIRES_IN);
                         String user_name = extras.getString(VkAuthActivity.USER_NAME);
-                        SessionConfig sessionConfig = App.getSessionConfig();
-                        sessionConfig.setSocialAccountName(user_name);
-                        sessionConfig.saveConfig();
+                        if (user_name != null) {
+                            SessionConfig sessionConfig = App.getSessionConfig();
+                            sessionConfig.setSocialAccountName(user_name);
+                            sessionConfig.saveConfig();
+                        }
 
                         AuthToken authToken = AuthToken.getInstance();
                         authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);

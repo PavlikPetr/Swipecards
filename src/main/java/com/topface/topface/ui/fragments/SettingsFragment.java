@@ -617,6 +617,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                             }
                         });
                         mSessionSettings.setSocialAccountName(socialName);
+                        mSessionSettings.saveConfig();
                     }
                 });
             } else {
