@@ -33,10 +33,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.controllers.StartActionsController;
-import com.topface.topface.utils.gcmutils.GCMUtils;
-import com.topface.topface.utils.http.HttpUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,7 +41,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
-import java.util.Locale;
 
 import ru.ok.android.sdk.Odnoklassniki;
 import ru.ok.android.sdk.OkTokenRequestListener;
@@ -116,7 +112,7 @@ public class AuthorizationManager {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == VkAuthActivity.INTENT_WEB_AUTH) {
+            if (requestCode == VkAuthActivity.INTENT_VK_AUTH) {
                 if (data != null) {
                     Bundle extras = data.getExtras();
                     if (extras != null) {
@@ -124,9 +120,11 @@ public class AuthorizationManager {
                         String user_id = extras.getString(VkAuthActivity.USER_ID);
                         String expires_in = extras.getString(VkAuthActivity.EXPIRES_IN);
                         String user_name = extras.getString(VkAuthActivity.USER_NAME);
-                        SessionConfig sessionConfig = App.getSessionConfig();
-                        sessionConfig.setSocialAccountName(user_name);
-                        sessionConfig.saveConfig();
+                        if (user_name != null) {
+                            SessionConfig sessionConfig = App.getSessionConfig();
+                            sessionConfig.setSocialAccountName(user_name);
+                            sessionConfig.saveConfig();
+                        }
 
                         AuthToken authToken = AuthToken.getInstance();
                         authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
@@ -142,7 +140,7 @@ public class AuthorizationManager {
     // vkontakte methods
     public void vkontakteAuth() {
         Intent intent = new Intent(mParentActivity.getApplicationContext(), VkAuthActivity.class);
-        mParentActivity.startActivityForResult(intent, VkAuthActivity.INTENT_WEB_AUTH);
+        mParentActivity.startActivityForResult(intent, VkAuthActivity.INTENT_VK_AUTH);
     }
 
     // Facebook methods
@@ -336,7 +334,7 @@ public class AuthorizationManager {
         if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             getFbName(authToken.getUserSocialId(), handler);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            getVkName(authToken.getTokenKey(), authToken.getUserSocialId(), handler);
+            VkAuthActivity.getVkName(authToken.getTokenKey(), authToken.getUserSocialId(), handler);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, authToken.getLogin()));
         }
@@ -344,35 +342,8 @@ public class AuthorizationManager {
     }
 
 
-    private static final String VK_NAME_URL = "https://api.vk.com/method/getProfiles?uid=%s&access_token=%s";
     public static final int SUCCESS_GET_NAME = 0;
     public static final int FAILURE_GET_NAME = 1;
-
-    public static void getVkName(final String token, final String user_id, final Handler handler) {
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                String responseRaw = HttpUtils.httpGetRequest(String.format(Locale.ENGLISH, VK_NAME_URL, user_id, token));
-                try {
-                    String result = "";
-                    JSONObject response = new JSONObject(responseRaw);
-                    JSONArray responseArr = response.optJSONArray("response");
-                    if (responseArr != null) {
-                        if (responseArr.length() > 0) {
-                            JSONObject profile = responseArr.getJSONObject(0);
-                            result = profile.optString("first_name") + " " + profile.optString("last_name");
-                        }
-                        handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, result));
-                    } else {
-                        handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
-                    }
-                } catch (Exception e) {
-                    Debug.error("AuthorizationManager can't get name in vk", e);
-                    handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
-                }
-            }
-        };
-    }
 
     public static void getFbName(final String user_id, final Handler handler) {
         new AsyncFacebookRunner(new Facebook(App.getAppConfig().getAuthFbApi())).request("/" + user_id, new RequestListener() {
@@ -417,7 +388,6 @@ public class AuthorizationManager {
 
 
     public static void logout(Activity activity) {
-        new GCMUtils(activity).unregister();
         Ssid.remove();
         AuthToken authToken = AuthToken.getInstance();
         if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {

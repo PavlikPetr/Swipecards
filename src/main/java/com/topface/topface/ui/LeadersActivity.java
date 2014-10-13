@@ -50,7 +50,7 @@ public class LeadersActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_leaders_layout);
 
-        getSupportActionBar().setTitle(getString(R.string.leaders_go_date));
+        getTitleSetter().setActionBarTitles(R.string.leaders_go_date, null);
 
         mContainer = (RelativeLayout) findViewById(R.id.leadersCont);
 
@@ -119,12 +119,12 @@ public class LeadersActivity extends BaseFragmentActivity {
     private void updateProfileInfo(Profile profile) {
         mLoadingLocker.setVisibility(View.VISIBLE);
         final AlbumRequest request = new AlbumRequest(this, profile.uid, AlbumRequest.MODE_LEADER, AlbumLoadController.FOR_GALLERY);
-        final RetryViewCreator rv = RetryViewCreator.createDefaultRetryView(this, new OnClickListener() {
+        final RetryViewCreator rv = new RetryViewCreator.Builder(this, new OnClickListener() {
             @Override
             public void onClick(View view) {
                 request.exec();
             }
-        }, getResources().getColor(R.color.bg_main));
+        }).backgroundColor(getResources().getColor(R.color.bg_main)).build();
         rv.setVisibility(View.GONE);
         mContainer.addView(rv.getView());
 

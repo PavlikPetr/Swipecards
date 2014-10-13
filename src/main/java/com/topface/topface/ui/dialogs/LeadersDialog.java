@@ -77,7 +77,7 @@ public class LeadersDialog extends AbstractModalDialog {
                     openChat();
                 }
             });
-            message.setVisibility(((CacheProfile.premium || !CacheProfile.getOptions().block_chat_not_mutual) &&
+            message.setVisibility(((CacheProfile.premium || !CacheProfile.getOptions().blockChatNotMutual) &&
                     user.id != CacheProfile.uid) ? View.VISIBLE : View.GONE);
         } catch (JSONException e) {
             Debug.error(e);

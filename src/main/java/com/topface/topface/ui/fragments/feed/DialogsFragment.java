@@ -71,7 +71,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected String getTitle() {
-        return getString(R.string.general_dialogs);
+        return getString(R.string.settings_messages);
     }
 
     @Override

@@ -1,16 +1,21 @@
 package com.topface.topface.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.MenuItem;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 
-public abstract class SingleFragmentActivity<T extends Fragment> extends CustomTitlesBaseFragmentActivity {
+import java.util.List;
+
+public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFragmentActivity {
 
     private T mFragment;
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,11 +31,38 @@ public abstract class SingleFragmentActivity<T extends Fragment> extends CustomT
         addToLayout();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                FragmentManager fm = getSupportFragmentManager();
+                if (fm != null) {
+                    List<Fragment> fragments = fm.getFragments();
+                    if (fragments != null) {
+                        for (Fragment f : fragments) {
+                            if (f != null && f.getActivity() == this) {
+                                f.onOptionsItemSelected(item);
+                            }
+                        }
+                    }
+                }
+                if (isTaskRoot()) {
+                    Intent i = new Intent(this, NavigationActivity.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    onBackPressed();
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     protected void addToLayout() {
         if (!mFragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().add(getContainerId(), mFragment, getFragmentTag()).commit();
         } else {
-            Debug.log(mFragment, "Fragment was already added to activity " + getClass().getSimpleName());
+            Debug.log(mFragment, "Fragment was already added to activity " + ((Object) this).getClass().getSimpleName());
         }
     }
 

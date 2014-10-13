@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -28,10 +27,7 @@ import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.FeedGift;
-import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
-import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -41,7 +37,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteBlackListRequest;
 import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.AttitudeHandler;
@@ -53,7 +48,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
-import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.gift.UserGiftsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
@@ -88,20 +82,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private RelativeLayout mDelight;
     private TextView mDelightText;
     private View mActions;
-    private ProgressBar mGiftsLoader;
-    private ImageView mGiftsIcon;
     private ViewStub mUserActionsStub;
-    private OnGiftReceivedListener mGiftsReceivedListener = new OnGiftReceivedListener() {
-        @Override
-        public void onReceived() {
-            if (mGiftsIcon != null) {
-                mGiftsIcon.setVisibility(View.VISIBLE);
-            }
-            if (mGiftsLoader != null) {
-                mGiftsLoader.setVisibility(View.INVISIBLE);
-            }
-        }
-    };
     private RelativeLayout mBlocked;
     private MenuItem mBarActions;
     // controllers
@@ -183,12 +164,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_PROFILE);
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         mLockScreen = (RelativeLayout) root.findViewById(R.id.lockScreen);
-        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
+        mRetryView = new RetryViewCreator.Builder(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getUserProfile(mProfileId);
             }
-        });
+        }).build();
         mLockScreen.addView(mRetryView.getView());
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
@@ -547,13 +528,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
                 break;
             case R.id.send_gift_action:
-                mGiftsLoader = (ProgressBar) v.findViewById(R.id.giftPrBar);
-                mGiftsIcon = (ImageView) v.findViewById(R.id.giftIcon);
-                mGiftsLoader.setVisibility(View.VISIBLE);
-                mGiftsIcon.setVisibility(View.INVISIBLE);
                 UserGiftsFragment giftsFragment = getGiftFragment();
                 if (giftsFragment != null && giftsFragment.getActivity() != null) {
-                    giftsFragment.sendGift(mGiftsReceivedListener);
+                    giftsFragment.sendGift();
                 } else {
                     startActivityForResult(
                             GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
@@ -562,7 +539,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
                 break;
             case R.id.open_chat_action:
-                if (CacheProfile.premium || !CacheProfile.getOptions().block_chat_not_mutual) {
+                if (CacheProfile.premium || !CacheProfile.getOptions().blockChatNotMutual) {
                     openChat();
                 } else {
                     String callingClass = getCallingClassName();
@@ -624,87 +601,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode) {
-                case GiftsActivity.INTENT_REQUEST_GIFT:
-                    UserGiftsFragment giftsFragment = getGiftFragment();
-                    if (giftsFragment == null || !giftsFragment.isAdded()) {
-                        sendGift(data);
-                        return;
-                    }
-                    break;
-            }
-        } else if (resultCode == Activity.RESULT_CANCELED) {
-            mGiftsReceivedListener.onReceived();
-        }
-    }
-
-    private void sendGift(Intent data) {
-        Bundle extras = data.getExtras();
-        if (extras != null) {
-            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
-            final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
-
-            final Profile profile = getProfile();
-            if (profile != null) {
-                final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
-                registerRequest(sendGift);
-                sendGift.giftId = id;
-                sendGift.userId = profile.uid;
-                final FeedGift sendedGift = new FeedGift();
-                sendedGift.gift = new Gift(
-                        sendGift.giftId,
-                        Gift.PROFILE_NEW,
-                        url,
-                        0
-                );
-                sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
-
-                    @Override
-                    protected void success(SendGiftAnswer data, IApiResponse response) {
-                        UserGiftsFragment giftsFragment = getGiftFragment();
-                        if (giftsFragment != null) {
-                            giftsFragment.addGift(sendedGift);
-                        } else {
-                            profile.gifts.add(0, sendedGift.gift);
-                        }
-                        Toast.makeText(getContext(), R.string.chat_gift_out, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    protected SendGiftAnswer parseResponse(ApiResponse response) {
-                        return SendGiftAnswer.parse(response);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-                        if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                            FragmentActivity activity = getActivity();
-                            if (activity != null) {
-                                Intent intent = PurchasesActivity.createBuyingIntent("Profile");
-                                intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, PurchasesFragment.TYPE_GIFT);
-                                intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, price);
-                                startActivity(intent);
-                            }
-                        } else {
-                            Utils.showErrorMessage();
-                        }
-                    }
-
-                    @Override
-                    public void always(IApiResponse response) {
-                        super.always(response);
-                        mGiftsReceivedListener.onReceived();
-                    }
-                }).exec();
-            }
-        }
-    }
-
     private void closeProfileActions() {
         if (mBarActions != null && mBarActions.isChecked()) {
             onOptionsItemSelected(mBarActions);
@@ -734,10 +630,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             intent.putExtra(ChatFragment.INTENT_USER_CITY, profile.city == null ? "" : profile.city.name);
             startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         }
-    }
-
-    public interface OnGiftReceivedListener {
-        public void onReceived();
     }
 
     @Override

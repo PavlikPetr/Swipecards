@@ -42,6 +42,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
 
     protected LoadController mLoadController;
+    private boolean mMore;
 
     public LoadingListAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         mContext = context;
@@ -161,8 +162,13 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         ArrayList<T> data = getData();
         data.clear();
         data.addAll(dataList);
+        mMore = more;
         addLoaderItem(more);
         if (notify) notifyDataSetChanged();
+    }
+
+    protected boolean isNeedMore() {
+        return mMore;
     }
 
     protected void addAll(ArrayList<T> dataList, boolean more, boolean notify) {
@@ -219,6 +225,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     protected void addLoaderItem(boolean hasMore) {
         FeedList<T> currentData = getData();
+        mMore = hasMore;
         if (hasMore && !currentData.isEmpty()) {
             currentData.add(getLoaderItem());
         }

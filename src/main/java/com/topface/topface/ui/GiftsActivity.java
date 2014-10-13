@@ -10,7 +10,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.SendGiftAnswer;
@@ -25,6 +27,7 @@ import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.TripleButton;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -33,8 +36,6 @@ import java.util.List;
 public class GiftsActivity extends BaseFragmentActivity implements IGiftSendListener {
 
     public static final int INTENT_REQUEST_GIFT = 111;
-    public static final String INTENT_GIFT_ID = "gift_id";
-    public static final String INTENT_GIFT_URL = "gift_url";
     public static final String INTENT_GIFT_PRICE = "gift_price";
     public static final String INTENT_USER_ID_TO_SEND_GIFT = "user_id_to_send_gift";
     public static final String GIFTS_LIST = "gifts_list";
@@ -55,7 +56,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_gifts);
-        getSupportActionBar().setTitle(getString(R.string.gifts_title));
+        getTitleSetter().setActionBarTitles(getString(R.string.gifts_title), null);
 
         mUserIdToSendGift = getIntent().getIntExtra(INTENT_USER_ID_TO_SEND_GIFT, 0);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
@@ -121,12 +122,12 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
 
         mLockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
-        mRetryView = RetryViewCreator.createDefaultRetryView(this, new View.OnClickListener() {
+        mRetryView = new RetryViewCreator.Builder(this, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadGifts();
             }
-        });
+        }).build();
         mLockScreen.addView(mRetryView.getView());
 
         loadGifts();
@@ -243,7 +244,9 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             protected void success(SendGiftAnswer answer, IApiResponse response) {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(INTENT_SEND_GIFT_ANSWER, answer);
+                resultIntent.putExtra(INTENT_GIFT_PRICE, item.price);
                 setResult(Activity.RESULT_OK, resultIntent);
+                Toast.makeText(App.getContext(), R.string.chat_gift_out, Toast.LENGTH_SHORT).show();
                 finish();
             }
 
@@ -257,6 +260,8 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 setSupportProgressBarIndeterminateVisibility(false);
                 if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                     startActivity(PurchasesActivity.createBuyingIntent("Gifts", PurchasesFragment.TYPE_GIFT, item.price));
+                } else {
+                    Utils.showErrorMessage();
                 }
             }
         }).exec();

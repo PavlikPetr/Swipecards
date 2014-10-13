@@ -8,21 +8,20 @@
     android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@+id/title_clickable"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:orientation="horizontal"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentLeft="true"
+        android:background="?attr/actionBarItemBackground"
+        android:paddingRight="10dp">
 
         <ImageView
-            android:id="@+id/online"
+            android:id="@+id/up_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/ico_online"
-            android:visibility="gone" />
+            android:src="@drawable/arrow_with_paddings"
+            android:layout_gravity="center_vertical" />
 
         <LinearLayout
             android:layout_width="wrap_content"

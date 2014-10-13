@@ -92,10 +92,10 @@ public class Options extends AbstractData {
     public String offerwall = OfferwallsManager.SPONSORPAY;
 
     public int premium_period;
-    public int contacts_count;
+    public int contacts_count = 10;
     public long popup_timeout;
-    public boolean block_unconfirmed;
-    public boolean block_chat_not_mutual;
+    public boolean blockUnconfirmed;
+    public boolean blockChatNotMutual;
     public Closing closing = new Closing();
     public BlockSympathy blockSympathy = new BlockSympathy();
     public BlockPeopleNearby blockPeople = new BlockPeopleNearby();
@@ -170,8 +170,8 @@ public class Options extends AbstractData {
             }
             offerwall = response.optString("offerwall");
             maxVersion = response.optString("maxVersion");
-            block_unconfirmed = response.optBoolean("blockUnconfirmed");
-            block_chat_not_mutual = response.optBoolean("blockChatNotMutual");
+            blockUnconfirmed = response.optBoolean("blockUnconfirmed");
+            blockChatNotMutual = response.optBoolean("blockChatNotMutual");
 
             JSONObject payments = response.optJSONObject("payments");
 

@@ -6,7 +6,9 @@
     <string name="general_ok">OK</string>
     <string name="general_dbl_new">Nuevos</string>
     <string name="general_settings_abbr">Ajustes</string>
+    <string name="general_disallow">Prohibir</string>
     <string name="general_allow">Permitir</string>
+    <string name="notification_denied_popup_title">Permitir avisos, para enterarse de los mensajes entrantes, simpatías y otras noticias</string>
     <string name="notification_popup_title">Permite enviarte notificaciones, para poder saber momentaneamente sobre una simpatía o admiración nueva o un mensaje no leído</string>
     <string name="email_successfully_changed">Tu email ha sido cambiado con éxito</string>
     <string name="auth_vk_name">VK.com</string>

@@ -5,11 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -17,12 +17,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.http.IRequestClient;
@@ -33,23 +34,23 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
 
-    private IActionBarTitleSetter mTitleSetter;
     private ActionBar mSupportActionBar;
     private BroadcastReceiver mProfileLoadReceiver;
+    private IActionBarTitleSetter mTitleSetter;
 
     public static enum FragmentId {
         F_VIP_PROFILE(0),
         F_PROFILE(1),
         F_DATING(2, true),
-        F_LIKES(3),
-        F_ADMIRATIONS(4),
-        F_MUTUAL(5),
-        F_LIKES_CLOSINGS(6, true),
-        F_MUTUAL_CLOSINGS(7, true),
-        F_DIALOGS(8),
-        F_BOOKMARKS(9),
-        F_FANS(10),
-        F_VISITORS(11),
+        F_DIALOGS(3),
+        F_VISITORS(4),
+        F_LIKES(5),
+        F_ADMIRATIONS(6),
+        F_MUTUAL(7),
+        F_LIKES_CLOSINGS(8, true),
+        F_MUTUAL_CLOSINGS(9, true),
+        F_BOOKMARKS(10),
+        F_FANS(11),
         F_GEO(12),
         F_BONUS(13),
         F_EDITOR(1000),
@@ -99,15 +100,25 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         super.onCreate(savedInstanceState);
     }
 
+    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return new ActionBarCustomViewTitleSetterDelegate(getActivity(),
+                    actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
+        } else {
+            return new ActionBarTitleSetterDelegate(actionBar);
+        }
+    }
+
     protected boolean needOptionsMenu() {
         return true;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         clearPreviousState();
+        mTitleSetter = createTitleSetter(getSupportActionBar());
         refreshActionBarTitles();
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     private void clearPreviousState() {
@@ -119,12 +130,15 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (mNeedTitles) setActionBarTitles(getTitle(), getSubtitle());
     }
 
+    @SuppressWarnings("unused")
     protected void onUpdateStart(boolean isFlyUpdating) {
     }
 
+    @SuppressWarnings("unused")
     protected void onUpdateSuccess(boolean isFlyUpdating) {
     }
 
+    @SuppressWarnings("unused")
     protected void onUpdateFail(boolean isFlyUpdating) {
     }
 
@@ -150,6 +164,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
         checkProfileLoad();
+        refreshActionBarTitles();
     }
 
     @Override
@@ -272,20 +287,28 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void setActionBarTitles(String title, String subtitle) {
-        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title, subtitle);
+        if (mTitleSetter != null) {
+            mTitleSetter.setActionBarTitles(title, subtitle);
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
     protected void setActionBarTitles(int title, int subtitle) {
-        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title, subtitle);
+        if (mTitleSetter != null) {
+            mTitleSetter.setActionBarTitles(title, subtitle);
+        }
     }
 
     protected void setActionBarTitles(String title) {
-        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title, null);
+        if (mTitleSetter != null) {
+            mTitleSetter.setActionBarTitles(title, null);
+        }
     }
 
     protected void setActionBarTitles(int title) {
-        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title, null);
+        if (mTitleSetter != null) {
+            mTitleSetter.setActionBarTitles(title, null);
+        }
     }
 
     protected String getTitle() {
@@ -301,17 +324,5 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected void setNeedTitles(boolean needTitles) {
         mNeedTitles = needTitles;
-    }
-
-    protected IActionBarTitleSetter getActionBarTitleSetter(ActionBar actionBar) {
-        if (mTitleSetter == null) {
-            Activity activity = getActivity();
-            if (activity instanceof CustomTitlesBaseFragmentActivity) {
-                mTitleSetter = ((CustomTitlesBaseFragmentActivity) activity).getActionBarTitleSetterDelegate();
-            } else {
-                mTitleSetter = new ActionBarTitleSetterDelegate(actionBar);
-            }
-        }
-        return mTitleSetter;
     }
 }

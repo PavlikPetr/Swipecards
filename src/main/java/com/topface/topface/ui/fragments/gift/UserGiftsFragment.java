@@ -11,17 +11,15 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
-import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 
 /**
  * Fragment to display user's gifts
  */
 public class UserGiftsFragment extends UpdatableGiftsFragment {
-
-    private UserProfileFragment.OnGiftReceivedListener mGiftReceivedListener;
 
     @Override
     protected void onGiftClick(AdapterView<?> parent, View view, int position, long id) {
@@ -64,11 +62,6 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
         }
     }
 
-    public void sendGift(UserProfileFragment.OnGiftReceivedListener listener) {
-        this.mGiftReceivedListener = listener;
-        sendGift();
-    }
-
     public void sendGift() {
         getParentFragment().startActivityForResult(
                 GiftsActivity.getSendGiftIntent(getActivity(), getProfileId()),
@@ -82,14 +75,12 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
                 Bundle extras = data.getExtras();
                 if (extras != null) {
-                    int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-                    String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+                    SendGiftAnswer giftAnswer = (SendGiftAnswer) extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
+                    int id = giftAnswer.history.gift;
+                    String url = giftAnswer.history.link;
                     FeedGift sended = new FeedGift();
                     sended.gift = new Gift(id, Gift.PROFILE_NEW, url, 0);
                     addGift(sended);
-                    if (mGiftReceivedListener != null) {
-                        mGiftReceivedListener.onReceived();
-                    }
                 }
             }
         }

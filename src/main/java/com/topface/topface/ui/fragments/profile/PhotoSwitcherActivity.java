@@ -1,11 +1,12 @@
 package com.topface.topface.ui.fragments.profile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -61,13 +62,17 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 );
                 mPhotoAlbumControlVisibility = mPhotoAlbumControl.getVisibility();
                 mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
+                if (mPhotoAlbumControlVisibility == View.VISIBLE) {
+                    getSupportActionBar().show();
+                } else {
+                    getSupportActionBar().hide();
+                }
             }
         }
     };
-    private TextView mCounter;
     private ViewGroup mPhotoAlbumControl;
     private ViewGroup mOwnPhotosControl;
-    private int mPhotoAlbumControlVisibility = View.GONE;
+    private int mPhotoAlbumControlVisibility = View.VISIBLE;
     private int mOwnPhotosControlVisibility = View.GONE;
     private Photos mPhotoLinks;
     private PreloadManager mPreloadManager;
@@ -141,9 +146,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             return;
         }
 
-        // Title Header
-        mCounter = ((TextView) findViewById(R.id.tvPhotoCounter));
-
         // Gallery
         mImageSwitcher = ((ImageSwitcher) findViewById(R.id.galleryAlbum));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
@@ -152,16 +154,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         // Control layout
         mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
         mOwnPhotosControl = (ViewGroup) mPhotoAlbumControl.findViewById(R.id.loBottomPanel);
-
-        // - close button
-        mPhotoAlbumControl.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deletePhotoRequest();
-                setResult(Activity.RESULT_CANCELED);
-                finish();
-            }
-        });
 
         mLoadedCount = mPhotoLinks.getRealPhotosCount();
         mNeedMore = photosCount > mLoadedCount;
@@ -227,6 +219,16 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         super.onBackPressed();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.home:
+                deletePhotoRequest();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void initControls() {
         if (mUid == CacheProfile.uid) {
             // - set avatar button
@@ -262,6 +264,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 }
             });
             if (mPhotoLinks.size() <= 1) mDeleteButton.setVisibility(View.GONE);
+            mOwnPhotosControlVisibility = View.VISIBLE;
         } else {
             mPhotoAlbumControl.findViewById(R.id.loBottomPanel).setVisibility(mOwnPhotosControlVisibility);
         }
@@ -338,7 +341,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         int photosLinksSize = mPhotoLinks.size();
         if (mPhotoLinks != null) {
             mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
-            mCounter.setText((mCurrentPosition + 1) + "/" + photosLinksSize);
+            getTitleSetter().setActionBarTitles((mCurrentPosition + 1) + "/" + photosLinksSize, null);
         }
     }
 
@@ -402,5 +405,14 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 mCanSendAlbumReq = true;
             }
         }).exec();
+    }
+
+    @Override
+    protected void initActionBar(ActionBar actionBar) {
+        super.initActionBar(actionBar);
+        if (actionBar != null) {
+            actionBar.setDisplayUseLogoEnabled(false);
+            actionBar.setIcon(android.R.color.transparent);
+        }
     }
 }

@@ -35,7 +35,6 @@ import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
 import java.util.ArrayList;
@@ -67,7 +66,6 @@ public class ClosingsController implements View.OnClickListener {
     private boolean mLeftMenuLocked = false;
     private static boolean mLogoutWasInitiated = false;
     private INavigationFragmentsListener mNavigationFragmentsListener;
-    private FeedLoadController mLoadController = new FeedLoadController();
 
     public ClosingsController(@NonNull final MenuFragment menuFragment, @NonNull ViewStub mHeaderViewStub, @NonNull LeftMenuAdapter adapter) {
         mMenuFragment = menuFragment;
@@ -402,7 +400,6 @@ public class ClosingsController implements View.OnClickListener {
                     }
                 });
                 activity.showContent();
-                activity.getSupportActionBar().setDisplayUseLogoEnabled(false);
             }
             mLeftMenuLocked = true;
         }
@@ -414,7 +411,6 @@ public class ClosingsController implements View.OnClickListener {
             if (mMenuFragment.getActivity() instanceof NavigationActivity) {
                 NavigationActivity activity = ((NavigationActivity) mMenuFragment.getActivity());
                 activity.setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                activity.getSupportActionBar().setDisplayUseLogoEnabled(true);
             }
         }
     }

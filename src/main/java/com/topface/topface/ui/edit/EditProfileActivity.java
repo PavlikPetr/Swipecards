@@ -68,7 +68,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         setContentView(R.layout.ac_edit_profile);
         hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
         //Navigation bar
-        getSupportActionBar().setTitle(R.string.edit_title);
+        getTitleSetter().setActionBarTitles(R.string.edit_title, null);
         // ListView
         mEditItems = new LinkedList<>();
         initEditItems();

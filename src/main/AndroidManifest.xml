@@ -56,6 +56,7 @@
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
+        android:supportsRtl="false"
         android:label="@string/app_name"
         android:logo="@drawable/ic_home_topface_white"
         android:theme="@style/Theme.Topface">
@@ -76,7 +77,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -162,7 +162,8 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".ui.fragments.profile.PhotoSwitcherActivity"
-            android:theme="@style/Theme.Topface.NoActionBar.Fullscreen"/>
+            android:theme="@style/Topface.Theme.TransparentActionBarActivity"
+            />
         <activity
             android:name=".ui.edit.EditProfileActivity"
             android:screenOrientation="portrait"/>
@@ -176,7 +177,9 @@
         <activity
             android:name=".ui.settings.SettingsContainerActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.BanActivity"/>
+        <activity
+            android:name=".ui.BanActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.BlackListActivity"/>
 
         <activity
@@ -377,11 +380,6 @@
             android:launchMode="singleInstance"
             android:theme="@style/Theme.Topface.NoActionBar"/>
 
-        <activity
-            android:name="me.faan.sdk.PlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>
-
         <!-- Alias for main Activity from first version. Just in case of previous problems with FB -->
         <activity-alias
             android:name=".ui.MainActivity"
@@ -437,6 +435,7 @@
         </receiver>
 
         <!-- Amazon In-App Purchasing -->
+        <!--suppress AndroidDomInspection -->
         <receiver
             android:name="com.amazon.inapp.purchasing.ResponseReceiver"
             tools:ignore="ExportedReceiver">

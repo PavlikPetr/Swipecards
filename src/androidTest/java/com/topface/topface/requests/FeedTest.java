@@ -7,12 +7,10 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.handlers.ApiHandler;
 
 public abstract class FeedTest<T extends FeedItem> extends AbstractThreadTest {
-    private static final int LIMIT = 10;
 
 
     private void sendFeedRequest(final String testName) {
         FeedRequest request = new FeedRequest(getFeedType(), getInstrumentation().getTargetContext());
-        request.limit = LIMIT;
         request.unread = false;
         request.callback(new ApiHandler() {
 

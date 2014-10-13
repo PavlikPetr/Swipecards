@@ -103,11 +103,11 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (mGiftsFirstPortion != null) {
+        if (savedInstanceState != null) {
+            restoreInstanceState(savedInstanceState);
+        } else if (mGiftsFirstPortion != null) {
             setGifts(mGiftsFirstPortion);
             mGiftsFirstPortion = null;
-        } else if (savedInstanceState != null) {
-            restoreInstanceState(savedInstanceState);
         }
     }
 

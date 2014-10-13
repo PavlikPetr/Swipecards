@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +52,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FilterRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.NoviceLikesRequest;
+import com.topface.topface.requests.ResetFilterRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
@@ -58,7 +61,6 @@ import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
-import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
@@ -75,6 +77,9 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
+import com.topface.topface.utils.actionbar.ActionBarOnlineSetterDelegate;
+import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.social.AuthToken;
@@ -91,14 +96,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Button mMutualBtn;
     private Button mSkipBtn;
     private Button mProfileBtn;
-    private TextView mUserInfoName;
-    private TextView mUserInfoCity;
     private TextView mUserInfoStatus;
     private TextView mDatingCounter;
     private TextView mDatingLovePrice;
     private View mDatingResources;
     private View mDatingButtons;
-    private View mUserInfo;
 
     private RateController mRateController;
     private ImageSwitcher mImageSwitcher;
@@ -129,6 +131,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private BroadcastReceiver mProfileReceiver;
     private boolean mNeedMore;
     private int mLoadedCount;
+    private boolean mNewFilter;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -169,6 +172,43 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private INavigationFragmentsListener mFragmentSwitcherListener;
     private AnimationHelper mAnimationHelper;
     private AlbumLoadController mController;
+    private ActionBarOnlineSetterDelegate mOnlineSetter;
+
+    private class FilterHandler extends DataApiHandler<DatingFilter> {
+
+        @Override
+        protected void success(DatingFilter filter, IApiResponse response) {
+            CacheProfile.dating = filter;
+            updateFilterData();
+            updateData(false);
+        }
+
+        @Override
+        protected DatingFilter parseResponse(ApiResponse response) {
+            return new DatingFilter(response.getJsonResult());
+        }
+
+        @Override
+        public void fail(int codeError, IApiResponse response) {
+            showEmptySearchDialog();
+            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void always(IApiResponse response) {
+            super.always(response);
+            mNewFilter = false;
+        }
+
+        @Override
+        public void cancel() {
+            super.cancel();
+            mProgressBar.setVisibility(View.GONE);
+            if (mCurrentUser != null) {
+                unlockControls();
+            }
+        }
+    }
 
     private void startDatingFilterActivity() {
         Intent intent = new Intent(getActivity().getApplicationContext(),
@@ -185,11 +225,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mFragmentSwitcherListener = (INavigationFragmentsListener) activity;
         }
     }
-    
+
     @Override
     public void onDetach() {
         super.onDetach();
         mFragmentSwitcherListener = null;
+        mOnlineSetter.setOnline(false);
     }
 
     @Override
@@ -225,7 +266,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRoot = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_dating, null);
 
         initViews(mRoot);
-        initActionBar();
         initEmptySearchDialog(mRoot);
         initImageSwitcher(mRoot);
         return mRoot;
@@ -234,6 +274,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+        if (mOnlineSetter != null) {
+            mOnlineSetter.setOnline(mCurrentUser != null && mCurrentUser.online);
+        }
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
         LocalBroadcastManager.getInstance(getActivity())
@@ -241,9 +284,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         setHighRatePrice();
-        setActionBarTitles(getTitle(), getSubtitle());
+
         updateResources();
-        refreshActionBarTitles();
     }
 
     @Override
@@ -255,6 +297,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onPause() {
         super.onPause();
+
         if (mRetryView.isVisible()) {
             EasyTracker.sendEvent("EmptySearch", "DismissScreen", "", 0L);
         }
@@ -276,14 +319,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
 
+
         // Dating controls
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
         // User Info
-        mUserInfo = root.findViewById(R.id.loUserInfo);
-        mUserInfoName = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserName));
-        mUserInfoCity = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserCity));
-        mUserInfoStatus = ((TextView) mUserInfo.findViewById(R.id.tvDatingUserStatus));
+        mUserInfoStatus = ((TextView) root.findViewById(R.id.tvDatingUserStatus));
 
         // Counter
         mDatingCounter = ((TextView) root.findViewById(R.id.tvDatingCounter));
@@ -297,7 +338,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
         mAnimationHelper.addView(mDatingCounter);
         mAnimationHelper.addView(mDatingResources);
-        mAnimationHelper.addView(mUserInfo);
 
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
 
@@ -354,58 +394,52 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProfileBtn.setOnClickListener(this);
     }
 
-    private void initActionBar() {
-        // Navigation Header
-        setActionBarTitles(getTitle(), getSubtitle());
+    @Override
+    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            mOnlineSetter = new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar,
+                    R.id.title_clickable, R.id.title, R.id.subtitle);
+        } else {
+            mOnlineSetter = new ActionBarOnlineSetterDelegate(actionBar, getActivity());
+        }
+        return mOnlineSetter;
     }
 
     protected String getTitle() {
-        if (CacheProfile.dating != null) {
-            int age = CacheProfile.dating.ageEnd == DatingFilter.MAX_AGE ?
-                    EditAgeFragment.absoluteMax : CacheProfile.dating.ageEnd;
-            String headerText = getString(CacheProfile.dating.sex == Static.BOY ?
-                            R.string.dating_header_guys : R.string.dating_header_girls,
-                    CacheProfile.dating.ageStart, age
-            );
-            String plus = CacheProfile.dating.ageEnd == DatingFilter.MAX_AGE ? "+" : "";
-            return headerText + plus;
+        if (mCurrentUser != null) {
+            return mCurrentUser.getNameAndAge();
         }
-        return Static.EMPTY;
+        return getString(R.string.general_dating);
     }
 
     protected String getSubtitle() {
-        if (CacheProfile.dating != null) {
-            String cityString = CacheProfile.dating.city == null || CacheProfile.dating.city.isEmpty() ?
-                    getString(R.string.filter_cities_all) : CacheProfile.dating.city.name;
-            String onlineString = DatingFilter.getOnlyOnlineField() ? getString(R.string.dating_online_only) : "%s";
-            return String.format(onlineString, cityString);
+        if (mCurrentUser != null && mCurrentUser.city != null) {
+            return mCurrentUser.city.getName();
         }
-        return Static.EMPTY;
+        return null;
     }
 
     private void initEmptySearchDialog(View view) {
-        mRetryView = RetryViewCreator.createDefaultRetryView(
-                getActivity(),
-                /* Первая кнопка - "Попробовать еще раз" */
-                getString(R.string.general_search_null_response_error),
-                new OnClickListener() {
+        RetryViewCreator.Builder rvcBuilder = new RetryViewCreator.Builder(getActivity(), new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EasyTracker.sendEvent("EmptySearch", "ClickTryAgain", "", 0L);
+                updateData(false);
+            }
+        }).message(getString(R.string.general_search_null_response_error))
+                .orientation(LinearLayout.VERTICAL)
+                .button(getString(R.string.reset_filter), new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EasyTracker.sendEvent("EmptySearch", "ClickTryAgain", "", 0L);
-                        updateData(false);
+                        EasyTracker.sendEvent("EmptySearch", "ClickResetFilter", "", 0L);
+                        ResetFilterRequest resetRequest = new ResetFilterRequest(getActivity());
+                        registerRequest(resetRequest);
+                        hideEmptySearchDialog();
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        resetRequest.callback(new FilterHandler()).exec();
                     }
-                },
-                /* Вторая кнопка - "Изменить фильтр" */
-                getString(R.string.change_filters),
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        EasyTracker.sendEvent("EmptySearch", "ClickChangeFilter", "", 0L);
-                        startDatingFilterActivity();
-                    }
-                },
-                LinearLayout.VERTICAL
-        );
+                });
+        mRetryView = rvcBuilder.build();
 
         hideEmptySearchDialog();
         ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(mRetryView.getView());
@@ -427,7 +461,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mUserSearchList != null) {
             mUserSearchList.updateSignatureAndUpdate();
         }
-        setActionBarTitles(getTitle(), getSubtitle());
     }
 
     private void updateData(final boolean isAddition) {
@@ -654,11 +687,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.send_gift_button: {
-                startActivityForResult(
-                        GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id),
-                        GiftsActivity.INTENT_REQUEST_GIFT
-                );
-                EasyTracker.sendEvent("Dating", "SendGiftClick", "", 1L);
+                if (mCurrentUser != null) {
+                    startActivityForResult(
+                            GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id),
+                            GiftsActivity.INTENT_REQUEST_GIFT
+                    );
+                    EasyTracker.sendEvent("Dating", "SendGiftClick", "", 1L);
+                }
             }
             break;
             case R.id.chat_btn: {
@@ -734,19 +769,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (currUser == null || !isAdded()) {
             return;
         }
+        refreshActionBarTitles();
         lockControls();
-
-        if (currUser.city != null) {
-            mUserInfoCity.setText(currUser.city.name);
-        }
         //Устанавливаем статус пользователя.
         mUserInfoStatus.setText(currUser.getStatus());
-        //Имя и возраст пользователя
-        mUserInfoName.setText(currUser.getNameAndAge());
 
         Resources res = getResources();
 
-        setUserOnlineStatus(currUser, res);
+        setUserOnlineStatus(currUser);
         setUserSex(currUser, res);
         setLikeButtonDrawables(currUser);
         setUserPhotos(currUser);
@@ -756,14 +786,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         setCounter(0);
     }
 
-    private void setUserOnlineStatus(SearchUser currUser, Resources res) {
-        if (currUser.online) {
-            mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
-                    res.getDrawable(R.drawable.im_online), null, null, null);
-        } else {
-            mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
-                    res.getDrawable(R.drawable.im_offline), null, null, null);
-        }
+    private void setUserOnlineStatus(SearchUser currUser) {
+        mOnlineSetter.setOnline(currUser != null && currUser.online);
     }
 
     private void setUserSex(SearchUser currUser, Resources res) {
@@ -933,8 +957,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void lockControls() {
         mProgressBar.setVisibility(View.VISIBLE);
         if (!mIsHide) mDatingCounter.setVisibility(View.GONE);
-        mUserInfoName.setVisibility(View.GONE);
-        mUserInfoCity.setVisibility(View.GONE);
         mUserInfoStatus.setVisibility(View.GONE);
         mMutualBtn.setEnabled(false);
         mDelightBtn.setEnabled(false);
@@ -950,8 +972,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void unlockControls() {
         mProgressBar.setVisibility(View.GONE);
         if (!mIsHide) mDatingCounter.setVisibility(View.VISIBLE);
-        mUserInfoName.setVisibility(mCurrentUser != null ? View.VISIBLE : View.GONE);
-        mUserInfoCity.setVisibility(mCurrentUser != null ? View.VISIBLE : View.GONE);
         if (!mRoot.isKeyboardOpened()) {
             mUserInfoStatus.setVisibility(View.VISIBLE);
         }
@@ -1016,6 +1036,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (!isPushUpdating) {
             mProgressBar.setVisibility(View.VISIBLE);
             mImageSwitcher.setVisibility(View.GONE);
+            mCurrentUser = null;
+            refreshActionBarTitles();
+            mOnlineSetter.setOnline(false);
+            mUserInfoStatus.setText(Static.EMPTY);
         }
     }
 
@@ -1039,30 +1063,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             lockControls();
             hideEmptySearchDialog();
+            mProgressBar.setVisibility(View.VISIBLE);
             if (data != null && data.getExtras() != null) {
                 final DatingFilter filter = data.getExtras().getParcelable(FilterFragment.INTENT_DATING_FILTER);
                 FilterRequest filterRequest = new FilterRequest(filter, getActivity());
                 registerRequest(filterRequest);
-                filterRequest.callback(new DataApiHandler<DatingFilter>() {
-
-                    @Override
-                    protected void success(DatingFilter filter, IApiResponse response) {
-                        CacheProfile.dating = filter;
-                        updateFilterData();
-                        updateData(false);
-                    }
-
-                    @Override
-                    protected DatingFilter parseResponse(ApiResponse response) {
-                        return new DatingFilter(response.getJsonResult());
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-                        Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_LONG).show();
-                        unlockControls();
-                    }
-                }).exec();
+                filterRequest.callback(new FilterHandler()).exec();
+                mNewFilter = true;
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -1184,14 +1191,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private OnUsersListEventsListener mSearchListener = new OnUsersListEventsListener() {
         @Override
         public void onEmptyList(UsersList usersList) {
-            lockControls();
-            updateData(false);
-
+            if (!mNewFilter) {
+                lockControls();
+                updateData(false);
+            }
         }
 
         @Override
         public void onPreload(UsersList usersList) {
-            updateData(true);
+            if (!mNewFilter) {
+                updateData(true);
+            }
         }
 
     };
@@ -1202,6 +1212,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProgressBar.setVisibility(View.GONE);
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);
+        setActionBarTitles(getString(R.string.general_dating));
+        mOnlineSetter.setOnline(false);
         mFragmentSwitcherListener.onShowActionBar();
     }
 

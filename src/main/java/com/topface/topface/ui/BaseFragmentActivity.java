@@ -28,6 +28,8 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
+import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.IRequestClient;
@@ -48,6 +50,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private StartActionsController mStartActionsController;
+    private ActionBarTitleSetterDelegate mTitleSetter;
 
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -62,6 +65,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         LocaleConfig.updateConfiguration(getBaseContext());
         setWindowOptions();
         initActionBar(getSupportActionBar());
+        mTitleSetter = initTitleSetter(getSupportActionBar());
+        if (mTitleSetter != null) {
+            mTitleSetter.setActionBarTitles(String.valueOf(getTitle()), null);
+        }
     }
 
     @Override
@@ -95,9 +102,35 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
      */
     protected void initActionBar(ActionBar actionBar) {
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setIcon(R.drawable.ic_home_topface_white);
+            actionBar.setIcon(android.R.color.transparent);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                actionBar.setDisplayHomeAsUpEnabled(false);
+                actionBar.setDisplayUseLogoEnabled(true);
+                actionBar.setCustomView(R.layout.actionbar_container_title_view);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setDisplayShowTitleEnabled(false);
+                actionBar.setLogo(android.R.color.transparent);
+            } else {
+                actionBar.setDisplayUseLogoEnabled(false);
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setHomeAsUpIndicator(R.drawable.arrow_with_paddings);
+            }
         }
+    }
+
+    protected ActionBarTitleSetterDelegate initTitleSetter(ActionBar actionBar) {
+        if (actionBar != null) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                return new ActionBarCustomViewTitleSetterDelegate(this, actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
+            } else {
+                return new ActionBarTitleSetterDelegate(actionBar);
+            }
+        }
+        return null;
+    }
+
+    public ActionBarTitleSetterDelegate getTitleSetter() {
+        return mTitleSetter;
     }
 
     /**
@@ -219,6 +252,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         return false;
     }
 
+    @SuppressWarnings("unused")
     public void startFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()

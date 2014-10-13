@@ -19,6 +19,13 @@
         </item>
     </style>
 
+    <style name="Widget.Topface.TransparentActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="background">@android:color/transparent</item>
+        <item name="icon">@android:color/transparent</item>
+        <item name="android:background" tools:ignore="NewApi">@android:color/transparent</item>
+        <item name="android:icon" tools:ignore="NewApi">@android:color/transparent</item>
+    </style>
+
     <style name="Widget.Topface.ActionBar.Title" parent="ShadowBlackTop">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:textSize">@dimen/action_bar_title_size</item>
@@ -491,18 +498,6 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:visibility">gone</item>
-    </style>
-
-    <style name="BackButton" parent="android:Widget.ImageButton">
-        <item name="android:background">@drawable/navigation_back_selector</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_alignParentLeft">true</item>
-
-        <item name="android:paddingLeft">5dp</item>
-        <item name="android:visibility">gone</item>
-        <item name="android:clickable">false</item>
     </style>
 
     <style name="chat_message_layout">

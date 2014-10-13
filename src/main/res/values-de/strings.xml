@@ -6,7 +6,9 @@
     <string name="general_ok">OK</string>
     <string name="general_dbl_new">Neue</string>
     <string name="general_settings_abbr">Einst.</string>
+    <string name="general_disallow">Verboten</string>
     <string name="general_allow">Erlauben</string>
+    <string name="notification_denied_popup_title">Erlauben Sie die Benachrichtigungen, falls Sie über neue Nachrichten, Sympathien und andere Neuigkeiten erfahren wollen.</string>
     <string name="notification_popup_title">Erlauben Sie die Benachrichtigungen, und erfahren Sie sofort über neue Sympathien, Bewunderungen oder Nachrichten</string>
     <string name="email_successfully_changed">Ihre E-Mail Adresse wurde erfolgreich geändert</string>
     <string name="auth_vk_name">VKontakte</string>

@@ -5,6 +5,6 @@
     <item
         android:id="@+id/action_dating_filter"
         android:title="@string/filter_filter"
-        android:icon="@drawable/filter_selector"
+        android:icon="@drawable/ic_settings"
         appcompat:showAsAction="always" />
 </menu>

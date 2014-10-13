@@ -25,7 +25,7 @@ public class ResourcesUtils {
             case F_MUTUAL_CLOSINGS:
                 return R.string.general_mutual;
             case F_DIALOGS:
-                return R.string.general_dialogs;
+                return R.string.settings_messages;
             case F_VISITORS:
                 return R.string.general_visitors;
             case F_BOOKMARKS:
