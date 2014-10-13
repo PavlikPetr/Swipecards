@@ -163,17 +163,17 @@
     <string name="dating_skip_button">Next</string>
     <string name="message_too_long">The message you entered is too long. The number of symbols can\'t exceed %d.</string>
     <string name="chat_gift_in">You have received a gift.</string>
-    <string name="chat_gift_out">You have sent the gift.</string>
+    <string name="chat_gift_out">Gift is sent.</string>
     <string name="chat_like_in">Someone likes you!</string>
-    <string name="chat_like_out">You have sent a like.</string>
+    <string name="chat_like_out">Like is sent.</string>
     <string name="chat_mutual_in">You have received an admiration.</string>
     <string name="chat_mutual_out">You have sent an admiration.</string>
     <string name="chat_wish_in">Someone has sent you a Secret Wish.</string>
-    <string name="chat_wish_out">You have sent a Secret Wish.</string>
+    <string name="chat_wish_out">Secret Wish is sent.</string>
     <string name="chat_sexuality_in">Your sexuality has been rated.</string>
     <string name="chat_sexuality_out">You have rated a sexuality.</string>
     <string name="chat_wink_in">You have received a wink.</string>
-    <string name="chat_wink_out">You have sent a wink.</string>
+    <string name="chat_wink_out">Wink is sent.</string>
     <string name="filter_filter">Filter</string>
     <string name="filter_age_string">From %1$d to %2$d</string>
     <string name="filter_only_beautiful">Attractive only</string>
@@ -335,7 +335,7 @@
         <item quantity="other">Now you have %d likes!</item>
         <item quantity="one">Now you have %d like!</item>
     </plurals>
-    <string name="profile_ask_sent">Your request is sent</string>
+    <string name="profile_ask_sent">Request is sent.</string>
     <string name="virus_error">A friend can send you a like only once every 24 hours. Try again tomorrow!</string>
     <string name="popup_version_update">Update</string>
     <string name="popup_version_cancel">Remind me later</string>
@@ -391,7 +391,7 @@
     <string name="reselect_city">Select a different city:</string>
     <string name="choose_cool_photo">Select your best photo and a status that reflects your mood!</string>
     <string name="email_confirmed">The email is confirmed!</string>
-    <string name="sympathy_sended">A like has been sent</string>
+    <string name="sympathy_sended">Like is sent.</string>
     <string name="general_photo_deleted">Your photo was deleted because it violates the rules.</string>
     <string name="general_change">Change</string>
     <string name="user_does_not_have_gifts">This user has no gifts, give the first one and you will be noticed.</string>
@@ -450,7 +450,7 @@
     <string name="your_avatar">Profile picture</string>
     <string name="avatar_set_successfully">Your profile photo has been successfully set</string>
     <string name="incorrect_photo">Improper photo. Try to upload a different one.</string>
-    <string name="incorrect_photo_format">Improper image format. Try to upload a .jpg or .png file.</string>
+    <string name="incorrect_photo_format">Invalid image format. Try to upload a .jpg or .png file.</string>
     <string name="incorrect_photo_size">Invalid photo size</string>
     <string name="input_contact_name">Enter the contact name</string>
     <string name="incorrect_locale">If you would like for us to read your review, please write it in Russian or in English language</string>
@@ -494,7 +494,7 @@
     <string name="delete_account_error">Unfortunately, your attempt to delete your account has failed. You can try it again.</string>
     <string name="delete_account_will_be_restored_are_you_sure">You are trying to log in to your deleted account. If you log in, your account will be restored. Are you sure?</string>
     <string name="restore">Restore</string>
-    <string name="admiration_sended">Admiration is sent</string>
+    <string name="admiration_sended">Admiration is sent.</string>
     <string name="getjar_auth_title">Choose account</string>
     <string name="skip">Skip</string>
     <string name="chat">Chat</string>
