@@ -436,7 +436,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         registerRequest(resetRequest);
                         hideEmptySearchDialog();
                         mProgressBar.setVisibility(View.VISIBLE);
-                        resetRequest.callback(new FilterHandler()).exec();
+                        resetRequest.callback(new FilterHandler() {
+                            @Override
+                            protected void success(DatingFilter filter, IApiResponse response) {
+                                DatingFilter.setOnlyOnlineField(false);
+                                super.success(filter, response);
+                            }
+                        }).exec();
                     }
                 });
         mRetryView = rvcBuilder.build();
