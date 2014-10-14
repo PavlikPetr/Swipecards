@@ -1,8 +1,10 @@
 package com.topface.topface.requests;
 
+import com.topface.topface.data.SerializableToJson;
+
 import org.json.JSONObject;
 
-public interface IApiResponse {
+public interface IApiResponse extends SerializableToJson {
 
 
     /**
@@ -30,6 +32,7 @@ public interface IApiResponse {
 
     public String getMethodName();
 
+    @SuppressWarnings("unused")
     public boolean isMethodNameEquals(String method);
 
     public JSONObject getUnread();

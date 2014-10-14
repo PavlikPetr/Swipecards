@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 abstract public class MultipartApiRequest extends ApiRequest {
@@ -159,8 +160,16 @@ abstract public class MultipartApiRequest extends ApiRequest {
         return this;
     }
 
+    @SuppressWarnings("unused")
     public MultipartApiRequest addRequests(Map<String, IApiRequest> requests) {
         mRequests.putAll(requests);
+        return this;
+    }
+
+    public MultipartApiRequest addRequests(List<IApiRequest> requests) {
+        for (IApiRequest request : requests) {
+            mRequests.put(request.getId(), request);
+        }
         return this;
     }
 
@@ -185,5 +194,8 @@ abstract public class MultipartApiRequest extends ApiRequest {
         return multipartApiResponse;
     }
 
-
+    @Override
+    public RequestBuilder intoBuilder(RequestBuilder requestBuilder) {
+        return requestBuilder.multipleRequest(this);
+    }
 }
