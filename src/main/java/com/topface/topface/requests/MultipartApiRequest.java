@@ -142,9 +142,11 @@ abstract public class MultipartApiRequest extends ApiRequest {
 
     @Override
     public void exec() {
-        if (mRequests.size() > MAX_SUBREQUESTS_NUMBER) {
+        // Check number of subrequests. One position is reserved for optional auth request.
+        // So maximum allowed number is MAX - 1.
+        if (mRequests.size() >= MAX_SUBREQUESTS_NUMBER) {
             throw new RuntimeException("Multiple request with " + mRequests.size() +
-                    " subrequests. " + MAX_SUBREQUESTS_NUMBER + " is maximum.");
+                    " subrequests. " + (MAX_SUBREQUESTS_NUMBER - 1) + " is maximum.");
         }
         super.exec();
     }
