@@ -6,6 +6,8 @@ import com.topface.topface.requests.handlers.ApiHandler;
 
 public interface IApiRequest {
 
+    IApiRequest callback(ApiHandler handler);
+
     public void exec();
 
     public int resend();
@@ -18,11 +20,15 @@ public interface IApiRequest {
 
     public void setFinished();
 
+    String toPostData();
+
     public Context getContext();
 
     public ApiHandler getHandler();
 
     public String getId();
+
+    String getServiceName();
 
     public IApiResponse sendRequestAndReadResponse() throws Exception;
 
@@ -31,4 +37,6 @@ public interface IApiRequest {
     boolean isNeedAuth();
 
     public void sendHandlerMessage(IApiResponse response);
+
+    RequestBuilder intoBuilder(RequestBuilder requestBuilder);
 }

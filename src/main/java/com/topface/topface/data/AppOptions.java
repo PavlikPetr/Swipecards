@@ -9,11 +9,17 @@ import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONObject;
 
 /**
- * Created by kirussell on 23.04.2014.
+ * Application options
  */
 public class AppOptions extends AbstractData {
 
+    private static final int DEFAULT_SESSION_TIMEOUT = 1200;
+
     private ClientStatisticSettings clientStatisticsSettings = new ClientStatisticSettings();
+    /**
+     * Session timeout in seconds
+     */
+    private int sessionTimeout;
 
     public AppOptions(JSONObject data) {
         if (data != null) {
@@ -27,6 +33,7 @@ public class AppOptions extends AbstractData {
             if (clientStatisticsJson != null) {
                 clientStatisticsSettings = new ClientStatisticSettings(clientStatisticsJson);
             }
+            sessionTimeout = item.optInt("sessionTimeout", DEFAULT_SESSION_TIMEOUT);
             App.getAppConfig().setAppOptions(item.toString());
         } catch (Exception e) {
             Debug.error("AppOptions.class : Wrong response parsing", e);
@@ -45,6 +52,10 @@ public class AppOptions extends AbstractData {
                 wifi ? clientStatisticsSettings.timeoutWifi : clientStatisticsSettings.timeoutCell,
                 HttpUtils.getUserAgent()
         );
+    }
+
+    public int getSessionTimeout() {
+        return sessionTimeout;
     }
 
     private class ClientStatisticSettings {

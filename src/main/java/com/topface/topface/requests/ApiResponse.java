@@ -1,7 +1,6 @@
 package com.topface.topface.requests;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.requests.handlers.ErrorCodes;
 
 import org.json.JSONException;
@@ -10,7 +9,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class ApiResponse implements IApiResponse, SerializableToJson {
+public class ApiResponse implements IApiResponse {
     private boolean mIsNeedUpdateCounters = true;
     // Data
     protected int code = ErrorCodes.RESULT_DONT_SET;

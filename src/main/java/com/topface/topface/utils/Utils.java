@@ -108,6 +108,8 @@ public class Utils {
     public static Integer getGooglePlayServicesVersion(Context context) {
         try {
             return context.getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            Debug.error("Can't obtain google play services version, no gcm available");
         } catch (Exception e) {
             Debug.error("Can't obtain google play services version", e);
         }

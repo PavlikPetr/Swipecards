@@ -21,6 +21,7 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -88,11 +89,15 @@ public class CacheProfile {
     @SuppressWarnings("FieldCanBeLocal")
     private static Products mFortumoProducts;
 
-    private static void setProfileCache(final ApiResponse response) {
+    private static void setProfileCache(final IApiResponse response) {
         if (response != null) {
             SessionConfig config = App.getSessionConfig();
-            config.setProfileData(response.toJson().toString());
-            config.saveConfig();
+            try {
+                config.setProfileData(response.toJson().toString());
+                config.saveConfig();
+            } catch (JSONException e) {
+                Debug.error("Can't get prfile data from json", e);
+            }
         }
     }
 
@@ -136,7 +141,7 @@ public class CacheProfile {
         setProfile(profile, response, ProfileRequest.P_ALL);
     }
 
-    public static void setProfile(Profile profile, ApiResponse response, int part) {
+    public static void setProfile(Profile profile, IApiResponse response, int part) {
         switch (part) {
             case ProfileRequest.P_NECESSARY_DATA:
                 gifts = profile.gifts;

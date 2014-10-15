@@ -91,14 +91,17 @@ public class AuthorizationManager {
         getFacebook().extendAccessTokenIfNeeded(parentActivity.getApplicationContext(), null);
     }
 
-    public static Auth saveAuthInfo(IApiResponse response) {
+    public static void saveAuthInfo(IApiResponse response) {
         Auth auth = new Auth(response);
+        saveAuthInfo(auth);
+    }
+
+    public static void saveAuthInfo(Auth auth) {
         Ssid.save(auth.ssid);
         AuthToken token = AuthToken.getInstance();
         if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             token.saveToken(auth.userId, token.getLogin(), token.getPassword());
         }
-        return auth;
     }
 
     private void receiveToken() {

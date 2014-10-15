@@ -66,6 +66,7 @@ public abstract class ApiRequest implements IApiRequest {
         return App.getAppConfig().getApiRevision();
     }
 
+    @Override
     public ApiRequest callback(ApiHandler handler) {
         if (handler != null) {
             this.handler = handler;
@@ -161,6 +162,7 @@ public abstract class ApiRequest implements IApiRequest {
         mPostData = null;
     }
 
+    @Override
     public String toPostData() {
         //Непосредственно перед отправкой запроса устанавливаем новый SSID
         setSsid(Ssid.get());
@@ -217,8 +219,6 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     protected abstract JSONObject getRequestData() throws JSONException;
-
-    public abstract String getServiceName();
 
     @Override
     final public String toString() {
@@ -314,6 +314,10 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     protected boolean writeData(HttpURLConnection connection, IConnectionConfigureListener listener) throws IOException {
+        // Check if service name exists and throw runtime exception if doesn't
+        if (TextUtils.isEmpty(getServiceName())) {
+            throw new RuntimeException("Request doesn't have service name!");
+        }
         //Формируем свои данные для отправки POST запросом
         String requestJson = toPostData();
 
@@ -413,5 +417,10 @@ public abstract class ApiRequest implements IApiRequest {
         void onConfigureEnd();
 
         void onConnectionEstablished();
+    }
+
+    @Override
+    public RequestBuilder intoBuilder(RequestBuilder requestBuilder) {
+        return requestBuilder.singleRequest(this);
     }
 }
