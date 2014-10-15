@@ -48,10 +48,10 @@ public class AppOptions extends AbstractData {
         boolean wifi = connectivityType == Connectivity.Conn.WIFI;
         return new StatisticsConfiguration(
                 hasConnection && clientStatisticsSettings.enabled,
+                hasConnection && clientStatisticsSettings.connectionStatisticsEnabled,
                 wifi ? clientStatisticsSettings.maxSizeWifi : clientStatisticsSettings.maxSizeCell,
                 wifi ? clientStatisticsSettings.timeoutWifi : clientStatisticsSettings.timeoutCell,
-                HttpUtils.getUserAgent()
-        );
+                HttpUtils.getUserAgent());
     }
 
     public int getSessionTimeout() {
@@ -60,6 +60,7 @@ public class AppOptions extends AbstractData {
 
     private class ClientStatisticSettings {
         boolean enabled = false;
+        boolean connectionStatisticsEnabled = false;
         long timeoutWifi = 60000;
         long timeoutCell = 150000;
         int maxSizeWifi = 200;
@@ -70,6 +71,7 @@ public class AppOptions extends AbstractData {
 
         ClientStatisticSettings(JSONObject json) {
             enabled = json.optBoolean("enabled");
+            connectionStatisticsEnabled = json.optBoolean("connectionStatisticsEnabled");
             timeoutWifi = json.optLong("timeoutWifi") * 1000;
             timeoutCell = json.optLong("timeoutCell") * 1000;
             maxSizeWifi = json.optInt("maxSizeWifi");

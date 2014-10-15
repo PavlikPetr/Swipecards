@@ -76,7 +76,7 @@ public class ConnectionStatLogs extends InstrumentationTestCase {
         mSourceConfig = tracker.getConfiguration();
         tracker.setConfiguration(
                 new StatisticsConfiguration(
-                        true, 4, 30,
+                        true, true, 4, 30,
                         "test-android-imgDwn",
                         "localhost"
                 )

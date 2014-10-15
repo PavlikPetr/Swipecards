@@ -33,29 +33,24 @@ public class RequestConnectionListener {
     }
 
     public void onConnectionEstablished() {
-        mConnEstablishedTime = System.currentTimeMillis();
-        long interval = mConnEstablishedTime - mConnInvokedTime;
-        addDebugVal(interval);
-        mTracker.sendEvent(
-                TfStatConsts.api_connect_time,
-                mSlices.putSlice(TfStatConsts.val, getConnTimeVal(interval))
-        );
+        if (isConnectionStatisticsEnabled()) {
+            mConnEstablishedTime = System.currentTimeMillis();
+            long interval = mConnEstablishedTime - mConnInvokedTime;
+            addDebugVal(interval);
+            send(TfStatConsts.val, getConnTimeVal(interval));
+        }
     }
 
     public void onConnectionClose() {
-        long connClosedTime = System.currentTimeMillis();
-        long interval = connClosedTime - mConnEstablishedTime;
-        addDebugVal(interval);
-        mTracker.sendEvent(
-                TfStatConsts.api_load_time,
-                mSlices.putSlice(TfStatConsts.val, getConnTimeVal(interval))
-        );
-        interval = connClosedTime - mConnStartedTime;
-        addDebugVal(interval);
-        mTracker.sendEvent(
-                TfStatConsts.api_request_time,
-                mSlices.putSlice(TfStatConsts.val, getRequestTimeVal(interval))
-        );
+        if (isConnectionStatisticsEnabled()) {
+            long connClosedTime = System.currentTimeMillis();
+            long interval = connClosedTime - mConnEstablishedTime;
+            addDebugVal(interval);
+            send(TfStatConsts.val, getConnTimeVal(interval));
+            interval = connClosedTime - mConnStartedTime;
+            addDebugVal(interval);
+            send(TfStatConsts.val, getRequestTimeVal(interval));
+        }
     }
 
     private void addDebugVal(long val) {
@@ -71,5 +66,13 @@ public class RequestConnectionListener {
 
     protected String getRequestTimeVal(long interval) {
         return TfStatConsts.getRequestTimeVal(interval);
+    }
+
+    private void send(String slice, String val) {
+        mTracker.sendEvent(TfStatConsts.api_request_time, mSlices.putSlice(slice, val));
+    }
+
+    private boolean isConnectionStatisticsEnabled() {
+        return mTracker.getConfiguration().connectionStatisticsEnabled;
     }
 }
