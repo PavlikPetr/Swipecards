@@ -2,6 +2,7 @@ package com.topface.topface.utils.http;
 
 import android.content.Context;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
@@ -69,8 +70,11 @@ public class AuthAssistant {
             Context context = request.getContext();
             AuthRequest authRequest = new AuthRequest(AuthToken.getInstance().getTokenInfo(), context);
 
+            String oldRequestId = request.getId();
             request = new RequestBuilder(context).
                     firstRequest(authRequest, authHandler).request(request).build();
+            Debug.log("Request's id changed from " + oldRequestId + " to " + request.getId() +
+                    " because of adding authorization subrequest");
 
             mModifiedRequestsIds.add(request.getId());
         }
