@@ -123,7 +123,7 @@ public class ConnectionManager {
             }
 
             //Проверяем запрос на ошибку неверной сессии
-            if (response.isCodeEqual(ErrorCodes.SESSION_NOT_FOUND)) {
+            if (response != null && response.isCodeEqual(ErrorCodes.SESSION_NOT_FOUND)) {
                 //Добавляем запрос авторизации
                 request = authAssistant.precedeRequestWithAuth(request);
                 response = sendOrPend(request);
@@ -231,6 +231,8 @@ public class ConnectionManager {
 
             //Изначальный же запрос отменяем, нам не нужно что бы он обрабатывался дальше
             result = true;
+        } else {
+            Ssid.update();
         }
 
         return result;

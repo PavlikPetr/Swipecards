@@ -23,6 +23,8 @@ import java.util.Map;
 
 abstract public class MultipartApiRequest extends ApiRequest {
 
+    public static final int MAX_SUBREQUESTS_NUMBER = 10;
+
     protected LinkedHashMap<String, IApiRequest> mRequests = new LinkedHashMap<>();
 
     public MultipartApiRequest(Context context) {
@@ -136,6 +138,15 @@ abstract public class MultipartApiRequest extends ApiRequest {
         } else {
             super.sendHandlerMessage(multipartResponse);
         }
+    }
+
+    @Override
+    public void exec() {
+        if (mRequests.size() > MAX_SUBREQUESTS_NUMBER) {
+            throw new RuntimeException("Multiple request with " + mRequests.size() +
+                    " subrequests. " + MAX_SUBREQUESTS_NUMBER + " is maximum.");
+        }
+        super.exec();
     }
 
     private void sendHandlerMessageToRequests(MultipartApiResponse response, boolean onlyCompleted) {

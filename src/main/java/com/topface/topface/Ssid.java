@@ -50,6 +50,19 @@ public class Ssid {
 
     }
 
+    public synchronized static void update() {
+        mLastUpdate = System.currentTimeMillis();
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong(PREFERENCES_LAST_UPDATE_KEY, mLastUpdate);
+                editor.apply();
+            }
+        };
+    }
+
     public synchronized static void remove() {
         mSsid = Static.EMPTY;
         new BackgroundThread() {
@@ -65,19 +78,18 @@ public class Ssid {
     }
 
     /**
-     * Определяет старше ли SSID указаного числа минут
+     * Определяет старше ли SSID указаного числа секунд
      *
-     * @param minutes время в минутах
+     * @param seconds время в минутах
      * @return старше ли SSID чем число минут передах в аргменте minutes
      */
-    @SuppressWarnings("UnusedDeclaration")
-    public synchronized static boolean isOlderThan(int minutes) {
-        int millis = minutes * 60 * 1000;
+    public synchronized static boolean isOlderThan(int seconds) {
+        int millis = seconds * 1000;
         return System.currentTimeMillis() > (millis + mLastUpdate);
     }
 
     public static boolean isOverdue() {
-        return true;
+        return isOlderThan(App.getAppOptions().getSessionTimeout());
     }
 
     public interface ISsidUpdateListener {
