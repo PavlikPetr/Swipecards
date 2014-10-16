@@ -121,14 +121,14 @@ public class AuthorizationManager {
                     if (extras != null) {
                         String token_key = extras.getString(VkAuthActivity.ACCESS_TOKEN);
                         String user_id = extras.getString(VkAuthActivity.USER_ID);
-                        String expires_in = extras.getString(VkAuthActivity.EXPIRES_IN);
+                        int expires_in = extras.getInt(VkAuthActivity.EXPIRES_IN);
                         String user_name = extras.getString(VkAuthActivity.USER_NAME);
                         SessionConfig sessionConfig = App.getSessionConfig();
                         sessionConfig.setSocialAccountName(user_name);
                         sessionConfig.saveConfig();
 
                         AuthToken authToken = AuthToken.getInstance();
-                        authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
+                        authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, String.valueOf(expires_in));
                     }
                     receiveToken();
                 }
