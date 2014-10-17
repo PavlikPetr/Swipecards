@@ -294,6 +294,8 @@
     <string name="settings_melody">Notification ringtone</string>
     <string name="edit_refresh_status">Update status</string>
     <string name="ban_title">Congratulations! You are banned.</string>
+    <string name="ban_title_forever">Congratulations! You are banned forever.</string>
+    <string name="ban_title_until">Congratulations! You are banned until %s</string>
     <string name="ban_complain">Ban complaint</string>
     <string name="general_ready">Done</string>
     <string name="buying_store_ok">Purchase successfully completed</string>
@@ -356,7 +358,7 @@
     <string name="recovering_password">Password recovery</string>
     <string name="send_password">Send password</string>
     <string name="boy">guy</string>
-    <string name="girl">Girl</string>
+    <string name="girl">girl</string>
     <string name="start_communication">Start a chat</string>
     <string name="birthdate">BD</string>
     <string name="welcome_to_topface">Welcome to Topface!</string>

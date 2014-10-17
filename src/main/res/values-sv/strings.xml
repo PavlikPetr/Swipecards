@@ -6,7 +6,9 @@
     <string name="general_ok">OK</string>
     <string name="general_dbl_new">Nya</string>
     <string name="general_settings_abbr">Inställningar</string>
+    <string name="general_disallow">Förbjud</string>
     <string name="general_allow">Tillåta</string>
+    <string name="notification_denied_popup_title">Tillåt notifikationer för att ta reda på inkommande meddelanden, sympatier och andra nyheter.</string>
     <string name="notification_popup_title">Tillåta sända dig notifikationer för att du genast kan få veta om ny sympati, beundran eller oläst meddelande.</string>
     <string name="email_successfully_changed">Din e-postadress har framgångsrikt ändrats</string>
     <string name="auth_vk_name">VKontakte</string>
@@ -276,6 +278,7 @@
     <string name="general_premium_access_error">För denna funktion behövs Premium</string>
     <string name="general_search_null_response_error">Inget hittats. Försök att ändra sökkriterier</string>
     <string name="change_filters">Ändra filtrar</string>
+    <string name="reset_filter">Återställ</string>
     <string name="general_sex">Kön</string>
     <string name="general_girl">Kvinna</string>
     <string name="general_boy">man</string>
@@ -291,6 +294,8 @@
     <string name="settings_melody">Notifikationsmelodi</string>
     <string name="edit_refresh_status">Förnya status</string>
     <string name="ban_title">Grattis! Du har bannlysts!</string>
+    <string name="ban_title_forever">Grattis! Du har bannlysts för alltid</string>
+    <string name="ban_title_until">Grattis! Du har bannlysts till %s</string>
     <string name="ban_complain">Klaga på bannlysning</string>
     <string name="general_ready">Klart</string>
     <string name="buying_store_ok">Inköpet har framgångsrikt avklarats</string>

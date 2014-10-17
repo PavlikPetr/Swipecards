@@ -278,6 +278,7 @@
     <string name="general_premium_access_error">Für diese Funktion brauchen Sie VIP Status</string>
     <string name="general_search_null_response_error">Nichts gefunden. Versuchen Sie die Filter zu ändern</string>
     <string name="change_filters">Filter ändern</string>
+    <string name="reset_filter">reset</string>
     <string name="general_sex">Geschlecht</string>
     <string name="general_girl">Weiblich</string>
     <string name="general_boy">Männlich</string>
@@ -293,6 +294,8 @@
     <string name="settings_melody">Sound-Benachrichtigungen</string>
     <string name="edit_refresh_status">Den Status aktualisieren</string>
     <string name="ban_title">Gratulation! Sie sind gebannt</string>
+    <string name="ban_title_forever">Gratulation! Sie sind für immer gebannt</string>
+    <string name="ban_title_until">Gratulation! Sie sind bis %s gebannt</string>
     <string name="ban_complain">Auf Ban beklagen</string>
     <string name="general_ready">Fertig</string>
     <string name="buying_store_ok">Kauf ist erfolgreich beendet</string>

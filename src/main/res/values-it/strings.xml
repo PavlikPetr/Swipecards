@@ -278,6 +278,7 @@
     <string name="general_premium_access_error">Devi avere lo stato VIP per questa funzione</string>
     <string name="general_search_null_response_error">La ricerca non ha prodotto risultati. Prova a cambiare i filtri</string>
     <string name="change_filters">Cambiare filtri</string>
+    <string name="reset_filter">Azzerare</string>
     <string name="general_sex">Sesso</string>
     <string name="general_girl">Femminile</string>
     <string name="general_boy">Maschile</string>
@@ -293,6 +294,8 @@
     <string name="settings_melody">Suoneria di avviso</string>
     <string name="edit_refresh_status">Aggiornare lo stato</string>
     <string name="ban_title">Congratulazioni! Hai ricevuto ban</string>
+    <string name="ban_title_forever">Congratulazioni! Hai ricevuto il ban per sempre</string>
+    <string name="ban_title_until">Congratulazioni! Hai ricevuto il ban fino al %s</string>
     <string name="ban_complain">Reclamare ban</string>
     <string name="general_ready">Fatto</string>
     <string name="buying_store_ok">L’acquisto è stato completato con successo</string>

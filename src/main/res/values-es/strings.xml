@@ -278,6 +278,7 @@
     <string name="general_premium_access_error">Para esta función hace falta el estado VIP</string>
     <string name="general_search_null_response_error">Nada fue encontrado. Prueba cambiar los filtros de busqueda</string>
     <string name="change_filters">Cambiar filtros</string>
+    <string name="reset_filter">Resetear</string>
     <string name="general_sex">Sexo</string>
     <string name="general_girl">Femenino</string>
     <string name="general_boy">Masculino</string>
@@ -293,6 +294,8 @@
     <string name="settings_melody">Melodía de notificación</string>
     <string name="edit_refresh_status">Renovar estado</string>
     <string name="ban_title">¡Enhorabuena! Estas baneado/a</string>
+    <string name="ban_title_forever">¡Enhorabuena! Estas baneado para siempre</string>
+    <string name="ban_title_until">¡Enhorabuena! Estas baneado hasta %s</string>
     <string name="ban_complain">Denunciar baneo</string>
     <string name="general_ready">Listo</string>
     <string name="buying_store_ok">Compra efectuada con éxito</string>
