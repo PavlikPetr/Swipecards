@@ -36,7 +36,7 @@ public class ErrorCodes {
     public static final int DEFAULT_ERO_PHOTO = 13;
     public static final int PAYMENT = 14; // not enough coins
     public static final int INCORRECT_VOTE = 15;
-    public static final int INVALID_TRANSACTION = 16;
+    public static final int DUPLICATE_TRANSACTION = 16;
     public static final int INVALID_PRODUCT = 17;
     public static final int INVERIFIED_RECEIPT = 18;
     public static final int ITUNES_CONNECTION = 19;

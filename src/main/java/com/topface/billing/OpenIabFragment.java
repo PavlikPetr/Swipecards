@@ -24,6 +24,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PurchaseRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -500,13 +501,12 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 // то возникнет ситуация, что сервер не может валидировать покупку.
                 // Поэтому мы тратим такую покупку после ошибки, если это тестовая покупка
                 DeveloperPayload developerPayload = validateRequest.getDeveloperPayload();
-                if (developerPayload != null && TextUtils.equals(developerPayload.sku, TEST_PURCHASED_PRODUCT_ID)) {
+                if ((developerPayload != null && TextUtils.equals(developerPayload.sku, TEST_PURCHASED_PRODUCT_ID)) ||
+                        codeError == ErrorCodes.DUPLICATE_TRANSACTION) {
                     mHelper.consumeAsync(purchase, OpenIabFragment.this);
                 } else {
                     Debug.error("BillindFragment: verify error: " + response);
                 }
-
-
             }
 
         }).exec();
