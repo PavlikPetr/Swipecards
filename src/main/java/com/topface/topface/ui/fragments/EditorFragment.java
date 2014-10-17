@@ -52,7 +52,7 @@ import static com.topface.topface.utils.notifications.UserNotificationManager.ge
  * Фрагмент админки. Доступен только для редакторов.
  */
 public class EditorFragment extends BaseFragment implements View.OnClickListener {
-    public static final String API_STAGE_TF = "https://api-%s.stage.tf";
+    public static final String API_STAGE_TF = "https://api-%s.stage.tf/";
     private Spinner mApiUrl;
     private Spinner mOfferwallTypeChoose;
     private EditText mApiRevision;
@@ -139,7 +139,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mConnectionCheckbox.setOnClickListener(this);
         mConnectionCheckbox.setChecked(config.getDebugConnectionChecked());
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_spinner_item,
                 new String[]{"Offline", "3G", "Edge", "WiFi"});
