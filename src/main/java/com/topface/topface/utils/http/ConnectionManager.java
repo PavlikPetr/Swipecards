@@ -122,22 +122,24 @@ public class ConnectionManager {
 
             }
 
-            //Проверяем запрос на ошибку неверной сессии
-            if (response != null && response.isCodeEqual(ErrorCodes.SESSION_NOT_FOUND)) {
-                //Добавляем запрос авторизации
-                request = authAssistant.precedeRequestWithAuth(request);
-                response = sendOrPend(request);
+            if (response != null) {
+                //Проверяем запрос на ошибку неверной сессии
+                if (response.isCodeEqual(ErrorCodes.SESSION_NOT_FOUND)) {
+                    //Добавляем запрос авторизации
+                    request = authAssistant.precedeRequestWithAuth(request);
+                    response = sendOrPend(request);
 
-                //Если после отпправки на авторизацию вернулся пустой запрос,
-                //значит другой поток уже отправил запрос авторизации и нам нужно завершаем обработку и ждать новый SSID
-                if (response == null) {
-                    return;
+                    //Если после отпправки на авторизацию вернулся пустой запрос,
+                    //значит другой поток уже отправил запрос авторизации и нам нужно завершаем обработку и ждать новый SSID
+                    if (response == null) {
+                        return;
+                    }
                 }
+                //Проверяем, нет ли в конечном запросе ошибок авторизации (т.е. не верного токена, пароля и т.п.)
+                checkAuthError(request, response);
+                //Обрабатываем ответ от сервера
+                needResend = processResponse(request, response);
             }
-            //Проверяем, нет ли в конечном запросе ошибок авторизации (т.е. не верного токена, пароля и т.п.)
-            checkAuthError(request, response);
-            //Обрабатываем ответ от сервера
-            needResend = processResponse(request, response);
         } catch (Exception e) {
             //Мы отлавливаем все ошибки, возникшие при запросе, не хотим что бы приложение падало из-за них
             Debug.error(TAG + "::REQUEST::ERROR", e);
