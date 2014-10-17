@@ -92,6 +92,7 @@ public class ConnectionManager {
     private void runRequest(IApiRequest request) {
         //Флаг, по которому мы будем определять в конце запроса, нужно ли нам затирать запрос и закрывать соедининение
         boolean needResend = false;
+        IApiResponse response = null;
 
         if (request == null || request.isCanceled() || mStopRequestsOnBan.get()) {
             Debug.log("CM:: request is canceled");
@@ -105,7 +106,6 @@ public class ConnectionManager {
         }
 
         try {
-            IApiResponse response;
             //Отправляем запрос, если есть SSID, и он не просрочен, и Токен или если запрос не требует авторизации
             if ((Ssid.isLoaded() && !Ssid.isOverdue()) || !request.isNeedAuth()) {
                 response = executeRequest(request);
@@ -145,7 +145,7 @@ public class ConnectionManager {
             Debug.error(TAG + "::REQUEST::ERROR", e);
         } finally {
             //Проверяем, нужно ли завершать запрос и соответсвенно закрыть соединение и почистить запрос
-            if (!needResend) {
+            if (!needResend && response != null) {
                 //Отмечаем запрос отмененным, что бы почистить
                 authAssistant.forgetRequest(request.getId());
                 request.setFinished();
