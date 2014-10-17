@@ -9,6 +9,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.StatisticsConfiguration;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.Static;
+import com.topface.topface.utils.IRequestConnectionListener;
 import com.topface.topface.utils.RequestConnectionListener;
 import com.topface.topface.utils.http.HttpUtils;
 
@@ -176,7 +177,7 @@ public class ConnectionStatLogs extends InstrumentationTestCase {
     }
 
     private void processConnections(IConnectionStreamFactory connFactory, int size, List<String> urlsToChoose) {
-        RequestConnectionListener listener = getTimeListener();
+        IRequestConnectionListener listener = getTimeListener();
         InputStream stream;
         for (String url : getListOfImagesUrls(size, urlsToChoose)) {
             listener.onConnectionStarted();
@@ -191,7 +192,7 @@ public class ConnectionStatLogs extends InstrumentationTestCase {
         }
     }
 
-    private RequestConnectionListener getTimeListener() {
+    private IRequestConnectionListener getTimeListener() {
         return new RequestConnectionListener("imgDwn") {
             @Override
             protected String getConnTimeVal(long interval) {

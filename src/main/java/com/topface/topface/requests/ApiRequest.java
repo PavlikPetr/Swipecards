@@ -16,7 +16,8 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.RequestConnectionListener;
+import com.topface.topface.utils.IRequestConnectionListener;
+import com.topface.topface.utils.RequestConnectionListenerFactory;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 
@@ -271,7 +272,7 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     final public IApiResponse sendRequestAndReadResponse() throws Exception {
-        final RequestConnectionListener listener = new RequestConnectionListener(getServiceName());
+        final IRequestConnectionListener listener = new RequestConnectionListenerFactory().create(getServiceName());
         int responseCode = -1;
         IApiResponse response;
         mApiUrl = getApiUrl();

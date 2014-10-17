@@ -7,9 +7,9 @@ import com.topface.topface.statistics.TfStatConsts;
 
 /**
  * Created by kirussell on 28.04.2014.
- * Listener for connection process
+ * Default listener for connection process
  */
-public class RequestConnectionListener {
+public class RequestConnectionListener implements IRequestConnectionListener {
 
     private final StatisticsTracker mTracker;
     private final Slices mSlices;
@@ -24,14 +24,17 @@ public class RequestConnectionListener {
                 .putSlice(TfStatConsts.mtd, TfStatConsts.getMtd(serviceName));
     }
 
+    @Override
     public void onConnectionStarted() {
         mConnStartedTime = System.currentTimeMillis();
     }
 
+    @Override
     public void onConnectInvoked() {
         mConnInvokedTime = System.currentTimeMillis();
     }
 
+    @Override
     public void onConnectionEstablished() {
         if (isConnectionStatisticsEnabled()) {
             mConnEstablishedTime = System.currentTimeMillis();
@@ -41,6 +44,7 @@ public class RequestConnectionListener {
         }
     }
 
+    @Override
     public void onConnectionClose() {
         if (isConnectionStatisticsEnabled()) {
             long connClosedTime = System.currentTimeMillis();
