@@ -7,7 +7,7 @@ import com.topface.statistics.android.StatisticsTracker;
  */
 public class RequestConnectionListenerFactory {
 
-    public IRequestConnectionListener create(String serviceName) {
+    public static IRequestConnectionListener create(String serviceName) {
         if (StatisticsTracker.getInstance().getConfiguration().connectionStatisticsEnabled) {
             return new RequestConnectionListener(serviceName);
         } else {
