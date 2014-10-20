@@ -141,9 +141,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     }
 
     private void initTextViews(View root, FeedbackType feedbackType) {
-        mEditEmail = (EditText) root.findViewById(R.id.edEmail);
-        mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
-        mEditEmail.setText(ClientUtils.getSocialAccountEmail());
+        initEmailInput(root);
         mTransactionIdEditText = (EditText) root.findViewById(R.id.edTransactionId);
         switch (feedbackType) {
             case DEVELOPERS_MESSAGE:
@@ -157,6 +155,27 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
             case UNKNOWN:
                 break;
         }
+    }
+
+    /**
+     * инициализация поля ввода email
+     * и заполнение его в зависимости от типа сети
+     * если вход был через соц сеть - то email гугл-аккаунта
+     * если через topface аккаунт - то его email
+     *
+     * @param root - view, где вложено поле ввода email
+     */
+    private void initEmailInput(View root) {
+        mEditEmail = (EditText) root.findViewById(R.id.edEmail);
+        mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
+        String email;
+        if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            email = AuthToken.getInstance().getLogin();
+        } else {
+            email = ClientUtils.getSocialAccountEmail();
+        }
+
+        mEditEmail.setText(email);
     }
 
     @Override
