@@ -215,6 +215,7 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
                     notifyDataSetChanged();
                     mLastSelected = position;
                     mSeletedDataId = (int) getItemId(mLastSelected);
+                    getActivity().finish();
                 }
             });
 
