@@ -52,7 +52,7 @@ import static com.topface.topface.utils.notifications.UserNotificationManager.ge
  * Фрагмент админки. Доступен только для редакторов.
  */
 public class EditorFragment extends BaseFragment implements View.OnClickListener {
-    public static final String API_STAGE_TF = "https://api-%s.stage.tf";
+    public static final String API_STAGE_TF = "https://api-%s.stage.tf/";
     private Spinner mApiUrl;
     private Spinner mOfferwallTypeChoose;
     private EditText mApiRevision;
@@ -83,9 +83,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mApiUrlsMap.put(2, Static.API_BETA_URL);
         mApiUrlsMap.put(3, Static.API_GAMMA_URL);
         mApiUrlsMap.put(4, Static.API_DELTA_URL);
-        mApiUrlsMap.put(6, Static.API_STAGE_AKI_URL);
-        mApiUrlsMap.put(7, Static.API_STAGE_MKRASILNIKOV_URL);
-        mApiUrlsMap.put(8, Static.API_STAGE_POCHTAR_URL);
         mApiUrlsMap.put(5, Static.API_500_ERROR_URL);
     }
 
@@ -142,14 +139,14 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mConnectionCheckbox.setOnClickListener(this);
         mConnectionCheckbox.setChecked(config.getDebugConnectionChecked());
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_spinner_item,
                 new String[]{"Offline", "3G", "Edge", "WiFi"});
 
         mConnectionTypeChoose.setAdapter(adapter);
 
-        int connectionType = mConnectionCheckbox.isChecked()? config.getDebugConnection() : ConnectionChangeReceiver.getConnectionType().getInt();
+        int connectionType = mConnectionCheckbox.isChecked() ? config.getDebugConnection() : ConnectionChangeReceiver.getConnectionType().getInt();
         mConnectionTypeChoose.setSelection(connectionType);
 
         mConnectionCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

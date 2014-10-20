@@ -20,7 +20,6 @@ import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
-import com.topface.offerwall.advertizer.TFOfferSDK;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
@@ -244,7 +243,7 @@ public class App extends Application {
 
                     @Override
                     protected void success(Profile data, IApiResponse response) {
-                        CacheProfile.setProfile(data, (ApiResponse) response, part);
+                        CacheProfile.setProfile(data, response, part);
                         CacheProfile.sendUpdateProfileBroadcast();
                     }
 

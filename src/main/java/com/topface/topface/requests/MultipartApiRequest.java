@@ -17,11 +17,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 abstract public class MultipartApiRequest extends ApiRequest {
 
-    protected HashMap<String, ApiRequest> mRequests = new HashMap<>();
+    public static final int MAX_SUBREQUESTS_NUMBER = 10;
+
+    protected LinkedHashMap<String, IApiRequest> mRequests = new LinkedHashMap<>();
 
     public MultipartApiRequest(Context context) {
         super(context);
@@ -30,7 +34,7 @@ abstract public class MultipartApiRequest extends ApiRequest {
     @Override
     protected boolean writeData(HttpURLConnection connection, IConnectionConfigureListener listener) throws IOException {
         //Формируем базовую часть запроса (Заголовки, json данные)
-        String requests = getRequests();
+        String requests = getRequestsAsString();
         //Переводим в байты
         byte[] requestsBytes = requests.getBytes();
         //Это просто закрывающие данные запроса с boundary и переносами строк
@@ -136,6 +140,17 @@ abstract public class MultipartApiRequest extends ApiRequest {
         }
     }
 
+    @Override
+    public void exec() {
+        // Check number of subrequests. One position is reserved for optional auth request.
+        // So maximum allowed number is MAX - 1.
+        if (mRequests.size() >= MAX_SUBREQUESTS_NUMBER) {
+            throw new RuntimeException("Multiple request with " + mRequests.size() +
+                    " subrequests. " + (MAX_SUBREQUESTS_NUMBER - 1) + " is maximum.");
+        }
+        super.exec();
+    }
+
     private void sendHandlerMessageToRequests(MultipartApiResponse response, boolean onlyCompleted) {
         HashMap<String, ApiResponse> responses = response.getResponses();
         for (Map.Entry<String, ApiResponse> entry : responses.entrySet()) {
@@ -151,20 +166,36 @@ abstract public class MultipartApiRequest extends ApiRequest {
         }
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public MultipartApiRequest addRequest(ApiRequest request) {
+    public MultipartApiRequest addRequest(IApiRequest request) {
         if (request != null) {
             mRequests.put(request.getId(), request);
         }
         return this;
     }
 
-    protected String getRequests() {
+    @SuppressWarnings("unused")
+    public MultipartApiRequest addRequests(Map<String, IApiRequest> requests) {
+        mRequests.putAll(requests);
+        return this;
+    }
+
+    public MultipartApiRequest addRequests(List<IApiRequest> requests) {
+        for (IApiRequest request : requests) {
+            mRequests.put(request.getId(), request);
+        }
+        return this;
+    }
+
+    protected String getRequestsAsString() {
         String requestString = "";
-        for (ApiRequest request : mRequests.values()) {
+        for (IApiRequest request : mRequests.values()) {
             requestString += getPartHeaders(CONTENT_TYPE) + request.toPostData();
         }
         return requestString;
+    }
+
+    public Map<String, IApiRequest> getRequests() {
+        return mRequests;
     }
 
     @Override
@@ -176,5 +207,8 @@ abstract public class MultipartApiRequest extends ApiRequest {
         return multipartApiResponse;
     }
 
-
+    @Override
+    public RequestBuilder intoBuilder(RequestBuilder requestBuilder) {
+        return requestBuilder.multipleRequest(this);
+    }
 }

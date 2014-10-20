@@ -91,14 +91,17 @@ public class AuthorizationManager {
         getFacebook().extendAccessTokenIfNeeded(parentActivity.getApplicationContext(), null);
     }
 
-    public static Auth saveAuthInfo(IApiResponse response) {
+    public static void saveAuthInfo(IApiResponse response) {
         Auth auth = new Auth(response);
+        saveAuthInfo(auth);
+    }
+
+    public static void saveAuthInfo(Auth auth) {
         Ssid.save(auth.ssid);
         AuthToken token = AuthToken.getInstance();
         if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             token.saveToken(auth.userId, token.getLogin(), token.getPassword());
         }
-        return auth;
     }
 
     private void receiveToken() {
@@ -118,7 +121,7 @@ public class AuthorizationManager {
                     if (extras != null) {
                         String token_key = extras.getString(VkAuthActivity.ACCESS_TOKEN);
                         String user_id = extras.getString(VkAuthActivity.USER_ID);
-                        String expires_in = extras.getString(VkAuthActivity.EXPIRES_IN);
+                        int expires_in = extras.getInt(VkAuthActivity.EXPIRES_IN);
                         String user_name = extras.getString(VkAuthActivity.USER_NAME);
                         if (user_name != null) {
                             SessionConfig sessionConfig = App.getSessionConfig();
@@ -127,7 +130,7 @@ public class AuthorizationManager {
                         }
 
                         AuthToken authToken = AuthToken.getInstance();
-                        authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
+                        authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, String.valueOf(expires_in));
                     }
                     receiveToken();
                 }

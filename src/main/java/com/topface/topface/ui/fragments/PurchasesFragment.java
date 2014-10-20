@@ -169,17 +169,26 @@ public class PurchasesFragment extends BaseFragment {
 
     private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
         boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS, false);
+        TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        int simState = telephonyManager.getSimState();
+        Options.Tab pwallMobileTab = null;
+        Options.Tab fortimoTab = null;
         for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext(); ) {
             Options.Tab tab = iterator.next();
+            switch (tab.type) {
+                case Options.Tab.FORTUMO:
+                    fortimoTab = tab;
+                    break;
+                case Options.Tab.PWALL_MOBILE:
+                    pwallMobileTab = tab;
+                    break;
+            }
             //Удаляем вкладку Google Play, если не доступны Play Services
             if (TextUtils.equals(tab.type, Options.Tab.GPLAY) && !App.isGmsEnabled()) {
                 iterator.remove();
-            } else if (TextUtils.equals(tab.type, Options.Tab.FORTUMO)) {
+            } else if (simState != TelephonyManager.SIM_STATE_READY && TextUtils.equals(tab.type, Options.Tab.FORTUMO)) {
                 // Deleting fortumo tab if no sim available
-                TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-                if (telephonyManager.getSimState() != TelephonyManager.SIM_STATE_READY) {
-                    iterator.remove();
-                }
+                iterator.remove();
             } else {
                 Products products = getProductsByTab(tab);
                 if (products != null) {
@@ -189,6 +198,9 @@ public class PurchasesFragment extends BaseFragment {
                     }
                 }
             }
+        }
+        if (tabs.contains(fortimoTab)) {
+            tabs.remove(pwallMobileTab);
         }
     }
 

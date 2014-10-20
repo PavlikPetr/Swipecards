@@ -287,6 +287,7 @@
     <string name="general_premium_access_error">Šiai funkcijai būtina turėti Premium</string>
     <string name="general_search_null_response_error">Nieko nerasta. Pabandykite pakeisti filtrus</string>
     <string name="change_filters">Pakeisti filtrus</string>
+    <string name="reset_filter">Perkrauti</string>
     <string name="general_sex">Lytis</string>
     <string name="general_girl">Moteriška</string>
     <string name="general_boy">Vyriška</string>
@@ -302,6 +303,8 @@
     <string name="settings_melody">Pranešimo melodija</string>
     <string name="edit_refresh_status">Atnaujinti statusą</string>
     <string name="ban_title">Sveikiname! Jūs užbanintas</string>
+    <string name="ban_title_forever">Sveikiname! Jūs užbanintas visam laikui</string>
+    <string name="ban_title_until">Sveikiname! Jūs užbanintas iki %s</string>
     <string name="ban_complain">Pasiskųsti dėl bano</string>
     <string name="general_ready">Paruošta</string>
     <string name="buying_store_ok">Pirkimas sėkmingai baigtas</string>

@@ -6,7 +6,9 @@
     <string name="general_ok">OK</string>
     <string name="general_dbl_new">Novos</string>
     <string name="general_settings_abbr">Nastr.</string>
+    <string name="general_disallow">Proibir</string>
     <string name="general_allow">Permitir</string>
+    <string name="notification_denied_popup_title">Permita notificações para saber das mensagens recebidas, gostos e de outras notícias.</string>
     <string name="notification_popup_title">Permita-me enviar-lhe uma notificação para que você possa saber de imediato sobre a nova simpatia, admiração ou mensagens não lidas</string>
     <string name="email_successfully_changed">O seu e-mail foi alterado com sucesso</string>
     <string name="auth_vk_name">Vk</string>

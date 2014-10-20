@@ -6,7 +6,9 @@
     <string name="general_ok">Tamam</string>
     <string name="general_dbl_new">Yeni</string>
     <string name="general_settings_abbr">Ayarlar</string>
+    <string name="general_disallow">Yasak</string>
     <string name="general_allow">İzin vermek</string>
+    <string name="notification_denied_popup_title">Gelen mesajlar, beğenler ve öbür haberler öğrenmek için bildirimleri izin verin.</string>
     <string name="notification_popup_title">Yeni sempatiniz, hayranlık veya okunmamış mesaj hakkında bilgi hemen almak için size bildirim göndermeye izin verin</string>
     <string name="email_successfully_changed">E-mailiniz başarılıyla değiştirildi</string>
     <string name="auth_vk_name">VKontakte</string>

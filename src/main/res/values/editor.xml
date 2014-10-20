@@ -8,7 +8,6 @@
     <string name="editor_fragment_complete">Готово</string>
     <string name="editor_api_url_title">API URL:</string>
     <string name="editor_api_rev_hint">ревизия</string>
-    <string name="editor_api_version_hint">Ver</string>
     <string name="editor_save_settings">Запомнить настройки</string>
     <string name="editor_title_name">Имя:</string>
     <string name="editor_title_id">Topface ID:</string>
@@ -17,7 +16,6 @@
     <string name="editor_title_social_link">Профиль в соцсети:</string>
     <string name="editor_title_editor_status">Редактор:</string>
     <string name="editor_title_debug">Отладка:</string>
-    <string name="editor_api_title_version">\?v=</string>
     <string name="editor_title_editor_mode">Инструменты редактора:</string>
     <string name="editor_configure_banners">Настройка баннеров</string>
     <string name="editor_save_banners_settings">Сохранить в SharedPreferences</string>

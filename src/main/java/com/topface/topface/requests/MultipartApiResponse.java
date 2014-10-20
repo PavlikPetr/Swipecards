@@ -9,6 +9,7 @@ import com.topface.topface.requests.multipart.MultipartStream;
 import com.topface.topface.utils.http.FlushedInputStream;
 import com.topface.topface.utils.http.HttpUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -265,4 +266,13 @@ public class MultipartApiResponse implements IApiResponse {
     }
 
 
+    @Override
+    public JSONObject toJson() throws JSONException {
+        return jsonResult;
+    }
+
+    @Override
+    public void fromJSON(String json) {
+
+    }
 }

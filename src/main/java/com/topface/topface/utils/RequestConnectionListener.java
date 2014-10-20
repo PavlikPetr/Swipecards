@@ -7,9 +7,9 @@ import com.topface.topface.statistics.TfStatConsts;
 
 /**
  * Created by kirussell on 28.04.2014.
- * Listener for connection process
+ * Default listener for connection process
  */
-public class RequestConnectionListener {
+public class RequestConnectionListener implements IRequestConnectionListener {
 
     private final StatisticsTracker mTracker;
     private final Slices mSlices;
@@ -24,38 +24,37 @@ public class RequestConnectionListener {
                 .putSlice(TfStatConsts.mtd, TfStatConsts.getMtd(serviceName));
     }
 
+    @Override
     public void onConnectionStarted() {
         mConnStartedTime = System.currentTimeMillis();
     }
 
+    @Override
     public void onConnectInvoked() {
         mConnInvokedTime = System.currentTimeMillis();
     }
 
+    @Override
     public void onConnectionEstablished() {
-        mConnEstablishedTime = System.currentTimeMillis();
-        long interval = mConnEstablishedTime - mConnInvokedTime;
-        addDebugVal(interval);
-        mTracker.sendEvent(
-                TfStatConsts.api_connect_time,
-                mSlices.putSlice(TfStatConsts.val, getConnTimeVal(interval))
-        );
+        if (isConnectionStatisticsEnabled()) {
+            mConnEstablishedTime = System.currentTimeMillis();
+            long interval = mConnEstablishedTime - mConnInvokedTime;
+            addDebugVal(interval);
+            send(TfStatConsts.val, getConnTimeVal(interval));
+        }
     }
 
+    @Override
     public void onConnectionClose() {
-        long connClosedTime = System.currentTimeMillis();
-        long interval = connClosedTime - mConnEstablishedTime;
-        addDebugVal(interval);
-        mTracker.sendEvent(
-                TfStatConsts.api_load_time,
-                mSlices.putSlice(TfStatConsts.val, getConnTimeVal(interval))
-        );
-        interval = connClosedTime - mConnStartedTime;
-        addDebugVal(interval);
-        mTracker.sendEvent(
-                TfStatConsts.api_request_time,
-                mSlices.putSlice(TfStatConsts.val, getRequestTimeVal(interval))
-        );
+        if (isConnectionStatisticsEnabled()) {
+            long connClosedTime = System.currentTimeMillis();
+            long interval = connClosedTime - mConnEstablishedTime;
+            addDebugVal(interval);
+            send(TfStatConsts.val, getConnTimeVal(interval));
+            interval = connClosedTime - mConnStartedTime;
+            addDebugVal(interval);
+            send(TfStatConsts.val, getRequestTimeVal(interval));
+        }
     }
 
     private void addDebugVal(long val) {
@@ -71,5 +70,13 @@ public class RequestConnectionListener {
 
     protected String getRequestTimeVal(long interval) {
         return TfStatConsts.getRequestTimeVal(interval);
+    }
+
+    private void send(String slice, String val) {
+        mTracker.sendEvent(TfStatConsts.api_request_time, mSlices.putSlice(slice, val));
+    }
+
+    private boolean isConnectionStatisticsEnabled() {
+        return mTracker.getConfiguration().connectionStatisticsEnabled;
     }
 }

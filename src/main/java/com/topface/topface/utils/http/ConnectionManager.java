@@ -11,8 +11,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryDialog;
 import com.topface.topface.Ssid;
-import com.topface.topface.data.Auth;
-import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -49,6 +47,7 @@ public class ConnectionManager {
     public static final String TAG = "ConnectionManager";
     private final HashMap<String, IApiRequest> mPendingRequests;
     private AtomicBoolean mStopRequestsOnBan = new AtomicBoolean(false);
+    private AuthAssistant authAssistant = new AuthAssistant(this);
 
     private ConnectionManager() {
         mWorker = getNewExecutorService();
@@ -90,9 +89,10 @@ public class ConnectionManager {
      *
      * @param request Запрос к API
      */
-    private void runRequest(final IApiRequest request) {
+    private void runRequest(IApiRequest request) {
         //Флаг, по которому мы будем определять в конце запроса, нужно ли нам затирать запрос и закрывать соедининение
         boolean needResend = false;
+        IApiResponse response = null;
 
         if (request == null || request.isCanceled() || mStopRequestsOnBan.get()) {
             Debug.log("CM:: request is canceled");
@@ -106,9 +106,8 @@ public class ConnectionManager {
         }
 
         try {
-            IApiResponse response;
-            //Отправляем запрос, если есть SSID и Токен или если запрос не требует авторизации
-            if (Ssid.isLoaded() || !request.isNeedAuth()) {
+            //Отправляем запрос, если есть SSID, и он не просрочен, и Токен или если запрос не требует авторизации
+            if ((Ssid.isLoaded() && !Ssid.isOverdue()) || !request.isNeedAuth()) {
                 response = executeRequest(request);
             } else {
                 //Если у нас нет авторизационного токена, то выкидываем на авторизацию
@@ -116,34 +115,39 @@ public class ConnectionManager {
                     //Если токен пустой, то сразу конструируем ошибку
                     response = request.constructApiResponse(ErrorCodes.UNKNOWN_SOCIAL_USER, "AuthToken is empty");
                 } else {
-                    //Если SSID пустой, то сразу пишим ответ
-                    response = request.constructApiResponse(ErrorCodes.SESSION_NOT_FOUND, "SSID is empty");
+                    //Если SSID пустой, то добавлем к изначальном запросу запрос авторизации
+                    request = authAssistant.precedeRequestWithAuth(request);
+                    response = sendOrPend(request);
                 }
 
             }
 
-            //Проверяем запрос на ошибку неверной сессии
-            if (response.isCodeEqual(ErrorCodes.SESSION_NOT_FOUND)) {
-                //если сессия истекла, то переотправляем запрос авторизации в том же потоке
-                response = resendAfterAuth(request);
+            if (response != null) {
+                //Проверяем запрос на ошибку неверной сессии
+                if (response.isCodeEqual(ErrorCodes.SESSION_NOT_FOUND)) {
+                    //Добавляем запрос авторизации
+                    request = authAssistant.precedeRequestWithAuth(request);
+                    response = sendOrPend(request);
 
-                //Если после отпправки на авторизацию вернулся пустой запрос,
-                //значит другой поток уже отправил запрос авторизации и нам нужно завершаем обработку и ждать новый SSID
-                if (response == null) {
-                    return;
+                    //Если после отпправки на авторизацию вернулся пустой запрос,
+                    //значит другой поток уже отправил запрос авторизации и нам нужно завершаем обработку и ждать новый SSID
+                    if (response == null) {
+                        return;
+                    }
                 }
+                //Проверяем, нет ли в конечном запросе ошибок авторизации (т.е. не верного токена, пароля и т.п.)
+                checkAuthError(request, response);
+                //Обрабатываем ответ от сервера
+                needResend = processResponse(request, response);
             }
-            //Проверяем, нет ли в конечном запросе ошибок авторизации (т.е. не верного токена, пароля и т.п.)
-            checkAuthError(request, response);
-            //Обрабатываем ответ от сервера
-            needResend = processResponse(request, response);
         } catch (Exception e) {
             //Мы отлавливаем все ошибки, возникшие при запросе, не хотим что бы приложение падало из-за них
             Debug.error(TAG + "::REQUEST::ERROR", e);
         } finally {
             //Проверяем, нужно ли завершать запрос и соответсвенно закрыть соединение и почистить запрос
-            if (!needResend) {
+            if (!needResend && response != null) {
                 //Отмечаем запрос отмененным, что бы почистить
+                authAssistant.forgetRequest(request.getId());
                 request.setFinished();
             }
         }
@@ -229,6 +233,8 @@ public class ConnectionManager {
 
             //Изначальный же запрос отменяем, нам не нужно что бы он обрабатывался дальше
             result = true;
+        } else {
+            Ssid.update();
         }
 
         return result;
@@ -391,45 +397,7 @@ public class ConnectionManager {
         return response;
     }
 
-    /**
-     * Сперва отправляется запрос авторизации, после чего запрос отправляется вновь
-     *
-     * @param request запрос, который будет выполнен после авторизации
-     * @return ответ сервера
-     */
-    private IApiResponse sendAuthAndExecute(IApiRequest request) {
-        Debug.log(TAG + "::Reauth");
-        IApiResponse response = null;
-        Context context = request.getContext();
-
-        //Отправляем запрос авторизации
-        IApiResponse authResponse = executeRequest(
-                new AuthRequest(AuthToken.getInstance().getTokenInfo(), context)
-        );
-
-        //Проверяем, что авторизация прошла и нет ошибки
-        if (authResponse.isCodeEqual(ErrorCodes.RESULT_OK)) {
-            Auth auth = new Auth(authResponse);
-            //Сохраняем новый SSID в SharedPreferences
-            Ssid.save(auth.ssid);
-            //Снимаем блокировку
-            mAuthUpdateFlag.set(false);
-            //Заново отправляем исходный запрос с уже новым SSID
-            response = executeRequest(request);
-            //После этого выполняем все отложенные запросы
-            runPendingRequests();
-        } else if (authResponse.isWrongAuthError()) {
-            //Пробрасываем ошибку авторизации в основной запрос, может не очень красиво, зато работает
-            //Может стоит сделать отдельный, внутренний, тип ошибки
-            response = request.constructApiResponse(authResponse.getResultCode(), "Auth error: " + authResponse.getErrorMessage());
-        } else if (authResponse.isCodeEqual(ErrorCodes.USER_DELETED)) {
-            response = request.constructApiResponse(authResponse.getResultCode(), "Auth error: " + authResponse.getErrorMessage());
-        }
-
-        return response;
-    }
-
-    private void sendBroadcastReauth(Context context) {
+    void sendBroadcastReauth(Context context) {
         Intent intent = new Intent();
         intent.setAction(AuthFragment.REAUTH_INTENT);
         context.sendBroadcast(intent);
@@ -438,7 +406,7 @@ public class ConnectionManager {
     /**
      * Заново отправляем отложенные запросы
      */
-    private void runPendingRequests() {
+    void runPendingRequests() {
         synchronized (mPendingRequests) {
             if (mPendingRequests.size() > 0) {
                 int size = mPendingRequests.size();
@@ -464,12 +432,19 @@ public class ConnectionManager {
         }
     }
 
-    private IApiResponse resendAfterAuth(IApiRequest request) {
+    /**
+     * Executes request if there are no auth requests in process.
+     * Otherwise lefts request pending until authorization is complete.
+     *
+     * @param request
+     * @return response or null if request was left pending
+     */
+    private IApiResponse sendOrPend(IApiRequest request) {
         IApiResponse resultResponse = null;
         //Проверяем, что еще не запущен запрос авторизации
         if (mAuthUpdateFlag.compareAndSet(false, true)) {
-            //Отправляем запрос авторизации, после чего будем перезапрашивать ответ
-            resultResponse = sendAuthAndExecute(request);
+            Debug.log(TAG + "::Reauth");
+            resultResponse = executeRequest(request);
             //Снимаем блокировку
             mAuthUpdateFlag.set(false);
         } else {
@@ -482,5 +457,9 @@ public class ConnectionManager {
 
     public void onBanActivityFinish() {
         mStopRequestsOnBan.set(false);
+    }
+
+    AtomicBoolean getAuthUpdateFlag() {
+        return mAuthUpdateFlag;
     }
 }
