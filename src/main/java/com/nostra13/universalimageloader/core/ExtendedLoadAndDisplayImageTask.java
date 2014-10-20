@@ -27,7 +27,7 @@ public class ExtendedLoadAndDisplayImageTask extends LoadAndDisplayImageTask {
 
     @Override
     protected boolean downloadImage(File targetFile) throws IOException {
-        IRequestConnectionListener listener = new RequestConnectionListenerFactory().create(SERVICE_NAME);
+        IRequestConnectionListener listener = RequestConnectionListenerFactory.create(SERVICE_NAME);
         listener.onConnectionStarted();
         listener.onConnectInvoked();
         InputStream is = getDownloader().getStream(uri, options.getExtraForDownloader());

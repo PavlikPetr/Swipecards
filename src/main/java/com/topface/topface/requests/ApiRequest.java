@@ -272,7 +272,7 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     final public IApiResponse sendRequestAndReadResponse() throws Exception {
-        final IRequestConnectionListener listener = new RequestConnectionListenerFactory().create(getServiceName());
+        final IRequestConnectionListener listener = RequestConnectionListenerFactory.create(getServiceName());
         int responseCode = -1;
         IApiResponse response;
         mApiUrl = getApiUrl();
