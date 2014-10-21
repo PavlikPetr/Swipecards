@@ -240,21 +240,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         }
     }
 
-    public void addHeader(ListView parentView) {
-        if (mHeaderView == null) {
-            mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
-        }
-        try {
-            parentView.addHeaderView(mHeaderView);
-            parentView.setStackFromBottom(false);
-            mHeaderView.setVisibility(View.GONE);
-        } catch (OutOfMemoryError e) {
-            Debug.error("Add header OOM", e);
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-    }
-
     private void removeHeader(ListView parentView) {
         if (mHeaderView != null && parentView != null) {
             parentView.removeHeaderView(mHeaderView);
@@ -608,6 +593,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void removeItem(History item) {
         getData().remove(item);
     }
@@ -712,11 +698,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-            FeedList<History> data = getData();
-            if (mUpdateCallback != null && !data.isEmpty() && firstVisibleItem <= mLoadController.getItemsOffsetByConnectionType()
-                    && isNeedMore()) {
-                mUpdateCallback.onUpdate();
-            }
+        FeedList<History> data = getData();
+        if (mUpdateCallback != null && !data.isEmpty() && firstVisibleItem <= mLoadController.getItemsOffsetByConnectionType()
+                && isNeedMore()) {
+            mUpdateCallback.onUpdate();
+        }
     }
 
     @Override

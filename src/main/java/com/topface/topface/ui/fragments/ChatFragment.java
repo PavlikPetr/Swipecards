@@ -200,6 +200,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         //Анимация изменения лейаута
         Utils.enableLayoutChangingTransition(root);
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
+            @SuppressWarnings("ConstantConditions")
             @Override
             public void keyboardOpened() {
                 mIsKeyboardOpened = true;
@@ -325,9 +326,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         });
         mListView.setClickable(true);
         mListView.getRefreshableView().setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
-        if (mAdapter.isEmpty()) {
-            mAdapter.addHeader(mListView.getRefreshableView());
-        }
+
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
         mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
@@ -697,6 +696,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onResume() {
         super.onResume();
