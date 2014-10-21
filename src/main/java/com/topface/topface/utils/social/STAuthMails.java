@@ -44,5 +44,6 @@ public class STAuthMails {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_dropdown_item_1line, emails);
         view.setAdapter(adapter);
+        view.setThreshold(1);
     }
 }
