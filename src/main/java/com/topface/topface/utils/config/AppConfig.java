@@ -49,7 +49,7 @@ public class AppConfig extends AbstractConfig {
     public static final String DEBUG_CONNECTION_CHECKED = "debug_connection_checked";
     private static final String LAST_APP_VERSION = "last_app_version";
     private static final String GCM_REG_ID = "gcm_reg_id";
-
+    public static final String SAVED_EMAIL_LIST = "tf_saved_email_list";
 
 
     public AppConfig(Context context) {
@@ -96,6 +96,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, LAST_APP_VERSION, 0);
         //GCM registration id
         addField(settingsMap, GCM_REG_ID, Static.EMPTY);
+        // список всех email, с котороми удачно прошла авторизация в стандартный акк
+        addField(settingsMap, SAVED_EMAIL_LIST, Static.EMPTY);
     }
 
     protected SharedPreferences getPreferences() {
@@ -117,6 +119,7 @@ public class AppConfig extends AbstractConfig {
      *
      * @return api key
      */
+    @SuppressWarnings("UnusedDeclaration")
     public String getAuthVkApi() {
         return getStringField(getSettingsMap(), DATA_AUTH_VK_API);
     }
@@ -181,6 +184,7 @@ public class AppConfig extends AbstractConfig {
      *
      * @return version number
      */
+    @SuppressWarnings("UnusedDeclaration")
     public Integer getApiVersion() {
         return getIntegerField(getSettingsMap(), DATA_API_VERSION);
     }
@@ -285,8 +289,6 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Sets last fullscreen ad show time
-     *
-     * @param time
      */
     public void setLastFullscreenTime(long time) {
         setField(getSettingsMap(), LAST_FULLSCREEN_TIME, time);
@@ -313,7 +315,6 @@ public class AppConfig extends AbstractConfig {
     /**
      * Adds url to fullscreen ad url set
      *
-     * @param url
      */
     public void addFullscreenUrl(String url) {
         String urls = getStringField(getSettingsMap(), FULLSCREEN_URLS_SET);
@@ -347,7 +348,6 @@ public class AppConfig extends AbstractConfig {
     /**
      * Sets GCM registration id
      *
-     * @param regId
      */
     public void setGcmRegId(String regId) {
         setField(getSettingsMap(), GCM_REG_ID, regId);
@@ -362,6 +362,18 @@ public class AppConfig extends AbstractConfig {
         return getStringField(getSettingsMap(), GCM_REG_ID);
     }
 
+    /**
+     * Sets list of all succesfull-auth emails
+     *
+     * @param savedEmailList list of emails
+     */
+    public void setSavedEmailList(String savedEmailList) {
+        setField(getSettingsMap(), SAVED_EMAIL_LIST, savedEmailList);
+    }
+
+    public String getSavedEmailList() {
+        return getStringField(getSettingsMap(), SAVED_EMAIL_LIST);
+    }
 
     @Override
     public String toString() {

@@ -15,6 +15,9 @@
         <!-- Цвет ссылок (для TextView свойства autoLink)  -->
         <item name="android:textColorLink">#2371B9</item>
         <item name="android:editTextStyle">@style/topfaceEditText</item>
+        <item name="android:autoCompleteTextViewStyle">@style/topfaceAutoCompleteEditText</item>
+        <item name="android:dropDownItemStyle">@style/topfaceDropDownItemStyle</item>
+        <item name="android:listPreferredItemHeight">32dp</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
         <item name="android:windowBackground">@null</item>
         <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
