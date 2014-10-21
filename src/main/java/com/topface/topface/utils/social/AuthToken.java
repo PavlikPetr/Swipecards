@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.utils.CacheProfile;
 
 public class AuthToken {
     // Data
@@ -67,7 +68,9 @@ public class AuthToken {
         editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword = password);
         editor.apply();
         //save email to list for autocomlete
-        STAuthMails.addEmail(login);
+        if (CacheProfile.emailConfirmed) {
+            STAuthMails.addEmail(login);
+        }
     }
 
     public void saveToken(String snType, String userSocialId, String tokenKey, String expiresIn) {
