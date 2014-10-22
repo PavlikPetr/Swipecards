@@ -11,9 +11,6 @@ public class AuthToken {
     // Data
     private TokenInfo mTokenInfo;
     private SharedPreferences mPreferences;
-    // Constants
-    public static final int AUTH_COMPLETE = 1001;
-    public static final int AUTH_ERROR = 0;
     public static final String TOKEN_NETWORK = "sn_type";
     public static final String TOKEN_USER_SOCIAL_ID = "user_id";
     public static final String TOKEN_TOKEN_KEY = "token_key";
@@ -69,6 +66,8 @@ public class AuthToken {
         editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = login);
         editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword = password);
         editor.apply();
+        //save email to list for autocomlete
+        STAuthMails.addEmail(login);
     }
 
     public void saveToken(String snType, String userSocialId, String tokenKey, String expiresIn) {

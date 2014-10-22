@@ -50,6 +50,20 @@
         <item name="android:enabled">true</item>
     </style>
 
+    <style name="topfaceAutoCompleteEditText" parent="@style/Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textCursorDrawable" tools:ignore="NewApi">@null</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:background">@drawable/edittext_selector</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textColor">#393939</item>
+    </style>
+
+    <style name="topfaceDropDownItemStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <style name="topfaceCheckbox">
         <item name="android:background">@drawable/checkbox_selector</item>
 

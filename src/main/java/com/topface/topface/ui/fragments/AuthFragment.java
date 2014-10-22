@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -51,6 +52,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+import com.topface.topface.utils.social.STAuthMails;
 
 import java.util.HashSet;
 import java.util.Timer;
@@ -71,7 +73,7 @@ public class AuthFragment extends BaseFragment {
     private View mSignInView;
     private View mCreateAccountView;
     private TextView mRecoverPwd;
-    private EditText mLogin;
+    private AutoCompleteTextView mLogin;
     private EditText mPassword;
     private ProgressBar mProgressBar;
     private ProgressBar mLoginSendingProgress;
@@ -379,7 +381,10 @@ public class AuthFragment extends BaseFragment {
                 startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
             }
         });
-        mLogin = (EditText) root.findViewById(R.id.edLogin);
+        mLogin = (AutoCompleteTextView) root.findViewById(R.id.edLogin);
+        //fill autocomplete data (emails)
+        STAuthMails.initInputField(getActivity(), mLogin);
+
         mPassword = (EditText) root.findViewById(R.id.edPassword);
         root.findViewById(R.id.ivShowPassword).setOnClickListener(new View.OnClickListener() {
             boolean toggle = false;

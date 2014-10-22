@@ -75,6 +75,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
             mEditText.append(mData);
         }
 
+        mInputData = mData;
         mEditText.setOnEditorActionListener(getOnDoneListener());
         mEditText.addTextChangedListener(new TextWatcher() {
 
