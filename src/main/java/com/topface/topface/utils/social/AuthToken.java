@@ -66,8 +66,6 @@ public class AuthToken {
         editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = login);
         editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword = password);
         editor.apply();
-        //save email to list for autocomlete
-        STAuthMails.addEmail(login);
     }
 
     public void saveToken(String snType, String userSocialId, String tokenKey, String expiresIn) {

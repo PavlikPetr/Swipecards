@@ -30,6 +30,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.social.STAuthMails;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -169,6 +170,9 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                     intent.putExtra(INTENT_LOGIN, emailLogin);
                     intent.putExtra(INTENT_PASSWORD, password);
                     intent.putExtra(INTENT_USER_ID, data.getUserId());
+
+                    //Запоминаем email после регистрации, что бы помочь при логине
+                    STAuthMails.addEmail(emailLogin);
 
                     EasyTracker.sendEvent(
                             "Registration",

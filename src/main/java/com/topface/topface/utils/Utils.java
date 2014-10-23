@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Point;
@@ -107,7 +108,8 @@ public class Utils {
 
     public static Integer getGooglePlayServicesVersion(Context context) {
         try {
-            return context.getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode;
+            PackageInfo packageInfo = context.getPackageManager().getPackageInfo("com.google.android.gms", 0);
+            return packageInfo != null ? packageInfo.versionCode : null;
         } catch (PackageManager.NameNotFoundException e) {
             Debug.error("Can't obtain google play services version, no gcm available");
         } catch (Exception e) {
@@ -240,11 +242,6 @@ public class Utils {
 
     /**
      * Method to pass activity results to nested fragments.
-     *
-     * @param fm          Can be general or child fragment manager.
-     * @param requestCode
-     * @param resultCode
-     * @param data
      */
     public static void activityResultToNestedFragments(FragmentManager fm, int requestCode, int resultCode, Intent data) {
         if (fm != null) {

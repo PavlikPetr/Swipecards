@@ -435,6 +435,9 @@ public class AuthFragment extends BaseFragment {
                 AuthorizationManager.saveAuthInfo(response);
                 if (!token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
                     btnsController.addSocialNetwork(token.getSocialNet());
+                } else {
+                    //Запоминаем email после удачного логина
+                    STAuthMails.addEmail(token.getLogin());
                 }
                 loadAllProfileData();
                 hasAuthorized = true;

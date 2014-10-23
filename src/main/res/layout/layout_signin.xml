@@ -36,6 +36,7 @@
                     android:id="@+id/edLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:completionThreshold="1"
                     android:hint="@string/email"
                     android:inputType="textEmailAddress"
                     style="@style/EditTextAuth" />
