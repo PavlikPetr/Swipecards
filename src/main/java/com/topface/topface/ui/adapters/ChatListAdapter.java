@@ -301,7 +301,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     }
 
     private void setTypeDifferences(ViewHolder holder, int type, final History item) {
-        boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
         boolean showDate = mShowDatesList.contains(item);
 
         switch (type) {
@@ -328,12 +327,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                     }
                 }
                 return;
-            case T_FRIEND:
-            case T_USER:
-            case T_USER_POPULAR_1:
-            case T_USER_POPULAR_2:
-                holder.message.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
-                break;
             case T_FRIEND_GIFT:
             case T_USER_GIFT:
                 holder.message.setVisibility(View.GONE);

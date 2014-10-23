@@ -15,7 +15,9 @@
         android:id="@+id/chat_message"
         android:layout_below="@id/loDateDivider"
         android:layout_alignParentLeft="true"
-        style="@style/chat_message.friend" />
+        style="@style/chat_message.friend"
+        android:paddingLeft="21dp"
+        android:paddingRight="13dp" />
 
     <!-- date -->
     <TextView

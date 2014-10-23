@@ -13,16 +13,17 @@
     <!-- message -->
     <TextView
         android:id="@+id/chat_message"
+        style="@style/chat_message"
         android:layout_below="@id/loDateDivider"
         android:layout_alignParentRight="true"
-        style="@style/chat_message" />
+        android:paddingLeft="13dp"
+        android:paddingRight="21dp" />
 
     <!-- date -->
     <TextView
         android:id="@+id/chat_date"
         style="@style/chat_date"
         android:layout_toLeftOf="@id/chat_message"
-        android:text="13:30"
         android:layout_alignBottom="@id/chat_message" />
 
 </RelativeLayout>    
