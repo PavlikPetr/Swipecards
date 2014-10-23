@@ -46,7 +46,7 @@ public class UserConfig extends AbstractUniqueConfig {
     public static final String SETTINGS_GCM_LED = "settings_gcm_led";
     public static final String SILENT = "silent";
     public static final String PURCHASED_SUBSCRIPTIONS = "purchased_subscriptions";
-    public static final String PURCHASED_SUBSCRIPTIONS_SEPARATOR = ",";
+    public static final String PURCHASED_SUBSCRIPTIONS_SEPARATOR = "&";
 
     public UserConfig(Context context) {
         super(context);
