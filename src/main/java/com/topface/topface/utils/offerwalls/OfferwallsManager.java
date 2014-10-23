@@ -25,9 +25,7 @@ import com.getjar.sdk.listener.RecommendedPricesListener;
 import com.getjar.sdk.response.PurchaseSucceededResponse;
 import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
-import com.tapjoy.TapjoyConnect;
 import com.topface.framework.utils.Debug;
-import com.topface.offerwall.advertizer.TFOfferSDK;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.offerwall.publisher.TFOfferwallSDK;
 import com.topface.topface.R;
@@ -47,6 +45,10 @@ public class OfferwallsManager {
 
     /**
      * Идентификаторы для типов офферволлов
+     */
+
+    /**
+     * TapJoy благополучно выпилен.
      */
     public static final String TAPJOY = "TAPJOY";
     public static final String SPONSORPAY = "SPONSORPAY";
@@ -82,9 +84,6 @@ public class OfferwallsManager {
         String offerwall = getOfferWallType();
         if (!TextUtils.isEmpty(offerwall)) {
             switch (offerwall) {
-                case TAPJOY:
-                    initTapjoy(context);
-                    break;
                 case SPONSORPAY:
                     initSponsorpay(context);
                     break;
@@ -110,9 +109,6 @@ public class OfferwallsManager {
         }
 
         switch (offerwall) {
-            case TAPJOY:
-                startTapjoy(activity);
-                break;
             case SPONSORPAY:
                 startSponsorpay(activity);
                 break;
@@ -144,9 +140,6 @@ public class OfferwallsManager {
     private static void startRandomOfferwall(Activity activity) {
         Random random = new Random();
         switch (random.nextInt(2)) {
-            case 0:
-                startTapjoy(activity);
-                break;
             case 1:
                 startSponsorpay(activity);
                 break;
@@ -156,32 +149,6 @@ public class OfferwallsManager {
                 startDefault(activity);
                 break;
         }
-    }
-
-    /**
-     * Tapjoy
-     */
-    private static void initTapjoy(Context context) {
-        try {
-            TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
-            TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-    }
-
-    public static void startTapjoy(Context context) {
-        try {
-            TapjoyConnect.getTapjoyConnectInstance().showOffers();
-        } catch (Exception e) {
-            Debug.error(e);
-            if (context != null && CacheProfile.uid > 0) initTapjoy(context);
-            TapjoyConnect.getTapjoyConnectInstance().showOffers();
-        }
-    }
-
-    public static void startTapjoy() {
-        startTapjoy(null);
     }
 
     /**
