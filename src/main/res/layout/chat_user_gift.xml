@@ -22,7 +22,7 @@
         <!-- message -->
         <TextView
             android:id="@+id/chat_message"
-            style="@style/chat_message" />
+            style="@style/chat_message.NoBack" />
     </LinearLayout>
 
     <!-- date -->

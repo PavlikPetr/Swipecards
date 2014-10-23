@@ -12,8 +12,8 @@
                                        p2r:ptrOverScroll="false"
                                        p2r:ptrMode="pullUpFromBottom"
                                        android:id="@+id/lvChatList"
-                                       android:layout_width="fill_parent"
-                                       android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
                                        android:cacheColorHint="#00000000"
                                        android:clickable="true"
                                        android:divider="@android:color/transparent"
@@ -21,6 +21,7 @@
                                        android:fadeScrollbars="true"
                                        android:fadingEdge="none"
                                        android:stackFromBottom="true"
+        android:background="@color/bg_holo"
                                        android:listSelector="@android:color/transparent"
                                        android:layout_above="@+id/loChatFooterSend"/>
 
@@ -44,7 +45,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        layout="@layout/chat_footer_send"/>
+        layout="@layout/chat_footer_send_holo" />
 
     <TextView
         android:id="@+id/tvBackgroundText"

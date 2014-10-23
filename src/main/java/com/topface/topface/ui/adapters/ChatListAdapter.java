@@ -428,7 +428,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER:
             case T_USER_POPULAR_1:
             case T_USER_POPULAR_2:
-                holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
+                holder.message.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
                 break;
             case T_FRIEND_GIFT:
             case T_USER_GIFT:
@@ -439,7 +439,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 break;
             case T_FRIEND_REQUEST:
             case T_USER_REQUEST:
-                holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
+                holder.message.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
                 if (type == T_FRIEND_REQUEST) {
                     holder.likeRequest.setTag(position);
                     holder.likeRequest.setOnClickListener(mLikeRequestListener);
@@ -491,14 +491,12 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_FRIEND_REQUEST:
                 convertView = mInflater.inflate(R.layout.chat_friend_request, null, false);
                 holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                holder.userInfo = convertView.findViewById(R.id.user_info);
                 holder.likeRequest = (Button) convertView.findViewById(R.id.btn_chat_like_request);
                 holder.prgsLoader = (ProgressBar) convertView.findViewById(prsLoaderId);
                 holder.likeRequest.setTag(prsLoaderId, holder.prgsLoader);
                 break;
             case T_USER_REQUEST:
                 convertView = mInflater.inflate(R.layout.chat_user, null, false);
-                holder.userInfo = convertView.findViewById(R.id.user_info);
                 break;
             case T_FRIEND:
             case T_USER:
@@ -506,7 +504,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER_POPULAR_2:
             default:
                 convertView = mInflater.inflate(output ? R.layout.chat_user : R.layout.chat_friend, null, false);
-                holder.userInfo = convertView.findViewById(R.id.user_info);
                 break;
         }
 
@@ -531,6 +528,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 break;
             case FeedDialog.GIFT:
                 holder.gift.setRemoteSrc(item.link);
+                if (holder.message != null) {
+                    holder.message.setVisibility(setMessageHtmlContent(holder, item) ? View.VISIBLE : View.GONE);
+                }
                 break;
             case FeedDialog.MESSAGE_WISH:
                 holder.message.setText(mContext.getString(output ? R.string.chat_wish_out : R.string.chat_wish_in));
@@ -557,11 +557,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case FeedDialog.MESSAGE_POPULAR_STAGE_1:
             case FeedDialog.MESSAGE_POPULAR_STAGE_2:
             default:
-                if (holder != null && holder.message != null) {
-                    holder.message.setText(
-                            Html.fromHtml(item.text != null ? item.text : "")
-                    );
-                }
+                setMessageHtmlContent(holder, item);
                 break;
         }
         if (holder != null) {
@@ -570,6 +566,19 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             if (holder.date != null) holder.date.setText(item.createdFormatted);
         }
 
+    }
+
+    private boolean setMessageHtmlContent(ViewHolder holder, History item) {
+        if (holder != null && holder.message != null) {
+            if (item.text != null && !item.text.equals(Static.EMPTY)) {
+                holder.message.setText(Html.fromHtml(item.text));
+                return true;
+            } else {
+                holder.message.setText("");
+                return false;
+            }
+        }
+        return false;
     }
 
     public void setOnItemLongClickListener(ChatFragment.OnListViewItemLongClickListener listener) {
@@ -720,7 +729,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         ImageViewRemote mapBackground;
         ProgressBar prgsLoader;
         Button likeRequest;
-        View userInfo;
         View loader;
         View retrier;
     }
