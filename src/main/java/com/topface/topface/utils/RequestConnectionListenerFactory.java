@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import com.topface.statistics.android.StatisticsConfiguration;
 import com.topface.statistics.android.StatisticsTracker;
 
 /**
@@ -8,7 +9,8 @@ import com.topface.statistics.android.StatisticsTracker;
 public class RequestConnectionListenerFactory {
 
     public static IRequestConnectionListener create(String serviceName) {
-        if (StatisticsTracker.getInstance().getConfiguration().connectionStatisticsEnabled) {
+        StatisticsConfiguration statisticsConfiguration = StatisticsTracker.getInstance().getConfiguration();
+        if (statisticsConfiguration != null && statisticsConfiguration.connectionStatisticsEnabled) {
             return new RequestConnectionListener(serviceName);
         } else {
             return new EmptyRequestConnectionListener();
