@@ -1,14 +1,12 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,18 +18,10 @@ import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
-import com.topface.topface.data.VirusLike;
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.geo.AddressesCache;
 import com.topface.topface.utils.loadcontollers.ChatLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
@@ -62,78 +52,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private View.OnClickListener mOnClickListener;
     private ChatFragment.OnListViewItemLongClickListener mLongClickListener;
     private View mHeaderView;
-    private View.OnClickListener mLikeRequestListener = new View.OnClickListener() {
-        @Override
-        public void onClick(final View v) {
-            final int position = (Integer) v.getTag();
-            final ProgressBar prsLoader = (ProgressBar) v.getTag(R.id.prsLoader);
-            final History item = getItem(position);
-            if (item != null) {
-                EasyTracker.sendEvent("VirusLike", "Click", "Chat", 0L);
-
-                prsLoader.setVisibility(View.VISIBLE);
-                v.setVisibility(View.INVISIBLE);
-                new VirusLikesRequest(item.id, mContext).callback(new DataApiHandler<VirusLike>() {
-
-                    @Override
-                    protected void success(VirusLike data, IApiResponse response) {
-                        EasyTracker.sendEvent("VirusLike", "Success", "Chat", 0L);
-                        //После заврешения запроса удаляем элемент
-                        removeItem(getPosition(position));
-                        //И предлагаем отправить пользователю запрос своим друзьям не из приложения
-                        data.sendFacebookRequest(
-                                "Chat",
-                                mContext,
-                                new VirusLike.VirusLikeDialogListener(mContext) {
-
-                                    private void showCompleteMessage() {
-                                        Toast.makeText(
-                                                mContext,
-                                                Utils.getQuantityString(
-                                                        R.plurals.virus_request_likes_cnt,
-                                                        CacheProfile.likes,
-                                                        CacheProfile.likes
-                                                ),
-                                                Toast.LENGTH_SHORT
-                                        ).show();
-                                    }
-
-                                    @Override
-                                    public void onComplete(Bundle values) {
-                                        super.onComplete(values);
-                                        showCompleteMessage();
-                                    }
-
-                                    @Override
-                                    public void onCancel() {
-                                        super.onCancel();
-                                        showCompleteMessage();
-                                    }
-                                }
-                        );
-                    }
-
-                    @Override
-                    protected VirusLike parseResponse(ApiResponse response) {
-                        return new VirusLike(response);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-                        EasyTracker.sendEvent("VirusLike", "Fail", "Chat", 0L);
-                        Utils.showErrorMessage();
-                    }
-
-                    @Override
-                    public void always(IApiResponse response) {
-                        super.always(response);
-                        prsLoader.setVisibility(View.GONE);
-                        v.setVisibility(View.VISIBLE);
-                    }
-                }).exec();
-            }
-        }
-    };
 
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
         super(context, data, updateCallback);
@@ -455,10 +373,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_FRIEND_REQUEST:
             case T_USER_REQUEST:
                 holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
-                if (type == T_FRIEND_REQUEST) {
-                    holder.likeRequest.setTag(position);
-                    holder.likeRequest.setOnClickListener(mLikeRequestListener);
-                }
                 break;
         }
 
@@ -507,9 +421,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 convertView = mInflater.inflate(R.layout.chat_friend_request, null, false);
                 holder.date = (TextView) convertView.findViewById(R.id.chat_date);
                 holder.userInfo = convertView.findViewById(R.id.user_info);
-                holder.likeRequest = (Button) convertView.findViewById(R.id.btn_chat_like_request);
                 holder.prgsLoader = (ProgressBar) convertView.findViewById(prsLoaderId);
-                holder.likeRequest.setTag(prsLoaderId, holder.prgsLoader);
                 break;
             case T_USER_REQUEST:
                 convertView = mInflater.inflate(R.layout.chat_user, null, false);
@@ -712,11 +624,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-            FeedList<History> data = getData();
-            if (mUpdateCallback != null && !data.isEmpty() && firstVisibleItem <= mLoadController.getItemsOffsetByConnectionType()
-                    && isNeedMore()) {
-                mUpdateCallback.onUpdate();
-            }
+        FeedList<History> data = getData();
+        if (mUpdateCallback != null && !data.isEmpty() && firstVisibleItem <= mLoadController.getItemsOffsetByConnectionType()
+                && isNeedMore()) {
+            mUpdateCallback.onUpdate();
+        }
     }
 
     @Override
@@ -733,7 +645,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         ImageViewRemote gift;
         ImageViewRemote mapBackground;
         ProgressBar prgsLoader;
-        Button likeRequest;
         View userInfo;
         View loader;
         View retrier;

@@ -9,111 +9,72 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.method.PasswordTransformationMethod;
-import android.text.method.TransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
-import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.Static;
-import com.topface.topface.data.Options;
-import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
-import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AuthButtonsController;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+import com.topface.topface.utils.social.Authorizer;
 
 import java.util.HashSet;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class AuthFragment extends BaseFragment {
+public class AuthFragment extends BaseAuthFragment {
 
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
     public static final String BTNS_HIDDEN = "BtnsHidden";
-    public static final String MSG_AUTH_KEY = "msg";
-    private RelativeLayout mWrongPasswordAlertView;
-    private TextView mWrongDataTextView;
-    private TextView mCreateAccountButton;
-    private ViewFlipper mAuthViewsFlipper;
+
     private Button mFBButton;
     private Button mVKButton;
-    private Button mTFButton;
     private View mSignInView;
     private View mCreateAccountView;
-    private TextView mRecoverPwd;
-    private EditText mLogin;
-    private EditText mPassword;
     private ProgressBar mProgressBar;
-    private ProgressBar mLoginSendingProgress;
     private AuthorizationManager mAuthorizationManager;
-    private BroadcastReceiver connectionChangeListener;
-    private TextView mBackButton;
-    private Timer mTimer = new Timer();
-    private RetryViewCreator mRetryView;
-    private boolean mProcessingTFReg = false;
     private Button mOKButton;
     private AuthButtonsController btnsController;
     private LinearLayout mOtherSocialNetworksButton;
     private static final String MAIN_BUTTONS_GA_TAG = "LoginButtonsTest";
     private boolean additionalButtonsScreen = false;
-    private boolean hasAuthorized = false;
     private boolean btnsHidden;
-    private BroadcastReceiver authorizationReceiver;
-    private boolean authReceiverRegistered;
+
     private boolean mButtonsInitialized = false;
     private ImageView mVkIcon;
     private ImageView mOkIcon;
     private ImageView mFbIcon;
     private boolean mNeedShowButtonsOnResume = true;
+    private BroadcastReceiver authorizationReceiver;
+    private boolean authReceiverRegistered;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
     }
 
-    //пробный пуш
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Debug.log("AF: onCreate");
-        mAuthorizationManager = new AuthorizationManager(getActivity());
+
         View root = inflater.inflate(R.layout.fragment_auth, null);
         if (savedInstanceState != null) {
             btnsHidden = savedInstanceState.getBoolean(BTNS_HIDDEN);
         }
         initViews(root);
-        if (authorizationReceiver == null || !authReceiverRegistered) {
-            initAuthorizationHandler();
-        }
+        initAuthorizationHandler();
         //Если у нас нет токена
         if (!AuthToken.getInstance().isEmpty()) {
             //Если мы попали на этот фрагмент с работающей авторизацией, то просто перезапрашиваем профиль
@@ -123,16 +84,38 @@ public class AuthFragment extends BaseFragment {
         return root;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        authReceiverRegistered = false;
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(authorizationReceiver);
+    protected void initAuthorizationHandler() {
+        if (authorizationReceiver == null || !authReceiverRegistered) {
+            authorizationReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    int msg = intent.getIntExtra(MSG_AUTH_KEY, Authorizer.AUTHORIZATION_CANCELLED);
+                    switch (msg) {
+                        case Authorizer.AUTHORIZATION_FAILED:
+                            authorizationFailed(ErrorCodes.NETWORK_CONNECT_ERROR, null);
+                            break;
+                        case Authorizer.DIALOG_COMPLETED:
+                            hideButtons();
+                            break;
+                        case Authorizer.TOKEN_RECEIVED:
+                            if (getActivity() != null) {
+                                auth(AuthToken.getInstance());
+                            }
+                            break;
+                        case Authorizer.AUTHORIZATION_CANCELLED:
+                            showButtons();
+                            break;
+                    }
+                }
+            };
+            authReceiverRegistered = true;
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(authorizationReceiver, new IntentFilter(Authorizer.AUTHORIZATION_TAG));
+        }
     }
 
-    private void initViews(final View root) {
-        mAuthViewsFlipper = (ViewFlipper) root.findViewById(R.id.vfAuthViewFlipper);
-
+    @Override
+    protected void initViews(final View root) {
+        super.initViews(root);
         initButtons(root);
 
         btnsController = new AuthButtonsController(getActivity(), new AuthButtonsController.OnButtonsSettingsLoadedHandler() {
@@ -144,35 +127,7 @@ public class AuthFragment extends BaseFragment {
             }
         });
 
-        initRetryView(root);
         initOtherViews(root);
-    }
-
-    private void initAuthorizationHandler() {
-        authorizationReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                int msg = intent.getIntExtra(MSG_AUTH_KEY, AuthorizationManager.AUTHORIZATION_CANCELLED);
-                switch (msg) {
-                    case AuthorizationManager.AUTHORIZATION_FAILED:
-                        authorizationFailed(ErrorCodes.NETWORK_CONNECT_ERROR, null);
-                        break;
-                    case AuthorizationManager.DIALOG_COMPLETED:
-                        hideButtons();
-                        break;
-                    case AuthorizationManager.TOKEN_RECEIVED:
-                        if (getActivity() != null) {
-                            auth(AuthToken.getInstance());
-                        }
-                        break;
-                    case AuthorizationManager.AUTHORIZATION_CANCELLED:
-                        showButtons();
-                        break;
-                }
-            }
-        };
-        authReceiverRegistered = true;
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(authorizationReceiver, new IntentFilter(AuthorizationManager.AUTHORIZATION_TAG));
     }
 
     private void initButtons(final View root) {
@@ -222,8 +177,7 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 FragmentActivity activity = getActivity();
                 if (activity != null) {
-                    Utils.showSoftKeyboard(activity, mLogin);
-                    mAuthViewsFlipper.setDisplayedChild(1);
+                    btnTFClick();
                 }
             }
         });
@@ -238,25 +192,6 @@ public class AuthFragment extends BaseFragment {
             }
         });
 
-        mTFButton = (Button) root.findViewById(R.id.btnLogin);
-        mTFButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnTFClick();
-//                removeRedAlert();
-                Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
-            }
-        });
-
-        mBackButton = (TextView) root.findViewById(R.id.tvBackToMainAuth);
-        mBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuthViewsFlipper.setDisplayedChild(0);
-                removeRedAlert();
-                Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
-            }
-        });
         mButtonsInitialized = true;
     }
 
@@ -311,36 +246,10 @@ public class AuthFragment extends BaseFragment {
         }
     }
 
-    private void initRetryView(View root) {
-        mRetryView = new RetryViewCreator.Builder(getActivity(), new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // инициализация обработчика происходит в методе authorizationFailed()
-            }
-        }).build();
-        mRetryView.setVisibility(View.GONE);
-
-        RelativeLayout rootLayout = (RelativeLayout) root.findViewById(R.id.authContainer);
-        rootLayout.addView(mRetryView.getView());
-
-        connectionChangeListener = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, -1);
-                if (ConnectionChangeReceiver.ConnectionType.valueOf(mConnectionType) != ConnectionChangeReceiver.ConnectionType.CONNECTION_OFFLINE) {
-                    if (mRetryView != null) mRetryView.performClick();
-                }
-            }
-        };
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (authorizationReceiver == null || !authReceiverRegistered) {
-            initAuthorizationHandler();
-        }
+        mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
 
         if (mAuthorizationManager != null) {
             hideButtons();
@@ -367,43 +276,6 @@ public class AuthFragment extends BaseFragment {
 
     private void initOtherViews(View root) {
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsAuthLoading);
-        mLoginSendingProgress = (ProgressBar) root.findViewById(R.id.prsLoginSending);
-        mWrongPasswordAlertView = (RelativeLayout) root.findViewById(R.id.redAlert);
-        mWrongDataTextView = (TextView) root.findViewById(R.id.redAlertTextView);
-        mCreateAccountButton = (TextView) root.findViewById(R.id.redAlertButton);
-        mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
-                Intent intent = new Intent(getActivity(), RegistrationActivity.class);
-                startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
-            }
-        });
-        mLogin = (EditText) root.findViewById(R.id.edLogin);
-        mPassword = (EditText) root.findViewById(R.id.edPassword);
-        root.findViewById(R.id.ivShowPassword).setOnClickListener(new View.OnClickListener() {
-            boolean toggle = false;
-            TransformationMethod passwordMethod = new PasswordTransformationMethod();
-
-            @Override
-            public void onClick(View v) {
-                toggle = !toggle;
-                mPassword.setTransformationMethod(toggle ? null : passwordMethod);
-                Editable text = mPassword.getText();
-                if (text != null) {
-                    mPassword.setSelection(text.length());
-                }
-            }
-        });
-        mRecoverPwd = (TextView) root.findViewById(R.id.tvRecoverPwd);
-        mRecoverPwd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PasswordRecoverActivity.class);
-                startActivityForResult(intent, PasswordRecoverActivity.INTENT_RECOVER_PASSWORD);
-            }
-        });
-        mRecoverPwd.setVisibility(View.GONE);
     }
 
     private boolean checkOnline() {
@@ -419,201 +291,14 @@ public class AuthFragment extends BaseFragment {
                 .show();
     }
 
-    private void auth(final AuthToken token) {
-        EasyTracker.sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
-        App.getConfig().onAuthTokenReceived();
-        hideButtons();
-        final AuthRequest authRequest = new AuthRequest(token.getTokenInfo(), getActivity());
-        authRequest.callback(new ApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                AuthorizationManager.saveAuthInfo(response);
-                if (!token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-                    btnsController.addSocialNetwork(token.getSocialNet());
-                }
-                loadAllProfileData();
-                hasAuthorized = true;
-                //Отправляем статистику в AppsFlyer
-                try {
-                    AppsFlyerLib.sendTrackingWithEvent(App.getContext(), "registration", "");
-                } catch (Exception e) {
-                    Debug.error("AppsFlyer Exception", e);
-                }
-            }
-
-            @Override
-            public void fail(final int codeError, IApiResponse response) {
-                authorizationFailed(codeError, authRequest);
-            }
-
-            public void always(IApiResponse response) {
-            }
-        }).exec();
-    }
-
-    private void loadAllProfileData() {
-        hideButtons();
-        App.sendProfileAndOptionsRequests(new ApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                //После авторизации обязательно бросаем события, что бы профиль загрузился
-                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-                if (isAdded()) {
-                    Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
-                    ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
-                    MenuFragment.selectFragment(FragmentId.F_DATING);
-                    LocalBroadcastManager.getInstance(getContext())
-                            .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
-                }
-            }
-
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                if (isAdded() && response.isCodeEqual(ErrorCodes.BAN)) {
-                    showButtons();
-                } else {
-                    authorizationFailed(codeError, null);
-                }
-            }
-        });
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(BTNS_HIDDEN, btnsHidden);
     }
 
-    private void authorizationFailed(int codeError, final ApiRequest request) {
-        if (!isAdded()) {
-            return;
-        }
-        hideButtons();
-        boolean needShowRetry = true;
-        StringBuilder strBuilder = new StringBuilder();
-        strBuilder.append(RetryViewCreator.REFRESH_TEMPLATE).append(getString(R.string.general_dialog_retry));
-        switch (codeError) {
-            case ErrorCodes.NETWORK_CONNECT_ERROR:
-                showRetryView(getString(R.string.general_reconnect_social), strBuilder.toString(), request);
-                break;
-            case ErrorCodes.MAINTENANCE:
-                showRetryView(getString(R.string.general_maintenance), strBuilder.toString(), request);
-                break;
-            case ErrorCodes.CODE_OLD_APPLICATION_VERSION:
-                fillRetryView(getString(R.string.general_version_not_supported), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Utils.goToMarket(getActivity());
-                    }
-                }, getString(R.string.popup_version_update));
-                break;
-            case ErrorCodes.INCORRECT_LOGIN:
-            case ErrorCodes.UNKNOWN_SOCIAL_USER:
-                redAlert(R.string.incorrect_login);
-                needShowRetry = false;
-                break;
-            case ErrorCodes.INCORRECT_PASSWORD:
-                redAlert(R.string.incorrect_password);
-                mRecoverPwd.setVisibility(View.VISIBLE);
-                needShowRetry = false;
-                break;
-            case ErrorCodes.MISSING_REQUIRE_PARAMETER:
-                redAlert(R.string.empty_fields);
-                needShowRetry = false;
-                break;
-            case ErrorCodes.USER_DELETED:
-                needShowRetry = false;
-                break;
-            case ErrorCodes.WRONG_RESPONSE:
-            default:
-                showRetryView(getString(R.string.general_data_error), strBuilder.toString(), request);
-                break;
-        }
-
-        if (needShowRetry) {
-            mRetryView.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.GONE);
-        } else {
-            showButtons();
-        }
-    }
-
-    private void fillRetryView(String text, View.OnClickListener listener, String btnText) {
-        mRetryView.setText(text);
-        mRetryView.setButtonText(btnText);
-        mRetryView.setListener(listener);
-    }
-
-    private void showRetryView(String text, String btnText, final ApiRequest request) {
-        mAuthViewsFlipper.setVisibility(View.GONE);
-        fillRetryView(text, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mRetryView.setVisibility(View.GONE);
-                mAuthViewsFlipper.setVisibility(View.VISIBLE);
-                if (mAuthViewsFlipper.getDisplayedChild() == 0) {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                }
-                resendRequest(request);
-            }
-        }, btnText);
-    }
-
-    private void resendRequest(ApiRequest request) {
-        if (request != null) {
-            request.canceled = false;
-            request.exec();
-        } else {
-            //Если запрос базовой информации не прошел, то повторяем запрос
-            loadAllProfileData();
-        }
-    }
-
-    private void redAlert(int resId) {
-        redAlert(getString(resId));
-    }
-
-    private void redAlert(String text) {
-        if (mWrongPasswordAlertView != null && mAuthViewsFlipper.getDisplayedChild() == 1) {
-            if (text != null) {
-                mWrongDataTextView.setText(text);
-            }
-            mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
-                    R.anim.slide_down_fade_in));
-            mWrongPasswordAlertView.setVisibility(View.VISIBLE);
-            mWrongDataTextView.setVisibility(View.VISIBLE);
-            if (text != null && text.equals(getString(R.string.incorrect_login))) {
-                mCreateAccountButton.setVisibility(View.VISIBLE);
-            } else {
-                mCreateAccountButton.setVisibility(View.GONE);
-                mTimer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (isAdded()) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    removeRedAlert();
-                                }
-                            });
-                        }
-                    }
-                }, Static.RED_ALERT_APPEARANCE_TIME);
-            }
-        }
-    }
-
-    private void removeRedAlert() {
-        FragmentActivity activity = getActivity();
-        if (activity != null && mWrongPasswordAlertView != null && mWrongPasswordAlertView.getVisibility() == View.VISIBLE) {
-            mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(activity, android.R.anim.fade_out));
-            mWrongPasswordAlertView.setVisibility(View.GONE);
-            mWrongDataTextView.setVisibility(View.GONE);
-        }
-    }
-
-
-    private void showButtons() {
+    @Override
+    protected void showButtons() {
         //Эта проверка нужна, для безопасной работы в
         btnsHidden = false;
         if (mFBButton != null && mVKButton != null && mProgressBar != null) {
@@ -630,24 +315,13 @@ public class AuthFragment extends BaseFragment {
                 mOtherSocialNetworksButton.setVisibility(View.VISIBLE);
             }
             mSignInView.setVisibility(View.VISIBLE);
-            mTFButton.setVisibility(View.VISIBLE);
             mCreateAccountView.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.GONE);
-            mLoginSendingProgress.setVisibility(View.GONE);
-            mRetryView.setVisibility(View.GONE);
-            mRecoverPwd.setEnabled(true);
-            mLogin.setEnabled(true);
-            mPassword.setEnabled(true);
-            mBackButton.setEnabled(true);
         }
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    private void hideButtons() {
+    protected void hideButtons() {
         if (mButtonsInitialized && isAdded()) {
             btnsHidden = true;
             mFBButton.setVisibility(View.GONE);
@@ -656,26 +330,23 @@ public class AuthFragment extends BaseFragment {
             mOtherSocialNetworksButton.setVisibility(View.GONE);
             mSignInView.setVisibility(View.GONE);
             mCreateAccountView.setVisibility(View.GONE);
-            mRetryView.setVisibility(View.GONE);
-            mTFButton.setVisibility(View.INVISIBLE);
-            if (mProcessingTFReg) {
-                mLoginSendingProgress.setVisibility(View.VISIBLE);
-                mProgressBar.setVisibility(View.GONE);
-            } else {
-                mLoginSendingProgress.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-            mRecoverPwd.setEnabled(false);
-            mLogin.setEnabled(false);
-            mPassword.setEnabled(false);
-            mBackButton.setEnabled(false);
+            hideRetrier();
+            mProgressBar.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    protected void showProgress() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void hideProgress() {
+        mProgressBar.setVisibility(View.GONE);
     }
 
 
     private void btnVKClick() {
-        // костыль, надо избавить от viewflipper к чертовой бабушке
-        mProcessingTFReg = false;
         EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalVk" : "LoginMainVk", btnsController.getLocaleTag(), 1L);
 
         if (checkOnline() && mAuthorizationManager != null) {
@@ -685,8 +356,6 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void btnFBClick() {
-        // костыль, надо избавить от viewflipper к чертовой бабушке
-        mProcessingTFReg = false;
         EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalFb" : "LoginMainFb", btnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
@@ -696,10 +365,9 @@ public class AuthFragment extends BaseFragment {
 
 
     private void btnOKClick() {
-        mProcessingTFReg = false;
         EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalOk" : "LoginMainOk", btnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
-            mAuthorizationManager.odnoklassnikiAuth(new AuthorizationManager.OnTokenReceivedListener() {
+            mAuthorizationManager.odnoklassnikiAuth(new Authorizer.OnTokenReceivedListener() {
                 @Override
                 public void onTokenReceived() {
                     mNeedShowButtonsOnResume = false;
@@ -716,42 +384,33 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void btnTFClick() {
-        // костыль, надо избавить от viewflipper к чертовой бабушке
-        mProcessingTFReg = true;
-        //---------------------------------------------------------
-        if (checkOnline()) {
-            hideButtons();
-            String emailLogin = Utils.getText(mLogin).trim();
-            String password = Utils.getText(mPassword);
-            if (TextUtils.isEmpty(emailLogin) || TextUtils.isEmpty(password.trim())) {
-                redAlert(R.string.empty_fields);
-                showButtons();
-                return;
-            } else if (!Utils.isValidEmail(emailLogin)) {
-                redAlert(R.string.incorrect_login);
-                showButtons();
-                return;
-            }
-            AuthToken token = AuthToken.getInstance();
-            token.saveToken(emailLogin, emailLogin, password);
-            SessionConfig sessionConfig = App.getSessionConfig();
-            sessionConfig.setSocialAccountEmail(emailLogin);
-            sessionConfig.saveConfig();
-            auth(token);
+        if (checkOnline() && mAuthorizationManager != null) {
+            mAuthorizationManager.topfaceAuth();
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAuthorizationManager = AuthorizationManager.getInstance(getActivity());
+        mAuthorizationManager.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onSuccessAuthorization(AuthToken token) {
+        if (!token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            btnsController.addSocialNetwork(token.getSocialNet());
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mAuthorizationManager.onResume();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
         }
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(connectionChangeListener,
-                new IntentFilter(ConnectionChangeReceiver.REAUTH));
-
-        removeRedAlert();
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             loadAllProfileData();
         } else if (mNeedShowButtonsOnResume) {
@@ -763,19 +422,21 @@ public class AuthFragment extends BaseFragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionChangeListener);
+    public void onDestroyView() {
+        super.onDestroyView();
+        authReceiverRegistered = false;
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(authorizationReceiver);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mAuthorizationManager.onDestroy();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.show();
         }
-        if (!hasAuthorized) {
+        if (!hasAuthorized()) {
             EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "DismissAdditional" : "DismissMain", btnsController.getLocaleTag(), 1L);
         }
     }

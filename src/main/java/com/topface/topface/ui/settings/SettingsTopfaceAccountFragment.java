@@ -305,7 +305,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         logoutRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                AuthorizationManager.logout(getActivity());
+                AuthorizationManager.getInstance(getActivity()).logout(getActivity());
             }
 
             @Override

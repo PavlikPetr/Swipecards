@@ -66,6 +66,9 @@ public class AuthAssistant {
     }
 
     IApiRequest precedeRequestWithAuth(IApiRequest request) {
+        if (request instanceof AuthRequest) {
+            return request;
+        }
         if (!mModifiedRequestsIds.contains(request.getId())) {
             Context context = request.getContext();
             AuthRequest authRequest = new AuthRequest(AuthToken.getInstance().getTokenInfo(), context);

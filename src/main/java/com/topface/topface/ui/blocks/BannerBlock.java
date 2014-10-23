@@ -1,13 +1,11 @@
 package com.topface.topface.ui.blocks;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -17,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -36,13 +33,10 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
-import com.topface.topface.data.VirusLike;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.VirusLikesRequest;
-import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
@@ -55,7 +49,6 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import java.util.Calendar;
@@ -77,8 +70,6 @@ import ru.ideast.adwired.events.OnStopListener;
 public class BannerBlock {
 
     private static final String TAG = "BannerBlock";
-
-    public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
     /**
      * Идентификаторы типов баннеров
      */
@@ -425,9 +416,6 @@ public class BannerBlock {
                     case Banner.ACTION_URL:
                         intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
                         break;
-                    case Banner.ACTION_METHOD:
-                        invokeBannerMethod(banner.parameter);
-                        break;
                     case Banner.ACTION_OFFERWALL:
                         switch (banner.parameter) {
                             case OfferwallsManager.TAPJOY:
@@ -550,66 +538,6 @@ public class BannerBlock {
                 }
             }
         }
-    }
-
-    private void invokeBannerMethod(String param) {
-        if (TextUtils.equals(param, VIRUS_LIKES_BANNER_PARAM)) {
-            sendVirusLikeRequest();
-        }
-    }
-
-    private void sendVirusLikeRequest() {
-        final ProgressDialog dialog = new ProgressDialog(mFragment.getActivity());
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setMessage(mFragment.getString(R.string.general_dialog_loading));
-        dialog.show();
-
-        EasyTracker.sendEvent("VirusLike", "Click", "Banner", 0L);
-
-        new VirusLikesRequest(mFragment.getActivity()).callback(new DataApiHandler<VirusLike>() {
-            @Override
-            protected void success(VirusLike data, IApiResponse response) {
-                EasyTracker.sendEvent("VirusLike", "Success", "Banner", 0L);
-                //И предлагаем отправить пользователю запрос своим друзьям не из приложения
-                new VirusLike((ApiResponse) response).sendFacebookRequest(
-                        "Banner",
-                        mFragment.getActivity(),
-                        new VirusLike.VirusLikeDialogListener(mFragment.getActivity()) {
-                            @Override
-                            public void onComplete(Bundle values) {
-                                super.onComplete(values);
-                                loadBanner(FloatBlock.getActivityMap().get(((Object) mFragment).getClass().toString()).name);
-                            }
-                        }
-                );
-            }
-
-            @Override
-            protected VirusLike parseResponse(ApiResponse response) {
-                return new VirusLike(response);
-            }
-
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                EasyTracker.sendEvent("VirusLike", "Fail", "Banner", 0L);
-
-                if (response.isCodeEqual(ErrorCodes.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
-                    Toast.makeText(getContext(), R.string.virus_error, Toast.LENGTH_LONG).show();
-                } else {
-                    Utils.showErrorMessage();
-                }
-            }
-
-            @Override
-            public void always(IApiResponse response) {
-                super.always(response);
-                try {
-                    dialog.dismiss();
-                } catch (Exception e) {
-                    Debug.error(e);
-                }
-            }
-        }).exec();
     }
 
     /**

@@ -66,7 +66,7 @@ public class DeleteAccountDialog extends AbstractModalDialog implements View.OnC
                                     @Override
                                     public void success(IApiResponse response) {
                                         if (response.isCompleted()) {
-                                            AuthorizationManager.logout(getActivity());
+                                            AuthorizationManager.getInstance(getActivity()).logout(getActivity());
                                         } else {
                                             fail(response.getResultCode(), response);
                                         }

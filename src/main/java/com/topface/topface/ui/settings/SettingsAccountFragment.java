@@ -77,7 +77,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
                         logoutRequest.callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
-                                AuthorizationManager.logout(getActivity());
+                                AuthorizationManager.getInstance(getActivity()).logout(getActivity());
                             }
 
                             @Override
