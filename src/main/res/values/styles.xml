@@ -569,6 +569,10 @@
         <item name="android:layout_height">130dp</item>
     </style>
 
+    <style name="chat_image.gift.holo">
+        <item name="android:background">@drawable/bg_chat_image_holo</item>
+    </style>
+
     <style name="chat_image.map" parent="NoShadowItemFont">
         <item name="android:layout_width">146dp</item>
         <item name="android:layout_height">100dp</item>

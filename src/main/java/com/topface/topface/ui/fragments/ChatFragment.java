@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +27,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -82,7 +80,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimerTask;
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener, IUserOnlineListener {
@@ -285,7 +282,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void initChatHistory(View root) {
         // adapter
         mAdapter.setUser(mUser);
-        mAdapter.setOnAvatarListener(this);
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
 
             @Override
@@ -482,7 +478,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
-                 if (!data.items.isEmpty() && !isPopularLockOn) {
+                if (!data.items.isEmpty() && !isPopularLockOn) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
                         int blockStage = mPopularUserLockController.block(message);
@@ -655,21 +651,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onClick(final View v) {
-        if (v instanceof ImageView) {
-            if (v.getTag() instanceof History) {
-                History history = (History) v.getTag();
-                if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
-                    String uri = String.format(Locale.ENGLISH,
-                            "geo:%f,%f?q=%f,%f" + history.text,
-                            (float) history.geo.getCoordinates().getLatitude(),
-                            (float) history.geo.getCoordinates().getLongitude(),
-                            (float) history.geo.getCoordinates().getLatitude(),
-                            (float) history.geo.getCoordinates().getLongitude());
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                    startActivity(intent);
-                }
-            }
-        }
         switch (v.getId()) {
             case R.id.btnSend:
                 if (mUserId > 0) {

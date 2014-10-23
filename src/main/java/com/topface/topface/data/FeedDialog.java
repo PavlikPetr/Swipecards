@@ -68,7 +68,7 @@ public class FeedDialog extends FeedLike implements Parcelable {
         text = in.readString();
         gift = in.readInt();
         link = in.readString();
-        geo = (Geo) in.readParcelable(getClass().getClassLoader());
+        geo = in.readParcelable(getClass().getClassLoader());
     }
 
     @Override
@@ -77,9 +77,6 @@ public class FeedDialog extends FeedLike implements Parcelable {
         text = item.optString("text");
         link = item.optString("link");
         createdRelative = getRelativeCreatedDate(created);
-        if (type == MAP || type == ADDRESS) {
-            geo = new Geo(item);
-        }
     }
 
     @Override
