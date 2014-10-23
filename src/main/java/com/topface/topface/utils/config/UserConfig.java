@@ -11,6 +11,9 @@ import com.topface.topface.data.Options;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by kirussell on 06.01.14.
  * Config for data related to User
@@ -42,6 +45,8 @@ public class UserConfig extends AbstractUniqueConfig {
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
     public static final String SETTINGS_GCM_LED = "settings_gcm_led";
     public static final String SILENT = "silent";
+    public static final String PURCHASED_SUBSCRIPTIONS = "purchased_subscriptions";
+    public static final String PURCHASED_SUBSCRIPTIONS_SEPARATOR = ",";
 
     public UserConfig(Context context) {
         super(context);
@@ -91,6 +96,8 @@ public class UserConfig extends AbstractUniqueConfig {
         addField(settingsMap, SETTINGS_GCM_LED, true);
         // is push notification enabled or not
         addField(settingsMap, SETTINGS_GCM, true);
+        // purchased subscriptions which don't need verification
+        addField(settingsMap, PURCHASED_SUBSCRIPTIONS, "");
     }
 
     @Override
@@ -397,7 +404,28 @@ public class UserConfig extends AbstractUniqueConfig {
         setField(getSettingsMap(), SETTINGS_GCM, enabled);
     }
 
+    /**
+     * @return List of purchased subscriptions
+     */
+    public List<String> getPurchasedSubscriptions() {
+        String rawSubs = getStringField(getSettingsMap(), PURCHASED_SUBSCRIPTIONS);
+        return Arrays.asList(rawSubs.split(PURCHASED_SUBSCRIPTIONS_SEPARATOR));
+    }
 
+    /**
+     * Add subscription order id to purchased subscriptions
+     *
+     * @param subscriptionId
+     */
+    public void addPurchasedSubscription(String subscriptionId) {
+        String rawSubs = getStringField(getSettingsMap(), PURCHASED_SUBSCRIPTIONS);
+        if (rawSubs.isEmpty()) {
+            setField(getSettingsMap(), PURCHASED_SUBSCRIPTIONS, rawSubs.concat(subscriptionId));
+        } else {
+            setField(getSettingsMap(), PURCHASED_SUBSCRIPTIONS, rawSubs.
+                    concat(PURCHASED_SUBSCRIPTIONS_SEPARATOR).concat(subscriptionId));
+        }
+    }
 
     // =====================================================
 }

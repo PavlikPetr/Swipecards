@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.data.Products;
@@ -28,6 +29,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.UserConfig;
 
 import org.onepf.oms.OpenIabHelper;
 import org.onepf.oms.appstore.AmazonAppstore;
@@ -459,11 +461,17 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      * @param purchase объект с данными покупки
      */
     public void verifyPurchase(final Purchase purchase, final Context context) {
+        final UserConfig userConfig = App.getUserConfig();
         if (purchase == null) {
             Debug.error("BillingFragment: purchase is empty");
             return;
         }
         Debug.log("BillingFragment: try verify purchase " + purchase);
+        if (userConfig.getPurchasedSubscriptions().contains(purchase.getOrderId())) {
+            Debug.log("BillingFragment: subscription with order id " + purchase.getOrderId() +
+                    " already purchased on this google account.");
+            return;
+        }
 
         // Отправлем покупку на сервер для проверки и начисления
         final PurchaseRequest validateRequest = PurchaseRequest.getValidateRequest(purchase, context);
@@ -501,11 +509,18 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 // то возникнет ситуация, что сервер не может валидировать покупку.
                 // Поэтому мы тратим такую покупку после ошибки, если это тестовая покупка
                 DeveloperPayload developerPayload = validateRequest.getDeveloperPayload();
-                if ((developerPayload != null && TextUtils.equals(developerPayload.sku, TEST_PURCHASED_PRODUCT_ID)) ||
-                        codeError == ErrorCodes.DUPLICATE_TRANSACTION) {
+                if (developerPayload != null && TextUtils.equals(developerPayload.sku, TEST_PURCHASED_PRODUCT_ID)) {
                     mHelper.consumeAsync(purchase, OpenIabFragment.this);
                 } else {
                     Debug.error("BillindFragment: verify error: " + response);
+                }
+                if (codeError == ErrorCodes.DUPLICATE_TRANSACTION && purchase.getItemType().equals("subs")) {
+                    userConfig.addPurchasedSubscription(purchase.getOrderId());
+                    userConfig.saveConfig();
+                    Debug.log("BillingFragment: subscription with order id " + purchase.getOrderId() +
+                            " added to purchesed subscription for this google acount.");
+                } else {
+                    mHelper.consumeAsync(purchase, OpenIabFragment.this);
                 }
             }
 
