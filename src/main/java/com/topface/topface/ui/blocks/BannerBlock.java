@@ -430,9 +430,6 @@ public class BannerBlock {
                         break;
                     case Banner.ACTION_OFFERWALL:
                         switch (banner.parameter) {
-                            case OfferwallsManager.TAPJOY:
-                                OfferwallsManager.startTapjoy();
-                                break;
                             case OfferwallsManager.SPONSORPAY:
                                 OfferwallsManager.startSponsorpay(mFragment.getActivity());
                                 break;
