@@ -34,7 +34,19 @@
     <string name="cancel">Cancel</string>
     <string name="general_admin_login">Login</string>
     <string name="editor_emulate_connection">Эмулировать соединение</string>
+    <string name="editor_profile_admin">Админка</string>
 
+    <string name="editor_ban_porn">Порно</string>
+    <string name="editor_ban_spam_photo">Спам фото</string>
+    <string name="editor_ban_porn_album">Порно альбом</string>
+    <string name="editor_ban_spam_msg">Спам сообщение</string>
+    <string name="editor_ban_fake">Фейк</string>
+    <string name="editor_ban_censor">Мат</string>
+    <string name="editor_ban_change_gender">Изменить пол</string>
+    <string name="editor_ban_del_photo">Удалить фото</string>
+    <string name="editor_ban_del_photo_all">Удалить все фото</string>
+    <string name="editor_ban_del_status">Удалить статус</string>
+    <string name="editor_ban_del_about">Удалить "О Себе"</string>
 
     <string-array name="editor_debug_titles">
         <item>Только в debug режиме</item>

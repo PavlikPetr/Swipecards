@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/editor_ban_spam_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_ban_spam_msg"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:id="@+id/editor_ban_spam_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_ban_spam_photo"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:id="@+id/editor_ban_fake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_ban_fake"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:id="@+id/editor_ban_censor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_ban_censor"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:id="@+id/editor_ban_porn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_ban_porn"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:id="@+id/editor_ban_porn_album"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_ban_porn_album"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:id="@+id/editor_ban_del_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_ban_del_photo"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:id="@+id/editor_ban_del_photo_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_ban_del_photo_all"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:id="@+id/editor_ban_del_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_ban_del_status"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:id="@+id/editor_ban_del_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_ban_del_about"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:id="@+id/editor_ban_change_gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_ban_change_gender"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <!-- Это просто текстовая информация о пользователе -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/editor_title_name"
+            android:id="@+id/EditorInfoName" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/editor_title_id"
+            android:autoLink="web"
+            android:id="@+id/EditorInfoId" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/EditorInfoSsid"
+            android:text="@string/editor_title_ssid" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/EditorInfoToken"
+            android:text="@string/editor_title_token" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/EditorInfoSocialNetwork"
+            android:autoLink="web"
+            android:text="@string/editor_title_social_link" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/EditorInfoEditorStatus"
+            android:text="@string/editor_title_editor_status" />
+
+    </LinearLayout>
+</ScrollView>

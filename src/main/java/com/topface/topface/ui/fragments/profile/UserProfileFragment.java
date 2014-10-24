@@ -43,6 +43,7 @@ import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
+import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.LeadersDialog;
@@ -88,6 +89,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     // controllers
     private RateController mRateController;
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
+        @SuppressWarnings("ConstantConditions")
         @Override
         public void onReceive(Context context, Intent intent) {
             AttitudeHandler.ActionTypes type = (AttitudeHandler.ActionTypes) intent.getSerializableExtra(AttitudeHandler.TYPE);
@@ -205,6 +207,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         if (mActions == null) {
             stub.setLayoutResource(R.layout.user_actions_layout);
             mActions = stub.inflate();
+            activeteEditorActions(mActions);
             RelativeLayout bookmarksLayout = (RelativeLayout) mActions.findViewById(R.id.add_to_bookmark_action);
             bookmarksLayout.setOnClickListener(this);
             new UserActions(mActions, actions);
@@ -228,6 +231,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         }
     }
 
+    private void activeteEditorActions(View actions) {
+        if (CacheProfile.isEditor()) {
+            ViewStub stub = (ViewStub) actions.findViewById(R.id.open_profile_for_editor_stub);
+            stub.inflate();
+        }
+    }
     private ArrayList<UserActions.ActionItem> getActionItems() {
         if (mUserActions == null) {
             mUserActions = new ArrayList<>();
@@ -238,6 +247,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             mUserActions.add(new UserActions.ActionItem(R.id.add_to_black_list_action, this));
             mUserActions.add(new UserActions.ActionItem(R.id.complain_action, this));
             mUserActions.add(new UserActions.ActionItem(R.id.add_to_bookmark_action, this));
+            if (CacheProfile.isEditor()) {
+                mUserActions.add(new UserActions.ActionItem(R.id.open_profile_for_editor, this));
+            }
         }
         return mUserActions;
     }
@@ -595,6 +607,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 break;
             case R.id.complain_action:
                 startActivity(ComplainsActivity.createIntent(mProfileId));
+                break;
+            case R.id.open_profile_for_editor:
+                startActivity(EditorProfileActionsActivity.createIntent(mProfileId));
                 break;
             default:
                 break;
