@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.data.Products;
@@ -28,6 +29,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.UserConfig;
 
 import org.onepf.oms.OpenIabHelper;
 import org.onepf.oms.appstore.AmazonAppstore;
@@ -70,17 +72,18 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
     public static final int PURCHASE_CANCEL_FORTUMO = 5;
     public static final int PURCHASE_IMPOSSIBLE_FORTUMO = 6;
-    private static final String ITEM_TYPE_SUBS = "subs";
     private static final CharSequence ITEM_TYPE_INAPP = "inapp";
     private OpenIabHelper mHelper;
     private boolean mIabSetupFinished = false;
     private boolean mHasDeferredPurchase = false;
     private View mDeferredPurchaseButton;
+    private UserConfig mUserConfig;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initOpenIabHelper();
+        mUserConfig = App.getUserConfig();
     }
 
     /**
@@ -261,7 +264,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 Products.ProductsInventory serverSubs = marketProducts != null ? marketProducts.inventory : null;
                 for (String sku : allOwnedSkus) {
                     Purchase purchase = inventory.getPurchase(sku);
-                    if (ITEM_TYPE_SUBS.equals(purchase.getItemType())) {
+                    if (OpenIabHelper.ITEM_TYPE_SUBS.equals(purchase.getItemType())) {
                         //Если на сервере нет какой то подписки, которая есть в маркете, то отправляем ее повторно
                         if (serverSubs != null && !serverSubs.containsSku(sku)) {
                             Debug.log("BillingFragment: restore subscription: " + sku);
@@ -464,6 +467,11 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             return;
         }
         Debug.log("BillingFragment: try verify purchase " + purchase);
+        if (mUserConfig.getPurchasedSubscriptions().contains(purchase.getOrderId())) {
+            Debug.log("BillingFragment: subscription with order id " + purchase.getOrderId() +
+                    " already purchased on this google account.");
+            return;
+        }
 
         // Отправлем покупку на сервер для проверки и начисления
         final PurchaseRequest validateRequest = PurchaseRequest.getValidateRequest(purchase, context);
@@ -497,19 +505,43 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
             @Override
             public void fail(int codeError, final IApiResponse response) {
-                // Если кто-то попытался купить android.test.purchased вне тестового режима,
-                // то возникнет ситуация, что сервер не может валидировать покупку.
-                // Поэтому мы тратим такую покупку после ошибки, если это тестовая покупка
-                DeveloperPayload developerPayload = validateRequest.getDeveloperPayload();
-                if ((developerPayload != null && TextUtils.equals(developerPayload.sku, TEST_PURCHASED_PRODUCT_ID)) ||
-                        codeError == ErrorCodes.DUPLICATE_TRANSACTION) {
-                    mHelper.consumeAsync(purchase, OpenIabFragment.this);
-                } else {
+                boolean consumed = false;
+                consumed |= consumeTestPurchase(purchase, validateRequest);
+                consumed |= consumeDuplicatePurchase(codeError, purchase);
+                if (!consumed) {
                     Debug.error("BillindFragment: verify error: " + response);
                 }
             }
 
         }).exec();
+    }
+
+    private boolean consumeTestPurchase(Purchase purchase, PurchaseRequest validateRequest) {
+        // Если кто-то попытался купить android.test.purchased вне тестового режима,
+        // то возникнет ситуация, что сервер не может валидировать покупку.
+        // Поэтому мы тратим такую покупку после ошибки, если это тестовая покупка
+        DeveloperPayload developerPayload = validateRequest.getDeveloperPayload();
+        if (developerPayload != null && TextUtils.equals(developerPayload.sku, TEST_PURCHASED_PRODUCT_ID)) {
+            mHelper.consumeAsync(purchase, OpenIabFragment.this);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean consumeDuplicatePurchase(int codeError, Purchase purchase) {
+        if (codeError == ErrorCodes.DUPLICATE_TRANSACTION) {
+            if (purchase.getItemType().equals(OpenIabHelper.ITEM_TYPE_SUBS)) {
+                mUserConfig.addPurchasedSubscription(purchase.getOrderId());
+                mUserConfig.saveConfig();
+                Debug.log("BillingFragment: subscription with order id " + purchase.getOrderId() +
+                        " added to purchesed subscription for this google acount.");
+                return false;
+            } else {
+                mHelper.consumeAsync(purchase, OpenIabFragment.this);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
