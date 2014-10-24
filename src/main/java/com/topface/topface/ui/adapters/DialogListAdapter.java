@@ -81,9 +81,6 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                         image = R.drawable.ico_outbox;
                     }
                     break;
-                case FeedDialog.ADDRESS:
-                    image = R.drawable.ico_map;
-                    break;
                 case FeedDialog.GIFT:
                     image = R.drawable.ico_gift;
                     text = (dialog.target == FeedDialog.INPUT_FRIEND_MESSAGE) ?
@@ -116,8 +113,6 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
             case FeedDialog.PHOTO:
                 counter = dialog.unreadCounter;
                 break;
-            case FeedDialog.ADDRESS:
-            case FeedDialog.MAP:
             case FeedDialog.GIFT:
             default:
                 counter = 0;

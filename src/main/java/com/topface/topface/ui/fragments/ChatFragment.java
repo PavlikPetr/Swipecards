@@ -16,6 +16,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -159,6 +160,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private boolean mWasNotEmptyHistory;
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            updateSendMessageAbility();
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    };
+    private ImageButton mSendButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -212,6 +230,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         Debug.log(this, "+onCreate");
         // Swap Control
         root.findViewById(R.id.send_gift_button).setOnClickListener(this);
+        //Send Button
+        mSendButton = (ImageButton) root.findViewById(R.id.btnSend);
+        mSendButton.setOnClickListener(this);
         // Edit Box
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
         if (mInitialMessage != null) {
@@ -219,6 +240,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mEditBox.setSelection(mInitialMessage.length());
         }
         mEditBox.setOnEditorActionListener(mEditorActionListener);
+        mEditBox.addTextChangedListener(mTextWatcher);
         //LockScreen
         initLockScreen(root);
         if (savedInstanceState != null) {
@@ -227,10 +249,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 mPopularUserLockController.setState((PopularUserChatController.SavedState) popularLockState);
             }
         }
+        updateSendMessageAbility();
         checkPopularUserLock();
-        //Send Button
-        ImageButton sendButton = (ImageButton) root.findViewById(R.id.btnSend);
-        sendButton.setOnClickListener(this);
         //init data
         restoreData(savedInstanceState);
         // History ListView & ListAdapter
@@ -358,6 +378,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         return false;
     }
 
+    private void updateSendMessageAbility() {
+        if (mSendButton != null && mEditBox != null) {
+            mSendButton.setEnabled(!mEditBox.getText().toString().isEmpty());
+        }
+
+    }
     @Override
     protected String getTitle() {
         if (TextUtils.isEmpty(mUserName) && mUserAge == 0) {
