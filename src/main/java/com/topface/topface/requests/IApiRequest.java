@@ -12,6 +12,8 @@ public interface IApiRequest {
 
     public int resend();
 
+    void setEmptyHandler();
+
     public void cancel();
 
     public boolean isCanResend();
@@ -25,6 +27,8 @@ public interface IApiRequest {
     public Context getContext();
 
     public ApiHandler getHandler();
+
+    int getResendCounter();
 
     public String getId();
 

@@ -66,6 +66,9 @@ public class AuthAssistant {
     }
 
     IApiRequest precedeRequestWithAuth(IApiRequest request) {
+        if (request instanceof AuthRequest) {
+            return request;
+        }
         if (!mModifiedRequestsIds.contains(request.getId())) {
             Context context = request.getContext();
             AuthRequest authRequest = new AuthRequest(AuthToken.getInstance().getTokenInfo(), context);
@@ -75,6 +78,7 @@ public class AuthAssistant {
                     firstRequest(authRequest, authHandler).request(request).build();
             Debug.log("Request's id changed from " + oldRequestId + " to " + request.getId() +
                     " because of adding authorization subrequest");
+            request.setEmptyHandler();
 
             mModifiedRequestsIds.add(request.getId());
         }

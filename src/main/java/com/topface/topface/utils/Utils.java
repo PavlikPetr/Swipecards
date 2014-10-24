@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Point;
@@ -106,10 +105,9 @@ public class Utils {
         }
     }
 
-    public static Integer getGooglePlayServicesVersion(Context context) {
+    public static Integer getGooglePlayServicesVersion() {
         try {
-            PackageInfo packageInfo = context.getPackageManager().getPackageInfo("com.google.android.gms", 0);
-            return packageInfo != null ? packageInfo.versionCode : null;
+            return App.getContext().getPackageManager().getPackageInfo("com.google.android.gms", 0).versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             Debug.error("Can't obtain google play services version, no gcm available");
         } catch (Exception e) {
