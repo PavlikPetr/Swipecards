@@ -352,7 +352,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                     );
                 } else {
                     if (!TextUtils.isEmpty(customApi)) {
-                        mAppConfig.setApiUrl(String.format(API_STAGE_TF, customApi),
+                        mAppConfig.setApiUrl(String.format(API_STAGE_TF, customApi.trim()),
                                 null);
                     }
                 }

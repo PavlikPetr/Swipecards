@@ -89,7 +89,8 @@ public class Ssid {
     }
 
     public static boolean isOverdue() {
-        return isOlderThan(App.getAppOptions().getSessionTimeout());
+        int sessionTimeout = App.getAppOptions().getSessionTimeout();
+        return sessionTimeout != 0 && isOlderThan(App.getAppOptions().getSessionTimeout());
     }
 
     public interface ISsidUpdateListener {
