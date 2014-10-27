@@ -72,7 +72,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
     public static final int PURCHASE_CANCEL_FORTUMO = 5;
     public static final int PURCHASE_IMPOSSIBLE_FORTUMO = 6;
-    private static final CharSequence ITEM_TYPE_INAPP = "inapp";
     private OpenIabHelper mHelper;
     private boolean mIabSetupFinished = false;
     private boolean mHasDeferredPurchase = false;
@@ -480,7 +479,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             protected void success(Verify verify, IApiResponse response) {
                 //Послу удачной покупки (не подписки), которая была проверена сервером,
                 //нужно "потратить" элемент, что бы можно было купить следующий
-                if (TextUtils.equals(purchase.getItemType(), ITEM_TYPE_INAPP)) {
+                if (TextUtils.equals(purchase.getItemType(), OpenIabHelper.ITEM_TYPE_INAPP)) {
                     mHelper.consumeAsync(purchase, OpenIabFragment.this);
                 }
                 onPurchased(purchase.getSku());
