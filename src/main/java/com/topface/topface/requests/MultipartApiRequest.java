@@ -64,6 +64,11 @@ abstract public class MultipartApiRequest extends ApiRequest {
         return true;
     }
 
+    @Override
+    public boolean isCanResend() {
+        return getResendCounter() < ApiRequest.MAX_RESEND_CNT;
+    }
+
     /**
      * Возвращает заголовки для подзапроса
      *
