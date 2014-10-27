@@ -2,6 +2,7 @@ package com.topface.topface.requests;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
@@ -120,9 +121,10 @@ public abstract class ApiRequest implements IApiRequest {
         return mResendCnt;
     }
 
+    @Override
     public void setEmptyHandler() {
         if (handler == null) {
-            handler = new ApiHandler() {
+            handler = new ApiHandler(Looper.getMainLooper()) {
                 @Override
                 public void success(IApiResponse response) {
                 }
@@ -182,6 +184,11 @@ public abstract class ApiRequest implements IApiRequest {
     @Override
     public ApiHandler getHandler() {
         return handler;
+    }
+
+    @Override
+    public int getResendCounter() {
+        return mResendCnt;
     }
 
     private boolean setSsid(String ssid) {

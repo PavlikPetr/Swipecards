@@ -436,7 +436,6 @@ public class ConnectionManager {
      * Executes request if there are no auth requests in process.
      * Otherwise lefts request pending until authorization is complete.
      *
-     * @param request
      * @return response or null if request was left pending
      */
     private IApiResponse sendOrPend(IApiRequest request) {

@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
@@ -17,7 +19,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.framework.utils.Debug;
 
 import org.json.JSONObject;
 
@@ -27,6 +28,14 @@ abstract public class ApiHandler extends Handler {
     private boolean mCancel = false;
     private boolean mNeedCounters = true;
     private CompleteAction mCompleteAction;
+
+    public ApiHandler() {
+
+    }
+
+    public ApiHandler(Looper looper) {
+        super(looper);
+    }
 
     @Override
     public void handleMessage(Message msg) {
