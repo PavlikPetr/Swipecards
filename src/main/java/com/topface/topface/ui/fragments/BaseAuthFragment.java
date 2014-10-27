@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.view.ViewGroup;
 
 import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
@@ -61,7 +61,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
         }).build();
         retryView.setVisibility(View.GONE);
 
-        RelativeLayout rootLayout = (RelativeLayout) root.findViewById(getRootId());
+        ViewGroup rootLayout = (ViewGroup) root.findViewById(getRootId());
         rootLayout.addView(retryView.getView());
 
         mConnectionChangeListener = new BroadcastReceiver() {

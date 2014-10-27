@@ -24,7 +24,6 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
-import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.SessionConfig;
@@ -134,7 +133,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     @Override
     protected int getRootId() {
-        return R.id.mainContainer;
+        return R.id.tf_auth_root;
     }
 
     @Override
@@ -251,10 +250,5 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     protected void onSuccessAuthorization(AuthToken token) {
         Intent intent = new Intent(getActivity(), NavigationActivity.class);
         getActivity().startActivity(intent);
-    }
-
-    @Override
-    protected RetryViewCreator initRetryView(View root) {
-        return null;
     }
 }
