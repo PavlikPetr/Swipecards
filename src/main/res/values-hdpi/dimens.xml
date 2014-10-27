@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="shadow_1px" format="float" type="dimen">1.5</item>
+    <item name="shadow_n1px" format="float" type="dimen">-1.5</item>
+    <item name="shadow_2px" format="float" type="dimen">3</item>
+    <item name="shadow_n2px" format="float" type="dimen">-3</item>
+    <item name="shadow_3px" format="float" type="dimen">4.5</item>
+    <item name="shadow_n3px" format="float" type="dimen">-4.5</item>
+</resources>

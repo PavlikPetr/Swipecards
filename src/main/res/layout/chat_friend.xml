@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:id="@+id/layout"
     android:gravity="left">
 
     <include
-        layout="@layout/chat_date_divider"
-        android:id="@+id/loDateDivider" />
+        android:id="@+id/loDateDivider"
+        layout="@layout/chat_date_divider" />
 
     <!-- message -->
     <TextView
         android:id="@+id/chat_message"
-        android:layout_below="@id/loDateDivider"
+        style="@style/ChatMessage.Friend"
         android:layout_alignParentLeft="true"
-        style="@style/chat_message.friend"
+        android:layout_below="@id/loDateDivider"
         android:paddingLeft="21dp"
         android:paddingRight="13dp" />
 
     <!-- date -->
     <TextView
         android:id="@+id/chat_date"
-        style="@style/chat_date"
-        android:layout_toRightOf="@id/chat_message"
-        android:layout_alignBottom="@id/chat_message" />
+        style="@style/ChatDate"
+        android:layout_alignBottom="@id/chat_message"
+        android:layout_toRightOf="@id/chat_message" />
 
 </RelativeLayout>    
