@@ -15,4 +15,8 @@
     <color name="geo_color">#FFCF72</color>>
 
     <color name="disabled_color">#AAAAAA</color>
+    <!-- new redesign colors -->
+    <color name="bg_holo">#F1F1F1</color>
+    <color name="bg_white">#FFFFFF</color>
+    <color name="text_color_gray">#333333</color>
 </resources>

@@ -21,10 +21,6 @@ public class FeedDialog extends FeedLike implements Parcelable {
      *    
      */
     public String link;
-    /**
-     * Координаты местоположения
-     */
-    public Geo geo;
 
     // Constants
     public static final int DEFAULT = 0; // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
@@ -68,7 +64,6 @@ public class FeedDialog extends FeedLike implements Parcelable {
         text = in.readString();
         gift = in.readInt();
         link = in.readString();
-        geo = (Geo) in.readParcelable(getClass().getClassLoader());
     }
 
     @Override
@@ -77,9 +72,6 @@ public class FeedDialog extends FeedLike implements Parcelable {
         text = item.optString("text");
         link = item.optString("link");
         createdRelative = getRelativeCreatedDate(created);
-        if (type == MAP || type == ADDRESS) {
-            geo = new Geo(item);
-        }
     }
 
     @Override
@@ -88,6 +80,5 @@ public class FeedDialog extends FeedLike implements Parcelable {
         dest.writeString(text);
         dest.writeInt(gift);
         dest.writeString(link);
-        dest.writeParcelable(geo, 0);
     }
 }
