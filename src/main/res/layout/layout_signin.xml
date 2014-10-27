@@ -10,12 +10,12 @@
 
 
         <LinearLayout
+            android:id="@+id/mainContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_centerInParent="true"
-            android:id="@+id/mainContainer"
             android:gravity="center_horizontal"
+            android:orientation="vertical"
             android:paddingBottom="40dp">
 
             <ImageView
@@ -29,17 +29,18 @@
                 android:id="@+id/loLoginGroup"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
                 <AutoCompleteTextView
                     android:id="@+id/edLogin"
+                    style="@style/EditTextAuth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:completionThreshold="1"
                     android:hint="@string/email"
-                    android:inputType="textEmailAddress"
-                    style="@style/EditTextAuth" />
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress" />
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
@@ -48,23 +49,24 @@
 
                     <EditText
                         android:id="@+id/edPassword"
+                        style="@style/EditTextAuth"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:hint="@string/password"
                         android:inputType="textPassword"
-                        android:paddingRight="24dp"
-                        style="@style/EditTextAuth" />
+                        android:imeOptions="actionDone"
+                        android:paddingRight="24dp" />
 
                     <ImageButton
                         android:id="@+id/ivShowPassword"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:src="@drawable/ic_show_password_selector"
-                        android:background="@android:color/transparent"
+                        android:layout_alignRight="@id/edPassword"
                         android:layout_centerVertical="true"
-                        android:layout_alignRight="@id/edPassword" />
+                        android:background="@android:color/transparent"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_show_password_selector" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -74,46 +76,46 @@
 
                     <ProgressBar
                         android:id="@+id/prsLoginSending"
+                        style="@android:style/Widget.ProgressBar.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:visibility="gone"
-                        style="@android:style/Widget.ProgressBar.Small" />
+                        android:visibility="gone" />
 
                     <Button
                         android:id="@+id/btnLogin"
+                        style="@style/AuthButtonsBigText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/sign_in"
-                        style="@style/AuthButtonsBigText"
-                        android:background="@drawable/btn_signin_selector" />
+                        android:background="@drawable/btn_signin_selector"
+                        android:text="@string/sign_in" />
                 </RelativeLayout>
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tvRecoverPwd"
+                style="@style/AuthButtonsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/AuthButtonsText"
-                android:text="@string/recover_password"
+                android:paddingBottom="16dp"
                 android:paddingTop="16dp"
-                android:paddingBottom="16dp" />
+                android:text="@string/recover_password" />
 
         </LinearLayout>
 
 
         <TextView
             android:id="@+id/tvBackToMainAuth"
+            style="@style/AuthBackButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/AuthBackButtonStyle"
             android:layout_marginBottom="8dp" />
 
         <ImageView
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:src="@drawable/auth_bg_bottom_spot" />
 
     </RelativeLayout>

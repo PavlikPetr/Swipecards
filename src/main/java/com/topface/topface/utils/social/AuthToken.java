@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.utils.CacheProfile;
 
 public class AuthToken {
     // Data
