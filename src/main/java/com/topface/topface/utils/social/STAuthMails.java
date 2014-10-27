@@ -71,11 +71,8 @@ public class STAuthMails {
             }
         }
 
-        //String[] emails = converted.toArray(new String[converted.size()]);
-
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_dropdown_item_1line, converted);
         view.setAdapter(adapter);
-        view.setThreshold(1);
     }
 }
