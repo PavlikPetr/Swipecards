@@ -243,6 +243,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                     mLastSelected = position;
                     setSelectedId((int) getItemId(position));
                     notifyDataSetChanged();
+                    getActivity().finish();
                 }
             });
 

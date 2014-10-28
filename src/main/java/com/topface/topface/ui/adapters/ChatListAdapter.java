@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +21,6 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.geo.AddressesCache;
 import com.topface.topface.utils.loadcontollers.ChatLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
@@ -38,18 +36,12 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private static final int T_FRIEND = 6;
     private static final int T_USER_GIFT = 7;
     private static final int T_FRIEND_GIFT = 8;
-    private static final int T_USER_MAP = 9;
-    private static final int T_FRIEND_MAP = 10;
-    private static final int T_USER_REQUEST = 11;
-    private static final int T_FRIEND_REQUEST = 12;
     private static final int T_USER_POPULAR_1 = 13;
     private static final int T_USER_POPULAR_2 = 14;
     private static final int T_COUNT = 15;
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
-    private AddressesCache mAddressesCache = new AddressesCache();
-    private View.OnClickListener mOnClickListener;
     private ChatFragment.OnListViewItemLongClickListener mLongClickListener;
     private View mHeaderView;
 
@@ -78,12 +70,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         switch (item.type) {
             case FeedDialog.GIFT:
                 return output ? T_USER_GIFT : T_FRIEND_GIFT;
-            case FeedDialog.MAP:
-                return output ? T_USER_MAP : T_FRIEND_MAP;
-            case FeedDialog.ADDRESS:
-                return output ? T_USER_MAP : T_FRIEND_MAP;
-            case FeedDialog.LIKE_REQUEST:
-                return output ? T_USER_REQUEST : T_FRIEND_REQUEST;
             case FeedDialog.MESSAGE_POPULAR_STAGE_1:
                 return T_USER_POPULAR_1;
             case FeedDialog.MESSAGE_POPULAR_STAGE_2:
@@ -134,7 +120,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        setTypeDifferences(position, holder, type, item);
+        setTypeDifferences(holder, type, item);
         if (type != T_WAIT_OR_RETRY) {
             setViewInfo(holder, item);
             setLongClickListener(position, convertView, holder);
@@ -155,21 +141,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 ((TextView) mHeaderView.findViewById(R.id.tvFirstMessageTitle)).setText(R.string.user_deleted_or_banned);
                 mHeaderView.findViewById(R.id.tvFirstMessageText).setVisibility(View.GONE);
             }
-        }
-    }
-
-    public void addHeader(ListView parentView) {
-        if (mHeaderView == null) {
-            mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
-        }
-        try {
-            parentView.addHeaderView(mHeaderView);
-            parentView.setStackFromBottom(false);
-            mHeaderView.setVisibility(View.GONE);
-        } catch (OutOfMemoryError e) {
-            Debug.error("Add header OOM", e);
-        } catch (Exception e) {
-            Debug.error(e);
         }
     }
 
@@ -329,8 +300,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     }
 
-    private void setTypeDifferences(int position, ViewHolder holder, int type, final History item) {
-        boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
+    private void setTypeDifferences(ViewHolder holder, int type, final History item) {
         boolean showDate = mShowDatesList.contains(item);
 
         switch (type) {
@@ -357,22 +327,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                     }
                 }
                 return;
-            case T_FRIEND:
-            case T_USER:
-            case T_USER_POPULAR_1:
-            case T_USER_POPULAR_2:
-                holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
-                break;
             case T_FRIEND_GIFT:
             case T_USER_GIFT:
                 holder.message.setVisibility(View.GONE);
-                break;
-            case T_FRIEND_MAP:
-            case T_USER_MAP:
-                break;
-            case T_FRIEND_REQUEST:
-            case T_USER_REQUEST:
-                holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
                 break;
         }
 
@@ -411,29 +368,12 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 convertView = mInflater.inflate(output ? R.layout.chat_user_gift : R.layout.chat_friend_gift, null, false);
                 holder.gift = (ImageViewRemote) convertView.findViewById(chatImageId);
                 break;
-            case T_FRIEND_MAP:
-            case T_USER_MAP:
-                convertView = mInflater.inflate(output ? R.layout.chat_user_map : R.layout.chat_friend_map, null, false);
-                holder.mapBackground = (ImageViewRemote) convertView.findViewById(chatImageId);
-                holder.prgsLoader = (ProgressBar) convertView.findViewById(R.id.chat_text_progress);
-                break;
-            case T_FRIEND_REQUEST:
-                convertView = mInflater.inflate(R.layout.chat_friend_request, null, false);
-                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                holder.userInfo = convertView.findViewById(R.id.user_info);
-                holder.prgsLoader = (ProgressBar) convertView.findViewById(prsLoaderId);
-                break;
-            case T_USER_REQUEST:
-                convertView = mInflater.inflate(R.layout.chat_user, null, false);
-                holder.userInfo = convertView.findViewById(R.id.user_info);
-                break;
             case T_FRIEND:
             case T_USER:
             case T_USER_POPULAR_1:
             case T_USER_POPULAR_2:
             default:
                 convertView = mInflater.inflate(output ? R.layout.chat_user : R.layout.chat_friend, null, false);
-                holder.userInfo = convertView.findViewById(R.id.user_info);
                 break;
         }
 
@@ -448,16 +388,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private void setViewInfo(ViewHolder holder, History item) {
         boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
         switch (item.type) {
-            case FeedDialog.MAP:
-            case FeedDialog.ADDRESS:
-                holder.message.setText(Static.EMPTY);
-                holder.mapBackground.setImageResource(R.drawable.chat_item_place);
-                holder.mapBackground.setTag(item);
-                holder.mapBackground.setOnClickListener(mOnClickListener);
-                mAddressesCache.mapAddressDetection(item, holder.message, holder.prgsLoader);
-                break;
             case FeedDialog.GIFT:
                 holder.gift.setRemoteSrc(item.link);
+                if (holder.message != null) {
+                    holder.message.setVisibility(setMessageHtmlContent(holder, item) ? View.VISIBLE : View.GONE);
+                }
                 break;
             case FeedDialog.MESSAGE_WISH:
                 holder.message.setText(mContext.getString(output ? R.string.chat_wish_out : R.string.chat_wish_in));
@@ -484,11 +419,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case FeedDialog.MESSAGE_POPULAR_STAGE_1:
             case FeedDialog.MESSAGE_POPULAR_STAGE_2:
             default:
-                if (holder != null && holder.message != null) {
-                    holder.message.setText(
-                            Html.fromHtml(item.text != null ? item.text : "")
-                    );
-                }
+                setMessageHtmlContent(holder, item);
                 break;
         }
         if (holder != null) {
@@ -499,12 +430,21 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     }
 
-    public void setOnItemLongClickListener(ChatFragment.OnListViewItemLongClickListener listener) {
-        mLongClickListener = listener;
+    private boolean setMessageHtmlContent(ViewHolder holder, History item) {
+        if (holder != null && holder.message != null) {
+            if (item.text != null && !item.text.equals(Static.EMPTY)) {
+                holder.message.setText(Html.fromHtml(item.text));
+                return true;
+            } else {
+                holder.message.setText("");
+                return false;
+            }
+        }
+        return false;
     }
 
-    public void setOnAvatarListener(View.OnClickListener listener) {
-        mOnClickListener = listener;
+    public void setOnItemLongClickListener(ChatFragment.OnListViewItemLongClickListener listener) {
+        mLongClickListener = listener;
     }
 
     @SuppressWarnings("deprecation")
@@ -520,6 +460,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void removeItem(History item) {
         getData().remove(item);
     }
@@ -569,7 +510,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private void setLongClickListener(final int position, final View convertView, final ViewHolder holder) {
         setLongClickListenerIfPresented(position, convertView, holder.message);
-        setLongClickListenerIfPresented(position, convertView, holder.mapBackground);
         setLongClickListenerIfPresented(position, convertView, holder.gift);
     }
 
@@ -643,9 +583,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         TextView message;
         TextView date;
         ImageViewRemote gift;
-        ImageViewRemote mapBackground;
-        ProgressBar prgsLoader;
-        View userInfo;
         View loader;
         View retrier;
     }

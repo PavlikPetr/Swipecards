@@ -78,6 +78,7 @@ public class AuthAssistant {
                     firstRequest(authRequest, authHandler).request(request).build();
             Debug.log("Request's id changed from " + oldRequestId + " to " + request.getId() +
                     " because of adding authorization subrequest");
+            request.setEmptyHandler();
 
             mModifiedRequestsIds.add(request.getId());
         }

@@ -6,14 +6,12 @@ import android.content.SharedPreferences;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.utils.CacheProfile;
 
 public class AuthToken {
     // Data
     private TokenInfo mTokenInfo;
     private SharedPreferences mPreferences;
-    // Constants
-    public static final int AUTH_COMPLETE = 1001;
-    public static final int AUTH_ERROR = 0;
     public static final String TOKEN_NETWORK = "sn_type";
     public static final String TOKEN_USER_SOCIAL_ID = "user_id";
     public static final String TOKEN_TOKEN_KEY = "token_key";
