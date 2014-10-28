@@ -5,6 +5,7 @@
     android:fillViewport="true">
 
     <RelativeLayout
+        android:id="@+id/tf_auth_root"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/auth_bg"
