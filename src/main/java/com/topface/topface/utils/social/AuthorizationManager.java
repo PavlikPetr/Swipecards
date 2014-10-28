@@ -25,7 +25,6 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.BaseAuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.controllers.StartActionsController;
@@ -57,7 +56,6 @@ public class AuthorizationManager {
 
     public static final int RESULT_LOGOUT = 666;
 
-    private Handler mHandler;
     private Activity mParentActivity;
 
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
@@ -98,7 +96,6 @@ public class AuthorizationManager {
 
     private AuthorizationManager(Activity parent) {
         mParentActivity = parent;
-        mHandler = null;
         mAuthorizers.put(Platform.VKONTAKTE, new VkAuthorizer(mParentActivity));
         mAuthorizers.put(Platform.FACEBOOK, new FbAuthorizer(mParentActivity));
         mAuthorizers.put(Platform.ODNOKLASSNIKI, new OkAuthorizer(mParentActivity));
@@ -122,15 +119,6 @@ public class AuthorizationManager {
         }
     }
 
-    private void receiveToken() {
-        LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(Authorizer.AUTHORIZATION_TAG).putExtra(BaseAuthFragment.MSG_AUTH_KEY, Authorizer.TOKEN_RECEIVED));
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void setOnAuthorizationHandler(Handler handler) {
-        mHandler = handler;
-    }
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         for (Authorizer authorizer : mAuthorizers.values()) {
             authorizer.onActivityResult(requestCode, resultCode, data);
@@ -147,7 +135,7 @@ public class AuthorizationManager {
         mAuthorizers.get(Platform.FACEBOOK).authorize();
     }
 
-    public void odnoklassnikiAuth(final Authorizer.OnTokenReceivedListener listener) {
+    public void odnoklassnikiAuth() {
         mAuthorizers.get(Platform.ODNOKLASSNIKI).authorize();
     }
 

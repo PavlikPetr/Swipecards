@@ -16,6 +16,8 @@ public interface IApiRequest {
 
     public boolean isCanResend();
 
+    void resetResendCounter();
+
     public boolean isCanceled();
 
     public void setFinished();

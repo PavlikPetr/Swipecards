@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,7 +22,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.utils.EasyTracker;
@@ -37,9 +37,11 @@ import java.util.TimerTask;
  */
 public class TopfaceAuthFragment extends BaseAuthFragment {
 
+    private View mLogo;
     private Button mTFButton;
     private EditText mLogin;
     private EditText mPassword;
+    private View mShowPassword;
     private TextView mBackButton;
     private RelativeLayout mWrongPasswordAlertView;
     private TextView mWrongDataTextView;
@@ -74,6 +76,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     protected void initViews(View root) {
         super.initViews(root);
 
+        mLogo = root.findViewById(R.id.ivTopfaceLogo);
         mLogin = (EditText) root.findViewById(R.id.edLogin);
         mTFButton = (Button) root.findViewById(R.id.btnLogin);
         mTFButton.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +108,8 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             }
         });
         mPassword = (EditText) root.findViewById(R.id.edPassword);
-        root.findViewById(R.id.ivShowPassword).setOnClickListener(new View.OnClickListener() {
+        mShowPassword = root.findViewById(R.id.ivShowPassword);
+        mShowPassword.setOnClickListener(new View.OnClickListener() {
             boolean toggle = false;
             TransformationMethod passwordMethod = new PasswordTransformationMethod();
 
@@ -155,8 +159,29 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         }
     }
 
+    @Override
+    protected void showRetrier() {
+        super.showRetrier();
+        mLogo.setVisibility(View.GONE);
+        mTFButton.setVisibility(View.GONE);
+        mLogin.setVisibility(View.GONE);
+        mPassword.setVisibility(View.GONE);
+        mShowPassword.setVisibility(View.GONE);
+        mLoginSendingProgress.setVisibility(View.GONE);
+        mRecoverPwd.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void hideRetrier() {
+        super.hideRetrier();
+        mLogo.setVisibility(View.VISIBLE);
+        mTFButton.setVisibility(View.VISIBLE);
+        mLogin.setVisibility(View.VISIBLE);
+        mPassword.setVisibility(View.VISIBLE);
+        mShowPassword.setVisibility(View.VISIBLE);
+    }
+
     private void btnTFClick() {
-        hideButtons();
         String emailLogin = Utils.getText(mLogin).trim();
         String password = Utils.getText(mPassword);
         if (TextUtils.isEmpty(emailLogin) || TextUtils.isEmpty(password.trim())) {
@@ -173,6 +198,10 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         SessionConfig sessionConfig = App.getSessionConfig();
         sessionConfig.setSocialAccountEmail(emailLogin);
         sessionConfig.saveConfig();
+
+        removeRedAlert();
+        mRecoverPwd.setVisibility(View.GONE);
+
         auth(token);
     }
 
@@ -218,11 +247,12 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     @Override
     protected void showButtons() {
+        mLogo.setVisibility(View.VISIBLE);
         mTFButton.setVisibility(View.VISIBLE);
         mLogin.setEnabled(true);
         mPassword.setEnabled(true);
+        mShowPassword.setEnabled(true);
         mBackButton.setEnabled(true);
-        mLoginSendingProgress.setVisibility(View.GONE);
         mRecoverPwd.setEnabled(true);
     }
 
@@ -231,13 +261,14 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         mTFButton.setVisibility(View.INVISIBLE);
         mLogin.setEnabled(false);
         mPassword.setEnabled(false);
+        mShowPassword.setEnabled(false);
         mBackButton.setEnabled(false);
-        mLoginSendingProgress.setVisibility(View.VISIBLE);
         mRecoverPwd.setEnabled(false);
     }
 
     @Override
     protected void showProgress() {
+        hideButtons();
         mLoginSendingProgress.setVisibility(View.VISIBLE);
     }
 
@@ -248,7 +279,10 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     @Override
     protected void onSuccessAuthorization(AuthToken token) {
-        Intent intent = new Intent(getActivity(), NavigationActivity.class);
-        getActivity().startActivity(intent);
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.setResult(Activity.RESULT_OK);
+            activity.finish();
+        }
     }
 }

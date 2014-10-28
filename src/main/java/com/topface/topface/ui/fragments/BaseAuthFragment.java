@@ -32,15 +32,9 @@ import com.topface.topface.utils.social.AuthorizationManager;
  */
 public abstract class BaseAuthFragment extends BaseFragment {
 
-    public static final String MSG_AUTH_KEY = "msg";
     private boolean mHasAuthorized = false;
     private RetryViewCreator mRetryView;
     private BroadcastReceiver mConnectionChangeListener;
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
     @Override
     public void onPause() {
@@ -86,7 +80,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
     protected void auth(final AuthToken token) {
         EasyTracker.sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
         App.getConfig().onAuthTokenReceived();
-        hideButtons();
+        showProgress();
         final AuthRequest authRequest = new AuthRequest(token.getTokenInfo(), getActivity());
         authRequest.callback(new ApiHandler() {
             @Override
@@ -148,7 +142,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
         processAuthError(codeError, request);
 
         if (whetherToShowRetrier(codeError)) {
-            mRetryView.setVisibility(View.VISIBLE);
+            showRetrier();
             hideProgress();
         } else {
             showButtons();
@@ -203,8 +197,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
         fillRetryView(text, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRetryView.setVisibility(View.GONE);
+                hideRetrier();
                 showProgress();
+                request.resetResendCounter();
                 resendRequest(request);
             }
         }, btnText);

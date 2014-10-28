@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.facebook.topface.AsyncFacebookRunner;
 import com.facebook.topface.DialogError;
@@ -12,7 +11,6 @@ import com.facebook.topface.Facebook;
 import com.facebook.topface.FacebookError;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.ui.fragments.BaseAuthFragment;
 import com.topface.topface.utils.config.SessionConfig;
 
 import org.json.JSONException;
@@ -37,29 +35,21 @@ public class FbAuthorizer extends Authorizer {
         public void onComplete(Bundle values) {
             Debug.log("FB", "mDialogListener::onComplete");
             mAsyncFacebookRunner.request("/me", mRequestListener);
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(
-                    Authorizer.AUTHORIZATION_TAG).putExtra(BaseAuthFragment.MSG_AUTH_KEY, DIALOG_COMPLETED));
         }
 
         @Override
         public void onFacebookError(FacebookError e) {
             Debug.log("FB", "mDialogListener::onFacebookError:" + e.getMessage());
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(
-                    Authorizer.AUTHORIZATION_TAG).putExtra(BaseAuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
         }
 
         @Override
         public void onError(DialogError e) {
             Debug.log("FB", "mDialogListener::onError");
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(
-                    Authorizer.AUTHORIZATION_TAG).putExtra(BaseAuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
         }
 
         @Override
         public void onCancel() {
             Debug.log("FB", "mDialogListener::onCancel");
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(
-                    Authorizer.AUTHORIZATION_TAG).putExtra(BaseAuthFragment.MSG_AUTH_KEY, AUTHORIZATION_CANCELLED));
 
         }
     };
@@ -80,40 +70,29 @@ public class FbAuthorizer extends Authorizer {
                 sessionConfig.setSocialAccountName(jsonResult.optString("name", ""));
                 sessionConfig.setSocialAccountEmail(jsonResult.optString("email", ""));
                 sessionConfig.saveConfig();
-                receiveToken();
             } catch (JSONException e) {
                 Debug.error("FB login mRequestListener::onComplete:error", e);
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent
-                        (Authorizer.AUTHORIZATION_TAG).putExtra(BaseAuthFragment.MSG_AUTH_KEY, Authorizer.AUTHORIZATION_CANCELLED));
             }
         }
 
         @Override
         public void onMalformedURLException(MalformedURLException e, Object state) {
             Debug.error("FB mRequestListener::onMalformedURLException", e);
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(
-                    Authorizer.AUTHORIZATION_TAG).putExtra(BaseAuthFragment.MSG_AUTH_KEY, Authorizer.AUTHORIZATION_FAILED));
         }
 
         @Override
         public void onIOException(IOException e, Object state) {
             Debug.error("FB mRequestListener::onIOException", e);
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(
-                    Authorizer.AUTHORIZATION_TAG).putExtra(BaseAuthFragment.MSG_AUTH_KEY, Authorizer.AUTHORIZATION_FAILED));
         }
 
         @Override
         public void onFileNotFoundException(FileNotFoundException e, Object state) {
             Debug.error("FB mRequestListener::onFileNotFoundException", e);
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(
-                    Authorizer.AUTHORIZATION_TAG).putExtra(BaseAuthFragment.MSG_AUTH_KEY, Authorizer.AUTHORIZATION_FAILED));
         }
 
         @Override
         public void onFacebookError(FacebookError e, Object state) {
             Debug.error("FB mRequestListener::onFacebookError", e);
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(
-                    Authorizer.AUTHORIZATION_TAG).putExtra(BaseAuthFragment.MSG_AUTH_KEY, Authorizer.AUTHORIZATION_FAILED));
         }
     };
 

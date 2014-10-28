@@ -1,13 +1,9 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,14 +19,13 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
+import com.topface.topface.ui.TopfaceAuthActivity;
 import com.topface.topface.utils.AuthButtonsController;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
-import com.topface.topface.utils.social.Authorizer;
 
 import java.util.HashSet;
 
@@ -39,6 +34,7 @@ public class AuthFragment extends BaseAuthFragment {
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
     public static final String BTNS_HIDDEN = "BtnsHidden";
 
+    private View mLogo;
     private Button mFBButton;
     private Button mVKButton;
     private View mSignInView;
@@ -57,8 +53,6 @@ public class AuthFragment extends BaseAuthFragment {
     private ImageView mOkIcon;
     private ImageView mFbIcon;
     private boolean mNeedShowButtonsOnResume = true;
-    private BroadcastReceiver authorizationReceiver;
-    private boolean authReceiverRegistered;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -74,7 +68,6 @@ public class AuthFragment extends BaseAuthFragment {
             btnsHidden = savedInstanceState.getBoolean(BTNS_HIDDEN);
         }
         initViews(root);
-        initAuthorizationHandler();
         //Если у нас нет токена
         if (!AuthToken.getInstance().isEmpty()) {
             //Если мы попали на этот фрагмент с работающей авторизацией, то просто перезапрашиваем профиль
@@ -82,35 +75,6 @@ public class AuthFragment extends BaseAuthFragment {
         }
         checkOnline();
         return root;
-    }
-
-    protected void initAuthorizationHandler() {
-        if (authorizationReceiver == null || !authReceiverRegistered) {
-            authorizationReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    int msg = intent.getIntExtra(MSG_AUTH_KEY, Authorizer.AUTHORIZATION_CANCELLED);
-                    switch (msg) {
-                        case Authorizer.AUTHORIZATION_FAILED:
-                            authorizationFailed(ErrorCodes.NETWORK_CONNECT_ERROR, null);
-                            break;
-                        case Authorizer.DIALOG_COMPLETED:
-                            hideButtons();
-                            break;
-                        case Authorizer.TOKEN_RECEIVED:
-                            if (getActivity() != null) {
-                                auth(AuthToken.getInstance());
-                            }
-                            break;
-                        case Authorizer.AUTHORIZATION_CANCELLED:
-                            showButtons();
-                            break;
-                    }
-                }
-            };
-            authReceiverRegistered = true;
-            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(authorizationReceiver, new IntentFilter(Authorizer.AUTHORIZATION_TAG));
-        }
     }
 
     @Override
@@ -249,13 +213,14 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
 
         if (mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
         }
-        if (resultCode == Activity.RESULT_OK &&
+        if (requestCode == TopfaceAuthActivity.INTENT_TOPFACE_AUTH && resultCode == Activity.RESULT_OK) {
+            mNeedShowButtonsOnResume = false;
+        } else if (resultCode == Activity.RESULT_OK &&
                 (requestCode == PasswordRecoverActivity.INTENT_RECOVER_PASSWORD
                         || requestCode == RegistrationActivity.INTENT_REGISTRATION)) {
             if (data != null) {
@@ -269,12 +234,19 @@ public class AuthFragment extends BaseAuthFragment {
                 hideButtons();
                 auth(AuthToken.getInstance());
             }
+        } else if (resultCode == Activity.RESULT_OK) {
+            AuthToken authToken = AuthToken.getInstance();
+            if (!authToken.isEmpty()) {
+                mNeedShowButtonsOnResume = false;
+                auth(AuthToken.getInstance());
+            }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            showButtons();
+            hideProgress();
         }
     }
 
     private void initOtherViews(View root) {
+        mLogo = root.findViewById(R.id.ivAuthLogo);
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsAuthLoading);
     }
 
@@ -301,6 +273,7 @@ public class AuthFragment extends BaseAuthFragment {
     protected void showButtons() {
         //Эта проверка нужна, для безопасной работы в
         btnsHidden = false;
+        mLogo.setVisibility(View.VISIBLE);
         if (mFBButton != null && mVKButton != null && mProgressBar != null) {
             if (btnsController.needSN(AuthToken.SN_FACEBOOK)) {
                 mFBButton.setVisibility(View.VISIBLE);
@@ -337,6 +310,8 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Override
     protected void showProgress() {
+        hideButtons();
+        mLogo.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
@@ -345,6 +320,11 @@ public class AuthFragment extends BaseAuthFragment {
         mProgressBar.setVisibility(View.GONE);
     }
 
+    @Override
+    protected void showRetrier() {
+        super.showRetrier();
+        mLogo.setVisibility(View.GONE);
+    }
 
     private void btnVKClick() {
         EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalVk" : "LoginMainVk", btnsController.getLocaleTag(), 1L);
@@ -367,19 +347,7 @@ public class AuthFragment extends BaseAuthFragment {
     private void btnOKClick() {
         EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalOk" : "LoginMainOk", btnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
-            mAuthorizationManager.odnoklassnikiAuth(new Authorizer.OnTokenReceivedListener() {
-                @Override
-                public void onTokenReceived() {
-                    mNeedShowButtonsOnResume = false;
-                    hideButtons();
-                }
-
-                @Override
-                public void onTokenReceiveFailed() {
-                    mNeedShowButtonsOnResume = true;
-                    showButtons();
-                }
-            });
+            mAuthorizationManager.odnoklassnikiAuth();
         }
     }
 
@@ -422,13 +390,6 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        authReceiverRegistered = false;
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(authorizationReceiver);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         mAuthorizationManager.onDestroy();
@@ -439,11 +400,6 @@ public class AuthFragment extends BaseAuthFragment {
         if (!hasAuthorized()) {
             EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "DismissAdditional" : "DismissMain", btnsController.getLocaleTag(), 1L);
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     @Override

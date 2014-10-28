@@ -17,12 +17,12 @@ public class TfAuthorizer extends Authorizer {
     public void authorize() {
         Activity activity = getActivity();
         Intent intent = new Intent(activity, TopfaceAuthActivity.class);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, TopfaceAuthActivity.INTENT_TOPFACE_AUTH);
     }
 
     @Override
     public void logout() {
-
+        AuthToken.getInstance().removeToken();
     }
 
 

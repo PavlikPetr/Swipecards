@@ -1,14 +1,11 @@
 package com.topface.topface.utils.social;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.BaseAuthFragment;
 import com.topface.topface.utils.config.SessionConfig;
 
 import org.json.JSONObject;
@@ -21,7 +18,7 @@ import ru.ok.android.sdk.OkTokenRequestListener;
 import ru.ok.android.sdk.util.OkScope;
 
 /**
- * Created by saharuk on 20.10.14.
+ * Class that starts Odnoklassniki authorization
  */
 public class OkAuthorizer extends Authorizer {
 
@@ -32,7 +29,7 @@ public class OkAuthorizer extends Authorizer {
         private final Odnoklassniki odnoklassniki;
         private final String token;
 
-        public GetCurrentUserTask(Odnoklassniki ok, String token, OnTokenReceivedListener listener) {
+        public GetCurrentUserTask(Odnoklassniki ok, String token) {
             odnoklassniki = ok;
             Debug.log("Odnoklassniki token: " + token);
             this.token = token;
@@ -66,14 +63,11 @@ public class OkAuthorizer extends Authorizer {
                     SessionConfig sessionConfig = App.getSessionConfig();
                     sessionConfig.setSocialAccountName(user.optString("name"));
                     sessionConfig.saveConfig();
-                    receiveToken();
                 } catch (Exception e) {
-//                    mHandler.sendEmptyMessage(Authorizer.AUTHORIZATION_FAILED);
                     Debug.error("Odnoklassniki result parse error", e);
                 }
             } else {
                 Debug.error("Odnoklassniki auth error. users.getCurrentUser returns null");
-//                mHandler.sendEmptyMessage(Authorizer.AUTHORIZATION_FAILED);
             }
         }
 
@@ -96,30 +90,17 @@ public class OkAuthorizer extends Authorizer {
             @Override
             public void onSuccess(String token) {
                 Debug.log("Odnoklassniki auth success with token " + token);
-                new GetCurrentUserTask(mOkAuthObject, token, getOnTokenReceivedListener()).execute();
+                new GetCurrentUserTask(mOkAuthObject, token).execute();
             }
 
             @Override
             public void onError() {
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
-                        new Intent(Authorizer.AUTHORIZATION_TAG).putExtra(
-                                BaseAuthFragment.MSG_AUTH_KEY,
-                                Authorizer.AUTHORIZATION_FAILED
-                        )
-                );
                 Debug.error("Odnoklassniki auth error");
             }
 
             @Override
             public void onCancel() {
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
-                        new Intent(Authorizer.AUTHORIZATION_TAG).putExtra(
-                                BaseAuthFragment.MSG_AUTH_KEY,
-                                Authorizer.AUTHORIZATION_CANCELLED
-                        )
-                );
                 Debug.error("Odnoklassniki auth cancel");
-
             }
         });
 

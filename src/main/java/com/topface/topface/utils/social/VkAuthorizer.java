@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.utils.config.SessionConfig;
@@ -26,21 +27,22 @@ public class VkAuthorizer extends Authorizer {
 
         @Override
         public void onCaptchaError(VKError vkError) {
-
+            Debug.log("VkAuthorizer: captcha error");
         }
 
         @Override
         public void onTokenExpired(VKAccessToken vkAccessToken) {
-
+            Debug.log("VkAuthorizer: token expired");
         }
 
         @Override
         public void onAccessDenied(VKError vkError) {
-
+            Debug.log("VkAuthorizer: access denied");
         }
 
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
+            Debug.log("VkAuthorizer: receive new token");
             super.onReceiveNewToken(newToken);
             String tokenKey = newToken.accessToken;
             String userId = newToken.userId;
@@ -56,16 +58,17 @@ public class VkAuthorizer extends Authorizer {
                     return true;
                 }
             }));
-            receiveToken();
         }
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
+            Debug.log("VkAuthorizer: accept user token");
             super.onAcceptUserToken(token);
         }
 
         @Override
         public void onRenewAccessToken(VKAccessToken token) {
+            Debug.log("VkAuthorizer: renew access token");
             super.onRenewAccessToken(token);
         }
     };
