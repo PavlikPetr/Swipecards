@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +16,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +28,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -82,7 +81,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimerTask;
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener, IUserOnlineListener {
@@ -162,6 +160,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private boolean mWasNotEmptyHistory;
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            updateSendMessageAbility();
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    };
+    private ImageButton mSendButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -200,6 +215,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         //Анимация изменения лейаута
         Utils.enableLayoutChangingTransition(root);
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
+            @SuppressWarnings("ConstantConditions")
             @Override
             public void keyboardOpened() {
                 mIsKeyboardOpened = true;
@@ -214,6 +230,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         Debug.log(this, "+onCreate");
         // Swap Control
         root.findViewById(R.id.send_gift_button).setOnClickListener(this);
+        //Send Button
+        mSendButton = (ImageButton) root.findViewById(R.id.btnSend);
+        mSendButton.setOnClickListener(this);
         // Edit Box
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
         if (mInitialMessage != null) {
@@ -221,6 +240,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mEditBox.setSelection(mInitialMessage.length());
         }
         mEditBox.setOnEditorActionListener(mEditorActionListener);
+        mEditBox.addTextChangedListener(mTextWatcher);
         //LockScreen
         initLockScreen(root);
         if (savedInstanceState != null) {
@@ -229,10 +249,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 mPopularUserLockController.setState((PopularUserChatController.SavedState) popularLockState);
             }
         }
+        updateSendMessageAbility();
         checkPopularUserLock();
-        //Send Button
-        ImageButton sendButton = (ImageButton) root.findViewById(R.id.btnSend);
-        sendButton.setOnClickListener(this);
         //init data
         restoreData(savedInstanceState);
         // History ListView & ListAdapter
@@ -284,7 +302,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void initChatHistory(View root) {
         // adapter
         mAdapter.setUser(mUser);
-        mAdapter.setOnAvatarListener(this);
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
 
             @Override
@@ -325,9 +342,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         });
         mListView.setClickable(true);
         mListView.getRefreshableView().setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
-        if (mAdapter.isEmpty()) {
-            mAdapter.addHeader(mListView.getRefreshableView());
-        }
+
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
         mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
@@ -363,6 +378,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         return false;
     }
 
+    private void updateSendMessageAbility() {
+        if (mSendButton != null && mEditBox != null) {
+            mSendButton.setEnabled(!mEditBox.getText().toString().isEmpty());
+        }
+
+    }
     @Override
     protected String getTitle() {
         if (TextUtils.isEmpty(mUserName) && mUserAge == 0) {
@@ -483,7 +504,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
-                 if (!data.items.isEmpty() && !isPopularLockOn) {
+                if (!data.items.isEmpty() && !isPopularLockOn) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
                         int blockStage = mPopularUserLockController.block(message);
@@ -656,21 +677,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onClick(final View v) {
-        if (v instanceof ImageView) {
-            if (v.getTag() instanceof History) {
-                History history = (History) v.getTag();
-                if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
-                    String uri = String.format(Locale.ENGLISH,
-                            "geo:%f,%f?q=%f,%f" + history.text,
-                            (float) history.geo.getCoordinates().getLatitude(),
-                            (float) history.geo.getCoordinates().getLongitude(),
-                            (float) history.geo.getCoordinates().getLatitude(),
-                            (float) history.geo.getCoordinates().getLongitude());
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                    startActivity(intent);
-                }
-            }
-        }
         switch (v.getId()) {
             case R.id.btnSend:
                 if (mUserId > 0) {
@@ -697,6 +703,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onResume() {
         super.onResume();

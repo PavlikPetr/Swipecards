@@ -5,31 +5,31 @@
     android:gravity="right">
 
     <include
-        layout="@layout/chat_date_divider"
-        android:id="@+id/loDateDivider" />
+        android:id="@+id/loDateDivider"
+        layout="@layout/chat_date_divider" />
 
     <LinearLayout
-        android:layout_below="@id/loDateDivider"
         android:id="@+id/user_info"
-        style="@style/chat_message_layout"
-        android:layout_alignParentRight="true">
+        style="@style/ChatMessageLayout"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/loDateDivider">
 
         <!--image-->
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/chat_image"
-            style="@style/chat_image.gift" />
+            style="@style/ChatImage.Gift.Holo" />
 
         <!-- message -->
         <TextView
             android:id="@+id/chat_message"
-            style="@style/chat_message" />
+            style="@style/ChatMessage.NoBack" />
     </LinearLayout>
 
     <!-- date -->
     <TextView
         android:id="@+id/chat_date"
-        style="@style/chat_date"
-        android:layout_toLeftOf="@id/user_info"
-        android:layout_alignBottom="@id/user_info" />
+        style="@style/ChatDate"
+        android:layout_alignBottom="@id/user_info"
+        android:layout_toLeftOf="@id/user_info" />
 
 </RelativeLayout>
