@@ -2,13 +2,13 @@ package com.topface.topface.utils.social;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.facebook.topface.AsyncFacebookRunner;
 import com.facebook.topface.DialogError;
 import com.facebook.topface.Facebook;
 import com.facebook.topface.FacebookError;
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.utils.config.SessionConfig;
@@ -109,17 +109,17 @@ public class FbAuthorizer extends Authorizer {
 
     @Override
     public void logout() {
-        new AsyncTask() {
+        new BackgroundThread() {
+
             @Override
-            protected java.lang.Object doInBackground(java.lang.Object... params) {
+            public void execute() {
                 try {
                     mFacebook.logout(App.getContext());
                 } catch (Exception e) {
                     Debug.error(e);
                 }
-                return null;
             }
-        }.execute();
+        };
     }
 
     @Override
