@@ -584,11 +584,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             if (adapter.isMultiSelectionMode()) {
                 adapter.onSelection(item);
             } else {
-                startActivity(
-                        UserProfileActivity.createIntent(item.user.id, getActivity())
-                );
+                startActivity(getOnAvatarClickIntent(item));
             }
         }
+    }
+
+    protected Intent getOnAvatarClickIntent(T item) {
+        return UserProfileActivity.createIntent(item.user.id, item.id, getActivity());
     }
 
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
