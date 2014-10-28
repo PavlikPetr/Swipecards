@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -102,6 +104,19 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private void initEditTextViews(View root) {
         mEdEmail = (EditText) root.findViewById(R.id.edEmail);
         mEdName = (EditText) root.findViewById(R.id.edName);
+        mEdName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if (mBirthdayText != null) {
+                        handled = true;
+                        mBirthdayText.performClick();
+                    }
+                }
+                return handled;
+            }
+        });
         mEdPassword = (EditText) root.findViewById(R.id.edPassword);
     }
 

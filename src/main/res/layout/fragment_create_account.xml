@@ -43,6 +43,7 @@
                         android:hint="@string/email"
                         style="@style/EditTextAuth"
                         android:background="@drawable/textlines"
+                        android:imeOptions="actionNext"
                         android:inputType="textEmailAddress"/>
 
                     <EditText
@@ -51,6 +52,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/password"
                         style="@style/EditTextAuth"
+                        android:imeOptions="actionNext"
                         android:background="@drawable/textlines"
                         android:inputType="textPassword"/>
 
@@ -59,6 +61,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/edit_name"
+                        android:imeOptions="actionNext"
                         style="@style/EditTextAuth"
                         android:background="@drawable/textlines"/>
 
