@@ -86,6 +86,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private ViewStub mUserActionsStub;
     private RelativeLayout mBlocked;
     private MenuItem mBarActions;
+    // for profile forwarding
+    private IApiResponse mSavedResponse = null;
     // controllers
     private RateController mRateController;
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
@@ -310,6 +312,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
             @Override
             protected void success(User user, IApiResponse response) {
+                if (user != null) {
+                    saveResponseForEditor(response);
+                }
                 if (user == null) {
                     showRetryBtn();
                 } else if (user.banned) {
@@ -346,6 +351,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
             }
         }).exec();
+    }
+
+    private void saveResponseForEditor(IApiResponse response) {
+        if (CacheProfile.isEditor()) {
+            mSavedResponse = response;
+        }
     }
 
     private void showForBanned() {
@@ -609,7 +620,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 startActivity(ComplainsActivity.createIntent(mProfileId));
                 break;
             case R.id.open_profile_for_editor:
-                startActivity(EditorProfileActionsActivity.createIntent(mProfileId));
+                if (mSavedResponse != null) {
+                    startActivity(EditorProfileActionsActivity.createIntent(mProfileId, mSavedResponse));
+                }
                 break;
             default:
                 break;

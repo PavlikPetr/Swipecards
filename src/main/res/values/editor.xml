@@ -17,6 +17,9 @@
     <string name="editor_title_editor_status">Редактор:</string>
     <string name="editor_title_debug">Отладка:</string>
     <string name="editor_title_editor_mode">Инструменты редактора:</string>
+    <string name="editor_title_social_id">ID в соцсети:</string>
+    <string name="editor_title_banned">Забанен:</string>
+    <string name="editor_title_show_full_info">Cкрыть/показать всю информацию</string>
     <string name="editor_configure_banners">Настройка баннеров</string>
     <string name="editor_save_banners_settings">Сохранить в SharedPreferences</string>
     <string name="editor_reset_banners_settings">Сбросить к серверным</string>
@@ -47,6 +50,7 @@
     <string name="editor_ban_del_photo_all">Удалить все фото</string>
     <string name="editor_ban_del_status">Удалить статус</string>
     <string name="editor_ban_del_about">Удалить "О Себе"</string>
+    <string name="editor_ban_result_ok">Пользователь забанен</string>
 
     <string-array name="editor_debug_titles">
         <item>Только в debug режиме</item>
