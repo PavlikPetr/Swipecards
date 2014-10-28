@@ -65,7 +65,6 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.gcmutils.GCMUtils;
-import com.topface.topface.utils.loadcontollers.FeedLoadController;
 
 import org.json.JSONObject;
 
@@ -133,7 +132,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private ActionMode mActionMode;
     private FilterBlock mFilterBlock;
-    private FeedLoadController mLoadController;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -143,7 +141,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         initNavigationBar();
         mLockView = root.findViewById(R.id.llvFeedLoading);
         mLockView.setVisibility(View.GONE);
-        mLoadController = new FeedLoadController();
         init();
 
         initViews(root);
@@ -588,7 +585,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 adapter.onSelection(item);
             } else {
                 startActivity(
-                        UserProfileActivity.createIntent(item.user.id, item.id, getActivity())
+                        UserProfileActivity.createIntent(item.user.id, getActivity())
                 );
             }
         }
