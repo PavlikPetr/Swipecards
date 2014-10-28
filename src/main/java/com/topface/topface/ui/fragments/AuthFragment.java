@@ -13,10 +13,12 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -244,9 +246,7 @@ public class AuthFragment extends BaseFragment {
         mTFButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnTFClick();
-//                removeRedAlert();
-                Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
+                onTFLoginClick();
             }
         });
 
@@ -260,6 +260,11 @@ public class AuthFragment extends BaseFragment {
             }
         });
         mButtonsInitialized = true;
+    }
+
+    private void onTFLoginClick() {
+        btnTFClick();
+        Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
     }
 
     private void setAuthInterface() {
@@ -386,6 +391,17 @@ public class AuthFragment extends BaseFragment {
         STAuthMails.initInputField(getActivity(), mLogin);
 
         mPassword = (EditText) root.findViewById(R.id.edPassword);
+        mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    handled = true;
+                    onTFLoginClick();
+                }
+                return handled;
+            }
+        });
         root.findViewById(R.id.ivShowPassword).setOnClickListener(new View.OnClickListener() {
             boolean toggle = false;
             TransformationMethod passwordMethod = new PasswordTransformationMethod();
