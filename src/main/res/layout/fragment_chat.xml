@@ -20,6 +20,7 @@
         android:fadingEdge="none"
         android:listSelector="@android:color/transparent"
         android:stackFromBottom="true"
+        p2r:ptrHeaderTextColor="#8A8A8A"
         p2r:ptrMode="pullUpFromBottom"
         p2r:ptrOverScroll="false"
         p2r:ptrShowIndicator="false" />

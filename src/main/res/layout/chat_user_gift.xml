@@ -12,6 +12,7 @@
         android:id="@+id/user_info"
         style="@style/ChatMessageLayout"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="4dp"
         android:layout_below="@id/loDateDivider">
 
         <!--image-->

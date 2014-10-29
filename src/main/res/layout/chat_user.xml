@@ -17,6 +17,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/loDateDivider"
         android:paddingLeft="13dp"
+        android:layout_marginRight="4dp"
         android:paddingRight="21dp" />
 
     <!-- date -->
