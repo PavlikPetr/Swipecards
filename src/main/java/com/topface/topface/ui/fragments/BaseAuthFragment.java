@@ -199,7 +199,6 @@ public abstract class BaseAuthFragment extends BaseFragment {
             public void onClick(View v) {
                 hideRetrier();
                 showProgress();
-                request.resetResendCounter();
                 resendRequest(request);
             }
         }, btnText);
@@ -208,6 +207,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
     private void resendRequest(ApiRequest request) {
         if (request != null) {
             request.canceled = false;
+            request.resetResendCounter();
             request.exec();
         } else {
             //Если запрос базовой информации не прошел, то повторяем запрос

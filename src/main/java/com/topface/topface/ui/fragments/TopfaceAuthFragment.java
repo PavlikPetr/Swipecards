@@ -7,10 +7,13 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -28,6 +31,7 @@ import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.STAuthMails;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -39,7 +43,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     private View mLogo;
     private Button mTFButton;
-    private EditText mLogin;
+    private AutoCompleteTextView mLogin;
     private EditText mPassword;
     private View mShowPassword;
     private TextView mBackButton;
@@ -54,7 +58,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View root = inflater.inflate(R.layout.layout_signin, null);
+        View root = inflater.inflate(R.layout.layout_topface_signin, null);
         initViews(root);
 
         return root;
@@ -77,14 +81,14 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         super.initViews(root);
 
         mLogo = root.findViewById(R.id.ivTopfaceLogo);
-        mLogin = (EditText) root.findViewById(R.id.edLogin);
+        mLogin = (AutoCompleteTextView) root.findViewById(R.id.edLogin);
+        //fill autocomplete data (emails)
+        STAuthMails.initInputField(getActivity(), mLogin);
         mTFButton = (Button) root.findViewById(R.id.btnLogin);
         mTFButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnTFClick();
-                removeRedAlert();
-                Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
+                onTFLoginClick();
             }
         });
         mBackButton = (TextView) root.findViewById(R.id.tvBackToMainAuth);
@@ -108,6 +112,17 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             }
         });
         mPassword = (EditText) root.findViewById(R.id.edPassword);
+        mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    handled = true;
+                    onTFLoginClick();
+                }
+                return handled;
+            }
+        });
         mShowPassword = root.findViewById(R.id.ivShowPassword);
         mShowPassword.setOnClickListener(new View.OnClickListener() {
             boolean toggle = false;
@@ -205,6 +220,11 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         auth(token);
     }
 
+    private void onTFLoginClick() {
+        btnTFClick();
+        Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
+    }
+
     private void redAlert(int resId) {
         redAlert(getString(resId));
     }
@@ -279,6 +299,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     @Override
     protected void onSuccessAuthorization(AuthToken token) {
+        STAuthMails.addEmail(token.getLogin());
         Activity activity = getActivity();
         if (activity != null) {
             activity.setResult(Activity.RESULT_OK);

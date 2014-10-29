@@ -49,7 +49,7 @@ public class VkAuthorizer extends Authorizer {
             int expiresIn = newToken.expiresIn;
             AuthToken authToken = AuthToken.getInstance();
             authToken.saveToken(AuthToken.SN_VKONTAKTE, userId, tokenKey, String.valueOf(expiresIn));
-            AuthorizationManager.getVkName(tokenKey, userId, new Handler(new Handler.Callback() {
+            AuthToken.getVkName(userId, new Handler(new Handler.Callback() {
                 @Override
                 public boolean handleMessage(Message msg) {
                     SessionConfig sessionConfig = App.getSessionConfig();

@@ -75,7 +75,6 @@ public class OkAuthorizer extends Authorizer {
         protected void onCancelled() {
             super.onCancelled();
             Debug.error("Odnoklassniki auth cancelled");
-//            mHandler.sendEmptyMessage(Authorizer.AUTHORIZATION_FAILED);
         }
     }
 

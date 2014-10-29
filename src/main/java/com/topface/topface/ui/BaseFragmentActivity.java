@@ -187,7 +187,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected void onLoadProfile() {
         Debug.log("onLoadProfile in " + ((Object) this).getClass().getSimpleName());
-        AuthorizationManager.getInstance(this).refreshAccessToken();
+        new AuthorizationManager(this).refreshAccessToken();
         if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
             startAuth();
         } else {

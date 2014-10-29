@@ -161,7 +161,7 @@ public class AuthFragment extends BaseAuthFragment {
 
     private void setAuthInterface() {
         if (mBtnsController == null || !isAdded()) return;
-        if (mBtnsController.needSN(AuthToken.SN_VKONTAKTE)) {
+        if (mBtnsController.isSocialNetworkActive(AuthToken.SN_VKONTAKTE)) {
             mVKButton.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                     R.anim.fade_in));
             mVKButton.setVisibility(View.VISIBLE);
@@ -169,7 +169,7 @@ public class AuthFragment extends BaseAuthFragment {
             mVKButton.setVisibility(View.GONE);
         }
 
-        if (mBtnsController.needSN(AuthToken.SN_FACEBOOK)) {
+        if (mBtnsController.isSocialNetworkActive(AuthToken.SN_FACEBOOK)) {
             mFBButton.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                     R.anim.fade_in));
             mFBButton.setVisibility(View.VISIBLE);
@@ -177,7 +177,7 @@ public class AuthFragment extends BaseAuthFragment {
             mFBButton.setVisibility(View.GONE);
         }
 
-        if (mBtnsController.needSN(AuthToken.SN_ODNOKLASSNIKI)) {
+        if (mBtnsController.isSocialNetworkActive(AuthToken.SN_ODNOKLASSNIKI)) {
             mOKButton.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                     R.anim.fade_in));
             mOKButton.setVisibility(View.VISIBLE);
@@ -275,13 +275,13 @@ public class AuthFragment extends BaseAuthFragment {
         mBtnsHidden = false;
         mLogo.setVisibility(View.VISIBLE);
         if (mFBButton != null && mVKButton != null && mProgressBar != null) {
-            if (mBtnsController.needSN(AuthToken.SN_FACEBOOK)) {
+            if (mBtnsController.isSocialNetworkActive(AuthToken.SN_FACEBOOK)) {
                 mFBButton.setVisibility(View.VISIBLE);
             }
-            if (mBtnsController.needSN(AuthToken.SN_VKONTAKTE)) {
+            if (mBtnsController.isSocialNetworkActive(AuthToken.SN_VKONTAKTE)) {
                 mVKButton.setVisibility(View.VISIBLE);
             }
-            if (mBtnsController.needSN(AuthToken.SN_ODNOKLASSNIKI)) {
+            if (mBtnsController.isSocialNetworkActive(AuthToken.SN_ODNOKLASSNIKI)) {
                 mOKButton.setVisibility(View.VISIBLE);
             }
             if (mBtnsController.getOthers().size() > 0) {
@@ -360,7 +360,7 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuthorizationManager = AuthorizationManager.getInstance(getActivity());
+        mAuthorizationManager = new AuthorizationManager(getActivity());
         mAuthorizationManager.onCreate(savedInstanceState);
     }
 

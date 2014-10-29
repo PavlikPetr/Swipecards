@@ -516,7 +516,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             try {
                 mCursor = getActivity().getContentResolver().query(uri, null, null, null, null);
 
-                if (mCursor!= null && mCursor.moveToFirst()) {
+                if (mCursor != null && mCursor.moveToFirst()) {
                     if (mCursor.getColumnIndex("title") >= 0) {
                         ringtoneName = mCursor.getString(mCursor.getColumnIndex("title"));
                     } else {
@@ -537,10 +537,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     /**
-     * @param key
-     * @param isMail
-     * @param value
-     * @param context
      * @return SendMailNotificationRequest depending on a key
      */
     public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {
@@ -571,7 +567,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     /**
-     * @param context
      * @return new SendMailNotificationRequest
      */
     public SendMailNotificationsRequest getMailNotificationRequest(Context context) {
@@ -630,15 +625,13 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         new BackgroundThread() {
             @Override
             public void execute() {
-                AuthorizationManager.getAccountName(handler);
+                AuthToken.getAccountName(handler);
             }
         };
     }
 
     /**
      * Sets drawable with social network icon to textView
-     *
-     * @param textView
      */
     public void getSocialAccountIcon(final TextView textView) {
         AuthToken authToken = AuthToken.getInstance();
