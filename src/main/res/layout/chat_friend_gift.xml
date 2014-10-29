@@ -12,7 +12,6 @@
         android:id="@+id/user_info"
         style="@style/ChatMessageLayout.Friend"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="4dp"
         android:layout_below="@id/loDateDivider">
 
         <!--image-->
