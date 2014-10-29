@@ -90,7 +90,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             mPreloadManager.preloadPhoto(mPhotoLinks, position + 1);
             setCounter(realPosition);
             refreshButtonsState();
-            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
+            if (realPosition + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
                 final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
                 if (mNeedMore) {
                     mImageSwitcher.getAdapter().notifyDataSetChanged();
