@@ -29,6 +29,7 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -77,7 +78,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private Photos mPhotoLinks;
     private PreloadManager mPreloadManager;
     private Photos mDeletedPhotos = new Photos();
-    private ImageSwitcher mImageSwitcher;
+    private ImageSwitcherLooped mImageSwitcher;
     private boolean mNeedMore;
     private boolean mCanSendAlbumReq = true;
     private int mUid;
@@ -85,8 +86,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
+            int realPosition = calcRealPosition(position, mPhotoLinks.size());
             mPreloadManager.preloadPhoto(mPhotoLinks, position + 1);
-            setCounter(position);
+            setCounter(realPosition);
             refreshButtonsState();
             if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
                 final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
@@ -147,7 +149,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
 
         // Gallery
-        mImageSwitcher = ((ImageSwitcher) findViewById(R.id.galleryAlbum));
+        mImageSwitcher = ((ImageSwitcherLooped) findViewById(R.id.galleryAlbum));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
 
@@ -162,7 +164,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             mPhotoLinks.add(new Photo());
         }
         mImageSwitcher.setData(mPhotoLinks);
-        mImageSwitcher.setCurrentItem(position, false);
+        mImageSwitcher.setCurrentItem((ImageSwitcherLooped.ITEMS_HALF / mPhotoLinks.size() * mPhotoLinks.size()) + position, false);
 
         setCounter(position);
     }
@@ -227,6 +229,10 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private int calcRealPosition(int position, int realItemsAmount) {
+        return position % realItemsAmount;
     }
 
     private void initControls() {
@@ -338,8 +344,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void setCounter(int position) {
-        int photosLinksSize = mPhotoLinks.size();
         if (mPhotoLinks != null) {
+            int photosLinksSize = mPhotoLinks.size();
             mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
             getTitleSetter().setActionBarTitles((mCurrentPosition + 1) + "/" + photosLinksSize, null);
         }
