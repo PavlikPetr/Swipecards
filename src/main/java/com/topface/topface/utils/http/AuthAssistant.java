@@ -3,6 +3,7 @@ package com.topface.topface.utils.http;
 import android.content.Context;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
@@ -27,7 +28,7 @@ public class AuthAssistant {
     private ConnectionManager mConnectionManager;
     private Set<String> mModifiedRequestsIds = Collections.synchronizedSet(new HashSet<String>());
 
-    private DataApiHandler authHandler = new DataApiHandler<Auth>() {
+    private DataApiHandler mAuthHandler = new DataApiHandler<Auth>() {
 
         @Override
         protected void success(Auth data, IApiResponse response) {
@@ -76,7 +77,7 @@ public class AuthAssistant {
 
             String oldRequestId = request.getId();
             request = new RequestBuilder(context).
-                    firstRequest(authRequest, authHandler).request(request).build();
+                    firstRequest(authRequest, mAuthHandler).request(request).build();
             Debug.log("Request's id changed from " + oldRequestId + " to " + request.getId() +
                     " because of adding authorization subrequest");
             request.setEmptyHandler();
@@ -84,6 +85,10 @@ public class AuthAssistant {
             mModifiedRequestsIds.add(request.getId());
         }
         return request;
+    }
+
+    public IApiRequest explicitAuthRequest() {
+        return new AuthRequest(AuthToken.getInstance().getTokenInfo(), App.getContext()).callback(mAuthHandler);
     }
 
     void forgetRequest(String id) {

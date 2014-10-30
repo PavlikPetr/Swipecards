@@ -98,7 +98,7 @@ public class ConnectionManager {
             Debug.log("CM:: request is canceled");
             //Если запрос отменен, то прекращаем обработку сразу
             return;
-        } else if (mAuthUpdateFlag.get()) {
+        } else if (mAuthUpdateFlag.get() && request.isNeedAuth()) {
             //Если же запрос нового SSID в процессе, то отправляем запрос в список ожидающих авторизации
             addToPendign(request);
             //И тоже прекращаем обработку
@@ -126,8 +126,13 @@ public class ConnectionManager {
                 //Проверяем запрос на ошибку неверной сессии
                 if (response.isCodeEqual(ErrorCodes.SESSION_NOT_FOUND)) {
                     //Добавляем запрос авторизации
-                    request = authAssistant.precedeRequestWithAuth(request);
-                    response = sendOrPend(request);
+                    if (!AuthAssistant.isAuthUnacceptable(request)) {
+                        request = authAssistant.precedeRequestWithAuth(request);
+                        response = sendOrPend(request);
+                    } else {
+                        addToPendign(request);
+                        runRequest(authAssistant.explicitAuthRequest());
+                    }
 
                     //Если после отпправки на авторизацию вернулся пустой запрос,
                     //значит другой поток уже отправил запрос авторизации и нам нужно завершаем обработку и ждать новый SSID
