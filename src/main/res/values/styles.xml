@@ -2,15 +2,15 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Widget.Topface.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
-        <item name="background">@color/bg_actionbar</item>
-        <item name="backgroundStacked">@color/bg_actionbar</item>
-        <item name="backgroundSplit">@color/bg_actionbar</item>
+        <item name="background">@drawable/bg_actionbar</item>
+        <item name="backgroundStacked">@drawable/bg_actionbar</item>
+        <item name="backgroundSplit">@drawable/bg_actionbar</item>
         <item name="titleTextStyle">@style/Widget.Topface.ActionBar.Title</item>
         <item name="subtitleTextStyle">@style/Widget.Topface.ActionBar.Subtitle</item>
 
-        <item name="android:background">@color/bg_actionbar</item>
-        <item name="android:backgroundStacked" tools:ignore="NewApi">@color/bg_actionbar</item>
-        <item name="android:backgroundSplit" tools:ignore="NewApi">@color/bg_actionbar</item>
+        <item name="android:background">@drawable/bg_actionbar</item>
+        <item name="android:backgroundStacked" tools:ignore="NewApi">@drawable/bg_actionbar</item>
+        <item name="android:backgroundSplit" tools:ignore="NewApi">@drawable/bg_actionbar</item>
         <item name="android:titleTextStyle" tools:ignore="NewApi">
             @style/Widget.Topface.ActionBar.Title
         </item>

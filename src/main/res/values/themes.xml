@@ -20,7 +20,7 @@
         <item name="android:listPreferredItemHeight">32dp</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
         <item name="android:windowBackground">@null</item>
-        <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
+        <item name="android:windowContentOverlay">@null</item>
         <!-- Стилизованные кнопки -->
         <item name="blueButtonStyle">@style/Widget.Topface.Button.Big.Blue</item>
         <item name="grayButtonStyle">@style/Widget.Topface.Button.Big.Gray</item>
