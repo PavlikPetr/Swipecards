@@ -107,7 +107,7 @@ public class ConnectionManager {
 
         try {
             //Отправляем запрос, если есть SSID, и он не просрочен, и Токен или если запрос не требует авторизации
-            if ((Ssid.isLoaded() && !Ssid.isOverdue()) || !request.isNeedAuth()) {
+            if ((Ssid.isLoaded() && !Ssid.isOverdue()) || !request.isNeedAuth() || AuthAssistant.isAuthUnacceptable(request)) {
                 response = executeRequest(request);
             } else {
                 //Если у нас нет авторизационного токена, то выкидываем на авторизацию

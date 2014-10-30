@@ -9,6 +9,7 @@ import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.RequestBuilder;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -66,7 +67,7 @@ public class AuthAssistant {
     }
 
     IApiRequest precedeRequestWithAuth(IApiRequest request) {
-        if (request instanceof AuthRequest) {
+        if (isAuthUnacceptable(request)) {
             return request;
         }
         if (!mModifiedRequestsIds.contains(request.getId())) {
@@ -87,5 +88,9 @@ public class AuthAssistant {
 
     void forgetRequest(String id) {
         mModifiedRequestsIds.remove(id);
+    }
+
+    public static boolean isAuthUnacceptable(IApiRequest request) {
+        return request instanceof AuthRequest || request instanceof PhotoAddRequest;
     }
 }
