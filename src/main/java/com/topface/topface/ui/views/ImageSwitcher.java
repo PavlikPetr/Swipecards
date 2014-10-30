@@ -186,7 +186,7 @@ public class ImageSwitcher extends ViewPager {
             int realPosition = getRealPosition(position);
             LayoutInflater inflater = (LayoutInflater) pager.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_album_gallery, null);
-            view.setTag(VIEW_TAG + Integer.toString(realPosition));
+            view.setTag(VIEW_TAG + Integer.toString(position));
             ImageViewRemote imageView = (ImageViewRemote) view.findViewById(R.id.ivPreView);
             imageView.setOnClickListener(new OnClickListener() {
                 @Override
@@ -231,7 +231,7 @@ public class ImageSwitcher extends ViewPager {
         public void setPhotoToPosition(int position, boolean ifLoaded) {
             int realPosition = getRealPosition(position);
             if (!ifLoaded || mLoadedPhotos.get(realPosition, false)) {
-                View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG + Integer.toString(realPosition));
+                View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG + Integer.toString(position));
                 //Этот метод может вызываться до того, как создана страница для этой фотографии
                 if (baseLayout != null) {
                     ImageViewRemote imageView = (ImageViewRemote) baseLayout.findViewById(R.id.ivPreView);
