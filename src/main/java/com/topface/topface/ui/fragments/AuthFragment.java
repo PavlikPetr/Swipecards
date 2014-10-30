@@ -65,6 +65,7 @@ public class AuthFragment extends BaseFragment {
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
     public static final String BTNS_HIDDEN = "BtnsHidden";
     public static final String MSG_AUTH_KEY = "msg";
+    public static final String ARG_EMAIL = "email";
     private RelativeLayout mWrongPasswordAlertView;
     private TextView mWrongDataTextView;
     private TextView mCreateAccountButton;
@@ -99,6 +100,7 @@ public class AuthFragment extends BaseFragment {
     private ImageView mOkIcon;
     private ImageView mFbIcon;
     private boolean mNeedShowButtonsOnResume = true;
+    private String mEmailForNewReg;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -383,6 +385,7 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), RegistrationActivity.class);
+                intent.putExtra(ARG_EMAIL, mEmailForNewReg);
                 startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
             }
         });
@@ -534,6 +537,8 @@ public class AuthFragment extends BaseFragment {
             case ErrorCodes.INCORRECT_LOGIN:
             case ErrorCodes.UNKNOWN_SOCIAL_USER:
                 redAlert(R.string.incorrect_login);
+                //сохранить email введенный при авторизации
+                mEmailForNewReg = Utils.getText(mLogin).trim();
                 needShowRetry = false;
                 break;
             case ErrorCodes.INCORRECT_PASSWORD:
