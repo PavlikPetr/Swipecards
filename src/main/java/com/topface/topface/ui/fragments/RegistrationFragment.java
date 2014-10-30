@@ -103,6 +103,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
     private void initEditTextViews(View root) {
         mEdEmail = (EditText) root.findViewById(R.id.edEmail);
+        mEdEmail.setText(getArguments().getString(AuthFragment.ARG_EMAIL));
         mEdName = (EditText) root.findViewById(R.id.edName);
         mEdName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
