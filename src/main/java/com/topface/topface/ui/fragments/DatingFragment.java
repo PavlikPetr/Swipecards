@@ -831,14 +831,19 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void skipUser(SearchUser currentSearch) {
         if (currentSearch != null && !currentSearch.skipped && !currentSearch.rated) {
-            SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
+            final SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
             registerRequest(skipRateRequest);
             skipRateRequest.userid = currentSearch.id;
             skipRateRequest.callback(new SimpleApiHandler() {
 
                 @Override
                 public void success(IApiResponse response) {
-                    mCurrentUser.skipped = true;
+                    for (SearchUser user : mUserSearchList) {
+                        if (user.id == skipRateRequest.userid) {
+                            user.skipped = true;
+                            return;
+                        }
+                    }
                 }
             }).exec();
         }
