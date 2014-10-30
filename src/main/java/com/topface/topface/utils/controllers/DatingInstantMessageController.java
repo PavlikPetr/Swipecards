@@ -253,8 +253,12 @@ public class DatingInstantMessageController {
     }
 
     private void setInstantMessageText(String text) {
-        mMessageText.setText(text);
-        mMessageText.setSelection(text.length());
+        if (text == null) {
+            mMessageText.getText().clear();
+        } else {
+            mMessageText.setText(text);
+            mMessageText.setSelection(text.length());
+        }
     }
 
     public void reset() {
