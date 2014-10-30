@@ -22,3 +22,6 @@
 [submodule "libs/tf-offerwall"]
 	path = libs/tf-offerwall
 	url = git@github.com:Topface/offerwall-android.git
+[submodule "libs/statistics-android"]
+	path = libs/statistics-android
+	url = git@github.com:Topface/statistics-android.git
