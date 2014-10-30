@@ -104,7 +104,7 @@ public class AuthButtonsController {
         };
     }
 
-    public boolean needSN(String sn) {
+    public boolean isSocialNetworkActive(String sn) {
         return activeButtons.contains(sn);
     }
 

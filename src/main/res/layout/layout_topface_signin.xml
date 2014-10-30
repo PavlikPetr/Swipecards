@@ -5,17 +5,47 @@
     android:fillViewport="true">
 
     <RelativeLayout
+        android:id="@+id/tf_auth_root"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/auth_bg"
+        >
 
+        <RelativeLayout
+            android:id="@+id/redAlert"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/background_alert_plate"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/redAlertTextView"
+                style="@style/RedAlertTextView"
+                android:text="@string/error_login_password" />
+
+            <TextView
+                android:id="@+id/redAlertButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/redAlertTextView"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_create_acc_selector"
+                android:padding="5dp"
+                android:text="@string/create_account" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/mainContainer"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center_horizontal"
+            android:layout_height="fill_parent"
             android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/redAlert"
+            android:gravity="center"
             android:paddingBottom="40dp">
 
             <ImageView

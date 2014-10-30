@@ -149,12 +149,9 @@
         </activity>
 
         <activity
-            android:name=".utils.social.VkAuthActivity"
+            android:name=".ui.TopfaceAuthActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Topface.NoActionBar">
-
-        </activity>
-
+            android:theme="@style/Theme.Topface.NoActionBar" />
         <activity
             android:name=".ui.CitySearchActivity"
             android:screenOrientation="portrait"

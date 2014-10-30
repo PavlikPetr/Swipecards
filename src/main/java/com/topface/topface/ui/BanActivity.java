@@ -203,7 +203,7 @@ public class BanActivity extends TrackedFragmentActivity implements View.OnClick
                                 .commit();
                         break;
                     case R.id.logout_text:
-                        AuthorizationManager.logout(this);
+                        new AuthorizationManager(this).logout(this);
                         break;
                     default:
                         break;

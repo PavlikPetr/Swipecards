@@ -2,13 +2,38 @@ package com.topface.topface.utils.social;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 
+import com.facebook.topface.AsyncFacebookRunner;
+import com.facebook.topface.Facebook;
+import com.facebook.topface.FacebookError;
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.requests.ApiRequest;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.VKSdkListener;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class AuthToken {
+    public static final int SUCCESS_GET_NAME = 0;
+    public static final int FAILURE_GET_NAME = 1;
     // Data
     private TokenInfo mTokenInfo;
     private SharedPreferences mPreferences;
@@ -37,6 +62,105 @@ public class AuthToken {
             mInstance = new AuthToken();
         }
         return mInstance;
+    }
+
+    public static void getAccountName(Handler handler) {
+        AuthToken authToken = getInstance();
+
+        if (authToken.getSocialNet().equals(SN_FACEBOOK)) {
+            getFbName(authToken.getUserSocialId(), handler);
+        } else if (authToken.getSocialNet().equals(SN_VKONTAKTE)) {
+            getVkName(authToken.getUserSocialId(), handler);
+        } else if (authToken.getSocialNet().equals(SN_TOPFACE)) {
+            handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, authToken.getLogin()));
+        }
+        //Одноклассников здесь нет, потому что юзер запрашивается и сохраняется при авторизации
+    }
+
+    public static void getFbName(final String user_id, final Handler handler) {
+        new AsyncFacebookRunner(new Facebook(App.getAppConfig().getAuthFbApi())).request("/" + user_id, new AsyncFacebookRunner.RequestListener() {
+
+            @Override
+            public void onComplete(String response, Object state) {
+                try {
+                    JSONObject jsonResult = new JSONObject(response);
+                    String user_name = jsonResult.getString("name");
+                    handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, user_name));
+                } catch (JSONException e) {
+                    Debug.error("FB RequestListener::onComplete:error ", e);
+                    handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
+                }
+            }
+
+            @Override
+            public void onMalformedURLException(MalformedURLException e, Object state) {
+                Debug.error("FB RequestListener::onMalformedURLException");
+                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
+            }
+
+            @Override
+            public void onIOException(IOException e, Object state) {
+                Debug.error("FB RequestListener::onIOException", e);
+                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
+            }
+
+            @Override
+            public void onFileNotFoundException(FileNotFoundException e, Object state) {
+                Debug.error("FB RequestListener::onFileNotFoundException", e);
+                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
+            }
+
+            @Override
+            public void onFacebookError(FacebookError e, Object state) {
+                Debug.error("FB RequestListener::onFacebookError:" + state, e);
+                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
+            }
+        });
+    }
+
+    public static void getVkName(final String user_id, final Handler handler) {
+        VKSdk.initialize(new VKSdkListener() {
+            @Override
+            public void onCaptchaError(VKError vkError) {
+            }
+
+            @Override
+            public void onTokenExpired(VKAccessToken vkAccessToken) {
+            }
+
+            @Override
+            public void onAccessDenied(VKError vkError) {
+            }
+        }, Static.AUTH_VK_ID);
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.USER_ID, user_id));
+                request.attempts = ApiRequest.MAX_RESEND_CNT;
+                request.secure = true;
+                request.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        try {
+                            String result = "";
+                            JSONArray responseArr = response.json.getJSONArray("response");
+                            if (responseArr != null) {
+                                if (responseArr.length() > 0) {
+                                    JSONObject profile = responseArr.getJSONObject(0);
+                                    result = profile.optString("first_name") + " " + profile.optString("last_name");
+                                }
+                                handler.sendMessage(Message.obtain(null, AuthToken.SUCCESS_GET_NAME, result));
+                            } else {
+                                handler.sendMessage(Message.obtain(null, AuthToken.FAILURE_GET_NAME, ""));
+                            }
+                        } catch (Exception e) {
+                            Debug.error("AuthorizationManager can't get name in vk", e);
+                            handler.sendMessage(Message.obtain(null, AuthToken.FAILURE_GET_NAME, ""));
+                        }
+                    }
+                });
+            }
+        };
     }
 
 

@@ -99,6 +99,11 @@ public abstract class ApiRequest implements IApiRequest {
         }
     }
 
+    @Override
+    public void resetResendCounter() {
+        mResendCnt = 0;
+    }
+
     /**
      * Переотправляем запрос
      *
