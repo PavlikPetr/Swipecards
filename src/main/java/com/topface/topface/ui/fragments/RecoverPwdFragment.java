@@ -107,6 +107,7 @@ public class RecoverPwdFragment extends BaseFragment {
 
     private void initEditViews(View root) {
         mEdEmail = (EditText) root.findViewById(R.id.edEmail);
+        mEdEmail.setText(getArguments().getString(AuthFragment.ARG_EMAIL));
         mEdEmail.addTextChangedListener(new TextWatcher() {
             String before = Static.EMPTY;
 
