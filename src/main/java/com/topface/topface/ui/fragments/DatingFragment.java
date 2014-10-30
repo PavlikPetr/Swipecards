@@ -283,7 +283,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 .registerReceiver(mBalanceReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-        setHighRatePrice();
 
         updateResources();
     }
@@ -574,6 +573,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mRoot != null && mDatingInstantMessageController == null) {
             initInstantMessageController(mRoot);
         }
+
+        setHighRatePrice();
     }
 
     private void initInstantMessageController(KeyboardListenerLayout root) {

@@ -29,9 +29,10 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
+import com.topface.topface.utils.loadcontollers.LoadController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,29 +76,19 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private int mPhotoAlbumControlVisibility = View.VISIBLE;
     private int mOwnPhotosControlVisibility = View.GONE;
     private Photos mPhotoLinks;
-    private PreloadManager mPreloadManager;
     private Photos mDeletedPhotos = new Photos();
-    private ImageSwitcher mImageSwitcher;
-    private boolean mNeedMore;
-    private boolean mCanSendAlbumReq = true;
+    private ImageSwitcherLooped mImageSwitcher;
     private int mUid;
-    private int mLoadedCount;
+    private PhotosManager mPhotosManager = new PhotosManager();
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
-            mPreloadManager.preloadPhoto(mPhotoLinks, position + 1);
-            setCounter(position);
+            int realPosition = calcRealPosition(position, mPhotoLinks.size());
+            setCounter(realPosition);
             refreshButtonsState();
-            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
-                final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
-                if (mNeedMore) {
-                    mImageSwitcher.getAdapter().notifyDataSetChanged();
-                    if (mCanSendAlbumReq) {
-                        mCanSendAlbumReq = false;
-                        sendAlbumRequest(data);
-                    }
-                }
-            }
+
+            mPhotosManager.check(((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData(),
+                    realPosition);
         }
 
         @Override
@@ -127,7 +118,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_photos);
-        mPreloadManager = new PreloadManager();
         // Extras
         Intent intent = getIntent();
         int photosCount = intent.getIntExtra(INTENT_PHOTOS_COUNT, 0);
@@ -138,31 +128,27 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         mPhotoLinks = new Photos();
         mPhotoLinks.addAll(arrList);
 
-        mNeedMore = photosCount > mPhotoLinks.size();
-
         if (mUid == -1) {
             Debug.log(this, "Intent param is wrong");
             finish();
             return;
         }
 
-        // Gallery
-        mImageSwitcher = ((ImageSwitcher) findViewById(R.id.galleryAlbum));
-        mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
-        mImageSwitcher.setOnClickListener(mOnClickListener);
-
         // Control layout
         mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
         mOwnPhotosControl = (ViewGroup) mPhotoAlbumControl.findViewById(R.id.loBottomPanel);
 
-        mLoadedCount = mPhotoLinks.getRealPhotosCount();
-        mNeedMore = photosCount > mLoadedCount;
         int rest = photosCount - mPhotoLinks.size();
         for (int i = 0; i < rest; i++) {
             mPhotoLinks.add(new Photo());
         }
+
+        // Gallery
+        mImageSwitcher = ((ImageSwitcherLooped) findViewById(R.id.galleryAlbum));
+        mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
+        mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setData(mPhotoLinks);
-        mImageSwitcher.setCurrentItem(position, false);
+        mImageSwitcher.setCurrentItem((ImageSwitcherLooped.ITEMS_HALF / mPhotoLinks.size() * mPhotoLinks.size()) + position, false);
 
         setCounter(position);
     }
@@ -227,6 +213,10 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private int calcRealPosition(int position, int realItemsAmount) {
+        return position % realItemsAmount;
     }
 
     private void initControls() {
@@ -338,8 +328,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void setCounter(int position) {
-        int photosLinksSize = mPhotoLinks.size();
         if (mPhotoLinks != null) {
+            int photosLinksSize = mPhotoLinks.size();
             mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
             getTitleSetter().setActionBarTitles((mCurrentPosition + 1) + "/" + photosLinksSize, null);
         }
@@ -371,27 +361,21 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
     }
 
-    private void sendAlbumRequest(final Photos data) {
-        int position = data.get(mLoadedCount - 2).getPosition() + 1;
+    private void sendAlbumRequest(int position) {
         AlbumRequest request = new AlbumRequest(this, mUid, position, AlbumRequest.MODE_SEARCH, AlbumLoadController.FOR_PREVIEW);
         request.callback(new DataApiHandler<AlbumPhotos>() {
 
             @Override
             protected void success(AlbumPhotos newPhotos, IApiResponse response) {
-                mNeedMore = newPhotos.more;
-                int i = -1;
                 for (Photo photo : newPhotos) {
-                    mPhotoLinks.set(mLoadedCount + i, photo);
-                    i++;
+                    mPhotoLinks.set(photo.getPosition(), photo);
                 }
-                mLoadedCount += newPhotos.size();
-                mCanSendAlbumReq = true;
 
                 if (mImageSwitcher != null) {
                     mImageSwitcher.getAdapter().notifyDataSetChanged();
                     LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
                             .putExtra(INTENT_PHOTOS, newPhotos)
-                            .putExtra(INTENT_MORE, mNeedMore));
+                            .putExtra(INTENT_MORE, newPhotos.more));
                 }
             }
 
@@ -402,9 +386,54 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                mCanSendAlbumReq = true;
             }
         }).exec();
+    }
+
+    private class PhotosManager {
+        private int mLimit;
+
+        public PhotosManager() {
+            LoadController loadController = new AlbumLoadController(AlbumLoadController.FOR_PREVIEW);
+            mLimit = loadController.getItemsLimitByConnectionType();
+        }
+
+        /**
+         * sends request for photo data load, if need
+         *
+         * @param photos   array of photos
+         * @param position _real_ index of current photo in this array
+         */
+        public void check(final Photos photos, final int position) {
+            int indexToLeft = calcRightIndex(photos, position - DEFAULT_PRELOAD_ALBUM_RANGE);
+            if (photos.get(indexToLeft).isFake()) {
+                sendAlbumRequest(calcRightIndex(photos, position - mLimit));
+            }
+            int indexToRight = calcRightIndex(photos, position + DEFAULT_PRELOAD_ALBUM_RANGE);
+            if (photos.get(indexToRight).isFake()) {
+                sendAlbumRequest(calcRightIndex(photos, position));
+            }
+        }
+
+        /**
+         * converts some index (negative for example) to fit in array size
+         *
+         * @param photos source array
+         * @param index  some index to fit
+         * @return correct index, fitted in array size
+         */
+        private int calcRightIndex(final Photos photos, final int index) {
+            if (index < 0) {
+                int res = index;
+                while (res < 0) res += photos.size();
+                return res;
+            } else if (index >= photos.size()) {
+                int res = index;
+                while (res >= photos.size()) res -= photos.size();
+                return res;
+            }
+            return index;
+        }
     }
 
     @Override

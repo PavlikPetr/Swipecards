@@ -40,17 +40,22 @@ public class ImageSwitcher extends ViewPager {
 
     private void init() {
         mGestureDetector = new GestureDetector(getContext(), mOnGestureListener);
-        mImageSwitcherAdapter = new ImageSwitcherAdapter();
+        mImageSwitcherAdapter = createImageSwitcherAdapter();
         setAdapter(mImageSwitcherAdapter);
         setOnTouchListener(mOnTouchListener);
         setPageMargin(40);
         mPreloadManager = new PreloadManager(getWidth(), getHeight());
     }
 
+    protected ImageSwitcherAdapter createImageSwitcherAdapter() {
+        return new ImageSwitcherAdapter();
+    }
+
     public void setData(Photos photoLinks) {
-        mImageSwitcherAdapter.setData(photoLinks);
-        mImageSwitcherAdapter.setIsFirstInstantiate(true);
-        this.setAdapter(mImageSwitcherAdapter);
+        ImageSwitcherAdapter adapter = mImageSwitcherAdapter;
+        adapter.setData(photoLinks);
+        adapter.setIsFirstInstantiate(true);
+        this.setAdapter(adapter);
     }
 
     @Override
@@ -140,7 +145,7 @@ public class ImageSwitcher extends ViewPager {
     */
     public class ImageSwitcherAdapter extends PagerAdapter {
         private boolean isFirstInstantiate = true;
-        private Photos mPhotoLinks;
+        protected Photos mPhotoLinks;
         private SparseBooleanArray mLoadedPhotos;
 
         /**
@@ -168,12 +173,17 @@ public class ImageSwitcher extends ViewPager {
             return mPhotoLinks;
         }
 
+        public int getRealPosition(int position) {
+            return position;
+        }
+
         @Override
         public int getCount() {
             return mPhotoLinks == null ? 0 : mPhotoLinks.size();
         }
 
         public Object instantiateItem(ViewGroup pager, int position) {
+            int realPosition = getRealPosition(position);
             LayoutInflater inflater = (LayoutInflater) pager.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_album_gallery, null);
             view.setTag(VIEW_TAG + Integer.toString(position));
@@ -185,7 +195,7 @@ public class ImageSwitcher extends ViewPager {
                 }
             });
             //Первую фотографию грузим сразу, или если фотографию уже загружена, то сразу показываем ее
-            Boolean isLoadedPhoto = mLoadedPhotos.get(position, false);
+            Boolean isLoadedPhoto = mLoadedPhotos.get(realPosition, false);
             //Если это первая фото в списке или фотография уже загружена, то устанавливаем фото сразу
             if (isFirstInstantiate || isLoadedPhoto) {
                 setPhotoToView(position, view, imageView);
@@ -193,9 +203,9 @@ public class ImageSwitcher extends ViewPager {
             }
 
             //Если фото еще не загружено, то пытаемся его загрузить через прелоадер
-            if (!isLoadedPhoto && mPreloadManager.preloadPhoto(mPhotoLinks, position, getListener(position))) {
+            if (!isLoadedPhoto && mPreloadManager.preloadPhoto(mPhotoLinks, realPosition, getListener(position))) {
                 //Добавляем его в список загруженых
-                mLoadedPhotos.put(position, true);
+                mLoadedPhotos.put(realPosition, true);
             }
 
             pager.addView(view);
@@ -219,7 +229,8 @@ public class ImageSwitcher extends ViewPager {
          * @param ifLoaded если true, то установить только если фотография уже загружена
          */
         public void setPhotoToPosition(int position, boolean ifLoaded) {
-            if (!ifLoaded || mLoadedPhotos.get(position, false)) {
+            int realPosition = getRealPosition(position);
+            if (!ifLoaded || mLoadedPhotos.get(realPosition, false)) {
                 View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG + Integer.toString(position));
                 //Этот метод может вызываться до того, как создана страница для этой фотографии
                 if (baseLayout != null) {
@@ -230,16 +241,17 @@ public class ImageSwitcher extends ViewPager {
         }
 
         private void setPhotoToView(int position, View baseLayout, ImageViewRemote imageView) {
+            int realPosition = getRealPosition(position);
             Object tag = imageView.getTag(R.string.photo_is_set_tag);
             //Проверяем, не установленно ли уже изображение в ImageView
             if (tag == null || !((Boolean) tag)) {
                 View progressBar = baseLayout.findViewById(R.id.pgrsAlbum);
                 progressBar.setVisibility(View.VISIBLE);
-                Photo photo = mPhotoLinks.get(position);
+                Photo photo = mPhotoLinks.get(realPosition);
                 imageView.setPhoto(photo, mUpdatedHandler, progressBar);
                 imageView.setTag(R.string.photo_is_set_tag, !photo.isFake());
             }
-            mLoadedPhotos.put(position, true);
+            mLoadedPhotos.put(realPosition, true);
         }
 
 

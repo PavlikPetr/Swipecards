@@ -53,6 +53,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     private Timer mTimer = new Timer();
     private ProgressBar mLoginSendingProgress;
     private TextView mRecoverPwd;
+    private String mEmailForRestorePassword;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -144,6 +145,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PasswordRecoverActivity.class);
+                intent.putExtra(RecoverPwdFragment.ARG_EMAIL, mEmailForRestorePassword);
                 startActivityForResult(intent, PasswordRecoverActivity.INTENT_RECOVER_PASSWORD);
             }
         });
@@ -167,6 +169,8 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             case ErrorCodes.INCORRECT_PASSWORD:
                 redAlert(R.string.incorrect_password);
                 mRecoverPwd.setVisibility(View.VISIBLE);
+                //сохранить корректный логин на случай изменения
+                mEmailForRestorePassword = Utils.getText(mLogin).trim();
                 break;
             case ErrorCodes.MISSING_REQUIRE_PARAMETER:
                 redAlert(R.string.empty_fields);
@@ -305,5 +309,11 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             activity.setResult(Activity.RESULT_OK);
             activity.finish();
         }
+    }
+
+    @Override
+    protected void authorizationFailed(int codeError, ApiRequest request) {
+        mEmailForRestorePassword = null;
+        super.authorizationFailed(codeError, request);
     }
 }

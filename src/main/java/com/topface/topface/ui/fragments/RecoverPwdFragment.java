@@ -26,6 +26,7 @@ import java.util.TimerTask;
 
 public class RecoverPwdFragment extends BaseFragment {
 
+    public static final String ARG_EMAIL = "email";
     private Button mBtnRecover;
     private EditText mEdEmail;
     private ProgressBar mProgressBar;
@@ -107,6 +108,7 @@ public class RecoverPwdFragment extends BaseFragment {
 
     private void initEditViews(View root) {
         mEdEmail = (EditText) root.findViewById(R.id.edEmail);
+        mEdEmail.setText(getArguments().getString(ARG_EMAIL));
         mEdEmail.addTextChangedListener(new TextWatcher() {
             String before = Static.EMPTY;
 
