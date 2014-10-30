@@ -101,6 +101,7 @@ public class AuthFragment extends BaseFragment {
     private ImageView mFbIcon;
     private boolean mNeedShowButtonsOnResume = true;
     private String mEmailForRestorePassword;
+    private String mEmailForNewReg;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -385,6 +386,7 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), RegistrationActivity.class);
+                intent.putExtra(ARG_EMAIL, mEmailForNewReg);
                 startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
             }
         });
@@ -538,6 +540,8 @@ public class AuthFragment extends BaseFragment {
             case ErrorCodes.INCORRECT_LOGIN:
             case ErrorCodes.UNKNOWN_SOCIAL_USER:
                 redAlert(R.string.incorrect_login);
+                //сохранить email введенный при авторизации
+                mEmailForNewReg = Utils.getText(mLogin).trim();
                 needShowRetry = false;
                 break;
             case ErrorCodes.INCORRECT_PASSWORD:
