@@ -99,6 +99,7 @@ public class AuthFragment extends BaseFragment {
     private ImageView mOkIcon;
     private ImageView mFbIcon;
     private boolean mNeedShowButtonsOnResume = true;
+    private String emailForRestorePassword;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -421,6 +422,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PasswordRecoverActivity.class);
+                intent.putExtra(Static.EMAIL, emailForRestorePassword);
                 startActivityForResult(intent, PasswordRecoverActivity.INTENT_RECOVER_PASSWORD);
             }
         });
@@ -509,6 +511,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void authorizationFailed(int codeError, final ApiRequest request) {
+        emailForRestorePassword = Static.EMPTY;
         if (!isAdded()) {
             return;
         }
@@ -539,6 +542,8 @@ public class AuthFragment extends BaseFragment {
             case ErrorCodes.INCORRECT_PASSWORD:
                 redAlert(R.string.incorrect_password);
                 mRecoverPwd.setVisibility(View.VISIBLE);
+                //сохранить корректный логин на случай изменения
+                emailForRestorePassword = Utils.getText(mLogin).trim();
                 needShowRetry = false;
                 break;
             case ErrorCodes.MISSING_REQUIRE_PARAMETER:
