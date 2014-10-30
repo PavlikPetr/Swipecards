@@ -14,19 +14,22 @@ public class BuyWidgetController {
     public boolean salesEnabled = false;
     ServicesTextView mCoins;
     ServicesTextView mLikes;
+    private View.OnClickListener mBuyWidgetClickListener;
 
 
     public BuyWidgetController(final Context context, View root) {
-        mRoot = root;
-        mCoins = (ServicesTextView) root.findViewById(R.id.menuCurCoins);
-        mLikes = (ServicesTextView) root.findViewById(R.id.menuCurLikes);
-        mBuyButton = (Button) root.findViewById(R.id.menuBuyBtn);
-        mBuyButton.setOnClickListener(new View.OnClickListener() {
+        mBuyWidgetClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 context.startActivity(PurchasesActivity.createBuyingIntent("Menu"));
             }
-        });
+        };
+        mRoot = root;
+        mCoins = (ServicesTextView) root.findViewById(R.id.menuCurCoins);
+        mLikes = (ServicesTextView) root.findViewById(R.id.menuCurLikes);
+        mBuyButton = (Button) root.findViewById(R.id.menuBuyBtn);
+        mRoot.setOnClickListener(mBuyWidgetClickListener);
+        mBuyButton.setOnClickListener(mBuyWidgetClickListener);
         updateBalance();
     }
 
