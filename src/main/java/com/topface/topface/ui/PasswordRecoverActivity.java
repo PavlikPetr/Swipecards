@@ -2,7 +2,7 @@ package com.topface.topface.ui;
 
 import android.os.Bundle;
 
-import com.topface.topface.Static;
+import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
 
 public class PasswordRecoverActivity extends NoAuthActivity<RecoverPwdFragment> {
@@ -16,9 +16,8 @@ public class PasswordRecoverActivity extends NoAuthActivity<RecoverPwdFragment> 
 
     @Override
     protected RecoverPwdFragment createFragment() {
-        String email = getIntent().getStringExtra(Static.EMAIL);
         Bundle arg = new Bundle();
-        arg.putString(Static.EMAIL, email);
+        arg.putString(AuthFragment.ARG_EMAIL, getIntent().getStringExtra(AuthFragment.ARG_EMAIL));
         RecoverPwdFragment recoverPwdFragment = new RecoverPwdFragment();
         recoverPwdFragment.setArguments(arg);
         return new RecoverPwdFragment();

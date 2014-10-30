@@ -75,5 +75,4 @@ public class Static {
     public static final String AMPERSAND = "&";
     public static final String SEMICOLON = ":";
     public static final String UNKNOWN = "unknown";
-    public static final String EMAIL = "email";
 }

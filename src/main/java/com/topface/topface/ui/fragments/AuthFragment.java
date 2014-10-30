@@ -65,6 +65,7 @@ public class AuthFragment extends BaseFragment {
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
     public static final String BTNS_HIDDEN = "BtnsHidden";
     public static final String MSG_AUTH_KEY = "msg";
+    public static final String ARG_EMAIL = "email";
     private RelativeLayout mWrongPasswordAlertView;
     private TextView mWrongDataTextView;
     private TextView mCreateAccountButton;
@@ -99,7 +100,7 @@ public class AuthFragment extends BaseFragment {
     private ImageView mOkIcon;
     private ImageView mFbIcon;
     private boolean mNeedShowButtonsOnResume = true;
-    private String emailForRestorePassword;
+    private String mEmailForRestorePassword;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -422,7 +423,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PasswordRecoverActivity.class);
-                intent.putExtra(Static.EMAIL, emailForRestorePassword);
+                intent.putExtra(ARG_EMAIL, mEmailForRestorePassword);
                 startActivityForResult(intent, PasswordRecoverActivity.INTENT_RECOVER_PASSWORD);
             }
         });
@@ -511,7 +512,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void authorizationFailed(int codeError, final ApiRequest request) {
-        emailForRestorePassword = Static.EMPTY;
+        mEmailForRestorePassword = null;
         if (!isAdded()) {
             return;
         }
@@ -543,7 +544,7 @@ public class AuthFragment extends BaseFragment {
                 redAlert(R.string.incorrect_password);
                 mRecoverPwd.setVisibility(View.VISIBLE);
                 //сохранить корректный логин на случай изменения
-                emailForRestorePassword = Utils.getText(mLogin).trim();
+                mEmailForRestorePassword = Utils.getText(mLogin).trim();
                 needShowRetry = false;
                 break;
             case ErrorCodes.MISSING_REQUIRE_PARAMETER:
