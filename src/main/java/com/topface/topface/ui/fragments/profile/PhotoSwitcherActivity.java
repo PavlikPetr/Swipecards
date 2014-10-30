@@ -223,6 +223,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home:
+            case android.R.id.home:
                 deletePhotoRequest();
             default:
                 return super.onOptionsItemSelected(item);
