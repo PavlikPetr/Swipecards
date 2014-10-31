@@ -3,12 +3,14 @@ package com.topface.topface.utils.http;
 import android.content.Context;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.RequestBuilder;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -26,7 +28,7 @@ public class AuthAssistant {
     private ConnectionManager mConnectionManager;
     private Set<String> mModifiedRequestsIds = Collections.synchronizedSet(new HashSet<String>());
 
-    private DataApiHandler authHandler = new DataApiHandler<Auth>() {
+    private DataApiHandler mAuthHandler = new DataApiHandler<Auth>() {
 
         @Override
         protected void success(Auth data, IApiResponse response) {
@@ -66,7 +68,7 @@ public class AuthAssistant {
     }
 
     IApiRequest precedeRequestWithAuth(IApiRequest request) {
-        if (request instanceof AuthRequest) {
+        if (isAuthUnacceptable(request)) {
             return request;
         }
         if (!mModifiedRequestsIds.contains(request.getId())) {
@@ -75,7 +77,7 @@ public class AuthAssistant {
 
             String oldRequestId = request.getId();
             request = new RequestBuilder(context).
-                    firstRequest(authRequest, authHandler).request(request).build();
+                    firstRequest(authRequest, mAuthHandler).request(request).build();
             Debug.log("Request's id changed from " + oldRequestId + " to " + request.getId() +
                     " because of adding authorization subrequest");
             request.setEmptyHandler();
@@ -85,7 +87,15 @@ public class AuthAssistant {
         return request;
     }
 
+    public IApiRequest explicitAuthRequest() {
+        return new AuthRequest(AuthToken.getInstance().getTokenInfo(), App.getContext()).callback(mAuthHandler);
+    }
+
     void forgetRequest(String id) {
         mModifiedRequestsIds.remove(id);
+    }
+
+    public static boolean isAuthUnacceptable(IApiRequest request) {
+        return request instanceof AuthRequest || request instanceof PhotoAddRequest;
     }
 }
