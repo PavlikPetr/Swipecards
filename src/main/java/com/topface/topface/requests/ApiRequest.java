@@ -207,6 +207,11 @@ public abstract class ApiRequest implements IApiRequest {
         return hashCode() + ".." + mResendCnt;
     }
 
+    @Override
+    public boolean containsAuth() {
+        return false;
+    }
+
     protected JSONObject getRequest() {
         JSONObject root = new JSONObject();
         try {

@@ -15,10 +15,6 @@ import com.topface.topface.requests.RequestBuilder;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Manages requests with added authorization request. Saves new auth data and
  * runs pending requests in ConnectionManager.
@@ -26,7 +22,6 @@ import java.util.Set;
 public class AuthAssistant {
 
     private ConnectionManager mConnectionManager;
-    private Set<String> mModifiedRequestsIds = Collections.synchronizedSet(new HashSet<String>());
 
     private DataApiHandler mAuthHandler = new DataApiHandler<Auth>() {
 
@@ -71,7 +66,7 @@ public class AuthAssistant {
         if (isAuthUnacceptable(request)) {
             return request;
         }
-        if (!mModifiedRequestsIds.contains(request.getId())) {
+        if (!request.containsAuth()) {
             Context context = request.getContext();
             AuthRequest authRequest = new AuthRequest(AuthToken.getInstance().getTokenInfo(), context);
 
@@ -81,18 +76,12 @@ public class AuthAssistant {
             Debug.log("Request's id changed from " + oldRequestId + " to " + request.getId() +
                     " because of adding authorization subrequest");
             request.setEmptyHandler();
-
-            mModifiedRequestsIds.add(request.getId());
         }
         return request;
     }
 
     public IApiRequest explicitAuthRequest() {
         return new AuthRequest(AuthToken.getInstance().getTokenInfo(), App.getContext()).callback(mAuthHandler);
-    }
-
-    void forgetRequest(String id) {
-        mModifiedRequestsIds.remove(id);
     }
 
     public static boolean isAuthUnacceptable(IApiRequest request) {

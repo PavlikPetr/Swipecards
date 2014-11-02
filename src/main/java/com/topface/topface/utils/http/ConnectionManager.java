@@ -132,6 +132,7 @@ public class ConnectionManager {
                     } else {
                         addToPendign(request);
                         runRequest(authAssistant.explicitAuthRequest());
+                        return;
                     }
 
                     //Если после отпправки на авторизацию вернулся пустой запрос,
@@ -150,9 +151,9 @@ public class ConnectionManager {
             Debug.error(TAG + "::REQUEST::ERROR", e);
         } finally {
             //Проверяем, нужно ли завершать запрос и соответсвенно закрыть соединение и почистить запрос
-            if (!needResend && response != null) {
+            if ((!needResend && response != null) &&
+                    !(response.isCodeEqual(ErrorCodes.SESSION_NOT_FOUND) && AuthAssistant.isAuthUnacceptable(request))) {
                 //Отмечаем запрос отмененным, что бы почистить
-                authAssistant.forgetRequest(request.getId());
                 request.setFinished();
             }
         }
