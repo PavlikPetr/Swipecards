@@ -88,7 +88,11 @@ public class RecoverPwdFragment extends BaseFragment {
                 }).exec();
             }
         });
-        mBtnRecover.setEnabled(false);
+        if (getArguments().getString(ARG_EMAIL) != null) {
+            mBtnRecover.setEnabled(true);
+        } else {
+            mBtnRecover.setEnabled(false);
+        }
 
         root.findViewById(R.id.tvBackToMainAuth).setOnClickListener(new View.OnClickListener() {
             @Override

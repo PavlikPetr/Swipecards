@@ -19,6 +19,6 @@ public class PasswordRecoverActivity extends NoAuthActivity<RecoverPwdFragment> 
         arg.putString(RecoverPwdFragment.ARG_EMAIL, getIntent().getStringExtra(RecoverPwdFragment.ARG_EMAIL));
         RecoverPwdFragment recoverPwdFragment = new RecoverPwdFragment();
         recoverPwdFragment.setArguments(arg);
-        return new RecoverPwdFragment();
+        return recoverPwdFragment;
     }
 }
