@@ -182,7 +182,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                 public void success(IApiResponse response) {
                     super.success(response);
                     if (isAdded()) {
-                        initCoinsButtons(getView(), products);
+                        initCoinsButtons(getView(), getProducts());
                     }
                     LocalBroadcastManager.getInstance(App.getContext())
                             .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
