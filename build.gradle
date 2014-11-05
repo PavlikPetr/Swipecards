@@ -138,7 +138,7 @@ dependencies {
     //Аннотации вроде @NonNull и @*Res для обозначения переменных
     compile 'com.android.support:support-annotations:19.1.0'
     //Для Амазона нужна библиотека для поддержки in-app покупок
-    amazonCompile files('libs/amazon/*.jar')
+    amazonCompile fileTree(dir: 'libs/amazon/', include: '*.jar')
 
     compile project(':libs:tf-offerwall:sdk')
 
