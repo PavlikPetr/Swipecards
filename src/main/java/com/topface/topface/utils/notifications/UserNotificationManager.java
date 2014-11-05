@@ -270,9 +270,11 @@ public class UserNotificationManager {
     private MessageStack saveMessageStack(String message, User user) {
         UserConfig config = App.getUserConfig();
         MessageStack messagesStack = config.getNotificationMessagesStack();
-        messagesStack.addFirst(new MessageStack.Message(user.name, message));
-        config.setNotificationMessagesStack(messagesStack);
-        config.saveConfig();
+        if (user != null) {
+            messagesStack.addFirst(new MessageStack.Message(user.name, message));
+            config.setNotificationMessagesStack(messagesStack);
+            config.saveConfig();
+        }
         return messagesStack;
     }
 

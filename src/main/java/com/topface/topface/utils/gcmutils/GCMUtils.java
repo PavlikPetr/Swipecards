@@ -277,7 +277,7 @@ public class GCMUtils {
                     getUnread(extra),
                     intent,
                     false,
-                    null);
+                    user);
         }
     }
 

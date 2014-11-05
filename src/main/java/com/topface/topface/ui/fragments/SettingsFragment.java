@@ -59,6 +59,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     private EditSwitcher mSwitchVibration;
     private EditSwitcher mSwitchLED;
     private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<>();
+    private TextView mSocialNameText;
     private CountDownTimer mSendTimer = new CountDownTimer(3000, 3000) {
         @Override
         public void onTick(long l) {
@@ -261,10 +262,10 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loAccount);
         setBackground(R.drawable.edit_big_btn_top_selector, frame);
         ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_account);
-        TextView socialNameText = (TextView) frame.findViewWithTag("tvText");
-        getSocialAccountName(socialNameText);
-        getSocialAccountIcon(socialNameText);
-        socialNameText.setVisibility(View.VISIBLE);
+        mSocialNameText = (TextView) frame.findViewWithTag("tvText");
+        getSocialAccountName(mSocialNameText);
+        getSocialAccountIcon(mSocialNameText);
+        mSocialNameText.setVisibility(View.VISIBLE);
         frame.setOnClickListener(this);
     }
 
@@ -600,9 +601,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     public void getSocialAccountName(final TextView textView) {
         AuthToken authToken = AuthToken.getInstance();
-        if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            textView.setText(authToken.getLogin());
-        } else {
+        if (!authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             String name = mSessionSettings.getSocialAccountName();
             if (TextUtils.isEmpty(name)) {
                 getSocialAccountNameAsync(new Handler() {
@@ -655,6 +654,10 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     @Override
     public void onResume() {
+        AuthToken authToken = AuthToken.getInstance();
+        if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            mSocialNameText.setText(authToken.getLogin());
+        }
         super.onResume();
     }
 
