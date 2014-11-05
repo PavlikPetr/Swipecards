@@ -45,4 +45,6 @@ public interface IApiRequest {
     public void sendHandlerMessage(IApiResponse response);
 
     RequestBuilder intoBuilder(RequestBuilder requestBuilder);
+
+    boolean containsAuth();
 }

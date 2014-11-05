@@ -98,7 +98,7 @@ public class ConnectionManager {
             Debug.log("CM:: request is canceled");
             //Если запрос отменен, то прекращаем обработку сразу
             return;
-        } else if (mAuthUpdateFlag.get()) {
+        } else if (mAuthUpdateFlag.get() && request.isNeedAuth()) {
             //Если же запрос нового SSID в процессе, то отправляем запрос в список ожидающих авторизации
             addToPendign(request);
             //И тоже прекращаем обработку
@@ -107,7 +107,7 @@ public class ConnectionManager {
 
         try {
             //Отправляем запрос, если есть SSID, и он не просрочен, и Токен или если запрос не требует авторизации
-            if ((Ssid.isLoaded() && !Ssid.isOverdue()) || !request.isNeedAuth()) {
+            if ((Ssid.isLoaded() && !Ssid.isOverdue()) || !request.isNeedAuth() || AuthAssistant.isAuthUnacceptable(request)) {
                 response = executeRequest(request);
             } else {
                 //Если у нас нет авторизационного токена, то выкидываем на авторизацию
@@ -126,8 +126,14 @@ public class ConnectionManager {
                 //Проверяем запрос на ошибку неверной сессии
                 if (response.isCodeEqual(ErrorCodes.SESSION_NOT_FOUND)) {
                     //Добавляем запрос авторизации
-                    request = authAssistant.precedeRequestWithAuth(request);
-                    response = sendOrPend(request);
+                    if (!AuthAssistant.isAuthUnacceptable(request)) {
+                        request = authAssistant.precedeRequestWithAuth(request);
+                        response = sendOrPend(request);
+                    } else {
+                        addToPendign(request);
+                        runRequest(authAssistant.explicitAuthRequest());
+                        return;
+                    }
 
                     //Если после отпправки на авторизацию вернулся пустой запрос,
                     //значит другой поток уже отправил запрос авторизации и нам нужно завершаем обработку и ждать новый SSID
@@ -145,9 +151,9 @@ public class ConnectionManager {
             Debug.error(TAG + "::REQUEST::ERROR", e);
         } finally {
             //Проверяем, нужно ли завершать запрос и соответсвенно закрыть соединение и почистить запрос
-            if (!needResend && response != null) {
+            if ((!needResend && response != null) &&
+                    !(response.isCodeEqual(ErrorCodes.SESSION_NOT_FOUND) && AuthAssistant.isAuthUnacceptable(request))) {
                 //Отмечаем запрос отмененным, что бы почистить
-                authAssistant.forgetRequest(request.getId());
                 request.setFinished();
             }
         }

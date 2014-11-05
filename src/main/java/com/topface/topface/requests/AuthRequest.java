@@ -85,6 +85,11 @@ public class AuthRequest extends ApiRequest {
         }
     }
 
+    @Override
+    public boolean containsAuth() {
+        return true;
+    }
+
     private String getClientLocale() {
         String locale;
         //На всякий случай проверяем возможность получить локаль
