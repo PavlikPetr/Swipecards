@@ -3,22 +3,18 @@ package com.topface.topface.utils.social;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 
-import com.facebook.topface.AsyncFacebookRunner;
-import com.facebook.topface.DialogError;
-import com.facebook.topface.Facebook;
-import com.facebook.topface.FacebookError;
-import com.topface.framework.utils.BackgroundThread;
-import com.topface.framework.utils.Debug;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
 import com.topface.topface.App;
 import com.topface.topface.utils.config.SessionConfig;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
+import java.util.Arrays;
 
 /**
  * Class that starts Facebook authorization
@@ -27,109 +23,91 @@ public class FbAuthorizer extends Authorizer {
 
     private String[] FB_PERMISSIONS = {"user_photos", "email", "offline_access"};
 
-    private Facebook mFacebook;
-    private AsyncFacebookRunner mAsyncFacebookRunner;
-
-    private Facebook.DialogListener mDialogListener = new Facebook.DialogListener() {
+    private UiLifecycleHelper mUiHelper;
+    private Session.StatusCallback mStatusCallback = new Session.StatusCallback() {
         @Override
-        public void onComplete(Bundle values) {
-            Debug.log("FB", "mDialogListener::onComplete");
-            mAsyncFacebookRunner.request("/me", mRequestListener);
-        }
+        public void call(final Session session, SessionState state, Exception exception) {
+            if (state.equals(SessionState.OPENED)) {
+                Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
+                        if (user != null && AuthToken.getInstance().isEmpty()) {
+                            AuthToken.getInstance().saveToken(
+                                    AuthToken.SN_FACEBOOK,
+                                    user.getId(),
+                                    session.getAccessToken(),
+                                    session.getExpirationDate().toString()
+                            );
 
-        @Override
-        public void onFacebookError(FacebookError e) {
-            Debug.log("FB", "mDialogListener::onFacebookError:" + e.getMessage());
-        }
+                            String name = user.getFirstName() + " " + user.getLastName();
+                            SessionConfig sessionConfig = App.getSessionConfig();
+                            sessionConfig.setSocialAccountName(name);
+                            sessionConfig.saveConfig();
 
-        @Override
-        public void onError(DialogError e) {
-            Debug.log("FB", "mDialogListener::onError");
-        }
+                            intent.putExtra(TOKEN_STATUS, TOKEN_READY);
 
-        @Override
-        public void onCancel() {
-            Debug.log("FB", "mDialogListener::onCancel");
-
-        }
-    };
-
-    private AsyncFacebookRunner.RequestListener mRequestListener = new AsyncFacebookRunner.RequestListener() {
-        @Override
-        public void onComplete(String response, Object state) {
-            try {
-                Debug.log("FB", "mRequestListener::onComplete");
-                JSONObject jsonResult = new JSONObject(response);
-                AuthToken.getInstance().saveToken(
-                        AuthToken.SN_FACEBOOK,
-                        jsonResult.getString("id"),
-                        mFacebook.getAccessToken(),
-                        Long.toString(mFacebook.getAccessExpires())
-                );
-                SessionConfig sessionConfig = App.getSessionConfig();
-                sessionConfig.setSocialAccountName(jsonResult.optString("name", ""));
-                sessionConfig.setSocialAccountEmail(jsonResult.optString("email", ""));
-                sessionConfig.saveConfig();
-            } catch (JSONException e) {
-                Debug.error("FB login mRequestListener::onComplete:error", e);
+                        } else {
+                            intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
+                        }
+                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+                    }
+                });
+                request.executeAsync();
             }
-        }
-
-        @Override
-        public void onMalformedURLException(MalformedURLException e, Object state) {
-            Debug.error("FB mRequestListener::onMalformedURLException", e);
-        }
-
-        @Override
-        public void onIOException(IOException e, Object state) {
-            Debug.error("FB mRequestListener::onIOException", e);
-        }
-
-        @Override
-        public void onFileNotFoundException(FileNotFoundException e, Object state) {
-            Debug.error("FB mRequestListener::onFileNotFoundException", e);
-        }
-
-        @Override
-        public void onFacebookError(FacebookError e, Object state) {
-            Debug.error("FB mRequestListener::onFacebookError", e);
         }
     };
 
     public FbAuthorizer(Activity activity) {
         super(activity);
-        mFacebook = new Facebook(App.getAppConfig().getAuthFbApi());
+        mUiHelper = new UiLifecycleHelper(activity, mStatusCallback);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mUiHelper.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mUiHelper.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mUiHelper.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mUiHelper.onDestroy();
     }
 
     @Override
     public void authorize() {
-        mAsyncFacebookRunner = new AsyncFacebookRunner(mFacebook);
-        mFacebook.authorize(getActivity(), FB_PERMISSIONS, mDialogListener);
+        Session.openActiveSession(getActivity(), true, Arrays.asList(FB_PERMISSIONS), mStatusCallback);
     }
 
     @Override
     public void logout() {
-        new BackgroundThread() {
-
-            @Override
-            public void execute() {
-                try {
-                    mFacebook.logout(App.getContext());
-                } catch (Exception e) {
-                    Debug.error(e);
-                }
-            }
-        };
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            session.closeAndClearTokenInformation();
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mFacebook.authorizeCallback(requestCode, resultCode, data);
+        mUiHelper.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public boolean refreshToken() {
-        return mFacebook.extendAccessTokenIfNeeded(getActivity(), null);
+        return super.refreshToken();
     }
 }

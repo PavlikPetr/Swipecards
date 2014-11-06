@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">en_US</string>
+    <string name="app_id">642883445728173</string>
     <string name="general_warning">WARNING</string>
     <string name="general_ok">OK</string>
     <string name="general_dbl_new">New</string>
