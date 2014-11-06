@@ -14,6 +14,7 @@ public abstract class Authorizer {
     public static final String TOKEN_STATUS = "token_status";
     public static final int TOKEN_READY = 0;
     public static final int TOKEN_NOT_READY = -1;
+    public static final int TOKEN_PREPARING = 1;
 
     private Activity mActivity;
 

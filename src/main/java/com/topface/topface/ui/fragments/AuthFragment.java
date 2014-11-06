@@ -62,11 +62,19 @@ public class AuthFragment extends BaseAuthFragment {
     private BroadcastReceiver mTokenReadyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getIntExtra(Authorizer.TOKEN_STATUS, Authorizer.TOKEN_NOT_READY) == Authorizer.TOKEN_READY) {
-                auth(AuthToken.getInstance());
-            } else {
-                hideProgress();
-                showButtons();
+            int tokenStatus = intent.getIntExtra(Authorizer.TOKEN_STATUS, Authorizer.TOKEN_NOT_READY);
+            switch (tokenStatus) {
+                case Authorizer.TOKEN_READY:
+                    auth(AuthToken.getInstance());
+                    break;
+                case Authorizer.TOKEN_NOT_READY:
+                    hideProgress();
+                    showButtons();
+                    break;
+                case Authorizer.TOKEN_PREPARING:
+                    hideButtons();
+                    showProgress();
+                    break;
             }
         }
     };
