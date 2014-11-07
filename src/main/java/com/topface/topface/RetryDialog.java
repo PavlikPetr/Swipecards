@@ -85,12 +85,12 @@ public class RetryDialog extends AlertDialog {
     @Override
     public void cancel() {
         super.cancel();
-        isShowing = false;
     }
 
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        isShowing = false;
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mReciever);
     }
 }
