@@ -3,8 +3,10 @@ package com.topface.topface.ui.analytics;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
+import com.facebook.AppEventsLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.topface.topface.Static;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
@@ -21,6 +23,12 @@ public class TrackedFragmentActivity extends ActionBarActivity {
             tracker.setScreenName(getTrackName());
             tracker.send(setCustomMeticsAndDimensions().build());
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppEventsLogger.activateApp(this, Static.AUTH_FACEBOOK_ID);
     }
 
     public static HitBuilders.AppViewBuilder setCustomMeticsAndDimensions() {
