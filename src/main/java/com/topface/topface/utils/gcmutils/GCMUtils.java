@@ -274,7 +274,6 @@ public class GCMUtils {
                         null);
             }
         } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
-
             notificationManager.showNotificationAsync(
                     title,
                     data,

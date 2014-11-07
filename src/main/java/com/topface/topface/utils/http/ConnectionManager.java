@@ -372,11 +372,11 @@ public class ConnectionManager {
             //Отправляем запрос и сразу читаем ответ
             response = apiRequest.sendRequestAndReadResponse();
         } catch (UnknownHostException | SocketException | SocketTimeoutException e) {
-            Debug.error(TAG + "::Exception", e);
+            Debug.error(TAG + "::HostException", e);
             //Это ошибка соединение, такие запросы мы будем переотправлять
             response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection exception: " + e.toString());
         } catch (SSLException e) {
-            Debug.error(TAG + "::Exception", e);
+            Debug.error(TAG + "::SSLException", e);
             //Это ошибка SSL соединения, возможно у юзера не правильно установлено время на устройсте
             //такую ошибку следует обрабатывать отдельно, распарсив сообщение об ошибке и уведомив
             //пользователя
@@ -386,7 +386,7 @@ public class ConnectionManager {
             //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос
             response = apiRequest.constructApiResponse(ErrorCodes.ERRORS_PROCCESED, "Request exception: " + e.toString());
         } catch (OutOfMemoryError e) {
-            Debug.error(TAG + "::" + e.toString());
+            Debug.error(TAG + "::OutOfMemory" + e.toString());
             //Если OutOfMemory, то отменяем запросы, толку от этого все равно нет
             response = apiRequest.constructApiResponse(ErrorCodes.ERRORS_PROCCESED, "Request OutOfMemory: " + e.toString());
         } finally {

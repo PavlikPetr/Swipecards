@@ -75,6 +75,7 @@ import com.topface.topface.utils.actionbar.ActionBarOnlineSetterDelegate;
 import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.controllers.PopularUserChatController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
+import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONObject;
@@ -183,6 +184,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         DateUtils.syncTime();
         setRetainInstance(true);
+        String text = UserNotification.getRemoteInputMessageText(getActivity().getIntent());
+        if (text != null) {
+            sendMessage(text, false);
+        }
     }
 
     @Override
@@ -384,6 +389,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
 
     }
+
     @Override
     protected String getTitle() {
         if (TextUtils.isEmpty(mUserName) && mUserAge == 0) {
@@ -792,16 +798,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return false;
         }
         editText.clear();
+        return sendMessage(editString, true);
+    }
+
+    public boolean sendMessage(String text, final boolean cancelable) {
         final History loaderItem = new History(IListLoader.ItemType.WAITING);
-        final MessageRequest messageRequest = new MessageRequest(mUserId, editString, getActivity());
-        registerRequest(messageRequest);
-        if (mAdapter != null && mListView != null) {
+        final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
+        if (cancelable) {
+            registerRequest(messageRequest);
+        }
+        if (mAdapter != null && mListView != null && cancelable) {
             addSentMessage(loaderItem, messageRequest);
         }
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, IApiResponse response) {
-                if (mAdapter != null) {
+                if (mAdapter != null && cancelable) {
                     mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
                 }
                 LocalBroadcastManager.getInstance(getActivity())
@@ -815,7 +827,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                if (mAdapter != null) {
+                if (mAdapter != null && cancelable) {
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                     mAdapter.showRetrySendMessage(loaderItem, messageRequest);
                 }
