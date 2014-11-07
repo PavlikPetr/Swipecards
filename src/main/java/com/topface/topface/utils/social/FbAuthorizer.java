@@ -105,9 +105,4 @@ public class FbAuthorizer extends Authorizer {
         super.onActivityResult(requestCode, resultCode, data);
         mUiHelper.onActivityResult(requestCode, resultCode, data);
     }
-
-    @Override
-    public boolean refreshToken() {
-        return super.refreshToken();
-    }
 }
