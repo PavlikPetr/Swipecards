@@ -1,7 +1,9 @@
 package com.topface.topface.utils.social;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -53,22 +55,34 @@ public class OkAuthorizer extends Authorizer {
         @Override
         protected void onPostExecute(String s) {
             Debug.log("Odnoklassniki users.getCurrentUser result: " + s);
+            Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
             if (s != null) {
-                final AuthToken authToken = AuthToken.getInstance();
+                AuthToken authToken = AuthToken.getInstance();
                 try {
                     JSONObject user = new JSONObject(s);
                     Field f = odnoklassniki.getClass().getDeclaredField("mRefreshToken");
                     f.setAccessible(true);
-                    authToken.saveToken(AuthToken.SN_ODNOKLASSNIKI, user.optString("uid"), token, (String) f.get(odnoklassniki));
+                    authToken.saveToken(
+                            AuthToken.SN_ODNOKLASSNIKI,
+                            user.optString("uid"),
+                            token,
+                            (String) f.get(odnoklassniki)
+                    );
                     SessionConfig sessionConfig = App.getSessionConfig();
                     sessionConfig.setSocialAccountName(user.optString("name"));
                     sessionConfig.saveConfig();
+
+                    intent.putExtra(TOKEN_STATUS, TOKEN_READY);
                 } catch (Exception e) {
                     Debug.error("Odnoklassniki result parse error", e);
+                    intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
                 }
             } else {
                 Debug.error("Odnoklassniki auth error. users.getCurrentUser returns null");
+                intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
             }
+
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
         }
 
         @Override
@@ -90,6 +104,9 @@ public class OkAuthorizer extends Authorizer {
             public void onSuccess(String token) {
                 Debug.log("Odnoklassniki auth success with token " + token);
                 new GetCurrentUserTask(mOkAuthObject, token).execute();
+                Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
+                intent.putExtra(TOKEN_STATUS, TOKEN_PREPARING);
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
             }
 
             @Override
