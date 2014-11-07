@@ -131,7 +131,7 @@ dependencies {
     compile project(':libs:PhotoView')
     compile project(':libs:UniversalImageLoader')
     //Social networks SDK
-    compile project(':libs:Facebook')
+    compile project(':libs:facebook-android-sdk:facebook')
     compile project(':libs:odnoklassniki')
     //Ad networks SDK
     compile project(':libs:mopub-android-sdk')
@@ -198,15 +198,6 @@ project(':libs:UniversalImageLoader') {
 }
 
 //Social networks
-project(':libs:Facebook') {
-    apply plugin: 'com.android.library'
-    android.sourceSets.main {
-        manifest.srcFile 'facebook/AndroidManifest.xml'
-        java.srcDirs = ['facebook/src']
-        res.srcDirs = ['facebook/res']
-    }
-}
-
 project(':libs:odnoklassniki') {
     apply plugin: 'com.android.library'
     android.sourceSets.main {

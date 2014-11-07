@@ -34,7 +34,6 @@ import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
-import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.LinkedList;
 
@@ -187,7 +186,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected void onLoadProfile() {
         Debug.log("onLoadProfile in " + ((Object) this).getClass().getSimpleName());
-        new AuthorizationManager(this).refreshAccessToken();
         if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
             startAuth();
         } else {
