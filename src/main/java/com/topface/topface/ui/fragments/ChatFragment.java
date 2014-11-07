@@ -55,7 +55,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
-import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -880,7 +879,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.action_profile:
                 if (mUser != null) {
                     if (!(mUser.deleted || mUser.banned)) {
-                        Intent profileIntent = UserProfileActivity.createIntent(mUserId, getActivity());
+                        Intent profileIntent = CacheProfile.getOptions().autoOpenGallery.createIntent(mUserId, mUser.photosCount, getActivity());
                         startActivity(profileIntent);
                     } else {
                         Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
