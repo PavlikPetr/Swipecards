@@ -44,8 +44,4 @@ public abstract class Authorizer {
     }
 
     public abstract void logout();
-
-    public boolean refreshToken() {
-        return false;
-    }
 }
