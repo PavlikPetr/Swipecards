@@ -312,6 +312,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         if (activity != null) {
             activity.setResult(Activity.RESULT_OK);
             activity.finish();
+            activity.overridePendingTransition(0, 0);
         }
     }
 
