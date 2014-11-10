@@ -14,3 +14,25 @@
         android:layout_alignBaseline="@+id/btnMenu"
         style="@style/Informer"/>
 </RelativeLayout>
+
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:id="@+id/leftMenuCellLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:clickable="true"-->
+    <!--android:background="@drawable/bg_left_menu_item_selector"-->
+    <!--android:layout_height="wrap_content">-->
+
+    <!--<Button-->
+        <!--android:id="@+id/btnMenu"-->
+        <!--android:lines="1"-->
+        <!--android:maxLines="1"-->
+        <!--android:ellipsize="end"-->
+        <!--android:singleLine="true"-->
+        <!--style="@style/LeftMenuButtons"/>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/tvCounterBadge"-->
+        <!--android:layout_alignBaseline="@+id/btnMenu"-->
+        <!--style="@style/Informer"/>-->
+<!--</LinearLayout>-->

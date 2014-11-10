@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.topface.App;
@@ -180,6 +181,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         // init button state
         holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(item.getMenuIconResId(), 0, 0, 0);
         holder.btnMenu.setTag(item.getMenuId());
+
         if (enabled || item.isHidden()) {
             holder.btnMenu.setOnClickListener(mMenuFragment);
             setAlphaToTextAndDrawable(holder.btnMenu, 255);
@@ -195,6 +197,13 @@ public class LeftMenuAdapter extends BaseAdapter {
             holder.btnMenu.setVisibility(View.VISIBLE);
         }
         return convertView;
+    }
+    private void setCellBackground(boolean flag, LinearLayout layout){
+        if (flag){
+            layout.setBackgroundResource(R.drawable.bg_left_menu_pressed);
+        }else{
+            layout.setBackgroundResource(R.drawable.bg_left_menu_item);
+        }
     }
 
     private void setAlphaToTextAndDrawable(Button btn, int alpha) {
