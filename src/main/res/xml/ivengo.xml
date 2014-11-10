@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ivengo>
+    <logging>
+        <enabled>false</enabled>
+        <level>verbose</level>
+    </logging>
+</ivengo>
