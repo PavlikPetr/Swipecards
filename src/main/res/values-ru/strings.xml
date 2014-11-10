@@ -463,6 +463,7 @@
     <string name="profile_edit_age_ranges">Возраст должен быть в диапазоне от 16 до 99 лет. Пожалуйста, введите
         корректное число и повторите попытку.
     </string>
+    <string name="wrong_password_format">Недопустимый формат пароля</string>
 
     <string name="sign_in">Войти</string>
     <string name="create_account">Создать аккаунт</string>
