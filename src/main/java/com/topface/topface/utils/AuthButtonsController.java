@@ -1,15 +1,12 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
-import android.text.TextUtils;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -70,8 +67,7 @@ public class AuthButtonsController {
     }
 
     private void loadButtons() {
-        String json = mAppConfig.getSocialButtonsSettings();
-        activeButtons = fromJson(json);
+        activeButtons = fromJson(mAppConfig.getSocialButtonsSettings());
 
         if (activeButtons.size() == 0) {
             realButtons = getButtonsSettings();
@@ -126,26 +122,21 @@ public class AuthButtonsController {
         return settings;
     }
 
-    private String toJson() {
+    private JSONArray toJson() {
         JSONArray object = new JSONArray();
         for (String sn : realButtons) {
             object.put(sn);
         }
-        return object.toString();
+        return object;
     }
 
-    private HashSet<String> fromJson(String json) {
+    private HashSet<String> fromJson(JSONArray json) {
         realButtons = new HashSet<>();
-        try {
-            if (!TextUtils.isEmpty(json)) {
-                JSONArray object = new JSONArray(json);
-                for (int i = 0; i < object.length(); i++) {
-                    realButtons.add(object.optString(i));
-                }
-
+        if (json != null) {
+            for (int i = 0; i < json.length(); i++) {
+                realButtons.add(json.optString(i));
             }
-        } catch (JSONException e) {
-            Debug.error(e);
+
         }
         return realButtons;
     }

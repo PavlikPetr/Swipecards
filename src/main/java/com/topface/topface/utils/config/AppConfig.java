@@ -11,6 +11,9 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.Editor;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -381,15 +384,19 @@ public class AppConfig extends AbstractConfig {
     /**
      * Sets new settings for social net buttons on login screen
      */
-    public void setSocialButtonsSettings(String socialButtonsSettings) {
-        setField(getSettingsMap(), SOCIAL_BUTTONS_SETTINGS, socialButtonsSettings);
+    public void setSocialButtonsSettings(JSONArray socialButtonsSettings) {
+        setField(getSettingsMap(), SOCIAL_BUTTONS_SETTINGS, socialButtonsSettings.toString());
     }
 
     /**
      * @return Social buttons settings
      */
-    public String getSocialButtonsSettings() {
-        return getStringField(getSettingsMap(), SOCIAL_BUTTONS_SETTINGS);
+    public JSONArray getSocialButtonsSettings() {
+        try {
+            return new JSONArray(getStringField(getSettingsMap(), SOCIAL_BUTTONS_SETTINGS));
+        } catch (JSONException e) {
+            throw new RuntimeException("Error getting social buttons settings", e);
+        }
     }
 
     @Override
