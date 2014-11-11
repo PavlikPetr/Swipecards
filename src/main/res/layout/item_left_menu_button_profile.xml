@@ -45,7 +45,6 @@
                 android:layout_marginLeft="8dp" />
 
             <Button
-                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnUserName"
                 android:text="@string/general_profile"
@@ -95,7 +94,7 @@
             android:layout_height="30dp"
             android:layout_marginLeft="8dp" />
 
-        <Button
+        <TextView
             android:id="@+id/profile_button"
             android:tag="profile_fragment_button_tag"
             android:layout_toRightOf="@id/ivMenuAvatar"

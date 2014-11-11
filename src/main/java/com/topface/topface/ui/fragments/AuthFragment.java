@@ -60,21 +60,30 @@ public class AuthFragment extends BaseAuthFragment {
     private boolean mNeedShowButtonsOnResume = true;
 
     private BroadcastReceiver mTokenReadyReceiver = new BroadcastReceiver() {
+
+        private int mLastStatusReceived = Integer.MIN_VALUE;
+
         @Override
         public void onReceive(Context context, Intent intent) {
             int tokenStatus = intent.getIntExtra(Authorizer.TOKEN_STATUS, Authorizer.TOKEN_NOT_READY);
-            switch (tokenStatus) {
-                case Authorizer.TOKEN_READY:
-                    auth(AuthToken.getInstance());
-                    break;
-                case Authorizer.TOKEN_NOT_READY:
-                    hideProgress();
-                    showButtons();
-                    break;
-                case Authorizer.TOKEN_PREPARING:
-                    hideButtons();
-                    showProgress();
-                    break;
+
+            if (tokenStatus != mLastStatusReceived) {
+                switch (tokenStatus) {
+                    case Authorizer.TOKEN_READY:
+                        auth(AuthToken.getInstance());
+                        break;
+                    case Authorizer.TOKEN_FAILED:
+                        Toast.makeText(getActivity(), R.string.general_reconnect_social, Toast.LENGTH_SHORT).show();
+                    case Authorizer.TOKEN_NOT_READY:
+                        hideProgress();
+                        showButtons();
+                        break;
+                    case Authorizer.TOKEN_PREPARING:
+                        hideButtons();
+                        showProgress();
+                        break;
+                }
+                mLastStatusReceived = tokenStatus;
             }
         }
     };
@@ -107,14 +116,8 @@ public class AuthFragment extends BaseAuthFragment {
         super.initViews(root);
         initButtons(root);
 
-        mBtnsController = new AuthButtonsController(getActivity(), new AuthButtonsController.OnButtonsSettingsLoadedHandler() {
-            @Override
-            public void buttonSettingsLoaded(HashSet<String> settings) {
-                if (mBtnsController != null) {
-                    setAuthInterface();
-                }
-            }
-        });
+        mBtnsController = new AuthButtonsController(getActivity());
+        setAuthInterface();
 
         initOtherViews(root);
     }
@@ -211,10 +214,7 @@ public class AuthFragment extends BaseAuthFragment {
         }
 
         HashSet<String> otherSN = mBtnsController.getOthers();
-        if (otherSN.size() == 0) {
-            mOtherSocialNetworksButton.setVisibility(View.GONE);
-        } else {
-            mOtherSocialNetworksButton.setVisibility(View.VISIBLE);
+        if (otherSN.size() != 0) {
             if (otherSN.contains(AuthToken.SN_VKONTAKTE)) {
                 mVkIcon.setVisibility(View.VISIBLE);
             } else {
@@ -410,8 +410,9 @@ public class AuthFragment extends BaseAuthFragment {
             loadAllProfileData();
         } else if (mNeedShowButtonsOnResume) {
             showButtons();
-
         } else {
+            hideButtons();
+            showProgress();
             mNeedShowButtonsOnResume = true;
         }
     }
