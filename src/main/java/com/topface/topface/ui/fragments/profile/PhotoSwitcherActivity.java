@@ -56,7 +56,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static final String INTENT_ALBUM_POS = "album_position";
     public static final String INTENT_PHOTOS = "album_photos";
     public static final String INTENT_PHOTOS_COUNT = "photos_count";
-    public static final String INTENT_FILL_SELF = "fill_self";
+    public static final String INTENT_PHOTOS_FILLED = "photos_filled";
+    public static final String INTENT_FILL_PROFILE_ON_BACK = "fill_profile_on_back";
     public static final String CONTROL_VISIBILITY = "CONTROL_VISIBILITY";
     public static final String OWN_PHOTOS_CONTROL_VISIBILITY = "OWN_PHOTOS_CONTROL_VISIBILITY";
     public static final String DELETED_PHOTOS = "DELETED_PHOTOS";
@@ -151,6 +152,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         position = photos.get(0).isFake() ? position - 1 : position;
         intent.putExtra(INTENT_ALBUM_POS, position);
         intent.putExtra(INTENT_PHOTOS_COUNT, photosCount);
+        intent.putExtra(INTENT_PHOTOS_FILLED, true);
         intent.putParcelableArrayListExtra(INTENT_PHOTOS, photos);
         return intent;
     }
@@ -158,7 +160,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static Intent getPhotoSwitcherIntent(int userId, Class callingClass, Context context) {
         Intent intent = new Intent(context, PhotoSwitcherActivity.class);
         intent.putExtra(INTENT_USER_ID, userId);
-        intent.putExtra(INTENT_FILL_SELF, true);
+        intent.putExtra(INTENT_FILL_PROFILE_ON_BACK, true);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         if (callingClass != null) {
             intent.putExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT, callingClass.getName());
@@ -186,14 +188,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
         mOwnPhotosControl = (ViewGroup) mPhotoAlbumControl.findViewById(R.id.loBottomPanel);
 
-        if (intent.getBooleanExtra(INTENT_FILL_SELF, false)) {
-            mUserProfileLoader = new UserProfileLoader(
-                    (RelativeLayout) findViewById(R.id.lockScreen),
-                    findViewById(R.id.llvProfileLoading),
-                    mUserProfileReceiver,
-                    mUid
-            );
-        } else {
+        if (intent.getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
             int photosCount = intent.getIntExtra(INTENT_PHOTOS_COUNT, 0);
             int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);
             ArrayList<Photo> arrList = getPhotos(intent);
@@ -202,6 +197,13 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             mPhotoLinks.addAll(arrList);
 
             initViews(position, photosCount);
+        } else {
+            mUserProfileLoader = new UserProfileLoader(
+                    (RelativeLayout) findViewById(R.id.lockScreen),
+                    findViewById(R.id.llvProfileLoading),
+                    mUserProfileReceiver,
+                    mUid
+            );
         }
     }
 
@@ -231,7 +233,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     protected void onResume() {
         super.onResume();
         mPhotoAlbumControl.setVisibility(mPhotoAlbumControlVisibility);
-        if (getIntent().getBooleanExtra(INTENT_FILL_SELF, false)) {
+        if (!getIntent().getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
             mUserProfileLoader.loadUserProfile(this);
         }
     }
@@ -280,7 +282,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public void onBackPressed() {
         deletePhotoRequest();
         Intent intent = getIntent();
-        if (intent.getBooleanExtra(INTENT_FILL_SELF, false)) {
+        if (intent.getBooleanExtra(INTENT_FILL_PROFILE_ON_BACK, false)) {
             startUserProfileActivity();
         } else {
             super.onBackPressed();
@@ -305,7 +307,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     protected void onPreFinish() {
         super.onPreFinish();
         Intent intent = getIntent();
-        if (intent.getBooleanExtra(INTENT_FILL_SELF, false)) {
+        if (intent.getBooleanExtra(INTENT_FILL_PROFILE_ON_BACK, false)) {
             startUserProfileActivity();
         }
     }

@@ -1,17 +1,13 @@
 package com.topface.topface.data;
 
 
-import android.content.Context;
-import android.content.Intent;
-
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
+import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.blocks.BannerBlock;
-import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.UserConfig;
@@ -668,54 +664,5 @@ public class Options extends AbstractData {
         public boolean enabled;
         public String group;
         public String text;
-    }
-
-    /**
-     * Experiment about autoopening gallery from click on friend avatar
-     */
-    public static class AutoOpenGallery {
-        private boolean mEnabled = false;
-        private String mGroup;
-
-        public boolean isEnabled() {
-            return mEnabled;
-        }
-
-        public void setEnabled(boolean enabled) {
-            this.mEnabled = enabled;
-        }
-
-        public String getGroup() {
-            return mGroup;
-        }
-
-        public void setGroup(String group) {
-            this.mGroup = group;
-        }
-
-        public Intent createIntent(int userId, int photosCount, Context context) {
-            if (isEnabled() && photosCount > 0) {
-                return PhotoSwitcherActivity.getPhotoSwitcherIntent(userId, context);
-            } else {
-                return UserProfileActivity.createIntent(userId, context);
-            }
-        }
-
-        public Intent createIntent(int userId, int photosCount, String itemId, Context context) {
-            if (isEnabled() && photosCount > 0) {
-                return PhotoSwitcherActivity.getPhotoSwitcherIntent(userId, context);
-            } else {
-                return UserProfileActivity.createIntent(userId, itemId, context);
-            }
-        }
-
-        public Intent createIntent(int userId, int photosCount, Class callingClass, Context context) {
-            if (isEnabled() && photosCount > 0) {
-                return PhotoSwitcherActivity.getPhotoSwitcherIntent(userId, callingClass, context);
-            } else {
-                return UserProfileActivity.createIntent(userId, callingClass, context);
-            }
-        }
-
     }
 }
