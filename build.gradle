@@ -86,6 +86,8 @@ android {
         release {
             //noinspection GroovyAssignabilityCheck
             signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
         }
         //Специальный тип сборки для тестирования отделом QA,
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
@@ -105,6 +107,10 @@ android {
         exclude 'LICENSE.txt'
     }
 
+    //@see https://code.google.com/p/android/issues/detail?id=40409
+    dexOptions {
+        jumboMode = true
+    }
 }
 
 dependencies {
@@ -131,7 +137,7 @@ dependencies {
     compile project(':libs:PhotoView')
     compile project(':libs:UniversalImageLoader')
     //Social networks SDK
-    compile project(':libs:Facebook')
+    compile project(':libs:facebook-android-sdk:facebook')
     compile project(':libs:odnoklassniki')
     //Ad networks SDK
     compile project(':libs:mopub-android-sdk')
@@ -198,15 +204,6 @@ project(':libs:UniversalImageLoader') {
 }
 
 //Social networks
-project(':libs:Facebook') {
-    apply plugin: 'com.android.library'
-    android.sourceSets.main {
-        manifest.srcFile 'facebook/AndroidManifest.xml'
-        java.srcDirs = ['facebook/src']
-        res.srcDirs = ['facebook/res']
-    }
-}
-
 project(':libs:odnoklassniki') {
     apply plugin: 'com.android.library'
     android.sourceSets.main {
@@ -256,5 +253,4 @@ android {
                 "MissingQuantity"
         //Временно отключена проверка из-за того, что нет many формы в польском и украинском в дальнейшем поправим (пока many = other)
     }
-    aaptOptions.useAaptPngCruncher = true
 }

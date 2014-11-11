@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -75,6 +76,7 @@ import com.topface.topface.utils.actionbar.ActionBarOnlineSetterDelegate;
 import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.controllers.PopularUserChatController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
+import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONObject;
@@ -183,6 +185,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         DateUtils.syncTime();
         setRetainInstance(true);
+        String text = UserNotification.getRemoteInputMessageText(getActivity().getIntent());
+        if (text != null) {
+            sendMessage(text, false);
+        }
     }
 
     @Override
@@ -384,6 +390,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
 
     }
+
     @Override
     protected String getTitle() {
         if (TextUtils.isEmpty(mUserName) && mUserAge == 0) {
@@ -757,6 +764,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         switch (requestCode) {
             case GiftsActivity.INTENT_REQUEST_GIFT:
                 if (resultCode == Activity.RESULT_OK) {
+                    scrollListToTheEnd();
                     Bundle extras = data.getExtras();
                     if (extras != null) {
                         SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
@@ -764,13 +772,26 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         addSentMessage(sendGiftAnswer.history, null);
                         LocalBroadcastManager.getInstance(getActivity())
                                 .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
+
                     }
                 }
                 break;
         }
 
     }
+private void scrollListToTheEnd(){
+    Log.d("TopFace", "scrollListToTheEnd");
+    if (mListView!=null && mAdapter!=null) {
+        mListView.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("TopFace", "scroll list to position " + mAdapter.getCount());
+                mListView.getRefreshableView().smoothScrollToPosition(mAdapter.getCount());
+            }
+        });
 
+    }
+}
     private void addSentMessage(History loaderItem, ApiRequest request) {
         mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView(), request);
     }
@@ -792,16 +813,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return false;
         }
         editText.clear();
+        return sendMessage(editString, true);
+    }
+
+    public boolean sendMessage(String text, final boolean cancelable) {
         final History loaderItem = new History(IListLoader.ItemType.WAITING);
-        final MessageRequest messageRequest = new MessageRequest(mUserId, editString, getActivity());
-        registerRequest(messageRequest);
-        if (mAdapter != null && mListView != null) {
+        final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
+        if (cancelable) {
+            registerRequest(messageRequest);
+        }
+        if (mAdapter != null && mListView != null && cancelable) {
             addSentMessage(loaderItem, messageRequest);
         }
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, IApiResponse response) {
-                if (mAdapter != null) {
+                if (mAdapter != null && cancelable) {
                     mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
                 }
                 LocalBroadcastManager.getInstance(getActivity())
@@ -815,7 +842,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                if (mAdapter != null) {
+                if (mAdapter != null && cancelable) {
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                     mAdapter.showRetrySendMessage(loaderItem, messageRequest);
                 }

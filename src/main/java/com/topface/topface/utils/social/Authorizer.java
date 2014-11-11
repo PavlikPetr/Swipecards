@@ -9,6 +9,13 @@ import android.os.Bundle;
  */
 public abstract class Authorizer {
 
+    public static final String AUTH_TOKEN_READY_ACTION = "com.topface.topface.auth.token.ready";
+
+    public static final String TOKEN_STATUS = "token_status";
+    public static final int TOKEN_READY = 0;
+    public static final int TOKEN_NOT_READY = -1;
+    public static final int TOKEN_PREPARING = 1;
+
     private Activity mActivity;
 
     public Authorizer(Activity activity) {
@@ -26,6 +33,9 @@ public abstract class Authorizer {
     public void onResume() {
     }
 
+    public void onPause() {
+    }
+
     public void onDestroy() {
     }
 
@@ -34,8 +44,4 @@ public abstract class Authorizer {
     }
 
     public abstract void logout();
-
-    public boolean refreshToken() {
-        return true;
-    }
 }

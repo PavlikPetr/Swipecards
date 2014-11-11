@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -220,8 +221,14 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                             redAlert(R.string.empty_fields);
                             break;
                         case ErrorCodes.INCORRECT_PASSWORD:
+                            redAlert(R.string.wrong_password_format);
+                            break;
                         case ErrorCodes.INCORRECT_VALUE:
                         default:
+                            Activity activity = getActivity();
+                            if (activity != null) {
+                                Toast.makeText(activity, R.string.general_error_try_again_later, Toast.LENGTH_SHORT).show();
+                            }
                             break;
                     }
                 }

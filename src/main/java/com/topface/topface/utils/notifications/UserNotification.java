@@ -11,7 +11,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.RemoteInput;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -29,6 +31,11 @@ import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.Utils;
 
 public class UserNotification {
+
+    public static final String EXTRA_VOICE_REPLY = "extra_voice_reply";
+    // sometimes with code 0 and 1 (ones that are inspected) wear does not send intent to app with error:
+    // removeAppFromTaskLocked: token=AppWindowToken{adee2558 token=Token{adf4b7d0 ActivityRecord{adee3d40 u0 com.google.android.wearable.app/com.google.android.clockwork.home.RemoteActionConfirmationActivity t1 f}}} not found.
+    private static final int WEAR_REPLY_REQUEST_CODE = 593;
     public static final int ICON_SIZE = 64;
     public static final String NOTIFICATION_ID = "notification_id";
     private Bitmap mImage;
@@ -50,6 +57,7 @@ public class UserNotification {
     private int unread = 0;
     private Context mContext;
     private NotificationCompat.Builder notificationBuilder;
+    private NotificationCompat.WearableExtender mWearableExtender;
 
     public UserNotification(Context context) {
         this.mContext = context;
@@ -168,7 +176,9 @@ public class UserNotification {
         if (mDeleteIntent != null) {
             notificationBuilder.setDeleteIntent(mDeleteIntent);
         }
-
+        if (mWearableExtender != null) {
+            notificationBuilder.extend(mWearableExtender);
+        }
         generatedNotification = notificationBuilder.build();
         return generatedNotification;
     }
@@ -273,6 +283,10 @@ public class UserNotification {
     }
 
     private PendingIntent generatePendingIntent(Intent intent) {
+        return generatePendingIntent(intent, 0);
+    }
+
+    private PendingIntent generatePendingIntent(Intent intent, int requestCode) {
         PendingIntent resultPendingIntent;
         intent.putExtra(NOTIFICATION_ID, mId);
         if (!TextUtils.equals(intent.getComponent().getClassName(), NavigationActivity.class.toString())) {
@@ -282,9 +296,9 @@ public class UserNotification {
             // Adds the Intent to the top of the stack
             stackBuilder.addNextIntent(intent);
             // Gets a PendingIntent containing the entire back stack
-            resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            resultPendingIntent = stackBuilder.getPendingIntent(requestCode, PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
-            resultPendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            resultPendingIntent = PendingIntent.getActivity(mContext, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
         return resultPendingIntent;
     }
@@ -302,6 +316,29 @@ public class UserNotification {
             notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),
                     R.drawable.ic_stat_notify));
         }
+    }
+
+    public void setWearReply(Context context, Intent replyIntent) {
+        String replyLabel = context.getResources().getString(R.string.reply);
+        RemoteInput remoteInput = new RemoteInput.Builder(EXTRA_VOICE_REPLY)
+                .setLabel(replyLabel)
+                .build();
+        PendingIntent replyPendingIntent = generatePendingIntent(replyIntent, WEAR_REPLY_REQUEST_CODE);
+        NotificationCompat.Action action =
+                new NotificationCompat.Action.Builder(R.drawable.ic_reply_icon,
+                        context.getString(R.string.reply), replyPendingIntent)
+                        .addRemoteInput(remoteInput)
+                        .build();
+        mWearableExtender = new NotificationCompat.WearableExtender().addAction(action);
+
+    }
+
+    public static String getRemoteInputMessageText(Intent intent) {
+        Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
+        if (remoteInput != null) {
+            return remoteInput.getCharSequence(UserNotification.EXTRA_VOICE_REPLY).toString();
+        }
+        return null;
     }
 
     public enum Type {PROGRESS, STANDARD, FAIL, ACTIONS}

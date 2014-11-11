@@ -70,10 +70,6 @@ public class AuthorizationManager {
         mAuthorizers.put(Platform.TOPFACE, new TfAuthorizer(mParentActivity));
     }
 
-    public void refreshAccessToken() {
-        mAuthorizers.get(Platform.FACEBOOK).refreshToken();
-    }
-
     public static void saveAuthInfo(IApiResponse response) {
         Auth auth = new Auth(response);
         saveAuthInfo(auth);

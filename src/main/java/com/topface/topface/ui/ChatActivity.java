@@ -13,6 +13,11 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
 
     public static final int INTENT_CHAT = 3;
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
+
     public static class IntentBuilder {
         private Context context;
         private FeedUser feedUser;
