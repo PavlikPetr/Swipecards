@@ -77,6 +77,8 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         mInvisSwitcher.setProgressState(false, CacheProfile.invisible);
+        switchLayouts();
+
     }
 
     @Override

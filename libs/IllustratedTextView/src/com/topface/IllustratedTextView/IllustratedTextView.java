@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 /**
  * Это TextView, которое заменит текстовые шаблоны на изображения согласно своему конфигу в itv_icons.
- * Например если установить во View данного типа текст "Этот подраок стоит 10 {{coins}}",
+ * Например если установить во View данного типа текст "Этот подарок стоит 10 {{coins}}",
  * то текст {{coins}} будет заменен на иконку монет.
  * Укзать шаблоны, и изображения, на которые они заменяеются можно в файле itv_icons.xml
  */
@@ -79,7 +79,7 @@ public class IllustratedTextView extends TextView {
     }
 
     protected ArrayList<Integer> getAllIndexesOfSubstring(String text, String substr) {
-        ArrayList<Integer> indexes = new ArrayList<Integer>();
+        ArrayList<Integer> indexes = new ArrayList<>();
         int index = text.indexOf(substr);
         while (index >= 0) {
             indexes.add(index);
