@@ -5,14 +5,16 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 
-import com.facebook.topface.AsyncFacebookRunner;
-import com.facebook.topface.Facebook;
-import com.facebook.topface.FacebookError;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphUser;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.utils.config.SessionConfig;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
@@ -24,12 +26,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
 
 public class AuthToken {
     public static final int SUCCESS_GET_NAME = 0;
@@ -68,7 +65,7 @@ public class AuthToken {
         AuthToken authToken = getInstance();
 
         if (authToken.getSocialNet().equals(SN_FACEBOOK)) {
-            getFbName(authToken.getUserSocialId(), handler);
+            getFbName(handler);
         } else if (authToken.getSocialNet().equals(SN_VKONTAKTE)) {
             getVkName(authToken.getUserSocialId(), handler);
         } else if (authToken.getSocialNet().equals(SN_TOPFACE)) {
@@ -77,45 +74,25 @@ public class AuthToken {
         //Одноклассников здесь нет, потому что юзер запрашивается и сохраняется при авторизации
     }
 
-    public static void getFbName(final String user_id, final Handler handler) {
-        new AsyncFacebookRunner(new Facebook(App.getAppConfig().getAuthFbApi())).request("/" + user_id, new AsyncFacebookRunner.RequestListener() {
-
-            @Override
-            public void onComplete(String response, Object state) {
-                try {
-                    JSONObject jsonResult = new JSONObject(response);
-                    String user_name = jsonResult.getString("name");
-                    handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, user_name));
-                } catch (JSONException e) {
-                    Debug.error("FB RequestListener::onComplete:error ", e);
-                    handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
+    public static void getFbName(final Handler handler) {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
+                @Override
+                public void onCompleted(GraphUser user, Response response) {
+                    if (user != null) {
+                        String name = user.getFirstName() + " " + user.getLastName();
+                        SessionConfig sessionConfig = App.getSessionConfig();
+                        sessionConfig.setSocialAccountName(name);
+                        sessionConfig.saveConfig();
+                        handler.sendMessage(Message.obtain(null, AuthToken.SUCCESS_GET_NAME, name));
+                    } else {
+                        handler.sendMessage(Message.obtain(null, AuthToken.FAILURE_GET_NAME, ""));
+                    }
                 }
-            }
-
-            @Override
-            public void onMalformedURLException(MalformedURLException e, Object state) {
-                Debug.error("FB RequestListener::onMalformedURLException");
-                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
-            }
-
-            @Override
-            public void onIOException(IOException e, Object state) {
-                Debug.error("FB RequestListener::onIOException", e);
-                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
-            }
-
-            @Override
-            public void onFileNotFoundException(FileNotFoundException e, Object state) {
-                Debug.error("FB RequestListener::onFileNotFoundException", e);
-                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
-            }
-
-            @Override
-            public void onFacebookError(FacebookError e, Object state) {
-                Debug.error("FB RequestListener::onFacebookError:" + state, e);
-                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
-            }
-        });
+            });
+            request.executeAsync();
+        }
     }
 
     public static void getVkName(final String user_id, final Handler handler) {

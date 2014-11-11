@@ -1,9 +1,13 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +30,7 @@ import com.topface.topface.utils.AuthButtonsController;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+import com.topface.topface.utils.social.Authorizer;
 
 import java.util.HashSet;
 
@@ -53,6 +58,26 @@ public class AuthFragment extends BaseAuthFragment {
     private ImageView mOkIcon;
     private ImageView mFbIcon;
     private boolean mNeedShowButtonsOnResume = true;
+
+    private BroadcastReceiver mTokenReadyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int tokenStatus = intent.getIntExtra(Authorizer.TOKEN_STATUS, Authorizer.TOKEN_NOT_READY);
+            switch (tokenStatus) {
+                case Authorizer.TOKEN_READY:
+                    auth(AuthToken.getInstance());
+                    break;
+                case Authorizer.TOKEN_NOT_READY:
+                    hideProgress();
+                    showButtons();
+                    break;
+                case Authorizer.TOKEN_PREPARING:
+                    hideButtons();
+                    showProgress();
+                    break;
+            }
+        }
+    };
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -236,8 +261,8 @@ public class AuthFragment extends BaseAuthFragment {
             }
         } else if (resultCode == Activity.RESULT_OK) {
             AuthToken authToken = AuthToken.getInstance();
+            mNeedShowButtonsOnResume = false;
             if (!authToken.isEmpty()) {
-                mNeedShowButtonsOnResume = false;
                 auth(AuthToken.getInstance());
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -362,6 +387,8 @@ public class AuthFragment extends BaseAuthFragment {
         super.onCreate(savedInstanceState);
         mAuthorizationManager = new AuthorizationManager(getActivity());
         mAuthorizationManager.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mTokenReadyReceiver,
+                new IntentFilter(Authorizer.AUTH_TOKEN_READY_ACTION));
     }
 
     @Override
@@ -400,6 +427,7 @@ public class AuthFragment extends BaseAuthFragment {
         if (!hasAuthorized()) {
             EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, mAdditionalButtonsScreen ? "DismissAdditional" : "DismissMain", mBtnsController.getLocaleTag(), 1L);
         }
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mTokenReadyReceiver);
     }
 
     @Override

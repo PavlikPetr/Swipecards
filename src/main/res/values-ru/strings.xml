@@ -463,6 +463,7 @@
     <string name="profile_edit_age_ranges">Возраст должен быть в диапазоне от 16 до 99 лет. Пожалуйста, введите
         корректное число и повторите попытку.
     </string>
+    <string name="wrong_password_format">Недопустимый формат пароля</string>
 
     <string name="sign_in">Войти</string>
     <string name="create_account">Создать аккаунт</string>
@@ -750,4 +751,5 @@
     <string name="open_market_error">Не удается открыть страницу приложения</string>
     <string name="billing_item_already_owned">Ваша предыдущая покупка в обработке, пожалуйста подождите</string>
     <string name="dialog">Переписка</string>
+    <string name="reply">Ответить</string>
 </resources>
