@@ -504,10 +504,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             unlockControls();
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded()) {
                             showEmptySearchDialog();
-                        } else if (!mUserSearchList.isEnded()) {
-                            unlockControls();
                         } else {
-                            showEmptySearchDialog();
+                            unlockControls();
                         }
 
                         //Скрываем кнопку отправки повтора
@@ -727,7 +725,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
                             @Override
                             public void onRateFailed(int userId, int mutualId) {
-                                mCurrentUser.rated = false;
+                                if (mCurrentUser != null) {
+                                    mCurrentUser.rated = false;
+                                }
                                 unlockControls();
                             }
                         }
@@ -763,6 +763,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     private void prevUser() {
         if (mUserSearchList != null) {
             fillUserInfo(mUserSearchList.prevUser());
@@ -1140,10 +1141,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void sendAlbumRequest(final Photos data) {
-        sendAlbumRequest(data, true);
-    }
-
-    private void sendAlbumRequest(final Photos data, boolean defaultLoading) {
         if (mUserSearchList == null)
             return;
         if ((mLoadedCount - 1) >= data.size())
@@ -1172,7 +1169,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
 
                         if (mImageSwitcher.getSelectedPosition() > mLoadedCount + mController.getItemsOffsetByConnectionType()) {
-                            sendAlbumRequest(data, false);
+                            sendAlbumRequest(data);
                         }
 
                         if (mImageSwitcher != null && mImageSwitcher.getAdapter() != null) {
