@@ -230,7 +230,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onDetach() {
         super.onDetach();
         mFragmentSwitcherListener = null;
-        mOnlineSetter.setOnline(false);
+        if (mOnlineSetter!=null) {
+            mOnlineSetter.setOnline(false);
+        }
     }
 
     @Override
