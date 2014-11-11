@@ -308,6 +308,7 @@
     </style>
 
     <style name="LeftMenuButtons" parent="ShadowBlackBottom">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/left_menu_text</item>
         <item name="android:paddingLeft">10dp</item>

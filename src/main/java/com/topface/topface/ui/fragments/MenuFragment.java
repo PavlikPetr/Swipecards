@@ -591,10 +591,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (mListView.isClickable()) {
             FragmentId id = null;
-            if (v.getTag() instanceof LeftMenuAdapter.ViewHolder)
+            if (v.getTag() instanceof LeftMenuAdapter.ViewHolder) {
                 id = ((LeftMenuAdapter.ViewHolder) v.getTag()).getFragmentId();
-            if (v.getTag() instanceof FragmentId)
-                id = (FragmentId)v.getTag();
+            }
+            if (v.getTag() instanceof FragmentId) {
+                id = (FragmentId) v.getTag();
+            }
 
 
             //Тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
