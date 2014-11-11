@@ -1,14 +1,11 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 
-import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.Static;
+import com.topface.topface.App;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONArray;
@@ -23,7 +20,6 @@ import java.util.Random;
 
 public class AuthButtonsController {
 
-    public static final String BUTTON_SETTINGS = "ButtonSettings";
     private Context mContext;
     private HashSet<String> activeButtons = new HashSet<>(); // Те кнопки, которые реально показываются пользователю в данный момент
     private HashSet<String> realButtons = new HashSet<>(); // Те кнопки, которые изначально показываются пользователю
@@ -31,24 +27,13 @@ public class AuthButtonsController {
     private LinkedList<HashSet<String>> allScreenSocials = new LinkedList<>();
     private String locale;
 
-    private SharedPreferences mPreferences;
+    private AppConfig mAppConfig;
 
-    public AuthButtonsController(Context context, final OnButtonsSettingsLoadedHandler listener) {
+    public AuthButtonsController(Context context) {
         mContext = context;
+        mAppConfig = App.getAppConfig();
         initAllSocialsForLocale();
-
-        loadButtons(new OnButtonsSettingsLoadedHandler() {
-            @Override
-            public void buttonSettingsLoaded(HashSet<String> settings) {
-                if (settings.size() == 0) {
-                    realButtons = getButtonsSettings();
-                    activeButtons = realButtons;
-                    saveButtons();
-                }
-                createLocale();
-                listener.sendSettings(activeButtons);
-            }
-        });
+        loadButtons();
     }
 
     private void createLocale() {
@@ -80,28 +65,20 @@ public class AuthButtonsController {
     }
 
     private void saveButtons() {
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                mPreferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_BUTTONS, Context.MODE_PRIVATE);
-                mPreferences.edit().putString(BUTTON_SETTINGS, toJson()).apply();
-
-            }
-
-
-        };
+        mAppConfig.setSocialButtonsSettings(toJson());
+        mAppConfig.saveConfig();
     }
 
-    private void loadButtons(final OnButtonsSettingsLoadedHandler listener) {
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                mPreferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_BUTTONS, Context.MODE_PRIVATE);
-                String json = mPreferences.getString(BUTTON_SETTINGS, "");
-                activeButtons = fromJson(json);
-                listener.sendSettings(activeButtons);
-            }
-        };
+    private void loadButtons() {
+        String json = mAppConfig.getSocialButtonsSettings();
+        activeButtons = fromJson(json);
+
+        if (activeButtons.size() == 0) {
+            realButtons = getButtonsSettings();
+            activeButtons = realButtons;
+            saveButtons();
+        }
+        createLocale();
     }
 
     public boolean isSocialNetworkActive(String sn) {
@@ -172,28 +149,6 @@ public class AuthButtonsController {
         }
         return realButtons;
     }
-
-    public static abstract class OnButtonsSettingsLoadedHandler extends Handler {
-
-        private HashSet<String> mSetting;
-
-        public OnButtonsSettingsLoadedHandler() {
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            buttonSettingsLoaded(mSetting);
-        }
-
-        protected void sendSettings(HashSet<String> settings) {
-            mSetting = settings;
-            sendMessage(new Message());
-        }
-
-        public abstract void buttonSettingsLoaded(HashSet<String> settings);
-    }
-
 
     public String getLocaleTag() {
         if (locale == null) {

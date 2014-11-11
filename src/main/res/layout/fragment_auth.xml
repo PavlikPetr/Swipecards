@@ -29,7 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
 
             <ImageView
                 android:id="@+id/ivAuthLogo"
@@ -130,7 +131,8 @@
             android:layout_centerHorizontal="true"
             android:orientation="horizontal"
             android:gravity="center"
-            android:padding="10dp">
+            android:padding="10dp"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/fb_ico"

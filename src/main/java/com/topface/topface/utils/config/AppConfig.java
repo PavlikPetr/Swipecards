@@ -50,6 +50,7 @@ public class AppConfig extends AbstractConfig {
     private static final String LAST_APP_VERSION = "last_app_version";
     private static final String GCM_REG_ID = "gcm_reg_id";
     public static final String SAVED_EMAIL_LIST = "tf_saved_email_list";
+    public static final String SOCIAL_BUTTONS_SETTINGS = "ButtonSettings";
 
 
     public AppConfig(Context context) {
@@ -98,6 +99,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, GCM_REG_ID, Static.EMPTY);
         // список всех email, с котороми удачно прошла авторизация в стандартный акк
         addField(settingsMap, SAVED_EMAIL_LIST, Static.EMPTY);
+        // social nets buttons settings
+        addField(settingsMap, SOCIAL_BUTTONS_SETTINGS, "");
     }
 
     protected SharedPreferences getPreferences() {
@@ -373,6 +376,20 @@ public class AppConfig extends AbstractConfig {
 
     public String getSavedEmailList() {
         return getStringField(getSettingsMap(), SAVED_EMAIL_LIST);
+    }
+
+    /**
+     * Sets new settings for social net buttons on login screen
+     */
+    public void setSocialButtonsSettings(String socialButtonsSettings) {
+        setField(getSettingsMap(), SOCIAL_BUTTONS_SETTINGS, socialButtonsSettings);
+    }
+
+    /**
+     * @return Social buttons settings
+     */
+    public String getSocialButtonsSettings() {
+        return getStringField(getSettingsMap(), SOCIAL_BUTTONS_SETTINGS);
     }
 
     @Override
