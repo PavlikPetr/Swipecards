@@ -674,7 +674,7 @@ public class Options extends AbstractData {
      * Experiment about autoopening gallery from click on friend avatar
      */
     public static class AutoOpenGallery {
-        private boolean mEnabled = true;
+        private boolean mEnabled = false;
         private String mGroup;
 
         public boolean isEnabled() {
