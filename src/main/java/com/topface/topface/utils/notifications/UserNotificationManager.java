@@ -1,12 +1,12 @@
 package com.topface.topface.utils.notifications;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.support.v4.app.NotificationManagerCompat;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -29,13 +29,13 @@ public class UserNotificationManager {
     public static final int TARGET_IMAGE_SIZE_PRE_JB = 128;
     private static UserNotificationManager mInstance;
     private static int lastId = 1314;
-    private NotificationManager mNotificationManager;
+    private NotificationManagerCompat mNotificationManager;
     private Context mContext;
     private ImageSize mImageSize;
 
     private UserNotificationManager(Context context) {
         mContext = context;
-        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager = NotificationManagerCompat.from(mContext);
     }
 
     public static UserNotificationManager getInstance(Context context) {
@@ -43,6 +43,12 @@ public class UserNotificationManager {
             mInstance = new UserNotificationManager(context);
         }
         return mInstance;
+    }
+
+    public UserNotification showNotification(String title, String message, boolean isTextNotification,
+                                             Bitmap icon, int unread, Intent intent, boolean doNeedReplace) {
+        return showNotification(title, message, isTextNotification, icon, unread, intent,
+                doNeedReplace, false, UserNotification.Type.STANDARD, null, null);
     }
 
     /*
@@ -224,13 +230,13 @@ public class UserNotificationManager {
                                               Bitmap icon, int unread, Intent intent, int id,
                                               boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions,
                                               User user) {
-
+        UserNotification notification = new UserNotification(mContext);
         MessageStack messagesStack = new MessageStack();
         if (intent != null && intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ChatActivity.INTENT_CHAT) {
             id = MESSAGES_ID;
             messagesStack = saveMessageStack(message, user);
+            notification.setWearReply(mContext, intent);
         }
-        UserNotification notification = new UserNotification(mContext);
         notification.setType(type);
         notification.setImage(icon);
         notification.setTitle(title);
@@ -270,9 +276,11 @@ public class UserNotificationManager {
     private MessageStack saveMessageStack(String message, User user) {
         UserConfig config = App.getUserConfig();
         MessageStack messagesStack = config.getNotificationMessagesStack();
-        messagesStack.addFirst(new MessageStack.Message(user.name, message));
-        config.setNotificationMessagesStack(messagesStack);
-        config.saveConfig();
+        if (user != null) {
+            messagesStack.addFirst(new MessageStack.Message(user.name, message));
+            config.setNotificationMessagesStack(messagesStack);
+            config.saveConfig();
+        }
         return messagesStack;
     }
 

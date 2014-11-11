@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:foreground="@drawable/actionbar_shadow"
     android:background="@drawable/auth_bg">
 
-    <LinearLayout
+<LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_centerInParent="true"
@@ -17,7 +17,7 @@
             android:id="@+id/ivBan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_ban" />
+            android:src="@drawable/ic_ban"/>
 
         <TextView
             android:id="@+id/banned_title"
@@ -25,14 +25,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dip"
             android:gravity="center"
-            android:textSize="15sp" />
+            android:textSize="15sp"/>
 
         <TextView
             android:id="@+id/banned_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="15dip" />
+            android:padding="15dip"/>
 
         <TextView
             android:id="@+id/banned_timer"
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="15dip"
-            android:text="@string/default_ban_time" />
+            android:text="@string/default_ban_time"/>
 
         <Button
             android:id="@+id/btnConfirm"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dip"
             android:gravity="center"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btnCancel"
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dip"
             android:gravity="center"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </LinearLayout>
 
     <TextView
@@ -69,13 +69,11 @@
         android:layout_centerHorizontal="true"
         android:text="@string/settings_logout"
         android:padding="12dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <FrameLayout
         android:id="@+id/foreground_frame_layout"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:foreground="@drawable/actionbar_shadow"
-        android:foregroundGravity="top|fill_horizontal" />
+        android:layout_height="fill_parent"/>
 
 </RelativeLayout>

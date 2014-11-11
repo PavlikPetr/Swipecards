@@ -1,11 +1,14 @@
 package com.topface.topface.utils.gcmutils;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -211,6 +214,19 @@ public class GCMUtils {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static boolean showNotification(final Intent extra, Context context) {
+        if (!CacheProfile.isLoaded()) {
+            Debug.log("GCM: wait for profile load to show notification");
+            BroadcastReceiver profileLoadReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    showNotification(extra, context);
+                    LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
+                }
+            };
+            LocalBroadcastManager.getInstance(context).registerReceiver(profileLoadReceiver,
+                    new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
+            return false;
+        }
         String uid = Integer.toString(CacheProfile.uid);
         String targetUserId = extra.getStringExtra("receiver");
         targetUserId = targetUserId != null ? targetUserId : uid;
@@ -258,7 +274,6 @@ public class GCMUtils {
                         null);
             }
         } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
-
             notificationManager.showNotificationAsync(
                     title,
                     data,
@@ -277,7 +292,7 @@ public class GCMUtils {
                     getUnread(extra),
                     intent,
                     false,
-                    null);
+                    user);
         }
     }
 

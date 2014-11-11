@@ -252,14 +252,16 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (getIntent().getBooleanExtra(INTENT_EXIT, false)) {
+        Intent intent = getIntent();
+
+        if (intent.getBooleanExtra(INTENT_EXIT, false)) {
             finish();
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
         instance = this;
-        if (isNeedBroughtToFront(getIntent())) {
+        if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
             return;
@@ -272,6 +274,10 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         initDrawerLayout();
         initFullscreen();
         initAppsFlyer();
+
+        if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
+            showFragment(intent);
+        }
     }
 
     @Override

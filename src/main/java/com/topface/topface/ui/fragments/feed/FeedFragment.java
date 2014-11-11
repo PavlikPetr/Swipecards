@@ -136,6 +136,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
+
         View root = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) root.findViewById(R.id.feedContainer);
         initNavigationBar();

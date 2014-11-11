@@ -212,6 +212,11 @@ public abstract class ApiRequest implements IApiRequest {
         return hashCode() + ".." + mResendCnt;
     }
 
+    @Override
+    public boolean containsAuth() {
+        return false;
+    }
+
     protected JSONObject getRequest() {
         JSONObject root = new JSONObject();
         try {
@@ -348,7 +353,14 @@ public abstract class ApiRequest implements IApiRequest {
             HttpUtils.sendPostData(requestData, connection);
             return true;
         } else {
-            Debug.error(String.format(Locale.ENGLISH, "ConnectionManager: Api request %s is empty", getServiceName()));
+            Debug.error(
+                    String.format(
+                            Locale.ENGLISH,
+                            isCanceled() ? ConnectionManager.TAG + "::Api request %s is canceled"
+                                    : ConnectionManager.TAG + "::Api request %s is empty",
+                            getServiceName()
+                    )
+            );
             return false;
         }
     }
@@ -416,7 +428,7 @@ public abstract class ApiRequest implements IApiRequest {
         }
     }
 
-    //Отменяем запрос из UI потомка
+    //Отменяем запрос из UI потока
     public void cancelFromUi() {
         closeConnectionAsync();
         mPostData = null;

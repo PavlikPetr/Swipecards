@@ -54,6 +54,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     private ProgressBar mLoginSendingProgress;
     private TextView mRecoverPwd;
     private String mEmailForRestorePassword;
+    private String mEmailForNewReg;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,6 +110,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             public void onClick(View v) {
                 EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), RegistrationActivity.class);
+                intent.putExtra(RecoverPwdFragment.ARG_EMAIL, mEmailForNewReg);
                 startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
             }
         });
@@ -165,6 +167,8 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             case ErrorCodes.INCORRECT_LOGIN:
             case ErrorCodes.UNKNOWN_SOCIAL_USER:
                 redAlert(R.string.incorrect_login);
+                //сохранить email введенный при авторизации
+                mEmailForNewReg = Utils.getText(mLogin).trim();
                 break;
             case ErrorCodes.INCORRECT_PASSWORD:
                 redAlert(R.string.incorrect_password);
@@ -308,6 +312,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         if (activity != null) {
             activity.setResult(Activity.RESULT_OK);
             activity.finish();
+            activity.overridePendingTransition(0, 0);
         }
     }
 
