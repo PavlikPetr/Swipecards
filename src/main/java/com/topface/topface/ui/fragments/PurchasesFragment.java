@@ -64,7 +64,9 @@ public class PurchasesFragment extends BaseFragment {
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mResourcesInfo.setVisibility(View.GONE);
+            if (mResourcesInfo != null) {
+                mResourcesInfo.setVisibility(View.GONE);
+            }
         }
     };
     private boolean mIsVip;
@@ -95,7 +97,7 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (CacheProfile.premium) {
+        if (CacheProfile.premium && mResourcesInfo != null) {
             mResourcesInfo.setVisibility(View.GONE);
         } else {
             mResourcesInfo.setVisibility(View.VISIBLE);

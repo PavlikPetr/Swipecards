@@ -79,7 +79,7 @@ public class IllustratedTextView extends TextView {
     }
 
     protected ArrayList<Integer> getAllIndexesOfSubstring(String text, String substr) {
-        ArrayList<Integer> indexes = new ArrayList<>();
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
         int index = text.indexOf(substr);
         while (index >= 0) {
             indexes.add(index);
