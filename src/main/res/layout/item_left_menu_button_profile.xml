@@ -95,8 +95,9 @@
             android:layout_height="30dp"
             android:layout_marginLeft="8dp" />
 
-        <Button
+        <TextView
             android:id="@+id/profile_button"
+            android:layout_width="match_parent"
             android:tag="profile_fragment_button_tag"
             android:layout_toRightOf="@id/ivMenuAvatar"
             android:layout_centerVertical="true"

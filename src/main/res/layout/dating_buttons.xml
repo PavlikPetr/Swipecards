@@ -26,8 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
         android:layout_width="0dp">
-
-        <Button
+             <Button
             style="@style/DatingButtonsText"
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/dating_admiration_selector"
@@ -42,14 +41,14 @@
             android:drawablePadding="2dp"
             android:drawableRight="@drawable/coins"
             android:id="@+id/tvDatingLovePrice"
-            android:layout_alignBottom="@id/btnDatingAdmiration"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12sp"
             android:layout_width="wrap_content"
             android:text="@integer/love_dating_button"
+            android:layout_alignBottom="@id/btnDatingAdmiration"
             android:textStyle="bold"
-            android:layout_centerHorizontal="true"
-            android:paddingLeft="25dp" />
+            android:layout_marginBottom="15dp"
+            android:paddingLeft="18dp"
+            android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 
     <Button

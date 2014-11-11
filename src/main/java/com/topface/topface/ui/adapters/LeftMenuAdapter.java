@@ -7,8 +7,6 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.topface.App;
@@ -134,7 +132,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     public boolean hasFragment(BaseFragment.FragmentId id) {
-        return mItems.size() > id.getId() && mItems.valueAt(id.getId()) != null;
+        return mItems.size() > id.getId();
     }
 
     @NonNull
@@ -149,7 +147,8 @@ public class LeftMenuAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = View.inflate(mMenuFragment.getActivity(), R.layout.item_left_menu_button_with_badge, null);
-            holder.btnMenu = (Button) convertView.findViewById(R.id.btnMenu);
+            holder.leftMenuCellLayout = convertView.findViewById(R.id.leftMenuCellLayout);
+            holder.btnMenu = (TextView) convertView.findViewById(R.id.btnMenu);
             holder.counterBadge = (TextView) convertView.findViewById(R.id.tvCounterBadge);
             convertView.setTag(holder);
         } else {
@@ -180,16 +179,16 @@ public class LeftMenuAdapter extends BaseAdapter {
         holder.item = item;
         // init button state
         holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(item.getMenuIconResId(), 0, 0, 0);
-        holder.btnMenu.setTag(item.getMenuId());
 
         if (enabled || item.isHidden()) {
-            holder.btnMenu.setOnClickListener(mMenuFragment);
+            holder.leftMenuCellLayout.setOnClickListener(mMenuFragment);
             setAlphaToTextAndDrawable(holder.btnMenu, 255);
-            holder.btnMenu.setSelected(mMenuFragment.getCurrentFragmentId() == item.getMenuId());
+            setCheckedBackgroundState(mMenuFragment.getCurrentFragmentId() == item.getMenuId(), holder.leftMenuCellLayout);
+
         } else {
-            holder.btnMenu.setOnClickListener(mDisabledItemClickListener);
+            holder.leftMenuCellLayout.setOnClickListener(mDisabledItemClickListener);
             setAlphaToTextAndDrawable(holder.btnMenu, 102);
-            holder.btnMenu.setSelected(mMenuFragment.getCurrentFragmentId() == item.getMenuId());
+            setCheckedBackgroundState(mMenuFragment.getCurrentFragmentId() == item.getMenuId(), holder.leftMenuCellLayout);
         }
         if (item.isHidden()) {
             holder.btnMenu.setVisibility(View.GONE);
@@ -198,18 +197,19 @@ public class LeftMenuAdapter extends BaseAdapter {
         }
         return convertView;
     }
-    private void setCellBackground(boolean flag, LinearLayout layout){
-        if (flag){
+    private void setCheckedBackgroundState(boolean isChecked, View layout){
+        if (isChecked){
             layout.setBackgroundResource(R.drawable.bg_left_menu_pressed);
         }else{
-            layout.setBackgroundResource(R.drawable.bg_left_menu_item);
+            layout.setBackgroundResource(R.drawable.bg_left_menu_item_selector);
         }
     }
 
-    private void setAlphaToTextAndDrawable(Button btn, int alpha) {
+
+    private void setAlphaToTextAndDrawable(TextView btn, int alpha) {
         btn.setTextColor(Color.argb(alpha, 255, 255, 255));
         Drawable[] compoundDrawables = btn.getCompoundDrawables();
-        if (compoundDrawables != null && compoundDrawables[0] != null) {
+        if (compoundDrawables[0] != null) {
             compoundDrawables[0].setAlpha(alpha);
         }
     }
@@ -251,10 +251,15 @@ public class LeftMenuAdapter extends BaseAdapter {
         }
     }
 
-    class ViewHolder {
-        Button btnMenu;
+    public class ViewHolder {
+        TextView btnMenu;
+        View leftMenuCellLayout;
         TextView counterBadge;
         ILeftMenuItem item;
+
+        public BaseFragment.FragmentId getFragmentId() {
+            return item.getMenuId();
+        }
     }
 
     public interface ILeftMenuItem {
