@@ -24,6 +24,7 @@ import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -89,7 +90,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private LeftMenuAdapter mAdapter;
     private boolean mHardwareAccelerated;
     private View mHeaderView;
-    private Button mProfileButton;
+    private TextView mProfileButton;
     private BuyWidgetController mBuyWidgetController;
     private ViewStub mHeaderViewStub;
     private ViewGroup mFooterView;
@@ -199,7 +200,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             if (Editor.isEditor()) {
                 if (mEditorItem == null) {
                     mEditorItem = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
-                    Button btnMenu = (Button) mEditorItem.findViewById(R.id.btnMenu);
+                    TextView btnMenu = (TextView) mEditorItem.findViewById(R.id.btnMenu);
                     //noinspection ResourceType
                     btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.F_EDITOR));
                     btnMenu.setTag(FragmentId.F_EDITOR);
@@ -297,7 +298,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     .setRemoteImageBitmap(bitmap);
         } else {
             profileLayout.setVisibility(View.VISIBLE);
-            ((Button) profileLayout.findViewById(R.id.profile_button))
+            ((TextView) profileLayout.findViewById(R.id.profile_button))
                     .setText(R.string.general_profile);
             profileLayoutWithBackground.setVisibility(View.GONE);
             currentLayout = profileLayout;
@@ -318,11 +319,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             avatarView.setPhoto(CacheProfile.photo);
         }
         // set OnClickListener for profile menu item
-        mProfileButton = (Button) currentLayout.findViewWithTag("profile_fragment_button_tag");
+        mProfileButton = (TextView) currentLayout.findViewWithTag("profile_fragment_button_tag");
         if (mProfileButton == null) {
-            mProfileButton = (Button) currentLayout.findViewWithTag(F_PROFILE);
+            mProfileButton = (TextView) currentLayout.findViewWithTag(F_PROFILE);
         } else {
-            mProfileButton.setTag(F_PROFILE);
+            mProfileButton.setTag(FragmentId.F_PROFILE);
         }
         if (mProfileButton != null) {
             mProfileButton.setOnClickListener(this);
@@ -589,7 +590,15 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (mListView.isClickable()) {
-            FragmentId id = (FragmentId) v.getTag();
+            FragmentId id = null;
+            if (v.getTag() instanceof LeftMenuAdapter.ViewHolder) {
+                id = ((LeftMenuAdapter.ViewHolder) v.getTag()).getFragmentId();
+            }
+            if (v.getTag() instanceof FragmentId) {
+                id = (FragmentId) v.getTag();
+            }
+
+
             //Тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
             //его локально, а не серверно, как это происходит с остальными счетчиками.
             if (id == F_BONUS) {
