@@ -102,8 +102,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, GCM_REG_ID, Static.EMPTY);
         // список всех email, с котороми удачно прошла авторизация в стандартный акк
         addField(settingsMap, SAVED_EMAIL_LIST, Static.EMPTY);
-        // social nets buttons settings
-        addField(settingsMap, SOCIAL_BUTTONS_SETTINGS, "");
+        // social nets buttons settings. Stores value in form of JSON array. So default value is "[]"
+        addField(settingsMap, SOCIAL_BUTTONS_SETTINGS, "[]");
     }
 
     protected SharedPreferences getPreferences() {
