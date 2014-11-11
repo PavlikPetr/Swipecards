@@ -144,8 +144,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         // добавляем анимацию открытия нового activity
-        if (mNeedAnimate) {
-            overridePendingTransition(com.topface.topface.R.anim.slide_in_from_right, com.topface.topface.R.anim.slide_out_left);
+        // иногда еще надо совсем _не_ анимировать, поэтому флаг оставлен
+        if (!mNeedAnimate) {
+            overridePendingTransition(0, 0);
         }
     }
 
@@ -334,8 +335,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     public void finish() {
         super.finish();
-        if (mNeedAnimate) {
-            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
+        if (!mNeedAnimate) {
+            overridePendingTransition(0, 0);
         }
     }
 
