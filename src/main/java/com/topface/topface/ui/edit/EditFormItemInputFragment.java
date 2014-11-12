@@ -159,6 +159,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         if (hasChanges()) {
             if (isCheckNumeric()&&isValueZero()) {
                     mEditText.setText("");
+                warnEditingFailedHeightWeight(handler);
             }else {
                 for (int i = 0; i < CacheProfile.forms.size(); i++) {
                     if (CacheProfile.forms.get(i).titleId == mTitleId) {
