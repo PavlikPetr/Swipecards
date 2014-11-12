@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -71,6 +72,9 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         ((TextView) root.findViewById(R.id.tvTitle)).setText(mFormInfo.getFormTitle(mTitleId));
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setInputType(mFormInfo.getInputType(mTitleId));
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(mFormInfo.getMaxCharacters(mTitleId));
+        mEditText.setFilters(FilterArray);
         if (mData != null) {
             mEditText.append(mData);
         }
@@ -107,7 +111,44 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     @Override
     protected boolean hasChanges() {
+//        boolean result = true;
+//        int value = -1;
+//        try {
+//            value = Integer.parseInt(mInputData);
+//        } catch (NumberFormatException e) {
+//            e.printStackTrace();
+//        }
+//        if (mTitleId==R.array.form_main_height && mTitleId == R.array.form_main_weight && value==-1) {
+//            result = false;
+//        }
+//        if (){
+//            result = false;
+//        }
         return !TextUtils.equals(mData, mInputData);
+    }
+
+    private boolean isCheckNumeric() {
+        return (mTitleId == R.array.form_main_height || mTitleId == R.array.form_main_weight);
+    }
+
+    private boolean isValueZero() {
+        if (isCheckNumeric()) {
+            if (mInputData.length()==0){
+                return false;
+            }
+            int value = -1;
+            try {
+                value = Integer.parseInt(mInputData);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            if (value > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -116,38 +157,46 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
         if (hasChanges()) {
-            for (int i = 0; i < CacheProfile.forms.size(); i++) {
-                if (CacheProfile.forms.get(i).titleId == mTitleId) {
-                    final FormItem item = CacheProfile.forms.get(i);
-                    FormItem newItem;
-                    mInputData = Utils.getText(mEditText).trim();
-                    newItem = new FormItem(item.titleId, mInputData, FormItem.DATA);
+            if (isCheckNumeric()&&isValueZero()) {
+                    mEditText.setText("");
+            }else {
+                for (int i = 0; i < CacheProfile.forms.size(); i++) {
+                    if (CacheProfile.forms.get(i).titleId == mTitleId) {
+                        final FormItem item = CacheProfile.forms.get(i);
+                        FormItem newItem;
+                        mInputData = Utils.getText(mEditText).trim();
+                        newItem = new FormItem(item.titleId, mInputData, FormItem.DATA);
 
-                    mFormInfo.fillFormItem(newItem);
+                        mFormInfo.fillFormItem(newItem);
 
-                    prepareRequestSend();
-                    ApiRequest request = mFormInfo.getFormRequest(newItem);
-                    registerRequest(request);
-                    request.callback(new ApiHandler() {
+                        prepareRequestSend();
+                        ApiRequest request = mFormInfo.getFormRequest(newItem);
+                        registerRequest(request);
+                        request.callback(new ApiHandler() {
 
-                        @Override
-                        public void success(IApiResponse response) {
-                            item.value = TextUtils.isEmpty(mInputData) ? null : mInputData;
-                            mFormInfo.fillFormItem(item);
-                            getActivity().setResult(Activity.RESULT_OK);
-                            mData = mInputData;
-                            finishRequestSend();
-                            if (handler == null) getActivity().finish();
-                            else handler.sendEmptyMessage(0);
-                            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(CacheProfile.PROFILE_UPDATE_ACTION));
-                        }
+                            @Override
+                            public void success(IApiResponse response) {
+                                item.value = TextUtils.isEmpty(mInputData) ? null : mInputData;
+                                mFormInfo.fillFormItem(item);
+                                getActivity().setResult(Activity.RESULT_OK);
+                                mData = mInputData;
+                                finishRequestSend();
+                                if (handler == null) getActivity().finish();
+                                else handler.sendEmptyMessage(0);
+                                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(CacheProfile.PROFILE_UPDATE_ACTION));
+                            }
 
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-                            warnEditingFailed(handler);
-                        }
-                    }).exec();
-                    break;
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+                                if (isCheckNumeric()) {
+                                    warnEditingFailedHeightWeight(handler);
+                                } else {
+                                    warnEditingFailed(handler);
+                                }
+                            }
+                        }).exec();
+                        break;
+                    }
                 }
             }
         } else {
