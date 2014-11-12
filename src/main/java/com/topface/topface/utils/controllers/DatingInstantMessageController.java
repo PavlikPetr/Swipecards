@@ -8,7 +8,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -87,14 +86,6 @@ public class DatingInstantMessageController {
         mFooterFlipper.setVisibility(View.VISIBLE);
         mGiftSend = root.findViewById(R.id.send_gift_button);
         mMessageText = (EditText) root.findViewById(R.id.edChatBox);
-        mMessageText.setCursorVisible(false);
-        mMessageText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                mMessageText.setCursorVisible(true);
-                return false;
-            }
-        });
         mMessageSend = (ImageButton) root.findViewById(R.id.btnSend);
         mSpin = AnimationUtils.loadAnimation(mActivity, R.anim.loader_rotate);
         mMessageText.addTextChangedListener(new TextWatcher() {
