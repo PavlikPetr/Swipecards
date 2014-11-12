@@ -51,7 +51,6 @@ import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
@@ -62,6 +61,7 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -295,14 +295,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         if (mBackgroundText != null) {
             Drawable[] drawables = mBackgroundText.getCompoundDrawables();
-            if (drawables != null) {
-                mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(
-                        drawables[0],
-                        getBackIcon(),
-                        drawables[2],
-                        drawables[3]
-                );
-            }
+            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(
+                    drawables[0],
+                    getBackIcon(),
+                    drawables[2],
+                    drawables[3]
+            );
         }
     }
 
@@ -591,7 +589,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected Intent getOnAvatarClickIntent(T item) {
-        return UserProfileActivity.createIntent(item.user.id, item.id, getActivity());
+        return CacheProfile.getOptions().autoOpenGallery.createIntent(item.user.id, item.user.photosCount, item.id, getActivity());
     }
 
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
@@ -787,19 +785,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mRetryView.setVisibility(View.GONE);
 
             Drawable[] drawables = mBackgroundText.getCompoundDrawables();
-            if (drawables != null) {
-                if (drawables[0] != null) {
-                    Drawable drawable = drawables[0];
-                    if (drawable instanceof AnimationDrawable) {
-                        ((AnimationDrawable) drawable).stop();
-                    }
+            if (drawables[0] != null) {
+                Drawable drawable = drawables[0];
+                if (drawable instanceof AnimationDrawable) {
+                    ((AnimationDrawable) drawable).stop();
                 }
-
-                mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
-                        drawables[1],
-                        drawables[2],
-                        drawables[3]);
             }
+
+            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
+                    drawables[1],
+                    drawables[2],
+                    drawables[3]);
             setFilterSwitcherState(true);
         }
 
@@ -873,17 +869,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mListView.setVisibility(View.VISIBLE);
             mBackgroundText.setText("");
             Drawable[] drawables = mBackgroundText.getCompoundDrawables();
-            if (drawables != null) {
-                Drawable drawable = drawables[0];
-                if (drawable != null && drawable instanceof AnimationDrawable) {
-                    ((AnimationDrawable) drawable).stop();
-                }
-
-                mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
-                        drawables[1],
-                        drawables[2],
-                        drawables[3]);
+            Drawable drawable = drawables[0];
+            if (drawable != null && drawable instanceof AnimationDrawable) {
+                ((AnimationDrawable) drawable).stop();
             }
+
+            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
+                    drawables[1],
+                    drawables[2],
+                    drawables[3]);
             setFilterSwitcherState(true);
         }
     }
@@ -896,14 +890,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mBackgroundText.setVisibility(View.VISIBLE);
             mBackgroundText.setText(R.string.general_dialog_loading);
             Drawable[] drawables = mBackgroundText.getCompoundDrawables();
-            if (drawables != null) {
-                AnimationDrawable drawable = getLoader();
-                mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(drawable,
-                        drawables[1],
-                        drawables[2],
-                        drawables[3]);
-                drawable.start();
-            }
+            AnimationDrawable drawable = getLoader();
+            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(drawable,
+                    drawables[1],
+                    drawables[2],
+                    drawables[3]);
+            drawable.start();
             setFilterSwitcherState(false);
         }
     }

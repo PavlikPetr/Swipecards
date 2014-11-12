@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.topface.topface.R;
+import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.StandardMessageSendRequest;
@@ -43,6 +44,7 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
     private ProgressBar mPgb;
     private TextView mSuccessText;
     private ListView mListQuestionnaire;
+    private BasePendingInit<User> mPendingUserInit = new BasePendingInit<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,7 +104,29 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
         outState.putBoolean(MATCHED_DATA_ONLY, mUserFormListAdapter.isMatchedDataOnly());
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mPendingUserInit.setCanSet(true);
+        if (mPendingUserInit.getCanSet()) {
+            setUserDataPending(mPendingUserInit.getData());
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPendingUserInit.setCanSet(false);
+    }
+
     public void setUserData(User user) {
+        mPendingUserInit.setData(user);
+        if (mPendingUserInit.getCanSet()) {
+            setUserDataPending(mPendingUserInit.getData());
+        }
+    }
+
+    private void setUserDataPending(User user) {
         setUserData(user.uid, user.forms, user.formMatches);
     }
 

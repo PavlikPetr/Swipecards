@@ -5,6 +5,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
+import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.utils.CacheProfile;
@@ -135,6 +136,8 @@ public class Options extends AbstractData {
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
 
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
+
+    public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -313,6 +316,13 @@ public class Options extends AbstractData {
                 instantMessageFromSearch.group = jsonInstantMessageFromSearch.optString("group");
                 instantMessageFromSearch.text = jsonInstantMessageFromSearch.optString("text");
             }
+
+            JSONObject jsonAutoOpenGallery = response.optJSONObject("autoOpenGallery");
+            if (jsonAutoOpenGallery != null) {
+                autoOpenGallery.setEnabled(jsonAutoOpenGallery.optBoolean("enabled"));
+                autoOpenGallery.setGroup(jsonAutoOpenGallery.optString("group"));
+            }
+
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }

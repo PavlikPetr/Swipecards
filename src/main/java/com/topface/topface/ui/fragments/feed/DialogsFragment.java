@@ -18,10 +18,10 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteDialogsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -96,7 +96,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected Intent getOnAvatarClickIntent(FeedDialog item) {
-        return UserProfileActivity.createIntent(item.user.id, getActivity());
+        return CacheProfile.getOptions().autoOpenGallery.createIntent(item.user.id, item.user.photosCount, getActivity());
     }
 
     @Override
