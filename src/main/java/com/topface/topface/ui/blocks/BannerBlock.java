@@ -71,10 +71,8 @@ public class BannerBlock {
     public final static String BANNER_TOPFACE = "TOPFACE";
     public final static String BANNER_ADMOB = "ADMOB";
     public static final String BANNER_ADWIRED = "ADWIRED";
-    public static final String BANNER_MOPUB = "MOPUB";
     public static final String BANNER_IVENGO = "IVENGO";
     public static final String BANNER_ADCAMP = "ADCAMP";
-    public static final String BANNER_LIFESTREET = "LIFESTREET";
     public static final String BANNER_INNERACTIVE = "INNERACTIVE";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
@@ -82,10 +80,8 @@ public class BannerBlock {
             BANNER_TOPFACE,
             BANNER_ADMOB,
             BANNER_ADWIRED,
-            BANNER_MOPUB,
             BANNER_IVENGO,
             BANNER_ADCAMP,
-            BANNER_LIFESTREET,
             BANNER_GAG,
             BANNER_NONE
     };
@@ -179,12 +175,8 @@ public class BannerBlock {
                     return mInflater.inflate(R.layout.banner_admob, mBannerLayout, false);
                 case BANNER_ADWIRED:
                     return mInflater.inflate(R.layout.banner_adwired, mBannerLayout, false);
-                case BANNER_MOPUB:
-                    return mInflater.inflate(R.layout.banner_mopub, mBannerLayout, false);
                 case BANNER_ADCAMP:
                     return mInflater.inflate(R.layout.banner_adcamp, mBannerLayout, false);
-                case BANNER_LIFESTREET:
-                    return mInflater.inflate(R.layout.banner_lifestreet, mBannerLayout, false);
                 case BANNER_INNERACTIVE:
                     return mInflater.inflate(R.layout.banner_inneractive, null);
                 default:

@@ -28,7 +28,6 @@ public class OfferwallsManager {
      */
     public static final String TAPJOY = "TAPJOY";
     public static final String SPONSORPAY = "SPONSORPAY";
-    public static final String CLICKKY = "CLICKKY";
     public static final String RANDOM = "RANDOM";
     public static final String SUPERSONIC = "SUPERSONIC";
     public static final String TFOFFERWALL = "TOPFACE";
@@ -36,7 +35,6 @@ public class OfferwallsManager {
     public final static String[] OFFERWALLS = new String[]{
             TAPJOY,
             SPONSORPAY,
-            CLICKKY,
             SUPERSONIC,
             TFOFFERWALL,
             RANDOM
@@ -56,7 +54,6 @@ public class OfferwallsManager {
             }
         }
     }
-
 
 
     public static void startOfferwall(Activity activity) {

@@ -331,14 +331,6 @@
             android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
             android:configChanges="orientation"/>
 
-        <!-- Keys for clickky -->
-        <meta-data
-            android:name="CLICKKY_API_KEY"
-            android:value="c2441dedd5b0e62a7acadbdb5a43c8d2"/>
-        <meta-data
-            android:name="CLICKKY_SITE_ID"
-            android:value="3382"/>
-
         <activity
             android:hardwareAccelerated="true"
             android:name="com.ivengo.ads.InterstitialActivity"
