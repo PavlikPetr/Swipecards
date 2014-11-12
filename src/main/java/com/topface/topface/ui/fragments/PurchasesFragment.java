@@ -60,6 +60,15 @@ public class PurchasesFragment extends BaseFragment {
             updateBalanceCounters();
         }
     };
+
+    private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mResourcesInfo != null) {
+                mResourcesInfo.setVisibility(View.GONE);
+            }
+        }
+    };
     private boolean mIsVip;
 
     @Override
@@ -74,7 +83,6 @@ public class PurchasesFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.purchases_fragment, null);
-
         initViews(root, savedInstanceState);
         return root;
     }
@@ -89,14 +97,21 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (CacheProfile.premium && mResourcesInfo != null) {
+            mResourcesInfo.setVisibility(View.GONE);
+        } else {
+            mResourcesInfo.setVisibility(View.VISIBLE);
+        }
         updateBalanceCounters();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mVipPurchasedReceiver, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
     }
 
     @Override
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mVipPurchasedReceiver);
     }
 
     public boolean forceBonusScreen(String infoText) {
