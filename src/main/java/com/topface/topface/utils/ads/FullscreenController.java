@@ -16,13 +16,6 @@ import com.ivengo.ads.AdType;
 import com.ivengo.ads.Interstitial;
 import com.ivengo.ads.InterstitialListener;
 import com.ivengo.ads.Request;
-import com.lifestreet.android.lsmsdk.BannerAdapter;
-import com.lifestreet.android.lsmsdk.BasicSlotListener;
-import com.lifestreet.android.lsmsdk.InterstitialAdapter;
-import com.lifestreet.android.lsmsdk.InterstitialSlot;
-import com.lifestreet.android.lsmsdk.SlotView;
-import com.mopub.mobileads.MoPubErrorCode;
-import com.mopub.mobileads.MoPubInterstitial;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -55,14 +48,10 @@ import ru.ideast.adwired.events.OnStopListener;
 public class FullscreenController {
 
     private static final String TAG = "FullscreenController";
-    private static final String MOPUB_INTERSTITIAL_ID = "00db7208a90811e281c11231392559e4";
     private static final String IVENGO_APP_ID = "aggeas97392g";
-    private static final String LIFESTREET_TAG = "http://mobile-android.lfstmedia.com/m2/slot76331?ad_size=320x480&adkey=a25";
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
-
-    private MoPubInterstitial mInterstitial;
 
     private class FullscreenStartAction extends AbstractStartAction {
         private Options.Page startPage;
@@ -170,14 +159,8 @@ public class FullscreenController {
                 case BannerBlock.BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
-                case BannerBlock.BANNER_MOPUB:
-                    requestMopubFullscreen();
-                    break;
                 case BannerBlock.BANNER_IVENGO:
                     requestIvengoFullscreen();
-                    break;
-                case BannerBlock.BANNER_LIFESTREET:
-                    requestLifestreetFullscreen();
                     break;
                 default:
                     break;
@@ -230,39 +213,6 @@ public class FullscreenController {
         });
     }
 
-    private void requestLifestreetFullscreen() {
-        InterstitialSlot slot = new InterstitialSlot(mActivity);
-        slot.setSlotTag(LIFESTREET_TAG);
-        slot.setListener(new BasicSlotListener() {
-            @Override
-            public void onFailedToLoadSlotView(SlotView slotView) {
-                requestGagFullscreen();
-            }
-
-            @Override
-            public void onReceiveInterstitialAd(InterstitialAdapter<?> adapter, Object ad) {
-                addLastFullscreenShowedTime();
-            }
-
-            @Override
-            public void onPresentInterstitialScreen(InterstitialAdapter<?> adapter, Object ad) {
-                addLastFullscreenShowedTime();
-            }
-
-            @Override
-            public void onFailedToReceiveAd(BannerAdapter<?> adapter, View view) {
-                requestGagFullscreen();
-            }
-
-            @Override
-            public void onFailedToReceiveInterstitialAd(InterstitialAdapter<?> adapter, Object ad) {
-                requestGagFullscreen();
-            }
-        });
-        slot.setShowCloseButton(true);
-        slot.loadAd();
-    }
-
     private void requestIvengoFullscreen() {
         AdManager.getInstance().initialize(mActivity);
         Interstitial advViewIvengo = new Interstitial(AdType.BANNER_FULLSCREEN);
@@ -306,44 +256,6 @@ public class FullscreenController {
         });
 
         advViewIvengo.loadRequest(request);
-    }
-
-    private void requestMopubFullscreen() {
-        if (mInterstitial == null) {
-            mInterstitial = new MoPubInterstitial(mActivity, MOPUB_INTERSTITIAL_ID);
-        }
-        mInterstitial.setInterstitialAdListener(new MoPubInterstitial.InterstitialAdListener() {
-            @Override
-            public void onInterstitialLoaded(MoPubInterstitial interstitial) {
-                if (interstitial.isReady()) {
-                    interstitial.show();
-                    addLastFullscreenShowedTime();
-                }
-                Debug.log("MoPub: onInterstitialLoaded()");
-            }
-
-            @Override
-            public void onInterstitialFailed(MoPubInterstitial interstitial, MoPubErrorCode errorCode) {
-                requestFallbackFullscreen();
-                Debug.log("MoPub: onInterstitialFailed()");
-            }
-
-            @Override
-            public void onInterstitialShown(MoPubInterstitial interstitial) {
-                Debug.log("MoPub: onInterstitialShown()");
-            }
-
-            @Override
-            public void onInterstitialClicked(MoPubInterstitial interstitial) {
-                Debug.log("MoPub: onInterstitialClicked()");
-            }
-
-            @Override
-            public void onInterstitialDismissed(MoPubInterstitial interstitial) {
-                Debug.log("MoPub: onInterstitialDismissed()");
-            }
-        });
-        mInterstitial.load();
     }
 
     private void requestAdwiredFullscreen() {
@@ -471,11 +383,13 @@ public class FullscreenController {
         return fullscreenContainer;
     }
 
-    public void onDestroy() {
-        if (mInterstitial != null) mInterstitial.destroy();
+    public void onPause() {
+        //Пока не требуется, но на будущее
     }
 
-    public void onPause() {
+
+    public void onDestroy() {
+        //Пока не требуется, но на будущее
     }
 
     public IStartAction createFullscreenStartAction(final int priority) {

@@ -139,8 +139,6 @@ dependencies {
     //Social networks SDK
     compile project(':libs:facebook-android-sdk:facebook')
     compile project(':libs:odnoklassniki')
-    //Ad networks SDK
-    compile project(':libs:mopub-android-sdk')
     //Аннотации вроде @NonNull и @*Res для обозначения переменных
     compile 'com.android.support:support-annotations:19.1.0'
     //Для Амазона нужна библиотека для поддержки in-app покупок
@@ -210,19 +208,6 @@ project(':libs:odnoklassniki') {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['src']
         res.srcDirs = ['res']
-    }
-}
-
-//Ad networks
-project(':libs:mopub-android-sdk') {
-    apply plugin: 'com.android.library'
-    //noinspection GradleMisplacedStatement
-    dependencies {
-        compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
-    }
-    android.sourceSets.main {
-        manifest.srcFile 'mopub-sdk/AndroidManifest.xml'
-        java.srcDirs = ['mopub-sdk/src/main/java']
     }
 }
 
