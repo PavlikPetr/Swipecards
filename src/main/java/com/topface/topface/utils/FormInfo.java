@@ -283,6 +283,23 @@ public class FormInfo {
         return result;
     }
 
+    public int getMaxCharacters(int titleId) {
+        int result;
+        switch (titleId) {
+            case R.array.form_main_height:
+                result = 3;
+                break;
+            case R.array.form_main_weight:
+                result = 3;
+                break;
+            default:
+                result = Integer.MAX_VALUE;
+                break;
+        }
+
+        return result;
+    }
+
     // =============================== Form Titles ===============================
     public String getFormTitle(int arrayResourceId) {
         String result = Static.EMPTY;
