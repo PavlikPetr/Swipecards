@@ -159,7 +159,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             mFragmentSwitchListener = (INavigationFragmentsListener) activity;
         }
     }
-    
+
 
     @Override
     public void onDetach() {
@@ -218,10 +218,13 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     private void initHeader() {
         mHeaderView = View.inflate(getActivity(), R.layout.layout_left_menu_header, null);
+        mHeaderView.setTag(FragmentId.F_PROFILE);
+        mHeaderView.setOnClickListener(this);
         initProfileMenuItem(mHeaderView);
         mHeaderViewStub = (ViewStub) mHeaderView.findViewById(R.id.vsHeaderStub);
         mListView.addHeaderView(mHeaderView);
     }
+
 
     private void initAdapter() {
         SparseArray<LeftMenuAdapter.ILeftMenuItem> menuItems = new SparseArray<>();
@@ -597,8 +600,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             if (v.getTag() instanceof FragmentId) {
                 id = (FragmentId) v.getTag();
             }
-
-
             //Тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
             //его локально, а не серверно, как это происходит с остальными счетчиками.
             if (id == F_BONUS) {
@@ -649,7 +650,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         if (ClosingsBuyVipDialog.opened) return;
 
         ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(selectedFragment);
-        
+
         newFragment.setOnRespondToLikesListener(new ClosingsBuyVipDialog.IRespondToLikesListener() {
             @Override
             public void onRespondToLikes() {
