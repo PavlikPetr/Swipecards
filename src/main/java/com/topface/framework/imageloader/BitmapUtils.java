@@ -1,6 +1,7 @@
 package com.topface.framework.imageloader;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,6 +13,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.provider.MediaStore;
 
 import com.topface.framework.utils.Debug;
 
@@ -39,6 +41,18 @@ public class BitmapUtils {
         return bitmap;
     }
 
+    public static int getOrientationPhotoFromGallery(Context context, Uri photoUri) {
+        Cursor cursor = context.getContentResolver().query(photoUri,
+                new String[]{MediaStore.Images.ImageColumns.ORIENTATION}, null, null, null);
+
+        if (cursor.getCount() != 1) {
+            return -1;
+        }
+
+        cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
+
     public static BitmapFactory.Options readImageFileOptions(Context context, Uri uri) {
         BufferedInputStream bis = null;
         InputStream is = null;
@@ -61,6 +75,7 @@ public class BitmapUtils {
             }
         }
 
+
         return options;
     }
 
@@ -78,12 +93,20 @@ public class BitmapUtils {
             } else {
                 options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
             }
-
+            int width = options.outWidth;
+            int height = options.outHeight;
             // Decode bitmap with inSampleSize set
             options.inJustDecodeBounds = false;
             is = getInputStream(context, uri);
             bis = new BufferedInputStream(is, 8192);
             bitmap = BitmapFactory.decodeStream(bis, null, options);
+            if (orientation == 0) {
+                int galleryPhotoOrientation = getOrientationPhotoFromGallery(context, uri);
+                //на некоторых телефонах ширина с высотой не меняются местами в зависимости от ориентации
+                if (height < width && (galleryPhotoOrientation == 90 || galleryPhotoOrientation == 270)) {
+                    bitmap = getRotatedBitmap(bitmap, galleryPhotoOrientation);
+                }
+            }
         } catch (Exception ex) {
             Debug.error(ex);
         } finally {
@@ -94,7 +117,6 @@ public class BitmapUtils {
                 Debug.error(e);
             }
         }
-
         return bitmap;
     }
 
