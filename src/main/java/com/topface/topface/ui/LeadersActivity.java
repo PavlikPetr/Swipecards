@@ -70,8 +70,13 @@ public class LeadersActivity extends BaseFragmentActivity {
             mUselessTitle.setVisibility(View.VISIBLE);
         }
         setListeners();
-        getProfile();
         setPrice(CacheProfile.getOptions().priceLeader);
+    }
+
+    @Override
+    protected void onLoadProfile() {
+        super.onLoadProfile();
+        getProfile();
     }
 
     private void setPrice(int price) {
