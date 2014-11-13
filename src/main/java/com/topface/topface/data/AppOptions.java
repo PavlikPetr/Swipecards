@@ -66,7 +66,7 @@ public class AppOptions extends AbstractData {
         return sessionTimeout;
     }
 
-    public int getmMaxPartialRequestsCount() {
+    public int getMaxPartialRequestsCount() {
         return maxPartialRequestsCount;
     }
 
