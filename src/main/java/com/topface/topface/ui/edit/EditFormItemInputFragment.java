@@ -37,6 +37,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     private String mData;
     private String mInputData = "";
     private Profile mProfile;
+
     private FormInfo mFormInfo;
 
     private EditText mEditText;
@@ -109,21 +110,9 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         return root;
     }
 
+
     @Override
     protected boolean hasChanges() {
-//        boolean result = true;
-//        int value = -1;
-//        try {
-//            value = Integer.parseInt(mInputData);
-//        } catch (NumberFormatException e) {
-//            e.printStackTrace();
-//        }
-//        if (mTitleId==R.array.form_main_height && mTitleId == R.array.form_main_weight && value==-1) {
-//            result = false;
-//        }
-//        if (){
-//            result = false;
-//        }
         return !TextUtils.equals(mData, mInputData);
     }
 
@@ -133,7 +122,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     private boolean isValueZero() {
         if (isCheckNumeric()) {
-            if (mInputData.length()==0){
+            if (mInputData.length() == 0) {
                 return false;
             }
             int value = -1;
@@ -144,8 +133,6 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
             }
             if (value > 0) {
                 return false;
-            } else {
-                return true;
             }
         }
         return true;
@@ -157,10 +144,10 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
         if (hasChanges()) {
-            if (isCheckNumeric()&&isValueZero()) {
-                    mEditText.setText("");
+            if (isCheckNumeric() && isValueZero()) {
+                mEditText.setText("");
                 warnEditingFailedHeightWeight(handler);
-            }else {
+            } else {
                 for (int i = 0; i < CacheProfile.forms.size(); i++) {
                     if (CacheProfile.forms.get(i).titleId == mTitleId) {
                         final FormItem item = CacheProfile.forms.get(i);

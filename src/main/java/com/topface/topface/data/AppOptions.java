@@ -14,12 +14,15 @@ import org.json.JSONObject;
 public class AppOptions extends AbstractData {
 
     private static final int DEFAULT_SESSION_TIMEOUT = 1200;
+    private static final int DEFAULT_MAX_PARTIAL_REQUEST_COUNT = 5;
 
     private ClientStatisticSettings clientStatisticsSettings = new ClientStatisticSettings();
+    private Conditions conditions = new Conditions();
     /**
      * Session timeout in seconds
      */
     private int sessionTimeout;
+    private int maxPartialRequestsCount;
 
     public AppOptions(JSONObject data) {
         if (data != null) {
@@ -33,7 +36,12 @@ public class AppOptions extends AbstractData {
             if (clientStatisticsJson != null) {
                 clientStatisticsSettings = new ClientStatisticSettings(clientStatisticsJson);
             }
+            maxPartialRequestsCount = item.optInt("maxPartialRequestsCount", DEFAULT_MAX_PARTIAL_REQUEST_COUNT);
             sessionTimeout = item.optInt("sessionTimeout", DEFAULT_SESSION_TIMEOUT);
+            JSONObject conditionsJson = item.optJSONObject("conditions");
+            if (conditionsJson != null) {
+                conditions = new Conditions(conditionsJson);
+            }
             App.getAppConfig().setAppOptions(item.toString());
         } catch (Exception e) {
             Debug.error("AppOptions.class : Wrong response parsing", e);
@@ -58,6 +66,18 @@ public class AppOptions extends AbstractData {
         return sessionTimeout;
     }
 
+    public int getmMxPartialRequestsCount() {
+        return maxPartialRequestsCount;
+    }
+
+    public Conditions getConditions() {
+        return conditions;
+    }
+
+    public int getUserStatusMaxLength() {
+        return getConditions().getUserStatusMaxLength();
+    }
+
     private class ClientStatisticSettings {
         boolean enabled = false;
         boolean connectionStatisticsEnabled = false;
@@ -77,5 +97,29 @@ public class AppOptions extends AbstractData {
             maxSizeWifi = json.optInt("maxSizeWifi");
             maxSizeCell = json.optInt("maxSizeCell");
         }
+    }
+
+    private class Conditions {
+        int userStatusMaxLength = 1024;
+        int userWeightMin = 1;
+        int userWeightMax = 999;
+        int userHeightMin = 1;
+        int userHeightMax = 999;
+
+        Conditions() {
+        }
+
+        Conditions(JSONObject json) {
+            userStatusMaxLength = json.optInt("userStatusMaxLength");
+            userWeightMin = json.optInt("userWeightMin");
+            userWeightMax = json.optInt("userWeightMax");
+            userHeightMin = json.optInt("userHeightMin");
+            userHeightMax = json.optInt("userHeightMax");
+        }
+
+        public int getUserStatusMaxLength() {
+            return userStatusMaxLength;
+        }
+
     }
 }

@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
@@ -41,7 +42,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
     public static final int MAX_AGE = 99;
     public static final int MIN_AGE = 16;
-    public static final int MAX_STATUS_LENGTH = 200;
     public static final String INTENT_SEX_CHANGED = "SEX_CHANGED";
     private static final String ARG_TYPES = "arg_types";
     private boolean ageIncorrect = false;
@@ -56,6 +56,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     private View mLoBoy;
     private ImageView mCheckGirl;
     private ImageView mCheckBoy;
+    private TextView mCharactersCount;
 
     public EditMainFormItemsFragment() {
     }
@@ -180,8 +181,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         loStatus.setVisibility(View.VISIBLE);
         ((TextView) loStatus.findViewWithTag("tvTitle")).setText(R.string.edit_status);
         mEdStatus = (EditText) loStatus.findViewWithTag("edText");
+        initCharactersCount(loStatus);
         InputFilter[] filters = new InputFilter[1];
-        filters[0] = new InputFilter.LengthFilter(MAX_STATUS_LENGTH);
+        filters[0] = new InputFilter.LengthFilter(App.getAppOptions().getUserStatusMaxLength());
         mEdStatus.setFilters(filters);
         if (data != null) {
             mEdStatus.append(data);
@@ -192,11 +194,13 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                setCharactersCount(mEdStatus.getText().length());
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 before = s.toString();
+
             }
 
             @Override
@@ -208,6 +212,19 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                 }
             }
         });
+    }
+
+    private void initCharactersCount(ViewGroup view) {
+        mCharactersCount = (TextView) view.findViewById(R.id.charactersCount);
+        setCharactersCount(0, App.getAppOptions().getUserStatusMaxLength());
+    }
+
+    private void setCharactersCount(int count, int maxCount) {
+        mCharactersCount.setText(Integer.toString(maxCount - count));
+    }
+
+    private void setCharactersCount(int count) {
+        setCharactersCount(count, App.getAppOptions().getUserStatusMaxLength());
     }
 
     private void setAge(ViewGroup loAge, final EditType type, String data) {
