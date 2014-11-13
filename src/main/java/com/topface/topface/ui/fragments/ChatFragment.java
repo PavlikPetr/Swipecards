@@ -17,7 +17,6 @@ import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -778,26 +777,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         addSentMessage(sendGiftAnswer.history, null);
                         LocalBroadcastManager.getInstance(getActivity())
                                 .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
-
                     }
                 }
                 break;
         }
-
     }
-private void scrollListToTheEnd(){
-    Log.d("TopFace", "scrollListToTheEnd");
-    if (mListView!=null && mAdapter!=null) {
-        mListView.post(new Runnable() {
-            @Override
-            public void run() {
-                Log.d("TopFace", "scroll list to position " + mAdapter.getCount());
-                mListView.getRefreshableView().smoothScrollToPosition(mAdapter.getCount());
-            }
-        });
 
+    private void scrollListToTheEnd() {
+        if (mListView != null && mAdapter != null) {
+            mListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mListView.getRefreshableView().setSelection(mAdapter.getCount());
+                }
+            });
+        }
     }
-}
+
     private void addSentMessage(History loaderItem, ApiRequest request) {
         mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView(), request);
     }
@@ -839,6 +835,7 @@ private void scrollListToTheEnd(){
                 }
                 LocalBroadcastManager.getInstance(getActivity())
                         .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
+                scrollListToTheEnd();
             }
 
             @Override
@@ -931,5 +928,4 @@ private void scrollListToTheEnd(){
     public interface OnListViewItemLongClickListener {
         public void onLongClick(int position, View v);
     }
-
 }
