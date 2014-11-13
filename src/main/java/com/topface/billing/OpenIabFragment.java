@@ -15,6 +15,9 @@ import android.view.ViewStub;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
@@ -58,6 +61,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public static final String ARG_TAG_SOURCE = "from_value";
     public static final int BUYING_REQUEST = 1001;
     public static final String TEST_PURCHASED_PRODUCT_ID = "android.test.purchased";
+    private static final String APP_STORE_NAME = "&storename";
     /**
      * Результат запроса из OpenIAB: Пользователь отменил покупку
      */
@@ -77,12 +81,15 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     private boolean mHasDeferredPurchase = false;
     private View mDeferredPurchaseButton;
     private UserConfig mUserConfig;
+    private Tracker mGATracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initOpenIabHelper();
         mUserConfig = App.getUserConfig();
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(getActivity());
+        mGATracker = analytics.newTracker(R.string.ga_trackingId);
     }
 
     /**
@@ -483,17 +490,28 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     mHelper.consumeAsync(purchase, OpenIabFragment.this);
                 }
                 onPurchased(purchase.getSku());
-                //Статистика AppsFlyer
-                if (verify.revenue > 0) {
-                    try {
-                        AppsFlyerLib.sendTrackingWithEvent(
-                                context,
-                                "purchase",
-                                Double.toString(verify.revenue)
-                        );
-                    } catch (Exception e) {
-                        Debug.error("AppsFlyer exception", e);
+
+                if (needSendStatistics()) {
+                    //Статистика AppsFlyer
+                    if (verify.revenue > 0) {
+                        try {
+                            AppsFlyerLib.sendTrackingWithEvent(
+                                    context,
+                                    "purchase",
+                                    Double.toString(verify.revenue)
+                            );
+                        } catch (Exception e) {
+                            Debug.error("AppsFlyer exception", e);
+                        }
                     }
+
+                    // Google analytics statisctics
+                    mGATracker.send(new HitBuilders.ItemBuilder()
+                            .setTransactionId(purchase.getOrderId())
+                            .setSku(purchase.getSku())
+                            .setCategory(purchase.getItemType())
+                            .setPrice(verify.revenue)
+                            .set(APP_STORE_NAME, purchase.getAppstoreName()).build());
                 }
             }
 
@@ -513,6 +531,10 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             }
 
         }).exec();
+    }
+
+    private boolean needSendStatistics() {
+        return !CacheProfile.isEditor() && !BuildConfig.DEBUG;
     }
 
     private boolean consumeTestPurchase(Purchase purchase, PurchaseRequest validateRequest) {
