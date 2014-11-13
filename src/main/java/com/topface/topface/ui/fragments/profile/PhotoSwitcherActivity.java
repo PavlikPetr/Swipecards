@@ -298,18 +298,23 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     protected void startUserProfileActivity() {
-        Intent intent = getIntent();
-        String callingClassName = intent.getStringExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT);
-        String itemId = intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID);
+        ApiResponse lastResponse = mUserProfileLoader.getLastResponse();
+        // only if we got profile loaded, we will start UserProfileActivity
+        // if we are offline or got other problems with profile loading - go back
+        if (lastResponse != null) {
+            Intent intent = getIntent();
+            String callingClassName = intent.getStringExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT);
+            String itemId = intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID);
 
-        startActivity(UserProfileActivity.createIntent(
-                        mUserProfileLoader.getLastResponse(),
-                        mUid,
-                        itemId,
-                        callingClassName,
-                        UserFormFragment.class.getName(),
-                        this)
-        );
+            startActivity(UserProfileActivity.createIntent(
+                            lastResponse,
+                            mUid,
+                            itemId,
+                            callingClassName,
+                            UserFormFragment.class.getName(),
+                            this)
+            );
+        }
         finish();
     }
 
