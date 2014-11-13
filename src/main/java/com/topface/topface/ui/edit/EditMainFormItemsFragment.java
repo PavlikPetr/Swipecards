@@ -177,11 +177,17 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         });
     }
 
-    private void setStatus(ViewGroup loStatus, final EditType type, String data) {
+    private void setStatus(final ViewGroup loStatus, final EditType type, String data) {
         loStatus.setVisibility(View.VISIBLE);
         ((TextView) loStatus.findViewWithTag("tvTitle")).setText(R.string.edit_status);
         mEdStatus = (EditText) loStatus.findViewWithTag("edText");
-        initCharactersCount(loStatus);
+        mEdStatus.post(new Runnable() {
+            @Override
+            public void run() {
+                initCharactersCount(loStatus);
+            }
+        });
+
         InputFilter[] filters = new InputFilter[1];
         filters[0] = new InputFilter.LengthFilter(App.getAppOptions().getUserStatusMaxLength());
         mEdStatus.setFilters(filters);
@@ -215,12 +221,14 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     }
 
     private void initCharactersCount(ViewGroup view) {
+        int count = mEdStatus.getText().length();
         mCharactersCount = (TextView) view.findViewById(R.id.charactersCount);
-        setCharactersCount(0, App.getAppOptions().getUserStatusMaxLength());
+        setCharactersCount(count);
+        mEdStatus.setSelection(count);
     }
 
     private void setCharactersCount(int count, int maxCount) {
-        mCharactersCount.setText(Integer.toString(maxCount - count));
+        mCharactersCount.setText(count + "/" + maxCount);
     }
 
     private void setCharactersCount(int count) {
