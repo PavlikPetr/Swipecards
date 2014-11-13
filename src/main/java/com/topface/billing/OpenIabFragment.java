@@ -15,9 +15,7 @@ import android.view.ViewStub;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
@@ -31,6 +29,7 @@ import com.topface.topface.requests.PurchaseRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 
@@ -81,15 +80,12 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     private boolean mHasDeferredPurchase = false;
     private View mDeferredPurchaseButton;
     private UserConfig mUserConfig;
-    private Tracker mGATracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initOpenIabHelper();
         mUserConfig = App.getUserConfig();
-        GoogleAnalytics analytics = GoogleAnalytics.getInstance(getActivity());
-        mGATracker = analytics.newTracker(R.string.ga_trackingId);
     }
 
     /**
@@ -491,7 +487,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 }
                 onPurchased(purchase.getSku());
 
-                if (needSendStatistics()) {
+                if (isNeedSendPurchasesStatistics()) {
                     //Статистика AppsFlyer
                     if (verify.revenue > 0) {
                         try {
@@ -506,11 +502,13 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     }
 
                     // Google analytics statisctics
-                    mGATracker.send(new HitBuilders.ItemBuilder()
+                    EasyTracker.getTracker().send(new HitBuilders.ItemBuilder()
                             .setTransactionId(purchase.getOrderId())
+                            .setName(purchase.getSku())
                             .setSku(purchase.getSku())
                             .setCategory(purchase.getItemType())
                             .setPrice(verify.revenue)
+                            .setQuantity(1l)
                             .set(APP_STORE_NAME, purchase.getAppstoreName()).build());
                 }
             }
@@ -533,7 +531,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         }).exec();
     }
 
-    private boolean needSendStatistics() {
+    private boolean isNeedSendPurchasesStatistics() {
         return !CacheProfile.isEditor() && !BuildConfig.DEBUG;
     }
 
