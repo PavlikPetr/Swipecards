@@ -39,6 +39,11 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
         return intent;
     }
 
+    public static Intent createIntent(int userId, String itemId, String className, String bodyStartPageClassName, Context context) {
+        return createIntent(userId, itemId, className, context)
+                .putExtra(AbstractProfileFragment.INTENT_START_BODY_PAGE_NAME, bodyStartPageClassName);
+    }
+
     public static Intent createIntent(ApiResponse response, int userId, String itemId, String className, String bodyStartPageClassName, Context context) {
         Intent intent = createIntent(response, userId, className, bodyStartPageClassName, context);
         if (!TextUtils.isEmpty(itemId)) {
