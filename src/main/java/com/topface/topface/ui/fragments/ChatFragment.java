@@ -56,7 +56,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
-import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -101,6 +100,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INTENT_USER_CITY = "user_city";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
+    public static final String MAKE_ITEM_READ_BY_UID = "com.topface.topface.feedfragment.MAKE_READ_BY_UID";
     public static final String INITIAL_MESSAGE = "initial_message";
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
@@ -207,6 +207,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mUserAge = args.getInt(INTENT_USER_AGE, 0);
         mUserCity = args.getString(INTENT_USER_CITY);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
+
+        // only DialogsFragment will hear this
+        Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
+        intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+
     }
 
     @Override
@@ -907,7 +913,7 @@ private void scrollListToTheEnd(){
             case R.id.action_profile:
                 if (mUser != null) {
                     if (!(mUser.deleted || mUser.banned)) {
-                        Intent profileIntent = UserProfileActivity.createIntent(mUserId, getActivity());
+                        Intent profileIntent = CacheProfile.getOptions().autoOpenGallery.createIntent(mUserId, mUser.photosCount, getActivity());
                         startActivity(profileIntent);
                     } else {
                         Toast.makeText(getActivity(), R.string.user_deleted_or_banned,

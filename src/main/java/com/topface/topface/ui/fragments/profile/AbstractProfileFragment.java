@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     public static final String INTENT_UID = "intent_profile_uid";
     public static final String INTENT_ITEM_ID = "intent_profile_item_id";
     public static final String INTENT_CALLING_FRAGMENT = "intent_profile_calling_fragment";
+    public static final String INTENT_START_BODY_PAGE_NAME = "intent_start_body_page";
     public static final String ADD_PHOTO_INTENT = "com.topface.topface.ADD_PHOTO_INTENT";
     protected static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
     protected static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
@@ -84,6 +86,13 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     private ViewPager mHeaderPager;
     private TabPageIndicator mTabIndicator;
     private DarkenImageView mBackgroundView;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Bundle args = getArguments();
+        mBodyStartPageClassName = args.getString(INTENT_START_BODY_PAGE_NAME);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

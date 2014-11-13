@@ -292,7 +292,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     }
 
     private boolean needDialog(Photo photo) {
-        return CacheProfile.photo != null && photo != null && CacheProfile.photo.getId() != photo.getId();
+        return CacheProfile.photo != null && photo != null && !photo.isFake() && CacheProfile.photo.getId() != photo.getId();
     }
 
     private void initTitleText(TextView title) {

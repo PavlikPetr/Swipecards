@@ -11,6 +11,9 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.Editor;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -50,6 +53,7 @@ public class AppConfig extends AbstractConfig {
     private static final String LAST_APP_VERSION = "last_app_version";
     private static final String GCM_REG_ID = "gcm_reg_id";
     public static final String SAVED_EMAIL_LIST = "tf_saved_email_list";
+    public static final String SOCIAL_BUTTONS_SETTINGS = "ButtonSettings";
 
 
     public AppConfig(Context context) {
@@ -98,6 +102,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, GCM_REG_ID, Static.EMPTY);
         // список всех email, с котороми удачно прошла авторизация в стандартный акк
         addField(settingsMap, SAVED_EMAIL_LIST, Static.EMPTY);
+        // social nets buttons settings. Stores value in form of JSON array. So default value is "[]"
+        addField(settingsMap, SOCIAL_BUTTONS_SETTINGS, "[]");
     }
 
     protected SharedPreferences getPreferences() {
@@ -373,6 +379,24 @@ public class AppConfig extends AbstractConfig {
 
     public String getSavedEmailList() {
         return getStringField(getSettingsMap(), SAVED_EMAIL_LIST);
+    }
+
+    /**
+     * Sets new settings for social net buttons on login screen
+     */
+    public void setSocialButtonsSettings(JSONArray socialButtonsSettings) {
+        setField(getSettingsMap(), SOCIAL_BUTTONS_SETTINGS, socialButtonsSettings.toString());
+    }
+
+    /**
+     * @return Social buttons settings
+     */
+    public JSONArray getSocialButtonsSettings() {
+        try {
+            return new JSONArray(getStringField(getSettingsMap(), SOCIAL_BUTTONS_SETTINGS));
+        } catch (JSONException e) {
+            throw new RuntimeException("Error getting social buttons settings", e);
+        }
     }
 
     @Override

@@ -86,12 +86,15 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 CacheProfile.totalPhotos += 1;
 
                 mPhotoLinks.addFirst(photo);
-                if (activity != null) {
-                    Toast.makeText(activity, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+                if (activity == null) {
+                    Intent intent = new Intent(CacheProfile.PROFILE_UPDATE_ACTION);
+                    LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+                } else {
                     activity.setResult(Activity.RESULT_OK);
                 }
-            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR && activity != null) {
-                Toast.makeText(activity, R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+                Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }
         }
     };

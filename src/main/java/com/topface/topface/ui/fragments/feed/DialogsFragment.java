@@ -18,7 +18,6 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteDialogsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
@@ -95,8 +94,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected Intent getOnAvatarClickIntent(FeedDialog item) {
-        return UserProfileActivity.createIntent(item.user.id, getActivity());
+    protected void makeItemReadWithId(String id) {
+        //feed will be marked read in another method
     }
 
     @Override

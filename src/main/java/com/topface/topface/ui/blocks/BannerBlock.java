@@ -21,11 +21,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.inneractive.api.ads.InneractiveAd;
 import com.inneractive.api.ads.InneractiveAdListener;
-import com.lifestreet.android.lsmsdk.BannerAdapter;
-import com.lifestreet.android.lsmsdk.BasicSlotListener;
-import com.lifestreet.android.lsmsdk.SlotView;
-import com.mopub.mobileads.MoPubErrorCode;
-import com.mopub.mobileads.MoPubView;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -76,10 +71,8 @@ public class BannerBlock {
     public final static String BANNER_TOPFACE = "TOPFACE";
     public final static String BANNER_ADMOB = "ADMOB";
     public static final String BANNER_ADWIRED = "ADWIRED";
-    public static final String BANNER_MOPUB = "MOPUB";
     public static final String BANNER_IVENGO = "IVENGO";
     public static final String BANNER_ADCAMP = "ADCAMP";
-    public static final String BANNER_LIFESTREET = "LIFESTREET";
     public static final String BANNER_INNERACTIVE = "INNERACTIVE";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
@@ -87,16 +80,11 @@ public class BannerBlock {
             BANNER_TOPFACE,
             BANNER_ADMOB,
             BANNER_ADWIRED,
-            BANNER_MOPUB,
             BANNER_IVENGO,
             BANNER_ADCAMP,
-            BANNER_LIFESTREET,
             BANNER_GAG,
             BANNER_NONE
     };
-
-    private static final String MOPUB_AD_UNIT_ID = "4ec8274ea73811e295fa123138070049";
-    private static final String LIFESTREET_SLOT_TAG = "http://mobile-android.lfstmedia.com/m2/slot76330?ad_size=320x50&adkey=3f6";
 
     private LayoutInflater mInflater;
     ViewGroup mBannerLayout;
@@ -187,12 +175,8 @@ public class BannerBlock {
                     return mInflater.inflate(R.layout.banner_admob, mBannerLayout, false);
                 case BANNER_ADWIRED:
                     return mInflater.inflate(R.layout.banner_adwired, mBannerLayout, false);
-                case BANNER_MOPUB:
-                    return mInflater.inflate(R.layout.banner_mopub, mBannerLayout, false);
                 case BANNER_ADCAMP:
                     return mInflater.inflate(R.layout.banner_adcamp, mBannerLayout, false);
-                case BANNER_LIFESTREET:
-                    return mInflater.inflate(R.layout.banner_lifestreet, mBannerLayout, false);
                 case BANNER_INNERACTIVE:
                     return mInflater.inflate(R.layout.banner_inneractive, null);
                 default:
@@ -240,12 +224,8 @@ public class BannerBlock {
             showAdMob();
         } else if (mBannerView instanceof AWView) {
             showAdwired();
-        } else if (mBannerView instanceof MoPubView) {
-            showMopub();
         } else if (mBannerView instanceof BannerAdView) {
             showAdcamp();
-        } else if (mBannerView instanceof SlotView) {
-            showLifeStreet();
         } else if (mBannerView instanceof InneractiveAd) {
             showInneractive();
         } else if (mBannerView instanceof ImageView) {
@@ -311,52 +291,6 @@ public class BannerBlock {
         });
     }
 
-    private void showLifeStreet() {
-        SlotView slotView = (SlotView) mBannerView;
-        slotView.setSlotTag(LIFESTREET_SLOT_TAG);
-        slotView.setAutoRefreshEnabled(true);
-        slotView.setListener(new BasicSlotListener() {
-            @Override
-            public void onFailedToLoadSlotView(SlotView slotView) {
-                requestBannerGag();
-            }
-
-            @Override
-            public void onFailedToReceiveAd(BannerAdapter<?> adapter, View view) {
-                requestBannerGag();
-            }
-        });
-        slotView.loadAd();
-    }
-
-
-    private void showMopub() {
-        MoPubView adView = (MoPubView) mBannerView;
-        adView.setAdUnitId(MOPUB_AD_UNIT_ID);
-        adView.setBannerAdListener(new MoPubView.BannerAdListener() {
-            @Override
-            public void onBannerLoaded(MoPubView banner) {
-            }
-
-            @Override
-            public void onBannerFailed(MoPubView banner, MoPubErrorCode errorCode) {
-                requestBannerGag();
-            }
-
-            @Override
-            public void onBannerClicked(MoPubView banner) {
-            }
-
-            @Override
-            public void onBannerExpanded(MoPubView banner) {
-            }
-
-            @Override
-            public void onBannerCollapsed(MoPubView banner) {
-            }
-        });
-        adView.loadAd();
-    }
 
     private void showTopface(final Banner banner) {
         //Это нужно, что бы сбросить размеры баннера, для правильного расчета размера в ImageLoader
@@ -596,16 +530,10 @@ public class BannerBlock {
     }
 
     public void onPause() {
-        if (mBannerView instanceof SlotView) {
-            ((SlotView) mBannerView).pause();
-        }
     }
 
     public void onDestroy() {
-        if (mBannerView instanceof MoPubView) ((MoPubView) mBannerView).destroy();
-        if (mBannerView instanceof SlotView) {
-            ((SlotView) mBannerView).destroy();
-        }
+
         if (mBannerView != null) {
             if (mBannerView instanceof InneractiveAd) {
                 ((InneractiveAd) mBannerView).cleanUp();
@@ -615,8 +543,6 @@ public class BannerBlock {
     }
 
     public void onResume() {
-        if (mBannerView instanceof SlotView) {
-            ((SlotView) mBannerView).resume();
-        }
+
     }
 }
