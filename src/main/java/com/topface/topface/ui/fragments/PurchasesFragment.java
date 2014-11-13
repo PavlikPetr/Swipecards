@@ -84,6 +84,8 @@ public class PurchasesFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.purchases_fragment, null);
         initViews(root, savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mVipPurchasedReceiver, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
         return root;
     }
 
@@ -92,7 +94,6 @@ public class PurchasesFragment extends BaseFragment {
         outState.putInt(LAST_PAGE, mPager.getCurrentItem());
         outState.putBoolean(SKIP_BONUS, mSkipBonus);
     }
-
 
     @Override
     public void onResume() {
@@ -103,13 +104,11 @@ public class PurchasesFragment extends BaseFragment {
             mResourcesInfo.setVisibility(View.VISIBLE);
         }
         updateBalanceCounters();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mVipPurchasedReceiver, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroyView() {
+        super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mVipPurchasedReceiver);
     }
