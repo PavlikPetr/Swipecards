@@ -39,7 +39,7 @@ public class AutoOpenGallery {
 
     public Intent createIntent(int userId, int photosCount, String itemId, Context context) {
         if (isEnabled() && photosCount > 0) {
-            return PhotoSwitcherActivity.getPhotoSwitcherIntent(userId, context);
+            return PhotoSwitcherActivity.getPhotoSwitcherIntent(itemId, userId, context);
         } else {
             return UserProfileActivity.createIntent(userId, itemId, context);
         }

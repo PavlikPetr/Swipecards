@@ -150,19 +150,26 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void onReceive(Context context, Intent intent) {
                 String itemId = intent.getStringExtra(ChatFragment.INTENT_ITEM_ID);
-                if (itemId != null) {
-                    makeItemReadWithId(itemId);
-                } else {
-                    String lastMethod = intent.getStringExtra(CountersManager.METHOD_INTENT_STRING);
-                    if (lastMethod != null) {
-                        updateDataAfterReceivingCounters(lastMethod);
+                int userId = intent.getIntExtra(ChatFragment.INTENT_USER_ID, 0);
+                if (userId == 0) {
+                    if (!TextUtils.isEmpty(itemId)) {
+                        makeItemReadWithId(itemId);
+                    } else {
+                        String lastMethod = intent.getStringExtra(CountersManager.METHOD_INTENT_STRING);
+                        if (!TextUtils.isEmpty(lastMethod)) {
+                            updateDataAfterReceivingCounters(lastMethod);
+                        }
                     }
+                } else {
+                    makeItemReadUserId(userId);
                 }
             }
         };
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
+        IntentFilter filter2 = new IntentFilter(ChatFragment.MAKE_ITEM_READ_BY_UID);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter2);
         for (int type : getTypesForGCM()) {
             GCMUtils.cancelNotification(getActivity(), type);
         }
@@ -583,13 +590,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             if (adapter.isMultiSelectionMode()) {
                 adapter.onSelection(item);
             } else {
-                startActivity(getOnAvatarClickIntent(item));
+                startActivity(CacheProfile.getOptions().autoOpenGallery.createIntent(item.user.id, item.user.photosCount, item.id, getActivity()));
             }
         }
-    }
-
-    protected Intent getOnAvatarClickIntent(T item) {
-        return CacheProfile.getOptions().autoOpenGallery.createIntent(item.user.id, item.user.photosCount, item.id, getActivity());
     }
 
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
@@ -926,10 +929,20 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     }
 
-    private void makeItemReadWithId(String id) {
+    protected void makeItemReadWithId(String id) {
         FeedAdapter<T> adapter = getListAdapter();
         for (FeedItem item : adapter.getData()) {
             if (TextUtils.equals(item.id, id) && item.unread) {
+                item.unread = false;
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    protected void makeItemReadUserId(int uid) {
+        FeedAdapter<T> adapter = getListAdapter();
+        for (FeedItem item : adapter.getData()) {
+            if (item.user != null && item.user.id == uid && item.unread) {
                 item.unread = false;
                 adapter.notifyDataSetChanged();
             }
