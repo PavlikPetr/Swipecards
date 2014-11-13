@@ -785,19 +785,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
 
     }
-private void scrollListToTheEnd(){
-    Log.d("TopFace", "scrollListToTheEnd");
-    if (mListView!=null && mAdapter!=null) {
-        mListView.post(new Runnable() {
-            @Override
-            public void run() {
-                Log.d("TopFace", "scroll list to position " + mAdapter.getCount());
-                mListView.getRefreshableView().smoothScrollToPosition(mAdapter.getCount());
-            }
-        });
 
+    private void scrollListToTheEnd() {
+        Log.d("TopFace", "scrollListToTheEnd");
+        if (mListView != null && mAdapter != null) {
+            mListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("TopFace", "scroll list to position " + mAdapter.getCount());
+                    mListView.getRefreshableView().setSelection(mAdapter.getCount());
+                }
+            });
+
+        }
     }
-}
+
     private void addSentMessage(History loaderItem, ApiRequest request) {
         mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView(), request);
     }
@@ -839,6 +841,7 @@ private void scrollListToTheEnd(){
                 }
                 LocalBroadcastManager.getInstance(getActivity())
                         .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
+                scrollListToTheEnd();
             }
 
             @Override
