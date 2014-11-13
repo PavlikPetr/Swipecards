@@ -106,7 +106,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
     };
 
-    private boolean isHide;
+    private boolean mIsActionBarHidden;
     private View mContentFrame;
     private MenuFragment mMenuFragment;
     private HackyDrawerLayout mDrawerLayout;
@@ -126,10 +126,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private BroadcastReceiver mOpenMenuReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (!isHide) {
-                drawerLayoutState();
-                mDrawerToggle.syncState();
-            }
+            toggleDrawerLayout();
         }
     };
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
@@ -625,12 +622,16 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
     }
 
-    private void drawerLayoutState() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            mDrawerLayout.openDrawer(GravityCompat.START);
+    private void toggleDrawerLayout() {
+        if (!mIsActionBarHidden) {
+            if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                mDrawerLayout.openDrawer(GravityCompat.START);
+            }
+            mDrawerToggle.syncState();
         }
+
     }
 
     @Override
@@ -639,7 +640,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             case KeyEvent.KEYCODE_MENU:
                 if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) ==
                         DrawerLayout.LOCK_MODE_UNLOCKED) {
-                    drawerLayoutState();
+                    toggleDrawerLayout();
                 }
                 return true;
         }
@@ -679,7 +680,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     public void onHideActionBar() {
         if (!mMenuFragment.isLockedByClosings()) {
-            isHide = true;
+            mIsActionBarHidden = true;
             setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             getSupportActionBar().hide();
         }
@@ -687,7 +688,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
     @Override
     public void onShowActionBar() {
-        isHide = false;
+        mIsActionBarHidden = false;
         setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         getSupportActionBar().show();
     }
