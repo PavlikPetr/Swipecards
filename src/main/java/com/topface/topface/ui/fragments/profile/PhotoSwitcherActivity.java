@@ -168,6 +168,14 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         return intent;
     }
 
+    public static Intent getPhotoSwitcherIntent(String itemId, int userId, Context context) {
+        Intent intent = getPhotoSwitcherIntent(userId, context);
+        if (itemId != null) {
+            // for forwarding feed id to profile fragment
+            intent.putExtra(AbstractProfileFragment.INTENT_ITEM_ID, itemId);
+        }
+        return intent;
+    }
     public static Intent getPhotoSwitcherIntent(int userId, Context context) {
         return getPhotoSwitcherIntent(userId, null, context);
     }
@@ -292,10 +300,12 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     protected void startUserProfileActivity() {
         Intent intent = getIntent();
         String callingClassName = intent.getStringExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT);
+        String itemId = intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID);
 
         startActivity(UserProfileActivity.createIntent(
                         mUserProfileLoader.getLastResponse(),
                         mUid,
+                        itemId,
                         callingClassName,
                         UserFormFragment.class.getName(),
                         this)

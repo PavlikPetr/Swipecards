@@ -21,7 +21,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -95,8 +94,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected Intent getOnAvatarClickIntent(FeedDialog item) {
-        return CacheProfile.getOptions().autoOpenGallery.createIntent(item.user.id, item.user.photosCount, getActivity());
+    protected void makeItemReadWithId(String id) {
+        //feed will be marked read in another method
     }
 
     @Override
