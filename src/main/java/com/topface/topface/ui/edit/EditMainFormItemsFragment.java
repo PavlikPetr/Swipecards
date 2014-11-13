@@ -181,18 +181,12 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         loStatus.setVisibility(View.VISIBLE);
         ((TextView) loStatus.findViewWithTag("tvTitle")).setText(R.string.edit_status);
         mEdStatus = (EditText) loStatus.findViewWithTag("edText");
-        mEdStatus.post(new Runnable() {
-            @Override
-            public void run() {
-                initCharactersCount(loStatus);
-            }
-        });
 
         InputFilter[] filters = new InputFilter[1];
         filters[0] = new InputFilter.LengthFilter(App.getAppOptions().getUserStatusMaxLength());
         mEdStatus.setFilters(filters);
         if (data != null) {
-            mEdStatus.append(data);
+            mEdStatus.append(data);//add data to EditText
         }
         mEdStatus.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEdStatus.addTextChangedListener(new TextWatcher() {
@@ -206,7 +200,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 before = s.toString();
-
             }
 
             @Override
@@ -218,6 +211,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                 }
             }
         });
+        initCharactersCount(loStatus);
     }
 
     private void initCharactersCount(ViewGroup view) {
