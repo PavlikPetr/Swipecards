@@ -455,7 +455,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     private void removeEmptyPhotos(ArrayList<Photo> arrList) {
         for (int i = 0; i < arrList.size(); i++) {
-            if (arrList.get(i) == null || arrList.get(i).isFake()) {
+            Photo photo = arrList.get(i);
+            if (photo == null || photo.isFake() || photo.isEmpty()) {
                 arrList.remove(i);
             }
         }
