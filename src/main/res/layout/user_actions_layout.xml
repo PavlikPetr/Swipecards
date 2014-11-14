@@ -308,8 +308,8 @@
 
     <ViewStub
         android:id="@+id/open_profile_for_editor_stub"
-        android:inflatedId="@+id/open_profile_for_editor"
-        android:layout="@layout/editor_action_open_user_profile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inflatedId="@+id/open_profile_for_editor"
+        android:layout="@layout/editor_action_open_user_profile" />
 </LinearLayout>

@@ -256,10 +256,23 @@ public class Utils {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static void enableLayoutChangingTransition(ViewGroup viewGroup) {
+        enableLayoutChangingTransition(viewGroup, true);
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public static void enableLayoutChangingTransition(ViewGroup viewGroup, boolean switchTransition) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             viewGroup.setLayoutTransition(new LayoutTransition());
             LayoutTransition transition = viewGroup.getLayoutTransition();
-            transition.enableTransitionType(LayoutTransition.CHANGING);
+            if (!switchTransition) {
+                transition.disableTransitionType(LayoutTransition.CHANGING);
+                transition.disableTransitionType(LayoutTransition.DISAPPEARING);
+                transition.disableTransitionType(LayoutTransition.APPEARING);
+                transition.disableTransitionType(LayoutTransition.CHANGE_APPEARING);
+                transition.disableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
+            } else {
+                transition.enableTransitionType(LayoutTransition.CHANGING);
+            }
         }
     }
 }
