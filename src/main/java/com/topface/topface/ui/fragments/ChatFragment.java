@@ -785,19 +785,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
 
     }
-private void scrollListToTheEnd(){
-    Log.d("TopFace", "scrollListToTheEnd");
-    if (mListView!=null && mAdapter!=null) {
-        mListView.post(new Runnable() {
-            @Override
-            public void run() {
-                Log.d("TopFace", "scroll list to position " + mAdapter.getCount());
-                mListView.getRefreshableView().smoothScrollToPosition(mAdapter.getCount());
-            }
-        });
 
+    private void scrollListToTheEnd() {
+        Log.d("TopFace", "scrollListToTheEnd");
+        if (mListView != null && mAdapter != null) {
+            mListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("TopFace", "scroll list to position " + mAdapter.getCount());
+                    mListView.getRefreshableView().smoothScrollToPosition(mAdapter.getCount());
+                }
+            });
+
+        }
     }
-}
+
     private void addSentMessage(History loaderItem, ApiRequest request) {
         mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView(), request);
     }
@@ -913,7 +915,7 @@ private void scrollListToTheEnd(){
             case R.id.action_profile:
                 if (mUser != null) {
                     if (!(mUser.deleted || mUser.banned)) {
-                        Intent profileIntent = CacheProfile.getOptions().autoOpenGallery.createIntent(mUserId, mUser.photosCount, getActivity());
+                        Intent profileIntent = CacheProfile.getOptions().autoOpenGallery.createIntent(mUserId, mUser.photosCount, mUser.photo, getActivity());
                         startActivity(profileIntent);
                     } else {
                         Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
