@@ -296,7 +296,6 @@ public class FormInfo {
                 result = Integer.MAX_VALUE;
                 break;
         }
-
         return result;
     }
 
