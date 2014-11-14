@@ -12,6 +12,7 @@ public class MultiselectionController<T> {
     private IMultiSelectionListener mSelectionListener;
     private BaseAdapter mAdapter;
     private int mSelectionLimit;
+    private boolean mOverlimit = false;
 
     public MultiselectionController(BaseAdapter adapter) {
         mAdapter = adapter;
@@ -26,10 +27,12 @@ public class MultiselectionController<T> {
     public void onSelection(int position) {
         if (isSelected(position)) {
             removeSelection(position);
+            if (mSelectionListener != null) mSelectionListener.onSelected(mSelected.size(), false);
         } else {
             addSelection(position);
+            if (mSelectionListener != null)
+                mSelectionListener.onSelected(mSelected.size(), mOverlimit);
         }
-        if (mSelectionListener != null) mSelectionListener.onSelected(mSelected.size());
     }
 
     public void onSelection(T item) {
@@ -38,12 +41,15 @@ public class MultiselectionController<T> {
         } else {
             addSelection(item);
         }
-        if (mSelectionListener != null) mSelectionListener.onSelected(mSelected.size());
+        if (mSelectionListener != null) mSelectionListener.onSelected(mSelected.size(), false);
     }
 
     public void addSelection(int position) {
         if (selectedCount() + 1 > mSelectionLimit) {
+            mOverlimit = true;
             return;
+        } else {
+            mOverlimit = false;
         }
         if (mAdapter != null) {
             T item = (T) mAdapter.getItem(position);
@@ -122,7 +128,7 @@ public class MultiselectionController<T> {
     }
 
     public interface IMultiSelectionListener {
-        public void onSelected(int size);
+        public void onSelected(int size, boolean overSize);
 
     }
 }

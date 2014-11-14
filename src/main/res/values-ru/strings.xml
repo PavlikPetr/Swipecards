@@ -753,4 +753,6 @@
     <string name="billing_item_already_owned">Ваша предыдущая покупка в обработке, пожалуйста подождите</string>
     <string name="dialog">Переписка</string>
     <string name="reply">Ответить</string>
+    <string name="maximum_number_of_users">Выбрано максимальное количестово пользователей</string>
+    />
 </resources>
