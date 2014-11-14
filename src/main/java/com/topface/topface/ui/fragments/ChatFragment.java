@@ -116,7 +116,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INITIAL_MESSAGE = "initial_message";
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
-    private static final int ACTIONS_ANIMATION_TIME = 500;
 
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @SuppressWarnings("ConstantConditions")
@@ -225,7 +224,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private MenuItem mBarActions;
     private RelativeLayout mBlocked;
     private TextView mBookmarkAction;
-    private KeyboardListenerLayout root;
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -1056,10 +1054,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         return mUserActions;
     }
 
-    private ArrayList<UserActions.ActionItem> getActions(FeedUser user) {
-        return getActionItems();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -1076,7 +1070,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 return true;
             case R.id.action_user_actions_list:
                 if (mUser != null) {
-                    initActions(mChatActionsStub, mUser, getActions(mUser));
+                    initActions(mChatActionsStub, mUser, getActionItems());
                     boolean checked = item.isChecked();
                     item.setChecked(!checked);
                     changeChatActionState();
@@ -1133,7 +1127,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return;
         }
         TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -getChatActionsViewHeight());
-        ta.setDuration(ACTIONS_ANIMATION_TIME);
+        ta.setDuration(getAnimationTime());
         ta.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -1156,7 +1150,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return;
         }
         TranslateAnimation ta = new TranslateAnimation(0, 0, -getChatActionsViewHeight(), 0);
-        ta.setDuration(ACTIONS_ANIMATION_TIME);
+        ta.setDuration(getAnimationTime());
         ta.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -1172,6 +1166,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
         mActions.startAnimation(ta);
+    }
+
+    private int getAnimationTime() {
+        return mUserActions.size() * getActivity().getResources().getInteger(R.integer.action_animation_time);
     }
 
     private int getChatActionsViewHeight() {
@@ -1200,31 +1198,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         public void switchAction() {
             actionText.setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
-        }
-
-        public void processActionFor(int userId) {
-            if (CacheProfile.premium) {
-                if (userId > 0) {
-                    actionLoader.setVisibility(View.VISIBLE);
-                    actionIcon.setVisibility(View.GONE);
-
-                    ApiRequest request;
-                    if (mUser.blocked) {
-                        request = new DeleteBlackListRequest(userId, getActivity());
-                    } else {
-                        request = new BlackListAddRequest(userId, getActivity());
-                    }
-                    request.exec();
-                }
-            } else {
-                startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "Chat"), PurchasesActivity.INTENT_BUY_VIP);
-                closeChatActions();
-            }
-        }
-
-        public void setViewsToNormalState() {
-            actionLoader.setVisibility(View.INVISIBLE);
-            actionIcon.setVisibility(View.VISIBLE);
         }
     }
 }

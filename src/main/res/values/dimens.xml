@@ -16,6 +16,8 @@
     <item name="shadow_3px" format="float" type="dimen">3</item>
     <item name="shadow_n3px" format="float" type="dimen">-3</item>
 
+    <item name="action_animation_time" format="integer" type="integer">75</item>
+
     <dimen name="chat_date_line_size">1px</dimen>
 
 </resources>
