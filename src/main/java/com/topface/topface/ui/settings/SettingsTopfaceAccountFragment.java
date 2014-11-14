@@ -29,6 +29,7 @@ import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -285,7 +286,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
                         @Override
                         public void fail(int codeError, IApiResponse response) {
-                            Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                            if (ErrorCodes.USER_ALREADY_REGISTERED == codeError) {
+                                Toast.makeText(App.getContext(), R.string.email_already_registered, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }).exec();
                 } else {
