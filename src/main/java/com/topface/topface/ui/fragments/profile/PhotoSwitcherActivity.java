@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
@@ -16,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -39,6 +41,7 @@ import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
@@ -57,6 +60,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static final String INTENT_PHOTOS = "album_photos";
     public static final String INTENT_PHOTOS_COUNT = "photos_count";
     public static final String INTENT_PHOTOS_FILLED = "photos_filled";
+    public static final String INTENT_PRELOAD_PHOTO = "preload_photo";
     public static final String INTENT_FILL_PROFILE_ON_BACK = "fill_profile_on_back";
     public static final String CONTROL_VISIBILITY = "CONTROL_VISIBILITY";
     public static final String OWN_PHOTOS_CONTROL_VISIBILITY = "OWN_PHOTOS_CONTROL_VISIBILITY";
@@ -157,27 +161,31 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         return intent;
     }
 
-    public static Intent getPhotoSwitcherIntent(int userId, Class callingClass, Context context) {
+    public static Intent getPhotoSwitcherIntent(int userId, Class callingClass, Photo preloadPhoto, Context context) {
         Intent intent = new Intent(context, PhotoSwitcherActivity.class);
         intent.putExtra(INTENT_USER_ID, userId);
         intent.putExtra(INTENT_FILL_PROFILE_ON_BACK, true);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        if (preloadPhoto != null) {
+            intent.putExtra(INTENT_PRELOAD_PHOTO, preloadPhoto);
+        }
         if (callingClass != null) {
             intent.putExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT, callingClass.getName());
         }
         return intent;
     }
 
-    public static Intent getPhotoSwitcherIntent(String itemId, int userId, Context context) {
-        Intent intent = getPhotoSwitcherIntent(userId, context);
+    public static Intent getPhotoSwitcherIntent(String itemId, int userId, Photo preloadPhoto, Context context) {
+        Intent intent = getPhotoSwitcherIntent(userId, preloadPhoto, context);
         if (itemId != null) {
             // for forwarding feed id to profile fragment
             intent.putExtra(AbstractProfileFragment.INTENT_ITEM_ID, itemId);
         }
         return intent;
     }
-    public static Intent getPhotoSwitcherIntent(int userId, Context context) {
-        return getPhotoSwitcherIntent(userId, null, context);
+
+    public static Intent getPhotoSwitcherIntent(int userId, Photo preloadPhoto, Context context) {
+        return getPhotoSwitcherIntent(userId, null, preloadPhoto, context);
     }
 
     @Override
@@ -195,6 +203,13 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         // Control layout
         mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
         mOwnPhotosControl = (ViewGroup) mPhotoAlbumControl.findViewById(R.id.loBottomPanel);
+
+        Photo preloadPhoto = intent.getParcelableExtra(INTENT_PRELOAD_PHOTO);
+        if (preloadPhoto != null) {
+            Point size = Utils.getSrceenSize(this);
+            String s = preloadPhoto.getSuitableLink(size.x, size.y);
+            DefaultImageLoader.getInstance(this).preloadImage(s, null);
+        }
 
         if (intent.getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
             int photosCount = intent.getIntExtra(INTENT_PHOTOS_COUNT, 0);
@@ -298,18 +313,31 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     protected void startUserProfileActivity() {
+        ApiResponse lastResponse = mUserProfileLoader.getLastResponse();
+        // if profile was not loaded at this moment - we will open UserProfileActivity
+        // without chached info
         Intent intent = getIntent();
         String callingClassName = intent.getStringExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT);
         String itemId = intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID);
 
-        startActivity(UserProfileActivity.createIntent(
-                        mUserProfileLoader.getLastResponse(),
-                        mUid,
-                        itemId,
-                        callingClassName,
-                        UserFormFragment.class.getName(),
-                        this)
-        );
+        if (lastResponse != null) {
+            startActivity(UserProfileActivity.createIntent(
+                            lastResponse,
+                            mUid,
+                            itemId,
+                            callingClassName,
+                            UserFormFragment.class.getName(),
+                            this)
+            );
+        } else {
+            startActivity(UserProfileActivity.createIntent(
+                            mUid,
+                            itemId,
+                            callingClassName,
+                            UserFormFragment.class.getName(),
+                            this)
+            );
+        }
         finish();
     }
 
