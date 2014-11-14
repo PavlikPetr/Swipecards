@@ -102,9 +102,9 @@ public class DatingInstantMessageController {
             @Override
             public void afterTextChanged(Editable s) {
                 if (mIsEnabled && mIsSendEnadled && isMessageValid()) {
-                    mMessageSend.setEnabled(true);
+                    mMessageSend.setClickable(true);
                 } else {
-                    mMessageSend.setEnabled(false);
+                    mMessageSend.setClickable(false);
                 }
             }
         });
@@ -214,9 +214,9 @@ public class DatingInstantMessageController {
     }
 
     public void setEnabled(boolean isEnabled) {
-        mGiftSend.setEnabled(isEnabled);
+        mGiftSend.setClickable(isEnabled);
         mMessageText.setEnabled(isEnabled);
-        mMessageSend.setEnabled(isEnabled && isMessageValid());
+        mMessageSend.setClickable(isEnabled && isMessageValid());
 
         mIsSendEnadled = mIsEnabled = isEnabled;
     }
@@ -226,9 +226,9 @@ public class DatingInstantMessageController {
     }
 
     public void setSendEnabled(boolean isEnabled) {
-        mGiftSend.setEnabled(isEnabled);
+        mGiftSend.setClickable(isEnabled);
         mMessageText.setEnabled(isEnabled);
-        mMessageSend.setEnabled(isEnabled && isMessageValid());
+        mMessageSend.setClickable(isEnabled && isMessageValid());
         int sendWidth = mMessageSend.getWidth();
         int sendHeight = mMessageSend.getHeight();
         if (isEnabled) {
