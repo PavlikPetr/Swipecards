@@ -79,6 +79,12 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mTimer.cancel();
+    }
+
+    @Override
     protected void initViews(View root) {
         super.initViews(root);
 
