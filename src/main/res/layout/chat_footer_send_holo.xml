@@ -1,43 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/bg_white"
-    android:orientation="horizontal">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/bg_white"
+              android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/send_gift_button"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:background="@drawable/bg_solid_holo_selector"
-        android:src="@drawable/btn_send_gift_holo_selector" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/chat_line_above_input_holo"
+        />
 
-    <EditText
-        android:id="@+id/edChatBox"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:hint="@string/dating_message"
-        android:imeOptions="actionSend"
-        android:inputType="textCapSentences|textMultiLine"
-        android:maxLines="5"
-        android:minHeight="34dp"
-        style="@style/topfaceEditText.Holo">
+        android:orientation="horizontal">
 
-        <requestFocus />
-    </EditText>
+        <ImageButton
+            android:id="@+id/send_gift_button"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="@drawable/bg_solid_holo_selector"
+            android:src="@drawable/btn_send_gift_holo_selector"/>
 
-    <ImageButton
-        android:id="@+id/btnSend"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:background="@drawable/bg_solid_holo_selector"
-        android:src="@drawable/btn_send_message_holo_selector" />
+        <EditText
+            android:id="@+id/edChatBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:hint="@string/dating_message"
+            android:imeOptions="actionSend"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="5"
+            android:minHeight="34dp"
+            style="@style/topfaceEditText.Holo">
 
+            <requestFocus/>
+        </EditText>
+
+        <ImageButton
+            android:id="@+id/btnSend"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="@drawable/bg_solid_holo_selector"
+            android:src="@drawable/btn_send_message_holo_selector"/>
+
+    </LinearLayout>
 </LinearLayout>
