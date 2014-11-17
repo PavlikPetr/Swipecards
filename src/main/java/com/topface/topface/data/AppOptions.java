@@ -66,6 +66,7 @@ public class AppOptions extends AbstractData {
         return sessionTimeout;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public int getMaxPartialRequestsCount() {
         return maxPartialRequestsCount;
     }
