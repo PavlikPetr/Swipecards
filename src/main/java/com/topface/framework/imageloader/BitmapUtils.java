@@ -431,7 +431,7 @@ public class BitmapUtils {
         canvas.drawARGB(0, 0, 0, 0);
 
         canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint);
-        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
         canvas.drawBitmap(bitmap, src, dst, canvasPaint);
 
         Bitmap scaledBitmap;
