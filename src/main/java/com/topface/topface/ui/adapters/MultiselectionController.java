@@ -128,7 +128,7 @@ public class MultiselectionController<T> {
     }
 
     public interface IMultiSelectionListener {
-        public void onSelected(int size, boolean overSize);
+        public void onSelected(int size, boolean overlimit);
 
     }
 }
