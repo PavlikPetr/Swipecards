@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -288,36 +287,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                         @Override
                         public void fail(int codeError, IApiResponse response) {
                             if (ErrorCodes.USER_ALREADY_REGISTERED == codeError) {
-                                new AlertDialog.Builder(getContext())
-                                        .setMessage(String.format(getContext().getString(R.string.logout_if_email_already_registred), email))
-                                        .setCancelable(false)
-                                        .setPositiveButton(R.string.general_exit, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                final LogoutRequest logoutRequest = new LogoutRequest(getActivity());
-                                                logoutRequest.callback(new ApiHandler() {
-                                                    @Override
-                                                    public void success(IApiResponse response) {
-                                                        new AuthorizationManager(getActivity()).logout(getActivity());
-                                                    }
-
-                                                    @Override
-                                                    public void fail(int codeError, IApiResponse response) {
-                                                        FragmentActivity activity = getActivity();
-                                                        if (activity != null) {
-                                                            Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_LONG).show();
-                                                            AuthorizationManager.showRetryLogoutDialog(activity, logoutRequest);
-                                                        }
-                                                    }
-                                                }).exec();
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.general_cancel, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                cancel();
-                                            }
-                                        }).show();
+                                showLogoutPoup(email);
                             } else {
                                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                             }
@@ -352,6 +322,25 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 }
             }
         }).exec();
+    }
+
+    private void showLogoutPoup(String email) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(String.format(getActivity().getString(R.string.logout_if_email_already_registred), email));
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.general_exit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                logout();
+            }
+        });
+        builder.setNegativeButton(R.string.general_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.create().show();
     }
 
     private void showExitPopup() {
