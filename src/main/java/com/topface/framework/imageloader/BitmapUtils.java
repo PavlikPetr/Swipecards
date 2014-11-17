@@ -330,7 +330,7 @@ public class BitmapUtils {
         canvas.drawARGB(0, 0, 0, 0);
 //
         canvas.drawBitmap(mask, 0, 0, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
         canvas.drawBitmap(clippedBitmap, 0, 0, paint);
         if (border != null) {
             paint.setXfermode(null);
@@ -379,7 +379,7 @@ public class BitmapUtils {
 
         canvas.drawCircle(dstWidth / 2, dstWidth / 2, dstWidth / 2, paint);
 
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
         canvas.drawBitmap(clippedBitmap, rect, rect, paint);
 
         if (!bitmap.isRecycled()) {
