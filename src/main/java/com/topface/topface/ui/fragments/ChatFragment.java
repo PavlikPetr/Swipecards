@@ -133,8 +133,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             }
                             switchBookmarkEnabled(!value);
                         }
-                        mActions.findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
-                        mActions.findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
+                        if (mActions != null) {
+                            mActions.findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
+                            mActions.findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
+                        }
                         break;
                     case BOOKMARK:
                         if (mBookmarkAction != null && intent.hasExtra(AttitudeHandler.VALUE) && !mUser.blocked) {
@@ -830,12 +832,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 break;
         }
     }
-
-    /**
-     * Note: if you starting new activity and need actions' menu to be closed after,
-     * then first call this method. Actions' menu view will fully disappear before new
-     * activity will be shown
-     */
 
     @SuppressWarnings("ConstantConditions")
     @Override
