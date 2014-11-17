@@ -752,5 +752,6 @@
     <string name="open_market_error">Не удается открыть страницу приложения</string>
     <string name="billing_item_already_owned">Ваша предыдущая покупка в обработке, пожалуйста подождите</string>
     <string name="dialog">Переписка</string>
-    <string name="reply">Ответить</string>
+    <string name="reply">Ответить</string>\
+    <string name="logout_if_email_already_registred">Пользователь с таким e-mail уже существует. Если это Ваш e-mail, то Вам необходимо выйти из текущего аккаунта и зайти в аккаунт %s</string>
 </resources>
