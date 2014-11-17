@@ -19,7 +19,9 @@ public class MultiselectionController<T> {
     }
 
     public void startMultiSelection(int selectionLimit) {
-        if (!mSelected.isEmpty()) mSelected.clear();
+        if (!mSelected.isEmpty()) {
+            mSelected.clear();
+        }
         mMultiSelection = true;
         mSelectionLimit = selectionLimit;
     }
@@ -27,7 +29,9 @@ public class MultiselectionController<T> {
     public void onSelection(int position) {
         if (isSelected(position)) {
             removeSelection(position);
-            if (mSelectionListener != null) mSelectionListener.onSelected(mSelected.size(), false);
+            if (mSelectionListener != null) {
+                mSelectionListener.onSelected(mSelected.size(), false);
+            }
         } else {
             addSelection(position);
             if (mSelectionListener != null) {
@@ -42,7 +46,9 @@ public class MultiselectionController<T> {
         } else {
             addSelection(item);
         }
-        if (mSelectionListener != null) mSelectionListener.onSelected(mSelected.size(), false);
+        if (mSelectionListener != null) {
+            mSelectionListener.onSelected(mSelected.size(), false);
+        }
     }
 
     public void addSelection(int position) {
@@ -75,14 +81,18 @@ public class MultiselectionController<T> {
     public void removeSelection(int position, boolean notify) {
         if (mAdapter != null) {
             mSelected.remove(mAdapter.getItem(position));
-            if (notify) mAdapter.notifyDataSetChanged();
+            if (notify) {
+                mAdapter.notifyDataSetChanged();
+            }
         }
     }
 
     public void removeSelection(T item, boolean notify) {
         if (mAdapter != null) {
             mSelected.remove(item);
-            if (notify) mAdapter.notifyDataSetChanged();
+            if (notify) {
+                mAdapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -99,9 +109,13 @@ public class MultiselectionController<T> {
     }
 
     public void finishMultiSelection() {
-        if (!mSelected.isEmpty()) mSelected.clear();
+        if (!mSelected.isEmpty()) {
+            mSelected.clear();
+        }
         mMultiSelection = false;
-        if (mAdapter != null) mAdapter.notifyDataSetChanged();
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     public boolean isMultiSelectionMode() {
@@ -112,7 +126,9 @@ public class MultiselectionController<T> {
         for (T item : mSelected) {
             removeSelection(item, false);
         }
-        if (mAdapter != null) mAdapter.notifyDataSetChanged();
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     public int selectedCount() {
