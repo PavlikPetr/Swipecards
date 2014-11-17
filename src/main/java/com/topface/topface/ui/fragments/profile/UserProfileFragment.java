@@ -136,6 +136,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         }
     };
 
+    private int getAnimationTime() {
+        return mUserActions.size() * getActivity().getResources().getInteger(R.integer.action_animation_time);
+    }
+
     private void switchBookmarkEnabled(boolean enabled) {
         if (mActions != null) {
             mBookmarkAction.setText(((User) getProfile()).bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
@@ -291,7 +295,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     initActions(mUserActionsStub, (User) user, getActionItems());
                     boolean checked = mBarActions.isChecked();
                     mBarActions.setChecked(!checked);
-                    animateProfileActions(checked, 500);
+                    animateProfileActions(checked);
                 }
                 return true;
             default:
@@ -410,7 +414,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         }
     }
 
-    private void animateProfileActions(final boolean isActive, int time) {
+    private void animateProfileActions(final boolean isActive) {
         if (mActions != null) {
             TranslateAnimation ta;
             if (isActive) {
@@ -419,7 +423,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 ta = new TranslateAnimation(0, 0, -getChatActionsViewHeight(), 0);
             }
 
-            ta.setDuration(time);
+            ta.setDuration(getAnimationTime());
             ta.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {

@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_settings"
-        android:title="@string/general_settings"
         android:icon="@drawable/navigation_edit_selector"
+        android:title="@string/general_settings"
         appcompat:showAsAction="always" />
 </menu>

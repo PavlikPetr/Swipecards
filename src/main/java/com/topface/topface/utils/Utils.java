@@ -254,6 +254,7 @@ public class Utils {
         }
     }
 
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static void enableLayoutChangingTransition(ViewGroup viewGroup) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
