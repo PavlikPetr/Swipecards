@@ -254,25 +254,13 @@ public class Utils {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public static void enableLayoutChangingTransition(ViewGroup viewGroup) {
-        enableLayoutChangingTransition(viewGroup, true);
-    }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public static void enableLayoutChangingTransition(ViewGroup viewGroup, boolean switchTransition) {
+    public static void enableLayoutChangingTransition(ViewGroup viewGroup) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             viewGroup.setLayoutTransition(new LayoutTransition());
             LayoutTransition transition = viewGroup.getLayoutTransition();
-            if (!switchTransition) {
-                transition.disableTransitionType(LayoutTransition.CHANGING);
-                transition.disableTransitionType(LayoutTransition.DISAPPEARING);
-                transition.disableTransitionType(LayoutTransition.APPEARING);
-                transition.disableTransitionType(LayoutTransition.CHANGE_APPEARING);
-                transition.disableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
-            } else {
-                transition.enableTransitionType(LayoutTransition.CHANGING);
-            }
+            transition.enableTransitionType(LayoutTransition.CHANGING);
         }
     }
 }

@@ -66,7 +66,6 @@ import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -134,8 +133,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             }
                             switchBookmarkEnabled(!value);
                         }
-                        getView().findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
-                        getView().findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
+                        mActions.findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
+                        mActions.findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
                         break;
                     case BOOKMARK:
                         if (mBookmarkAction != null && intent.hasExtra(AttitudeHandler.VALUE) && !mUser.blocked) {
@@ -224,6 +223,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private MenuItem mBarActions;
     private RelativeLayout mBlocked;
     private TextView mBookmarkAction;
+    private View mActions;
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -308,7 +308,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
         Debug.log(this, "+onCreate");
-        // mChatActions
         mChatActionsStub = (ViewStub) root.findViewById(R.id.chat_actions_stub);
         mActions = null;
         // Swap Control
@@ -770,12 +769,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 break;
             case R.id.add_to_black_list_action:
-//                mBlackListActionController.processActionFor(mUserId);
                 if (CacheProfile.premium) {
                     if (mUser.id > 0) {
                         final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
                         final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
-
                         loader.setVisibility(View.VISIBLE);
                         icon.setVisibility(View.GONE);
                         ApiRequest request;
@@ -790,12 +787,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
                 }
                 break;
-            case R.id.acWProfile:
-            case R.id.acProfile:
-                Intent profileIntent = UserProfileActivity.createIntent(mUserId, getActivity());
-                startActivity(profileIntent);
-                closeChatActions();
-                break;
+
             case R.id.add_to_bookmark_action:
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
                 final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
@@ -814,7 +806,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.complain_action:
                 startActivity(ComplainsActivity.createIntent(mUserId));
-//                closeChatActions();
+                hideChatAction();
                 break;
             case R.id.send_gift_button:
                 if (mPopularUserLockController.showBlockDialog()) {
@@ -829,6 +821,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.ivBarAvatar:
                 onOptionsItemSelected(mBarAvatar);
+                hideChatAction();
                 break;
             case R.id.action_user_actions_list:
                 onOptionsItemSelected(mBarActions);
@@ -843,11 +836,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
      * then first call this method. Actions' menu view will fully disappear before new
      * activity will be shown
      */
-    private void closeChatActions() {
-        if (mBarAvatar.isChecked()) {
-            onOptionsItemSelected(mBarAvatar);
-        }
-    }
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -1087,7 +1075,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         public void onLongClick(int position, View v);
     }
 
-    private View mActions;
     private int mActionsHeightHeuristic;
     private AddToBlackListViewsController mBlackListActionController;
 
@@ -1120,6 +1107,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         } else {
             animateShowChatAction();
         }
+    }
+
+    private void hideChatAction() {
+        if (mActions == null || mActions.getVisibility() == View.INVISIBLE) {
+            return;
+        }
+        mActions.setVisibility(View.INVISIBLE);
     }
 
     private void animateHideChatAction() {
