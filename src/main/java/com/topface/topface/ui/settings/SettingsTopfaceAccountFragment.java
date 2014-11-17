@@ -287,7 +287,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                         @Override
                         public void fail(int codeError, IApiResponse response) {
                             if (ErrorCodes.USER_ALREADY_REGISTERED == codeError) {
-                                showLogoutPoup(email);
+                                showLogoutPopup(email);
                             } else {
                                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                             }
@@ -324,7 +324,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         }).exec();
     }
 
-    private void showLogoutPoup(String email) {
+    private void showLogoutPopup(String email) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(String.format(getActivity().getString(R.string.logout_if_email_already_registred), email));
         builder.setCancelable(false);
