@@ -30,8 +30,9 @@ public class MultiselectionController<T> {
             if (mSelectionListener != null) mSelectionListener.onSelected(mSelected.size(), false);
         } else {
             addSelection(position);
-            if (mSelectionListener != null)
+            if (mSelectionListener != null) {
                 mSelectionListener.onSelected(mSelected.size(), mOverlimit);
+            }
         }
     }
 
