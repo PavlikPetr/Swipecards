@@ -90,8 +90,7 @@ public class MultiselectionController<T> {
     }
 
     public boolean isSelected(int position) {
-        if (mAdapter == null) return false;
-        return isMultiSelectionMode() && mSelected.contains(mAdapter.getItem(position));
+        return mAdapter != null && isMultiSelectionMode() && mSelected.contains(mAdapter.getItem(position));
     }
 
     public boolean isSelected(T item) {
