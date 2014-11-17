@@ -470,7 +470,6 @@
         <item name="border">@drawable/feed_photo_border</item>
         <item name="android:layout_width">37dp</item>
         <item name="android:layout_height">37dp</item>
-        <item name="android:layout_marginRight">5dp</item>
         <item name="android:layout_centerVertical">true</item>
     </style>
 

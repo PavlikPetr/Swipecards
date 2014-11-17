@@ -754,4 +754,5 @@
     <string name="dialog">Переписка</string>
     <string name="reply">Ответить</string>
     <string name="maximum_number_of_users">Выбрано максимальное количестово пользователей</string>
+    <string name="logout_if_email_already_registred">Пользователь с таким e-mail уже существует. Если это ваш e-mail, то вам необходимо выйти из текущего аккаунта и зайти в аккаунт %s</string>
 </resources>
