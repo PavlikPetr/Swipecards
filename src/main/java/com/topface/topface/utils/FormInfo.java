@@ -324,7 +324,7 @@ public class FormInfo {
             case R.array.form_main_weight:
                 return App.getAppOptions().getUserWeightMin();
         }
-        return 1;
+        return Integer.MIN_VALUE;
     }
 
     public int getMaxValue(int titleId) {
@@ -334,7 +334,7 @@ public class FormInfo {
             case R.array.form_main_weight:
                 return App.getAppOptions().getUserWeightMax();
         }
-        return 999;
+        return Integer.MAX_VALUE;
     }
 
     // =============================== Form Titles ===============================
