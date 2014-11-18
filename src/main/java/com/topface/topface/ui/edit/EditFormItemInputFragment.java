@@ -23,7 +23,8 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -75,6 +76,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         mEditText.setInputType(mFormInfo.getInputType(mTitleId));
         InputFilter[] FilterArray = new InputFilter[1];
         FilterArray[0] = new InputFilter.LengthFilter(mFormInfo.getMaxCharacters(mTitleId));
+        mEditText.setHint(mFormInfo.getHintText(mTitleId));
         mEditText.setFilters(FilterArray);
         if (mData != null) {
             mEditText.append(mData);
@@ -160,7 +162,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                         prepareRequestSend();
                         ApiRequest request = mFormInfo.getFormRequest(newItem);
                         registerRequest(request);
-                        request.callback(new ApiHandler() {
+                        request.callback(new VipApiHandler() {
 
                             @Override
                             public void success(IApiResponse response) {
@@ -175,8 +177,14 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                             }
 
                             @Override
+                            public void always(IApiResponse response) {
+                                super.always(response);
+                                finishRequestSend();
+                            }
+
+                            @Override
                             public void fail(int codeError, IApiResponse response) {
-                                if (isCheckNumeric()) {
+                                if (codeError == ErrorCodes.INCORRECT_VALUE) {
                                     warnEditingFailedHeightWeight(handler);
                                 } else {
                                     warnEditingFailed(handler);

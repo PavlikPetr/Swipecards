@@ -753,4 +753,6 @@
     <string name="billing_item_already_owned">Ваша предыдущая покупка в обработке, пожалуйста подождите</string>
     <string name="dialog">Переписка</string>
     <string name="reply">Ответить</string>
+    <string name="measurement_unit_weight">кг.</string>
+    <string name="measurement_unit_height">см.</string>
 </resources>

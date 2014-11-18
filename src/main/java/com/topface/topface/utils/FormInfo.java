@@ -282,6 +282,22 @@ public class FormInfo {
 
         return result;
     }
+    public int getHintText(int titleId) {
+        int result;
+        switch (titleId) {
+            case R.array.form_main_height:
+                result = R.string.measurement_unit_height;
+                break;
+            case R.array.form_main_weight:
+                result = R.string.measurement_unit_weight;
+                break;
+            default:
+                result = 0;
+                break;
+        }
+
+        return result;
+    }
 
     public int getMaxCharacters(int titleId) {
         int result;
