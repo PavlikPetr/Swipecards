@@ -48,7 +48,6 @@ public class BitmapUtils {
         if (cursor.getCount() != 1) {
             return -1;
         }
-
         cursor.moveToFirst();
         return cursor.getInt(0);
     }
@@ -74,8 +73,6 @@ public class BitmapUtils {
                 Debug.error(e);
             }
         }
-
-
         return options;
     }
 
@@ -151,7 +148,6 @@ public class BitmapUtils {
         } else {
             stream = context.getContentResolver().openInputStream(uri);
         }
-
         return stream;
     }
 
@@ -211,7 +207,6 @@ public class BitmapUtils {
             default:
                 return bitmap;
         }
-
         return getRotatedBitmap(bitmap, rotate);
     }
 
@@ -260,7 +255,6 @@ public class BitmapUtils {
             //noinspection SuspiciousNameCombination
             clippedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, width, null, false);
         }
-
         return clippedBitmap;
     }
 
@@ -309,7 +303,6 @@ public class BitmapUtils {
         } catch (OutOfMemoryError e) {
             Debug.error("ClipANdScaleImage:: " + e.toString());
         }
-
         return clippedBitmap;
     }
 
@@ -337,7 +330,6 @@ public class BitmapUtils {
             canvas.drawBitmap(border, 0, 0, paint);
         }
         clippedBitmap.recycle();
-
         return output;
     }
 
@@ -372,7 +364,6 @@ public class BitmapUtils {
 
         Paint paint = new Paint();
 
-
         paint.setAntiAlias(true);
         paint.setColor(0xff424242);
         canvas.drawARGB(0, 0, 0, 0);
@@ -389,7 +380,6 @@ public class BitmapUtils {
         }
 
         clippedBitmap.recycle();
-
         return output;
     }
 
@@ -410,7 +400,6 @@ public class BitmapUtils {
             multWidth = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
         else
             multWidth = (int) (((bitmapWidth < bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
-
 
         @SuppressWarnings("SuspiciousNameCombination")
         Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Bitmap.Config.ARGB_8888);
@@ -446,7 +435,6 @@ public class BitmapUtils {
         } else {
             Debug.error("Bitmap is already recycled");
         }
-
         return scaledBitmap;
     }
 }
