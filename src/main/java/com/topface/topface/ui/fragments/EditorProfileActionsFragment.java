@@ -137,6 +137,10 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         textView.setText(textView.getText() + " " + text);
     }
 
+    @Override
+    protected String getTitle() {
+        return getResources().getString(R.string.editor_profile_title);
+    }
 
     @Override
     public void onClick(View view) {

@@ -38,6 +38,7 @@
     <string name="general_admin_login">Login</string>
     <string name="editor_emulate_connection">Эмулировать соединение</string>
     <string name="editor_profile_admin">Админка</string>
+    <string name="editor_profile_title">Баны</string>
 
     <string name="editor_ban_porn">Порно</string>
     <string name="editor_ban_spam_photo">Спам фото</string>
