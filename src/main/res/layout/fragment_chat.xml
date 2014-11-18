@@ -48,6 +48,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/chat_line_above_input_holo"
+        android:layout_above="@+id/loChatFooterSend"
+        />
+
     <TextView
         android:id="@+id/tvBackgroundText"
         style="@style/BackgroundFont"
