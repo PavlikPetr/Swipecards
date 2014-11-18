@@ -160,7 +160,7 @@
     <string name="auth_retry">Retry</string>
     <string name="dating_header_girls">Girls from %1$d to %2$d</string>
     <string name="dating_header_guys">Guys from %1$d to %2$d</string>
-    <string name="dating_skip_button">Next</string>
+    <string name="dating_skip_button">Skip</string>
     <string name="message_too_long">The message you entered is too long. The number of symbols can\'t exceed %d.</string>
     <string name="chat_gift_in">You have received a gift.</string>
     <string name="chat_gift_out">Gift is sent.</string>
