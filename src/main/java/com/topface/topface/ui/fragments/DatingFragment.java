@@ -859,10 +859,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mNovice.isDatingCompleted())
             return;
 
-        if (mDatingInstantMessageController != null) {
-            mDatingInstantMessageController.setEnabled(false);
-        }
-
         if (mNoviceLayout == null) {
             mNoviceLayout = new NoviceLayout(getActivity());
             mNoviceLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
