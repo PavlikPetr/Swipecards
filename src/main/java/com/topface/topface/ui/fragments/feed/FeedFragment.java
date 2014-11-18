@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.PullToRefreshBase;
@@ -444,7 +445,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             FeedAdapter<T> adapter = getListAdapter();
             adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
                 @Override
-                public void onSelected(int size) {
+                public void onSelected(int size, boolean overlimit) {
+                    if (overlimit) {
+                        Toast.makeText(App.getContext(), R.string.maximum_number_of_users, Toast.LENGTH_LONG).show();
+                    }
                     if (mActionMode != null) {
                         mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
                     }
@@ -590,7 +594,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             if (adapter.isMultiSelectionMode()) {
                 adapter.onSelection(item);
             } else {
-                startActivity(CacheProfile.getOptions().autoOpenGallery.createIntent(item.user.id, item.user.photosCount, item.id, getActivity()));
+                startActivity(CacheProfile.getOptions().autoOpenGallery.createIntent(item.user.id, item.user.photosCount, item.id, item.user.photo, getActivity()));
             }
         }
     }

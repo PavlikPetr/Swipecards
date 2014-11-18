@@ -520,8 +520,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
             @Override
             public void fail(int codeError, final IApiResponse response) {
-                boolean consumed = false;
-                consumed |= consumeTestPurchase(purchase, validateRequest);
+                boolean consumed = consumeTestPurchase(purchase, validateRequest);
                 consumed |= consumeDuplicatePurchase(codeError, purchase);
                 if (!consumed) {
                     Debug.error("BillindFragment: verify error: " + response);

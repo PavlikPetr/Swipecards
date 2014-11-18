@@ -17,4 +17,8 @@
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">270dp</dimen>
 
+    <item name="action_animation_time" format="integer" type="integer">75</item>
+
+    <dimen name="chat_date_line_size">1px</dimen>
+
 </resources>

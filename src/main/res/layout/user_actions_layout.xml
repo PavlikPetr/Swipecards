@@ -11,72 +11,6 @@
     android:visibility="invisible">
 
     <RelativeLayout
-        android:id="@+id/acProfile"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/actions_menu_delimiter"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/profIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            android:src="@drawable/ico_drop_menu_profile_m_normal" />
-
-        <ProgressBar
-            android:id="@+id/profPrBar"
-            style="@android:style/Widget.ProgressBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/delTV"
-            style="@style/actionsFont"
-            android:layout_toRightOf="@id/profPrBar"
-            android:text="@string/general_profile" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/acWProfile"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/actions_menu_delimiter"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/profwIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            android:src="@drawable/ico_drop_menu_profile_w_normal" />
-
-        <ProgressBar
-            android:id="@+id/profwPrBar"
-            style="@android:style/Widget.ProgressBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@id/delTV"
-            style="@style/actionsFont"
-            android:layout_toRightOf="@id/profwPrBar"
-            android:text="@string/general_profile" />
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/send_admiration_action"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -103,7 +37,7 @@
             android:visibility="invisible" />
 
         <TextView
-            android:id="@id/delTV"
+            android:id="@+id/delTV"
             style="@style/actionsFont"
             android:layout_toRightOf="@id/delPrBar"
             android:text="@string/general_delight" />
@@ -308,8 +242,8 @@
 
     <ViewStub
         android:id="@+id/open_profile_for_editor_stub"
-        android:inflatedId="@+id/open_profile_for_editor"
-        android:layout="@layout/editor_action_open_user_profile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inflatedId="@+id/open_profile_for_editor"
+        android:layout="@layout/editor_action_open_user_profile" />
 </LinearLayout>

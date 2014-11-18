@@ -29,6 +29,7 @@ import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -285,7 +286,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
                         @Override
                         public void fail(int codeError, IApiResponse response) {
-                            Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                            if (ErrorCodes.USER_ALREADY_REGISTERED == codeError) {
+                                showLogoutPoup(email);
+                            } else {
+                                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }).exec();
                 } else {
@@ -317,6 +322,25 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 }
             }
         }).exec();
+    }
+
+    private void showLogoutPoup(String email) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(String.format(getActivity().getString(R.string.logout_if_email_already_registred), email));
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.general_exit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                logout();
+            }
+        });
+        builder.setNegativeButton(R.string.general_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.create().show();
     }
 
     private void showExitPopup() {

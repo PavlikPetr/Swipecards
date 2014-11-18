@@ -3,6 +3,7 @@ package com.topface.topface.data.experiments;
 import android.content.Context;
 import android.content.Intent;
 
+import com.topface.topface.data.Photo;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 
@@ -29,25 +30,25 @@ public class AutoOpenGallery {
         this.mGroup = group;
     }
 
-    public Intent createIntent(int userId, int photosCount, Context context) {
+    public Intent createIntent(int userId, int photosCount, Photo preloadPhoto, Context context) {
         if (isEnabled() && photosCount > 0) {
-            return PhotoSwitcherActivity.getPhotoSwitcherIntent(userId, context);
+            return PhotoSwitcherActivity.getPhotoSwitcherIntent(userId, preloadPhoto, context);
         } else {
             return UserProfileActivity.createIntent(userId, context);
         }
     }
 
-    public Intent createIntent(int userId, int photosCount, String itemId, Context context) {
+    public Intent createIntent(int userId, int photosCount, String itemId, Photo preloadPhoto, Context context) {
         if (isEnabled() && photosCount > 0) {
-            return PhotoSwitcherActivity.getPhotoSwitcherIntent(itemId, userId, context);
+            return PhotoSwitcherActivity.getPhotoSwitcherIntent(itemId, userId, preloadPhoto, context);
         } else {
             return UserProfileActivity.createIntent(userId, itemId, context);
         }
     }
 
-    public Intent createIntent(int userId, int photosCount, Class callingClass, Context context) {
+    public Intent createIntent(int userId, int photosCount, Class callingClass, Photo preloadPhoto, Context context) {
         if (isEnabled() && photosCount > 0) {
-            return PhotoSwitcherActivity.getPhotoSwitcherIntent(userId, callingClass, context);
+            return PhotoSwitcherActivity.getPhotoSwitcherIntent(userId, callingClass, preloadPhoto, context);
         } else {
             return UserProfileActivity.createIntent(userId, callingClass, context);
         }
