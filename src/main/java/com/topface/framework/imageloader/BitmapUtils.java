@@ -328,9 +328,9 @@ public class BitmapUtils {
 
         Paint paint = new Paint();
         canvas.drawARGB(0, 0, 0, 0);
-//
+
         canvas.drawBitmap(mask, 0, 0, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, 0, 0, paint);
         if (border != null) {
             paint.setXfermode(null);
@@ -426,7 +426,7 @@ public class BitmapUtils {
 
         Paint canvasPaint = new Paint();
         canvasPaint.setAntiAlias(true);
-        canvasPaint.setColor(0xff424242);
+//        canvasPaint.setColor(0xff424242);
 
         canvas.drawARGB(0, 0, 0, 0);
 
