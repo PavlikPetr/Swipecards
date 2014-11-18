@@ -92,7 +92,6 @@ public abstract class AbstractEditFragment extends BaseFragment {
         builder.setNegativeButton(R.string.general_exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                completeFailedRequest();
                 Activity activity = getActivity();
                 if (handler == null && activity != null) {
                     activity.finish();
@@ -126,7 +125,6 @@ public abstract class AbstractEditFragment extends BaseFragment {
         builder.setNegativeButton(R.string.general_exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                completeFailedRequest();
                 Activity activity = getActivity();
                 if (handler == null && activity != null) {
                     activity.finish();

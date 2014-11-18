@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.text.InputType;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
@@ -282,6 +283,7 @@ public class FormInfo {
 
         return result;
     }
+
     public int getHintText(int titleId) {
         int result;
         switch (titleId) {
@@ -313,6 +315,26 @@ public class FormInfo {
                 break;
         }
         return result;
+    }
+
+    public int getMinValue(int titleId) {
+        switch (titleId) {
+            case R.array.form_main_height:
+                return App.getAppOptions().getUserHeightMin();
+            case R.array.form_main_weight:
+                return App.getAppOptions().getUserWeightMin();
+        }
+        return 1;
+    }
+
+    public int getMaxValue(int titleId) {
+        switch (titleId) {
+            case R.array.form_main_height:
+                return App.getAppOptions().getUserHeightMax();
+            case R.array.form_main_weight:
+                return App.getAppOptions().getUserWeightMax();
+        }
+        return 999;
     }
 
     // =============================== Form Titles ===============================

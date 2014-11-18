@@ -76,7 +76,8 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         mEditText.setInputType(mFormInfo.getInputType(mTitleId));
         InputFilter[] FilterArray = new InputFilter[1];
         FilterArray[0] = new InputFilter.LengthFilter(mFormInfo.getMaxCharacters(mTitleId));
-        mEditText.setHint(mFormInfo.getHintText(mTitleId));
+
+        mEditText.setHint(getString(mFormInfo.getHintText(mTitleId)));
         mEditText.setFilters(FilterArray);
         if (mData != null) {
             mEditText.append(mData);
@@ -122,7 +123,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         return (mTitleId == R.array.form_main_height || mTitleId == R.array.form_main_weight);
     }
 
-    private boolean isValueZero() {
+    private boolean isIncorrectValue() {
         if (isCheckNumeric()) {
             if (mInputData.length() == 0) {
                 return false;
@@ -133,9 +134,16 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-            if (value > 0) {
+            if (isValueRight(value)) {
                 return false;
             }
+        }
+        return true;
+    }
+
+    private boolean isValueRight(int value) {
+        if (value < mFormInfo.getMinValue(mTitleId) || value > mFormInfo.getMaxValue(mTitleId) || value == 0) {
+            return false;
         }
         return true;
     }
@@ -146,7 +154,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
         if (hasChanges()) {
-            if (isCheckNumeric() && isValueZero()) {
+            if (isCheckNumeric() && isIncorrectValue()) {
                 mEditText.setText("");
                 warnEditingFailedHeightWeight(handler);
             } else {
@@ -171,8 +179,11 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                                 getActivity().setResult(Activity.RESULT_OK);
                                 mData = mInputData;
                                 finishRequestSend();
-                                if (handler == null) getActivity().finish();
-                                else handler.sendEmptyMessage(0);
+                                if (handler == null) {
+                                    getActivity().finish();
+                                } else {
+                                    handler.sendEmptyMessage(0);
+                                }
                                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(CacheProfile.PROFILE_UPDATE_ACTION));
                             }
 
@@ -184,6 +195,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
                             @Override
                             public void fail(int codeError, IApiResponse response) {
+                                getActivity().setResult(Activity.RESULT_OK);
                                 if (codeError == ErrorCodes.INCORRECT_VALUE) {
                                     warnEditingFailedHeightWeight(handler);
                                 } else {

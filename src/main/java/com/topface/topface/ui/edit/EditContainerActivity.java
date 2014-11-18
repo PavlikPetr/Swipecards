@@ -11,8 +11,7 @@ import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.edit.EditMainFormItemsFragment.EditType;
 
-public class
-extends BaseFragmentActivity {
+public class EditContainerActivity extends BaseFragmentActivity {
 
     public static final String INTENT_FORM_TITLE_ID = "titleId";
     public static final String INTENT_FORM_DATA_ID = "dataId";
