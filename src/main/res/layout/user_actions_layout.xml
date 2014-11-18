@@ -1,80 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mUserActions"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/drop_menu_backgroud"
-    android:orientation="vertical"
-    android:paddingLeft="3dp"
-    android:paddingRight="3dp"
-    android:visibility="invisible">
-
-    <RelativeLayout
-        android:id="@+id/acProfile"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/actions_menu_delimiter"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/profIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            android:src="@drawable/ico_drop_menu_profile_m_normal" />
-
-        <ProgressBar
-            android:id="@+id/profPrBar"
-            style="@android:style/Widget.ProgressBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/delTV"
-            style="@style/actionsFont"
-            android:layout_toRightOf="@id/profPrBar"
-            android:text="@string/general_profile" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/acWProfile"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/actions_menu_delimiter"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/profwIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            android:src="@drawable/ico_drop_menu_profile_w_normal" />
-
-        <ProgressBar
-            android:id="@+id/profwPrBar"
-            style="@android:style/Widget.ProgressBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@id/delTV"
-            style="@style/actionsFont"
-            android:layout_toRightOf="@id/profwPrBar"
-            android:text="@string/general_profile" />
-    </RelativeLayout>
+              android:id="@+id/mUserActions"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@drawable/drop_menu_backgroud"
+              android:orientation="vertical"
+              android:paddingLeft="3dp"
+              android:paddingRight="3dp"
+              android:visibility="invisible">
 
     <RelativeLayout
         android:id="@+id/send_admiration_action"
@@ -90,7 +24,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/us_ac_delight_selector" />
+            android:src="@drawable/us_ac_delight_selector"/>
 
         <ProgressBar
             android:id="@+id/delPrBar"
@@ -100,13 +34,13 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <TextView
-            android:id="@id/delTV"
+            android:id="@+id/delTV"
             style="@style/actionsFont"
             android:layout_toRightOf="@id/delPrBar"
-            android:text="@string/general_delight" />
+            android:text="@string/general_delight"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -123,7 +57,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/us_ac_sympathy_selector" />
+            android:src="@drawable/us_ac_sympathy_selector"/>
 
         <ProgressBar
             android:id="@+id/likePrBar"
@@ -133,13 +67,13 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/likeTV"
             style="@style/actionsFont"
             android:layout_toRightOf="@id/likePrBar"
-            android:text="@string/general_sympathy" />
+            android:text="@string/general_sympathy"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -156,7 +90,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/us_ac_chat_selector" />
+            android:src="@drawable/us_ac_chat_selector"/>
 
         <ProgressBar
             android:id="@+id/chatPrBar"
@@ -166,13 +100,13 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/chatTV"
             style="@style/actionsFont"
             android:layout_toRightOf="@id/chatPrBar"
-            android:text="@string/user_actions_chat" />
+            android:text="@string/user_actions_chat"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -189,7 +123,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/us_ac_gift_selector" />
+            android:src="@drawable/us_ac_gift_selector"/>
 
         <ProgressBar
             android:id="@+id/giftPrBar"
@@ -199,13 +133,13 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/giftTV"
             style="@style/actionsFont"
             android:layout_toRightOf="@id/giftPrBar"
-            android:text="@string/general_gift" />
+            android:text="@string/general_gift"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -222,7 +156,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/us_ac_block" />
+            android:src="@drawable/us_ac_block"/>
 
         <ProgressBar
             android:id="@+id/blockPrBar"
@@ -232,13 +166,13 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/block_action_text"
             style="@style/actionsFont"
             android:layout_toRightOf="@id/blockPrBar"
-            android:text="@string/general_block" />
+            android:text="@string/general_block"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -255,7 +189,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/ic_star" />
+            android:src="@drawable/ic_star"/>
 
         <ProgressBar
             android:id="@+id/favPrBar"
@@ -265,13 +199,13 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/bookmark_action_text"
             style="@style/actionsFont"
             android:layout_toRightOf="@id/favPrBar"
-            android:text="@string/general_bookmarks_add" />
+            android:text="@string/general_bookmarks_add"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -287,7 +221,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/ico_drop_menu_alarm_normal" />
+            android:src="@drawable/ico_drop_menu_alarm_normal"/>
 
         <ProgressBar
             android:id="@+id/comPrBar"
@@ -297,19 +231,19 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/comTV"
             style="@style/actionsFont"
             android:layout_toRightOf="@id/comPrBar"
-            android:text="@string/general_complain" />
+            android:text="@string/general_complain"/>
     </RelativeLayout>
 
     <ViewStub
         android:id="@+id/open_profile_for_editor_stub"
-        android:inflatedId="@+id/open_profile_for_editor"
-        android:layout="@layout/editor_action_open_user_profile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inflatedId="@+id/open_profile_for_editor"
+        android:layout="@layout/editor_action_open_user_profile"/>
 </LinearLayout>

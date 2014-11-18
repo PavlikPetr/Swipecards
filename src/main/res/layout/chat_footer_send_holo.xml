@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/bg_white"
-    android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_white"
+        android:orientation="horizontal">
 
     <ImageButton
         android:id="@+id/send_gift_button"
@@ -11,7 +11,7 @@
         android:layout_height="46dp"
         android:layout_gravity="center_horizontal|bottom"
         android:background="@drawable/bg_solid_holo_selector"
-        android:src="@drawable/btn_send_gift_holo_selector" />
+        android:src="@drawable/btn_send_gift_holo_selector"/>
 
     <EditText
         android:id="@+id/edChatBox"
@@ -29,7 +29,7 @@
         android:minHeight="34dp"
         style="@style/topfaceEditText.Holo">
 
-        <requestFocus />
+        <requestFocus/>
     </EditText>
 
     <ImageButton
@@ -38,6 +38,6 @@
         android:layout_height="46dp"
         android:layout_gravity="center_horizontal|bottom"
         android:background="@drawable/bg_solid_holo_selector"
-        android:src="@drawable/btn_send_message_holo_selector" />
+        android:src="@drawable/btn_send_message_holo_selector"/>
 
 </LinearLayout>

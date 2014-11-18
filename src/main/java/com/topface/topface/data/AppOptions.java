@@ -75,8 +75,24 @@ public class AppOptions extends AbstractData {
         return conditions;
     }
 
+    public int getUserWeightMin() {
+        return conditions.userWeightMin;
+    }
+
+    public int getUserWeightMax() {
+        return conditions.userWeightMax;
+    }
+
+    public int getUserHeightMin() {
+        return conditions.userHeightMin;
+    }
+
+    public int getUserHeightMax() {
+        return conditions.userHeightMax;
+    }
+
     public int getUserStatusMaxLength() {
-        return getConditions().getUserStatusMaxLength();
+        return conditions.userStatusMaxLength;
     }
 
     private class ClientStatisticSettings {
@@ -117,10 +133,5 @@ public class AppOptions extends AbstractData {
             userHeightMin = json.optInt("userHeightMin");
             userHeightMax = json.optInt("userHeightMax");
         }
-
-        public int getUserStatusMaxLength() {
-            return userStatusMaxLength;
-        }
-
     }
 }
