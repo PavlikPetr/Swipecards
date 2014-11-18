@@ -880,6 +880,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, completeShowSympathylistener,
                     completeShowSympathylistener);
             mNoviceLayout.startAnimation(mAlphaAnimation);
+            mDatingInstantMessageController.setEnabled(false);
         } else if (mNovice.isShowSympathiesBonus()) {
             NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
             registerRequest(noviceLikesRequest);
@@ -912,6 +913,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 text
                         );
                         mNoviceLayout.startAnimation(mAlphaAnimation);
+                        mDatingInstantMessageController.setEnabled(false);
                     }
                 }
 
@@ -951,6 +953,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     }
             );
             mNoviceLayout.startAnimation(mAlphaAnimation);
+            mDatingInstantMessageController.setEnabled(false);
         }
     }
 
