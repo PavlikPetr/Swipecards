@@ -77,7 +77,15 @@ public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFra
     }
 
     protected void initLayout() {
-        setContentView(R.layout.ac_fragment_frame);
+        setContentView(getContentViewId());
+    }
+
+    protected int getContentViewId() {
+        // this layout (R.layout.ac_fragment_frame) defines its own background,
+        // so windowBackground in some activities (e.g. ChatActivity) defined in themes
+        // doesn't work properly - overlayed by fragment background
+        // so ChatActivity now has its own fragment frame layout
+        return R.layout.ac_fragment_frame;
     }
 
     protected T getFragment() {
