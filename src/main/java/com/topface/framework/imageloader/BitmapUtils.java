@@ -430,6 +430,7 @@ public class BitmapUtils {
         canvas.drawARGB(0, 0, 0, 0);
 
         canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint);
+        //SRC_ATOP mode for gifts list
         canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
         canvas.drawBitmap(bitmap, src, dst, canvasPaint);
 
