@@ -426,7 +426,6 @@ public class BitmapUtils {
 
         Paint canvasPaint = new Paint();
         canvasPaint.setAntiAlias(true);
-//        canvasPaint.setColor(0xff424242);
 
         canvas.drawARGB(0, 0, 0, 0);
 
