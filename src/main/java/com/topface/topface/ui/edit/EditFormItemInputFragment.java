@@ -195,7 +195,6 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
                             @Override
                             public void fail(int codeError, IApiResponse response) {
-                                getActivity().setResult(Activity.RESULT_OK);
                                 if (codeError == ErrorCodes.INCORRECT_VALUE) {
                                     warnEditingFailedHeightWeight(handler);
                                 } else {
