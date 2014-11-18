@@ -194,7 +194,7 @@
     <!-- Dating -->
     <string name="dating_header_girls">Девушки от %1$d до %2$d</string>
     <string name="dating_header_guys">Парни от %1$d до %2$d</string>
-    <string name="dating_skip_button">Пропустить</string>
+    <string name="dating_skip_button">Следующая</string>
 
     <!-- Chat -->
     <string name="message_too_long">Вы набрали слишком длинное сообщение. Число знаков не может превышать %d.</string>
