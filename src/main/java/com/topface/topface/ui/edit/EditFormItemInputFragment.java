@@ -154,7 +154,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
         if (hasChanges()) {
-            if (isCheckNumeric() && isIncorrectValue()) {
+            if (isIncorrectValue()) {
                 mEditText.setText("");
                 warnEditingFailedHeightWeight(handler);
             } else {
