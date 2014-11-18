@@ -23,7 +23,6 @@
         android:shadowColor="@null"
         android:shadowRadius="0"
         android:shadowDy="0"
-        android:text="TEST"
         android:shadowDx="0"
         android:paddingTop="2dp"
         android:paddingLeft="2dp"
