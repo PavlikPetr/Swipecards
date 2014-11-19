@@ -6,9 +6,9 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
@@ -21,12 +21,14 @@ import com.topface.topface.utils.social.AuthorizationManager;
 public class DeleteAccountDialog extends AbstractModalDialog implements View.OnClickListener {
 
     public static final String TAG = "com.topface.topface.ui.dialogs.DeleteAccountDialog_TAG";
+    private Button mBtnOk;
 
     @Override
     protected void initContentViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
         root.findViewById(R.id.btnCancel).setOnClickListener(this);
-        root.findViewById(R.id.btnOk).setOnClickListener(this);
+        mBtnOk = (Button)root.findViewById(R.id.btnOk);
+        mBtnOk.setOnClickListener(this);
         ((ImageViewRemote) root.findViewById(R.id.ivAvatar)).setPhoto(CacheProfile.photo);
         ((TextView) root.findViewById(R.id.tvProfile)).setText(CacheProfile.getUserNameAgeString());
         ((TextView) root.findViewById(R.id.tvWarningText)).setText(R.string.delete_account_warning);
@@ -49,6 +51,7 @@ public class DeleteAccountDialog extends AbstractModalDialog implements View.OnC
                 closeDialog();
                 break;
             case R.id.btnOk:
+                mBtnOk.setClickable(false);
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.settings_delete_account)
                         .setMessage(R.string.delete_account_are_you_sure)
@@ -91,6 +94,12 @@ public class DeleteAccountDialog extends AbstractModalDialog implements View.OnC
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                                 closeDialog();
+                            }
+                        })
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                mBtnOk.setClickable(true);
                             }
                         }).show();
                 break;

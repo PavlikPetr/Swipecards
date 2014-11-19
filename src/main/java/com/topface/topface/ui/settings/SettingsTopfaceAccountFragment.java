@@ -55,6 +55,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private static final int ACTION_CHANGE_EMAIL = 1;
     private static final int ACTION_CHANGE_PASSWORD = 2;
     private int mChangeButtonAction = ACTION_CHANGE_PASSWORD;
+    private boolean mChangeEmail = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,6 +107,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     @Override
     public void onResume() {
         super.onResume();
+        mBtnChange.setClickable(true);
         setViewsState();
     }
 
@@ -167,11 +169,13 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
             @Override
             public void afterTextChanged(Editable s) {
+                mBtnChange.setClickable(true);
                 String text = s.toString();
                 if (text.equals(mToken.getLogin())) {
                     setChangeBtnAction(ACTION_RESEND_CONFIRM);
                 } else {
                     setChangeBtnAction(ACTION_CHANGE_EMAIL);
+                    mChangeEmail =true;
                 }
             }
         });
@@ -204,12 +208,15 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         if (CacheProfile.emailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
             fieldContainer.setBackgroundResource(R.drawable.edit_big_btn_selector);
-
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
             fieldContainer.setBackgroundResource(android.R.color.transparent);
-            setChangeBtnAction(ACTION_RESEND_CONFIRM);
+            if(mChangeEmail){
+                setChangeBtnAction(ACTION_CHANGE_EMAIL);
+            }else{
+                setChangeBtnAction(ACTION_RESEND_CONFIRM);
+            }
         }
     }
 
@@ -234,14 +241,17 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         switch (v.getId()) {
             case R.id.btnLogout:
                 if (CacheProfile.needToChangePassword(App.getContext())) {
+                    mBtnLogout.setClickable(true);
                     Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
                     intent.putExtra(NEED_EXIT, true);
                     startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_PASSWORD);
                 } else {
+                    mBtnLogout.setClickable(false);
                     showExitPopup();
                 }
                 break;
             case R.id.btnChange:
+                mBtnChange.setClickable(false);
                 onChangeButtonClick();
                 break;
             case R.id.btnDeleteAccount:
@@ -260,6 +270,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void onChangeButtonClick() {
         switch (mChangeButtonAction) {
             case ACTION_RESEND_CONFIRM:
+                mBtnChange.setClickable(true);
                 RemindRequest remindRequest = new RemindRequest(getActivity());
                 remindRequest.callback(new ApiHandler() {
                     @Override
@@ -281,6 +292,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                         @Override
                         public void success(IApiResponse response) {
                             mToken.saveToken(mToken.getUserSocialId(), email, mToken.getPassword());
+                            mBtnChange.setClickable(true);
                             setChangeBtnAction(ACTION_RESEND_CONFIRM);
                         }
 
@@ -294,10 +306,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                         }
                     }).exec();
                 } else {
+                    mBtnChange.setClickable(true);
                     Toast.makeText(App.getContext(), R.string.incorrect_email, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case ACTION_CHANGE_PASSWORD:
+                mBtnChange.setClickable(true);
                 Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_PASSWORD);
                 break;
@@ -324,20 +338,27 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         }).exec();
     }
 
-    private void showLogoutPopup(String email) {
+    private void showLogoutPopup(final String email) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(String.format(getActivity().getString(R.string.logout_if_email_already_registred), email));
-        builder.setCancelable(false);
         builder.setPositiveButton(R.string.general_exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                mBtnChange.setClickable(true);
                 logout();
             }
         });
         builder.setNegativeButton(R.string.general_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                mBtnChange.setClickable(true);
                 dialog.cancel();
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                mBtnChange.setClickable(true);
             }
         });
         builder.create().show();
@@ -349,13 +370,21 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         builder.setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                mBtnLogout.setClickable(true);
                 dialog.cancel();
             }
         });
         builder.setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                mBtnLogout.setClickable(true);
                 logout();
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                mBtnLogout.setClickable(true);
             }
         });
         builder.create().show();
