@@ -76,8 +76,11 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         mEditText.setInputType(mFormInfo.getInputType(mTitleId));
         InputFilter[] FilterArray = new InputFilter[1];
         FilterArray[0] = new InputFilter.LengthFilter(mFormInfo.getMaxCharacters(mTitleId));
-
-        mEditText.setHint(getString(mFormInfo.getHintText(mTitleId)));
+        String hint = "";
+        if (mFormInfo.getHintText(mTitleId) != 0) {
+            hint = getString(mFormInfo.getHintText(mTitleId));
+        }
+        mEditText.setHint(hint);
         mEditText.setFilters(FilterArray);
         if (mData != null) {
             mEditText.append(mData);
@@ -154,7 +157,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
         if (hasChanges()) {
-            if (isIncorrectValue()) {
+            if (isCheckNumeric() && isIncorrectValue()) {
                 mEditText.setText("");
                 warnEditingFailedHeightWeight(handler);
             } else {
