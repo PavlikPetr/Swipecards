@@ -47,6 +47,8 @@ import java.util.List;
 
 public class LikesFragment extends FeedFragment<FeedLike> {
 
+    public static final int SELECTION_LIMIT = 100;
+
     protected View mEmptyFeedView;
     private RateController mRateController;
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
@@ -341,6 +343,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu;
+    }
+
+    @Override
+    protected int getMultiSelectionLimit() {
+        return SELECTION_LIMIT;
     }
 
     @Override

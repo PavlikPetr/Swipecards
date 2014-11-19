@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Visitor;
@@ -16,6 +15,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
 
@@ -23,6 +23,8 @@ import java.util.List;
 
 
 public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
+
+    public static final int SELECTION_LIMIT = 100;
 
     @Override
     protected Drawable getBackIcon() {
@@ -92,6 +94,11 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu;
+    }
+
+    @Override
+    protected int getMultiSelectionLimit() {
+        return SELECTION_LIMIT;
     }
 
     @Override

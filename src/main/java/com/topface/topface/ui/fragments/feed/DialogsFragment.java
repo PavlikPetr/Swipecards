@@ -30,6 +30,8 @@ import java.util.List;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
+    public static final int SELECTION_LIMIT = 100;
+
     public static final String REFRESH_DIALOGS = "refresh_dialogs";
 
     private boolean mNeedRefresh = false;
@@ -153,6 +155,11 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu;
+    }
+
+    @Override
+    protected int getMultiSelectionLimit() {
+        return SELECTION_LIMIT;
     }
 
     @Override
