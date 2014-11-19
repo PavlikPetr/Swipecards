@@ -14,12 +14,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -230,7 +232,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onDetach() {
         super.onDetach();
         mFragmentSwitcherListener = null;
-        if (mOnlineSetter!=null) {
+        if (mOnlineSetter != null) {
             mOnlineSetter.setOnline(false);
         }
     }
@@ -319,7 +321,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void initViews(final KeyboardListenerLayout root) {
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
-
 
         // Dating controls
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
@@ -586,6 +587,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 @Override
                 public void sendLike() {
                     sendSympathy();
+                }
+            }, new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEND) {
+                        mDatingInstantMessageController.instantSend(mCurrentUser);
+                    }
+                    return false;
                 }
             }
             );
