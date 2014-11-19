@@ -107,7 +107,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     @Override
     public void onResume() {
         super.onResume();
-        setClickableAccountManagmentButtons(true);
         setViewsState();
     }
 
@@ -169,7 +168,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
             @Override
             public void afterTextChanged(Editable s) {
-                setClickableAccountManagmentButtons(true);
                 String text = s.toString();
                 if (text.equals(mToken.getLogin())) {
                     setChangeBtnAction(ACTION_RESEND_CONFIRM);
@@ -241,17 +239,14 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         switch (v.getId()) {
             case R.id.btnLogout:
                 if (CacheProfile.needToChangePassword(App.getContext())) {
-                    setClickableAccountManagmentButtons(true);
                     Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
                     intent.putExtra(NEED_EXIT, true);
                     startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_PASSWORD);
                 } else {
-                    setClickableAccountManagmentButtons(false);
                     showExitPopup();
                 }
                 break;
             case R.id.btnChange:
-                setClickableAccountManagmentButtons(false);
                 onChangeButtonClick();
                 break;
             case R.id.btnDeleteAccount:
@@ -270,7 +265,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void onChangeButtonClick() {
         switch (mChangeButtonAction) {
             case ACTION_RESEND_CONFIRM:
-                setClickableAccountManagmentButtons(true);
                 RemindRequest remindRequest = new RemindRequest(getActivity());
                 remindRequest.callback(new ApiHandler() {
                     @Override
@@ -287,12 +281,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             case ACTION_CHANGE_EMAIL:
                 final String email = Utils.getText(mEditText).trim();
                 if (Utils.isValidEmail(email)) {
+                    setClickableAccountManagmentButtons(false);
                     ChangeLoginRequest changeLoginRequest = new ChangeLoginRequest(getActivity(), email);
                     changeLoginRequest.callback(new ApiHandler() {
                         @Override
                         public void success(IApiResponse response) {
                             mToken.saveToken(mToken.getUserSocialId(), email, mToken.getPassword());
-                            setClickableAccountManagmentButtons(true);
                             setChangeBtnAction(ACTION_RESEND_CONFIRM);
                         }
 
@@ -304,14 +298,18 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                             }
                         }
+
+                        @Override
+                        public void always(IApiResponse response) {
+                            super.always(response);
+                            setClickableAccountManagmentButtons(true);
+                        }
                     }).exec();
                 } else {
-                    setClickableAccountManagmentButtons(true);
                     Toast.makeText(App.getContext(), R.string.incorrect_email, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case ACTION_CHANGE_PASSWORD:
-                setClickableAccountManagmentButtons(true);
                 Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_PASSWORD);
                 break;
@@ -344,7 +342,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         builder.setPositiveButton(R.string.general_exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                setClickableAccountManagmentButtons(true);
                 logout();
             }
         });
@@ -354,16 +351,18 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 dialog.cancel();
             }
         });
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onCancel(DialogInterface dialog) {
+            public void onDismiss(DialogInterface dialog) {
                 setClickableAccountManagmentButtons(true);
             }
         });
-        builder.create().show();
+        alertDialog.show();
     }
 
     private void showExitPopup() {
+        setClickableAccountManagmentButtons(false);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.settings_logout_msg);
         builder.setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
@@ -375,17 +374,17 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         builder.setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                setClickableAccountManagmentButtons(true);
                 logout();
             }
         });
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onCancel(DialogInterface dialog) {
+            public void onDismiss(DialogInterface dialog) {
                 setClickableAccountManagmentButtons(true);
             }
         });
-        builder.create().show();
+        alertDialog.show();
     }
 
     private void setClickableAccountManagmentButtons(boolean b){

@@ -52,7 +52,7 @@ public class DeleteAccountDialog extends AbstractModalDialog implements View.OnC
                 break;
             case R.id.btnOk:
                 mBtnOk.setClickable(false);
-                new AlertDialog.Builder(getActivity())
+                AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.settings_delete_account)
                         .setMessage(R.string.delete_account_are_you_sure)
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
@@ -95,13 +95,15 @@ public class DeleteAccountDialog extends AbstractModalDialog implements View.OnC
                                 dialog.dismiss();
                                 closeDialog();
                             }
-                        })
-                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        });
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
-                            public void onCancel(DialogInterface dialog) {
+                            public void onDismiss(DialogInterface dialog) {
                                 mBtnOk.setClickable(true);
                             }
-                        }).show();
+                        });
+                        alertDialog.show();
                 break;
         }
     }
