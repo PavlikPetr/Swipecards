@@ -45,7 +45,7 @@ public class Utils {
                     "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
                     "(" +
                     "\\." +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25}" +
                     ")+"
     );
     private static PluralResources mPluralResources;
