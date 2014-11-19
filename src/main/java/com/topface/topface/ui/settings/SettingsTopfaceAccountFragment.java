@@ -399,7 +399,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         }
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
