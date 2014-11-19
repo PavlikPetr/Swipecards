@@ -581,9 +581,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void initInstantMessageController(KeyboardListenerLayout root) {
         Options.InstantMessageFromSearch instantMessageFromSearch = CacheProfile.getOptions().instantMessageFromSearch;
         if (instantMessageFromSearch.enabled) {
-            if (mUserSearchList == null) {
-                mUserSearchList = new CachableSearchList<>(SearchUser.class);
-            }
             mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
                     this, this, instantMessageFromSearch.text,
                     mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
