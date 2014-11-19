@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -98,6 +99,7 @@ import java.util.TimerTask;
 public class ChatFragment extends BaseFragment implements View.OnClickListener, IUserOnlineListener {
 
     public static final int LIMIT = 50;
+    public static final int PROGRESS_BAR_DELAY = 3000;
 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
@@ -198,6 +200,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private boolean wasFailed = false;
     private ArrayList<UserActions.ActionItem> mUserActions;
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
+    private boolean isLoading = false;
+    private CountDownTimer timer;
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -874,6 +878,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onPause() {
         super.onPause();
+        deleteTimerDelay();
         getActivity().unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         Utils.hideSoftKeyboard(getActivity(), mEditBox);
@@ -998,10 +1003,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void showLoading() {
-        setSupportProgressBarIndeterminateVisibility(true);
+        isLoading = true;
+        startTimerDelay();
     }
 
     private void hideLoading() {
+        deleteTimerDelay();
+        isLoading = false;
         setSupportProgressBarIndeterminateVisibility(false);
     }
 
@@ -1189,5 +1197,28 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         public void switchAction() {
             actionText.setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
         }
+    }
+
+    private void deleteTimerDelay() {
+        if (timer != null) {
+            timer.cancel();
+        }
+    }
+
+    private void startTimerDelay() {
+        deleteTimerDelay();
+        timer = new CountDownTimer(PROGRESS_BAR_DELAY, PROGRESS_BAR_DELAY) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (isLoading) {
+                    setSupportProgressBarIndeterminateVisibility(true);
+                }
+            }
+        }.start();
     }
 }
