@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.feed;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedMutual;
@@ -14,12 +13,14 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.MutualListAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
 
 import java.util.List;
 
 public class MutualFragment extends FeedFragment<FeedMutual> {
+
     @Override
     protected Drawable getBackIcon() {
         return getResources().getDrawable(R.drawable.mutual_back_icon);
