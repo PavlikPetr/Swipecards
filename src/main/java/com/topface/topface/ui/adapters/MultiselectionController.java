@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MultiselectionController<T> {
 
-    private List<T> mSelected = new ArrayList<T>();
+    private List<T> mSelected = new ArrayList<>();
     private boolean mMultiSelection = false;
     private IMultiSelectionListener mSelectionListener;
     private BaseAdapter mAdapter;
@@ -51,6 +51,7 @@ public class MultiselectionController<T> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void addSelection(int position) {
         if (selectedCount() + 1 > mSelectionLimit) {
             mOverlimit = true;
@@ -78,6 +79,7 @@ public class MultiselectionController<T> {
         removeSelection(position, true);
     }
 
+    @SuppressWarnings("SuspiciousMethodCalls")
     public void removeSelection(int position, boolean notify) {
         if (mAdapter != null) {
             mSelected.remove(mAdapter.getItem(position));
@@ -100,6 +102,7 @@ public class MultiselectionController<T> {
         removeSelection(item, true);
     }
 
+    @SuppressWarnings("SuspiciousMethodCalls")
     public boolean isSelected(int position) {
         return mAdapter != null && isMultiSelectionMode() && mSelected.contains(mAdapter.getItem(position));
     }

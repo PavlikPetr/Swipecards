@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:appcompat="http://schemas.android.com/apk/res-auto">
+      xmlns:appcompat="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_profile"
         android:title="@string/profile_actions"
         appcompat:actionLayout="@layout/actionbar_item_profile"
-        appcompat:showAsAction="always" />
+        appcompat:showAsAction="always"/>
     <item
         android:id="@+id/action_user_actions_list"
         android:icon="@drawable/user_profile_actions_button_selector"
         android:title="@string/profile_actions"
-        appcompat:showAsAction="always" />
+        appcompat:showAsAction="always"/>
 </menu>
