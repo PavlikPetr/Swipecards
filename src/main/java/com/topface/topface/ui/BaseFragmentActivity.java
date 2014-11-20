@@ -112,7 +112,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             } else {
                 actionBar.setDisplayUseLogoEnabled(false);
                 actionBar.setDisplayHomeAsUpEnabled(true);
-                actionBar.setHomeAsUpIndicator(R.drawable.arrow_with_paddings);
+                actionBar.setHomeAsUpIndicator(R.drawable.ic_up_arrow);
             }
         }
     }

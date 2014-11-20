@@ -69,5 +69,5 @@
         android:layout_weight="1.0"
         android:background="@android:color/transparent"
         android:drawableTop="@drawable/btn_skip_selector"
-        android:text="@string/dating_skip_button" />
+        android:text="@string/skip" />
 </LinearLayout>

@@ -23,7 +23,8 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -75,6 +76,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         mEditText.setInputType(mFormInfo.getInputType(mTitleId));
         InputFilter[] FilterArray = new InputFilter[1];
         FilterArray[0] = new InputFilter.LengthFilter(mFormInfo.getMaxCharacters(mTitleId));
+        mEditText.setHint(mFormInfo.getHintText(getActivity(), mTitleId));
         mEditText.setFilters(FilterArray);
         if (mData != null) {
             mEditText.append(mData);
@@ -120,7 +122,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         return (mTitleId == R.array.form_main_height || mTitleId == R.array.form_main_weight);
     }
 
-    private boolean isValueZero() {
+    private boolean isIncorrectValue() {
         if (isCheckNumeric()) {
             if (mInputData.length() == 0) {
                 return false;
@@ -131,9 +133,16 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-            if (value > 0) {
+            if (isValueRight(value)) {
                 return false;
             }
+        }
+        return true;
+    }
+
+    private boolean isValueRight(int value) {
+        if (value < mFormInfo.getMinValue(mTitleId) || value > mFormInfo.getMaxValue(mTitleId) || value == 0) {
+            return false;
         }
         return true;
     }
@@ -144,7 +153,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
         if (hasChanges()) {
-            if (isCheckNumeric() && isValueZero()) {
+            if (isCheckNumeric() && isIncorrectValue()) {
                 mEditText.setText("");
                 warnEditingFailedHeightWeight(handler);
             } else {
@@ -160,7 +169,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                         prepareRequestSend();
                         ApiRequest request = mFormInfo.getFormRequest(newItem);
                         registerRequest(request);
-                        request.callback(new ApiHandler() {
+                        request.callback(new VipApiHandler() {
 
                             @Override
                             public void success(IApiResponse response) {
@@ -169,14 +178,23 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                                 getActivity().setResult(Activity.RESULT_OK);
                                 mData = mInputData;
                                 finishRequestSend();
-                                if (handler == null) getActivity().finish();
-                                else handler.sendEmptyMessage(0);
+                                if (handler == null) {
+                                    getActivity().finish();
+                                } else {
+                                    handler.sendEmptyMessage(0);
+                                }
                                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(CacheProfile.PROFILE_UPDATE_ACTION));
                             }
 
                             @Override
+                            public void always(IApiResponse response) {
+                                super.always(response);
+                                finishRequestSend();
+                            }
+
+                            @Override
                             public void fail(int codeError, IApiResponse response) {
-                                if (isCheckNumeric()) {
+                                if (codeError == ErrorCodes.INCORRECT_VALUE) {
                                     warnEditingFailedHeightWeight(handler);
                                 } else {
                                     warnEditingFailed(handler);

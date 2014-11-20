@@ -580,4 +580,6 @@
     <string name="billing_item_already_owned">Your previous purchase is now processing, please wait.</string>
     <string name="dialog">Conversation</string>
     <string name="reply">Reply</string>
+    <string name="measurement_unit_weight">kg.</string>
+    <string name="measurement_unit_height">cm.</string>
 </resources>
