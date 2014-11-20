@@ -76,11 +76,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         mEditText.setInputType(mFormInfo.getInputType(mTitleId));
         InputFilter[] FilterArray = new InputFilter[1];
         FilterArray[0] = new InputFilter.LengthFilter(mFormInfo.getMaxCharacters(mTitleId));
-        String hint = "";
-        if (mFormInfo.getHintText(mTitleId) != 0) {
-            hint = getString(mFormInfo.getHintText(mTitleId));
-        }
-        mEditText.setHint(hint);
+        mEditText.setHint(mFormInfo.getHintText(getActivity(), mTitleId));
         mEditText.setFilters(FilterArray);
         if (mData != null) {
             mEditText.append(mData);
