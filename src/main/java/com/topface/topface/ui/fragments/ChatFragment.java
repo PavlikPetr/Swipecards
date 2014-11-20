@@ -200,7 +200,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private boolean wasFailed = false;
     private ArrayList<UserActions.ActionItem> mUserActions;
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
-    private boolean mLoadingData = false;
     private CountDownTimer mTimer;
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
@@ -1003,13 +1002,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void showLoading() {
-        mLoadingData = true;
         startTimerDelay();
     }
 
     private void hideLoading() {
         deleteTimerDelay();
-        mLoadingData = false;
         setSupportProgressBarIndeterminateVisibility(false);
     }
 
@@ -1215,7 +1212,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void onFinish() {
-                if (mLoadingData) {
+                if (mIsUpdating) {
                     setSupportProgressBarIndeterminateVisibility(true);
                 }
             }
