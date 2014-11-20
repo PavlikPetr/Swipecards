@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -77,6 +78,7 @@ public class RecoverPwdFragment extends BaseFragment {
                     @Override
                     public void success(IApiResponse response) {
                         showButtons();
+                        Toast.makeText(getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_LONG).show();
                         getActivity().finish();
                     }
 
