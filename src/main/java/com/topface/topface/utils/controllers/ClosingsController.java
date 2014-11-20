@@ -354,8 +354,8 @@ public class ClosingsController implements View.OnClickListener {
         }
         // switch to DatingFragment after closings are passed
         unlockLeftMenu();
-        if ((currentSelectedFragmentInLeftMenu ==FragmentId.F_LIKES_CLOSINGS)||
-            (currentSelectedFragmentInLeftMenu==FragmentId.F_MUTUAL_CLOSINGS)) {
+        if ((currentSelectedFragmentInLeftMenu == FragmentId.F_LIKES_CLOSINGS)||
+            (currentSelectedFragmentInLeftMenu == FragmentId.F_MUTUAL_CLOSINGS)) {
                 MenuFragment.selectFragment(BaseFragment.FragmentId.F_DATING);
             }
         mClosingsPassed = true;
