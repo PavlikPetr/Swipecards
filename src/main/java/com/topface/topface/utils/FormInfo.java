@@ -284,21 +284,15 @@ public class FormInfo {
         return result;
     }
 
-    public int getHintText(int titleId) {
-        int result;
+    public String getHintText(Context context, int titleId) {
         switch (titleId) {
             case R.array.form_main_height:
-                result = R.string.measurement_unit_height;
-                break;
+                return context.getResources().getString(R.string.measurement_unit_height);
             case R.array.form_main_weight:
-                result = R.string.measurement_unit_weight;
-                break;
+                return context.getResources().getString(R.string.measurement_unit_weight);
             default:
-                result = 0;
-                break;
+                return "";
         }
-
-        return result;
     }
 
     public int getMaxCharacters(int titleId) {
