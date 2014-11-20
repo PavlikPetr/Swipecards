@@ -55,6 +55,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private static final int ACTION_CHANGE_EMAIL = 1;
     private static final int ACTION_CHANGE_PASSWORD = 2;
     private int mChangeButtonAction = ACTION_CHANGE_PASSWORD;
+    private boolean mChangeEmail = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -172,6 +173,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                     setChangeBtnAction(ACTION_RESEND_CONFIRM);
                 } else {
                     setChangeBtnAction(ACTION_CHANGE_EMAIL);
+                    mChangeEmail =true;
                 }
             }
         });
@@ -204,12 +206,15 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         if (CacheProfile.emailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
             fieldContainer.setBackgroundResource(R.drawable.edit_big_btn_selector);
-
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
             fieldContainer.setBackgroundResource(android.R.color.transparent);
-            setChangeBtnAction(ACTION_RESEND_CONFIRM);
+            if(mChangeEmail){
+                setChangeBtnAction(ACTION_CHANGE_EMAIL);
+            }else{
+                setChangeBtnAction(ACTION_RESEND_CONFIRM);
+            }
         }
     }
 
@@ -276,6 +281,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             case ACTION_CHANGE_EMAIL:
                 final String email = Utils.getText(mEditText).trim();
                 if (Utils.isValidEmail(email)) {
+                    setClickableAccountManagmentButtons(false);
                     ChangeLoginRequest changeLoginRequest = new ChangeLoginRequest(getActivity(), email);
                     changeLoginRequest.callback(new ApiHandler() {
                         @Override
@@ -287,10 +293,16 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                         @Override
                         public void fail(int codeError, IApiResponse response) {
                             if (ErrorCodes.USER_ALREADY_REGISTERED == codeError) {
-                                showLogoutPoup(email);
+                                showLogoutPopup(email);
                             } else {
                                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                             }
+                        }
+
+                        @Override
+                        public void always(IApiResponse response) {
+                            super.always(response);
+                            setClickableAccountManagmentButtons(true);
                         }
                     }).exec();
                 } else {
@@ -324,10 +336,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         }).exec();
     }
 
-    private void showLogoutPoup(String email) {
+    private void showLogoutPopup(final String email) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(String.format(getActivity().getString(R.string.logout_if_email_already_registred), email));
-        builder.setCancelable(false);
         builder.setPositiveButton(R.string.general_exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -340,10 +351,18 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 dialog.cancel();
             }
         });
-        builder.create().show();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                setClickableAccountManagmentButtons(true);
+            }
+        });
+        alertDialog.show();
     }
 
     private void showExitPopup() {
+        setClickableAccountManagmentButtons(false);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.settings_logout_msg);
         builder.setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
@@ -358,7 +377,19 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 logout();
             }
         });
-        builder.create().show();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                setClickableAccountManagmentButtons(true);
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void setClickableAccountManagmentButtons(boolean b){
+        mBtnLogout.setClickable(b);
+        mBtnChange.setClickable(b);
     }
 
     private void unlock() {
@@ -366,7 +397,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             mLockerView.setVisibility(View.GONE);
         }
     }
-
 
     @Override
     public void onDestroy() {
