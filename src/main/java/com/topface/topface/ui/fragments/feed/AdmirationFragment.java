@@ -23,8 +23,6 @@ import java.util.List;
 
 public class AdmirationFragment extends LikesFragment {
 
-    public static final int SELECTION_LIMIT = 100;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         return super.onCreateView(inflater, container, saved);
@@ -92,11 +90,6 @@ public class AdmirationFragment extends LikesFragment {
                 });
             }
         }
-    }
-
-    @Override
-    protected int getMultiSelectionLimit() {
-        return SELECTION_LIMIT;
     }
 
     @Override

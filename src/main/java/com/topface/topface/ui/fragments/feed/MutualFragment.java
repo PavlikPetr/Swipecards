@@ -21,8 +21,6 @@ import java.util.List;
 
 public class MutualFragment extends FeedFragment<FeedMutual> {
 
-    public static final int SELECTION_LIMIT = 100;
-
     @Override
     protected Drawable getBackIcon() {
         return getResources().getDrawable(R.drawable.mutual_back_icon);
@@ -85,11 +83,6 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu;
-    }
-
-    @Override
-    protected int getMultiSelectionLimit() {
-        return SELECTION_LIMIT;
     }
 
     @Override
