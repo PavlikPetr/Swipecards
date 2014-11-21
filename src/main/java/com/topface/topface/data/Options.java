@@ -89,7 +89,7 @@ public class Options extends AbstractData {
      * С какого фрагмента стартовать приложению"
      */
 
-    public String startPage = ApplicationStartPage.startPage_Dialog;  //По умолчанию приложение стартует всегда с экрана ЗНАКОМСТВА
+    public String startPage = ApplicationStartPage.startPage_Dating;  //По умолчанию приложение стартует всегда с экрана ЗНАКОМСТВА
     /**
      * Стоимость вставания в лидеры
      */
@@ -163,7 +163,6 @@ public class Options extends AbstractData {
         try {
             priceAdmiration = response.optInt("admirationPrice");
             startPage = response.optString("startPage");
-            startPage = ApplicationStartPage.startPage_Dialog;
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
