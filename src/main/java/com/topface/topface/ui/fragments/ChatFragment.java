@@ -201,6 +201,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private ArrayList<UserActions.ActionItem> mUserActions;
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
     private CountDownTimer mTimer;
+    private boolean mIsListUpdated = false;
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -328,6 +329,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         mEditBox.addTextChangedListener(mTextWatcher);
+
         //LockScreen
         initLockScreen(root);
         if (savedInstanceState != null) {
@@ -352,6 +354,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mJustResumed = false;
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
         return root;
+    }
+
+    private void checkKeybordAndShow() {
+        if (Utils.checkDeviceScreenHeight(getActivity()) && !mIsListUpdated) {
+            Utils.showSoftKeyboard(getActivity(), mEditBox);
+            mIsKeyboardOpened = true;
+            mIsListUpdated = true;
+        }
     }
 
     @Override
@@ -655,6 +665,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
                 }
                 mIsUpdating = false;
+                //show keyboard if display size more then 479dp
+                checkKeybordAndShow();
             }
 
             @Override

@@ -7,6 +7,8 @@
 
     <dimen name="popular_dialog_text_margin">36dp</dimen>
 
+    <dimen name="min_screen_height_chat_fragment">479dp</dimen>
+
     <!-- defaults for shadows -->
     <item name="shadow_1px" format="float" type="dimen">1</item>
     <item name="shadow_n1px" format="float" type="dimen">-1</item>
