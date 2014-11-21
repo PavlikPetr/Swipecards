@@ -280,7 +280,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         data.removeAll(mUnrealItems);
     }
 
-    private void prepareDates() {
+    public void prepareDates() {
         FeedList<History> data = getData();
         mShowDatesList.clear();
         for (int i = data.size() - 1; i >= 0; i--) {

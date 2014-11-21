@@ -941,13 +941,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     public boolean sendMessage(String text, final boolean cancelable) {
-        final History loaderItem = new History(IListLoader.ItemType.WAITING);
+        final History loaderItem = new History(IListLoader.ItemType.NONE);
+        loaderItem.setSimpleParam(text);
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
         if (cancelable) {
             registerRequest(messageRequest);
         }
         if (mAdapter != null && mListView != null && cancelable) {
             addSentMessage(loaderItem, messageRequest);
+            mAdapter.prepareDates();
+            mAdapter.notifyDataSetChanged();
         }
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
