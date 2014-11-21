@@ -48,6 +48,7 @@ import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.ApplicationStartPage;
 import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -354,7 +355,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
             }
-            switchFragment(FragmentId.F_DATING, false);
+            switchFragment(ApplicationStartPage.getStartFragmentId(), false);
         }
     }
 
@@ -472,7 +473,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private void switchFragment(FragmentId newFragmentId, boolean executePending) {
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
-
         String fragmentTag = getTagById(newFragmentId);
         Debug.log("MenuFragment: Try switch to fragment with tag " + fragmentTag + " (old fragment " + mSelectedFragment + ")");
         BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);

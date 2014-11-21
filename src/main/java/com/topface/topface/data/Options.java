@@ -8,6 +8,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
+import com.topface.topface.utils.ApplicationStartPage;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.UserConfig;
@@ -85,6 +86,11 @@ public class Options extends AbstractData {
      */
     public int priceAdmiration = 1;
     /**
+     * С какого фрагмента стартовать приложению"
+     */
+
+    public String startPage = ApplicationStartPage.startPage_Dialog;  //По умолчанию приложение стартует всегда с экрана ЗНАКОМСТВА
+    /**
      * Стоимость вставания в лидеры
      */
     public int priceLeader = 8;
@@ -156,6 +162,8 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
+            startPage = response.optString("startPage");
+            startPage = ApplicationStartPage.startPage_Dialog;
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization

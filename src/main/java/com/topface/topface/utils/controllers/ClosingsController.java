@@ -30,10 +30,10 @@ import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
+import com.topface.topface.utils.ApplicationStartPage;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
@@ -355,7 +355,7 @@ public class ClosingsController implements View.OnClickListener {
         // switch to DatingFragment after closings are passed
         unlockLeftMenu();
         if (currentSelectedFragmentInLeftMenu != FragmentId.F_PROFILE) {
-            MenuFragment.selectFragment(BaseFragment.FragmentId.F_DATING);
+            MenuFragment.selectFragment(ApplicationStartPage.getStartFragmentId());
         }
         mClosingsPassed = true;
         mLikesClosingsActive = false;
