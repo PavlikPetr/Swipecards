@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import android.content.Context;
 import android.content.Intent;
 
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Profile;
@@ -44,6 +45,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
             return this;
         }
 
+        @SuppressWarnings("UnusedDeclaration")
         public IntentBuilder gcmUser(GCMUtils.User gcmUser) {
             this.gcmUser = gcmUser;
             profile = null;
@@ -51,6 +53,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
             return this;
         }
 
+        @SuppressWarnings("UnusedDeclaration")
         public IntentBuilder feedIdItem(String feedItemId) {
             this.feedItemId = feedItemId;
             return this;
@@ -92,6 +95,12 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
             }
             return intent;
         }
+    }
+
+    @Override
+    protected int getContentViewId() {
+        // the fragment frame layout _without_ background definition
+        return R.layout.ac_fragment_frame_no_background;
     }
 
     @Override

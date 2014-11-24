@@ -14,12 +14,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -230,7 +232,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onDetach() {
         super.onDetach();
         mFragmentSwitcherListener = null;
-        if (mOnlineSetter!=null) {
+        if (mOnlineSetter != null) {
             mOnlineSetter.setOnline(false);
         }
     }
@@ -319,7 +321,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void initViews(final KeyboardListenerLayout root) {
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
-
 
         // Dating controls
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
@@ -586,6 +587,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 @Override
                 public void sendLike() {
                     sendSympathy();
+                }
+            }, new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEND) {
+                        mDatingInstantMessageController.instantSend(mCurrentUser);
+                    }
+                    return false;
                 }
             }
             );
@@ -859,10 +868,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mNovice.isDatingCompleted())
             return;
 
-        if (mDatingInstantMessageController != null) {
-            mDatingInstantMessageController.setEnabled(false);
-        }
-
         if (mNoviceLayout == null) {
             mNoviceLayout = new NoviceLayout(getActivity());
             mNoviceLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -876,14 +881,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 @Override
                 public void onClick(View v) {
                     mNovice.completeShowSympathy();
-                    if (mDatingInstantMessageController != null) {
-                        mDatingInstantMessageController.setEnabled(true);
-                    }
+                    setEnableInputButtons(true);
                 }
             };
             mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, completeShowSympathylistener,
                     completeShowSympathylistener);
             mNoviceLayout.startAnimation(mAlphaAnimation);
+            setEnableInputButtons(false);
         } else if (mNovice.isShowSympathiesBonus()) {
             NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
             registerRequest(noviceLikesRequest);
@@ -904,9 +908,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             @Override
                             public void onClick(View v) {
                                 mNovice.completeShowNoviceSympathiesBonus();
-                                if (mDatingInstantMessageController != null) {
-                                    mDatingInstantMessageController.setEnabled(true);
-                                }
+                                setEnableInputButtons(true);
                             }
                         };
                         mNoviceLayout.setLayoutRes(
@@ -916,6 +918,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 text
                         );
                         mNoviceLayout.startAnimation(mAlphaAnimation);
+                        setEnableInputButtons(false);
                     }
                 }
 
@@ -940,21 +943,24 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         public void onClick(View v) {
                             mNovice.completeShowBuySympathies();
                             mDatingResources.performClick();
-                            if (mDatingInstantMessageController != null) {
-                                mDatingInstantMessageController.setEnabled(true);
-                            }
+                            setEnableInputButtons(true);
                         }
                     }, new OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             mNovice.completeShowBuySympathies();
-                            if (mDatingInstantMessageController != null) {
-                                mDatingInstantMessageController.setEnabled(true);
-                            }
+                            setEnableInputButtons(true);
                         }
                     }
             );
             mNoviceLayout.startAnimation(mAlphaAnimation);
+            setEnableInputButtons(false);
+        }
+    }
+
+    private void setEnableInputButtons(boolean b){
+        if(mDatingInstantMessageController!=null){
+            mDatingInstantMessageController.setEnabled(b);
         }
     }
 
@@ -978,9 +984,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSkipBtn.setEnabled(false);
         mProfileBtn.setEnabled(false);
         mDatingLoveBtnLayout.setEnabled(false);
-        if (mDatingInstantMessageController != null) {
-            mDatingInstantMessageController.setEnabled(false);
-        }
+        setEnableInputButtons(false);
     }
 
     @Override
@@ -1006,9 +1010,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLoveBtnLayout.setEnabled(true);
 
         if (mNoviceLayout == null || mNoviceLayout.getVisibility() == View.GONE) {
-            if (mDatingInstantMessageController != null) {
-                mDatingInstantMessageController.setEnabled(true);
-            }
+            setEnableInputButtons(true);
         }
     }
 
