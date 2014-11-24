@@ -21,7 +21,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.ApplicationStartPage;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
@@ -119,7 +118,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
                 if (isAdded()) {
                     ((BaseFragmentActivity) getActivity()).close(BaseAuthFragment.this, true);
-                    MenuFragment.selectFragment(ApplicationStartPage.getStartFragmentId());
+                    MenuFragment.selectFragment(Options.getStartFragmentId());
                     LocalBroadcastManager.getInstance(getContext())
                             .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
                 }
