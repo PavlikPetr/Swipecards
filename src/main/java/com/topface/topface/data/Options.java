@@ -26,10 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static com.topface.topface.data.Options.PromoPopupEntity.AIR_ADMIRATIONS;
-import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
-import static com.topface.topface.data.Options.PromoPopupEntity.AIR_VISITORS;
-
 /**
  * Опции приложения
  * <p/>
@@ -72,17 +68,6 @@ public class Options extends AbstractData {
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
     public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
     public static final String PREMIUM_ADMIRATION_POPUP_SHOW_TIME = "premium_admirations_popup_last_show";
-
-    /**
-     * Настройки по умолчанию для отображения попап в зависимости от стартового экрана
-     */
-    private static final boolean PAGE_DATING_DIALOG_AIR_MESSAGES_DEFAULT = true;
-    private static final boolean PAGE_DATING_DIALOG_AIR_VISITORS_DEFAULT = true;
-    private static final boolean PAGE_DATING_DIALOG_AIR_ADMIRATIONS_DEFAULT = true;
-
-    private static final boolean PAGE_DIALOG_DIALOG_AIR_MESSAGES_DEFAULT = false;
-    private static final boolean PAGE_DIALOG_DIALOG_AIR_VISITORS_DEFAULT = true;
-    private static final boolean PAGE_DIALOG_DIALOG_AIR_ADMIRATIONS_DEFAULT = true;
 
     /**
      * Настройки для каждого типа страниц
@@ -698,59 +683,5 @@ public class Options extends AbstractData {
             default:
                 return BaseFragment.FragmentId.F_DATING;
         }
-    }
-
-    /**
-     * Проверяем надо ли показывать попап
-     */
-    public static boolean isShowPopup(int popupType) {
-        switch (popupType) {
-            case AIR_MESSAGES:
-                return isAirMessageShow();
-            case AIR_VISITORS:
-                return isAirVisitorsShow();
-            case AIR_ADMIRATIONS:
-                return isAirAdmirationsShow();
-        }
-        return true;
-    }
-
-    /**
-     * проверяем показывать ли попап для AIR_MESSAGE
-     */
-    private static boolean isAirMessageShow() {
-        switch (CacheProfile.getOptions().startPage) {
-            case Options.PAGE_DIALOGS:
-                return PAGE_DIALOG_DIALOG_AIR_MESSAGES_DEFAULT;
-            case Options.PAGE_START:
-                return PAGE_DATING_DIALOG_AIR_MESSAGES_DEFAULT;
-        }
-        return true;
-    }
-
-    /**
-     * проверяем показывать ли попап для AIR_VISITORS
-     */
-    private static boolean isAirVisitorsShow() {
-        switch (CacheProfile.getOptions().startPage) {
-            case Options.PAGE_DIALOGS:
-                return PAGE_DIALOG_DIALOG_AIR_VISITORS_DEFAULT;
-            case Options.PAGE_START:
-                return PAGE_DATING_DIALOG_AIR_VISITORS_DEFAULT;
-        }
-        return true;
-    }
-
-    /**
-     * проверяем показывать ли попап для AIR_ADMIRATIONS
-     */
-    private static boolean isAirAdmirationsShow() {
-        switch (CacheProfile.getOptions().startPage) {
-            case Options.PAGE_DIALOGS:
-                return PAGE_DIALOG_DIALOG_AIR_ADMIRATIONS_DEFAULT;
-            case Options.PAGE_START:
-                return PAGE_DATING_DIALOG_AIR_ADMIRATIONS_DEFAULT;
-        }
-        return true;
     }
 }

@@ -93,7 +93,7 @@ public class PromoPopupManager {
     }
 
     private boolean checkIsNeedShow(Options.PromoPopupEntity entity) {
-        return entity != null && entity.isNeedShow() && Options.isShowPopup(entity.getPopupAirType());
+        return entity != null && entity.isNeedShow();
     }
 
     public IStartAction createPromoPopupStartAction(final int priority) {
