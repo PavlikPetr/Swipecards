@@ -745,7 +745,7 @@
     <string name="loading_photo_percent">Загрузка фотографии %d%%</string>
     <string name="profile_update_error">Ошибка обновления данных</string>
     <string name="retry_cancel_editing">Во время отправки данных возникла ошибка соединения. Повторить попытку или выйти, не сохраняя данные?</string>
-    <string name="retry_cancel_editing_bad_value">Вы ввели неверные данные. Повторить попытку или выйти, не сохраняя данные? </string>
+    <string name="retry_cancel_editing_bad_value">Вы ввели неверные данные. Повторить попытку или выйти, не сохраняя данные?</string>
     <string name="user_does_not_exist">Пользователь не найден</string>
     <string name="feedback_subject_ban">Жалоба на несправедливый бан</string>
     <string name="settings_led">LED уведомление</string>
