@@ -71,7 +71,6 @@ import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
@@ -941,22 +940,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     public boolean sendMessage(String text, final boolean cancelable) {
-        final History loaderItem = new History(IListLoader.ItemType.NONE);
-        loaderItem.setSimpleParam(text);
+        final History messageItem = new History(text);
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
         if (cancelable) {
             registerRequest(messageRequest);
         }
         if (mAdapter != null && mListView != null && cancelable) {
-            addSentMessage(loaderItem, messageRequest);
-            mAdapter.prepareDates();
-            mAdapter.notifyDataSetChanged();
+            addSentMessage(messageItem, messageRequest);
         }
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, IApiResponse response) {
                 if (mAdapter != null && cancelable) {
-                    mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
+                    mAdapter.replaceMessage(messageItem, data, mListView.getRefreshableView());
                 }
                 LocalBroadcastManager.getInstance(getActivity())
                         .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
@@ -972,7 +968,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             public void fail(int codeError, IApiResponse response) {
                 if (mAdapter != null && cancelable) {
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
-                    mAdapter.showRetrySendMessage(loaderItem, messageRequest);
+                    mAdapter.showRetrySendMessage(messageItem, messageRequest);
                 }
             }
         }).exec();

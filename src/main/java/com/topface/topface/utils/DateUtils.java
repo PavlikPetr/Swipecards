@@ -97,8 +97,7 @@ public class DateUtils {
     }
 
     public static String getCurrentTimeInHoursAndMinute(){
-        Calendar calendar =Calendar.getInstance();
-        return mDateFormatHours.format(calendar.getTime());
+        return getFormattedTime(System.currentTimeMillis());
     }
 
 }
