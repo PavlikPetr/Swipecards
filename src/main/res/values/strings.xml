@@ -349,6 +349,7 @@
     <string name="general_gift">Gift</string>
     <string name="user_actions_chat">Chat</string>
     <string name="profile_edit_age_ranges">The age has to be between 16 and 99 years. Please, enter the proper number, and try again.</string>
+    <string name="wrong_password_format">Unacceptable password format</string>
     <string name="sign_in">Sign in</string>
     <string name="create_account">Create an account</string>
     <string name="email">Email</string>

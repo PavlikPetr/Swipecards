@@ -359,6 +359,7 @@
     <string name="general_gift">Dovana</string>
     <string name="user_actions_chat">Pokalbis</string>
     <string name="profile_edit_age_ranges">Amžius turi būti nuo 16 iki 99 metų. Prašome įvesti teisingą skaičių ir bandyti dar kartą.</string>
+    <string name="wrong_password_format">Neleistinas slaptažodžio formatas</string>
     <string name="sign_in">Įeiti</string>
     <string name="create_account">Sukurti paskyrą</string>
     <string name="email">El. paštas</string>
@@ -597,4 +598,5 @@
     <string name="open_market_error">Nepavyksta atverti programos lango</string>
     <string name="billing_item_already_owned">Jūsų praeitas pirkinys apdorojamas, prašome palaukti</string>
     <string name="dialog">Susirašinėjimas</string>
+    <string name="reply">Atsakyti</string>
 </resources>

@@ -6,7 +6,9 @@
     <string name="general_ok">OK</string>
     <string name="general_dbl_new">Νέες</string>
     <string name="general_settings_abbr">Ρυθμίσεις</string>
+    <string name="general_disallow">Απαγορεύστε</string>
     <string name="general_allow">Επιτρέψτε</string>
+    <string name="notification_denied_popup_title">Επιτρέψτε την παραλαβή τις ειδοποιήσεις για να ενημερώνεστε για τα εισερχόμενα μηνύματα, συμπάθειες και άλλες ειδήσεις.</string>
     <string name="notification_popup_title">Επιτρέψτε μας να σας στείλουμε μια ειδοποίηση, έτσι ώστε να μπορείτε αμέσως να μάθετε για τις νέες συμπάθειες, το θαυμασμό ή τα μη αναγνωσμένα μηνύματα</string>
     <string name="email_successfully_changed">Το e-mail σας έχει αλλάξει επιτυχώς</string>
     <string name="auth_vk_name">Vkontakte</string>
@@ -276,6 +278,7 @@
     <string name="general_premium_access_error">Για αυτή η λειτουργία χρειάζεται Premium</string>
     <string name="general_search_null_response_error">Τίποτα δεν βρέθηκε. Προσπαθήστε να αλλάξετε τα φίλτρα</string>
     <string name="change_filters">Αλλάξτε τα φίλτρα</string>
+    <string name="reset_filter">Επαναφορά</string>
     <string name="general_sex">Φύλο</string>
     <string name="general_girl">Θηλυκός</string>
     <string name="general_boy">Αρσενικός</string>
@@ -291,6 +294,8 @@
     <string name="settings_melody">Κοινοποίηση τον ήχο κλήσης</string>
     <string name="edit_refresh_status">Κάντε ενημέρωση της κατάστασης</string>
     <string name="ban_title">Συγχαρητήρια! Είστε αποκλεισμένος</string>
+    <string name="ban_title_forever">Συγχαρητήρια! Έχετε απαγορευτεί για πάντα</string>
+    <string name="ban_title_until">Συγχαρητήρια! Έχετε απαγορευτεί μέχρι την %s</string>
     <string name="ban_complain">Η αναφορά για την απαγόρευση</string>
     <string name="general_ready">Έγινε</string>
     <string name="buying_store_ok">Αγορά ολοκληρώθηκε με επιτυχία</string>
@@ -344,6 +349,7 @@
     <string name="general_gift">Το δώρω</string>
     <string name="user_actions_chat">Συνομιλία</string>
     <string name="profile_edit_age_ranges">Ηλικία θα πρέπει να είναι μεταξύ 16 – 99 ετών. Παρακαλώ εισάγετε έναν έγκυρο αριθμό και προσπαθήστε ξανά.</string>
+    <string name="wrong_password_format">Απαράδεκτη μορφή κωδικού πρόσβασης</string>
     <string name="sign_in">Είσοδος</string>
     <string name="create_account">Δημιουργία λογαριασμού</string>
     <string name="email">E-mail</string>
@@ -570,4 +576,5 @@
     <string name="open_market_error">Δεν μπορείτε να ανοίξετε τη σελίδα εφαρμογής</string>
     <string name="billing_item_already_owned">Προηγούμενη αγορά σας είναι σε επεξεργασία, παρακαλώ περιμένετε</string>
     <string name="dialog">Μηνύματα</string>
+    <string name="reply">Απαντήστε</string>
 </resources>

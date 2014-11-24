@@ -352,6 +352,7 @@
     <string name="general_gift">Regalo</string>
     <string name="user_actions_chat">Conversación</string>
     <string name="profile_edit_age_ranges">La edad ha de estar comprendida entre 16 y 99 años. Por favor, introduce el número correcto y prueba de nuevo.</string>
+    <string name="wrong_password_format">Formato de contraseña inaceptable</string>
     <string name="sign_in">Entrar</string>
     <string name="create_account">Crear cuenta</string>
     <string name="email">E-mail</string>
@@ -578,4 +579,5 @@
     <string name="open_market_error">No se puede abrir la página de la aplicación</string>
     <string name="billing_item_already_owned">Tu anterior compra está procesandose, espera por favor</string>
     <string name="dialog">Diálogo</string>
+    <string name="reply">Responder</string>
 </resources>
