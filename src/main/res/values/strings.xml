@@ -349,6 +349,7 @@
     <string name="general_gift">Gift</string>
     <string name="user_actions_chat">Chat</string>
     <string name="profile_edit_age_ranges">The age has to be between 16 and 99 years. Please, enter the proper number, and try again.</string>
+    <string name="wrong_password_format">Unacceptable password format</string>
     <string name="sign_in">Sign in</string>
     <string name="create_account">Create an account</string>
     <string name="email">Email</string>
@@ -573,7 +574,6 @@
     <string name="loading_photo_percent">Uploading photos %d%%</string>
     <string name="profile_update_error">Update data error</string>
     <string name="retry_cancel_editing">There was a network connection error while sending data to the server. Exit without saving, or try again?</string>
-    <string name="retry_cancel_editing_bad_value">You have entered incorrect data. Exit without saving, or try again?</string>
     <string name="user_does_not_exist">The user is not found.</string>
     <string name="feedback_subject_ban">Complaint on unfair ban</string>
     <string name="settings_led">LED notification</string>

@@ -349,6 +349,7 @@
     <string name="general_gift">Regalo</string>
     <string name="user_actions_chat">Chat</string>
     <string name="profile_edit_age_ranges">L’età deve entrare nel campo tra 16 e 99 anni. Per favore, inserisci il numero valido e riprova.</string>
+    <string name="wrong_password_format">Formato password inammissibile</string>
     <string name="sign_in">Accedi</string>
     <string name="create_account">Creare profilo</string>
     <string name="email">E-mail</string>
@@ -575,4 +576,5 @@
     <string name="open_market_error">La pagina momentaneamente non è disponibile</string>
     <string name="billing_item_already_owned">Il tuo ordine precedente è in elaborazione, si prega di attendere</string>
     <string name="dialog">Dialoghi</string>
+    <string name="reply">Rispondere</string>
 </resources>
