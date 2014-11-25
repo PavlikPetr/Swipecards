@@ -18,7 +18,6 @@ import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -425,7 +424,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mAdapter.setOnItemClickListener(new OnListViewItemClickListener() {
             @Override
             public void onClick(int position, View v) {
-                Log.e("TOP_FACE", "mAdapter.setOnItemClickListener");
                 Utils.hideSoftKeyboard(getActivity(), mEditBox);
             }
         });
