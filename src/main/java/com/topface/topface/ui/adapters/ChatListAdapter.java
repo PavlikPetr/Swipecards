@@ -43,6 +43,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
     private ChatFragment.OnListViewItemLongClickListener mLongClickListener;
+    private ChatFragment.OnListViewItemClickListener mClickListener;
     private View mHeaderView;
 
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
@@ -124,6 +125,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (type != T_WAIT_OR_RETRY) {
             setViewInfo(holder, item);
             setLongClickListener(position, convertView, holder);
+            setClickListener(position, convertView, holder);
         }
 
         return convertView;
@@ -447,6 +449,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         mLongClickListener = listener;
     }
 
+    public void setOnItemClickListener(ChatFragment.OnListViewItemClickListener listener) {
+        mClickListener = listener;
+    }
+
     @SuppressWarnings("deprecation")
     public void copyText(String text) {
         ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -527,6 +533,28 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 public boolean onLongClick(View v) {
                     mLongClickListener.onLongClick(position, view);
                     return false;
+                }
+            });
+        }
+    }
+
+    private void setClickListener(final int position, final View convertView, final ViewHolder holder) {
+        setClickListenerIfPresented(position, convertView, holder.message);
+        setClickListenerIfPresented(position, convertView, holder.gift);
+    }
+
+    private void setClickListenerIfPresented(final int position, final View convertView, final View view) {
+        if (view != null && convertView != null) {
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onClick(position, view);
+                }
+            });
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onClick(position, view);
                 }
             });
         }

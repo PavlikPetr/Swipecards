@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -421,6 +422,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         }).create().show();
             }
         });
+        mAdapter.setOnItemClickListener(new OnListViewItemClickListener() {
+            @Override
+            public void onClick(int position, View v) {
+                Log.e("TOP_FACE", "mAdapter.setOnItemClickListener");
+                Utils.hideSoftKeyboard(getActivity(), mEditBox);
+            }
+        });
         // list view
         mListView = (PullToRefreshListView) root.findViewById(R.id.lvChatList);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -435,12 +443,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
         mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
-        mListView.setOnViewClickListener(new PullToRefreshBase.onClickListener() {
-            @Override
-            public void onClick() {
-                Utils.hideSoftKeyboard(getActivity(), mEditBox);
-            }
-        });
     }
 
     private void initLockScreen(View root) {
@@ -1080,6 +1082,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     public interface OnListViewItemLongClickListener {
         public void onLongClick(int position, View v);
+    }
+
+    public interface OnListViewItemClickListener {
+        public void onClick(int position, View v);
     }
 
     private int mActionsHeightHeuristic;
