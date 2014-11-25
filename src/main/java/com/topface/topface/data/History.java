@@ -35,12 +35,14 @@ public class History extends FeedDialog implements Parcelable {
         mJsonForParse = response.jsonResult.toString();
     }
 
-    public History(String message) {
+    public History(String message, ItemType type) {
         super((JSONObject) null);
+        setLoaderTypeFlags(type);
         text = message;
         createdFormatted = DateUtils.getCurrentTimeInHoursAndMinute();
-        createdRelative = getRelativeCreatedDate(System.currentTimeMillis());
         created = System.currentTimeMillis();
+        createdRelative = getRelativeCreatedDate(created);
+
     }
 
     public History() {

@@ -71,6 +71,7 @@ import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
@@ -940,7 +941,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     public boolean sendMessage(String text, final boolean cancelable) {
-        final History messageItem = new History(text);
+        final History messageItem = new History(text, IListLoader.ItemType.WAITING);
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
         if (cancelable) {
             registerRequest(messageRequest);
