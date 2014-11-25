@@ -42,7 +42,6 @@ public class History extends FeedDialog implements Parcelable {
         createdFormatted = DateUtils.getCurrentTimeInHoursAndMinute();
         created = System.currentTimeMillis();
         createdRelative = getRelativeCreatedDate(created);
-
     }
 
     public History() {
