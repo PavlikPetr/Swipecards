@@ -79,13 +79,7 @@ public class MultiselectionController<T> {
     }
 
     private boolean isOverlimit() {
-        if (selectedCount() + 1 > mSelectionLimit) {
-            mOverlimit = true;
-            return mOverlimit;
-        } else {
-            mOverlimit = false;
-            return mOverlimit;
-        }
+        return (mOverlimit = selectedCount() + 1 > mSelectionLimit);
     }
 
     public void removeSelection(int position) {
