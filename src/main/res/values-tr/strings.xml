@@ -283,6 +283,7 @@
     <string name="general_premium_access_error">Bu fonksiyon için Premium gerek</string>
     <string name="general_search_null_response_error">Hiçbir şey bulunamadı. Filtreleri değiştirmeyi deneyin</string>
     <string name="change_filters">Filtreleri değiştirmek</string>
+    <string name="reset_filter">Sıfırlamak</string>
     <string name="general_sex">Cinsiyet</string>
     <string name="general_girl">Kadın</string>
     <string name="general_boy">Erkek</string>
@@ -298,6 +299,8 @@
     <string name="settings_melody">Bildirim sesi</string>
     <string name="edit_refresh_status">Durumu yenilemek</string>
     <string name="ban_title">Tebrikler! Siz ban edildiniz</string>
+    <string name="ban_title_forever">Tebrikler! Hayat boyu engellendiniz!</string>
+    <string name="ban_title_until">Tebrikler!  %s kadar engellendiniz.</string>
     <string name="ban_complain">Engellemeyi şikayet etmek</string>
     <string name="general_ready">Hazır</string>
     <string name="buying_store_ok">Alış başarılıyla tamamlanmıştır</string>
@@ -352,6 +355,7 @@
     <string name="general_gift">Hediye</string>
     <string name="user_actions_chat">Sohbet</string>
     <string name="profile_edit_age_ranges">Yaş 16 ile 99 arasında olmalıdır. Lütfen doğru rakam yazın ve tekrar deneyin.</string>
+    <string name="wrong_password_format">Yanlış parola formatı</string>
     <string name="sign_in">Giriş</string>
     <string name="create_account">Hesap oluşturmak</string>
     <string name="email">E-mail</string>
@@ -589,4 +593,5 @@
     <string name="open_market_error">Uygulama sayfası açılamıyor</string>
     <string name="billing_item_already_owned">Önceki satım alınınız uygulanıyor lütfen bekleyiniz</string>
     <string name="dialog">Sohbet</string>
+    <string name="reply">Cevap vermek</string>
 </resources>
