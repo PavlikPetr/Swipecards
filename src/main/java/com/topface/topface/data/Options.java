@@ -84,9 +84,6 @@ public class Options extends AbstractData {
      * Стоимость отправки "Восхищения"
      */
     public int priceAdmiration = 1;
-    /**
-     * С какого фрагмента стартовать приложению
-     */
 
     public String startPage = Options.PAGE_START;  //По умолчанию приложение стартует всегда с экрана ЗНАКОМСТВА
     /**
@@ -672,9 +669,6 @@ public class Options extends AbstractData {
         public String text;
     }
 
-    /**
-     * Выбор id статового экрана в зависимости от ответа сервера
-     */
     public static BaseFragment.FragmentId getStartFragmentId() {
 
         switch (CacheProfile.getOptions().startPage) {
