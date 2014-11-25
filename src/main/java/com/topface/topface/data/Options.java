@@ -85,7 +85,16 @@ public class Options extends AbstractData {
      */
     public int priceAdmiration = 1;
 
-    public String startPage = Options.PAGE_START;  //По умолчанию приложение стартует всегда с экрана ЗНАКОМСТВА
+    /**
+     * Идентификаторы стартовой страницы
+     */
+    public static final String START_PAGE_DIALOGS = "DIALOGS";
+    public static final String START_PAGE_DATINGS = "START";
+
+    /**
+     * По умолчанию приложение стартует с экрана ЗНАКОМСТВА, если сервер не прислал другое значение
+     */
+    public String startPage = Options.START_PAGE_DATINGS;
     /**
      * Стоимость вставания в лидеры
      */
@@ -672,7 +681,7 @@ public class Options extends AbstractData {
     public static BaseFragment.FragmentId getStartFragmentId() {
 
         switch (CacheProfile.getOptions().startPage) {
-            case Options.PAGE_DIALOGS:
+            case Options.START_PAGE_DIALOGS:
                 return BaseFragment.FragmentId.F_DIALOGS;
             default:
                 return BaseFragment.FragmentId.F_DATING;
