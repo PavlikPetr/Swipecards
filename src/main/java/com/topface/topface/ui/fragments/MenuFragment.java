@@ -48,7 +48,6 @@ import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.ApplicationStartPage;
 import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -355,7 +354,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
             }
-            switchFragment(ApplicationStartPage.getStartFragmentId(), false);
+            switchFragment(Options.getStartFragmentId(), false);
         }
     }
 

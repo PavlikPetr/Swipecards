@@ -8,6 +8,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.UserConfig;
@@ -32,7 +33,6 @@ import java.util.Set;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Options extends AbstractData {
-
     /**
      * Идентификаторы страниц
      */
@@ -84,9 +84,6 @@ public class Options extends AbstractData {
      * Стоимость отправки "Восхищения"
      */
     public int priceAdmiration = 1;
-    /**
-     * С какого фрагмента стартовать приложению"
-     */
 
     public String startPage = Options.PAGE_START;  //По умолчанию приложение стартует всегда с экрана ЗНАКОМСТВА
     /**
@@ -670,5 +667,15 @@ public class Options extends AbstractData {
         public boolean enabled;
         public String group;
         public String text;
+    }
+
+    public static BaseFragment.FragmentId getStartFragmentId() {
+
+        switch (CacheProfile.getOptions().startPage) {
+            case Options.PAGE_DIALOGS:
+                return BaseFragment.FragmentId.F_DIALOGS;
+            default:
+                return BaseFragment.FragmentId.F_DATING;
+        }
     }
 }

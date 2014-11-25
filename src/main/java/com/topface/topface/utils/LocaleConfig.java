@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserSetLocaleRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -113,7 +114,7 @@ public class LocaleConfig {
                 @Override
                 public void success(IApiResponse response) {
                     App.sendProfileAndOptionsRequests();
-                    NavigationActivity.restartNavigationActivity(ApplicationStartPage.getStartFragmentId());
+                    NavigationActivity.restartNavigationActivity(Options.getStartFragmentId());
                 }
 
                 @Override

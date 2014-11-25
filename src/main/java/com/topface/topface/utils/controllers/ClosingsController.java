@@ -356,7 +356,7 @@ public class ClosingsController implements View.OnClickListener {
         unlockLeftMenu();
         if ((currentSelectedFragmentInLeftMenu == FragmentId.F_LIKES_CLOSINGS)||
             (currentSelectedFragmentInLeftMenu == FragmentId.F_MUTUAL_CLOSINGS)) {
-                MenuFragment.selectFragment(BaseFragment.FragmentId.F_DATING);
+            MenuFragment.selectFragment(Options.getStartFragmentId());
             }
         mClosingsPassed = true;
         mLikesClosingsActive = false;
