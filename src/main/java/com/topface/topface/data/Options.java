@@ -8,7 +8,6 @@ import com.topface.topface.Static;
 import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
-import com.topface.topface.utils.ApplicationStartPage;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.UserConfig;
@@ -89,7 +88,7 @@ public class Options extends AbstractData {
      * С какого фрагмента стартовать приложению"
      */
 
-    public String startPage = ApplicationStartPage.startPage_Dating;  //По умолчанию приложение стартует всегда с экрана ЗНАКОМСТВА
+    public String startPage = Options.PAGE_START;  //По умолчанию приложение стартует всегда с экрана ЗНАКОМСТВА
     /**
      * Стоимость вставания в лидеры
      */

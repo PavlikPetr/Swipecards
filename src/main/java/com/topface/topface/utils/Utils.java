@@ -201,13 +201,6 @@ public class Utils {
         return (int) (mDensity * pixels);
     }
 
-    public static boolean checkDeviceScreenHeight(Context context) {
-        if (Device.getMaxDisplaySize() >= context.getResources().getDimension(R.dimen.min_screen_height_chat_fragment)) {
-            return true;
-        }
-        return false;
-    }
-
     public static String getSocialNetworkLink(String socialNetwork, String socialId) {
         String socialNetworkLink = "";
         if (TextUtils.equals(socialNetwork, AuthToken.SN_VKONTAKTE)) {

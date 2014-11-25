@@ -79,6 +79,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
@@ -201,7 +202,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private ArrayList<UserActions.ActionItem> mUserActions;
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
     private CountDownTimer mTimer;
-    private boolean mIsListUpdated = false;
+    private boolean mIsBeforeFirstChatUpdate = true;
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -354,14 +355,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mJustResumed = false;
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
         return root;
-    }
-
-    private void checkKeybordAndShow() {
-        if (Utils.checkDeviceScreenHeight(getActivity()) && !mIsListUpdated) {
-            Utils.showSoftKeyboard(getActivity(), mEditBox);
-            mIsKeyboardOpened = true;
-            mIsListUpdated = true;
-        }
     }
 
     @Override
@@ -666,7 +659,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 mIsUpdating = false;
                 //show keyboard if display size more then 479dp
-                checkKeybordAndShow();
+                if (isShowKeyboardInChat() && mIsBeforeFirstChatUpdate) {
+                    Utils.showSoftKeyboard(getActivity(), mEditBox);
+                    mIsKeyboardOpened = true;
+                    mIsBeforeFirstChatUpdate = false;
+                }
             }
 
             @Override
@@ -1229,5 +1226,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
             }
         }.start();
+    }
+
+    private boolean isShowKeyboardInChat() {
+        if (Device.getMaxDisplaySize() >= getActivity().getResources().getDimension(R.dimen.min_screen_height_chat_fragment)) {
+            return true;
+        }
+        return false;
     }
 }
