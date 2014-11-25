@@ -12,7 +12,6 @@ public class MultiselectionController<T> {
     private IMultiSelectionListener mSelectionListener;
     private BaseAdapter mAdapter;
     private int mSelectionLimit;
-    private boolean mOverlimit = false;
 
     public MultiselectionController(BaseAdapter adapter) {
         mAdapter = adapter;
@@ -35,7 +34,7 @@ public class MultiselectionController<T> {
         } else {
             addSelection(position);
             if (mSelectionListener != null) {
-                mSelectionListener.onSelected(mSelected.size(), mOverlimit);
+                mSelectionListener.onSelected(mSelected.size(), isOverlimit());
             }
         }
     }
@@ -49,7 +48,7 @@ public class MultiselectionController<T> {
         } else {
             addSelection(item);
             if (mSelectionListener != null) {
-                mSelectionListener.onSelected(mSelected.size(), mOverlimit);
+                mSelectionListener.onSelected(mSelected.size(), isOverlimit());
             }
         }
     }
@@ -79,7 +78,7 @@ public class MultiselectionController<T> {
     }
 
     private boolean isOverlimit() {
-        return (mOverlimit = selectedCount() + 1 > mSelectionLimit);
+        return (selectedCount() + 1 > mSelectionLimit);
     }
 
     public void removeSelection(int position) {
