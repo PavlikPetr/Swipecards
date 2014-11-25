@@ -36,6 +36,10 @@ public class Options extends AbstractData {
     /**
      * Идентификаторы страниц
      */
+    public final static String PAGE_PROFILE = "PROFILE";
+    public final static String PAGE_ADMIRATIONS = "ADMIRATIONS";
+    public final static String PAGE_GEO = "GEO";
+    public final static String PAGE_BONUS = "BONUS";
     public static final String PAGE_UNKNOWK = "UNKNOWN_PAGE";
     public final static String PAGE_LIKES = "LIKE";
     public final static String PAGE_MUTUAL = "MUTUAL";
@@ -46,6 +50,7 @@ public class Options extends AbstractData {
     public final static String PAGE_BOOKMARKS = "BOOKMARKS";
     public final static String PAGE_VIEWS = "VIEWS";
     public final static String PAGE_START = "START";
+    public final static String PAGE_DATING = "DATING";
     public final static String PAGE_GAG = "GAG";
     public final static String[] PAGES = new String[]{
             PAGE_UNKNOWK,
@@ -85,16 +90,12 @@ public class Options extends AbstractData {
      */
     public int priceAdmiration = 1;
 
-    /**
-     * Идентификаторы стартовой страницы
-     */
-    public static final String START_PAGE_DIALOGS = "DIALOGS";
-    public static final String START_PAGE_DATINGS = "START";
 
     /**
-     * По умолчанию приложение стартует с экрана ЗНАКОМСТВА, если сервер не прислал другое значение
+     * Раздел бокового меню, который будет отображаться при старте приложения
+     * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
-    public String startPage = Options.START_PAGE_DATINGS;
+    public String startPage = Options.PAGE_DATING;
     /**
      * Стоимость вставания в лидеры
      */
@@ -679,10 +680,29 @@ public class Options extends AbstractData {
     }
 
     public static BaseFragment.FragmentId getStartFragmentId() {
-
         switch (CacheProfile.getOptions().startPage) {
-            case Options.START_PAGE_DIALOGS:
+            case Options.PAGE_PROFILE:
+                return BaseFragment.FragmentId.F_PROFILE;
+            case Options.PAGE_DATING:
+                return BaseFragment.FragmentId.F_DATING;
+            case Options.PAGE_DIALOGS:
                 return BaseFragment.FragmentId.F_DIALOGS;
+            case Options.PAGE_VISITORS:
+                return BaseFragment.FragmentId.F_VISITORS;
+            case Options.PAGE_LIKES:
+                return BaseFragment.FragmentId.F_LIKES;
+            case Options.PAGE_ADMIRATIONS:
+                return BaseFragment.FragmentId.F_ADMIRATIONS;
+            case Options.PAGE_MUTUAL:
+                return BaseFragment.FragmentId.F_MUTUAL;
+            case Options.PAGE_BOOKMARKS:
+                return BaseFragment.FragmentId.F_BOOKMARKS;
+            case Options.PAGE_FANS:
+                return BaseFragment.FragmentId.F_FANS;
+            case Options.PAGE_GEO:
+                return BaseFragment.FragmentId.F_GEO;
+            case Options.PAGE_BONUS:
+                return BaseFragment.FragmentId.F_BONUS;
             default:
                 return BaseFragment.FragmentId.F_DATING;
         }
