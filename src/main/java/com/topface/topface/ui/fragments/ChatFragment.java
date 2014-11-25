@@ -435,6 +435,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
         mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
+        mListView.setOnViewClickListener(new PullToRefreshBase.onClickListener() {
+            @Override
+            public void onClick() {
+                Utils.hideSoftKeyboard(getActivity(), mEditBox);
+            }
+        });
     }
 
     private void initLockScreen(View root) {
