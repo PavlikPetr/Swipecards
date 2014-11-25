@@ -592,6 +592,7 @@
     <string name="loading_photo_percent">Fotografijos įkrova %d%%</string>
     <string name="profile_update_error">Duomenų atnaujinimo klaida</string>
     <string name="retry_cancel_editing">Duomenų siuntimo į serverį klaida. Išeiti neišsaugant ar pakartoti bandymą?</string>
+    <string name="retry_cancel_editing_bad_value">Jūs įvedėte neteisingus duomenis. Pakartoti bandymą ar išeiti, neišsaugant duomenų?</string>
     <string name="user_does_not_exist">Vartotojas nerastas</string>
     <string name="feedback_subject_ban">Skundas dėl neteisingo bano</string>
     <string name="settings_led">LED pranešimas</string>
@@ -599,4 +600,8 @@
     <string name="billing_item_already_owned">Jūsų praeitas pirkinys apdorojamas, prašome palaukti</string>
     <string name="dialog">Susirašinėjimas</string>
     <string name="reply">Atsakyti</string>
+    <string name="measurement_unit_weight">kg.</string>
+    <string name="measurement_unit_height">cm.</string>
+    <string name="maximum_number_of_users">Pasirinktas maksimalus vartotojų kiekis</string>
+    <string name="logout_if_email_already_registred">Vartotojas su tokiu el. paštu jau egzistuoja. Jeigu tai jūsų el. paštas, jums būtina išeiti iš dabartinės paskyros ir įeiti į paskyrą %s</string>
 </resources>

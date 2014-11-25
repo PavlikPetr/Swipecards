@@ -2,6 +2,8 @@
 name = Topface-mobile
 language = ru
 format = androidxml
+required_translations = en
+
 
 [translation]
 service = http://l10n.topface.com/
