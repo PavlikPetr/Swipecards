@@ -43,21 +43,21 @@ public class MultiselectionController<T> {
     public void onSelection(T item) {
         if (isSelected(item)) {
             removeSelection(item);
+            if (mSelectionListener != null) {
+                mSelectionListener.onSelected(mSelected.size(), false);
+            }
         } else {
             addSelection(item);
-        }
-        if (mSelectionListener != null) {
-            mSelectionListener.onSelected(mSelected.size(), false);
+            if (mSelectionListener != null) {
+                mSelectionListener.onSelected(mSelected.size(), mOverlimit);
+            }
         }
     }
 
     @SuppressWarnings("unchecked")
     public void addSelection(int position) {
-        if (selectedCount() + 1 > mSelectionLimit) {
-            mOverlimit = true;
+        if (isOverlimit()) {
             return;
-        } else {
-            mOverlimit = false;
         }
         if (mAdapter != null) {
             T item = (T) mAdapter.getItem(position);
@@ -69,9 +69,22 @@ public class MultiselectionController<T> {
     }
 
     public void addSelection(T item) {
+        if (isOverlimit()) {
+            return;
+        }
         if (mAdapter != null && item != null) {
             mSelected.add(item);
             mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private boolean isOverlimit() {
+        if (selectedCount() + 1 > mSelectionLimit) {
+            mOverlimit = true;
+            return mOverlimit;
+        } else {
+            mOverlimit = false;
+            return mOverlimit;
         }
     }
 
