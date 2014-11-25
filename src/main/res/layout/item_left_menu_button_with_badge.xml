@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/btnMenu"
         android:layout_toLeftOf="@+id/tvCounterBadge"
-        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         style="@style/LeftMenuButtons"/>
 
     <TextView
