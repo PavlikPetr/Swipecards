@@ -96,8 +96,4 @@ public class DateUtils {
         return date.getTime() / 1000;
     }
 
-    public static String getCurrentTimeInHoursAndMinute(){
-        return getFormattedTime(System.currentTimeMillis());
-    }
-
 }

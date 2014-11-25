@@ -39,8 +39,8 @@ public class History extends FeedDialog implements Parcelable {
         super((JSONObject) null);
         setLoaderTypeFlags(type);
         text = message;
-        createdFormatted = DateUtils.getCurrentTimeInHoursAndMinute();
         created = System.currentTimeMillis();
+        createdFormatted = DateUtils.getFormattedTime(created);
         createdRelative = getRelativeCreatedDate(created);
     }
 
