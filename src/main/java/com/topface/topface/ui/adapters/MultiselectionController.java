@@ -12,7 +12,6 @@ public class MultiselectionController<T> {
     private IMultiSelectionListener mSelectionListener;
     private BaseAdapter mAdapter;
     private int mSelectionLimit;
-    private boolean mOverlimit = false;
 
     public MultiselectionController(BaseAdapter adapter) {
         mAdapter = adapter;
@@ -35,7 +34,7 @@ public class MultiselectionController<T> {
         } else {
             addSelection(position);
             if (mSelectionListener != null) {
-                mSelectionListener.onSelected(mSelected.size(), mOverlimit);
+                mSelectionListener.onSelected(mSelected.size(), isOverlimit());
             }
         }
     }
@@ -43,21 +42,21 @@ public class MultiselectionController<T> {
     public void onSelection(T item) {
         if (isSelected(item)) {
             removeSelection(item);
+            if (mSelectionListener != null) {
+                mSelectionListener.onSelected(mSelected.size(), false);
+            }
         } else {
             addSelection(item);
-        }
-        if (mSelectionListener != null) {
-            mSelectionListener.onSelected(mSelected.size(), false);
+            if (mSelectionListener != null) {
+                mSelectionListener.onSelected(mSelected.size(), isOverlimit());
+            }
         }
     }
 
     @SuppressWarnings("unchecked")
     public void addSelection(int position) {
-        if (selectedCount() + 1 > mSelectionLimit) {
-            mOverlimit = true;
+        if (isOverlimit()) {
             return;
-        } else {
-            mOverlimit = false;
         }
         if (mAdapter != null) {
             T item = (T) mAdapter.getItem(position);
@@ -69,10 +68,17 @@ public class MultiselectionController<T> {
     }
 
     public void addSelection(T item) {
+        if (isOverlimit()) {
+            return;
+        }
         if (mAdapter != null && item != null) {
             mSelected.add(item);
             mAdapter.notifyDataSetChanged();
         }
+    }
+
+    private boolean isOverlimit() {
+        return (selectedCount() + 1 > mSelectionLimit);
     }
 
     public void removeSelection(int position) {
