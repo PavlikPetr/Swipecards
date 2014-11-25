@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center"
     android:orientation="vertical"
     android:clickable="true">
 
     <ImageView
+        android:layout_marginTop="@dimen/popular_dialog_text_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/icon_rocket" />
@@ -37,5 +42,7 @@
         android:text="@string/buying_vip_status"
         style="@style/Widget.Topface.Button.Big.Blue"
         android:singleLine="true"
-        android:minWidth="179dp" />
-</LinearLayout>
+        android:minWidth="179dp"
+        android:layout_marginBottom="@dimen/popular_dialog_text_margin" />
+    </LinearLayout>
+</ScrollView>
