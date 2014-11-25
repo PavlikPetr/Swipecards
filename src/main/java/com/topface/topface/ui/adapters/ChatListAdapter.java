@@ -234,6 +234,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private void addSentMessage(History item) {
         getData().addFirst(item);
+        prepareDates();
         if (!item.isWaitingItem()) {
             mUnrealItems.add(item);
         }
@@ -575,7 +576,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     @Override
     public void notifyDataSetChanged() {
         updateHeaderState(null);
-        prepareDates();
         super.notifyDataSetChanged();
     }
 
