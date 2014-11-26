@@ -20,4 +20,11 @@
     <color name="bg_white">#FFFFFF</color>
     <color name="bg_light_blue">#AEE5FD</color>
     <color name="text_color_gray">#333333</color>
+
+    <color name="tab_counter_text_color_selected">#33B5E5</color>
+    <color name="tab_counter_text_color_not_selected">#9933B5E5</color>
+    <color name="tab_text_color_selected">#FFFFFF</color>
+    <color name="tab_text_color_not_selected">#99FFFFFF</color>
+    <color name="tab_background">#303030</color>
+
 </resources>

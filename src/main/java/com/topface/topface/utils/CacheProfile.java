@@ -471,6 +471,8 @@ public class CacheProfile {
                 return CacheProfile.unread_admirations;
             case F_GEO:
                 return CacheProfile.unread_geo;
+            case F_TABBED_LIKES:
+                return CacheProfile.unread_admirations + CacheProfile.unread_likes + CacheProfile.unread_mutual;
             case F_BONUS:
                 return needShowBonusCounter ? getOptions().bonus.counter : 0;
             default:

@@ -33,7 +33,6 @@ public class AppConfig extends AbstractConfig {
     public static final String BASE_CONFIG_SETTINGS = "base_config_settings";
     public static final String DATA_API_URL = "data_api_url";
     public static final String DATA_AUTH_VK_API = "data_auth_vk_api";
-    public static final String DATA_AUTH_FB_API = "data_auth_fb_api";
     public static final String FLOOD_ENDS_TIME = "flood_ens_time";
     private static final String DATA_API_REVISION = "data_api_revision";
     private static final String DATA_EDITOR_MODE = "data_editor_mode";
@@ -54,6 +53,7 @@ public class AppConfig extends AbstractConfig {
     private static final String GCM_REG_ID = "gcm_reg_id";
     public static final String SAVED_EMAIL_LIST = "tf_saved_email_list";
     public static final String SOCIAL_BUTTONS_SETTINGS = "ButtonSettings";
+    public static final String TABBED_LIKES_LAST_PAGE = "tabbed_likes_last_page";
 
 
     public AppConfig(Context context) {
@@ -70,8 +70,6 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, DATA_API_REVISION, null);
         // vk api id
         addField(settingsMap, DATA_AUTH_VK_API, Static.AUTH_VK_ID);
-        // fb api id
-        addField(settingsMap, DATA_AUTH_FB_API, Static.AUTH_FACEBOOK_ID);
         // editor mode from Editor class
         addField(settingsMap, DATA_EDITOR_MODE, Editor.MODE_USER_FIELD);
         // editor mode from Debug class
@@ -104,6 +102,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, SAVED_EMAIL_LIST, Static.EMPTY);
         // social nets buttons settings. Stores value in form of JSON array. So default value is "[]"
         addField(settingsMap, SOCIAL_BUTTONS_SETTINGS, "[]");
+        // последняя открытая вкладка в эксперименте, где лайки разбили на три таба
+        addField(settingsMap, TABBED_LIKES_LAST_PAGE, 0);
     }
 
     protected SharedPreferences getPreferences() {
@@ -128,15 +128,6 @@ public class AppConfig extends AbstractConfig {
     @SuppressWarnings("UnusedDeclaration")
     public String getAuthVkApi() {
         return getStringField(getSettingsMap(), DATA_AUTH_VK_API);
-    }
-
-    /**
-     * Fb Api key
-     *
-     * @return api key
-     */
-    public String getAuthFbApi() {
-        return getStringField(getSettingsMap(), DATA_AUTH_FB_API);
     }
 
     /**
@@ -250,12 +241,13 @@ public class AppConfig extends AbstractConfig {
     }
 
     public String getStageLogin() {
-        return  getStringField(getSettingsMap(), STAGE_LOGIN);
+        return getStringField(getSettingsMap(), STAGE_LOGIN);
     }
 
     public boolean getStageChecked() {
         return getBooleanField(getSettingsMap(), STAGE_CHECKED);
     }
+
     /**
      * Url for api request with current saved version
      *
@@ -318,9 +310,9 @@ public class AppConfig extends AbstractConfig {
     public String getAdId() {
         return getStringField(getSettingsMap(), AD_ID);
     }
+
     /**
      * Adds url to fullscreen ad url set
-     *
      */
     public void addFullscreenUrl(String url) {
         String urls = getStringField(getSettingsMap(), FULLSCREEN_URLS_SET);
@@ -353,7 +345,6 @@ public class AppConfig extends AbstractConfig {
 
     /**
      * Sets GCM registration id
-     *
      */
     public void setGcmRegId(String regId) {
         setField(getSettingsMap(), GCM_REG_ID, regId);
@@ -379,6 +370,19 @@ public class AppConfig extends AbstractConfig {
 
     public String getSavedEmailList() {
         return getStringField(getSettingsMap(), SAVED_EMAIL_LIST);
+    }
+
+    /**
+     * Sets last opened page in {@link com.topface.topface.ui.fragments.feed.TabbedLikesFragment}
+     *
+     * @param lastPage page index to store
+     */
+    public void setTabbedLikesLastPage(int lastPage) {
+        setField(getSettingsMap(), TABBED_LIKES_LAST_PAGE, lastPage);
+    }
+
+    public int getTabbedLikesLastPage() {
+        return getIntegerField(getSettingsMap(), TABBED_LIKES_LAST_PAGE);
     }
 
     /**

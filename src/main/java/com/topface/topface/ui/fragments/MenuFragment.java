@@ -45,6 +45,7 @@ import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -71,6 +72,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_GEO;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_PROFILE;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_TABBED_LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_UNDEFINED;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VIP_PROFILE;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITORS;
@@ -235,12 +237,17 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 R.drawable.ic_dialog_selector));
         menuItems.put(F_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
-        menuItems.put(F_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(F_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_likes_selector));
-        menuItems.put(F_ADMIRATIONS.getId(), LeftMenuAdapter.newLeftMenuItem(F_ADMIRATIONS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_admirations_selector));
-        menuItems.put(F_MUTUAL.getId(), LeftMenuAdapter.newLeftMenuItem(F_MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_mutual_selector));
+        if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
+            menuItems.put(F_TABBED_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(F_TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                    R.drawable.ic_likes_selector));
+        } else {
+            menuItems.put(F_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(F_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                    R.drawable.ic_likes_selector));
+            menuItems.put(F_ADMIRATIONS.getId(), LeftMenuAdapter.newLeftMenuItem(F_ADMIRATIONS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                    R.drawable.ic_admirations_selector));
+            menuItems.put(F_MUTUAL.getId(), LeftMenuAdapter.newLeftMenuItem(F_MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                    R.drawable.ic_mutual_selector));
+        }
         menuItems.put(F_BOOKMARKS.getId(), LeftMenuAdapter.newLeftMenuItem(F_BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_star_selector));
         menuItems.put(F_FANS.getId(), LeftMenuAdapter.newLeftMenuItem(F_FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
@@ -582,6 +589,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 if (Editor.isEditor()) {
                     fragment = new EditorFragment();
                 }
+                break;
+            case F_TABBED_LIKES:
+                fragment = new TabbedLikesFragment();
                 break;
             default:
                 fragment = OwnProfileFragment.newInstance();
