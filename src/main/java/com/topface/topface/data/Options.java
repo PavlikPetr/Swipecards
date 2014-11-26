@@ -86,7 +86,6 @@ public class Options extends AbstractData {
      */
     public int priceAdmiration = 1;
 
-
     /**
      * Id фрагмента, который будет отображаться при старте приложения
      * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
