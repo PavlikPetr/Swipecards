@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -202,6 +203,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private ArrayList<UserActions.ActionItem> mUserActions;
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
     private CountDownTimer mTimer;
+    private float mListViewTouchPositionStartX;
+    private float mListViewTouchPositionStartY;
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -389,7 +392,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+    private boolean mIsListViewClick(float startX, float endX, float startY, float endY) {
+        float differenceX = Math.abs(startX - endX);
+        float differenceY = Math.abs(startY - endY);
+        if (differenceX > 5 || differenceY > 5) {
+            return false;
+        }
+        return true;
+    }
+
     private void initChatHistory(View root) {
+
         // adapter
         mAdapter.setUser(mUser);
         // list view
@@ -400,21 +413,37 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 update(true, "pull to refresh");
             }
         });
-        mListView.getRefreshableView().setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
-
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
-        mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
-        mListView.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        final ListView mListViewFromPullToRefresh = mListView.getRefreshableView();
+        mListViewFromPullToRefresh.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
+        mListViewFromPullToRefresh.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
+        mListViewFromPullToRefresh.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Utils.hideSoftKeyboard(getActivity(), mEditBox);
+            public boolean onTouch(View v, MotionEvent event) {
+                final int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        float endX = event.getX();
+                        float endY = event.getY();
+                        if (mIsListViewClick(mListViewTouchPositionStartX, endX, mListViewTouchPositionStartY, endY)) {
+                            Utils.hideSoftKeyboard(getActivity(), mEditBox);
+                        }
+                        return false;
+                    case MotionEvent.ACTION_DOWN:
+                        mListViewTouchPositionStartX = event.getX();
+                        mListViewTouchPositionStartY = event.getY();
+                        return false;
+                }
+                return false;
             }
         });
-        mListView.getRefreshableView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        mListViewFromPullToRefresh.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
-                final int pos = position - mListView.getRefreshableView().getHeaderViewsCount();
+            public boolean onItemLongClick(AdapterView<?> parent, final View view,
+                                           int position, long id) {
+                final int pos = position - mListViewFromPullToRefresh.getHeaderViewsCount();
                 History item = mAdapter.getItem(pos);
                 final EditButtonsAdapter editAdapter = new EditButtonsAdapter(getActivity(), item);
                 if (item == null) return true;

@@ -96,7 +96,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (superType == T_OTHER && item != null) {
             if (item.isWaitingItem()) {
                 return T_WAIT;
-            }else if (item.isRepeatItem()){
+            } else if (item.isRepeatItem()) {
                 return T_RETRY;
             }
             return ChatListAdapter.getItemType(item);
