@@ -1,6 +1,8 @@
 package com.topface.topface.data;
 
 
+import android.util.Log;
+
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Ssid;
@@ -92,10 +94,11 @@ public class Options extends AbstractData {
 
 
     /**
-     * Раздел бокового меню, который будет отображаться при старте приложения
+     * Id фрагмента, который будет отображаться при старте приложения
      * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
-    public String startPage = Options.PAGE_DATING;
+    public BaseFragment.FragmentId startPageFragmentId = BaseFragment.FragmentId.DATING;
+
     /**
      * Стоимость вставания в лидеры
      */
@@ -168,7 +171,12 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
-            startPage = response.optString("startPage");
+            try {
+                startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
+            } catch (IllegalArgumentException e) {
+                Debug.error("Illegal value of startPage", e);
+            }
+            Log.e("TOP_FACE", "fragmentId = " + startPageFragmentId);
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
@@ -677,34 +685,5 @@ public class Options extends AbstractData {
         public boolean enabled;
         public String group;
         public String text;
-    }
-
-    public static BaseFragment.FragmentId getStartFragmentId() {
-        switch (CacheProfile.getOptions().startPage) {
-            case Options.PAGE_PROFILE:
-                return BaseFragment.FragmentId.F_PROFILE;
-            case Options.PAGE_DATING:
-                return BaseFragment.FragmentId.F_DATING;
-            case Options.PAGE_DIALOGS:
-                return BaseFragment.FragmentId.F_DIALOGS;
-            case Options.PAGE_VISITORS:
-                return BaseFragment.FragmentId.F_VISITORS;
-            case Options.PAGE_LIKES:
-                return BaseFragment.FragmentId.F_LIKES;
-            case Options.PAGE_ADMIRATIONS:
-                return BaseFragment.FragmentId.F_ADMIRATIONS;
-            case Options.PAGE_MUTUAL:
-                return BaseFragment.FragmentId.F_MUTUAL;
-            case Options.PAGE_BOOKMARKS:
-                return BaseFragment.FragmentId.F_BOOKMARKS;
-            case Options.PAGE_FANS:
-                return BaseFragment.FragmentId.F_FANS;
-            case Options.PAGE_GEO:
-                return BaseFragment.FragmentId.F_GEO;
-            case Options.PAGE_BONUS:
-                return BaseFragment.FragmentId.F_BONUS;
-            default:
-                return BaseFragment.FragmentId.F_DATING;
-        }
     }
 }

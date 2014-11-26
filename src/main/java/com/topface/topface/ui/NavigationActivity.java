@@ -392,7 +392,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
         FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
-        showFragment(currentFragment == null ? FragmentId.F_DATING : currentFragment);
+        showFragment(currentFragment == null ? FragmentId.DATING : currentFragment);
     }
 
     public void showContent() {

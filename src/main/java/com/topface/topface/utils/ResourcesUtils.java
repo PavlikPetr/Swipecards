@@ -11,36 +11,36 @@ public class ResourcesUtils {
 
     public static int getFragmentNameResId(BaseFragment.FragmentId id) {
         switch (id) {
-            case F_VIP_PROFILE:
-            case F_PROFILE:
+            case VIP_PROFILE:
+            case PROFILE:
                 return R.string.general_profile;
-            case F_DATING:
+            case DATING:
                 return R.string.general_dating;
-            case F_LIKES:
-            case F_LIKES_CLOSINGS:
+            case LIKES:
+            case LIKES_CLOSINGS:
                 return R.string.general_likes;
-            case F_ADMIRATIONS:
+            case ADMIRATIONS:
                 return R.string.general_admirations;
-            case F_MUTUAL:
-            case F_MUTUAL_CLOSINGS:
+            case MUTUAL:
+            case MUTUAL_CLOSINGS:
                 return R.string.general_mutual;
-            case F_DIALOGS:
+            case DIALOGS:
                 return R.string.settings_messages;
-            case F_VISITORS:
+            case VISITORS:
                 return R.string.general_visitors;
-            case F_BOOKMARKS:
+            case BOOKMARKS:
                 return R.string.general_bookmarks;
-            case F_BONUS:
+            case BONUS:
                 return R.string.general_bonus;
-            case F_FANS:
+            case FANS:
                 return R.string.general_fans;
-            case F_GEO:
+            case GEO:
                 return R.string.people_nearby;
-            case F_EDITOR:
+            case EDITOR:
                 return R.string.editor_menu_admin;
-            case F_SETTINGS:
+            case SETTINGS:
                 return R.string.general_settings;
-            case F_UNDEFINED:
+            case UNDEFINED:
             default:
                 throw new IllegalArgumentException("Illegal fragmentId: do not have resources for this fragment id");
         }
