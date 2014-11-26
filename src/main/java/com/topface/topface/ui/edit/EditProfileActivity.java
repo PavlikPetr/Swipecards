@@ -288,7 +288,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         if (CacheProfile.city != null) {
             if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
                 Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
-                intent.putExtra(GCMUtils.NEXT_INTENT, FragmentId.F_VIP_PROFILE);
+                intent.putExtra(GCMUtils.NEXT_INTENT, FragmentId.VIP_PROFILE);
                 SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                 preferences.edit().putBoolean(Static.PREFERENCES_NEED_EDIT, false).apply();
                 startActivity(intent);
