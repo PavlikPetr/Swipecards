@@ -30,6 +30,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -391,42 +392,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void initChatHistory(View root) {
         // adapter
         mAdapter.setUser(mUser);
-        mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
-
-            @Override
-            public void onLongClick(final int position, final View v) {
-                History item = mAdapter.getItem(position);
-                final EditButtonsAdapter editAdapter = new EditButtonsAdapter(getActivity(), item);
-                if (item == null) return;
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.general_spinner_title)
-                        .setAdapter(editAdapter, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch ((int) editAdapter.getItemId(which)) {
-                                    case EditButtonsAdapter.ITEM_DELETE:
-                                        deleteItem(position);
-                                        EasyTracker.sendEvent("Chat", "DeleteItem", "", 1L);
-                                        break;
-                                    case EditButtonsAdapter.ITEM_COPY:
-                                        mAdapter.copyText(((TextView) v).getText().toString());
-                                        EasyTracker.sendEvent("Chat", "CopyItemText", "", 1L);
-                                        break;
-                                    case EditButtonsAdapter.ITEM_COMPLAINT:
-                                        startActivity(ComplainsActivity.createIntent(mUserId, mAdapter.getItem(position).id));
-                                        EasyTracker.sendEvent("Chat", "ComplainItemText", "", 1L);
-                                        break;
-                                }
-                            }
-                        }).create().show();
-            }
-        });
-        mAdapter.setOnItemClickListener(new OnListViewItemClickListener() {
-            @Override
-            public void onClick(int position, View v) {
-                Utils.hideSoftKeyboard(getActivity(), mEditBox);
-            }
-        });
         // list view
         mListView = (PullToRefreshListView) root.findViewById(R.id.lvChatList);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -435,12 +400,48 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 update(true, "pull to refresh");
             }
         });
-        mListView.setClickable(true);
         mListView.getRefreshableView().setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
 
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
         mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
+        mListView.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Utils.hideSoftKeyboard(getActivity(), mEditBox);
+            }
+        });
+        mListView.getRefreshableView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
+                final int pos = position - mListView.getRefreshableView().getHeaderViewsCount();
+                History item = mAdapter.getItem(pos);
+                final EditButtonsAdapter editAdapter = new EditButtonsAdapter(getActivity(), item);
+                if (item == null) return true;
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.general_spinner_title)
+                        .setAdapter(editAdapter, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch ((int) editAdapter.getItemId(which)) {
+                                    case EditButtonsAdapter.ITEM_DELETE:
+                                        deleteItem(pos);
+                                        EasyTracker.sendEvent("Chat", "DeleteItem", "", 1L);
+                                        break;
+                                    case EditButtonsAdapter.ITEM_COPY:
+                                        mAdapter.copyText(((TextView) view).getText().toString());
+                                        EasyTracker.sendEvent("Chat", "CopyItemText", "", 1L);
+                                        break;
+                                    case EditButtonsAdapter.ITEM_COMPLAINT:
+                                        startActivity(ComplainsActivity.createIntent(mUserId, mAdapter.getItem(pos).id));
+                                        EasyTracker.sendEvent("Chat", "ComplainItemText", "", 1L);
+                                        break;
+                                }
+                            }
+                        }).create().show();
+                return true;
+            }
+        });
     }
 
     private void initLockScreen(View root) {
@@ -1076,14 +1077,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public interface OnListViewItemLongClickListener {
-        public void onLongClick(int position, View v);
-    }
-
-    public interface OnListViewItemClickListener {
-        public void onClick(int position, View v);
     }
 
     private int mActionsHeightHeuristic;
