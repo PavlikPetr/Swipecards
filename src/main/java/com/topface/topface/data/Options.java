@@ -1,8 +1,6 @@
 package com.topface.topface.data;
 
 
-import android.util.Log;
-
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Ssid;
@@ -38,10 +36,6 @@ public class Options extends AbstractData {
     /**
      * Идентификаторы страниц
      */
-    public final static String PAGE_PROFILE = "PROFILE";
-    public final static String PAGE_ADMIRATIONS = "ADMIRATIONS";
-    public final static String PAGE_GEO = "GEO";
-    public final static String PAGE_BONUS = "BONUS";
     public static final String PAGE_UNKNOWK = "UNKNOWN_PAGE";
     public final static String PAGE_LIKES = "LIKE";
     public final static String PAGE_MUTUAL = "MUTUAL";
@@ -52,7 +46,6 @@ public class Options extends AbstractData {
     public final static String PAGE_BOOKMARKS = "BOOKMARKS";
     public final static String PAGE_VIEWS = "VIEWS";
     public final static String PAGE_START = "START";
-    public final static String PAGE_DATING = "DATING";
     public final static String PAGE_GAG = "GAG";
     public final static String[] PAGES = new String[]{
             PAGE_UNKNOWK,
@@ -176,7 +169,6 @@ public class Options extends AbstractData {
             } catch (IllegalArgumentException e) {
                 Debug.error("Illegal value of startPage", e);
             }
-            Log.e("TOP_FACE", "fragmentId = " + startPageFragmentId);
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
