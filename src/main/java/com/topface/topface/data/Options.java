@@ -33,6 +33,7 @@ import java.util.Set;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Options extends AbstractData {
+
     /**
      * Идентификаторы страниц
      */
