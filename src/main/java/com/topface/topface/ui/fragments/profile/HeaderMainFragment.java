@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -64,6 +65,18 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_profile_header_main, null);
         mAvatarView = (ImageViewRemote) root.findViewById(R.id.ivUserAvatar);
+        mAvatarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(mAvatarVal.position);
+                Fragment parentFrag = getParentFragment();
+                if (parentFrag != null) {
+                    parentFrag.startActivity(intent);
+                } else {
+                startActivity(intent);
+               }
+            }
+        });
         mNameView = (TextView) root.findViewById(R.id.tvName);
         mCityView = (TextView) root.findViewById(R.id.tvCity);
         return root;

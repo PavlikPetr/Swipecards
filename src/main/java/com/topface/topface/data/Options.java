@@ -11,6 +11,7 @@ import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.experiments.LikesWithThreeTabs;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.UserConfig;
@@ -87,6 +88,13 @@ public class Options extends AbstractData {
      * Стоимость отправки "Восхищения"
      */
     public int priceAdmiration = 1;
+
+    /**
+     * Id фрагмента, который будет отображаться при старте приложения
+     * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
+     */
+    public BaseFragment.FragmentId startPageFragmentId = BaseFragment.FragmentId.DATING;
+
     /**
      * Стоимость вставания в лидеры
      */
@@ -162,6 +170,11 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
+            try {
+                startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
+            } catch (IllegalArgumentException e) {
+                Debug.error("Illegal value of startPage", e);
+            }
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
