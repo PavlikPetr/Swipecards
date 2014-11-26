@@ -19,7 +19,7 @@ public class ResourcesUtils {
             case LIKES:
             case LIKES_CLOSINGS:
                 return R.string.general_likes;
-            case F_TABBED_LIKES:
+            case TABBED_LIKES:
                 return R.string.general_sympathies;
             case ADMIRATIONS:
                 return R.string.general_admirations;
