@@ -39,23 +39,23 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     private IActionBarTitleSetter mTitleSetter;
 
     public static enum FragmentId {
-        F_VIP_PROFILE(0),
-        F_PROFILE(1),
-        F_DATING(2, true),
-        F_DIALOGS(3),
-        F_VISITORS(4),
-        F_LIKES(5),
-        F_ADMIRATIONS(6),
-        F_MUTUAL(7),
-        F_LIKES_CLOSINGS(8, true),
-        F_MUTUAL_CLOSINGS(9, true),
-        F_BOOKMARKS(10),
-        F_FANS(11),
-        F_GEO(12),
-        F_BONUS(13),
-        F_EDITOR(1000),
-        F_SETTINGS(15),
-        F_UNDEFINED(-1);
+        VIP_PROFILE(0),
+        PROFILE(1),
+        DATING(2, true),
+        DIALOGS(3),
+        VISITORS(4),
+        LIKES(5),
+        ADMIRATIONS(6),
+        MUTUAL(7),
+        LIKES_CLOSINGS(8, true),
+        MUTUAL_CLOSINGS(9, true),
+        BOOKMARKS(10),
+        FANS(11),
+        GEO(12),
+        BONUS(13),
+        EDITOR(1000),
+        SETTINGS(15),
+        UNDEFINED(-1);
 
         private int mNumber;
         private boolean mIsOverlayed;

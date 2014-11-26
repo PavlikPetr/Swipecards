@@ -36,11 +36,11 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DIALOGS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_GEO;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITORS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DIALOGS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.LIKES;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.MUTUAL;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VISITORS;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
@@ -392,7 +392,7 @@ public class GCMUtils {
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, F_MUTUAL);
+                    i.putExtra(NEXT_INTENT, MUTUAL);
                 }
                 break;
 
@@ -400,7 +400,7 @@ public class GCMUtils {
                 if (showLikes) {
                     lastNotificationType = GCM_TYPE_LIKE;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, F_LIKES);
+                    i.putExtra(NEXT_INTENT, LIKES);
                 }
                 break;
 
@@ -408,13 +408,13 @@ public class GCMUtils {
                 if (showVisitors) {
                     lastNotificationType = GCM_TYPE_GUESTS;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, F_VISITORS);
+                    i.putExtra(NEXT_INTENT, VISITORS);
                 }
                 break;
             case GCM_TYPE_PEOPLE_NEARBY:
                 lastNotificationType = GCM_TYPE_PEOPLE_NEARBY;
                 i = new Intent(context, NavigationActivity.class);
-                i.putExtra(NEXT_INTENT, F_GEO);
+                i.putExtra(NEXT_INTENT, GEO);
                 break;
             case GCM_TYPE_UPDATE:
                 i = Utils.getMarketIntent(context);
@@ -426,7 +426,7 @@ public class GCMUtils {
             case GCM_TYPE_DIALOGS:
                 lastNotificationType = GCM_TYPE_DIALOGS;
                 i = new Intent(context, NavigationActivity.class);
-                i.putExtra(NEXT_INTENT, F_DIALOGS);
+                i.putExtra(NEXT_INTENT, DIALOGS);
                 break;
             case GCM_TYPE_PROMO:
             default:

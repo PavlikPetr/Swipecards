@@ -5,6 +5,7 @@ public interface IListLoader {
 
     public boolean isLoader();
 
+    @SuppressWarnings("UnusedDeclaration")
     public boolean isRetrier();
 
 }

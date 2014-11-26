@@ -62,7 +62,7 @@ public class LeadersDialog extends AbstractModalDialog {
                 @Override
                 public void onClick(View v) {
                     if (user.id == CacheProfile.uid) {
-                        ((NavigationActivity) getActivity()).showFragment(FragmentId.F_PROFILE);
+                        ((NavigationActivity) getActivity()).showFragment(FragmentId.PROFILE);
                         dialog.dismiss();
                     } else {
                         startActivity(CacheProfile.getOptions().autoOpenGallery.createIntent(user.id, user.photosCount, LeadersDialog.class, user.photo, getActivity()));

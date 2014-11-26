@@ -958,8 +958,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void setEnableInputButtons(boolean b){
-        if(mDatingInstantMessageController!=null){
+    private void setEnableInputButtons(boolean b) {
+        if (mDatingInstantMessageController != null) {
             mDatingInstantMessageController.setEnabled(b);
         }
     }
