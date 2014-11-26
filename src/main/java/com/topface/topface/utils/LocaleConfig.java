@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserSetLocaleRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -114,7 +113,7 @@ public class LocaleConfig {
                 @Override
                 public void success(IApiResponse response) {
                     App.sendProfileAndOptionsRequests();
-                    NavigationActivity.restartNavigationActivity(Options.getStartFragmentId());
+                    NavigationActivity.restartNavigationActivity(CacheProfile.getOptions().startPageFragmentId);
                 }
 
                 @Override
@@ -130,7 +129,7 @@ public class LocaleConfig {
             }).exec();
         } else {
             progress.dismiss();
-            NavigationActivity.restartNavigationActivity(BaseFragment.FragmentId.F_DATING);
+            NavigationActivity.restartNavigationActivity(BaseFragment.FragmentId.DATING);
         }
     }
 }

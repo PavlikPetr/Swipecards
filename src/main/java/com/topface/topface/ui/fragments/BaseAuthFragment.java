@@ -118,7 +118,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
                 if (isAdded()) {
                     ((BaseFragmentActivity) getActivity()).close(BaseAuthFragment.this, true);
-                    MenuFragment.selectFragment(Options.getStartFragmentId());
+                    MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
                     LocalBroadcastManager.getInstance(getContext())
                             .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
                 }

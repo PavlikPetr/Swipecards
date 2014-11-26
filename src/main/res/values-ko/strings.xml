@@ -121,7 +121,6 @@
     <string name="chat_like_out">당신은 호감도를 전송하였습니다.</string>
     <string name="chat_mutual_in">당신에게 감탄하는 마음을 보내왔습니다.</string>
     <string name="chat_mutual_out">당신은 감탄하는 마음을 보냈습니다.</string>
-    <string name="chat_wish_in">개인적인 희망을 당신에게 보내왔습니다.</string>
     <string name="chat_wish_out">당신의 개인적인 희망을 보냅니다.</string>
     <string name="chat_sexuality_in">당신의 섹시함을 평가하였습니다.</string>
     <string name="chat_sexuality_out">당신은 섹시함을 평가하였습니다.</string>
@@ -138,7 +137,6 @@
     <string name="buying_default_message">선물을 보낼 수 있으며, 코인 선물에 대한 감탄을 보낼 수 있습니다.</string>
     <string name="buying_money">코인 구입</string>
     <string name="profile_header_title">내 프로필</string>
-    <string name="album_add_photo_title">사진을 추가하세요.</string>
     <string name="profile_add_album">사진 앨범에서 선택하기</string>
     <string name="profile_add_camera">카메라에서 촬영하기</string>
     <string name="profile_photo">사진</string>

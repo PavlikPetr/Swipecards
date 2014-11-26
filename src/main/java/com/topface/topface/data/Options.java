@@ -33,6 +33,7 @@ import java.util.Set;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Options extends AbstractData {
+
     /**
      * Идентификаторы страниц
      */
@@ -85,7 +86,12 @@ public class Options extends AbstractData {
      */
     public int priceAdmiration = 1;
 
-    public String startPage = Options.PAGE_START;  //По умолчанию приложение стартует всегда с экрана ЗНАКОМСТВА
+    /**
+     * Id фрагмента, который будет отображаться при старте приложения
+     * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
+     */
+    public BaseFragment.FragmentId startPageFragmentId = BaseFragment.FragmentId.DATING;
+
     /**
      * Стоимость вставания в лидеры
      */
@@ -158,7 +164,11 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
-            startPage = response.optString("startPage");
+            try {
+                startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
+            } catch (IllegalArgumentException e) {
+                Debug.error("Illegal value of startPage", e);
+            }
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
@@ -667,15 +677,5 @@ public class Options extends AbstractData {
         public boolean enabled;
         public String group;
         public String text;
-    }
-
-    public static BaseFragment.FragmentId getStartFragmentId() {
-
-        switch (CacheProfile.getOptions().startPage) {
-            case Options.PAGE_DIALOGS:
-                return BaseFragment.FragmentId.F_DIALOGS;
-            default:
-                return BaseFragment.FragmentId.F_DATING;
-        }
     }
 }
