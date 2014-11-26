@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewStub;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
@@ -230,7 +229,7 @@ public class ClosingsController implements View.OnClickListener {
     private boolean initMenuItem(View menuItem, int btnTextResId, int iconResId, boolean visible,
                                  FragmentId fragmentId) {
         menuItem.setVisibility(visible ? View.VISIBLE : View.GONE);
-        Button menuButton = (Button) menuItem.findViewById(R.id.btnMenu);
+        TextView menuButton = (TextView) menuItem.findViewById(R.id.btnMenu);
         menuButton.setOnClickListener(this);
         menuButton.setText(btnTextResId);
         menuButton.setTag(fragmentId);
@@ -340,10 +339,6 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     private void removeClosings() {
-        removeClosings(null);
-    }
-
-    private void removeClosings(FragmentId currentSelectedFragmentInLeftMenu) {
         if (mClosingsWidget != null) mClosingsWidget.setVisibility(View.GONE);
         if (mAdapter != null) {
             mMenuFragment.showBuyWidjet();
@@ -353,10 +348,8 @@ public class ClosingsController implements View.OnClickListener {
         }
         // switch to DatingFragment after closings are passed
         unlockLeftMenu();
-        if ((currentSelectedFragmentInLeftMenu == FragmentId.LIKES_CLOSINGS) ||
-                (currentSelectedFragmentInLeftMenu == FragmentId.MUTUAL_CLOSINGS)) {
-            MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
-        }
+        MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
+
         mClosingsPassed = true;
         mLikesClosingsActive = false;
         mMutualClosingsActive = false;
@@ -427,9 +420,9 @@ public class ClosingsController implements View.OnClickListener {
         mLogoutWasInitiated = false;
     }
 
-    public void onPremiumObtained(FragmentId fragmentId) {
+    public void onPremiumObtained() {
         if (!mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) {
-            removeClosings(fragmentId);
+            removeClosings();
         }
     }
 
