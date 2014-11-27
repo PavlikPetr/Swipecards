@@ -105,7 +105,6 @@ public class Options extends AbstractData {
     public long popup_timeout;
     public boolean blockUnconfirmed;
     public boolean blockChatNotMutual;
-    public boolean isInstantMessageAllowedForNewbie;
     public Closing closing = new Closing();
     public BlockSympathy blockSympathy = new BlockSympathy();
     public BlockPeopleNearby blockPeople = new BlockPeopleNearby();
@@ -148,6 +147,8 @@ public class Options extends AbstractData {
 
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
 
+    public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -189,7 +190,6 @@ public class Options extends AbstractData {
             maxVersion = response.optString("maxVersion");
             blockUnconfirmed = response.optBoolean("blockUnconfirmed");
             blockChatNotMutual = response.optBoolean("blockChatNotMutual");
-            isInstantMessageAllowedForNewbie = response.optBoolean("instantMessageAllowedForNewbie");
 
             JSONObject payments = response.optJSONObject("payments");
 
@@ -337,6 +337,13 @@ public class Options extends AbstractData {
                 autoOpenGallery.setEnabled(jsonAutoOpenGallery.optBoolean("enabled"));
                 autoOpenGallery.setGroup(jsonAutoOpenGallery.optString("group"));
             }
+
+            JSONObject jsonInstaMessagesForNewbies = response.optJSONObject("instantMessagesForNewbies");
+            if (jsonInstaMessagesForNewbies != null) {
+                instantMessagesForNewbies.isAllowed = jsonInstaMessagesForNewbies.optBoolean("allowed");
+                instantMessagesForNewbies.text = jsonInstaMessagesForNewbies.optString("text");
+            }
+
 
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -679,5 +686,10 @@ public class Options extends AbstractData {
         public boolean enabled;
         public String group;
         public String text;
+    }
+
+    public static class InstantMessagesForNewbies {
+        public boolean isAllowed = false;
+        public String text = "";
     }
 }
