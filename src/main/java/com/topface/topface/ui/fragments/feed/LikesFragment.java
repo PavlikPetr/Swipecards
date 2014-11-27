@@ -49,7 +49,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     protected View mEmptyFeedView;
     private RateController mRateController;
-    private boolean mIsEmptyScreenOnLikesNeedVipShow = false;
+    private TextView mTitleWithCounter;
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -72,9 +72,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     protected void onCountersUpdated() {
-        if (mEmptyFeedView != null && mIsEmptyScreenOnLikesNeedVipShow) {
-            initEmptyFeedView(mEmptyFeedView);
-        }
+        updateTitleWithCounter();
     }
 
     @Override
@@ -157,17 +155,23 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         }
     }
 
-    private void initEmptyScreenOnLikesNeedVip(ViewFlipper viewFlipper) {
-        mIsEmptyScreenOnLikesNeedVipShow = true;
-        viewFlipper.setDisplayedChild(1);
-        View currentView = viewFlipper.getChildAt(1);
-        if (currentView != null) {
+    private void updateTitleWithCounter() {
+        if (mTitleWithCounter != null) {
             String title = Utils.getQuantityString(
                     R.plurals.you_were_liked,
                     CacheProfile.unread_likes,
                     CacheProfile.unread_likes
             );
-            ((TextView) currentView.findViewById(R.id.tvTitle)).setText(title);
+            mTitleWithCounter.setText(title);
+        }
+    }
+
+    private void initEmptyScreenOnLikesNeedVip(ViewFlipper viewFlipper) {
+        viewFlipper.setDisplayedChild(1);
+        View currentView = viewFlipper.getChildAt(1);
+        if (currentView != null) {
+            mTitleWithCounter = (TextView) currentView.findViewById(R.id.tvTitle);
+            updateTitleWithCounter();
             currentView.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -180,7 +184,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     private void initEmptyScreenWithoutLikes(ViewFlipper viewFlipper) {
-        mIsEmptyScreenOnLikesNeedVipShow = false;
         viewFlipper.setDisplayedChild(0);
         View currentView = viewFlipper.getChildAt(0);
         if (currentView != null) {
@@ -195,7 +198,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     private void initEmptyScreenOnBlockedLikes(final View inflated, ViewFlipper viewFlipper) {
         final Options.BlockSympathy blockSympathyOptions = CacheProfile.getOptions().blockSympathy;
-        mIsEmptyScreenOnLikesNeedVipShow = false;
         // send stat to google analytics
         sendBlockSympathyStatistics(blockSympathyOptions);
         // set paid likes view
