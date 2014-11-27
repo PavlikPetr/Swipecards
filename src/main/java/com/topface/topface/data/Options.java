@@ -340,7 +340,7 @@ public class Options extends AbstractData {
 
             JSONObject jsonInstaMessagesForNewbies = response.optJSONObject("instantMessagesForNewbies");
             if (jsonInstaMessagesForNewbies != null) {
-                instantMessagesForNewbies.isAllowed = jsonInstaMessagesForNewbies.optBoolean("allowed");
+                instantMessagesForNewbies.enabled = jsonInstaMessagesForNewbies.optBoolean("enabled");
                 instantMessagesForNewbies.text = jsonInstaMessagesForNewbies.optString("text");
             }
 
@@ -689,7 +689,7 @@ public class Options extends AbstractData {
     }
 
     public static class InstantMessagesForNewbies {
-        public boolean isAllowed = false;
+        public boolean enabled = false;
         public String text = "";
     }
 }

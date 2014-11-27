@@ -206,7 +206,7 @@ public class DatingInstantMessageController {
     }
 
     private boolean tryChat(SearchUser user) {
-        if (CacheProfile.getOptions().instantMessagesForNewbies.isAllowed) {
+        if (CacheProfile.getOptions().instantMessagesForNewbies.enabled) {
             return true;
         }
 
