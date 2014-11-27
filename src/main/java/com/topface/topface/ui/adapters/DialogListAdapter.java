@@ -91,8 +91,11 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                     break;
             }
         }
-        text = (dialog.type == FeedDialog.MESSAGE && dialog.unread && CacheProfile.getOptions().hideDialogPreview) ? Utils.getQuantityString(R.plurals.notification_many_messages,
-                dialog.unreadCounter, dialog.unreadCounter) : text;
+        if (dialog.unread && CacheProfile.getOptions().hideDialogPreview) {
+            text = Utils.getQuantityString(R.plurals.notification_many_messages,
+                    dialog.unreadCounter, dialog.unreadCounter);
+            view.setTextColor(getContext().getResources().getColor(R.color.hidden_dialog_preview_text_color));
+        }
         //Если иконка или текст пустые, то ставим данные по умолчанию
         image = (image == 0 && dialog.target == FeedDialog.OUTPUT_USER_MESSAGE) ?
                 R.drawable.ico_outbox : 0;

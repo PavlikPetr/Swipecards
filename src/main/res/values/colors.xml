@@ -13,6 +13,8 @@
     <color name="text_white">#FFFFFF</color>
 
     <color name="geo_color">#FFCF72</color>>
+    <!-- text color for hidden dialog preview -->
+    <color name="hidden_dialog_preview_text_color">#00CDFE</color>>
 
     <color name="disabled_color">#AAAAAA</color>
     <!-- new redesign colors -->
