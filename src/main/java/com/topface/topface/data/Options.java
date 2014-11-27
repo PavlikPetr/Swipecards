@@ -141,6 +141,9 @@ public class Options extends AbstractData {
     public boolean unlockAllForPremium;
     public int maxMessageSize;
 
+    public boolean enabledDatingLockPopup = true;
+    public long datingLockPopupTimeout;
+
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
 
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
@@ -334,6 +337,12 @@ public class Options extends AbstractData {
             if (jsonAutoOpenGallery != null) {
                 autoOpenGallery.setEnabled(jsonAutoOpenGallery.optBoolean("enabled"));
                 autoOpenGallery.setGroup(jsonAutoOpenGallery.optString("group"));
+            }
+
+            JSONObject jsonNotShown = response.optJSONObject("notShown");
+            if (jsonNotShown != null) {
+                enabledDatingLockPopup = jsonNotShown.optBoolean("enabled");
+                datingLockPopupTimeout = jsonNotShown.optLong("timeout");
             }
 
         } catch (Exception e) {
