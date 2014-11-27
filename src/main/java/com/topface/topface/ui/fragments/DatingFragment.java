@@ -40,9 +40,9 @@ import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.NoviceLikes;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.search.CachableSearchList;
 import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
@@ -579,10 +579,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initInstantMessageController(KeyboardListenerLayout root) {
-        Options.InstantMessageFromSearch instantMessageFromSearch = CacheProfile.getOptions().instantMessageFromSearch;
-        if (instantMessageFromSearch.enabled) {
+        InstantMessageFromSearch instantMessageFromSearch = CacheProfile.getOptions().instantMessageFromSearch;
+        if (instantMessageFromSearch.isEnabled()) {
             mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
-                    this, this, instantMessageFromSearch.text,
+                    this, this, instantMessageFromSearch.getText(),
                     mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
                 @Override
                 public void sendLike() {
