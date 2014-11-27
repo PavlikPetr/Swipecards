@@ -189,6 +189,10 @@ public class DatingInstantMessageController {
     }
 
     private boolean tryChat(SearchUser user) {
+        if (CacheProfile.getOptions().isInstantMessageAllowedForNewbie) {
+            return true;
+        }
+
         if (CacheProfile.premium || user.isMutualPossible || !CacheProfile.getOptions().blockChatNotMutual) {
             return true;
         } else {

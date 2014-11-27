@@ -97,6 +97,7 @@ public class Options extends AbstractData {
     public long popup_timeout;
     public boolean blockUnconfirmed;
     public boolean blockChatNotMutual;
+    public boolean isInstantMessageAllowedForNewbie;
     public Closing closing = new Closing();
     public BlockSympathy blockSympathy = new BlockSympathy();
     public BlockPeopleNearby blockPeople = new BlockPeopleNearby();
@@ -175,6 +176,7 @@ public class Options extends AbstractData {
             maxVersion = response.optString("maxVersion");
             blockUnconfirmed = response.optBoolean("blockUnconfirmed");
             blockChatNotMutual = response.optBoolean("blockChatNotMutual");
+            isInstantMessageAllowedForNewbie = response.optBoolean("instantMessageAllowedForNewbie");
 
             JSONObject payments = response.optJSONObject("payments");
 
