@@ -79,6 +79,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
@@ -201,6 +202,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private ArrayList<UserActions.ActionItem> mUserActions;
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
     private CountDownTimer mTimer;
+    private boolean mIsBeforeFirstChatUpdate = true;
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -328,6 +330,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         mEditBox.addTextChangedListener(mTextWatcher);
+
         //LockScreen
         initLockScreen(root);
         if (savedInstanceState != null) {
@@ -655,6 +658,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
                 }
                 mIsUpdating = false;
+                //show keyboard if display size more then 479dp
+                showKeyboardOnLargeScreen();
+                mIsBeforeFirstChatUpdate = false;
             }
 
             @Override
@@ -684,6 +690,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }).exec();
     }
 
+    private void showKeyboardOnLargeScreen(){
+        if (isShowKeyboardInChat() && mIsBeforeFirstChatUpdate) {
+            Utils.showSoftKeyboard(getActivity(), mEditBox);
+            mIsKeyboardOpened = true;
+        }
+    }
 
     private void removeOutdatedItems(HistoryListData data) {
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
@@ -1217,5 +1229,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
             }
         }.start();
+    }
+
+    private boolean isShowKeyboardInChat() {
+        if (Device.getMaxDisplaySize() >= getActivity().getResources().getDimension(R.dimen.min_screen_height_chat_fragment)) {
+            return true;
+        }
+        return false;
     }
 }
