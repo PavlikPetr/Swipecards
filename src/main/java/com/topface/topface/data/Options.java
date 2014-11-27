@@ -662,6 +662,7 @@ public class Options extends AbstractData {
             public String action;
             public int type;
         }
+
         public boolean hasOffers() {
             return !mainOffers.isEmpty() && !extraOffers.isEmpty();
         }
