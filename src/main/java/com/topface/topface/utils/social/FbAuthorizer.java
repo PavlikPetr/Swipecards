@@ -111,7 +111,13 @@ public class FbAuthorizer extends Authorizer {
 
     @Override
     public void authorize() {
-        Session.openActiveSession(getActivity(), true, Arrays.asList(FB_PERMISSIONS), mStatusCallback);
+        Session session = Session.getActiveSession();
+        if (session.isOpened() || session.isClosed()) {
+            Session.openActiveSession(getActivity(), true, Arrays.asList(FB_PERMISSIONS), mStatusCallback);
+        } else {
+            Session.getActiveSession().openForRead(new Session.OpenRequest(getActivity())
+                    .setPermissions(Arrays.asList(FB_PERMISSIONS)).setCallback(mStatusCallback));
+        }
     }
 
     @Override
