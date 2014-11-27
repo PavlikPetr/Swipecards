@@ -9,6 +9,10 @@ import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.experiments.LikesWithThreeTabs;
+import com.topface.topface.data.experiments.ForceOfferwallRedirect;
+import com.topface.topface.data.experiments.InstantMessageFromSearch;
+import com.topface.topface.data.experiments.InstantMessagesForNewbies;
+import com.topface.topface.data.experiments.LikesWithThreeTabs;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -151,6 +155,8 @@ public class Options extends AbstractData {
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
 
     public LikesWithThreeTabs likesWithThreeTabs = new LikesWithThreeTabs();
+
+    public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -330,6 +336,8 @@ public class Options extends AbstractData {
             autoOpenGallery.init(response);
 
             likesWithThreeTabs.init(response);
+
+            instantMessagesForNewbies.init(response);
 
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -657,9 +665,9 @@ public class Options extends AbstractData {
             public String action;
             public int type;
         }
-
         public boolean hasOffers() {
             return !mainOffers.isEmpty() && !extraOffers.isEmpty();
         }
     }
+
 }
