@@ -95,7 +95,7 @@ public class Options extends AbstractData {
     /**
      * Флаг отображения превью в диалогах
      */
-    public boolean isHideDialogPreview;
+    public boolean hideDialogPreview;
 
     /**
      * Стоимость вставания в лидеры
@@ -171,7 +171,7 @@ public class Options extends AbstractData {
             priceAdmiration = response.optInt("admirationPrice");
 
             // по умолчанию превью в диалогах всегда отображаем
-            isHideDialogPreview = response.optBoolean("hideDialogPreview", false);
+            hideDialogPreview = response.optBoolean("hideDialogPreview", false);
             try {
                 startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
             } catch (IllegalArgumentException e) {

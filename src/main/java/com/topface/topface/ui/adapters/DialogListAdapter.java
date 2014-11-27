@@ -35,7 +35,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
         if (getItemViewType(position) == T_NEW) {
             int unreadCounter = getUnreadCounter(dialog);
-            if (unreadCounter > 1 && !CacheProfile.getOptions().isHideDialogPreview) {
+            if (unreadCounter > 1 && !CacheProfile.getOptions().hideDialogPreview) {
                 holder.unreadCounter.setVisibility(View.VISIBLE);
                 holder.unreadCounter.setText(Integer.toString(unreadCounter));
             } else {
@@ -91,7 +91,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                     break;
             }
         }
-        text = (dialog.type == FeedDialog.MESSAGE && dialog.unread && CacheProfile.getOptions().isHideDialogPreview) ? Utils.getQuantityString(R.plurals.notification_many_messages,
+        text = (dialog.type == FeedDialog.MESSAGE && dialog.unread && CacheProfile.getOptions().hideDialogPreview) ? Utils.getQuantityString(R.plurals.notification_many_messages,
                 dialog.unreadCounter, dialog.unreadCounter) : text;
         //Если иконка или текст пустые, то ставим данные по умолчанию
         image = (image == 0 && dialog.target == FeedDialog.OUTPUT_USER_MESSAGE) ?
