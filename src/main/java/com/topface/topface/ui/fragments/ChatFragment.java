@@ -13,11 +13,13 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -203,8 +205,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private ArrayList<UserActions.ActionItem> mUserActions;
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
     private CountDownTimer mTimer;
-    private float mListViewTouchPositionStartX;
-    private float mListViewTouchPositionStartY;
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -392,15 +392,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
-    private boolean mIsListViewClick(float startX, float endX, float startY, float endY) {
-        float differenceX = Math.abs(startX - endX);
-        float differenceY = Math.abs(startY - endY);
-        if (differenceX > 5 || differenceY > 5) {
-            return false;
-        }
-        return true;
-    }
-
     private void initChatHistory(View root) {
 
         // adapter
@@ -418,24 +409,43 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         final ListView mListViewFromPullToRefresh = mListView.getRefreshableView();
         mListViewFromPullToRefresh.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         mListViewFromPullToRefresh.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
+        // detect gesture on ListView
+        final GestureDetectorCompat mListViewDetector = new GestureDetectorCompat(getActivity(), new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent e) {
+
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                Utils.hideSoftKeyboard(getActivity(), mEditBox);
+                return false;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                return false;
+            }
+        });
         mListViewFromPullToRefresh.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                final int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        float endX = event.getX();
-                        float endY = event.getY();
-                        if (mIsListViewClick(mListViewTouchPositionStartX, endX, mListViewTouchPositionStartY, endY)) {
-                            Utils.hideSoftKeyboard(getActivity(), mEditBox);
-                        }
-                        return false;
-                    case MotionEvent.ACTION_DOWN:
-                        mListViewTouchPositionStartX = event.getX();
-                        mListViewTouchPositionStartY = event.getY();
-                        return false;
-                }
+                mListViewDetector.onTouchEvent(event);
                 return false;
             }
         });
