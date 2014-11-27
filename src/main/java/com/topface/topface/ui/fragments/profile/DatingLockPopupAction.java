@@ -1,47 +1,37 @@
 package com.topface.topface.ui.fragments.profile;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
-import com.topface.topface.ui.dialogs.RateAppDialog;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 
-/**
- * Created by onikitin on 26.11.14.
- */
+
 public class DatingLockPopupAction extends AbstractStartAction {
 
 
-    private FragmentManager fragmentManager;
-    private int priority;
+    private DatingLockPopup.DatingLockPopupRedirectListener mDatingLockPopupRedirect;
+    private FragmentManager mFragmentManager;
+    private int mPriority;
 
-    public DatingLockPopupAction(FragmentManager fragmentManager, int priority) {
-        this.fragmentManager = fragmentManager;
-        this.priority = priority;
+    public DatingLockPopupAction(FragmentManager fragmentManager, int priority, DatingLockPopup.DatingLockPopupRedirectListener mDatingLockPopupRedirect) {
+        this.mFragmentManager = fragmentManager;
+        this.mPriority = priority;
+        this.mDatingLockPopupRedirect = mDatingLockPopupRedirect;
     }
 
     private boolean isTimeoutEnded() {
         Options options = CacheProfile.getOptions();
-        if (options.enabledDatingLockPopup) {
-            SharedPreferences preferences = App.getContext().getSharedPreferences(
-                    Static.PREFERENCES_TAG_SHARED,
-                    Context.MODE_PRIVATE);
-            if (preferences == null) {
-                return false;
-            }
-            long lastTime = preferences.getLong(DatingLockPopup.DATING_LOCK_POPUP, -1);
-            if (lastTime == -1) {
+        if (options.notShown.enabledDatingLockPopup) {
+            long lastTime = App.getUserConfig().getDatingLockPopupShow();
+            if (lastTime == 0) {
                 //показываем попап первый раз
                 return true;
             }
             long currentTime = System.currentTimeMillis();
-            return ((currentTime - lastTime) >= options.datingLockPopupTimeout);
+            return ((currentTime - lastTime) >= options.notShown.datingLockPopupTimeout);
         } else {
             return false;
         }
@@ -49,29 +39,24 @@ public class DatingLockPopupAction extends AbstractStartAction {
 
     @Override
     public void callInBackground() {
-        SharedPreferences preferences = App.getContext().getSharedPreferences(
-                Static.PREFERENCES_TAG_SHARED,
-                Context.MODE_PRIVATE
-        );
-        preferences.edit()
-                .putLong(DatingLockPopup.DATING_LOCK_POPUP, System.currentTimeMillis())
-                .apply();
+        App.getUserConfig().setDatingLockPopupShow(System.currentTimeMillis());
     }
 
     @Override
     public void callOnUi() {
         DatingLockPopup datingLockPopup = new DatingLockPopup();
-        datingLockPopup.show(fragmentManager, RateAppDialog.TAG);
+        datingLockPopup.setDatingLockPopupRedirectListener(mDatingLockPopupRedirect);
+        datingLockPopup.show(mFragmentManager, DatingLockPopup.TAG);
     }
 
     @Override
     public boolean isApplicable() {
-        return (CacheProfile.getOptions().enabledDatingLockPopup && isTimeoutEnded());
+        return (CacheProfile.getOptions().notShown.enabledDatingLockPopup && isTimeoutEnded());
     }
 
     @Override
     public int getPriority() {
-        return priority;
+        return mPriority;
     }
 
     @Override

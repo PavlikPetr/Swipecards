@@ -197,9 +197,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onResume() {
         super.onResume();
-        if (CacheProfile.getOptions().enabledDatingLockPopup) {
-            mStartActionsController.onProcessAction();
-        }
         checkProfileLoad();
         registerReauthReceiver();
         LocalBroadcastManager.getInstance(this)

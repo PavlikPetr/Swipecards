@@ -141,14 +141,13 @@ public class Options extends AbstractData {
     public boolean unlockAllForPremium;
     public int maxMessageSize;
 
-    public boolean enabledDatingLockPopup = true;
-    public long datingLockPopupTimeout;
-
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
 
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
 
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
+
+    public NotShown notShown = new NotShown();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -340,10 +339,8 @@ public class Options extends AbstractData {
             }
 
             JSONObject jsonNotShown = response.optJSONObject("notShown");
-            if (jsonNotShown != null) {
-                enabledDatingLockPopup = jsonNotShown.optBoolean("enabled");
-                datingLockPopupTimeout = jsonNotShown.optLong("timeout");
-            }
+            if (jsonNotShown != null) notShown.parseNotShownJSON(jsonNotShown);
+
 
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -687,4 +684,23 @@ public class Options extends AbstractData {
         public String group;
         public String text;
     }
+
+    public static class NotShown {
+        public boolean enabledDatingLockPopup = false;
+        public long datingLockPopupTimeout = DateUtils.DAY_IN_MILLISECONDS;
+        public String title;
+        public String text;
+
+        public void parseNotShownJSON(JSONObject jsonNotShown) {
+            if (jsonNotShown != null) {
+                enabledDatingLockPopup = jsonNotShown.optBoolean("enabled");
+                datingLockPopupTimeout = jsonNotShown.optLong("timeout");
+                title = jsonNotShown.optString("title");
+                text = jsonNotShown.optString("text");
+            }
+        }
+
+    }
+
+
 }

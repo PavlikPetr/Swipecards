@@ -757,6 +757,4 @@
     <string name="measurement_unit_height">см.</string>
     <string name="maximum_number_of_users">Выбрано максимальное количестово пользователей</string>
     <string name="logout_if_email_already_registred">Пользователь с таким e-mail уже существует. Если это ваш e-mail, то вам необходимо выйти из текущего аккаунта и зайти в аккаунт %s</string>
-    <string name="you_do_not_show_in_dating">Вас не показывают в «Знакомствах»</string>
-    <string name="you_do_not_show_in_dating_popup_message">Это происходит потому, что вы мало отвечаете на пришедшие вам симпатии. Ответьте на 6 симпатий, и вас будут показывыать значительно чаще</string>
 </resources>
