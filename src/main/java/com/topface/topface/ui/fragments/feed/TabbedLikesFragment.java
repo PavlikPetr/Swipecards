@@ -13,20 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.adapters.TabbedLikesPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.config.AppConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TabbedLikesFragment extends BaseFragment {
     private static final String LAST_OPENED_PAGE = "last_opened_page";
+    private static int mLastOpenedPage = 0;
     private ViewPager mPager;
     private SlidingTabLayout mSlidingTabLayout;
     private ArrayList<String> mPagesClassNames = new ArrayList<>();
@@ -41,9 +40,11 @@ public class TabbedLikesFragment extends BaseFragment {
         @Override
         public void onPageSelected(int position) {
             List<Fragment> fragments = getChildFragmentManager().getFragments();
-            for (Fragment fragment : fragments) {
-                if (fragment instanceof FeedFragment) {
-                    ((FeedFragment) fragment).finishMultiSelection();
+            if (fragments != null) {
+                for (Fragment fragment : fragments) {
+                    if (fragment instanceof FeedFragment) {
+                        ((FeedFragment) fragment).finishMultiSelection();
+                    }
                 }
             }
         }
@@ -91,9 +92,12 @@ public class TabbedLikesFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        int lastPage = mLastOpenedPage;
         if (savedInstanceState != null) {
-            mPager.setCurrentItem(savedInstanceState.getInt(LAST_OPENED_PAGE, 0));
+            lastPage = savedInstanceState.getInt(LAST_OPENED_PAGE, mLastOpenedPage);
         }
+        mPager.setCurrentItem(lastPage);
+
     }
 
     private void initPages(View root) {
@@ -116,8 +120,6 @@ public class TabbedLikesFragment extends BaseFragment {
         mSlidingTabLayout.setViewPager(mPager);
         // need this, because SlidingView defines its own listener
         mSlidingTabLayout.setOnPageChangeListener(mPageChangeListener);
-
-        mPager.setCurrentItem(App.getAppConfig().getTabbedLikesLastPage());
     }
 
     private void addBodyPage(String className, String pageTitle, int counter) {
@@ -136,9 +138,7 @@ public class TabbedLikesFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        AppConfig appConfig = App.getAppConfig();
-        appConfig.setTabbedLikesLastPage(mPager.getCurrentItem());
-        appConfig.saveConfig();
+        mLastOpenedPage = mPager.getCurrentItem();
         mPager = null;
     }
 

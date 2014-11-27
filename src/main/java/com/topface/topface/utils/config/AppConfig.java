@@ -53,7 +53,6 @@ public class AppConfig extends AbstractConfig {
     private static final String GCM_REG_ID = "gcm_reg_id";
     public static final String SAVED_EMAIL_LIST = "tf_saved_email_list";
     public static final String SOCIAL_BUTTONS_SETTINGS = "ButtonSettings";
-    public static final String TABBED_LIKES_LAST_PAGE = "tabbed_likes_last_page";
 
 
     public AppConfig(Context context) {
@@ -102,8 +101,6 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, SAVED_EMAIL_LIST, Static.EMPTY);
         // social nets buttons settings. Stores value in form of JSON array. So default value is "[]"
         addField(settingsMap, SOCIAL_BUTTONS_SETTINGS, "[]");
-        // последняя открытая вкладка в эксперименте, где лайки разбили на три таба
-        addField(settingsMap, TABBED_LIKES_LAST_PAGE, 0);
     }
 
     protected SharedPreferences getPreferences() {
@@ -370,19 +367,6 @@ public class AppConfig extends AbstractConfig {
 
     public String getSavedEmailList() {
         return getStringField(getSettingsMap(), SAVED_EMAIL_LIST);
-    }
-
-    /**
-     * Sets last opened page in {@link com.topface.topface.ui.fragments.feed.TabbedLikesFragment}
-     *
-     * @param lastPage page index to store
-     */
-    public void setTabbedLikesLastPage(int lastPage) {
-        setField(getSettingsMap(), TABBED_LIKES_LAST_PAGE, lastPage);
-    }
-
-    public int getTabbedLikesLastPage() {
-        return getIntegerField(getSettingsMap(), TABBED_LIKES_LAST_PAGE);
     }
 
     /**
