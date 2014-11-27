@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewStub;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
@@ -30,7 +29,6 @@ import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -120,15 +118,15 @@ public class ClosingsController implements View.OnClickListener {
                     likesMenuItem = mClosingsWidget.findViewById(R.id.itemLikesClosings);
                     if (initMenuItem(likesMenuItem, R.string.general_likes, R.drawable.ic_likes_selector,
                             needLikesClosings,
-                            FragmentId.F_LIKES_CLOSINGS)) {
-                        mAdapter.hideItem(FragmentId.F_LIKES);
+                            FragmentId.LIKES_CLOSINGS)) {
+                        mAdapter.hideItem(FragmentId.LIKES);
                         mLikesClosingsActive = true;
                     }
                     mutualsMenuItem = mClosingsWidget.findViewById(R.id.itemMutualsClosings);
                     if (initMenuItem(mutualsMenuItem, R.string.general_mutual, R.drawable.ic_mutual_selector,
                             needMutualsClosings,
-                            FragmentId.F_MUTUAL_CLOSINGS)) {
-                        mAdapter.hideItem(FragmentId.F_MUTUAL);
+                            FragmentId.MUTUAL_CLOSINGS)) {
+                        mAdapter.hideItem(FragmentId.MUTUAL);
                         mMutualClosingsActive = true;
                     }
                     mMenuFragment.hideBuyWidget();
@@ -231,7 +229,7 @@ public class ClosingsController implements View.OnClickListener {
     private boolean initMenuItem(View menuItem, int btnTextResId, int iconResId, boolean visible,
                                  FragmentId fragmentId) {
         menuItem.setVisibility(visible ? View.VISIBLE : View.GONE);
-        Button menuButton = (Button) menuItem.findViewById(R.id.btnMenu);
+        TextView menuButton = (TextView) menuItem.findViewById(R.id.btnMenu);
         menuButton.setOnClickListener(this);
         menuButton.setText(btnTextResId);
         menuButton.setTag(fragmentId);
@@ -267,11 +265,11 @@ public class ClosingsController implements View.OnClickListener {
         Object tag = v.getTag();
         if (tag instanceof FragmentId) {
             switch ((FragmentId) tag) {
-                case F_LIKES_CLOSINGS:
-                    selectMenuItem(FragmentId.F_LIKES_CLOSINGS);
+                case LIKES_CLOSINGS:
+                    selectMenuItem(FragmentId.LIKES_CLOSINGS);
                     break;
-                case F_MUTUAL_CLOSINGS:
-                    selectMenuItem(FragmentId.F_MUTUAL_CLOSINGS);
+                case MUTUAL_CLOSINGS:
+                    selectMenuItem(FragmentId.MUTUAL_CLOSINGS);
                     break;
             }
         } else {
@@ -312,10 +310,10 @@ public class ClosingsController implements View.OnClickListener {
                 if (mLikesClosingsActive && likesMenuItem != null) {
                     likesMenuItem.setVisibility(View.GONE);
                     if (mAdapter != null) {
-                        mAdapter.showItem(FragmentId.F_LIKES);
+                        mAdapter.showItem(FragmentId.LIKES);
                         mAdapter.notifyDataSetChanged();
                     }
-                    selectMenuItem(FragmentId.F_MUTUAL_CLOSINGS);
+                    selectMenuItem(FragmentId.MUTUAL_CLOSINGS);
                 }
             }
             CacheProfile.getOptions().closing.onStopLikesClosings();
@@ -327,10 +325,10 @@ public class ClosingsController implements View.OnClickListener {
                 if (mMutualClosingsActive && mutualsMenuItem != null) {
                     mutualsMenuItem.setVisibility(View.GONE);
                     if (mAdapter != null) {
-                        mAdapter.showItem(FragmentId.F_MUTUAL);
+                        mAdapter.showItem(FragmentId.MUTUAL);
                         mAdapter.notifyDataSetChanged();
                     }
-                    selectMenuItem(FragmentId.F_LIKES_CLOSINGS);
+                    selectMenuItem(FragmentId.LIKES_CLOSINGS);
                 }
             }
             CacheProfile.getOptions().closing.onStopMutualClosings();
@@ -341,10 +339,6 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     private void removeClosings() {
-        removeClosings(null);
-    }
-
-    private void removeClosings(FragmentId currentSelectedFragmentInLeftMenu) {
         if (mClosingsWidget != null) mClosingsWidget.setVisibility(View.GONE);
         if (mAdapter != null) {
             mMenuFragment.showBuyWidjet();
@@ -354,9 +348,8 @@ public class ClosingsController implements View.OnClickListener {
         }
         // switch to DatingFragment after closings are passed
         unlockLeftMenu();
-        if (currentSelectedFragmentInLeftMenu != FragmentId.F_PROFILE) {
-            MenuFragment.selectFragment(BaseFragment.FragmentId.F_DATING);
-        }
+        MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
+
         mClosingsPassed = true;
         mLikesClosingsActive = false;
         mMutualClosingsActive = false;
@@ -376,9 +369,9 @@ public class ClosingsController implements View.OnClickListener {
      */
     public void respondToLikes() {
         if (mMutualClosingsActive) {
-            selectMenuItem(FragmentId.F_MUTUAL_CLOSINGS);
+            selectMenuItem(FragmentId.MUTUAL_CLOSINGS);
         } else if (mLikesClosingsActive) {
-            selectMenuItem(FragmentId.F_LIKES_CLOSINGS);
+            selectMenuItem(FragmentId.LIKES_CLOSINGS);
         }
     }
 
@@ -427,9 +420,9 @@ public class ClosingsController implements View.OnClickListener {
         mLogoutWasInitiated = false;
     }
 
-    public void onPremiumObtained(FragmentId fragmentId) {
+    public void onPremiumObtained() {
         if (!mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) {
-            removeClosings(fragmentId);
+            removeClosings();
         }
     }
 

@@ -9,19 +9,23 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -29,6 +33,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -78,6 +83,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.UserActions;
 import com.topface.topface.utils.Utils;
@@ -98,6 +104,7 @@ import java.util.TimerTask;
 public class ChatFragment extends BaseFragment implements View.OnClickListener, IUserOnlineListener {
 
     public static final int LIMIT = 50;
+    public static final int PROGRESS_BAR_DELAY = 3000;
 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
@@ -198,6 +205,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private boolean wasFailed = false;
     private ArrayList<UserActions.ActionItem> mUserActions;
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
+    private CountDownTimer mTimer;
+    private boolean mIsBeforeFirstChatUpdate = true;
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -325,6 +334,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         mEditBox.addTextChangedListener(mTextWatcher);
+
         //LockScreen
         initLockScreen(root);
         if (savedInstanceState != null) {
@@ -386,38 +396,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void initChatHistory(View root) {
+
         // adapter
         mAdapter.setUser(mUser);
-        mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
-
-            @Override
-            public void onLongClick(final int position, final View v) {
-                History item = mAdapter.getItem(position);
-                final EditButtonsAdapter editAdapter = new EditButtonsAdapter(getActivity(), item);
-                if (item == null) return;
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.general_spinner_title)
-                        .setAdapter(editAdapter, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch ((int) editAdapter.getItemId(which)) {
-                                    case EditButtonsAdapter.ITEM_DELETE:
-                                        deleteItem(position);
-                                        EasyTracker.sendEvent("Chat", "DeleteItem", "", 1L);
-                                        break;
-                                    case EditButtonsAdapter.ITEM_COPY:
-                                        mAdapter.copyText(((TextView) v).getText().toString());
-                                        EasyTracker.sendEvent("Chat", "CopyItemText", "", 1L);
-                                        break;
-                                    case EditButtonsAdapter.ITEM_COMPLAINT:
-                                        startActivity(ComplainsActivity.createIntent(mUserId, mAdapter.getItem(position).id));
-                                        EasyTracker.sendEvent("Chat", "ComplainItemText", "", 1L);
-                                        break;
-                                }
-                            }
-                        }).create().show();
-            }
-        });
         // list view
         mListView = (PullToRefreshListView) root.findViewById(R.id.lvChatList);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -426,12 +407,58 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 update(true, "pull to refresh");
             }
         });
-        mListView.setClickable(true);
-        mListView.getRefreshableView().setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
-
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
-        mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
+        final ListView mListViewFromPullToRefresh = mListView.getRefreshableView();
+        mListViewFromPullToRefresh.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
+        mListViewFromPullToRefresh.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
+        // detect gesture on ListView
+        final GestureDetectorCompat mListViewDetector = new GestureDetectorCompat(getActivity(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                Utils.hideSoftKeyboard(getActivity(), mEditBox);
+                return false;
+            }
+        });
+        mListViewFromPullToRefresh.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mListViewDetector.onTouchEvent(event);
+                return false;
+            }
+        });
+        mListViewFromPullToRefresh.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, final View view,
+                                           int position, long id) {
+                final int pos = position - mListViewFromPullToRefresh.getHeaderViewsCount();
+                History item = mAdapter.getItem(pos);
+                final EditButtonsAdapter editAdapter = new EditButtonsAdapter(getActivity(), item);
+                if (item == null) return true;
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.general_spinner_title)
+                        .setAdapter(editAdapter, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch ((int) editAdapter.getItemId(which)) {
+                                    case EditButtonsAdapter.ITEM_DELETE:
+                                        deleteItem(pos);
+                                        EasyTracker.sendEvent("Chat", "DeleteItem", "", 1L);
+                                        break;
+                                    case EditButtonsAdapter.ITEM_COPY:
+                                        mAdapter.copyText(((TextView) view).getText().toString());
+                                        EasyTracker.sendEvent("Chat", "CopyItemText", "", 1L);
+                                        break;
+                                    case EditButtonsAdapter.ITEM_COMPLAINT:
+                                        startActivity(ComplainsActivity.createIntent(mUserId, mAdapter.getItem(pos).id));
+                                        EasyTracker.sendEvent("Chat", "ComplainItemText", "", 1L);
+                                        break;
+                                }
+                            }
+                        }).create().show();
+                return true;
+            }
+        });
     }
 
     private void initLockScreen(View root) {
@@ -652,6 +679,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
                 }
                 mIsUpdating = false;
+                //show keyboard if display size more then 479dp
+                showKeyboardOnLargeScreen();
+                mIsBeforeFirstChatUpdate = false;
             }
 
             @Override
@@ -681,6 +711,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }).exec();
     }
 
+    private void showKeyboardOnLargeScreen(){
+        if (isShowKeyboardInChat() && mIsBeforeFirstChatUpdate) {
+            Utils.showSoftKeyboard(getActivity(), mEditBox);
+            mIsKeyboardOpened = true;
+        }
+    }
 
     private void removeOutdatedItems(HistoryListData data) {
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
@@ -874,6 +910,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onPause() {
         super.onPause();
+        deleteTimerDelay();
         getActivity().unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         Utils.hideSoftKeyboard(getActivity(), mEditBox);
@@ -937,19 +974,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     public boolean sendMessage(String text, final boolean cancelable) {
-        final History loaderItem = new History(IListLoader.ItemType.WAITING);
+        final History messageItem = new History(text, IListLoader.ItemType.WAITING);
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
         if (cancelable) {
             registerRequest(messageRequest);
         }
         if (mAdapter != null && mListView != null && cancelable) {
-            addSentMessage(loaderItem, messageRequest);
+            addSentMessage(messageItem, messageRequest);
         }
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, IApiResponse response) {
                 if (mAdapter != null && cancelable) {
-                    mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
+                    mAdapter.replaceMessage(messageItem, data, mListView.getRefreshableView());
                 }
                 LocalBroadcastManager.getInstance(getActivity())
                         .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
@@ -965,7 +1002,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             public void fail(int codeError, IApiResponse response) {
                 if (mAdapter != null && cancelable) {
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
-                    mAdapter.showRetrySendMessage(loaderItem, messageRequest);
+                    mAdapter.showRetrySendMessage(messageItem, messageRequest);
                 }
             }
         }).exec();
@@ -998,10 +1035,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void showLoading() {
-        setSupportProgressBarIndeterminateVisibility(true);
+        startTimerDelay();
     }
 
     private void hideLoading() {
+        deleteTimerDelay();
         setSupportProgressBarIndeterminateVisibility(false);
     }
 
@@ -1065,10 +1103,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public interface OnListViewItemLongClickListener {
-        public void onLongClick(int position, View v);
     }
 
     private int mActionsHeightHeuristic;
@@ -1189,5 +1223,35 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         public void switchAction() {
             actionText.setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
         }
+    }
+
+    private void deleteTimerDelay() {
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+    }
+
+    private void startTimerDelay() {
+        deleteTimerDelay();
+        mTimer = new CountDownTimer(PROGRESS_BAR_DELAY, PROGRESS_BAR_DELAY) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (mIsUpdating) {
+                    setSupportProgressBarIndeterminateVisibility(true);
+                }
+            }
+        }.start();
+    }
+
+    private boolean isShowKeyboardInChat() {
+        if (Device.getMaxDisplaySize() >= getActivity().getResources().getDimension(R.dimen.min_screen_height_chat_fragment)) {
+            return true;
+        }
+        return false;
     }
 }

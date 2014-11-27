@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -65,7 +66,7 @@ public class DatingInstantMessageController {
                                           View.OnClickListener clickListener,
                                           IRequestClient requestClient, String text,
                                           final View datingButtons, final View userInfoStatus,
-                                          SendLikeAction sendLikeAction) {
+                                          SendLikeAction sendLikeAction, TextView.OnEditorActionListener mEditorActionListener) {
         mActivity = activity;
         mSendLikeAction = sendLikeAction;
 
@@ -86,6 +87,7 @@ public class DatingInstantMessageController {
         mFooterFlipper.setVisibility(View.VISIBLE);
         mGiftSend = root.findViewById(R.id.send_gift_button);
         mMessageText = (EditText) root.findViewById(R.id.edChatBox);
+        mMessageText.setOnEditorActionListener(mEditorActionListener);
         mMessageSend = (ImageButton) root.findViewById(R.id.btnSend);
         mSpin = AnimationUtils.loadAnimation(mActivity, R.anim.loader_rotate);
         mMessageText.addTextChangedListener(new TextWatcher() {

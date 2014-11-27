@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.Authorizer;
+import com.vk.sdk.VKOpenAuthActivity;
 
 import java.util.HashSet;
 
@@ -264,6 +266,9 @@ public class AuthFragment extends BaseAuthFragment {
             mNeedShowButtonsOnResume = false;
             if (!authToken.isEmpty()) {
                 auth(AuthToken.getInstance());
+            } else if (TextUtils.equals(data.getAction(), VKOpenAuthActivity.VK_RESULT_INTENT_NAME)) {
+                mNeedShowButtonsOnResume = true;
+                hideProgress();
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             hideProgress();

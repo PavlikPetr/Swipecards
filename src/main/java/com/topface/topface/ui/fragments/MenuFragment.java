@@ -61,19 +61,19 @@ import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_ADMIRATIONS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_BONUS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_BOOKMARKS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DATING;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DIALOGS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_FANS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_GEO;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_PROFILE;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_UNDEFINED;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VIP_PROFILE;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITORS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.ADMIRATIONS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BOOKMARKS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DATING;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DIALOGS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.FANS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.LIKES;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.MUTUAL;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PROFILE;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.UNDEFINED;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VIP_PROFILE;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VISITORS;
 
 /**
  * Created by kirussell on 05.11.13.
@@ -117,7 +117,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     initEditor();
                     initBonus();
                     if (CacheProfile.premium) {
-                        mClosingsController.onPremiumObtained(getCurrentFragmentId());
+                        mClosingsController.onPremiumObtained();
                     }
                     break;
                 case Products.INTENT_UPDATE_PRODUCTS:
@@ -183,8 +183,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initBonus() {
-        if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(F_BONUS)) {
-            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_1));
+        if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(BONUS)) {
+            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_1));
             mAdapter.refreshCounterBadges();
         }
     }
@@ -202,8 +202,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     mEditorItem = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
                     TextView btnMenu = (TextView) mEditorItem.findViewById(R.id.btnMenu);
                     //noinspection ResourceType
-                    btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.F_EDITOR));
-                    btnMenu.setTag(FragmentId.F_EDITOR);
+                    btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.EDITOR));
+                    btnMenu.setTag(FragmentId.EDITOR);
                     btnMenu.setOnClickListener(this);
                     mFooterView.addView(mEditorItem);
                 }
@@ -218,7 +218,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     private void initHeader() {
         mHeaderView = View.inflate(getActivity(), R.layout.layout_left_menu_header, null);
-        mHeaderView.setTag(FragmentId.F_PROFILE);
+        mHeaderView.setTag(FragmentId.PROFILE);
         mHeaderView.setOnClickListener(this);
         initProfileMenuItem(mHeaderView);
         mHeaderViewStub = (ViewStub) mHeaderView.findViewById(R.id.vsHeaderStub);
@@ -229,26 +229,26 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private void initAdapter() {
         SparseArray<LeftMenuAdapter.ILeftMenuItem> menuItems = new SparseArray<>();
         //- Profile added as part of header
-        menuItems.put(F_DATING.getId(), LeftMenuAdapter.newLeftMenuItem(F_DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
+        menuItems.put(DATING.getId(), LeftMenuAdapter.newLeftMenuItem(DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.drawable.ic_dating_selector));
-        menuItems.put(F_DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(F_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_dialog_selector));
-        menuItems.put(F_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
-        menuItems.put(F_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(F_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_likes_selector));
-        menuItems.put(F_ADMIRATIONS.getId(), LeftMenuAdapter.newLeftMenuItem(F_ADMIRATIONS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(ADMIRATIONS.getId(), LeftMenuAdapter.newLeftMenuItem(ADMIRATIONS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_admirations_selector));
-        menuItems.put(F_MUTUAL.getId(), LeftMenuAdapter.newLeftMenuItem(F_MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(MUTUAL.getId(), LeftMenuAdapter.newLeftMenuItem(MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_mutual_selector));
-        menuItems.put(F_BOOKMARKS.getId(), LeftMenuAdapter.newLeftMenuItem(F_BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(BOOKMARKS.getId(), LeftMenuAdapter.newLeftMenuItem(BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_star_selector));
-        menuItems.put(F_FANS.getId(), LeftMenuAdapter.newLeftMenuItem(F_FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(FANS.getId(), LeftMenuAdapter.newLeftMenuItem(FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_fans_selector));
-        menuItems.put(F_GEO.getId(), LeftMenuAdapter.newLeftMenuItem(F_GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(GEO.getId(), LeftMenuAdapter.newLeftMenuItem(GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.icon_people_close));
         if (CacheProfile.getOptions().bonus.enabled) {
-            menuItems.put(F_BONUS.getId(), LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+            menuItems.put(BONUS.getId(), LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_bonus_1));
         }
         mAdapter = new LeftMenuAdapter(this, menuItems);
@@ -324,9 +324,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         // set OnClickListener for profile menu item
         mProfileButton = (TextView) currentLayout.findViewWithTag("profile_fragment_button_tag");
         if (mProfileButton == null) {
-            mProfileButton = (TextView) currentLayout.findViewWithTag(F_PROFILE);
+            mProfileButton = (TextView) currentLayout.findViewWithTag(PROFILE);
         } else {
-            mProfileButton.setTag(FragmentId.F_PROFILE);
+            mProfileButton.setTag(FragmentId.PROFILE);
         }
         if (mProfileButton != null) {
             mProfileButton.setOnClickListener(this);
@@ -354,7 +354,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
             }
-            switchFragment(FragmentId.F_DATING, false);
+            switchFragment(CacheProfile.getOptions().startPageFragmentId, false);
         }
     }
 
@@ -402,7 +402,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         // We need to clean state if there was a logout in other Activity
         mClosingsController.onLogoutWasInitiated();
         if (CacheProfile.premium) {
-            mClosingsController.onPremiumObtained(getCurrentFragmentId());
+            mClosingsController.onPremiumObtained();
         }
 
     }
@@ -452,7 +452,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             mAdapter.notifyDataSetChanged();
         }
         if (mProfileButton != null) {
-            if (mSelectedFragment == F_PROFILE || mSelectedFragment == F_VIP_PROFILE) {
+            if (mSelectedFragment == PROFILE || mSelectedFragment == VIP_PROFILE) {
                 mProfileButton.setSelected(true);
                 if (mClosingsController != null) {
                     mClosingsController.unselectMenuItems();
@@ -472,7 +472,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private void switchFragment(FragmentId newFragmentId, boolean executePending) {
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
-
         String fragmentTag = getTagById(newFragmentId);
         Debug.log("MenuFragment: Try switch to fragment with tag " + fragmentTag + " (old fragment " + mSelectedFragment + ")");
         BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
@@ -526,58 +525,58 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
     public FragmentId getCurrentFragmentId() {
-        return mSelectedFragment == F_UNDEFINED ? F_DATING : mSelectedFragment;
+        return mSelectedFragment == UNDEFINED ? DATING : mSelectedFragment;
     }
 
     private BaseFragment getFragmentNewInstanceById(FragmentId id) {
         BaseFragment fragment;
         switch (id) {
-            case F_VIP_PROFILE:
+            case VIP_PROFILE:
                 fragment = OwnProfileFragment.newInstance(VipBuyFragment.class.getName());
                 break;
-            case F_PROFILE:
+            case PROFILE:
                 fragment = OwnProfileFragment.newInstance();
                 break;
-            case F_DATING:
+            case DATING:
                 fragment = new DatingFragment();
                 break;
-            case F_ADMIRATIONS:
+            case ADMIRATIONS:
                 fragment = new AdmirationFragment();
                 break;
-            case F_LIKES:
+            case LIKES:
                 fragment = new LikesFragment();
                 break;
-            case F_LIKES_CLOSINGS:
+            case LIKES_CLOSINGS:
                 fragment = new LikesClosingFragment();
                 break;
-            case F_MUTUAL:
+            case MUTUAL:
                 fragment = new MutualFragment();
                 break;
-            case F_MUTUAL_CLOSINGS:
+            case MUTUAL_CLOSINGS:
                 fragment = new MutualClosingFragment();
                 break;
-            case F_DIALOGS:
+            case DIALOGS:
                 fragment = new DialogsFragment();
                 break;
-            case F_BOOKMARKS:
+            case BOOKMARKS:
                 fragment = new BookmarksFragment();
                 break;
-            case F_FANS:
+            case FANS:
                 fragment = new FansFragment();
                 break;
-            case F_GEO:
+            case GEO:
                 fragment = new PeopleNearbyFragment();
                 break;
-            case F_BONUS:
+            case BONUS:
                 fragment = BonusFragment.newInstance(true);
                 break;
-            case F_VISITORS:
+            case VISITORS:
                 fragment = new VisitorsFragment();
                 break;
-            case F_SETTINGS:
+            case SETTINGS:
                 fragment = new SettingsFragment();
                 break;
-            case F_EDITOR:
+            case EDITOR:
                 fragment = null;
                 if (Editor.isEditor()) {
                     fragment = new EditorFragment();
@@ -602,7 +601,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             }
             //Тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
             //его локально, а не серверно, как это происходит с остальными счетчиками.
-            if (id == F_BONUS) {
+            if (id == BONUS) {
                 if (CacheProfile.needShowBonusCounter) {
                     UserConfig config = App.getUserConfig();
                     config.setBonusCounterLastShowTime(CacheProfile.getOptions().bonus.timestamp);
@@ -613,7 +612,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 if (!TextUtils.isEmpty(CacheProfile.getOptions().bonus.integrationUrl) ||
                         CacheProfile.getOptions().offerwalls.hasOffers()
                         ) {
-                    selectMenu(F_BONUS);
+                    selectMenu(BONUS);
                 } else {
                     OfferwallsManager.startOfferwall(getActivity());
                 }

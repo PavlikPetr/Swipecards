@@ -63,7 +63,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
             public void onReceive(Context context, Intent intent) {
                 int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, -1);
                 if (ConnectionChangeReceiver.ConnectionType.valueOf(mConnectionType) != ConnectionChangeReceiver.ConnectionType.CONNECTION_OFFLINE) {
-                    if (retryView != null) retryView.performClick();
+                    if (retryView != null) {
+                        retryView.performClick();
+                    }
                 }
             }
         };
@@ -116,7 +118,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
                 if (isAdded()) {
                     ((BaseFragmentActivity) getActivity()).close(BaseAuthFragment.this, true);
-                    MenuFragment.selectFragment(FragmentId.F_DATING);
+                    MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
                     LocalBroadcastManager.getInstance(getContext())
                             .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
                 }
