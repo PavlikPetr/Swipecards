@@ -139,7 +139,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         }
         ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
         switch (errorCode) {
-            case ErrorCodes.RESULT_OK:
             case ErrorCodes.PREMIUM_ACCESS_ONLY:
                 initEmptyScreenOnLikesNeedVip(viewFlipper);
                 break;
