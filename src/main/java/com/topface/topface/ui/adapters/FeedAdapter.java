@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     public static final int LIMIT = 40;
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
     private OnAvatarClickListener<T> mOnAvatarClickListener;
-
 
 
     @SuppressWarnings("unchecked")
@@ -184,7 +184,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             } else {
                 holder.name.setTextColor(Color.WHITE);
             }
-            // установка городв
+            // установка города
             if (item.user.city != null) {
                 if (item.user.deleted || item.user.banned) {
                     holder.city.setTextColor(Color.GRAY);
@@ -251,7 +251,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             loadOlderItems();
         }
     }
-
 
 
     /**

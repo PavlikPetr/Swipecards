@@ -92,6 +92,8 @@ public class Options extends AbstractData {
      */
     public BaseFragment.FragmentId startPageFragmentId = BaseFragment.FragmentId.DATING;
 
+    public boolean exp = false;
+
     /**
      * Стоимость вставания в лидеры
      */
