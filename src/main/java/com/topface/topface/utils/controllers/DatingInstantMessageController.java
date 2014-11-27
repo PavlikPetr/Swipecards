@@ -174,7 +174,7 @@ public class DatingInstantMessageController {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (response.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY)) {
-                    startPurchasesActivity(CacheProfile.getOptions().instantMessagesForNewbies.text, "InstantMessageLimitExceeded");
+                    startPurchasesActivity(CacheProfile.getOptions().instantMessagesForNewbies.getText(), "InstantMessageLimitExceeded");
                 } else {
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                 }
@@ -206,7 +206,7 @@ public class DatingInstantMessageController {
     }
 
     private boolean tryChat(SearchUser user) {
-        if (CacheProfile.getOptions().instantMessagesForNewbies.enabled) {
+        if (CacheProfile.getOptions().instantMessagesForNewbies.isEnabled()) {
             return true;
         }
 
