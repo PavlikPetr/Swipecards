@@ -29,7 +29,6 @@ import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;

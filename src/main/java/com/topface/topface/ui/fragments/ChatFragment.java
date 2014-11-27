@@ -659,11 +659,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 mIsUpdating = false;
                 //show keyboard if display size more then 479dp
-                if (isShowKeyboardInChat() && mIsBeforeFirstChatUpdate) {
-                    Utils.showSoftKeyboard(getActivity(), mEditBox);
-                    mIsKeyboardOpened = true;
-                    mIsBeforeFirstChatUpdate = false;
-                }
+                showKeyboardOnLargeScreen();
+                mIsBeforeFirstChatUpdate = false;
             }
 
             @Override
@@ -693,6 +690,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }).exec();
     }
 
+    private void showKeyboardOnLargeScreen(){
+        if (isShowKeyboardInChat() && mIsBeforeFirstChatUpdate) {
+            Utils.showSoftKeyboard(getActivity(), mEditBox);
+            mIsKeyboardOpened = true;
+        }
+    }
 
     private void removeOutdatedItems(HistoryListData data) {
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
