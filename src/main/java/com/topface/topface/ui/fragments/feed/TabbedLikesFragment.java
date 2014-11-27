@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -39,8 +40,8 @@ public class TabbedLikesFragment extends BaseFragment {
 
         @Override
         public void onPageSelected(int position) {
-            List<android.support.v4.app.Fragment> fragments = getChildFragmentManager().getFragments();
-            for (android.support.v4.app.Fragment fragment : fragments) {
+            List<Fragment> fragments = getChildFragmentManager().getFragments();
+            for (Fragment fragment : fragments) {
                 if (fragment instanceof FeedFragment) {
                     ((FeedFragment) fragment).finishMultiSelection();
                 }
@@ -80,6 +81,9 @@ public class TabbedLikesFragment extends BaseFragment {
         View root = inflater.inflate(R.layout.fragment_tabbed_likes, null);
 
         initPages(root);
+
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
 
         return root;
     }
@@ -123,15 +127,8 @@ public class TabbedLikesFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroyView() {
+        super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity())
                 .unregisterReceiver(mCountersReceiver);
     }

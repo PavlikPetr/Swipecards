@@ -146,7 +146,6 @@ public class Options extends AbstractData {
 
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
 
-    //    public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
 
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();

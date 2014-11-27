@@ -439,7 +439,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     public void finishMultiSelection() {
-        if (mActionMode != null) mActionMode.finish();
+        if (mActionMode != null) {
+            mActionMode.finish();
+        }
     }
 
     private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
