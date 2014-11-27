@@ -195,10 +195,11 @@ public class LeftMenuAdapter extends BaseAdapter {
 
         return convertView;
     }
-    private void setCheckedBackgroundState(boolean isChecked, View layout){
-        if (isChecked){
+
+    private void setCheckedBackgroundState(boolean isChecked, View layout) {
+        if (isChecked) {
             layout.setBackgroundResource(R.drawable.bg_left_menu_pressed);
-        }else{
+        } else {
             layout.setBackgroundResource(R.drawable.bg_left_menu_item_selector);
         }
     }
