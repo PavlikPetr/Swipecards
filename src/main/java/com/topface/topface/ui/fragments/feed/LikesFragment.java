@@ -53,7 +53,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            onCountersUpdated();
+            updateTitleWithCounter();
         }
     };
 
@@ -69,10 +69,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity())
                 .unregisterReceiver(mCountersReceiver);
-    }
-
-    protected void onCountersUpdated() {
-        updateTitleWithCounter();
     }
 
     @Override
