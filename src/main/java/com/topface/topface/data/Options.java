@@ -100,6 +100,11 @@ public class Options extends AbstractData {
     public BaseFragment.FragmentId startPageFragmentId = BaseFragment.FragmentId.DATING;
 
     /**
+     * Флаг отображения превью в диалогах
+     */
+    public boolean hideDialogPreview;
+
+    /**
      * Стоимость вставания в лидеры
      */
     public int priceLeader = 8;
@@ -175,6 +180,9 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
+
+            // по умолчанию превью в диалогах всегда отображаем
+            hideDialogPreview = response.optBoolean("hideDialogPreview", false);
             try {
                 startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
             } catch (IllegalArgumentException e) {
