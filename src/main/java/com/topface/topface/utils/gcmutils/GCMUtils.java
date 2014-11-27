@@ -498,5 +498,14 @@ public class GCMUtils {
 
         }
 
+        public String getNameAndAge() {
+            String result;
+            if (name != null && name.length() > 0 && age > 0) {
+                result = name + ", " + age;
+            } else {
+                result = name;
+            }
+            return result;
+        }
     }
 }

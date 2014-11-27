@@ -112,10 +112,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private static final String KEYBOARD_OPENED = "keyboard_opened";
     private static final String POPULAR_LOCK_STATE = "chat_blocked";
     public static final String INTENT_USER_ID = "user_id";
-    public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_USER_SEX = "user_sex";
-    public static final String INTENT_USER_AGE = "user_age";
     public static final String INTENT_USER_CITY = "user_city";
+    public static final String INTENT_USER_NAME_AND_AGE = "user_name_and_age";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
     public static final String MAKE_ITEM_READ_BY_UID = "com.topface.topface.feedfragment.MAKE_READ_BY_UID";
@@ -225,10 +224,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private ActionBarOnlineSetterDelegate mOnlineSetter;
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
-    private String mUserName;
     private ViewStub mChatActionsStub;
-    private int mUserAge;
     private String mUserCity;
+    private String mUserNameAndAge;
     private int mUserSex;
     private MenuItem mBarAvatar;
     private MenuItem mBarActions;
@@ -282,10 +280,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         Bundle args = getArguments();
         mItemId = args.getString(INTENT_ITEM_ID);
         mUserId = args.getInt(INTENT_USER_ID, -1);
-        mUserName = args.getString(INTENT_USER_NAME);
         mUserSex = args.getInt(INTENT_USER_SEX, Static.BOY);
-        mUserAge = args.getInt(INTENT_USER_AGE, 0);
         mUserCity = args.getString(INTENT_USER_CITY);
+        mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
 
         // only DialogsFragment will hear this
@@ -499,11 +496,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     protected String getTitle() {
-        if (TextUtils.isEmpty(mUserName) && mUserAge == 0) {
-            return Static.EMPTY;
-        } else {
-            return mUserName + ", " + mUserAge;
-        }
+        return mUserNameAndAge;
     }
 
     @Override
@@ -711,7 +704,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }).exec();
     }
 
-    private void showKeyboardOnLargeScreen(){
+    private void showKeyboardOnLargeScreen() {
         if (isShowKeyboardInChat() && mIsBeforeFirstChatUpdate) {
             Utils.showSoftKeyboard(getActivity(), mEditBox);
             mIsKeyboardOpened = true;
