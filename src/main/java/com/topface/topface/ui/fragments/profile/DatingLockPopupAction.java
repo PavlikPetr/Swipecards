@@ -6,6 +6,7 @@ import com.topface.topface.App;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 
 
@@ -16,10 +17,10 @@ public class DatingLockPopupAction extends AbstractStartAction {
     private FragmentManager mFragmentManager;
     private int mPriority;
 
-    public DatingLockPopupAction(FragmentManager fragmentManager, int priority, DatingLockPopup.DatingLockPopupRedirectListener mDatingLockPopupRedirect) {
+    public DatingLockPopupAction(FragmentManager fragmentManager, int priority, DatingLockPopup.DatingLockPopupRedirectListener listener) {
         this.mFragmentManager = fragmentManager;
         this.mPriority = priority;
-        this.mDatingLockPopupRedirect = mDatingLockPopupRedirect;
+        this.mDatingLockPopupRedirect = listener;
     }
 
     private boolean isTimeoutEnded() {
@@ -39,7 +40,10 @@ public class DatingLockPopupAction extends AbstractStartAction {
 
     @Override
     public void callInBackground() {
-        App.getUserConfig().setDatingLockPopupShow(System.currentTimeMillis());
+        UserConfig userConfig = App.getUserConfig();
+        userConfig.setDatingLockPopupShow(System.currentTimeMillis());
+        userConfig.saveConfig();
+
     }
 
     @Override

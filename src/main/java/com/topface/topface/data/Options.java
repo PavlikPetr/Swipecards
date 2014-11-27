@@ -339,7 +339,9 @@ public class Options extends AbstractData {
             }
 
             JSONObject jsonNotShown = response.optJSONObject("notShown");
-            if (jsonNotShown != null) notShown.parseNotShownJSON(jsonNotShown);
+            if (jsonNotShown != null) {
+                notShown.parseNotShownJSON(jsonNotShown);
+            }
 
 
         } catch (Exception e) {
@@ -687,7 +689,7 @@ public class Options extends AbstractData {
 
     public static class NotShown {
         public boolean enabledDatingLockPopup = false;
-        public long datingLockPopupTimeout = DateUtils.DAY_IN_MILLISECONDS;
+        public long datingLockPopupTimeout = DateUtils.DAY_IN_SECONDS;
         public String title;
         public String text;
 

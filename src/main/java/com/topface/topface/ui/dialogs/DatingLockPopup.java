@@ -25,8 +25,8 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
         public void onRedirect();
     }
 
-    public void setDatingLockPopupRedirectListener(DatingLockPopupRedirectListener mDatingLockPopupRedirectListener) {
-        this.mDatingLockPopupRedirectListener = mDatingLockPopupRedirectListener;
+    public void setDatingLockPopupRedirectListener(DatingLockPopupRedirectListener listener) {
+        this.mDatingLockPopupRedirectListener = listener;
     }
 
     private void send(String key) {

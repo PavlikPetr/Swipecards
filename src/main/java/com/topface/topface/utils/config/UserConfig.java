@@ -158,7 +158,6 @@ public class UserConfig extends AbstractUniqueConfig {
 
     public void setDatingLockPopupShow(long lastTime) {
         setField(getSettingsMap(), DATING_LOCK_POPUP_TIME, lastTime);
-        saveConfig();
     }
 
     public long getDatingLockPopupShow() {
