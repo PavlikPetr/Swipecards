@@ -1,6 +1,5 @@
 package com.topface.topface.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -37,8 +36,7 @@ public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFra
                     mFragment.onOptionsItemSelected(item);
                 }
                 if (isTaskRoot()) {
-                    Intent i = new Intent(this, NavigationActivity.class);
-                    startActivity(i);
+                    startActivity(getSupportParentActivityIntent());
                     finish();
                 } else {
                     onBackPressed();

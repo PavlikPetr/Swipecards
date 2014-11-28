@@ -2,8 +2,10 @@ package com.topface.topface.utils.actionbar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -37,7 +39,9 @@ public class ActionBarCustomViewTitleSetterDelegate extends ActionBarOnlineSette
                         Intent intent = new Intent(NavigationActivity.OPEN_MENU);
                         LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
                     } else if (activity.isTaskRoot()) {
-                        Intent intent = new Intent(activity, NavigationActivity.class);
+                        Intent intent = activity instanceof ActionBarActivity ?
+                                ((ActionBarActivity) activity).getSupportParentActivityIntent() :
+                                NavUtils.getParentActivityIntent(activity);
                         activity.startActivity(intent);
                         activity.finish();
                     } else {
