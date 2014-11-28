@@ -68,13 +68,14 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
         mAvatarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(mAvatarVal.position);
-                Fragment parentFrag = getParentFragment();
-                if (parentFrag != null) {
-                    parentFrag.startActivity(intent);
-                } else {
-                    startActivity(intent);
+                Profile userProfile = mPendingUserInit.getData();
+                Photo photo = userProfile.photos.getByPhotoId(mAvatarVal.getId());
+                int position = 0;
+                if (photo != null) {
+                    position = photo.getPosition();
                 }
+                Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userProfile.uid, userProfile.photosCount, userProfile.photos);
+                startActivity(intent);
             }
         });
         mNameView = (TextView) root.findViewById(R.id.tvName);
