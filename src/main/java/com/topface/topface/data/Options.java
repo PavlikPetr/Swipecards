@@ -6,8 +6,16 @@ import com.topface.topface.App;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.experiments.AutoOpenGallery;
+import com.topface.topface.data.experiments.ForceOfferwallRedirect;
+import com.topface.topface.data.experiments.InstantMessageFromSearch;
+import com.topface.topface.data.experiments.LikesWithThreeTabs;
+import com.topface.topface.data.experiments.ForceOfferwallRedirect;
+import com.topface.topface.data.experiments.InstantMessageFromSearch;
+import com.topface.topface.data.experiments.InstantMessagesForNewbies;
+import com.topface.topface.data.experiments.LikesWithThreeTabs;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.UserConfig;
@@ -84,6 +92,18 @@ public class Options extends AbstractData {
      * Стоимость отправки "Восхищения"
      */
     public int priceAdmiration = 1;
+
+    /**
+     * Id фрагмента, который будет отображаться при старте приложения
+     * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
+     */
+    public BaseFragment.FragmentId startPageFragmentId = BaseFragment.FragmentId.DATING;
+
+    /**
+     * Флаг отображения превью в диалогах
+     */
+    public boolean hideDialogPreview;
+
     /**
      * Стоимость вставания в лидеры
      */
@@ -139,6 +159,10 @@ public class Options extends AbstractData {
 
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
 
+    public LikesWithThreeTabs likesWithThreeTabs = new LikesWithThreeTabs();
+
+    public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -156,6 +180,14 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
+
+            // по умолчанию превью в диалогах всегда отображаем
+            hideDialogPreview = response.optBoolean("hideDialogPreview", false);
+            try {
+                startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
+            } catch (IllegalArgumentException e) {
+                Debug.error("Illegal value of startPage", e);
+            }
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
@@ -304,24 +336,16 @@ public class Options extends AbstractData {
 
             maxMessageSize = response.optInt("maxMessageSize");
 
-            JSONObject jsonForceOfferwallRedirect = response.optJSONObject("forceOfferwallRedirect");
-            if (jsonForceOfferwallRedirect != null) {
-                forceOfferwallRedirect.enebled = jsonForceOfferwallRedirect.optBoolean("enabled");
-                forceOfferwallRedirect.text = jsonForceOfferwallRedirect.optString("text", "");
-            }
+            // experiments init
+            forceOfferwallRedirect.init(response);
 
-            JSONObject jsonInstantMessageFromSearch = response.optJSONObject("instantMessageFromSearch");
-            if (jsonInstantMessageFromSearch != null) {
-                instantMessageFromSearch.enabled = jsonInstantMessageFromSearch.optBoolean("enabled");
-                instantMessageFromSearch.group = jsonInstantMessageFromSearch.optString("group");
-                instantMessageFromSearch.text = jsonInstantMessageFromSearch.optString("text");
-            }
+            instantMessageFromSearch.init(response);
 
-            JSONObject jsonAutoOpenGallery = response.optJSONObject("autoOpenGallery");
-            if (jsonAutoOpenGallery != null) {
-                autoOpenGallery.setEnabled(jsonAutoOpenGallery.optBoolean("enabled"));
-                autoOpenGallery.setGroup(jsonAutoOpenGallery.optString("group"));
-            }
+            autoOpenGallery.init(response);
+
+            likesWithThreeTabs.init(response);
+
+            instantMessagesForNewbies.init(response);
 
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -655,14 +679,4 @@ public class Options extends AbstractData {
         }
     }
 
-    public static class ForceOfferwallRedirect {
-        public boolean enebled;
-        public String text = "";
-    }
-
-    public static class InstantMessageFromSearch {
-        public boolean enabled;
-        public String group;
-        public String text;
-    }
 }

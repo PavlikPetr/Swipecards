@@ -33,9 +33,13 @@ public class ActionBarCustomViewTitleSetterDelegate extends ActionBarOnlineSette
             mClickable.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (activity.isTaskRoot()) {
+                    if (activity instanceof NavigationActivity) {
                         Intent intent = new Intent(NavigationActivity.OPEN_MENU);
                         LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
+                    } else if (activity.isTaskRoot()) {
+                        Intent intent = new Intent(activity, NavigationActivity.class);
+                        activity.startActivity(intent);
+                        activity.finish();
                     } else {
                         activity.onBackPressed();
                     }

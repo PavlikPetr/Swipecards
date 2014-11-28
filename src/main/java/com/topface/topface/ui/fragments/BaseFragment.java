@@ -39,23 +39,24 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     private IActionBarTitleSetter mTitleSetter;
 
     public static enum FragmentId {
-        F_VIP_PROFILE(0),
-        F_PROFILE(1),
-        F_DATING(2, true),
-        F_DIALOGS(3),
-        F_VISITORS(4),
-        F_LIKES(5),
-        F_ADMIRATIONS(6),
-        F_MUTUAL(7),
-        F_LIKES_CLOSINGS(8, true),
-        F_MUTUAL_CLOSINGS(9, true),
-        F_BOOKMARKS(10),
-        F_FANS(11),
-        F_GEO(12),
-        F_BONUS(13),
-        F_EDITOR(1000),
-        F_SETTINGS(15),
-        F_UNDEFINED(-1);
+        VIP_PROFILE(0),
+        PROFILE(1),
+        DATING(2, true),
+        DIALOGS(3),
+        VISITORS(4),
+        LIKES(5),
+        TABBED_LIKES(6),
+        ADMIRATIONS(7),
+        MUTUAL(8),
+        LIKES_CLOSINGS(9, true),
+        MUTUAL_CLOSINGS(10, true),
+        BOOKMARKS(11),
+        FANS(12),
+        GEO(13),
+        BONUS(14),
+        EDITOR(1000),
+        SETTINGS(16),
+        UNDEFINED(-1);
 
         private int mNumber;
         private boolean mIsOverlayed;
@@ -90,7 +91,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
-
+    private boolean mNeedOptionsMenu = true;
     private boolean mNeedTitles = true;
 
     @Override
@@ -109,8 +110,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
+    public void setNeedOptionsMenu(boolean needOptionsMenu) {
+        mNeedOptionsMenu = needOptionsMenu;
+    }
+
     protected boolean needOptionsMenu() {
-        return true;
+        return mNeedOptionsMenu;
     }
 
     @Override

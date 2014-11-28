@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.ClipboardManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -31,7 +32,8 @@ import java.util.HashMap;
 
 public class ChatListAdapter extends LoadingListAdapter<History> implements AbsListView.OnScrollListener {
 
-    private static final int T_WAIT_OR_RETRY = 3;
+    private static final int T_WAIT = 3;
+    private static final int T_RETRY = 4;
     private static final int T_USER = 5;
     private static final int T_FRIEND = 6;
     private static final int T_USER_GIFT = 7;
@@ -42,7 +44,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
-    private ChatFragment.OnListViewItemLongClickListener mLongClickListener;
     private View mHeaderView;
 
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
@@ -93,7 +94,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         int superType = super.getItemViewType(position);
         History item = getItem(position);
         if (superType == T_OTHER && item != null) {
-            if (item.isWaitingItem() || item.isRepeatItem()) return T_WAIT_OR_RETRY;
+            if (item.isWaitingItem()) {
+                return T_WAIT;
+            } else if (item.isRepeatItem()) {
+                return T_RETRY;
+            }
             return ChatListAdapter.getItemType(item);
         } else {
             return superType;
@@ -121,9 +126,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             holder = (ViewHolder) convertView.getTag();
 
         setTypeDifferences(holder, type, item);
-        if (type != T_WAIT_OR_RETRY) {
+        if (type != T_WAIT || type != T_RETRY) {
             setViewInfo(holder, item);
-            setLongClickListener(position, convertView, holder);
         }
 
         return convertView;
@@ -229,6 +233,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private void addSentMessage(History item) {
         getData().addFirst(item);
+        prepareDates();
         if (!item.isWaitingItem()) {
             mUnrealItems.add(item);
         }
@@ -304,7 +309,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         boolean showDate = mShowDatesList.contains(item);
 
         switch (type) {
-            case T_WAIT_OR_RETRY:
+            case T_RETRY:
                 if (item.isRepeatItem()) {
                     holder.loader.setVisibility(View.GONE);
                     holder.retrier.setVisibility(View.VISIBLE);
@@ -318,15 +323,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                             notifyDataSetChanged();
                         }
                     });
-                } else {
-                    holder.loader.setVisibility(View.VISIBLE);
-                    holder.retrier.setVisibility(View.GONE);
-                    ApiRequest request = mHashRequestByWaitingRetryItem.get(item);
-                    if (request != null && request.isCanceled()) {
-                        resendCanceledRequest(request);
-                    }
                 }
                 return;
+            case T_WAIT:
+                break;
             case T_FRIEND_GIFT:
             case T_USER_GIFT:
                 holder.message.setVisibility(View.GONE);
@@ -355,7 +355,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         int prsLoaderId = R.id.prsLoader;
         int chatImageId = R.id.chat_image;
 
-        if (type == T_WAIT_OR_RETRY) {
+        if (type == T_RETRY) {
             convertView = mInflater.inflate(R.layout.item_chat_list_loader_retrier, null, false);
             holder.retrier = convertView.findViewById(R.id.tvLoaderText);
             holder.loader = convertView.findViewById(prsLoaderId);
@@ -372,6 +372,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER:
             case T_USER_POPULAR_1:
             case T_USER_POPULAR_2:
+            case T_WAIT:
             default:
                 convertView = mInflater.inflate(output ? R.layout.chat_user : R.layout.chat_friend, null, false);
                 break;
@@ -423,9 +424,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 break;
         }
         if (holder != null) {
-            if (holder.message != null)
-                holder.message.setMovementMethod(LinkMovementMethod.getInstance());
-            if (holder.date != null) holder.date.setText(item.createdFormatted);
+            if (holder.date != null) {
+                holder.date.setText(item.createdFormatted);
+            }
         }
 
     }
@@ -434,6 +435,14 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (holder != null && holder.message != null) {
             if (item.text != null && !item.text.equals(Static.EMPTY)) {
                 holder.message.setText(Html.fromHtml(item.text));
+
+                // Проверяем наличие в textView WEB_URLS | EMAIL_ADDRESSES | PHONE_NUMBERS | MAP_ADDRESSES;
+                // Если нашли, то добавим им кликабельность
+                // в остальных случаях holder.message будет кликаться на onItemClickListener
+                if (Linkify.addLinks(holder.message, Linkify.ALL)) {
+                    holder.message.setMovementMethod(LinkMovementMethod.getInstance());
+                    holder.message.setFocusable(false);
+                }
                 return true;
             } else {
                 holder.message.setText("");
@@ -441,10 +450,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             }
         }
         return false;
-    }
-
-    public void setOnItemLongClickListener(ChatFragment.OnListViewItemLongClickListener listener) {
-        mLongClickListener = listener;
     }
 
     @SuppressWarnings("deprecation")
@@ -506,30 +511,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             Debug.error(e);
         }
         return dataClone;
-    }
-
-    private void setLongClickListener(final int position, final View convertView, final ViewHolder holder) {
-        setLongClickListenerIfPresented(position, convertView, holder.message);
-        setLongClickListenerIfPresented(position, convertView, holder.gift);
-    }
-
-    private void setLongClickListenerIfPresented(final int position, final View convertView, final View view) {
-        if (view != null && convertView != null) {
-            convertView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    mLongClickListener.onLongClick(position, view);
-                    return false;
-                }
-            });
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    mLongClickListener.onLongClick(position, view);
-                    return false;
-                }
-            });
-        }
     }
 
     @Override

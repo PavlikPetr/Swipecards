@@ -115,7 +115,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuFragment.selectFragment(FragmentId.F_DATING);
+                MenuFragment.selectFragment(FragmentId.DATING);
             }
         });
     }

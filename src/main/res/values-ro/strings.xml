@@ -119,7 +119,6 @@
     <string name="chat_like_out">Ati trimis o simpatie</string>
     <string name="chat_mutual_in">V-au trimis o admirare</string>
     <string name="chat_mutual_out">Ati trimis o admirare</string>
-    <string name="chat_wish_in">Dmv ati primit o Dorinta ascunsa</string>
     <string name="chat_wish_out">Dmv ati trimis o Dorinta ascunsa</string>
     <string name="chat_sexuality_in">Sexualitatea Dmv, a fost apreciata.</string>
     <string name="chat_sexuality_out">Ati apreciat sexualitate.</string>
@@ -136,7 +135,6 @@
     <string name="buying_default_message">Puteti trimite cadouri si admirari pentru monete</string>
     <string name="buying_money">Cumpararea monedelor</string>
     <string name="profile_header_title">Profilul meu</string>
-    <string name="album_add_photo_title">Adauga poza</string>
     <string name="profile_add_album">Alege din prezentele</string>
     <string name="profile_add_camera">Face poza</string>
     <string name="profile_photo">Poza</string>

@@ -139,7 +139,6 @@ dependencies {
     compile project(':libs:PhotoView')
     compile project(':libs:UniversalImageLoader')
     //Social networks SDK
-    compile project(':libs:facebook-android-sdk:facebook')
     compile project(':libs:odnoklassniki')
     //Аннотации вроде @NonNull и @*Res для обозначения переменных
     compile 'com.android.support:support-annotations:19.1.0'
@@ -150,7 +149,8 @@ dependencies {
 
     androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
 
-    compile 'com.vk:androidsdk:1.3.2'
+    compile 'com.vk:androidsdk:1.3.4'
+    compile 'com.facebook.android:facebook-android-sdk:3.20.0'
 }
 
 project(':libs:IllustratedTextView') {

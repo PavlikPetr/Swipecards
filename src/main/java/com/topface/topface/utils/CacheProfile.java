@@ -455,24 +455,26 @@ public class CacheProfile {
 
     public static int getUnreadCounterByFragmentId(BaseFragment.FragmentId id) {
         switch (id) {
-            case F_LIKES:
-            case F_LIKES_CLOSINGS:
+            case LIKES:
+            case LIKES_CLOSINGS:
                 return CacheProfile.unread_likes;
-            case F_MUTUAL:
-            case F_MUTUAL_CLOSINGS:
+            case MUTUAL:
+            case MUTUAL_CLOSINGS:
                 return CacheProfile.unread_mutual;
-            case F_DIALOGS:
+            case DIALOGS:
                 return CacheProfile.unread_messages;
-            case F_VISITORS:
+            case VISITORS:
                 return CacheProfile.unread_visitors;
-            case F_FANS:
+            case FANS:
                 return CacheProfile.unread_fans;
-            case F_ADMIRATIONS:
+            case ADMIRATIONS:
                 return CacheProfile.unread_admirations;
-            case F_GEO:
+            case GEO:
                 return CacheProfile.unread_geo;
-            case F_BONUS:
+            case BONUS:
                 return needShowBonusCounter ? getOptions().bonus.counter : 0;
+            case TABBED_LIKES:
+                return CacheProfile.unread_admirations + CacheProfile.unread_likes + CacheProfile.unread_mutual;
             default:
                 return 0;
         }

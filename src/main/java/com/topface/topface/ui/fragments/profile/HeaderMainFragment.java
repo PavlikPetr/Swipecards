@@ -73,8 +73,8 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                 if (parentFrag != null) {
                     parentFrag.startActivity(intent);
                 } else {
-                startActivity(intent);
-               }
+                    startActivity(intent);
+                }
             }
         });
         mNameView = (TextView) root.findViewById(R.id.tvName);

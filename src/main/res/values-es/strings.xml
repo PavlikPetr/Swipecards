@@ -116,7 +116,7 @@
     <string name="pincode_auth_input">Tienes que introducir el login y la contraseña.</string>
     <string name="pincode_will_be_reset">Al efectuar una autorización exitosa todos los ajustes de la aplicación van a ser reiniciados.</string>
     <plurals name="pincode_interval">
-        <item quantity="zero">directamente después de cerrar</item>
+        <item quantity="zero">inmediatamente despues de cerrar</item>
         <item quantity="other">%d min.</item>
         <item quantity="one">%d min.</item>
     </plurals>
@@ -168,7 +168,7 @@
     <string name="chat_like_out">Has enviado simpatía</string>
     <string name="chat_mutual_in">Has recibido admiración</string>
     <string name="chat_mutual_out">Has enviado admiración</string>
-    <string name="chat_wish_in">Has recibido Deseo Secreto</string>
+    <string name="chat_wish_in">Te enviaron un Deseo Oculto</string>
     <string name="chat_wish_out">Has enviado Deseo Secreto</string>
     <string name="chat_sexuality_in">Han evaluado tu sexualidad.</string>
     <string name="chat_sexuality_out">Has evaluado su sexualidad</string>
@@ -573,6 +573,7 @@
     <string name="loading_photo_percent">Subiendo fotografía %d%%</string>
     <string name="profile_update_error">Error de actualización de datos</string>
     <string name="retry_cancel_editing">Durante el envío de datos ha ocurrido un error de conexión. ¿Repetir el intento o salir sin guardar los datos?</string>
+    <string name="retry_cancel_editing_bad_value">Datos introducidos incorrectos. ¿Repetir el intento o salir sin guardar?</string>
     <string name="user_does_not_exist">Usuario no encontrado</string>
     <string name="feedback_subject_ban">Denunciar un baneo injusto</string>
     <string name="settings_led">Notificación LED</string>
@@ -580,4 +581,8 @@
     <string name="billing_item_already_owned">Tu anterior compra está procesandose, espera por favor</string>
     <string name="dialog">Diálogo</string>
     <string name="reply">Responder</string>
+    <string name="measurement_unit_weight">kg.</string>
+    <string name="measurement_unit_height">cm.</string>
+    <string name="maximum_number_of_users">Seleccionada la máxima cantidad de usuarios</string>
+    <string name="logout_if_email_already_registred">Usuario con este e-mail ya existe. Si es tu e-mail, tienes que salir de esta cuenta y entrar en la %s</string>
 </resources>

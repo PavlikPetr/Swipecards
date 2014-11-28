@@ -116,11 +116,6 @@
     <string name="pincode_forget">Você esqueceu o código PIN?</string>
     <string name="pincode_auth_input">Você precisa introduzir o nome de usuário e senha.</string>
     <string name="pincode_will_be_reset">Perante uma autorização de sucesso todas as configurações do aplicativo serão reiniciadas.</string>
-    <plurals name="pincode_interval">
-        <item quantity="zero">imediatamente após o fechamento</item>
-        <item quantity="other">%d min.</item>
-        <item quantity="one">%d min.</item>
-    </plurals>
     <string name="general_error">ERRO</string>
     <string name="general_yes">Sim</string>
     <string name="general_no">Não</string>
@@ -169,7 +164,6 @@
     <string name="chat_like_out">Você enviou uma simpatia</string>
     <string name="chat_mutual_in">Você foi enviado uma admiração</string>
     <string name="chat_mutual_out">Você enviou uma admiração</string>
-    <string name="chat_wish_in">Enviaram para você um desejo secreto.</string>
     <string name="chat_wish_out">Você enviou um desejo secreto.</string>
     <string name="chat_sexuality_in">Avaliaram a sua sexualidade.</string>
     <string name="chat_sexuality_out">Você avaliou a sexualidade.</string>
@@ -201,7 +195,6 @@
     <string name="buying_default_message">Você pode enviar presentes e admirações por moedas</string>
     <string name="buying_money">Compra de moedas</string>
     <string name="profile_header_title">Meu perfil</string>
-    <string name="album_add_photo_title">Adicionar fotos</string>
     <string name="profile_add_album">Seleccionar dos disponíveis</string>
     <string name="profile_add_camera">Tirar a foto</string>
     <string name="profile_photo">Foto</string>
