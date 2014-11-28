@@ -485,7 +485,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 if (TextUtils.equals(purchase.getItemType(), OpenIabHelper.ITEM_TYPE_INAPP)) {
                     mHelper.consumeAsync(purchase, OpenIabFragment.this);
                 }
-                if (verify.revenue > 0) {
+                if(verify.revenue > 0) {
                     onPurchased(purchase.getSku());
                 }
                 if (isNeedSendPurchasesStatistics()) {
