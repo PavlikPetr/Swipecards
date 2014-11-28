@@ -213,7 +213,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
                     @Override
                     public void success(IApiResponse response) {
-                        CacheProfile.photo = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
+                        CacheProfile.photo = mPhotoLinks.getPhotoById(mLastSelectedAsMainId);
                         mSelectedAsMainId = mLastSelectedAsMainId;
                         CacheProfile.sendUpdateProfileBroadcast();
                         finishOperations(handler);
@@ -223,7 +223,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     public void fail(int codeError, IApiResponse response) {
                         if (getActivity() != null) {
                             if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
-                                Photo removedPhoto = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
+                                Photo removedPhoto = mPhotoLinks.getPhotoById(mLastSelectedAsMainId);
                                 mPhotoGridAdapter.getData().remove(removedPhoto);
                                 mPhotoGridAdapter.notifyDataSetChanged();
                                 if (CacheProfile.photos.contains(removedPhoto)) {

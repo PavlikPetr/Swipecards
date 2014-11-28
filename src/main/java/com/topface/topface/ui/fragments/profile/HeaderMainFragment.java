@@ -69,11 +69,8 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
             @Override
             public void onClick(View v) {
                 Profile userProfile = mPendingUserInit.getData();
-                Photo photo = userProfile.photos.getByPhotoId(mAvatarVal.getId());
-                int position = 0;
-                if (photo != null) {
-                    position = photo.getPosition();
-                }
+                Photo photo = userProfile.photos.getPhotoById(mAvatarVal.getId());
+                int position = (photo != null) ? photo.getPosition() : 0;
                 Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userProfile.uid, userProfile.photosCount, userProfile.photos);
                 startActivity(intent);
             }
