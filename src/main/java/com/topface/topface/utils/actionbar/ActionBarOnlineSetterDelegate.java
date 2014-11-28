@@ -19,7 +19,7 @@ public class ActionBarOnlineSetterDelegate extends ActionBarTitleSetterDelegate 
         final int abTitleId = activity.getResources().getIdentifier("action_bar_title", "id", "android");
         mAbTitile = (TextView) activity.findViewById(abTitleId);
         if (mAbTitile != null) {
-            mAbTitile.setCompoundDrawablePadding(10);
+            mAbTitile.setCompoundDrawablePadding((int) activity.getResources().getDimension(R.dimen.padding_left_for_online_icon));
         }
     }
 
@@ -27,7 +27,7 @@ public class ActionBarOnlineSetterDelegate extends ActionBarTitleSetterDelegate 
         super(actionBar);
         mAbTitile = (TextView) activity.findViewById(titleId);
         if (mAbTitile != null) {
-            mAbTitile.setCompoundDrawablePadding(10);
+            mAbTitile.setCompoundDrawablePadding((int) activity.getResources().getDimension(R.dimen.padding_left_for_online_icon));
         }
     }
 
