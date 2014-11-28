@@ -23,6 +23,9 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
+import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
@@ -40,6 +43,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.MUTUAL;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VISITORS;
 
 public class GCMUtils {
@@ -392,7 +396,12 @@ public class GCMUtils {
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, MUTUAL);
+                    if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
+                        i.putExtra(NEXT_INTENT, TABBED_LIKES);
+                        i.putExtra(TabbedLikesFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
+                    } else {
+                        i.putExtra(NEXT_INTENT, MUTUAL);
+                    }
                 }
                 break;
 
@@ -400,7 +409,12 @@ public class GCMUtils {
                 if (showLikes) {
                     lastNotificationType = GCM_TYPE_LIKE;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, LIKES);
+                    if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
+                        i.putExtra(NEXT_INTENT, TABBED_LIKES);
+                        i.putExtra(TabbedLikesFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
+                    } else {
+                        i.putExtra(NEXT_INTENT, LIKES);
+                    }
                 }
                 break;
 
