@@ -171,9 +171,10 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 String text = s.toString();
                 if (text.equals(mToken.getLogin())) {
                     setChangeBtnAction(ACTION_RESEND_CONFIRM);
+                    mChangeEmail = false;
                 } else {
                     setChangeBtnAction(ACTION_CHANGE_EMAIL);
-                    mChangeEmail =true;
+                    mChangeEmail = true;
                 }
             }
         });
@@ -352,6 +353,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             }
         });
         AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
