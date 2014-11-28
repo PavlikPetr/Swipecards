@@ -174,7 +174,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                     mChangeEmail = false;
                 } else {
                     setChangeBtnAction(ACTION_CHANGE_EMAIL);
-                    mChangeEmail =true;
+                    mChangeEmail = true;
                 }
             }
         });
