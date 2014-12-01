@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TabbedLikesFragment extends BaseFragment {
+    public static final String EXTRA_OPEN_PAGE = "openTabbedLikesAt";
     private static final String LAST_OPENED_PAGE = "last_opened_page";
     private static int mLastOpenedPage = 0;
     private ViewPager mPager;
@@ -95,9 +97,14 @@ public class TabbedLikesFragment extends BaseFragment {
         int lastPage = mLastOpenedPage;
         if (savedInstanceState != null) {
             lastPage = savedInstanceState.getInt(LAST_OPENED_PAGE, mLastOpenedPage);
+        } else {
+            Intent i = getActivity().getIntent();
+            String sLastPage = i.getStringExtra(EXTRA_OPEN_PAGE);
+            if (!TextUtils.isEmpty(sLastPage)) {
+                lastPage = mPagesClassNames.indexOf(sLastPage);
+            }
         }
         mPager.setCurrentItem(lastPage);
-
     }
 
     private void initPages(View root) {
@@ -138,7 +145,9 @@ public class TabbedLikesFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mLastOpenedPage = mPager.getCurrentItem();
+        if (mPager != null) {
+            mLastOpenedPage = mPager.getCurrentItem();
+        }
         mPager = null;
     }
 

@@ -90,7 +90,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private static final String CURRENT_FRAGMENT_STATE = "menu_fragment_current_fragment";
 
     private OnFragmentSelectedListener mOnFragmentSelected;
-    private FragmentId mSelectedFragment;
+    private FragmentId mSelectedFragment = UNDEFINED;
     private LeftMenuAdapter mAdapter;
     private boolean mHardwareAccelerated;
     private View mHeaderView;
