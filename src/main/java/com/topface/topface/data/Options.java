@@ -684,17 +684,6 @@ public class Options extends AbstractData {
         }
     }
 
-    public static class ForceOfferwallRedirect {
-        public boolean enebled;
-        public String text = "";
-    }
-
-    public static class InstantMessageFromSearch {
-        public boolean enabled;
-        public String group;
-        public String text;
-    }
-
     public static class NotShown {
         public boolean enabledDatingLockPopup = false;
         public long datingLockPopupTimeout = DateUtils.DAY_IN_SECONDS;
