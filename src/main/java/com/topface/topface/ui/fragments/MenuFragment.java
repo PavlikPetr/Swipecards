@@ -45,6 +45,7 @@ import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
@@ -72,6 +73,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.MUTUAL;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PROFILE;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.UNDEFINED;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VIP_PROFILE;
@@ -233,8 +235,15 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         //- Profile added as part of header
         menuItems.put(DATING.getId(), LeftMenuAdapter.newLeftMenuItem(DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.drawable.ic_dating_selector));
-        menuItems.put(DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_dialog_selector));
+        if (CacheProfile.getOptions().messagesWithTabs.isEnabled()) {
+            menuItems.put(TABBED_DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                    R.drawable.ic_dialog_selector));
+        } else {
+            menuItems.put(DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                    R.drawable.ic_dialog_selector));
+            menuItems.put(BOOKMARKS.getId(), LeftMenuAdapter.newLeftMenuItem(BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                    R.drawable.ic_star_selector));
+        }
         menuItems.put(VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
         if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
@@ -248,8 +257,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             menuItems.put(MUTUAL.getId(), LeftMenuAdapter.newLeftMenuItem(MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_mutual_selector));
         }
-        menuItems.put(BOOKMARKS.getId(), LeftMenuAdapter.newLeftMenuItem(BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_star_selector));
         menuItems.put(FANS.getId(), LeftMenuAdapter.newLeftMenuItem(FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_fans_selector));
         menuItems.put(GEO.getId(), LeftMenuAdapter.newLeftMenuItem(GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
@@ -591,6 +598,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 break;
             case TABBED_LIKES:
                 fragment = new TabbedLikesFragment();
+                break;
+            case TABBED_DIALOGS:
+                fragment = new TabbedDialogsFragment();
                 break;
             default:
                 fragment = OwnProfileFragment.newInstance();
