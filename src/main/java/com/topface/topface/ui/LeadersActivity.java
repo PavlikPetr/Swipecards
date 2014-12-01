@@ -188,6 +188,8 @@ public class LeadersActivity extends BaseFragmentActivity {
     }
 
     private void splitPhotos(Photos photos) {
+        usePhotos.clear();
+        uselessPhotos.clear();
         for (Photo photo : photos) {
             if (photo.canBecomeLeader || CacheProfile.getOptions().minLeadersPercent == 0) {
                 usePhotos.add(new Photo(photo));

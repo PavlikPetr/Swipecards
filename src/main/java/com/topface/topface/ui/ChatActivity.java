@@ -10,6 +10,8 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DIALOGS;
+
 public class ChatActivity extends CheckAuthActivity<ChatFragment> {
 
     public static final int INTENT_CHAT = 3;
@@ -141,6 +143,13 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         intent.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, user.city);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CHAT);
+        return intent;
+    }
+
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        Intent intent = super.getSupportParentActivityIntent();
+        intent.putExtra(GCMUtils.NEXT_INTENT, DIALOGS);
         return intent;
     }
 }
