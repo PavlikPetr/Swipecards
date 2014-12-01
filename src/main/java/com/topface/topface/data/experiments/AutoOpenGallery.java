@@ -10,24 +10,10 @@ import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 /**
  * Experiment about autoopening gallery from click on friend avatar
  */
-public class AutoOpenGallery {
-    private boolean mEnabled = false;
-    private String mGroup;
-
-    public boolean isEnabled() {
-        return mEnabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.mEnabled = enabled;
-    }
-
-    public String getGroup() {
-        return mGroup;
-    }
-
-    public void setGroup(String group) {
-        this.mGroup = group;
+public class AutoOpenGallery extends BaseExperiment {
+    @Override
+    protected String getOptionsKey() {
+        return "autoOpenGallery";
     }
 
     public Intent createIntent(int userId, int photosCount, Photo preloadPhoto, Context context) {

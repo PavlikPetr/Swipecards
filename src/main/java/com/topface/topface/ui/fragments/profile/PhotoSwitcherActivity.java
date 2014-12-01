@@ -149,10 +149,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         return getPhotoSwitcherIntent(position, userId, photosCount, adapter.getData());
     }
 
-    public static  Intent getPhotoSwitcherIntent(int position){
-        return getPhotoSwitcherIntent(position,CacheProfile.uid,CacheProfile.photos.size(),CacheProfile.photos);
-    }
-
     public static Intent getPhotoSwitcherIntent(int position, int userId, int photosCount, Photos photos) {
         Intent intent = new Intent(App.getContext(), PhotoSwitcherActivity.class);
         intent.putExtra(INTENT_USER_ID, userId);

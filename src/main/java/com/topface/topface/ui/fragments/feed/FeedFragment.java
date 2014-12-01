@@ -262,7 +262,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mFloatBlock != null) {
             mFloatBlock.onPause();
         }
-        if (mActionMode != null) mActionMode.finish();
+        finishMultiSelection();
         if (mListView.isRefreshing()) {
             mListView.onRefreshComplete();
         }
@@ -436,6 +436,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected int getMultiSelectionLimit() {
         return FEED_MULTI_SELECTION_LIMIT;
+    }
+
+    public void finishMultiSelection() {
+        if (mActionMode != null) {
+            mActionMode.finish();
+        }
     }
 
     private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
@@ -1015,6 +1021,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             button.setText(buttonText);
             button.setOnClickListener(listener);
         }
+    }
+
+    @Override
+    public void setNeedTitles(boolean needTitles) {
+        super.setNeedTitles(needTitles);
     }
 
     protected boolean whetherDeleteIfBlacklisted() {

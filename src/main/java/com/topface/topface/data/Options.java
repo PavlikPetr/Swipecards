@@ -6,6 +6,10 @@ import com.topface.topface.App;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.experiments.AutoOpenGallery;
+import com.topface.topface.data.experiments.ForceOfferwallRedirect;
+import com.topface.topface.data.experiments.InstantMessageFromSearch;
+import com.topface.topface.data.experiments.InstantMessagesForNewbies;
+import com.topface.topface.data.experiments.LikesWithThreeTabs;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -93,6 +97,11 @@ public class Options extends AbstractData {
     public BaseFragment.FragmentId startPageFragmentId = BaseFragment.FragmentId.DATING;
 
     /**
+     * Флаг отображения превью в диалогах
+     */
+    public boolean hideDialogPreview;
+
+    /**
      * Стоимость вставания в лидеры
      */
     public int priceLeader = 8;
@@ -149,6 +158,10 @@ public class Options extends AbstractData {
 
     public NotShown notShown = new NotShown();
 
+    public LikesWithThreeTabs likesWithThreeTabs = new LikesWithThreeTabs();
+
+    public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -166,6 +179,9 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
+
+            // по умолчанию превью в диалогах всегда отображаем
+            hideDialogPreview = response.optBoolean("hideDialogPreview", false);
             try {
                 startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
             } catch (IllegalArgumentException e) {
@@ -319,24 +335,16 @@ public class Options extends AbstractData {
 
             maxMessageSize = response.optInt("maxMessageSize");
 
-            JSONObject jsonForceOfferwallRedirect = response.optJSONObject("forceOfferwallRedirect");
-            if (jsonForceOfferwallRedirect != null) {
-                forceOfferwallRedirect.enebled = jsonForceOfferwallRedirect.optBoolean("enabled");
-                forceOfferwallRedirect.text = jsonForceOfferwallRedirect.optString("text", "");
-            }
+            // experiments init
+            forceOfferwallRedirect.init(response);
 
-            JSONObject jsonInstantMessageFromSearch = response.optJSONObject("instantMessageFromSearch");
-            if (jsonInstantMessageFromSearch != null) {
-                instantMessageFromSearch.enabled = jsonInstantMessageFromSearch.optBoolean("enabled");
-                instantMessageFromSearch.group = jsonInstantMessageFromSearch.optString("group");
-                instantMessageFromSearch.text = jsonInstantMessageFromSearch.optString("text");
-            }
+            instantMessageFromSearch.init(response);
 
-            JSONObject jsonAutoOpenGallery = response.optJSONObject("autoOpenGallery");
-            if (jsonAutoOpenGallery != null) {
-                autoOpenGallery.setEnabled(jsonAutoOpenGallery.optBoolean("enabled"));
-                autoOpenGallery.setGroup(jsonAutoOpenGallery.optString("group"));
-            }
+            autoOpenGallery.init(response);
+
+            likesWithThreeTabs.init(response);
+
+            instantMessagesForNewbies.init(response);
 
             JSONObject jsonNotShown = response.optJSONObject("notShown");
             if (jsonNotShown != null) {

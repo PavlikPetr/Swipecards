@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.ClipboardManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -43,7 +44,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
-    private ChatFragment.OnListViewItemLongClickListener mLongClickListener;
     private View mHeaderView;
 
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
@@ -96,7 +96,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (superType == T_OTHER && item != null) {
             if (item.isWaitingItem()) {
                 return T_WAIT;
-            }else if (item.isRepeatItem()){
+            } else if (item.isRepeatItem()) {
                 return T_RETRY;
             }
             return ChatListAdapter.getItemType(item);
@@ -128,7 +128,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         setTypeDifferences(holder, type, item);
         if (type != T_WAIT || type != T_RETRY) {
             setViewInfo(holder, item);
-            setLongClickListener(position, convertView, holder);
         }
 
         return convertView;
@@ -425,9 +424,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 break;
         }
         if (holder != null) {
-            if (holder.message != null)
-                holder.message.setMovementMethod(LinkMovementMethod.getInstance());
-            if (holder.date != null) holder.date.setText(item.createdFormatted);
+            if (holder.date != null) {
+                holder.date.setText(item.createdFormatted);
+            }
         }
 
     }
@@ -436,6 +435,14 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (holder != null && holder.message != null) {
             if (item.text != null && !item.text.equals(Static.EMPTY)) {
                 holder.message.setText(Html.fromHtml(item.text));
+
+                // Проверяем наличие в textView WEB_URLS | EMAIL_ADDRESSES | PHONE_NUMBERS | MAP_ADDRESSES;
+                // Если нашли, то добавим им кликабельность
+                // в остальных случаях holder.message будет кликаться на onItemClickListener
+                if (Linkify.addLinks(holder.message, Linkify.ALL)) {
+                    holder.message.setMovementMethod(LinkMovementMethod.getInstance());
+                    holder.message.setFocusable(false);
+                }
                 return true;
             } else {
                 holder.message.setText("");
@@ -443,10 +450,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             }
         }
         return false;
-    }
-
-    public void setOnItemLongClickListener(ChatFragment.OnListViewItemLongClickListener listener) {
-        mLongClickListener = listener;
     }
 
     @SuppressWarnings("deprecation")
@@ -508,30 +511,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             Debug.error(e);
         }
         return dataClone;
-    }
-
-    private void setLongClickListener(final int position, final View convertView, final ViewHolder holder) {
-        setLongClickListenerIfPresented(position, convertView, holder.message);
-        setLongClickListenerIfPresented(position, convertView, holder.gift);
-    }
-
-    private void setLongClickListenerIfPresented(final int position, final View convertView, final View view) {
-        if (view != null && convertView != null) {
-            convertView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    mLongClickListener.onLongClick(position, view);
-                    return false;
-                }
-            });
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    mLongClickListener.onLongClick(position, view);
-                    return false;
-                }
-            });
-        }
     }
 
     @Override

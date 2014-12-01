@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiRequest;
@@ -669,10 +668,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         if (profile != null) {
             Intent intent = new Intent(getActivity(), ChatActivity.class);
             intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
-            intent.putExtra(ChatFragment.INTENT_USER_NAME, profile.firstName != null ?
-                    profile.firstName : Static.EMPTY);
+            intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, profile.getNameAndAge());
             intent.putExtra(ChatFragment.INTENT_USER_SEX, profile.sex);
-            intent.putExtra(ChatFragment.INTENT_USER_AGE, profile.age);
             intent.putExtra(ChatFragment.INTENT_USER_CITY, profile.city == null ? "" : profile.city.name);
             startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         }

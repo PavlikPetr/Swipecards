@@ -43,7 +43,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     private OnAvatarClickListener<T> mOnAvatarClickListener;
 
 
-
     @SuppressWarnings("unchecked")
     private MultiselectionController<T> mSelectionController = new MultiselectionController(this);
 
@@ -184,7 +183,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             } else {
                 holder.name.setTextColor(Color.WHITE);
             }
-            // установка городв
+            // установка города
             if (item.user.city != null) {
                 if (item.user.deleted || item.user.banned) {
                     holder.city.setTextColor(Color.GRAY);
@@ -251,7 +250,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             loadOlderItems();
         }
     }
-
 
 
     /**

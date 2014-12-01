@@ -115,6 +115,11 @@
     <string name="pincode_forget">Forgot your PIN?</string>
     <string name="pincode_auth_input">You need to enter your login and password.</string>
     <string name="pincode_will_be_reset">If the authorization is successful, all app settings will be reset.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">Right after logging out</item>
+        <item quantity="other">%d min</item>
+        <item quantity="one">%d min</item>
+    </plurals>
     <string name="general_error">ERROR</string>
     <string name="general_yes">Yes</string>
     <string name="general_no">No</string>
@@ -163,6 +168,7 @@
     <string name="chat_like_out">Like is sent.</string>
     <string name="chat_mutual_in">You have received an admiration.</string>
     <string name="chat_mutual_out">You have sent an admiration.</string>
+    <string name="chat_wish_in">Someone has sent you their Secret Desire</string>
     <string name="chat_wish_out">Secret Wish is sent.</string>
     <string name="chat_sexuality_in">Your sexuality has been rated.</string>
     <string name="chat_sexuality_out">You have rated a sexuality.</string>
@@ -191,6 +197,7 @@
     <string name="buying_default_message">You can send gifts and admirations with coins</string>
     <string name="buying_money">Coins purchase</string>
     <string name="profile_header_title">My profile</string>
+    <string name="album_add_photo_title">Add a photo</string>
     <string name="profile_add_album">Choose from available ones</string>
     <string name="profile_add_camera">Take a photo</string>
     <string name="profile_photo">Photo</string>
@@ -567,6 +574,7 @@
     <string name="loading_photo_percent">Uploading photos %d%%</string>
     <string name="profile_update_error">Update data error</string>
     <string name="retry_cancel_editing">There was a network connection error while sending data to the server. Exit without saving, or try again?</string>
+    <string name="retry_cancel_editing_bad_value">You have entered invalid data. Try again or log out without saving?</string>
     <string name="user_does_not_exist">The user is not found.</string>
     <string name="feedback_subject_ban">Complaint on unfair ban</string>
     <string name="settings_led">LED notification</string>
@@ -576,4 +584,6 @@
     <string name="reply">Reply</string>
     <string name="measurement_unit_weight">kg.</string>
     <string name="measurement_unit_height">cm.</string>
+    <string name="maximum_number_of_users">You have selected the maximum number of users.</string>
+    <string name="logout_if_email_already_registred">There is a user with this email already. If this is your email, you have to log out of the current account and log into %s account.</string>
 </resources>

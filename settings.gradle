@@ -5,6 +5,6 @@ include ':libs:IllustratedTextView', ':libs:statistics-android'
 //Third part libs
 include ':libs:Android-ViewPagerIndicator', ':libs:PullToRefresh', ':libs:PhotoView', ':libs:UniversalImageLoader'
 //Social networks
-include ':libs:facebook-android-sdk:facebook', ':libs:odnoklassniki'
+include ':libs:odnoklassniki'
 //Topface Offerwall
 include ':libs:tf-offerwall:sdk'
