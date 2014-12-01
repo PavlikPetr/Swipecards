@@ -116,9 +116,9 @@
     <string name="pincode_auth_input">You need to enter your login and password.</string>
     <string name="pincode_will_be_reset">If the authorization is successful, all app settings will be reset.</string>
     <plurals name="pincode_interval">
-        <item quantity="zero">right away</item>
-        <item quantity="other">%d min.</item>
-        <item quantity="one">%d min.</item>
+        <item quantity="zero">Right after logging out</item>
+        <item quantity="other">%d min</item>
+        <item quantity="one">%d min</item>
     </plurals>
     <string name="general_error">ERROR</string>
     <string name="general_yes">Yes</string>
@@ -168,7 +168,7 @@
     <string name="chat_like_out">Like is sent.</string>
     <string name="chat_mutual_in">You have received an admiration.</string>
     <string name="chat_mutual_out">You have sent an admiration.</string>
-    <string name="chat_wish_in">Someone has sent you a Secret Wish.</string>
+    <string name="chat_wish_in">Someone has sent you their Secret Desire</string>
     <string name="chat_wish_out">Secret Wish is sent.</string>
     <string name="chat_sexuality_in">Your sexuality has been rated.</string>
     <string name="chat_sexuality_out">You have rated a sexuality.</string>
@@ -349,6 +349,7 @@
     <string name="general_gift">Gift</string>
     <string name="user_actions_chat">Chat</string>
     <string name="profile_edit_age_ranges">The age has to be between 16 and 99 years. Please, enter the proper number, and try again.</string>
+    <string name="wrong_password_format">Unacceptable password format</string>
     <string name="sign_in">Sign in</string>
     <string name="create_account">Create an account</string>
     <string name="email">Email</string>
@@ -573,10 +574,16 @@
     <string name="loading_photo_percent">Uploading photos %d%%</string>
     <string name="profile_update_error">Update data error</string>
     <string name="retry_cancel_editing">There was a network connection error while sending data to the server. Exit without saving, or try again?</string>
+    <string name="retry_cancel_editing_bad_value">You have entered invalid data. Try again or log out without saving?</string>
     <string name="user_does_not_exist">The user is not found.</string>
     <string name="feedback_subject_ban">Complaint on unfair ban</string>
     <string name="settings_led">LED notification</string>
     <string name="open_market_error">Cannot open the app page</string>
     <string name="billing_item_already_owned">Your previous purchase is now processing, please wait.</string>
     <string name="dialog">Conversation</string>
+    <string name="reply">Reply</string>
+    <string name="measurement_unit_weight">kg.</string>
+    <string name="measurement_unit_height">cm.</string>
+    <string name="maximum_number_of_users">You have selected the maximum number of users.</string>
+    <string name="logout_if_email_already_registred">There is a user with this email already. If this is your email, you have to log out of the current account and log into %s account.</string>
 </resources>

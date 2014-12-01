@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <Button
+                android:id="@+id/editor_ban_spam_msg"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/editor_ban_spam_msg" />
+
+            <Button
+                android:id="@+id/editor_ban_spam_photo"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/editor_ban_spam_photo" />
+
+            <Button
+                android:id="@+id/editor_ban_fake"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/editor_ban_fake" />
+
+            <Button
+                android:id="@+id/editor_ban_censor"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/editor_ban_censor" />
+
+            <Button
+                android:id="@+id/editor_ban_porn"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/editor_ban_porn" />
+
+            <Button
+                android:id="@+id/editor_ban_porn_album"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/editor_ban_porn_album" />
+
+            <Button
+                android:id="@+id/editor_ban_del_photo"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/editor_ban_del_photo" />
+
+            <Button
+                android:id="@+id/editor_ban_del_photo_all"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/editor_ban_del_photo_all" />
+
+            <Button
+                android:id="@+id/editor_ban_del_status"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/editor_ban_del_status" />
+
+            <Button
+                android:id="@+id/editor_ban_del_about"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/editor_ban_del_about" />
+
+            <Button
+                android:id="@+id/editor_ban_change_gender"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/editor_ban_change_gender" />
+
+            <!-- Это просто текстовая информация о пользователе -->
+            <TextView
+                android:id="@+id/editor_ban_profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/editor_title_name" />
+
+            <TextView
+                android:id="@+id/editor_ban_profile_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:text="@string/editor_title_id" />
+
+            <TextView
+                android:id="@+id/editor_ban_profile_social"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:text="@string/editor_title_social_link"
+                android:textColorLink="@color/text_white" />
+
+            <TextView
+                android:id="@+id/editor_ban_profile_social_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/editor_title_social_id" />
+
+            <TextView
+                android:id="@+id/editor_ban_profile_banned"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/editor_title_banned" />
+
+            <!-- big user info, unparsed json -->
+
+            <Button
+                android:id="@+id/editor_ban_profile_show_full_info"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/editor_title_show_full_info" />
+
+            <TextView
+                android:id="@+id/editor_ban_profile_full_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.topface.topface.ui.views.LockerView
+        android:id="@+id/editor_ban_locker"
+        style="@style/LoadingLocker"
+        android:visibility="gone" />
+
+</RelativeLayout>

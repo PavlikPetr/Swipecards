@@ -2,6 +2,7 @@ package com.topface.topface.requests;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
@@ -98,6 +99,11 @@ public abstract class ApiRequest implements IApiRequest {
         }
     }
 
+    @Override
+    public void resetResendCounter() {
+        mResendCnt = 0;
+    }
+
     /**
      * Переотправляем запрос
      *
@@ -120,9 +126,10 @@ public abstract class ApiRequest implements IApiRequest {
         return mResendCnt;
     }
 
+    @Override
     public void setEmptyHandler() {
         if (handler == null) {
-            handler = new ApiHandler() {
+            handler = new ApiHandler(Looper.getMainLooper()) {
                 @Override
                 public void success(IApiResponse response) {
                 }
@@ -184,6 +191,11 @@ public abstract class ApiRequest implements IApiRequest {
         return handler;
     }
 
+    @Override
+    public int getResendCounter() {
+        return mResendCnt;
+    }
+
     private boolean setSsid(String ssid) {
         if (isNeedAuth()) {
             //Если SSID изменился, то сбрасываем кэш данных запроса
@@ -198,6 +210,11 @@ public abstract class ApiRequest implements IApiRequest {
     @Override
     public String getId() {
         return hashCode() + ".." + mResendCnt;
+    }
+
+    @Override
+    public boolean containsAuth() {
+        return false;
     }
 
     protected JSONObject getRequest() {
@@ -336,7 +353,14 @@ public abstract class ApiRequest implements IApiRequest {
             HttpUtils.sendPostData(requestData, connection);
             return true;
         } else {
-            Debug.error(String.format(Locale.ENGLISH, "ConnectionManager: Api request %s is empty", getServiceName()));
+            Debug.error(
+                    String.format(
+                            Locale.ENGLISH,
+                            isCanceled() ? ConnectionManager.TAG + "::Api request %s is canceled"
+                                    : ConnectionManager.TAG + "::Api request %s is empty",
+                            getServiceName()
+                    )
+            );
             return false;
         }
     }
@@ -404,7 +428,7 @@ public abstract class ApiRequest implements IApiRequest {
         }
     }
 
-    //Отменяем запрос из UI потомка
+    //Отменяем запрос из UI потока
     public void cancelFromUi() {
         closeConnectionAsync();
         mPostData = null;

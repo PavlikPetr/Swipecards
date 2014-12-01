@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 import java.util.Collections;
 
@@ -33,7 +35,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
         if (getItemViewType(position) == T_NEW) {
             int unreadCounter = getUnreadCounter(dialog);
-            if (unreadCounter > 1) {
+            if (unreadCounter > 1 && !CacheProfile.getOptions().hideDialogPreview) {
                 holder.unreadCounter.setVisibility(View.VISIBLE);
                 holder.unreadCounter.setText(Integer.toString(unreadCounter));
             } else {
@@ -81,9 +83,6 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                         image = R.drawable.ico_outbox;
                     }
                     break;
-                case FeedDialog.ADDRESS:
-                    image = R.drawable.ico_map;
-                    break;
                 case FeedDialog.GIFT:
                     image = R.drawable.ico_gift;
                     text = (dialog.target == FeedDialog.INPUT_FRIEND_MESSAGE) ?
@@ -91,6 +90,11 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                             getContext().getString(R.string.chat_gift_out);
                     break;
             }
+        }
+        if (dialog.unread && CacheProfile.getOptions().hideDialogPreview) {
+            text = Utils.getQuantityString(R.plurals.notification_many_messages,
+                    dialog.unreadCounter, dialog.unreadCounter);
+            view.setTextColor(getContext().getResources().getColor(R.color.hidden_dialog_preview_text_color));
         }
         //Если иконка или текст пустые, то ставим данные по умолчанию
         image = (image == 0 && dialog.target == FeedDialog.OUTPUT_USER_MESSAGE) ?
@@ -116,8 +120,6 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
             case FeedDialog.PHOTO:
                 counter = dialog.unreadCounter;
                 break;
-            case FeedDialog.ADDRESS:
-            case FeedDialog.MAP:
             case FeedDialog.GIFT:
             default:
                 counter = 0;

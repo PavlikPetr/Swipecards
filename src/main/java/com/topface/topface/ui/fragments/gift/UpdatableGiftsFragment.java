@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Profile;
@@ -25,6 +26,7 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
 
     private int mProfileId;
     private boolean mIsUpdating = false;
+    private BasePendingInit<Profile> mPendingProfileInit = new BasePendingInit<>();
 
     @Override
     protected void postGiftsLoadInfoUpdate(Profile.Gifts gifts) {
@@ -56,7 +58,7 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
         if (mGridAdapter != null) {
             outState.putInt(PROFILE_ID, mProfileId);
         }
-       
+
     }
 
     @Override
@@ -68,7 +70,30 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
         }
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mPendingProfileInit.setCanSet(true);
+        if (mPendingProfileInit.getCanSet()) {
+            setProfilePending(mPendingProfileInit.getData());
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPendingProfileInit.setCanSet(false);
+    }
+
     public void setProfile(Profile profile) {
+        mPendingProfileInit.setData(profile);
+        if (mPendingProfileInit.getCanSet()) {
+            setProfilePending(mPendingProfileInit.getData());
+        }
+
+    }
+
+    private void setProfilePending(Profile profile) {
         if (mProfileId != profile.uid || mGridAdapter.isEmpty()) {
             mProfileId = profile.uid;
             setGifts(profile.gifts);
@@ -107,7 +132,7 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
 
                 removeLoaderItem();
                 if (request.from == 0) {
-                    FeedList<FeedGift> noFeedIdGifts = new FeedList<FeedGift>();
+                    FeedList<FeedGift> noFeedIdGifts = new FeedList<>();
                     for (int i = getMinItemsCount(); i < data.size(); i++) {
                         FeedGift gift = data.get(i);
                         if (gift.gift.feedId == 0) {

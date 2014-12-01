@@ -7,7 +7,6 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.topface.topface.App;
@@ -25,6 +24,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     private static final int TYPE_COUNT = 2;
     private MenuFragment mMenuFragment;
     private final SparseArray<ILeftMenuItem> mItems;
+    private SparseArray<ILeftMenuItem> mHiddenItems = new SparseArray<>();
 
     private HashMap<BaseFragment.FragmentId, TextView> mCountersBadgesMap = new HashMap<>();
     private boolean mIsEnabled = true;
@@ -32,7 +32,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             if (mMenuFragment != null) {
-                BaseFragment.FragmentId id = (BaseFragment.FragmentId) v.getTag();
+                BaseFragment.FragmentId id = ((ViewHolder) v.getTag()).getFragmentId();
                 mMenuFragment.showClosingsDialog(id);
             }
         }
@@ -46,7 +46,6 @@ public class LeftMenuAdapter extends BaseAdapter {
     public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentId menuId, final int menuType,
                                                 final int menuIconResId) {
         return new ILeftMenuItem() {
-            boolean isHidden = false;
 
             @Override
             public BaseFragment.FragmentId getMenuId() {
@@ -66,16 +65,6 @@ public class LeftMenuAdapter extends BaseAdapter {
             @Override
             public int getMenuIconResId() {
                 return menuIconResId;
-            }
-
-            @Override
-            public boolean isHidden() {
-                return isHidden;
-            }
-
-            @Override
-            public void setHidden(boolean hidden) {
-                isHidden = hidden;
             }
         };
     }
@@ -116,16 +105,29 @@ public class LeftMenuAdapter extends BaseAdapter {
         setAllItemsHidden(false);
     }
 
-    private void setItemHidden(BaseFragment.FragmentId id, boolean hidden) {
-        mItems.get(id.getId()).setHidden(hidden);
+    private void setItemHidden(BaseFragment.FragmentId fragmentId, boolean hidden) {
+        int id = fragmentId.getId();
+        if (hidden) {
+            mHiddenItems.put(id, mItems.get(id));
+            mItems.remove(id);
+        } else {
+            mItems.put(id, mHiddenItems.get(id));
+            mHiddenItems.remove(id);
+        }
+        notifyDataSetChanged();
     }
 
     private void setAllItemsHidden(boolean hidden) {
         int key;
-        for (int i = 0; i < mItems.size(); i++) {
-            key = mItems.keyAt(i);
-            mItems.get(key).setHidden(hidden);
+
+        SparseArray<ILeftMenuItem> goalStateItems = hidden ? mHiddenItems : mItems;
+        SparseArray<ILeftMenuItem> anotherStateItems = hidden ? mItems : mHiddenItems;
+
+        for (int i = 0; i < anotherStateItems.size(); i++) {
+            key = anotherStateItems.keyAt(i);
+            goalStateItems.put(key, anotherStateItems.get(key));
         }
+        anotherStateItems.clear();
     }
 
     public void addItem(ILeftMenuItem item) {
@@ -133,7 +135,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     public boolean hasFragment(BaseFragment.FragmentId id) {
-        return mItems.size() > id.getId() && mItems.valueAt(id.getId()) != null;
+        return mItems.size() > id.getId();
     }
 
     @NonNull
@@ -148,7 +150,8 @@ public class LeftMenuAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = View.inflate(mMenuFragment.getActivity(), R.layout.item_left_menu_button_with_badge, null);
-            holder.btnMenu = (Button) convertView.findViewById(R.id.btnMenu);
+            holder.leftMenuCellLayout = convertView.findViewById(R.id.leftMenuCellLayout);
+            holder.btnMenu = (TextView) convertView.findViewById(R.id.btnMenu);
             holder.counterBadge = (TextView) convertView.findViewById(R.id.tvCounterBadge);
             convertView.setTag(holder);
         } else {
@@ -166,11 +169,11 @@ public class LeftMenuAdapter extends BaseAdapter {
                 break;
             case TYPE_MENU_BUTTON_WITH_BADGE:
                 holder.btnMenu.setText(item.getMenuText());
-                if (item.isHidden()) {
+                if (enabled) {
+                    registerCounterBadge(item, holder.counterBadge);
+                } else {
                     unregisterCounterBadge(item);
                     holder.counterBadge.setVisibility(View.GONE);
-                } else {
-                    registerCounterBadge(item, holder.counterBadge);
                 }
                 break;
             default:
@@ -179,28 +182,33 @@ public class LeftMenuAdapter extends BaseAdapter {
         holder.item = item;
         // init button state
         holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(item.getMenuIconResId(), 0, 0, 0);
-        holder.btnMenu.setTag(item.getMenuId());
-        if (enabled || item.isHidden()) {
-            holder.btnMenu.setOnClickListener(mMenuFragment);
+
+        if (enabled) {
+            holder.leftMenuCellLayout.setOnClickListener(mMenuFragment);
             setAlphaToTextAndDrawable(holder.btnMenu, 255);
-            holder.btnMenu.setSelected(mMenuFragment.getCurrentFragmentId() == item.getMenuId());
+            setCheckedBackgroundState(mMenuFragment.getCurrentFragmentId() == item.getMenuId(), holder.leftMenuCellLayout);
         } else {
-            holder.btnMenu.setOnClickListener(mDisabledItemClickListener);
+            holder.leftMenuCellLayout.setOnClickListener(mDisabledItemClickListener);
             setAlphaToTextAndDrawable(holder.btnMenu, 102);
-            holder.btnMenu.setSelected(mMenuFragment.getCurrentFragmentId() == item.getMenuId());
+            setCheckedBackgroundState(mMenuFragment.getCurrentFragmentId() == item.getMenuId(), holder.leftMenuCellLayout);
         }
-        if (item.isHidden()) {
-            holder.btnMenu.setVisibility(View.GONE);
-        } else {
-            holder.btnMenu.setVisibility(View.VISIBLE);
-        }
+
         return convertView;
     }
 
-    private void setAlphaToTextAndDrawable(Button btn, int alpha) {
+    private void setCheckedBackgroundState(boolean isChecked, View layout) {
+        if (isChecked) {
+            layout.setBackgroundResource(R.drawable.bg_left_menu_pressed);
+        } else {
+            layout.setBackgroundResource(R.drawable.bg_left_menu_item_selector);
+        }
+    }
+
+
+    private void setAlphaToTextAndDrawable(TextView btn, int alpha) {
         btn.setTextColor(Color.argb(alpha, 255, 255, 255));
         Drawable[] compoundDrawables = btn.getCompoundDrawables();
-        if (compoundDrawables != null && compoundDrawables[0] != null) {
+        if (compoundDrawables[0] != null) {
             compoundDrawables[0].setAlpha(alpha);
         }
     }
@@ -242,10 +250,15 @@ public class LeftMenuAdapter extends BaseAdapter {
         }
     }
 
-    class ViewHolder {
-        Button btnMenu;
+    public class ViewHolder {
+        TextView btnMenu;
+        View leftMenuCellLayout;
         TextView counterBadge;
         ILeftMenuItem item;
+
+        public BaseFragment.FragmentId getFragmentId() {
+            return item.getMenuId();
+        }
     }
 
     public interface ILeftMenuItem {
@@ -256,9 +269,5 @@ public class LeftMenuAdapter extends BaseAdapter {
         String getMenuText();
 
         int getMenuIconResId();
-
-        boolean isHidden();
-
-        void setHidden(boolean hidden);
     }
 }

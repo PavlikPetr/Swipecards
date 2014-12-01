@@ -51,10 +51,7 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
      * @return флаг наличия фотографии в списке
      */
     public boolean contains(Photo photo) {
-        if (photo == null) {
-            return false;
-        }
-        return getByPhotoId(photo.getId()) != null;
+        return photo != null && getPhotoById(photo.getId()) != null;
     }
 
     /**
@@ -67,7 +64,7 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
         return size() >= index + 1;
     }
 
-    public Photo getByPhotoId(int photoId) {
+    public Photo getPhotoById(int photoId) {
         Photo result = null;
         for (Photo photo : this) {
             if (photo != null && photoId == photo.getId()) {

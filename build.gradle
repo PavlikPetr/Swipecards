@@ -12,6 +12,7 @@ buildscript {
     }
     dependencies {
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
     }
 }
 
@@ -19,6 +20,7 @@ repositories {
     mavenCentral()
 }
 
+apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 
 android {
@@ -86,6 +88,8 @@ android {
         release {
             //noinspection GroovyAssignabilityCheck
             signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
         }
         //Специальный тип сборки для тестирования отделом QA,
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
@@ -105,6 +109,10 @@ android {
         exclude 'LICENSE.txt'
     }
 
+    //@see https://code.google.com/p/android/issues/detail?id=40409
+    dexOptions {
+        jumboMode = true
+    }
 }
 
 dependencies {
@@ -117,7 +125,7 @@ dependencies {
     compile fileTree(dir: 'libs', exclude: 'amazon/*.jar', include: '*.jar')
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
-    compile project(':libs:AndroidStatistics')
+    compile project(':libs:statistics-android')
     //Third party libs
     compile('ch.acra:acra:4.5.0') {
         //Удаляем предоставляемыю acra зависимость org.json, так как она все рвно не нужна
@@ -131,29 +139,18 @@ dependencies {
     compile project(':libs:PhotoView')
     compile project(':libs:UniversalImageLoader')
     //Social networks SDK
-    compile project(':libs:Facebook')
     compile project(':libs:odnoklassniki')
-    //Ad networks SDK
-    compile project(':libs:mopub-android-sdk')
     //Аннотации вроде @NonNull и @*Res для обозначения переменных
     compile 'com.android.support:support-annotations:19.1.0'
     //Для Амазона нужна библиотека для поддержки in-app покупок
-    amazonCompile files('libs/amazon/*.jar')
+    amazonCompile fileTree(dir: 'libs/amazon/', include: '*.jar')
 
     compile project(':libs:tf-offerwall:sdk')
 
     androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
 
-    compile 'com.vk:androidsdk:1.3.2'
-}
-
-
-project(':libs:AndroidStatistics') {
-    apply plugin: 'com.android.library'
-    //noinspection GradleMisplacedStatement
-    repositories {
-        mavenCentral()
-    }
+    compile 'com.vk:androidsdk:1.3.4'
+    compile 'com.facebook.android:facebook-android-sdk:3.20.0'
 }
 
 project(':libs:IllustratedTextView') {
@@ -207,34 +204,12 @@ project(':libs:UniversalImageLoader') {
 }
 
 //Social networks
-project(':libs:Facebook') {
-    apply plugin: 'com.android.library'
-    android.sourceSets.main {
-        manifest.srcFile 'facebook/AndroidManifest.xml'
-        java.srcDirs = ['facebook/src']
-        res.srcDirs = ['facebook/res']
-    }
-}
-
 project(':libs:odnoklassniki') {
     apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['src']
         res.srcDirs = ['res']
-    }
-}
-
-//Ad networks
-project(':libs:mopub-android-sdk') {
-    apply plugin: 'com.android.library'
-    //noinspection GradleMisplacedStatement
-    dependencies {
-        compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
-    }
-    android.sourceSets.main {
-        manifest.srcFile 'mopub-sdk/AndroidManifest.xml'
-        java.srcDirs = ['mopub-sdk/src/main/java']
     }
 }
 
@@ -265,5 +240,4 @@ android {
                 "MissingQuantity"
         //Временно отключена проверка из-за того, что нет many формы в польском и украинском в дальнейшем поправим (пока many = other)
     }
-    aaptOptions.useAaptPngCruncher = true
 }

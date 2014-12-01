@@ -57,7 +57,6 @@ public class LeadersActivity extends BaseFragmentActivity {
         usePhotos = new Photos();
         uselessPhotos = new Photos();
 
-//        mProgressBar = (ProgressBar) findViewById(R.id.loader);
         mGridView = (GridView) findViewById(R.id.useful_photos_grid);
         mUselessGridView = (GridView) findViewById(R.id.useless_photos_grid);
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
@@ -70,8 +69,13 @@ public class LeadersActivity extends BaseFragmentActivity {
             mUselessTitle.setVisibility(View.VISIBLE);
         }
         setListeners();
-        getProfile();
         setPrice(CacheProfile.getOptions().priceLeader);
+    }
+
+    @Override
+    protected void onLoadProfile() {
+        super.onLoadProfile();
+        getProfile();
     }
 
     private void setPrice(int price) {
@@ -184,6 +188,8 @@ public class LeadersActivity extends BaseFragmentActivity {
     }
 
     private void splitPhotos(Photos photos) {
+        usePhotos.clear();
+        uselessPhotos.clear();
         for (Photo photo : photos) {
             if (photo.canBecomeLeader || CacheProfile.getOptions().minLeadersPercent == 0) {
                 usePhotos.add(new Photo(photo));

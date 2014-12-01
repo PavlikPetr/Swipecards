@@ -1,5 +1,7 @@
 package com.topface.topface.utils;
 
+import android.text.TextUtils;
+
 import com.topface.framework.utils.Debug;
 import com.topface.topface.data.SerializableToJson;
 
@@ -26,7 +28,7 @@ public class SerializableList extends LinkedList<SerializableToJson> {
     }
 
     public void fromJSON(String json, String className) {
-        if (json == null) {
+        if (TextUtils.isEmpty(json)) {
             return;
         }
         try {

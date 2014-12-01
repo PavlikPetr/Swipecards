@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
@@ -30,6 +31,7 @@ public class HeaderStatusFragment extends ProfileInnerFragment implements View.O
     private TextView mStatusView;
     private String mStatusVal;
     private int mProfileType;
+    private BasePendingInit<Profile> mPendingUserInit = new BasePendingInit<>();
 
     private static void saveState(Fragment fragment, Profile profile, int profileType) {
         if (!fragment.isVisible()) {
@@ -73,7 +75,29 @@ public class HeaderStatusFragment extends ProfileInnerFragment implements View.O
         refreshViews();
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mPendingUserInit.setCanSet(true);
+        if (mPendingUserInit.getCanSet()) {
+            setProfilePending(mPendingUserInit.getData());
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPendingUserInit.setCanSet(false);
+    }
+
     public void setProfile(Profile profile) {
+        mPendingUserInit.setData(profile);
+        if (mPendingUserInit.getCanSet()) {
+            setProfilePending(mPendingUserInit.getData());
+        }
+    }
+
+    private void setProfilePending(Profile profile) {
         if (profile != null) {
             initState(profile);
             saveState(this, profile);

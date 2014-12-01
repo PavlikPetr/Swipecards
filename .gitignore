@@ -15,6 +15,3 @@ local.properties
 project.properties
 *.swp
 *~
-/gradlew
-/gradlew.bat
-/gradle

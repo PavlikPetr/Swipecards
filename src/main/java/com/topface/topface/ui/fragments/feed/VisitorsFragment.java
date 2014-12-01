@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Visitor;
@@ -16,6 +15,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
 

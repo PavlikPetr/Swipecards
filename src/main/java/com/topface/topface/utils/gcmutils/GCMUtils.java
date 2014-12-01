@@ -1,11 +1,14 @@
 package com.topface.topface.utils.gcmutils;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -20,6 +23,9 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
+import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
@@ -33,11 +39,12 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DIALOGS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_GEO;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITORS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DIALOGS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.LIKES;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.MUTUAL;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VISITORS;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
@@ -211,6 +218,19 @@ public class GCMUtils {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static boolean showNotification(final Intent extra, Context context) {
+        if (!CacheProfile.isLoaded()) {
+            Debug.log("GCM: wait for profile load to show notification");
+            BroadcastReceiver profileLoadReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    showNotification(extra, context);
+                    LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
+                }
+            };
+            LocalBroadcastManager.getInstance(context).registerReceiver(profileLoadReceiver,
+                    new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
+            return false;
+        }
         String uid = Integer.toString(CacheProfile.uid);
         String targetUserId = extra.getStringExtra("receiver");
         targetUserId = targetUserId != null ? targetUserId : uid;
@@ -258,7 +278,6 @@ public class GCMUtils {
                         null);
             }
         } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
-
             notificationManager.showNotificationAsync(
                     title,
                     data,
@@ -277,7 +296,7 @@ public class GCMUtils {
                     getUnread(extra),
                     intent,
                     false,
-                    null);
+                    user);
         }
     }
 
@@ -377,7 +396,12 @@ public class GCMUtils {
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, F_MUTUAL);
+                    if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
+                        i.putExtra(NEXT_INTENT, TABBED_LIKES);
+                        i.putExtra(TabbedLikesFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
+                    } else {
+                        i.putExtra(NEXT_INTENT, MUTUAL);
+                    }
                 }
                 break;
 
@@ -385,7 +409,12 @@ public class GCMUtils {
                 if (showLikes) {
                     lastNotificationType = GCM_TYPE_LIKE;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, F_LIKES);
+                    if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
+                        i.putExtra(NEXT_INTENT, TABBED_LIKES);
+                        i.putExtra(TabbedLikesFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
+                    } else {
+                        i.putExtra(NEXT_INTENT, LIKES);
+                    }
                 }
                 break;
 
@@ -393,13 +422,13 @@ public class GCMUtils {
                 if (showVisitors) {
                     lastNotificationType = GCM_TYPE_GUESTS;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, F_VISITORS);
+                    i.putExtra(NEXT_INTENT, VISITORS);
                 }
                 break;
             case GCM_TYPE_PEOPLE_NEARBY:
                 lastNotificationType = GCM_TYPE_PEOPLE_NEARBY;
                 i = new Intent(context, NavigationActivity.class);
-                i.putExtra(NEXT_INTENT, F_GEO);
+                i.putExtra(NEXT_INTENT, GEO);
                 break;
             case GCM_TYPE_UPDATE:
                 i = Utils.getMarketIntent(context);
@@ -411,7 +440,7 @@ public class GCMUtils {
             case GCM_TYPE_DIALOGS:
                 lastNotificationType = GCM_TYPE_DIALOGS;
                 i = new Intent(context, NavigationActivity.class);
-                i.putExtra(NEXT_INTENT, F_DIALOGS);
+                i.putExtra(NEXT_INTENT, DIALOGS);
                 break;
             case GCM_TYPE_PROMO:
             default:
@@ -483,5 +512,14 @@ public class GCMUtils {
 
         }
 
+        public String getNameAndAge() {
+            String result;
+            if (name != null && name.length() > 0 && age > 0) {
+                result = name + ", " + age;
+            } else {
+                result = name;
+            }
+            return result;
+        }
     }
 }

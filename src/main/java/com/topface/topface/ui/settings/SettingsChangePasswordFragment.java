@@ -141,7 +141,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
         logoutRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                AuthorizationManager.logout(getActivity());
+                new AuthorizationManager(getActivity()).logout(getActivity());
             }
 
             @Override

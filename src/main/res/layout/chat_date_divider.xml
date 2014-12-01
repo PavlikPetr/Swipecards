@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/chat_divider_bg"
-        android:scaleType="fitXY"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp"
+        android:background="@drawable/chat_date_line" />
 
     <TextView
         android:id="@+id/tvChatDateDivider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:background="@color/bg_holo"
         android:gravity="center"
-        android:textColor="#979797"
-        android:textSize="12sp"
-        android:background="@color/bg_main"
-        android:padding="2dp" />
+        android:paddingBottom="4dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="2dp"
+        android:shadowColor="@null"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="0"
+        android:textColor="#A7A7A7"
+        android:textSize="12sp" />
 
 </RelativeLayout>
-

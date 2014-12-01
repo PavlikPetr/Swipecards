@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
+import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.AlbumRequest;
@@ -40,6 +41,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     private Photos mPhotoLinks;
     private LoadingListAdapter.Updater mUpdater;
     private GridView mGridAlbum;
+    private BasePendingInit<User> mPendingUserInit = new BasePendingInit<>();
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
@@ -127,6 +129,21 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mPendingUserInit.setCanSet(true);
+        if (mPendingUserInit.getCanSet()) {
+            setUserDataPending(mPendingUserInit.getData());
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPendingUserInit.setCanSet(false);
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(USER_ID, mUserId);
@@ -136,10 +153,17 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         } catch (JSONException e) {
             Debug.error(e);
         }
-        outState.putInt(POSITION, mGridAlbum != null ? mGridAlbum.getFirstVisiblePosition() : null);
+        outState.putInt(POSITION, (mGridAlbum != null) ? mGridAlbum.getFirstVisiblePosition() : 0);
     }
 
     public void setUserData(User user) {
+        mPendingUserInit.setData(user);
+        if (mPendingUserInit.getCanSet()) {
+            setUserDataPending(mPendingUserInit.getData());
+        }
+    }
+
+    private void setUserDataPending(User user) {
         mUserId = user.uid;
         mPhotosCount = user.photosCount;
         mPhotoLinks = user.photos;

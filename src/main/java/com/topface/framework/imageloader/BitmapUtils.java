@@ -1,6 +1,7 @@
 package com.topface.framework.imageloader;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,6 +13,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.provider.MediaStore;
 
 import com.topface.framework.utils.Debug;
 
@@ -39,6 +41,17 @@ public class BitmapUtils {
         return bitmap;
     }
 
+    public static int getOrientationPhotoFromGallery(Context context, Uri photoUri) {
+        Cursor cursor = context.getContentResolver().query(photoUri,
+                new String[]{MediaStore.Images.ImageColumns.ORIENTATION}, null, null, null);
+
+        if (cursor.getCount() != 1) {
+            return -1;
+        }
+        cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
+
     public static BitmapFactory.Options readImageFileOptions(Context context, Uri uri) {
         BufferedInputStream bis = null;
         InputStream is = null;
@@ -60,7 +73,6 @@ public class BitmapUtils {
                 Debug.error(e);
             }
         }
-
         return options;
     }
 
@@ -78,12 +90,20 @@ public class BitmapUtils {
             } else {
                 options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
             }
-
+            int width = options.outWidth;
+            int height = options.outHeight;
             // Decode bitmap with inSampleSize set
             options.inJustDecodeBounds = false;
             is = getInputStream(context, uri);
             bis = new BufferedInputStream(is, 8192);
             bitmap = BitmapFactory.decodeStream(bis, null, options);
+            if (orientation == 0) {
+                int galleryPhotoOrientation = getOrientationPhotoFromGallery(context, uri);
+                //на некоторых телефонах ширина с высотой не меняются местами в зависимости от ориентации
+                if (height < width && (galleryPhotoOrientation == 90 || galleryPhotoOrientation == 270)) {
+                    bitmap = getRotatedBitmap(bitmap, galleryPhotoOrientation);
+                }
+            }
         } catch (Exception ex) {
             Debug.error(ex);
         } finally {
@@ -94,7 +114,6 @@ public class BitmapUtils {
                 Debug.error(e);
             }
         }
-
         return bitmap;
     }
 
@@ -129,7 +148,6 @@ public class BitmapUtils {
         } else {
             stream = context.getContentResolver().openInputStream(uri);
         }
-
         return stream;
     }
 
@@ -189,7 +207,6 @@ public class BitmapUtils {
             default:
                 return bitmap;
         }
-
         return getRotatedBitmap(bitmap, rotate);
     }
 
@@ -238,7 +255,6 @@ public class BitmapUtils {
             //noinspection SuspiciousNameCombination
             clippedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, width, null, false);
         }
-
         return clippedBitmap;
     }
 
@@ -287,7 +303,6 @@ public class BitmapUtils {
         } catch (OutOfMemoryError e) {
             Debug.error("ClipANdScaleImage:: " + e.toString());
         }
-
         return clippedBitmap;
     }
 
@@ -306,7 +321,7 @@ public class BitmapUtils {
 
         Paint paint = new Paint();
         canvas.drawARGB(0, 0, 0, 0);
-//
+
         canvas.drawBitmap(mask, 0, 0, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, 0, 0, paint);
@@ -315,7 +330,6 @@ public class BitmapUtils {
             canvas.drawBitmap(border, 0, 0, paint);
         }
         clippedBitmap.recycle();
-
         return output;
     }
 
@@ -350,14 +364,13 @@ public class BitmapUtils {
 
         Paint paint = new Paint();
 
-
         paint.setAntiAlias(true);
         paint.setColor(0xff424242);
         canvas.drawARGB(0, 0, 0, 0);
 
         canvas.drawCircle(dstWidth / 2, dstWidth / 2, dstWidth / 2, paint);
 
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
         canvas.drawBitmap(clippedBitmap, rect, rect, paint);
 
         if (!bitmap.isRecycled()) {
@@ -367,7 +380,6 @@ public class BitmapUtils {
         }
 
         clippedBitmap.recycle();
-
         return output;
     }
 
@@ -389,7 +401,6 @@ public class BitmapUtils {
         else
             multWidth = (int) (((bitmapWidth < bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
 
-
         @SuppressWarnings("SuspiciousNameCombination")
         Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Bitmap.Config.ARGB_8888);
 
@@ -404,12 +415,11 @@ public class BitmapUtils {
 
         Paint canvasPaint = new Paint();
         canvasPaint.setAntiAlias(true);
-        canvasPaint.setColor(0xff424242);
 
         canvas.drawARGB(0, 0, 0, 0);
 
         canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint);
-        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
         canvas.drawBitmap(bitmap, src, dst, canvasPaint);
 
         Bitmap scaledBitmap;
@@ -425,7 +435,6 @@ public class BitmapUtils {
         } else {
             Debug.error("Bitmap is already recycled");
         }
-
         return scaledBitmap;
     }
 }

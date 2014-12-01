@@ -1,6 +1,5 @@
 package com.topface.topface.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,8 +7,6 @@ import android.view.MenuItem;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
-
-import java.util.List;
 
 public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFragmentActivity {
 
@@ -35,20 +32,11 @@ public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFra
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                FragmentManager fm = getSupportFragmentManager();
-                if (fm != null) {
-                    List<Fragment> fragments = fm.getFragments();
-                    if (fragments != null) {
-                        for (Fragment f : fragments) {
-                            if (f != null && f.getActivity() == this) {
-                                f.onOptionsItemSelected(item);
-                            }
-                        }
-                    }
+                if (mFragment != null) {
+                    mFragment.onOptionsItemSelected(item);
                 }
                 if (isTaskRoot()) {
-                    Intent i = new Intent(this, NavigationActivity.class);
-                    startActivity(i);
+                    startActivity(getSupportParentActivityIntent());
                     finish();
                 } else {
                     onBackPressed();
@@ -77,7 +65,15 @@ public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFra
     }
 
     protected void initLayout() {
-        setContentView(R.layout.ac_fragment_frame);
+        setContentView(getContentViewId());
+    }
+
+    protected int getContentViewId() {
+        // this layout (R.layout.ac_fragment_frame) defines its own background,
+        // so windowBackground in some activities (e.g. ChatActivity) defined in themes
+        // doesn't work properly - overlayed by fragment background
+        // so ChatActivity now has its own fragment frame layout
+        return R.layout.ac_fragment_frame;
     }
 
     protected T getFragment() {

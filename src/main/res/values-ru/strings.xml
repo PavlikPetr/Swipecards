@@ -177,6 +177,7 @@
     <string name="general_dating">Знакомства</string>
     <string name="general_likes">Я нравлюсь</string>
 
+    <string name="general_sympathies">Симпатии</string>
     <string name="general_sympathy">Симпатия</string>
     <string name="general_delight">Восхищение</string>
     <string name="general_mutual">Взаимно</string>
@@ -463,6 +464,7 @@
     <string name="profile_edit_age_ranges">Возраст должен быть в диапазоне от 16 до 99 лет. Пожалуйста, введите
         корректное число и повторите попытку.
     </string>
+    <string name="wrong_password_format">Недопустимый формат пароля</string>
 
     <string name="sign_in">Войти</string>
     <string name="create_account">Создать аккаунт</string>
@@ -744,10 +746,16 @@
     <string name="loading_photo_percent">Загрузка фотографии %d%%</string>
     <string name="profile_update_error">Ошибка обновления данных</string>
     <string name="retry_cancel_editing">Во время отправки данных возникла ошибка соединения. Повторить попытку или выйти, не сохраняя данные?</string>
+    <string name="retry_cancel_editing_bad_value">Вы ввели неверные данные. Повторить попытку или выйти, не сохраняя данные?</string>
     <string name="user_does_not_exist">Пользователь не найден</string>
     <string name="feedback_subject_ban">Жалоба на несправедливый бан</string>
     <string name="settings_led">LED уведомление</string>
     <string name="open_market_error">Не удается открыть страницу приложения</string>
     <string name="billing_item_already_owned">Ваша предыдущая покупка в обработке, пожалуйста подождите</string>
     <string name="dialog">Переписка</string>
+    <string name="reply">Ответить</string>
+    <string name="measurement_unit_weight">кг.</string>
+    <string name="measurement_unit_height">см.</string>
+    <string name="maximum_number_of_users">Выбрано максимальное количестово пользователей</string>
+    <string name="logout_if_email_already_registred">Пользователь с таким e-mail уже существует. Если это ваш e-mail, то вам необходимо выйти из текущего аккаунта и зайти в аккаунт %s</string>
 </resources>

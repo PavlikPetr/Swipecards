@@ -3,5 +3,9 @@
 
     <dimen name="popular_dialog_text_margin">12dp</dimen>
     <dimen name="action_bar_title_size">16sp</dimen>
+    <dimen name="action_bar_subtitle_size">12sp</dimen>
+
+    <!-- for chat -->
+    <dimen name="chat_balloon_max_width">360dp</dimen>
 
 </resources>

@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiRequest;
@@ -43,11 +42,13 @@ import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
+import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
+import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.fragments.gift.UserGiftsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
@@ -85,9 +86,12 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private ViewStub mUserActionsStub;
     private RelativeLayout mBlocked;
     private MenuItem mBarActions;
+    // for profile forwarding
+    private ApiResponse mSavedResponse = null;
     // controllers
     private RateController mRateController;
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
+        @SuppressWarnings("ConstantConditions")
         @Override
         public void onReceive(Context context, Intent intent) {
             AttitudeHandler.ActionTypes type = (AttitudeHandler.ActionTypes) intent.getSerializableExtra(AttitudeHandler.TYPE);
@@ -131,6 +135,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         }
     };
 
+    private int getAnimationTime() {
+        return mUserActions.size() * getActivity().getResources().getInteger(R.integer.action_animation_time);
+    }
+
     private void switchBookmarkEnabled(boolean enabled) {
         if (mActions != null) {
             mBookmarkAction.setText(((User) getProfile()).bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
@@ -149,6 +157,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         mItemId = args.getString(AbstractProfileFragment.INTENT_ITEM_ID);
         mUserRated = args.containsKey(USER_RATED_EXTRA);
         mUserRate = args.getBoolean(USER_RATED_EXTRA, false);
+        String s = args.getString(EditorProfileActionsFragment.PROFILE_RESPONSE);
+        if (!TextUtils.isEmpty(s)) {
+            mSavedResponse = new ApiResponse(s);
+        }
         setCallingClass(args.getString(AbstractProfileFragment.INTENT_CALLING_FRAGMENT));
     }
 
@@ -205,6 +217,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         if (mActions == null) {
             stub.setLayoutResource(R.layout.user_actions_layout);
             mActions = stub.inflate();
+            activateEditorActions(mActions);
             RelativeLayout bookmarksLayout = (RelativeLayout) mActions.findViewById(R.id.add_to_bookmark_action);
             bookmarksLayout.setOnClickListener(this);
             new UserActions(mActions, actions);
@@ -228,6 +241,13 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         }
     }
 
+    private void activateEditorActions(View actions) {
+        if (CacheProfile.isEditor()) {
+            ViewStub stub = (ViewStub) actions.findViewById(R.id.open_profile_for_editor_stub);
+            stub.inflate();
+        }
+    }
+
     private ArrayList<UserActions.ActionItem> getActionItems() {
         if (mUserActions == null) {
             mUserActions = new ArrayList<>();
@@ -238,6 +258,9 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             mUserActions.add(new UserActions.ActionItem(R.id.add_to_black_list_action, this));
             mUserActions.add(new UserActions.ActionItem(R.id.complain_action, this));
             mUserActions.add(new UserActions.ActionItem(R.id.add_to_bookmark_action, this));
+            if (CacheProfile.isEditor()) {
+                mUserActions.add(new UserActions.ActionItem(R.id.open_profile_for_editor, this));
+            }
         }
         return mUserActions;
     }
@@ -271,7 +294,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                     initActions(mUserActionsStub, (User) user, getActionItems());
                     boolean checked = mBarActions.isChecked();
                     mBarActions.setChecked(!checked);
-                    animateProfileActions(checked, 500);
+                    animateProfileActions(checked);
                 }
                 return true;
             default:
@@ -292,48 +315,65 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         if (isLoaded(profileId)) return;
         mLockScreen.setVisibility(View.GONE);
         mLoaderView.setVisibility(View.VISIBLE);
-        UserRequest userRequest = new UserRequest(profileId, getActivity());
-        registerRequest(userRequest);
-        userRequest.callback(new DataApiHandler<User>() {
+        if (mSavedResponse == null) {
+            UserRequest userRequest = new UserRequest(profileId, getActivity());
+            registerRequest(userRequest);
+            userRequest.callback(new DataApiHandler<User>() {
 
-            @Override
-            protected void success(User user, IApiResponse response) {
-                if (user == null) {
-                    showRetryBtn();
-                } else if (user.banned) {
-                    showForBanned();
-                } else if (user.deleted) {
-                    showForDeleted();
-                } else {
-                    setProfile(user);
-                    if (mHeaderMainFragment != null) {
-                        mHeaderMainFragment.setOnline(user.online);
-                    }
-                    mLoaderView.setVisibility(View.INVISIBLE);
-                    if (getProfileType() == Profile.TYPE_USER_PROFILE) {
-                        String status = user.getStatus();
-                        if (status == null || TextUtils.isEmpty(status)) {
-                            mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
-                        }
+                @Override
+                protected void success(User user, IApiResponse response) {
+                    onSuccess(user, response);
+                }
+
+                @Override
+                protected User parseResponse(ApiResponse response) {
+                    return User.parse(profileId, response);
+                }
+
+                @Override
+                public void fail(final int codeError, IApiResponse response) {
+                    if (response.isCodeEqual(ErrorCodes.INCORRECT_VALUE, ErrorCodes.USER_NOT_FOUND)) {
+                        showForNotExisting();
+                    } else {
+                        showRetryBtn();
                     }
                 }
-                mLastLoadedProfileId = mProfileId;
-            }
+            }).exec();
+        } else {
+            onSuccess(User.parse(mProfileId, mSavedResponse), mSavedResponse);
+        }
+    }
 
-            @Override
-            protected User parseResponse(ApiResponse response) {
-                return User.parse(profileId, response);
+    private void onSuccess(User user, IApiResponse response) {
+        if (user != null) {
+            saveResponseForEditor((ApiResponse) response);
+        }
+        if (user == null) {
+            showRetryBtn();
+        } else if (user.banned) {
+            showForBanned();
+        } else if (user.deleted) {
+            showForDeleted();
+        } else {
+            setProfile(user);
+            if (mHeaderMainFragment != null) {
+                mHeaderMainFragment.setOnline(user.online);
             }
-
-            @Override
-            public void fail(final int codeError, IApiResponse response) {
-                if (response.isCodeEqual(ErrorCodes.INCORRECT_VALUE, ErrorCodes.USER_NOT_FOUND)) {
-                    showForNotExisting();
-                } else {
-                    showRetryBtn();
+            mLoaderView.setVisibility(View.INVISIBLE);
+            if (getProfileType() == Profile.TYPE_USER_PROFILE) {
+                String status = user.getStatus();
+                if (status == null || TextUtils.isEmpty(status)) {
+                    mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
                 }
             }
-        }).exec();
+        }
+        mLastLoadedProfileId = mProfileId;
+    }
+
+    private void saveResponseForEditor(ApiResponse response) {
+        if (CacheProfile.isEditor()) {
+            mSavedResponse = response;
+        }
     }
 
     private void showForBanned() {
@@ -373,7 +413,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         }
     }
 
-    private void animateProfileActions(final boolean isActive, int time) {
+    private void animateProfileActions(final boolean isActive) {
         if (mActions != null) {
             TranslateAnimation ta;
             if (isActive) {
@@ -382,7 +422,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 ta = new TranslateAnimation(0, 0, -getChatActionsViewHeight(), 0);
             }
 
-            ta.setDuration(time);
+            ta.setDuration(getAnimationTime());
             ta.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
@@ -596,6 +636,11 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             case R.id.complain_action:
                 startActivity(ComplainsActivity.createIntent(mProfileId));
                 break;
+            case R.id.open_profile_for_editor:
+                if (mSavedResponse != null) {
+                    startActivity(EditorProfileActionsActivity.createIntent(mProfileId, mSavedResponse));
+                }
+                break;
             default:
                 break;
         }
@@ -623,10 +668,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         if (profile != null) {
             Intent intent = new Intent(getActivity(), ChatActivity.class);
             intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
-            intent.putExtra(ChatFragment.INTENT_USER_NAME, profile.firstName != null ?
-                    profile.firstName : Static.EMPTY);
+            intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, profile.getNameAndAge());
             intent.putExtra(ChatFragment.INTENT_USER_SEX, profile.sex);
-            intent.putExtra(ChatFragment.INTENT_USER_AGE, profile.age);
             intent.putExtra(ChatFragment.INTENT_USER_CITY, profile.city == null ? "" : profile.city.name);
             startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         }

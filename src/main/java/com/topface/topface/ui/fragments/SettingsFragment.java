@@ -59,6 +59,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     private EditSwitcher mSwitchVibration;
     private EditSwitcher mSwitchLED;
     private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<>();
+    private TextView mSocialNameText;
     private CountDownTimer mSendTimer = new CountDownTimer(3000, 3000) {
         @Override
         public void onTick(long l) {
@@ -261,10 +262,10 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loAccount);
         setBackground(R.drawable.edit_big_btn_top_selector, frame);
         ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_account);
-        TextView socialNameText = (TextView) frame.findViewWithTag("tvText");
-        getSocialAccountName(socialNameText);
-        getSocialAccountIcon(socialNameText);
-        socialNameText.setVisibility(View.VISIBLE);
+        mSocialNameText = (TextView) frame.findViewWithTag("tvText");
+        getSocialAccountName(mSocialNameText);
+        getSocialAccountIcon(mSocialNameText);
+        mSocialNameText.setVisibility(View.VISIBLE);
         frame.setOnClickListener(this);
     }
 
@@ -516,7 +517,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             try {
                 mCursor = getActivity().getContentResolver().query(uri, null, null, null, null);
 
-                if (mCursor!= null && mCursor.moveToFirst()) {
+                if (mCursor != null && mCursor.moveToFirst()) {
                     if (mCursor.getColumnIndex("title") >= 0) {
                         ringtoneName = mCursor.getString(mCursor.getColumnIndex("title"));
                     } else {
@@ -537,10 +538,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     /**
-     * @param key
-     * @param isMail
-     * @param value
-     * @param context
      * @return SendMailNotificationRequest depending on a key
      */
     public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {
@@ -571,7 +568,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     /**
-     * @param context
      * @return new SendMailNotificationRequest
      */
     public SendMailNotificationsRequest getMailNotificationRequest(Context context) {
@@ -600,9 +596,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     public void getSocialAccountName(final TextView textView) {
         AuthToken authToken = AuthToken.getInstance();
-        if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            textView.setText(authToken.getLogin());
-        } else {
+        if (!authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             String name = mSessionSettings.getSocialAccountName();
             if (TextUtils.isEmpty(name)) {
                 getSocialAccountNameAsync(new Handler() {
@@ -630,15 +624,13 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         new BackgroundThread() {
             @Override
             public void execute() {
-                AuthorizationManager.getAccountName(handler);
+                AuthToken.getAccountName(handler);
             }
         };
     }
 
     /**
      * Sets drawable with social network icon to textView
-     *
-     * @param textView
      */
     public void getSocialAccountIcon(final TextView textView) {
         AuthToken authToken = AuthToken.getInstance();
@@ -655,6 +647,10 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     @Override
     public void onResume() {
+        AuthToken authToken = AuthToken.getInstance();
+        if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            mSocialNameText.setText(authToken.getLogin());
+        }
         super.onResume();
     }
 

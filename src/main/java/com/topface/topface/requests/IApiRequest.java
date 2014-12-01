@@ -12,9 +12,13 @@ public interface IApiRequest {
 
     public int resend();
 
+    void setEmptyHandler();
+
     public void cancel();
 
     public boolean isCanResend();
+
+    void resetResendCounter();
 
     public boolean isCanceled();
 
@@ -25,6 +29,8 @@ public interface IApiRequest {
     public Context getContext();
 
     public ApiHandler getHandler();
+
+    int getResendCounter();
 
     public String getId();
 
@@ -39,4 +45,6 @@ public interface IApiRequest {
     public void sendHandlerMessage(IApiResponse response);
 
     RequestBuilder intoBuilder(RequestBuilder requestBuilder);
+
+    boolean containsAuth();
 }

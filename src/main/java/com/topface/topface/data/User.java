@@ -2,6 +2,7 @@ package com.topface.topface.data;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.utils.CacheProfile;
 
 import org.json.JSONObject;
 
@@ -19,6 +20,7 @@ public class User extends Profile {
     public boolean deleted;
     public boolean bookmarked;
     public boolean isSympathySent;
+    public UserSocialInfo socialInfo;   // info about social network
 
     public static User parse(int userId, ApiResponse response) {
         User user = new User();
@@ -38,6 +40,9 @@ public class User extends Profile {
                 user.deleted = item.optBoolean("deleted") || user.isEmpty();
                 user.bookmarked = item.optBoolean("bookmarked");
                 user.isSympathySent = item.optBoolean("isSympathySent");
+                if (CacheProfile.isEditor()) {
+                    user.socialInfo = UserSocialInfo.parse(item.optString("info"));
+                }
             } else {
                 user.deleted = true;
                 user.uid = userId;

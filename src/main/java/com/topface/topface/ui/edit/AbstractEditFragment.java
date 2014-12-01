@@ -92,7 +92,6 @@ public abstract class AbstractEditFragment extends BaseFragment {
         builder.setNegativeButton(R.string.general_exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                completeFailedRequest();
                 Activity activity = getActivity();
                 if (handler == null && activity != null) {
                     activity.finish();
@@ -106,6 +105,39 @@ public abstract class AbstractEditFragment extends BaseFragment {
             public void onClick(DialogInterface dialog, int which) {
                 if (handler != null) {
                     saveChanges(handler);
+                }
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finishRequestSend();
+            }
+        });
+        builder.create().show();
+        setSupportProgressBarIndeterminateVisibility(false);
+    }
+
+    protected void warnEditingFailedHeightWeight(final Handler handler) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getString(R.string.general_error));
+        builder.setMessage(R.string.retry_cancel_editing_bad_value);
+        builder.setNegativeButton(R.string.general_exit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Activity activity = getActivity();
+                if (handler == null && activity != null) {
+                    activity.finish();
+                } else if (handler != null) {
+                    handler.sendEmptyMessage(0);
+                }
+            }
+        });
+        builder.setPositiveButton(R.string.general_dialog_retry, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (handler != null) {
+                    dialog.cancel();
                 }
             }
         });

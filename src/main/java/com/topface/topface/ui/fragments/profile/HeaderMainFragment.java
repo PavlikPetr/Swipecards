@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -10,8 +11,10 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.User;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.views.ImageViewRemote;
 
@@ -30,6 +33,7 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     private String mNameVal;
     private TextView mCityView;
     private String mCityVal;
+    private BasePendingInit<Profile> mPendingUserInit = new BasePendingInit<>();
 
     private static void saveState(Fragment fragment, Profile profile) {
         if (!fragment.isVisible()) {
@@ -38,12 +42,14 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                 fragment.setArguments(args);
             }
 
-            fragment.getArguments().putParcelable(ARG_TAG_AVATAR, profile.photo);
-            fragment.getArguments().putString(ARG_TAG_NAME, profile.getNameAndAge());
-            if (profile.city != null) {
-                fragment.getArguments().putString(ARG_TAG_CITY, profile.city.name);
+            if (fragment.getArguments() != null) {
+                fragment.getArguments().putParcelable(ARG_TAG_AVATAR, profile.photo);
+                fragment.getArguments().putString(ARG_TAG_NAME, profile.getNameAndAge());
+                if (profile.city != null) {
+                    fragment.getArguments().putString(ARG_TAG_CITY, profile.city.name);
+                }
+                fragment.getArguments().putInt(ARG_TAG_BACKGROUND, profile.background);
             }
-            fragment.getArguments().putInt(ARG_TAG_BACKGROUND, profile.background);
         }
     }
 
@@ -59,6 +65,16 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_profile_header_main, null);
         mAvatarView = (ImageViewRemote) root.findViewById(R.id.ivUserAvatar);
+        mAvatarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Profile userProfile = mPendingUserInit.getData();
+                Photo photo = userProfile.photos.getPhotoById(mAvatarVal.getId());
+                int position = (photo != null) ? photo.getPosition() : 0;
+                Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userProfile.uid, userProfile.photosCount, userProfile.photos);
+                startActivity(intent);
+            }
+        });
         mNameView = (TextView) root.findViewById(R.id.tvName);
         mCityView = (TextView) root.findViewById(R.id.tvCity);
         return root;
@@ -79,7 +95,32 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
         refreshViews();
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mPendingUserInit.setCanSet(true);
+        if (mPendingUserInit.getCanSet()) {
+            setProfilePending(mPendingUserInit.getData());
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPendingUserInit.setCanSet(false);
+    }
+
     public void setProfile(Profile profile) {
+        mPendingUserInit.setData(profile);
+        if (mPendingUserInit.getCanSet()) {
+            setProfilePending(mPendingUserInit.getData());
+            if (profile instanceof User) {
+                setOnline(((User) profile).online);
+            }
+        }
+    }
+
+    private void setProfilePending(Profile profile) {
         if (profile != null) {
             initState(profile);
             saveState(this, profile);

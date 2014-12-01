@@ -1,7 +1,6 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -50,19 +49,23 @@ public class AuthRequest extends ApiRequest {
         super(context);
         doNeedAlert(false);
         clienttype = BuildConfig.BILLING_TYPE.getClientType();
-        locale = getClientLocale(context);
+        locale = getClientLocale();
         androidApiVersion = Build.VERSION.SDK_INT;
         codeVersion = BuildConfig.VERSION_CODE;
         adId = App.getAppConfig().getAdId();
-        googlePlayServicesVersion = Utils.getGooglePlayServicesVersion(context);
+        googlePlayServicesVersion = Utils.getGooglePlayServicesVersion();
         clientversion = BuildConfig.VERSION_NAME;
         clientosversion = Utils.getClientOsVersion();
         clientdevice = Utils.getClientDeviceName();
-        tablet = context.getResources().getBoolean(R.bool.is_tablet);
-        try {
-            appsflyer = new AppsFlyerData(context);
-        } catch (Exception e) {
-            Debug.error("AppsFlyer exception", e);
+        tablet = App.getContext().getResources().getBoolean(R.bool.is_tablet);
+        if (context != null) {
+            try {
+                appsflyer = new AppsFlyerData(context);
+            } catch (Exception e) {
+                Debug.error("AppsFlyer exception", e);
+            }
+        } else {
+            Debug.log("AuthRequest: can't create appsflyer with null context.");
         }
     }
 
@@ -82,11 +85,16 @@ public class AuthRequest extends ApiRequest {
         }
     }
 
-    private String getClientLocale(Context context) {
+    @Override
+    public boolean containsAuth() {
+        return true;
+    }
+
+    private String getClientLocale() {
         String locale;
         //На всякий случай проверяем возможность получить локаль
         try {
-            locale = context.getResources().getString(R.string.app_locale);
+            locale = App.getContext().getResources().getString(R.string.app_locale);
         } catch (Exception e) {
             locale = FALLBACK_LOCALE;
         }

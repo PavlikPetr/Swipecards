@@ -106,6 +106,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
     };
 
+    private boolean mIsActionBarHidden;
     private View mContentFrame;
     private MenuFragment mMenuFragment;
     private HackyDrawerLayout mDrawerLayout;
@@ -125,12 +126,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private BroadcastReceiver mOpenMenuReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-            } else {
-                mDrawerLayout.openDrawer(GravityCompat.START);
-            }
-            mDrawerToggle.syncState();
+            toggleDrawerLayout();
         }
     };
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
@@ -252,14 +248,16 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (getIntent().getBooleanExtra(INTENT_EXIT, false)) {
+        Intent intent = getIntent();
+
+        if (intent.getBooleanExtra(INTENT_EXIT, false)) {
             finish();
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
         instance = this;
-        if (isNeedBroughtToFront(getIntent())) {
+        if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
             return;
@@ -272,6 +270,10 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         initDrawerLayout();
         initFullscreen();
         initAppsFlyer();
+
+        if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
+            showFragment(intent);
+        }
     }
 
     @Override
@@ -390,7 +392,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
         FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
-        showFragment(currentFragment == null ? FragmentId.F_DATING : currentFragment);
+        showFragment(currentFragment == null ? FragmentId.DATING : currentFragment);
     }
 
     public void showContent() {
@@ -620,17 +622,25 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
     }
 
+    private void toggleDrawerLayout() {
+        if (!mIsActionBarHidden) {
+            if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                mDrawerLayout.openDrawer(GravityCompat.START);
+            }
+            mDrawerToggle.syncState();
+        }
+
+    }
+
     @Override
     public boolean onKeyDown(int keycode, KeyEvent e) {
         switch (keycode) {
             case KeyEvent.KEYCODE_MENU:
                 if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) ==
                         DrawerLayout.LOCK_MODE_UNLOCKED) {
-                    if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                        mDrawerLayout.closeDrawer(GravityCompat.START);
-                    } else {
-                        mDrawerLayout.openDrawer(GravityCompat.START);
-                    }
+                    toggleDrawerLayout();
                 }
                 return true;
         }
@@ -670,6 +680,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     public void onHideActionBar() {
         if (!mMenuFragment.isLockedByClosings()) {
+            mIsActionBarHidden = true;
             setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             getSupportActionBar().hide();
         }
@@ -677,6 +688,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
     @Override
     public void onShowActionBar() {
+        mIsActionBarHidden = false;
         setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         getSupportActionBar().show();
     }

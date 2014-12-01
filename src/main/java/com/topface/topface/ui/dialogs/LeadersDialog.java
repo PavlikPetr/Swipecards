@@ -12,7 +12,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.Leader;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
@@ -63,10 +62,10 @@ public class LeadersDialog extends AbstractModalDialog {
                 @Override
                 public void onClick(View v) {
                     if (user.id == CacheProfile.uid) {
-                        ((NavigationActivity) getActivity()).showFragment(FragmentId.F_PROFILE);
+                        ((NavigationActivity) getActivity()).showFragment(FragmentId.PROFILE);
                         dialog.dismiss();
                     } else {
-                        startActivity(UserProfileActivity.createIntent(user.id, LeadersDialog.class, getActivity()));
+                        startActivity(CacheProfile.getOptions().autoOpenGallery.createIntent(user.id, user.photosCount, LeadersDialog.class, user.photo, getActivity()));
                     }
                 }
             });

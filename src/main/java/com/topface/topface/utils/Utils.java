@@ -45,7 +45,7 @@ public class Utils {
                     "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
                     "(" +
                     "\\." +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25}" +
                     ")+"
     );
     private static PluralResources mPluralResources;
@@ -105,9 +105,9 @@ public class Utils {
         }
     }
 
-    public static Integer getGooglePlayServicesVersion(Context context) {
+    public static Integer getGooglePlayServicesVersion() {
         try {
-            return context.getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode;
+            return App.getContext().getPackageManager().getPackageInfo("com.google.android.gms", 0).versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             Debug.error("Can't obtain google play services version, no gcm available");
         } catch (Exception e) {
@@ -240,11 +240,6 @@ public class Utils {
 
     /**
      * Method to pass activity results to nested fragments.
-     *
-     * @param fm          Can be general or child fragment manager.
-     * @param requestCode
-     * @param resultCode
-     * @param data
      */
     public static void activityResultToNestedFragments(FragmentManager fm, int requestCode, int resultCode, Intent data) {
         if (fm != null) {
@@ -258,6 +253,7 @@ public class Utils {
             }
         }
     }
+
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static void enableLayoutChangingTransition(ViewGroup viewGroup) {

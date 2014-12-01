@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -26,6 +27,7 @@ import java.util.TimerTask;
 
 public class RecoverPwdFragment extends BaseFragment {
 
+    public static final String ARG_EMAIL = "email";
     private Button mBtnRecover;
     private EditText mEdEmail;
     private ProgressBar mProgressBar;
@@ -76,6 +78,7 @@ public class RecoverPwdFragment extends BaseFragment {
                     @Override
                     public void success(IApiResponse response) {
                         showButtons();
+                        Toast.makeText(getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_LONG).show();
                         getActivity().finish();
                     }
 
@@ -87,7 +90,11 @@ public class RecoverPwdFragment extends BaseFragment {
                 }).exec();
             }
         });
-        mBtnRecover.setEnabled(false);
+        if (getArguments().getString(ARG_EMAIL) != null) {
+            mBtnRecover.setEnabled(true);
+        } else {
+            mBtnRecover.setEnabled(false);
+        }
 
         root.findViewById(R.id.tvBackToMainAuth).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +114,7 @@ public class RecoverPwdFragment extends BaseFragment {
 
     private void initEditViews(View root) {
         mEdEmail = (EditText) root.findViewById(R.id.edEmail);
+        mEdEmail.setText(getArguments().getString(ARG_EMAIL));
         mEdEmail.addTextChangedListener(new TextWatcher() {
             String before = Static.EMPTY;
 

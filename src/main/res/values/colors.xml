@@ -13,6 +13,20 @@
     <color name="text_white">#FFFFFF</color>
 
     <color name="geo_color">#FFCF72</color>>
+    <!-- text color for hidden dialog preview -->
+    <color name="hidden_dialog_preview_text_color">#00CDFE</color>>
 
     <color name="disabled_color">#AAAAAA</color>
+    <!-- new redesign colors -->
+    <color name="bg_holo">#F1F1F1</color>
+    <color name="bg_white">#FFFFFF</color>
+    <color name="bg_light_blue">#AEE5FD</color>
+    <color name="text_color_gray">#333333</color>
+
+    <color name="tab_counter_text_color_selected">#33B5E5</color>
+    <color name="tab_counter_text_color_not_selected">#9933B5E5</color>
+    <color name="tab_text_color_selected">#FFFFFF</color>
+    <color name="tab_text_color_not_selected">#99FFFFFF</color>
+    <color name="tab_background">#303030</color>
+
 </resources>

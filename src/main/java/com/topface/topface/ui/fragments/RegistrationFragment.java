@@ -7,16 +7,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -30,6 +33,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.social.STAuthMails;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -100,7 +104,21 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
     private void initEditTextViews(View root) {
         mEdEmail = (EditText) root.findViewById(R.id.edEmail);
+        mEdEmail.setText(getArguments().getString(RecoverPwdFragment.ARG_EMAIL));
         mEdName = (EditText) root.findViewById(R.id.edName);
+        mEdName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if (mBirthdayText != null) {
+                        handled = true;
+                        mBirthdayText.performClick();
+                    }
+                }
+                return handled;
+            }
+        });
         mEdPassword = (EditText) root.findViewById(R.id.edPassword);
     }
 
@@ -170,6 +188,9 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                     intent.putExtra(INTENT_PASSWORD, password);
                     intent.putExtra(INTENT_USER_ID, data.getUserId());
 
+                    //Запоминаем email после регистрации, что бы помочь при логине
+                    STAuthMails.addEmail(emailLogin);
+
                     EasyTracker.sendEvent(
                             "Registration",
                             "SubmitRegister",
@@ -200,8 +221,14 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                             redAlert(R.string.empty_fields);
                             break;
                         case ErrorCodes.INCORRECT_PASSWORD:
+                            redAlert(R.string.wrong_password_format);
+                            break;
                         case ErrorCodes.INCORRECT_VALUE:
                         default:
+                            Activity activity = getActivity();
+                            if (activity != null) {
+                                Toast.makeText(activity, R.string.general_error_try_again_later, Toast.LENGTH_SHORT).show();
+                            }
                             break;
                     }
                 }

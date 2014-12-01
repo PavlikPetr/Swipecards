@@ -26,7 +26,7 @@ public class Static {
     /**
      * Это id приложения нужный для авторизации
      */
-    public static final String AUTH_FACEBOOK_ID = "642883445728173";
+    public static final String AUTH_FACEBOOK_ID = App.getContext().getString(R.string.app_id);
 
 
     public static final int GIRL = 0;

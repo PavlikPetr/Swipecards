@@ -2,12 +2,35 @@ package com.topface.topface.utils.social;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphUser;
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.utils.config.SessionConfig;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.VKSdkListener;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class AuthToken {
+    public static final int SUCCESS_GET_NAME = 0;
+    public static final int FAILURE_GET_NAME = 1;
     // Data
     private TokenInfo mTokenInfo;
     private SharedPreferences mPreferences;
@@ -38,6 +61,85 @@ public class AuthToken {
         return mInstance;
     }
 
+    public static void getAccountName(Handler handler) {
+        AuthToken authToken = getInstance();
+
+        if (authToken.getSocialNet().equals(SN_FACEBOOK)) {
+            getFbName(handler);
+        } else if (authToken.getSocialNet().equals(SN_VKONTAKTE)) {
+            getVkName(authToken.getUserSocialId(), handler);
+        } else if (authToken.getSocialNet().equals(SN_TOPFACE)) {
+            handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, authToken.getLogin()));
+        }
+        //Одноклассников здесь нет, потому что юзер запрашивается и сохраняется при авторизации
+    }
+
+    public static void getFbName(final Handler handler) {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
+                @Override
+                public void onCompleted(GraphUser user, Response response) {
+                    if (user != null) {
+                        String name = user.getFirstName() + " " + user.getLastName();
+                        SessionConfig sessionConfig = App.getSessionConfig();
+                        sessionConfig.setSocialAccountName(name);
+                        sessionConfig.saveConfig();
+                        handler.sendMessage(Message.obtain(null, AuthToken.SUCCESS_GET_NAME, name));
+                    } else {
+                        handler.sendMessage(Message.obtain(null, AuthToken.FAILURE_GET_NAME, ""));
+                    }
+                }
+            });
+            request.executeAsync();
+        }
+    }
+
+    public static void getVkName(final String user_id, final Handler handler) {
+        VKSdk.initialize(new VKSdkListener() {
+            @Override
+            public void onCaptchaError(VKError vkError) {
+            }
+
+            @Override
+            public void onTokenExpired(VKAccessToken vkAccessToken) {
+            }
+
+            @Override
+            public void onAccessDenied(VKError vkError) {
+            }
+        }, Static.AUTH_VK_ID);
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.USER_ID, user_id));
+                request.attempts = ApiRequest.MAX_RESEND_CNT;
+                request.secure = true;
+                request.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        try {
+                            String result = "";
+                            JSONArray responseArr = response.json.getJSONArray("response");
+                            if (responseArr != null) {
+                                if (responseArr.length() > 0) {
+                                    JSONObject profile = responseArr.getJSONObject(0);
+                                    result = profile.optString("first_name") + " " + profile.optString("last_name");
+                                }
+                                handler.sendMessage(Message.obtain(null, AuthToken.SUCCESS_GET_NAME, result));
+                            } else {
+                                handler.sendMessage(Message.obtain(null, AuthToken.FAILURE_GET_NAME, ""));
+                            }
+                        } catch (Exception e) {
+                            Debug.error("AuthorizationManager can't get name in vk", e);
+                            handler.sendMessage(Message.obtain(null, AuthToken.FAILURE_GET_NAME, ""));
+                        }
+                    }
+                });
+            }
+        };
+    }
+
 
     private boolean isToken() {
         boolean hasSocialToken = (mTokenInfo.mTokenKey != null && mTokenInfo.mTokenKey.length() > 0);
@@ -66,8 +168,6 @@ public class AuthToken {
         editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = login);
         editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword = password);
         editor.apply();
-        //save email to list for autocomlete
-        STAuthMails.addEmail(login);
     }
 
     public void saveToken(String snType, String userSocialId, String tokenKey, String expiresIn) {

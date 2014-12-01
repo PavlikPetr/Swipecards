@@ -94,6 +94,11 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
+    protected void makeItemReadWithId(String id) {
+        //feed will be marked read in another method
+    }
+
+    @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.DIALOGS;
     }
@@ -110,7 +115,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuFragment.selectFragment(FragmentId.F_DATING);
+                MenuFragment.selectFragment(FragmentId.DATING);
             }
         });
     }

@@ -64,6 +64,21 @@ abstract public class MultipartApiRequest extends ApiRequest {
         return true;
     }
 
+    @Override
+    public boolean isCanResend() {
+        return getResendCounter() < ApiRequest.MAX_RESEND_CNT;
+    }
+
+    /**
+     * It's enough to check first request beacause AuthRequest has sence only in first place.
+     *
+     * @return whether request contains AuthRequest or not
+     */
+    @Override
+    public boolean containsAuth() {
+        return mRequests.size() > 0 && mRequests.values().iterator().next() instanceof AuthRequest;
+    }
+
     /**
      * Возвращает заголовки для подзапроса
      *

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -22,7 +23,8 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -36,6 +38,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     private String mData;
     private String mInputData = "";
     private Profile mProfile;
+
     private FormInfo mFormInfo;
 
     private EditText mEditText;
@@ -71,6 +74,10 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         ((TextView) root.findViewById(R.id.tvTitle)).setText(mFormInfo.getFormTitle(mTitleId));
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setInputType(mFormInfo.getInputType(mTitleId));
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(mFormInfo.getMaxCharacters(mTitleId));
+        mEditText.setHint(mFormInfo.getHintText(getActivity(), mTitleId));
+        mEditText.setFilters(FilterArray);
         if (mData != null) {
             mEditText.append(mData);
         }
@@ -105,9 +112,39 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         return root;
     }
 
+
     @Override
     protected boolean hasChanges() {
         return !TextUtils.equals(mData, mInputData);
+    }
+
+    private boolean isCheckNumeric() {
+        return (mTitleId == R.array.form_main_height || mTitleId == R.array.form_main_weight);
+    }
+
+    private boolean isIncorrectValue() {
+        if (isCheckNumeric()) {
+            if (mInputData.length() == 0) {
+                return false;
+            }
+            int value = -1;
+            try {
+                value = Integer.parseInt(mInputData);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            if (isValueRight(value)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isValueRight(int value) {
+        if (value < mFormInfo.getMinValue(mTitleId) || value > mFormInfo.getMaxValue(mTitleId) || value == 0) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -116,38 +153,56 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
         if (hasChanges()) {
-            for (int i = 0; i < CacheProfile.forms.size(); i++) {
-                if (CacheProfile.forms.get(i).titleId == mTitleId) {
-                    final FormItem item = CacheProfile.forms.get(i);
-                    FormItem newItem;
-                    mInputData = Utils.getText(mEditText).trim();
-                    newItem = new FormItem(item.titleId, mInputData, FormItem.DATA);
+            if (isCheckNumeric() && isIncorrectValue()) {
+                mEditText.setText("");
+                warnEditingFailedHeightWeight(handler);
+            } else {
+                for (int i = 0; i < CacheProfile.forms.size(); i++) {
+                    if (CacheProfile.forms.get(i).titleId == mTitleId) {
+                        final FormItem item = CacheProfile.forms.get(i);
+                        FormItem newItem;
+                        mInputData = Utils.getText(mEditText).trim();
+                        newItem = new FormItem(item.titleId, mInputData, FormItem.DATA);
 
-                    mFormInfo.fillFormItem(newItem);
+                        mFormInfo.fillFormItem(newItem);
 
-                    prepareRequestSend();
-                    ApiRequest request = mFormInfo.getFormRequest(newItem);
-                    registerRequest(request);
-                    request.callback(new ApiHandler() {
+                        prepareRequestSend();
+                        ApiRequest request = mFormInfo.getFormRequest(newItem);
+                        registerRequest(request);
+                        request.callback(new VipApiHandler() {
 
-                        @Override
-                        public void success(IApiResponse response) {
-                            item.value = TextUtils.isEmpty(mInputData) ? null : mInputData;
-                            mFormInfo.fillFormItem(item);
-                            getActivity().setResult(Activity.RESULT_OK);
-                            mData = mInputData;
-                            finishRequestSend();
-                            if (handler == null) getActivity().finish();
-                            else handler.sendEmptyMessage(0);
-                            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(CacheProfile.PROFILE_UPDATE_ACTION));
-                        }
+                            @Override
+                            public void success(IApiResponse response) {
+                                item.value = TextUtils.isEmpty(mInputData) ? null : mInputData;
+                                mFormInfo.fillFormItem(item);
+                                getActivity().setResult(Activity.RESULT_OK);
+                                mData = mInputData;
+                                finishRequestSend();
+                                if (handler == null) {
+                                    getActivity().finish();
+                                } else {
+                                    handler.sendEmptyMessage(0);
+                                }
+                                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(CacheProfile.PROFILE_UPDATE_ACTION));
+                            }
 
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-                            warnEditingFailed(handler);
-                        }
-                    }).exec();
-                    break;
+                            @Override
+                            public void always(IApiResponse response) {
+                                super.always(response);
+                                finishRequestSend();
+                            }
+
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+                                if (codeError == ErrorCodes.INCORRECT_VALUE) {
+                                    warnEditingFailedHeightWeight(handler);
+                                } else {
+                                    warnEditingFailed(handler);
+                                }
+                            }
+                        }).exec();
+                        break;
+                    }
                 }
             }
         } else {

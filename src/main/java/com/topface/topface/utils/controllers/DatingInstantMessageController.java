@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -26,6 +27,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.DatingMessageStatistics;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.PurchasesActivity;
@@ -65,7 +67,7 @@ public class DatingInstantMessageController {
                                           View.OnClickListener clickListener,
                                           IRequestClient requestClient, String text,
                                           final View datingButtons, final View userInfoStatus,
-                                          SendLikeAction sendLikeAction) {
+                                          SendLikeAction sendLikeAction, TextView.OnEditorActionListener mEditorActionListener) {
         mActivity = activity;
         mSendLikeAction = sendLikeAction;
 
@@ -86,6 +88,7 @@ public class DatingInstantMessageController {
         mFooterFlipper.setVisibility(View.VISIBLE);
         mGiftSend = root.findViewById(R.id.send_gift_button);
         mMessageText = (EditText) root.findViewById(R.id.edChatBox);
+        mMessageText.setOnEditorActionListener(mEditorActionListener);
         mMessageSend = (ImageButton) root.findViewById(R.id.btnSend);
         mSpin = AnimationUtils.loadAnimation(mActivity, R.anim.loader_rotate);
         mMessageText.addTextChangedListener(new TextWatcher() {
@@ -170,7 +173,11 @@ public class DatingInstantMessageController {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                if (response.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY)) {
+                    startPurchasesActivity(CacheProfile.getOptions().instantMessagesForNewbies.getText(), "InstantMessageLimitExceeded");
+                } else {
+                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -188,17 +195,26 @@ public class DatingInstantMessageController {
         return true;
     }
 
+    private void startPurchasesActivity(String message, String statisticKey) {
+        mActivity.startActivityForResult(
+                PurchasesActivity.createVipBuyIntent(
+                        message,
+                        statisticKey
+                ),
+                PurchasesActivity.INTENT_BUY_VIP
+        );
+    }
+
     private boolean tryChat(SearchUser user) {
+        if (CacheProfile.getOptions().instantMessagesForNewbies.isEnabled()) {
+            return true;
+        }
+
         if (CacheProfile.premium || user.isMutualPossible || !CacheProfile.getOptions().blockChatNotMutual) {
             return true;
         } else {
-            mActivity.startActivityForResult(
-                    PurchasesActivity.createVipBuyIntent(
-                            mActivity.getString(R.string.chat_block_not_mutual),
-                            "DatingInstantMessage"
-                    ),
-                    PurchasesActivity.INTENT_BUY_VIP
-            );
+            startPurchasesActivity(mActivity.getString(R.string.chat_block_not_mutual),
+                    "DatingInstantMessage");
             DatingMessageStatistics.sendVipBuyScreenTransition();
             return false;
         }
@@ -253,8 +269,12 @@ public class DatingInstantMessageController {
     }
 
     private void setInstantMessageText(String text) {
-        mMessageText.setText(text);
-        mMessageText.setSelection(text.length());
+        if (text == null) {
+            mMessageText.getText().clear();
+        } else {
+            mMessageText.setText(text);
+            mMessageText.setSelection(text.length());
+        }
     }
 
     public void reset() {

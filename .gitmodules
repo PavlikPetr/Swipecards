@@ -4,9 +4,6 @@
 [submodule "libs/PullToRefresh"]
 	path = libs/PullToRefresh
 	url = git@github.com:Topface/Android-PullToRefresh.git
-[submodule "libs/Facebook"]
-	path = libs/Facebook
-	url = git@github.com:Topface/facebook-android-sdk.git
 [submodule "libs/Android-ViewPagerIndicator"]
 	path = libs/Android-ViewPagerIndicator
 	url = git@github.com:Topface/Android-ViewPagerIndicator.git
@@ -16,9 +13,9 @@
 [submodule "libs/odnoklassniki"]
 	path = libs/odnoklassniki
 	url = git@github.com:Topface/Odnoklassniki-Android-SDK.git
-[submodule "libs/mopub-android-sdk"]
-	path = libs/mopub-android-sdk
-	url = git@github.com:Topface/mopub-android-sdk.git
 [submodule "libs/tf-offerwall"]
 	path = libs/tf-offerwall
 	url = git@github.com:Topface/offerwall-android.git
+[submodule "libs/statistics-android"]
+	path = libs/statistics-android
+	url = git@github.com:Topface/statistics-android.git

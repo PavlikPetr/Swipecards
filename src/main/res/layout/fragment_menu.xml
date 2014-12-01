@@ -11,6 +11,7 @@
         android:id="@+id/lvMenu"
         android:layout_weight="1"
         android:requiresFadingEdge="vertical"
+        android:listSelector="@android:color/transparent"
         android:fadingEdgeLength="20dp"
         android:dividerHeight="0dp"
         android:divider="@null"

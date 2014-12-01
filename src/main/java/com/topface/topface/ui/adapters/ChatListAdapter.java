@@ -1,16 +1,14 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,19 +18,10 @@ import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
-import com.topface.topface.data.VirusLike;
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.geo.AddressesCache;
 import com.topface.topface.utils.loadcontollers.ChatLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
@@ -43,97 +32,19 @@ import java.util.HashMap;
 
 public class ChatListAdapter extends LoadingListAdapter<History> implements AbsListView.OnScrollListener {
 
-    private static final int T_WAIT_OR_RETRY = 3;
+    private static final int T_WAIT = 3;
+    private static final int T_RETRY = 4;
     private static final int T_USER = 5;
     private static final int T_FRIEND = 6;
     private static final int T_USER_GIFT = 7;
     private static final int T_FRIEND_GIFT = 8;
-    private static final int T_USER_MAP = 9;
-    private static final int T_FRIEND_MAP = 10;
-    private static final int T_USER_REQUEST = 11;
-    private static final int T_FRIEND_REQUEST = 12;
     private static final int T_USER_POPULAR_1 = 13;
     private static final int T_USER_POPULAR_2 = 14;
     private static final int T_COUNT = 15;
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
-    private AddressesCache mAddressesCache = new AddressesCache();
-    private View.OnClickListener mOnClickListener;
-    private ChatFragment.OnListViewItemLongClickListener mLongClickListener;
     private View mHeaderView;
-    private View.OnClickListener mLikeRequestListener = new View.OnClickListener() {
-        @Override
-        public void onClick(final View v) {
-            final int position = (Integer) v.getTag();
-            final ProgressBar prsLoader = (ProgressBar) v.getTag(R.id.prsLoader);
-            final History item = getItem(position);
-            if (item != null) {
-                EasyTracker.sendEvent("VirusLike", "Click", "Chat", 0L);
-
-                prsLoader.setVisibility(View.VISIBLE);
-                v.setVisibility(View.INVISIBLE);
-                new VirusLikesRequest(item.id, mContext).callback(new DataApiHandler<VirusLike>() {
-
-                    @Override
-                    protected void success(VirusLike data, IApiResponse response) {
-                        EasyTracker.sendEvent("VirusLike", "Success", "Chat", 0L);
-                        //После заврешения запроса удаляем элемент
-                        removeItem(getPosition(position));
-                        //И предлагаем отправить пользователю запрос своим друзьям не из приложения
-                        data.sendFacebookRequest(
-                                "Chat",
-                                mContext,
-                                new VirusLike.VirusLikeDialogListener(mContext) {
-
-                                    private void showCompleteMessage() {
-                                        Toast.makeText(
-                                                mContext,
-                                                Utils.getQuantityString(
-                                                        R.plurals.virus_request_likes_cnt,
-                                                        CacheProfile.likes,
-                                                        CacheProfile.likes
-                                                ),
-                                                Toast.LENGTH_SHORT
-                                        ).show();
-                                    }
-
-                                    @Override
-                                    public void onComplete(Bundle values) {
-                                        super.onComplete(values);
-                                        showCompleteMessage();
-                                    }
-
-                                    @Override
-                                    public void onCancel() {
-                                        super.onCancel();
-                                        showCompleteMessage();
-                                    }
-                                }
-                        );
-                    }
-
-                    @Override
-                    protected VirusLike parseResponse(ApiResponse response) {
-                        return new VirusLike(response);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-                        EasyTracker.sendEvent("VirusLike", "Fail", "Chat", 0L);
-                        Utils.showErrorMessage();
-                    }
-
-                    @Override
-                    public void always(IApiResponse response) {
-                        super.always(response);
-                        prsLoader.setVisibility(View.GONE);
-                        v.setVisibility(View.VISIBLE);
-                    }
-                }).exec();
-            }
-        }
-    };
 
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
         super(context, data, updateCallback);
@@ -160,12 +71,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         switch (item.type) {
             case FeedDialog.GIFT:
                 return output ? T_USER_GIFT : T_FRIEND_GIFT;
-            case FeedDialog.MAP:
-                return output ? T_USER_MAP : T_FRIEND_MAP;
-            case FeedDialog.ADDRESS:
-                return output ? T_USER_MAP : T_FRIEND_MAP;
-            case FeedDialog.LIKE_REQUEST:
-                return output ? T_USER_REQUEST : T_FRIEND_REQUEST;
             case FeedDialog.MESSAGE_POPULAR_STAGE_1:
                 return T_USER_POPULAR_1;
             case FeedDialog.MESSAGE_POPULAR_STAGE_2:
@@ -189,7 +94,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         int superType = super.getItemViewType(position);
         History item = getItem(position);
         if (superType == T_OTHER && item != null) {
-            if (item.isWaitingItem() || item.isRepeatItem()) return T_WAIT_OR_RETRY;
+            if (item.isWaitingItem()) {
+                return T_WAIT;
+            } else if (item.isRepeatItem()) {
+                return T_RETRY;
+            }
             return ChatListAdapter.getItemType(item);
         } else {
             return superType;
@@ -216,10 +125,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        setTypeDifferences(position, holder, type, item);
-        if (type != T_WAIT_OR_RETRY) {
+        setTypeDifferences(holder, type, item);
+        if (type != T_WAIT || type != T_RETRY) {
             setViewInfo(holder, item);
-            setLongClickListener(position, convertView, holder);
         }
 
         return convertView;
@@ -237,21 +145,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 ((TextView) mHeaderView.findViewById(R.id.tvFirstMessageTitle)).setText(R.string.user_deleted_or_banned);
                 mHeaderView.findViewById(R.id.tvFirstMessageText).setVisibility(View.GONE);
             }
-        }
-    }
-
-    public void addHeader(ListView parentView) {
-        if (mHeaderView == null) {
-            mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
-        }
-        try {
-            parentView.addHeaderView(mHeaderView);
-            parentView.setStackFromBottom(false);
-            mHeaderView.setVisibility(View.GONE);
-        } catch (OutOfMemoryError e) {
-            Debug.error("Add header OOM", e);
-        } catch (Exception e) {
-            Debug.error(e);
         }
     }
 
@@ -340,6 +233,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private void addSentMessage(History item) {
         getData().addFirst(item);
+        prepareDates();
         if (!item.isWaitingItem()) {
             mUnrealItems.add(item);
         }
@@ -411,12 +305,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     }
 
-    private void setTypeDifferences(int position, ViewHolder holder, int type, final History item) {
-        boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
+    private void setTypeDifferences(ViewHolder holder, int type, final History item) {
         boolean showDate = mShowDatesList.contains(item);
 
         switch (type) {
-            case T_WAIT_OR_RETRY:
+            case T_RETRY:
                 if (item.isRepeatItem()) {
                     holder.loader.setVisibility(View.GONE);
                     holder.retrier.setVisibility(View.VISIBLE);
@@ -430,35 +323,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                             notifyDataSetChanged();
                         }
                     });
-                } else {
-                    holder.loader.setVisibility(View.VISIBLE);
-                    holder.retrier.setVisibility(View.GONE);
-                    ApiRequest request = mHashRequestByWaitingRetryItem.get(item);
-                    if (request != null && request.isCanceled()) {
-                        resendCanceledRequest(request);
-                    }
                 }
                 return;
-            case T_FRIEND:
-            case T_USER:
-            case T_USER_POPULAR_1:
-            case T_USER_POPULAR_2:
-                holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
+            case T_WAIT:
                 break;
             case T_FRIEND_GIFT:
             case T_USER_GIFT:
                 holder.message.setVisibility(View.GONE);
-                break;
-            case T_FRIEND_MAP:
-            case T_USER_MAP:
-                break;
-            case T_FRIEND_REQUEST:
-            case T_USER_REQUEST:
-                holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
-                if (type == T_FRIEND_REQUEST) {
-                    holder.likeRequest.setTag(position);
-                    holder.likeRequest.setOnClickListener(mLikeRequestListener);
-                }
                 break;
         }
 
@@ -484,7 +355,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         int prsLoaderId = R.id.prsLoader;
         int chatImageId = R.id.chat_image;
 
-        if (type == T_WAIT_OR_RETRY) {
+        if (type == T_RETRY) {
             convertView = mInflater.inflate(R.layout.item_chat_list_loader_retrier, null, false);
             holder.retrier = convertView.findViewById(R.id.tvLoaderText);
             holder.loader = convertView.findViewById(prsLoaderId);
@@ -497,31 +368,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 convertView = mInflater.inflate(output ? R.layout.chat_user_gift : R.layout.chat_friend_gift, null, false);
                 holder.gift = (ImageViewRemote) convertView.findViewById(chatImageId);
                 break;
-            case T_FRIEND_MAP:
-            case T_USER_MAP:
-                convertView = mInflater.inflate(output ? R.layout.chat_user_map : R.layout.chat_friend_map, null, false);
-                holder.mapBackground = (ImageViewRemote) convertView.findViewById(chatImageId);
-                holder.prgsLoader = (ProgressBar) convertView.findViewById(R.id.chat_text_progress);
-                break;
-            case T_FRIEND_REQUEST:
-                convertView = mInflater.inflate(R.layout.chat_friend_request, null, false);
-                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                holder.userInfo = convertView.findViewById(R.id.user_info);
-                holder.likeRequest = (Button) convertView.findViewById(R.id.btn_chat_like_request);
-                holder.prgsLoader = (ProgressBar) convertView.findViewById(prsLoaderId);
-                holder.likeRequest.setTag(prsLoaderId, holder.prgsLoader);
-                break;
-            case T_USER_REQUEST:
-                convertView = mInflater.inflate(R.layout.chat_user, null, false);
-                holder.userInfo = convertView.findViewById(R.id.user_info);
-                break;
             case T_FRIEND:
             case T_USER:
             case T_USER_POPULAR_1:
             case T_USER_POPULAR_2:
+            case T_WAIT:
             default:
                 convertView = mInflater.inflate(output ? R.layout.chat_user : R.layout.chat_friend, null, false);
-                holder.userInfo = convertView.findViewById(R.id.user_info);
                 break;
         }
 
@@ -536,16 +389,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private void setViewInfo(ViewHolder holder, History item) {
         boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
         switch (item.type) {
-            case FeedDialog.MAP:
-            case FeedDialog.ADDRESS:
-                holder.message.setText(Static.EMPTY);
-                holder.mapBackground.setImageResource(R.drawable.chat_item_place);
-                holder.mapBackground.setTag(item);
-                holder.mapBackground.setOnClickListener(mOnClickListener);
-                mAddressesCache.mapAddressDetection(item, holder.message, holder.prgsLoader);
-                break;
             case FeedDialog.GIFT:
                 holder.gift.setRemoteSrc(item.link);
+                if (holder.message != null) {
+                    holder.message.setVisibility(setMessageHtmlContent(holder, item) ? View.VISIBLE : View.GONE);
+                }
                 break;
             case FeedDialog.MESSAGE_WISH:
                 holder.message.setText(mContext.getString(output ? R.string.chat_wish_out : R.string.chat_wish_in));
@@ -572,27 +420,36 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case FeedDialog.MESSAGE_POPULAR_STAGE_1:
             case FeedDialog.MESSAGE_POPULAR_STAGE_2:
             default:
-                if (holder != null && holder.message != null) {
-                    holder.message.setText(
-                            Html.fromHtml(item.text != null ? item.text : "")
-                    );
-                }
+                setMessageHtmlContent(holder, item);
                 break;
         }
         if (holder != null) {
-            if (holder.message != null)
-                holder.message.setMovementMethod(LinkMovementMethod.getInstance());
-            if (holder.date != null) holder.date.setText(item.createdFormatted);
+            if (holder.date != null) {
+                holder.date.setText(item.createdFormatted);
+            }
         }
 
     }
 
-    public void setOnItemLongClickListener(ChatFragment.OnListViewItemLongClickListener listener) {
-        mLongClickListener = listener;
-    }
+    private boolean setMessageHtmlContent(ViewHolder holder, History item) {
+        if (holder != null && holder.message != null) {
+            if (item.text != null && !item.text.equals(Static.EMPTY)) {
+                holder.message.setText(Html.fromHtml(item.text));
 
-    public void setOnAvatarListener(View.OnClickListener listener) {
-        mOnClickListener = listener;
+                // Проверяем наличие в textView WEB_URLS | EMAIL_ADDRESSES | PHONE_NUMBERS | MAP_ADDRESSES;
+                // Если нашли, то добавим им кликабельность
+                // в остальных случаях holder.message будет кликаться на onItemClickListener
+                if (Linkify.addLinks(holder.message, Linkify.ALL)) {
+                    holder.message.setMovementMethod(LinkMovementMethod.getInstance());
+                    holder.message.setFocusable(false);
+                }
+                return true;
+            } else {
+                holder.message.setText("");
+                return false;
+            }
+        }
+        return false;
     }
 
     @SuppressWarnings("deprecation")
@@ -608,6 +465,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void removeItem(History item) {
         getData().remove(item);
     }
@@ -655,31 +513,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         return dataClone;
     }
 
-    private void setLongClickListener(final int position, final View convertView, final ViewHolder holder) {
-        setLongClickListenerIfPresented(position, convertView, holder.message);
-        setLongClickListenerIfPresented(position, convertView, holder.mapBackground);
-        setLongClickListenerIfPresented(position, convertView, holder.gift);
-    }
-
-    private void setLongClickListenerIfPresented(final int position, final View convertView, final View view) {
-        if (view != null && convertView != null) {
-            convertView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    mLongClickListener.onLongClick(position, view);
-                    return false;
-                }
-            });
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    mLongClickListener.onLongClick(position, view);
-                    return false;
-                }
-            });
-        }
-    }
-
     @Override
     protected int getLoaderRetrierLayout() {
         return R.layout.item_chat_list_loader_retrier;
@@ -712,11 +545,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-            FeedList<History> data = getData();
-            if (mUpdateCallback != null && !data.isEmpty() && firstVisibleItem <= mLoadController.getItemsOffsetByConnectionType()
-                    && isNeedMore()) {
-                mUpdateCallback.onUpdate();
-            }
+        FeedList<History> data = getData();
+        if (mUpdateCallback != null && !data.isEmpty() && firstVisibleItem <= mLoadController.getItemsOffsetByConnectionType()
+                && isNeedMore()) {
+            mUpdateCallback.onUpdate();
+        }
     }
 
     @Override
@@ -731,10 +564,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         TextView message;
         TextView date;
         ImageViewRemote gift;
-        ImageViewRemote mapBackground;
-        ProgressBar prgsLoader;
-        Button likeRequest;
-        View userInfo;
         View loader;
         View retrier;
     }
