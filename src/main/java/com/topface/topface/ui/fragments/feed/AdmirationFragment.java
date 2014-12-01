@@ -14,6 +14,7 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteAdmirationsRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
@@ -70,6 +71,7 @@ public class AdmirationFragment extends LikesFragment {
                 inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        PushButtonVipStatistics.sendPushButtonVip();
                         Intent intent = PurchasesActivity.createVipBuyIntent(null, "Admirations");
                         startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                     }

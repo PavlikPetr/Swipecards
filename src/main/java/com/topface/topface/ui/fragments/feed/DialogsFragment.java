@@ -17,6 +17,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteDialogsRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -108,6 +109,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PushButtonVipStatistics.sendPushButtonVip();
                 startActivity(PurchasesActivity.createBuyingIntent("EmptyDialogs"));
             }
         });

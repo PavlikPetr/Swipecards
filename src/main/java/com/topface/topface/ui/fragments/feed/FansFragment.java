@@ -7,6 +7,7 @@ import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
 
@@ -41,6 +42,7 @@ public class FansFragment extends BookmarksFragment {
             btnBuyVip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    PushButtonVipStatistics.sendPushButtonVip();
                     Intent intent = PurchasesActivity.createVipBuyIntent(null, "Fans");
                     startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 }

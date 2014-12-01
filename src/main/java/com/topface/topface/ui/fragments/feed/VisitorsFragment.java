@@ -10,6 +10,7 @@ import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteVisitorsRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
@@ -62,6 +63,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
             btnBuyVip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    PushButtonVipStatistics.sendPushButtonVip();
                     Intent intent = PurchasesActivity.createVipBuyIntent(null, "Visitors");
                     startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 }

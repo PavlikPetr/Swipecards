@@ -29,6 +29,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
@@ -170,6 +171,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             currentView.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    PushButtonVipStatistics.sendPushButtonVip();
                     Intent intent = PurchasesActivity.createVipBuyIntent(null, "Likes");
                     startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 }
