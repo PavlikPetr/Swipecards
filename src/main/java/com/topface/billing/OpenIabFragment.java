@@ -486,7 +486,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     mHelper.consumeAsync(purchase, OpenIabFragment.this);
                 }
                 onPurchased(purchase.getSku());
-
                 if (isNeedSendPurchasesStatistics()) {
                     //Статистика AppsFlyer
                     if (verify.revenue > 0) {

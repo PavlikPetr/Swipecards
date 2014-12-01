@@ -30,7 +30,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.topface.topface.ui.adapters.TabbedLikesPageAdapter;
+import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
@@ -256,9 +256,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
     public void updateTitles() {
         if (mTabViewCounterViewId != 0) {
             final PagerAdapter adapter = mViewPager.getAdapter();
-            if (adapter instanceof TabbedLikesPageAdapter) {
+            if (adapter instanceof TabbedFeedPageAdapter) {
                 for (int i = 0; i < adapter.getCount(); i++) {
-                    int counter = ((TabbedLikesPageAdapter) adapter).getPageCounter(i);
+                    int counter = ((TabbedFeedPageAdapter) adapter).getPageCounter(i);
                     View v = mTabStrip.getChildAt(i);
                     TextView tv = (TextView) v.findViewById(mTabViewCounterViewId);
                     if (tv != null) {

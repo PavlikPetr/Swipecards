@@ -9,15 +9,15 @@ import com.topface.topface.ui.fragments.feed.FeedFragment;
 
 import java.util.ArrayList;
 
-public class TabbedLikesPageAdapter extends HackyFragmentStatePagerAdapter {
+public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
     private ArrayList<Integer> mFragmentsCounters = new ArrayList<>();
     private ArrayList<String> mFragmentsClasses = new ArrayList<>();
     private ArrayList<String> mFragmentsTitles = new ArrayList<>();
 
-    public TabbedLikesPageAdapter(FragmentManager fm,
-                                  ArrayList<String> fragmentsClasses,
-                                  ArrayList<String> fragmentTitles,
-                                  ArrayList<Integer> fragmentsCounters) {
+    public TabbedFeedPageAdapter(FragmentManager fm,
+                                 ArrayList<String> fragmentsClasses,
+                                 ArrayList<String> fragmentTitles,
+                                 ArrayList<Integer> fragmentsCounters) {
         super(fm);
         mFragmentsClasses = fragmentsClasses;
         mFragmentsTitles = fragmentTitles;
