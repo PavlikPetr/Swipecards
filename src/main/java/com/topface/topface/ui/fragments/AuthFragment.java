@@ -126,8 +126,9 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Override
     protected void onOptionsAndProfileSuccess() {
-        if (isAdded()) {
-            ((BaseFragmentActivity) getActivity()).close(this, true);
+        Activity activity = getActivity();
+        if (isAdded() && activity instanceof BaseFragmentActivity) {
+            ((BaseFragmentActivity) activity).close(this, true);
             MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
             LocalBroadcastManager.getInstance(getActivity())
                     .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
