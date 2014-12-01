@@ -10,6 +10,7 @@ import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.LikesWithThreeTabs;
+import com.topface.topface.data.experiments.MessagesWithTabs;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -159,6 +160,8 @@ public class Options extends AbstractData {
     public LikesWithThreeTabs likesWithThreeTabs = new LikesWithThreeTabs();
 
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
+
+    public MessagesWithTabs messagesWithTabs = new MessagesWithTabs();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -343,6 +346,8 @@ public class Options extends AbstractData {
             likesWithThreeTabs.init(response);
 
             instantMessagesForNewbies.init(response);
+
+            messagesWithTabs.init(response);
 
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
