@@ -29,6 +29,8 @@ public class RetryViewCreator {
         private List<View.OnClickListener> mListeners = new ArrayList<>();
         private int mOrientation = buttonsOrientation;
         private Integer mBackgroungColor;
+        private Integer mMessageFontColor;
+        private Boolean mNoShadow = false;
 
         public Builder(Context context, View.OnClickListener listener) {
             mContext = context;
@@ -58,6 +60,16 @@ public class RetryViewCreator {
             return this;
         }
 
+        public Builder messageFontColor(Integer messageFontColor) {
+            mMessageFontColor = messageFontColor;
+            return this;
+        }
+
+        public Builder noShadow() {
+            mNoShadow = true;
+            return this;
+        }
+
         public RetryViewCreator build() {
             LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             ViewGroup retryView = (ViewGroup) mInflater.inflate(R.layout.layout_retryview, null);
@@ -68,10 +80,17 @@ public class RetryViewCreator {
             params.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
             retryView.setLayoutParams(params);
 
+            TextView message = (TextView) retryView.findViewById(R.id.tvMessage);
             if (mMessage != null) {
-                ((TextView) retryView.findViewById(R.id.tvMessage)).setText(mMessage);
+                message.setText(mMessage);
             } else {
-                retryView.findViewById(R.id.tvMessage).setVisibility(View.GONE);
+                message.setVisibility(View.GONE);
+            }
+            if (mMessageFontColor != null) {
+                message.setTextColor(mMessageFontColor);
+            }
+            if (mNoShadow) {
+                message.setShadowLayer(0, 0, 0, 0);
             }
 
             LinearLayout buttonsContainer = (LinearLayout) retryView.findViewById(R.id.loButtonsContainer);
