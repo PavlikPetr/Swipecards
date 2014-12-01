@@ -35,7 +35,6 @@ import static android.view.View.OnClickListener;
 public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     public static final String ACTION_BAR_CONST = "needActionBar";
-    public static final String ARG_TAG_TAB_NAME = "tab_name";
 
     public static final String VIP_PURCHASED_INTENT = "com.topface.topface.VIP_PURCHASED";
     EditSwitcher mInvisSwitcher;
@@ -58,15 +57,12 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
      * @param from          параметр для статистики покупок, что бы определить откуда пользователь пришел
      * @return Фрагмент покупки VIP
      */
-    public static VipBuyFragment newInstance(boolean needActionBar, String from, String tabName) {
+    public static VipBuyFragment newInstance(boolean needActionBar, String from) {
         VipBuyFragment fragment = new VipBuyFragment();
         Bundle args = new Bundle();
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
-        }
-        if (tabName != null) {
-            args.putString(ARG_TAG_TAB_NAME, tabName);
         }
         fragment.setArguments(args);
         return fragment;
@@ -152,7 +148,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     protected void buy(String id, Products.BuyButton curBtn) {
         buy(curBtn);
         PushButtonVipUniqueStatistics.sendPushButtonVip();
-        PushButtonVipStatistics.send(id, getTabName(), getFrom());
+        PushButtonVipStatistics.send(id, ((Object) this).getClass().getSimpleName(), getFrom());
         EasyTracker.sendEvent("Subscription", "ButtonClick" + getFrom(), id, 0L);
     }
 
@@ -322,14 +318,5 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
             from = "From" + arguments.getString(ARG_TAG_SOURCE);
         }
         return from;
-    }
-
-    public String getTabName() {
-        Bundle arguments = getArguments();
-        String tab = "";
-        if (arguments != null) {
-            tab = arguments.getString(ARG_TAG_TAB_NAME);
-        }
-        return tab;
     }
 }
