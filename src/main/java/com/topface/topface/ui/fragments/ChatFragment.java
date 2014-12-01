@@ -466,7 +466,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 update(false, "retry");
                 mLockScreen.setVisibility(View.GONE);
             }
-        }).messageFontColor(getResources().getColor(R.color.text_color_gray)).noShadow().build();
+        }).messageFontColor(R.color.text_color_gray).noShadow().build();
         mLockScreen.addView(retryView.getView());
 
         if (mPopularUserLockController != null) {

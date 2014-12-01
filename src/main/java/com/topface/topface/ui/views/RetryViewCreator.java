@@ -1,6 +1,7 @@
 package com.topface.topface.ui.views;
 
 import android.content.Context;
+import android.support.annotation.ColorRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +61,8 @@ public class RetryViewCreator {
             return this;
         }
 
-        public Builder messageFontColor(Integer messageFontColor) {
-            mMessageFontColor = messageFontColor;
+        public Builder messageFontColor(@ColorRes int messageFontColor) {
+            mMessageFontColor = mContext.getResources().getColor(messageFontColor);
             return this;
         }
 
