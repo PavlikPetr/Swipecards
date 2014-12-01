@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.topface.topface.R;
-import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.EasyTracker;
 
@@ -66,7 +65,6 @@ public class PopularUserDialog extends AbstractModalDialog {
             @Override
             public void onClick(View v) {
                 isOpened = false;
-                PushButtonVipStatistics.sendPushButtonVip();
                 EasyTracker.sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
                 Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserBlockDialog");
                 startActivity(intent);

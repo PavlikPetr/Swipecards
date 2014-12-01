@@ -14,7 +14,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
@@ -119,7 +118,6 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buyVip:
-                PushButtonVipStatistics.sendPushButtonVip();
                 startActivityForResult(
                         PurchasesActivity.createVipBuyIntent(getMessage(), getTagForBuyingFragment()),
                         PurchasesActivity.INTENT_BUY_VIP

@@ -25,7 +25,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
@@ -276,7 +275,6 @@ public class ClosingsController implements View.OnClickListener {
         } else {
             switch (v.getId()) {
                 case R.id.btnBuyVipFromClosingsWidget:
-                    PushButtonVipStatistics.sendPushButtonVip();
                     mMenuFragment.startActivity(PurchasesActivity.createVipBuyIntent(null, "Menu"));
                     break;
                 default:

@@ -13,12 +13,15 @@ import org.onepf.oms.appstore.FortumoStore;
  * Фрагмент покупки VIP через Fortumo
  */
 public class VipFortumoBuyFragment extends VipBuyFragment {
-    public static VipFortumoBuyFragment newInstance(boolean needActionBar, String from) {
+    public static VipFortumoBuyFragment newInstance(boolean needActionBar, String from, String tabName) {
         VipFortumoBuyFragment fragment = new VipFortumoBuyFragment();
         Bundle args = new Bundle();
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
+        }
+        if (tabName != null) {
+            args.putString(ARG_TAG_TAB_NAME, tabName);
         }
         fragment.setArguments(args);
         return fragment;

@@ -8,6 +8,7 @@ import com.topface.billing.BillingType;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
@@ -75,9 +76,9 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
                 //Если это платежи через Google Play, но у нас не поддерживаются Google Play Services,
                 //то вместо покупок через GP показываем покупки через PaymentWall
                 if (BuildConfig.BILLING_TYPE == BillingType.GOOGLE_PLAY && !App.isGmsEnabled()) {
-                    fragment = VipPaymentWallBuyFragment.newInstance(false, "ProfileTab", PaymentWallProducts.TYPE.DIRECT);
+                    fragment = VipPaymentWallBuyFragment.newInstance(false, "ProfileTab", PaymentWallProducts.TYPE.DIRECT, Options.Tab.PWALL);
                 } else {
-                    fragment = VipBuyFragment.newInstance(false, "ProfileTab");
+                    fragment = VipBuyFragment.newInstance(false, "ProfileTab", Options.Tab.GPLAY);
                 }
             } else {
                 Class fragmentClass = Class.forName(fragmentClassName);

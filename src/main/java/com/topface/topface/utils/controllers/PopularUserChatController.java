@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.History;
-import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
@@ -163,7 +162,6 @@ public class PopularUserChatController extends BroadcastReceiver {
             mPopularChatBlocker.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PushButtonVipStatistics.sendPushButtonVip();
                     EasyTracker.sendEvent(mChatFragment.getTrackName(), "BuyVipStatus", "", 1L);
                     Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
                     mChatFragment.startActivity(intent);

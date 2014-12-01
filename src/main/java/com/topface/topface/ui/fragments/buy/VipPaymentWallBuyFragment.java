@@ -5,18 +5,23 @@ import android.support.v4.app.FragmentActivity;
 
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
+import com.topface.topface.statistics.PushButtonVipStatistics;
+import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.utils.CacheProfile;
 
 public class VipPaymentWallBuyFragment extends VipBuyFragment {
 
-    public static VipPaymentWallBuyFragment newInstance(boolean needActionBar, String from, PaymentWallProducts.TYPE type) {
+    public static VipPaymentWallBuyFragment newInstance(boolean needActionBar, String from, PaymentWallProducts.TYPE type, String tabName) {
         VipPaymentWallBuyFragment fragment = new VipPaymentWallBuyFragment();
         Bundle args = new Bundle();
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
         args.putInt(PaymentWallBuyingFragment.PAGE_TYPE, type.ordinal());
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
+        }
+        if (tabName != null) {
+            args.putString(ARG_TAG_TAB_NAME, tabName);
         }
         fragment.setArguments(args);
         return fragment;
@@ -31,6 +36,8 @@ public class VipPaymentWallBuyFragment extends VipBuyFragment {
 
     @Override
     protected void buy(String id, Products.BuyButton btn) {
+        PushButtonVipUniqueStatistics.sendPushButtonVip();
+        PushButtonVipStatistics.send(id, getTabName(), getFrom());
         FragmentActivity activity = getActivity();
         if (activity != null) {
             activity.startActivityForResult(

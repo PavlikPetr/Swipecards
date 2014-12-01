@@ -68,14 +68,14 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
                 if (!mIsVip) {
                     fragment = MarketBuyingFragment.newInstance(from);
                 } else {
-                    fragment = VipBuyFragment.newInstance(true, from);
+                    fragment = VipBuyFragment.newInstance(true, from, Options.Tab.GPLAY);
                 }
                 break;
             case Options.Tab.AMAZON:
                 if (!mIsVip) {
                     fragment = AmazonBuyingFragment.newInstance(from);
                 } else {
-                    fragment = VipBuyFragment.newInstance(true, from);
+                    fragment = VipBuyFragment.newInstance(true, from, Options.Tab.AMAZON);
                 }
                 break;
             case Options.Tab.BONUS:
@@ -87,21 +87,21 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
                 if (!mIsVip) {
                     fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.DIRECT);
                 } else {
-                    fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.DIRECT);
+                    fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.DIRECT, Options.Tab.PWALL);
                 }
                 break;
             case Options.Tab.PWALL_MOBILE:
                 if (!mIsVip) {
                     fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.MOBILE);
                 } else {
-                    fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.MOBILE);
+                    fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.MOBILE, Options.Tab.PWALL_MOBILE);
                 }
                 break;
             case Options.Tab.FORTUMO:
                 if (!mIsVip) {
                     fragment = FortumoBuyingFragment.newInstance(from);
                 } else {
-                    fragment = VipFortumoBuyFragment.newInstance(true, from);
+                    fragment = VipFortumoBuyFragment.newInstance(true, from, Options.Tab.FORTUMO);
                 }
                 break;
             default:

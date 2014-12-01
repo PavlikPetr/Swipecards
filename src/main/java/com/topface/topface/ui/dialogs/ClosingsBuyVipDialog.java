@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.EasyTracker;
@@ -79,7 +78,6 @@ public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.On
                 closeDialog();
                 break;
             case R.id.btnBuyVip:
-                PushButtonVipStatistics.sendPushButtonVip();
                 EasyTracker.sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
                 Intent intent = PurchasesActivity.createVipBuyIntent(null, "ClosingDialogWatchAsList");
                 startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);

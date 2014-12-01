@@ -22,6 +22,8 @@ import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.statistics.PushButtonVipStatistics;
+import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.BlackListActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
@@ -33,6 +35,7 @@ import static android.view.View.OnClickListener;
 public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     public static final String ACTION_BAR_CONST = "needActionBar";
+    public static final String ARG_TAG_TAB_NAME = "tab_name";
 
     public static final String VIP_PURCHASED_INTENT = "com.topface.topface.VIP_PURCHASED";
     EditSwitcher mInvisSwitcher;
@@ -55,12 +58,15 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
      * @param from          параметр для статистики покупок, что бы определить откуда пользователь пришел
      * @return Фрагмент покупки VIP
      */
-    public static VipBuyFragment newInstance(boolean needActionBar, String from) {
+    public static VipBuyFragment newInstance(boolean needActionBar, String from, String tabName) {
         VipBuyFragment fragment = new VipBuyFragment();
         Bundle args = new Bundle();
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
+        }
+        if (tabName != null) {
+            args.putString(ARG_TAG_TAB_NAME, tabName);
         }
         fragment.setArguments(args);
         return fragment;
@@ -145,12 +151,9 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     protected void buy(String id, Products.BuyButton curBtn) {
         buy(curBtn);
-        Bundle arguments = getArguments();
-        String from = "";
-        if (arguments != null) {
-            from = "From" + arguments.getString(ARG_TAG_SOURCE);
-        }
-        EasyTracker.sendEvent("Subscription", "ButtonClick" + from, id, 0L);
+        PushButtonVipUniqueStatistics.sendPushButtonVip();
+        PushButtonVipStatistics.send(id, getTabName(), getFrom());
+        EasyTracker.sendEvent("Subscription", "ButtonClick" + getFrom(), id, 0L);
     }
 
     protected Products getProducts() {
@@ -310,5 +313,23 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    public String getFrom() {
+        Bundle arguments = getArguments();
+        String from = "";
+        if (arguments != null) {
+            from = "From" + arguments.getString(ARG_TAG_SOURCE);
+        }
+        return from;
+    }
+
+    public String getTabName() {
+        Bundle arguments = getArguments();
+        String tab = "";
+        if (arguments != null) {
+            tab = arguments.getString(ARG_TAG_TAB_NAME);
+        }
+        return tab;
     }
 }
