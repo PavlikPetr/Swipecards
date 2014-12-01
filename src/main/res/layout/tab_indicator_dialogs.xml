@@ -5,13 +5,13 @@
               android:paddingLeft="8dp"
               android:paddingRight="8dp"
               android:orientation="horizontal"
-              android:layout_width="wrap_content"
               android:gravity="center"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tab_title"
-        style="@style/TabIndicatorHoloStyle.Title"/>
+        style="@style/TabIndicatorHoloStyle.Title.Dialogs"/>
 
     <TextView
         android:id="@+id/tab_counter"

@@ -6,8 +6,4 @@ public class MessagesWithTabs extends BaseExperiment {
         return "messagesWithTabs";
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

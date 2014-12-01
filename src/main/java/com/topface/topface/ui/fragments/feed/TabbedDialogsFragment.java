@@ -1,149 +1,40 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.topface.topface.R;
-import com.topface.topface.ui.adapters.TabbedLikesPageAdapter;
-import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class TabbedDialogsFragment extends BaseFragment {
-    private static final String LAST_OPENED_PAGE = "last_opened_page";
+public class TabbedDialogsFragment extends TabbedFeedFragment {
     private static int mLastOpenedPage = 0;
-    private ViewPager mPager;
-    private SlidingTabLayout mSlidingTabLayout;
-    private ArrayList<String> mPagesClassNames = new ArrayList<>();
-    private ArrayList<String> mPagesTitles = new ArrayList<>();
-    private ArrayList<Integer> mPagesCounters = new ArrayList<>();
-    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            onCountersUpdated();
-        }
-    };
-    private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            List<Fragment> fragments = getChildFragmentManager().getFragments();
-            if (fragments != null) {
-                for (Fragment fragment : fragments) {
-                    if (fragment instanceof FeedFragment) {
-                        ((FeedFragment) fragment).finishMultiSelection();
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
-    };
-
-
-    private void onCountersUpdated() {
-        mPagesCounters.set(mPagesClassNames.indexOf(DialogsFragment.class.getName()), CacheProfile.unread_messages);
-
-        if (mSlidingTabLayout != null) {
-            mSlidingTabLayout.updateTitles();
-        }
-    }
-
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_tabbed_likes, null);
-
-        initPages(root);
-
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-
-        return root;
+    protected void onBeforeCountersUpdate() {
+        updatePageCounter(DialogsFragment.class.getName(), CacheProfile.unread_messages);
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        int lastPage = mLastOpenedPage;
-        if (savedInstanceState != null) {
-            lastPage = savedInstanceState.getInt(LAST_OPENED_PAGE, mLastOpenedPage);
-        }
-        mPager.setCurrentItem(lastPage);
-
-    }
 
     @Override
     protected String getTitle() {
         return getString(R.string.settings_messages);
     }
 
-    private void initPages(View root) {
-        addBodyPage(DialogsFragment.class.getName(), getString(R.string.general_likes), CacheProfile.unread_messages);
+    @Override
+    protected void addPages() {
+        addBodyPage(DialogsFragment.class.getName(), getString(R.string.general_dbl_all), CacheProfile.unread_messages);
         addBodyPage(BookmarksFragment.class.getName(), getString(R.string.general_mutual), 0);
-
-        mPager = (ViewPager) root.findViewById(R.id.pager);
-
-        mPager.setSaveEnabled(false);
-        TabbedLikesPageAdapter bodyPagerAdapter = new TabbedLikesPageAdapter(getChildFragmentManager(),
-                mPagesClassNames,
-                mPagesTitles,
-                mPagesCounters);
-        mPager.setAdapter(bodyPagerAdapter);
-
-        mSlidingTabLayout = (SlidingTabLayout) root.findViewById(R.id.sliding_tabs);
-        mSlidingTabLayout.setUseWeightProportions(true);
-        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, R.id.tab_title, R.id.tab_counter);
-        mSlidingTabLayout.setViewPager(mPager);
-        // need this, because SlidingView defines its own listener
-        mSlidingTabLayout.setOnPageChangeListener(mPageChangeListener);
-    }
-
-    private void addBodyPage(String className, String pageTitle, int counter) {
-        mPagesCounters.add(counter);
-        mPagesTitles.add(pageTitle.toUpperCase());
-        mPagesClassNames.add(className);
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(mCountersReceiver);
+    protected int getLastOpenedPage() {
+        return mLastOpenedPage;
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mLastOpenedPage = mPager.getCurrentItem();
-        mPager = null;
+    protected void setLastOpenedPage(int lastOpenedPage) {
+        mLastOpenedPage = lastOpenedPage;
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(LAST_OPENED_PAGE, mPager.getCurrentItem());
+    protected int getIndicatorLayout() {
+        return R.layout.tab_indicator_dialogs;
     }
-
 }
