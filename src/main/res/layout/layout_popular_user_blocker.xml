@@ -16,21 +16,17 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/popular_dialog_text_margin"
-                android:src="@drawable/icon_rocket" />
-
             <TextView
                 android:id="@+id/popular_user_lock_text"
+                android:drawableTop="@drawable/icon_rocket"
+                android:drawablePadding="@dimen/popular_dialog_text_margin"
                 style="@style/ItemTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/popular_dialog_text_margin"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="@dimen/popular_dialog_text_margin"
+                android:paddingTop="@dimen/popular_dialog_text_margin"
                 android:gravity="center"
                 android:lineSpacingExtra="4sp"
                 android:shadowColor="@null"
