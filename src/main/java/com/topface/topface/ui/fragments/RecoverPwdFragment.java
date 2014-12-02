@@ -91,12 +91,7 @@ public class RecoverPwdFragment extends BaseFragment {
                 }).exec();
             }
         });
-        if (TextUtils.isEmpty(getArguments().getString(ARG_EMAIL))) {
-            mBtnRecover.setEnabled(false);
-        } else {
-            mBtnRecover.setEnabled(true);
-        }
-
+        mBtnRecover.setEnabled(!TextUtils.isEmpty(getArguments().getString(ARG_EMAIL)));
         root.findViewById(R.id.tvBackToMainAuth).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
