@@ -10,6 +10,7 @@ import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.LikesWithThreeTabs;
+import com.topface.topface.data.experiments.MessagesWithTabs;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -156,9 +157,13 @@ public class Options extends AbstractData {
 
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
 
+    public NotShown notShown = new NotShown();
+
     public LikesWithThreeTabs likesWithThreeTabs = new LikesWithThreeTabs();
 
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
+
+    public MessagesWithTabs messagesWithTabs = new MessagesWithTabs();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -343,6 +348,14 @@ public class Options extends AbstractData {
             likesWithThreeTabs.init(response);
 
             instantMessagesForNewbies.init(response);
+
+            messagesWithTabs.init(response);
+
+            JSONObject jsonNotShown = response.optJSONObject("notShown");
+            if (jsonNotShown != null) {
+                notShown.parseNotShownJSON(jsonNotShown);
+            }
+
 
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -675,5 +688,23 @@ public class Options extends AbstractData {
             return !mainOffers.isEmpty() && !extraOffers.isEmpty();
         }
     }
+
+    public static class NotShown {
+        public boolean enabledDatingLockPopup = false;
+        public long datingLockPopupTimeout = DateUtils.DAY_IN_SECONDS;
+        public String title;
+        public String text;
+
+        public void parseNotShownJSON(JSONObject jsonNotShown) {
+            if (jsonNotShown != null) {
+                enabledDatingLockPopup = jsonNotShown.optBoolean("enabled");
+                datingLockPopupTimeout = jsonNotShown.optLong("timeout");
+                title = jsonNotShown.optString("title");
+                text = jsonNotShown.optString("text");
+            }
+        }
+
+    }
+
 
 }

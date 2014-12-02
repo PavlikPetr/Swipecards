@@ -32,8 +32,8 @@ import com.topface.topface.utils.AnimationHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.cache.UsersListCacheManager;
+import com.topface.topface.utils.loadcontollers.FeedLoadController;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -72,7 +72,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             mFragmentSwitchListener = (INavigationFragmentsListener) activity;
         }
     }
-    
+
     @Override
     public void onDetach() {
         super.onDetach();
