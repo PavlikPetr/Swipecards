@@ -38,7 +38,9 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
+import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.profile.DatingLockPopupAction;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
@@ -287,6 +289,12 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
         // popups
         mPopupManager = new PopupManager(this);
+        startActionsController.registerAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_NORMAL, new DatingLockPopup.DatingLockPopupRedirectListener() {
+            @Override
+            public void onRedirect() {
+                showFragment(FragmentId.LIKES);
+            }
+        }));
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createInvitePopupStartAction(AC_PRIORITY_LOW));
@@ -692,4 +700,5 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         getSupportActionBar().show();
     }
+
 }

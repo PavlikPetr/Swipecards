@@ -21,13 +21,15 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
+import com.topface.topface.data.Options;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.ui.TopfaceAuthActivity;
 import com.topface.topface.utils.AuthButtonsController;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -47,6 +49,7 @@ public class AuthFragment extends BaseAuthFragment {
     private View mSignInView;
     private View mCreateAccountView;
     private ProgressBar mProgressBar;
+    private View mAuthGroup;
     private AuthorizationManager mAuthorizationManager;
     private Button mOKButton;
     private AuthButtonsController mBtnsController;
@@ -104,24 +107,32 @@ public class AuthFragment extends BaseAuthFragment {
             mBtnsHidden = savedInstanceState.getBoolean(BTNS_HIDDEN);
         }
         initViews(root);
-        //Если у нас нет токена
-        if (!AuthToken.getInstance().isEmpty()) {
-            //Если мы попали на этот фрагмент с работающей авторизацией, то просто перезапрашиваем профиль
-            loadAllProfileData();
-        }
-        checkOnline();
+
         return root;
     }
 
     @Override
     protected void initViews(final View root) {
         super.initViews(root);
+        mAuthGroup = root.findViewById(R.id.ivAuthGroup);
+
         initButtons(root);
 
         mBtnsController = new AuthButtonsController(getActivity());
         setAuthInterface();
 
         initOtherViews(root);
+    }
+
+    @Override
+    protected void onOptionsAndProfileSuccess() {
+        Activity activity = getActivity();
+        if (isAdded() && activity instanceof BaseFragmentActivity) {
+            ((BaseFragmentActivity) activity).close(this, true);
+            MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
+            LocalBroadcastManager.getInstance(getActivity())
+                    .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
+        }
     }
 
     private void initButtons(final View root) {
@@ -280,19 +291,6 @@ public class AuthFragment extends BaseAuthFragment {
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsAuthLoading);
     }
 
-    private boolean checkOnline() {
-        if (!App.isOnline()) {
-            showNoInternetToast();
-            return false;
-        }
-        return true;
-    }
-
-    private void showNoInternetToast() {
-        Toast.makeText(App.getContext(), R.string.general_internet_off, Toast.LENGTH_SHORT)
-                .show();
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -353,7 +351,15 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     protected void showRetrier() {
         super.showRetrier();
-        mLogo.setVisibility(View.GONE);
+        mAuthGroup.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
+        mOtherSocialNetworksButton.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void hideRetrier() {
+        super.hideRetrier();
+        mAuthGroup.setVisibility(View.VISIBLE);
     }
 
     private void btnVKClick() {
@@ -420,6 +426,12 @@ public class AuthFragment extends BaseAuthFragment {
             showProgress();
             mNeedShowButtonsOnResume = true;
         }
+    }
+
+    @Override
+    protected void loadAllProfileData() {
+        mNeedShowButtonsOnResume = false;
+        super.loadAllProfileData();
     }
 
     @Override

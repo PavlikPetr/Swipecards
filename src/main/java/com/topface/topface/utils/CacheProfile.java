@@ -461,6 +461,7 @@ public class CacheProfile {
             case MUTUAL:
             case MUTUAL_CLOSINGS:
                 return CacheProfile.unread_mutual;
+            case TABBED_DIALOGS:
             case DIALOGS:
                 return CacheProfile.unread_messages;
             case VISITORS:

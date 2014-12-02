@@ -348,8 +348,9 @@ public class ClosingsController implements View.OnClickListener {
         }
         // switch to DatingFragment after closings are passed
         unlockLeftMenu();
-        MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
-
+        if (mMenuFragment.getCurrentFragmentId() == FragmentId.UNDEFINED) {
+            MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
+        }
         mClosingsPassed = true;
         mLikesClosingsActive = false;
         mMutualClosingsActive = false;
