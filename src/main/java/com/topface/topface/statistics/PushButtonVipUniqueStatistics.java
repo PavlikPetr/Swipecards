@@ -16,6 +16,7 @@ public class PushButtonVipUniqueStatistics {
         StatisticsTracker.getInstance().setContext(App.getContext()).sendUniqueEvent(key, 1, unique + "_" + key);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public static void sendPushButtonVip(String unique) {
         send(PUSH_BUTTON_VIP_UNIQUE, unique);
     }
