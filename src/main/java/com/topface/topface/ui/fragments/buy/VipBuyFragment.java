@@ -22,6 +22,8 @@ import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.statistics.PushButtonVipStatistics;
+import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.BlackListActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
@@ -145,12 +147,9 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     protected void buy(String id, Products.BuyButton curBtn) {
         buy(curBtn);
-        Bundle arguments = getArguments();
-        String from = "";
-        if (arguments != null) {
-            from = "From" + arguments.getString(ARG_TAG_SOURCE);
-        }
-        EasyTracker.sendEvent("Subscription", "ButtonClick" + from, id, 0L);
+        PushButtonVipUniqueStatistics.sendPushButtonVip(id, ((Object) this).getClass().getSimpleName(), getFrom());
+        PushButtonVipStatistics.send(id, ((Object) this).getClass().getSimpleName(), getFrom());
+        EasyTracker.sendEvent("Subscription", "ButtonClick" + getFrom(), id, 0L);
     }
 
     protected Products getProducts() {
@@ -310,5 +309,14 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    public String getFrom() {
+        Bundle arguments = getArguments();
+        String from = "";
+        if (arguments != null) {
+            from = "From" + arguments.getString(ARG_TAG_SOURCE);
+        }
+        return from;
     }
 }

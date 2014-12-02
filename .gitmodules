@@ -19,6 +19,3 @@
 [submodule "libs/statistics-android"]
 	path = libs/statistics-android
 	url = git@github.com:Topface/statistics-android.git
-[submodule "libs/facebook-android-sdk"]
-	path = libs/facebook-android-sdk
-	url = git@github.com:facebook/facebook-android-sdk.git

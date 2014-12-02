@@ -43,18 +43,20 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         PROFILE(1),
         DATING(2, true),
         DIALOGS(3),
-        VISITORS(4),
-        LIKES(5),
-        ADMIRATIONS(6),
-        MUTUAL(7),
-        LIKES_CLOSINGS(8, true),
-        MUTUAL_CLOSINGS(9, true),
-        BOOKMARKS(10),
-        FANS(11),
-        GEO(12),
-        BONUS(13),
+        TABBED_DIALOGS(4),
+        VISITORS(5),
+        LIKES(6),
+        TABBED_LIKES(7),
+        ADMIRATIONS(8),
+        MUTUAL(9),
+        LIKES_CLOSINGS(10, true),
+        MUTUAL_CLOSINGS(11, true),
+        BOOKMARKS(12),
+        FANS(13),
+        GEO(14),
+        BONUS(15),
         EDITOR(1000),
-        SETTINGS(15),
+        SETTINGS(17),
         UNDEFINED(-1);
 
         private int mNumber;
@@ -90,7 +92,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
-
+    private boolean mNeedOptionsMenu = true;
     private boolean mNeedTitles = true;
 
     @Override
@@ -109,8 +111,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
+    public void setNeedOptionsMenu(boolean needOptionsMenu) {
+        mNeedOptionsMenu = needOptionsMenu;
+    }
+
     protected boolean needOptionsMenu() {
-        return true;
+        return mNeedOptionsMenu;
     }
 
     @Override

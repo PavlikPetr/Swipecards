@@ -461,6 +461,7 @@ public class CacheProfile {
             case MUTUAL:
             case MUTUAL_CLOSINGS:
                 return CacheProfile.unread_mutual;
+            case TABBED_DIALOGS:
             case DIALOGS:
                 return CacheProfile.unread_messages;
             case VISITORS:
@@ -473,6 +474,8 @@ public class CacheProfile {
                 return CacheProfile.unread_geo;
             case BONUS:
                 return needShowBonusCounter ? getOptions().bonus.counter : 0;
+            case TABBED_LIKES:
+                return CacheProfile.unread_admirations + CacheProfile.unread_likes + CacheProfile.unread_mutual;
             default:
                 return 0;
         }

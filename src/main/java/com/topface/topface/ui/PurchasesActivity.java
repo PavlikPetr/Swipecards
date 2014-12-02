@@ -9,7 +9,7 @@ import com.topface.billing.OpenIabFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Options;
+import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
 
@@ -22,7 +22,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
 
-    private Options.ForceOfferwallRedirect mBonusRedirect;
+    private ForceOfferwallRedirect mBonusRedirect;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -31,16 +31,12 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mBonusRedirect == null || !mBonusRedirect.enebled || !getFragment().forceBonusScreen(mBonusRedirect.text)) {
-            return super.onOptionsItemSelected(item);
-        } else {
-            return true;
-        }
+        return !(mBonusRedirect == null || !mBonusRedirect.isEnabled() || !getFragment().forceBonusScreen(mBonusRedirect.getText())) || super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
-        if (mBonusRedirect == null || !mBonusRedirect.enebled || !getFragment().forceBonusScreen(mBonusRedirect.text)) {
+        if (mBonusRedirect == null || !mBonusRedirect.isEnabled() || !getFragment().forceBonusScreen(mBonusRedirect.getText())) {
             super.onBackPressed();
         }
     }

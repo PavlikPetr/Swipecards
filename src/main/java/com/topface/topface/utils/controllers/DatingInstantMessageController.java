@@ -27,6 +27,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.DatingMessageStatistics;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.PurchasesActivity;
@@ -172,7 +173,11 @@ public class DatingInstantMessageController {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                if (response.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY)) {
+                    startPurchasesActivity(CacheProfile.getOptions().instantMessagesForNewbies.getText(), "InstantMessageLimitExceeded");
+                } else {
+                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -190,17 +195,26 @@ public class DatingInstantMessageController {
         return true;
     }
 
+    private void startPurchasesActivity(String message, String statisticKey) {
+        mActivity.startActivityForResult(
+                PurchasesActivity.createVipBuyIntent(
+                        message,
+                        statisticKey
+                ),
+                PurchasesActivity.INTENT_BUY_VIP
+        );
+    }
+
     private boolean tryChat(SearchUser user) {
+        if (CacheProfile.getOptions().instantMessagesForNewbies.isEnabled()) {
+            return true;
+        }
+
         if (CacheProfile.premium || user.isMutualPossible || !CacheProfile.getOptions().blockChatNotMutual) {
             return true;
         } else {
-            mActivity.startActivityForResult(
-                    PurchasesActivity.createVipBuyIntent(
-                            mActivity.getString(R.string.chat_block_not_mutual),
-                            "DatingInstantMessage"
-                    ),
-                    PurchasesActivity.INTENT_BUY_VIP
-            );
+            startPurchasesActivity(mActivity.getString(R.string.chat_block_not_mutual),
+                    "DatingInstantMessage");
             DatingMessageStatistics.sendVipBuyScreenTransition();
             return false;
         }

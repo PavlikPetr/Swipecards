@@ -49,10 +49,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     protected View mEmptyFeedView;
     private RateController mRateController;
+    private TextView mTitleWithCounter;
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            onCountersUpdated();
+            updateTitleWithCounter();
         }
     };
 
@@ -133,7 +134,9 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected void initEmptyFeedView(final View inflated, int errorCode) {
-        if (mEmptyFeedView == null) mEmptyFeedView = inflated;
+        if (mEmptyFeedView == null) {
+            mEmptyFeedView = inflated;
+        }
         ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
         switch (errorCode) {
             case ErrorCodes.PREMIUM_ACCESS_ONLY:
@@ -147,16 +150,23 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         }
     }
 
-    private void initEmptyScreenOnLikesNeedVip(ViewFlipper viewFlipper) {
-        viewFlipper.setDisplayedChild(1);
-        View currentView = viewFlipper.getChildAt(1);
-        if (currentView != null) {
+    private void updateTitleWithCounter() {
+        if (mTitleWithCounter != null) {
             String title = Utils.getQuantityString(
                     R.plurals.you_were_liked,
                     CacheProfile.unread_likes,
                     CacheProfile.unread_likes
             );
-            ((TextView) currentView.findViewById(R.id.tvTitle)).setText(title);
+            mTitleWithCounter.setText(title);
+        }
+    }
+
+    private void initEmptyScreenOnLikesNeedVip(ViewFlipper viewFlipper) {
+        viewFlipper.setDisplayedChild(1);
+        View currentView = viewFlipper.getChildAt(1);
+        if (currentView != null) {
+            mTitleWithCounter = (TextView) currentView.findViewById(R.id.tvTitle);
+            updateTitleWithCounter();
             currentView.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -330,12 +340,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected boolean isForPremium() {
         return true;
-    }
-
-    protected void onCountersUpdated() {
-        if (mEmptyFeedView != null) {
-            initEmptyFeedView(mEmptyFeedView);
-        }
     }
 
     @Override

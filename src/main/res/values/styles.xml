@@ -35,7 +35,7 @@
     </style>
 
     <style name="Widget.Topface.ActionBar.Subtitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-    <item name="android:textColor">#99FFFFFF</item>
+        <item name="android:textColor">#99FFFFFF</item>
         <item name="android:textSize">@dimen/action_bar_subtitle_size</item>
     </style>
 
@@ -826,4 +826,43 @@
         <item name="android:drawablePadding">8dp</item>
         <item name="android:gravity">center</item>
     </style>
+
+    <style name="TabIndicatorHoloStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="TabIndicatorHoloStyle.Title">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">70</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/tab_text_color</item>
+    </style>
+
+    <style name="TabIndicatorHoloStyle.Title.Dialogs">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:layout_weight">0</item>
+    </style>
+
+    <style name="TabIndicatorHoloStyle.Counter">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/tab_counter_color</item>
+    </style>
+
+    <style name="YouDoNotShowPopupTitle">
+        <item name="android:textColor">#FEFEFE</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="YouDoNotShowPopupMessage">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
 </resources>

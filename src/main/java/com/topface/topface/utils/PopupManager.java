@@ -13,7 +13,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
-import com.topface.topface.ui.dialogs.AbstractModalDialog;
 import com.topface.topface.ui.dialogs.InvitesPopup;
 import com.topface.topface.ui.dialogs.RateAppDialog;
 import com.topface.topface.utils.controllers.AbstractStartAction;

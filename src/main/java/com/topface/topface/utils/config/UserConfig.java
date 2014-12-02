@@ -47,6 +47,7 @@ public class UserConfig extends AbstractUniqueConfig {
     public static final String SILENT = "silent";
     public static final String PURCHASED_SUBSCRIPTIONS = "purchased_subscriptions";
     public static final String PURCHASED_SUBSCRIPTIONS_SEPARATOR = "&";
+    public static final String DATING_LOCK_POPUP_TIME = "dating_lock_popup_time";
 
     public UserConfig(Context context) {
         super(context);
@@ -98,6 +99,8 @@ public class UserConfig extends AbstractUniqueConfig {
         addField(settingsMap, SETTINGS_GCM, true);
         // purchased subscriptions which don't need verification
         addField(settingsMap, PURCHASED_SUBSCRIPTIONS, "");
+        // время последнего показа попапа блокировки знакомств
+        addField(settingsMap, DATING_LOCK_POPUP_TIME, 0L);
     }
 
     @Override
@@ -151,6 +154,14 @@ public class UserConfig extends AbstractUniqueConfig {
      */
     public String getPinCode() {
         return getStringField(getSettingsMap(), DATA_PIN_CODE);
+    }
+
+    public void setDatingLockPopupShow(long lastTime) {
+        setField(getSettingsMap(), DATING_LOCK_POPUP_TIME, lastTime);
+    }
+
+    public long getDatingLockPopupShow() {
+        return getLongField(getSettingsMap(), DATING_LOCK_POPUP_TIME);
     }
 
     // =======================PromoPopups=======================
