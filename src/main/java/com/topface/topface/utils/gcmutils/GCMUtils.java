@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
@@ -68,6 +69,17 @@ public class GCMUtils {
     public static final int GCM_TYPE_PEOPLE_NEARBY = 9;
     public static final int GCM_TYPE_UPDATE_COUNTERS_BALANCE = 10;
 
+    /**
+     * параметры геометрической прогрессии для расчета задержки между запросами на регистрацию в GCM
+     * все значения в сек.
+     * <p/>
+     * при начальном значении = 2, знаменателе = 2 и последнем значении прогрессии = 64, суммарное
+     * время, в течении которого будем пытаться зарегистрироваться в GCM, составит 126 сек
+     */
+    public static final int TIME_GEOMETRIC_PROGRESSION_DENOMINATOR = 2;
+    public static final int TIME_GEOMETRIC_PROGRESSION_FIRST_VALUE = 2;
+    public static final int TIME_GEOMETRIC_PROGRESSION_LAST_VALUE = 64;
+
 
     public static final String NEXT_INTENT = "com.topface.topface_next";
 
@@ -106,7 +118,7 @@ public class GCMUtils {
             mGcmObject = GoogleCloudMessaging.getInstance(mContext);
             mRegId = getRegistrationId();
             if (mRegId.isEmpty()) {
-                registerInBackground(serverToken);
+                registerSenderId(serverToken, 0);
                 return true;
             } else if (!mRegId.equals(serverToken)) {
                 new Handler(mContext.getMainLooper()).post(new Runnable() {
@@ -121,35 +133,70 @@ public class GCMUtils {
         return false;
     }
 
-    private void registerInBackground(final String serverToken) {
-        new BackgroundThread() {
+    private void getRegId(String regId, String serverToken) {
+        if (!TextUtils.isEmpty(regId)) {
+            mRegId = regId;
+            storeRegistrationId();
+            if (!regId.equals(serverToken)) {
+                //Отправляем запрос в основном потоке
+                Looper.prepare();
+                sendRegistrationIdToBackend();
+                Looper.loop();
+            }
+        } else {
+            Debug.log("Registration id is " + (regId == null ? "null" : "empty"));
+        }
+    }
+
+    private void registerSenderId(final String serverToken, final int time) {
+        Looper.prepare();
+        new CountDownTimer(time * 1000, time * 1000) {
             @Override
-            public void execute() {
-                String regId = null;
-                try {
-                    if (mGcmObject == null) {
-                        mGcmObject = GoogleCloudMessaging.getInstance(mContext);
-                    }
-                    regId = mGcmObject.register(SENDER_ID);
+            public void onTick(long millisUntilFinished) {
+            }
 
-                } catch (IOException ex) {
-                    Debug.error(ex);
-                }
-
-                if (!TextUtils.isEmpty(regId)) {
-                    mRegId = regId;
-                    storeRegistrationId();
-                    if (!regId.equals(serverToken)) {
-                        //Отправляем запрос в основном потоке
-                        Looper.prepare();
-                        sendRegistrationIdToBackend();
+            @Override
+            public void onFinish() {
+                new BackgroundThread() {
+                    @Override
+                    public void execute() {
+                        String regId = null;
+                        try {
+                            if (mGcmObject == null) {
+                                mGcmObject = GoogleCloudMessaging.getInstance(mContext);
+                            }
+                            regId = mGcmObject.register(SENDER_ID);
+                        } catch (IOException ex) {
+                            Debug.error(ex);
+                            if (isDelayTimeCorrect(time)) {
+                                registerSenderId(serverToken, getTimerDelay(time));
+                            } else {
+                                getRegId(null, serverToken);
+                                Looper.loop();
+                            }
+                        }
+                        if (regId != null) {
+                            getRegId(regId, serverToken);
+                        }
                         Looper.loop();
                     }
-                } else {
-                    Debug.log("Registration id is " + (regId == null ? "null" : "empty"));
-                }
+                };
             }
-        };
+        }.start();
+    }
+
+    private int getTimerDelay(int time) {
+        if (time == 0) {
+            return TIME_GEOMETRIC_PROGRESSION_FIRST_VALUE;
+        }
+        return time * TIME_GEOMETRIC_PROGRESSION_DENOMINATOR;
+    }
+
+    private boolean isDelayTimeCorrect(int time) {
+        if (getTimerDelay(time) <= TIME_GEOMETRIC_PROGRESSION_LAST_VALUE) {
+            return true;
+        }
+        return false;
     }
 
     @SuppressWarnings("unused")
