@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
@@ -72,9 +70,9 @@ public class GCMUtils {
     /**
      * параметры геометрической прогрессии для расчета задержки между запросами на регистрацию в GCM
      * все значения в сек.
-     *
+     * <p/>
      * при начальном значении = 2, знаменателе = 2 и последнем значении прогрессии = 128, суммарное
-     * время, в течении которого будем пытаться зарегистрироваться в GCM, составит 256 сек
+     * время, в течении которого будем пытаться зарегистрироваться в GCM, составит 254 сек
      */
     public static final int TIME_GEOMETRIC_PROGRESSION_DENOMINATOR = 2;
     public static final int TIME_GEOMETRIC_PROGRESSION_FIRST_VALUE = 2;
@@ -138,10 +136,7 @@ public class GCMUtils {
             mRegId = regId;
             storeRegistrationId();
             if (!regId.equals(serverToken)) {
-                //Отправляем запрос в основном потоке
-                Looper.prepare();
                 sendRegistrationIdToBackend();
-                Looper.loop();
             }
         } else {
             Debug.log("Registration id is " + (regId == null ? "null" : "empty"));
@@ -149,54 +144,36 @@ public class GCMUtils {
     }
 
     private void registerSenderId(final String serverToken, final int time) {
-        Looper.prepare();
-        new CountDownTimer(time * 1000, time * 1000) {
+        new Timer().schedule(new TimerTask() {
             @Override
-            public void onTick(long millisUntilFinished) {
-            }
-
-            @Override
-            public void onFinish() {
-                new BackgroundThread() {
-                    @Override
-                    public void execute() {
-                        String regId = null;
-                        try {
-                            if (mGcmObject == null) {
-                                mGcmObject = GoogleCloudMessaging.getInstance(mContext);
-                            }
-                            regId = mGcmObject.register(SENDER_ID);
-                        } catch (IOException ex) {
-                            Debug.error(ex);
-                            if (isDelayTimeCorrect(time)) {
-                                registerSenderId(serverToken, getTimerDelay(time));
-                            } else {
-                                getRegId(null, serverToken);
-                                Looper.loop();
-                            }
-                        }
-                        if (regId != null) {
-                            getRegId(regId, serverToken);
-                        }
-                        Looper.loop();
+            public void run() {
+                String regId = null;
+                try {
+                    if (mGcmObject == null) {
+                        mGcmObject = GoogleCloudMessaging.getInstance(mContext);
                     }
-                };
+                    regId = mGcmObject.register(SENDER_ID);
+                } catch (IOException ex) {
+                    Debug.error(ex);
+                    if (isDelayTimeCorrect(time)) {
+                        registerSenderId(serverToken, getTimerDelay(time));
+                    } else {
+                        getRegId(null, serverToken);
+                    }
+                }
+                if (regId != null) {
+                    getRegId(regId, serverToken);
+                }
             }
-        }.start();
+        }, time * 1000);
     }
 
     private int getTimerDelay(int time) {
-        if (time == 0) {
-            return TIME_GEOMETRIC_PROGRESSION_FIRST_VALUE;
-        }
-        return time * TIME_GEOMETRIC_PROGRESSION_DENOMINATOR;
+        return time == 0 ? TIME_GEOMETRIC_PROGRESSION_FIRST_VALUE : time * TIME_GEOMETRIC_PROGRESSION_DENOMINATOR;
     }
 
     private boolean isDelayTimeCorrect(int time) {
-        if (getTimerDelay(time) <= TIME_GEOMETRIC_PROGRESSION_LAST_VALUE) {
-            return true;
-        }
-        return false;
+        return getTimerDelay(time) <= TIME_GEOMETRIC_PROGRESSION_LAST_VALUE ? true : false;
     }
 
     @SuppressWarnings("unused")
