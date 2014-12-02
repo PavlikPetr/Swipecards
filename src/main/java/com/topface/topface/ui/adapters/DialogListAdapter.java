@@ -35,7 +35,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
         if (getItemViewType(position) == T_NEW) {
             int unreadCounter = getUnreadCounter(dialog);
-            if (unreadCounter > 1 && !CacheProfile.getOptions().hideDialogPreview) {
+            if (unreadCounter > 1 && !CacheProfile.getOptions().hidePreviewDialog) {
                 holder.unreadCounter.setVisibility(View.VISIBLE);
                 holder.unreadCounter.setText(Integer.toString(unreadCounter));
             } else {
@@ -91,7 +91,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                     break;
             }
         }
-        if (dialog.unread && CacheProfile.getOptions().hideDialogPreview) {
+        if (dialog.unread && CacheProfile.getOptions().hidePreviewDialog) {
             text = Utils.getQuantityString(R.plurals.notification_many_messages,
                     dialog.unreadCounter, dialog.unreadCounter);
             view.setTextColor(getContext().getResources().getColor(R.color.hidden_dialog_preview_text_color));
