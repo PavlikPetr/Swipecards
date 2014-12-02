@@ -72,13 +72,13 @@ public class GCMUtils {
     /**
      * параметры геометрической прогрессии для расчета задержки между запросами на регистрацию в GCM
      * все значения в сек.
-     * <p/>
-     * при начальном значении = 2, знаменателе = 2 и последнем значении прогрессии = 64, суммарное
-     * время, в течении которого будем пытаться зарегистрироваться в GCM, составит 126 сек
+     *
+     * при начальном значении = 2, знаменателе = 2 и последнем значении прогрессии = 128, суммарное
+     * время, в течении которого будем пытаться зарегистрироваться в GCM, составит 256 сек
      */
     public static final int TIME_GEOMETRIC_PROGRESSION_DENOMINATOR = 2;
     public static final int TIME_GEOMETRIC_PROGRESSION_FIRST_VALUE = 2;
-    public static final int TIME_GEOMETRIC_PROGRESSION_LAST_VALUE = 64;
+    public static final int TIME_GEOMETRIC_PROGRESSION_LAST_VALUE = 128;
 
 
     public static final String NEXT_INTENT = "com.topface.topface_next";
