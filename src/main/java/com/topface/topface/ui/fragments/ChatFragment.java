@@ -466,7 +466,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 update(false, "retry");
                 mLockScreen.setVisibility(View.GONE);
             }
-        }).backgroundColor(getResources().getColor(R.color.bg_main)).build();
+        }).messageFontColor(R.color.text_color_gray).noShadow().build();
         mLockScreen.addView(retryView.getView());
 
         if (mPopularUserLockController != null) {
@@ -1242,9 +1242,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private boolean isShowKeyboardInChat() {
-        if (Device.getMaxDisplaySize() >= getActivity().getResources().getDimension(R.dimen.min_screen_height_chat_fragment)) {
-            return true;
-        }
-        return false;
+        return Device.getMaxDisplaySize() >= getActivity().getResources().getDimension(R.dimen.min_screen_height_chat_fragment);
     }
 }

@@ -210,6 +210,13 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         mShowPassword.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    protected void onOptionsAndProfileSuccess() {
+        if (isAdded()) {
+            getActivity().finish();
+        }
+    }
+
     private void btnTFClick() {
         String emailLogin = Utils.getText(mLogin).trim();
         String password = Utils.getText(mPassword);

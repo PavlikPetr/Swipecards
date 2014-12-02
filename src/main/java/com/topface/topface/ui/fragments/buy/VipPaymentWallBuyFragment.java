@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentActivity;
 
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
+import com.topface.topface.statistics.PushButtonVipStatistics;
+import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.utils.CacheProfile;
 
@@ -31,6 +33,8 @@ public class VipPaymentWallBuyFragment extends VipBuyFragment {
 
     @Override
     protected void buy(String id, Products.BuyButton btn) {
+        PushButtonVipUniqueStatistics.sendPushButtonVip();
+        PushButtonVipStatistics.send(id, ((Object) this).getClass().getSimpleName(), getFrom());
         FragmentActivity activity = getActivity();
         if (activity != null) {
             activity.startActivityForResult(

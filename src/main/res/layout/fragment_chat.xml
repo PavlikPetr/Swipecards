@@ -35,7 +35,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:inflatedId="@+id/famousBlocker"
-            android:layout="@layout/layout_popular_user_blocker"/>
+            android:layout="@layout/layout_popular_user_blocker" />
     </RelativeLayout>
 
     <include
@@ -43,7 +43,7 @@
         layout="@layout/chat_footer_send_holo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true" />
 
     <View
         android:layout_width="match_parent"
