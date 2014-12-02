@@ -143,6 +143,7 @@ public class UserConfig extends AbstractUniqueConfig {
      * @param pinCode value
      * @return true on success
      */
+    @SuppressWarnings("UnusedDeclaration")
     public boolean setPinCode(String pinCode) {
         return setField(getSettingsMap(), DATA_PIN_CODE, pinCode);
     }
@@ -152,6 +153,7 @@ public class UserConfig extends AbstractUniqueConfig {
      *
      * @return pincode value
      */
+    @SuppressWarnings("UnusedDeclaration")
     public String getPinCode() {
         return getStringField(getSettingsMap(), DATA_PIN_CODE);
     }
@@ -411,6 +413,7 @@ public class UserConfig extends AbstractUniqueConfig {
      *
      * @param enabled
      */
+    @SuppressWarnings("UnusedDeclaration")
     public void setNotificationEnabled(boolean enabled) {
         setField(getSettingsMap(), SETTINGS_GCM, enabled);
     }
