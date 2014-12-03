@@ -313,7 +313,7 @@
     <string name="settings_guests">Гости</string>
     <string name="settings_help">Помощь</string>
     <string name="settings_faq">Вопросы и ответы</string>
-    <string name="settings_faq_title">Вероятно, ваша проблема уже описана, посмотрите в разделе \"Вопросы и ответы\"</string>
+    <string name="settings_faq_title">Вероятно, ваша проблема уже описана, посмотрите в разделе «Вопросы и ответы»</string>
     <string name="settings_account">Аккаунт</string>
     <string name="settings_feedback">Оставить отзыв</string>
     <string name="settings_about">О программе</string>
