@@ -7,6 +7,8 @@ import android.widget.LinearLayout;
 
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
+import com.topface.topface.statistics.PushButtonVipStatistics;
+import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -47,6 +49,8 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
 
     @Override
     public void buy(Products.BuyButton btn) {
+        PushButtonVipUniqueStatistics.sendPushButtonNoVip(btn.id, ((Object) this).getClass().getSimpleName(), getFrom());
+        PushButtonVipStatistics.send(btn.id, ((Object) this).getClass().getSimpleName(), getFrom());
         FragmentActivity activity = getActivity();
         if (activity != null) {
             activity.startActivityForResult(

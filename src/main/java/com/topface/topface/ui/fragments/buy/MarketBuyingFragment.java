@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import com.topface.topface.R;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Products.ProductsInfo.CoinsSubscriptionInfo;
+import com.topface.topface.statistics.PushButtonVipStatistics;
+import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.CoinsSubscriptionsActivity;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -96,5 +98,12 @@ public class MarketBuyingFragment extends CoinsBuyingFragment {
                     getActivity(), mCoinsSubscriptionClickListener);
         }
         return null;
+    }
+
+    @Override
+    public void buy(BuyButton btn) {
+        PushButtonVipUniqueStatistics.sendPushButtonNoVip(btn.id, ((Object) this).getClass().getSimpleName(), getFrom());
+        PushButtonVipStatistics.send(btn.id, ((Object) this).getClass().getSimpleName(), getFrom());
+        super.buy(btn);
     }
 }
