@@ -20,7 +20,7 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
     @Override
     protected void addPages() {
         addBodyPage(DialogsFragment.class.getName(), getString(R.string.general_dbl_all), CacheProfile.unread_messages);
-        addBodyPage(BookmarksFragment.class.getName(), getString(R.string.general_mutual), 0);
+        addBodyPage(BookmarksFragment.class.getName(), getString(R.string.general_bookmarks), 0);
     }
 
     @Override
