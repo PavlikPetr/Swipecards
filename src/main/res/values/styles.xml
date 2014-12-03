@@ -834,27 +834,22 @@
 
     <style name="TabIndicatorHoloStyle">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">11sp</item>
         <item name="android:singleLine">true</item>
     </style>
 
     <style name="TabIndicatorHoloStyle.Title">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">70</item>
+        <item name="android:layout_weight">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:textColor">@color/tab_text_color</item>
     </style>
 
-    <style name="TabIndicatorHoloStyle.Title.Dialogs">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:paddingRight">8dp</item>
-        <item name="android:layout_weight">0</item>
-    </style>
-
     <style name="TabIndicatorHoloStyle.Counter">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_weight">0</item>
+        <item name="android:paddingLeft">8dp</item>
         <item name="android:textColor">@color/tab_counter_color</item>
     </style>
 

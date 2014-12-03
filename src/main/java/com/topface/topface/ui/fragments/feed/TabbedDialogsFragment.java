@@ -33,8 +33,4 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
         mLastOpenedPage = lastOpenedPage;
     }
 
-    @Override
-    protected int getIndicatorLayout() {
-        return R.layout.tab_indicator_dialogs;
-    }
 }

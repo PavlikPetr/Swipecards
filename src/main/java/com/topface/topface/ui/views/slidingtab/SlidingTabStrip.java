@@ -16,15 +16,15 @@
 
 package com.topface.topface.ui.views.slidingtab;
 
-import android.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import com.topface.topface.R;
 
 class SlidingTabStrip extends LinearLayout {
 
@@ -64,16 +64,14 @@ class SlidingTabStrip extends LinearLayout {
 
         final float density = getResources().getDisplayMetrics().density;
 
-        TypedValue outValue = new TypedValue();
-        context.getTheme().resolveAttribute(R.attr.colorForeground, outValue, true);
-        final int themeForegroundColor = outValue.data;
+        final int dividerColor = context.getResources().getColor(R.color.tab_divider_color);
 
-        mDefaultBottomBorderColor = setColorAlpha(themeForegroundColor,
+        mDefaultBottomBorderColor = setColorAlpha(dividerColor,
                 DEFAULT_BOTTOM_BORDER_COLOR_ALPHA);
 
         mDefaultTabColorizer = new SimpleTabColorizer();
         mDefaultTabColorizer.setIndicatorColors(DEFAULT_SELECTED_INDICATOR_COLOR);
-        mDefaultTabColorizer.setDividerColors(setColorAlpha(themeForegroundColor,
+        mDefaultTabColorizer.setDividerColors(setColorAlpha(dividerColor,
                 DEFAULT_DIVIDER_COLOR_ALPHA));
 
         mBottomBorderThickness = (int) (DEFAULT_BOTTOM_BORDER_THICKNESS_DIPS * density);
