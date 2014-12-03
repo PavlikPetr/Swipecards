@@ -115,7 +115,7 @@ public class GCMUtils {
             mGcmObject = GoogleCloudMessaging.getInstance(mContext);
             mRegId = getRegistrationId();
             if (mRegId.isEmpty()) {
-                registerSenderId(serverToken, 0);
+                register(serverToken, 0);
                 return true;
             } else if (!mRegId.equals(serverToken)) {
                 sendRegistrationIdToBackend();
@@ -124,7 +124,7 @@ public class GCMUtils {
         return false;
     }
 
-    private void GcmToken(String regId, String serverToken) {
+    private void saveGcmToken(String regId, String serverToken) {
         if (!TextUtils.isEmpty(regId)) {
             mRegId = regId;
             storeRegistrationId();
@@ -132,11 +132,11 @@ public class GCMUtils {
                 sendRegistrationIdToBackend();
             }
         } else {
-            Debug.log("Registration id is " + (regId == null ? "null" : "empty"));
+            Debug.log("Registration id is empty");
         }
     }
 
-    private void registerSenderId(final String serverToken, final int time) {
+    private void register(final String serverToken, final int time) {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -149,13 +149,13 @@ public class GCMUtils {
                 } catch (IOException ex) {
                     Debug.error(ex);
                     if (isDelayTimeCorrect(time)) {
-                        registerSenderId(serverToken, getTimerDelay(time));
+                        register(serverToken, getTimerDelay(time));
                     } else {
                         Debug.log("Unable to register in GCM, all attempts have been exhausted");
                     }
                 }
                 if (regId != null) {
-                    GcmToken(regId, serverToken);
+                    saveGcmToken(regId, serverToken);
                 }
             }
         }, time * 1000);
