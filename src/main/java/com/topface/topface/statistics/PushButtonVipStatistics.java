@@ -1,7 +1,5 @@
 package com.topface.topface.statistics;
 
-import android.util.Log;
-
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
@@ -22,7 +20,6 @@ public class PushButtonVipStatistics {
     }
 
     public static Slices generateSlices(String button_type, String class_name, String from_screen_name) {
-        Log.e("TOP_FACE", "generateSlices button_type: " + button_type + " class_name: " + class_name + " from_screen_name: " + from_screen_name);
         Slices slices = new Slices();
         slices.putSlice(BUTTON_TYPE, button_type);
         slices.putSlice(CLASS_NAME, class_name);
