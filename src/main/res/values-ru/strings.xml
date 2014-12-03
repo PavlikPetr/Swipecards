@@ -312,6 +312,8 @@
     <string name="settings_messages">Сообщения</string>
     <string name="settings_guests">Гости</string>
     <string name="settings_help">Помощь</string>
+    <string name="settings_faq">Вопросы и ответы</string>
+    <string name="settings_faq_title">Вероятно, ваша проблема уже описана, посмотрите в разделе «Вопросы и ответы»</string>
     <string name="settings_account">Аккаунт</string>
     <string name="settings_feedback">Оставить отзыв</string>
     <string name="settings_about">О программе</string>
@@ -759,4 +761,5 @@
     <string name="measurement_unit_height">см.</string>
     <string name="maximum_number_of_users">Выбрано максимальное количестово пользователей</string>
     <string name="logout_if_email_already_registred">Пользователь с таким e-mail уже существует. Если это ваш e-mail, то вам необходимо выйти из текущего аккаунта и зайти в аккаунт %s</string>
+    <string name="recover_password_instructions">На ваш e-mail отправлено письмо с инструкцией по восстановлению пароля</string>
 </resources>

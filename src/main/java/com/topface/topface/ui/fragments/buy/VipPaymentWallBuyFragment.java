@@ -33,7 +33,7 @@ public class VipPaymentWallBuyFragment extends VipBuyFragment {
 
     @Override
     protected void buy(String id, Products.BuyButton btn) {
-        PushButtonVipUniqueStatistics.sendPushButtonVip();
+        PushButtonVipUniqueStatistics.sendPushButtonVip(id, ((Object) this).getClass().getSimpleName(), getFrom());
         PushButtonVipStatistics.send(id, ((Object) this).getClass().getSimpleName(), getFrom());
         FragmentActivity activity = getActivity();
         if (activity != null) {

@@ -147,7 +147,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     protected void buy(String id, Products.BuyButton curBtn) {
         buy(curBtn);
-        PushButtonVipUniqueStatistics.sendPushButtonVip();
+        PushButtonVipUniqueStatistics.sendPushButtonVip(id, ((Object) this).getClass().getSimpleName(), getFrom());
         PushButtonVipStatistics.send(id, ((Object) this).getClass().getSimpleName(), getFrom());
         EasyTracker.sendEvent("Subscription", "ButtonClick" + getFrom(), id, 0L);
     }

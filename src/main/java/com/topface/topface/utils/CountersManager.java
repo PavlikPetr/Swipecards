@@ -161,8 +161,8 @@ public class CountersManager {
                 sympathyCounter != CacheProfile.unread_mutual ||
                 visitorsCounter != CacheProfile.unread_visitors ||
                 fansCounter != CacheProfile.unread_fans ||
-                admirationsCounter != CacheProfile.unread_admirations) ||
-                geoCounter != CacheProfile.unread_geo &&
+                admirationsCounter != CacheProfile.unread_admirations ||
+                geoCounter != CacheProfile.unread_geo) &&
                 !checkMethodIsDenyed(method)
                 ) {
             CacheProfile.unread_likes = likesCounter;

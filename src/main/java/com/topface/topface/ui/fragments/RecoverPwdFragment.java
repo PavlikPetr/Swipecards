@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,7 +79,7 @@ public class RecoverPwdFragment extends BaseFragment {
                     @Override
                     public void success(IApiResponse response) {
                         showButtons();
-                        Toast.makeText(getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), R.string.recover_password_instructions, Toast.LENGTH_LONG).show();
                         getActivity().finish();
                     }
 
@@ -90,12 +91,7 @@ public class RecoverPwdFragment extends BaseFragment {
                 }).exec();
             }
         });
-        if (getArguments().getString(ARG_EMAIL) != null) {
-            mBtnRecover.setEnabled(true);
-        } else {
-            mBtnRecover.setEnabled(false);
-        }
-
+        mBtnRecover.setEnabled(!TextUtils.isEmpty(getArguments().getString(ARG_EMAIL)));
         root.findViewById(R.id.tvBackToMainAuth).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +111,7 @@ public class RecoverPwdFragment extends BaseFragment {
     private void initEditViews(View root) {
         mEdEmail = (EditText) root.findViewById(R.id.edEmail);
         mEdEmail.setText(getArguments().getString(ARG_EMAIL));
+        mEdEmail.setSelection(mEdEmail.getText().length());
         mEdEmail.addTextChangedListener(new TextWatcher() {
             String before = Static.EMPTY;
 
