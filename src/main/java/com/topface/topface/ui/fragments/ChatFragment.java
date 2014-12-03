@@ -413,7 +413,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         final GestureDetectorCompat mListViewDetector = new GestureDetectorCompat(getActivity(), new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
-                Utils.hideSoftKeyboard(getActivity(), mEditBox);
+                // hide keyBoard when chatAction invisible
+                if (!animateHideChatAction()) {
+                    Utils.hideSoftKeyboard(getActivity(), mEditBox);
+                }
                 return false;
             }
         });
@@ -1139,9 +1142,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mActions.setVisibility(View.INVISIBLE);
     }
 
-    private void animateHideChatAction() {
+    private boolean animateHideChatAction() {
         if (mActions == null || mActions.getVisibility() == View.INVISIBLE) {
-            return;
+            return false;
         }
         TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -getChatActionsViewHeight());
         ta.setDuration(getAnimationTime());
@@ -1160,6 +1163,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
         mActions.startAnimation(ta);
+        return true;
     }
 
     private void animateShowChatAction() {
