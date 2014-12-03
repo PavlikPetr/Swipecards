@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
@@ -119,19 +118,13 @@ public class GCMUtils {
                 registerSenderId(serverToken, 0);
                 return true;
             } else if (!mRegId.equals(serverToken)) {
-                new Handler(mContext.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        sendRegistrationIdToBackend();
-
-                    }
-                });
+                sendRegistrationIdToBackend();
             }
         }
         return false;
     }
 
-    private void getRegId(String regId, String serverToken) {
+    private void GcmToken(String regId, String serverToken) {
         if (!TextUtils.isEmpty(regId)) {
             mRegId = regId;
             storeRegistrationId();
@@ -158,11 +151,11 @@ public class GCMUtils {
                     if (isDelayTimeCorrect(time)) {
                         registerSenderId(serverToken, getTimerDelay(time));
                     } else {
-                        getRegId(null, serverToken);
+                        Debug.log("Unable to register in GCM, all attempts have been exhausted");
                     }
                 }
                 if (regId != null) {
-                    getRegId(regId, serverToken);
+                    GcmToken(regId, serverToken);
                 }
             }
         }, time * 1000);
