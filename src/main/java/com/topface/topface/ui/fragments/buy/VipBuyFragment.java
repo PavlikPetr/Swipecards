@@ -30,6 +30,8 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 
+import org.onepf.oms.appstore.googleUtils.Purchase;
+
 import static android.view.View.OnClickListener;
 
 public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
@@ -296,7 +298,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     }
 
     @Override
-    public void onPurchased(String productId) {
+    public void onPurchased(Purchase product) {
         switchLayouts();
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(VIP_PURCHASED_INTENT));
     }
