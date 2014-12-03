@@ -44,6 +44,8 @@ import org.onepf.oms.appstore.googleUtils.Purchase;
 import org.onepf.oms.util.Logger;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Абстрактный фрагмент, реализующий процесс покупки черес библиотеку OpenIAB
@@ -61,6 +63,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public static final int BUYING_REQUEST = 1001;
     public static final String TEST_PURCHASED_PRODUCT_ID = "android.test.purchased";
     private static final String APP_STORE_NAME = "&storename";
+    private static final String MAIN_API_URL = "https://api\\.core\\.tf/\\?v=[0-9]+";
     /**
      * Результат запроса из OpenIAB: Пользователь отменил покупку
      */
@@ -268,7 +271,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     Purchase purchase = inventory.getPurchase(sku);
                     if (OpenIabHelper.ITEM_TYPE_SUBS.equals(purchase.getItemType())) {
                         //Если на сервере нет какой то подписки, которая есть в маркете и сервер не является стейджем, то отправляем ее повторно
-                        if (!App.getAppConfig().getStageChecked() && serverSubs != null && !serverSubs.containsSku(sku)) {
+                        if (isMainApi() && serverSubs != null && !serverSubs.containsSku(sku)) {
                             Debug.log("BillingFragment: restore subscription: " + sku);
                             verifyPurchase(purchase, getActivity());
                         }
@@ -282,6 +285,13 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         } else {
             Debug.error("BillingFragment: onQueryInventoryFinished error: " + iabResult);
         }
+    }
+
+    private boolean isMainApi() {
+        String apiUrl = App.getAppConfig().getApiUrl();
+        Pattern pattern = Pattern.compile(MAIN_API_URL);
+        Matcher matcher = pattern.matcher(apiUrl);
+        return matcher.matches();
     }
 
     protected abstract Products getProducts();
