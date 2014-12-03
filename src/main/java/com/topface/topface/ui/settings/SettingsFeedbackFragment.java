@@ -1,7 +1,9 @@
 package com.topface.topface.ui.settings;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.CacheProfile;
 
 public class SettingsFeedbackFragment extends BaseFragment implements OnClickListener {
 
@@ -27,11 +30,26 @@ public class SettingsFeedbackFragment extends BaseFragment implements OnClickLis
 
     @Override
     protected String getTitle() {
-        return getString(R.string.settings_feedback);
+        return getString(R.string.settings_help);
     }
 
     private void initViews(View root) {
         ViewGroup frame;
+
+        // FAQ header
+        ViewGroup frame2 = (ViewGroup) root.findViewById(R.id.loFaqTitle);
+        setText(R.string.settings_faq_title, frame2);
+
+        // FAQ
+        frame = (ViewGroup) root.findViewById(R.id.loFaq);
+        if (!TextUtils.isEmpty(CacheProfile.getOptions().helpUrl)) {
+            setBackground(R.drawable.edit_big_btn_selector, frame);
+            setText(R.string.settings_faq, frame);
+            frame.setOnClickListener(this);
+        } else {
+            frame.setVisibility(View.GONE);
+            frame2.setVisibility(View.GONE);
+        }
 
         // Error message
         frame = (ViewGroup) root.findViewById(R.id.loErrorMessage);
@@ -71,6 +89,15 @@ public class SettingsFeedbackFragment extends BaseFragment implements OnClickLis
     public void onClick(View v) {
         Intent intent = null;
         switch (v.getId()) {
+            case R.id.loFaq:
+                String helpUrl = CacheProfile.getOptions().helpUrl;
+                //Ссылку на помощь показываем только в случае, если сервер нам ее прислал.
+                if (!TextUtils.isEmpty(helpUrl)) {
+                    intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(helpUrl));
+                    startActivity(intent);
+                }
+                break;
             case R.id.loErrorMessage:
                 intent = SettingsContainerActivity.getFeedbackMessageIntent(
                         getActivity(),

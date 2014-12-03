@@ -228,18 +228,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
         // Help
         frame = (ViewGroup) root.findViewById(R.id.loHelp);
-        if (!TextUtils.isEmpty(CacheProfile.getOptions().helpUrl)) {
-            setBackground(R.drawable.edit_big_btn_middle_selector, frame);
-            setText(R.string.settings_help, frame);
-            frame.setOnClickListener(this);
-        } else {
-            frame.setVisibility(View.GONE);
-        }
-
-        // Rate app
-        frame = (ViewGroup) root.findViewById(R.id.loFeedback);
         setBackground(R.drawable.edit_big_btn_middle_selector, frame);
-        setText(R.string.settings_feedback, frame);
+        setText(R.string.settings_help, frame);
         frame.setOnClickListener(this);
 
         // Language app
@@ -324,20 +314,11 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         Intent intent;
         Context applicationContext = App.getContext();
         switch (v.getId()) {
-            case R.id.loHelp:
-                String helpUrl = CacheProfile.getOptions().helpUrl;
-                //Ссылку на помощь показываем только в случае, если сервер нам ее прислал.
-                if (!TextUtils.isEmpty(helpUrl)) {
-                    intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(helpUrl));
-                    startActivity(intent);
-                }
-                break;
             case R.id.loAccount:
                 intent = new Intent(applicationContext, SettingsContainerActivity.class);
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_ACCOUNT);
                 break;
-            case R.id.loFeedback:
+            case R.id.loHelp:
                 intent = new Intent(applicationContext, SettingsContainerActivity.class);
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
                 break;
