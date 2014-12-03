@@ -286,7 +286,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     }
 
     private boolean isMainApi() {
-        return App.getAppConfig().getApiUrl().contains(Static.API_URL);
+        return App.getAppConfig().getApiDomain().contains(Static.API_URL);
     }
 
     protected abstract Products getProducts();
