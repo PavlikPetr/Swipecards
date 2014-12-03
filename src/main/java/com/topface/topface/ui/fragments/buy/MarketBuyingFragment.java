@@ -52,7 +52,6 @@ public class MarketBuyingFragment extends CoinsBuyingFragment {
     private Products.BuyButtonClickListener mCoinsSubscriptionClickListener = new Products.BuyButtonClickListener() {
         @Override
         public void onClick(String id) {
-//            PushButtonVipUniqueStatistics.sendPushButtonNoVip(id, ((Object) this).getClass().getSimpleName(), getFrom());
             startActivityForResult(CoinsSubscriptionsActivity.createIntent(getFrom()), CoinsSubscriptionsActivity.INTENT_COINS_SUBSCRIPTION);
         }
     };
