@@ -267,8 +267,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 for (String sku : allOwnedSkus) {
                     Purchase purchase = inventory.getPurchase(sku);
                     if (OpenIabHelper.ITEM_TYPE_SUBS.equals(purchase.getItemType())) {
-                        //Если на сервере нет какой то подписки, которая есть в маркете, то отправляем ее повторно
-                        if (serverSubs != null && !serverSubs.containsSku(sku)) {
+                        //Если на сервере нет какой то подписки, которая есть в маркете и сервер не является стейджем, то отправляем ее повторно
+                        if (!App.getAppConfig().getStageChecked() && serverSubs != null && !serverSubs.containsSku(sku)) {
                             Debug.log("BillingFragment: restore subscription: " + sku);
                             verifyPurchase(purchase, getActivity());
                         }
