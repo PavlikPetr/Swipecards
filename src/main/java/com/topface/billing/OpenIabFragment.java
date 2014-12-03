@@ -20,6 +20,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Verify;
 import com.topface.topface.requests.ApiResponse;
@@ -44,8 +45,6 @@ import org.onepf.oms.appstore.googleUtils.Purchase;
 import org.onepf.oms.util.Logger;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Абстрактный фрагмент, реализующий процесс покупки черес библиотеку OpenIAB
@@ -63,7 +62,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public static final int BUYING_REQUEST = 1001;
     public static final String TEST_PURCHASED_PRODUCT_ID = "android.test.purchased";
     private static final String APP_STORE_NAME = "&storename";
-    private static final String MAIN_API_URL = "https://api\\.core\\.tf/\\?v=[0-9]+";
     /**
      * Результат запроса из OpenIAB: Пользователь отменил покупку
      */
@@ -288,10 +286,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     }
 
     private boolean isMainApi() {
-        String apiUrl = App.getAppConfig().getApiUrl();
-        Pattern pattern = Pattern.compile(MAIN_API_URL);
-        Matcher matcher = pattern.matcher(apiUrl);
-        return matcher.matches();
+        return App.getAppConfig().getApiUrl().contains(Static.API_URL);
     }
 
     protected abstract Products getProducts();
