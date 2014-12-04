@@ -19,7 +19,7 @@
     <string name="dating_switch_button">Еще…</string>
     <string name="dating_prev_button">Предыдущая</string>
     <string name="dating_chat_button">Поболтать</string>
-    
+
     <string name="waiting_a_products">Пожалуйста, подождите. Мы загружаем доступные для покупок товары</string>
     <string name="likes_background_text">Нет симпатий</string>
 
@@ -167,6 +167,9 @@
     <string name="general_profile_error">Ошибка загрузки профиля</string>
     <string name="general_dbl_all">Все</string>
     <string name="general_dbl_unread">Непрочитанные</string>
+    <string name="general_empty_code_confirmation">Введите код подтверждения</string>
+    <string name="general_email_success_confirmed">E-mail успешно подтвержден</string>
+    <string name="general_email_not_confirmed">E-mail не был подтвержден</string>
 
     <string name="time_yesterday">Вчера</string>
     <string name="time_today">Сегодня</string>
@@ -322,6 +325,9 @@
     <string name="settings_rights_reserved">Topface \nВсе права защищены</string>
     <string name="settings_extra">Подробную информацию можно найти на</string>
     <string name="settings_logout">Выйти из аккаунта</string>
+    <string name="settings_code_confirmation">Отправить код подтверждения</string>
+    <string name="settings_email_was_confirmed">Уже подтвердил</string>
+    <string name="settings_code_confirmation_hint">Код подтверждения</string>
     <string name="settings_logout_msg">Вы действительно хотите выйти?</string>
     <string name="settings_error_message">Сообщение об ошибке</string>
     <string name="settings_ask_developer">Вопрос разработчикам</string>
