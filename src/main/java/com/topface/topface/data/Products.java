@@ -372,7 +372,7 @@ public class Products extends AbstractData {
     public boolean isSubscription(Purchase product) {
         String productId = product.getSku();
         if (productId.equals(OpenIabFragment.TEST_PURCHASED_PRODUCT_ID)) {
-            productId = getSku(product.getDeveloperPayload());
+            productId = getSkuFromDeveloperPayload(product.getDeveloperPayload());
         }
         for (BuyButton subscription : coinsSubscriptions) {
             if (subscription.id.equals(productId)) {
@@ -387,7 +387,7 @@ public class Products extends AbstractData {
         return false;
     }
 
-    private String getSku(String developerPayload) {
+    private String getSkuFromDeveloperPayload(String developerPayload) {
         DeveloperPayload payload = JsonUtils.fromJson(developerPayload, DeveloperPayload.class);
         return payload.sku;
     }
