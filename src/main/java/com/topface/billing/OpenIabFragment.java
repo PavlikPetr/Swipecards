@@ -490,7 +490,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 if (TextUtils.equals(purchase.getItemType(), OpenIabHelper.ITEM_TYPE_INAPP)) {
                     mHelper.consumeAsync(purchase, OpenIabFragment.this);
                 }
-                onPurchased(purchase.getSku());
+                onPurchased(purchase);
                 if (isNeedSendPurchasesStatistics()) {
                     //Статистика AppsFlyer
                     if (verify.revenue > 0) {
@@ -567,7 +567,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     }
 
     @Override
-    public void onPurchased(String productId) {
+    public void onPurchased(Purchase product) {
         if (isAdded()) {
             Toast.makeText(getActivity(), R.string.buying_store_ok, Toast.LENGTH_LONG).show();
         }
