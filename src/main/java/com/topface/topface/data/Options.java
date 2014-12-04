@@ -103,6 +103,12 @@ public class Options extends AbstractData {
     public boolean hidePreviewDialog;
 
     /**
+     * title и url для экрана "О программе"
+     * по умолчанию отобрази "topface.com" с переходом на "http://m.topface.com", если сервер не пришлет другое значениеА
+     */
+    public AboutApp aboutApp = new AboutApp();
+
+    /**
      * Стоимость вставания в лидеры
      */
     public int priceLeader = 8;
@@ -205,6 +211,8 @@ public class Options extends AbstractData {
                         )
                 );
             }
+            JSONObject aboutAppJson = response.optJSONObject("aboutApp");
+            aboutApp = new AboutApp(aboutAppJson.optString("title"), aboutAppJson.optString("url"));
             offerwall = response.optString("offerwall");
             maxVersion = response.optString("maxVersion");
             blockUnconfirmed = response.optBoolean("blockUnconfirmed");
@@ -470,6 +478,21 @@ public class Options extends AbstractData {
             } else {
                 return null;
             }
+        }
+    }
+
+    public static class AboutApp {
+        public String title = "topface.com";
+        public String url = "http://m.topface.com";
+
+
+        public AboutApp(String title, String url) {
+            this.title = title;
+            this.url = url;
+        }
+
+        public AboutApp() {
+
         }
     }
 
