@@ -15,6 +15,7 @@
     <string name="dating_switch_button">More…</string>
     <string name="dating_prev_button">Previous</string>
     <string name="dating_chat_button">Chat</string>
+    <string name="waiting_a_products">Please hold on. We are loading the available products.</string>
     <string name="likes_background_text">No likes</string>
     <string name="visitors_background_text">No guests</string>
     <string name="chat_background_text">No incoming messages</string>
@@ -148,6 +149,7 @@
     <string name="general_city">City</string>
     <string name="general_dating">Dating</string>
     <string name="general_likes">They like me</string>
+    <string name="general_sympathies">Likes</string>
     <string name="general_sympathy">Like</string>
     <string name="general_delight">Admiration</string>
     <string name="general_mutual">Mutual</string>

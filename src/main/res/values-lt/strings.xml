@@ -15,6 +15,7 @@
     <string name="dating_switch_button">Daugiau…</string>
     <string name="dating_prev_button">Ankstesnis</string>
     <string name="dating_chat_button">Paplepėti</string>
+    <string name="waiting_a_products">Prašome, palaukite. Mes įkrauname parduodamas prekes</string>
     <string name="likes_background_text">Nėra simpatijų</string>
     <string name="visitors_background_text">Nėra svečių</string>
     <string name="chat_background_text">Įeinančių pranešimų nėra</string>
@@ -151,6 +152,7 @@
     <string name="general_city">Miestas</string>
     <string name="general_dating">Pažintys</string>
     <string name="general_likes">Aš patinku</string>
+    <string name="general_sympathies">Simpatijos</string>
     <string name="general_sympathy">Simpatija</string>
     <string name="general_delight">Susižavėjimas</string>
     <string name="general_mutual">Abipusiai</string>

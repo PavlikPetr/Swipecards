@@ -15,6 +15,7 @@
     <string name="dating_switch_button">Más…</string>
     <string name="dating_prev_button">Anterior</string>
     <string name="dating_chat_button">Charlar</string>
+    <string name="waiting_a_products">Espera, por favor. Estamos cargando productos disponibles para la compra</string>
     <string name="likes_background_text">No hay simpatías</string>
     <string name="visitors_background_text">No hay visitantes</string>
     <string name="chat_background_text">No hay mensajes entrantes</string>
@@ -148,6 +149,7 @@
     <string name="general_city">Ciudad</string>
     <string name="general_dating">Encuentros</string>
     <string name="general_likes">Gusto a</string>
+    <string name="general_sympathies">Simpatías</string>
     <string name="general_sympathy">Simpatía</string>
     <string name="general_delight">Admiración</string>
     <string name="general_mutual">Simpatías mutuas</string>

@@ -115,6 +115,11 @@
     <string name="pincode_forget">Hai dimenticato il codice PIN?</string>
     <string name="pincode_auth_input">Bisogna inserire login e password.</string>
     <string name="pincode_will_be_reset">All\'autorizzazione avvenuta con successo tutte le impostazioni dell’applicazione verranno azzerate.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">subito dopo la chiusura</item>
+        <item quantity="other">%d minuti</item>
+        <item quantity="one">%d minuto</item>
+    </plurals>
     <string name="general_error">ERRORE</string>
     <string name="general_yes">Sì</string>
     <string name="general_no">No</string>
@@ -163,6 +168,7 @@
     <string name="chat_like_out">Hai inviato una simpatia</string>
     <string name="chat_mutual_in">Hai ricevuto un\'ammirazione</string>
     <string name="chat_mutual_out">Hai inviato un\'ammirazione</string>
+    <string name="chat_wish_in">Hai ricevuto un Desiderio Segreto</string>
     <string name="chat_wish_out">Hai inviato un desiderio segreto.</string>
     <string name="chat_sexuality_in">La tua sessualità è stata valutata.</string>
     <string name="chat_sexuality_out">Hai valutato la sessualità.</string>
@@ -191,6 +197,7 @@
     <string name="buying_default_message">Puoi inviare regali e ammirazioni pagando con le monete</string>
     <string name="buying_money">Acquisto monete</string>
     <string name="profile_header_title">Mio profilo</string>
+    <string name="album_add_photo_title">Aggiungere foto</string>
     <string name="profile_add_album">Scegliere dagli esistenti</string>
     <string name="profile_add_camera">Scattare la foto</string>
     <string name="profile_photo">Foto</string>
@@ -563,6 +570,7 @@
     <string name="loading_photo_percent">Caricamento della foto %d%%</string>
     <string name="profile_update_error">Si è verificato un errore durante l’aggiornamento dati</string>
     <string name="retry_cancel_editing">Si è verificato un errore sul server durante l’aggiornamento dati. Uscire senza salvare o riprovare?</string>
+    <string name="retry_cancel_editing_bad_value">Hai inserito i dati sbagliati. Riprovare o uscire senza salvare i dati?</string>
     <string name="user_does_not_exist">Utente non trovato</string>
     <string name="feedback_subject_ban">Reclamo di un ban ingiusto</string>
     <string name="settings_led">Notifica LED</string>
@@ -570,4 +578,8 @@
     <string name="billing_item_already_owned">Il tuo ordine precedente è in elaborazione, si prega di attendere</string>
     <string name="dialog">Dialoghi</string>
     <string name="reply">Rispondere</string>
+    <string name="measurement_unit_weight">kg</string>
+    <string name="measurement_unit_height">cm</string>
+    <string name="maximum_number_of_users">Hai scelto il numero massimo degli utenti</string>
+    <string name="logout_if_email_already_registred">L’utente con questo e-mail esiste già. Se questo indirizzo mail è tuo, devi uscire dall’account attuale e accedere all’account %s</string>
 </resources>
