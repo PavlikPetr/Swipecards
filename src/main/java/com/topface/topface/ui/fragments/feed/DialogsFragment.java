@@ -151,11 +151,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected int getContextMenuLayoutRes() {
-        return R.menu.feed_context_menu;
-    }
-
-    @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteDialogsRequest(ids, getActivity());
     }

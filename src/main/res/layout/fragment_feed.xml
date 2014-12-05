@@ -3,7 +3,8 @@
     android:id="@+id/loControlsGroup"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/bg_white">
 
     <!-- button bar -->
     <include layout="@layout/bar_double_big_button" />
@@ -37,6 +38,7 @@
             android:dividerHeight="0dp"
             android:fadeScrollbars="true"
             android:fadingEdge="none"
+            p2r:ptrHeaderTextColor="#8A8A8A"
             p2r:ptrOverScroll="false"
             p2r:ptrShowIndicator="false" />
 

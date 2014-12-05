@@ -31,7 +31,6 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
         Visitor visitor = getItem(position);
         holder.time.setText(visitor.createdRelative);
         holder.time.setVisibility(View.VISIBLE);
-        holder.city.setText(null);
         holder.text.setText(visitor.user.city.name);
         return convertView;
     }

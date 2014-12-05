@@ -17,7 +17,7 @@ public class PeopleNearbyAdapter extends FeedAdapter<FeedGeo> {
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         FeedGeo item = getItem(position);
-        double distance = 0;
+        double distance;
         if (item.distance >= 1000) {
             distance = item.distance / 1000;
             holder.city.setText(String.format(getContext().getString(R.string.general_distance_km), distance));
@@ -25,9 +25,6 @@ public class PeopleNearbyAdapter extends FeedAdapter<FeedGeo> {
             distance = item.distance >= 1 ? item.distance : 1;
             holder.city.setText(String.format(getContext().getString(R.string.general_distance_m), (int) distance));
         }
-        holder.city.setCompoundDrawablesWithIntrinsicBounds(getContext().getResources().getDrawable(R.drawable.geo_ico),
-                null, null, null);
-        holder.city.setTextColor(getContext().getResources().getColor(R.color.geo_color));
         return convertView;
     }
 

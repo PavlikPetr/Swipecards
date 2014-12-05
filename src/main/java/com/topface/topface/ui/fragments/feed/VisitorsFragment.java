@@ -90,11 +90,6 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    protected int getContextMenuLayoutRes() {
-        return R.menu.feed_context_menu;
-    }
-
-    @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteVisitorsRequest(ids, getActivity());
     }

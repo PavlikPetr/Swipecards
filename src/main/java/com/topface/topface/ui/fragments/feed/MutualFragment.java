@@ -81,11 +81,6 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
-    protected int getContextMenuLayoutRes() {
-        return R.menu.feed_context_menu;
-    }
-
-    @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteMutualsRequest(ids, getActivity());
     }

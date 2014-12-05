@@ -2,17 +2,14 @@ package com.topface.topface.ui.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -61,12 +58,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         public TextView name;
         public TextView city;
         public TextView time;
-        public ImageView online;
         public TextView unreadCounter;
         public TextView text;
         public ImageView heart;
-        public ViewFlipper flipper;
-        public Button flippedBtn;
         public View dataLayout;
         public Drawable background;
     }
@@ -152,7 +146,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                 layoutId = getNewItemLayout();
             } else if (type == T_NEW_VIP) {
                 layoutId = getNewVipItemLayout();
-            } else if (type == T_VIP || type == LikesListAdapter.T_SELECTED_FOR_MUTUAL_VIP) {
+            } else if (type == T_VIP) {
                 layoutId = getVipItemLayout();
             } else {
                 layoutId = getItemLayout();
@@ -179,31 +173,23 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             // установка имени
             holder.name.setText(item.user.getNameAndAge());
             if (item.user.deleted || item.user.banned) {
-                holder.name.setTextColor(Color.GRAY);
+                holder.name.setTextColor(getContext().getResources().getColor(R.color.list_text_gray));
             } else {
-                holder.name.setTextColor(Color.WHITE);
+                holder.name.setTextColor(getContext().getResources().getColor(R.color.list_text_black));
             }
             // установка города
-            if (item.user.city != null) {
-                if (item.user.deleted || item.user.banned) {
-                    holder.city.setTextColor(Color.GRAY);
-                } else {
-                    holder.city.setTextColor(Color.WHITE);
-                }
+            if (item.user.city != null && holder.city != null) {
                 holder.city.setText(item.user.city.name);
             }
 
             // установка иконки онлайн
-            if (item.user.deleted || item.user.banned) {
-                holder.online.setVisibility(View.INVISIBLE);
-            } else {
-                holder.online.setVisibility(item.user.online ? View.VISIBLE : View.INVISIBLE);
-            }
+            int onLineDrawableId = (!(item.user.deleted || item.user.banned) && item.user.online) ? R.drawable.im_list_online : 0;
+            holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, onLineDrawableId, 0);
         }
 
         convertView.setTag(holder);
         if (mSelectionController.isSelected(position)) {
-            convertView.setBackgroundResource(R.drawable.background_list_selected);
+            convertView.setBackgroundResource(R.drawable.list_item_bg_selected);
         } else {
             setBackground(convertView, holder);
         }
@@ -398,9 +384,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.ivAvatar);
         holder.name = (TextView) convertView.findViewById(R.id.tvName);
         holder.city = (TextView) convertView.findViewById(R.id.tvCity);
-        holder.online = (ImageView) convertView.findViewById(R.id.ivOnline);
-        holder.flipper = (ViewFlipper) convertView.findViewById(R.id.vfFlipper);
-        holder.flippedBtn = (Button) convertView.findViewById(R.id.btnMutual);
         holder.background = convertView.getBackground();
 
         return holder;

@@ -1,55 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/item_list_vip_selector">
+                style="@style/ListItemContainer"
+                android:background="@drawable/item_list_selector">
 
     <!-- аватар -->
 
     <com.topface.topface.ui.views.ImageViewRemote
         android:id="@+id/ivAvatar"
-        style="@style/FeedAvatar" />
+        style="@style/ListAvatar"/>
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/ivAvatar"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="20dp">
+        android:layout_centerVertical="true">
 
         <!-- имя, возраст -->
         <TextView
             android:id="@+id/tvName"
-            style="@style/ListName" />
-
-        <!-- город -->
-        <TextView
-            android:id="@+id/tvCity"
-            android:layout_toRightOf="@id/tvName"
-            android:layout_alignBaseline="@id/tvName"
-            style="@style/ListCity" />
+            style="@style/ListName"/>
 
         <!-- текст -->
         <TextView
-
             android:id="@+id/tvText"
             android:layout_below="@id/tvName"
-            android:layout_toLeftOf="@+id/tvTime"
-            style="@style/ListMessageText" />
+            style="@style/ListMessageText"/>
 
         <!-- время -->
         <TextView
             android:id="@+id/tvTime"
-            android:layout_alignBaseline="@id/tvText"
-            style="@style/ListTime" />
-
+            android:layout_alignBaseline="@id/tvName"
+            style="@style/ListTime"/>
 
     </RelativeLayout>
-
-
-    <!-- online -->
-    <ImageView
-        android:id="@+id/ivOnline"
-        style="@style/OnlineIndicator" />
 
 </RelativeLayout>
