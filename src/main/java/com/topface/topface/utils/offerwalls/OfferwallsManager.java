@@ -135,11 +135,15 @@ public class OfferwallsManager {
 
     public static void initTfOfferwall(Context context, TFCredentials.OnInitializeListener listener) {
         TFOfferwallSDK.initialize(context, Integer.toString(CacheProfile.uid), "53edb54b0fdc7", listener);
+        TFOfferwallSDK.setTarget(new TFOfferwallSDK.Target().setAge(CacheProfile.age).setSex(CacheProfile.sex));
     }
 
     public static void startTfOfferwall(Context context) {
-        TFOfferwallSDK.setTarget(new TFOfferwallSDK.Target().setAge(CacheProfile.age).setSex(CacheProfile.sex));
         TFOfferwallSDK.showOffers(context, true, context.getResources().getString(R.string.general_bonus));
+    }
+
+    public static void startTfOfferwall(Context context, String experimentGroup) {
+        TFOfferwallSDK.showOffers(context, true, context.getResources().getString(R.string.general_bonus), experimentGroup);
     }
 
     private static void startSupersonic(Activity activity) {
