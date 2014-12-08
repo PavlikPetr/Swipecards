@@ -60,8 +60,8 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
             mSetPasswordText.setVisibility(View.VISIBLE);
         }
 
-        mEdMainField = (EditText) root.findViewById(R.id.edPassword);
-        mEdConfirmationField = (EditText) root.findViewById(R.id.edPasswordConfirmation);
+        mEdMainField = (EditText) root.findViewById(R.id.edMainField);
+        mEdConfirmationField = (EditText) root.findViewById(R.id.edConfirmationField);
 
         mBtnSave = (Button) root.findViewById(R.id.btnSave);
         if (mNeedExit) {

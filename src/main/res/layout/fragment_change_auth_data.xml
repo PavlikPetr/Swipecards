@@ -20,7 +20,7 @@
             android:visibility="gone" />
 
         <EditText
-            android:id="@+id/edPassword"
+            android:id="@+id/edMainField"
             style="@style/ItemWhiteText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
             android:textColorHint="#5F5F5F" />
 
         <EditText
-            android:id="@+id/edPasswordConfirmation"
+            android:id="@+id/edConfirmationField"
             style="@style/ItemWhiteText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
