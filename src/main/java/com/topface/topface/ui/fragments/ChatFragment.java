@@ -446,7 +446,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                         EasyTracker.sendEvent("Chat", "DeleteItem", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COPY:
-                                        mAdapter.copyText(((TextView) view).getText().toString());
+                                        mAdapter.copyText(((TextView) view.findViewById(R.id.chat_message)).getText().toString());
                                         EasyTracker.sendEvent("Chat", "CopyItemText", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COMPLAINT:
