@@ -5,16 +5,15 @@
 
     <ImageView
         android:id="@+id/ivEditBackground"
-        android:tag="ivEditBackground"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:scaleType="fitXY"
-        android:layout_centerHorizontal="true" />
+        android:tag="ivEditBackground" />
 
     <TextView
-        android:tag="tvTitle"
         style="@style/ItemTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,6 +24,7 @@
         android:drawablePadding="5dp"
         android:ellipsize="end"
         android:singleLine="true"
+        android:tag="tvTitle"
         android:textSize="14sp" />
 
     <LinearLayout
@@ -41,19 +41,19 @@
             android:layout_marginRight="5dp">
 
             <CheckBox
-                android:tag="cbPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/settings_phone_selector"
+                android:layout_centerInParent="true"
                 android:button="@android:color/transparent"
-                android:layout_centerInParent="true" />
+                android:drawableLeft="@drawable/settings_phone_selector"
+                android:tag="cbPhone" />
 
             <ProgressBar
-                android:tag="prsPhone"
                 style="@android:style/Widget.ProgressBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:tag="prsPhone"
                 android:visibility="gone" />
         </RelativeLayout>
 
@@ -65,19 +65,19 @@
             android:layout_marginRight="5dp">
 
             <CheckBox
-                android:tag="cbMail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/settings_mail_selector"
+                android:layout_centerInParent="true"
                 android:button="@android:color/transparent"
-                android:layout_centerInParent="true" />
+                android:drawableLeft="@drawable/settings_mail_selector"
+                android:tag="cbMail" />
 
             <ProgressBar
-                android:tag="prsMail"
                 style="@android:style/Widget.ProgressBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:tag="prsMail"
                 android:visibility="gone" />
         </RelativeLayout>
     </LinearLayout>

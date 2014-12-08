@@ -9,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
@@ -34,23 +37,24 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private FormInfo mFormInfo;
     private DatingFilter mInitFilter;
     private DatingFilter mFilter;
-    private ViewGroup mCityFrame;
-    private ViewGroup mAgeFrame;
 
-    private ImageView mCheckGirl;
-    private ImageView mCheckBoy;
-    private ViewGroup mLoGirls;
-    private ViewGroup mLoBoys;
-    private ViewGroup mXStatusFrame;
-    private ViewGroup mMarriageFrame;
-    private ViewGroup mCharacterFrame;
-    private ViewGroup mAlcoholFrame;
-    private ViewGroup mFinanceFrame;
-    private ViewGroup mBreastFrame;
+    //    private ViewGroup mXStatusFrame;
+//    private ViewGroup mMarriageFrame;
+//    private ViewGroup mCharacterFrame;
+//    private ViewGroup mAlcoholFrame;
+//    private ViewGroup mFinanceFrame;
+//    private ViewGroup mBreastFrame;
     private SparseArrayCompat<TextView> hashTextViewByTitleId = new SparseArrayCompat<>();
 
-    private EditSwitcher mSwitchOnlyOnline;
-    private EditSwitcher mSwitchBeautifull;
+    private Spinner mLoFilterSex;
+    private Spinner mLoFilterAgeStart;
+    private Spinner mLoFilterAgeEnd;
+    private CheckBox mLoFilterOnline;
+    private CheckBox mLoFilterBeautiful;
+
+
+//    private EditSwitcher mSwitchOnlyOnline;
+//    private EditSwitcher mSwitchBeautifull;
 
     private boolean mExtraSavingPerformed = false;
 
@@ -62,7 +66,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mTargetUser.sex = CacheProfile.dating != null ? CacheProfile.dating.sex : Static.BOY;
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
 
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_filter, container, false);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_filter_light_theme, container, false);
 
         // Preferences
         initFilter();
@@ -94,126 +98,79 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private void initViews(ViewGroup root) {
-        // Girl
-        mLoGirls = (ViewGroup) root.findViewById(R.id.loGirl);
-        setBackground(R.drawable.edit_big_btn_top_selector, mLoGirls);
-        setText(R.string.general_girls, mLoGirls);
-        mCheckGirl = (ImageView) mLoGirls.findViewWithTag("ivCheck");
-        if (mFilter.sex == Static.GIRL) {
-            mCheckGirl.setVisibility(View.VISIBLE);
-        }
-        mLoGirls.setOnClickListener(this);
+        // Sex
+        mLoFilterSex = (Spinner) root.findViewById(R.id.loFilterSex);
+        mLoFilterSex.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.spinner_text_layout, getSexArray()));
+        mLoFilterSex.setSelection(mFilter.sex);
 
-        // Boy
-        mLoBoys = (ViewGroup) root.findViewById(R.id.loBoy);
-        setBackground(R.drawable.edit_big_btn_bottom_selector, mLoBoys);
-        setText(R.string.general_boys, mLoBoys);
-        mCheckBoy = (ImageView) mLoBoys.findViewWithTag("ivCheck");
-        if (mFilter.sex == Static.BOY) {
-            mCheckBoy.setVisibility(View.VISIBLE);
-        }
-        mLoBoys.setOnClickListener(this);
+        // AgeStart
+        mLoFilterAgeStart = (Spinner) root.findViewById(R.id.loFilterAgeStart);
+        mLoFilterAgeStart.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.spinner_text_layout, getAgeStartArray()));
+        mLoFilterAgeStart.setSelection(getAgeStartCurrentPosition(mFilter.ageStart));
 
-        // Age
-        mAgeFrame = (ViewGroup) root.findViewById(R.id.loAge);
-        setBackground(R.drawable.edit_big_btn_top_selector, mAgeFrame);
-        setText(buildAgeString(), mAgeFrame);
-        mAgeFrame.setOnClickListener(this);
-
-        // City
-        mCityFrame = (ViewGroup) root.findViewById(R.id.loCity);
-        setBackground(R.drawable.edit_big_btn_bottom_selector, mCityFrame);
-        setText(buildCityString(), mCityFrame);
-        mCityFrame.setOnClickListener(this);
+        // AgeEnd
+        mLoFilterAgeEnd = (Spinner) root.findViewById(R.id.loFilterAgeEnd);
+        mLoFilterAgeEnd.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.spinner_text_layout, getAgeEndArray()));
+        mLoFilterAgeEnd.setSelection(getAgeEndCurrentPosition(mFilter.ageEnd));
 
         // Online
-        ViewGroup loSwitchOnline = (ViewGroup) root.findViewById(R.id.loOnline);
-        setBackground(R.drawable.edit_big_btn_top_selector, loSwitchOnline);
-        setText(R.string.filter_online, loSwitchOnline);
-        mSwitchOnlyOnline = new EditSwitcher(loSwitchOnline);
-        mSwitchOnlyOnline.setChecked(DatingFilter.getOnlyOnlineField());
-        loSwitchOnline.setOnClickListener(this);
+        mLoFilterOnline = (CheckBox) root.findViewById(R.id.loFilterOnline);
+        mLoFilterOnline.setChecked(DatingFilter.getOnlyOnlineField());
+        mLoFilterOnline.setOnClickListener(this);
 
         // Beautiful
-        ViewGroup loSwitchBeautifull = (ViewGroup) root.findViewById(R.id.loBeautiful);
-        setBackground(R.drawable.edit_big_btn_bottom_selector, loSwitchBeautifull);
-        setText(R.string.filter_only_beautiful, loSwitchBeautifull);
-        mSwitchBeautifull = new EditSwitcher(loSwitchBeautifull);
-        mSwitchBeautifull.setChecked(mFilter.beautiful);
-        loSwitchBeautifull.setOnClickListener(this);
+        mLoFilterBeautiful = (CheckBox) root.findViewById(R.id.loFilterBeautiful);
+        mLoFilterBeautiful.setChecked(mFilter.beautiful);
+        mLoFilterBeautiful.setOnClickListener(this);
 
-        // Extra Header
-        ViewGroup frame = (ViewGroup) root.findViewById(R.id.loExtraHeader);
-        ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.filter_extra_parameters);
+//        // Dating Status
+//        mXStatusFrame = (ViewGroup) root.findViewById(R.id.loDatingStatus);
+//        setBackground(R.drawable.edit_big_btn_top_selector, mXStatusFrame);
+//        setText(R.array.form_main_status,
+//                mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus), mXStatusFrame);
+//        mXStatusFrame.setTag(R.array.form_main_status);
+//        mXStatusFrame.setOnClickListener(this);
+//
+//        // Marriage
+//        mMarriageFrame = (ViewGroup) root.findViewById(R.id.loMarriage);
+//        setBackground(R.drawable.edit_big_btn_middle_selector, mMarriageFrame);
+//        setText(R.array.form_social_marriage,
+//                mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage), mMarriageFrame);
+//        mMarriageFrame.setTag(R.array.form_social_marriage);
+//        mMarriageFrame.setOnClickListener(this);
+//
+//        // Character
+//        mCharacterFrame = (ViewGroup) root.findViewById(R.id.loCharacter);
+//        setBackground(R.drawable.edit_big_btn_middle_selector, mCharacterFrame);
+//        setText(R.array.form_main_character,
+//                mFormInfo.getEntry(R.array.form_main_character, mFilter.character), mCharacterFrame);
+//        mCharacterFrame.setTag(R.array.form_main_character);
+//        mCharacterFrame.setOnClickListener(this);
+//
+//        // Alcohol
+//        mAlcoholFrame = (ViewGroup) root.findViewById(R.id.loAlcohol);
+//        setBackground(R.drawable.edit_big_btn_middle_selector, mAlcoholFrame);
+//        setText(R.array.form_habits_alcohol,
+//                mFormInfo.getEntry(R.array.form_habits_alcohol, mFilter.alcohol), mAlcoholFrame);
+//        mAlcoholFrame.setTag(R.array.form_habits_alcohol);
+//        mAlcoholFrame.setOnClickListener(this);
+//
+//        // Finance
+//        mFinanceFrame = (ViewGroup) root.findViewById(R.id.loFinance);
+//        setBackground(R.drawable.edit_big_btn_middle_selector, mFinanceFrame);
+//        setText(R.array.form_social_finances,
+//                mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances), mFinanceFrame);
+//        mFinanceFrame.setTag(R.array.form_social_finances);
+//        mFinanceFrame.setOnClickListener(this);
+//
+//        // ShowOff
+//        mBreastFrame = (ViewGroup) root.findViewById(R.id.loShowOff);
+//        setBackground(R.drawable.edit_big_btn_bottom_selector, mBreastFrame);
+//        setText(R.array.form_physique_breast,
+//                mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast), mBreastFrame);
+//        mBreastFrame.setTag(R.array.form_physique_breast);
+//        mBreastFrame.setOnClickListener(this);
 
-        // Dating Status
-        mXStatusFrame = (ViewGroup) root.findViewById(R.id.loDatingStatus);
-        setBackground(R.drawable.edit_big_btn_top_selector, mXStatusFrame);
-        setText(R.array.form_main_status,
-                mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus), mXStatusFrame);
-        mXStatusFrame.setTag(R.array.form_main_status);
-        mXStatusFrame.setOnClickListener(this);
-
-        // Marriage
-        mMarriageFrame = (ViewGroup) root.findViewById(R.id.loMarriage);
-        setBackground(R.drawable.edit_big_btn_middle_selector, mMarriageFrame);
-        setText(R.array.form_social_marriage,
-                mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage), mMarriageFrame);
-        mMarriageFrame.setTag(R.array.form_social_marriage);
-        mMarriageFrame.setOnClickListener(this);
-
-        // Character
-        mCharacterFrame = (ViewGroup) root.findViewById(R.id.loCharacter);
-        setBackground(R.drawable.edit_big_btn_middle_selector, mCharacterFrame);
-        setText(R.array.form_main_character,
-                mFormInfo.getEntry(R.array.form_main_character, mFilter.character), mCharacterFrame);
-        mCharacterFrame.setTag(R.array.form_main_character);
-        mCharacterFrame.setOnClickListener(this);
-
-        // Alcohol
-        mAlcoholFrame = (ViewGroup) root.findViewById(R.id.loAlcohol);
-        setBackground(R.drawable.edit_big_btn_middle_selector, mAlcoholFrame);
-        setText(R.array.form_habits_alcohol,
-                mFormInfo.getEntry(R.array.form_habits_alcohol, mFilter.alcohol), mAlcoholFrame);
-        mAlcoholFrame.setTag(R.array.form_habits_alcohol);
-        mAlcoholFrame.setOnClickListener(this);
-
-        // Finance
-        mFinanceFrame = (ViewGroup) root.findViewById(R.id.loFinance);
-        setBackground(R.drawable.edit_big_btn_middle_selector, mFinanceFrame);
-        setText(R.array.form_social_finances,
-                mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances), mFinanceFrame);
-        mFinanceFrame.setTag(R.array.form_social_finances);
-        mFinanceFrame.setOnClickListener(this);
-
-        // ShowOff
-        mBreastFrame = (ViewGroup) root.findViewById(R.id.loShowOff);
-        setBackground(R.drawable.edit_big_btn_bottom_selector, mBreastFrame);
-        setText(R.array.form_physique_breast,
-                mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast), mBreastFrame);
-        mBreastFrame.setTag(R.array.form_physique_breast);
-        mBreastFrame.setOnClickListener(this);
-
-        switchSex(mFilter.sex);
-    }
-
-    private void switchSex(int sex) {
-        if (sex == Static.GIRL) {
-            mCheckGirl.setVisibility(View.VISIBLE);
-            mCheckBoy.setVisibility(View.INVISIBLE);
-            mBreastFrame.setVisibility(View.VISIBLE);
-            setBackground(R.drawable.edit_big_btn_middle_selector, mFinanceFrame);
-        } else {
-            mCheckBoy.setVisibility(View.VISIBLE);
-            mCheckGirl.setVisibility(View.INVISIBLE);
-            mBreastFrame.setVisibility(View.GONE);
-            setBackground(R.drawable.edit_big_btn_bottom_selector, mFinanceFrame);
-        }
-
-        mTargetUser.sex = sex;
-        mFilter.sex = sex;
-
-        refreshFilterExtraCellsText();
     }
 
     private void refreshFilterExtraCellsText() {
@@ -290,7 +247,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     @Override
     protected boolean hasChanges() {
-        return !mInitFilter.equals(mFilter) || mInitFilterOnline != DatingFilter.getOnlyOnlineField();
+//        return !mInitFilter.equals(mFilter) || mInitFilterOnline != DatingFilter.getOnlyOnlineField();
+        return false;
     }
 
     @Override
@@ -315,12 +273,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.loGirl:
-                switchSex(Static.GIRL);
-                break;
-            case R.id.loBoy:
-                switchSex(Static.BOY);
-                break;
             case R.id.loAge:
                 Intent ageEditIntent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
                 ageEditIntent.putExtra(EditContainerActivity.INTENT_AGE_START, mFilter.ageStart);
@@ -337,13 +289,13 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 }
                 startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY);
                 break;
-            case R.id.loOnline:
-                mSwitchOnlyOnline.doSwitch();
-                DatingFilter.setOnlyOnlineField(mSwitchOnlyOnline.isChecked());
+            case R.id.loFilterOnline:
+//                mSwitchOnlyOnline.doSwitch();
+//                DatingFilter.setOnlyOnlineField(mSwitchOnlyOnline.isChecked());
                 break;
-            case R.id.loBeautiful:
-                mSwitchBeautifull.doSwitch();
-                mFilter.beautiful = mSwitchBeautifull.isChecked();
+            case R.id.loFilterBeautiful:
+//                mSwitchBeautifull.doSwitch();
+//                mFilter.beautiful = mSwitchBeautifull.isChecked();
                 break;
             case R.id.loDatingStatus:
                 startEditFilterFormItem(v, mFilter.xstatus);
@@ -405,7 +357,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 } catch (JSONException e) {
                     Debug.error(e);
                 }
-                setText(buildCityString(), mCityFrame);
             } else if (requestCode == EditContainerActivity.INTENT_EDIT_AGE) {
                 int ageStart = extras.getInt(EditContainerActivity.INTENT_AGE_START);
                 int ageEnd = extras.getInt(EditContainerActivity.INTENT_AGE_END);
@@ -416,7 +367,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 }
                 mFilter.ageEnd = ageEnd;
                 mFilter.ageStart = ageStart;
-                setText(buildAgeString(), mAgeFrame);
             }
             refreshSaveState();
         } else {
@@ -424,36 +374,69 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         }
     }
 
+    private String[] getSexArray() {
+        String[] array = {getActivity().getResources().getString(R.string.general_girls), getActivity().getResources().getString(R.string.general_boys)};
+        return array;
+    }
+
+    private String[] getAgeStartArray() {
+        String[] array = new String[mFilter.ageEnd - mFilter.ageStart];
+        for (int i = mFilter.ageStart; i < mFilter.ageEnd; i++) {
+            array[i] = Integer.toString(i);
+        }
+        return array;
+    }
+
+    private int getAgeStartCurrentPosition(int currentAge) {
+        return findCurrentPositionInArray(Integer.toString(currentAge), getAgeStartArray());
+    }
+
+    private String[] getAgeEndArray() {
+        String[] array = new String[mFilter.ageEnd - mFilter.ageStart - 4];
+        for (int i = mFilter.ageStart + 4; i < mFilter.ageEnd; i++) {
+            array[i] = Integer.toString(i);
+        }
+        return array;
+    }
+
+    private int getAgeEndCurrentPosition(int currentAge) {
+        return findCurrentPositionInArray(Integer.toString(currentAge), getAgeEndArray());
+    }
+
+    private int findCurrentPositionInArray(String currentAge, String[] array) {
+        int res = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(currentAge)) {
+                res = i;
+                break;
+            }
+        }
+        return res;
+    }
+
+
     @Override
     protected void lockUi() {
 //        mBackButton.setEnabled(false);
-        mLoGirls.setEnabled(false);
-        mLoBoys.setEnabled(false);
-        mAgeFrame.setEnabled(false);
-        mCityFrame.setEnabled(false);
-        mSwitchOnlyOnline.setEnabled(false);
-        mSwitchBeautifull.setEnabled(false);
-        mXStatusFrame.setEnabled(false);
-        mMarriageFrame.setEnabled(false);
-        mCharacterFrame.setEnabled(false);
-        mAlcoholFrame.setEnabled(false);
-        mBreastFrame.setEnabled(false);
+//        mSwitchOnlyOnline.setEnabled(false);
+//        mSwitchBeautifull.setEnabled(false);
+//        mXStatusFrame.setEnabled(false);
+//        mMarriageFrame.setEnabled(false);
+//        mCharacterFrame.setEnabled(false);
+//        mAlcoholFrame.setEnabled(false);
+//        mBreastFrame.setEnabled(false);
     }
 
     @Override
     protected void unlockUi() {
 //        mBackButton.setEnabled(true);
-        mLoGirls.setEnabled(true);
-        mLoBoys.setEnabled(true);
-        mAgeFrame.setEnabled(true);
-        mCityFrame.setEnabled(true);
-        mSwitchOnlyOnline.setEnabled(true);
-        mSwitchBeautifull.setEnabled(true);
-        mXStatusFrame.setEnabled(true);
-        mMarriageFrame.setEnabled(true);
-        mCharacterFrame.setEnabled(true);
-        mAlcoholFrame.setEnabled(true);
-        mBreastFrame.setEnabled(true);
+//        mSwitchOnlyOnline.setEnabled(true);
+//        mSwitchBeautifull.setEnabled(true);
+//        mXStatusFrame.setEnabled(true);
+//        mMarriageFrame.setEnabled(true);
+//        mCharacterFrame.setEnabled(true);
+//        mAlcoholFrame.setEnabled(true);
+//        mBreastFrame.setEnabled(true);
     }
 
     @Override
