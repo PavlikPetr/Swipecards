@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import com.topface.billing.OpenIabFragment;
+import com.topface.offerwall.common.OfferwallPayload;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.offerwall.publisher.TFOfferwallActivity;
 import com.topface.offerwall.publisher.TFOfferwallSDK;
@@ -48,7 +49,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         if (TFOfferwallSDK.isInitialized()) {
             mIsTopfaceOfferwallsReady = true;
         }
-        if (getIntent().hasExtra(TFOfferwallActivity.EXPEREMENT_GROUP)) {
+        if (getIntent().hasExtra(TFOfferwallActivity.PAYLOAD)) {
             mIsTopfaceOfferwallCompleted = true;
         }
     }
@@ -116,8 +117,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         Context context = App.getContext();
         if (mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled() &&
                 mTopfaceOfferwallRedirect.isExpOnOpen() && CacheProfile.money < itemPrice) {
-            intent = TFOfferwallSDK.getIntent(context, true,
-                    context.getString(R.string.general_bonus), TopfaceOfferwallRedirect.KEY_EXP_ON_OPEN);
+            OfferwallPayload payload = new OfferwallPayload();
+            payload.experimentGroup = TopfaceOfferwallRedirect.KEY_EXP_ON_OPEN;
+            intent = TFOfferwallSDK.getIntent(context, true, context.getString(R.string.general_bonus), payload);
             intent.putExtra(TFOfferwallActivity.RELAUNCH_PARENT_WITH_SAME_INTENT, true);
         } else {
             intent = new Intent(context, PurchasesActivity.class);
@@ -192,7 +194,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     private boolean showTopfaceOfferwall() {
         if (mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled() &&
                 mTopfaceOfferwallRedirect.isExpOnClose() && !mIsTopfaceOfferwallCompleted && mIsTopfaceOfferwallsReady) {
-            OfferwallsManager.startTfOfferwall(this, TopfaceOfferwallRedirect.KEY_EXP_ON_CLOSE);
+            OfferwallPayload payload = new OfferwallPayload();
+            payload.experimentGroup = TopfaceOfferwallRedirect.KEY_EXP_ON_CLOSE;
+            OfferwallsManager.startTfOfferwall(this, payload);
             mIsTopfaceOfferwallCompleted = true;
             return true;
         }

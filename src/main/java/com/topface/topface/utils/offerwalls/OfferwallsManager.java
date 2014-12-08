@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.topface.framework.utils.Debug;
+import com.topface.offerwall.common.OfferwallPayload;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.offerwall.publisher.TFOfferwallSDK;
 import com.topface.topface.R;
@@ -142,8 +143,8 @@ public class OfferwallsManager {
         TFOfferwallSDK.showOffers(context, true, context.getResources().getString(R.string.general_bonus));
     }
 
-    public static void startTfOfferwall(Context context, String experimentGroup) {
-        TFOfferwallSDK.showOffers(context, true, context.getResources().getString(R.string.general_bonus), experimentGroup);
+    public static void startTfOfferwall(Context context, OfferwallPayload payload) {
+        TFOfferwallSDK.showOffers(context, true, context.getResources().getString(R.string.general_bonus), payload);
     }
 
     private static void startSupersonic(Activity activity) {
