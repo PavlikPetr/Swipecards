@@ -12,7 +12,6 @@ public class TopfaceOfferwallRedirect extends BaseExperiment {
 
     public static final String KEY_EXP_ON_OPEN = "expOnOpen";
     public static final String KEY_EXP_ON_CLOSE = "expOnClose";
-    public static final int SHOW_FREQUENCY = 2;
 
     private boolean mExpOnOpen;
     private boolean mExpOnClose;
@@ -48,12 +47,8 @@ public class TopfaceOfferwallRedirect extends BaseExperiment {
 
     public boolean showOrNot() {
         int showCounter = mUserConfig.getTopfaceOfferwallRedirectCounter();
-        boolean showOrNot = showCounter < SHOW_FREQUENCY;
-        if (showOrNot) {
-            mUserConfig.setTopfaceOfferwallRedirectCounter(showCounter + 1);
-        } else {
-            mUserConfig.setTopfaceOfferwallRedirectCounter(0);
-        }
+        boolean showOrNot = showCounter < UserConfig.TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY;
+        mUserConfig.incrementTopfaceOfferwallRedirectCounter();
         mUserConfig.saveConfig();
         return !showOrNot;
     }

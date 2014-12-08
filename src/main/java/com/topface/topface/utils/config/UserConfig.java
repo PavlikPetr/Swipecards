@@ -23,6 +23,7 @@ import java.util.List;
  * use generateKey(String name) to create keys to put(key) and get(key) data
  */
 public class UserConfig extends AbstractUniqueConfig {
+    public static final int TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY = 2;
     private static final String PROFILE_CONFIG_SETTINGS = "profile_config_settings";
     /**
      * Keys' names to generate user-based keys
@@ -435,9 +436,14 @@ public class UserConfig extends AbstractUniqueConfig {
     /**
      * Set new topface offerwall redirection counter value
      *
-     * @param counter new counter value
      */
-    public void setTopfaceOfferwallRedirectCounter(int counter) {
+    public void incrementTopfaceOfferwallRedirectCounter() {
+        int counter = getTopfaceOfferwallRedirectCounter();
+        if (counter < TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY) {
+            counter++;
+        } else {
+            counter = 0;
+        }
         setField(getSettingsMap(), TOPFACE_OFFERWALL_REDIRECT_COUNTER, counter);
     }
 
