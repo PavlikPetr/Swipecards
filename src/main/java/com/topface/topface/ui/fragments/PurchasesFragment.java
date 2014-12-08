@@ -17,11 +17,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
+import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -153,6 +156,8 @@ public class PurchasesFragment extends BaseFragment {
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs);
         mPager.setAdapter(mPagerAdapter);
         mTabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -162,6 +167,10 @@ public class PurchasesFragment extends BaseFragment {
             public void onPageSelected(int position) {
                 changeInfoText(getInfoText());
                 if (position == mPagerAdapter.getTabIndex(Options.Tab.BONUS)) {
+                    if (mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled()) {
+                        StatisticsTracker.getInstance().sendEvent("bonuses_opened",
+                                new Slices().putSlice("ref", mTopfaceOfferwallRedirect.getGroup()));
+                    }
                     mSkipBonus = true;
                 }
             }
