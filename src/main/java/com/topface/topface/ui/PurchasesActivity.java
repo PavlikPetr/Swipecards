@@ -116,7 +116,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         Intent intent;
         Context context = App.getContext();
         if (mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled() &&
-                mTopfaceOfferwallRedirect.isExpOnOpen() && CacheProfile.money < itemPrice) {
+                mTopfaceOfferwallRedirect.isExpOnOpen() && CacheProfile.money < itemPrice &&
+                mTopfaceOfferwallRedirect.showOrNot()) {
             OfferwallPayload payload = new OfferwallPayload();
             payload.experimentGroup = TopfaceOfferwallRedirect.KEY_EXP_ON_OPEN;
             intent = TFOfferwallSDK.getIntent(context, true, context.getString(R.string.general_bonus), payload);
@@ -182,8 +183,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         /*
         First check if redirection to topface offers is on. If no check redirection to bonus tab
          */
-        if (mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled() &&
-                mTopfaceOfferwallRedirect.isExpOnClose()) {
+        if ((mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled() &&
+                mTopfaceOfferwallRedirect.isExpOnClose()) || mIsTopfaceOfferwallCompleted) {
             return false;
         }
         return mBonusRedirect != null &&
