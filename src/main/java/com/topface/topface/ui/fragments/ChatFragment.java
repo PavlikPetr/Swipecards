@@ -72,6 +72,7 @@ import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.adapters.ChatListAnimatedAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
@@ -404,7 +405,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 update(true, "pull to refresh");
             }
         });
-        mListView.setAdapter(mAdapter);
+        ChatListAnimatedAdapter animatedAdapter = new ChatListAnimatedAdapter(mAdapter);
+        animatedAdapter.setAbsListView(mListView.getRefreshableView());
+        mListView.setAdapter(animatedAdapter);
+
         mListView.setOnScrollListener(mAdapter);
         final ListView mListViewFromPullToRefresh = mListView.getRefreshableView();
         mListViewFromPullToRefresh.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
