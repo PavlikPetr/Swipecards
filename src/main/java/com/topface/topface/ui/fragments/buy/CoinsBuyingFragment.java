@@ -21,6 +21,8 @@ import com.topface.topface.ui.CoinsSubscriptionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
 
+import org.onepf.oms.appstore.googleUtils.Purchase;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -172,11 +174,11 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     }
 
     @Override
-    public void onPurchased(String productId) {
-        super.onPurchased(productId);
-        Debug.log("Purchased item with ID:" + productId);
+    public void onPurchased(Purchase product) {
+        super.onPurchased(product);
+        Debug.log("Purchased item with ID:" + product.getSku());
         final Products products = getProducts();
-        if (products != null && products.isSubscription(productId)) {
+        if (products != null && products.isSubscription(product)) {
             App.sendProfileAndOptionsRequests(new SimpleApiHandler() {
                 @Override
                 public void success(IApiResponse response) {

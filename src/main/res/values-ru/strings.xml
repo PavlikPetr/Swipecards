@@ -762,4 +762,5 @@
     <string name="maximum_number_of_users">Выбрано максимальное количестово пользователей</string>
     <string name="logout_if_email_already_registred">Пользователь с таким e-mail уже существует. Если это ваш e-mail, то вам необходимо выйти из текущего аккаунта и зайти в аккаунт %s</string>
     <string name="recover_password_instructions">На ваш e-mail отправлено письмо с инструкцией по восстановлению пароля</string>
+    <string name="email_changing">Изменение e-mail</string>
 </resources>

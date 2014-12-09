@@ -20,7 +20,7 @@
             android:visibility="gone" />
 
         <EditText
-            android:id="@+id/edPassword"
+            android:id="@+id/edMainField"
             style="@style/ItemWhiteText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -34,12 +34,10 @@
             android:paddingRight="16dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:hint="@string/password_hint"
-            android:textColorHint="#5F5F5F"
-            android:inputType="textPassword" />
+            android:textColorHint="#5F5F5F" />
 
         <EditText
-            android:id="@+id/edPasswordConfirmation"
+            android:id="@+id/edConfirmationField"
             style="@style/ItemWhiteText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -53,7 +51,6 @@
             android:paddingRight="16dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:hint="@string/password_confirmation_hint"
             android:textColorHint="#5F5F5F"
             android:inputType="textPassword" />
 

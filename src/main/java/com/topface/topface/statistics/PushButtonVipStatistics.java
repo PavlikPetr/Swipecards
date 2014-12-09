@@ -9,7 +9,7 @@ import com.topface.topface.App;
  */
 public class PushButtonVipStatistics {
 
-    public static final String PUSH_BUTTON_VIP = "mobile_push_button_vip";
+    public static final String PUSH_BUTTON_VIP = "buy_button_click";
 
     public static final String BUTTON_TYPE = "val";
     public static final String CLASS_NAME = "ref";

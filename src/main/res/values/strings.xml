@@ -15,6 +15,7 @@
     <string name="dating_switch_button">More…</string>
     <string name="dating_prev_button">Previous</string>
     <string name="dating_chat_button">Chat</string>
+    <string name="waiting_a_products">Please hold on. We are loading the available products.</string>
     <string name="likes_background_text">No likes</string>
     <string name="visitors_background_text">No guests</string>
     <string name="chat_background_text">No incoming messages</string>
@@ -148,6 +149,7 @@
     <string name="general_city">City</string>
     <string name="general_dating">Dating</string>
     <string name="general_likes">They like me</string>
+    <string name="general_sympathies">Likes</string>
     <string name="general_sympathy">Like</string>
     <string name="general_delight">Admiration</string>
     <string name="general_mutual">Mutual</string>
@@ -243,6 +245,8 @@
     <string name="settings_messages">Messages</string>
     <string name="settings_guests">Guests</string>
     <string name="settings_help">Help</string>
+    <string name="settings_faq">Questions and answers</string>
+    <string name="settings_faq_title">Perhaps your problem has been solved already, please see the FAQ.</string>
     <string name="settings_account">Account</string>
     <string name="settings_feedback">Leave feedback</string>
     <string name="settings_about">About</string>
@@ -586,4 +590,5 @@
     <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">You have selected the maximum number of users.</string>
     <string name="logout_if_email_already_registred">There is a user with this email already. If this is your email, you have to log out of the current account and log into %s account.</string>
+    <string name="recover_password_instructions">An email has been sent to you with the password recovery instruction.</string>
 </resources>
