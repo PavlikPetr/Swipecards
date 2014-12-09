@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -25,7 +24,6 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.ui.views.TripleButton;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 
@@ -41,12 +39,10 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     public static final String GIFTS_LIST = "gifts_list";
     public static final String INTENT_SEND_GIFT_ANSWER = "send_gift_answer";
 
-    public static ArrayList<Gift> mGiftsList = new ArrayList<>();
+    private ArrayList<Gift> mAllGifts = new ArrayList<>();
     private int mUserIdToSendGift;
     private boolean mRequestingGifts;
 
-    public GiftsCollection mGiftsCollection;
-    private TripleButton mTripleButton;
     private PlainGiftsFragment<List<Gift>> mGiftFragment;
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
@@ -56,7 +52,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_gifts);
-        getTitleSetter().setActionBarTitles(getString(R.string.gifts_title), null);
+        getTitleSetter().setActionBarTitles(getString(R.string.profile_gifts), null);
 
         mUserIdToSendGift = getIntent().getIntExtra(INTENT_USER_ID_TO_SEND_GIFT, 0);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
@@ -70,57 +66,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         }
         transaction.commit();
 
-        mGiftsCollection = new GiftsCollection();
-
-        // init triple button
-        mTripleButton = (TripleButton) findViewById(R.id.btnTriple);
-        mTripleButton.setLeftText(Gift.getTypeNameResId(Gift.ROMANTIC));
-        mTripleButton.setMiddleText(Gift.getTypeNameResId(Gift.FRIENDS));
-        mTripleButton.setRightText(Gift.getTypeNameResId(Gift.PRESENT));
-
-        mTripleButton.setLeftListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mGiftsCollection.setCurrentType(Gift.ROMANTIC);
-                        mGiftFragment.setGifts(mGiftsCollection.getGifts());
-                    }
-                });
-            }
-        });
-
-        mTripleButton.setMiddleListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mGiftsCollection.setCurrentType(Gift.FRIENDS);
-                        mGiftFragment.setGifts(mGiftsCollection.getGifts());
-                    }
-                });
-
-            }
-        });
-
-        mTripleButton.setRightListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                v.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mGiftsCollection.setCurrentType(Gift.PRESENT);
-                        mGiftFragment.setGifts(mGiftsCollection.getGifts());
-                    }
-                });
-            }
-        });
-
-        mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
-
         mLockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
         mRetryView = new RetryViewCreator.Builder(this, new View.OnClickListener() {
             @Override
@@ -129,16 +74,13 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }
         }).build();
         mLockScreen.addView(mRetryView.getView());
-
-        loadGifts();
     }
 
     /**
      * Loading array of gifts from server
      */
     private void loadGifts() {
-        if (mGiftsList.isEmpty()) {
-            mTripleButton.setEnabled(false);
+        if (mAllGifts.isEmpty()) {
             setSupportProgressBarIndeterminateVisibility(true);
             GiftsRequest giftRequest = new GiftsRequest(this);
             registerRequest(giftRequest);
@@ -147,9 +89,8 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
                 @Override
                 protected void success(LinkedList<Gift> data, IApiResponse response) {
-                    mGiftsList.addAll(data);
-                    mGiftsCollection.add(mGiftsList);
-                    mGiftFragment.setGifts(mGiftsCollection.getGifts());
+                    mAllGifts.addAll(data);
+                    mGiftFragment.setGifts(mAllGifts);
                 }
 
                 @Override
@@ -167,36 +108,21 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 @Override
                 public void always(IApiResponse response) {
                     super.always(response);
-                    mTripleButton.setEnabled(true);
                     setSupportProgressBarIndeterminateVisibility(false);
                     mRequestingGifts = false;
                 }
             }).exec();
             mLockScreen.setVisibility(View.GONE);
         } else {
-            mGiftsCollection.add(mGiftsList);
-            mGiftFragment.setGifts(mGiftsCollection.getGifts());
+            mGiftFragment.setGifts(mAllGifts);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mGiftsList.isEmpty() && !mRequestingGifts) {
+        if (mAllGifts.isEmpty() && !mRequestingGifts) {
             loadGifts();
-        }
-        switch (GiftsCollection.currentType) {
-            case Gift.ROMANTIC:
-                mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
-                break;
-            case Gift.FRIENDS:
-                mTripleButton.setChecked(TripleButton.MIDDLE_BUTTON);
-                break;
-            case Gift.PRESENT:
-                mTripleButton.setChecked(TripleButton.RIGHT_BUTTON);
-                break;
-            default:
-                break;
         }
     }
 
@@ -221,13 +147,14 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(GIFTS_LIST, mGiftsList);
+        mGiftFragment.clearContent();
+        outState.putParcelableArrayList(GIFTS_LIST, mAllGifts);
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mGiftsList = savedInstanceState.getParcelableArrayList(GIFTS_LIST);
+        mAllGifts = savedInstanceState.getParcelableArrayList(GIFTS_LIST);
     }
 
     @Override
@@ -279,36 +206,5 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         Intent result = new Intent(context, GiftsActivity.class);
         result.putExtra(INTENT_USER_ID_TO_SEND_GIFT, userId);
         return result;
-    }
-
-    /**
-     * Works with array of gifts, categorizes by type
-     */
-    public static class GiftsCollection {
-        public static int currentType = Gift.ROMANTIC;
-        private LinkedList<Gift> mAllGifts = new LinkedList<>();
-
-        public void add(ArrayList<Gift> gifts) {
-            mAllGifts.addAll(gifts);
-        }
-
-        public ArrayList<Gift> getGifts(int type) {
-            ArrayList<Gift> result = new ArrayList<>();
-            for (Gift gift : mAllGifts) {
-                if (gift.type == type) {
-                    result.add(gift);
-                }
-            }
-
-            return result;
-        }
-
-        public ArrayList<Gift> getGifts() {
-            return getGifts(GiftsCollection.currentType);
-        }
-
-        public void setCurrentType(int type) {
-            GiftsCollection.currentType = type;
-        }
     }
 }

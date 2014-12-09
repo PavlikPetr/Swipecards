@@ -11,6 +11,7 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
@@ -261,6 +263,16 @@ public class Utils {
             viewGroup.setLayoutTransition(new LayoutTransition());
             LayoutTransition transition = viewGroup.getLayoutTransition();
             transition.enableTransitionType(LayoutTransition.CHANGING);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public static void setBackground(@DrawableRes int res, ImageView imageView) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            imageView.setBackgroundDrawable(App.getContext().getResources().getDrawable(res));
+        } else {
+            imageView.setBackground(App.getContext().getResources().getDrawable(res));
         }
     }
 }
