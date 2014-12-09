@@ -12,7 +12,7 @@ buildscript {
     }
     dependencies {
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
-        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
     }
 }
 
@@ -112,6 +112,23 @@ android {
     //@see https://code.google.com/p/android/issues/detail?id=40409
     dexOptions {
         jumboMode = true
+    }
+
+    lintOptions {
+        checkReleaseBuilds true
+        //Отключено, что бы не валилась сборка на CI сервере
+        abortOnError false
+
+        //Отключаем ненужные нам проверки lint
+        ignore "MissingTranslation", //Об отсутсвующих переводах. У нас есть всегда языки без переводов
+                "ContentDescription", //О том что к каждой картинке нужно описание
+                "SmallSp", //Проверка на маленький размер шрифта. Это вотчина дизайнеров
+                "HandlerLeak", //Предупреждение об использовании анонимного Handler
+                "InflateParams", //Проверка того, что  передан view root при inflate. Отключен, т.к. все предупреждения касаются inflate в ListView, где нет root view
+                "UnusedQuantity", //Предупреждение о не используемой форме в переводах. Мы используем zero во всех языках, поэтому нам не актуально
+                "ClickableViewAccessibility", //Предупреждение о том, что нужно определить performClick, если переопределяешь onTouchEvent
+                "MissingQuantity"
+        //Временно отключена проверка из-за того, что нет many формы в польском и украинском в дальнейшем поправим (пока many = other)
     }
 }
 
@@ -220,24 +237,5 @@ subprojects {
     android {
         compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
         buildToolsVersion rootProject.ANDROID_BUILD_TOOLS_VERSION
-    }
-}
-
-android {
-    lintOptions {
-        checkReleaseBuilds true
-        //Отключено, что бы не валилась сборка на CI сервере
-        abortOnError false
-
-        //Отключаем ненужные нам проверки lint
-        ignore "MissingTranslation", //Об отсутсвующих переводах. У нас есть всегда языки без переводов
-                "ContentDescription", //О том что к каждой картинке нужно описание
-                "SmallSp", //Проверка на маленький размер шрифта. Это вотчина дизайнеров
-                "HandlerLeak", //Предупреждение об использовании анонимного Handler
-                "InflateParams", //Проверка того, что  передан view root при inflate. Отключен, т.к. все предупреждения касаются inflate в ListView, где нет root view
-                "UnusedQuantity", //Предупреждение о не используемой форме в переводах. Мы используем zero во всех языках, поэтому нам не актуально
-                "ClickableViewAccessibility", //Предупреждение о том, что нужно определить performClick, если переопределяешь onTouchEvent
-                "MissingQuantity"
-        //Временно отключена проверка из-за того, что нет many формы в польском и украинском в дальнейшем поправим (пока many = other)
     }
 }
