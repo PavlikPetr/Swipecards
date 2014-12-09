@@ -252,6 +252,8 @@
     <string name="settings_messages">Pranešimai</string>
     <string name="settings_guests">Svečiai</string>
     <string name="settings_help">Pagalba</string>
+    <string name="settings_faq">Klausimai ir atsakymai</string>
+    <string name="settings_faq_title">Tikėtina, kad problema jau yra aprašyta, pažiūrėkite skyriuje \"Klausimai ir atsakymai\"</string>
     <string name="settings_account">Paskyra</string>
     <string name="settings_feedback">Palikti atsiliepimą</string>
     <string name="settings_about">Apie programą</string>
@@ -606,4 +608,5 @@
     <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Pasirinktas maksimalus vartotojų kiekis</string>
     <string name="logout_if_email_already_registred">Vartotojas su tokiu el. paštu jau egzistuoja. Jeigu tai jūsų el. paštas, jums būtina išeiti iš dabartinės paskyros ir įeiti į paskyrą %s</string>
+    <string name="recover_password_instructions">Jūsų el. pašto adresu išsiųstas laiškas su slaptažodžio atstatymo instrukcija</string>
 </resources>
