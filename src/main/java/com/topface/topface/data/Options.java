@@ -11,6 +11,7 @@ import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.LikesWithThreeTabs;
 import com.topface.topface.data.experiments.MessagesWithTabs;
+import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -152,6 +153,8 @@ public class Options extends AbstractData {
     public int maxMessageSize;
 
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
+
+    public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
 
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
 
@@ -340,6 +343,8 @@ public class Options extends AbstractData {
 
             // experiments init
             forceOfferwallRedirect.init(response);
+
+            topfaceOfferwallRedirect.init(response);
 
             instantMessageFromSearch.init(response);
 

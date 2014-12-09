@@ -553,6 +553,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         mDrawerToggle.syncState();
         mMenuFragment.onLoadProfile();
+
+        /*
+        Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
+         */
+        OfferwallsManager.initTfOfferwall(this, null);
     }
 
     @Override
