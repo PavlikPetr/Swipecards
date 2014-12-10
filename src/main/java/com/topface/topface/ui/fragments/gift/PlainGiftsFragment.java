@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.gift;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
-import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IGiftSendListener;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
@@ -27,7 +25,7 @@ import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragment implements GiftsAdapter.OnGridClickLIstener {
+public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragment {
 
     private static final String DATA = "data";
     private static final String POSITION = "position";
@@ -56,11 +54,7 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         mGridView = (GridView) root.findViewById(R.id.usedGrid);
         mGridView.setAnimationCacheEnabled(false);
         mGridView.setScrollingCacheEnabled(true);
-        if (getActivity() instanceof GiftsActivity) {
-            mGridView.setBackgroundColor(Color.WHITE);
-        }
         mGridAdapter = new GiftsAdapter(getActivity(), new FeedList<FeedGift>(), getUpdaterCallback());
-        mGridAdapter.setOnGridClickLIstener(this);
         mGridView.setAdapter(mGridAdapter);
         mGridView.setOnScrollListener(mGridAdapter);
         mTitle = (TextView) root.findViewById(R.id.usedTitle);
@@ -158,6 +152,10 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         }
     }
 
+    public IGiftSendListener getGiftSendListener() {
+        return mGiftSendListener;
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -167,8 +165,4 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         return null;
     }
 
-    @Override
-    public void onGridClick(FeedGift item) {
-        mGiftSendListener.onSendGift(item.gift);
-    }
 }

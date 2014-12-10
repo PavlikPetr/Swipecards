@@ -22,14 +22,13 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.fragments.gift.PlainGiftsFragment;
+import com.topface.topface.ui.fragments.gift.GiftsListFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 public class GiftsActivity extends BaseFragmentActivity implements IGiftSendListener {
 
@@ -43,7 +42,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     private int mUserIdToSendGift;
     private boolean mRequestingGifts;
 
-    private PlainGiftsFragment<List<Gift>> mGiftFragment;
+    private GiftsListFragment mGiftListFragment;
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
 
@@ -58,11 +57,11 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (fragment == null) {
-            mGiftFragment = new PlainGiftsFragment<>();
-            transaction.add(R.id.giftGrid, mGiftFragment);
+            mGiftListFragment = new GiftsListFragment();
+            transaction.add(R.id.giftGrid, mGiftListFragment);
         } else {
-            mGiftFragment = (PlainGiftsFragment<List<Gift>>) fragment;
-            transaction.replace(R.id.giftGrid, mGiftFragment);
+            mGiftListFragment = (GiftsListFragment) fragment;
+            transaction.replace(R.id.giftGrid, mGiftListFragment);
         }
         transaction.commit();
 
@@ -90,7 +89,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 @Override
                 protected void success(LinkedList<Gift> data, IApiResponse response) {
                     mAllGifts.addAll(data);
-                    mGiftFragment.setGifts(mAllGifts);
+                    mGiftListFragment.setGifts(mAllGifts);
                 }
 
                 @Override
@@ -114,7 +113,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }).exec();
             mLockScreen.setVisibility(View.GONE);
         } else {
-            mGiftFragment.setGifts(mAllGifts);
+            mGiftListFragment.setGifts(mAllGifts);
         }
     }
 
@@ -147,7 +146,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mGiftFragment.clearContent();
+        mGiftListFragment.clearContent();
         outState.putParcelableArrayList(GIFTS_LIST, mAllGifts);
     }
 

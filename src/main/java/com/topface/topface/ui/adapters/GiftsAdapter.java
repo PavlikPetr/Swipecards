@@ -1,20 +1,14 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
-import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
@@ -23,20 +17,8 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
     public static final int T_SEND_BTN = 3;
     public static final int T_COUNT = 4;
 
-    private OnGridClickLIstener mOnGridClickLIstener;
-
-    public void setOnGridClickLIstener(OnGridClickLIstener mOnGridClickLIstener) {
-        this.mOnGridClickLIstener = mOnGridClickLIstener;
-    }
-
-    public interface OnGridClickLIstener {
-        public void onGridClick(FeedGift item);
-    }
-
     public class ViewHolder {
         ImageViewRemote giftImage;
-        TextView priceText;
-        TextView giftText;
     }
 
     public GiftsAdapter(Context context, FeedList<FeedGift> data, Updater updateCallback) {
@@ -64,7 +46,6 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     protected View getContentView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -73,59 +54,22 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
         FeedGift item = getItem(position);
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.item_gift, null, false);
+            convertView = mInflater.inflate(R.layout.profile_item_gift_grid, null, false);
             holder = new ViewHolder();
-            holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
-            holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
-            holder.giftText = (TextView) convertView.findViewById(R.id.giftText);
-
+            holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.profileGiftImage);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
-        }
-        if ((mContext instanceof GiftsActivity)) {
-            holder.giftImage.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            int color = mContext.getResources().getColor(R.color.blue_60_percent);
-                            ((ImageView) v).setColorFilter(color);
-                            Utils.setBackground(R.color.blue_60_percent, (ImageView) v);
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            ((ImageView) v).setColorFilter(null);
-                            Utils.setBackground(R.color.text_white, (ImageView) v);
-                            mOnGridClickLIstener.onGridClick(mData.get(position));
-                            break;
-                        case MotionEvent.ACTION_CANCEL:
-                            ((ImageView) v).setColorFilter(null);
-                            Utils.setBackground(R.color.text_white, (ImageView) v);
-                            break;
-                    }
-                    return true;
-                }
-            });
         }
 
         if (type == T_SEND_BTN) {
             holder.giftImage.setImageBitmap(null);
             holder.giftImage.setBackgroundResource(R.drawable.chat_gift_selector);
-            holder.giftText.setText(R.string.gifts_send_btn);
-            holder.giftText.setVisibility(View.VISIBLE);
-            holder.priceText.setVisibility(View.GONE);
         } else if (item.gift.type == Gift.PROFILE || item.gift.type == Gift.PROFILE_NEW) {
             holder.giftImage.setRemoteSrc(item.gift.link);
-            holder.giftText.setText(Static.EMPTY);
-            holder.giftText.setVisibility(View.VISIBLE);
-            holder.priceText.setVisibility(View.GONE);
         } else {
             holder.giftImage.setRemoteSrc(item.gift.link);
-            holder.priceText.setVisibility(View.VISIBLE);
-            holder.priceText.setText(Integer.toString(item.gift.price));
-            holder.giftText.setVisibility(View.GONE);
         }
-
         return convertView;
     }
 
