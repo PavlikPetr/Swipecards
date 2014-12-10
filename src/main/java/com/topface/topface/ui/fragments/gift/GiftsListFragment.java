@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.gift;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 
 public class GiftsListFragment extends PlainGiftsFragment implements GiftsListAdapter.OnGridClickLIstener {
 
+    private static final String DATA = "data";
     private GridView mGridView;
     private GiftsListAdapter mGiftsListAdapter;
 
@@ -47,4 +49,21 @@ public class GiftsListFragment extends PlainGiftsFragment implements GiftsListAd
         getGiftSendListener().onSendGift(item.gift);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(DATA, mGiftsListAdapter.getData());
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            ArrayList<Parcelable> gfts = savedInstanceState.getParcelableArrayList(DATA);
+            ArrayList<FeedGift> g = new ArrayList<>(gfts.size());
+            for (Parcelable p : gfts) {
+                g.add((FeedGift) p);
+            }
+            mGiftsListAdapter.setData(g, false);
+            mGiftsListAdapter.notifyDataSetChanged();
+        }
+    }
 }
