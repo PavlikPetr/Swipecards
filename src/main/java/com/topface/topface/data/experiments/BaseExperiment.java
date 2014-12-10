@@ -33,9 +33,13 @@ public abstract class BaseExperiment {
     public JSONObject init(JSONObject response) {
         JSONObject source = response.optJSONObject(getOptionsKey());
         if (source != null) {
-            setEnabled(source.optBoolean(KEY_ENABLED));
-            setGroup(source.optString(KEY_GROUP));
+            setKeys(source);
         }
         return source;
+    }
+
+    protected void setKeys(JSONObject source) {
+        setEnabled(source.optBoolean(KEY_ENABLED));
+        setGroup(source.optString(KEY_GROUP));
     }
 }

@@ -15,6 +15,7 @@
     <string name="dating_switch_button">Ancora…</string>
     <string name="dating_prev_button">Precedente</string>
     <string name="dating_chat_button">Chattare</string>
+    <string name="waiting_a_products">Attendere, prego. Caricamento prodotti da acquistare</string>
     <string name="likes_background_text">Non hai simpatie</string>
     <string name="visitors_background_text">Non ci sono le visite</string>
     <string name="chat_background_text">Non ci sono i messaggi in entrata</string>
@@ -148,6 +149,7 @@
     <string name="general_city">Città</string>
     <string name="general_dating">Incontri</string>
     <string name="general_likes">Piaccio</string>
+    <string name="general_sympathies">Simpatie</string>
     <string name="general_sympathy">Simpatia</string>
     <string name="general_delight">Ammirazione</string>
     <string name="general_mutual">Reciprocamente</string>
@@ -243,6 +245,8 @@
     <string name="settings_messages">Messaggi</string>
     <string name="settings_guests">Visite</string>
     <string name="settings_help">Aiuto</string>
+    <string name="settings_faq">Domande e risposte</string>
+    <string name="settings_faq_title">Probabilmente la risposta al tuo problema è già scritta nella sezione “Domande e risposte”</string>
     <string name="settings_account">Profilo</string>
     <string name="settings_feedback">Lasciare un giudizio</string>
     <string name="settings_about">Di programma</string>
@@ -582,4 +586,5 @@
     <string name="measurement_unit_height">cm</string>
     <string name="maximum_number_of_users">Hai scelto il numero massimo degli utenti</string>
     <string name="logout_if_email_already_registred">L’utente con questo e-mail esiste già. Se questo indirizzo mail è tuo, devi uscire dall’account attuale e accedere all’account %s</string>
+    <string name="recover_password_instructions">Al tuo indirizzo e-mail sono state inviate le istruzioni su come ripristinare la password</string>
 </resources>

@@ -245,6 +245,8 @@
     <string name="settings_messages">Messages</string>
     <string name="settings_guests">Guests</string>
     <string name="settings_help">Help</string>
+    <string name="settings_faq">Questions and answers</string>
+    <string name="settings_faq_title">Perhaps your problem has been solved already, please see the FAQ.</string>
     <string name="settings_account">Account</string>
     <string name="settings_feedback">Leave feedback</string>
     <string name="settings_about">About</string>
@@ -588,4 +590,5 @@
     <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">You have selected the maximum number of users.</string>
     <string name="logout_if_email_already_registred">There is a user with this email already. If this is your email, you have to log out of the current account and log into %s account.</string>
+    <string name="recover_password_instructions">An email has been sent to you with the password recovery instruction.</string>
 </resources>
