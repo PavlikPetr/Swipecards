@@ -583,6 +583,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
+        if (mIsUpdating) {
+            return;
+        }
         mIsUpdating = true;
         final boolean isPopularLockOn;
         isPopularLockOn = mAdapter != null &&
@@ -590,10 +593,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
                 pullToRefresh;
 
-        if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
-            showLoading();
-        }
-        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId);
+        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId) {
+
+            @Override
+            public void exec() {
+                mIsUpdating = true;
+                if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
+                    showLoading();
+                }
+                super.exec();
+            }
+        };
+
         registerRequest(historyRequest);
         historyRequest.debug = type;
         if (mAdapter != null) {
@@ -678,6 +689,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 //show keyboard if display size more then 479dp
                 showKeyboardOnLargeScreen();
                 mIsBeforeFirstChatUpdate = false;
+
+                if (mLockScreen != null && mLockScreen.getVisibility() == View.VISIBLE) {
+                    mLockScreen.setVisibility(View.GONE);
+                }
             }
 
             @Override
