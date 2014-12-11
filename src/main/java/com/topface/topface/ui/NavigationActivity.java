@@ -400,7 +400,13 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
         FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
-        showFragment(currentFragment == null ? FragmentId.DATING : currentFragment);
+        if (currentFragment == null) {
+            if (mMenuFragment.getCurrentFragmentId() == FragmentId.UNDEFINED) {
+                showFragment(CacheProfile.getOptions().startPageFragmentId);
+            }
+        } else {
+            showFragment(currentFragment);
+        }
     }
 
     public void showContent() {
