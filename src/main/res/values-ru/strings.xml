@@ -766,4 +766,7 @@
     <string name="hint_faces_filter">Изменяйте параметры поиска и знакомьтесь с интересными людьми</string>
     <string name="hint_faces_buy_like">Чем больше у вас симпатий, тем чаще вас оценивают. Не забывайте пополнять запас симпатий.</string>
     <string name="hint_myprofile_buy_vip">Купите VIP-статус и наслаждайтесь безграничным общением</string>
+    <string name="pull_to_refresh_pull_label">Потяните для обновления…</string>
+    <string name="pull_to_refresh_release_label">Отпустите для обновления…</string>
+    <string name="pull_to_refresh_refreshing_label">Загрузка…</string>
 </resources>
