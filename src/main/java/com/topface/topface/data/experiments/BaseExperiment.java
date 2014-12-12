@@ -30,12 +30,23 @@ public abstract class BaseExperiment {
 
     protected abstract String getOptionsKey();
 
+    protected boolean isEnabledByDefault() {
+        return false;
+    }
+
     public JSONObject init(JSONObject response) {
         JSONObject source = response.optJSONObject(getOptionsKey());
         if (source != null) {
-            setEnabled(source.optBoolean(KEY_ENABLED));
-            setGroup(source.optString(KEY_GROUP));
+            setKeys(source);
+        } else {
+            // возможно этот объект уже был использован с другими настройками, надо их сбрасывать
+            setEnabled(isEnabledByDefault());
         }
         return source;
+    }
+
+    protected void setKeys(JSONObject source) {
+        setEnabled(source.optBoolean(KEY_ENABLED));
+        setGroup(source.optString(KEY_GROUP));
     }
 }
