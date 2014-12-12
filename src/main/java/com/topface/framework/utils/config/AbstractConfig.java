@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.BuildConfig;
 
 import java.util.HashMap;
 import java.util.List;
