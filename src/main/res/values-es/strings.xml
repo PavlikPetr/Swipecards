@@ -245,6 +245,8 @@
     <string name="settings_messages">Mensajes</string>
     <string name="settings_guests">Visitantes</string>
     <string name="settings_help">Ayuda</string>
+    <string name="settings_faq">Preguntas y respuestas</string>
+    <string name="settings_faq_title">Probablemente, tu problema ya fue descrito, echa un vistazo a la sección \"Preguntas y respuestas\"</string>
     <string name="settings_account">Cuenta</string>
     <string name="settings_feedback">Dejar comentario</string>
     <string name="settings_about">Sobre el programa</string>
@@ -587,4 +589,5 @@
     <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Seleccionada la máxima cantidad de usuarios</string>
     <string name="logout_if_email_already_registred">Usuario con este e-mail ya existe. Si es tu e-mail, tienes que salir de esta cuenta y entrar en la %s</string>
+    <string name="recover_password_instructions">A tu e-mail fue enviada una carta con las instrucciones para recuperar la contraseña</string>
 </resources>
