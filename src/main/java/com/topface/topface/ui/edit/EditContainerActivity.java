@@ -32,6 +32,9 @@ public class EditContainerActivity extends BaseFragmentActivity {
 
     public static final int INTENT_EDIT_FILTER = 201;
     public static final int INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM = 202;
+
+    private onBackPressed backPressedListener;
+
     Handler mFinishHandler = new Handler() {
         public void handleMessage(Message msg) {
             EditContainerActivity.super.finish();
@@ -113,5 +116,32 @@ public class EditContainerActivity extends BaseFragmentActivity {
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+//        if (mFragment instanceof FilterFragment) {
+//            if (((FilterFragment) mFragment).pressedBack()) {
+//                finish();
+//            }
+//        } else {
+//            finish();
+//        }
+        if (backPressedListener != null) {
+            if (backPressedListener.onPressed()) {
+                finish();
+            }
+        } else {
+            finish();
+        }
+
+    }
+
+    public interface onBackPressed {
+        abstract boolean onPressed();
+    }
+
+    public void setOnBackPressedListener(onBackPressed listener) {
+        backPressedListener = listener;
     }
 }

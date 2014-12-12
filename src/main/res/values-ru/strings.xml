@@ -19,7 +19,7 @@
     <string name="dating_switch_button">Еще…</string>
     <string name="dating_prev_button">Предыдущая</string>
     <string name="dating_chat_button">Поболтать</string>
-    
+
     <string name="waiting_a_products">Пожалуйста, подождите. Мы загружаем доступные для покупок товары</string>
     <string name="likes_background_text">Нет симпатий</string>
 
@@ -220,6 +220,9 @@
     <string name="filter_extra_parameters">Дополнительные параметры</string>
     <string name="filter_age">Выбор возраста</string>
     <string name="filter_online">Онлайн</string>
+    <string name="filter_age_start_prefix">От %s</string>
+    <string name="filter_age_end_prefix">до %s</string>
+
 
     <string name="filter_cities_all">По всем городам</string>
 

@@ -1,17 +1,27 @@
 package com.topface.topface.ui.edit;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.util.SparseArrayCompat;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,48 +33,106 @@ import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.CitySearchActivity;
+import com.topface.topface.ui.adapters.FilterDialogAdapter;
+import com.topface.topface.ui.adapters.SpinnerAgeAdapter;
+import com.topface.topface.ui.views.CustomCitySearchView;
+import com.topface.topface.ui.views.LockableScrollView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
+import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class FilterFragment extends AbstractEditFragment implements OnClickListener {
 
     public static Profile mTargetUser = new User();
     public static final String INTENT_DATING_FILTER = "Topface_Dating_Filter";
 
+    private static final String FRAGMENT_SEARCH_CITY_TAG = "FilterChooseCityFragment";
+
     private FormInfo mFormInfo;
     private DatingFilter mInitFilter;
     private DatingFilter mFilter;
 
-    //    private ViewGroup mXStatusFrame;
-//    private ViewGroup mMarriageFrame;
-//    private ViewGroup mCharacterFrame;
-//    private ViewGroup mAlcoholFrame;
-//    private ViewGroup mFinanceFrame;
-//    private ViewGroup mBreastFrame;
     private SparseArrayCompat<TextView> hashTextViewByTitleId = new SparseArrayCompat<>();
 
     private Spinner mLoFilterSex;
     private Spinner mLoFilterAgeStart;
     private Spinner mLoFilterAgeEnd;
+    private EditText mLoFilterCity;
+
+    private LockableScrollView mScroll;
+
     private CheckBox mLoFilterOnline;
     private CheckBox mLoFilterBeautiful;
 
+    private ViewGroup mLoFilterDatingStatus;
+    private ViewGroup mLoFilterMarriage;
+    private ViewGroup mLoFilterCharacter;
+    private ViewGroup mLoFilterAlcohol;
+    private ViewGroup mLoFilterFinance;
+    private ViewGroup mLoFilterShowOff;
 
-//    private EditSwitcher mSwitchOnlyOnline;
-//    private EditSwitcher mSwitchBeautifull;
+    private CustomCitySearchView mLoFilterCitySearchView;
+
+
+    private ImageView mLoFilterButtonHome;
+
+    private FragmentManager mFragmentManager;
 
     private boolean mExtraSavingPerformed = false;
 
     private boolean mInitFilterOnline;
+
+    private DialogRowCliCkInterface mDialogOnItemClickListener = new DialogRowCliCkInterface() {
+        @Override
+        public void onRowClickListener(int id, int item) {
+            switch (id) {
+                case R.id.loFilterDatingStatus:
+                    mFilter.xstatus = item;
+                    setText(mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus), mLoFilterDatingStatus);
+                    break;
+                case R.id.loFilterMarriage:
+                    mFilter.marriage = item;
+                    setText(mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage), mLoFilterMarriage);
+                    break;
+                case R.id.loFilterCharacter:
+                    mFilter.character = item;
+                    setText(mFormInfo.getEntry(R.array.form_main_character, mFilter.character), mLoFilterCharacter);
+                    break;
+                case R.id.loFilterAlcohol:
+                    mFilter.alcohol = item;
+                    setText(mFormInfo.getEntry(R.array.form_habits_alcohol, mFilter.alcohol), mLoFilterAlcohol);
+                    break;
+                case R.id.loFilterFinance:
+                    mFilter.finances = item;
+                    setText(mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances), mLoFilterFinance);
+                    break;
+                case R.id.loFilterShowOff:
+                    mFilter.breast = item;
+                    setText(mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast), mLoFilterShowOff);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         mTargetUser.sex = CacheProfile.dating != null ? CacheProfile.dating.sex : Static.BOY;
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
+
+        ((EditContainerActivity) getActivity()).setOnBackPressedListener(new EditContainerActivity.onBackPressed() {
+            @Override
+            public boolean onPressed() {
+                return pressedBack();
+            }
+        });
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_filter_light_theme, container, false);
 
@@ -98,20 +166,93 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private void initViews(ViewGroup root) {
+
+        // ScrollView
+        mScroll = (LockableScrollView) root.findViewById(R.id.filter_scroll);
+
         // Sex
         mLoFilterSex = (Spinner) root.findViewById(R.id.loFilterSex);
-        mLoFilterSex.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.spinner_text_layout, getSexArray()));
+        mLoFilterSex.setAdapter(new SpinnerAgeAdapter(getActivity(), R.layout.spinner_text_layout, getSexArray()));
         mLoFilterSex.setSelection(mFilter.sex);
+        mLoFilterSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mFilter.sex = position;
+                setBraSizeVisibility();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // AgeStart
         mLoFilterAgeStart = (Spinner) root.findViewById(R.id.loFilterAgeStart);
-        mLoFilterAgeStart.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.spinner_text_layout, getAgeStartArray()));
-        mLoFilterAgeStart.setSelection(getAgeStartCurrentPosition(mFilter.ageStart));
+        mLoFilterAgeStart.setAdapter(new SpinnerAgeAdapter(getActivity(), R.layout.spinner_text_layout, getAgeStartArray(), getActivity().getResources().getString(R.string.filter_age_start_prefix)));
+        mLoFilterAgeStart.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                checkStartAge();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // AgeEnd
         mLoFilterAgeEnd = (Spinner) root.findViewById(R.id.loFilterAgeEnd);
-        mLoFilterAgeEnd.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.spinner_text_layout, getAgeEndArray()));
-        mLoFilterAgeEnd.setSelection(getAgeEndCurrentPosition(mFilter.ageEnd));
+        mLoFilterAgeEnd.setAdapter(new SpinnerAgeAdapter(getActivity(), R.layout.spinner_text_layout, getAgeEndArray(), getActivity().getResources().getString(R.string.filter_age_end_prefix)));
+        mLoFilterAgeEnd.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                checkEndAge();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        setCurrentAgeStartValue(mFilter.ageStart);
+        setCurrentAgeEndValue(mFilter.ageEnd);
+        checkStartAge();
+        checkEndAge();
+
+        mLoFilterCitySearchView = (CustomCitySearchView) root.findViewById(R.id.loFilterCitySearchView);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if (!TextUtils.isEmpty(mFilter.city.getName())) {
+            mLoFilterCitySearchView.setText(mFilter.city.getName());
+        }
+
+        // City
+        mLoFilterCity = (EditText) root.findViewById(R.id.loFilterCity);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        mLoFilterCity.setOnClickListener(this);
+        if (!TextUtils.isEmpty(mFilter.city.getName())) {
+            mLoFilterCity.setText(mFilter.city.getName());
+        }
+        mLoFilterCity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 2)
+                    city(s.toString());
+                else {
+                    low();
+                }
+            }
+        });
 
         // Online
         mLoFilterOnline = (CheckBox) root.findViewById(R.id.loFilterOnline);
@@ -123,132 +264,70 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoFilterBeautiful.setChecked(mFilter.beautiful);
         mLoFilterBeautiful.setOnClickListener(this);
 
-//        // Dating Status
-//        mXStatusFrame = (ViewGroup) root.findViewById(R.id.loDatingStatus);
-//        setBackground(R.drawable.edit_big_btn_top_selector, mXStatusFrame);
-//        setText(R.array.form_main_status,
-//                mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus), mXStatusFrame);
-//        mXStatusFrame.setTag(R.array.form_main_status);
-//        mXStatusFrame.setOnClickListener(this);
-//
-//        // Marriage
-//        mMarriageFrame = (ViewGroup) root.findViewById(R.id.loMarriage);
-//        setBackground(R.drawable.edit_big_btn_middle_selector, mMarriageFrame);
-//        setText(R.array.form_social_marriage,
-//                mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage), mMarriageFrame);
-//        mMarriageFrame.setTag(R.array.form_social_marriage);
-//        mMarriageFrame.setOnClickListener(this);
-//
-//        // Character
-//        mCharacterFrame = (ViewGroup) root.findViewById(R.id.loCharacter);
-//        setBackground(R.drawable.edit_big_btn_middle_selector, mCharacterFrame);
-//        setText(R.array.form_main_character,
-//                mFormInfo.getEntry(R.array.form_main_character, mFilter.character), mCharacterFrame);
-//        mCharacterFrame.setTag(R.array.form_main_character);
-//        mCharacterFrame.setOnClickListener(this);
-//
-//        // Alcohol
-//        mAlcoholFrame = (ViewGroup) root.findViewById(R.id.loAlcohol);
-//        setBackground(R.drawable.edit_big_btn_middle_selector, mAlcoholFrame);
-//        setText(R.array.form_habits_alcohol,
-//                mFormInfo.getEntry(R.array.form_habits_alcohol, mFilter.alcohol), mAlcoholFrame);
-//        mAlcoholFrame.setTag(R.array.form_habits_alcohol);
-//        mAlcoholFrame.setOnClickListener(this);
-//
-//        // Finance
-//        mFinanceFrame = (ViewGroup) root.findViewById(R.id.loFinance);
-//        setBackground(R.drawable.edit_big_btn_middle_selector, mFinanceFrame);
-//        setText(R.array.form_social_finances,
-//                mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances), mFinanceFrame);
-//        mFinanceFrame.setTag(R.array.form_social_finances);
-//        mFinanceFrame.setOnClickListener(this);
-//
-//        // ShowOff
-//        mBreastFrame = (ViewGroup) root.findViewById(R.id.loShowOff);
-//        setBackground(R.drawable.edit_big_btn_bottom_selector, mBreastFrame);
-//        setText(R.array.form_physique_breast,
-//                mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast), mBreastFrame);
-//        mBreastFrame.setTag(R.array.form_physique_breast);
-//        mBreastFrame.setOnClickListener(this);
+        // Dating Status
+        mLoFilterDatingStatus = (ViewGroup) root.findViewById(R.id.loFilterDatingStatus);
+        setText(R.array.form_main_status,
+                mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus), mLoFilterDatingStatus);
+        mLoFilterDatingStatus.setTag(R.array.form_main_status);
+        mLoFilterDatingStatus.setOnClickListener(this);
 
-    }
+        // Marriage
+        mLoFilterMarriage = (ViewGroup) root.findViewById(R.id.loFilterMarriage);
+        setText(R.array.form_social_marriage,
+                mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage), mLoFilterMarriage);
+        mLoFilterMarriage.setTag(R.array.form_social_marriage);
+        mLoFilterMarriage.setOnClickListener(this);
 
-    private void refreshFilterExtraCellsText() {
-        for (int i = 0; i < hashTextViewByTitleId.size(); i++) {
-            int titleId = hashTextViewByTitleId.keyAt(i);
-            switch (titleId) {
-                case R.array.form_main_status:
-                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.xstatus));
-                    break;
-                case R.array.form_social_marriage:
-                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.marriage));
-                    break;
-                case R.array.form_main_character:
-                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.character));
-                    break;
-                case R.array.form_habits_alcohol:
-                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.alcohol));
-                    break;
-                case R.array.form_social_finances:
-                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.finances));
-                    break;
-                case R.array.form_physique_breast:
-                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.breast));
-                    break;
-            }
-        }
-    }
+        // Character
+        mLoFilterCharacter = (ViewGroup) root.findViewById(R.id.loFilterCharacter);
+        setText(R.array.form_main_character,
+                mFormInfo.getEntry(R.array.form_main_character, mFilter.character), mLoFilterCharacter);
+        mLoFilterCharacter.setTag(R.array.form_main_character);
+        mLoFilterCharacter.setOnClickListener(this);
 
-    private void setBackground(int resId, ViewGroup frame) {
-        ImageView background = (ImageView) frame.findViewWithTag("ivEditBackground");
-        background.setImageResource(resId);
+        // Alcohol
+        mLoFilterAlcohol = (ViewGroup) root.findViewById(R.id.loFilterAlcohol);
+        setText(R.array.form_habits_alcohol,
+                mFormInfo.getEntry(R.array.form_habits_alcohol, mFilter.alcohol), mLoFilterAlcohol);
+        mLoFilterAlcohol.setTag(R.array.form_habits_alcohol);
+        mLoFilterAlcohol.setOnClickListener(this);
+
+        // Finance
+        mLoFilterFinance = (ViewGroup) root.findViewById(R.id.loFilterFinance);
+        setText(R.array.form_social_finances,
+                mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances), mLoFilterFinance);
+        mLoFilterFinance.setTag(R.array.form_social_finances);
+        mLoFilterFinance.setOnClickListener(this);
+
+        // ShowOff
+        mLoFilterShowOff = (ViewGroup) root.findViewById(R.id.loFilterShowOff);
+        setText(R.array.form_physique_breast,
+                mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast), mLoFilterShowOff);
+        mLoFilterShowOff.setTag(R.array.form_physique_breast);
+        mLoFilterShowOff.setOnClickListener(this);
+        setBraSizeVisibility();
+
+        // Button Home
+        mLoFilterButtonHome = (ImageView) root.findViewById(R.id.loFilterButtonHome);
+        mLoFilterButtonHome.setTag(R.id.loFilterButtonHome);
+        mLoFilterButtonHome.setOnClickListener(this);
     }
 
     private void setText(int titleId, String text, ViewGroup frame) {
-        ((TextView) frame.findViewWithTag("tvTitle")).setText(mFormInfo.getFormTitle(titleId));
-        TextView textView = (TextView) frame.findViewWithTag("tvText");
+        ((TextView) frame.findViewWithTag("tvFilterTitle")).setText(mFormInfo.getFormTitle(titleId));
+        TextView textView = (TextView) frame.findViewWithTag("tvFilterText");
         textView.setText(text);
         textView.setVisibility(View.VISIBLE);
         hashTextViewByTitleId.put(titleId, textView);
     }
 
     private void setText(String title, ViewGroup frame) {
-        ((TextView) frame.findViewWithTag("tvTitle")).setText(title);
-    }
-
-    private void setText(int titleResId, ViewGroup frame) {
-        ((TextView) frame.findViewWithTag("tvTitle")).setText(titleResId);
-    }
-
-    private void startEditFilterFormItem(View v, int targetId) {
-        int titleId = (Integer) v.getTag();
-        String targetValue = mFormInfo.getEntry(titleId, targetId);
-
-        Intent intent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
-        intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, titleId);
-        intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, targetId);
-        intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, targetValue);
-        startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM);
-    }
-
-    private String buildCityString() {
-        if (mFilter.city.id == City.ALL_CITIES) {
-            return getResources().getString(R.string.filter_cities_all);
-        } else {
-            return getResources().getString(R.string.general_city) + " " + mFilter.city.name;
-        }
-    }
-
-    private String buildAgeString() {
-        String plus = mFilter.ageEnd == DatingFilter.MAX_AGE ? "+" : "";
-        int age_end = mFilter.ageEnd == DatingFilter.MAX_AGE ? EditAgeFragment.absoluteMax : mFilter.ageEnd;
-        return getString(R.string.filter_age_string, mFilter.ageStart, age_end) + plus;
+        ((TextView) frame.findViewWithTag("tvFilterText")).setText(title);
     }
 
     @Override
     protected boolean hasChanges() {
-//        return !mInitFilter.equals(mFilter) || mInitFilterOnline != DatingFilter.getOnlyOnlineField();
-        return false;
+        return !mInitFilter.equals(mFilter) || mInitFilterOnline != DatingFilter.getOnlyOnlineField();
     }
 
     @Override
@@ -270,50 +349,131 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         handler.sendEmptyMessage(0);
     }
 
+    private void scrollToView() {
+        int[] viewLocation = new int[2];
+        mLoFilterCity.getLocationInWindow(viewLocation);
+        int[] scrollLocation = new int[2];
+        mScroll.getLocationInWindow(scrollLocation);
+        mScroll.smoothScrollTo(0, mScroll.getScrollY() + (viewLocation[1] - scrollLocation[1]));
+    }
+
+    private void showSearchCityFragment() {
+        if (isSearchCityFragmentVisible()) {
+            return;
+        }
+        String stringCity = null;
+        try {
+            stringCity = mFilter.city.toJson().toString();
+        } catch (JSONException e) {
+            Debug.error(e);
+        }
+        FilterChooseCityFragment mFragment = FilterChooseCityFragment
+                .newInstance(stringCity, mLoFilterCity.getMeasuredHeight(), getTitle());
+        getCurrentFragmentManager()
+                .beginTransaction()
+                .replace(R.id.loFrame, mFragment, FRAGMENT_SEARCH_CITY_TAG).addToBackStack(FRAGMENT_SEARCH_CITY_TAG).commit();
+
+    }
+
+    public void setScrollingEnabled(boolean enabled) {
+        if (mScroll != null) {
+            mScroll.setScrollingEnabled(enabled);
+        }
+    }
+
+    public void setSelectedCity(City city) {
+        mLoFilterCity.setText(city.getName());
+        mFilter.city = city;
+        Utils.hideSoftKeyboard(getActivity(), mLoFilterCity);
+        if (isSearchCityFragmentVisible()) {
+            pressedBack();
+        }
+    }
+
+    private FragmentManager getCurrentFragmentManager() {
+        if (mFragmentManager == null) {
+            mFragmentManager = getChildFragmentManager();
+        }
+        return mFragmentManager;
+    }
+
+    private boolean isSearchCityFragmentVisible() {
+        if (getCurrentFragmentManager().findFragmentByTag(FRAGMENT_SEARCH_CITY_TAG) != null) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean pressedBack() {
+        if (getCurrentFragmentManager().getBackStackEntryCount() > 0) {
+            getCurrentFragmentManager().popBackStack();
+            return false;
+        }
+        return true;
+    }
+
+    private void city(String prefixF) {
+        Fragment fragment = getCurrentFragmentManager().findFragmentByTag(FRAGMENT_SEARCH_CITY_TAG);
+        if (fragment != null) {
+            ((FilterChooseCityFragment) fragment).city(prefixF);
+        }
+
+    }
+
+    private void low() {
+        Fragment fragment = getCurrentFragmentManager().findFragmentByTag(FRAGMENT_SEARCH_CITY_TAG);
+        if (fragment != null) {
+            ((FilterChooseCityFragment) fragment).low();
+        }
+
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.loAge:
-                Intent ageEditIntent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
-                ageEditIntent.putExtra(EditContainerActivity.INTENT_AGE_START, mFilter.ageStart);
-                ageEditIntent.putExtra(EditContainerActivity.INTENT_AGE_END, mFilter.ageEnd);
-                ageEditIntent.putExtra(EditContainerActivity.FILTER_SEX, mFilter.sex);
-                startActivityForResult(ageEditIntent, EditContainerActivity.INTENT_EDIT_AGE);
+            case R.id.loFilterCity:
+                scrollToView();
+                showSearchCityFragment();
                 break;
-            case R.id.loCity:
-                Intent intent = new Intent(getActivity().getApplicationContext(), CitySearchActivity.class);
+            case R.id.loFilterOnline:
+                DatingFilter.setOnlyOnlineField(mLoFilterOnline.isChecked());
+                break;
+            case R.id.loFilterBeautiful:
+                mFilter.beautiful = mLoFilterBeautiful.isChecked();
+                break;
+            case R.id.loFilterDatingStatus:
+                onCreateDialog(R.array.form_main_status, mFilter.xstatus, v.getId(), mDialogOnItemClickListener);
+                break;
+            case R.id.loFilterMarriage:
+                onCreateDialog(R.array.form_social_marriage, mFilter.marriage, v.getId(), mDialogOnItemClickListener);
+                break;
+            case R.id.loFilterCharacter:
+                onCreateDialog(R.array.form_main_character, mFilter.character, v.getId(), mDialogOnItemClickListener);
+                break;
+            case R.id.loFilterAlcohol:
+                onCreateDialog(R.array.form_habits_alcohol, mFilter.alcohol, v.getId(), mDialogOnItemClickListener);
+                break;
+            case R.id.loFilterFinance:
+                onCreateDialog(R.array.form_social_finances, mFilter.finances, v.getId(), mDialogOnItemClickListener);
+                break;
+            case R.id.loFilterShowOff:
+                onCreateDialog(R.array.form_physique_breast, mFilter.breast, v.getId(), mDialogOnItemClickListener);
+                break;
+            case R.id.loFilterButtonHome:
+                City city = null;
                 try {
-                    intent.putExtra(CitySearchActivity.INTENT_CITY, mFilter.city.toJson().toString());
+                    city = new City(new JSONObject(CacheProfile.city.getName()));
                 } catch (JSONException e) {
                     Debug.error(e);
                 }
-                startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY);
-                break;
-            case R.id.loFilterOnline:
-//                mSwitchOnlyOnline.doSwitch();
-//                DatingFilter.setOnlyOnlineField(mSwitchOnlyOnline.isChecked());
-                break;
-            case R.id.loFilterBeautiful:
-//                mSwitchBeautifull.doSwitch();
-//                mFilter.beautiful = mSwitchBeautifull.isChecked();
-                break;
-            case R.id.loDatingStatus:
-                startEditFilterFormItem(v, mFilter.xstatus);
-                break;
-            case R.id.loMarriage:
-                startEditFilterFormItem(v, mFilter.marriage);
-                break;
-            case R.id.loCharacter:
-                startEditFilterFormItem(v, mFilter.character);
-                break;
-            case R.id.loAlcohol:
-                startEditFilterFormItem(v, mFilter.alcohol);
-                break;
-            case R.id.loFinance:
-                startEditFilterFormItem(v, mFilter.finances);
-                break;
-            case R.id.loShowOff:
-                startEditFilterFormItem(v, mFilter.breast);
+                if (city == null) {
+                    mLoFilterCity.setText(CacheProfile.city.getName());
+                    mFilter.city = CacheProfile.city;
+                } else {
+                    mLoFilterCity.setText(city.getName());
+                    mFilter.city = city;
+                }
                 break;
         }
         refreshSaveState();
@@ -374,15 +534,17 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         }
     }
 
-    private String[] getSexArray() {
-        String[] array = {getActivity().getResources().getString(R.string.general_girls), getActivity().getResources().getString(R.string.general_boys)};
+    private ArrayList<String> getSexArray() {
+        ArrayList<String> array = new ArrayList<>();
+        array.add(getActivity().getResources().getString(R.string.general_girls));
+        array.add(getActivity().getResources().getString(R.string.general_boys));
         return array;
     }
 
-    private String[] getAgeStartArray() {
-        String[] array = new String[mFilter.ageEnd - mFilter.ageStart];
-        for (int i = mFilter.ageStart; i < mFilter.ageEnd; i++) {
-            array[i] = Integer.toString(i);
+    private ArrayList<String> getAgeStartArray() {
+        ArrayList<String> array = new ArrayList<>();
+        for (int i = DatingFilter.MIN_AGE; i <= DatingFilter.MAX_AGE - DatingFilter.DIFF_AGE; i++) {
+            array.add(Integer.toString(i));
         }
         return array;
     }
@@ -391,10 +553,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         return findCurrentPositionInArray(Integer.toString(currentAge), getAgeStartArray());
     }
 
-    private String[] getAgeEndArray() {
-        String[] array = new String[mFilter.ageEnd - mFilter.ageStart - 4];
-        for (int i = mFilter.ageStart + 4; i < mFilter.ageEnd; i++) {
-            array[i] = Integer.toString(i);
+    private ArrayList<String> getAgeEndArray() {
+        ArrayList<String> array = new ArrayList<>();
+        for (int i = DatingFilter.MIN_AGE + DatingFilter.DIFF_AGE; i <= DatingFilter.MAX_AGE; i++) {
+            array.add(Integer.toString(i));
         }
         return array;
     }
@@ -403,10 +565,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         return findCurrentPositionInArray(Integer.toString(currentAge), getAgeEndArray());
     }
 
-    private int findCurrentPositionInArray(String currentAge, String[] array) {
+    private int findCurrentPositionInArray(String currentAge, ArrayList<String> array) {
         int res = 0;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i].equals(currentAge)) {
+        for (int i = 0; i < array.size(); i++) {
+            if (array.get(i).equals(currentAge)) {
                 res = i;
                 break;
             }
@@ -414,29 +576,105 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         return res;
     }
 
+    private void checkStartAge() {
+        int startAge = getSpinnerSelectedAge(mLoFilterAgeStart);
+        int endAge = getSpinnerSelectedAge(mLoFilterAgeEnd);
+        mFilter.ageStart = startAge;
+        if (startAge + DatingFilter.DIFF_AGE > endAge) {
+            setCurrentAgeEndValue(startAge + DatingFilter.DIFF_AGE);
+        }
+    }
+
+    private void checkEndAge() {
+        int startAge = getSpinnerSelectedAge(mLoFilterAgeStart);
+        int endAge = getSpinnerSelectedAge(mLoFilterAgeEnd);
+        mFilter.ageEnd = endAge;
+        if (endAge - DatingFilter.DIFF_AGE < startAge) {
+            setCurrentAgeStartValue(endAge - DatingFilter.DIFF_AGE);
+        }
+    }
+
+    // get int spinner selected value without characters
+    private int getSpinnerSelectedAge(Spinner spinner) {
+        return Integer.parseInt(((String) (spinner.getAdapter().getItem(spinner.getSelectedItemPosition()))).replaceAll("[^\\d]", ""));
+    }
+
+    private void setCurrentAgeStartValue(final int value) {
+        mLoFilterAgeStart.setSelection(getAgeStartCurrentPosition(value));
+        mFilter.ageStart = value;
+
+    }
+
+    private void setCurrentAgeEndValue(final int value) {
+        mLoFilterAgeEnd.setSelection(getAgeEndCurrentPosition(value));
+        mFilter.ageEnd = value;
+    }
+
+    private void setBraSizeVisibility() {
+        if (mFilter.sex == Static.GIRL) {
+            mLoFilterShowOff.setVisibility(View.VISIBLE);
+            mLoFilterFinance.setVisibility(View.GONE);
+        } else {
+            mLoFilterShowOff.setVisibility(View.GONE);
+            mLoFilterFinance.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void onCreateDialog(final int titleId, int targetId, final int viewId, final DialogRowCliCkInterface listener) {
+        View view = getActivity().getLayoutInflater().inflate(R.layout.filter_dialog_layout, null);
+        ListView myList = (ListView) view.findViewWithTag("loFilterList");
+        myList.setAdapter(new FilterDialogAdapter(getActivity(), R.layout.filter_edit_form_dialog_cell, mFormInfo.getEntriesByTitleId(titleId), mFormInfo.getEntry(titleId, targetId)));
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(view);
+        final Dialog dialog = builder.create();
+        dialog.show();
+        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (listener != null) {
+                    listener.onRowClickListener(viewId, mFormInfo.getIdsByTitleId(titleId)[position]);
+                }
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private interface DialogRowCliCkInterface {
+        void onRowClickListener(int id, int item);
+    }
 
     @Override
     protected void lockUi() {
-//        mBackButton.setEnabled(false);
-//        mSwitchOnlyOnline.setEnabled(false);
-//        mSwitchBeautifull.setEnabled(false);
-//        mXStatusFrame.setEnabled(false);
-//        mMarriageFrame.setEnabled(false);
-//        mCharacterFrame.setEnabled(false);
-//        mAlcoholFrame.setEnabled(false);
-//        mBreastFrame.setEnabled(false);
+        mLoFilterSex.setEnabled(false);
+        mLoFilterAgeStart.setEnabled(false);
+        mLoFilterAgeEnd.setEnabled(false);
+        mLoFilterCity.setEnabled(false);
+        mLoFilterOnline.setEnabled(false);
+        mLoFilterBeautiful.setEnabled(false);
+        mLoFilterDatingStatus.setEnabled(false);
+        mLoFilterMarriage.setEnabled(false);
+        mLoFilterCharacter.setEnabled(false);
+        mLoFilterAlcohol.setEnabled(false);
+        mLoFilterFinance.setEnabled(false);
+        mLoFilterShowOff.setEnabled(false);
+        mLoFilterButtonHome.setEnabled(false);
     }
 
     @Override
     protected void unlockUi() {
-//        mBackButton.setEnabled(true);
-//        mSwitchOnlyOnline.setEnabled(true);
-//        mSwitchBeautifull.setEnabled(true);
-//        mXStatusFrame.setEnabled(true);
-//        mMarriageFrame.setEnabled(true);
-//        mCharacterFrame.setEnabled(true);
-//        mAlcoholFrame.setEnabled(true);
-//        mBreastFrame.setEnabled(true);
+        mLoFilterSex.setEnabled(true);
+        mLoFilterAgeStart.setEnabled(true);
+        mLoFilterAgeEnd.setEnabled(true);
+        mLoFilterCity.setEnabled(true);
+        mLoFilterOnline.setEnabled(true);
+        mLoFilterBeautiful.setEnabled(true);
+        mLoFilterDatingStatus.setEnabled(true);
+        mLoFilterMarriage.setEnabled(true);
+        mLoFilterCharacter.setEnabled(true);
+        mLoFilterAlcohol.setEnabled(true);
+        mLoFilterFinance.setEnabled(true);
+        mLoFilterShowOff.setEnabled(true);
+        mLoFilterButtonHome.setEnabled(true);
     }
 
     @Override

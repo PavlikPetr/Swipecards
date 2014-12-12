@@ -1,111 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#FFFFFF"
-    android:fillViewport="true">
+    android:layout_height="fill_parent">
 
-    <LinearLayout
+    <com.topface.topface.ui.views.LockableScrollView
+        android:id="@+id/filter_scroll"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="fill_parent"
+        android:background="#FFFFFF"
+        android:fillViewport="true">
 
-        <Spinner
-            android:id="@+id/loFilterSex"
-            style="@style/FilterSpinner"
-            android:layout_width="fill_parent" />
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/loFewSpinners_layout"
-                android:layout_width="wrap_content"
+            <com.topface.topface.ui.views.CustomCitySearchView
+                android:id="@+id/loFilterCitySearchView"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:orientation="vertical">
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/input_field" />
+
+            <Spinner
+                android:id="@+id/loFilterSex"
+                style="@style/FilterSpinner"
+                android:layout_width="fill_parent" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
                 <LinearLayout
+                    android:id="@+id/loFewSpinners_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:orientation="vertical">
 
-                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
 
-                    <Spinner
-                        android:id="@+id/loFilterAgeStart"
-                        style="@style/FilterSpinner"
-                        android:layout_width="104dp" />
+                        android:orientation="horizontal">
 
-                    <Spinner
-                        android:id="@+id/loFilterAgeEnd"
-                        style="@style/FilterSpinner"
-                        android:layout_width="104dp"
-                        android:paddingRight="0dp" />
+                        <Spinner
+                            android:id="@+id/loFilterAgeStart"
+                            style="@style/FilterSpinner"
+                            android:layout_width="104dp" />
+
+                        <Spinner
+                            android:id="@+id/loFilterAgeEnd"
+                            style="@style/FilterSpinner"
+                            android:layout_width="104dp"
+                            android:layout_marginRight="0dp" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/loFilterCity"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="28dp"
+                        android:background="@drawable/input_field"
+                        android:hint="@string/general_city"
+                        android:textColorHint="#8A8A8A" />
+
                 </LinearLayout>
 
-                <Spinner
-                    android:id="@+id/loFilterCity"
-                    style="@style/FilterSpinner"
-                    android:layout_width="fill_parent" />
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/loFilterButtonHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/loFewSpinners_layout"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/ic_home_selector" />
+            </RelativeLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/loFewSpinners_layout"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/ic_home_normal" />
-        </RelativeLayout>
+            <CheckBox
+                android:id="@+id/loFilterOnline"
+                style="@style/FilterCheckBox"
+                android:layout_marginTop="40dp"
+                android:text="@string/filter_only_online" />
 
-        <CheckBox
-            android:id="@+id/loFilterOnline"
-            style="@style/FilterCheckBox"
-            android:layout_marginTop="40dp"
-            android:text="@string/filter_only_online" />
+            <CheckBox
+                android:id="@+id/loFilterBeautiful"
+                style="@style/FilterCheckBox"
+                android:layout_marginBottom="38dp"
+                android:layout_marginTop="42dp"
+                android:text="@string/filter_only_beautiful" />
 
-        <CheckBox
-            android:id="@+id/loFilterBeautiful"
-            style="@style/FilterCheckBox"
-            android:layout_marginTop="42dp"
-            android:text="@string/filter_only_beautiful" />
+            <include
+                android:id="@+id/loFilterDatingStatus"
+                layout="@layout/filter_light_edit_form"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-        <include
-            android:id="@+id/loFilterDatingStatus"
-            layout="@layout/filter_light_edit_form"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            <include
+                android:id="@+id/loFilterMarriage"
+                layout="@layout/filter_light_edit_form"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-        <include
-            android:id="@+id/loFilterMarriage"
-            layout="@layout/filter_light_edit_form"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            <include
+                android:id="@+id/loFilterCharacter"
+                layout="@layout/filter_light_edit_form"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-        <include
-            android:id="@+id/loFilterCharacter"
-            layout="@layout/filter_light_edit_form"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            <include
+                android:id="@+id/loFilterAlcohol"
+                layout="@layout/filter_light_edit_form"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-        <include
-            android:id="@+id/loFilterAlcohol"
-            layout="@layout/filter_light_edit_form"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            <include
+                android:id="@+id/loFilterFinance"
+                layout="@layout/filter_light_edit_form"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-        <include
-            android:id="@+id/loFilterFinance"
-            layout="@layout/filter_light_edit_form"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            <include
+                android:id="@+id/loFilterShowOff"
+                layout="@layout/filter_light_edit_form"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-        <include
-            android:id="@+id/loFilterBraSize"
-            layout="@layout/filter_light_edit_form"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+        </LinearLayout>
+    </com.topface.topface.ui.views.LockableScrollView>
 
-    </LinearLayout>
-</ScrollView>
+    <FrameLayout
+        android:id="@+id/loFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
+</RelativeLayout>
