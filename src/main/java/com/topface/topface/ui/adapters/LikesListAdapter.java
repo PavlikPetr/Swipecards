@@ -12,6 +12,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
+import com.topface.topface.ui.views.FeedItemViewConstructor;
 
 public class LikesListAdapter extends FeedAdapter<FeedLike> {
     private static final int T_COUNT = 2;
@@ -30,6 +31,11 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     public int getViewTypeCount() {
         Debug.log(Integer.toString(super.getViewTypeCount() + T_COUNT));
         return (super.getViewTypeCount() + T_COUNT);
+    }
+
+    @Override
+    protected FeedItemViewConstructor.TypeAndFlag getViewCreationFlag() {
+        return new FeedItemViewConstructor.TypeAndFlag(FeedItemViewConstructor.Type.HEART);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -58,29 +64,8 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     @Override
     protected FeedViewHolder getEmptyHolder(View convertView, FeedLike item) {
         FeedViewHolder holder = super.getEmptyHolder(convertView, item);
-        holder.heart = (ImageView) convertView.findViewById(R.id.ivHeart);
-        holder.heart.setVisibility(View.VISIBLE);
+        holder.heart = (ImageView) convertView.findViewById(R.id.ifp_heart);
         return holder;
-    }
-
-    @Override
-    protected int getItemLayout() {
-        return R.layout.item_feed_like;
-    }
-
-    @Override
-    protected int getNewItemLayout() {
-        return R.layout.item_feed_new_like;
-    }
-
-    @Override
-    protected int getVipItemLayout() {
-        return R.layout.item_feed_vip_like;
-    }
-
-    @Override
-    protected int getNewVipItemLayout() {
-        return R.layout.item_feed_vip_new_like;
     }
 
     public void setOnMutualListener(OnMutualListener listener) {
