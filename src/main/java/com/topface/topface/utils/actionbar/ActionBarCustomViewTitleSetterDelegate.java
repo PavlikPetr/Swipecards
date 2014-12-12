@@ -2,6 +2,8 @@ package com.topface.topface.utils.actionbar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 
 /**
  * Title setter delegate for actionbar with custom view.
@@ -35,13 +38,19 @@ public class ActionBarCustomViewTitleSetterDelegate extends ActionBarOnlineSette
             mClickable.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Bundle extras = activity.getIntent().getExtras();
+                    boolean isFromNotification = extras != null && extras.getBoolean(GCMUtils.NOTIFICATION_INTENT, false);
+                    boolean noBackStack = isFromNotification && Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB;
                     if (activity instanceof NavigationActivity) {
                         Intent intent = new Intent(NavigationActivity.OPEN_MENU);
                         LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
-                    } else if (activity.isTaskRoot()) {
+                    } else if (activity.isTaskRoot() || noBackStack) {
                         Intent intent = activity instanceof ActionBarActivity ?
                                 ((ActionBarActivity) activity).getSupportParentActivityIntent() :
                                 NavUtils.getParentActivityIntent(activity);
+                        if (noBackStack) {
+                            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        }
                         activity.startActivity(intent);
                         activity.finish();
                     } else {
