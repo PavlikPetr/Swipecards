@@ -49,7 +49,9 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_base, container, false);
-        root.setPadding(0, mNeedActionBarIndent ? mActionBarSize : 0, 0, 0);
+        if (isUnderActionBar()) {
+            root.setPadding(0, mNeedActionBarIndent ? mActionBarSize : 0, 0, 0);
+        }
         ViewStub stub = (ViewStub) root.findViewById(R.id.vsContent);
         stub.setLayoutResource(getDialogLayoutRes());
         View view = stub.inflate();
@@ -115,4 +117,9 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     protected final void setNeedActionBarIndent(boolean value) {
         mNeedActionBarIndent = value;
     }
+
+    public boolean isUnderActionBar() {
+        return true;
+    }
+
 }
