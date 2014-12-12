@@ -1,7 +1,6 @@
 package com.topface.topface.ui.dialogs;
 
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.TextView;
@@ -58,11 +57,6 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
         mTitle.setText(CacheProfile.getOptions().notShown.title);
         mMessage = (TextView) root.findViewById(R.id.message);
         mMessage.setText(CacheProfile.getOptions().notShown.text);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override

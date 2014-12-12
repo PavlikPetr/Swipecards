@@ -12,7 +12,6 @@ import com.topface.topface.utils.controllers.AbstractStartAction;
 
 public class DatingLockPopupAction extends AbstractStartAction {
 
-
     private DatingLockPopup.DatingLockPopupRedirectListener mDatingLockPopupRedirect;
     private FragmentManager mFragmentManager;
     private int mPriority;
