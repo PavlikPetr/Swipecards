@@ -91,6 +91,7 @@ public class ApiResponse implements IApiResponse {
                 code = ErrorCodes.RESULT_OK;
             } else {
                 code = ErrorCodes.WRONG_RESPONSE;
+                Debug.error("Json format is wrong: " + response);
             }
         } catch (Exception e) {
             code = ErrorCodes.WRONG_RESPONSE;
