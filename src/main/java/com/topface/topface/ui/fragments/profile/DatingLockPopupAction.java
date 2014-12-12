@@ -32,7 +32,7 @@ public class DatingLockPopupAction extends AbstractStartAction {
                 return true;
             }
             long currentTime = System.currentTimeMillis();
-            long deltaInSeconds = ((currentTime - lastTime) / 1000) % 60;
+            long deltaInSeconds = (currentTime - lastTime) / 1000;
             return (deltaInSeconds >= options.notShown.datingLockPopupTimeout);
         } else {
             return false;
