@@ -539,7 +539,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
     public FragmentId getCurrentFragmentId() {
-        return mSelectedFragment == UNDEFINED ? DATING : mSelectedFragment;
+        return mSelectedFragment == UNDEFINED ? CacheProfile.getOptions().startPageFragmentId : mSelectedFragment;
     }
 
     private BaseFragment getFragmentNewInstanceById(FragmentId id) {

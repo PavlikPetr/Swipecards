@@ -400,13 +400,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
         FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
-        if (currentFragment == null) {
-            if (mMenuFragment.getCurrentFragmentId() == FragmentId.UNDEFINED) {
-                showFragment(CacheProfile.getOptions().startPageFragmentId);
-            }
-        } else {
-            showFragment(currentFragment);
-        }
+        showFragment(currentFragment == null ? CacheProfile.getOptions().startPageFragmentId : currentFragment);
     }
 
     public void showContent() {
@@ -426,7 +420,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        showFragment(intent);
+        if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
+            showFragment(intent);
+        }
     }
 
     @Override
