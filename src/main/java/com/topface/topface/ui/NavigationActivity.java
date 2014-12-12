@@ -448,6 +448,10 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onProfileUpdated() {
         initBonusCounterConfig();
+        // возможно что содержимое меню поменялось, надо обновить
+        if (mMenuFragment != null) {
+            mMenuFragment.updataAdapter();
+        }
         mNotificationController.refreshNotificator();
     }
 
