@@ -33,6 +33,7 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     private static HashSet<String> mShowingDialogs = new HashSet<>();
     private String mTag;
     private DialogInterface.OnDismissListener mDismissListener;
+    private boolean needPadding = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,9 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_base, container, false);
-        root.setPadding(0, mNeedActionBarIndent ? mActionBarSize : 0, 0, 0);
+        if (isNeedPadding()) {
+            root.setPadding(0, mNeedActionBarIndent ? mActionBarSize : 0, 0, 0);
+        }
         ViewStub stub = (ViewStub) root.findViewById(R.id.vsContent);
         stub.setLayoutResource(getDialogLayoutRes());
         View view = stub.inflate();
@@ -114,5 +117,13 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
 
     protected final void setNeedActionBarIndent(boolean value) {
         mNeedActionBarIndent = value;
+    }
+
+    public boolean isNeedPadding() {
+        return needPadding;
+    }
+
+    public void setNeedPadding(boolean needPadding) {
+        this.needPadding = needPadding;
     }
 }
