@@ -271,7 +271,7 @@ public abstract class AbstractConfig {
             } else {
                 String error = fieldName + " is not defined in Settings Map";
                 Debug.error(error);
-                if (BuildConfig.DEBUG)  {
+                if (BuildConfig.DEBUG) {
                     throw new IllegalStateException(error);
                 }
                 return false;
