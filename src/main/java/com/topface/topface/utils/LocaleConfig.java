@@ -15,7 +15,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserSetLocaleRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -129,7 +128,7 @@ public class LocaleConfig {
             }).exec();
         } else {
             progress.dismiss();
-            NavigationActivity.restartNavigationActivity(BaseFragment.FragmentId.DATING);
+            NavigationActivity.restartNavigationActivity(CacheProfile.getOptions().startPageFragmentId);
         }
     }
 }
