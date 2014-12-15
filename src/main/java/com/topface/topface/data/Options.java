@@ -93,8 +93,9 @@ public class Options extends AbstractData {
 
     /**
      * Id фрагмента, который будет отображаться при старте приложения
+     * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
-    public BaseFragment.FragmentId startPageFragmentId;
+    public BaseFragment.FragmentId startPageFragmentId = BaseFragment.FragmentId.DATING;
 
     /**
      * Флаг отображения превью в диалогах
@@ -699,21 +700,25 @@ public class Options extends AbstractData {
                 text = jsonNotShown.optString("text");
             }
         }
-
     }
 
     private BaseFragment.FragmentId getStartPageFragmentId(JSONObject response) {
-        // По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
-        BaseFragment.FragmentId fragmentId = BaseFragment.FragmentId.DATING;
+        BaseFragment.FragmentId fragmentId = startPageFragmentId;
         try {
             fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
-            if (fragmentId.equals(BaseFragment.FragmentId.DIALOGS) && messagesWithTabs.isEnabled()) {
-                fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
-            }
         } catch (IllegalArgumentException e) {
             Debug.error("Illegal value of startPage", e);
         }
+        if (messagesWithTabs.isEnabled()) {
+            switch (fragmentId) {
+                case DIALOGS:
+                    fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
+                    break;
+                case LIKES:
+                    fragmentId = BaseFragment.FragmentId.TABBED_LIKES;
+                    break;
+            }
+        }
         return fragmentId;
     }
-
 }
