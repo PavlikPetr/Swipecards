@@ -15,11 +15,6 @@ public class MessagesWithTabs extends BaseExperiment {
         return "messagesWithTabs";
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
     public void equipNavigationActivityIntent(Intent intent) {
         if (isEnabled()) {
             intent.putExtra(GCMUtils.NEXT_INTENT, TABBED_DIALOGS);
