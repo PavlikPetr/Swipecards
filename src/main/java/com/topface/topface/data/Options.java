@@ -93,9 +93,8 @@ public class Options extends AbstractData {
 
     /**
      * Id фрагмента, который будет отображаться при старте приложения
-     * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
-    public BaseFragment.FragmentId startPageFragmentId = BaseFragment.FragmentId.DATING;
+    public BaseFragment.FragmentId startPageFragmentId;
 
     /**
      * Флаг отображения превью в диалогах
@@ -185,11 +184,6 @@ public class Options extends AbstractData {
 
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
-            try {
-                startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
-            } catch (IllegalArgumentException e) {
-                Debug.error("Illegal value of startPage", e);
-            }
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
@@ -350,6 +344,8 @@ public class Options extends AbstractData {
             instantMessagesForNewbies.init(response);
 
             messagesWithTabs.init(response);
+
+            startPageFragmentId = getStartPageFragmentId(response);
 
             JSONObject jsonNotShown = response.optJSONObject("notShown");
             if (jsonNotShown != null) {
@@ -706,5 +702,18 @@ public class Options extends AbstractData {
 
     }
 
+    private BaseFragment.FragmentId getStartPageFragmentId(JSONObject response) {
+        // По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
+        BaseFragment.FragmentId fragmentId = BaseFragment.FragmentId.DATING;
+        try {
+            fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
+            if (fragmentId.equals(BaseFragment.FragmentId.DIALOGS) && messagesWithTabs.isEnabled()) {
+                fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
+            }
+        } catch (IllegalArgumentException e) {
+            Debug.error("Illegal value of startPage", e);
+        }
+        return fragmentId;
+    }
 
 }
