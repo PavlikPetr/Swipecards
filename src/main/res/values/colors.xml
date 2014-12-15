@@ -8,6 +8,7 @@
     <color name="bg_main">#4D4D4D</color>
     <color name="bg_leaders_block">#373737</color>
     <color name="bg_action_mode">#373737</color>
+    <color name="bg_left_menu_not_clicked">#2E2E2E</color>
     <!--text colors-->
     <color name="text_light_gray">#B8B8B8</color>
     <color name="text_white">#FFFFFF</color>
