@@ -233,6 +233,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     public void updataAdapter() {
         initAdapter();
     }
+
     private void initAdapter() {
         SparseArray<LeftMenuAdapter.ILeftMenuItem> menuItems = new SparseArray<>();
         //- Profile added as part of header
@@ -542,7 +543,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
     public FragmentId getCurrentFragmentId() {
-        return mSelectedFragment == UNDEFINED ? DATING : mSelectedFragment;
+        return mSelectedFragment == UNDEFINED ? CacheProfile.getOptions().startPageFragmentId : mSelectedFragment;
     }
 
     private BaseFragment getFragmentNewInstanceById(FragmentId id) {

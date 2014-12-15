@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CountersManager;
@@ -34,6 +35,8 @@ public abstract class TabbedFeedFragment extends BaseFragment {
     private ArrayList<String> mPagesClassNames = new ArrayList<>();
     private ArrayList<String> mPagesTitles = new ArrayList<>();
     private ArrayList<Integer> mPagesCounters = new ArrayList<>();
+    private FloatBlock mFloatBlock;
+
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -80,11 +83,17 @@ public abstract class TabbedFeedFragment extends BaseFragment {
         View root = inflater.inflate(R.layout.fragment_tabbed_feed, null);
 
         initPages(root);
+        initFloatBlock((ViewGroup) root);
 
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
 
         return root;
+    }
+
+    protected void initFloatBlock(ViewGroup view) {
+        mFloatBlock = new FloatBlock(this, view);
+        mFloatBlock.onCreate();
     }
 
     private void initPages(View root) {
@@ -147,12 +156,33 @@ public abstract class TabbedFeedFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mFloatBlock != null) {
+            mFloatBlock.onResume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mFloatBlock != null) {
+            mFloatBlock.onPause();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mPager != null) {
             setLastOpenedPage(mPager.getCurrentItem());
         }
         mPager = null;
+
+        if (mFloatBlock != null) {
+            mFloatBlock.onDestroy();
+        }
+
     }
 
     @Override

@@ -128,6 +128,7 @@ public class BannerBlock {
     }
 
     private void initBanner() {
+        Debug.log("BannersBlock: init banner");
         Map<String, Options.Page> bannersMap = FloatBlock.getActivityMap();
         if (mFragment != null && bannersMap != null) {
             String fragmentId = ((Object) mFragment).getClass().toString();
@@ -189,6 +190,7 @@ public class BannerBlock {
     }
 
     private void loadBanner(String bannerPlace) {
+        Debug.log("BannersBlock: load banner");
         BannerRequest bannerRequest = new BannerRequest(mFragment.getActivity());
         bannerRequest.place = bannerPlace;
         if (mFragment instanceof BaseFragment) {
@@ -454,8 +456,10 @@ public class BannerBlock {
     }
 
     private void requestBannerGag() {
+        // TODO: Запрос заглушки ведёт к закликиванию запроса банера https://tasks.verumnets.ru/issues/34334
+        Debug.log("BannersBlock: request banner gag");
         removeBanner();
-        String bannerType = CacheProfile.getOptions().gagTypeBanner;
+        /*String bannerType = CacheProfile.getOptions().gagTypeBanner;
         mBannerView = getBannerView(bannerType);
         if (mBannerView != null) {
             mBannerLayout.addView(mBannerView);
@@ -468,7 +472,7 @@ public class BannerBlock {
                     Debug.error(e);
                 }
             }
-        }
+        }*/
     }
 
     /**

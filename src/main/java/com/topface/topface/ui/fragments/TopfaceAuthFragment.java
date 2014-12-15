@@ -56,6 +56,13 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     private String mEmailForRestorePassword;
     private String mEmailForNewReg;
 
+    private View.OnClickListener mCredentialsEditListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            removeRedAlert();
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -158,6 +165,9 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             }
         });
         mRecoverPwd.setVisibility(View.GONE);
+
+        mLogin.setOnClickListener(mCredentialsEditListener);
+        mPassword.setOnClickListener(mCredentialsEditListener);
     }
 
     @Override
