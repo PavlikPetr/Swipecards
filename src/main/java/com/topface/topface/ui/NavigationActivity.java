@@ -37,6 +37,7 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.fragments.MenuFragment;
@@ -450,6 +451,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onProfileUpdated() {
         initBonusCounterConfig();
+        // возможно что содержимое меню поменялось, надо обновить
+        if (mMenuFragment != null) {
+            mMenuFragment.updataAdapter();
+        }
+        FloatBlock.resetActivityMap();
         mNotificationController.refreshNotificator();
     }
 
