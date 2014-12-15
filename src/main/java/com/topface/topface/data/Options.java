@@ -711,9 +711,12 @@ public class Options extends AbstractData {
         }
         if (messagesWithTabs.isEnabled()) {
             switch (fragmentId) {
+                case FANS:
                 case DIALOGS:
                     fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
                     break;
+                case MUTUAL:
+                case ADMIRATIONS:
                 case LIKES:
                     fragmentId = BaseFragment.FragmentId.TABBED_LIKES;
                     break;
