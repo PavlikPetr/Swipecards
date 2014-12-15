@@ -652,6 +652,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     removeOutdatedItems(data);
                 } else if (scrollRefresh) {
                     removeAlreadyLoadedItems(data);
+                } else {
+                    removeFakesNotWaiting(data);
                 }
 
                 refreshActionBarTitles();
@@ -755,6 +757,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 data.items.removeAll(itemsToDelete);
             }
+        }
+    }
+
+    private void removeFakesNotWaiting(HistoryListData data) {
+        if (!mAdapter.isEmpty()) {
+            ArrayList<History> itemsToDelete = new ArrayList<>();
+            for (History item : mAdapter.getData()) {
+                for (History newItem : data.items) {
+                    if (item.isFake() && ((!item.isWaitingItem() && !item.isRepeatItem()) || TextUtils.equals(item.text, newItem.text))) {
+                        itemsToDelete.add(item);
+                    }
+                }
+            }
+            mAdapter.getData().removeAll(itemsToDelete);
         }
     }
 
