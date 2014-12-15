@@ -299,7 +299,7 @@
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:singleLine">true</item>
         <item name="android:text">@string/general_back</item>
-        <item name="android:drawableLeft">@drawable/ic_back</item>
+        <item name="android:drawableLeft">@drawable/back</item>
         <item name="android:drawablePadding">8dp</item>
     </style>
 

@@ -109,8 +109,6 @@ public class ContactsFragment extends BaseFragment {
             }
         });
 
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
         mContactsVip = (Button) root.findViewById(R.id.contactsVip);
         if (data.size() < CacheProfile.getOptions().contacts_count) {
             mContactsVip.setText(getString(R.string.general_rest_contacts, CacheProfile.getOptions().contacts_count - data.size()));

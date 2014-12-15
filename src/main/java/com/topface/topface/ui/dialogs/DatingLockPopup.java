@@ -1,5 +1,6 @@
 package com.topface.topface.ui.dialogs;
 
+import android.content.DialogInterface;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.TextView;
@@ -20,6 +21,8 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
     private DatingLockPopupRedirectListener mDatingLockPopupRedirectListener;
     private TextView mTitle;
     private TextView mMessage;
+    private boolean mIsStatisticsSent = false;
+
 
     public interface DatingLockPopupRedirectListener {
         public void onRedirect();
@@ -57,6 +60,11 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
     }
 
     @Override
+    public boolean isUnderActionBar() {
+        return false;
+    }
+
+    @Override
     public int getDialogLayoutRes() {
         return R.layout.dating_lock_popup;
     }
@@ -72,6 +80,7 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
                 sendDatingPopupClose();
                 break;
         }
+        mIsStatisticsSent = true;
         dismiss();
     }
 
@@ -79,5 +88,14 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
     public void show(FragmentManager manager, String tag) {
         sendDatingPopupShow();
         super.show(manager, tag);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (!mIsStatisticsSent) {
+            sendDatingPopupClose();
+        }
+
     }
 }

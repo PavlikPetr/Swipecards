@@ -166,7 +166,7 @@ public class GCMUtils {
     }
 
     private boolean isDelayTimeCorrect(int time) {
-        return getTimerDelay(time) <= TIME_GEOMETRIC_PROGRESSION_LAST_VALUE ? true : false;
+        return getTimerDelay(time) <= TIME_GEOMETRIC_PROGRESSION_LAST_VALUE;
     }
 
     @SuppressWarnings("unused")
@@ -275,7 +275,6 @@ public class GCMUtils {
                 intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
                 intent.putExtra(GCM_TYPE, type);
                 intent.putExtra(GCM_LABEL, getLabel(extra));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 showNotificationByType(extra, context, data, type, user, title, intent);
                 return true;
             }
