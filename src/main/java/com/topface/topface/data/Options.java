@@ -54,6 +54,8 @@ public class Options extends AbstractData {
     public final static String PAGE_VIEWS = "VIEWS";
     public final static String PAGE_START = "START";
     public final static String PAGE_GAG = "GAG";
+    public final static String PAGE_TABBED_LIKES = "LIKES_TABS";
+    public final static String PAGE_TABBED_MESSAGES = "MESSAGES_TABS";
     public final static String[] PAGES = new String[]{
             PAGE_UNKNOWK,
             PAGE_LIKES,
@@ -65,6 +67,8 @@ public class Options extends AbstractData {
             PAGE_BOOKMARKS,
             PAGE_VIEWS,
             PAGE_START,
+            PAGE_TABBED_LIKES,
+            PAGE_TABBED_MESSAGES,
             PAGE_GAG
     };
 
@@ -188,11 +192,6 @@ public class Options extends AbstractData {
 
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
-            try {
-                startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
-            } catch (IllegalArgumentException e) {
-                Debug.error("Illegal value of startPage", e);
-            }
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
@@ -356,6 +355,8 @@ public class Options extends AbstractData {
 
             messagesWithTabs.init(response);
 
+            startPageFragmentId = getStartPageFragmentId(response);
+
             JSONObject jsonNotShown = response.optJSONObject("notShown");
             if (jsonNotShown != null) {
                 notShown.parseNotShownJSON(jsonNotShown);
@@ -420,6 +421,10 @@ public class Options extends AbstractData {
                 return PAGE_START;
             case PAGE_GAG:
                 return PAGE_GAG;
+            case PAGE_TABBED_MESSAGES:
+                return PAGE_TABBED_MESSAGES;
+            case PAGE_TABBED_LIKES:
+                return PAGE_TABBED_LIKES;
             default:
                 return PAGE_UNKNOWK + "(" + name + ")";
         }
@@ -708,8 +713,28 @@ public class Options extends AbstractData {
                 text = jsonNotShown.optString("text");
             }
         }
-
     }
 
-
+    private BaseFragment.FragmentId getStartPageFragmentId(JSONObject response) {
+        BaseFragment.FragmentId fragmentId = startPageFragmentId;
+        try {
+            fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
+        } catch (IllegalArgumentException e) {
+            Debug.error("Illegal value of startPage", e);
+        }
+        if (messagesWithTabs.isEnabled()) {
+            switch (fragmentId) {
+                case FANS:
+                case DIALOGS:
+                    fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
+                    break;
+                case MUTUAL:
+                case ADMIRATIONS:
+                case LIKES:
+                    fragmentId = BaseFragment.FragmentId.TABBED_LIKES;
+                    break;
+            }
+        }
+        return fragmentId;
+    }
 }

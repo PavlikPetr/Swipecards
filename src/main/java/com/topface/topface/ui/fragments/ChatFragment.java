@@ -446,7 +446,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                         EasyTracker.sendEvent("Chat", "DeleteItem", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COPY:
-                                        mAdapter.copyText(((TextView) view).getText().toString());
+                                        mAdapter.copyText(((TextView) view.findViewById(R.id.chat_message)).getText().toString());
                                         EasyTracker.sendEvent("Chat", "CopyItemText", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COMPLAINT:
@@ -583,6 +583,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
+        if (mIsUpdating) {
+            return;
+        }
         mIsUpdating = true;
         final boolean isPopularLockOn;
         isPopularLockOn = mAdapter != null &&
@@ -590,10 +593,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
                 pullToRefresh;
 
-        if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
-            showLoading();
-        }
-        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId);
+        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId) {
+
+            @Override
+            public void exec() {
+                mIsUpdating = true;
+                if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
+                    showLoading();
+                }
+                super.exec();
+            }
+        };
+
         registerRequest(historyRequest);
         historyRequest.debug = type;
         if (mAdapter != null) {
@@ -641,6 +652,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     removeOutdatedItems(data);
                 } else if (scrollRefresh) {
                     removeAlreadyLoadedItems(data);
+                } else {
+                    removeFakesNotWaiting(data);
                 }
 
                 refreshActionBarTitles();
@@ -678,6 +691,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 //show keyboard if display size more then 479dp
                 showKeyboardOnLargeScreen();
                 mIsBeforeFirstChatUpdate = false;
+
+                if (mLockScreen != null && mLockScreen.getVisibility() == View.VISIBLE) {
+                    mLockScreen.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -740,6 +757,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 data.items.removeAll(itemsToDelete);
             }
+        }
+    }
+
+    private void removeFakesNotWaiting(HistoryListData data) {
+        if (!mAdapter.isEmpty()) {
+            ArrayList<History> itemsToDelete = new ArrayList<>();
+            for (History item : mAdapter.getData()) {
+                for (History newItem : data.items) {
+                    if (item.isFake() && ((!item.isWaitingItem() && !item.isRepeatItem()) || TextUtils.equals(item.text, newItem.text))) {
+                        itemsToDelete.add(item);
+                    }
+                }
+            }
+            mAdapter.getData().removeAll(itemsToDelete);
         }
     }
 

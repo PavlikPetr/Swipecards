@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:background="@drawable/bg_left_menu_item_selector">
+    android:background="@color/bg_main">
 
-    <ImageView
+<ImageView
         android:id="@+id/iv_close"
         android:layout_gravity="right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
+        android:padding="10dp"
         android:src="@drawable/ic_close_dating_lock_popup" />
 
     <ImageView

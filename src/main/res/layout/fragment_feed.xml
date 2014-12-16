@@ -38,7 +38,8 @@
             android:fadeScrollbars="true"
             android:fadingEdge="none"
             p2r:ptrOverScroll="false"
-            p2r:ptrShowIndicator="false" />
+            p2r:ptrShowIndicator="false"
+            android:listSelector="@android:color/transparent" />
 
         <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvFeedLoading"
