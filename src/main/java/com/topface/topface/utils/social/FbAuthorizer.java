@@ -123,6 +123,9 @@ public class FbAuthorizer extends Authorizer {
     @Override
     public void logout() {
         Session session = Session.getActiveSession();
+        if (session == null) {
+            session = Session.openActiveSessionFromCache(getActivity());
+        }
         if (session != null) {
             session.closeAndClearTokenInformation();
         }
