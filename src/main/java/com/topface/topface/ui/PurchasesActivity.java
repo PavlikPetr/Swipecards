@@ -1,10 +1,14 @@
 package com.topface.topface.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 
 import com.topface.billing.OpenIabFragment;
@@ -17,6 +21,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
+import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -43,6 +48,14 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         }
     }
 
+    private BroadcastReceiver mOfferwallOpenedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mIsTopfaceOfferwallCompleted = TextUtils.equals(
+                    intent.getStringExtra(BonusFragment.OFFERWALL_NAME), OfferwallsManager.TFOFFERWALL);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -52,6 +65,13 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         if (getIntent().hasExtra(TFOfferwallActivity.PAYLOAD)) {
             mIsTopfaceOfferwallCompleted = true;
         }
+        LocalBroadcastManager.getInstance(this).registerReceiver(mOfferwallOpenedReceiver, new IntentFilter(BonusFragment.OFFERWALL_OPENED));
+    }
+
+    @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mOfferwallOpenedReceiver);
+        super.onDestroy();
     }
 
     @Override
