@@ -1,57 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:background="@color/bg_main">
 
-<ImageView
-        android:id="@+id/iv_close"
-        android:layout_gravity="right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:src="@drawable/ic_close_dating_lock_popup" />
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerVertical="true"
+        android:fillViewport="true">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
-        android:src="@drawable/ic_heart" />
+        <LinearLayout
+            android:id="@+id/root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_main"
+            android:gravity="center|top"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/YouDoNotShowPopupTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="28dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+            <ImageView
+                android:id="@+id/iv_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:padding="10dp"
+                android:src="@drawable/ic_close_dating_lock_popup" />
 
-    <TextView
-        android:id="@+id/message"
-        style="@style/YouDoNotShowPopupMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginRight="18dp" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="68dp"
+                android:src="@drawable/ic_heart" />
 
-    <Button
-        style="@style/Widget.Topface.Button.Big.Blue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:minHeight="46dp"
-        android:minWidth="198dp"
-        android:singleLine="true"
-        android:id="@+id/redirect_into_sympathy"
-        android:text="@string/locking_popup_button_answer" />
+            <TextView
+                android:id="@+id/title"
+                style="@style/YouDoNotShowPopupTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="28dp"
+                android:gravity="center" />
 
+            <TextView
+                android:id="@+id/message"
+                style="@style/YouDoNotShowPopupMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center" />
 
-</LinearLayout>
+            <Button
+                android:id="@+id/redirect_into_sympathy"
+                style="@style/Widget.Topface.Button.Big.Blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:minHeight="46dp"
+                android:minWidth="198dp"
+                android:singleLine="true"
+                android:text="@string/locking_popup_button_answer" />
+        </LinearLayout>
+    </ScrollView>
