@@ -587,4 +587,8 @@
     <string name="maximum_number_of_users">Hai scelto il numero massimo degli utenti</string>
     <string name="logout_if_email_already_registred">L’utente con questo e-mail esiste già. Se questo indirizzo mail è tuo, devi uscire dall’account attuale e accedere all’account %s</string>
     <string name="recover_password_instructions">Al tuo indirizzo e-mail sono state inviate le istruzioni su come ripristinare la password</string>
+    <string name="email_changing">Cambio e-mail</string>
+    <string name="hint_faces_filter">Cambia i parametri della ricerca e conosci la gente interessante</string>
+    <string name="hint_faces_buy_like">Più simpatie hai, più spesso ricevi le valutazioni. Ricordati di rifornire la quantità di simpatie.</string>
+    <string name="hint_myprofile_buy_vip">Compra lo stato VIP e sfrutta la possibilità di contattare chi vuoi tu</string>
 </resources>

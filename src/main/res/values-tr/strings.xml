@@ -600,4 +600,6 @@
     <string name="measurement_unit_weight">Kg.</string>
     <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Maksimum kullanıcı sayısını seçildi</string>
+    <string name="email_changing">E-posta değiştermek için</string>
+    <string name="hint_myprofile_buy_vip">VIP-üyelik alın ve sınırsız sohbet etmeyi eğlenin</string>
 </resources>
