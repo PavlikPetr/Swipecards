@@ -122,7 +122,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private BroadcastReceiver mOpenMenuReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            toggleDrawerLayout();
+            if (mMenuFragment.isLockedByClosings()) {
+                mMenuFragment.showClosingsDialog();
+            } else {
+                toggleDrawerLayout();
+            }
         }
     };
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);

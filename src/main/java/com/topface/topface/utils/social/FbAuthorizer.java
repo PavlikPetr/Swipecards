@@ -21,7 +21,7 @@ import java.util.Arrays;
  */
 public class FbAuthorizer extends Authorizer {
 
-    private String[] FB_PERMISSIONS = {"user_photos", "email", "offline_access"};
+    private String[] FB_PERMISSIONS = {"user_photos", "email", "offline_access", "user_birthday"};
 
     private UiLifecycleHelper mUiHelper;
     private Session.StatusCallback mStatusCallback = new Session.StatusCallback() {
@@ -123,6 +123,9 @@ public class FbAuthorizer extends Authorizer {
     @Override
     public void logout() {
         Session session = Session.getActiveSession();
+        if (session == null) {
+            session = Session.openActiveSessionFromCache(getActivity());
+        }
         if (session != null) {
             session.closeAndClearTokenInformation();
         }
