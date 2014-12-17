@@ -1,32 +1,37 @@
 package com.topface.topface.ui.views;
 
-
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.content.res.TypedArray;
+import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.AutoCompleteTextView;
+import android.widget.ScrollView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.City;
-import com.topface.topface.ui.adapters.CitySearchAdapter;
+import com.topface.topface.ui.adapters.CustomCitySearchAdapter;
 import com.topface.topface.utils.Utils;
 
-public class CustomCitySearchView extends EditText {
-    private Context mContext;
-    private int mListViewId = R.layout.filter_dialog_layout;
-    private String mListViewTag = "loFilterList";
-    private View mLayoutView;
-    private ListView mListView;
-    private onCityClickListener mOnCityClickListener;
-    private CitySearchAdapter mAdapter;
+/**
+ * Created by ppetr on 15.12.14.
+ */
+public class CustomCitySearchView extends AutoCompleteTextView {
 
+    public static final int CITY_SEARCH_ACTIVITY = 100;
+    public static final int CITY_SEARCH_FROM_FILTER_ACTIVITY = 101;
+    public static final int CITY_SEARCH_AFTER_REGISTRATION = 102;
+
+    private Context mContext;
+    private CustomCitySearchAdapter mAdapter;
+    private onCityClickListener cityClickListener;
+    private int mRequestKey = CITY_SEARCH_FROM_FILTER_ACTIVITY;
+
+    private ScrollView mScrollView;
+
+    private City mDefaultCity;
 
     public CustomCitySearchView(Context context) {
         super(context);
@@ -36,98 +41,158 @@ public class CustomCitySearchView extends EditText {
 
     public CustomCitySearchView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        getAttrs(context, attrs, 0);
         mContext = context;
         init();
     }
 
     public CustomCitySearchView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        getAttrs(context, attrs, defStyle);
         mContext = context;
         init();
     }
 
+    private void getAttrs(Context context, AttributeSet attrs, int defStyle) {
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CitySearchAttrs, defStyle, 0);
+
+        int requestKey = a.getInt(R.styleable.CitySearchAttrs_request_key, 1);
+        setRequestKey(requestKey);
+
+    }
+
+    private void setRequestKey(int key) {
+        switch (key) {
+            case 0:
+                mRequestKey = CITY_SEARCH_ACTIVITY;
+                break;
+            case 1:
+                mRequestKey = CITY_SEARCH_FROM_FILTER_ACTIVITY;
+                break;
+            case 2:
+                mRequestKey = CITY_SEARCH_AFTER_REGISTRATION;
+                break;
+        }
+    }
+
     private void init() {
-        this.addTextChangedListener(new TextWatcher() {
+        this.setOnDismissListener(new OnDismissListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onDismiss() {
+//                Utils.hideSoftKeyboard(mContext, CustomCitySearchView.this);
+//                CustomCitySearchView.this.clearFocus();
+                if (TextUtils.isEmpty(CustomCitySearchView.this.getText())) {
+                    mScrollView.requestFocus();
+//                    if (mDefaultCity != null) {
+//
+//                    }
+                }
             }
-
+        });
+        this.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (mAdapter != null) {
-                    if (s.length() > 2)
-                        mAdapter.setSearchPhrase(s.toString());
-                    else {
-                        mAdapter.shortSearchPhrase();
-                    }
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    scrollToView();
+                    checkCurrentCity();
                 }
             }
         });
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDropDownView();
+                scrollToView();
             }
         });
-    }
+        this.setThreshold(0);
+        this.setAdapter(getMyAdapter());
+        getMyAdapter().setOnCitySearchProgress(new CustomCitySearchAdapter.onCitySearchProgress() {
+            @Override
+            public void inProgress(boolean isOnProgress) {
+                Log.e("TOP_FACE", "inProgress: " + isOnProgress);
+            }
 
-    public void setListViewLayout(int id) {
-        mListViewId = id;
-    }
-
-    public void setListViewTag(String tag) {
-        mListViewTag = tag;
-    }
-
-    private View getLayoutView() {
-        if (mLayoutView == null) {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mLayoutView = inflater.inflate(mListViewId, null);
-        }
-        return mLayoutView;
-    }
-
-    private ListView getListView() {
-        if (mListView == null) {
-            mListView = (ListView) getLayoutView().findViewWithTag(mListViewTag);
-        }
-        return mListView;
-    }
-
-    private void showDropDownView() {
-        mAdapter = new CitySearchAdapter(mContext, R.layout.spinner_text_layout, this.getText().toString());
-        getListView().setAdapter(mAdapter);
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setView(getLayoutView());
-        final Dialog dialog = builder.create();
-        dialog.show();
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onSearchFail(boolean state) {
+                Log.e("TOP_FACE", "onSearchFail: " + state);
+            }
+        });
+        this.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int pos = position - getListView().getHeaderViewsCount();
-                if (pos >= 0) {
-                    City city = ((CitySearchAdapter) getListView().getAdapter()).getCityByPosition(pos);
-                    CustomCitySearchView.this.setText(city.getName());
-                    dialog.dismiss();
-                    Utils.hideSoftKeyboard(mContext, CustomCitySearchView.this);
-                    if (mOnCityClickListener != null) {
-                        mOnCityClickListener.onCityClick(city);
-                    }
+                Utils.hideSoftKeyboard(mContext, CustomCitySearchView.this);
+                if (cityClickListener != null) {
+                    cityClickListener.onClick(getMyAdapter().getCityByPosition(position));
                 }
             }
         });
     }
 
+    private CustomCitySearchAdapter getMyAdapter() {
+        if (mAdapter == null) {
+            mAdapter = new CustomCitySearchAdapter(mContext, mRequestKey);
+        }
+        return mAdapter;
+    }
+
     public interface onCityClickListener {
-        public void onCityClick(City city);
+        public void onClick(City city);
     }
 
     public void setOnCityClickListener(onCityClickListener listener) {
-        mOnCityClickListener = listener;
+        cityClickListener = listener;
+    }
+
+    public void setDefaultCity(City city) {
+        mDefaultCity = city;
+        this.setText(city.getName());
+        getMyAdapter().setDefaultCity(city);
+    }
+
+    @Override
+    public boolean enoughToFilter() {
+        return true;
+    }
+
+    private void checkCurrentCity() {
+        if (mDefaultCity != null) {
+            if (getMyAdapter().getAllCitiesData().id == mDefaultCity.id) {
+                this.setText("", false);
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!CustomCitySearchView.this.isPopupShowing()) {
+                            CustomCitySearchView.this.showDropDown();
+                        }
+                    }
+                });
+            } else {
+                this.setText(mDefaultCity.getName());
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (CustomCitySearchView.this.isPopupShowing()) {
+                            CustomCitySearchView.this.dismissDropDown();
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    public void setScrollableViewToTop(ScrollView scrollView) {
+        mScrollView = scrollView;
+    }
+
+    private void scrollToView() {
+        if (mScrollView == null) {
+            return;
+        }
+        int[] viewLocation = new int[2];
+        this.getLocationInWindow(viewLocation);
+        int[] scrollLocation = new int[2];
+        mScrollView.getLocationInWindow(scrollLocation);
+        mScrollView.smoothScrollTo(0, mScrollView.getScrollY() + (viewLocation[1] - scrollLocation[1]));
     }
 
 }

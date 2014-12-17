@@ -78,15 +78,15 @@ public class SpinnerAgeAdapter extends ArrayAdapter<String> {
         if (item != null) {
             TextView textView = (TextView) view;
             if (textView != null)
-                textView.setPadding(getPxFromDp(8), getPxFromDp(15), 0, getPxFromDp(15));
+                textView.setPadding((int) context.getResources().getDimension(R.dimen.drop_downList_cell_padding_left),
+                        (int) context.getResources().getDimension(R.dimen.drop_downList_cell_padding_left),
+                        (int) context.getResources().getDimension(R.dimen.drop_downList_cell_padding_left),
+                        (int) context.getResources().getDimension(R.dimen.drop_downList_cell_padding_left));
             textView.setTextColor(textColor);
             textView.setText(item);
         }
         return view;
     }
 
-    private int getPxFromDp(int dp) {
-        double density = context.getResources().getDisplayMetrics().density;
-        return (int) (dp * density);
-    }
+
 }

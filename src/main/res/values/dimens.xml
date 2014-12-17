@@ -30,4 +30,10 @@
 
     <dimen name="chat_date_line_size">1px</dimen>
 
+    <!--DropDown list all paddings-->
+    <dimen name="drop_downList_cell_padding_left">8dp</dimen>
+    <dimen name="drop_downList_cell_padding_right">0dp</dimen>
+    <dimen name="drop_downList_cell_padding_top">15dp</dimen>
+    <dimen name="drop_downList_cell_padding_bottom">15dp</dimen>
+
 </resources>

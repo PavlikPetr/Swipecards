@@ -6,20 +6,15 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.SparseArrayCompat;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -62,7 +57,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private Spinner mLoFilterSex;
     private Spinner mLoFilterAgeStart;
     private Spinner mLoFilterAgeEnd;
-    private EditText mLoFilterCity;
 
     private LockableScrollView mScroll;
 
@@ -76,7 +70,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ViewGroup mLoFilterFinance;
     private ViewGroup mLoFilterShowOff;
 
-    private CustomCitySearchView mLoFilterCitySearchView;
+    CustomCitySearchView mLoFilterChooseCity;
 
 
     private ImageView mLoFilterButtonHome;
@@ -126,13 +120,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         super.onCreateView(inflater, container, savedInstanceState);
         mTargetUser.sex = CacheProfile.dating != null ? CacheProfile.dating.sex : Static.BOY;
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
-
-        ((EditContainerActivity) getActivity()).setOnBackPressedListener(new EditContainerActivity.onBackPressed() {
-            @Override
-            public boolean onPressed() {
-                return pressedBack();
-            }
-        });
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_filter_light_theme, container, false);
 
@@ -222,37 +209,18 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         checkStartAge();
         checkEndAge();
 
-        mLoFilterCitySearchView = (CustomCitySearchView) root.findViewById(R.id.loFilterCitySearchView);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        if (!TextUtils.isEmpty(mFilter.city.getName())) {
-            mLoFilterCitySearchView.setText(mFilter.city.getName());
-        }
-
         // City
-        mLoFilterCity = (EditText) root.findViewById(R.id.loFilterCity);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        mLoFilterCity.setOnClickListener(this);
+        mLoFilterChooseCity = (CustomCitySearchView) root.findViewById(R.id.loFilterChooseCity);
         if (!TextUtils.isEmpty(mFilter.city.getName())) {
-            mLoFilterCity.setText(mFilter.city.getName());
+            mLoFilterChooseCity.setDefaultCity(mFilter.city);
         }
-        mLoFilterCity.addTextChangedListener(new TextWatcher() {
+        mLoFilterChooseCity.setOnCityClickListener(new CustomCitySearchView.onCityClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 2)
-                    city(s.toString());
-                else {
-                    low();
-                }
+            public void onClick(City city) {
+                mFilter.city = city;
             }
         });
+        mLoFilterChooseCity.setScrollableViewToTop(mScroll);
 
         // Online
         mLoFilterOnline = (CheckBox) root.findViewById(R.id.loFilterOnline);
@@ -349,92 +317,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         handler.sendEmptyMessage(0);
     }
 
-    private void scrollToView() {
-        int[] viewLocation = new int[2];
-        mLoFilterCity.getLocationInWindow(viewLocation);
-        int[] scrollLocation = new int[2];
-        mScroll.getLocationInWindow(scrollLocation);
-        mScroll.smoothScrollTo(0, mScroll.getScrollY() + (viewLocation[1] - scrollLocation[1]));
-    }
-
-    private void showSearchCityFragment() {
-        if (isSearchCityFragmentVisible()) {
-            return;
-        }
-        String stringCity = null;
-        try {
-            stringCity = mFilter.city.toJson().toString();
-        } catch (JSONException e) {
-            Debug.error(e);
-        }
-        FilterChooseCityFragment mFragment = FilterChooseCityFragment
-                .newInstance(stringCity, mLoFilterCity.getMeasuredHeight(), getTitle());
-        getCurrentFragmentManager()
-                .beginTransaction()
-                .replace(R.id.loFrame, mFragment, FRAGMENT_SEARCH_CITY_TAG).addToBackStack(FRAGMENT_SEARCH_CITY_TAG).commit();
-
-    }
-
-    public void setScrollingEnabled(boolean enabled) {
-        if (mScroll != null) {
-            mScroll.setScrollingEnabled(enabled);
-        }
-    }
-
-    public void setSelectedCity(City city) {
-        mLoFilterCity.setText(city.getName());
-        mFilter.city = city;
-        Utils.hideSoftKeyboard(getActivity(), mLoFilterCity);
-        if (isSearchCityFragmentVisible()) {
-            pressedBack();
-        }
-    }
-
-    private FragmentManager getCurrentFragmentManager() {
-        if (mFragmentManager == null) {
-            mFragmentManager = getChildFragmentManager();
-        }
-        return mFragmentManager;
-    }
-
-    private boolean isSearchCityFragmentVisible() {
-        if (getCurrentFragmentManager().findFragmentByTag(FRAGMENT_SEARCH_CITY_TAG) != null) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean pressedBack() {
-        if (getCurrentFragmentManager().getBackStackEntryCount() > 0) {
-            getCurrentFragmentManager().popBackStack();
-            return false;
-        }
-        return true;
-    }
-
-    private void city(String prefixF) {
-        Fragment fragment = getCurrentFragmentManager().findFragmentByTag(FRAGMENT_SEARCH_CITY_TAG);
-        if (fragment != null) {
-            ((FilterChooseCityFragment) fragment).city(prefixF);
-        }
-
-    }
-
-    private void low() {
-        Fragment fragment = getCurrentFragmentManager().findFragmentByTag(FRAGMENT_SEARCH_CITY_TAG);
-        if (fragment != null) {
-            ((FilterChooseCityFragment) fragment).low();
-        }
-
-    }
-
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.loFilterCity:
-                scrollToView();
-                showSearchCityFragment();
+            case R.id.loFilterChooseCity:
                 break;
             case R.id.loFilterOnline:
                 DatingFilter.setOnlyOnlineField(mLoFilterOnline.isChecked());
@@ -468,10 +355,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                     Debug.error(e);
                 }
                 if (city == null) {
-                    mLoFilterCity.setText(CacheProfile.city.getName());
+                    mLoFilterChooseCity.setText(CacheProfile.city.getName());
                     mFilter.city = CacheProfile.city;
                 } else {
-                    mLoFilterCity.setText(city.getName());
+                    mLoFilterChooseCity.setText(city.getName());
                     mFilter.city = city;
                 }
                 break;
@@ -648,7 +535,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoFilterSex.setEnabled(false);
         mLoFilterAgeStart.setEnabled(false);
         mLoFilterAgeEnd.setEnabled(false);
-        mLoFilterCity.setEnabled(false);
+        mLoFilterChooseCity.setEnabled(false);
         mLoFilterOnline.setEnabled(false);
         mLoFilterBeautiful.setEnabled(false);
         mLoFilterDatingStatus.setEnabled(false);
@@ -665,7 +552,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoFilterSex.setEnabled(true);
         mLoFilterAgeStart.setEnabled(true);
         mLoFilterAgeEnd.setEnabled(true);
-        mLoFilterCity.setEnabled(true);
+        mLoFilterChooseCity.setEnabled(true);
         mLoFilterOnline.setEnabled(true);
         mLoFilterBeautiful.setEnabled(true);
         mLoFilterDatingStatus.setEnabled(true);
@@ -698,5 +585,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     protected String getTitle() {
         return getString(R.string.filter_filter);
+    }
+
+    @Override
+    public void onPause() {
+        Utils.hideSoftKeyboard(getActivity(), mLoFilterChooseCity);
+        super.onPause();
     }
 }
