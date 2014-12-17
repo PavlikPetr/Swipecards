@@ -589,11 +589,15 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         private int calcRightIndex(final Photos photos, final int index) {
             if (index < 0) {
                 int res = index;
-                while (res < 0) res += photos.size();
+                while (res < 0) {
+                    res += photos.size();
+                }
                 return res;
             } else if (index >= photos.size()) {
                 int res = index;
-                while (res >= photos.size()) res -= 1;
+                while (res >= photos.size()) {
+                    res -= 1;
+                }
                 return res;
             }
             return index;
