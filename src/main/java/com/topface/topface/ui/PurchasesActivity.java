@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
-import android.text.TextUtils;
 import android.view.MenuItem;
 
 import com.topface.billing.OpenIabFragment;
@@ -28,8 +27,6 @@ import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
-    private static final String TOPFACE_OFFERWALL_COMPLETENESS = "topface_offewall_completeness";
-
     /**
      * Constant keys for different fragments
      * Values have to be > 0
@@ -39,8 +36,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     private ForceOfferwallRedirect mBonusRedirect;
     private static TopfaceOfferwallRedirect mTopfaceOfferwallRedirect;
-    private boolean mIsTopfaceOfferwallCompleted;
-    private boolean mIsTopfaceOfferwallsReady;
+    private boolean mIsOfferwallsReady;
 
     static {
         if (CacheProfile.isLoaded()) {
@@ -51,8 +47,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     private BroadcastReceiver mOfferwallOpenedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mIsTopfaceOfferwallCompleted = TextUtils.equals(
-                    intent.getStringExtra(BonusFragment.OFFERWALL_NAME), OfferwallsManager.TFOFFERWALL);
+            if (mTopfaceOfferwallRedirect != null) {
+                mTopfaceOfferwallRedirect.setCompletedByBroadcast(intent);
+            }
         }
     };
 
@@ -60,10 +57,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         if (TFOfferwallSDK.isInitialized()) {
-            mIsTopfaceOfferwallsReady = true;
+            mIsOfferwallsReady = true;
         }
-        if (getIntent().hasExtra(TFOfferwallActivity.PAYLOAD)) {
-            mIsTopfaceOfferwallCompleted = true;
+        if (mTopfaceOfferwallRedirect != null) {
+            mTopfaceOfferwallRedirect.setCompletedByIntent(getIntent());
         }
         LocalBroadcastManager.getInstance(this).registerReceiver(mOfferwallOpenedReceiver, new IntentFilter(BonusFragment.OFFERWALL_OPENED));
     }
@@ -71,6 +68,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     @Override
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mOfferwallOpenedReceiver);
+        mTopfaceOfferwallRedirect.setComplited(false);
         super.onDestroy();
     }
 
@@ -97,7 +95,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
             OfferwallsManager.initTfOfferwall(this, new TFCredentials.OnInitializeListener() {
                 @Override
                 public void onInitialized() {
-                    mIsTopfaceOfferwallsReady = true;
+                    mIsOfferwallsReady = true;
                 }
 
                 @Override
@@ -110,13 +108,13 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(TOPFACE_OFFERWALL_COMPLETENESS, mIsTopfaceOfferwallCompleted);
+        outState.putParcelable(TopfaceOfferwallRedirect.TOPFACE_OFFERWAL_REDIRECT, mTopfaceOfferwallRedirect);
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-
+        mTopfaceOfferwallRedirect = savedInstanceState.getParcelable(TopfaceOfferwallRedirect.TOPFACE_OFFERWAL_REDIRECT);
     }
 
     public void skipBonus() {
@@ -204,7 +202,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     private boolean needTFOfferwallOnCloseRedirect() {
         return isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnClose() &&
-                !mIsTopfaceOfferwallCompleted && mIsTopfaceOfferwallsReady;
+                !mTopfaceOfferwallRedirect.isCompleted() && mIsOfferwallsReady;
     }
 
     private boolean showBonus() {
@@ -212,7 +210,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         First check if redirection to topface offers is on. If no check redirection to bonus tab
          */
         if ((isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnClose()) ||
-                mIsTopfaceOfferwallCompleted) {
+                mTopfaceOfferwallRedirect.isCompleted()) {
             return false;
         }
         return mBonusRedirect != null &&
@@ -229,7 +227,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
             OfferwallPayload payload = new OfferwallPayload();
             payload.experimentGroup = TopfaceOfferwallRedirect.KEY_EXP_ON_CLOSE;
             OfferwallsManager.startTfOfferwall(this, payload);
-            mIsTopfaceOfferwallCompleted = true;
+            mTopfaceOfferwallRedirect.setComplited(true);
             return true;
         }
         return false;
