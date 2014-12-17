@@ -15,6 +15,7 @@
     <string name="dating_switch_button">Daha…</string>
     <string name="dating_prev_button">Önceki</string>
     <string name="dating_chat_button">Sohbet etmek</string>
+    <string name="waiting_a_products">Satın almak için mevcut mal indiriyoruz. Lütfen bekleyin.</string>
     <string name="likes_background_text">Sempati yok</string>
     <string name="visitors_background_text">Misafirler yok</string>
     <string name="chat_background_text">Gelen mesaj yok</string>
@@ -117,6 +118,11 @@
     <string name="pincode_forget">PIN-kod mu unuttunuz?</string>
     <string name="pincode_auth_input">Login ve parolaya girmelisiniz</string>
     <string name="pincode_will_be_reset">Başarılı üye girişinden sonra uygulamanın tüm ayarları sıfırlanacak.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">%d min.</item>
+        <item quantity="other">%d min.</item>
+        <item quantity="one">%d min.</item>
+    </plurals>
     <string name="general_error">HATA</string>
     <string name="general_yes">Evet</string>
     <string name="general_no">Hayır</string>
@@ -145,6 +151,7 @@
     <string name="general_city">Şehir</string>
     <string name="general_dating">Tanışmalar</string>
     <string name="general_likes">Ben beğeniliyorum</string>
+    <string name="general_sympathies">Beğenleri</string>
     <string name="general_sympathy">Sempati</string>
     <string name="general_delight">Hayranlık</string>
     <string name="general_mutual">Karşılıklı</string>
@@ -165,6 +172,7 @@
     <string name="chat_like_out">Siz sempati gönderdiniz</string>
     <string name="chat_mutual_in">Size hayranlık gönderildi</string>
     <string name="chat_mutual_out">Siz hayranlığınızı gönderdiniz</string>
+    <string name="chat_wish_in">Size gizli bir arzu gönderildi.</string>
     <string name="chat_wish_out">Siz Gizli İstek gönderdiniz.</string>
     <string name="chat_sexuality_in">Seksiliğinize not verildi.</string>
     <string name="chat_sexuality_out">Seksiliğe not verdiniz.</string>
@@ -195,6 +203,7 @@
     <string name="buying_default_message">Siz, hediyelerinizi ve hayranlığınızı para karşına gönderebilirsiniz</string>
     <string name="buying_money">Para alış verişi</string>
     <string name="profile_header_title">Profilim</string>
+    <string name="album_add_photo_title">Bir fotoğraf eklemek için</string>
     <string name="profile_add_album">Mevcut olanlardan seçmek</string>
     <string name="profile_add_camera">Resim çekmek</string>
     <string name="profile_photo">Foto</string>
@@ -240,6 +249,7 @@
     <string name="settings_messages">Mesajlar</string>
     <string name="settings_guests">Misafirler</string>
     <string name="settings_help">Yardım</string>
+    <string name="settings_faq">Sorular ve cevaplar</string>
     <string name="settings_account">Hesap</string>
     <string name="settings_feedback">Yorum bırakmak</string>
     <string name="settings_about">Program hakkında</string>
@@ -587,4 +597,7 @@
     <string name="billing_item_already_owned">Önceki satım alınınız uygulanıyor lütfen bekleyiniz</string>
     <string name="dialog">Sohbet</string>
     <string name="reply">Cevap vermek</string>
+    <string name="measurement_unit_weight">Kg.</string>
+    <string name="measurement_unit_height">cm.</string>
+    <string name="maximum_number_of_users">Maksimum kullanıcı sayısını seçildi</string>
 </resources>
