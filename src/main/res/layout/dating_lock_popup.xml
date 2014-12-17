@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-
-    <ScrollView
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_centerVertical="true"
@@ -66,4 +62,3 @@
                 android:text="@string/locking_popup_button_answer" />
         </LinearLayout>
     </ScrollView>
-</RelativeLayout>
