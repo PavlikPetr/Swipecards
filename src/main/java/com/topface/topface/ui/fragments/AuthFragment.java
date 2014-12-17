@@ -450,6 +450,12 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Override
     protected String getTitle() {
-        return getString(R.string.app_name);
+        /*
+        * ВНИМАНИЕ - данное решение - хак
+        * иначе, после выполнения здесь, в onDestroy(), actionBar.show();
+        * в следующем фрагменте может обрезаться title, причем не сразу,
+        * а только после подгрузки содержимого фида, например
+        * */
+        return getString(R.string.app_name) + "                          ";
     }
 }
