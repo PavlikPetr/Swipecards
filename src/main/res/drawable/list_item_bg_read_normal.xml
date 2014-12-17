@@ -9,8 +9,6 @@
                 android:width="1dp"
                 android:color="@color/list_item_divider_normal"/>
 
-            <solid android:color="@color/list_item_read_normal"/>
-
             <padding
                 android:left="10dp"
                 android:right="12dp"

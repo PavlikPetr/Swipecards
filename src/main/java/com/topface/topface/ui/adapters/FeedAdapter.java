@@ -133,7 +133,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
         if (holder == null) {
             TypeAndFlag typeAndFlag = getViewCreationFlag();
-            flag = typeAndFlag.flag;
 
             if (type == T_NEW || type == T_NEW_VIP) {
                 typeAndFlag.flag |= FeedItemViewConstructor.Flag.NEW;
@@ -141,15 +140,20 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             if (type == T_VIP || type == T_NEW_VIP) {
                 typeAndFlag.flag |= FeedItemViewConstructor.Flag.VIP;
             }
+            flag = typeAndFlag.flag;
             convertView = FeedItemViewConstructor.construct(mContext, typeAndFlag);
             holder = getEmptyHolder(convertView, item);
         }
 
         if (item != null) {
             // установка аватарки пользователя
+            // какую аватарку использовать по умолчанию для забаненных и во время загрузки нормальной
+            int defaultAvatarResId = (item.user.sex == Static.BOY ?
+                    R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+            holder.avatar.setStubResId(defaultAvatarResId);
+
             if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
-                holder.avatar.setRemoteSrc("drawable://" + (item.user.sex == Static.BOY ?
-                        R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar));
+                holder.avatar.setRemoteSrc("drawable://" + defaultAvatarResId);
                 if (item.user.banned || item.user.deleted) {
                     holder.avatar.setOnClickListener(null);
                 } else {
@@ -164,8 +168,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             holder.name.setText(item.user.getNameAndAge());
             if ((item.user.deleted || item.user.banned)) {
                 flag |= FeedItemViewConstructor.Flag.BANNED;
-                FeedItemViewConstructor.setBanned(holder.name, flag);
             }
+            FeedItemViewConstructor.setBanned(holder.name, flag);
 
             // установка сообщения фида
             setItemMessage(item, holder.text);
