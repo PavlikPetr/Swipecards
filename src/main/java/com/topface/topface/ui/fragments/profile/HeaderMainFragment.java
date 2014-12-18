@@ -13,10 +13,12 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.CacheProfile;
 
 /**
  * Фрагмент с аватркой и именем пользователя в профиле
@@ -71,8 +73,31 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                 if (mAvatarVal == null) {
                     return;
                 }
-                Profile userProfile = mPendingUserInit.getData();
-                Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(mAvatarVal.position, userProfile.uid, userProfile.photosCount, userProfile.photos);
+                Profile userProfile = CacheProfile.getProfile();//mPendingUserInit.getData();
+                Photos photos = userProfile.photos;
+                int pos;
+                //todo vыкидывает выход за пределы массива
+                if (photos.size() < mAvatarVal.position) {
+                    //у юзера мало фоток. ава за пределами загруженного, значит все пришло с сервера
+                    pos = mAvatarVal.position;
+                } else {
+                    if (photos.get(mAvatarVal.position).getId() != mAvatarVal.getId()) {
+                        //ид не равны, значт фоточки грузит юзер
+                        int id = mAvatarVal.getId();
+                        pos = photos.getPhotoPosInArrayById(id);
+                    } else {
+                        //у юзера мало фоток и ид равны
+                        pos = mAvatarVal.position;
+                    }
+                }
+                Intent intent;
+                intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(pos, userProfile.uid, userProfile.photosCount, userProfile.photos);
+//                if (userProfile.photos.size()<userProfile.photosCount){
+//                    //колличетство фоток меньше количества объектов в photo -> модератор потер фотки
+//                    intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(pos, userProfile.uid, userProfile.photos.size(), userProfile.photos);
+//                }else{
+//                    intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(pos, userProfile.uid, userProfile.photosCount, userProfile.photos);
+//                }
                 startActivity(intent);
             }
         });

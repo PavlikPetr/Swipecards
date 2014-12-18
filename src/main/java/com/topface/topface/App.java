@@ -242,6 +242,12 @@ public class App extends Application {
 
                     @Override
                     protected void success(Profile data, IApiResponse response) {
+                        //todo можно добавить через веб
+                        if (CacheProfile.getProfile().photosCount > data.photosCount) {
+                            //LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT)
+                            //        .putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, data.photos)
+                            //        .putExtra(PhotoSwitcherActivity.INTENT_CLEAR, true));
+                        }
                         CacheProfile.setProfile(data, response, part);
                         CacheProfile.sendUpdateProfileBroadcast();
                     }

@@ -81,7 +81,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                     position,
                     CacheProfile.uid,
                     CacheProfile.totalPhotos,
-                    (ProfileGridAdapter) mGridAlbum.getAdapter()
+                    CacheProfile.photos
+                    //(ProfileGridAdapter) mGridAlbum.getAdapter()
+                    //todo
             ));
         }
     };
@@ -298,7 +300,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private void initTitleText(TextView title) {
         if (title != null) {
             title.setVisibility(View.VISIBLE);
-            int size = CacheProfile.totalPhotos;
+            int size = mGridAlbum.getAdapter().getCount() - 1;//CacheProfile.totalPhotos;
             if (size > 0) {
                 title.setText(Utils.formatPhotoQuantity(size));
                 return;
