@@ -359,7 +359,8 @@
         <!-- Topface offerwall -->
         <activity
             android:name="com.topface.offerwall.publisher.TFOfferwallActivity"
-            android:icon="@drawable/ic_home_topface_white"/>
+            android:icon="@drawable/ic_home_topface_white"
+            android:parentActivityName=".ui.PurchasesActivity" />
 
         <receiver
             android:name=".receivers.TestNotificationsReceiver"

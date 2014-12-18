@@ -37,6 +37,7 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.fragments.MenuFragment;
@@ -128,7 +129,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private BroadcastReceiver mOpenMenuReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            toggleDrawerLayout();
+            if (mMenuFragment.isLockedByClosings()) {
+                mMenuFragment.showClosingsDialog();
+            } else {
+                toggleDrawerLayout();
+            }
         }
     };
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
@@ -450,6 +455,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onProfileUpdated() {
         initBonusCounterConfig();
+        // возможно что содержимое меню поменялось, надо обновить
+        if (mMenuFragment != null) {
+            mMenuFragment.updataAdapter();
+        }
+        FloatBlock.resetActivityMap();
         mNotificationController.refreshNotificator();
     }
 
@@ -555,6 +565,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         mDrawerToggle.syncState();
         mMenuFragment.onLoadProfile();
+
+        /*
+        Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
+         */
+        OfferwallsManager.initTfOfferwall(this, null);
     }
 
     @Override

@@ -68,10 +68,11 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
         mAvatarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mAvatarVal == null) {
+                    return;
+                }
                 Profile userProfile = mPendingUserInit.getData();
-                Photo photo = userProfile.photos.getPhotoById(mAvatarVal.getId());
-                int position = (photo != null) ? photo.getPosition() : 0;
-                Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userProfile.uid, userProfile.photosCount, userProfile.photos);
+                Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(mAvatarVal.position, userProfile.uid, userProfile.photosCount, userProfile.photos);
                 startActivity(intent);
             }
         });
