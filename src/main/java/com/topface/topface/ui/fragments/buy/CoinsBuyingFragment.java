@@ -76,6 +76,8 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                             if (activity instanceof PurchasesActivity) {
                                 ((PurchasesActivity) activity).skipBonus();
                             }
+
+                            CacheProfile.getOptions().topfaceOfferwallRedirect.setComplited(true);
                         }
                     }
             );
@@ -117,6 +119,8 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                             if (activity instanceof PurchasesActivity) {
                                 ((PurchasesActivity) activity).skipBonus();
                             }
+
+                            CacheProfile.getOptions().topfaceOfferwallRedirect.setComplited(true);
                         }
                     }
             );

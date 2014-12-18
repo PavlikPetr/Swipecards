@@ -170,6 +170,7 @@ public class PurchasesFragment extends BaseFragment {
                     if (mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled()) {
                         StatisticsTracker.getInstance().sendEvent("bonuses_opened",
                                 new Slices().putSlice("ref", mTopfaceOfferwallRedirect.getGroup()));
+                        mTopfaceOfferwallRedirect.setComplited(true);
                     }
                     mSkipBonus = true;
                 }
