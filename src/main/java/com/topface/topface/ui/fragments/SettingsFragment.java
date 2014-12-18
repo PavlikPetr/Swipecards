@@ -94,7 +94,14 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         mUserSettings = App.getUserConfig();
 
         // Init settings views
-        initViews(view);
+        /*
+         Hack for xiaomi. Maybe not only xiaomi. After finishing activity it keeps initializing it's fragments.
+         In case of logout we haven't user settings to properly init some views. Because of this we need
+         to abort views initialization if activity is finishing.
+          */
+        if (!getActivity().isFinishing()) {
+            initViews(view);
+        }
 
         return view;
     }
