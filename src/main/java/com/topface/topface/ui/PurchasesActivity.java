@@ -57,7 +57,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         if (TFOfferwallSDK.isInitialized()) {
-            mIsOfferwallsReady = true;
+            mIsOfferwallsReady = TFCredentials.getAdId() != null;
         }
         if (mTopfaceOfferwallRedirect != null) {
             mTopfaceOfferwallRedirect.setCompletedByIntent(getIntent());
@@ -114,7 +114,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mTopfaceOfferwallRedirect = savedInstanceState.getParcelable(TopfaceOfferwallRedirect.TOPFACE_OFFERWAL_REDIRECT);
+        TopfaceOfferwallRedirect topfaceOfferwallRedirectRestored =
+                savedInstanceState.getParcelable(TopfaceOfferwallRedirect.TOPFACE_OFFERWAL_REDIRECT);
+        mTopfaceOfferwallRedirect.setComplited(topfaceOfferwallRedirectRestored.isCompleted());
     }
 
     public void skipBonus() {
