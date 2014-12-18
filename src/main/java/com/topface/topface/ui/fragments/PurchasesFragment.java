@@ -48,6 +48,7 @@ public class PurchasesFragment extends BaseFragment {
     public static final int TYPE_GIFT = 1;
     public static final int TYPE_LEADERS = 2;
     public static final int TYPE_UNLOCK_SYMPATHIES = 3;
+    public static final int TYPE_ADMIRATION = 4;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
     private TextView mCurCoins;
     private TextView mCurLikes;
@@ -303,6 +304,9 @@ public class PurchasesFragment extends BaseFragment {
                     break;
                 case TYPE_UNLOCK_SYMPATHIES:
                     text = Utils.getQuantityString(R.plurals.buying_unlock_likes_you_need_coins, diff, diff);
+                    break;
+                case TYPE_ADMIRATION:
+                    text = Utils.getQuantityString(R.plurals.buying_admiration_you_need_coins, diff, diff);
                     break;
                 default:
                     if (extraText != null) {
