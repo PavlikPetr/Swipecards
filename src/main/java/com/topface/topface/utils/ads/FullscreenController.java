@@ -11,11 +11,6 @@ import android.view.animation.AnimationUtils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.ivengo.ads.AdManager;
-import com.ivengo.ads.AdType;
-import com.ivengo.ads.Interstitial;
-import com.ivengo.ads.InterstitialListener;
-import com.ivengo.ads.Request;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -36,8 +31,6 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 
-import java.net.URL;
-
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
@@ -48,7 +41,6 @@ import ru.ideast.adwired.events.OnStopListener;
 public class FullscreenController {
 
     private static final String TAG = "FullscreenController";
-    private static final String IVENGO_APP_ID = "aggeas97392g";
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
@@ -159,9 +151,6 @@ public class FullscreenController {
                 case BannerBlock.BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
-                case BannerBlock.BANNER_IVENGO:
-                    requestIvengoFullscreen();
-                    break;
                 default:
                     break;
             }
@@ -211,51 +200,6 @@ public class FullscreenController {
                 addLastFullscreenShowedTime();
             }
         });
-    }
-
-    private void requestIvengoFullscreen() {
-        AdManager.getInstance().initialize(mActivity);
-        Interstitial advViewIvengo = new Interstitial(AdType.BANNER_FULLSCREEN);
-        Request request = new Request();
-        request.setAppId(IVENGO_APP_ID);
-        advViewIvengo.setInterstitialListener(new InterstitialListener() {
-            @Override
-            public void onInterstitialReceiveAd(Interstitial interstitial) {
-                interstitial.showFromActivity(mActivity);
-            }
-
-            @Override
-            public void onInterstitialFailWithError(Interstitial interstitial, com.ivengo.ads.Error error) {
-                requestFallbackFullscreen();
-            }
-
-            @Override
-            public void onInterstitialShowAd(Interstitial interstitial) {
-
-            }
-
-            @Override
-            public void onInterstitialSkipAd(Interstitial interstitial) {
-                requestFallbackFullscreen();
-            }
-
-            @Override
-            public void onInterstitialWillLeaveApplicationWithUrl(Interstitial interstitial, URL url) {
-
-            }
-
-            @Override
-            public void onInterstitialWillReturnToApplication(Interstitial interstitial) {
-
-            }
-
-            @Override
-            public void onInterstitialDidFinishAd(Interstitial interstitial) {
-
-            }
-        });
-
-        advViewIvengo.loadRequest(request);
     }
 
     private void requestAdwiredFullscreen() {

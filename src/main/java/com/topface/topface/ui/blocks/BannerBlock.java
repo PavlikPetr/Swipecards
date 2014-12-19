@@ -19,8 +19,6 @@ import android.widget.ImageView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.inneractive.api.ads.InneractiveAd;
-import com.inneractive.api.ads.InneractiveAdListener;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -71,16 +69,13 @@ public class BannerBlock {
     public final static String BANNER_TOPFACE = "TOPFACE";
     public final static String BANNER_ADMOB = "ADMOB";
     public static final String BANNER_ADWIRED = "ADWIRED";
-    public static final String BANNER_IVENGO = "IVENGO";
     public static final String BANNER_ADCAMP = "ADCAMP";
-    public static final String BANNER_INNERACTIVE = "INNERACTIVE";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
     public final static String[] BANNERS = new String[]{
             BANNER_TOPFACE,
             BANNER_ADMOB,
             BANNER_ADWIRED,
-            BANNER_IVENGO,
             BANNER_ADCAMP,
             BANNER_GAG,
             BANNER_NONE
@@ -178,8 +173,6 @@ public class BannerBlock {
                     return mInflater.inflate(R.layout.banner_adwired, mBannerLayout, false);
                 case BANNER_ADCAMP:
                     return mInflater.inflate(R.layout.banner_adcamp, mBannerLayout, false);
-                case BANNER_INNERACTIVE:
-                    return mInflater.inflate(R.layout.banner_inneractive, null);
                 default:
                     return null;
             }
@@ -228,8 +221,6 @@ public class BannerBlock {
             showAdwired();
         } else if (mBannerView instanceof BannerAdView) {
             showAdcamp();
-        } else if (mBannerView instanceof InneractiveAd) {
-            showInneractive();
         } else if (mBannerView instanceof ImageView) {
             if (banner == null) {
                 requestBannerGag();
@@ -238,61 +229,6 @@ public class BannerBlock {
             }
         }
     }
-
-    private void showInneractive() {
-        InneractiveAd inneractive = ((InneractiveAd) mBannerView);
-        inneractive.setAge(CacheProfile.age);
-        inneractive.setGender(CacheProfile.sex == Static.BOY ? "Male" : "Female");
-        inneractive.setInneractiveListener(new InneractiveAdListener() {
-            @Override
-            public void onIaAdReceived() {
-                Debug.log("Inneractive: onIaAdReceived()");
-            }
-
-            @Override
-            public void onIaDefaultAdReceived() {
-                Debug.log("Inneractive: onIaDefaultAdReceived()");
-            }
-
-            @Override
-            public void onIaAdFailed() {
-                Debug.log("Inneractive: onIaAdFailed()");
-                if (mFragment != null && mFragment.getActivity() != null) {
-                    mFragment.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            requestBannerGag();
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onIaAdClicked() {
-            }
-
-            @Override
-            public void onIaAdResize() {
-            }
-
-            @Override
-            public void onIaAdResizeClosed() {
-            }
-
-            @Override
-            public void onIaAdExpand() {
-            }
-
-            @Override
-            public void onIaAdExpandClosed() {
-            }
-
-            @Override
-            public void onIaDismissScreen() {
-            }
-        });
-    }
-
 
     private void showTopface(final Banner banner) {
         //Это нужно, что бы сбросить размеры баннера, для правильного расчета размера в ImageLoader
@@ -537,12 +473,6 @@ public class BannerBlock {
     }
 
     public void onDestroy() {
-
-        if (mBannerView != null) {
-            if (mBannerView instanceof InneractiveAd) {
-                ((InneractiveAd) mBannerView).cleanUp();
-            }
-        }
         removeBanner();
     }
 
