@@ -456,8 +456,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     protected void onProfileUpdated() {
         initBonusCounterConfig();
         // возможно что содержимое меню поменялось, надо обновить
-        if (mMenuFragment != null) {
-            mMenuFragment.updataAdapter();
+        if (mMenuFragment != null && CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
+            mMenuFragment.updateAdapter();
         }
         FloatBlock.resetActivityMap();
         mNotificationController.refreshNotificator();
