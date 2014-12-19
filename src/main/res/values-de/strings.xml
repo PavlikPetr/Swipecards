@@ -242,6 +242,7 @@
     <string name="settings_messages">Nachrichten</string>
     <string name="settings_guests">Gäste</string>
     <string name="settings_help">Hilfe</string>
+    <string name="settings_faq">Fragen und antworten</string>
     <string name="settings_account">Account</string>
     <string name="settings_feedback">Meinung abgeben</string>
     <string name="settings_about">Über das Programm</string>
@@ -580,4 +581,5 @@
     <string name="reply">Antworten</string>
     <string name="measurement_unit_weight">kg.</string>
     <string name="measurement_unit_height">cm.</string>
+    <string name="email_changing">E-Mail ändern</string>
 </resources>
