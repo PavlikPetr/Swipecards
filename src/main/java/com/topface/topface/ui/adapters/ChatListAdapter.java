@@ -175,12 +175,37 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
+    /**
+     * compares current data set with new from server
+     * and updates current items.
+     * clears incoming data, to avoid usless notifyDataSetChanged()
+     *
+     * @param data new data from server
+     */
+    private void compareAndUpdateData(ArrayList<History> data) {
+        ArrayList<History> currentData = getData();
+        for (int j = 0; j < currentData.size(); j++) {
+            History item = currentData.get(j);
+            for (int i = 0; i < data.size(); i++) {
+                History newItem = data.get(i);
+                if (item.isEqualsEnough(newItem)) {
+                    currentData.set(j, newItem);
+                    data.remove(i);
+                    break;
+                }
+            }
+        }
+    }
     @Override
     public void addFirst(ArrayList<History> data, boolean more) {
+        compareAndUpdateData(data);
+
         if (!mUnrealItems.isEmpty()) removeUnrealItems();
         super.addFirst(data, more, false);
         prepareDates();
-        notifyDataSetChanged();
+        if (!data.isEmpty()) {
+            notifyDataSetChanged();
+        }
     }
 
     public void addFirst(ArrayList<History> data, boolean more, ListView parentView) {
@@ -215,13 +240,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             }
         }
         if (positionToReplace != -1) {
-            data.remove(positionToReplace);
-            data.add(positionToReplace, unrealItem);
+            data.set(positionToReplace, unrealItem);
             mUnrealItems.add(unrealItem);
         }
 
         prepareDates();
-        notifyDataSetChanged();
         parentView.setSelection(getCount() - 1);
     }
 
