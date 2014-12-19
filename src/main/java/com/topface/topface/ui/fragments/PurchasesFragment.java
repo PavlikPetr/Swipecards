@@ -336,4 +336,8 @@ public class PurchasesFragment extends BaseFragment {
         return getString(R.string.buying_header_title);
     }
 
+    public boolean isVipProducts() {
+        return mIsVip;
+    }
+
 }
