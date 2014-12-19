@@ -319,11 +319,16 @@ public class PurchasesFragment extends BaseFragment {
                     text = Utils.getQuantityString(R.plurals.buying_admiration_you_need_coins, diff, diff);
                     break;
                 default:
-                    if (extraText != null) {
-                        text = extraText;
+                    if (coins != 0) {
+                        text = Utils.getQuantityString(R.plurals.buying_you_need_coins, diff, diff);
                     } else {
-                        text = getResources().getString(mIsVip ? R.string.vip_state_off : R.string.buying_default_message);
+                        if (extraText != null) {
+                            text = extraText;
+                        } else {
+                            text = getResources().getString(mIsVip ? R.string.vip_state_off : R.string.buying_default_message);
+                        }
                     }
+
                     break;
             }
             if (diff <= 0 && type != TYPE_NONE) {
