@@ -230,8 +230,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    public void updataAdapter() {
+    public void updateAdapter() {
         initAdapter();
+        if (mClosingsController != null) {
+            mClosingsController.unlockLeftMenu();
+        }
     }
 
     private void initAdapter() {
