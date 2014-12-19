@@ -376,7 +376,7 @@
     <style name="ListItemContainer">
         <!-- paddings set in drawables -->
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_height">68dp</item>
     </style>
 
     <style name="ListItemEmptyText">
@@ -395,8 +395,8 @@
         <item name="clipMask">@drawable/feed_photo_mask</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_width">44dp</item>
-        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
         <item name="android:layout_marginRight">10dp</item>
     </style>
 
@@ -443,7 +443,7 @@
 
     <style name="ListName" parent="Shadowless">
         <item name="android:drawablePadding">6dp</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
