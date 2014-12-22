@@ -88,6 +88,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 mPhotoLinks.addFirst(photo);
                 Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
                 if (activity == null) {
+                    //TODO: Переделать на обновление фото
                     Intent intent = new Intent(CacheProfile.PROFILE_UPDATE_ACTION);
                     LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
                 } else {
@@ -110,7 +111,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         mLastSelectedAsMainId = mSelectedAsMainId;
         CacheProfile.sendUpdateProfileBroadcast();
         mPhotoLinks = new Photos();
-        mPhotoLinks.add(new Photo());
         if (CacheProfile.photos != null) {
             mPhotoLinks.addAll(CacheProfile.photos);
         }

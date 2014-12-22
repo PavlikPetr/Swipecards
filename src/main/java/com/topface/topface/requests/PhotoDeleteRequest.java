@@ -8,7 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PhotoDeleteRequest extends ApiRequest {
+public class
+        PhotoDeleteRequest extends ApiRequest {
     // Data
     public static final String service = "photo.delete";
     //TODO передалть на объекты Photo

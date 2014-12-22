@@ -1,8 +1,12 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +22,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 
 /**
  * Фрагмент с аватркой и именем пользователя в профиле
@@ -28,6 +31,9 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     private static final String ARG_TAG_NAME = "name";
     private static final String ARG_TAG_CITY = "city";
     private static final String ARG_TAG_BACKGROUND = "background";
+    public static final String UPDATE_AVATAR_POSITION = "com.topface.topface.updateAvatarPosition";
+    public static final String INCREMENT_AVATAR_POSITION = "com.topface.topface.incrementAvatarPosition";
+    public static final String DECREMENT_AVATAR_POSITION = "com.topface.topface.decrementAvatarPosition";
 
     private ImageViewRemote mAvatarView;
     private Photo mAvatarVal;
@@ -36,6 +42,24 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     private TextView mCityView;
     private String mCityVal;
     private BasePendingInit<Profile> mPendingUserInit = new BasePendingInit<>();
+
+    private BroadcastReceiver mAvatarPositionReciver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean increment = intent.getBooleanExtra(INCREMENT_AVATAR_POSITION, false);
+            boolean decrement = intent.getBooleanExtra(DECREMENT_AVATAR_POSITION, false);
+            if (increment) {
+                mAvatarVal.position += 1;
+                return;
+            }
+            if (decrement) {
+                if (intent.getIntExtra("pos", -1) > mAvatarVal.position) {
+                    mAvatarVal.position -= 1;
+                }
+                mPendingUserInit.getData().photosCount -= 1;
+            }
+        }
+    };
 
     private static void saveState(Fragment fragment, Profile profile) {
         if (!fragment.isVisible()) {
@@ -73,31 +97,23 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                 if (mAvatarVal == null) {
                     return;
                 }
-                Profile userProfile = CacheProfile.getProfile();//mPendingUserInit.getData();
+                Profile userProfile = mPendingUserInit.getData();
                 Photos photos = userProfile.photos;
                 int pos;
-                //todo vыкидывает выход за пределы массива
                 if (photos.size() < mAvatarVal.position) {
-                    //у юзера мало фоток. ава за пределами загруженного, значит все пришло с сервера
+                    //ава за пределами загруженной пачки
                     pos = mAvatarVal.position;
                 } else {
                     if (photos.get(mAvatarVal.position).getId() != mAvatarVal.getId()) {
-                        //ид не равны, значт фоточки грузит юзер
+                        //ид не равны, юзер загрузил новые фотки
                         int id = mAvatarVal.getId();
                         pos = photos.getPhotoPosInArrayById(id);
                     } else {
-                        //у юзера мало фоток и ид равны
                         pos = mAvatarVal.position;
                     }
                 }
                 Intent intent;
                 intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(pos, userProfile.uid, userProfile.photosCount, userProfile.photos);
-//                if (userProfile.photos.size()<userProfile.photosCount){
-//                    //колличетство фоток меньше количества объектов в photo -> модератор потер фотки
-//                    intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(pos, userProfile.uid, userProfile.photos.size(), userProfile.photos);
-//                }else{
-//                    intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(pos, userProfile.uid, userProfile.photosCount, userProfile.photos);
-//                }
                 startActivity(intent);
             }
         });
@@ -119,6 +135,8 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     public void onResume() {
         super.onResume();
         refreshViews();
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mAvatarPositionReciver, new IntentFilter(UPDATE_AVATAR_POSITION));
     }
 
     @Override
@@ -209,5 +227,7 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     @Override
     public void onPause() {
         super.onPause();
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(mAvatarPositionReciver);
     }
 }
