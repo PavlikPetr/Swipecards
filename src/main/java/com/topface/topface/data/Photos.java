@@ -75,7 +75,6 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
         return result;
     }
 
-    //todo
     public int getPhotoPosInArrayById(int photoId) {
         int pos;
         for (int i = 0; i < this.size(); i++) {
