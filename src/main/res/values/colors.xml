@@ -42,5 +42,8 @@
     <color name="edit_form_selector_background_color_release_state">#FFFFFF</color>
     <color name="edit_form_selector_background_color_pressed_state">#33B5E5</color>
 
+    <!--filter fragment dividers color-->
+    <color name="filter_fragment_divider_color">#E2E2E2</color>
+
 
 </resources>

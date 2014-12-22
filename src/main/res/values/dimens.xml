@@ -36,4 +36,10 @@
     <dimen name="drop_downList_cell_padding_top">15dp</dimen>
     <dimen name="drop_downList_cell_padding_bottom">15dp</dimen>
 
+    <!--CustomCitySearchView padding top-->
+    <dimen name="custom_city_search_view_padding_top">10dp</dimen>
+
+    <!--filter fragment dividers height-->
+    <dimen name="filter_fragment_divider_height">1dp</dimen>
+
 </resources>

@@ -199,7 +199,7 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="ItemTitleText" parent="ShadowItemFont">
+    <style name="ItemTitleText" parent="NoShadowItemFont">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
@@ -244,13 +244,13 @@
         <item name="android:textColor">#9FCCF3</item>
     </style>
 
-    <style name="ItemtText" parent="ShadowItemFont">
+    <style name="ItemtText" parent="NoShadowItemFont">
         <item name="android:textColor">#B8B8B8</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="ItemWhiteText" parent="ShadowItemFont">
+    <style name="ItemWhiteText" parent="NoShadowItemFont">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">normal</item>
@@ -348,7 +348,7 @@
         <item name="android:text">@string/general_dialog_saving</item>
     </style>
 
-    <style name="BackgroundFont" parent="ShadowItemFont">
+    <style name="BackgroundFont" parent="NoShadowItemFont">
         <item name="android:textColor">#737373</item>
         <item name="android:textSize">16sp</item>
     </style>
@@ -417,7 +417,7 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="ListMessageText" parent="ShadowItemFont">
+    <style name="ListMessageText" parent="NoShadowItemFont">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginRight">4dp</item>
@@ -428,7 +428,7 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="ListCity" parent="ShadowItemFont">
+    <style name="ListCity" parent="NoShadowItemFont">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">5dp</item>
@@ -445,7 +445,7 @@
         <item name="android:drawablePadding">5dp</item>
     </style>
 
-    <style name="ListName" parent="ShadowItemFont">
+    <style name="ListName" parent="NoShadowItemFont">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#FFFFFF</item>
@@ -656,7 +656,7 @@
         <item name="android:layout_marginRight">6dp</item>
     </style>
 
-    <style name="TopfaceTextAppearance" parent="ShadowItemFont">
+    <style name="TopfaceTextAppearance" parent="NoShadowItemFont">
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
@@ -879,8 +879,8 @@
     </style>
 
     <style name="FilterSpinnerDropDownList" parent="android:Widget.ListView.DropDown">
-        <item name="android:divider">#e2e2e2</item>
-        <item name="android:dividerHeight">1dp</item>
+        <item name="android:divider">@color/filter_fragment_divider_color</item>
+        <item name="android:dividerHeight">@dimen/filter_fragment_divider_height</item>
     </style>
 
     <style name="FilterCheckBox" parent="topfaceCheckbox">
@@ -895,8 +895,8 @@
     </style>
 
     <style name="CenterJustifyDialogTitle" parent="@android:style/Theme.Dialog">
-        <item name="android:divider">#e2e2e2</item>
-        <item name="android:dividerHeight">1dp</item>
+        <item name="android:divider">@color/filter_fragment_divider_color</item>
+        <item name="android:dividerHeight">@dimen/filter_fragment_divider_height</item>
     </style>
 
 </resources>

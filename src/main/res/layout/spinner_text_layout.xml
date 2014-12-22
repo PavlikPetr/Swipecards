@@ -6,5 +6,6 @@
     android:background="#FFFFFF"
     android:gravity="center_vertical"
     android:singleLine="false"
+    android:tag="dropDownTextView"
     android:textColor="#333333"
     android:textSize="18sp" />

@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -27,11 +27,9 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
-import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.adapters.FilterDialogAdapter;
-import com.topface.topface.ui.adapters.SpinnerAgeAdapter;
-import com.topface.topface.ui.views.CustomCitySearchView;
-import com.topface.topface.ui.views.LockableScrollView;
+import com.topface.topface.ui.adapters.SpinnerAdapter;
+import com.topface.topface.ui.views.CitySearchView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.Utils;
@@ -46,8 +44,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     public static Profile mTargetUser = new User();
     public static final String INTENT_DATING_FILTER = "Topface_Dating_Filter";
 
-    private static final String FRAGMENT_SEARCH_CITY_TAG = "FilterChooseCityFragment";
-
     private FormInfo mFormInfo;
     private DatingFilter mInitFilter;
     private DatingFilter mFilter;
@@ -58,7 +54,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private Spinner mLoFilterAgeStart;
     private Spinner mLoFilterAgeEnd;
 
-    private LockableScrollView mScroll;
+    private ScrollView mScroll;
 
     private CheckBox mLoFilterOnline;
     private CheckBox mLoFilterBeautiful;
@@ -70,14 +66,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ViewGroup mLoFilterFinance;
     private ViewGroup mLoFilterShowOff;
 
-    CustomCitySearchView mLoFilterChooseCity;
-
+    CitySearchView mLoFilterChooseCity;
 
     private ImageView mLoFilterButtonHome;
-
-    private FragmentManager mFragmentManager;
-
-    private boolean mExtraSavingPerformed = false;
 
     private boolean mInitFilterOnline;
 
@@ -87,27 +78,33 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             switch (id) {
                 case R.id.loFilterDatingStatus:
                     mFilter.xstatus = item;
-                    setText(mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus), mLoFilterDatingStatus);
+                    setText(mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus),
+                            mLoFilterDatingStatus);
                     break;
                 case R.id.loFilterMarriage:
                     mFilter.marriage = item;
-                    setText(mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage), mLoFilterMarriage);
+                    setText(mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage),
+                            mLoFilterMarriage);
                     break;
                 case R.id.loFilterCharacter:
                     mFilter.character = item;
-                    setText(mFormInfo.getEntry(R.array.form_main_character, mFilter.character), mLoFilterCharacter);
+                    setText(mFormInfo.getEntry(R.array.form_main_character, mFilter.character),
+                            mLoFilterCharacter);
                     break;
                 case R.id.loFilterAlcohol:
                     mFilter.alcohol = item;
-                    setText(mFormInfo.getEntry(R.array.form_habits_alcohol, mFilter.alcohol), mLoFilterAlcohol);
+                    setText(mFormInfo.getEntry(R.array.form_habits_alcohol, mFilter.alcohol),
+                            mLoFilterAlcohol);
                     break;
                 case R.id.loFilterFinance:
                     mFilter.finances = item;
-                    setText(mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances), mLoFilterFinance);
+                    setText(mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances),
+                            mLoFilterFinance);
                     break;
                 case R.id.loFilterShowOff:
                     mFilter.breast = item;
-                    setText(mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast), mLoFilterShowOff);
+                    setText(mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast),
+                            mLoFilterShowOff);
                     break;
                 default:
                     break;
@@ -155,11 +152,12 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private void initViews(ViewGroup root) {
 
         // ScrollView
-        mScroll = (LockableScrollView) root.findViewById(R.id.filter_scroll);
+        mScroll = (ScrollView) root.findViewById(R.id.filter_scroll);
 
         // Sex
         mLoFilterSex = (Spinner) root.findViewById(R.id.loFilterSex);
-        mLoFilterSex.setAdapter(new SpinnerAgeAdapter(getActivity(), R.layout.spinner_text_layout, getSexArray()));
+        mLoFilterSex.setAdapter(new SpinnerAdapter(getActivity(),
+                R.layout.spinner_text_layout, getSexArray()));
         mLoFilterSex.setSelection(mFilter.sex);
         mLoFilterSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -176,7 +174,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
         // AgeStart
         mLoFilterAgeStart = (Spinner) root.findViewById(R.id.loFilterAgeStart);
-        mLoFilterAgeStart.setAdapter(new SpinnerAgeAdapter(getActivity(), R.layout.spinner_text_layout, getAgeStartArray(), getActivity().getResources().getString(R.string.filter_age_start_prefix)));
+        mLoFilterAgeStart.setAdapter(new SpinnerAdapter(getActivity(),
+                R.layout.spinner_text_layout, getAgeStartArray(),
+                getActivity().getResources().getString(R.string.filter_age_start_prefix)));
         mLoFilterAgeStart.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -191,7 +191,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
         // AgeEnd
         mLoFilterAgeEnd = (Spinner) root.findViewById(R.id.loFilterAgeEnd);
-        mLoFilterAgeEnd.setAdapter(new SpinnerAgeAdapter(getActivity(), R.layout.spinner_text_layout, getAgeEndArray(), getActivity().getResources().getString(R.string.filter_age_end_prefix)));
+        mLoFilterAgeEnd.setAdapter(new SpinnerAdapter(getActivity(),
+                R.layout.spinner_text_layout, getAgeEndArray(),
+                getActivity().getResources().getString(R.string.filter_age_end_prefix)));
         mLoFilterAgeEnd.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -210,11 +212,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         checkEndAge();
 
         // City
-        mLoFilterChooseCity = (CustomCitySearchView) root.findViewById(R.id.loFilterChooseCity);
+        mLoFilterChooseCity = (CitySearchView) root.findViewById(R.id.loFilterChooseCity);
         if (!TextUtils.isEmpty(mFilter.city.getName())) {
             mLoFilterChooseCity.setDefaultCity(mFilter.city);
         }
-        mLoFilterChooseCity.setOnCityClickListener(new CustomCitySearchView.onCityClickListener() {
+        mLoFilterChooseCity.setOnCityClickListener(new CitySearchView.onCityClickListener() {
             @Override
             public void onClick(City city) {
                 mFilter.city = city;
@@ -235,42 +237,48 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         // Dating Status
         mLoFilterDatingStatus = (ViewGroup) root.findViewById(R.id.loFilterDatingStatus);
         setText(R.array.form_main_status,
-                mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus), mLoFilterDatingStatus);
+                mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus),
+                mLoFilterDatingStatus);
         mLoFilterDatingStatus.setTag(R.array.form_main_status);
         mLoFilterDatingStatus.setOnClickListener(this);
 
         // Marriage
         mLoFilterMarriage = (ViewGroup) root.findViewById(R.id.loFilterMarriage);
         setText(R.array.form_social_marriage,
-                mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage), mLoFilterMarriage);
+                mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage),
+                mLoFilterMarriage);
         mLoFilterMarriage.setTag(R.array.form_social_marriage);
         mLoFilterMarriage.setOnClickListener(this);
 
         // Character
         mLoFilterCharacter = (ViewGroup) root.findViewById(R.id.loFilterCharacter);
         setText(R.array.form_main_character,
-                mFormInfo.getEntry(R.array.form_main_character, mFilter.character), mLoFilterCharacter);
+                mFormInfo.getEntry(R.array.form_main_character, mFilter.character),
+                mLoFilterCharacter);
         mLoFilterCharacter.setTag(R.array.form_main_character);
         mLoFilterCharacter.setOnClickListener(this);
 
         // Alcohol
         mLoFilterAlcohol = (ViewGroup) root.findViewById(R.id.loFilterAlcohol);
         setText(R.array.form_habits_alcohol,
-                mFormInfo.getEntry(R.array.form_habits_alcohol, mFilter.alcohol), mLoFilterAlcohol);
+                mFormInfo.getEntry(R.array.form_habits_alcohol, mFilter.alcohol),
+                mLoFilterAlcohol);
         mLoFilterAlcohol.setTag(R.array.form_habits_alcohol);
         mLoFilterAlcohol.setOnClickListener(this);
 
         // Finance
         mLoFilterFinance = (ViewGroup) root.findViewById(R.id.loFilterFinance);
         setText(R.array.form_social_finances,
-                mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances), mLoFilterFinance);
+                mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances),
+                mLoFilterFinance);
         mLoFilterFinance.setTag(R.array.form_social_finances);
         mLoFilterFinance.setOnClickListener(this);
 
         // ShowOff
         mLoFilterShowOff = (ViewGroup) root.findViewById(R.id.loFilterShowOff);
         setText(R.array.form_physique_breast,
-                mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast), mLoFilterShowOff);
+                mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast),
+                mLoFilterShowOff);
         mLoFilterShowOff.setTag(R.array.form_physique_breast);
         mLoFilterShowOff.setOnClickListener(this);
         setBraSizeVisibility();
@@ -308,11 +316,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
             saveFilter();
         } else {
-            if (mExtraSavingPerformed) {
-                getActivity().setResult(Activity.RESULT_OK);
-            } else {
-                getActivity().setResult(Activity.RESULT_CANCELED);
-            }
+            getActivity().setResult(Activity.RESULT_CANCELED);
         }
         handler.sendEmptyMessage(0);
     }
@@ -321,8 +325,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.loFilterChooseCity:
-                break;
             case R.id.loFilterOnline:
                 DatingFilter.setOnlyOnlineField(mLoFilterOnline.isChecked());
                 break;
@@ -330,22 +332,28 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 mFilter.beautiful = mLoFilterBeautiful.isChecked();
                 break;
             case R.id.loFilterDatingStatus:
-                onCreateDialog(R.array.form_main_status, mFilter.xstatus, v.getId(), mDialogOnItemClickListener);
+                createAndShowDialog(R.array.form_main_status, mFilter.xstatus, v.getId(),
+                        mDialogOnItemClickListener);
                 break;
             case R.id.loFilterMarriage:
-                onCreateDialog(R.array.form_social_marriage, mFilter.marriage, v.getId(), mDialogOnItemClickListener);
+                createAndShowDialog(R.array.form_social_marriage, mFilter.marriage, v.getId(),
+                        mDialogOnItemClickListener);
                 break;
             case R.id.loFilterCharacter:
-                onCreateDialog(R.array.form_main_character, mFilter.character, v.getId(), mDialogOnItemClickListener);
+                createAndShowDialog(R.array.form_main_character, mFilter.character, v.getId(),
+                        mDialogOnItemClickListener);
                 break;
             case R.id.loFilterAlcohol:
-                onCreateDialog(R.array.form_habits_alcohol, mFilter.alcohol, v.getId(), mDialogOnItemClickListener);
+                createAndShowDialog(R.array.form_habits_alcohol, mFilter.alcohol, v.getId(),
+                        mDialogOnItemClickListener);
                 break;
             case R.id.loFilterFinance:
-                onCreateDialog(R.array.form_social_finances, mFilter.finances, v.getId(), mDialogOnItemClickListener);
+                createAndShowDialog(R.array.form_social_finances, mFilter.finances, v.getId(),
+                        mDialogOnItemClickListener);
                 break;
             case R.id.loFilterShowOff:
-                onCreateDialog(R.array.form_physique_breast, mFilter.breast, v.getId(), mDialogOnItemClickListener);
+                createAndShowDialog(R.array.form_physique_breast, mFilter.breast, v.getId(),
+                        mDialogOnItemClickListener);
                 break;
             case R.id.loFilterButtonHome:
                 City city = null;
@@ -355,10 +363,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                     Debug.error(e);
                 }
                 if (city == null) {
-                    mLoFilterChooseCity.setText(CacheProfile.city.getName());
+                    mLoFilterChooseCity.setDefaultCity(CacheProfile.city);
                     mFilter.city = CacheProfile.city;
                 } else {
-                    mLoFilterChooseCity.setText(city.getName());
+                    mLoFilterChooseCity.setDefaultCity(city);
                     mFilter.city = city;
                 }
                 break;
@@ -366,61 +374,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         refreshSaveState();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            Bundle extras = data.getExtras();
-
-            if (requestCode == EditContainerActivity.INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM) {
-                int titleId = extras.getInt(FilterChooseFormItemFragment.INTENT_TITLE_ID);
-                int selectedId = extras.getInt(FilterChooseFormItemFragment.INTENT_SELECTED_ID);
-
-                switch (titleId) {
-                    case R.array.form_main_status:
-                        mFilter.xstatus = selectedId;
-                        break;
-                    case R.array.form_social_marriage:
-                        mFilter.marriage = selectedId;
-                        break;
-                    case R.array.form_main_character:
-                        mFilter.character = selectedId;
-                        break;
-                    case R.array.form_habits_alcohol:
-                        mFilter.alcohol = selectedId;
-                        break;
-                    case R.array.form_physique_breast:
-                        mFilter.breast = selectedId;
-                        break;
-                    case R.array.form_social_finances:
-                        mFilter.finances = selectedId;
-                        break;
-                }
-
-                TextView item = hashTextViewByTitleId.get(titleId);
-                if (item != null) item.setText(mFormInfo.getEntry(titleId, selectedId));
-            } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY) {
-                try {
-                    mFilter.city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
-                } catch (JSONException e) {
-                    Debug.error(e);
-                }
-            } else if (requestCode == EditContainerActivity.INTENT_EDIT_AGE) {
-                int ageStart = extras.getInt(EditContainerActivity.INTENT_AGE_START);
-                int ageEnd = extras.getInt(EditContainerActivity.INTENT_AGE_END);
-                if (ageEnd != 0 && ageStart != 0) {
-                    if (ageEnd == EditAgeFragment.absoluteMax) {
-                        ageEnd = DatingFilter.MAX_AGE;
-                    }
-                }
-                mFilter.ageEnd = ageEnd;
-                mFilter.ageStart = ageStart;
-            }
-            refreshSaveState();
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
+    // create array for spinner Sex
     private ArrayList<String> getSexArray() {
         ArrayList<String> array = new ArrayList<>();
         array.add(getActivity().getResources().getString(R.string.general_girls));
@@ -428,6 +382,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         return array;
     }
 
+    // create array for sinner AgeStart
     private ArrayList<String> getAgeStartArray() {
         ArrayList<String> array = new ArrayList<>();
         for (int i = DatingFilter.MIN_AGE; i <= DatingFilter.MAX_AGE - DatingFilter.DIFF_AGE; i++) {
@@ -440,6 +395,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         return findCurrentPositionInArray(Integer.toString(currentAge), getAgeStartArray());
     }
 
+    // create array for spinner AgeEnd
     private ArrayList<String> getAgeEndArray() {
         ArrayList<String> array = new ArrayList<>();
         for (int i = DatingFilter.MIN_AGE + DatingFilter.DIFF_AGE; i <= DatingFilter.MAX_AGE; i++) {
@@ -481,9 +437,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         }
     }
 
-    // get int spinner selected value without characters
+    // get int spinner selected value without prefix
     private int getSpinnerSelectedAge(Spinner spinner) {
-        return Integer.parseInt(((String) (spinner.getAdapter().getItem(spinner.getSelectedItemPosition()))).replaceAll("[^\\d]", ""));
+        return Integer.parseInt(((String) (spinner.getAdapter().
+                getItem(spinner.getSelectedItemPosition()))).replaceAll("[^\\d]", ""));
     }
 
     private void setCurrentAgeStartValue(final int value) {
@@ -507,10 +464,15 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         }
     }
 
-    private void onCreateDialog(final int titleId, int targetId, final int viewId, final DialogRowCliCkInterface listener) {
+    // show dialog
+    private void createAndShowDialog(final int titleId, int targetId, final int viewId,
+                                     final DialogRowCliCkInterface listener) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.filter_dialog_layout, null);
         ListView myList = (ListView) view.findViewWithTag("loFilterList");
-        myList.setAdapter(new FilterDialogAdapter(getActivity(), R.layout.filter_edit_form_dialog_cell, mFormInfo.getEntriesByTitleId(titleId), mFormInfo.getEntry(titleId, targetId)));
+        myList.setAdapter(new FilterDialogAdapter(getActivity(),
+                R.layout.filter_edit_form_dialog_cell,
+                mFormInfo.getEntriesByTitleId(titleId),
+                mFormInfo.getEntry(titleId, targetId)));
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
         final Dialog dialog = builder.create();

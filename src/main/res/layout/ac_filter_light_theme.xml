@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <com.topface.topface.ui.views.LockableScrollView
+    <ScrollView
         android:id="@+id/filter_scroll"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -52,7 +52,7 @@
                             android:layout_marginRight="0dp" />
                     </LinearLayout>
 
-                    <com.topface.topface.ui.views.CustomCitySearchView
+                    <com.topface.topface.ui.views.CitySearchView
                         android:id="@+id/loFilterChooseCity"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-    </com.topface.topface.ui.views.LockableScrollView>
+    </ScrollView>
 
     <FrameLayout
         android:id="@+id/loFrame"

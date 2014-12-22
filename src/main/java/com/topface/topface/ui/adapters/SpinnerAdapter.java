@@ -1,7 +1,6 @@
 package com.topface.topface.ui.adapters;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,44 +12,24 @@ import com.topface.topface.R;
 
 import java.util.ArrayList;
 
-public class SpinnerAgeAdapter extends ArrayAdapter<String> {
-    private final static int DEFAULT_TEXT_COLOR = Color.parseColor("#333333");
+public class SpinnerAdapter extends ArrayAdapter<String> {
     private final static String DEFAULT_PREFIX_VALUE = null;
     private Activity context;
     ArrayList<String> data = null;
     String prefix;
-    int textColor;
 
-    public SpinnerAgeAdapter(Activity context, int resource, ArrayList<String> data, int textColor, String prefix) {
+    public SpinnerAdapter(Activity context, int resource, ArrayList<String> data, String prefix) {
         super(context, resource, data);
         this.context = context;
         this.data = data;
         this.prefix = prefix;
-        this.textColor = textColor;
     }
 
-    public SpinnerAgeAdapter(Activity context, int resource, ArrayList<String> data, int textColor) {
+    public SpinnerAdapter(Activity context, int resource, ArrayList<String> data) {
         super(context, resource, data);
         this.context = context;
         this.data = data;
         this.prefix = DEFAULT_PREFIX_VALUE;
-        this.textColor = textColor;
-    }
-
-    public SpinnerAgeAdapter(Activity context, int resource, ArrayList<String> data, String prefix) {
-        super(context, resource, data);
-        this.context = context;
-        this.data = data;
-        this.prefix = prefix;
-        this.textColor = DEFAULT_TEXT_COLOR;
-    }
-
-    public SpinnerAgeAdapter(Activity context, int resource, ArrayList<String> data) {
-        super(context, resource, data);
-        this.context = context;
-        this.data = data;
-        this.prefix = DEFAULT_PREFIX_VALUE;
-        this.textColor = DEFAULT_TEXT_COLOR;
     }
 
     @Override
@@ -82,7 +61,7 @@ public class SpinnerAgeAdapter extends ArrayAdapter<String> {
                         (int) context.getResources().getDimension(R.dimen.drop_downList_cell_padding_left),
                         (int) context.getResources().getDimension(R.dimen.drop_downList_cell_padding_left),
                         (int) context.getResources().getDimension(R.dimen.drop_downList_cell_padding_left));
-            textView.setTextColor(textColor);
+            textView.setBackgroundResource(R.drawable.spinner_selector);
             textView.setText(item);
         }
         return view;

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="276dp"
-    android:layout_height="294dp">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:divider="#e2e2e2"
-        android:dividerHeight="1dp"
-        android:tag="loFilterList"></ListView>
+        android:divider="@color/filter_fragment_divider_color"
+        android:dividerHeight="@dimen/filter_fragment_divider_height"
+        android:tag="loFilterList" />
 </LinearLayout>
 
