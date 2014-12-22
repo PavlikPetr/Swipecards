@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
@@ -343,6 +344,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         });
 
         mListAdapter = createNewAdapter();
+
+        AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(mListAdapter);
+        animationAdapter.setAbsListView(mListView.getRefreshableView());
+
         FeedAdapter<T> adapter = getListAdapter();
         adapter.setOnAvatarClickListener(this);
         //Пауза загрузки изображений при прокрутке списка
@@ -355,7 +360,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 )
         );
 
-        mListView.getRefreshableView().setAdapter(adapter);
+        mListView.getRefreshableView().setAdapter(animationAdapter);
         mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
         mListView.getRefreshableView().setOnTouchListener(getListViewOnTouchListener());
         mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
