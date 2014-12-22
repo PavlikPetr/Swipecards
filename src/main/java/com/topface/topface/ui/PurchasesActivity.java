@@ -116,6 +116,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         super.onRestoreInstanceState(savedInstanceState);
         TopfaceOfferwallRedirect topfaceOfferwallRedirectRestored =
                 savedInstanceState.getParcelable(TopfaceOfferwallRedirect.TOPFACE_OFFERWAL_REDIRECT);
+        if (mTopfaceOfferwallRedirect == null) {
+            mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
+        }
         mTopfaceOfferwallRedirect.setComplited(topfaceOfferwallRedirectRestored.isCompleted());
     }
 
@@ -204,7 +207,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     private boolean needTFOfferwallOnCloseRedirect() {
         return isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnClose() &&
-                !mTopfaceOfferwallRedirect.isCompleted() && mIsOfferwallsReady;
+                !mTopfaceOfferwallRedirect.isCompleted() && mIsOfferwallsReady && !getFragment().isVipProducts();
     }
 
     private boolean showBonus() {
