@@ -2,8 +2,10 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,8 @@ import java.util.Locale;
 public class BonusFragment extends BaseFragment {
 
     public static final String NEED_SHOW_TITLE = "need_show_title";
+    public static final String OFFERWALL_OPENED = "com.topface.topface.offerwall.opened";
+    public static final String OFFERWALL_NAME = "offerwall_name";
     private View mProgressBar;
     private String mIntegrationUrl;
     private Button tfOfferwallButton;
@@ -144,7 +148,7 @@ public class BonusFragment extends BaseFragment {
      * @param offer    offer from Options
      * @return button obj
      */
-    private static Button createButton(final Activity activity, final Options.Offerwalls.Offer offer) {
+    private Button createButton(final Activity activity, final Options.Offerwalls.Offer offer) {
         int style;
         switch (offer.type) {
             case Options.Offerwalls.Offer.TYPE_MAIN:
@@ -161,6 +165,9 @@ public class BonusFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 OfferwallsManager.startOfferwall(activity, offer.action);
+                Intent intent = new Intent(OFFERWALL_OPENED);
+                intent.putExtra(OFFERWALL_NAME, offer.action);
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
             }
         });
     }

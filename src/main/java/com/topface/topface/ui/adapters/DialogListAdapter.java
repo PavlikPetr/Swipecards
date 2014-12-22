@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -15,13 +16,13 @@ import java.util.Collections;
 
 public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
-    public static final int NEW_ITEM_LAYOUT = R.layout.item_feed_new_dialog;
-    public static final int ITEM_LAYOUT = R.layout.item_feed_dialog;
-    public static final int NEW_VIP_ITEM_LAYOUT = R.layout.item_feed_vip_new_dialog;
-    public static final int VIP_ITEM_LAYOUT = R.layout.item_feed_vip_dialog;
-
     public DialogListAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
+    }
+
+    @Override
+    protected FeedItemViewConstructor.TypeAndFlag getViewCreationFlag() {
+        return new FeedItemViewConstructor.TypeAndFlag(FeedItemViewConstructor.Type.TIME_COUNT);
     }
 
     @Override
@@ -30,20 +31,19 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
 
         FeedDialog dialog = getItem(position);
-        setDialogText(dialog, holder.text);
         holder.time.setText(dialog.createdRelative);
 
-        if (getItemViewType(position) == T_NEW) {
-            int unreadCounter = getUnreadCounter(dialog);
-            if (unreadCounter > 1 && !CacheProfile.getOptions().hidePreviewDialog) {
-                holder.unreadCounter.setVisibility(View.VISIBLE);
-                holder.unreadCounter.setText(Integer.toString(unreadCounter));
-            } else {
-                holder.unreadCounter.setVisibility(View.GONE);
-            }
-        }
-
+        FeedItemViewConstructor.setCounter(holder.unreadCounter,
+                ((getItemViewType(position) == T_NEW) && (!CacheProfile.getOptions().hidePreviewDialog)) ?
+                        getUnreadCounter(dialog) :
+                        0
+        );
         return convertView;
+    }
+
+    @Override
+    protected void setItemMessage(FeedDialog item, TextView messageView) {
+        setDialogText(item, messageView);
     }
 
     private void setDialogText(FeedDialog dialog, TextView view) {
@@ -131,11 +131,8 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     @Override
     protected FeedViewHolder getEmptyHolder(View convertView, FeedDialog item) {
         FeedViewHolder holder = super.getEmptyHolder(convertView, item);
-        holder.text = (TextView) convertView.findViewById(R.id.tvText);
-        if (item.unread) {
-            holder.unreadCounter = (TextView) convertView.findViewById(R.id.tvUnreadCounter);
-        }
-        holder.time = (TextView) convertView.findViewById(R.id.tvTime);
+        holder.unreadCounter = (TextView) convertView.findViewById(R.id.ifp_counter);
+        holder.time = (TextView) convertView.findViewById(R.id.ifp_time);
         return holder;
     }
 
@@ -170,26 +167,6 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     private void setItemToStartOfFeed(FeedDialog dialog, FeedDialog item) {
         getData().remove(dialog);
         getData().addFirst(item);
-    }
-
-    @Override
-    protected int getItemLayout() {
-        return ITEM_LAYOUT;
-    }
-
-    @Override
-    protected int getNewItemLayout() {
-        return NEW_ITEM_LAYOUT;
-    }
-
-    @Override
-    protected int getVipItemLayout() {
-        return VIP_ITEM_LAYOUT;
-    }
-
-    @Override
-    protected int getNewVipItemLayout() {
-        return NEW_VIP_ITEM_LAYOUT;
     }
 
     @Override

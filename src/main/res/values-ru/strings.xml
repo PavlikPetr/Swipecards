@@ -234,6 +234,12 @@
         <item quantity="many">Чтобы отправить подарок, купите еще %d монет</item>
         <item quantity="other">Чтобы отправить подарок, купите еще %d монет</item>
     </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="one">Чтобы отправить восхищение, купите еще %d монету</item>
+        <item quantity="few">Чтобы отправить восхищение, купите еще %d монеты</item>
+        <item quantity="many">Чтобы отправить восхищение, купите еще %d монет</item>
+        <item quantity="other">Чтобы отправить восхищение, купите еще %d монет</item>
+    </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="one">Чтобы увидеть, кому вы нравитесь, купите еще %d монету</item>
         <item quantity="few">Чтобы увидеть, кому вы нравитесь, купите еще %d монеты</item>
@@ -245,6 +251,12 @@
         <item quantity="few">Чтобы вас все увидели, купите еще %d монеты</item>
         <item quantity="many">Чтобы вас все увидели, купите еще %d монет</item>
         <item quantity="other">Чтобы вас все увидели, купите еще %d монет</item>
+    </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="one">Вам не хватает %d монеты</item>
+        <item quantity="few">Вам не хватает %d монет</item>
+        <item quantity="many">Вам не хватает %d монет</item>
+        <item quantity="other">Вам не хватает %d монет</item>
     </plurals>
     <string name="buying_default_message">Вы можете отправлять подарки и восхищения за монеты</string>
     <string name="buying_money">Покупка монет</string>

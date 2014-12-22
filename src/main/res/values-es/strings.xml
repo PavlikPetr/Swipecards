@@ -590,4 +590,8 @@
     <string name="maximum_number_of_users">Seleccionada la máxima cantidad de usuarios</string>
     <string name="logout_if_email_already_registred">Usuario con este e-mail ya existe. Si es tu e-mail, tienes que salir de esta cuenta y entrar en la %s</string>
     <string name="recover_password_instructions">A tu e-mail fue enviada una carta con las instrucciones para recuperar la contraseña</string>
+    <string name="email_changing">Cambio de e-mail</string>
+    <string name="hint_faces_filter">Cambia los parametros de busqueda y conoce a la gente interesante</string>
+    <string name="hint_faces_buy_like">Por más simpatías que tengas, más a menudo te evaluan. No te olvides a recargar la cantidad de simpatías.</string>
+    <string name="hint_myprofile_buy_vip">Compra el estado VIP y disfruta de la comunicación sin límites</string>
 </resources>

@@ -22,10 +22,8 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -356,11 +354,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                         adapter
                 )
         );
-
-        ImageView iv = new ImageView(getActivity().getApplicationContext());
-        iv.setBackgroundResource(R.drawable.im_header_item_list_bg);
-        iv.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        mListView.getRefreshableView().addHeaderView(iv);
 
         mListView.getRefreshableView().setAdapter(adapter);
         mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());

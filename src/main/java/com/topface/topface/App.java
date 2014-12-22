@@ -328,6 +328,15 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
+        /**
+         * Баг Admob и Google Play Services, пробуем исправить
+         * @see https://code.google.com/p/android/issues/detail?id=81083
+         */
+        try {
+            Class.forName("android.os.AsyncTask");
+        } catch (Throwable ignore) {
+        }
+
         super.onCreate();
 
         mContext = getApplicationContext();

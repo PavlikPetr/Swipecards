@@ -192,11 +192,6 @@ public class Options extends AbstractData {
 
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
-            try {
-                startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
-            } catch (IllegalArgumentException e) {
-                Debug.error("Illegal value of startPage", e);
-            }
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
@@ -359,6 +354,8 @@ public class Options extends AbstractData {
             instantMessagesForNewbies.init(response);
 
             messagesWithTabs.init(response);
+
+            startPageFragmentId = getStartPageFragmentId(response);
 
             JSONObject jsonNotShown = response.optJSONObject("notShown");
             if (jsonNotShown != null) {
@@ -716,8 +713,28 @@ public class Options extends AbstractData {
                 text = jsonNotShown.optString("text");
             }
         }
-
     }
 
-
+    private BaseFragment.FragmentId getStartPageFragmentId(JSONObject response) {
+        BaseFragment.FragmentId fragmentId = startPageFragmentId;
+        try {
+            fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
+        } catch (IllegalArgumentException e) {
+            Debug.error("Illegal value of startPage", e);
+        }
+        if (messagesWithTabs.isEnabled()) {
+            switch (fragmentId) {
+                case FANS:
+                case DIALOGS:
+                    fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
+                    break;
+                case MUTUAL:
+                case ADMIRATIONS:
+                case LIKES:
+                    fragmentId = BaseFragment.FragmentId.TABBED_LIKES;
+                    break;
+            }
+        }
+        return fragmentId;
+    }
 }

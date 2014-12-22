@@ -70,8 +70,8 @@ public class ApiResponse implements IApiResponse {
 
     public void parseJson(JSONObject response) {
         if (response == null) {
-            Debug.error("JSON response is null");
             code = ErrorCodes.NULL_RESPONSE;
+            Debug.error(new ApiException("JSON response is null"));
             return;
         }
 
@@ -91,11 +91,13 @@ public class ApiResponse implements IApiResponse {
                 code = ErrorCodes.RESULT_OK;
             } else {
                 code = ErrorCodes.WRONG_RESPONSE;
-                Debug.error("Json format is wrong: " + response);
+                Debug.error(new ApiException(
+                        "Json format is wrong (result and error fields not found): \n" + response + "\n"
+                ));
             }
         } catch (Exception e) {
             code = ErrorCodes.WRONG_RESPONSE;
-            Debug.error("Json response is wrong:" + response, e);
+            Debug.error("Json response is wrong: \n" + response + "\n", e);
         }
     }
 
