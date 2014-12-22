@@ -48,7 +48,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
 
-    private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
+    private OwnProfileGridAdapter mProfilePhotoGridAdapter;
 
     private ViewFlipper mViewFlipper;
     private GridView mGridAlbum;
@@ -102,7 +102,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(), CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
+        mProfilePhotoGridAdapter = new OwnProfileGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(), CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
                 sendAlbumRequest();
@@ -298,7 +298,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
                                 Intent changeAvatarPosIntent = new Intent(HeaderMainFragment.UPDATE_AVATAR_POSITION);
                                 changeAvatarPosIntent.putExtra(HeaderMainFragment.DECREMENT_AVATAR_POSITION, true);
-                                changeAvatarPosIntent.putExtra("pos", position);
+                                changeAvatarPosIntent.putExtra(HeaderMainFragment.POSITION, position);
                                 LocalBroadcastManager.getInstance(App.getContext())
                                         .sendBroadcast(changeAvatarPosIntent);
                             }

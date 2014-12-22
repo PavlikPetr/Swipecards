@@ -28,12 +28,6 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
         mLoadController = new AlbumLoadController(AlbumLoadController.FOR_GALLERY);
     }
 
-    public void removeFirst() {
-        if (mPhotoLinks != null && mPhotoLinks.get(0) != null && mPhotoLinks.get(0).isFake()) {
-            mPhotoLinks.remove(0);
-        }
-    }
-
     public void addFirst(Photo photo) {
         if (mPhotoLinks.size() > 1 && mPhotoLinks.get(mPhotoLinks.size() - 1).getId() == 0) {
             mPhotoLinks.add(2, photo);
@@ -58,7 +52,13 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     public void setData(Photos photoLinks, boolean needMore) {
         mPhotoLinks.clear();
         addPhotos(photoLinks, needMore, false);
-        mPhotoLinks.add(0, new Photo());
+        if (isAddPhotoButtonEnabled()) {
+            mPhotoLinks.add(0, new Photo());
+        }
+    }
+
+    protected boolean isAddPhotoButtonEnabled() {
+        return false;
     }
 
     public void addData(Photos photoLinks, boolean needMore) {

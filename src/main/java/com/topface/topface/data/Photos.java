@@ -81,7 +81,6 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
      *
      * @param photoId id фоторгафии
      */
-
     public int getPhotoIndexById(int photoId) {
         for (int i = 0; i < size(); i++) {
             if (this.get(i) != null && photoId == this.get(i).getId()) {

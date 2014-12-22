@@ -34,6 +34,7 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     public static final String UPDATE_AVATAR_POSITION = "com.topface.topface.updateAvatarPosition";
     public static final String INCREMENT_AVATAR_POSITION = "incrementAvatarPosition";
     public static final String DECREMENT_AVATAR_POSITION = "decrementAvatarPosition";
+    public static final String POSITION = "position";
 
     private ImageViewRemote mAvatarView;
     private Photo mAvatarVal;
@@ -53,7 +54,7 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                 return;
             }
             if (decrement) {
-                if (intent.getIntExtra("pos", -1) < mAvatarVal.position) {
+                if (intent.getIntExtra(POSITION, -1) < mAvatarVal.position) {
                     mAvatarVal.position -= 1;
                 }
                 mPendingUserInit.getData().photosCount -= 1;
