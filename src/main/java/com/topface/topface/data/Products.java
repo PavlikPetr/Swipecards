@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.topface.billing.DeveloperPayload;
+import com.topface.billing.OpenIabFragment;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -20,6 +22,7 @@ import com.topface.topface.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.onepf.oms.appstore.googleUtils.Purchase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -363,10 +366,14 @@ public class Products extends AbstractData {
     /**
      * Can check if this product id is in on of subscriptions list
      *
-     * @param productId productId for product
+     * @param product product
      * @return true if productId refers to subscriptions
      */
-    public boolean isSubscription(String productId) {
+    public boolean isSubscription(Purchase product) {
+        String productId = product.getSku();
+        if (productId.equals(OpenIabFragment.TEST_PURCHASED_PRODUCT_ID)) {
+            productId = getSkuFromDeveloperPayload(product.getDeveloperPayload());
+        }
         for (BuyButton subscription : coinsSubscriptions) {
             if (subscription.id.equals(productId)) {
                 return true;
@@ -378,6 +385,11 @@ public class Products extends AbstractData {
             }
         }
         return false;
+    }
+
+    private String getSkuFromDeveloperPayload(String developerPayload) {
+        DeveloperPayload payload = JsonUtils.fromJson(developerPayload, DeveloperPayload.class);
+        return payload.sku;
     }
 
     public interface BuyButtonClickListener {

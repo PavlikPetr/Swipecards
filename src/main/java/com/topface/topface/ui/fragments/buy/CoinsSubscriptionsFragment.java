@@ -23,6 +23,8 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 
+import org.onepf.oms.appstore.googleUtils.Purchase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,8 +128,8 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
     }
 
     @Override
-    public void onPurchased(final String productId) {
-        super.onPurchased(productId);
+    public void onPurchased(final Purchase product) {
+        super.onPurchased(product);
         Activity activity = getActivity();
         if (activity != null) {
             activity.setResult(Activity.RESULT_OK);

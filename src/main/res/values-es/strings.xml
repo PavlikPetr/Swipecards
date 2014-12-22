@@ -15,6 +15,7 @@
     <string name="dating_switch_button">Más…</string>
     <string name="dating_prev_button">Anterior</string>
     <string name="dating_chat_button">Charlar</string>
+    <string name="waiting_a_products">Espera, por favor. Estamos cargando productos disponibles para la compra</string>
     <string name="likes_background_text">No hay simpatías</string>
     <string name="visitors_background_text">No hay visitantes</string>
     <string name="chat_background_text">No hay mensajes entrantes</string>
@@ -148,6 +149,7 @@
     <string name="general_city">Ciudad</string>
     <string name="general_dating">Encuentros</string>
     <string name="general_likes">Gusto a</string>
+    <string name="general_sympathies">Simpatías</string>
     <string name="general_sympathy">Simpatía</string>
     <string name="general_delight">Admiración</string>
     <string name="general_mutual">Simpatías mutuas</string>
@@ -243,6 +245,8 @@
     <string name="settings_messages">Mensajes</string>
     <string name="settings_guests">Visitantes</string>
     <string name="settings_help">Ayuda</string>
+    <string name="settings_faq">Preguntas y respuestas</string>
+    <string name="settings_faq_title">Probablemente, tu problema ya fue descrito, echa un vistazo a la sección \"Preguntas y respuestas\"</string>
     <string name="settings_account">Cuenta</string>
     <string name="settings_feedback">Dejar comentario</string>
     <string name="settings_about">Sobre el programa</string>
@@ -585,4 +589,9 @@
     <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Seleccionada la máxima cantidad de usuarios</string>
     <string name="logout_if_email_already_registred">Usuario con este e-mail ya existe. Si es tu e-mail, tienes que salir de esta cuenta y entrar en la %s</string>
+    <string name="recover_password_instructions">A tu e-mail fue enviada una carta con las instrucciones para recuperar la contraseña</string>
+    <string name="email_changing">Cambio de e-mail</string>
+    <string name="hint_faces_filter">Cambia los parametros de busqueda y conoce a la gente interesante</string>
+    <string name="hint_faces_buy_like">Por más simpatías que tengas, más a menudo te evaluan. No te olvides a recargar la cantidad de simpatías.</string>
+    <string name="hint_myprofile_buy_vip">Compra el estado VIP y disfruta de la comunicación sin límites</string>
 </resources>

@@ -525,7 +525,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void sendAlbumRequest(int position) {
-        AlbumRequest request = new AlbumRequest(this, mUid, position, AlbumRequest.MODE_SEARCH, AlbumLoadController.FOR_PREVIEW);
+        AlbumRequest request = new AlbumRequest(this, mUid, position, AlbumRequest.MODE_ALBUM, AlbumLoadController.FOR_PREVIEW);
         request.callback(new DataApiHandler<AlbumPhotos>() {
 
             @Override
@@ -538,7 +538,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                     mImageSwitcher.getAdapter().notifyDataSetChanged();
                     LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
                             .putExtra(INTENT_PHOTOS, newPhotos)
-                            .putExtra(INTENT_MORE, newPhotos.more));
+                            .putExtra(INTENT_MORE, newPhotos.more)
+                            .putExtra(INTENT_CLEAR, true));
                 }
             }
 
@@ -588,11 +589,15 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         private int calcRightIndex(final Photos photos, final int index) {
             if (index < 0) {
                 int res = index;
-                while (res < 0) res += photos.size();
+                while (res < 0) {
+                    res += photos.size();
+                }
                 return res;
             } else if (index >= photos.size()) {
                 int res = index;
-                while (res >= photos.size()) res -= photos.size();
+                while (res >= photos.size()) {
+                    res -= 1;
+                }
                 return res;
             }
             return index;

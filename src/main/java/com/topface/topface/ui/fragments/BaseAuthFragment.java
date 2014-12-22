@@ -7,19 +7,18 @@ import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
@@ -35,6 +34,16 @@ public abstract class BaseAuthFragment extends BaseFragment {
     private boolean mHasAuthorized = false;
     private RetryViewCreator mRetryView;
     private BroadcastReceiver mConnectionChangeListener;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!AuthToken.getInstance().isEmpty()) {
+            //Если мы попали на этот фрагмент с работающей авторизацией, то просто перезапрашиваем профиль
+            loadAllProfileData();
+        }
+        checkOnline();
+    }
 
     @Override
     public void onPause() {
@@ -79,6 +88,19 @@ public abstract class BaseAuthFragment extends BaseFragment {
         return R.id.authContainer;
     }
 
+    protected boolean checkOnline() {
+        if (!App.isOnline()) {
+            showNoInternetToast();
+            return false;
+        }
+        return true;
+    }
+
+    private void showNoInternetToast() {
+        Toast.makeText(App.getContext(), R.string.general_internet_off, Toast.LENGTH_SHORT)
+                .show();
+    }
+
     protected void auth(final AuthToken token) {
         EasyTracker.sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
         App.getConfig().onAuthTokenReceived();
@@ -111,17 +133,13 @@ public abstract class BaseAuthFragment extends BaseFragment {
 
     protected void loadAllProfileData() {
         hideButtons();
+        showProgress();
         App.sendProfileAndOptionsRequests(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
                 //После авторизации обязательно бросаем события, что бы профиль загрузился
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-                if (isAdded()) {
-                    ((BaseFragmentActivity) getActivity()).close(BaseAuthFragment.this, true);
-                    MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
-                    LocalBroadcastManager.getInstance(getContext())
-                            .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
-                }
+                onOptionsAndProfileSuccess();
             }
 
             @Override
@@ -134,6 +152,8 @@ public abstract class BaseAuthFragment extends BaseFragment {
             }
         });
     }
+
+    protected abstract void onOptionsAndProfileSuccess();
 
     protected void authorizationFailed(int codeError, final ApiRequest request) {
         if (!isAdded()) {
@@ -222,11 +242,11 @@ public abstract class BaseAuthFragment extends BaseFragment {
     }
 
     protected void hideRetrier() {
-        mRetryView.setVisibility(View.GONE);
+        mRetryView.getView().setVisibility(View.GONE);
     }
 
     protected void showRetrier() {
-        mRetryView.setVisibility(View.VISIBLE);
+        mRetryView.getView().setVisibility(View.VISIBLE);
     }
 
     protected abstract void showButtons();

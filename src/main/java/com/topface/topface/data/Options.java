@@ -10,6 +10,8 @@ import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.LikesWithThreeTabs;
+import com.topface.topface.data.experiments.MessagesWithTabs;
+import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -52,6 +54,8 @@ public class Options extends AbstractData {
     public final static String PAGE_VIEWS = "VIEWS";
     public final static String PAGE_START = "START";
     public final static String PAGE_GAG = "GAG";
+    public final static String PAGE_TABBED_LIKES = "LIKES_TABS";
+    public final static String PAGE_TABBED_MESSAGES = "MESSAGES_TABS";
     public final static String[] PAGES = new String[]{
             PAGE_UNKNOWK,
             PAGE_LIKES,
@@ -63,6 +67,8 @@ public class Options extends AbstractData {
             PAGE_BOOKMARKS,
             PAGE_VIEWS,
             PAGE_START,
+            PAGE_TABBED_LIKES,
+            PAGE_TABBED_MESSAGES,
             PAGE_GAG
     };
 
@@ -99,7 +105,7 @@ public class Options extends AbstractData {
     /**
      * Флаг отображения превью в диалогах
      */
-    public boolean hideDialogPreview;
+    public boolean hidePreviewDialog;
 
     /**
      * Стоимость вставания в лидеры
@@ -152,13 +158,19 @@ public class Options extends AbstractData {
 
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
 
+    public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
+
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
 
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
 
+    public NotShown notShown = new NotShown();
+
     public LikesWithThreeTabs likesWithThreeTabs = new LikesWithThreeTabs();
 
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
+
+    public MessagesWithTabs messagesWithTabs = new MessagesWithTabs();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -179,12 +191,7 @@ public class Options extends AbstractData {
             priceAdmiration = response.optInt("admirationPrice");
 
             // по умолчанию превью в диалогах всегда отображаем
-            hideDialogPreview = response.optBoolean("hideDialogPreview", false);
-            try {
-                startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
-            } catch (IllegalArgumentException e) {
-                Debug.error("Illegal value of startPage", e);
-            }
+            hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
@@ -336,6 +343,8 @@ public class Options extends AbstractData {
             // experiments init
             forceOfferwallRedirect.init(response);
 
+            topfaceOfferwallRedirect.init(response);
+
             instantMessageFromSearch.init(response);
 
             autoOpenGallery.init(response);
@@ -343,6 +352,16 @@ public class Options extends AbstractData {
             likesWithThreeTabs.init(response);
 
             instantMessagesForNewbies.init(response);
+
+            messagesWithTabs.init(response);
+
+            startPageFragmentId = getStartPageFragmentId(response);
+
+            JSONObject jsonNotShown = response.optJSONObject("notShown");
+            if (jsonNotShown != null) {
+                notShown.parseNotShownJSON(jsonNotShown);
+            }
+
 
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -402,6 +421,10 @@ public class Options extends AbstractData {
                 return PAGE_START;
             case PAGE_GAG:
                 return PAGE_GAG;
+            case PAGE_TABBED_MESSAGES:
+                return PAGE_TABBED_MESSAGES;
+            case PAGE_TABBED_LIKES:
+                return PAGE_TABBED_LIKES;
             default:
                 return PAGE_UNKNOWK + "(" + name + ")";
         }
@@ -676,4 +699,42 @@ public class Options extends AbstractData {
         }
     }
 
+    public static class NotShown {
+        public boolean enabledDatingLockPopup = false;
+        public long datingLockPopupTimeout = DateUtils.DAY_IN_SECONDS;
+        public String title;
+        public String text;
+
+        public void parseNotShownJSON(JSONObject jsonNotShown) {
+            if (jsonNotShown != null) {
+                enabledDatingLockPopup = jsonNotShown.optBoolean("enabled");
+                datingLockPopupTimeout = jsonNotShown.optLong("timeout");
+                title = jsonNotShown.optString("title");
+                text = jsonNotShown.optString("text");
+            }
+        }
+    }
+
+    private BaseFragment.FragmentId getStartPageFragmentId(JSONObject response) {
+        BaseFragment.FragmentId fragmentId = startPageFragmentId;
+        try {
+            fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
+        } catch (IllegalArgumentException e) {
+            Debug.error("Illegal value of startPage", e);
+        }
+        if (messagesWithTabs.isEnabled()) {
+            switch (fragmentId) {
+                case FANS:
+                case DIALOGS:
+                    fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
+                    break;
+                case MUTUAL:
+                case ADMIRATIONS:
+                case LIKES:
+                    fragmentId = BaseFragment.FragmentId.TABBED_LIKES;
+                    break;
+            }
+        }
+        return fragmentId;
+    }
 }

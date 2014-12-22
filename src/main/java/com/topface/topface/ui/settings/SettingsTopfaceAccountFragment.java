@@ -44,6 +44,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private EditText mEditText;
     private TextView mText;
     private Button mBtnChange;
+    private Button mBtnChangeEmail;
     private Button mBtnLogout;
     private Button mBtnDelete;
 
@@ -171,9 +172,10 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 String text = s.toString();
                 if (text.equals(mToken.getLogin())) {
                     setChangeBtnAction(ACTION_RESEND_CONFIRM);
+                    mChangeEmail = false;
                 } else {
                     setChangeBtnAction(ACTION_CHANGE_EMAIL);
-                    mChangeEmail =true;
+                    mChangeEmail = true;
                 }
             }
         });
@@ -188,6 +190,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             mText.setVisibility(View.VISIBLE);
         } else {
             mEditText.setVisibility(View.VISIBLE);
+            mEditText.setText(mToken.getLogin());
             mText.setVisibility(View.GONE);
         }
     }
@@ -196,6 +199,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mBtnChange = (Button) root.findViewById(R.id.btnChange);
         mBtnChange.setOnClickListener(this);
         mBtnChange.setVisibility(View.VISIBLE);
+        mBtnChangeEmail = (Button) root.findViewById(R.id.btnChangeEmail);
+        mBtnChangeEmail.setOnClickListener(this);
         mBtnLogout = (Button) root.findViewById(R.id.btnLogout);
         mBtnLogout.setOnClickListener(this);
         mBtnDelete = (Button) root.findViewById(R.id.btnDeleteAccount);
@@ -205,14 +210,16 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
+            mBtnChangeEmail.setVisibility(View.VISIBLE);
             fieldContainer.setBackgroundResource(R.drawable.edit_big_btn_selector);
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
+            mBtnChangeEmail.setVisibility(View.GONE);
             fieldContainer.setBackgroundResource(android.R.color.transparent);
-            if(mChangeEmail){
+            if (mChangeEmail) {
                 setChangeBtnAction(ACTION_CHANGE_EMAIL);
-            }else{
+            } else {
                 setChangeBtnAction(ACTION_RESEND_CONFIRM);
             }
         }
@@ -252,9 +259,16 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             case R.id.btnDeleteAccount:
                 deleteAccount();
                 break;
+            case R.id.btnChangeEmail:
+                onChangeEmailButtonClick();
             default:
                 break;
         }
+    }
+
+    private void onChangeEmailButtonClick() {
+        Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
+        startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_EMAIL);
     }
 
     private void deleteAccount() {
@@ -352,6 +366,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             }
         });
         AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -387,7 +402,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         alertDialog.show();
     }
 
-    private void setClickableAccountManagmentButtons(boolean b){
+    private void setClickableAccountManagmentButtons(boolean b) {
         mBtnLogout.setClickable(b);
         mBtnChange.setClickable(b);
     }

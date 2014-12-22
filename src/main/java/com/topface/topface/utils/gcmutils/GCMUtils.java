@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
@@ -25,7 +23,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
-import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
+import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
@@ -39,7 +37,6 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.MUTUAL;
@@ -65,6 +62,17 @@ public class GCMUtils {
     public static final int GCM_TYPE_DIALOGS = 8;
     public static final int GCM_TYPE_PEOPLE_NEARBY = 9;
     public static final int GCM_TYPE_UPDATE_COUNTERS_BALANCE = 10;
+
+    /**
+     * параметры геометрической прогрессии для расчета задержки между запросами на регистрацию в GCM
+     * все значения в сек.
+     * <p/>
+     * при начальном значении = 2, знаменателе = 2 и последнем значении прогрессии = 128, суммарное
+     * время, в течении которого будем пытаться зарегистрироваться в GCM, составит 254 сек
+     */
+    public static final int TIME_GEOMETRIC_PROGRESSION_DENOMINATOR = 2;
+    public static final int TIME_GEOMETRIC_PROGRESSION_FIRST_VALUE = 2;
+    public static final int TIME_GEOMETRIC_PROGRESSION_LAST_VALUE = 128;
 
 
     public static final String NEXT_INTENT = "com.topface.topface_next";
@@ -104,50 +112,58 @@ public class GCMUtils {
             mGcmObject = GoogleCloudMessaging.getInstance(mContext);
             mRegId = getRegistrationId();
             if (mRegId.isEmpty()) {
-                registerInBackground(serverToken);
+                register(serverToken, 0);
                 return true;
             } else if (!mRegId.equals(serverToken)) {
-                new Handler(mContext.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        sendRegistrationIdToBackend();
-
-                    }
-                });
+                sendRegistrationIdToBackend();
             }
         }
         return false;
     }
 
-    private void registerInBackground(final String serverToken) {
-        new BackgroundThread() {
+    private void saveGcmToken(String regId, String serverToken) {
+        if (!TextUtils.isEmpty(regId)) {
+            mRegId = regId;
+            storeRegistrationId();
+            if (!regId.equals(serverToken)) {
+                sendRegistrationIdToBackend();
+            }
+        } else {
+            Debug.log("Registration id is empty");
+        }
+    }
+
+    private void register(final String serverToken, final int time) {
+        new Timer().schedule(new TimerTask() {
             @Override
-            public void execute() {
+            public void run() {
                 String regId = null;
                 try {
                     if (mGcmObject == null) {
                         mGcmObject = GoogleCloudMessaging.getInstance(mContext);
                     }
                     regId = mGcmObject.register(SENDER_ID);
-
                 } catch (IOException ex) {
                     Debug.error(ex);
-                }
-
-                if (!TextUtils.isEmpty(regId)) {
-                    mRegId = regId;
-                    storeRegistrationId();
-                    if (!regId.equals(serverToken)) {
-                        //Отправляем запрос в основном потоке
-                        Looper.prepare();
-                        sendRegistrationIdToBackend();
-                        Looper.loop();
+                    if (isDelayTimeCorrect(time)) {
+                        register(serverToken, getTimerDelay(time));
+                    } else {
+                        Debug.log("Unable to register in GCM, all attempts have been exhausted");
                     }
-                } else {
-                    Debug.log("Registration id is " + (regId == null ? "null" : "empty"));
+                }
+                if (regId != null) {
+                    saveGcmToken(regId, serverToken);
                 }
             }
-        };
+        }, time * 1000);
+    }
+
+    private int getTimerDelay(int time) {
+        return time == 0 ? TIME_GEOMETRIC_PROGRESSION_FIRST_VALUE : time * TIME_GEOMETRIC_PROGRESSION_DENOMINATOR;
+    }
+
+    private boolean isDelayTimeCorrect(int time) {
+        return getTimerDelay(time) <= TIME_GEOMETRIC_PROGRESSION_LAST_VALUE;
     }
 
     @SuppressWarnings("unused")
@@ -256,7 +272,6 @@ public class GCMUtils {
                 intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
                 intent.putExtra(GCM_TYPE, type);
                 intent.putExtra(GCM_LABEL, getLabel(extra));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 showNotificationByType(extra, context, data, type, user, title, intent);
                 return true;
             }
@@ -398,7 +413,7 @@ public class GCMUtils {
                     i = new Intent(context, NavigationActivity.class);
                     if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
                         i.putExtra(NEXT_INTENT, TABBED_LIKES);
-                        i.putExtra(TabbedLikesFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
+                        i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
                     } else {
                         i.putExtra(NEXT_INTENT, MUTUAL);
                     }
@@ -411,7 +426,7 @@ public class GCMUtils {
                     i = new Intent(context, NavigationActivity.class);
                     if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
                         i.putExtra(NEXT_INTENT, TABBED_LIKES);
-                        i.putExtra(TabbedLikesFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
+                        i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
                     } else {
                         i.putExtra(NEXT_INTENT, LIKES);
                     }
@@ -440,7 +455,7 @@ public class GCMUtils {
             case GCM_TYPE_DIALOGS:
                 lastNotificationType = GCM_TYPE_DIALOGS;
                 i = new Intent(context, NavigationActivity.class);
-                i.putExtra(NEXT_INTENT, DIALOGS);
+                CacheProfile.getOptions().messagesWithTabs.equipNavigationActivityIntent(i);
                 break;
             case GCM_TYPE_PROMO:
             default:

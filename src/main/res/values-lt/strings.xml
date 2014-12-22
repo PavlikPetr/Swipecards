@@ -15,6 +15,7 @@
     <string name="dating_switch_button">Daugiau…</string>
     <string name="dating_prev_button">Ankstesnis</string>
     <string name="dating_chat_button">Paplepėti</string>
+    <string name="waiting_a_products">Prašome, palaukite. Mes įkrauname parduodamas prekes</string>
     <string name="likes_background_text">Nėra simpatijų</string>
     <string name="visitors_background_text">Nėra svečių</string>
     <string name="chat_background_text">Įeinančių pranešimų nėra</string>
@@ -151,6 +152,7 @@
     <string name="general_city">Miestas</string>
     <string name="general_dating">Pažintys</string>
     <string name="general_likes">Aš patinku</string>
+    <string name="general_sympathies">Simpatijos</string>
     <string name="general_sympathy">Simpatija</string>
     <string name="general_delight">Susižavėjimas</string>
     <string name="general_mutual">Abipusiai</string>
@@ -250,6 +252,8 @@
     <string name="settings_messages">Pranešimai</string>
     <string name="settings_guests">Svečiai</string>
     <string name="settings_help">Pagalba</string>
+    <string name="settings_faq">Klausimai ir atsakymai</string>
+    <string name="settings_faq_title">Tikėtina, kad problema jau yra aprašyta, pažiūrėkite skyriuje \"Klausimai ir atsakymai\"</string>
     <string name="settings_account">Paskyra</string>
     <string name="settings_feedback">Palikti atsiliepimą</string>
     <string name="settings_about">Apie programą</string>
@@ -604,4 +608,9 @@
     <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Pasirinktas maksimalus vartotojų kiekis</string>
     <string name="logout_if_email_already_registred">Vartotojas su tokiu el. paštu jau egzistuoja. Jeigu tai jūsų el. paštas, jums būtina išeiti iš dabartinės paskyros ir įeiti į paskyrą %s</string>
+    <string name="recover_password_instructions">Jūsų el. pašto adresu išsiųstas laiškas su slaptažodžio atstatymo instrukcija</string>
+    <string name="email_changing">el. pašto keitimas</string>
+    <string name="hint_faces_filter">Keikite paieškos parametrus ir pažindinkitės su įdomiais žmonėmis</string>
+    <string name="hint_faces_buy_like">Kuo daugiau pas jus simpatijų, tuo dažniau jus įvertina. Nepamirškite papildyti simpatijų atsargos.</string>
+    <string name="hint_myprofile_buy_vip">Pirkite VIP-statusą ir mėgaukitės neapribotu bendravimu</string>
 </resources>

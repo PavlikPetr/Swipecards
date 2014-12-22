@@ -1,49 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_centerVertical="true">
 
-        <ImageView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/popular_dialog_text_margin"
-            android:src="@drawable/icon_rocket"/>
-
-        <TextView
-            android:id="@+id/popular_user_lock_text"
-            style="@style/ItemTitleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/popular_dialog_text_margin"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="@dimen/popular_dialog_text_margin"
+            android:clickable="true"
             android:gravity="center"
-            android:lineSpacingExtra="4sp"
-            android:shadowColor="@null"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="0"
-            android:textColor="@color/text_color_gray"
-            android:textSize="18sp"/>
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnBuyVip"
-            style="@style/Widget.Topface.Button.Big.Blue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/popular_dialog_text_margin"
-            android:minWidth="179dp"
-            android:singleLine="true"
-            android:text="@string/buying_vip_status"/>
-    </LinearLayout>
-</ScrollView>
+            <TextView
+                android:id="@+id/popular_user_lock_text"
+                android:drawableTop="@drawable/icon_rocket"
+                android:drawablePadding="@dimen/popular_dialog_text_margin"
+                style="@style/ItemTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/popular_dialog_text_margin"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:paddingTop="@dimen/popular_dialog_text_margin"
+                android:gravity="center"
+                android:lineSpacingExtra="4sp"
+                android:shadowColor="@null"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="0"
+                android:textColor="@color/text_color_gray"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btnBuyVip"
+                style="@style/Widget.Topface.Button.Big.Blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/popular_dialog_text_margin"
+                android:minWidth="179dp"
+                android:singleLine="true"
+                android:text="@string/buying_vip_status" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -108,11 +108,17 @@ public class LeftMenuAdapter extends BaseAdapter {
     private void setItemHidden(BaseFragment.FragmentId fragmentId, boolean hidden) {
         int id = fragmentId.getId();
         if (hidden) {
-            mHiddenItems.put(id, mItems.get(id));
-            mItems.remove(id);
+            ILeftMenuItem item = mItems.get(id);
+            if (item != null) {
+                mHiddenItems.put(id, mItems.get(id));
+                mItems.remove(id);
+            }
         } else {
-            mItems.put(id, mHiddenItems.get(id));
-            mHiddenItems.remove(id);
+            ILeftMenuItem item = mItems.get(id);
+            if (item != null) {
+                mItems.put(id, mHiddenItems.get(id));
+                mHiddenItems.remove(id);
+            }
         }
         notifyDataSetChanged();
     }
@@ -198,7 +204,7 @@ public class LeftMenuAdapter extends BaseAdapter {
 
     private void setCheckedBackgroundState(boolean isChecked, View layout) {
         if (isChecked) {
-            layout.setBackgroundResource(R.drawable.bg_left_menu_pressed);
+            layout.setBackgroundResource(R.color.bg_left_menu);
         } else {
             layout.setBackgroundResource(R.drawable.bg_left_menu_item_selector);
         }

@@ -506,9 +506,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                         closeProfileActions();
                                         loader.setVisibility(View.INVISIBLE);
                                         icon.setVisibility(View.VISIBLE);
-                                        if (CacheProfile.money > 0) {
-                                            Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                                        }
                                         v.setEnabled(true);
                                         v.setSelected(false);
                                         if (mDelightText != null) {

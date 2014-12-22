@@ -23,6 +23,7 @@ import java.util.List;
  * use generateKey(String name) to create keys to put(key) and get(key) data
  */
 public class UserConfig extends AbstractUniqueConfig {
+    public static final int TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY = 2;
     private static final String PROFILE_CONFIG_SETTINGS = "profile_config_settings";
     /**
      * Keys' names to generate user-based keys
@@ -47,6 +48,8 @@ public class UserConfig extends AbstractUniqueConfig {
     public static final String SILENT = "silent";
     public static final String PURCHASED_SUBSCRIPTIONS = "purchased_subscriptions";
     public static final String PURCHASED_SUBSCRIPTIONS_SEPARATOR = "&";
+    public static final String DATING_LOCK_POPUP_TIME = "dating_lock_popup_time";
+    public static final String TOPFACE_OFFERWALL_REDIRECT_COUNTER = "topface_offerwall_redirect_counter";
 
     public UserConfig(Context context) {
         super(context);
@@ -98,6 +101,10 @@ public class UserConfig extends AbstractUniqueConfig {
         addField(settingsMap, SETTINGS_GCM, true);
         // purchased subscriptions which don't need verification
         addField(settingsMap, PURCHASED_SUBSCRIPTIONS, "");
+        // время последнего показа попапа блокировки знакомств
+        addField(settingsMap, DATING_LOCK_POPUP_TIME, 0L);
+        // счётчит перехода на экран офервола топфейс
+        addField(settingsMap, TOPFACE_OFFERWALL_REDIRECT_COUNTER, 0);
     }
 
     @Override
@@ -140,6 +147,7 @@ public class UserConfig extends AbstractUniqueConfig {
      * @param pinCode value
      * @return true on success
      */
+    @SuppressWarnings("UnusedDeclaration")
     public boolean setPinCode(String pinCode) {
         return setField(getSettingsMap(), DATA_PIN_CODE, pinCode);
     }
@@ -149,8 +157,17 @@ public class UserConfig extends AbstractUniqueConfig {
      *
      * @return pincode value
      */
+    @SuppressWarnings("UnusedDeclaration")
     public String getPinCode() {
         return getStringField(getSettingsMap(), DATA_PIN_CODE);
+    }
+
+    public void setDatingLockPopupShow(long lastTime) {
+        setField(getSettingsMap(), DATING_LOCK_POPUP_TIME, lastTime);
+    }
+
+    public long getDatingLockPopupShow() {
+        return getLongField(getSettingsMap(), DATING_LOCK_POPUP_TIME);
     }
 
     // =======================PromoPopups=======================
@@ -329,8 +346,6 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Sets new default text for dating screen message
-     *
-     * @param message
      */
     public void setDefaultDatingMessage(String message) {
         setField(getSettingsMap(), DEFAULT_DATING_MESSAGE, message);
@@ -349,8 +364,6 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Sets push notification melody name
-     *
-     * @param ringtoneName
      */
     public void setGCMRingtone(String ringtoneName) {
         setField(getSettingsMap(), SETTINGS_GCM_RINGTONE, ringtoneName);
@@ -365,8 +378,6 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Sets vibration for push notification enabled or not
-     *
-     * @param enabled
      */
     public void setGCMVibrationEnabled(boolean enabled) {
         setField(getSettingsMap(), SETTINGS_GCM_VIBRATION, enabled);
@@ -381,8 +392,6 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Sets led blinking for push notification enabled or not
-     *
-     * @param enabled
      */
     public void setLEDEnabled(boolean enabled) {
         setField(getSettingsMap(), SETTINGS_GCM_LED, enabled);
@@ -397,9 +406,8 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Sets push notification enabled or not
-     *
-     * @param enabled
      */
+    @SuppressWarnings("UnusedDeclaration")
     public void setNotificationEnabled(boolean enabled) {
         setField(getSettingsMap(), SETTINGS_GCM, enabled);
     }
@@ -414,8 +422,6 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Add subscription order id to purchased subscriptions
-     *
-     * @param subscriptionId
      */
     public void addPurchasedSubscription(String subscriptionId) {
         String rawSubs = getStringField(getSettingsMap(), PURCHASED_SUBSCRIPTIONS);
@@ -425,6 +431,27 @@ public class UserConfig extends AbstractUniqueConfig {
             setField(getSettingsMap(), PURCHASED_SUBSCRIPTIONS, rawSubs.
                     concat(PURCHASED_SUBSCRIPTIONS_SEPARATOR).concat(subscriptionId));
         }
+    }
+
+    /**
+     * Set new topface offerwall redirection counter value
+     *
+     */
+    public void incrementTopfaceOfferwallRedirectCounter() {
+        int counter = getTopfaceOfferwallRedirectCounter();
+        if (counter < TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY) {
+            counter++;
+        } else {
+            counter = 0;
+        }
+        setField(getSettingsMap(), TOPFACE_OFFERWALL_REDIRECT_COUNTER, counter);
+    }
+
+    /**
+     * @return current topface offerwall redirection counter value
+     */
+    public int getTopfaceOfferwallRedirectCounter() {
+        return getIntegerField(getSettingsMap(), TOPFACE_OFFERWALL_REDIRECT_COUNTER);
     }
 
     // =====================================================

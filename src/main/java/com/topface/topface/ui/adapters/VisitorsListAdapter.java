@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Visitor;
+import com.topface.topface.ui.views.FeedItemViewConstructor;
 
 public class VisitorsListAdapter extends FeedAdapter<Visitor> {
 
@@ -18,9 +19,13 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     protected FeedAdapter.FeedViewHolder getEmptyHolder(View convertView, Visitor item) {
         FeedViewHolder holder = super.getEmptyHolder(convertView, item);
 
-        holder.time = (TextView) convertView.findViewById(R.id.tvTime);
-        holder.text = (TextView) convertView.findViewById(R.id.tvText);
+        holder.time = (TextView) convertView.findViewById(R.id.ifp_time);
         return holder;
+    }
+
+    @Override
+    protected FeedItemViewConstructor.TypeAndFlag getViewCreationFlag() {
+        return new FeedItemViewConstructor.TypeAndFlag(FeedItemViewConstructor.Type.TIME);
     }
 
     @Override
@@ -31,29 +36,7 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
         Visitor visitor = getItem(position);
         holder.time.setText(visitor.createdRelative);
         holder.time.setVisibility(View.VISIBLE);
-        holder.city.setText(null);
-        holder.text.setText(visitor.user.city.name);
         return convertView;
-    }
-
-    @Override
-    protected int getItemLayout() {
-        return R.layout.item_feed_dialog;
-    }
-
-    @Override
-    protected int getNewItemLayout() {
-        return R.layout.item_feed_new_dialog;
-    }
-
-    @Override
-    protected int getVipItemLayout() {
-        return R.layout.item_feed_vip_dialog;
-    }
-
-    @Override
-    protected int getNewVipItemLayout() {
-        return R.layout.item_feed_vip_new_dialog;
     }
 
     @Override

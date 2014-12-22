@@ -20,6 +20,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Verify;
 import com.topface.topface.requests.ApiResponse;
@@ -267,8 +268,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 for (String sku : allOwnedSkus) {
                     Purchase purchase = inventory.getPurchase(sku);
                     if (OpenIabHelper.ITEM_TYPE_SUBS.equals(purchase.getItemType())) {
-                        //Если на сервере нет какой то подписки, которая есть в маркете, то отправляем ее повторно
-                        if (serverSubs != null && !serverSubs.containsSku(sku)) {
+                        //Если на сервере нет какой то подписки, которая есть в маркете и сервер не является стейджем, то отправляем ее повторно
+                        if (isMainApi() && serverSubs != null && !serverSubs.containsSku(sku)) {
                             Debug.log("BillingFragment: restore subscription: " + sku);
                             verifyPurchase(purchase, getActivity());
                         }
@@ -282,6 +283,10 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         } else {
             Debug.error("BillingFragment: onQueryInventoryFinished error: " + iabResult);
         }
+    }
+
+    private boolean isMainApi() {
+        return App.getAppConfig().getApiDomain().equals(Static.API_URL);
     }
 
     protected abstract Products getProducts();
@@ -485,8 +490,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 if (TextUtils.equals(purchase.getItemType(), OpenIabHelper.ITEM_TYPE_INAPP)) {
                     mHelper.consumeAsync(purchase, OpenIabFragment.this);
                 }
-                onPurchased(purchase.getSku());
-
+                onPurchased(purchase);
                 if (isNeedSendPurchasesStatistics()) {
                     //Статистика AppsFlyer
                     if (verify.revenue > 0) {
@@ -563,7 +567,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     }
 
     @Override
-    public void onPurchased(String productId) {
+    public void onPurchased(Purchase product) {
         if (isAdded()) {
             Toast.makeText(getActivity(), R.string.buying_store_ok, Toast.LENGTH_LONG).show();
         }

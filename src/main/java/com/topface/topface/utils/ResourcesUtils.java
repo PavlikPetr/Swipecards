@@ -26,6 +26,7 @@ public class ResourcesUtils {
             case MUTUAL:
             case MUTUAL_CLOSINGS:
                 return R.string.general_mutual;
+            case TABBED_DIALOGS:
             case DIALOGS:
                 return R.string.settings_messages;
             case VISITORS:

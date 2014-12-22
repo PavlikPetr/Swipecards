@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    style="@style/ListItemContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <include
+        android:id="@+id/ifp_avatar"
+        layout="@layout/item_feed_part_avatar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/ifp_avatar"
+        android:paddingBottom="1dp"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/ifp_name_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:orientation="horizontal">
+
+            <include
+                android:id="@+id/ifp_name"
+                layout="@layout/item_feed_part_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <include
+                android:id="@+id/ifp_time"
+                layout="@layout/item_feed_part_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/ifp_text"
+            layout="@layout/item_feed_part_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/ifp_name_container"/>
+    </RelativeLayout>
+</RelativeLayout>

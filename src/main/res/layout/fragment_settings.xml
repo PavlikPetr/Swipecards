@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -19,58 +19,58 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:text="@string/settings_edit_profile"
-            android:layout_margin="8dp" />
+            android:layout_margin="8dp"/>
 
         <include
             android:id="@+id/loNotificationsHeader"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            layout="@layout/item_edit_profile_form_header" />
+            layout="@layout/item_edit_profile_form_header"/>
 
         <include
             android:id="@+id/loLikes"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_notifier" />
+            layout="@layout/item_edit_form_notifier"/>
 
         <include
             android:id="@+id/loMutual"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_notifier" />
+            layout="@layout/item_edit_form_notifier"/>
 
         <include
             android:id="@+id/loChat"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_notifier" />
+            layout="@layout/item_edit_form_notifier"/>
 
         <include
             android:id="@+id/loGuests"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            layout="@layout/item_edit_form_notifier" />
+            layout="@layout/item_edit_form_notifier"/>
 
         <include
             android:id="@+id/loVibration"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            layout="@layout/editor_form_switch" />
+            layout="@layout/editor_form_switch"/>
 
         <include
             android:id="@+id/loLED"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            layout="@layout/editor_form_switch" />
+            layout="@layout/editor_form_switch"/>
 
         <include
             android:id="@+id/loMelody"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            layout="@layout/item_edit_form_select" />
+            layout="@layout/item_edit_form_select"/>
 
         <TextView
             android:id="@+id/tvNoNotification"
@@ -79,43 +79,37 @@
             android:gravity="center"
             android:textSize="16sp"
             android:text="@string/general_no_notifications"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <include
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginBottom="20dp"
-            layout="@layout/item_divider" />
+            layout="@layout/item_divider"/>
 
         <include
             android:id="@+id/loAccount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
+            layout="@layout/item_edit_form_select"/>
 
         <include
             android:id="@+id/loHelp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
-
-        <include
-            android:id="@+id/loFeedback"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
+            layout="@layout/item_edit_form_select"/>
 
         <include
             android:id="@+id/loLanguage"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
+            layout="@layout/item_edit_form_select"/>
 
         <include
             android:id="@+id/loAbout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            layout="@layout/item_edit_form_select" />
+            layout="@layout/item_edit_form_select"/>
     </LinearLayout>
 </ScrollView>

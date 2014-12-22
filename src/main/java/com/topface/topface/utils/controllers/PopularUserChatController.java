@@ -162,13 +162,9 @@ public class PopularUserChatController extends BroadcastReceiver {
             mPopularChatBlocker.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    switch (v.getId()) {
-                        case R.id.btnBuyVip:
-                            EasyTracker.sendEvent(mChatFragment.getTrackName(), "BuyVipStatus", "", 1L);
-                            Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
-                            mChatFragment.startActivity(intent);
-                            break;
-                    }
+                    EasyTracker.sendEvent(mChatFragment.getTrackName(), "BuyVipStatus", "", 1L);
+                    Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
+                    mChatFragment.startActivity(intent);
                 }
             });
             lockScreen.requestLayout();

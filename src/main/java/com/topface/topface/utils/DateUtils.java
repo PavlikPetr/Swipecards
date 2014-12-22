@@ -10,10 +10,11 @@ import java.util.Date;
 public class DateUtils {
 
     public static final long DAY_IN_MILLISECONDS = 86400000; // 24 * 60 * 60 * 1000;
+    public static final long DAY_IN_SECONDS = 86400; // 24 * 60 * 60;
     public static final long HOUR_IN_MILLISECONDS = 3600000; // 60 * 60 * 1000;
     public static final long MINUTE_IN_MILLISECONDS = 60000; // 60 * 1000;
     private final static SimpleDateFormat mDateFormatDayYear = new SimpleDateFormat("dd MMMM yyyy", App.getCurrentLocale());
-    private final static SimpleDateFormat mDateFormatDay = new SimpleDateFormat("dd MMMM", App.getCurrentLocale());
+    private final static SimpleDateFormat mDateFormatDay = new SimpleDateFormat("d MMMM", App.getCurrentLocale());
     private final static SimpleDateFormat mDateFormatDayOfWeek = new SimpleDateFormat("EEEE", App.getCurrentLocale());
     private final static SimpleDateFormat mDateFormatHours = new SimpleDateFormat("HH:mm", App.getCurrentLocale());
     public static long midnight;
