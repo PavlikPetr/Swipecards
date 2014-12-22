@@ -132,12 +132,12 @@ public class AppOptions extends AbstractData {
         }
 
         Conditions(JSONObject json) {
-            userAboutMeMaxLength = json.optInt("userAboutMeMaxLength");
-            userStatusMaxLength = json.optInt("userStatusMaxLength");
-            userWeightMin = json.optInt("userWeightMin");
-            userWeightMax = json.optInt("userWeightMax");
-            userHeightMin = json.optInt("userHeightMin");
-            userHeightMax = json.optInt("userHeightMax");
+            userAboutMeMaxLength = json.optInt("userAboutMeMaxLength", 1024);
+            userStatusMaxLength = json.optInt("userStatusMaxLength", 1024);
+            userWeightMin = json.optInt("userWeightMin", 1);
+            userWeightMax = json.optInt("userWeightMax", 999);
+            userHeightMin = json.optInt("userHeightMin", 1);
+            userHeightMax = json.optInt("userHeightMax", 999);
         }
     }
 }
