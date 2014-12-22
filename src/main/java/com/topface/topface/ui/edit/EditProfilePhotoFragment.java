@@ -88,7 +88,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 mPhotoLinks.addFirst(photo);
                 Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
                 if (activity == null) {
-                    //TODO: Переделать на обновление фото
                     Intent intent = new Intent(CacheProfile.PROFILE_UPDATE_ACTION);
                     LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
                 } else {
@@ -224,7 +223,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                         if (getActivity() != null) {
                             if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
                                 Photo removedPhoto = mPhotoLinks.getPhotoById(mLastSelectedAsMainId);
-                                mPhotoGridAdapter.getData().remove(removedPhoto);
+                                mPhotoGridAdapter.getAdaprerData().remove(removedPhoto);
                                 mPhotoGridAdapter.notifyDataSetChanged();
                                 if (CacheProfile.photos.contains(removedPhoto)) {
                                     CacheProfile.photos.remove(removedPhoto);

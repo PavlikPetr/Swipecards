@@ -146,7 +146,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     };
 
     public static Intent getPhotoSwitcherIntent(int position, int userId, int photosCount, ProfileGridAdapter adapter) {
-        return getPhotoSwitcherIntent(position, userId, photosCount, adapter.getData());
+        return getPhotoSwitcherIntent(position, userId, photosCount, adapter.getAdaprerData());
     }
 
     public static Intent getPhotoSwitcherIntent(int position, int userId, int photosCount, Photos photos) {

@@ -16,7 +16,7 @@ public class UserPhotoGridAdapter extends ProfileGridAdapter {
 
     public UserPhotoGridAdapter(Context context, Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
         super(photoLinks, totalPhotos, callback);
-        getData();
+        removeFirst();
         mInflater = LayoutInflater.from(context);
     }
 

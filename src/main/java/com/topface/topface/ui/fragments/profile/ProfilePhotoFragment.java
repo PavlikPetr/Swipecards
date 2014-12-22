@@ -57,10 +57,12 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(
-                    CacheProfile.photos,
-                    CacheProfile.photos.size() < CacheProfile.totalPhotos
-            );
+            if (isAdded()) {
+                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(
+                        CacheProfile.photos,
+                        CacheProfile.photos.size() < CacheProfile.totalPhotos
+                );
+            }
             initTitleText(mTitle);
         }
     };

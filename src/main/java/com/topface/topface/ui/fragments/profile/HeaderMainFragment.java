@@ -32,8 +32,8 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     private static final String ARG_TAG_CITY = "city";
     private static final String ARG_TAG_BACKGROUND = "background";
     public static final String UPDATE_AVATAR_POSITION = "com.topface.topface.updateAvatarPosition";
-    public static final String INCREMENT_AVATAR_POSITION = "com.topface.topface.incrementAvatarPosition";
-    public static final String DECREMENT_AVATAR_POSITION = "com.topface.topface.decrementAvatarPosition";
+    public static final String INCREMENT_AVATAR_POSITION = "incrementAvatarPosition";
+    public static final String DECREMENT_AVATAR_POSITION = "decrementAvatarPosition";
 
     private ImageViewRemote mAvatarView;
     private Photo mAvatarVal;
@@ -53,7 +53,7 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                 return;
             }
             if (decrement) {
-                if (intent.getIntExtra("pos", -1) > mAvatarVal.position) {
+                if (intent.getIntExtra("pos", -1) < mAvatarVal.position) {
                     mAvatarVal.position -= 1;
                 }
                 mPendingUserInit.getData().photosCount -= 1;
@@ -94,27 +94,29 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
         mAvatarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mAvatarVal == null) {
-                    return;
-                }
                 Profile userProfile = mPendingUserInit.getData();
                 Photos photos = userProfile.photos;
+                if (mAvatarVal == null || photos == null) {
+                    return;
+                }
                 int pos;
                 if (photos.size() < mAvatarVal.position) {
                     //ава за пределами загруженной пачки
                     pos = mAvatarVal.position;
                 } else {
+                    if (photos.get(mAvatarVal.position) == null) {
+                        return;
+                    }
                     if (photos.get(mAvatarVal.position).getId() != mAvatarVal.getId()) {
                         //ид не равны, юзер загрузил новые фотки
                         int id = mAvatarVal.getId();
-                        pos = photos.getPhotoPosInArrayById(id);
+                        pos = photos.getPhotoIndexById(id);
                     } else {
                         pos = mAvatarVal.position;
                     }
                 }
-                Intent intent;
-                intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(pos, userProfile.uid, userProfile.photosCount, userProfile.photos);
-                startActivity(intent);
+                startActivity(PhotoSwitcherActivity.
+                        getPhotoSwitcherIntent(pos, userProfile.uid, userProfile.photosCount, userProfile.photos));
             }
         });
         mNameView = (TextView) root.findViewById(R.id.tvName);
