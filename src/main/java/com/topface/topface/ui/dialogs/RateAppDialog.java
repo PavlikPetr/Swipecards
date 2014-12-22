@@ -128,8 +128,7 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
     }
 
     private void sendRateRequest(long rating) {
-        AppRateRequest appRateRequest = new AppRateRequest(getActivity(), rating);
-        appRateRequest.callback(new ApiHandler() {
+        new AppRateRequest(getActivity(), rating).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
             }
