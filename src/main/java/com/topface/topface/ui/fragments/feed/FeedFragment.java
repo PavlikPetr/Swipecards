@@ -29,7 +29,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
@@ -52,6 +51,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedAnimatedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.MultiselectionController;
@@ -345,7 +345,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         mListAdapter = createNewAdapter();
 
-        AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(mListAdapter);
+        FeedAnimatedAdapter animationAdapter = new FeedAnimatedAdapter(mListAdapter);
         animationAdapter.setAbsListView(mListView.getRefreshableView());
 
         FeedAdapter<T> adapter = getListAdapter();
