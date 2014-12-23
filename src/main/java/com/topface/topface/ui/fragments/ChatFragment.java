@@ -394,8 +394,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void initChatHistory(View root) {
 
-        // adapter
-        mAdapter.setUser(mUser);
         // list view
         mListView = (PullToRefreshListView) root.findViewById(R.id.lvChatList);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -677,7 +675,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
 
                     if (mAdapter.getCount() <= 0) {
-                        mAdapter.setUser(mUser);
                         if (!mIsKeyboardOpened && !mWasNotEmptyHistory) {
                             Utils.showSoftKeyboard(getActivity(), mEditBox);
                             mIsKeyboardOpened = true;
