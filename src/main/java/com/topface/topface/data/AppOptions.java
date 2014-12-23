@@ -95,6 +95,10 @@ public class AppOptions extends AbstractData {
         return conditions.userStatusMaxLength;
     }
 
+    public int getUserAboutMeMaxLength() {
+        return conditions.userAboutMeMaxLength;
+    }
+
     private class ClientStatisticSettings {
         boolean enabled = false;
         boolean connectionStatisticsEnabled = false;
@@ -117,6 +121,7 @@ public class AppOptions extends AbstractData {
     }
 
     private class Conditions {
+        int userAboutMeMaxLength = 1024;
         int userStatusMaxLength = 1024;
         int userWeightMin = 1;
         int userWeightMax = 999;
@@ -127,11 +132,12 @@ public class AppOptions extends AbstractData {
         }
 
         Conditions(JSONObject json) {
-            userStatusMaxLength = json.optInt("userStatusMaxLength");
-            userWeightMin = json.optInt("userWeightMin");
-            userWeightMax = json.optInt("userWeightMax");
-            userHeightMin = json.optInt("userHeightMin");
-            userHeightMax = json.optInt("userHeightMax");
+            userAboutMeMaxLength = json.optInt("userAboutMeMaxLength", 1024);
+            userStatusMaxLength = json.optInt("userStatusMaxLength", 1024);
+            userWeightMin = json.optInt("userWeightMin", 1);
+            userWeightMax = json.optInt("userWeightMax", 999);
+            userHeightMin = json.optInt("userHeightMin", 1);
+            userHeightMax = json.optInt("userHeightMax", 999);
         }
     }
 }
