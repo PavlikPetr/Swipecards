@@ -150,6 +150,8 @@ public class GCMUtils {
                     } else {
                         Debug.log("Unable to register in GCM, all attempts have been exhausted");
                     }
+                } catch (SecurityException e) {
+                    Debug.log("Can't register in GCM. No com.google.android.c2dm.permission.RECEIVE permission.");
                 }
                 if (regId != null) {
                     saveGcmToken(regId, serverToken);
