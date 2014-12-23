@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
@@ -51,6 +52,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedAnimatedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.MultiselectionController;
@@ -307,6 +309,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     drawables[2],
                     drawables[3]
             );
+
+            //initial alpha = 0 setted in xml for this element
+            ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(mBackgroundText, "alpha", 0f, 1f);
+            alphaAnimator.setDuration(100);
+            alphaAnimator.setStartDelay(2000);
+            alphaAnimator.start();
         }
     }
 
@@ -343,6 +351,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         });
 
         mListAdapter = createNewAdapter();
+
+        FeedAnimatedAdapter animationAdapter = new FeedAnimatedAdapter(mListAdapter);
+        animationAdapter.setAbsListView(mListView.getRefreshableView());
+
         FeedAdapter<T> adapter = getListAdapter();
         adapter.setOnAvatarClickListener(this);
         //Пауза загрузки изображений при прокрутке списка
@@ -355,7 +367,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 )
         );
 
-        mListView.getRefreshableView().setAdapter(adapter);
+        mListView.getRefreshableView().setAdapter(animationAdapter);
         mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
         mListView.getRefreshableView().setOnTouchListener(getListViewOnTouchListener());
         mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
