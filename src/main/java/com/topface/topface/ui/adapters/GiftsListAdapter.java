@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
-import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Utils;
 
@@ -45,6 +44,24 @@ public class GiftsListAdapter extends GiftsAdapter {
             convertView = mInflater.inflate(R.layout.item_gift, null, false);
             holder = new ViewHolder();
             holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
+            holder.giftImage.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            setHighlight(v, true);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            setHighlight(v, false);
+                            mOnGridClickLIstener.onGridClick(mData.get(position));
+                            break;
+                        case MotionEvent.ACTION_CANCEL:
+                            setHighlight(v, false);
+                            break;
+                    }
+                    return true;
+                }
+            });
             holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
             convertView.setTag(holder);
         } else {
@@ -52,32 +69,16 @@ public class GiftsListAdapter extends GiftsAdapter {
         }
         holder.giftImage.setRemoteSrc(item.gift.link);
         holder.priceText.setText(Integer.toString(item.gift.price));
-        if ((mContext instanceof GiftsActivity)) {
-            holder.giftImage.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            int color = mContext.getResources().getColor(R.color.blue_60_percent);
-                            ((ImageView) v).setColorFilter(color);
-                            Utils.setBackground(R.color.blue_60_percent, (ImageView) v);
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            ((ImageView) v).setColorFilter(null);
-                            Utils.setBackground(R.color.text_white, (ImageView) v);
-                            mOnGridClickLIstener.onGridClick(mData.get(position));
-                            break;
-                        case MotionEvent.ACTION_CANCEL:
-                            ((ImageView) v).setColorFilter(null);
-                            Utils.setBackground(R.color.text_white, (ImageView) v);
-                            break;
-                    }
-                    return true;
-                }
-            });
-        }
         return convertView;
     }
 
-
+    private void setHighlight(View view, boolean isSelected) {
+        if (isSelected) {
+            ((ImageView) view).setColorFilter(mContext.getResources().getColor(R.color.blue_60_percent));
+            Utils.setBackground((ImageView) view, R.color.blue_60_percent);
+        } else {
+            ((ImageView) view).setColorFilter(null);
+            Utils.setBackground((ImageView) view, -1);
+        }
+    }
 }

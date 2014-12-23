@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 
 import org.json.JSONArray;
@@ -14,10 +13,6 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 
 public class Gift extends AbstractDataWithPhotos implements Parcelable {
-
-    public static final int ROMANTIC = 0;
-    public static final int FRIENDS = 2;
-    public static final int PRESENT = 1;
 
     public static final int PROFILE = -1;
     public static final int PROFILE_NEW = -2;
@@ -45,8 +40,9 @@ public class Gift extends AbstractDataWithPhotos implements Parcelable {
         this.feedId = feedId;
     }
 
+    @SuppressWarnings("deprecation")
     public static LinkedList<Gift> parse(ApiResponse response) {
-        LinkedList<Gift> gifts = new LinkedList<Gift>();
+        LinkedList<Gift> gifts = new LinkedList<>();
 
         try {
             JSONArray array = response.jsonResult.getJSONArray("gifts");
@@ -71,25 +67,12 @@ public class Gift extends AbstractDataWithPhotos implements Parcelable {
 
     // Gets User gifts
     public static LinkedList<Gift> parse(LinkedList<Gift> giftsList) {
-        LinkedList<Gift> gifts = new LinkedList<Gift>();
+        LinkedList<Gift> gifts = new LinkedList<>();
         gifts.add(
                 new Gift(0, Gift.SEND_BTN, null, 0)
         );
         gifts.addAll(giftsList);
         return gifts;
-    }
-
-    public static int getTypeNameResId(int type) {
-        switch (type) {
-            case ROMANTIC:
-                return R.string.gifts_romantic;
-            case FRIENDS:
-                return R.string.gifts_friends;
-            case PRESENT:
-                return R.string.gifts_present;
-            default:
-                return R.string.gifts_romantic;
-        }
     }
 
     @Override

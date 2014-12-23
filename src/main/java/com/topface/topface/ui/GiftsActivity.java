@@ -146,7 +146,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mGiftListFragment.clearContent();
         outState.putParcelableArrayList(GIFTS_LIST, mAllGifts);
     }
 
@@ -197,8 +196,8 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
      * Intent to start GiftsActivity for sending gift item
      * If you need to process send gift request yourself set sendGift flag to false
      *
-     * @param context  lauch context
-     * @param userId   profile id to send gift
+     * @param context lauch context
+     * @param userId  profile id to send gift
      * @return intent
      */
     public static Intent getSendGiftIntent(Context context, int userId) {

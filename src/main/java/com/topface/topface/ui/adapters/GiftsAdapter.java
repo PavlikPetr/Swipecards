@@ -50,7 +50,6 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
     protected View getContentView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
-        int type = getItemViewType(position);
         FeedGift item = getItem(position);
 
         if (convertView == null) {
@@ -61,12 +60,9 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        if (type == T_SEND_BTN) {
+        if (item.gift.type == Gift.SEND_BTN) {
             holder.giftImage.setImageBitmap(null);
             holder.giftImage.setBackgroundResource(R.drawable.chat_gift_selector);
-        } else if (item.gift.type == Gift.PROFILE || item.gift.type == Gift.PROFILE_NEW) {
-            holder.giftImage.setRemoteSrc(item.gift.link);
         } else {
             holder.giftImage.setRemoteSrc(item.gift.link);
         }
