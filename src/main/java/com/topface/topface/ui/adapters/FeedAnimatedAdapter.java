@@ -18,8 +18,11 @@ public class FeedAnimatedAdapter extends AnimationAdapter {
     @Override
     public void setListViewWrapper(@NonNull ListViewWrapper listViewWrapper) {
         super.setListViewWrapper(listViewWrapper);
+        // need this to redefine default timings
         ViewAnimator viewAnimator = getViewAnimator();
+        viewAnimator.setAnimationDelayMillis(0);
         viewAnimator.setAnimationDurationMillis(100);
+        viewAnimator.setInitialDelayMillis(0);
     }
 
     @NonNull

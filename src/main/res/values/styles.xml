@@ -353,6 +353,11 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="BackgroundFontShadowless" parent="Shadowless">
+        <item name="android:textColor">#737373</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="EditAvatar">
         <item name="postProcessor">mask</item>
         <item name="clipMask">@drawable/edit_main_avatar_mask</item>

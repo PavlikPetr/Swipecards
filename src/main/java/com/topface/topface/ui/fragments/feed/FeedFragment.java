@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
@@ -308,6 +309,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     drawables[2],
                     drawables[3]
             );
+
+            //initial alpha = 0 setted in xml for this element
+            ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(mBackgroundText, "alpha", 0f, 1f);
+            alphaAnimator.setDuration(100);
+            alphaAnimator.setStartDelay(2000);
+            alphaAnimator.start();
         }
     }
 
