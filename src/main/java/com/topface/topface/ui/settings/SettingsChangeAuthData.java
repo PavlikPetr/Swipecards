@@ -182,6 +182,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
                         Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_LONG).show();
                         App.sendProfileAndOptionsRequests();
                         mToken.saveToken(mToken.getUserSocialId(), email, mToken.getPassword());
+                        App.getConfig().rebuildUserConfig();
                         mEdMainField.getText().clear();
                     }
                 }

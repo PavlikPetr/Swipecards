@@ -40,6 +40,11 @@ public class Configurations {
         return mUserConfig;
     }
 
+    public UserConfig rebuildUserConfig() {
+        mUserConfig = new UserConfig(mContext);
+        return mUserConfig;
+    }
+
     public SessionConfig getSessionConfig() {
         if (mSessionConfig == null) {
             mSessionConfig = new SessionConfig(mContext);
