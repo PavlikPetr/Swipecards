@@ -250,6 +250,7 @@
     <string name="settings_guests">Misafirler</string>
     <string name="settings_help">Yardım</string>
     <string name="settings_faq">Sorular ve cevaplar</string>
+    <string name="settings_faq_title">Muhtemelen, sorununuz daha önce açıklandı.\"Sorular ve cevaplar\" kısmına bakın.</string>
     <string name="settings_account">Hesap</string>
     <string name="settings_feedback">Yorum bırakmak</string>
     <string name="settings_about">Program hakkında</string>
@@ -590,6 +591,7 @@
     <string name="loading_photo_percent">%d%% resim yüklemesi</string>
     <string name="profile_update_error">Bilgi yenileme hatası</string>
     <string name="retry_cancel_editing">Bilgi gönderme sırasında bağlantı hatası oluşmuştur. Yeniden denemek yoksa kaydetmeden çıkış yapmak mı istiyorsunuz?</string>
+    <string name="retry_cancel_editing_bad_value">Yanlış bilgi girdiniz.tekrar deneyin ya da kayıt etmeden çıkın?</string>
     <string name="user_does_not_exist">Kullanıcı bulunamamıştır.</string>
     <string name="feedback_subject_ban">İftira engellemeye karşı şikayet</string>
     <string name="settings_led">LED bildirim</string>
@@ -600,4 +602,6 @@
     <string name="measurement_unit_weight">Kg.</string>
     <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Maksimum kullanıcı sayısını seçildi</string>
+    <string name="logout_if_email_already_registred">Böyle bir e-posta adresi kullanılıyor.Eğer sizin e-postanız ise şu anki hesabınızdan çıkıp  %s hesaba bağlanın.</string>
+    <string name="recover_password_instructions">Şifrenizi kurtarmak ile alakalı talimatları içeren bir mesajı e-postanıza yolladık</string>
 </resources>
