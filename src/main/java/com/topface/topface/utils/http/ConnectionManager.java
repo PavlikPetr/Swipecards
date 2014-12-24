@@ -74,6 +74,10 @@ public class ConnectionManager {
      * @return объект содержащий сам запрос и связанное с ним http соединение
      */
     public boolean sendRequest(final IApiRequest apiRequest) {
+        if (mWorker.isShutdown() || mWorker.isTerminated()) {
+            apiRequest.cancel();
+            return false;
+        }
         //Добавляем поток с запросом в пулл потоков
         mWorker.submit(new Runnable() {
             @Override
