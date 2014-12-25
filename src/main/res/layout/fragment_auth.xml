@@ -30,9 +30,10 @@
             android:layout_centerInParent="true"
             android:animateLayoutChanges="true"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="UnusedAttribute">
 
-            <ImageView
+        <ImageView
                 android:id="@+id/ivAuthLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
