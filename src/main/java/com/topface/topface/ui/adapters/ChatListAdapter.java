@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -166,8 +167,14 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     }
 
     public void addAll(ArrayList<History> dataList, boolean more, ListView parentView) {
+        boolean wasEmpty = isEmpty();
         this.addAll(dataList, more);
         parentView.setSelection(dataList.size() + (more ? 2 : 0));
+        if (wasEmpty) {
+            ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(parentView, "alpha", 0, 1);
+            alphaAnimator.setDuration(150);
+            alphaAnimator.start();
+        }
     }
 
     public void forceStopLoader() {
