@@ -460,7 +460,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         initBonusCounterConfig();
         // возможно что содержимое меню поменялось, надо обновить
         if (mMenuFragment != null && (CacheProfile.getOptions().likesWithThreeTabs.isEnabled() ||
-                CacheProfile.getOptions().messagesWithTabs.isEnabled())) {
+                CacheProfile.getOptions().messagesWithTabs.isEnabled() || !mMenuFragment.isClosingsAvailable())) {
             mMenuFragment.updateAdapter();
         }
         FloatBlock.resetActivityMap();
