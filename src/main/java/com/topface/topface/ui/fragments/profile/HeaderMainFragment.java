@@ -72,7 +72,9 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                     return;
                 }
                 Profile userProfile = mPendingUserInit.getData();
-                Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(mAvatarVal.position, userProfile.uid, userProfile.photosCount, userProfile.photos);
+                Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(userProfile.gifts,
+                        mAvatarVal.position, userProfile.uid, userProfile.photosCount,
+                        userProfile.photos);
                 startActivity(intent);
             }
         });

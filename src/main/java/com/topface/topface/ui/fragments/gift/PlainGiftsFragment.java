@@ -27,8 +27,8 @@ import java.util.List;
 
 public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragment {
 
-    private static final String DATA = "data";
-    private static final String POSITION = "position";
+    public static final String DATA = "data";
+    public static final String POSITION = "position";
 
     protected TextView mTitle;
     protected View mGroupInfo;
@@ -151,13 +151,7 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     protected FeedAdapter.Updater getUpdaterCallback() {
         return null;
     }
-
 }

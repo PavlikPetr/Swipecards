@@ -1,12 +1,15 @@
 package com.topface.topface.ui.fragments.gift;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -15,6 +18,9 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
+
+import java.util.ArrayList;
 
 /**
  * Fragment displaying updatable gifts feed
@@ -61,12 +67,49 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
 
     }
 
+    private UserProfileFragment getUserProfileFragment() {
+        UserProfileFragment fragment = null;
+        try {
+            fragment = (UserProfileFragment) getParentFragment();
+        } catch (Exception e) {
+            Debug.error("Fragment not equals UserProfileFragment ", e);
+        }
+        return fragment;
+    }
+
     @Override
     protected void restoreInstanceState(Bundle savedState) {
+        UserProfileFragment fragment = getUserProfileFragment();
+        if (fragment != null) {
+            ArrayList<FeedGift> newGifts = fragment.getNewGifts();
+            if (newGifts.size() > 0) {
+                ArrayList<Parcelable> gfts = savedState.getParcelableArrayList(PlainGiftsFragment.DATA);
+                ArrayList<FeedGift> g = new ArrayList<>(gfts.size());
+                for (Parcelable p : gfts) {
+                    g.add((FeedGift) p);
+                }
+                // find button SendGift and add new gifts after it
+                g.addAll(getSendGiftButtonPosition(g), newGifts);
+                // displace list position
+                int position = savedState.getInt(PlainGiftsFragment.POSITION, 0) + newGifts.size();
+                fragment.clearNewFeedGift();
+                savedState.putParcelableArrayList(DATA, g);
+                savedState.putInt(POSITION, position);
+
+            }
+        }
         super.restoreInstanceState(savedState);
         mProfileId = savedState.getInt(PROFILE_ID);
         if (!mIsUpdating) {
             onNewFeeds(mProfileId);
+        }
+    }
+
+    private int getSendGiftButtonPosition(ArrayList<FeedGift> gifts) {
+        if (gifts.size() > 0 && gifts.get(0).gift.type == Gift.SEND_BTN) {
+            return 1;
+        } else {
+            return 0;
         }
     }
 
@@ -76,6 +119,10 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
         mPendingProfileInit.setCanSet(true);
         if (mPendingProfileInit.getCanSet()) {
             setProfilePending(mPendingProfileInit.getData());
+            UserProfileFragment fragment = getUserProfileFragment();
+            if (fragment != null) {
+                fragment.clearNewFeedGift();
+            }
         }
     }
 
