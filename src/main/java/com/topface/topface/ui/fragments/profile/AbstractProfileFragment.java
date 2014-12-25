@@ -95,11 +95,6 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_profile, null);
@@ -317,7 +312,4 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     protected UpdatableGiftsFragment getGiftFragment() {
         return mGiftFragment;
     }
-
-
-
 }

@@ -95,7 +95,6 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
                 fragment.clearNewFeedGift();
                 savedState.putParcelableArrayList(DATA, g);
                 savedState.putInt(POSITION, position);
-
             }
         }
         super.restoreInstanceState(savedState);

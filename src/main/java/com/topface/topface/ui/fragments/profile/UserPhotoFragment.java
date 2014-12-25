@@ -96,7 +96,6 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         };
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
@@ -181,7 +180,6 @@ public class UserPhotoFragment extends ProfileInnerFragment {
 
     private void setPhotos(Photos photos) {
         initTitle(photos);
-
         if (mUserPhotoGridAdapter == null) {
             mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext(),
                     photos,

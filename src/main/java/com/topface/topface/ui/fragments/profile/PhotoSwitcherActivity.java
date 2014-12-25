@@ -445,7 +445,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 // show default image when user haven't any gifts yet
                 mGiftImage.setBackgroundResource(R.drawable.ic_gift);
             }
-
         }
     }
 

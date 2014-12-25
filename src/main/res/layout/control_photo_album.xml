@@ -44,6 +44,5 @@
             android:padding="8dp"
             android:scaleType="fitXY"
             android:src="@drawable/ico_delete_selector" />
-
     </RelativeLayout>
 </RelativeLayout>

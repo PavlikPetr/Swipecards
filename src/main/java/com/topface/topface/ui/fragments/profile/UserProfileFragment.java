@@ -327,11 +327,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     private void getUserProfile(final int profileId) {
-        getUserProfile(profileId, isLoaded(profileId));
-    }
-
-    private void getUserProfile(final int profileId, boolean isLoad) {
-        if (isLoad) return;
+        if (isLoaded(profileId)) return;
         mLockScreen.setVisibility(View.GONE);
         mLoaderView.setVisibility(View.VISIBLE);
         if (mSavedResponse == null) {
@@ -699,7 +695,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private BroadcastReceiver mGiftReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-//            getUserProfile(mProfileId, false);
             addNewFeedGift(getGiftFromIntent(intent));
         }
     };
@@ -710,7 +705,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         switch (requestCode) {
             case GiftsActivity.INTENT_REQUEST_GIFT:
                 if (resultCode == Activity.RESULT_OK) {
-//                    getUserProfile(mProfileId, false);
                     addNewFeedGift(getGiftFromIntent(data));
                 }
                 break;
