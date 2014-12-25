@@ -155,11 +155,6 @@
     <string name="edit_set_as_main">A face principala</string>
     <string name="edit_delete">Sterge</string>
     <string name="edit_restore">Restabileste</string>
-    <string name="gifts_romantic">Romantica</string>
-    <string name="gifts_friends">Prietenie</string>
-    <string name="gifts_present">Felicitari</string>
-    <string name="gifts_title">Alege cadou</string>
-    <string name="gifts_send_btn">Trimite cadou</string>
     <string name="form_not_specified">Nu e indicat</string>
     <string name="form_main">De baza</string>
     <string name="form_physique">Date corp</string>

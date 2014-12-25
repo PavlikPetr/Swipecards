@@ -221,11 +221,6 @@
     <string name="edit_set_as_main">Imposta come la foto principale</string>
     <string name="edit_delete">Elimina</string>
     <string name="edit_restore">Ripristinare</string>
-    <string name="gifts_romantic">Romanticismo</string>
-    <string name="gifts_friends">Amicizia</string>
-    <string name="gifts_present">Auguri</string>
-    <string name="gifts_title">Scegli regalo</string>
-    <string name="gifts_send_btn">Invia regalo</string>
     <string name="form_not_specified">Non indicato</string>
     <string name="form_main">Principale</string>
     <string name="form_physique">Il fisico</string>

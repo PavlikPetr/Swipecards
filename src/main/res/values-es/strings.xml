@@ -221,11 +221,6 @@
     <string name="edit_set_as_main">Hacer principal</string>
     <string name="edit_delete">Eliminar</string>
     <string name="edit_restore">Recuperar</string>
-    <string name="gifts_romantic">Romántica</string>
-    <string name="gifts_friends">Amistad</string>
-    <string name="gifts_present">Felicitaciones</string>
-    <string name="gifts_title">Elige regalo</string>
-    <string name="gifts_send_btn">Enviar regalo</string>
     <string name="form_not_specified">No especificado</string>
     <string name="form_main">Básico</string>
     <string name="form_physique">Aspecto físico</string>
