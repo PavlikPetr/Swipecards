@@ -121,7 +121,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     initProfileMenuItem(mHeaderView);
                     initEditor();
                     initBonus();
-                    if (CacheProfile.premium) {
+                    if (mClosingsController.isLeftMenuLocked() && CacheProfile.premium) {
                         mClosingsController.onPremiumObtained();
                     }
                     break;
@@ -426,7 +426,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         }
         // We need to clean state if there was a logout in other Activity
         mClosingsController.onLogoutWasInitiated();
-        if (CacheProfile.premium) {
+        if (mClosingsController.isLeftMenuLocked() && CacheProfile.premium) {
             mClosingsController.onPremiumObtained();
         }
 

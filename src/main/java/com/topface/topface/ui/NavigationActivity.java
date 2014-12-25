@@ -84,6 +84,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
     private static NavigationActivity instance = null;
+    private Intent mPendingNextIntent;
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
@@ -280,7 +281,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         initAppsFlyer();
 
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
-            showFragment(intent);
+            mPendingNextIntent = intent;
         }
     }
 
@@ -453,6 +454,15 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mOpenMenuReceiver, new IntentFilter(OPEN_MENU));
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        if (mPendingNextIntent != null) {
+            showFragment(mPendingNextIntent);
+            mPendingNextIntent = null;
+        }
     }
 
     @Override
