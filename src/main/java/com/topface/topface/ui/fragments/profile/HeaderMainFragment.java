@@ -117,7 +117,9 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                     }
                 }
                 startActivity(PhotoSwitcherActivity.
-                        getPhotoSwitcherIntent(pos, userProfile.uid, userProfile.photosCount, userProfile.photos));
+                        getPhotoSwitcherIntent(userProfile.gifts, pos,
+                                userProfile.uid, userProfile.photosCount,
+                                userProfile.photos));
             }
         });
         mNameView = (TextView) root.findViewById(R.id.tvName);
