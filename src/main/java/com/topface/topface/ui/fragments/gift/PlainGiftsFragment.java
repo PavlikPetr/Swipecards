@@ -39,6 +39,7 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
     private IGiftSendListener mGiftSendListener;
     private T mGiftsFirstPortion;
 
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -53,7 +54,7 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         mGridView = (GridView) root.findViewById(R.id.usedGrid);
         mGridView.setAnimationCacheEnabled(false);
         mGridView.setScrollingCacheEnabled(true);
-        mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), new FeedList<FeedGift>(), getUpdaterCallback());
+        mGridAdapter = new GiftsAdapter(getActivity(), new FeedList<FeedGift>(), getUpdaterCallback());
         mGridView.setAdapter(mGridAdapter);
         mGridView.setOnScrollListener(mGridAdapter);
         mTitle = (TextView) root.findViewById(R.id.usedTitle);
@@ -149,6 +150,10 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         } else {
             mGiftsFirstPortion = gifts;
         }
+    }
+
+    public IGiftSendListener getGiftSendListener() {
+        return mGiftSendListener;
     }
 
     @Override
