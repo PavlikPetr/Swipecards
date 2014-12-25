@@ -33,6 +33,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Products;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.INavigationFragmentsListener;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
@@ -363,6 +364,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             if (savedInstanceState != null) {
                 FragmentId savedId = (FragmentId) savedInstanceState.getSerializable(CURRENT_FRAGMENT_STATE);
                 if (savedId != null) {
+                    Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from saved instance state.");
                     switchFragment(savedId, false);
                     return;
                 }
@@ -371,10 +373,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 Intent intent = getActivity().getIntent();
                 if (intent != null &&
                         intent.getSerializableExtra(GCMUtils.NEXT_INTENT) != null) {
+                    Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from activity intent.");
                     switchFragment((FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT), false);
                     return;
                 }
             }
+            Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
             switchFragment(CacheProfile.getOptions().startPageFragmentId, false);
         }
     }
@@ -454,6 +458,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
      */
     public void selectMenu(FragmentId fragmentId) {
         if (fragmentId != mSelectedFragment) {
+            Debug.log("MenuFragment: Switch fragment in selectMenu().");
             switchFragment(fragmentId, true);
         } else if (mOnFragmentSelected != null) {
             mOnFragmentSelected.onFragmentSelected(fragmentId);

@@ -82,6 +82,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public static final String OPEN_MENU = "com.topface.topface.open.menu";
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String INTENT_EXIT = "EXIT";
+    public static final String PAGE_SWITCH = "Page switch: ";
     private static NavigationActivity instance = null;
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
@@ -399,12 +400,14 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     }
 
     public void showFragment(FragmentId fragmentId) {
+        Debug.log(PAGE_SWITCH + "show fragment: " + fragmentId);
         mMenuFragment.selectMenu(fragmentId);
     }
 
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
         FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
+        Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
         showFragment(currentFragment == null ? CacheProfile.getOptions().startPageFragmentId : currentFragment);
     }
 
