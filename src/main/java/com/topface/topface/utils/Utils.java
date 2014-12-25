@@ -8,9 +8,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
@@ -21,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
@@ -261,6 +264,26 @@ public class Utils {
             viewGroup.setLayoutTransition(new LayoutTransition());
             LayoutTransition transition = viewGroup.getLayoutTransition();
             transition.enableTransitionType(LayoutTransition.CHANGING);
+        }
+    }
+
+    /**
+     * Устанавливает фон для ImageView если передать -1 будет установлен null
+     *
+     * @param imageView ImageView в котором нужно поменять фон
+     * @param res       цвет фона
+     */
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public static void setBackground(ImageView imageView, @DrawableRes int res) {
+        Drawable background = null;
+        if (res != -1) {
+            background = App.getContext().getResources().getDrawable(res);
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            imageView.setBackgroundDrawable(background);
+        } else {
+            imageView.setBackground(background);
         }
     }
 }

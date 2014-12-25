@@ -295,6 +295,14 @@ public class FormInfo {
         }
     }
 
+    public boolean isCharactersCountVisible(int titleId) {
+        if (titleId == R.array.form_main_height || titleId == R.array.form_main_weight) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public int getMaxCharacters(int titleId) {
         int result;
         switch (titleId) {
@@ -305,7 +313,7 @@ public class FormInfo {
                 result = 3;
                 break;
             default:
-                result = Integer.MAX_VALUE;
+                result = App.getAppOptions().getUserAboutMeMaxLength();
                 break;
         }
         return result;

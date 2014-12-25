@@ -75,6 +75,21 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
         return result;
     }
 
+    /**
+     * Возвращает позицию аватары в массиве по id. Если id не соответствует ни одна фотография
+     * будет возвращения 0 позиция
+     *
+     * @param photoId id фоторгафии
+     */
+    public int getPhotoIndexById(int photoId) {
+        for (int i = 0; i < size(); i++) {
+            if (this.get(i) != null && photoId == this.get(i).getId()) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     public Photo getFirst() {
         if (!this.isEmpty()) {
             return this.get(0);

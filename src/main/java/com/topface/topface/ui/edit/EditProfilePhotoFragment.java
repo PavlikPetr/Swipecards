@@ -110,7 +110,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         mLastSelectedAsMainId = mSelectedAsMainId;
         CacheProfile.sendUpdateProfileBroadcast();
         mPhotoLinks = new Photos();
-        mPhotoLinks.add(new Photo());
         if (CacheProfile.photos != null) {
             mPhotoLinks.addAll(CacheProfile.photos);
         }
@@ -224,7 +223,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                         if (getActivity() != null) {
                             if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
                                 Photo removedPhoto = mPhotoLinks.getPhotoById(mLastSelectedAsMainId);
-                                mPhotoGridAdapter.getData().remove(removedPhoto);
+                                mPhotoGridAdapter.getAdaprerData().remove(removedPhoto);
                                 mPhotoGridAdapter.notifyDataSetChanged();
                                 if (CacheProfile.photos.contains(removedPhoto)) {
                                     CacheProfile.photos.remove(removedPhoto);

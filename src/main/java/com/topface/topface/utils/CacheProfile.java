@@ -150,6 +150,7 @@ public class CacheProfile {
                 show_ad = profile.showAd;
                 photo = profile.photo;
                 photos = profile.photos;
+                totalPhotos = profile.photosCount;
                 break;
             case ProfileRequest.P_ALL:
                 Editor.init(profile);

@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
@@ -42,6 +43,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     private FormInfo mFormInfo;
 
     private EditText mEditText;
+    private TextView mCharactersCount;
 
     public EditFormItemInputFragment() {
         super();
@@ -90,6 +92,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                setCharactersCount(mEditText.getText().length());
             }
 
             @Override
@@ -109,9 +112,29 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
+        initCharactersCount(root);
         return root;
     }
 
+    private void initCharactersCount(ViewGroup view) {
+        int count = mEditText.getText().length();
+        mCharactersCount = (TextView) view.findViewById(R.id.charactersCount);
+        if (mFormInfo.isCharactersCountVisible(mTitleId)) {
+            mCharactersCount.setVisibility(View.VISIBLE);
+        } else {
+            mCharactersCount.setVisibility(View.GONE);
+        }
+        setCharactersCount(count);
+        mEditText.setSelection(count);
+    }
+
+    private void setCharactersCount(int count, int maxCount) {
+        mCharactersCount.setText(count + "/" + maxCount);
+    }
+
+    private void setCharactersCount(int count) {
+        setCharactersCount(count, App.getAppOptions().getUserAboutMeMaxLength());
+    }
 
     @Override
     protected boolean hasChanges() {

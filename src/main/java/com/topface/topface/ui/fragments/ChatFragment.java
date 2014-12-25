@@ -273,7 +273,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // do not recreate Adapter cause of steRetainInstance(true)
+        // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
         }
@@ -368,7 +368,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void restoreData(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             try {
-                boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
+                boolean wasFailed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 FeedList<History> historyData = new FeedList<>();
                 if (list != null) {
@@ -380,7 +380,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 mAdapter.setData(historyData);
                 mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
-                if (was_failed) {
+                if (wasFailed) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 } else {
                     mLockScreen.setVisibility(View.GONE);

@@ -165,7 +165,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         Intent intent = new Intent(App.getContext(), PhotoSwitcherActivity.class);
         intent.putExtra(INTENT_USER_ID, userId);
         //Если первый элемент - это фейковая фотка, то смещаем позицию показа
-        position = photos.get(0).isFake() ? position - 1 : position;
         intent.putExtra(INTENT_ALBUM_POS, position);
         intent.putExtra(INTENT_PHOTOS_COUNT, photosCount);
         intent.putExtra(INTENT_PHOTOS_FILLED, true);
@@ -223,7 +222,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             String s = preloadPhoto.getSuitableLink(size.x, size.y);
             DefaultImageLoader.getInstance(this).preloadImage(s, null);
         }
-        extractUserGifts(intent);
+
         if (intent.getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
             int photosCount = intent.getIntExtra(INTENT_PHOTOS_COUNT, 0);
             int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);
