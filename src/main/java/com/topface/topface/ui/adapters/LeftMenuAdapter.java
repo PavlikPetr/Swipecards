@@ -256,6 +256,11 @@ public class LeftMenuAdapter extends BaseAdapter {
         }
     }
 
+    public boolean hasTabbdedPages() {
+        return mItems.indexOfKey(BaseFragment.FragmentId.TABBED_DIALOGS.getId()) > 0 ||
+                mItems.indexOfKey(BaseFragment.FragmentId.TABBED_DIALOGS.getId()) > 0;
+    }
+
     public class ViewHolder {
         TextView btnMenu;
         View leftMenuCellLayout;

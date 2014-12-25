@@ -697,4 +697,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     public static interface OnFragmentSelectedListener {
         public void onFragmentSelected(FragmentId fragmentId);
     }
+
+    public boolean isClosingsAvailable() {
+        return !mAdapter.hasTabbdedPages();
+    }
 }
