@@ -47,17 +47,19 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     private BroadcastReceiver mAvatarPositionReciver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean increment = intent.getBooleanExtra(INCREMENT_AVATAR_POSITION, false);
-            boolean decrement = intent.getBooleanExtra(DECREMENT_AVATAR_POSITION, false);
-            if (increment) {
-                mAvatarVal.position += 1;
-                return;
-            }
-            if (decrement) {
-                if (intent.getIntExtra(POSITION, -1) < mAvatarVal.position) {
-                    mAvatarVal.position -= 1;
+            if (mAvatarVal != null) {
+                boolean increment = intent.getBooleanExtra(INCREMENT_AVATAR_POSITION, false);
+                boolean decrement = intent.getBooleanExtra(DECREMENT_AVATAR_POSITION, false);
+                if (increment) {
+                    mAvatarVal.position += 1;
+                    return;
                 }
-                mPendingUserInit.getData().photosCount -= 1;
+                if (decrement) {
+                    if (intent.getIntExtra(POSITION, -1) < mAvatarVal.position) {
+                        mAvatarVal.position -= 1;
+                    }
+                    mPendingUserInit.getData().photosCount -= 1;
+                }
             }
         }
     };
