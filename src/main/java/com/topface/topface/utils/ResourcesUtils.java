@@ -29,14 +29,12 @@ public class ResourcesUtils {
             case TABBED_DIALOGS:
             case DIALOGS:
                 return R.string.settings_messages;
-            case VISITORS:
+            case TABBED_VISITORS:
                 return R.string.general_visitors;
             case BOOKMARKS:
                 return R.string.general_bookmarks;
             case BONUS:
                 return R.string.general_bonus;
-            case FANS:
-                return R.string.general_fans;
             case GEO:
                 return R.string.people_nearby;
             case EDITOR:
