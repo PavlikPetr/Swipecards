@@ -4,6 +4,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /* Класс чужого профиля */
@@ -23,25 +24,37 @@ public class User extends Profile {
     public UserSocialInfo socialInfo;   // info about social network
 
     public static User parse(int userId, ApiResponse response) {
+        return parse(userId, response.getJsonResult());
+    }
+
+    public static User parse(int userId, String userProfileJson) {
+        try {
+            return parse(userId, new JSONObject(userProfileJson));
+        } catch (JSONException e) {
+            Debug.error("Wrong response parsing", e);
+        }
+        return new User();
+    }
+
+    public static User parse(int userId, JSONObject userProfileJson) {
         User user = new User();
 
         try {
-            JSONObject item = response.getJsonResult();
-            if (item != null) {
-                parse(user, item);
-                user.platform = item.optString("platform");
-                user.lastVisit = item.optInt("lastVisit");
-                user.inBlackList = item.optBoolean("inBlacklist");
-                user.status = item.optString("status");
-                user.online = item.optBoolean("online");
-                user.mutual = item.optBoolean("mutual");
-                user.score = item.optInt("score");
-                user.banned = item.optBoolean("banned");
-                user.deleted = item.optBoolean("deleted") || user.isEmpty();
-                user.bookmarked = item.optBoolean("bookmarked");
-                user.isSympathySent = item.optBoolean("isSympathySent");
+            if (userProfileJson != null) {
+                parse(user, userProfileJson);
+                user.platform = userProfileJson.optString("platform");
+                user.lastVisit = userProfileJson.optInt("lastVisit");
+                user.inBlackList = userProfileJson.optBoolean("inBlacklist");
+                user.status = userProfileJson.optString("status");
+                user.online = userProfileJson.optBoolean("online");
+                user.mutual = userProfileJson.optBoolean("mutual");
+                user.score = userProfileJson.optInt("score");
+                user.banned = userProfileJson.optBoolean("banned");
+                user.deleted = userProfileJson.optBoolean("deleted") || user.isEmpty();
+                user.bookmarked = userProfileJson.optBoolean("bookmarked");
+                user.isSympathySent = userProfileJson.optBoolean("isSympathySent");
                 if (CacheProfile.isEditor()) {
-                    user.socialInfo = UserSocialInfo.parse(item.optString("info"));
+                    user.socialInfo = UserSocialInfo.parse(userProfileJson.optString("info"));
                 }
             } else {
                 user.deleted = true;

@@ -291,13 +291,6 @@
     <string name="edit_restore">Восстановить</string>
 
     <!-- Albums -->
-    <!-- Gifts -->
-    <string name="gifts_romantic">Романтика</string>
-    <string name="gifts_friends">Дружба</string>
-
-    <string name="gifts_present">Поздравления</string>
-    <string name="gifts_title">Выберите подарок</string>
-    <string name="gifts_send_btn">Отправить подарок</string>
 
     <!-- Map -->
 

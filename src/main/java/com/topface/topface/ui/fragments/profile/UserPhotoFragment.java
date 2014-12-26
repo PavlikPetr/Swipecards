@@ -67,7 +67,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
             @Override
             public void onUpdate() {
                 if (mGridAlbum != null) {
-                    Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData();
+                    Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getPhotos();
                     AlbumRequest request = new AlbumRequest(getActivity(), mUserId, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM, AlbumLoadController.FOR_GALLERY);
                     request.callback(new DataApiHandler<AlbumPhotos>() {
 
