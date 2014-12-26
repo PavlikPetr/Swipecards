@@ -276,6 +276,11 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
         }
     }
 
+
+    public String getCurrentSrcLink() {
+        return mCurrentSrc;
+    }
+
     public int getImageMaxHeight() {
         return maxHeight;
     }
