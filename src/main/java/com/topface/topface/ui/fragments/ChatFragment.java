@@ -57,14 +57,13 @@ import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
-import com.topface.topface.requests.BookmarkAddRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteBlackListRequest;
-import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.DeleteMessagesRequest;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
+import com.topface.topface.requests.handlers.ActionMenuHandler;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.ui.ComplainsActivity;
@@ -863,10 +862,26 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 ApiRequest request;
 
                 if (mUser.bookmarked) {
-                    request = new DeleteBookmarksRequest(mUserId, getActivity());
+                    request = new DeleteBlackListRequest(mUserId, getActivity());
+                    request.callback(new ActionMenuHandler(App.getContext(), AttitudeHandler.ActionTypes.BLACK_LIST, new int[]{mUserId}, false) {
+                        @Override
+                        public void closeMenu() {
+                            hideChatAction();
+                        }
+                    });
                 } else {
-                    request = new BookmarkAddRequest(mUserId, getActivity());
+                    request = new BlackListAddRequest(getActivity(), mUserId);
+                    request.callback(new ActionMenuHandler(App.getContext(), AttitudeHandler.ActionTypes.BLACK_LIST, new int[]{mUserId}, true) {
+                        @Override
+                        public void closeMenu() {
+                            hideChatAction();
+                        }
+                    });
                 }
+//                    request = new DeleteBookmarksRequest(mUserId, getActivity());
+//                } else {
+//                    request = new BookmarkAddRequest(mUserId, getActivity());
+//                }
 
                 request.exec();
                 break;

@@ -38,6 +38,7 @@ import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
+import com.topface.topface.requests.handlers.ActionMenuHandler;
 import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ChatActivity;
@@ -496,6 +497,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                         loader.setVisibility(View.INVISIBLE);
                                         icon.setVisibility(View.VISIBLE);
                                         disableSympathyDelight();
+                                        closeProfileActions();
                                     }
                                 }
 
@@ -538,6 +540,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                         loader.setVisibility(View.INVISIBLE);
                                         icon.setVisibility(View.VISIBLE);
                                         disableSympathyDelight();
+                                        closeProfileActions();
                                     }
                                 }
 
@@ -605,8 +608,20 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         ApiRequest request;
                         if (profile.inBlackList) {
                             request = new DeleteBlackListRequest(profile.uid, getActivity());
+                            request.callback(new ActionMenuHandler(App.getContext(), AttitudeHandler.ActionTypes.BLACK_LIST, new int[]{profile.uid}, false) {
+                                @Override
+                                public void closeMenu() {
+                                    closeProfileActions();
+                                }
+                            });
                         } else {
-                            request = new BlackListAddRequest(profile.uid, getActivity());
+                            request = new BlackListAddRequest(getActivity(), profile.uid);
+                            request.callback(new ActionMenuHandler(App.getContext(), AttitudeHandler.ActionTypes.BLACK_LIST, new int[]{profile.uid}, true) {
+                                @Override
+                                public void closeMenu() {
+                                    closeProfileActions();
+                                }
+                            });
                         }
                         request.exec();
                     }
@@ -624,8 +639,21 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
                 if (profile instanceof User && ((User) profile).bookmarked) {
                     request = new DeleteBookmarksRequest(profile.uid, getActivity());
+                    request.callback(new ActionMenuHandler(getActivity(), AttitudeHandler.ActionTypes.BOOKMARK, new int[]{profile.uid}, false) {
+                        @Override
+                        public void closeMenu() {
+                            closeProfileActions();
+                        }
+                    });
                 } else {
                     request = new BookmarkAddRequest(profile.uid, getActivity());
+                    request.callback(new ActionMenuHandler(getActivity(), AttitudeHandler.ActionTypes.BOOKMARK, new int[]{profile.uid}, true) {
+                        @Override
+                        public void closeMenu() {
+                            closeProfileActions();
+                        }
+                    });
+
                 }
 
                 request.exec();

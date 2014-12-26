@@ -33,6 +33,13 @@ public class BlackListAddRequest extends ApiRequest {
         setCallback();
     }
 
+    public BlackListAddRequest(Context context, int userId) {
+        super(context);
+        List<Integer> list = new ArrayList<>();
+        list.add(userId);
+        mUserIds = list;
+    }
+
     /**
      * @param userIds пользователи, которых нужно добавить в черный список
      */
@@ -40,7 +47,6 @@ public class BlackListAddRequest extends ApiRequest {
         super(context);
         mUserIds = userIds;
         setCallback();
-
     }
 
     private void setCallback() {
