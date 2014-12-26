@@ -23,6 +23,7 @@ import com.topface.topface.utils.CountersManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * base class for feeds with tabs
@@ -140,7 +141,7 @@ public abstract class TabbedFeedFragment extends BaseFragment {
 
     protected void addBodyPage(String className, String pageTitle, int counter) {
         mPagesCounters.add(counter);
-        mPagesTitles.add(pageTitle.toUpperCase());
+        mPagesTitles.add(pageTitle.toUpperCase(Locale.getDefault()));
         mPagesClassNames.add(className);
     }
 

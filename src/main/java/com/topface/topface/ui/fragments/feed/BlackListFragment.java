@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,11 +20,6 @@ import java.util.List;
  * Черный список. Сюда попадают заблокированые пользователи, отныне от них не приходит никакая активность
  */
 public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> implements View.OnClickListener {
-
-    @Override
-    protected Drawable getBackIcon() {
-        return null;
-    }
 
     @Override
     protected String getTitle() {

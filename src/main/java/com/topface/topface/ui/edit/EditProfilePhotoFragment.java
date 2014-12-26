@@ -296,6 +296,11 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         }
 
         @Override
+        protected boolean isAddPhotoButtonEnabled() {
+            return true;
+        }
+
+        @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             final Photo item = getItem(position);

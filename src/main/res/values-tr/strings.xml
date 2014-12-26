@@ -225,11 +225,6 @@
     <string name="edit_set_as_main">Genel yapmak</string>
     <string name="edit_delete">Silmek</string>
     <string name="edit_restore">Kurtarmak</string>
-    <string name="gifts_romantic">Romantik</string>
-    <string name="gifts_friends">Arkadaşlık</string>
-    <string name="gifts_present">Tebrikler</string>
-    <string name="gifts_title">Hediye seçin</string>
-    <string name="gifts_send_btn">Hediye göndermek</string>
     <string name="form_not_specified">Belirtilmemiş</string>
     <string name="form_main">Genel</string>
     <string name="form_physique">Fizik yapısı</string>
@@ -250,6 +245,7 @@
     <string name="settings_guests">Misafirler</string>
     <string name="settings_help">Yardım</string>
     <string name="settings_faq">Sorular ve cevaplar</string>
+    <string name="settings_faq_title">Muhtemelen, sorununuz daha önce açıklandı.\"Sorular ve cevaplar\" kısmına bakın.</string>
     <string name="settings_account">Hesap</string>
     <string name="settings_feedback">Yorum bırakmak</string>
     <string name="settings_about">Program hakkında</string>
@@ -590,6 +586,7 @@
     <string name="loading_photo_percent">%d%% resim yüklemesi</string>
     <string name="profile_update_error">Bilgi yenileme hatası</string>
     <string name="retry_cancel_editing">Bilgi gönderme sırasında bağlantı hatası oluşmuştur. Yeniden denemek yoksa kaydetmeden çıkış yapmak mı istiyorsunuz?</string>
+    <string name="retry_cancel_editing_bad_value">Yanlış bilgi girdiniz.tekrar deneyin ya da kayıt etmeden çıkın?</string>
     <string name="user_does_not_exist">Kullanıcı bulunamamıştır.</string>
     <string name="feedback_subject_ban">İftira engellemeye karşı şikayet</string>
     <string name="settings_led">LED bildirim</string>
@@ -600,6 +597,13 @@
     <string name="measurement_unit_weight">Kg.</string>
     <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Maksimum kullanıcı sayısını seçildi</string>
+    <string name="logout_if_email_already_registred">Böyle bir e-posta adresi kullanılıyor.Eğer sizin e-postanız ise şu anki hesabınızdan çıkıp  %s hesaba bağlanın.</string>
+    <string name="recover_password_instructions">Şifrenizi kurtarmak ile alakalı talimatları içeren bir mesajı e-postanıza yolladık</string>
     <string name="email_changing">E-posta değiştermek için</string>
+    <string name="hint_faces_filter">Arama yöntemlerinizi  değiştirin ve ilginç insanlar ile arkadaş olun.</string>
+    <string name="hint_faces_buy_like">Sahip olduğunuz beğeni kadar miktarda insanlar size minnettar olur.Beğenileri satın almayı unutmayın.</string>
     <string name="hint_myprofile_buy_vip">VIP-üyelik alın ve sınırsız sohbet etmeyi eğlenin</string>
+    <string name="pull_to_refresh_pull_label">Yenilemek için çekin…</string>
+    <string name="pull_to_refresh_release_label">Yenilemek için yayın…</string>
+    <string name="pull_to_refresh_refreshing_label">Yükleme…</string>
 </resources>
