@@ -151,7 +151,7 @@ public class CitySearchView extends AutoCompleteTextView {
 
     private void init() {
         setAdapter(getMyAdapter());
-        this.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 if (TextUtils.isEmpty(CitySearchView.this.getText()) &
@@ -165,7 +165,7 @@ public class CitySearchView extends AutoCompleteTextView {
                 }
             }
         });
-        this.setOnFocusChangeListener(new OnFocusChangeListener() {
+        setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -175,7 +175,7 @@ public class CitySearchView extends AutoCompleteTextView {
                 }
             }
         });
-        this.setOnTouchListener(new OnTouchListener() {
+        setOnTouchListener(new OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -183,13 +183,13 @@ public class CitySearchView extends AutoCompleteTextView {
                 return false;
             }
         });
-        this.setOnClickListener(new OnClickListener() {
+        setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 scrollToView();
             }
         });
-        this.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Utils.hideSoftKeyboard(mContext, CitySearchView.this);
@@ -257,7 +257,7 @@ public class CitySearchView extends AutoCompleteTextView {
             return;
         }
         int[] viewLocation = new int[2];
-        this.getLocationInWindow(viewLocation);
+        getLocationInWindow(viewLocation);
         int[] scrollLocation = new int[2];
         mScrollView.getLocationInWindow(scrollLocation);
         mScrollView.scrollTo(0, mScrollView.getScrollY() + (viewLocation[1] - scrollLocation[1]) -
@@ -268,7 +268,7 @@ public class CitySearchView extends AutoCompleteTextView {
     private void setMyText(CharSequence text) {
         CitySearchViewAdapter adapter = getMyAdapter();
         mAdapter = null;
-        this.setText(text);
+        setText(text);
         mAdapter = adapter;
     }
 }

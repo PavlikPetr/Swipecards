@@ -326,10 +326,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
         // User Info
-        mUserInfoStatus = ((TextView) root.findViewById(R.id.tvDatingUserStatus));
+        mUserInfoStatus = (TextView) getActivity().getLayoutInflater().inflate(R.layout.dating_user_info, null, false);
 
         // Counter
-        mDatingCounter = ((TextView) root.findViewById(R.id.tvDatingCounter));
+        mDatingCounter = (TextView) root.findViewById(R.id.tvDatingCounter);
 
         // Progress
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsDatingLoading);

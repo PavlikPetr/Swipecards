@@ -31,6 +31,9 @@ import java.util.TimerTask;
 
 public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
 
+    // minimal length of prefix for sending CitiesRequest
+    private final static int MIN_LENGTH_CITY_PREFIX = 2;
+
     // id of fake city
     private final static int EMPTY_ID = -1;
     // delay before show loader
@@ -48,7 +51,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     private final Context mContext;
     private int mRequestKey;
 
-    private LinkedList<ApiRequest> mRequests = new LinkedList<>();
+    private CitiesRequest mFindCityByPrefRequest;
 
     private LinkedList<City> mTopCitiesList;
     private LinkedList<City> mDataList;
@@ -104,11 +107,6 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
         } else {
             holder.progress.setVisibility(View.GONE);
             holder.cityName.setVisibility(View.VISIBLE);
-            holder.cityName.setBackgroundResource(R.drawable.spinner_selector);
-            holder.cityName.setPadding((int) mContext.getResources().getDimension(R.dimen.drop_downList_cell_padding_left),
-                    (int) mContext.getResources().getDimension(R.dimen.drop_downList_cell_padding_left),
-                    (int) mContext.getResources().getDimension(R.dimen.drop_downList_cell_padding_left),
-                    (int) mContext.getResources().getDimension(R.dimen.drop_downList_cell_padding_left));
             holder.cityName.setText(city.getName());
         }
         return convertView;
@@ -117,7 +115,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     public void setPrefix(CharSequence constraint) {
         isRequestCitiesByPreffInProgress = false;
         removeAllRequests();
-        if (constraint == null || constraint.length() <= 2) {
+        if (constraint == null || constraint.length() <= MIN_LENGTH_CITY_PREFIX) {
             fillDefaultData();
         } else {
             findCityByPrefix(constraint.toString());
@@ -128,10 +126,8 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     private void findCityByPrefix(final String prefix) {
         isRequestCitiesByPreffInProgress = true;
         callInProgress(true);
-        CitiesRequest searchCitiesRequest = new CitiesRequest(mContext);
-        registerRequest(searchCitiesRequest);
-        searchCitiesRequest.prefix = prefix;
-        searchCitiesRequest.callback(new DataApiHandler<LinkedList<City>>() {
+        registerRequest(new CitiesRequest(mContext, prefix));
+        getCurrentRequest().callback(new DataApiHandler<LinkedList<City>>() {
 
             @Override
             protected void success(LinkedList<City> citiesList, IApiResponse response) {
@@ -198,8 +194,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     // get default cities list
     private void findDefaultCitiesList() {
         isRequestDefaultCitiesInProgress = true;
-        CitiesRequest citiesRequest = new CitiesRequest(mContext);
-        citiesRequest.type = "top";
+        CitiesRequest citiesRequest = new CitiesRequest(mContext, true);
         citiesRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -315,18 +310,17 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     }
 
     private void removeAllRequests() {
-        if (mRequests != null && mRequests.size() > 0) {
-            for (ApiRequest request : mRequests) {
-                cancelRequest(request);
-            }
-            mRequests.clear();
+        if (mFindCityByPrefRequest != null) {
+            cancelRequest(mFindCityByPrefRequest);
         }
     }
 
-    private void registerRequest(ApiRequest request) {
-        if (!mRequests.contains(request)) {
-            mRequests.add(request);
-        }
+    private CitiesRequest getCurrentRequest() {
+        return mFindCityByPrefRequest;
+    }
+
+    private void registerRequest(CitiesRequest request) {
+        mFindCityByPrefRequest = request;
     }
 
     private void cancelRequest(ApiRequest request) {

@@ -1,6 +1,7 @@
 package com.topface.topface.ui.adapters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,27 +15,35 @@ import java.util.ArrayList;
 
 public class SpinnerAdapter extends ArrayAdapter<String> {
     private final static String DEFAULT_PREFIX_VALUE = null;
-    private Activity context;
+    private Context mContext;
     ArrayList<String> data = null;
     String prefix;
 
     public SpinnerAdapter(Activity context, int resource, ArrayList<String> data, String prefix) {
         super(context, resource, data);
-        this.context = context;
+        this.mContext = context;
         this.data = data;
         this.prefix = prefix;
     }
 
     public SpinnerAdapter(Activity context, int resource, ArrayList<String> data) {
         super(context, resource, data);
-        this.context = context;
+        this.mContext = context;
         this.data = data;
         this.prefix = DEFAULT_PREFIX_VALUE;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return super.getView(position, convertView, parent);
+        View view = convertView;
+        if (view == null) {
+            view = LayoutInflater.from(mContext).inflate(R.layout.spinner_header_text_layout, parent, false);
+        }
+        TextView textView = (TextView) view;
+        if (textView != null) {
+            textView.setText(getItem(position));
+        }
+        return view;
     }
 
     @Override
@@ -50,19 +59,14 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            LayoutInflater inflater = context.getLayoutInflater();
-            view = inflater.inflate(R.layout.spinner_text_layout, parent, false);
+            view = LayoutInflater.from(mContext).inflate(R.layout.spinner_text_layout, parent, false);
         }
         String item = data.get(position);
         if (item != null) {
             TextView textView = (TextView) view;
-            if (textView != null)
-                textView.setPadding((int) context.getResources().getDimension(R.dimen.drop_downList_cell_padding_left),
-                        (int) context.getResources().getDimension(R.dimen.drop_downList_cell_padding_left),
-                        (int) context.getResources().getDimension(R.dimen.drop_downList_cell_padding_left),
-                        (int) context.getResources().getDimension(R.dimen.drop_downList_cell_padding_left));
-            textView.setBackgroundResource(R.drawable.spinner_selector);
-            textView.setText(item);
+            if (textView != null) {
+                textView.setText(item);
+            }
         }
         return view;
     }

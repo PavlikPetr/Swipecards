@@ -55,6 +55,11 @@
         <item name="android:actionModeCloseDrawable" tools:ignore="NewApi">@drawable/ic_check</item>
     </style>
 
+    <!-- Светлая тема приложения -->
+    <style name="Theme.Topface.Light" parent="@style/Theme.Topface">
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewStyle</item>
+    </style>
+
     <style name="Theme.Topface.ActionbarOverlay" parent="Theme.Topface">
         <item name="windowActionBarOverlay">true</item>
         <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
