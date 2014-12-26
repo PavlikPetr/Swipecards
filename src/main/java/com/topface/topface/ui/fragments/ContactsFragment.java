@@ -70,8 +70,14 @@ public class ContactsFragment extends BaseFragment {
 
         if (data == null) {
             ((BaseFragmentActivity) getActivity()).close(this, false);
+        } else {
+            initViews(root);
         }
 
+        return root;
+    }
+
+    private void initViews(View root) {
         Button addButton = (Button) root.findViewById(R.id.addButton);
         final EditText emailView = (EditText) root.findViewById(R.id.addInput);
         if (data.size() > CacheProfile.getOptions().contacts_count) {
@@ -126,7 +132,6 @@ public class ContactsFragment extends BaseFragment {
 
         ContactsListAdapter adapter = new ContactsListAdapter(getActivity(), data);
         contactsView.setAdapter(adapter);
-        return root;
     }
 
     @Override
