@@ -153,6 +153,10 @@
         </activity>
 
         <activity
+            android:name=".ui.GiftsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Topface.Gifts" />
+        <activity
             android:name=".ui.TopfaceAuthActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.NoActionBar"/>
@@ -169,7 +173,6 @@
         <activity
             android:name=".ui.edit.EditContainerActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.GiftsActivity"/>
         <activity
             android:name=".ui.LeadersActivity"
             android:screenOrientation="portrait"/>

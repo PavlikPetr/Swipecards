@@ -87,4 +87,9 @@
     <style name="Theme.Topface.Chat">
         <item name="android:windowBackground">@color/bg_holo</item>
     </style>
+
+    <style name="Theme.Topface.Gifts">
+        <item name="android:windowBackground">@color/bg_white</item>
+    </style>
+
 </resources>

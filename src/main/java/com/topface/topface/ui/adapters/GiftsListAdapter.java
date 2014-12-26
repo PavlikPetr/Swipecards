@@ -37,36 +37,36 @@ public class GiftsListAdapter extends GiftsAdapter {
     }
 
     @Override
-    protected View getContentView(final int position, View convertView, ViewGroup parent) {
+    protected View getContentView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        FeedGift item = getItem(position);
+        final FeedGift item = getItem(position);
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_gift, null, false);
             holder = new ViewHolder();
             holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
-            holder.giftImage.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            setHighlight(v, true);
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            setHighlight(v, false);
-                            mOnGridClickLIstener.onGridClick(mData.get(position));
-                            break;
-                        case MotionEvent.ACTION_CANCEL:
-                            setHighlight(v, false);
-                            break;
-                    }
-                    return true;
-                }
-            });
             holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        holder.giftImage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        setHighlight(v, true);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        setHighlight(v, false);
+                        mOnGridClickLIstener.onGridClick(item);
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        setHighlight(v, false);
+                        break;
+                }
+                return true;
+            }
+        });
         holder.giftImage.setRemoteSrc(item.gift.link);
         holder.priceText.setText(Integer.toString(item.gift.price));
         return convertView;
