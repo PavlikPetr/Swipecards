@@ -5,8 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -25,11 +23,13 @@ import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.view.ViewHelper;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
@@ -83,7 +83,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
-    private TextView mBackgroundText;
+    private ProgressBar mBackgroundText;
     protected DoubleBigButton mDoubleButton;
     protected boolean mIsUpdating;
     private RetryViewCreator mRetryView;
@@ -125,8 +125,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private FloatBlock mFloatBlock;
 
     protected boolean isDeletable = true;
-    private Drawable mLoader0;
-    private AnimationDrawable mLoader;
     private ViewStub mEmptyScreenStub;
     private boolean needUpdate = false;
     private boolean mRestoredFilterState;
@@ -299,20 +297,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void initBackground(View view) {
         // ListView background
-        mBackgroundText = (TextView) view.findViewById(R.id.tvBackgroundText);
+        mBackgroundText = (ProgressBar) view.findViewById(R.id.tvBackgroundText);
 
         if (mBackgroundText != null) {
-            Drawable[] drawables = mBackgroundText.getCompoundDrawables();
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(
-                    drawables[0],
-                    getBackIcon(),
-                    drawables[2],
-                    drawables[3]
-            );
+            //initialyy set loaders alpha to 0, works on old androids too, instead of xml-attr "alpha"
+            ViewHelper.setAlpha(mBackgroundText, 0f);
 
-            //initial alpha = 0 setted in xml for this element
+            //delayed animation of loader appearing
             ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(mBackgroundText, "alpha", 0f, 1f);
-            alphaAnimator.setDuration(100);
+            alphaAnimator.setDuration(1000);
             alphaAnimator.setStartDelay(2000);
             alphaAnimator.start();
         }
@@ -326,8 +319,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mLens.setVisible(mRestoredFilterState);
         }
     }
-
-    protected abstract Drawable getBackIcon();
 
     protected int[] getTypesForGCM() {
         return new int[]{GCMUtils.GCM_TYPE_UNKNOWN};
@@ -802,18 +793,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mListView.setVisibility(View.VISIBLE);
             mRetryView.setVisibility(View.GONE);
 
-            Drawable[] drawables = mBackgroundText.getCompoundDrawables();
-            if (drawables[0] != null) {
-                Drawable drawable = drawables[0];
-                if (drawable instanceof AnimationDrawable) {
-                    ((AnimationDrawable) drawable).stop();
-                }
-            }
-
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
-                    drawables[1],
-                    drawables[2],
-                    drawables[3]);
             setFilterSwitcherState(true);
         }
 
@@ -885,17 +864,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void onUpdateFail(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
-            mBackgroundText.setText("");
-            Drawable[] drawables = mBackgroundText.getCompoundDrawables();
-            Drawable drawable = drawables[0];
-            if (drawable != null && drawable instanceof AnimationDrawable) {
-                ((AnimationDrawable) drawable).stop();
-            }
-
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
-                    drawables[1],
-                    drawables[2],
-                    drawables[3]);
             setFilterSwitcherState(true);
         }
     }
@@ -906,14 +874,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (!isPushUpdating) {
             mListView.setVisibility(View.INVISIBLE);
             mBackgroundText.setVisibility(View.VISIBLE);
-            mBackgroundText.setText(R.string.general_dialog_loading);
-            Drawable[] drawables = mBackgroundText.getCompoundDrawables();
-            AnimationDrawable drawable = getLoader();
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(drawable,
-                    drawables[1],
-                    drawables[2],
-                    drawables[3]);
-            drawable.start();
             setFilterSwitcherState(false);
         }
     }
@@ -971,24 +931,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 updateData(true, false);
             }
         }
-    }
-
-    private Drawable getLoader0() {
-        if (mLoader0 == null && isAdded()) {
-            mLoader0 = getResources().getDrawable(R.drawable.loader0);
-        }
-        return mLoader0;
-    }
-
-
-    private AnimationDrawable getLoader() {
-        if (mLoader == null && isAdded()) {
-            Drawable drawable = getResources().getDrawable(R.drawable.loader);
-            if (drawable instanceof AnimationDrawable) {
-                mLoader = (AnimationDrawable) drawable;
-            }
-        }
-        return mLoader;
     }
 
     @Override
