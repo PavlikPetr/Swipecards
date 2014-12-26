@@ -63,6 +63,9 @@ import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.io.Serializable;
+import java.util.Arrays;
+
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.ADMIRATIONS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
@@ -135,7 +138,16 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     Bundle extras = intent.getExtras();
                     FragmentId fragmentId = null;
                     if (extras != null) {
-                        fragmentId = (FragmentId) extras.getSerializable(SELECTED_FRAGMENT_ID);
+                        Serializable menuItem = extras.getSerializable(SELECTED_FRAGMENT_ID);
+                        /*
+                        After update user can have outdated fragment id in instance state. Here we check
+                        if it is still presented in BaseFragment.FragmentId enum.
+                         */
+                        if (Arrays.asList(FragmentId.values()).contains(menuItem)) {
+                            fragmentId = (FragmentId) menuItem;
+                        } else {
+                            fragmentId = CacheProfile.getOptions().startPageFragmentId;
+                        }
                     }
                     selectMenu(fragmentId);
                     break;
