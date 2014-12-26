@@ -731,7 +731,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             if (mNewGifts == null) {
                 mNewGifts = new ArrayList<>();
             }
-            mNewGifts.add(data);
+            mNewGifts.add(0, data);
         }
     }
 
@@ -749,9 +749,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
             }
         }
-
         return feedGift;
     }
-
-
 }

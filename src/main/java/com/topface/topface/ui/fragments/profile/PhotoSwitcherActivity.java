@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,12 +152,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
     };
 
-    public static Intent getPhotoSwitcherIntent(int position, int userId, int photosCount, ProfileGridAdapter adapter) {
-        return getPhotoSwitcherIntent(null, position, userId, photosCount, adapter.getData());
-    }
-
     public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, ProfileGridAdapter adapter) {
-        return getPhotoSwitcherIntent(gifts, position, userId, photosCount, adapter.getData());
+        return getPhotoSwitcherIntent(gifts, position, userId, photosCount, adapter.getPhotos());
     }
 
     public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, Photos photos) {
@@ -222,7 +217,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             String s = preloadPhoto.getSuitableLink(size.x, size.y);
             DefaultImageLoader.getInstance(this).preloadImage(s, null);
         }
-
+        extractUserGifts(intent);
         if (intent.getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
             int photosCount = intent.getIntExtra(INTENT_PHOTOS_COUNT, 0);
             int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);
@@ -281,7 +276,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         for (int i = 0; i < rest; i++) {
             mPhotoLinks.add(new Photo());
         }
-
         // Gallery
         // stub is needed, because sometimes(while gallery is waiting for user profile load)
         // ViewPager becomes visible without data
@@ -855,7 +849,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         if (mPhotoAlbumControl == null || mPhotoAlbumControl.getVisibility() == View.INVISIBLE) {
             return false;
         }
-        TranslateAnimation ta = new TranslateAnimation(0, 0, getDisplaySize().y - mPhotoAlbumControl.getMeasuredHeight(), getDisplaySize().y);
+        TranslateAnimation ta = new TranslateAnimation(0, 0, Utils.getSrceenSize(this).y - mPhotoAlbumControl.getMeasuredHeight(), Utils.getSrceenSize(this).y);
         ta.setDuration(ANIMATION_TIME);
         ta.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -880,7 +874,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         if (mPhotoAlbumControl == null || mPhotoAlbumControl.getVisibility() == View.VISIBLE) {
             return;
         }
-        TranslateAnimation ta = new TranslateAnimation(0, 0, getDisplaySize().y, getDisplaySize().y - mPhotoAlbumControl.getMeasuredHeight());
+        TranslateAnimation ta = new TranslateAnimation(0, 0, Utils.getSrceenSize(this).y, Utils.getSrceenSize(this).y - mPhotoAlbumControl.getMeasuredHeight());
         ta.setDuration(ANIMATION_TIME);
         ta.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -897,12 +891,5 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             }
         });
         mPhotoAlbumControl.startAnimation(ta);
-    }
-
-    private Point getDisplaySize() {
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        return size;
     }
 }

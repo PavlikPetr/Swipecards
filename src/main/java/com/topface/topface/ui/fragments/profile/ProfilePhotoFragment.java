@@ -90,6 +90,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                 mViewFlipper.setDisplayedChild(1);
             } else {
                 startActivity(PhotoSwitcherActivity.getPhotoSwitcherIntent(
+                        null,
                         position - 1,
                         CacheProfile.uid,
                         CacheProfile.totalPhotos,

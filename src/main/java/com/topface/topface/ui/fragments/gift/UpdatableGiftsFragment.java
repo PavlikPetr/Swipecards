@@ -92,7 +92,7 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
                 g.addAll(getSendGiftButtonPosition(g), newGifts);
                 // displace list position
                 int position = savedState.getInt(PlainGiftsFragment.POSITION, 0) + newGifts.size();
-                fragment.clearNewFeedGift();
+                clearNewGiftsArray();
                 savedState.putParcelableArrayList(DATA, g);
                 savedState.putInt(POSITION, position);
             }
@@ -112,16 +112,44 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
         }
     }
 
+    private boolean clearNewGiftsArray() {
+        UserProfileFragment fragment = getUserProfileFragment();
+        if (fragment != null) {
+            fragment.clearNewFeedGift();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        UserProfileFragment fragment = getUserProfileFragment();
+        if (fragment != null) {
+            ArrayList<FeedGift> newGifts = fragment.getNewGifts();
+            if (newGifts != null && newGifts.size() > 0) {
+                ArrayList<FeedGift> adapterGifts = mGridAdapter.getData();
+                if (adapterGifts.size() == getMinItemsCount()) {
+                    mTitle.setVisibility(View.GONE);
+                }
+                int pos = getSendGiftButtonPosition(adapterGifts);
+                for (int i = 0; i < newGifts.size(); i++) {
+                    mGridAdapter.add(pos + i, newGifts.get(i));
+                }
+                mGridAdapter.notifyDataSetChanged();
+                clearNewGiftsArray();
+            }
+        }
+
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPendingProfileInit.setCanSet(true);
         if (mPendingProfileInit.getCanSet()) {
             setProfilePending(mPendingProfileInit.getData());
-            UserProfileFragment fragment = getUserProfileFragment();
-            if (fragment != null) {
-                fragment.clearNewFeedGift();
-            }
+            clearNewGiftsArray();
         }
     }
 
