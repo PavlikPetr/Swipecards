@@ -24,6 +24,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
@@ -41,7 +42,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.MUTUAL;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VISITORS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_VISITORS;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
@@ -439,7 +440,8 @@ public class GCMUtils {
                 if (showVisitors) {
                     lastNotificationType = GCM_TYPE_GUESTS;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, VISITORS);
+                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, VisitorsFragment.class.getName());
+                    i.putExtra(NEXT_INTENT, TABBED_VISITORS);
                 }
                 break;
             case GCM_TYPE_PEOPLE_NEARBY:

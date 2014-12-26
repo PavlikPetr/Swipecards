@@ -42,13 +42,12 @@ import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
-import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.BuyWidgetController;
@@ -69,16 +68,15 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BOOKMARKS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DATING;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DIALOGS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.FANS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.MUTUAL;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PROFILE;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_VISITORS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.UNDEFINED;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VIP_PROFILE;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VISITORS;
 
 /**
  * Created by kirussell on 05.11.13.
@@ -252,7 +250,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             menuItems.put(BOOKMARKS.getId(), LeftMenuAdapter.newLeftMenuItem(BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_star_selector));
         }
-        menuItems.put(VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(TABBED_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
         if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
             menuItems.put(TABBED_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
@@ -265,8 +263,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             menuItems.put(MUTUAL.getId(), LeftMenuAdapter.newLeftMenuItem(MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_mutual_selector));
         }
-        menuItems.put(FANS.getId(), LeftMenuAdapter.newLeftMenuItem(FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_fans_selector));
         menuItems.put(GEO.getId(), LeftMenuAdapter.newLeftMenuItem(GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.icon_people_close));
         if (CacheProfile.getOptions().bonus.enabled) {
@@ -587,17 +583,14 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             case BOOKMARKS:
                 fragment = new BookmarksFragment();
                 break;
-            case FANS:
-                fragment = new FansFragment();
-                break;
             case GEO:
                 fragment = new PeopleNearbyFragment();
                 break;
             case BONUS:
                 fragment = BonusFragment.newInstance(true);
                 break;
-            case VISITORS:
-                fragment = new VisitorsFragment();
+            case TABBED_VISITORS:
+                fragment = new TabbedVisitorsFragment();
                 break;
             case SETTINGS:
                 fragment = new SettingsFragment();

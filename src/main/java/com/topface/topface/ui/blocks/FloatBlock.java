@@ -11,12 +11,11 @@ import android.view.ViewGroup;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
-import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.HashMap;
@@ -78,11 +77,8 @@ public class FloatBlock {
             mBannersMap = new HashMap<>();
             Options mOptions = CacheProfile.getOptions();
             // for all times
-            if (mOptions.pages.containsKey(Options.PAGE_VISITORS)) {
-                mBannersMap.put(VisitorsFragment.class.toString(), mOptions.pages.get(Options.PAGE_VISITORS));
-            }
-            if (mOptions.pages.containsKey(Options.PAGE_FANS)) {
-                mBannersMap.put(FansFragment.class.toString(), mOptions.pages.get(Options.PAGE_FANS));
+            if (mOptions.pages.containsKey(Options.PAGE_TABBED_VISITORS)) {
+                mBannersMap.put(TabbedVisitorsFragment.class.toString(), mOptions.pages.get(Options.PAGE_TABBED_VISITORS));
             }
 
             // for experiment with tabbed likes
