@@ -140,8 +140,6 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     public void onResume() {
         super.onResume();
         refreshViews();
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mAvatarPositionReciver, new IntentFilter(UPDATE_AVATAR_POSITION));
     }
 
     @Override
@@ -167,6 +165,8 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                 setOnline(((User) profile).online);
             }
         }
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mAvatarPositionReciver, new IntentFilter(UPDATE_AVATAR_POSITION));
     }
 
     private void setProfilePending(Profile profile) {
