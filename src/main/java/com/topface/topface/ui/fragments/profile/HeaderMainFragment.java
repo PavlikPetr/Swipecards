@@ -232,7 +232,10 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(mAvatarPositionReciver);
+        try {
+            LocalBroadcastManager.getInstance(getActivity())
+                    .unregisterReceiver(mAvatarPositionReciver);
+        } catch (IllegalArgumentException e) {
+        }
     }
 }
