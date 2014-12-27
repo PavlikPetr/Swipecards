@@ -57,7 +57,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isAdded()) {
+            if (isAdded() && getView() != null && CacheProfile.photos != null) {
                 ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(
                         CacheProfile.photos,
                         CacheProfile.photos.size() < CacheProfile.totalPhotos
@@ -231,10 +231,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                 new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT)
         );
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
-                mProfileUpdateReceiver,
-                new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION)
-        );
+
 
         return root;
     }
@@ -249,6 +246,15 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         }
         outState.putInt(POSITION, mGridAlbum.getFirstVisiblePosition());
         outState.putInt(FLIPPER_VISIBLE_CHILD, mViewFlipper.getDisplayedChild());
+    }
+
+    @Override
+    protected void onLoadProfile() {
+        super.onLoadProfile();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+                mProfileUpdateReceiver,
+                new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION)
+        );
     }
 
     public void startPhotoDialog(final Photo photo, final int position) {
