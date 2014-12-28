@@ -103,7 +103,7 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                     return;
                 }
                 int pos;
-                if (photos.size() < mAvatarVal.position) {
+                if (photos.size() <= mAvatarVal.position) {
                     //ава за пределами загруженной пачки
                     pos = mAvatarVal.position;
                 } else {
