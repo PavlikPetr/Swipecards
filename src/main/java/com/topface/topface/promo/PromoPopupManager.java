@@ -27,11 +27,11 @@ public class PromoPopupManager {
 
     private boolean startFragment() {
         //Пробуем по очереди показать каждый тип попапа
-        if (showPromoPopup(AIR_MESSAGES)) {
+        if (showPromoPopup(AIR_MESSAGES) && CacheProfile.getOptions().premiumMessages != null) {
             return true;
-        } else if (showPromoPopup(AIR_VISITORS)) {
+        } else if (showPromoPopup(AIR_VISITORS) && CacheProfile.getOptions().premiumVisitors != null) {
             return true;
-        } else if (showPromoPopup(AIR_ADMIRATIONS)) {
+        } else if (showPromoPopup(AIR_ADMIRATIONS) && CacheProfile.getOptions().premiumAdmirations != null) {
             return true;
         }
         return false;
