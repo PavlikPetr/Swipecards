@@ -91,7 +91,10 @@ public class RecoverPwdFragment extends BaseFragment {
                 }).exec();
             }
         });
-        mBtnRecover.setEnabled(!TextUtils.isEmpty(getArguments().getString(ARG_EMAIL)));
+        Bundle args = getArguments();
+        if (args != null) {
+            mBtnRecover.setEnabled(!TextUtils.isEmpty(getArguments().getString(ARG_EMAIL)));
+        }
         root.findViewById(R.id.tvBackToMainAuth).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,7 +113,10 @@ public class RecoverPwdFragment extends BaseFragment {
 
     private void initEditViews(View root) {
         mEdEmail = (EditText) root.findViewById(R.id.edEmail);
-        mEdEmail.setText(getArguments().getString(ARG_EMAIL));
+        Bundle args = getArguments();
+        if (args != null) {
+            mEdEmail.setText(args.getString(ARG_EMAIL));
+        }
         mEdEmail.setSelection(mEdEmail.getText().length());
         mEdEmail.addTextChangedListener(new TextWatcher() {
             String before = Static.EMPTY;
