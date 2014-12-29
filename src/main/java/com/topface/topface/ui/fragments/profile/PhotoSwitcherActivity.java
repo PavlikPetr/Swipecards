@@ -101,6 +101,27 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private int mUid;
     private String mUserGiftLink;
     private PhotosManager mPhotosManager = new PhotosManager();
+    private TranslateAnimation mCurrentAnimation;
+    private TranslateAnimation mAnimationHide = null;
+    private TranslateAnimation mAnimationShow = null;
+    private Animation.AnimationListener mAnimationListener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            if (mCurrentAnimation == mAnimationShow) {
+                mPhotoAlbumControl.setVisibility(View.VISIBLE);
+            } else if (mCurrentAnimation == mAnimationHide) {
+                mPhotoAlbumControl.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+        }
+    };
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
@@ -433,9 +454,15 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         if (mGiftImage != null) {
             if (mUserGiftLink != null) {
                 // show last added gift
+                // at first drop background
+                // after set image
+                mGiftImage.setBackgroundResource(0);
                 mGiftImage.setRemoteSrc(mUserGiftLink);
             } else {
                 // show default image when user haven't any gifts yet
+                // at first drop image
+                // after set background
+                mGiftImage.setImageDrawable(null);
                 mGiftImage.setBackgroundResource(R.drawable.ic_gift);
             }
         }
@@ -809,87 +836,91 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         switch (requestCode) {
             case GiftsActivity.INTENT_REQUEST_GIFT:
                 if (resultCode == Activity.RESULT_OK) {
-                    Bundle extras = data.getExtras();
-                    if (extras != null) {
-                        SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
-                        if (sendGiftAnswer != null) {
-                            showGiftImage(sendGiftAnswer.history.link);
-                            FeedGift feedGift = new FeedGift();
-                            feedGift.gift = new Gift(Integer.parseInt(sendGiftAnswer.history.id), 0, Gift.PROFILE, sendGiftAnswer.history.link);
-                            Intent intent = new Intent(ADD_NEW_GIFT);
-                            intent.putExtra(INTENT_GIFT, feedGift);
-                            LocalBroadcastManager.getInstance(this)
-                                    .sendBroadcast(intent);
-                        }
+                    FeedGift feedGift = getFeedGiftFromIntent(data);
+                    if (feedGift != null) {
+                        Intent intent = new Intent(ADD_NEW_GIFT);
+                        intent.putExtra(INTENT_GIFT, feedGift);
+                        LocalBroadcastManager.getInstance(this)
+                                .sendBroadcast(intent);
                     }
                 }
                 break;
         }
     }
 
-    private void hidePhotoAlbumControlAction() {
-        if (mPhotoAlbumControl == null ||
-                mPhotoAlbumControl.getVisibility() == View.INVISIBLE ||
-                mPhotoAlbumControl.getVisibility() == View.GONE) {
-            return;
+    private FeedGift getFeedGiftFromIntent(Intent data) {
+        FeedGift feedGift = null;
+        Bundle extras = data.getExtras();
+        if (extras != null) {
+            SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
+            if (sendGiftAnswer != null) {
+                showGiftImage(sendGiftAnswer.history.link);
+                feedGift = new FeedGift();
+                feedGift.gift = new Gift(
+                        Integer.parseInt(sendGiftAnswer.history.id),
+                        0,
+                        Gift.PROFILE, sendGiftAnswer.history.link);
+            }
         }
-        mPhotoAlbumControl.setVisibility(View.INVISIBLE);
+        return feedGift;
+    }
+
+    private void hidePhotoAlbumControlAction() {
+        if (mPhotoAlbumControl != null) {
+            mPhotoAlbumControl.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void showPhotoAlbumControlAction() {
-        if (mPhotoAlbumControl == null ||
-                mPhotoAlbumControl.getVisibility() == View.VISIBLE) {
-            return;
+        if (mPhotoAlbumControl != null) {
+            mPhotoAlbumControl.setVisibility(View.VISIBLE);
         }
-        mPhotoAlbumControl.setVisibility(View.VISIBLE);
     }
 
 
     private boolean animateHidePhotoAlbumControlAction() {
-        if (mPhotoAlbumControl == null || mPhotoAlbumControl.getVisibility() == View.INVISIBLE) {
-            return false;
+        if (mPhotoAlbumControl != null) {
+            if (mAnimationHide == null && mPhotoAlbumControl.getMeasuredHeight() != 0) {
+                mAnimationHide = new TranslateAnimation(
+                        0,
+                        0,
+                        Utils.getSrceenSize(this).y - mPhotoAlbumControl.getMeasuredHeight(),
+                        Utils.getSrceenSize(this).y);
+            }
+            if (mAnimationHide != null) {
+                mCurrentAnimation = mAnimationHide;
+                startAnimation(mCurrentAnimation);
+            } else {
+                hidePhotoAlbumControlAction();
+            }
+            return true;
         }
-        TranslateAnimation ta = new TranslateAnimation(0, 0, Utils.getSrceenSize(this).y - mPhotoAlbumControl.getMeasuredHeight(), Utils.getSrceenSize(this).y);
-        ta.setDuration(ANIMATION_TIME);
-        ta.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                mPhotoAlbumControl.setVisibility(View.INVISIBLE);
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        mPhotoAlbumControl.startAnimation(ta);
-        return true;
+        return false;
     }
 
-    private void animateShowPhotoAlbumControlAction() {
-        if (mPhotoAlbumControl == null || mPhotoAlbumControl.getVisibility() == View.VISIBLE) {
-            return;
+    private boolean animateShowPhotoAlbumControlAction() {
+        if (mPhotoAlbumControl != null) {
+            if (mAnimationShow == null && mPhotoAlbumControl.getMeasuredHeight() != 0) {
+                mAnimationShow = new TranslateAnimation(
+                        0,
+                        0,
+                        Utils.getSrceenSize(this).y,
+                        Utils.getSrceenSize(this).y - mPhotoAlbumControl.getMeasuredHeight());
+            }
+            if (mAnimationShow != null) {
+                mCurrentAnimation = mAnimationShow;
+                startAnimation(mCurrentAnimation);
+            } else {
+                showPhotoAlbumControlAction();
+            }
+            return true;
         }
-        TranslateAnimation ta = new TranslateAnimation(0, 0, Utils.getSrceenSize(this).y, Utils.getSrceenSize(this).y - mPhotoAlbumControl.getMeasuredHeight());
-        ta.setDuration(ANIMATION_TIME);
-        ta.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                mPhotoAlbumControl.setVisibility(View.VISIBLE);
-            }
+        return false;
+    }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        mPhotoAlbumControl.startAnimation(ta);
+    private void startAnimation(TranslateAnimation animation) {
+        animation.setDuration(ANIMATION_TIME);
+        animation.setAnimationListener(mAnimationListener);
+        mPhotoAlbumControl.startAnimation(animation);
     }
 }

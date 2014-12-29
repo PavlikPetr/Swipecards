@@ -735,6 +735,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         }
     }
 
+
     private FeedGift getGiftFromIntent(Intent data) {
         FeedGift feedGift = null;
         if (data.hasExtra(PhotoSwitcherActivity.INTENT_GIFT)) {

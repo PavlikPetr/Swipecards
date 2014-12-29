@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.gift;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -83,17 +82,13 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
         if (fragment != null) {
             ArrayList<FeedGift> newGifts = fragment.getNewGifts();
             if (newGifts.size() > 0) {
-                ArrayList<Parcelable> gfts = savedState.getParcelableArrayList(PlainGiftsFragment.DATA);
-                ArrayList<FeedGift> g = new ArrayList<>(gfts.size());
-                for (Parcelable p : gfts) {
-                    g.add((FeedGift) p);
-                }
+                ArrayList<FeedGift> gifts = savedState.getParcelableArrayList(PlainGiftsFragment.DATA);
                 // find button SendGift and add new gifts after it
-                g.addAll(getSendGiftButtonPosition(g), newGifts);
+                gifts.addAll(getSendGiftButtonPosition(gifts), newGifts);
                 // displace list position
                 int position = savedState.getInt(PlainGiftsFragment.POSITION, 0) + newGifts.size();
                 clearNewGiftsArray();
-                savedState.putParcelableArrayList(DATA, g);
+                savedState.putParcelableArrayList(DATA, gifts);
                 savedState.putInt(POSITION, position);
             }
         }
@@ -105,11 +100,12 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
     }
 
     private int getSendGiftButtonPosition(ArrayList<FeedGift> gifts) {
-        if (gifts.size() > 0 && gifts.get(0).gift.type == Gift.SEND_BTN) {
-            return 1;
-        } else {
-            return 0;
+        for (int i = 0; i < gifts.size(); i++) {
+            if (gifts.get(i).gift.type == Gift.SEND_BTN) {
+                return i;
+            }
         }
+        return 0;
     }
 
     private boolean clearNewGiftsArray() {
@@ -140,7 +136,6 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
                 clearNewGiftsArray();
             }
         }
-
     }
 
     @Override
