@@ -14,6 +14,9 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
+import com.topface.topface.requests.AppRateRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
@@ -82,6 +85,7 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
                 // Используем label: Cancel, как в iOS
                 EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Cancel", 1L);
                 saveRatingPopupStatus(0);
+                sendRateRequest(AppRateRequest.NO_RATE);
                 getDialog().dismiss();
                 break;
         }
@@ -108,9 +112,11 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
                     })
                     .show();
         } else if (rating >= 4) {
+            sendRateRequest(rating);
             saveRatingPopupStatus(0);
             Utils.goToMarket(getActivity(), GPLAY_ACTIVITY);
         } else {
+            sendRateRequest(rating);
             saveRatingPopupStatus(0);
             AbstractDialogFragment dialog = SendFeedbackDialog.newInstance(
                     R.string.feedback_popup_title,
@@ -121,6 +127,17 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
         }
     }
 
+    private void sendRateRequest(long rating) {
+        new AppRateRequest(getActivity(), rating).callback(new ApiHandler() {
+            @Override
+            public void success(IApiResponse response) {
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+            }
+        }).exec();
+    }
     /**
      * Saves status of rate popup show
      *

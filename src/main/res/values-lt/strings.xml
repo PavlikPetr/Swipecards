@@ -227,11 +227,6 @@
     <string name="edit_set_as_main">Padaryti pagrindine</string>
     <string name="edit_delete">Pašalinti</string>
     <string name="edit_restore">Atstatyti</string>
-    <string name="gifts_romantic">Romantiškos</string>
-    <string name="gifts_friends">Draugiškos</string>
-    <string name="gifts_present">Sveikinimų</string>
-    <string name="gifts_title">Pasirinkite dovaną</string>
-    <string name="gifts_send_btn">Išsiųsti dovaną</string>
     <string name="form_not_specified">Nenurodyta</string>
     <string name="form_main">Pagrindinis</string>
     <string name="form_physique">Fiziniai duomenys</string>

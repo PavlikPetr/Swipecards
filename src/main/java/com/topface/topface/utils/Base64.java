@@ -1493,6 +1493,8 @@ public class Base64 {
                 Debug.log("Write bytes: " + length);
                 output.write(buffer, 0, numBytes);
                 percentage = (int) (((double) length / (double) contentLength) * 100);
+                //Если у нас не верно определился contentLength, то не показываем очень большие проценты, а пишем 100%
+                percentage = percentage > 100 ? 100 : percentage;
                 if (percentage - prevPercentage >= updateInterval) {
                     listener.onProgress(percentage);
                     prevPercentage = percentage;

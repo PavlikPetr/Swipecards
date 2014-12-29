@@ -19,7 +19,7 @@
     <string name="dating_switch_button">Еще…</string>
     <string name="dating_prev_button">Предыдущая</string>
     <string name="dating_chat_button">Поболтать</string>
-    
+
     <string name="waiting_a_products">Пожалуйста, подождите. Мы загружаем доступные для покупок товары</string>
     <string name="likes_background_text">Нет симпатий</string>
 
@@ -185,6 +185,7 @@
     <string name="general_dialogs">Диалоги</string>
 
     <string name="general_visitors">Гости</string>
+    <string name="general_visitors_tab_views">просмотры</string>
     <string name="general_profile">Профиль</string>
     <string name="general_settings">Настройки</string>
 
@@ -288,13 +289,6 @@
     <string name="edit_restore">Восстановить</string>
 
     <!-- Albums -->
-    <!-- Gifts -->
-    <string name="gifts_romantic">Романтика</string>
-    <string name="gifts_friends">Дружба</string>
-
-    <string name="gifts_present">Поздравления</string>
-    <string name="gifts_title">Выберите подарок</string>
-    <string name="gifts_send_btn">Отправить подарок</string>
 
     <!-- Map -->
 

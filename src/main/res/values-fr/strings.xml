@@ -160,11 +160,6 @@
     <string name="edit_set_as_main">Définir comme  principale</string>
     <string name="edit_delete">Supprimer</string>
     <string name="edit_restore">Restaurer</string>
-    <string name="gifts_romantic">Romantiques</string>
-    <string name="gifts_friends">Amicaux</string>
-    <string name="gifts_present">Félicitation</string>
-    <string name="gifts_title">Choisissez un cadeau</string>
-    <string name="gifts_send_btn">Envoyer un cadeau</string>
     <string name="form_not_specified">N\'est pas indiqué</string>
     <string name="form_main">Information générale</string>
     <string name="form_physique">Forme physique</string>

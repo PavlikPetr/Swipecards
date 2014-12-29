@@ -297,7 +297,14 @@ public class UserNotificationManager {
         if (id == MESSAGES_ID) {
             App.getUserConfig().resetNotificationMessagesStack();
         }
-        mNotificationManager.cancel(id);
+        try {
+            mNotificationManager.cancel(id);
+        } catch (IllegalStateException e) {
+            /*
+            In some cases NotificationManager may throw IllegalStateException on notification cancel
+             */
+            Debug.error(e);
+        }
     }
 
     public static interface NotificationImageListener {

@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
@@ -59,11 +58,6 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBookmarkedReceiver);
-    }
-
-    @Override
-    protected Drawable getBackIcon() {
-        return getResources().getDrawable(R.drawable.favorite);
     }
 
     @Override

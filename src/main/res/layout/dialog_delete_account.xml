@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             style="@style/Widget.Topface.Button.Big.Blue"
-            android:text="@android:string/cancel"
+            android:text="@string/general_cancel"
             android:layout_marginRight="4dp" />
 
         <Button

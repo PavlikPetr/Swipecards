@@ -10,7 +10,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
@@ -37,6 +36,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
      */
     protected abstract String getMessage();
 
+    @SuppressWarnings("unused")
     protected abstract int getPluralForm();
 
     protected abstract void deleteMessages();
@@ -89,7 +89,6 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
 
         TextView popupText = (TextView) root.findViewById(R.id.airMessagesText);
         popupText.setText(getMessage());
-        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder();
 
         EasyTracker.sendEvent(getMainTag(), "Show", "", 0L);
     }
@@ -153,7 +152,10 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         }
 
         //Отмечаем время закрытия попапа
-        getPremiumEntity().setPopupShowTime();
+        Options.PromoPopupEntity promoPopupEntity = getPremiumEntity();
+        if (promoPopupEntity != null) {
+            promoPopupEntity.setPopupShowTime();
+        }
 
         FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
