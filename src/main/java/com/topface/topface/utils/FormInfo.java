@@ -295,11 +295,12 @@ public class FormInfo {
         }
     }
 
-    public boolean isCharactersCountVisible(int titleId) {
-        if (titleId == R.array.form_main_height || titleId == R.array.form_main_weight) {
-            return false;
-        } else {
-            return true;
+    public boolean isCounterVisible(int titleId) {
+        switch (titleId) {
+            case R.array.form_main_about_status:
+                return true;
+            default:
+                return false;
         }
     }
 

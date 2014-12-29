@@ -119,11 +119,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     private void initCharactersCount(ViewGroup view) {
         int count = mEditText.getText().length();
         mCharactersCount = (TextView) view.findViewById(R.id.charactersCount);
-        if (mFormInfo.isCharactersCountVisible(mTitleId)) {
-            mCharactersCount.setVisibility(View.VISIBLE);
-        } else {
-            mCharactersCount.setVisibility(View.GONE);
-        }
+        mCharactersCount.setVisibility(mFormInfo.isCounterVisible(mTitleId) ? View.VISIBLE : View.GONE);
         setCharactersCount(count);
         mEditText.setSelection(count);
     }
