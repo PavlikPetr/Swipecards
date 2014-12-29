@@ -54,11 +54,12 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                     mAvatarVal.position += 1;
                     return;
                 }
-                if (decrement) {
+                Profile profile = mPendingUserInit.getData();
+                if (decrement && profile != null) {
                     if (intent.getIntExtra(POSITION, -1) < mAvatarVal.position) {
                         mAvatarVal.position -= 1;
                     }
-                    mPendingUserInit.getData().photosCount -= 1;
+                    profile.photosCount -= 1;
                 }
             }
         }
@@ -140,6 +141,8 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     public void onResume() {
         super.onResume();
         refreshViews();
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mAvatarPositionReciver, new IntentFilter(UPDATE_AVATAR_POSITION));
     }
 
     @Override
@@ -165,8 +168,6 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                 setOnline(((User) profile).online);
             }
         }
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mAvatarPositionReciver, new IntentFilter(UPDATE_AVATAR_POSITION));
     }
 
     private void setProfilePending(Profile profile) {
@@ -232,10 +233,7 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     @Override
     public void onPause() {
         super.onPause();
-        try {
-            LocalBroadcastManager.getInstance(getActivity())
-                    .unregisterReceiver(mAvatarPositionReciver);
-        } catch (IllegalArgumentException e) {
-        }
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(mAvatarPositionReciver);
     }
 }
