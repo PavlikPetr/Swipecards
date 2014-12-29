@@ -115,27 +115,32 @@ public class AuthToken {
                 VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.USER_ID, user_id));
                 request.attempts = ApiRequest.MAX_RESEND_CNT;
                 request.secure = true;
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        try {
-                            String result = "";
-                            JSONArray responseArr = response.json.getJSONArray("response");
-                            if (responseArr != null) {
-                                if (responseArr.length() > 0) {
-                                    JSONObject profile = responseArr.getJSONObject(0);
-                                    result = profile.optString("first_name") + " " + profile.optString("last_name");
+                try {
+                    request.executeWithListener(new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            try {
+                                String result = "";
+                                JSONArray responseArr = response.json.getJSONArray("response");
+                                if (responseArr != null) {
+                                    if (responseArr.length() > 0) {
+                                        JSONObject profile = responseArr.getJSONObject(0);
+                                        result = profile.optString("first_name") + " " + profile.optString("last_name");
+                                    }
+                                    handler.sendMessage(Message.obtain(null, AuthToken.SUCCESS_GET_NAME, result));
+                                } else {
+                                    handler.sendMessage(Message.obtain(null, AuthToken.FAILURE_GET_NAME, ""));
                                 }
-                                handler.sendMessage(Message.obtain(null, AuthToken.SUCCESS_GET_NAME, result));
-                            } else {
+                            } catch (Exception e) {
+                                Debug.error("AuthorizationManager can't get name in vk", e);
                                 handler.sendMessage(Message.obtain(null, AuthToken.FAILURE_GET_NAME, ""));
                             }
-                        } catch (Exception e) {
-                            Debug.error("AuthorizationManager can't get name in vk", e);
-                            handler.sendMessage(Message.obtain(null, AuthToken.FAILURE_GET_NAME, ""));
                         }
-                    }
-                });
+                    });
+                } catch (NullPointerException e) {
+                    Debug.error("Vkontakte bug https://github.com/VKCOM/vk-android-sdk/issues/89", e);
+                    handler.sendMessage(Message.obtain(null, AuthToken.FAILURE_GET_NAME, ""));
+                }
             }
         };
     }
