@@ -54,11 +54,12 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                     mAvatarVal.position += 1;
                     return;
                 }
-                if (decrement) {
+                Profile profile = mPendingUserInit.getData();
+                if (decrement && profile != null) {
                     if (intent.getIntExtra(POSITION, -1) < mAvatarVal.position) {
                         mAvatarVal.position -= 1;
                     }
-                    mPendingUserInit.getData().photosCount -= 1;
+                    profile.photosCount -= 1;
                 }
             }
         }

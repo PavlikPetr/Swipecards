@@ -292,7 +292,7 @@ public class ImageSwitcher extends ViewPager {
     public boolean onTouchEvent(MotionEvent ev) {
         try {
             return super.onTouchEvent(ev);
-        } catch (IndexOutOfBoundsException | IllegalStateException | IllegalArgumentException e) {
+        } catch (IndexOutOfBoundsException | IllegalStateException | IllegalArgumentException | NullPointerException e) {
             return false;
         }
     }
