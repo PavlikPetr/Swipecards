@@ -14,14 +14,30 @@ import com.topface.topface.utils.Utils;
 
 public class GiftsListAdapter extends GiftsAdapter {
 
-    private Listener mListener;
-
     public GiftsListAdapter(Context context, FeedList<FeedGift> data, Updater updateCallback) {
         super(context, data, updateCallback);
-        mListener = new Listener(this);
     }
 
     private OnGridClickLIstener mOnGridClickLIstener;
+    private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    setHighlight(v, true);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    setHighlight(v, false);
+                    Integer pos = (Integer) v.getTag();
+                    mOnGridClickLIstener.onGridClick(getData().get(pos));
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    setHighlight(v, false);
+                    break;
+            }
+            return true;
+        }
+    };
 
     /* Кастомный листенер для GridView нужен из за того, что на ImageViewRemote навешен
      OnTouchListener и сандартный обработчик нажатий GridView не будет работать
@@ -48,11 +64,12 @@ public class GiftsListAdapter extends GiftsAdapter {
             holder = new ViewHolder();
             holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
             holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
-            holder.giftImage.setOnTouchListener(mListener);
+            holder.giftImage.setOnTouchListener(mOnTouchListener);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        holder.giftImage.setTag(position);
         holder.giftImage.setRemoteSrc(item.gift.link);
         holder.priceText.setText(Integer.toString(item.gift.price));
         return convertView;
@@ -66,41 +83,5 @@ public class GiftsListAdapter extends GiftsAdapter {
             ((ImageView) view).setColorFilter(null);
             Utils.setBackground((ImageView) view, -1);
         }
-    }
-
-    private class Listener implements View.OnTouchListener {
-
-        private GiftsListAdapter mGiftsListAdapter;
-
-        private Listener(GiftsListAdapter giftsListAdapter) {
-            this.mGiftsListAdapter = giftsListAdapter;
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    setHighlight(v, true);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    setHighlight(v, false);
-                    mOnGridClickLIstener.onGridClick(findGiftByLink(((ImageViewRemote) v).getCurrentSrcLink()));
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                    setHighlight(v, false);
-                    break;
-            }
-            return true;
-        }
-
-        private FeedGift findGiftByLink(String link) {
-            for (FeedGift feedGift : mGiftsListAdapter.getData()) {
-                if (link.equals(feedGift.gift.link)) {
-                    return feedGift;
-                }
-            }
-            return null;
-        }
-
     }
 }
