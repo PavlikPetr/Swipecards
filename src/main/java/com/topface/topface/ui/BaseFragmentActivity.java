@@ -197,8 +197,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onResume() {
         super.onResume();
-        checkProfileLoad();
-        registerReauthReceiver();
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
 
@@ -214,6 +212,20 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             intent.putExtra(IGNORE_NOTIFICATION_INTENT, true);
             setIntent(intent);
         }
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        /*
+        checkProfileLoad() may commit fragment transaction adding or replasing AuthFragment.
+        That is why it shouldn't be called in onResume() to avoid state loss.
+        See http://www.androiddesignpatterns.com/2013/08/fragment-transaction-commit-state-loss.html,
+        http://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume%28%29 and
+        http://stackoverflow.com/questions/16265733/failure-delivering-result-onactivityforresult
+         */
+        super.onResumeFragments();
+        checkProfileLoad();
+        registerReauthReceiver();
     }
 
     private void registerReauthReceiver() {

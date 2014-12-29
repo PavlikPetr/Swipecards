@@ -161,11 +161,6 @@
     <string name="edit_set_as_main">Nastavit jako úvodní</string>
     <string name="edit_delete">Smazat</string>
     <string name="edit_restore">Obnovit</string>
-    <string name="gifts_romantic">Romantické</string>
-    <string name="gifts_friends">Kamarádské</string>
-    <string name="gifts_present">Gratulovací</string>
-    <string name="gifts_title">Vyberte dárek</string>
-    <string name="gifts_send_btn">Odeslat dárek</string>
     <string name="form_not_specified">Neuvedeno</string>
     <string name="form_main">Základní</string>
     <string name="form_physique">Postava</string>

@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.sponsorpay.sdk.android.SponsorPay;
-import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
+import com.sponsorpay.SponsorPay;
+import com.sponsorpay.publisher.SponsorPayPublisher;
 import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.OfferwallPayload;
 import com.topface.offerwall.common.TFCredentials;
@@ -41,16 +41,20 @@ public class OfferwallsManager {
             RANDOM
     };
 
+    public static final String SPONSORPAY_APP_ID = "11625";
+    private static final int SPONSORPAY_OFFERWALL_REQUEST_CODE = 856;
+    public static final String SPONSORPAY_SECURITY_TOKEN = "0a4c64db64ed3c1ca14a5e5d81aaa23c";
+
     private static String getOfferWallType() {
         return CacheProfile.getOptions().offerwall;
     }
 
-    public static void init(Context context) {
+    public static void init(Activity activity) {
         String offerwall = getOfferWallType();
         if (!TextUtils.isEmpty(offerwall)) {
             switch (offerwall) {
                 case SPONSORPAY:
-                    initSponsorpay(context);
+                    initSponsorpay(activity);
                     break;
             }
         }
@@ -110,11 +114,16 @@ public class OfferwallsManager {
     }
 
     /**
-     * Sponsorpay
+     * Инициализация Sponsorpay, без этого офферволл не стартанет
      */
-    private static void initSponsorpay(Context context) {
+    private static void initSponsorpay(Activity activity) {
         try {
-            SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+            SponsorPay.start(
+                    SPONSORPAY_APP_ID,
+                    Integer.toString(CacheProfile.uid),
+                    SPONSORPAY_SECURITY_TOKEN,
+                    activity
+            );
         } catch (Exception e) {
             Debug.error(e);
         }
@@ -122,14 +131,14 @@ public class OfferwallsManager {
 
     public static void startSponsorpay(Activity activity) {
         try {
-            Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(activity.getApplicationContext(), true);
-            activity.startActivityForResult(offerWallIntent, SponsorPayPublisher.DEFAULT_OFFERWALL_REQUEST_CODE);
+            Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(activity, true);
+            activity.startActivityForResult(offerWallIntent, SPONSORPAY_OFFERWALL_REQUEST_CODE);
         } catch (Exception e) {
             Debug.error(e);
             if (activity != null && CacheProfile.uid > 0) {
                 initSponsorpay(activity);
-                Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(activity.getApplicationContext(), true);
-                activity.startActivityForResult(offerWallIntent, SponsorPayPublisher.DEFAULT_OFFERWALL_REQUEST_CODE);
+                Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(activity, true);
+                activity.startActivityForResult(offerWallIntent, SPONSORPAY_OFFERWALL_REQUEST_CODE);
             }
         }
     }

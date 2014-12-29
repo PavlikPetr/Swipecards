@@ -47,9 +47,8 @@ public class Options extends AbstractData {
     public final static String PAGE_LIKES = "LIKE";
     public final static String PAGE_MUTUAL = "MUTUAL";
     public final static String PAGE_MESSAGES = "MESSAGES";
-    public final static String PAGE_VISITORS = "VISITORS";
+    public final static String PAGE_TABBED_VISITORS = "VISITORS_TABS";
     public final static String PAGE_DIALOGS = "DIALOGS";
-    public final static String PAGE_FANS = "FANS";
     public final static String PAGE_BOOKMARKS = "BOOKMARKS";
     public final static String PAGE_VIEWS = "VIEWS";
     public final static String PAGE_START = "START";
@@ -61,9 +60,8 @@ public class Options extends AbstractData {
             PAGE_LIKES,
             PAGE_MUTUAL,
             PAGE_MESSAGES,
-            PAGE_VISITORS,
+            PAGE_TABBED_VISITORS,
             PAGE_DIALOGS,
-            PAGE_FANS,
             PAGE_BOOKMARKS,
             PAGE_VIEWS,
             PAGE_START,
@@ -407,12 +405,10 @@ public class Options extends AbstractData {
                 return PAGE_MUTUAL;
             case PAGE_MESSAGES:
                 return PAGE_MESSAGES;
-            case PAGE_VISITORS:
-                return PAGE_VISITORS;
+            case PAGE_TABBED_VISITORS:
+                return PAGE_TABBED_VISITORS;
             case PAGE_DIALOGS:
                 return PAGE_DIALOGS;
-            case PAGE_FANS:
-                return PAGE_FANS;
             case PAGE_BOOKMARKS:
                 return PAGE_BOOKMARKS;
             case PAGE_VIEWS:
@@ -722,9 +718,9 @@ public class Options extends AbstractData {
         } catch (IllegalArgumentException e) {
             Debug.error("Illegal value of startPage", e);
         }
-        if (messagesWithTabs.isEnabled()) {
+        if (messagesWithTabs.isEnabled() || likesWithThreeTabs.isEnabled()) {
             switch (fragmentId) {
-                case FANS:
+                case BOOKMARKS:
                 case DIALOGS:
                     fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
                     break;

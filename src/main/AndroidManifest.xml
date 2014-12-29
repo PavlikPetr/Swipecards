@@ -324,7 +324,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <activity
-            android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
+            android:name="com.sponsorpay.publisher.ofw.SPOfferWallActivity"
             android:configChanges="orientation"/>
 
         <activity
@@ -410,7 +410,7 @@
         </receiver>
 
         <receiver
-            android:name="com.sponsorpay.sdk.android.advertiser.InstallReferrerReceiver"
+            android:name="com.sponsorpay.advertiser.InstallReferrerReceiver"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>

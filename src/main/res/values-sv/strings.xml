@@ -212,11 +212,6 @@
     <string name="edit_set_as_main">Välja till profilbild</string>
     <string name="edit_delete">Radera</string>
     <string name="edit_restore">Återställa</string>
-    <string name="gifts_romantic">Romantiska</string>
-    <string name="gifts_friends">Vänliga</string>
-    <string name="gifts_present">Gratulationer</string>
-    <string name="gifts_title">Välj gåva</string>
-    <string name="gifts_send_btn">Skicka gåva</string>
     <string name="form_not_specified">Ej angivet</string>
     <string name="form_main">Grundform</string>
     <string name="form_physique">Kroppsbyggnad</string>

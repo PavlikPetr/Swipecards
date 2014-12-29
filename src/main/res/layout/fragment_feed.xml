@@ -17,18 +17,12 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <TextView
+        <ProgressBar
             android:id="@+id/tvBackgroundText"
-            style="@style/BackgroundFontShadowless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:minWidth="150dp"
-            android:paddingRight="25dp"
-            android:alpha="0"
-            android:maxLines="1" />
+            android:indeterminateDrawable="@drawable/progress_medium_holo"/>
 
         <com.topface.PullToRefreshListView xmlns:p2r="http://schemas.android.com/apk/res-auto"
             android:id="@+id/lvFeedList"

@@ -77,7 +77,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public static final String OPEN_MENU = "com.topface.topface.open.menu";
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String INTENT_EXIT = "EXIT";
+    public static final String PAGE_SWITCH = "Page switch: ";
     private static NavigationActivity instance = null;
+    private Intent mPendingNextIntent;
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
@@ -192,7 +194,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         initFullscreen();
         initAppsFlyer();
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
-            showFragment(intent);
+            mPendingNextIntent = intent;
         }
     }
 
@@ -310,12 +312,14 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     }
 
     public void showFragment(FragmentId fragmentId) {
+        Debug.log(PAGE_SWITCH + "show fragment: " + fragmentId);
         mMenuFragment.selectMenu(fragmentId);
     }
 
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
         FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
+        Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
         showFragment(currentFragment == null ? CacheProfile.getOptions().startPageFragmentId : currentFragment);
     }
 
@@ -364,11 +368,20 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     }
 
     @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        if (mPendingNextIntent != null) {
+            showFragment(mPendingNextIntent);
+            mPendingNextIntent = null;
+        }
+    }
+
+    @Override
     protected void onProfileUpdated() {
         initBonusCounterConfig();
         // возможно что содержимое меню поменялось, надо обновить
         if (mMenuFragment != null && (CacheProfile.getOptions().likesWithThreeTabs.isEnabled() ||
-                CacheProfile.getOptions().messagesWithTabs.isEnabled())) {
+                CacheProfile.getOptions().messagesWithTabs.isEnabled() || !mMenuFragment.isClosingsAvailable())) {
             mMenuFragment.updateAdapter();
         }
         FloatBlock.resetActivityMap();

@@ -465,10 +465,8 @@ public class CacheProfile {
             case TABBED_DIALOGS:
             case DIALOGS:
                 return CacheProfile.unread_messages;
-            case VISITORS:
-                return CacheProfile.unread_visitors;
-            case FANS:
-                return CacheProfile.unread_fans;
+            case TABBED_VISITORS:
+                return CacheProfile.unread_visitors + CacheProfile.unread_fans;
             case ADMIRATIONS:
                 return CacheProfile.unread_admirations;
             case GEO:

@@ -44,7 +44,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         DATING(2, true),
         DIALOGS(3),
         TABBED_DIALOGS(4),
-        VISITORS(5),
+        TABBED_VISITORS(5),
         LIKES(6),
         TABBED_LIKES(7),
         ADMIRATIONS(8),
@@ -52,11 +52,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         LIKES_CLOSINGS(10, true),
         MUTUAL_CLOSINGS(11, true),
         BOOKMARKS(12),
-        FANS(13),
-        GEO(14),
-        BONUS(15),
+        GEO(13),
+        BONUS(14),
         EDITOR(1000),
-        SETTINGS(17),
+        SETTINGS(16),
         UNDEFINED(-1);
 
         private int mNumber;
