@@ -20,7 +20,6 @@ public class DeleteBookmarksRequest extends DeleteAbstractUsersRequest {
 
     public DeleteBookmarksRequest(int id, Context context) {
         super(Integer.toString(id), context);
-        //callback(new AttitudeHandler(getContext(), AttitudeHandler.ActionTypes.BOOKMARK, new int[]{id}, false));
     }
 
     @Override
