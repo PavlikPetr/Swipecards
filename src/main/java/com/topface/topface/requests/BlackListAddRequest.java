@@ -30,14 +30,6 @@ public class BlackListAddRequest extends ApiRequest {
         List<Integer> list = new ArrayList<>();
         list.add(userId);
         mUserIds = list;
-        setCallback();
-    }
-
-    public BlackListAddRequest(Context context, int userId) {
-        super(context);
-        List<Integer> list = new ArrayList<>();
-        list.add(userId);
-        mUserIds = list;
     }
 
     /**

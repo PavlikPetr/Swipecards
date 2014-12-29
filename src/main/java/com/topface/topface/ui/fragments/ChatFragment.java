@@ -57,8 +57,10 @@ import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
+import com.topface.topface.requests.BookmarkAddRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteBlackListRequest;
+import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.DeleteMessagesRequest;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
@@ -167,6 +169,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
 
+
+    private ActionMenuHandler mActionMenuHandler = new ActionMenuHandler(App.getContext()) {
+        @Override
+        public void closeActionMenu() {
+            animateHideChatAction();
+        }
+    };
 
     private void switchBookmarkEnabled(boolean enabled) {
         if (mActions != null) {
@@ -843,8 +852,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         ApiRequest request;
                         if (mUser.blocked) {
                             request = new DeleteBlackListRequest(mUser.id, getActivity());
+                            mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BLACK_LIST, mUser.id, false, request);
                         } else {
                             request = new BlackListAddRequest(mUser.id, getActivity());
+                            mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BLACK_LIST, mUser.id, true, request);
                         }
                         request.exec();
                     }
@@ -862,27 +873,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 ApiRequest request;
 
                 if (mUser.bookmarked) {
-                    request = new DeleteBlackListRequest(mUserId, getActivity());
-                    request.callback(new ActionMenuHandler(App.getContext(), AttitudeHandler.ActionTypes.BLACK_LIST, new int[]{mUserId}, false) {
-                        @Override
-                        public void closeMenu() {
-                            hideChatAction();
-                        }
-                    });
+                    request = new DeleteBookmarksRequest(mUserId, getActivity());
+                    mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BOOKMARK, mUser.id, false, request);
                 } else {
-                    request = new BlackListAddRequest(getActivity(), mUserId);
-                    request.callback(new ActionMenuHandler(App.getContext(), AttitudeHandler.ActionTypes.BLACK_LIST, new int[]{mUserId}, true) {
-                        @Override
-                        public void closeMenu() {
-                            hideChatAction();
-                        }
-                    });
+                    request = new BookmarkAddRequest(mUserId, getActivity());
+                    mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BOOKMARK, mUser.id, true, request);
                 }
-//                    request = new DeleteBookmarksRequest(mUserId, getActivity());
-//                } else {
-//                    request = new BookmarkAddRequest(mUserId, getActivity());
-//                }
-
                 request.exec();
                 break;
             case R.id.complain_action:
