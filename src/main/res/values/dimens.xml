@@ -16,13 +16,6 @@
     <dimen name="action_bar_title_size">18sp</dimen>
     <dimen name="action_bar_subtitle_size">14sp</dimen>
 
-    <!-- defaults for shadows -->
-    <item name="shadow_1px" format="float" type="dimen">1</item>
-    <item name="shadow_n1px" format="float" type="dimen">-1</item>
-    <item name="shadow_2px" format="float" type="dimen">2</item>
-    <item name="shadow_n2px" format="float" type="dimen">-2</item>
-    <item name="shadow_3px" format="float" type="dimen">3</item>
-    <item name="shadow_n3px" format="float" type="dimen">-3</item>
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">260dp</dimen>
 

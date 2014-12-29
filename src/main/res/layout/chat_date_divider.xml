@@ -22,10 +22,6 @@
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
         android:paddingTop="2dp"
-        android:shadowColor="@null"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="0"
         android:textColor="#A7A7A7"
         android:textSize="12sp" />
 

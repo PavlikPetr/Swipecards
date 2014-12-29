@@ -3,39 +3,37 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="24dp"
-    android:paddingBottom="18dp">
+    android:paddingBottom="18dp"
+    android:paddingTop="24dp">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/popular_user_title"
-        android:layout_centerHorizontal="true"
         style="@style/ItemTitleText"
-        android:gravity="center"
-        />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center" />
+
+    <TextView
         android:id="@+id/popular_user_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/popular_user_title"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:textSize="13sp"
-        style="@style/NoShadowItemFont"/>
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:textSize="13sp" />
 
     <Button
         android:id="@+id/unlock_message_sent"
+        style="@style/Widget.Topface.Button.Big.Blue"
         android:layout_width="179dp"
         android:layout_height="43dp"
-        style="@style/Widget.Topface.Button.Big.Blue"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:text="@string/buying_vip_status"
         android:layout_below="@id/popular_user_message"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="@string/buying_vip_status" />
 
 </RelativeLayout>
