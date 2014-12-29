@@ -37,7 +37,8 @@ public class ImageSwitcherLooped extends ImageSwitcher {
 
         @Override
         public int getRealPosition(int position) {
-            return mPhotoLinks == null ? position : position % mPhotoLinks.size();
+            int photosCount = mPhotoLinks.size();
+            return mPhotoLinks == null || photosCount == 0 ? position : position % photosCount;
         }
     }
 }
