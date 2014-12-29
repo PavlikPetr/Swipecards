@@ -18,7 +18,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
@@ -35,18 +34,33 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     private static final String ARG_TAG_TITLE_ID = "titleId";
     private static final String ARG_TAG_DATA = "data";
+    private static final String ARG_TAG_LIMIT_VALUE = "limit_value";
+
+    public static final int UNUSED_LIMIT_VALUE = -1;
+
     private int mTitleId;
     private String mData;
     private String mInputData = "";
     private Profile mProfile;
 
     private FormInfo mFormInfo;
+    private int mCharactersLimit;
 
     private EditText mEditText;
     private TextView mCharactersCount;
 
     public EditFormItemInputFragment() {
         super();
+    }
+
+    public static EditFormItemInputFragment newInstance(int titleId, String data, int limit) {
+        EditFormItemInputFragment fragment = new EditFormItemInputFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_TAG_TITLE_ID, titleId);
+        args.putString(ARG_TAG_DATA, data);
+        args.putInt(ARG_TAG_LIMIT_VALUE, limit);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public static EditFormItemInputFragment newInstance(int titleId, String data) {
@@ -63,6 +77,11 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         mTitleId = getArguments().getInt(ARG_TAG_TITLE_ID);
         mData = getArguments().getString(ARG_TAG_DATA);
         mProfile = CacheProfile.getProfile();
+        if (getArguments().containsKey(ARG_TAG_LIMIT_VALUE)) {
+            mCharactersLimit = getArguments().getInt(ARG_TAG_LIMIT_VALUE);
+        } else {
+            mCharactersLimit = UNUSED_LIMIT_VALUE;
+        }
         mFormInfo = new FormInfo(getActivity(), mProfile.sex, mProfile.getType());
     }
 
@@ -119,7 +138,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     private void initCharactersCount(ViewGroup view) {
         int count = mEditText.getText().length();
         mCharactersCount = (TextView) view.findViewById(R.id.charactersCount);
-        mCharactersCount.setVisibility(mFormInfo.isCounterVisible(mTitleId) ? View.VISIBLE : View.GONE);
+        mCharactersCount.setVisibility(mCharactersLimit != UNUSED_LIMIT_VALUE ? View.VISIBLE : View.GONE);
         setCharactersCount(count);
         mEditText.setSelection(count);
     }
@@ -129,7 +148,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     }
 
     private void setCharactersCount(int count) {
-        setCharactersCount(count, App.getAppOptions().getUserAboutMeMaxLength());
+        setCharactersCount(count, mCharactersLimit);
     }
 
     @Override
