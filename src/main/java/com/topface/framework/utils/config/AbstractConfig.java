@@ -6,9 +6,13 @@ import android.content.SharedPreferences;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
+import com.topface.topface.Static;
+import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.social.AuthToken;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by kirussell on 06.01.14.
@@ -318,4 +322,42 @@ public abstract class AbstractConfig {
             return 0.0;
         }
     }
+
+    public void rebuildConfig() {
+        SettingsMap oldSettingsMap = getSettingsMap();
+        SettingsMap newSettingsMap = new SettingsMap();
+        StringBuilder newKey = new StringBuilder();
+        SettingsField field;
+        String newKeyPart = AuthToken.getInstance().getSocialNet() +
+                Static.AMPERSAND + AuthToken.getInstance().getUserTokenUniqueId();
+        for (String key : oldSettingsMap.keySet()) {
+            field = oldSettingsMap.get(key);
+            int endIndex = key.lastIndexOf("&");
+            String name = key.substring(endIndex);
+            newKey.append(newKeyPart);
+            newKey.append(name);
+            field.key = newKey.toString();
+            newSettingsMap.put(newKey.toString(), field);
+            newKey.setLength(0);
+        }
+        removeConfig();
+        mSettingsMap = newSettingsMap;
+    }
+
+    private void removeConfig() {
+        final SharedPreferences.Editor editor = getContext().getSharedPreferences(
+                UserConfig.PROFILE_CONFIG_SETTINGS,
+                Context.MODE_PRIVATE).edit();
+        final Set<String> s = getSettingsMap().keySet();
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                for (String key : s) {
+                    editor.remove(key);
+                }
+                editor.apply();
+            }
+        };
+    }
+
 }

@@ -41,7 +41,8 @@ public class Configurations {
     }
 
     public UserConfig rebuildUserConfig() {
-        mUserConfig = new UserConfig(mContext);
+        mUserConfig.rebuildConfig();
+        mUserConfig.saveConfig();
         return mUserConfig;
     }
 
