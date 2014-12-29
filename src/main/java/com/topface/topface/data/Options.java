@@ -47,24 +47,26 @@ public class Options extends AbstractData {
     public final static String PAGE_LIKES = "LIKE";
     public final static String PAGE_MUTUAL = "MUTUAL";
     public final static String PAGE_MESSAGES = "MESSAGES";
-    public final static String PAGE_VISITORS = "VISITORS";
+    public final static String PAGE_TABBED_VISITORS = "VISITORS_TABS";
     public final static String PAGE_DIALOGS = "DIALOGS";
-    public final static String PAGE_FANS = "FANS";
     public final static String PAGE_BOOKMARKS = "BOOKMARKS";
     public final static String PAGE_VIEWS = "VIEWS";
     public final static String PAGE_START = "START";
     public final static String PAGE_GAG = "GAG";
+    public final static String PAGE_TABBED_LIKES = "LIKES_TABS";
+    public final static String PAGE_TABBED_MESSAGES = "MESSAGES_TABS";
     public final static String[] PAGES = new String[]{
             PAGE_UNKNOWK,
             PAGE_LIKES,
             PAGE_MUTUAL,
             PAGE_MESSAGES,
-            PAGE_VISITORS,
+            PAGE_TABBED_VISITORS,
             PAGE_DIALOGS,
-            PAGE_FANS,
             PAGE_BOOKMARKS,
             PAGE_VIEWS,
             PAGE_START,
+            PAGE_TABBED_LIKES,
+            PAGE_TABBED_MESSAGES,
             PAGE_GAG
     };
 
@@ -188,11 +190,6 @@ public class Options extends AbstractData {
 
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
-            try {
-                startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
-            } catch (IllegalArgumentException e) {
-                Debug.error("Illegal value of startPage", e);
-            }
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
@@ -356,6 +353,8 @@ public class Options extends AbstractData {
 
             messagesWithTabs.init(response);
 
+            startPageFragmentId = getStartPageFragmentId(response);
+
             JSONObject jsonNotShown = response.optJSONObject("notShown");
             if (jsonNotShown != null) {
                 notShown.parseNotShownJSON(jsonNotShown);
@@ -406,12 +405,10 @@ public class Options extends AbstractData {
                 return PAGE_MUTUAL;
             case PAGE_MESSAGES:
                 return PAGE_MESSAGES;
-            case PAGE_VISITORS:
-                return PAGE_VISITORS;
+            case PAGE_TABBED_VISITORS:
+                return PAGE_TABBED_VISITORS;
             case PAGE_DIALOGS:
                 return PAGE_DIALOGS;
-            case PAGE_FANS:
-                return PAGE_FANS;
             case PAGE_BOOKMARKS:
                 return PAGE_BOOKMARKS;
             case PAGE_VIEWS:
@@ -420,6 +417,10 @@ public class Options extends AbstractData {
                 return PAGE_START;
             case PAGE_GAG:
                 return PAGE_GAG;
+            case PAGE_TABBED_MESSAGES:
+                return PAGE_TABBED_MESSAGES;
+            case PAGE_TABBED_LIKES:
+                return PAGE_TABBED_LIKES;
             default:
                 return PAGE_UNKNOWK + "(" + name + ")";
         }
@@ -708,8 +709,28 @@ public class Options extends AbstractData {
                 text = jsonNotShown.optString("text");
             }
         }
-
     }
 
-
+    private BaseFragment.FragmentId getStartPageFragmentId(JSONObject response) {
+        BaseFragment.FragmentId fragmentId = startPageFragmentId;
+        try {
+            fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
+        } catch (IllegalArgumentException e) {
+            Debug.error("Illegal value of startPage", e);
+        }
+        if (messagesWithTabs.isEnabled() || likesWithThreeTabs.isEnabled()) {
+            switch (fragmentId) {
+                case BOOKMARKS:
+                case DIALOGS:
+                    fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
+                    break;
+                case MUTUAL:
+                case ADMIRATIONS:
+                case LIKES:
+                    fragmentId = BaseFragment.FragmentId.TABBED_LIKES;
+                    break;
+            }
+        }
+        return fragmentId;
+    }
 }

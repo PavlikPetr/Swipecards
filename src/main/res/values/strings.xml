@@ -188,6 +188,10 @@
         <item quantity="other">To be able to send a gift, buy %d more coins</item>
         <item quantity="one">To be able to send a gift, buy %d more coin</item>
     </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="other">To send an admiration, buy %d more coins</item>
+        <item quantity="one">To send an admiration, buy %d more coin</item>
+    </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="other">To be able to see who likes you, buy %d more coins</item>
         <item quantity="one">To be able to see who likes you, buy %d more coin</item>
@@ -195,6 +199,10 @@
     <plurals name="buying_leaders_you_need_coins">
         <item quantity="other">To be able to be seen by everyone, buy %d more coins</item>
         <item quantity="one">To be able to be seen by everyone, buy %d more coin</item>
+    </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="other">You are short of %d coins</item>
+        <item quantity="one">You are short of %d coin</item>
     </plurals>
     <string name="buying_default_message">You can send gifts and admirations with coins</string>
     <string name="buying_money">Coins purchase</string>
@@ -221,11 +229,6 @@
     <string name="edit_set_as_main">Set as main</string>
     <string name="edit_delete">Delete</string>
     <string name="edit_restore">Restore</string>
-    <string name="gifts_romantic">Romance</string>
-    <string name="gifts_friends">Friendship</string>
-    <string name="gifts_present">Congratulations</string>
-    <string name="gifts_title">Choose a gift</string>
-    <string name="gifts_send_btn">Send a gift</string>
     <string name="form_not_specified">Not specified</string>
     <string name="form_main">Main</string>
     <string name="form_physique">Physique</string>
@@ -591,4 +594,11 @@
     <string name="maximum_number_of_users">You have selected the maximum number of users.</string>
     <string name="logout_if_email_already_registred">There is a user with this email already. If this is your email, you have to log out of the current account and log into %s account.</string>
     <string name="recover_password_instructions">An email has been sent to you with the password recovery instruction.</string>
+    <string name="email_changing">Email change</string>
+    <string name="hint_faces_filter">Change search options and meet new interesting people.</string>
+    <string name="hint_faces_buy_like">The more likes you have, the more often you get rated. Don\'t forget to refill the likes balance.</string>
+    <string name="hint_myprofile_buy_vip">Buy VIP-status and enjoy unlimited communication</string>
+    <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
+    <string name="pull_to_refresh_release_label">Let go to refresh…</string>
+    <string name="pull_to_refresh_refreshing_label">Loading…</string>
 </resources>

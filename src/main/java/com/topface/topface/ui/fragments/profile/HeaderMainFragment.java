@@ -1,8 +1,12 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +17,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.IUserOnlineListener;
@@ -26,6 +31,10 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     private static final String ARG_TAG_NAME = "name";
     private static final String ARG_TAG_CITY = "city";
     private static final String ARG_TAG_BACKGROUND = "background";
+    public static final String UPDATE_AVATAR_POSITION = "com.topface.topface.updateAvatarPosition";
+    public static final String INCREMENT_AVATAR_POSITION = "incrementAvatarPosition";
+    public static final String DECREMENT_AVATAR_POSITION = "decrementAvatarPosition";
+    public static final String POSITION = "position";
 
     private ImageViewRemote mAvatarView;
     private Photo mAvatarVal;
@@ -34,6 +43,26 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     private TextView mCityView;
     private String mCityVal;
     private BasePendingInit<Profile> mPendingUserInit = new BasePendingInit<>();
+
+    private BroadcastReceiver mAvatarPositionReciver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mAvatarVal != null) {
+                boolean increment = intent.getBooleanExtra(INCREMENT_AVATAR_POSITION, false);
+                boolean decrement = intent.getBooleanExtra(DECREMENT_AVATAR_POSITION, false);
+                if (increment) {
+                    mAvatarVal.position += 1;
+                    return;
+                }
+                if (decrement) {
+                    if (intent.getIntExtra(POSITION, -1) < mAvatarVal.position) {
+                        mAvatarVal.position -= 1;
+                    }
+                    mPendingUserInit.getData().photosCount -= 1;
+                }
+            }
+        }
+    };
 
     private static void saveState(Fragment fragment, Profile profile) {
         if (!fragment.isVisible()) {
@@ -69,10 +98,28 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
             @Override
             public void onClick(View v) {
                 Profile userProfile = mPendingUserInit.getData();
-                Photo photo = userProfile.photos.getPhotoById(mAvatarVal.getId());
-                int position = (photo != null) ? photo.getPosition() : 0;
-                Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userProfile.uid, userProfile.photosCount, userProfile.photos);
-                startActivity(intent);
+                Photos photos = userProfile.photos;
+                if (mAvatarVal == null || photos == null) {
+                    return;
+                }
+                int pos;
+                if (photos.size() < mAvatarVal.position) {
+                    //ава за пределами загруженной пачки
+                    pos = mAvatarVal.position;
+                } else {
+                    if (photos.get(mAvatarVal.position) == null) {
+                        return;
+                    }
+                    if (photos.get(mAvatarVal.position).getId() != mAvatarVal.getId()) {
+                        //ид не равны, юзер загрузил новые фотки
+                        int id = mAvatarVal.getId();
+                        pos = photos.getPhotoIndexById(id);
+                    } else {
+                        pos = mAvatarVal.position;
+                    }
+                }
+                startActivity(PhotoSwitcherActivity.
+                        getPhotoSwitcherIntent(pos, userProfile.uid, userProfile.photosCount, userProfile.photos));
             }
         });
         mNameView = (TextView) root.findViewById(R.id.tvName);
@@ -93,6 +140,8 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     public void onResume() {
         super.onResume();
         refreshViews();
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mAvatarPositionReciver, new IntentFilter(UPDATE_AVATAR_POSITION));
     }
 
     @Override
@@ -183,5 +232,7 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
     @Override
     public void onPause() {
         super.onPause();
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(mAvatarPositionReciver);
     }
 }

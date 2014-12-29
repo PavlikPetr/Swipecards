@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -30,19 +29,17 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
-import com.topface.topface.data.Photo;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.DatingLockPopupAction;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
-import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -51,9 +48,9 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.ExternalLinkExecuter;
 import com.topface.topface.utils.IActionbarNotifier;
-import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.IconNotificationController;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.FullscreenController;
@@ -67,7 +64,6 @@ import com.topface.topface.utils.social.AuthToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -81,7 +77,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public static final String OPEN_MENU = "com.topface.topface.open.menu";
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String INTENT_EXIT = "EXIT";
+    public static final String PAGE_SWITCH = "Page switch: ";
     private static NavigationActivity instance = null;
+    private Intent mPendingNextIntent;
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
@@ -107,7 +105,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             getIntent().setData(null);
         }
     };
-
     private boolean mIsActionBarHidden;
     private View mContentFrame;
     private MenuFragment mMenuFragment;
@@ -116,7 +113,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private boolean isPopupVisible = false;
     private boolean mActionBarOverlayed = false;
     private int mInitialTopMargin = 0;
-
     private ActionBarDrawerToggle mDrawerToggle;
     private IActionbarNotifier mNotificationController;
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
@@ -128,89 +124,15 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private BroadcastReceiver mOpenMenuReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            toggleDrawerLayout();
+            if (mMenuFragment.isLockedByClosings()) {
+                mMenuFragment.showClosingsDialog();
+            } else {
+                toggleDrawerLayout();
+            }
         }
     };
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     private AddPhotoHelper mAddPhotoHelper;
-    private IPhotoTakerWithDialog mPhotoTaker = new IPhotoTakerWithDialog() {
-        @Override
-        public void takePhoto() {
-            getAddPhotoHelper().startCamera(true);
-        }
-
-        @Override
-        public void choosePhotoFromGallery() {
-            getAddPhotoHelper().startChooseFromGallery(true);
-        }
-
-        @Override
-        public void onTakePhotoDialogSentSuccess(final Photo photo) {
-            if (CacheProfile.photos != null) {
-                CacheProfile.photos.add(photo);
-                CacheProfile.totalPhotos += 1;
-                Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-                intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
-                LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
-            } else {
-                Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-                ArrayList<Photo> photos = new ArrayList<>();
-                photos.add(photo);
-                intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
-            }
-            PhotoMainRequest request = new PhotoMainRequest(NavigationActivity.this);
-            request.photoId = photo.getId();
-            request.callback(new ApiHandler() {
-
-                @Override
-                public void success(IApiResponse response) {
-                    CacheProfile.photo = photo;
-                    App.sendProfileRequest();
-                }
-
-                @Override
-                public void fail(int codeError, IApiResponse response) {
-                    if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
-                        if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
-                            CacheProfile.photos.remove(photo);
-                        }
-                        Toast.makeText(
-                                NavigationActivity.this,
-                                App.getContext().getString(R.string.general_wrong_photo_upload),
-                                Toast.LENGTH_LONG
-                        ).show();
-                    }
-                }
-
-                @Override
-                public void always(IApiResponse response) {
-                    super.always(response);
-                }
-            }).exec();
-        }
-
-        @Override
-        public void onTakePhotoDialogSentFailure() {
-            Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onTakePhotoDialogDismiss() {
-            if (CacheProfile.needToSelectCity(NavigationActivity.this)) {
-                CacheProfile.selectCity(NavigationActivity.this);
-            }
-        }
-
-        @Override
-        public void sendPhotoRequest(Uri uri) {
-            getAddPhotoHelper().sendRequest(uri);
-        }
-
-        @Override
-        public FragmentManager getActivityFragmentManager() {
-            return getSupportFragmentManager();
-        }
-    };
     private PopupManager mPopupManager;
 
     public static void onLogout() {
@@ -251,7 +173,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
-
         if (intent.getBooleanExtra(INTENT_EXIT, false)) {
             finish();
         }
@@ -272,16 +193,14 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         initDrawerLayout();
         initFullscreen();
         initAppsFlyer();
-
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
-            showFragment(intent);
+            mPendingNextIntent = intent;
         }
     }
 
     @Override
     protected void onRegisterStartActions(StartActionsController startActionsController) {
         super.onRegisterStartActions(startActionsController);
-
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
         // promo popups
@@ -338,13 +257,12 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
         mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ? android.R.color.transparent : R.drawable.empty_home_as_up,  /* nav drawer icon to replace 'Up' caret */
-                R.string.app_name,  /* "open drawer" description */
-                R.string.app_name  /* "close drawer" description */
+                this, /* host Activity */
+                mDrawerLayout, /* DrawerLayout object */
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ? android.R.color.transparent : R.drawable.empty_home_as_up, /* nav drawer icon to replace 'Up' caret */
+                R.string.app_name, /* "open drawer" description */
+                R.string.app_name /* "close drawer" description */
         ) {
-
             @Override
             public void onDrawerStateChanged(int newState) {
                 super.onDrawerStateChanged(newState);
@@ -394,13 +312,15 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     }
 
     public void showFragment(FragmentId fragmentId) {
+        Debug.log(PAGE_SWITCH + "show fragment: " + fragmentId);
         mMenuFragment.selectMenu(fragmentId);
     }
 
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
         FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
-        showFragment(currentFragment == null ? FragmentId.DATING : currentFragment);
+        Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
+        showFragment(currentFragment == null ? CacheProfile.getOptions().startPageFragmentId : currentFragment);
     }
 
     public void showContent() {
@@ -420,7 +340,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        showFragment(intent);
+        if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
+            showFragment(intent);
+        }
     }
 
     @Override
@@ -446,8 +368,23 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     }
 
     @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        if (mPendingNextIntent != null) {
+            showFragment(mPendingNextIntent);
+            mPendingNextIntent = null;
+        }
+    }
+
+    @Override
     protected void onProfileUpdated() {
         initBonusCounterConfig();
+        // возможно что содержимое меню поменялось, надо обновить
+        if (mMenuFragment != null && (CacheProfile.getOptions().likesWithThreeTabs.isEnabled() ||
+                CacheProfile.getOptions().messagesWithTabs.isEnabled() || !mMenuFragment.isClosingsAvailable())) {
+            mMenuFragment.updateAdapter();
+        }
+        FloatBlock.resetActivityMap();
         mNotificationController.refreshNotificator();
     }
 
@@ -563,7 +500,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
-
     }
 
     @Override
@@ -595,7 +531,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 data,
                 OwnProfileFragment.class
         );
-
         if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
             switch (requestCode) {
                 case CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION:
@@ -608,7 +543,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                                 SettingsRequest request = new SettingsRequest(this);
                                 request.cityid = city.id;
                                 request.callback(new ApiHandler() {
-
                                     @Override
                                     public void success(IApiResponse response) {
                                         CacheProfile.city = city;
@@ -628,8 +562,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
                     AddPhotoHelper helper = getAddPhotoHelper();
-                    helper.showTakePhotoDialog(mPhotoTaker,
-                            helper.processActivityResult(requestCode, resultCode, data, false));
+                    helper.showTakePhotoDialog(new PhotoTaker(helper, this), helper.processActivityResult(requestCode, resultCode, data, false));
                     break;
             }
         }
@@ -644,7 +577,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             }
             mDrawerToggle.syncState();
         }
-
     }
 
     @Override
@@ -657,7 +589,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 }
                 return true;
         }
-
         return super.onKeyDown(keycode, e);
     }
 
@@ -669,7 +600,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     }
 
     private void takePhoto() {
-        getAddPhotoHelper().showTakePhotoDialog(mPhotoTaker, null);
+        getAddPhotoHelper().showTakePhotoDialog(new PhotoTaker(getAddPhotoHelper(), this), null);
     }
 
     private void switchContentTopMargin(boolean actionbarOverlay) {
@@ -705,5 +636,4 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         getSupportActionBar().show();
     }
-
 }

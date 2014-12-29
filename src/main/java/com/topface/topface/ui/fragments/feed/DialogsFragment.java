@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -79,11 +78,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected Drawable getBackIcon() {
-        return getResources().getDrawable(R.drawable.chat);
-    }
-
-    @Override
     protected DialogListAdapter createNewAdapter() {
         return new DialogListAdapter(getActivity().getApplicationContext(), getUpdaterCallback());
     }
@@ -148,11 +142,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected int getContextMenuLayoutRes() {
-        return R.menu.feed_context_menu;
     }
 
     @Override

@@ -227,11 +227,6 @@
     <string name="edit_set_as_main">Padaryti pagrindine</string>
     <string name="edit_delete">Pašalinti</string>
     <string name="edit_restore">Atstatyti</string>
-    <string name="gifts_romantic">Romantiškos</string>
-    <string name="gifts_friends">Draugiškos</string>
-    <string name="gifts_present">Sveikinimų</string>
-    <string name="gifts_title">Pasirinkite dovaną</string>
-    <string name="gifts_send_btn">Išsiųsti dovaną</string>
     <string name="form_not_specified">Nenurodyta</string>
     <string name="form_main">Pagrindinis</string>
     <string name="form_physique">Fiziniai duomenys</string>
@@ -609,4 +604,8 @@
     <string name="maximum_number_of_users">Pasirinktas maksimalus vartotojų kiekis</string>
     <string name="logout_if_email_already_registred">Vartotojas su tokiu el. paštu jau egzistuoja. Jeigu tai jūsų el. paštas, jums būtina išeiti iš dabartinės paskyros ir įeiti į paskyrą %s</string>
     <string name="recover_password_instructions">Jūsų el. pašto adresu išsiųstas laiškas su slaptažodžio atstatymo instrukcija</string>
+    <string name="email_changing">el. pašto keitimas</string>
+    <string name="hint_faces_filter">Keikite paieškos parametrus ir pažindinkitės su įdomiais žmonėmis</string>
+    <string name="hint_faces_buy_like">Kuo daugiau pas jus simpatijų, tuo dažniau jus įvertina. Nepamirškite papildyti simpatijų atsargos.</string>
+    <string name="hint_myprofile_buy_vip">Pirkite VIP-statusą ir mėgaukitės neapribotu bendravimu</string>
 </resources>

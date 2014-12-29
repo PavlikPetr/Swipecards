@@ -216,11 +216,6 @@
     <string name="edit_set_as_main">Definir como</string>
     <string name="edit_delete">Eliminar</string>
     <string name="edit_restore">Reinstalar</string>
-    <string name="gifts_romantic">Românticos</string>
-    <string name="gifts_friends">Amigáveis</string>
-    <string name="gifts_present">Felicitáveis</string>
-    <string name="gifts_title">Selecione presente</string>
-    <string name="gifts_send_btn">Enviar presente</string>
     <string name="form_not_specified">Não está especificado</string>
     <string name="form_main">Principais</string>
     <string name="form_physique">Dados fisicos</string>

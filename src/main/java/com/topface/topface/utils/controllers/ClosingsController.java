@@ -348,9 +348,7 @@ public class ClosingsController implements View.OnClickListener {
         }
         // switch to DatingFragment after closings are passed
         unlockLeftMenu();
-        if (mMenuFragment.getCurrentFragmentId() == FragmentId.UNDEFINED) {
-            MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
-        }
+        MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
         mClosingsPassed = true;
         mLikesClosingsActive = false;
         mMutualClosingsActive = false;
@@ -438,7 +436,9 @@ public class ClosingsController implements View.OnClickListener {
      */
     public boolean canShowClosings() {
         return !(mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) &&
-                CacheProfile.getOptions().closing.isClosingsEnabled();
+                CacheProfile.getOptions().closing.isClosingsEnabled() &&
+                !CacheProfile.getOptions().likesWithThreeTabs.isEnabled() &&
+                !CacheProfile.getOptions().messagesWithTabs.isEnabled();
     }
 
     @SuppressWarnings("UnusedDeclaration")

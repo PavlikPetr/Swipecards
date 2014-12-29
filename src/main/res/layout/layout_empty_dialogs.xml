@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:clickable="true">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:clickable="true">
 
     <TextView
         android:id="@+id/tvText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/nobody_chat_with_you_sympathies_will_help"
-        style="@style/ItemTitleText"
+        style="@style/ListItemEmptyText"
         android:layout_centerInParent="true"
         android:gravity="center"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="16dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
             style="@style/Widget.Topface.Button.Big.Gray"
             android:layout_marginRight="3dp"
             android:singleLine="true"
-            android:minWidth="210dp" />
+            android:minWidth="210dp"/>
 
         <Button
             android:id="@+id/btnBuyVip"
@@ -46,7 +46,7 @@
             style="@style/Widget.Topface.Button.Big.Blue"
             android:layout_marginLeft="3dp"
             android:singleLine="true"
-            android:minWidth="210dp" />
+            android:minWidth="210dp"/>
 
     </LinearLayout>
 
@@ -56,6 +56,6 @@
         android:src="@drawable/chat"
         android:layout_above="@id/tvText"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp" />
+        android:layout_marginBottom="18dp"/>
 
 </RelativeLayout>

@@ -218,11 +218,6 @@
     <string name="edit_set_as_main">Als Titelfoto machen</string>
     <string name="edit_delete">Löschen</string>
     <string name="edit_restore">Wiederherstellen</string>
-    <string name="gifts_romantic">Romantische</string>
-    <string name="gifts_friends">Freundschaftliche</string>
-    <string name="gifts_present">Glückwunschgeschenke</string>
-    <string name="gifts_title">Wählen Sie ein Geschenk</string>
-    <string name="gifts_send_btn">Ein Geschenk senden</string>
     <string name="form_not_specified">Nicht eingegeben</string>
     <string name="form_main">Wesentliches</string>
     <string name="form_physique">Körperbau</string>
@@ -242,6 +237,7 @@
     <string name="settings_messages">Nachrichten</string>
     <string name="settings_guests">Gäste</string>
     <string name="settings_help">Hilfe</string>
+    <string name="settings_faq">Fragen und antworten</string>
     <string name="settings_account">Account</string>
     <string name="settings_feedback">Meinung abgeben</string>
     <string name="settings_about">Über das Programm</string>
@@ -580,4 +576,5 @@
     <string name="reply">Antworten</string>
     <string name="measurement_unit_weight">kg.</string>
     <string name="measurement_unit_height">cm.</string>
+    <string name="email_changing">E-Mail ändern</string>
 </resources>

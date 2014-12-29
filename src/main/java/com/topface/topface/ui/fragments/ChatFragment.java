@@ -273,7 +273,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // do not recreate Adapter cause of steRetainInstance(true)
+        // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
         }
@@ -368,7 +368,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void restoreData(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             try {
-                boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
+                boolean wasFailed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 FeedList<History> historyData = new FeedList<>();
                 if (list != null) {
@@ -380,7 +380,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 mAdapter.setData(historyData);
                 mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
-                if (was_failed) {
+                if (wasFailed) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 } else {
                     mLockScreen.setVisibility(View.GONE);
@@ -395,8 +395,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void initChatHistory(View root) {
 
-        // adapter
-        mAdapter.setUser(mUser);
         // list view
         mListView = (PullToRefreshListView) root.findViewById(R.id.lvChatList);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -587,6 +585,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
+        if (mIsUpdating) {
+            return;
+        }
         mIsUpdating = true;
         final boolean isPopularLockOn;
         isPopularLockOn = mAdapter != null &&
@@ -594,10 +595,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
                 pullToRefresh;
 
-        if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
-            showLoading();
-        }
-        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId);
+        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId) {
+
+            @Override
+            public void exec() {
+                mIsUpdating = true;
+                if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
+                    showLoading();
+                }
+                super.exec();
+            }
+        };
+
         registerRequest(historyRequest);
         historyRequest.debug = type;
         if (mAdapter != null) {
@@ -645,6 +654,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     removeOutdatedItems(data);
                 } else if (scrollRefresh) {
                     removeAlreadyLoadedItems(data);
+                } else {
+                    removeFakesNotWaiting(data);
                 }
 
                 refreshActionBarTitles();
@@ -668,7 +679,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
 
                     if (mAdapter.getCount() <= 0) {
-                        mAdapter.setUser(mUser);
                         if (!mIsKeyboardOpened && !mWasNotEmptyHistory) {
                             Utils.showSoftKeyboard(getActivity(), mEditBox);
                             mIsKeyboardOpened = true;
@@ -682,6 +692,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 //show keyboard if display size more then 479dp
                 showKeyboardOnLargeScreen();
                 mIsBeforeFirstChatUpdate = false;
+
+                if (mLockScreen != null && mLockScreen.getVisibility() == View.VISIBLE) {
+                    mLockScreen.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -744,6 +758,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 data.items.removeAll(itemsToDelete);
             }
+        }
+    }
+
+    private void removeFakesNotWaiting(HistoryListData data) {
+        if (!mAdapter.isEmpty()) {
+            ArrayList<History> itemsToDelete = new ArrayList<>();
+            for (History item : mAdapter.getData()) {
+                for (History newItem : data.items) {
+                    if (item.isFake() && ((!item.isWaitingItem() && !item.isRepeatItem()) || TextUtils.equals(item.text, newItem.text))) {
+                        itemsToDelete.add(item);
+                    }
+                }
+            }
+            mAdapter.getData().removeAll(itemsToDelete);
         }
     }
 

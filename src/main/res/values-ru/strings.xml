@@ -185,6 +185,7 @@
     <string name="general_dialogs">Диалоги</string>
 
     <string name="general_visitors">Гости</string>
+    <string name="general_visitors_tab_views">просмотры</string>
     <string name="general_profile">Профиль</string>
     <string name="general_settings">Настройки</string>
 
@@ -231,6 +232,12 @@
         <item quantity="many">Чтобы отправить подарок, купите еще %d монет</item>
         <item quantity="other">Чтобы отправить подарок, купите еще %d монет</item>
     </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="one">Чтобы отправить восхищение, купите еще %d монету</item>
+        <item quantity="few">Чтобы отправить восхищение, купите еще %d монеты</item>
+        <item quantity="many">Чтобы отправить восхищение, купите еще %d монет</item>
+        <item quantity="other">Чтобы отправить восхищение, купите еще %d монет</item>
+    </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="one">Чтобы увидеть, кому вы нравитесь, купите еще %d монету</item>
         <item quantity="few">Чтобы увидеть, кому вы нравитесь, купите еще %d монеты</item>
@@ -242,6 +249,12 @@
         <item quantity="few">Чтобы вас все увидели, купите еще %d монеты</item>
         <item quantity="many">Чтобы вас все увидели, купите еще %d монет</item>
         <item quantity="other">Чтобы вас все увидели, купите еще %d монет</item>
+    </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="one">Вам не хватает %d монеты</item>
+        <item quantity="few">Вам не хватает %d монет</item>
+        <item quantity="many">Вам не хватает %d монет</item>
+        <item quantity="other">Вам не хватает %d монет</item>
     </plurals>
     <string name="buying_default_message">Вы можете отправлять подарки и восхищения за монеты</string>
     <string name="buying_money">Покупка монет</string>
@@ -756,4 +769,10 @@
     <string name="logout_if_email_already_registred">Пользователь с таким e-mail уже существует. Если это ваш e-mail, то вам необходимо выйти из текущего аккаунта и зайти в аккаунт %s</string>
     <string name="recover_password_instructions">На ваш e-mail отправлено письмо с инструкцией по восстановлению пароля</string>
     <string name="email_changing">Изменение e-mail</string>
+    <string name="hint_faces_filter">Изменяйте параметры поиска и знакомьтесь с интересными людьми</string>
+    <string name="hint_faces_buy_like">Чем больше у вас симпатий, тем чаще вас оценивают. Не забывайте пополнять запас симпатий.</string>
+    <string name="hint_myprofile_buy_vip">Купите VIP-статус и наслаждайтесь безграничным общением</string>
+    <string name="pull_to_refresh_pull_label">Потяните для обновления…</string>
+    <string name="pull_to_refresh_release_label">Отпустите для обновления…</string>
+    <string name="pull_to_refresh_refreshing_label">Загрузка…</string>
 </resources>

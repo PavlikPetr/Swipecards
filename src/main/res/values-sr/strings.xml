@@ -161,11 +161,6 @@
     <string name="edit_set_as_main">Načiniti da bude glavna</string>
     <string name="edit_delete">Ukloniti</string>
     <string name="edit_restore">Obnoviti</string>
-    <string name="gifts_romantic">Romantika</string>
-    <string name="gifts_friends">Prijateljstvo</string>
-    <string name="gifts_present">Čestitke</string>
-    <string name="gifts_title">Odaberite poklon</string>
-    <string name="gifts_send_btn">Poslati poklon</string>
     <string name="form_not_specified">Nije navedeno</string>
     <string name="form_main">Glavno</string>
     <string name="form_physique">Fizički podaci</string>
