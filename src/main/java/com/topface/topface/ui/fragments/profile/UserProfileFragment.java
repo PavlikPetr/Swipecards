@@ -97,7 +97,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             AttitudeHandler.ActionTypes type = (AttitudeHandler.ActionTypes) intent.getSerializableExtra(AttitudeHandler.TYPE);
             boolean value = intent.getBooleanExtra(AttitudeHandler.VALUE, false);
             Profile profile = getProfile();
-            if (profile != null && type != null) {
+            View root = getView();
+            if (profile != null && type != null && root != null) {
                 switch (type) {
                     case BLACK_LIST:
                         ((User) profile).inBlackList = value;
@@ -108,8 +109,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             }
                             switchBookmarkEnabled(!value);
                         }
-                        getView().findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
-                        getView().findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
+                        root.findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
+                        root.findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
                         break;
                     case BOOKMARK:
                         User user = (User) profile;
@@ -117,17 +118,14 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             user.bookmarked = value;
                             mBookmarkAction.setText(value ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
                         }
-                        View root = getView();
-                        if (root != null) {
-                            //Они могут быть Null, т.к. находятся внутри ViewStub
-                            View favPrBar = root.findViewById(R.id.favPrBar);
-                            if (favPrBar != null) {
-                                favPrBar.setVisibility(View.INVISIBLE);
-                            }
-                            View favIcon = root.findViewById(R.id.favIcon);
-                            if (favIcon != null) {
-                                favIcon.setVisibility(View.VISIBLE);
-                            }
+                        //Они могут быть Null, т.к. находятся внутри ViewStub
+                        View favPrBar = root.findViewById(R.id.favPrBar);
+                        if (favPrBar != null) {
+                            favPrBar.setVisibility(View.INVISIBLE);
+                        }
+                        View favIcon = root.findViewById(R.id.favIcon);
+                        if (favIcon != null) {
+                            favIcon.setVisibility(View.VISIBLE);
                         }
                         break;
                 }
@@ -195,7 +193,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     @Override
     public void onDestroyView() {
-        super.onDestroy();
+        super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
 

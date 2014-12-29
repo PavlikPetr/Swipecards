@@ -79,14 +79,14 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
             case R.id.btnAskLater:
                 EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Later", 1L);
                 saveRatingPopupStatus(System.currentTimeMillis());
-                getDialog().dismiss();
+                dismiss();
                 break;
             case R.id.btnNoThanx:
                 // Используем label: Cancel, как в iOS
                 EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Cancel", 1L);
                 saveRatingPopupStatus(0);
                 sendRateRequest(AppRateRequest.NO_RATE);
-                getDialog().dismiss();
+                dismiss();
                 break;
         }
     }
