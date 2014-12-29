@@ -54,7 +54,7 @@ public class ActionBarCustomViewTitleSetterDelegate extends ActionBarOnlineSette
                         activity.startActivity(intent);
                         activity.finish();
                     } else {
-                        activity.onBackPressed();
+                        activity.finish();
                     }
                 }
             });
