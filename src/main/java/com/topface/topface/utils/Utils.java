@@ -32,6 +32,8 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
@@ -285,5 +287,13 @@ public class Utils {
         } else {
             imageView.setBackground(background);
         }
+    }
+
+    public static ConnectionChangeReceiver.ConnectionType getConnectionType() {
+        AppConfig config = App.getAppConfig();
+        if (config.getDebugConnectionChecked()) {
+            return ConnectionChangeReceiver.ConnectionType.valueOf(config.getDebugConnection());
+        }
+        return ConnectionChangeReceiver.getConnectionType();
     }
 }

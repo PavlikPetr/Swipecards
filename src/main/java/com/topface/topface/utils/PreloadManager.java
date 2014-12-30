@@ -8,6 +8,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
 
 public class PreloadManager<T extends FeedUser> {
 
@@ -18,7 +19,7 @@ public class PreloadManager<T extends FeedUser> {
         this.width = width;
         this.height = height;
 
-        checkConnectionType(ConnectionChangeReceiver.getConnectionType());
+        checkConnectionType();
     }
 
     public PreloadManager() {
@@ -73,16 +74,33 @@ public class PreloadManager<T extends FeedUser> {
         return DefaultImageLoader.getInstance(App.getContext());
     }
 
-    public void checkConnectionType(ConnectionChangeReceiver.ConnectionType type) {
-        switch (type) {
-            case CONNECTION_WIFI:
-                canLoad = true;
-                break;
-            case CONNECTION_OFFLINE:
+    public void checkConnectionType() {
+        canLoad = isPreloadAllowed();
+    }
+
+    public static boolean isPreloadAllowed() {
+        ConnectionChangeReceiver.ConnectionType connectionType = Utils.getConnectionType();
+        int userPreloadTypeId = App.getUserConfig().getPreloadPhotoType().getId();
+        if (userPreloadTypeId == PreloadPhotoSelector.PreloadPhotoSelectorTypes.PRELOAD_OFF.getId()
+                || connectionType.getInt() == ConnectionChangeReceiver.ConnectionType.CONNECTION_OFFLINE.getInt()) {
+            return false;
+        }
+        if (userPreloadTypeId == PreloadPhotoSelector.PreloadPhotoSelectorTypes.ALWAYS_ON.getId()) {
+            return true;
+        }
+        switch (connectionType) {
             case CONNECTION_MOBILE_3G:
+                if (userPreloadTypeId == PreloadPhotoSelector.PreloadPhotoSelectorTypes.WIFI.getId()) {
+                    return false;
+                } else {
+                    return true;
+                }
             case CONNECTION_MOBILE_EDGE:
-                canLoad = false;
-                break;
+                return false;
+            case CONNECTION_WIFI:
+                return true;
+            default:
+                return true;
         }
     }
 }

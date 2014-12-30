@@ -41,6 +41,7 @@ import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
@@ -207,7 +208,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         if (preloadPhoto != null) {
             Point size = Utils.getSrceenSize(this);
             String s = preloadPhoto.getSuitableLink(size.x, size.y);
-            DefaultImageLoader.getInstance(this).preloadImage(s, null);
+            if (PreloadManager.isPreloadAllowed()) {
+                DefaultImageLoader.getInstance(this).preloadImage(s, null);
+            }
         }
 
         if (intent.getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
