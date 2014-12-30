@@ -514,7 +514,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 }
                 if (CacheProfile.photo != null && currentPhoto.getId() == CacheProfile.photo.getId()) {
                     mSetAvatarButton.setText(R.string.your_avatar);
-                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_selected_selector, 0, 0, 0);
+                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_selected, 0, 0, 0);
                 } else {
                     mSetAvatarButton.setText(R.string.on_avatar);
                     mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(CacheProfile.sex == Static.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector, 0, 0, 0);
