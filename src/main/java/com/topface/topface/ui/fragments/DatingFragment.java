@@ -140,7 +140,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onReceive(Context context, Intent intent) {
             if (mPreloadManager != null) {
                 int connectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0);
-                mPreloadManager.checkConnectionType(ConnectionChangeReceiver.ConnectionType.valueOf(connectionType));
+                mPreloadManager.checkConnectionType();
             }
         }
     };
