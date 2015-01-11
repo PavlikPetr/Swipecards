@@ -65,6 +65,7 @@ import com.topface.topface.requests.DeleteMessagesRequest;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
+import com.topface.topface.requests.handlers.ActionMenuHandler;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.ui.ComplainsActivity;
@@ -168,6 +169,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
 
+
+    private ActionMenuHandler mActionMenuHandler = new ActionMenuHandler(App.getContext()) {
+        @Override
+        public void closeActionMenu() {
+            animateHideChatAction();
+        }
+    };
 
     private void switchBookmarkEnabled(boolean enabled) {
         if (mActions != null) {
@@ -844,8 +852,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         ApiRequest request;
                         if (mUser.blocked) {
                             request = new DeleteBlackListRequest(mUser.id, getActivity());
+                            mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BLACK_LIST, mUser.id, false, request);
                         } else {
                             request = new BlackListAddRequest(mUser.id, getActivity());
+                            mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BLACK_LIST, mUser.id, true, request);
                         }
                         request.exec();
                     }
@@ -864,10 +874,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                 if (mUser.bookmarked) {
                     request = new DeleteBookmarksRequest(mUserId, getActivity());
+                    mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BOOKMARK, mUser.id, false, request);
                 } else {
                     request = new BookmarkAddRequest(mUserId, getActivity());
+                    mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BOOKMARK, mUser.id, true, request);
                 }
-
                 request.exec();
                 break;
             case R.id.complain_action:
