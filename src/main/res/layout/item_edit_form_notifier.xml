@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/ivEditBackground"
@@ -11,7 +11,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp"
         android:scaleType="fitXY"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:tag="tvTitle"
@@ -25,7 +25,7 @@
         android:drawablePadding="5dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -46,15 +46,15 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/settings_phone_selector"
                 android:button="@android:color/transparent"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"/>
 
             <ProgressBar
                 android:tag="prsPhone"
-                style="@android:style/Widget.ProgressBar.Small"
+                style="@style/TopFaceProgressBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <!-- e-mail notification -->
@@ -70,15 +70,15 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/settings_mail_selector"
                 android:button="@android:color/transparent"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"/>
 
             <ProgressBar
                 android:tag="prsMail"
-                style="@android:style/Widget.ProgressBar.Small"
+                style="@style/TopFaceProgressBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </RelativeLayout>
     </LinearLayout>
 
