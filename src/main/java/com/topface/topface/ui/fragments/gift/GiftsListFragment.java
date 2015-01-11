@@ -46,6 +46,9 @@ public class GiftsListFragment extends PlainGiftsFragment implements GiftsListAd
 
     @Override
     public void onGridClick(FeedGift item) {
+        if (item == null) {
+            return;
+        }
         getGiftSendListener().onSendGift(item.gift);
     }
 

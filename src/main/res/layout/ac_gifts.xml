@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@color/bg_white">
+    android:layout_height="fill_parent">
 
 
     <ImageView
@@ -19,11 +17,11 @@
         android:layout_below="@id/giftHeaderDivider" />
 
     <RelativeLayout
+        android:id="@+id/lockScreen"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@id/giftHeaderDivider"
         android:background="@color/bg_main"
-        android:visibility="gone"
-        android:id="@+id/lockScreen"
-        android:layout_below="@id/giftHeaderDivider" />
+        android:visibility="gone" />
 
 </RelativeLayout>
