@@ -190,6 +190,11 @@
         <item quantity="other">Bir hediye yollamak için daha fazla %d para gerek</item>
         <item quantity="one">Bir hediye yollamak için daha fazla %d para gerek</item>
     </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="zero">Bir mesaj atmak için %d para alın</item>
+        <item quantity="other">Bir mesaj atmak için daha %d para alın</item>
+        <item quantity="one">Bir mesaj atmak için %d para alın</item>
+    </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="zero">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
         <item quantity="other">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
@@ -199,6 +204,11 @@
         <item quantity="zero">Görünmek için daha fazla %d para gerekli</item>
         <item quantity="other">Görünmek için daha fazla %d para gerekli</item>
         <item quantity="one">Görünmek için daha fazla %d para gerekli</item>
+    </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="zero">%d para gerekir</item>
+        <item quantity="other">%d para gerekir</item>
+        <item quantity="one">%d para gerekir</item>
     </plurals>
     <string name="buying_default_message">Siz, hediyelerinizi ve hayranlığınızı para karşına gönderebilirsiniz</string>
     <string name="buying_money">Para alış verişi</string>
