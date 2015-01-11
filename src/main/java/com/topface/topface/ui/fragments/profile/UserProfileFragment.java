@@ -41,6 +41,7 @@ import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
+import com.topface.topface.requests.handlers.ActionMenuHandler;
 import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ChatActivity;
@@ -90,6 +91,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private RelativeLayout mBlocked;
     private MenuItem mBarActions;
     private ArrayList<FeedGift> mNewGifts;
+    private View mOutsideView;
     // for profile forwarding
     private ApiResponse mSavedResponse = null;
     // controllers
@@ -137,6 +139,13 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         }
     };
 
+    private ActionMenuHandler mActionMenuHandler = new ActionMenuHandler(App.getContext()) {
+        @Override
+        public void closeActionMenu() {
+            closeProfileActions();
+        }
+    };
+
     private int getAnimationTime() {
         return mUserActions.size() * getActivity().getResources().getInteger(R.integer.action_animation_time);
     }
@@ -177,6 +186,14 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         mUserActionsStub = (ViewStub) root.findViewById(R.id.user_actions_stub);
         mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_PROFILE);
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
+        mOutsideView = root.findViewById(R.id.outsideView);
+        mOutsideView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeProfileActions();
+                mOutsideView.setVisibility(View.GONE);
+            }
+        });
         mLockScreen = (RelativeLayout) root.findViewById(R.id.lockScreen);
         mRetryView = new RetryViewCreator.Builder(getActivity(), new View.OnClickListener() {
             @Override
@@ -206,6 +223,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     public void onResume() {
         super.onResume();
         getUserProfile(mProfileId);
+        mOutsideView.setVisibility(View.GONE);
     }
 
     @Override
@@ -217,6 +235,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     private void initActions(ViewStub stub, User user, ArrayList<UserActions.ActionItem> actions) {
+        mOutsideView.setVisibility(View.VISIBLE);
         if (mActions == null) {
             stub.setLayoutResource(R.layout.user_actions_layout);
             mActions = stub.inflate();
@@ -509,6 +528,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                         loader.setVisibility(View.INVISIBLE);
                                         icon.setVisibility(View.VISIBLE);
                                         disableSympathyDelight();
+                                        closeProfileActions();
                                     }
                                 }
 
@@ -551,6 +571,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                         loader.setVisibility(View.INVISIBLE);
                                         icon.setVisibility(View.VISIBLE);
                                         disableSympathyDelight();
+                                        closeProfileActions();
                                     }
                                 }
 
@@ -571,8 +592,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                 }
                             }
                     );
-
-
                     //noinspection deprecation
 //                    ((TextView) v).setAlpha(80);
                 }
@@ -618,8 +637,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         ApiRequest request;
                         if (profile.inBlackList) {
                             request = new DeleteBlackListRequest(profile.uid, getActivity());
+                            mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BLACK_LIST, profile.uid, false, request);
                         } else {
                             request = new BlackListAddRequest(profile.uid, getActivity());
+                            mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BLACK_LIST, profile.uid, true, request);
                         }
                         request.exec();
                     }
@@ -630,17 +651,16 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             case R.id.add_to_bookmark_action:
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
                 final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
-
                 loader.setVisibility(View.VISIBLE);
                 icon.setVisibility(View.GONE);
                 ApiRequest request;
-
                 if (profile instanceof User && ((User) profile).bookmarked) {
                     request = new DeleteBookmarksRequest(profile.uid, getActivity());
+                    mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BOOKMARK, profile.uid, false, request);
                 } else {
                     request = new BookmarkAddRequest(profile.uid, getActivity());
+                    mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BOOKMARK, profile.uid, true, request);
                 }
-
                 request.exec();
                 break;
             case R.id.complain_action:
@@ -659,6 +679,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private void closeProfileActions() {
         if (mBarActions != null && mBarActions.isChecked()) {
             onOptionsItemSelected(mBarActions);
+            mOutsideView.setVisibility(View.GONE);
         }
     }
 
