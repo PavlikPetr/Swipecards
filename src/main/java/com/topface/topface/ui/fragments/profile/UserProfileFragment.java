@@ -26,7 +26,10 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.FeedGift;
+import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -86,6 +89,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private ViewStub mUserActionsStub;
     private RelativeLayout mBlocked;
     private MenuItem mBarActions;
+    private ArrayList<FeedGift> mNewGifts;
     // for profile forwarding
     private ApiResponse mSavedResponse = null;
     // controllers
@@ -195,6 +199,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     public void onDestroyView() {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mGiftReceiver);
     }
 
     @Override
@@ -281,6 +286,16 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             barActionsItem.setChecked(mBarActions.isChecked());
         }
         mBarActions = barActionsItem;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(
+                        mGiftReceiver,
+                        new IntentFilter(PhotoSwitcherActivity.ADD_NEW_GIFT)
+                );
     }
 
     @Override
@@ -673,5 +688,66 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     @Override
     protected UserGiftsFragment getGiftFragment() {
         return (UserGiftsFragment) super.getGiftFragment();
+    }
+
+    private BroadcastReceiver mGiftReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            addNewFeedGift(getGiftFromIntent(intent));
+        }
+    };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case GiftsActivity.INTENT_REQUEST_GIFT:
+                if (resultCode == Activity.RESULT_OK) {
+                    addNewFeedGift(getGiftFromIntent(data));
+                }
+                break;
+        }
+    }
+
+    public ArrayList<FeedGift> getNewGifts() {
+        if (mNewGifts == null) {
+            return new ArrayList<>();
+        } else {
+            return mNewGifts;
+        }
+    }
+
+    public void clearNewFeedGift() {
+        if (mNewGifts != null) {
+            mNewGifts.clear();
+        }
+    }
+
+    private void addNewFeedGift(FeedGift data) {
+        if (data != null) {
+            getProfile().gifts.add(0, data.gift);
+            if (mNewGifts == null) {
+                mNewGifts = new ArrayList<>();
+            }
+            mNewGifts.add(0, data);
+        }
+    }
+
+
+    private FeedGift getGiftFromIntent(Intent data) {
+        FeedGift feedGift = null;
+        if (data.hasExtra(PhotoSwitcherActivity.INTENT_GIFT)) {
+            feedGift = data.getParcelableExtra(PhotoSwitcherActivity.INTENT_GIFT);
+        } else {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
+                if (sendGiftAnswer != null) {
+                    feedGift = new FeedGift();
+                    feedGift.gift = new Gift(Integer.parseInt(sendGiftAnswer.history.id), 0, Gift.PROFILE, sendGiftAnswer.history.link);
+                }
+            }
+        }
+        return feedGift;
     }
 }
