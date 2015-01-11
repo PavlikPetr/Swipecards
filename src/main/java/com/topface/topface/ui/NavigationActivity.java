@@ -370,7 +370,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onResumeFragments() {
         super.onResumeFragments();
-        if (mPendingNextIntent != null) {
+        if (isLoggedIn() && mPendingNextIntent != null) {
             showFragment(mPendingNextIntent);
             mPendingNextIntent = null;
         }
