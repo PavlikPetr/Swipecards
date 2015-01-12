@@ -78,11 +78,13 @@ public class MarketBuyingFragment extends CoinsBuyingFragment {
     public void onInAppBillingUnsupported() {
         //Если платежи не поддерживаются, то скрываем все кнопки
         View view = getView();
-        view.findViewById(R.id.likes_title).setVisibility(View.GONE);
-        view.findViewById(R.id.coins_title).setVisibility(View.GONE);
-        view.findViewById(R.id.fbCoins).setVisibility(View.GONE);
-        view.findViewById(R.id.fbLikes).setVisibility(View.GONE);
-        view.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
+        if (view != null) {
+            view.findViewById(R.id.likes_title).setVisibility(View.GONE);
+            view.findViewById(R.id.coins_title).setVisibility(View.GONE);
+            view.findViewById(R.id.fbCoins).setVisibility(View.GONE);
+            view.findViewById(R.id.fbLikes).setVisibility(View.GONE);
+            view.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

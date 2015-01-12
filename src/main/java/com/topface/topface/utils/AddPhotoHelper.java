@@ -257,7 +257,7 @@ public class AddPhotoHelper {
         }
         Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
         showProgressDialog();
-        mNotificationManager = UserNotificationManager.getInstance(mContext);
+        mNotificationManager = UserNotificationManager.getInstance();
 
         final PhotoNotificationListener notificationListener = new PhotoNotificationListener();
 
