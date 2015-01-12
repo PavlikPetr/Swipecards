@@ -42,7 +42,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     public static final String AUTH_TAG = "AUTH";
     public static final String IGNORE_NOTIFICATION_INTENT = "IGNORE_NOTIFICATION_INTENT";
-    private static final String NOTIFICATION_ID_FORM = "gcm_%d_%s";
+    private static final String APP_START_LABEL_FORM = "gcm_%d_%s";
 
     private boolean mIndeterminateSupported = false;
 
@@ -65,7 +65,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
-            App.setStartLabel(String.format(NOTIFICATION_ID_FORM,
+            App.setStartLabel(String.format(APP_START_LABEL_FORM,
                     intent.getIntExtra(GCMUtils.GCM_TYPE, -1),
                     intent.getStringExtra(GCMUtils.GCM_LABEL)));
         }

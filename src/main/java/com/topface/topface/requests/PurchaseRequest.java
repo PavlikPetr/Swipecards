@@ -52,7 +52,7 @@ abstract public class PurchaseRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        requestData.put("notification_id", App.getStartLabel());
+        requestData.put("appStartLabel", App.getStartLabel());
         return requestData;
     }
 
