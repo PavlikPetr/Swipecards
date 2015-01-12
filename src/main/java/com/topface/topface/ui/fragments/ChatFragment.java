@@ -29,8 +29,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -43,6 +41,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
 import com.topface.framework.utils.Debug;
@@ -91,6 +91,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.ActionBarOnlineSetterDelegate;
 import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
+import com.topface.topface.utils.actionbar.TopMenu;
 import com.topface.topface.utils.controllers.PopularUserChatController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
@@ -102,10 +103,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 
+import static com.topface.topface.utils.actionbar.TopMenu.CURRENT_RESOURCE;
+import static com.topface.topface.utils.actionbar.TopMenu.TopMenuItem;
+import static com.topface.topface.utils.actionbar.TopMenu.TopMenuItem.ADD_TO_BLACK_LIST_ACTION;
+import static com.topface.topface.utils.actionbar.TopMenu.findTopMenuItemById;
+import static com.topface.topface.utils.actionbar.TopMenu.getChatTopMenu;
+import static com.topface.topface.utils.actionbar.TopMenu.getCurrentResourceId;
+import static com.topface.topface.utils.actionbar.TopMenu.getNextResourceId;
+import static com.topface.topface.utils.actionbar.TopMenu.isCurrentIdTopMenuItem;
+
 public class ChatFragment extends BaseFragment implements View.OnClickListener, IUserOnlineListener {
 
     public static final int LIMIT = 50;
     public static final int PROGRESS_BAR_DELAY = 3000;
+    public static final int AnimationTime = 80;
 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
@@ -164,6 +175,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         }
                         break;
                 }
+                initTopMenu(mUser);
             }
         }
     };
@@ -380,6 +392,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 mAdapter.setData(historyData);
                 mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                initTopMenu(mUser);
                 if (wasFailed) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 } else {
@@ -636,6 +649,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             mUser = data.user;
                             if (!mUser.isEmpty()) {
                                 onUserLoaded(mUser);
+                                initTopMenu(mUser);
                             }
                             return;
                         } else if (blockStage == PopularUserChatController.SECOND_STAGE) {
@@ -823,6 +837,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mAdapter.release();
         }
         mAdapter = null;
+    }
+
+    private void onClickAddToBlackList() {
+        if (CacheProfile.premium) {
+            if (mUser.id > 0 && mBarActions != null && mBarActions.hasSubMenu()) {
+                MenuItem blackListMenuItem = mBarActions.getSubMenu().findItem(ADD_TO_BLACK_LIST_ACTION.getId());
+                int currentResourceId = getCurrentResourceId(blackListMenuItem.getItemId(), blackListMenuItem.getIntent());
+                ApiRequest request;
+                if (currentResourceId == ADD_TO_BLACK_LIST_ACTION.getSecondResourceId()) {
+                    request = new DeleteBlackListRequest(mUser.id, getActivity());
+                } else {
+                    request = new BlackListAddRequest(mUser.id, getActivity());
+                }
+                request.exec();
+            }
+        } else {
+            startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
+        }
     }
 
     @Override
@@ -1071,6 +1103,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         setSupportProgressBarIndeterminateVisibility(false);
     }
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -1083,10 +1116,76 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         setActionBarAvatar(mUser);
 
         MenuItem barActionsItem = menu.findItem(R.id.action_user_actions_list);
+//        if (barActionsItem != null && barActionsItem.hasSubMenu()) {
+//            barActionsItem.getSubMenu().clear();
+//            barActionsItem.getSubMenu().add(Menu.NONE, 11, Menu.NONE, "11");
+//            barActionsItem.getSubMenu().add(Menu.NONE, 12, Menu.NONE, "12");
+//            barActionsItem.getSubMenu().add(Menu.NONE, 13, Menu.NONE, "13");
+//            barActionsItem.getSubMenu().add(Menu.NONE, 14, Menu.NONE, "14");
+//        }
+//        if (mUser != null) {
+//            barActionsItem.getSubMenu().clear();
+//            barActionsItem.getSubMenu().add(0, 1, 0,
+//                    "1"
+//            );
+//            barActionsItem.getSubMenu().add(0, 2, 0,
+//                    "2"
+//            );
+//            barActionsItem.getSubMenu().add(0, 3, 0,
+//                    "3"
+//            );
+//            barActionsItem.getSubMenu().add(0, 4, 0,
+//                    "4"
+//            );
+//            barActionsItem.getSubMenu().add(0, 5, 0,
+//                    "5"
+//            );
+//            barActionsItem.getSubMenu().add(0, 1, 0,
+//                    mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short
+//            );
+//            barActionsItem.getSubMenu().add(0, 2, 0,
+//                    mUser.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add
+//            );
+//            barActionsItem.getSubMenu().add(0, 3, 0,
+//                    mUser.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add
+//            );
+//        }
         if (barActionsItem != null && mBarActions != null) {
             barActionsItem.setChecked(mBarActions.isChecked());
         }
         mBarActions = barActionsItem;
+        initTopMenu(mUser);
+    }
+
+    private void initTopMenu(FeedUser user) {
+        if (mBarActions != null && mBarActions.hasSubMenu()) {
+            if (user != null) {
+                mBarActions.getSubMenu().clear();
+                ArrayList<TopMenu.TopMenuItem> topMenuItemArray = getChatTopMenu();
+                for (int i = 0; i < topMenuItemArray.size(); i++) {
+                    TopMenuItem item = topMenuItemArray.get(i);
+                    int resourceId = 0;
+                    switch (topMenuItemArray.get(i)) {
+                        case ADD_TO_BLACK_LIST_ACTION:
+                            if (user != null) {
+                                resourceId = user.blocked ? item.getSecondResourceId() : item.getFirstResourceId();
+                            }
+                            break;
+                        case ADD_TO_BOOKMARK_ACTION:
+                            if (user != null) {
+                                resourceId = user.bookmarked ? item.getSecondResourceId() : item.getFirstResourceId();
+                            }
+                            break;
+                        default:
+                            resourceId = item.getFirstResourceId();
+                            break;
+                    }
+                    mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId).setIntent(new Intent().putExtra(CURRENT_RESOURCE, resourceId));
+                }
+            } else {
+                mBarActions.getSubMenu().clear();
+            }
+        }
     }
 
     @Override
@@ -1106,7 +1205,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        int itemId = item.getItemId();
+        if (isCurrentIdTopMenuItem(itemId)) {
+            TopMenuItem topMenuItem = findTopMenuItemById(itemId);
+            switch (topMenuItem) {
+                case ADD_TO_BLACK_LIST_ACTION:
+                    onClickAddToBlackList();
+                    break;
+                default:
+                    break;
+            }
+            int resourceId = getNextResourceId(itemId, item.getIntent());
+            item.setTitle(resourceId);
+            item.setIntent(new Intent().putExtra(CURRENT_RESOURCE, resourceId));
+        }
+        switch (itemId) {
             case R.id.action_profile:
                 if (mUser != null) {
                     if (!(mUser.deleted || mUser.banned)) {
@@ -1119,15 +1232,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 return true;
             case R.id.action_user_actions_list:
-                if (mUser != null) {
-                    initActions(mChatActionsStub, mUser, getActionItems());
-                    boolean checked = item.isChecked();
-                    item.setChecked(!checked);
-                    changeChatActionState();
+
+                if (mUser != null && mBarActions != null) {
+                    if (!mBarActions.getSubMenu().hasVisibleItems()) {
+                        initTopMenu(mUser);
+                    }
                 }
+//                    initActions(mChatActionsStub, mUser, getActionItems());
+//                    boolean checked = item.isChecked();
+//                    item.setChecked(!checked);
+//                initTopMenu(mUser);
+//                    changeChatActionState();
+//                    showPopupMenu(mListView);
+//                }
                 return true;
             case android.R.id.home:
                 Utils.hideSoftKeyboard(getActivity(), mEditBox);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -1178,23 +1299,35 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (mActions == null || mActions.getVisibility() == View.INVISIBLE) {
             return false;
         }
-        TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -getChatActionsViewHeight());
-        ta.setDuration(getAnimationTime());
-        ta.setAnimationListener(new Animation.AnimationListener() {
+        ViewPropertyAnimator animationHide = ViewPropertyAnimator.animate(mActions);
+        animationHide.setDuration(AnimationTime);
+        animationHide.scaleXBy(1f);
+        animationHide.scaleX(0.9f);
+        animationHide.scaleYBy(1f);
+        animationHide.scaleY(0.9f);
+        animationHide.alphaBy(1f);
+        animationHide.alpha(0f);
+        animationHide.setListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animation animation) {
+            public void onAnimationStart(Animator animation) {
             }
 
             @Override
-            public void onAnimationEnd(Animation animation) {
+            public void onAnimationEnd(Animator animation) {
                 mActions.setVisibility(View.INVISIBLE);
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
             }
         });
-        mActions.startAnimation(ta);
+        animationHide.start();
         return true;
     }
 
@@ -1202,23 +1335,36 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (mActions == null || mActions.getVisibility() == View.VISIBLE) {
             return;
         }
-        TranslateAnimation ta = new TranslateAnimation(0, 0, -getChatActionsViewHeight(), 0);
-        ta.setDuration(getAnimationTime());
-        ta.setAnimationListener(new Animation.AnimationListener() {
+        ViewPropertyAnimator animationShow = ViewPropertyAnimator.animate(mActions);
+        animationShow.setDuration(AnimationTime);
+        animationShow.scaleXBy(0.9f);
+        animationShow.scaleX(1f);
+        animationShow.scaleYBy(0.9f);
+        animationShow.scaleY(1f);
+        animationShow.alphaBy(0f);
+        animationShow.alpha(1f);
+        animationShow.setListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animation animation) {
+            public void onAnimationStart(Animator animation) {
                 mActions.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onAnimationEnd(Animation animation) {
+            public void onAnimationEnd(Animator animation) {
+
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
             }
         });
-        mActions.startAnimation(ta);
+        animationShow.start();
     }
 
     private int getAnimationTime() {
@@ -1280,4 +1426,42 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private boolean isShowKeyboardInChat() {
         return Device.getMaxDisplaySize() >= getActivity().getResources().getDimension(R.dimen.min_screen_height_chat_fragment);
     }
+
+//    private void showPopupMenu(View v) {
+//        PopupMenu popupMenu = new PopupMenu(getActivity(), getSupportActionBar());
+//        popupMenu.inflate(R.menu.popup_menu); // Для Android 4.0
+//        // для версии Android 3.0 нужно использовать длинный вариант
+//        // popupMenu.getMenuInflater().inflate(R.menu.popupmenu,
+//        // popupMenu.getMenu());
+//
+//        popupMenu
+//                .setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        // Toast.makeText(PopupMenuDemoActivity.this,
+//                        // item.toString(), Toast.LENGTH_LONG).show();
+//                        // return true;
+//                        switch (item.getItemId()) {
+//
+//                            case R.id.menu1:
+//                                return true;
+//                            case R.id.menu2:
+//                                return true;
+//                            case R.id.menu3:
+//                                return true;
+//                            default:
+//                                return false;
+//                        }
+//                    }
+//                });
+//
+//        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+//
+//            @Override
+//            public void onDismiss(PopupMenu menu) {
+//            }
+//        });
+//        popupMenu.show();
+//    }
 }
