@@ -127,6 +127,11 @@ Sa oled müksanud.</string>
     <string name="filter_cities_all">Kõikides linnades</string>
     <string name="buying_header_title">Ostud</string>
     <string name="buying_money">Müntide ost</string>
+    <string name="gifts_romantic">Romantika</string>
+    <string name="gifts_friends">Sõprus</string>
+    <string name="gifts_present">Õnnitlused</string>
+    <string name="gifts_title">Vali kingitus</string>
+    <string name="gifts_send_btn">Saada kingitus</string>
     <string name="profile_header_title">Minu konto</string>
     <string name="profile_add_album">Valida olemasolevate seast/hulgast</string>
     <string name="profile_add_camera">Teha pilt/foto</string>

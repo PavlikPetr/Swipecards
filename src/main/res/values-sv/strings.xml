@@ -190,6 +190,11 @@
     </plurals>
     <string name="buying_default_message">För mynt kan du skicka gåvor och visa beundran</string>
     <string name="buying_money">Köp mynt</string>
+    <string name="gifts_romantic">Romantiska</string>
+    <string name="gifts_friends">Vänliga</string>
+    <string name="gifts_present">Gratulationer</string>
+    <string name="gifts_title">Välj gåva</string>
+    <string name="gifts_send_btn">Skicka gåva</string>
     <string name="profile_header_title">Min profil</string>
     <string name="profile_add_album">Välj av de befintliga</string>
     <string name="profile_add_camera">Ta bild</string>
