@@ -78,7 +78,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
-    private static NavigationActivity instance = null;
     private Intent mPendingNextIntent;
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
@@ -139,13 +138,16 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         MenuFragment.onLogout();
     }
 
-    public static void restartNavigationActivity(FragmentId fragmentId) {
-        Activity activity = instance;
+    /**
+     * Перезапускает NavigationActivity, нужно например при смене языка
+     *
+     * @param activity активити, которое принадлежит тому же таску, что и старый NavigationActivity
+     */
+    public static void restartNavigationActivity(Activity activity) {
         Intent intent = new Intent(activity, NavigationActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(GCMUtils.NEXT_INTENT, fragmentId);
+                .putExtra(GCMUtils.NEXT_INTENT, CacheProfile.getOptions().startPageFragmentId);
         activity.startActivity(intent);
-        activity.finish();
     }
 
     @Override
@@ -179,7 +181,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
-        instance = this;
         if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -448,7 +449,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 }
             }, 3000);
             mBackPressedOnce.set(true);
-            Toast.makeText(this, R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getContext(), R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT).show();
             isPopupVisible = false;
         } else {
             super.onBackPressed();
@@ -508,6 +509,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (mFullscreenController != null) {
             mFullscreenController.onDestroy();
         }
+        mDrawerToggle = null;
         super.onDestroy();
     }
 
