@@ -746,7 +746,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     private void addNewFeedGift(FeedGift data) {
         if (data != null) {
-            getProfile().gifts.add(0, data.gift);
+            Profile profile = getProfile();
+            if (profile != null) {
+                getProfile().gifts.add(0, data.gift);
+            }
             if (mNewGifts == null) {
                 mNewGifts = new ArrayList<>();
             }
