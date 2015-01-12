@@ -129,7 +129,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
                 holder.title.setText(item.title.toUpperCase(Locale.getDefault()));
                 if (item.value != null && !TextUtils.isEmpty(item.value.trim()) && item.dataId != FormItem.NOT_SPECIFIED_ID) {
                     holder.state.setImageResource(R.drawable.user_cell);
-                    holder.value.setText(item.value.toLowerCase(Locale.getDefault()));
+                    holder.value.setText(item.value);
                     holder.value.setVisibility(View.VISIBLE);
                     holder.fill.setVisibility(View.GONE);
                 } else {

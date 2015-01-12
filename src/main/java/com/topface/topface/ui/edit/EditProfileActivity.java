@@ -547,6 +547,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, mFormItem.titleId);
             intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, mFormItem.value);
             if (mFormItem.dataId == FormItem.NO_RESOURCE_ID) {
+                if (mFormItem.getLimitInterface()!=null){
+                    intent.putExtra(EditContainerActivity.INTENT_FORM_LIMIT_VALUE, mFormItem.getLimitInterface().getLimit());
+                }
                 startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM);
             } else {
                 intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, mFormItem.dataId);

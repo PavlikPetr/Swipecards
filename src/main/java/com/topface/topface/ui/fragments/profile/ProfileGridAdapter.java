@@ -38,9 +38,6 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     }
 
     public void updateData() {
-        if (mPhotoLinks.isEmpty()) {
-            mPhotoLinks.add(new Photo());
-        }
         if (CacheProfile.photo != null) {
             Photos photos = (Photos) CacheProfile.photos.clone();
             photos.removeAll(mPhotoLinks);
@@ -109,6 +106,10 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
             photoLinks.remove(0);
         }
         return photoLinks;
+    }
+
+    public Photos getPhotoLinks() {
+        return mPhotoLinks;
     }
 
     @Override

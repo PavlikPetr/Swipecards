@@ -212,11 +212,6 @@
     <string name="edit_set_as_main">Κάντε τη κύρια</string>
     <string name="edit_delete">Κατάργηστε</string>
     <string name="edit_restore">Αποκαταστήστε</string>
-    <string name="gifts_romantic">Ρομαντισμό</string>
-    <string name="gifts_friends">Φιλία</string>
-    <string name="gifts_present">Συγχαρητήρια</string>
-    <string name="gifts_title">Επιλέξτε ένα δώρο</string>
-    <string name="gifts_send_btn">Στείλτε ένα δώρο</string>
     <string name="form_not_specified">Αδιάφορο</string>
     <string name="form_main">Βασική</string>
     <string name="form_physique">Σωματική διάπλαση</string>

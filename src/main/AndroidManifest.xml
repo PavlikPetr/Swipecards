@@ -153,6 +153,10 @@
         </activity>
 
         <activity
+            android:name=".ui.GiftsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Topface.Gifts" />
+        <activity
             android:name=".ui.TopfaceAuthActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.NoActionBar"/>
@@ -169,7 +173,6 @@
         <activity
             android:name=".ui.edit.EditContainerActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.GiftsActivity"/>
         <activity
             android:name=".ui.LeadersActivity"
             android:screenOrientation="portrait"/>
@@ -324,7 +327,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <activity
-            android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
+            android:name="com.sponsorpay.publisher.ofw.SPOfferWallActivity"
             android:configChanges="orientation"/>
 
         <activity
@@ -367,7 +370,7 @@
         <!-- gcm -->
         <service android:name=".GcmIntentService"/>
         <receiver
-            android:name="com.topface.topface.utils.gcmutils.GcmBroadcastReceiver"
+            android:name=".utils.gcmutils.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
@@ -410,7 +413,7 @@
         </receiver>
 
         <receiver
-            android:name="com.sponsorpay.sdk.android.advertiser.InstallReferrerReceiver"
+            android:name="com.sponsorpay.advertiser.InstallReferrerReceiver"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
@@ -419,7 +422,7 @@
         </receiver>
 
         <receiver
-            android:name="com.topface.topface.receivers.NotificationClosedReceiver"
+            android:name=".receivers.NotificationClosedReceiver"
             tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.topface.topface.NOTIFICATION_CLOSED"/>

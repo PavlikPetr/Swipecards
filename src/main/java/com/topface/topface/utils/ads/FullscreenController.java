@@ -12,6 +12,8 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -22,6 +24,7 @@ import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.TfStatConsts;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -243,6 +246,10 @@ public class FullscreenController {
             @Override
             public void success(final Banner data, IApiResponse response) {
                 if (data.action.equals(Banner.ACTION_URL)) {
+                    //Срезы для статистики
+                    final Slices slices = new Slices();
+                    slices.put(TfStatConsts.val, data.name);
+
                     if (showFullscreenBanner(data.parameter)) {
                         isFullScreenBannerVisible = true;
                         addLastFullscreenShowedTime();
@@ -250,11 +257,13 @@ public class FullscreenController {
                         final ViewGroup bannerContainer = getFullscreenBannerContainer();
                         bannerContainer.addView(fullscreenViewGroup);
                         bannerContainer.setVisibility(View.VISIBLE);
+                        StatisticsTracker.getInstance().sendEvent("mobile_tf_fullscreen_show", slices);
                         final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
                         fullscreenImage.setRemoteSrc(data.url);
                         fullscreenImage.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                StatisticsTracker.getInstance().sendEvent("mobile_tf_fullscreen_click", slices);
                                 AppConfig config = App.getAppConfig();
                                 config.addFullscreenUrl(data.parameter);
                                 config.saveConfig();
@@ -268,6 +277,7 @@ public class FullscreenController {
                             @Override
                             public void onClick(View v) {
                                 hideFullscreenBanner(bannerContainer);
+                                StatisticsTracker.getInstance().sendEvent("mobile_tf_fullscreen_close", slices);
                             }
                         });
                     }

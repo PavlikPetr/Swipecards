@@ -4,7 +4,6 @@
     <color name="semitransparent_black">#50000000</color>
     <!--flat design-->
     <color name="bg_left_menu">#212121</color>
-    <color name="bg_actionbar">#4D4D4D</color>
     <color name="bg_main">#4D4D4D</color>
     <color name="bg_leaders_block">#373737</color>
     <color name="bg_action_mode">#373737</color>
@@ -21,6 +20,7 @@
     <color name="bg_holo">#F1F1F1</color>
     <color name="bg_white">#FFFFFF</color>
     <color name="bg_light_blue">#AEE5FD</color>
+    <color name="blue_60_percent">#99AEE5FD</color>
     <color name="text_color_gray">#333333</color>
 
     <color name="tab_counter_text_color_selected">#33B5E5</color>

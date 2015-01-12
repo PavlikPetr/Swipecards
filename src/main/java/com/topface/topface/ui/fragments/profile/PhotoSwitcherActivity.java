@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -12,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,8 +26,12 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
+import com.topface.topface.data.FeedGift;
+import com.topface.topface.data.Gift;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.data.Profile;
+import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -36,9 +43,11 @@ import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -52,12 +61,15 @@ import java.util.ArrayList;
 
 public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
+    public static final String ADD_NEW_GIFT = "add_new_gift";
+
     public static final String INTENT_MORE = "more";
     public static final String INTENT_CLEAR = "clear";
     public static final String DEFAULT_UPDATE_PHOTOS_INTENT = "com.topface.topface.updatePhotos";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_ALBUM_POS = "album_position";
     public static final String INTENT_PHOTOS = "album_photos";
+    public static final String INTENT_GIFT = "user_gift";
     public static final String INTENT_PHOTOS_COUNT = "photos_count";
     public static final String INTENT_PHOTOS_FILLED = "photos_filled";
     public static final String INTENT_PRELOAD_PHOTO = "preload_photo";
@@ -70,30 +82,46 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         @Override
         public void onClick(View v) {
             if (mPhotoAlbumControl != null) {
-                mPhotoAlbumControl.setVisibility(
-                        mPhotoAlbumControl.getVisibility() == View.GONE ?
-                                View.VISIBLE :
-                                View.GONE
-                );
-                mPhotoAlbumControlVisibility = mPhotoAlbumControl.getVisibility();
-                mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
-                if (mPhotoAlbumControlVisibility == View.VISIBLE) {
-                    getSupportActionBar().show();
-                } else {
-                    getSupportActionBar().hide();
-                }
+                setPhotoAlbumControlVisibility(mPhotoAlbumControl.getVisibility() == View.GONE ||
+                        mPhotoAlbumControl.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.GONE, true);
             }
         }
     };
+
+    private static final int ANIMATION_TIME = 200;
+
     private ViewGroup mPhotoAlbumControl;
     private ViewGroup mOwnPhotosControl;
+    private ImageViewRemote mGiftImage;
     private int mPhotoAlbumControlVisibility = View.VISIBLE;
     private int mOwnPhotosControlVisibility = View.GONE;
     private Photos mPhotoLinks;
     private Photos mDeletedPhotos = new Photos();
     private ImageSwitcherLooped mImageSwitcher;
     private int mUid;
+    private String mUserGiftLink;
     private PhotosManager mPhotosManager = new PhotosManager();
+    private TranslateAnimation mCurrentAnimation;
+    private TranslateAnimation mAnimationHide = null;
+    private TranslateAnimation mAnimationShow = null;
+    private Animation.AnimationListener mAnimationListener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            if (mCurrentAnimation == mAnimationShow) {
+                mPhotoAlbumControl.setVisibility(View.VISIBLE);
+            } else if (mCurrentAnimation == mAnimationHide) {
+                mPhotoAlbumControl.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+        }
+    };
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
@@ -145,11 +173,11 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
     };
 
-    public static Intent getPhotoSwitcherIntent(int position, int userId, int photosCount, ProfileGridAdapter adapter) {
-        return getPhotoSwitcherIntent(position, userId, photosCount, adapter.getAdaprerData());
+    public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, ProfileGridAdapter adapter) {
+        return getPhotoSwitcherIntent(gifts, position, userId, photosCount, adapter.getPhotos());
     }
 
-    public static Intent getPhotoSwitcherIntent(int position, int userId, int photosCount, Photos photos) {
+    public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, Photos photos) {
         Intent intent = new Intent(App.getContext(), PhotoSwitcherActivity.class);
         intent.putExtra(INTENT_USER_ID, userId);
         //Если первый элемент - это фейковая фотка, то смещаем позицию показа
@@ -157,6 +185,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         intent.putExtra(INTENT_PHOTOS_COUNT, photosCount);
         intent.putExtra(INTENT_PHOTOS_FILLED, true);
         intent.putParcelableArrayListExtra(INTENT_PHOTOS, photos);
+        intent.putParcelableArrayListExtra(INTENT_GIFT, gifts);
         return intent;
     }
 
@@ -209,7 +238,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             String s = preloadPhoto.getSuitableLink(size.x, size.y);
             DefaultImageLoader.getInstance(this).preloadImage(s, null);
         }
-
+        extractUserGifts(intent);
         if (intent.getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
             int photosCount = intent.getIntExtra(INTENT_PHOTOS_COUNT, 0);
             int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);
@@ -229,13 +258,45 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
     }
 
+    private void extractUserGifts(Intent intent) {
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            ArrayList<Gift> array = extras.getParcelableArrayList(INTENT_GIFT);
+            if (array != null && array.size() > 0) {
+                mUserGiftLink = array.get(0).link;
+            }
+        }
+    }
+
+    private void setPhotoAlbumControlVisibility(int state, boolean isAnimated) {
+        if (state == View.GONE || state == View.INVISIBLE) {
+            mPhotoAlbumControlVisibility = View.GONE;
+            mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
+            getSupportActionBar().hide();
+            if (isAnimated) {
+                animateHidePhotoAlbumControlAction();
+            } else {
+                hidePhotoAlbumControlAction();
+            }
+            animateHidePhotoAlbumControlAction();
+        } else {
+            mPhotoAlbumControlVisibility = View.VISIBLE;
+            mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
+            getSupportActionBar().show();
+            if (isAnimated) {
+                animateShowPhotoAlbumControlAction();
+            } else {
+                showPhotoAlbumControlAction();
+            }
+        }
+    }
+
     private void initViews(int position, int photosCount) {
 
         int rest = photosCount - mPhotoLinks.size();
         for (int i = 0; i < rest; i++) {
             mPhotoLinks.add(new Photo());
         }
-
         // Gallery
         // stub is needed, because sometimes(while gallery is waiting for user profile load)
         // ViewPager becomes visible without data
@@ -254,7 +315,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mPhotoAlbumControl.setVisibility(mPhotoAlbumControlVisibility);
+        setPhotoAlbumControlVisibility(mPhotoAlbumControlVisibility, true);
         if (!getIntent().getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
             mUserProfileLoader.loadUserProfile(this);
         }
@@ -264,6 +325,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     protected void onLoadProfile() {
         super.onLoadProfile();
         initControls();
+        initGiftImage();
         refreshButtonsState();
     }
 
@@ -362,6 +424,48 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     private int calcRealPosition(int position, int realItemsAmount) {
         return position % realItemsAmount;
+    }
+
+    private void initGiftImage() {
+        mGiftImage = (ImageViewRemote) mPhotoAlbumControl.findViewById(R.id.loGiftImage);
+        mGiftImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(
+                        GiftsActivity.getSendGiftIntent(PhotoSwitcherActivity.this, mUid),
+                        GiftsActivity.INTENT_REQUEST_GIFT
+                );
+            }
+        });
+        if (mUid == CacheProfile.uid) {
+            mGiftImage.setVisibility(View.GONE);
+        } else {
+            mGiftImage.setVisibility(View.VISIBLE);
+            showGiftImage();
+        }
+    }
+
+    private void showGiftImage(String link) {
+        mUserGiftLink = link;
+        showGiftImage();
+    }
+
+    private void showGiftImage() {
+        if (mGiftImage != null) {
+            if (mUserGiftLink != null) {
+                // show last added gift
+                // at first drop background
+                // after set image
+                mGiftImage.setBackgroundResource(0);
+                mGiftImage.setRemoteSrc(mUserGiftLink);
+            } else {
+                // show default image when user haven't any gifts yet
+                // at first drop image
+                // after set background
+                mGiftImage.setImageDrawable(null);
+                mGiftImage.setBackgroundResource(R.drawable.ic_gift);
+            }
+        }
     }
 
     private void initControls() {
@@ -514,7 +618,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 }
                 if (CacheProfile.photo != null && currentPhoto.getId() == CacheProfile.photo.getId()) {
                     mSetAvatarButton.setText(R.string.your_avatar);
-                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_selected_selector, 0, 0, 0);
+                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_selected, 0, 0, 0);
                 } else {
                     mSetAvatarButton.setText(R.string.on_avatar);
                     mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(CacheProfile.sex == Static.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector, 0, 0, 0);
@@ -724,5 +828,99 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         private void showForNotExisting() {
             showLockWithText(getString(R.string.user_does_not_exist), true);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case GiftsActivity.INTENT_REQUEST_GIFT:
+                if (resultCode == Activity.RESULT_OK) {
+                    FeedGift feedGift = getFeedGiftFromIntent(data);
+                    if (feedGift != null) {
+                        Intent intent = new Intent(ADD_NEW_GIFT);
+                        intent.putExtra(INTENT_GIFT, feedGift);
+                        LocalBroadcastManager.getInstance(this)
+                                .sendBroadcast(intent);
+                    }
+                }
+                break;
+        }
+    }
+
+    private FeedGift getFeedGiftFromIntent(Intent data) {
+        FeedGift feedGift = null;
+        Bundle extras = data.getExtras();
+        if (extras != null) {
+            SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
+            if (sendGiftAnswer != null) {
+                showGiftImage(sendGiftAnswer.history.link);
+                feedGift = new FeedGift();
+                feedGift.gift = new Gift(
+                        Integer.parseInt(sendGiftAnswer.history.id),
+                        0,
+                        Gift.PROFILE, sendGiftAnswer.history.link);
+            }
+        }
+        return feedGift;
+    }
+
+    private void hidePhotoAlbumControlAction() {
+        if (mPhotoAlbumControl != null) {
+            mPhotoAlbumControl.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void showPhotoAlbumControlAction() {
+        if (mPhotoAlbumControl != null) {
+            mPhotoAlbumControl.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    private boolean animateHidePhotoAlbumControlAction() {
+        if (mPhotoAlbumControl != null) {
+            if (mAnimationHide == null && mPhotoAlbumControl.getMeasuredHeight() != 0) {
+                mAnimationHide = new TranslateAnimation(
+                        0,
+                        0,
+                        Utils.getSrceenSize(this).y - mPhotoAlbumControl.getMeasuredHeight(),
+                        Utils.getSrceenSize(this).y);
+            }
+            if (mAnimationHide != null) {
+                mCurrentAnimation = mAnimationHide;
+                startAnimation(mCurrentAnimation);
+            } else {
+                hidePhotoAlbumControlAction();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private boolean animateShowPhotoAlbumControlAction() {
+        if (mPhotoAlbumControl != null) {
+            if (mAnimationShow == null && mPhotoAlbumControl.getMeasuredHeight() != 0) {
+                mAnimationShow = new TranslateAnimation(
+                        0,
+                        0,
+                        Utils.getSrceenSize(this).y,
+                        Utils.getSrceenSize(this).y - mPhotoAlbumControl.getMeasuredHeight());
+            }
+            if (mAnimationShow != null) {
+                mCurrentAnimation = mAnimationShow;
+                startAnimation(mCurrentAnimation);
+            } else {
+                showPhotoAlbumControlAction();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void startAnimation(TranslateAnimation animation) {
+        animation.setDuration(ANIMATION_TIME);
+        animation.setAnimationListener(mAnimationListener);
+        mPhotoAlbumControl.startAnimation(animation);
     }
 }

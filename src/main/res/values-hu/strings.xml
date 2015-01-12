@@ -131,8 +131,6 @@
     <string name="edit_set_as_main">Főoldalnak</string>
     <string name="edit_delete">Eltávolít</string>
     <string name="edit_restore">Helyreállítás</string>
-    <string name="gifts_title">Válasszon ajándékot</string>
-    <string name="gifts_send_btn">Küldjön ajándékot</string>
     <string name="form_not_specified">Nincs megadva</string>
     <string name="form_main">Fő</string>
     <string name="form_physique">Testalkat</string>

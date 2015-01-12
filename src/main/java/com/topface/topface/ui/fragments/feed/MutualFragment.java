@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.topface.topface.R;
@@ -20,11 +19,6 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class MutualFragment extends FeedFragment<FeedMutual> {
-
-    @Override
-    protected Drawable getBackIcon() {
-        return getResources().getDrawable(R.drawable.mutual_back_icon);
-    }
 
     @Override
     protected String getTitle() {

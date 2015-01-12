@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:background="@color/bg_main">
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
+              android:background="@color/bg_main">
 
     <TextView
         android:id="@+id/tvMyCity"
@@ -15,14 +15,14 @@
         android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        style="@style/ItemTitleText" />
+        style="@style/ItemTitleText"/>
 
     <include
         layout="@layout/item_edit_form_check"
         android:id="@+id/cbMyCity"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"/>
 
     <TextView
         android:id="@+id/tvCityInputTitle"
@@ -34,7 +34,7 @@
         android:layout_marginRight="8dp"
         style="@style/ItemTitleText"
         android:focusable="true"
-        android:focusableInTouchMode="true" />
+        android:focusableInTouchMode="true"/>
 
     <EditText
         android:id="@+id/etCityInput"
@@ -44,7 +44,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:inputType="text"
-        android:singleLine="true" />
+        android:singleLine="true"/>
 
     <TextView
         android:id="@+id/noCities"
@@ -53,7 +53,7 @@
         android:gravity="center"
         android:text="@string/filter_city_fail"
         android:visibility="gone"
-        android:layout_margin="5dp" />
+        android:layout_margin="5dp"/>
 
     <ListView
         android:id="@+id/lvCityList"
@@ -63,14 +63,14 @@
         android:divider="@android:color/transparent"
         android:fadeScrollbars="true"
         android:fadingEdge="none"
-        android:listSelector="@android:color/transparent" />
+        android:listSelector="@android:color/transparent"/>
 
 
     <ProgressBar
         android:id="@+id/prsCityLoading"
-        style="@android:style/Widget.ProgressBar.Small"
+        style="@style/TopFaceProgressBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 </LinearLayout>

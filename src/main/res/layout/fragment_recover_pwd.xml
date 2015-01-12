@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/auth_bg">
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/auth_bg">
 
     <!--ImageView
             android:layout_centerInParent="true"
@@ -19,7 +19,7 @@
         android:background="@drawable/bg_alert_wrong_password"
         android:textSize="12sp"
         android:visibility="invisible"
-        android:text="@string/error_login_password" />
+        android:text="@string/error_login_password"/>
 
     <LinearLayout
         android:id="@+id/loLoginGroup"
@@ -35,7 +35,7 @@
             style="@style/AuthButtonsSmallText"
             android:text="@string/enter_email_from_registration"
             android:layout_marginBottom="16dp"
-            android:gravity="left" />
+            android:gravity="left"/>
 
         <EditText
             android:id="@+id/edEmail"
@@ -44,7 +44,7 @@
             android:background="@drawable/text_input_signin"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-            style="@style/EditTextAuth" />
+            style="@style/EditTextAuth"/>
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:visibility="gone"
-                style="@android:style/Widget.ProgressBar.Small" />
+                style="@style/TopFaceProgressBar.Small"/>
 
             <Button
                 android:id="@+id/btnRecover"
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/send_password"
                 style="@style/RecoveryButtonsBigText"
-                android:background="@drawable/btn_signin_selector" />
+                android:background="@drawable/btn_signin_selector"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -76,7 +76,7 @@
         android:text="@string/recovering_password"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/loLoginGroup"
-        android:layout_marginBottom="55dp" />
+        android:layout_marginBottom="55dp"/>
 
     <TextView
         android:id="@+id/tvBackToMainAuth"
@@ -89,5 +89,5 @@
         android:drawableLeft="@drawable/ic_back"
         android:drawablePadding="8dp"
         style="@style/AuthButtonsBigText"
-        android:gravity="center_vertical" />
+        android:gravity="center_vertical"/>
 </RelativeLayout>

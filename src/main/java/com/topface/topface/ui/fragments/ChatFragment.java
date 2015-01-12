@@ -65,6 +65,7 @@ import com.topface.topface.requests.DeleteMessagesRequest;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
+import com.topface.topface.requests.handlers.ActionMenuHandler;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.ui.ComplainsActivity;
@@ -168,6 +169,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
 
+
+    private ActionMenuHandler mActionMenuHandler = new ActionMenuHandler(App.getContext()) {
+        @Override
+        public void closeActionMenu() {
+            animateHideChatAction();
+        }
+    };
 
     private void switchBookmarkEnabled(boolean enabled) {
         if (mActions != null) {
@@ -273,7 +281,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // do not recreate Adapter cause of steRetainInstance(true)
+        // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
         }
@@ -368,7 +376,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void restoreData(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             try {
-                boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
+                boolean wasFailed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 FeedList<History> historyData = new FeedList<>();
                 if (list != null) {
@@ -380,7 +388,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 mAdapter.setData(historyData);
                 mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
-                if (was_failed) {
+                if (wasFailed) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 } else {
                     mLockScreen.setVisibility(View.GONE);
@@ -844,8 +852,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         ApiRequest request;
                         if (mUser.blocked) {
                             request = new DeleteBlackListRequest(mUser.id, getActivity());
+                            mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BLACK_LIST, mUser.id, false, request);
                         } else {
                             request = new BlackListAddRequest(mUser.id, getActivity());
+                            mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BLACK_LIST, mUser.id, true, request);
                         }
                         request.exec();
                     }
@@ -864,10 +874,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                 if (mUser.bookmarked) {
                     request = new DeleteBookmarksRequest(mUserId, getActivity());
+                    mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BOOKMARK, mUser.id, false, request);
                 } else {
                     request = new BookmarkAddRequest(mUserId, getActivity());
+                    mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BOOKMARK, mUser.id, true, request);
                 }
-
                 request.exec();
                 break;
             case R.id.complain_action:

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/auth_bg"
-    android:fillViewport="true">
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/auth_bg"
+            android:fillViewport="true">
 
     <RelativeLayout
         android:id="@+id/authContainer"
@@ -14,14 +14,14 @@
 
         <ProgressBar
             android:id="@+id/prsAuthLoading"
-            style="@android:style/Widget.ProgressBar.Small"
+            style="@style/TopFaceProgressBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="55dp"
             android:visibility="gone"
             android:layout_centerHorizontal="true"
             android:layout_alignTop="@+id/ivAuthGroup"
-            tools:visibility="visible" />
+            tools:visibility="visible"/>
 
         <LinearLayout
             android:id="@id/ivAuthGroup"
@@ -30,7 +30,8 @@
             android:layout_centerInParent="true"
             android:animateLayoutChanges="true"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="UnusedAttribute">
 
             <ImageView
                 android:id="@+id/ivAuthLogo"
@@ -38,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/auth_logo" />
+                android:src="@drawable/auth_logo"/>
 
             <Button
                 android:id="@+id/btnAuthFB"
@@ -47,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/auth_fb_selector"
                 android:text="@string/auth_btn_fb"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
             <Button
                 android:id="@+id/btnAuthVK"
@@ -57,7 +58,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/auth_vk_selector"
                 android:text="@string/auth_btn_vk"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
             <Button
                 android:id="@+id/btnAuthOk"
@@ -67,7 +68,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/auth_ok_selector"
                 android:text="@string/auth_btn_ok"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
             <RelativeLayout
                 android:id="@+id/loSignIn"
@@ -83,7 +84,7 @@
                     android:layout_centerVertical="true"
                     android:drawableLeft="@drawable/ic_sign_in"
                     android:drawablePadding="8dp"
-                    android:text="@string/sign_in" />
+                    android:text="@string/sign_in"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -91,7 +92,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="4dp"
-                    android:src="@drawable/ic_arrow" />
+                    android:src="@drawable/ic_arrow"/>
 
             </RelativeLayout>
 
@@ -108,7 +109,7 @@
                     android:layout_centerVertical="true"
                     android:drawableLeft="@drawable/ic_create_account"
                     android:drawablePadding="8dp"
-                    android:text="@string/create_account" />
+                    android:text="@string/create_account"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -116,7 +117,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="4dp"
-                    android:src="@drawable/ic_arrow" />
+                    android:src="@drawable/ic_arrow"/>
 
             </RelativeLayout>
 
@@ -140,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:src="@drawable/ico_facebook"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/vk_ico"
@@ -148,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:src="@drawable/ico_vk"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/ok_ico"
@@ -156,12 +157,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:src="@drawable/ico_ok"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/other_auth" />
+                android:text="@string/other_auth"/>
         </LinearLayout>
 
     </RelativeLayout>
