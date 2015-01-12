@@ -38,7 +38,7 @@ public class GooglePlayPurchaseRequest extends PurchaseRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONObject requestData = new JSONObject();
+        JSONObject requestData = super.getRequestData();
         requestData
                 .put("data", data)
                 .put("signature", signature)

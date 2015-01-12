@@ -38,7 +38,7 @@ public class FortumoPurchaseRequest extends PurchaseRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject()
+        return super.getRequestData()
                 .put("source", source)
                 .put("orderId", orderId);
     }

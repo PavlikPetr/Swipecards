@@ -87,6 +87,7 @@ public class App extends Application {
     private static AppOptions mAppOptions;
 
     private static Boolean mIsGmsSupported;
+    private static String mStartLabel;
 
 
     /**
@@ -324,6 +325,14 @@ public class App extends Application {
             }
         }
         return mAppOptions;
+    }
+
+    public static void setStartLabel(String startLabel) {
+        mStartLabel = startLabel;
+    }
+
+    public static String getStartLabel() {
+        return mStartLabel;
     }
 
     @Override

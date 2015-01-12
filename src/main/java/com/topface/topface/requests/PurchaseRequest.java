@@ -5,8 +5,11 @@ import android.text.TextUtils;
 
 import com.topface.billing.DeveloperPayload;
 import com.topface.framework.JsonUtils;
+import com.topface.topface.App;
 import com.topface.topface.requests.handlers.ErrorCodes;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.onepf.oms.OpenIabHelper;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
@@ -16,12 +19,14 @@ import org.onepf.oms.appstore.googleUtils.Purchase;
 abstract public class PurchaseRequest extends ApiRequest {
     transient private final Purchase mPurchase;
     transient private DeveloperPayload payload;
+    private JSONObject requestData;
 
     protected PurchaseRequest(Purchase purchase, Context context) {
         super(context);
         doNeedAlert(false);
         mPurchase = purchase;
         this.payload = parseDeveloperPayload(purchase);
+        requestData = new JSONObject();
     }
 
     private DeveloperPayload parseDeveloperPayload(Purchase product) {
@@ -43,6 +48,12 @@ abstract public class PurchaseRequest extends ApiRequest {
             default:
                 throw new RuntimeException("Unknown purchase app store");
         }
+    }
+
+    @Override
+    protected JSONObject getRequestData() throws JSONException {
+        requestData.put("notification_id", App.getStartLabel());
+        return requestData;
     }
 
     protected abstract String getAppstoreName();

@@ -31,7 +31,7 @@ public class AmazonPurchaseRequest extends PurchaseRequest {
                 purchase.getOriginalJson(),
                 AmazonPurchaseResponse.class
         );
-        return new JSONObject()
+        return super.getRequestData()
                 .put("product", purchase.getSku())
                 .put("userId", amazonResponse.userId)
                 .put("requestId", purchase.getOrderId())
