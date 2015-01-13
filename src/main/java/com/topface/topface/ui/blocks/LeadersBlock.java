@@ -1,12 +1,12 @@
 package com.topface.topface.ui.blocks;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.data.FeedUserListData;
 import com.topface.topface.data.Leader;
 import com.topface.topface.requests.ApiResponse;
@@ -22,11 +22,11 @@ import com.topface.topface.ui.fragments.BaseFragment;
  * Блок с лидерами
  */
 public class LeadersBlock {
-    private Fragment mFragment;
+    private IPageWithAds mPage;
     private final ViewGroup mLayout;
 
-    public LeadersBlock(Fragment fragment, ViewGroup layout) {
-        mFragment = fragment;
+    public LeadersBlock(IPageWithAds page, ViewGroup layout) {
+        mPage = page;
         mLayout = layout;
 
         bindButtonEvent();
@@ -35,9 +35,9 @@ public class LeadersBlock {
     }
 
     public void loadLeaders() {
-        LeadersRequest request = new LeadersRequest(mFragment.getActivity().getApplicationContext());
-        if (mFragment instanceof BaseFragment) {
-            ((BaseFragment) mFragment).registerRequest(request);
+        LeadersRequest request = new LeadersRequest(mPage.getActivity().getApplicationContext());
+        if (mPage instanceof BaseFragment) {
+            ((BaseFragment) mPage).registerRequest(request);
         }
         request.callback(new DataApiHandler<FeedUserListData<Leader>>() {
 
@@ -63,9 +63,9 @@ public class LeadersBlock {
         mLayout.findViewById(R.id.leadersDateBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFragment.startActivity(
+                mPage.getActivity().startActivity(
                         new Intent(
-                                mFragment.getActivity(),
+                                mPage.getActivity(),
                                 LeadersActivity.class
                         )
                 );
@@ -76,7 +76,7 @@ public class LeadersBlock {
     private void setAdapter(FeedUserListData<Leader> leaders) {
         HorizontalListView list = (HorizontalListView) mLayout.findViewById(R.id.leadersList);
         if (list != null) {
-            list.setAdapter(new LeadersAdapter(mFragment.getActivity(), leaders));
+            list.setAdapter(new LeadersAdapter(mPage.getActivity(), leaders));
             //Обработчик нажатия на лидера
             list.setOnItemClickListener(mItemClickListener);
         }
@@ -89,13 +89,7 @@ public class LeadersBlock {
             //При клике на лидера, открываем его профиль
             Leader leader = (Leader) adapterView.getItemAtPosition(i);
             LeadersDialog dialog = LeadersDialog.newInstance(leader);
-            dialog.show(mFragment.getFragmentManager(), "Leaders_Dialog");
-//            mFragment.startActivity(
-//                    ContainerActivity.createIntent(
-//                            leader.id,
-//                            mFragment.getActivity()
-//                    )
-//            );
+            dialog.show(mPage.getActivity().getSupportFragmentManager(), "Leaders_Dialog");
 
         }
     };

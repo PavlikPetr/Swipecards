@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedMutual;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -98,5 +99,10 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_MUTUAL_UPDATE;
+    }
+
+    @Override
+    public String getPageName() {
+        return PageInfo.PAGE_MUTUAL;
     }
 }

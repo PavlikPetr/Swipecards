@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -28,7 +29,7 @@ import java.util.Locale;
 /**
  * base class for feeds with tabs
  */
-public abstract class TabbedFeedFragment extends BaseFragment {
+public abstract class TabbedFeedFragment extends BaseFragment implements IPageWithAds {
     public static final String EXTRA_OPEN_PAGE = "openTabbedFeedAt";
     private static final String LAST_OPENED_PAGE = "last_opened_page";
     private ViewPager mPager;
@@ -82,26 +83,15 @@ public abstract class TabbedFeedFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_tabbed_feed, null);
-
         initPages(root);
-        initFloatBlock((ViewGroup) root);
-
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-
         return root;
-    }
-
-    protected void initFloatBlock(ViewGroup view) {
-        mFloatBlock = new FloatBlock(this, view);
-        mFloatBlock.onCreate();
     }
 
     private void initPages(View root) {
         addPages();
-
         mPager = (ViewPager) root.findViewById(R.id.pager);
-
         mPager.setSaveEnabled(false);
         TabbedFeedPageAdapter bodyPagerAdapter = new TabbedFeedPageAdapter(getChildFragmentManager(),
                 mPagesClassNames,
@@ -131,6 +121,11 @@ public abstract class TabbedFeedFragment extends BaseFragment {
             }
         }
         mPager.setCurrentItem(lastPage);
+        initFloatBlock((ViewGroup) view);
+    }
+
+    protected void initFloatBlock(ViewGroup view) {
+        mFloatBlock = new FloatBlock(this, view);
     }
 
     protected abstract void addPages();
@@ -165,14 +160,6 @@ public abstract class TabbedFeedFragment extends BaseFragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (mFloatBlock != null) {
-            mFloatBlock.onPause();
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mPager != null) {
@@ -202,4 +189,17 @@ public abstract class TabbedFeedFragment extends BaseFragment {
 
     protected abstract void setLastOpenedPage(int lastOpenedPage);
 
+    @Override
+    public String getPageName() {
+        return "";
+    }
+
+    @Override
+    public ViewGroup getContainerForAd() {
+        View view  = getView();
+        if (view != null) {
+            return (ViewGroup) getView().findViewById(R.id.loBannerContainer);
+        }
+        return null;
+    }
 }

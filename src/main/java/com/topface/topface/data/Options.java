@@ -1,10 +1,16 @@
 package com.topface.topface.data;
 
 
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+
+import com.google.gson.Gson;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
+import com.topface.topface.banners.PageInfo;
+import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessageFromSearch;
@@ -13,7 +19,7 @@ import com.topface.topface.data.experiments.LikesWithThreeTabs;
 import com.topface.topface.data.experiments.MessagesWithTabs;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.ui.blocks.BannerBlock;
+import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
@@ -30,6 +36,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -39,38 +46,6 @@ import java.util.Set;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Options extends AbstractData {
-
-    /**
-     * Идентификаторы страниц
-     */
-    public static final String PAGE_UNKNOWK = "UNKNOWN_PAGE";
-    public final static String PAGE_LIKES = "LIKE";
-    public final static String PAGE_MUTUAL = "MUTUAL";
-    public final static String PAGE_MESSAGES = "MESSAGES";
-    public final static String PAGE_VISITORS = "VISITORS";
-    public final static String PAGE_DIALOGS = "DIALOGS";
-    public final static String PAGE_FANS = "FANS";
-    public final static String PAGE_BOOKMARKS = "BOOKMARKS";
-    public final static String PAGE_VIEWS = "VIEWS";
-    public final static String PAGE_START = "START";
-    public final static String PAGE_GAG = "GAG";
-    public final static String PAGE_TABBED_LIKES = "LIKES_TABS";
-    public final static String PAGE_TABBED_MESSAGES = "MESSAGES_TABS";
-    public final static String[] PAGES = new String[]{
-            PAGE_UNKNOWK,
-            PAGE_LIKES,
-            PAGE_MUTUAL,
-            PAGE_MESSAGES,
-            PAGE_VISITORS,
-            PAGE_DIALOGS,
-            PAGE_FANS,
-            PAGE_BOOKMARKS,
-            PAGE_VIEWS,
-            PAGE_START,
-            PAGE_TABBED_LIKES,
-            PAGE_TABBED_MESSAGES,
-            PAGE_GAG
-    };
 
     public final static String INNER_MAIL_CONST = "mail";
     public final static String INNER_APNS_CONST = "apns";
@@ -83,7 +58,7 @@ public class Options extends AbstractData {
     /**
      * Настройки для каждого типа страниц
      */
-    public HashMap<String, Page> pages = new HashMap<>();
+    private HashMap<String, PageInfo> pages = new HashMap<>();
 
     public boolean ratePopupEnabled = false;
     public long ratePopupTimeout = DateUtils.DAY_IN_MILLISECONDS;
@@ -137,8 +112,8 @@ public class Options extends AbstractData {
      */
     public PromoPopupEntity premiumAdmirations;
     public GetJar getJar;
-    public String gagTypeBanner = BannerBlock.BANNER_ADMOB;
-    public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
+    public String gagTypeBanner = AdProvidersFactory.BANNER_ADMOB;
+    public String gagTypeFullscreen = AdProvidersFactory.BANNER_NONE;
     public String helpUrl;
 
     public LinkedList<Tab> otherTabs = new LinkedList<>();
@@ -171,6 +146,8 @@ public class Options extends AbstractData {
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
 
     public MessagesWithTabs messagesWithTabs = new MessagesWithTabs();
+    private Gson mGson;
+    private Map<String, PageInfo> pagesInfo;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -189,23 +166,14 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
-
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
-            JSONArray pagesJson = response.optJSONArray("pages");
-            for (int i = 0; i < pagesJson.length(); i++) {
-                JSONObject page = pagesJson.getJSONObject(i);
-                String pageName = getPageName(page, "name");
-                pages.put(pageName,
-                        new Page(
-                                pageName,
-                                page.optString("float"),
-                                page.optString("banner")
-                        )
-                );
+            PageInfo[] pagesArr = fromJson(response.optString("pages"), PageInfo[].class);
+            for(PageInfo pageInfo : pagesArr) {
+                pages.put(pageInfo.name, pageInfo);
             }
             offerwall = response.optString("offerwall");
             maxVersion = response.optString("maxVersion");
@@ -309,8 +277,8 @@ public class Options extends AbstractData {
                 getJar = new GetJar(getJarJson.optString("id"), getJarJson.optString("name"), getJarJson.optLong("price"));
             }
 
-            gagTypeBanner = response.optString("gag_type_banner", BannerBlock.BANNER_ADMOB);
-            gagTypeFullscreen = response.optString("gag_type_fullscreen", BannerBlock.BANNER_NONE);
+            gagTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_ADMOB);
+            gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);
             JSONObject bonusObject = response.optJSONObject("bonus");
             if (bonusObject != null) {
                 bonus.enabled = bonusObject.optBoolean("enabled");
@@ -375,6 +343,13 @@ public class Options extends AbstractData {
 
     }
 
+    private <T> T fromJson(String json, Class<T> aClass) {
+        if (mGson == null) {
+            mGson = new Gson();
+        }
+        return mGson.fromJson(json, aClass);
+    }
+
     private void fillTabs(JSONObject other, LinkedList<Tab> tabs) {
         JSONArray tabsArray = other.optJSONArray("tabs");
         for (int i = 0; i < tabsArray.length(); i++) {
@@ -401,32 +376,32 @@ public class Options extends AbstractData {
     private static String getPageName(JSONObject page, String key) {
         String name = page.optString(key);
         switch (name) {
-            case PAGE_LIKES:
-                return PAGE_LIKES;
-            case PAGE_MUTUAL:
-                return PAGE_MUTUAL;
-            case PAGE_MESSAGES:
-                return PAGE_MESSAGES;
-            case PAGE_VISITORS:
-                return PAGE_VISITORS;
-            case PAGE_DIALOGS:
-                return PAGE_DIALOGS;
-            case PAGE_FANS:
-                return PAGE_FANS;
-            case PAGE_BOOKMARKS:
-                return PAGE_BOOKMARKS;
-            case PAGE_VIEWS:
-                return PAGE_VIEWS;
-            case PAGE_START:
-                return PAGE_START;
-            case PAGE_GAG:
-                return PAGE_GAG;
-            case PAGE_TABBED_MESSAGES:
-                return PAGE_TABBED_MESSAGES;
-            case PAGE_TABBED_LIKES:
-                return PAGE_TABBED_LIKES;
+            case PageInfo.PAGE_LIKES:
+                return PageInfo.PAGE_LIKES;
+            case PageInfo.PAGE_MUTUAL:
+                return PageInfo.PAGE_MUTUAL;
+            case PageInfo.PAGE_MESSAGES:
+                return PageInfo.PAGE_MESSAGES;
+            case PageInfo.PAGE_VISITORS:
+                return PageInfo.PAGE_VISITORS;
+            case PageInfo.PAGE_DIALOGS:
+                return PageInfo.PAGE_DIALOGS;
+            case PageInfo.PAGE_FANS:
+                return PageInfo.PAGE_FANS;
+            case PageInfo.PAGE_BOOKMARKS:
+                return PageInfo.PAGE_BOOKMARKS;
+            case PageInfo.PAGE_VIEWS:
+                return PageInfo.PAGE_VIEWS;
+            case PageInfo.PAGE_START:
+                return PageInfo.PAGE_START;
+            case PageInfo.PAGE_GAG:
+                return PageInfo.PAGE_GAG;
+            case PageInfo.PAGE_TABBED_MESSAGES:
+                return PageInfo.PAGE_TABBED_MESSAGES;
+            case PageInfo.PAGE_TABBED_LIKES:
+                return PageInfo.PAGE_TABBED_LIKES;
             default:
-                return PAGE_UNKNOWK + "(" + name + ")";
+                return PageInfo.PAGE_UNKNOWK + "(" + name + ")";
         }
     }
 
@@ -446,46 +421,32 @@ public class Options extends AbstractData {
         return Integer.toString(type) + INNER_SEPARATOR + ((isMail) ? INNER_MAIL_CONST : INNER_APNS_CONST);
     }
 
+    public Map<String, PageInfo> getPagesInfo() {
+        return pages;
+    }
+
+    public void setPagesInfo(Map<String, PageInfo> pagesInfo) {
+        this.pagesInfo = new HashMap<>(pagesInfo);
+    }
+
+    public static void sendUpdateOptionsBroadcast() {
+        LocalBroadcastManager.getInstance(App.getContext())
+                .sendBroadcast(new Intent(UserGetAppOptionsRequest.OPTIONS_UPDATE_ACTION));
+    }
+
+    public String getPaymentwallLink() {
+        return paymentwall;
+    }
+
     public boolean containsBannerType(String bannerType) {
-        for (Page page : pages.values()) {
-            if (page.banner.equals(bannerType)) {
+        for (PageInfo page : pages.values()) {
+            if (page.getBanner().equals(bannerType)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static class Page {
-        public String name;
-        public String floatType;
-        public String banner;
-
-        private static final String SEPARATOR = ";";
-
-        public Page(String name, String floatType, String banner) {
-            this.name = name;
-            this.floatType = floatType;
-            this.banner = banner;
-        }
-
-        @Override
-        public String toString() {
-            return name + SEPARATOR + floatType + SEPARATOR + banner;
-        }
-
-        public static Page parseFromString(String str) {
-            String[] params = str.split(SEPARATOR);
-            if (params.length == 3) {
-                return new Page(params[0], params[1], params[2]);
-            } else {
-                return null;
-            }
-        }
-    }
-
-    public String getPaymentwallLink() {
-        return paymentwall;
-    }
 
     public static class PromoPopupEntity {
         public static final int DEFAULT_COUNT = 10;

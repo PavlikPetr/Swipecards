@@ -37,7 +37,6 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.fragments.MenuFragment;
@@ -474,7 +473,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 CacheProfile.getOptions().messagesWithTabs.isEnabled() || !mMenuFragment.isClosingsAvailable())) {
             mMenuFragment.updateAdapter();
         }
-        FloatBlock.resetActivityMap();
         mNotificationController.refreshNotificator();
     }
 

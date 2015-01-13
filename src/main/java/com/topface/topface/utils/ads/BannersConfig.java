@@ -9,11 +9,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.topface.topface.Static;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Аналогично AppConfig.java, для настроек баннеров
@@ -52,27 +53,27 @@ public class BannersConfig {
         SharedPreferences preferences = getPreferences();
         SharedPreferences.Editor editor = preferences.edit();
         Options options = CacheProfile.getOptions();
-        for (String pageName : options.pages.keySet()) {
-            editor.putString(pageName, options.pages.get(pageName).toString());
+        Map<String, PageInfo> pagesInfo = options.getPagesInfo();
+        for (String pageName : pagesInfo.keySet()) {
+            editor.putString(pageName, pagesInfo.get(pageName).toString());
         }
         editor.apply();
     }
 
     public void restoreBannersSettings() {
         SharedPreferences preferences = getPreferences();
-        Options options = CacheProfile.getOptions();
-        options.pages = new HashMap<>();
-        for (String pageName : Options.PAGES) {
+        Map<String, PageInfo> pagesInfo= new HashMap<>();
+        for (String pageName : PageInfo.PAGES) {
             String str = preferences.getString(pageName, Static.EMPTY);
             if (!TextUtils.isEmpty(str)) {
-                options.pages.put(pageName, Options.Page.parseFromString(str));
+                pagesInfo.put(pageName, PageInfo.parseFromString(str));
             }
         }
+        CacheProfile.getOptions().setPagesInfo(pagesInfo);
     }
 
     public void resetBannersSettings() {
         CacheProfile.clearOptions();
-        FloatBlock.resetActivityMap();
         getPreferences().edit().clear().commit();
     }
 
