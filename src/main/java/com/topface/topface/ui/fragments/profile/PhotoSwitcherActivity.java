@@ -775,7 +775,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
                 @Override
                 protected User parseResponse(ApiResponse response) {
-                    return User.parse(mProfileId, response);
+                    return new User(mProfileId, response);
                 }
 
                 @Override

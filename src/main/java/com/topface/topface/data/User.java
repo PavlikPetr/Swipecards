@@ -23,47 +23,40 @@ public class User extends Profile {
     public boolean isSympathySent;
     public UserSocialInfo socialInfo;   // info about social network
 
-    public static User parse(int userId, ApiResponse response) {
-        return parse(userId, response.getJsonResult());
+    public User(int userId, ApiResponse response) {
+        super(response);
+        uid = userId;
     }
 
-    public static User parse(int userId, String userProfileJson) {
-        try {
-            return parse(userId, new JSONObject(userProfileJson));
-        } catch (JSONException e) {
-            Debug.error("Wrong response parsing", e);
-        }
-        return new User();
+    public User() {
+        super();
     }
 
-    public static User parse(int userId, JSONObject userProfileJson) {
-        User user = new User();
-
+    @Override
+    protected void fillData(JSONObject resp) {
         try {
-            if (userProfileJson != null) {
-                parse(user, userProfileJson);
-                user.platform = userProfileJson.optString("platform");
-                user.lastVisit = userProfileJson.optInt("lastVisit");
-                user.inBlackList = userProfileJson.optBoolean("inBlacklist");
-                user.status = userProfileJson.optString("status");
-                user.online = userProfileJson.optBoolean("online");
-                user.mutual = userProfileJson.optBoolean("mutual");
-                user.score = userProfileJson.optInt("score");
-                user.banned = userProfileJson.optBoolean("banned");
-                user.deleted = userProfileJson.optBoolean("deleted") || user.isEmpty();
-                user.bookmarked = userProfileJson.optBoolean("bookmarked");
-                user.isSympathySent = userProfileJson.optBoolean("isSympathySent");
+            if (resp != null) {
+                super.fillData(resp);
+                platform = resp.optString("platform");
+                lastVisit = resp.optInt("lastVisit");
+                inBlackList = resp.optBoolean("inBlacklist");
+                status = resp.optString("status");
+                online = resp.optBoolean("online");
+                mutual = resp.optBoolean("mutual");
+                score = resp.optInt("score");
+                banned = resp.optBoolean("banned");
+                deleted = resp.optBoolean("deleted") || isEmpty();
+                bookmarked = resp.optBoolean("bookmarked");
+                isSympathySent = resp.optBoolean("isSympathySent");
                 if (CacheProfile.isEditor()) {
-                    user.socialInfo = UserSocialInfo.parse(userProfileJson.optString("info"));
+                    socialInfo = UserSocialInfo.parse(resp.optString("info"));
                 }
             } else {
-                user.deleted = true;
-                user.uid = userId;
+                deleted = true;
             }
         } catch (Exception e) {
-            Debug.error("Wrong response parsing", e);
+            Debug.error("User parse exception", e);
         }
-        return user;
     }
 
     @Override
