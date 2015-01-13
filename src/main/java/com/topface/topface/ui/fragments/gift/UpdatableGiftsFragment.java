@@ -84,7 +84,7 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
             if (newGifts.size() > 0) {
                 ArrayList<FeedGift> gifts = savedState.getParcelableArrayList(PlainGiftsFragment.DATA);
                 // find button SendGift and add new gifts after it
-                gifts.addAll(getSendGiftButtonPosition(gifts), newGifts);
+                gifts.addAll(getPastePosition(gifts), newGifts);
                 // displace list position
                 int position = savedState.getInt(PlainGiftsFragment.POSITION, 0) + newGifts.size();
                 clearNewGiftsArray();
@@ -99,10 +99,10 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
         }
     }
 
-    private int getSendGiftButtonPosition(ArrayList<FeedGift> gifts) {
+    private int getPastePosition(ArrayList<FeedGift> gifts) {
         for (int i = 0; i < gifts.size(); i++) {
             if (gifts.get(i).gift.type == Gift.SEND_BTN) {
-                return i;
+                return i + 1;
             }
         }
         return 0;
@@ -128,7 +128,7 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
                 if (adapterGifts.size() == getMinItemsCount()) {
                     mTitle.setVisibility(View.GONE);
                 }
-                int pos = getSendGiftButtonPosition(adapterGifts);
+                int pos = getPastePosition(adapterGifts);
                 for (int i = 0; i < newGifts.size(); i++) {
                     mGridAdapter.add(pos + i, newGifts.get(i));
                 }
