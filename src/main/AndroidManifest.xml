@@ -73,7 +73,7 @@
         <!-- activity -->
         <activity
             android:name=".ui.NavigationActivity"
-            android:configChanges="locale|screenSize|orientation"
+            android:configChanges="locale|screenSize|orientation|layoutDirection"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.ActionbarOverlay"
             android:windowSoftInputMode="stateHidden|adjustResize">
