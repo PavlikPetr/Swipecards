@@ -191,10 +191,6 @@ public class BanActivity extends TrackedFragmentActivity implements View.OnClick
                     case R.id.btnCancel:
                         ConnectionManager.getInstance().onBanActivityFinish();
                         getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(
-                                        R.anim.slide_in_from_right, R.anim.slide_out_right,
-                                        R.anim.slide_in_from_right, R.anim.slide_out_right
-                                )
                                 .add(
                                         R.id.foreground_frame_layout,
                                         FeedbackMessageFragment.newInstance(FeedbackType.BAN)
