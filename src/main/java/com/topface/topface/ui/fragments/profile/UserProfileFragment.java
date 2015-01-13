@@ -325,7 +325,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
                 @Override
                 protected User parseResponse(ApiResponse response) {
-                    return User.parse(profileId, response);
+                    return new User(profileId, response);
                 }
 
                 @Override
@@ -338,7 +338,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
             }).exec();
         } else {
-            onSuccess(User.parse(mProfileId, mSavedResponse), mSavedResponse);
+            onSuccess(new User(mProfileId, mSavedResponse), mSavedResponse);
         }
     }
 

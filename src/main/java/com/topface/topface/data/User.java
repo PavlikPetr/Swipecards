@@ -22,35 +22,40 @@ public class User extends Profile {
     public boolean isSympathySent;
     public UserSocialInfo socialInfo;   // info about social network
 
-    public static User parse(int userId, ApiResponse response) {
-        User user = new User();
+    public User(int userId, ApiResponse response) {
+        super(response);
+        uid = userId;
+    }
 
+    public User() {
+        super();
+    }
+
+    @Override
+    protected void fillData(JSONObject resp) {
         try {
-            JSONObject item = response.getJsonResult();
-            if (item != null) {
-                parse(user, item);
-                user.platform = item.optString("platform");
-                user.lastVisit = item.optInt("lastVisit");
-                user.inBlackList = item.optBoolean("inBlacklist");
-                user.status = item.optString("status");
-                user.online = item.optBoolean("online");
-                user.mutual = item.optBoolean("mutual");
-                user.score = item.optInt("score");
-                user.banned = item.optBoolean("banned");
-                user.deleted = item.optBoolean("deleted") || user.isEmpty();
-                user.bookmarked = item.optBoolean("bookmarked");
-                user.isSympathySent = item.optBoolean("isSympathySent");
+            if (resp != null) {
+                super.fillData(resp);
+                platform = resp.optString("platform");
+                lastVisit = resp.optInt("lastVisit");
+                inBlackList = resp.optBoolean("inBlacklist");
+                status = resp.optString("status");
+                online = resp.optBoolean("online");
+                mutual = resp.optBoolean("mutual");
+                score = resp.optInt("score");
+                banned = resp.optBoolean("banned");
+                deleted = resp.optBoolean("deleted") || isEmpty();
+                bookmarked = resp.optBoolean("bookmarked");
+                isSympathySent = resp.optBoolean("isSympathySent");
                 if (CacheProfile.isEditor()) {
-                    user.socialInfo = UserSocialInfo.parse(item.optString("info"));
+                    socialInfo = UserSocialInfo.parse(resp.optString("info"));
                 }
             } else {
-                user.deleted = true;
-                user.uid = userId;
+                deleted = true;
             }
         } catch (Exception e) {
-            Debug.error("Wrong response parsing", e);
+            Debug.error("User parse exception", e);
         }
-        return user;
     }
 
     @Override
