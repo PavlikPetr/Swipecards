@@ -4,7 +4,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /* Класс чужого профиля */
@@ -24,6 +23,11 @@ public class User extends Profile {
     public UserSocialInfo socialInfo;   // info about social network
 
     public User(int userId, ApiResponse response) {
+        super(response);
+        uid = userId;
+    }
+
+    public User(int userId, JSONObject response) {
         super(response);
         uid = userId;
     }

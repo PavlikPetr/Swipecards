@@ -77,6 +77,10 @@ public class Profile extends AbstractDataWithPhotos {
     }
 
     protected void fillData(final JSONObject resp) {
+        if (resp == null) {
+            Debug.error(new IllegalArgumentException("JSON response for Profile is null"));
+            return;
+        }
         Profile profile = this;
         try {
             profile.uid = resp.optInt("id");
