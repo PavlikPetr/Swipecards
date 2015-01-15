@@ -644,7 +644,7 @@
     <string name="likes_can_help_you">Симпатии помогут познакомиться</string>
     <string name="general_get_dating">Знакомиться</string>
     <string name="settings_select_language">Выбор языка приложения</string>
-    <string name="settings_select_preload_photo_type">Выбор типа предзагрузки фотографий</string>
+    <string name="settings_select_preload_photo_type">Выберите когда включена предзагрузка фотографий</string>
     <string name="restart_to_change_locale">Для смены языка приложение будет перезапущено</string>
     <string name="locale_changing">Смена языка</string>
 
@@ -781,6 +781,6 @@
 
     <string name="preload_photo_type_wifi_3g">WiFi и 3G</string>
     <string name="preload_photo_type_wifi">Только WiFi</string>
-    <string name="preload_photo_type_always_on">Включена</string>
+    <string name="preload_photo_type_always_on">Включена всегда</string>
     <string name="preload_photo_type_preload_off">Выключена</string>
 </resources>

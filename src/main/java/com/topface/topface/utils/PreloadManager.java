@@ -8,7 +8,10 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
+
+import static com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes.ALWAYS_ON;
+import static com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes.PRELOAD_OFF;
+import static com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes.WIFI;
 
 public class PreloadManager<T extends FeedUser> {
 
@@ -31,10 +34,6 @@ public class PreloadManager<T extends FeedUser> {
         if (!userList.isEnded()) {
             preloadNextPhoto(((T) userList.get(userList.getSearchPosition() + 1)).photos.getFirst());
         }
-    }
-
-    public boolean preloadPhoto(Photos photos, int position) {
-        return preloadPhoto(photos, position, null);
     }
 
     public boolean preloadPhoto(Photos photos, int position, ImageLoadingListener listener) {
@@ -81,23 +80,24 @@ public class PreloadManager<T extends FeedUser> {
     public static boolean isPreloadAllowed() {
         ConnectionChangeReceiver.ConnectionType connectionType = Utils.getConnectionType();
         int userPreloadTypeId = App.getUserConfig().getPreloadPhotoType().getId();
-        if (userPreloadTypeId == PreloadPhotoSelector.PreloadPhotoSelectorTypes.PRELOAD_OFF.getId()
-                || connectionType.getInt() == ConnectionChangeReceiver.ConnectionType.CONNECTION_OFFLINE.getInt()) {
-            return false;
-        }
-        if (userPreloadTypeId == PreloadPhotoSelector.PreloadPhotoSelectorTypes.ALWAYS_ON.getId()) {
-            return true;
-        }
         switch (connectionType) {
+            case CONNECTION_OFFLINE:
+                return false;
             case CONNECTION_MOBILE_3G:
-                if (userPreloadTypeId == PreloadPhotoSelector.PreloadPhotoSelectorTypes.WIFI.getId()) {
+                if (userPreloadTypeId == WIFI.getId() ||
+                        userPreloadTypeId == PRELOAD_OFF.getId()) {
                     return false;
-                } else {
+                }
+                return true;
+            case CONNECTION_MOBILE_EDGE:
+                if (userPreloadTypeId == ALWAYS_ON.getId()) {
                     return true;
                 }
-            case CONNECTION_MOBILE_EDGE:
                 return false;
             case CONNECTION_WIFI:
+                if (userPreloadTypeId == PRELOAD_OFF.getId()) {
+                    return false;
+                }
                 return true;
             default:
                 return true;

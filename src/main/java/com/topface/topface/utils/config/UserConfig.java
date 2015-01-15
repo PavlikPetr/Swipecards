@@ -8,7 +8,7 @@ import android.net.Uri;
 import com.topface.framework.utils.config.AbstractUniqueConfig;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
+import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -96,7 +96,7 @@ public class UserConfig extends AbstractUniqueConfig {
         // push notification melody
         addField(settingsMap, SETTINGS_GCM_RINGTONE, DEFAULT_SOUND);
         // preload photo default type WiFi and 3G
-        addField(settingsMap, SETTINGS_PRELOAD_PHOTO, PreloadPhotoSelector.PreloadPhotoSelectorTypes.WIFI_3G.getId());
+        addField(settingsMap, SETTINGS_PRELOAD_PHOTO, PreloadPhotoSelectorTypes.WIFI_3G.getId());
         // is vibration for notification enabled
         addField(settingsMap, SETTINGS_GCM_VIBRATION, true);
         // is led blinking for notification enabled
@@ -212,8 +212,8 @@ public class UserConfig extends AbstractUniqueConfig {
         return setField(getSettingsMap(), SETTINGS_PRELOAD_PHOTO, type);
     }
 
-    public PreloadPhotoSelector.PreloadPhotoSelectorTypes getPreloadPhotoType() {
-        return PreloadPhotoSelector.PreloadPhotoSelectorTypes.values()[getIntegerField(getSettingsMap(), SETTINGS_PRELOAD_PHOTO)];
+    public PreloadPhotoSelectorTypes getPreloadPhotoType() {
+        return PreloadPhotoSelectorTypes.values()[getIntegerField(getSettingsMap(), SETTINGS_PRELOAD_PHOTO)];
     }
 
     // =======================Novice=======================

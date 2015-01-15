@@ -36,6 +36,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
+import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
@@ -378,7 +379,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 PreloadPhotoSelector preloadPhotoSelector = new PreloadPhotoSelector(getActivity());
                 preloadPhotoSelector.setPreloadPhotoTypeListener(new PreloadPhotoSelector.PreloadPhotoTypeListener() {
                     @Override
-                    public void onSelected(PreloadPhotoSelector.PreloadPhotoSelectorTypes type) {
+                    public void onSelected(PreloadPhotoSelectorTypes type) {
                         preloadPhotoName.setText(type.getName());
                     }
                 });
