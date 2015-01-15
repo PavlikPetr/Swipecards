@@ -133,6 +133,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private ActionMode mActionMode;
     private FilterBlock mFilterBlock;
+    private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -675,6 +676,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected void processSuccessUpdate(FeedListData<T> data, boolean isHistoryLoad, boolean isPullToRefreshUpdating, boolean makeItemsRead, int limit) {
         FeedAdapter<T> adapter = getListAdapter();
+        if (!data.items.isEmpty()) {
+            // store unread-state of first and last items
+            // to use in next requests
+            FeedItem item = data.items.getFirst();
+            mLastUnreadState.from = item.unread;
+            item = data.items.getLast();
+            mLastUnreadState.to = item.unread;
+        }
+
         if (isHistoryLoad) {
             removeOldDublicates(data);
             adapter.addData(data);
@@ -753,7 +763,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected abstract FeedListData<T> getFeedList(JSONObject response);
 
     protected FeedRequest getRequest() {
-        return new FeedRequest(getFeedService(), getActivity());
+        return new FeedRequest(getFeedService(), getActivity()).setPreviousUnreadState(mLastUnreadState);
     }
 
     protected abstract FeedRequest.FeedService getFeedService();
