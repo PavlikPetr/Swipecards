@@ -40,10 +40,6 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     private final static int MY_TIMER_VALUE = 500;
 
     private Timer mTimer;
-    TimerTask mTimerTask;
-
-    private boolean isRequestDefaultCitiesInProgress;
-    private boolean isRequestCitiesByPreffInProgress;
 
     private City mDefaultCity;
     private City mUserCity;
@@ -51,10 +47,13 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     private final Context mContext;
     private int mRequestKey;
 
-    private CitiesRequest mFindCityByPrefRequest;
+    private volatile CitiesRequest mFindCityByPrefRequest;
+    private volatile CitiesRequest mDefaultCitiesRequest;
 
     private LinkedList<City> mTopCitiesList;
     private LinkedList<City> mDataList;
+
+    private enum RequestType {DEFAULT_CITIES_REQUEST, CITIES_BY_PREFF_REQUEST}
 
 
     public CitySearchViewAdapter(Context context, int requestKey) {
@@ -113,8 +112,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     }
 
     public void setPrefix(CharSequence constraint) {
-        isRequestCitiesByPreffInProgress = false;
-        removeAllRequests();
+        removeRequest(RequestType.CITIES_BY_PREFF_REQUEST);
         if (constraint == null || constraint.length() <= MIN_LENGTH_CITY_PREFIX) {
             fillDefaultData();
         } else {
@@ -124,14 +122,13 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
 
     // request to server with prefix of city
     private void findCityByPrefix(final String prefix) {
-        isRequestCitiesByPreffInProgress = true;
         callInProgress(true);
-        registerRequest(new CitiesRequest(mContext, prefix));
-        getCurrentRequest().callback(new DataApiHandler<LinkedList<City>>() {
+        registerRequest(RequestType.CITIES_BY_PREFF_REQUEST, new CitiesRequest(mContext, prefix));
+        getCurrentRequest(RequestType.CITIES_BY_PREFF_REQUEST).callback(new DataApiHandler<LinkedList<City>>() {
 
             @Override
             protected void success(LinkedList<City> citiesList, IApiResponse response) {
-                isRequestCitiesByPreffInProgress = false;
+                clearRequest(RequestType.CITIES_BY_PREFF_REQUEST);
                 callInProgress(false);
                 if (citiesList.size() == 0) {
                     callOnSearchFail(true);
@@ -143,13 +140,13 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
 
             @Override
             protected LinkedList<City> parseResponse(ApiResponse response) {
-                isRequestCitiesByPreffInProgress = false;
+                clearRequest(RequestType.CITIES_BY_PREFF_REQUEST);
                 return City.getCitiesList(response);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                isRequestCitiesByPreffInProgress = false;
+                clearRequest(RequestType.CITIES_BY_PREFF_REQUEST);
                 callInProgress(false);
                 fillDefaultData();
             }
@@ -159,7 +156,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     // set data for showing it in dropDown view
     private synchronized void fillData(LinkedList<City> citiesList) {
         mDataList.clear();
-        if (isRequestCitiesByPreffInProgress || isRequestDefaultCitiesInProgress) {
+        if (getCurrentRequest(RequestType.CITIES_BY_PREFF_REQUEST) != null || getCurrentRequest(RequestType.DEFAULT_CITIES_REQUEST) != null) {
             mDataList.add(City.createCity(EMPTY_ID, "", ""));
         }
         if (mRequestKey == CitySearchView.CITY_SEARCH_FROM_FILTER_ACTIVITY) {
@@ -193,12 +190,12 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
 
     // get default cities list
     private void findDefaultCitiesList() {
-        isRequestDefaultCitiesInProgress = true;
-        CitiesRequest citiesRequest = new CitiesRequest(mContext, true);
-        citiesRequest.callback(new ApiHandler() {
+        removeRequest(RequestType.DEFAULT_CITIES_REQUEST);
+        registerRequest(RequestType.DEFAULT_CITIES_REQUEST, new CitiesRequest(mContext, true));
+        getCurrentRequest(RequestType.DEFAULT_CITIES_REQUEST).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                isRequestDefaultCitiesInProgress = false;
+                clearRequest(RequestType.DEFAULT_CITIES_REQUEST);
                 final LinkedList<City> citiesList = City.getCitiesList(response);
                 if (citiesList.size() == 0 || mTopCitiesList == null) {
                     return;
@@ -214,13 +211,8 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                isRequestDefaultCitiesInProgress = false;
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, R.string.general_data_error, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                clearRequest(RequestType.DEFAULT_CITIES_REQUEST);
+                Toast.makeText(mContext, R.string.general_data_error, Toast.LENGTH_SHORT).show();
             }
         }).exec();
     }
@@ -309,18 +301,50 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
         return mUserCity;
     }
 
-    private void removeAllRequests() {
-        if (mFindCityByPrefRequest != null) {
-            cancelRequest(mFindCityByPrefRequest);
+    private void removeRequest(RequestType type) {
+        switch (type) {
+            case CITIES_BY_PREFF_REQUEST:
+                if (mFindCityByPrefRequest != null) {
+                    cancelRequest(mFindCityByPrefRequest);
+                    clearRequest(type);
+                }
+                break;
+            case DEFAULT_CITIES_REQUEST:
+                if (mDefaultCitiesRequest != null) {
+                    cancelRequest(mDefaultCitiesRequest);
+                    clearRequest(type);
+                }
+                break;
         }
     }
 
-    private CitiesRequest getCurrentRequest() {
-        return mFindCityByPrefRequest;
+    private void clearRequest(RequestType type) {
+        registerRequest(type, null);
     }
 
-    private void registerRequest(CitiesRequest request) {
-        mFindCityByPrefRequest = request;
+
+    private CitiesRequest getCurrentRequest(RequestType type) {
+        CitiesRequest currentRequest = null;
+        switch (type) {
+            case DEFAULT_CITIES_REQUEST:
+                currentRequest = mDefaultCitiesRequest;
+                break;
+            case CITIES_BY_PREFF_REQUEST:
+                currentRequest = mFindCityByPrefRequest;
+                break;
+        }
+        return currentRequest;
+    }
+
+    private void registerRequest(RequestType type, CitiesRequest request) {
+        switch (type) {
+            case DEFAULT_CITIES_REQUEST:
+                mDefaultCitiesRequest = request;
+                break;
+            case CITIES_BY_PREFF_REQUEST:
+                mFindCityByPrefRequest = request;
+                break;
+        }
     }
 
     private void cancelRequest(ApiRequest request) {
@@ -336,20 +360,17 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     private void initTimer() {
         stopTimer();
         mTimer = new Timer();
-        mTimerTask = new TimerTask() {
+        mTimer.schedule(new TimerTask() {
             public void run() {
-                // show default and users cities with progressBar
+                // show default and users city with progressBar
                 fillData(null);
             }
-        };
-        mTimer.schedule(mTimerTask, MY_TIMER_VALUE);
-
+        }, MY_TIMER_VALUE);
     }
 
     private void stopTimer() {
-        mTimer = null;
-        if (mTimerTask != null) {
-            mTimerTask.cancel();
+        if (mTimer != null) {
+            mTimer.cancel();
         }
     }
 }
