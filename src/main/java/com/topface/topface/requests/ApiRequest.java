@@ -315,8 +315,6 @@ public abstract class ApiRequest implements IApiRequest {
         } else {
             Debug.error("ApiResponse: getConnection() return null");
         }
-
-
         //Проверяем ответ
         if (HttpUtils.isCorrectResponseCode(responseCode)) {
             //Если код ответа верный, то читаем данные из потока и создаем IApiResponse
@@ -326,9 +324,7 @@ public abstract class ApiRequest implements IApiRequest {
             //Если не верный, то конструируем соответсвующий ответ
             response = constructApiResponse(ErrorCodes.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);
         }
-
         return response;
-
     }
 
     protected boolean writeData(HttpURLConnection connection, IConnectionConfigureListener listener) throws IOException {
@@ -336,13 +332,12 @@ public abstract class ApiRequest implements IApiRequest {
         if (TextUtils.isEmpty(getServiceName())) {
             throw new RuntimeException("Request doesn't have service name!");
         }
-        //Формируем свои данные для отправки POST запросом
+        // Формируем свои данные для отправки POST запросом
         String requestJson = toPostData();
-
-        //Переводим строку запроса в байты
+        // Переводим строку запроса в байты
         byte[] requestData = requestJson.getBytes();
         HttpUtils.setContentLengthAndConnect(connection, listener, requestData.length);
-
+        // Отправляем данные
         if (requestData.length > 0 && !isCanceled()) {
             Debug.logJson(
                     ConnectionManager.TAG,

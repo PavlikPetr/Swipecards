@@ -266,7 +266,7 @@ public class AddPhotoHelper {
                 uri.toString(), getIntentForNotification(), notificationListener
         );
 
-        final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext, new Base64.ProgressListener() {
+        final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext, new IProgressListener() {
             @Override
             public void onProgress(final int percentage) {
 
