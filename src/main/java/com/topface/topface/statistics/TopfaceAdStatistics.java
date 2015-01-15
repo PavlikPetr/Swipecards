@@ -12,6 +12,9 @@ import com.topface.topface.data.Banner;
 public class TopfaceAdStatistics {
     private static final String TF_MOBILE_BANNER_SHOW = "mobile_tf_fullscreen_show";
     private static final String TF_MOBILE_BANNER_CLICK = "mobile_tf_fullscreen_click";
+    private static final String TF_MOBILE_FULLSCREEN_SHOW = "mobile_tf_fullscreen_show";
+    private static final String TF_MOBILE_FULLSCREEN_CLICK = "mobile_tf_fullscreen_click";
+    private static final String TF_MOBILE_FULLSCREEN_CLOSED = "mobile_tf_fullscreen_close";
 
     private static void send(String key, String name) {
         StatisticsTracker.getInstance()
@@ -25,5 +28,17 @@ public class TopfaceAdStatistics {
 
     public static void sendBannerClicked(Banner banner) {
         send(TF_MOBILE_BANNER_CLICK, banner.name);
+    }
+
+    public static void sendFullscreenShown(Banner banner) {
+        send(TF_MOBILE_FULLSCREEN_SHOW, banner.name);
+    }
+
+    public static void sendFullscreenClicked(Banner banner) {
+        send(TF_MOBILE_FULLSCREEN_CLICK, banner.name);
+    }
+
+    public static void sendFullscreenClosed(Banner banner) {
+        send(TF_MOBILE_FULLSCREEN_CLOSED, banner.name);
     }
 }
