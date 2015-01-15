@@ -20,16 +20,16 @@ import ru.ideast.adwired.events.OnStartListener;
  */
 class AdWiredProvider extends AbstractAdsProvider {
 
-    private static Map<String, Character> ADWIRED_MAP = new HashMap<>();
+    private static Map<PageInfo.PageName, Character> ADWIRED_MAP = new HashMap<>();
     static {
-        ADWIRED_MAP.put(PageInfo.PAGE_LIKES, '1');
-        ADWIRED_MAP.put(PageInfo.PAGE_TABBED_LIKES, '1');
-        ADWIRED_MAP.put(PageInfo.PAGE_MUTUAL, '2');
-        ADWIRED_MAP.put(PageInfo.PAGE_DIALOGS, '3');
-        ADWIRED_MAP.put(PageInfo.PAGE_TABBED_MESSAGES, '3');
-        ADWIRED_MAP.put(PageInfo.PAGE_VISITORS, '5');
-        ADWIRED_MAP.put(PageInfo.PAGE_BOOKMARKS, '6');
-        ADWIRED_MAP.put(PageInfo.PAGE_FANS, '7');
+        ADWIRED_MAP.put(PageInfo.PageName.LIKES, '1');
+        ADWIRED_MAP.put(PageInfo.PageName.TABBED_LIKES, '1');
+        ADWIRED_MAP.put(PageInfo.PageName.MUTUAL, '2');
+        ADWIRED_MAP.put(PageInfo.PageName.DIALOGS, '3');
+        ADWIRED_MAP.put(PageInfo.PageName.TABBED_MESSAGES, '3');
+        ADWIRED_MAP.put(PageInfo.PageName.VISITORS, '5');
+        ADWIRED_MAP.put(PageInfo.PageName.BOOKMARKS, '6');
+        ADWIRED_MAP.put(PageInfo.PageName.FANS, '7');
     }
 
     @Override

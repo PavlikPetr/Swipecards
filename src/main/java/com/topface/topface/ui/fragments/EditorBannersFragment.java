@@ -18,7 +18,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
-import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
@@ -186,15 +185,15 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
                     getActivity(),
                     android.R.layout.simple_spinner_item,
-                    FloatBlock.FLOAT_TYPES
+                    PageInfo.FLOAT_TYPES
             );
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mFloatTypeSpinner.setAdapter(adapter);
             mFloatTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    getPage().floatType = FloatBlock.FLOAT_TYPES[position];
-                    mBannerTypeSpinner.setVisibility(FloatBlock.FLOAT_TYPES[position].equals(FloatBlock.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
+                    getPage().floatType = PageInfo.FLOAT_TYPES[position];
+                    mBannerTypeSpinner.setVisibility(PageInfo.FLOAT_TYPES[position].equals(PageInfo.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
                 }
 
                 @Override
@@ -211,13 +210,14 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             mPageInfo = pageInfo;
             mTitleText.setText(pageInfo.name);
             mPageInfo = pageInfo;
-            for (int i = 0; i < FloatBlock.FLOAT_TYPES.length; i++) {
-                if (FloatBlock.FLOAT_TYPES[i].equals(mPageInfo.floatType)) {
+            for (int i = 0; i < PageInfo.FLOAT_TYPES.length; i++) {
+                if (PageInfo.FLOAT_TYPES[i].equals(mPageInfo.floatType)) {
                     mFloatTypeSpinner.setSelection(i);
-                    mBannerTypeSpinner.setVisibility(FloatBlock.FLOAT_TYPES[i].equals(FloatBlock.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
+                    mBannerTypeSpinner.setVisibility(PageInfo.FLOAT_TYPES[i].equals(PageInfo.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
                 }
             }
-            if (mPageInfo.name.equals(PageInfo.PAGE_GAG) || mPageInfo.name.equals(PageInfo.PAGE_START)) {
+            if (mPageInfo.name.equals(PageInfo.PageName.GAG.getName())
+                    || mPageInfo.name.equals(PageInfo.PageName.START.getName())) {
                 mFloatTypeSpinner.setVisibility(View.GONE);
             }
 

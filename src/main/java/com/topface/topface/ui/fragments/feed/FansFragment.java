@@ -73,7 +73,7 @@ public class FansFragment extends BookmarksFragment {
     }
 
     @Override
-    public String getPageName() {
-        return PageInfo.PAGE_FANS;
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.FANS;
     }
 }

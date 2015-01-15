@@ -129,7 +129,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     }
 
     @Override
-    public String getPageName() {
-        return PageInfo.PAGE_BOOKMARKS;
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.BOOKMARKS;
     }
 }

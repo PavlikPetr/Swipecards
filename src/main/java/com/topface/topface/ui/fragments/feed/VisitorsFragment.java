@@ -106,7 +106,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    public String getPageName() {
-        return PageInfo.PAGE_VISITORS;
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.VISITORS;
     }
 }

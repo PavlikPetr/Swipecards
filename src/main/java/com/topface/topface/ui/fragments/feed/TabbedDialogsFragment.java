@@ -40,7 +40,7 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
     }
 
     @Override
-    public String getPageName() {
-        return PageInfo.PAGE_TABBED_MESSAGES;
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.TABBED_MESSAGES;
     }
 }

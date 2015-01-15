@@ -364,7 +364,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    public String getPageName() {
-        return PageInfo.PAGE_LIKES;
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.LIKES;
     }
 }

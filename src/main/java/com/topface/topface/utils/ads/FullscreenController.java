@@ -22,7 +22,6 @@ import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
@@ -56,7 +55,7 @@ public class FullscreenController {
         public FullscreenStartAction(int priority) {
             this.priority = priority;
             if (!CacheProfile.isEmpty()) {
-                startPageInfo = CacheProfile.getOptions().getPagesInfo().get(PageInfo.PAGE_START);
+                startPageInfo = CacheProfile.getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
             }
         }
 
@@ -79,7 +78,7 @@ public class FullscreenController {
             return CacheProfile.show_ad &&
                     FullscreenController.this.isTimePassed() &&
                     startPageInfo != null &&
-                    startPageInfo.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER);
+                    startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
         }
 
         @Override
@@ -242,7 +241,7 @@ public class FullscreenController {
 
     private void requestTopfaceFullscreen() {
         BannerRequest request = new BannerRequest(App.getContext());
-        request.place = PageInfo.PAGE_START;
+        request.place = PageInfo.PageName.START.getName();
         request.callback(new DataApiHandler<Banner>() {
             @Override
             public void success(final Banner data, IApiResponse response) {

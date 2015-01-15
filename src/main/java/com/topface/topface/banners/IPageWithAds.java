@@ -19,7 +19,7 @@ public interface IPageWithAds {
      * Name to find banner type in {@link com.topface.topface.data.Options#getPagesInfo()}
      * @return page name
      */
-    String getPageName();
+    PageInfo.PageName getPageName();
 
     /**
      * Activity to start other activities on banner click in some cases

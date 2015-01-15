@@ -102,7 +102,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
-    public String getPageName() {
-        return PageInfo.PAGE_MUTUAL;
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.MUTUAL;
     }
 }

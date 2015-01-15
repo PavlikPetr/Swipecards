@@ -23,7 +23,7 @@ import java.util.Map;
  * (for example, in onDestroy method of Activity or Fragment)
  *
  */
-public class BannerInjector implements IBannerInjector {
+class BannerInjector implements IBannerInjector {
 
     private final AdProvidersFactory mProvidersFactory;
     private final WeakReference<List<IPageWithAds>> mUsedPages =
@@ -35,17 +35,33 @@ public class BannerInjector implements IBannerInjector {
 
     @Override
     public void injectBanner(final IPageWithAds page) {
-        if (page == null) return;
-        String banner = lookupBannerFor(page);
-        IAdsProvider provider = getProvider(banner);
-        showAd(page, provider);
+        if (canInject(page)) {
+            String banner = lookupBannerFor(page);
+            IAdsProvider provider = getProvider(banner);
+            showAd(page, provider);
+        }
+    }
+
+    private boolean canInject(IPageWithAds page) {
+        if (!CacheProfile.show_ad || page == null)  {
+            return false;
+        }
+        String pageName = page.getPageName().getName();
+        Map<String, PageInfo> pagesInfo = CacheProfile.getOptions().getPagesInfo();
+        if (pagesInfo.containsKey(pageName)) {
+            String floatType = pagesInfo.get(pageName).floatType;
+            if (floatType.equals(PageInfo.FLOAT_TYPE_BANNER)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void showAd(final IPageWithAds page, IAdsProvider provider) {
         showAd(page, provider, false);
     }
 
-    private void showAd(final IPageWithAds page, IAdsProvider provider, final boolean isGag) {
+    private void showAd(final IPageWithAds page, IAdsProvider provider, final boolean isFallbackAd) {
         if (provider != null) {
             final boolean injectInitiated = provider.injectBanner(page,
                     new IAdsProvider.IAdProviderCallbacks() {
@@ -58,7 +74,7 @@ public class BannerInjector implements IBannerInjector {
                         @Override
                         public void onFailedToLoadAd() {
                             cleanUp(page);
-                            if (!isGag) {
+                            if (!isFallbackAd) {
                                 injectGag(page);
                             }
                         }
@@ -70,7 +86,7 @@ public class BannerInjector implements IBannerInjector {
     }
 
     private void injectGag(IPageWithAds page) {
-        showAd(page, getProvider(CacheProfile.getOptions().gagTypeBanner), true);
+        showAd(page, getProvider(CacheProfile.getOptions().fallbackTypeBanner), true);
     }
 
     private IAdsProvider getProvider(String banner) {
@@ -80,7 +96,7 @@ public class BannerInjector implements IBannerInjector {
     private String lookupBannerFor(IPageWithAds page) {
         Options options = CacheProfile.getOptions();
         Map<String, PageInfo> pagesInfo = options != null ? options.getPagesInfo() : null;
-        String pageName = page.getPageName();
+        String pageName = page.getPageName().getName();
         if (pagesInfo != null && pagesInfo.containsKey(pageName)) {
             PageInfo pageInfo = pagesInfo.get(pageName);
             if (pageInfo != null) {

@@ -39,7 +39,9 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.banners.BannersController;
 import com.topface.topface.banners.IPageWithAds;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiResponse;
@@ -58,7 +60,6 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.MultiselectionController;
 import com.topface.topface.ui.blocks.FilterBlock;
-import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
@@ -124,7 +125,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     };
 
-    private FloatBlock mFloatBlock;
+    private BannersController mBannersController;
 
     protected boolean isDeletable = true;
     private Drawable mLoader0;
@@ -239,7 +240,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void initFloatBlock(ViewGroup view) {
-        mFloatBlock = new FloatBlock(this, view);
+        mBannersController = new BannersController(this);
     }
 
     @Override
@@ -255,9 +256,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             updateData(false, true);
         }
         getListAdapter().loadOlderItems();
-        if (mFloatBlock != null) {
-            mFloatBlock.onResume();
-        }
         registerGcmReceiver();
     }
 
@@ -276,8 +274,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mFloatBlock != null) {
-            mFloatBlock.onDestroy();
+        if (mBannersController != null) {
+            mBannersController.onDestroy();
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
@@ -1039,8 +1037,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     @Override
-    public String getPageName() {
-        return "";
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.UNKNOWK;
     }
 
     @Override

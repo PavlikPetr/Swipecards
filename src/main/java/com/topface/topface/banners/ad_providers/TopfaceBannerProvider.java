@@ -61,7 +61,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
     private BannerRequest createTopfaceBannerRequest(final IPageWithAds page, final ImageViewRemote adView,
                                                      final IAdProviderCallbacks callbacks) {
         BannerRequest bannerRequest = new BannerRequest(page.getActivity());
-        bannerRequest.place = page.getPageName();
+        bannerRequest.place = page.getPageName().getName();
         bannerRequest.callback(new DataApiHandler<Banner>() {
 
             @Override

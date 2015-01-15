@@ -112,7 +112,7 @@ public class Options extends AbstractData {
      */
     public PromoPopupEntity premiumAdmirations;
     public GetJar getJar;
-    public String gagTypeBanner = AdProvidersFactory.BANNER_ADMOB;
+    public String fallbackTypeBanner = AdProvidersFactory.BANNER_ADMOB;
     public String gagTypeFullscreen = AdProvidersFactory.BANNER_NONE;
     public String helpUrl;
 
@@ -277,7 +277,7 @@ public class Options extends AbstractData {
                 getJar = new GetJar(getJarJson.optString("id"), getJarJson.optString("name"), getJarJson.optLong("price"));
             }
 
-            gagTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_ADMOB);
+            fallbackTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_ADMOB);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);
             JSONObject bonusObject = response.optJSONObject("bonus");
             if (bonusObject != null) {
@@ -369,39 +369,6 @@ public class Options extends AbstractData {
                 offer.type = offerObj.optInt("type");
                 list.add(offer);
             }
-        }
-    }
-
-
-    private static String getPageName(JSONObject page, String key) {
-        String name = page.optString(key);
-        switch (name) {
-            case PageInfo.PAGE_LIKES:
-                return PageInfo.PAGE_LIKES;
-            case PageInfo.PAGE_MUTUAL:
-                return PageInfo.PAGE_MUTUAL;
-            case PageInfo.PAGE_MESSAGES:
-                return PageInfo.PAGE_MESSAGES;
-            case PageInfo.PAGE_VISITORS:
-                return PageInfo.PAGE_VISITORS;
-            case PageInfo.PAGE_DIALOGS:
-                return PageInfo.PAGE_DIALOGS;
-            case PageInfo.PAGE_FANS:
-                return PageInfo.PAGE_FANS;
-            case PageInfo.PAGE_BOOKMARKS:
-                return PageInfo.PAGE_BOOKMARKS;
-            case PageInfo.PAGE_VIEWS:
-                return PageInfo.PAGE_VIEWS;
-            case PageInfo.PAGE_START:
-                return PageInfo.PAGE_START;
-            case PageInfo.PAGE_GAG:
-                return PageInfo.PAGE_GAG;
-            case PageInfo.PAGE_TABBED_MESSAGES:
-                return PageInfo.PAGE_TABBED_MESSAGES;
-            case PageInfo.PAGE_TABBED_LIKES:
-                return PageInfo.PAGE_TABBED_LIKES;
-            default:
-                return PageInfo.PAGE_UNKNOWK + "(" + name + ")";
         }
     }
 

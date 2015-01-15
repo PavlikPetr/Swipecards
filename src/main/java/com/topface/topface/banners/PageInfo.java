@@ -8,36 +8,15 @@ import com.google.gson.annotations.SerializedName;
  */
 public class PageInfo {
     /**
-     * Идентификаторы страниц
+     * Идентификаторы для типов блоков (лидеры, баннеры, не показывать блоки)
      */
-    public static final String PAGE_UNKNOWK = "UNKNOWN_PAGE";
-    public final static String PAGE_LIKES = "LIKE";
-    public final static String PAGE_MUTUAL = "MUTUAL";
-    public final static String PAGE_MESSAGES = "MESSAGES";
-    public final static String PAGE_VISITORS = "VISITORS";
-    public final static String PAGE_DIALOGS = "DIALOGS";
-    public final static String PAGE_FANS = "FANS";
-    public final static String PAGE_BOOKMARKS = "BOOKMARKS";
-    public final static String PAGE_VIEWS = "VIEWS";
-    public final static String PAGE_START = "START";
-    public final static String PAGE_GAG = "GAG";
-    public final static String PAGE_TABBED_LIKES = "LIKES_TABS";
-    public final static String PAGE_TABBED_MESSAGES = "MESSAGES_TABS";
-    public final static String[] PAGES = new String[]{
-            PAGE_UNKNOWK,
-            PAGE_LIKES,
-            PAGE_MUTUAL,
-            PAGE_MESSAGES,
-            PAGE_VISITORS,
-            PAGE_DIALOGS,
-            PAGE_FANS,
-            PAGE_BOOKMARKS,
-            PAGE_VIEWS,
-            PAGE_START,
-            PAGE_TABBED_LIKES,
-            PAGE_TABBED_MESSAGES,
-            PAGE_GAG
+    public final static String FLOAT_TYPE_NONE = "NONE";
+    public final static String FLOAT_TYPE_BANNER = "BANNER";
+    public final static String[] FLOAT_TYPES = new String[]{
+            FLOAT_TYPE_BANNER,
+            FLOAT_TYPE_NONE
     };
+
     private static final String SEPARATOR = ";";
 
     public String name;
@@ -71,5 +50,35 @@ public class PageInfo {
 
     public void setBanner(String banner) {
         this.banner = banner;
+    }
+
+    /**
+     * Created by kirussell on 15/01/15.
+     * Pages' identifiers with given String's names from server map
+     */
+    public static enum PageName {
+        UNKNOWK("UNKNOWN_PAGE"),
+        LIKES("LIKE"),
+        MUTUAL("MUTUAL"),
+        MESSAGES("MESSAGES"),
+        VISITORS("VISITORS"),
+        DIALOGS("DIALOGS"),
+        FANS("FANS"),
+        BOOKMARKS("BOOKMARKS"),
+        VIEWS("VIEWS"),
+        START("START"),
+        GAG("GAG"),
+        TABBED_LIKES("LIKES_TABS"),
+        TABBED_MESSAGES("MESSAGES_TABS");
+
+        private final String mName;
+
+        PageName(String name) {
+            mName = name;
+        }
+
+        public String getName() {
+            return mName;
+        }
     }
 }

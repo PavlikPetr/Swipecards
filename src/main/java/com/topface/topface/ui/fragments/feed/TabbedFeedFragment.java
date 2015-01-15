@@ -15,9 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.BannersController;
 import com.topface.topface.banners.IPageWithAds;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
-import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CountersManager;
@@ -37,7 +38,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
     private ArrayList<String> mPagesClassNames = new ArrayList<>();
     private ArrayList<String> mPagesTitles = new ArrayList<>();
     private ArrayList<Integer> mPagesCounters = new ArrayList<>();
-    private FloatBlock mFloatBlock;
+    private BannersController mBannersController;
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -121,11 +122,11 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
             }
         }
         mPager.setCurrentItem(lastPage);
-        initFloatBlock((ViewGroup) view);
+        initFloatBlock();
     }
 
-    protected void initFloatBlock(ViewGroup view) {
-        mFloatBlock = new FloatBlock(this, view);
+    protected void initFloatBlock() {
+        mBannersController = new BannersController(this);
     }
 
     protected abstract void addPages();
@@ -152,23 +153,14 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (mFloatBlock != null) {
-            mFloatBlock.onResume();
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mPager != null) {
             setLastOpenedPage(mPager.getCurrentItem());
         }
         mPager = null;
-
-        if (mFloatBlock != null) {
-            mFloatBlock.onDestroy();
+        if (mBannersController != null) {
+            mBannersController.onDestroy();
         }
 
     }
@@ -190,8 +182,8 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
     protected abstract void setLastOpenedPage(int lastOpenedPage);
 
     @Override
-    public String getPageName() {
-        return "";
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.UNKNOWK;
     }
 
     @Override

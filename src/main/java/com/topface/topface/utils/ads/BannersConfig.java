@@ -63,10 +63,10 @@ public class BannersConfig {
     public void restoreBannersSettings() {
         SharedPreferences preferences = getPreferences();
         Map<String, PageInfo> pagesInfo= new HashMap<>();
-        for (String pageName : PageInfo.PAGES) {
-            String str = preferences.getString(pageName, Static.EMPTY);
+        for (PageInfo.PageName pageName : PageInfo.PageName.values()) {
+            String str = preferences.getString(pageName.getName(), Static.EMPTY);
             if (!TextUtils.isEmpty(str)) {
-                pagesInfo.put(pageName, PageInfo.parseFromString(str));
+                pagesInfo.put(pageName.getName(), PageInfo.parseFromString(str));
             }
         }
         CacheProfile.getOptions().setPagesInfo(pagesInfo);

@@ -177,7 +177,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    public String getPageName() {
-        return PageInfo.PAGE_DIALOGS;
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.DIALOGS;
     }
 }
