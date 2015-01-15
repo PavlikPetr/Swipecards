@@ -7,7 +7,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.IApiResponse;
 
-abstract public class ActionMenuHandler extends AttitudeHandler {
+abstract public class ActionMenuHandler extends BlackListAndBookmarkHandler {
 
     private boolean mIsAddition;
     private int mUserId;
@@ -32,7 +32,7 @@ abstract public class ActionMenuHandler extends AttitudeHandler {
         this.mIsAddition = isAddition;
     }
 
-    public void setCallback(AttitudeHandler.ActionTypes actionTypes, int userId, boolean isAddition, ApiRequest request) {
+    public void setCallback(BlackListAndBookmarkHandler.ActionTypes actionTypes, int userId, boolean isAddition, ApiRequest request) {
         setIntentParam(actionTypes, userId, isAddition);
         request.callback(this);
     }

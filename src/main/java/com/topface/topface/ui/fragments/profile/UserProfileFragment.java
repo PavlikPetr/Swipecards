@@ -1,7 +1,10 @@
 package com.topface.topface.ui.fragments.profile;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -24,10 +27,9 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
-import com.topface.topface.requests.handlers.ActionMenuHandler;
-import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.fragments.gift.UserGiftsFragment;
@@ -36,6 +38,8 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
+
+import java.util.ArrayList;
 
 /**
  * Created by kirussell on 18.03.14.
@@ -58,15 +62,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
     // controllers
     private RateController mRateController;
     private OverflowMenu mProfileOverflowMenu;
-
-    private ActionMenuHandler mActionMenuHandler = new ActionMenuHandler(App.getContext()) {
-        @Override
-        public void closeActionMenu() {
-            closeProfileActions();
-        }
-    };
-
-    private int mActionsHeightHeuristic;
 
     @Override
     public void onAttach(Activity activity) {
@@ -117,7 +112,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
             mProfileOverflowMenu.unregisterBroadcastReceiver();
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mGiftReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
 
     @Override
