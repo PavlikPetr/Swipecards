@@ -43,11 +43,6 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
     }
 
     @Override
-    protected void initOpenIabHelper() {
-        //Для PW нам не нужно иницилизировать OpenIAB, но нужно отнаследоваться от CoinsBuyingFragment
-    }
-
-    @Override
     public void buy(Products.BuyButton btn) {
         PushButtonVipUniqueStatistics.sendPushButtonNoVip(btn.id, ((Object) this).getClass().getSimpleName(), getFrom());
         PushButtonVipStatistics.send(btn.id, ((Object) this).getClass().getSimpleName(), getFrom());
