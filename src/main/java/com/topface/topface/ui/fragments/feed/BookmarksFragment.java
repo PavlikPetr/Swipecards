@@ -14,7 +14,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.handlers.AttitudeHandler;
+import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.utils.CountersManager;
@@ -30,12 +30,12 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     private BroadcastReceiver mBookmarkedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.hasExtra(AttitudeHandler.TYPE) &&
-                    intent.getSerializableExtra(AttitudeHandler.TYPE)
-                            .equals(AttitudeHandler.ActionTypes.BOOKMARK) && isAdded()) {
-                int[] ids = intent.getIntArrayExtra(AttitudeHandler.FEED_IDS);
-                boolean hasValue = intent.hasExtra(AttitudeHandler.VALUE);
-                boolean value = intent.getBooleanExtra(AttitudeHandler.VALUE, false);
+            if (intent.hasExtra(BlackListAndBookmarkHandler.TYPE) &&
+                    intent.getSerializableExtra(BlackListAndBookmarkHandler.TYPE)
+                            .equals(BlackListAndBookmarkHandler.ActionTypes.BOOKMARK) && isAdded()) {
+                int[] ids = intent.getIntArrayExtra(BlackListAndBookmarkHandler.FEED_IDS);
+                boolean hasValue = intent.hasExtra(BlackListAndBookmarkHandler.VALUE);
+                boolean value = intent.getBooleanExtra(BlackListAndBookmarkHandler.VALUE, false);
                 if (ids != null && hasValue) {
                     if (!value) {
                         getListAdapter().removeByUserIds(ids);
@@ -51,7 +51,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBookmarkedReceiver,
-                new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
+                new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
     }
 
     @Override

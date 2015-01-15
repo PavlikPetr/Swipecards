@@ -863,4 +863,19 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="PopupMenuTextApearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@drawable/top_menu_text_color</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="PopupMenu" parent="@style/Widget.AppCompat.Base.PopupMenu">
+        <!--<item name="android:popupBackground">#F8F8F8</item>-->
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_example</item>
+    </style>
+
+    <style name="PopupMenuListView" parent="@android:style/Widget.Holo.ListView.DropDown" tools:ignore="NewApi">
+        <item name="android:divider">@drawable/chat_date_line</item>
+        <item name="android:listSelector">@drawable/top_menu_list_selector</item>
+    </style>
+
 </resources>

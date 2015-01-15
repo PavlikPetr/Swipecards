@@ -6,7 +6,6 @@ import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
@@ -14,6 +13,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
 import org.json.JSONArray;

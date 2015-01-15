@@ -2,8 +2,6 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.topface.topface.requests.handlers.AttitudeHandler;
-
 import java.util.List;
 
 public class DeleteBlackListRequest extends DeleteAbstractUsersRequest {
@@ -15,7 +13,6 @@ public class DeleteBlackListRequest extends DeleteAbstractUsersRequest {
 
     public DeleteBlackListRequest(int id, Context context) {
         super(Integer.toString(id), context);
-        callback(new AttitudeHandler(getContext(), AttitudeHandler.ActionTypes.BLACK_LIST, new int[]{id}, false));
     }
 
     @Override

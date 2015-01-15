@@ -9,7 +9,7 @@ import com.topface.topface.requests.IApiResponse;
 /**
  * This handler sends broadcasts every time users added to or deleted from bookmarks or blacklist.
  */
-public class AttitudeHandler extends VipApiHandler {
+public class BlackListAndBookmarkHandler extends VipApiHandler {
 
     public static final String UPDATE_USER_CATEGORY = "com.topface.topface.action.USER_CATEGORY";
     public static final String FEED_ID = "FEED_ID";
@@ -22,8 +22,8 @@ public class AttitudeHandler extends VipApiHandler {
     private int[] mUserId;
     private boolean mIsAddition;
 
-    public AttitudeHandler(Context context, ActionTypes actionType,
-                           int[] userId, boolean isAddition) {
+    public BlackListAndBookmarkHandler(Context context, ActionTypes actionType,
+                                       int[] userId, boolean isAddition) {
         mContext = context;
         mActionType = actionType;
         mUserId = userId;

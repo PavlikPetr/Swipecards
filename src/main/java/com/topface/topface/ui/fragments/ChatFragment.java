@@ -51,21 +51,15 @@ import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackListAddRequest;
-import com.topface.topface.requests.BookmarkAddRequest;
 import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.DeleteBlackListRequest;
-import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.DeleteMessagesRequest;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
-import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.ChatListAnimatedAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
@@ -85,7 +79,8 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.ActionBarOnlineSetterDelegate;
 import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
-import com.topface.topface.utils.actionbar.TopMenu;
+import com.topface.topface.utils.actionbar.OverflowMenu;
+import com.topface.topface.utils.actionbar.OverflowMenuUser;
 import com.topface.topface.utils.controllers.PopularUserChatController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
@@ -96,12 +91,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
-
-import static com.topface.topface.utils.actionbar.TopMenu.TopMenuItem;
-import static com.topface.topface.utils.actionbar.TopMenu.TopMenuItem.ADD_TO_BOOKMARK_ACTION;
-import static com.topface.topface.utils.actionbar.TopMenu.findTopMenuItemById;
-import static com.topface.topface.utils.actionbar.TopMenu.getChatTopMenu;
-import static com.topface.topface.utils.actionbar.TopMenu.isCurrentIdTopMenuItem;
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener, IUserOnlineListener {
 
@@ -123,29 +112,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INITIAL_MESSAGE = "initial_message";
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
-
-    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
-        @SuppressWarnings("ConstantConditions")
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            AttitudeHandler.ActionTypes type = (AttitudeHandler.ActionTypes) intent.getSerializableExtra(AttitudeHandler.TYPE);
-            boolean value = intent.getBooleanExtra(AttitudeHandler.VALUE, false);
-            if (mUser != null && type != null) {
-                switch (type) {
-                    case BLACK_LIST:
-                        mUser.blocked = value;
-                        initTopMenu(mUser);
-                        break;
-                    case BOOKMARK:
-                        if (intent.hasExtra(AttitudeHandler.VALUE) && !mUser.blocked) {
-                            mUser.bookmarked = value;
-                            initTopMenu(mUser);
-                        }
-                        break;
-                }
-            }
-        }
-    };
 
     // Data
     private int mUserId;
@@ -175,6 +141,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
     private CountDownTimer mTimer;
     private boolean mIsBeforeFirstChatUpdate = true;
+    private OverflowMenu mChatOverflowMenu;
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -316,15 +283,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         //регистрируем здесь, потому что может быть такая ситуация, что обновить надо, когда активити находится не на топе стека
         mJustResumed = false;
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver,
-                new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
         return root;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
 
     private void restoreData(Bundle savedInstanceState) {
@@ -342,7 +306,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 mAdapter.setData(historyData);
                 mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
-                initTopMenu(mUser);
+                initOverflowMenu();
                 if (wasFailed) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 } else {
@@ -534,6 +498,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onDestroy() {
         release();
+        if (mChatOverflowMenu != null) {
+            mChatOverflowMenu.unregisterBroadcastReceiver();
+        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPopularUserLockController);
         Debug.log(this, "-onDestroy");
         super.onDestroy();
@@ -599,7 +566,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             mUser = data.user;
                             if (!mUser.isEmpty()) {
                                 onUserLoaded(mUser);
-                                initTopMenu(mUser);
+                                initOverflowMenu();
                             }
                             return;
                         } else if (blockStage == PopularUserChatController.SECOND_STAGE) {
@@ -628,7 +595,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 mUser = data.user;
                 if (!mUser.isEmpty()) {
                     onUserLoaded(mUser);
-                    initTopMenu(mUser);
+                    initOverflowMenu();
                 }
                 if (mAdapter != null) {
                     if (!data.items.isEmpty()) {
@@ -788,40 +755,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mAdapter.release();
         }
         mAdapter = null;
-    }
-
-    private void onClickAddToBookmark() {
-        if (mUser != null && mBarActions != null && mBarActions.hasSubMenu()) {
-            ApiRequest request;
-            if (mUser.bookmarked) {
-                request = new DeleteBookmarksRequest(mUserId, getActivity());
-            } else {
-                request = new BookmarkAddRequest(mUserId, getActivity());
-            }
-            mUser.bookmarked = !mUser.bookmarked;
-            request.exec();
-        }
-    }
-
-    private void onClickAddToBlackList() {
-        if (CacheProfile.premium) {
-            if (mUser != null && mUser.id > 0 && mBarActions != null && mBarActions.hasSubMenu()) {
-                ApiRequest request;
-                if (mUser.blocked) {
-                    request = new DeleteBlackListRequest(mUser.id, getActivity());
-                } else {
-                    request = new BlackListAddRequest(mUser.id, getActivity());
-                }
-                mUser.blocked = !mUser.blocked;
-                if (mUser.blocked) {
-                    mUser.bookmarked = false;
-                }
-                request.exec();
-            }
-        } else {
-            startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"),
-                    PurchasesActivity.INTENT_BUY_VIP);
-        }
     }
 
     @Override
@@ -1047,34 +980,82 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             barActionsItem.setChecked(mBarActions.isChecked());
         }
         mBarActions = barActionsItem;
-        initTopMenu(mUser);
+        mChatOverflowMenu = new OverflowMenu(getActivity(), mBarActions);
+        mChatOverflowMenu.registerBroadcastReceiver();
     }
 
-    private void initTopMenu(FeedUser user) {
-        if (mBarActions != null && mBarActions.hasSubMenu()) {
-            if (user != null) {
-                mBarActions.getSubMenu().clear();
-                ArrayList<TopMenu.TopMenuItem> topMenuItemArray = getChatTopMenu();
-                for (int i = 0; i < topMenuItemArray.size(); i++) {
-                    TopMenuItem item = topMenuItemArray.get(i);
-                    int resourceId;
-                    switch (topMenuItemArray.get(i)) {
-                        case ADD_TO_BLACK_LIST_ACTION:
-                            resourceId = user.blocked ? item.getSecondResourceId() : item.getFirstResourceId();
-                            break;
-                        case ADD_TO_BOOKMARK_ACTION:
-                            resourceId = user.bookmarked ? item.getSecondResourceId() : item.getFirstResourceId();
-                            break;
-                        default:
-                            resourceId = item.getFirstResourceId();
-                            break;
+    private void initOverflowMenu() {
+        if (mChatOverflowMenu != null) {
+            if (mChatOverflowMenu.getoverflowMenuFieldsListener() == null) {
+                mChatOverflowMenu.setOverflowMenuFieldsListener(new OverflowMenuUser() {
+                    @Override
+                    public void setBlackListValue(Boolean value) {
+                        if (mUser != null) {
+                            if (value != null) {
+                                mUser.blocked = value;
+                            } else {
+                                mUser.blocked = !mUser.blocked;
+                            }
+                        }
                     }
-                    mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId);
-                }
-                mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!user.blocked);
-            } else {
-                mBarActions.getSubMenu().clear();
+
+                    @Override
+                    public Boolean getBlackListValue() {
+                        if (mUser != null) {
+                            return mUser.blocked;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public void setBookmarkValue(Boolean value) {
+                        if (mUser != null) {
+                            if (value != null) {
+                                mUser.bookmarked = value;
+                            } else {
+                                mUser.bookmarked = !mUser.bookmarked;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public Boolean getBookmarkValue() {
+                        if (mUser != null) {
+                            return mUser.bookmarked;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public void setSympathySentValue(Boolean value) {
+
+                    }
+
+                    @Override
+                    public Boolean getSympathySentValue() {
+                        return null;
+                    }
+
+                    @Override
+                    public Integer getUserId() {
+                        if (mUser != null) {
+                            return mUser.id;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public Intent getOpenChatIntent() {
+                        return null;
+                    }
+
+                    @Override
+                    public Boolean getMutualValue() {
+                        return null;
+                    }
+                });
             }
+            mChatOverflowMenu.initOverfowMenu();
         }
     }
 
@@ -1085,26 +1066,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        if (isCurrentIdTopMenuItem(itemId)) {
-            TopMenuItem topMenuItem = findTopMenuItemById(itemId);
-            switch (topMenuItem) {
-                case ADD_TO_BLACK_LIST_ACTION:
-                    onClickAddToBlackList();
-                    break;
-                case ADD_TO_BOOKMARK_ACTION:
-                    onClickAddToBookmark();
-                    break;
-                case COMPLAIN_ACTION:
-                    startActivity(ComplainsActivity.createIntent(mUserId));
-                    break;
-                default:
-                    break;
-            }
-            if (mUser != null) {
-                initTopMenu(mUser);
-            }
+        if (mChatOverflowMenu != null) {
+            mChatOverflowMenu.onMenuClicked(item);
         }
+        int itemId = item.getItemId();
         switch (itemId) {
             case R.id.action_profile:
                 if (mUser != null) {
@@ -1122,10 +1087,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 return true;
             case R.id.action_user_actions_list:
 
-                if (mUser != null && mBarActions != null) {
-                    if (!mBarActions.getSubMenu().hasVisibleItems()) {
-                        initTopMenu(mUser);
-                    }
+                if (mBarActions != null &&
+                        !mBarActions.getSubMenu().hasVisibleItems()) {
+                    initOverflowMenu();
                 }
                 return true;
             case android.R.id.home:

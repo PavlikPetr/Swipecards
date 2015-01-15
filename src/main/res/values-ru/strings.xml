@@ -775,4 +775,8 @@
     <string name="pull_to_refresh_pull_label">Потяните для обновления…</string>
     <string name="pull_to_refresh_release_label">Отпустите для обновления…</string>
     <string name="pull_to_refresh_refreshing_label">Загрузка…</string>
+    <string name="user_added_to_black_list">Пользователь добавлен в черный список</string>
+    <string name="user_deleted_from_black_list">Пользователь удален из черного списка</string>
+    <string name="user_added_to_bookmark">Пользователь добавлен в избранные</string>
+    <string name="user_deleted_from_bookmark">Пользователь удален из избранных</string>
 </resources>

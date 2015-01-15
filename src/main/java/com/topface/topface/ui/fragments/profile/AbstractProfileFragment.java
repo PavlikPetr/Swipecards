@@ -161,7 +161,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         return mProfile;
     }
 
-    protected void setProfile(Profile profile) {
+    protected void  setProfile(Profile profile) {
         int previousBackground = mProfile != null ? mProfile.background : -1;
         mProfile = profile;
         if (mProfile != null && previousBackground != mProfile.background && mBackgroundView != null) {

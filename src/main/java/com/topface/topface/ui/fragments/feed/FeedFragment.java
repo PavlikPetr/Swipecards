@@ -40,6 +40,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
 import com.topface.topface.requests.DataApiHandler;
@@ -47,7 +48,7 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.requests.handlers.AttitudeHandler;
+import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ChatActivity;
@@ -96,12 +97,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.hasExtra(AttitudeHandler.TYPE) &&
-                    intent.getSerializableExtra(AttitudeHandler.TYPE)
-                            .equals(AttitudeHandler.ActionTypes.BLACK_LIST) && isAdded()) {
-                int[] ids = intent.getIntArrayExtra(AttitudeHandler.FEED_IDS);
-                boolean hasValue = intent.hasExtra(AttitudeHandler.VALUE);
-                boolean value = intent.getBooleanExtra(AttitudeHandler.VALUE, false);
+            if (intent.hasExtra(BlackListAndBookmarkHandler.TYPE) &&
+                    intent.getSerializableExtra(BlackListAndBookmarkHandler.TYPE)
+                            .equals(BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST) && isAdded()) {
+                int[] ids = intent.getIntArrayExtra(BlackListAndBookmarkHandler.FEED_IDS);
+                boolean hasValue = intent.hasExtra(BlackListAndBookmarkHandler.VALUE);
+                boolean value = intent.getBooleanExtra(BlackListAndBookmarkHandler.VALUE, false);
                 if (ids != null && hasValue) {
                     if (value == whetherDeleteIfBlacklisted()) {
                         getListAdapter().removeByUserIds(ids);
@@ -238,7 +239,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
     }
 
     @Override
@@ -507,7 +508,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void onAddToBlackList(List<Integer> ids) {
-        BlackListAddRequest r = new BlackListAddRequest(ids, getActivity());
+        int[] idsToSend = new int[ids.size()];
+        for (int i = 0; i < idsToSend.length; i++) {
+            idsToSend[i] = ids.get(i);
+        }
+        ApiRequest r = new BlackListAddRequest(ids, getActivity()).callback(new BlackListAndBookmarkHandler(getActivity(), BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST, idsToSend, true));
         r.handler.setOnCompleteAction(new ApiHandler.CompleteAction() {
             @Override
             public void onCompleteAction() {

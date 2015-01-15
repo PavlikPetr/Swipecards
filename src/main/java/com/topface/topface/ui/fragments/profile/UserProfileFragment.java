@@ -1,10 +1,7 @@
 package com.topface.topface.ui.fragments.profile;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -15,47 +12,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
-import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackListAddRequest;
-import com.topface.topface.requests.BookmarkAddRequest;
 import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.DeleteBlackListRequest;
-import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
-import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.ComplainsActivity;
-import com.topface.topface.ui.EditorProfileActionsActivity;
-import com.topface.topface.ui.GiftsActivity;
-import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
-import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.fragments.gift.UserGiftsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.actionbar.TopMenu;
-
-import java.util.ArrayList;
-
-import static com.topface.topface.utils.actionbar.TopMenu.TopMenuItem.ADD_TO_BOOKMARK_ACTION;
-import static com.topface.topface.utils.actionbar.TopMenu.TopMenuItem.SEND_ADMIRATION_ACTION;
-import static com.topface.topface.utils.actionbar.TopMenu.TopMenuItem.SEND_SYMPATHY_ACTION;
-import static com.topface.topface.utils.actionbar.TopMenu.findTopMenuItemById;
-import static com.topface.topface.utils.actionbar.TopMenu.getProfileTopMenu;
-import static com.topface.topface.utils.actionbar.TopMenu.isCurrentIdTopMenuItem;
+import com.topface.topface.utils.actionbar.OverflowMenu;
+import com.topface.topface.utils.actionbar.OverflowMenuUser;
 
 /**
  * Created by kirussell on 18.03.14.
@@ -63,14 +38,9 @@ import static com.topface.topface.utils.actionbar.TopMenu.isCurrentIdTopMenuItem
  */
 public class UserProfileFragment extends AbstractProfileFragment {
 
-    public static final String USER_RATED_EXTRA = "USER_RATED_EXTRA";
-
-
     private int mProfileId;
     private int mLastLoadedProfileId;
     private String mItemId;
-    private boolean mUserRate;
-    private boolean mUserRated;
     // views
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
@@ -80,31 +50,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private ApiResponse mSavedResponse = null;
     // controllers
     private RateController mRateController;
-    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
-        @SuppressWarnings("ConstantConditions")
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            AttitudeHandler.ActionTypes type = (AttitudeHandler.ActionTypes) intent.getSerializableExtra(AttitudeHandler.TYPE);
-            boolean value = intent.getBooleanExtra(AttitudeHandler.VALUE, false);
-            Profile profile = getProfile();
-            View root = getView();
-            if (profile != null && type != null && root != null) {
-                switch (type) {
-                    case BLACK_LIST:
-                        ((User) profile).inBlackList = value;
-                        initTopMenu();
-                        break;
-                    case BOOKMARK:
-                        User user = (User) profile;
-                        if (intent.hasExtra(AttitudeHandler.VALUE) && !user.inBlackList) {
-                            user.bookmarked = value;
-                            initTopMenu();
-                        }
-                        break;
-                }
-            }
-        }
-    };
+    private OverflowMenu mProfileOverflowMenu;
 
     @Override
     public void onAttach(Activity activity) {
@@ -112,8 +58,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
         Bundle args = getArguments();
         mProfileId = args.getInt(AbstractProfileFragment.INTENT_UID, 0);
         mItemId = args.getString(AbstractProfileFragment.INTENT_ITEM_ID);
-        mUserRated = args.containsKey(USER_RATED_EXTRA);
-        mUserRate = args.getBoolean(USER_RATED_EXTRA, false);
         String s = args.getString(EditorProfileActionsFragment.PROFILE_RESPONSE);
         if (!TextUtils.isEmpty(s)) {
             mSavedResponse = new ApiResponse(s);
@@ -139,15 +83,15 @@ public class UserProfileFragment extends AbstractProfileFragment {
             }
         }).build();
         mLockScreen.addView(mRetryView.getView());
-
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
         return root;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
+        if (mProfileOverflowMenu != null) {
+            mProfileOverflowMenu.unregisterBroadcastReceiver();
+        }
     }
 
     @Override
@@ -182,184 +126,16 @@ public class UserProfileFragment extends AbstractProfileFragment {
             barActionsItem.setChecked(mBarActions.isChecked());
         }
         mBarActions = barActionsItem;
-        initTopMenu();
-    }
-
-    private void onClickAddToBookmarkAction() {
-        Profile profile = getProfile();
-        if (profile == null) {
-            return;
-        }
-        ApiRequest request;
-
-        if (profile instanceof User && ((User) profile).bookmarked) {
-            request = new DeleteBookmarksRequest(profile.uid, getActivity());
-        } else {
-            request = new BookmarkAddRequest(profile.uid, getActivity());
-        }
-        if (profile instanceof User) {
-            ((User) profile).bookmarked = !((User) profile).bookmarked;
-            setProfile(profile);
-        }
-        request.exec();
-    }
-
-    private void onClickOpenChatAction() {
-        Profile profile = getProfile();
-        if (profile == null) {
-            return;
-        }
-        if (CacheProfile.premium || !CacheProfile.getOptions().blockChatNotMutual) {
-            openChat();
-        } else {
-            String callingClass = getCallingClassName();
-            if (callingClass != null && (profile instanceof User)) {
-                if (callingClass.equals(DatingFragment.class.getName()) || callingClass.equals(LeadersDialog.class.getName())) {
-                    if (!((User) profile).mutual) {
-                        startActivityForResult(
-                                PurchasesActivity.createVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
-                                PurchasesActivity.INTENT_BUY_VIP
-                        );
-                    }
-                }
-            }
-            openChat();
-        }
-    }
-
-    private void onClickSendGiftAction() {
-        UserGiftsFragment giftsFragment = getGiftFragment();
-        if (giftsFragment != null && giftsFragment.getActivity() != null) {
-            giftsFragment.sendGift();
-        } else {
-            startActivityForResult(
-                    GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
-                    GiftsActivity.INTENT_REQUEST_GIFT
-            );
-        }
-    }
-
-    private void onClickSendSymphatyAction() {
-        Profile profile = getProfile();
-        if (profile == null) {
-            return;
-        }
-        mRateController.onLike(
-                profile.uid,
-                ((User) profile).mutual ?
-                        SendLikeRequest.DEFAULT_MUTUAL : SendLikeRequest.DEFAULT_NO_MUTUAL,
-                new RateController.OnRateRequestListener() {
-                    @SuppressWarnings("ConstantConditions")
-                    @Override
-                    public void onRateCompleted(int mutualId) {
-                        if (getActivity() != null) {
-                            Toast.makeText(App.getContext(), R.string.sympathy_sended, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @SuppressWarnings("ConstantConditions")
-                    @Override
-                    public void onRateFailed(int userId, int mutualId) {
-                        if (getActivity() != null) {
-                            Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-        );
-    }
-
-    private void onClickSendAdmirationAction() {
-        Profile profile = getProfile();
-        if (profile == null) {
-            return;
-        }
-        mRateController.onAdmiration(
-                profile.uid,
-                ((User) profile).mutual ?
-                        SendLikeRequest.DEFAULT_MUTUAL : SendLikeRequest.DEFAULT_NO_MUTUAL,
-                new RateController.OnRateRequestListener() {
-                    @SuppressWarnings("ConstantConditions")
-                    @Override
-                    public void onRateCompleted(int mutualId) {
-                        if (getActivity() != null) {
-                            Toast.makeText(App.getContext(), R.string.admiration_sended, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @SuppressWarnings("ConstantConditions")
-                    @Override
-                    public void onRateFailed(int userId, int mutualId) {
-                        if (getActivity() != null) {
-                            closeProfileActions();
-                        }
-                    }
-                }
-        );
-    }
-
-    private void onClickAddToBlackList() {
-        Profile profile = getProfile();
-        if (profile == null) {
-            return;
-        }
-        if (CacheProfile.premium) {
-            if (profile.uid > 0 && mBarActions != null && mBarActions.hasSubMenu()) {
-                ApiRequest request;
-                if (profile.inBlackList) {
-                    request = new DeleteBlackListRequest(profile.uid, getActivity());
-                } else {
-                    request = new BlackListAddRequest(profile.uid, getActivity());
-                }
-                profile.inBlackList = !profile.inBlackList;
-                if (profile.inBlackList && profile instanceof User) {
-                    ((User) profile).bookmarked = false;
-                }
-                setProfile(profile);
-                request.exec();
-            }
-        } else {
-            startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
-        }
+        mProfileOverflowMenu = new OverflowMenu(getActivity(), mBarActions, mRateController, mProfileId, getGiftFragment(), mSavedResponse);
+        mProfileOverflowMenu.registerBroadcastReceiver();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        Profile user = getProfile();
-        if (isCurrentIdTopMenuItem(itemId)) {
-            TopMenu.TopMenuItem topMenuItem = findTopMenuItemById(itemId);
-            switch (topMenuItem) {
-                case SEND_SYMPATHY_ACTION:
-                    onClickSendSymphatyAction();
-                    break;
-                case SEND_ADMIRATION_ACTION:
-                    onClickSendAdmirationAction();
-                    break;
-                case OPEN_CHAT_ACTION:
-                    onClickOpenChatAction();
-                    break;
-                case SEND_GIFT_ACTION:
-                    onClickSendGiftAction();
-                    break;
-                case COMPLAIN_ACTION:
-                    startActivity(ComplainsActivity.createIntent(mProfileId));
-                    break;
-                case OPEN_PROFILE_FOR_EDITOR_STUB:
-                    if (mSavedResponse != null) {
-                        startActivity(EditorProfileActionsActivity.createIntent(mProfileId, mSavedResponse));
-                    }
-                    break;
-                case ADD_TO_BLACK_LIST_ACTION:
-                    onClickAddToBlackList();
-                    break;
-                case ADD_TO_BOOKMARK_ACTION:
-                    onClickAddToBookmarkAction();
-                    break;
-                default:
-                    break;
-            }
-            initTopMenu();
+        if (mProfileOverflowMenu != null) {
+            mProfileOverflowMenu.onMenuClicked(item);
         }
+        Profile user = getProfile();
         switch (item.getItemId()) {
             case R.id.action_user_actions_list:
                 if (user != null && mBarActions != null) {
@@ -441,9 +217,16 @@ public class UserProfileFragment extends AbstractProfileFragment {
         mLastLoadedProfileId = mProfileId;
     }
 
+    private User getUser() {
+        return (User) getProfile();
+    }
+
     private void saveResponseForEditor(ApiResponse response) {
         if (CacheProfile.isEditor()) {
             mSavedResponse = response;
+            if (mProfileOverflowMenu != null) {
+                mProfileOverflowMenu.setSavedResponse(mSavedResponse);
+            }
         }
     }
 
@@ -485,35 +268,106 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     private void initTopMenu() {
-        Profile profile = getProfile();
-        if (mBarActions != null && mBarActions.hasSubMenu()) {
-            if (profile != null) {
-                mBarActions.getSubMenu().clear();
-                ArrayList<TopMenu.TopMenuItem> topMenuItemArray = getProfileTopMenu(CacheProfile.isEditor());
-                for (int i = 0; i < topMenuItemArray.size(); i++) {
-                    TopMenu.TopMenuItem item = topMenuItemArray.get(i);
-                    int resourceId;
-                    switch (topMenuItemArray.get(i)) {
-                        case ADD_TO_BLACK_LIST_ACTION:
-                            resourceId = profile.inBlackList ? item.getSecondResourceId() : item.getFirstResourceId();
-                            break;
-                        case ADD_TO_BOOKMARK_ACTION:
-                            resourceId = ((User) profile).bookmarked ? item.getSecondResourceId() : item.getFirstResourceId();
-                            break;
-                        default:
-                            resourceId = item.getFirstResourceId();
-                            break;
+        if (mProfileOverflowMenu != null) {
+            if (mProfileOverflowMenu.getoverflowMenuFieldsListener() == null) {
+                mProfileOverflowMenu.setOverflowMenuFieldsListener(new OverflowMenuUser() {
+                    @Override
+                    public void setBlackListValue(Boolean value) {
+                        Profile profile = getProfile();
+                        if (profile != null) {
+                            if (value != null) {
+                                profile.inBlackList = value;
+                            } else {
+                                profile.inBlackList = !profile.inBlackList;
+                            }
+                        }
                     }
-                    mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId);
-                }
-                mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!profile.inBlackList);
-                if (mUserRated ? mUserRate : ((User) profile).isSympathySent) {
-                    mBarActions.getSubMenu().findItem(SEND_SYMPATHY_ACTION.getId()).setEnabled(false);
-                    mBarActions.getSubMenu().findItem(SEND_ADMIRATION_ACTION.getId()).setEnabled(false);
-                }
-            } else {
-                mBarActions.getSubMenu().clear();
+
+                    @Override
+                    public Boolean getBlackListValue() {
+                        Profile profile = getProfile();
+                        if (profile != null) {
+                            return profile.inBlackList;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public void setBookmarkValue(Boolean value) {
+                        User user = getUser();
+                        if (user != null) {
+                            if (value != null) {
+                                user.bookmarked = value;
+                            } else {
+                                user.bookmarked = !user.bookmarked;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public Boolean getBookmarkValue() {
+                        User user = getUser();
+                        if (user != null) {
+                            return user.bookmarked;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public void setSympathySentValue(Boolean value) {
+                        User user = getUser();
+                        if (user != null) {
+                            if (value != null) {
+                                user.isSympathySent = value;
+                            } else {
+                                user.isSympathySent = !user.isSympathySent;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public Boolean getSympathySentValue() {
+                        User user = getUser();
+                        if (user != null) {
+                            return user.isSympathySent;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public Integer getUserId() {
+                        Profile profile = getProfile();
+                        if (profile != null) {
+                            return profile.uid;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public Intent getOpenChatIntent() {
+                        Profile profile = getProfile();
+                        if (profile != null) {
+                            Intent intent = new Intent(getActivity(), ChatActivity.class);
+                            intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
+                            intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, profile.getNameAndAge());
+                            intent.putExtra(ChatFragment.INTENT_USER_SEX, profile.sex);
+                            intent.putExtra(ChatFragment.INTENT_USER_CITY, profile.city == null ? "" : profile.city.name);
+                            return intent;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public Boolean getMutualValue() {
+                        User user = getUser();
+                        if (user != null) {
+                            return user.mutual;
+                        }
+                        return null;
+                    }
+                });
             }
+            mProfileOverflowMenu.initOverfowMenu();
         }
     }
 
@@ -532,18 +386,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     public void onPageSelected(int i) {
         closeProfileActions();
-    }
-
-    private void openChat() {
-        Profile profile = getProfile();
-        if (profile != null) {
-            Intent intent = new Intent(getActivity(), ChatActivity.class);
-            intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
-            intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, profile.getNameAndAge());
-            intent.putExtra(ChatFragment.INTENT_USER_SEX, profile.sex);
-            intent.putExtra(ChatFragment.INTENT_USER_CITY, profile.city == null ? "" : profile.city.name);
-            startActivityForResult(intent, ChatActivity.INTENT_CHAT);
-        }
     }
 
     @Override
