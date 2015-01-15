@@ -196,6 +196,11 @@
     </plurals>
     <string name="buying_default_message">Sie können Geschenke und Bewunderungen für Coins senden</string>
     <string name="buying_money">Coins kaufen</string>
+    <string name="gifts_romantic">Romantische</string>
+    <string name="gifts_friends">Freundschaftliche</string>
+    <string name="gifts_present">Glückwunschgeschenke</string>
+    <string name="gifts_title">Wählen Sie ein Geschenk</string>
+    <string name="gifts_send_btn">Ein Geschenk senden</string>
     <string name="profile_header_title">Mein Profil</string>
     <string name="album_add_photo_title">Foto hinzufügen</string>
     <string name="profile_add_album">Wählen aus den vorhandenen</string>

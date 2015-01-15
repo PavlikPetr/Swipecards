@@ -167,10 +167,11 @@ public class AddPhotoHelper {
     }
 
     public void startChooseFromGallery(boolean withDialog) {
-        int requestCode = withDialog ? GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG :
-                GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY;
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.album_add_photo_title));
+        boolean noSuitableActivity = intent.resolveActivity(mActivity.getPackageManager()) == null;
+        int requestCode = withDialog || noSuitableActivity ? GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG :
+                GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY;
         if (mFragment != null) {
             if (mFragment instanceof ProfilePhotoFragment) {
                 mFragment.getParentFragment().startActivityForResult(intent, requestCode);
@@ -256,7 +257,7 @@ public class AddPhotoHelper {
         }
         Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
         showProgressDialog();
-        mNotificationManager = UserNotificationManager.getInstance(mContext);
+        mNotificationManager = UserNotificationManager.getInstance();
 
         final PhotoNotificationListener notificationListener = new PhotoNotificationListener();
 

@@ -262,6 +262,13 @@
     <string name="buying_default_message">Вы можете отправлять подарки и восхищения за монеты</string>
     <string name="buying_money">Покупка монет</string>
 
+    <!-- Gifts -->
+    <string name="gifts_romantic">Романтика</string>
+    <string name="gifts_friends">Дружба</string>
+    <string name="gifts_present">Поздравления</string>
+    <string name="gifts_title">Выберите подарок</string>
+    <string name="gifts_send_btn">Отправить подарок</string>
+
     <!-- Profile  -->
     <string name="profile_header_title">Мой профиль</string>
 

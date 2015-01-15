@@ -27,6 +27,8 @@ public class FormItem implements Parcelable {
 
     private static FormItem divider = null;
 
+    private LimitInterface mLimitInterface;
+
     //private static final long serialVersionUID = 1883262786634798671L;    
 
     public FormItem(int titleId, int type) {
@@ -146,7 +148,7 @@ public class FormItem implements Parcelable {
                     result.equal = in.readInt() == 1;
                     result.titleId = in.readInt();
                     result.dataId = in.readInt();
-                    result.header = (FormItem) in.readParcelable(FormItem.class.getClassLoader());
+                    result.header = in.readParcelable(FormItem.class.getClassLoader());
                     return result;
                 }
 
@@ -154,4 +156,16 @@ public class FormItem implements Parcelable {
                     return new FormItem[size];
                 }
             };
+
+    public interface LimitInterface {
+        public int getLimit();
+    }
+
+    public void setLimitInterface(LimitInterface LimitInterface) {
+        mLimitInterface = LimitInterface;
+    }
+
+    public LimitInterface getLimitInterface() {
+        return mLimitInterface;
+    }
 }

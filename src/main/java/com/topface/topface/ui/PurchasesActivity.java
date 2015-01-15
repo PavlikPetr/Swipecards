@@ -201,7 +201,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     private static boolean needTFOfferwallOnOpenRedirect(int itemPrice) {
-        return isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnOpen() &&
+        return TFOfferwallSDK.canShowOffers() && isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnOpen() &&
                 CacheProfile.money < itemPrice && mTopfaceOfferwallRedirect.showOrNot();
     }
 

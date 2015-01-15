@@ -16,6 +16,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
     public static final String INTENT_FORM_TITLE_ID = "titleId";
     public static final String INTENT_FORM_DATA_ID = "dataId";
     public static final String INTENT_FORM_DATA = "data";
+    public static final String INTENT_FORM_LIMIT_VALUE = "limit_value";
 
     public static final String INTENT_AGE_START = "ageStart";
     public static final String INTENT_AGE_END = "ageEnd";
@@ -47,6 +48,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
         int titleId;
         int dataId;
         String data;
+        int limitValue;
         Intent intent = getIntent();
         switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0)) {
             case INTENT_EDIT_NAME_AGE:
@@ -67,6 +69,11 @@ public class EditContainerActivity extends BaseFragmentActivity {
             case INTENT_EDIT_INPUT_FORM_ITEM:
                 titleId = intent.getIntExtra(INTENT_FORM_TITLE_ID, -1);
                 data = intent.getStringExtra(INTENT_FORM_DATA);
+                if (intent.hasExtra(INTENT_FORM_LIMIT_VALUE)) {
+                    limitValue = intent.getIntExtra(INTENT_FORM_LIMIT_VALUE, EditFormItemInputFragment.UNUSED_LIMIT_VALUE);
+                    mFragment = EditFormItemInputFragment.newInstance(titleId, data, limitValue);
+                    break;
+                }
                 mFragment = EditFormItemInputFragment.newInstance(titleId, data);
                 break;
             case INTENT_EDIT_ALBUM:

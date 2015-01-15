@@ -6,7 +6,6 @@ import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
@@ -14,6 +13,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
 import org.json.JSONArray;
@@ -64,11 +64,24 @@ public class Profile extends AbstractDataWithPhotos {
     // Флаг того, является ли пользоветль редактором
     private boolean mEditor;
 
-    public static Profile parse(ApiResponse response) {
-        return parse(new Profile(), response.jsonResult);
+    public Profile() {
+        super();
     }
 
-    protected static Profile parse(final Profile profile, final JSONObject resp) {
+    public Profile(ApiResponse response) {
+        this(response.getJsonResult());
+    }
+
+    public Profile(JSONObject jsonObject) {
+        fillData(jsonObject);
+    }
+
+    protected void fillData(final JSONObject resp) {
+        if (resp == null) {
+            Debug.error(new IllegalArgumentException("JSON response for Profile is null"));
+            return;
+        }
+        Profile profile = this;
         try {
             profile.uid = resp.optInt("id");
             profile.age = resp.optInt("age");
@@ -107,7 +120,6 @@ public class Profile extends AbstractDataWithPhotos {
         } catch (Exception e) {
             Debug.error("Profile Wrong response parsing: ", e);
         }
-        return profile;
     }
 
     private static void parseForm(Profile profile, JSONObject resp, Context context) throws JSONException {
@@ -204,6 +216,12 @@ public class Profile extends AbstractDataWithPhotos {
             String aboutStatus = TextUtils.isEmpty(as.trim()) ? null : as;
             formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
                     FormItem.DATA, headerItem);
+            formItem.setLimitInterface(new FormItem.LimitInterface() {
+                @Override
+                public int getLimit() {
+                    return App.getAppOptions().getUserAboutMeMaxLength();
+                }
+            });
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 if (aboutStatus != null)

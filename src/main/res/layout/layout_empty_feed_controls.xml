@@ -22,7 +22,7 @@
 
         <ProgressBar
             android:id="@+id/prsLoading"
-            style="@android:style/Widget.ProgressBar.Small"
+            style="@style/TopFaceProgressBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

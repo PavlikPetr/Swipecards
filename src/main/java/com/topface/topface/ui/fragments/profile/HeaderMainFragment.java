@@ -54,11 +54,12 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                     mAvatarVal.position += 1;
                     return;
                 }
-                if (decrement) {
+                Profile profile = mPendingUserInit.getData();
+                if (decrement && profile != null) {
                     if (intent.getIntExtra(POSITION, -1) < mAvatarVal.position) {
                         mAvatarVal.position -= 1;
                     }
-                    mPendingUserInit.getData().photosCount -= 1;
+                    profile.photosCount -= 1;
                 }
             }
         }
@@ -103,7 +104,7 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                     return;
                 }
                 int pos;
-                if (photos.size() < mAvatarVal.position) {
+                if (photos.size() <= mAvatarVal.position) {
                     //ава за пределами загруженной пачки
                     pos = mAvatarVal.position;
                 } else {
@@ -119,7 +120,9 @@ public class HeaderMainFragment extends ProfileInnerFragment implements IUserOnl
                     }
                 }
                 startActivity(PhotoSwitcherActivity.
-                        getPhotoSwitcherIntent(pos, userProfile.uid, userProfile.photosCount, userProfile.photos));
+                        getPhotoSwitcherIntent(userProfile.gifts, pos,
+                                userProfile.uid, userProfile.photosCount,
+                                userProfile.photos));
             }
         });
         mNameView = (TextView) root.findViewById(R.id.tvName);
