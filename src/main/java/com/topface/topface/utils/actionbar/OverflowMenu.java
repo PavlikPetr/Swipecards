@@ -43,6 +43,10 @@ import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.
 import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.SEND_GIFT_ACTION;
 import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.SEND_SYMPATHY_ACTION;
 
+/**
+ * you need to call OverflowMenu.onDestroy inside onDestroy method your native class for unregister
+ * broadcast receiver and remove interface OverflowMenuUser
+ */
 public class OverflowMenu {
 
     private MenuItem mBarActions;
@@ -88,6 +92,7 @@ public class OverflowMenu {
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.CHAT_OVERFLOW_MENU;
         mContext = context;
+        registerBroadcastReceiver();
     }
 
     public OverflowMenu(Context context, MenuItem barActions, RateController rateController, int profileId, UserGiftsFragment userGiftFragment, ApiResponse savedResponse) {
@@ -98,6 +103,7 @@ public class OverflowMenu {
         mProfileId = profileId;
         mUserGiftFragment = userGiftFragment;
         mSavedResponse = savedResponse;
+        registerBroadcastReceiver();
     }
 
     private static enum OverflowMenuType {CHAT_OVERFLOW_MENU, PROFILE_OVERFLOW_MENU}
@@ -577,13 +583,14 @@ public class OverflowMenu {
         }
     }
 
-    public void registerBroadcastReceiver() {
+    private void registerBroadcastReceiver() {
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mUpdateActionsReceiver,
                 new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
     }
 
-    public void unregisterBroadcastReceiver() {
+    public void onDestroy() {
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUpdateActionsReceiver);
+        mOverflowMenuFields = null;
     }
 
 }

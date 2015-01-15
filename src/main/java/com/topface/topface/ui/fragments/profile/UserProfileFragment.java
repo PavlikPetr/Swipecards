@@ -109,7 +109,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     public void onDestroyView() {
         super.onDestroyView();
         if (mProfileOverflowMenu != null) {
-            mProfileOverflowMenu.unregisterBroadcastReceiver();
+            mProfileOverflowMenu.onDestroy();
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mGiftReceiver);
     }
@@ -148,7 +148,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
         }
         mBarActions = barActionsItem;
         mProfileOverflowMenu = new OverflowMenu(getActivity(), mBarActions, mRateController, mProfileId, getGiftFragment(), mSavedResponse);
-        mProfileOverflowMenu.registerBroadcastReceiver();
     }
 
     @Override

@@ -56,7 +56,6 @@ import com.topface.topface.requests.DeleteMessagesRequest;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
-import com.topface.topface.requests.handlers.ActionMenuHandler;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
@@ -500,7 +499,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onDestroy() {
         release();
         if (mChatOverflowMenu != null) {
-            mChatOverflowMenu.unregisterBroadcastReceiver();
+            mChatOverflowMenu.onDestroy();
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPopularUserLockController);
         Debug.log(this, "-onDestroy");
@@ -982,7 +981,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         mBarActions = barActionsItem;
         mChatOverflowMenu = new OverflowMenu(getActivity(), mBarActions);
-        mChatOverflowMenu.registerBroadcastReceiver();
     }
 
     private void initOverflowMenu() {
