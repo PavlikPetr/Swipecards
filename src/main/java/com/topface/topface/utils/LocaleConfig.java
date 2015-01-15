@@ -112,7 +112,7 @@ public class LocaleConfig {
                 @Override
                 public void success(IApiResponse response) {
                     App.sendProfileAndOptionsRequests();
-                    NavigationActivity.restartNavigationActivity(CacheProfile.getOptions().startPageFragmentId);
+                    NavigationActivity.restartNavigationActivity(activity);
                 }
 
                 @Override
@@ -128,7 +128,7 @@ public class LocaleConfig {
             }).exec();
         } else {
             progress.dismiss();
-            NavigationActivity.restartNavigationActivity(CacheProfile.getOptions().startPageFragmentId);
+            NavigationActivity.restartNavigationActivity(activity);
         }
     }
 }

@@ -152,7 +152,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:visibility="gone"
-                    style="@android:style/Widget.ProgressBar.Small"/>
+                    style="@style/TopFaceProgressBar.Small"/>
 
                 <Button
                     android:id="@+id/btnRegister"

@@ -353,7 +353,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
                 // Send empty vibro notification to demonstrate
                 if (mSwitchVibration.isChecked()) {
-                    UserNotificationManager.getInstance(getActivity()).showSimpleNotification(
+                    UserNotificationManager.getInstance().showSimpleNotification(
                             new NotificationCompat.Builder(getActivity()).setDefaults(Notification.
                                     DEFAULT_VIBRATE).build()
                     );
@@ -526,25 +526,27 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {
         SendMailNotificationsRequest request = getMailNotificationRequest(context);
 
-        switch (key) {
-            case CacheProfile.NOTIFICATIONS_LIKES:
-                if (isMail) request.mailSympathy = value;
-                else request.apnsSympathy = value;
-                break;
-            case CacheProfile.NOTIFICATIONS_MESSAGE:
-                if (isMail) request.mailChat = value;
-                else request.apnsChat = value;
-                break;
-            case CacheProfile.NOTIFICATIONS_SYMPATHY:
-                if (isMail) request.mailMutual = value;
-                else request.apnsMutual = value;
-                break;
-            case CacheProfile.NOTIFICATIONS_VISITOR:
-                if (isMail) request.mailGuests = value;
-                else request.apnsVisitors = value;
-                break;
-            default:
-                return null;
+        if (request != null) {
+            switch (key) {
+                case CacheProfile.NOTIFICATIONS_LIKES:
+                    if (isMail) request.mailSympathy = value;
+                    else request.apnsSympathy = value;
+                    break;
+                case CacheProfile.NOTIFICATIONS_MESSAGE:
+                    if (isMail) request.mailChat = value;
+                    else request.apnsChat = value;
+                    break;
+                case CacheProfile.NOTIFICATIONS_SYMPATHY:
+                    if (isMail) request.mailMutual = value;
+                    else request.apnsMutual = value;
+                    break;
+                case CacheProfile.NOTIFICATIONS_VISITOR:
+                    if (isMail) request.mailGuests = value;
+                    else request.apnsVisitors = value;
+                    break;
+                default:
+                    return null;
+            }
         }
 
         return request;
@@ -578,6 +580,9 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     /**
+     * Creates SendMailNotificationRequest if possible
+     * may return null, when profile information still not cached
+     *
      * @return new SendMailNotificationRequest
      */
     public SendMailNotificationsRequest getMailNotificationRequest(Context context) {
@@ -600,8 +605,11 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             } catch (Exception e) {
                 Debug.error(e);
             }
+            return request;
+        } else {
+            return null;
         }
-        return request;
+
     }
 
     public void getSocialAccountName(final TextView textView) {

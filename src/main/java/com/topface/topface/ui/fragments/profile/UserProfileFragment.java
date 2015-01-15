@@ -26,7 +26,10 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.FeedGift;
+import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -38,6 +41,7 @@ import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
+import com.topface.topface.requests.handlers.ActionMenuHandler;
 import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ChatActivity;
@@ -86,6 +90,8 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private ViewStub mUserActionsStub;
     private RelativeLayout mBlocked;
     private MenuItem mBarActions;
+    private ArrayList<FeedGift> mNewGifts;
+    private View mOutsideView;
     // for profile forwarding
     private ApiResponse mSavedResponse = null;
     // controllers
@@ -133,6 +139,13 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         }
     };
 
+    private ActionMenuHandler mActionMenuHandler = new ActionMenuHandler(App.getContext()) {
+        @Override
+        public void closeActionMenu() {
+            closeProfileActions();
+        }
+    };
+
     private int getAnimationTime() {
         return mUserActions.size() * getActivity().getResources().getInteger(R.integer.action_animation_time);
     }
@@ -173,6 +186,14 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         mUserActionsStub = (ViewStub) root.findViewById(R.id.user_actions_stub);
         mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_PROFILE);
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
+        mOutsideView = root.findViewById(R.id.outsideView);
+        mOutsideView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeProfileActions();
+                mOutsideView.setVisibility(View.GONE);
+            }
+        });
         mLockScreen = (RelativeLayout) root.findViewById(R.id.lockScreen);
         mRetryView = new RetryViewCreator.Builder(getActivity(), new View.OnClickListener() {
             @Override
@@ -195,12 +216,14 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     public void onDestroyView() {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mGiftReceiver);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         getUserProfile(mProfileId);
+        mOutsideView.setVisibility(View.GONE);
     }
 
     @Override
@@ -212,6 +235,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     private void initActions(ViewStub stub, User user, ArrayList<UserActions.ActionItem> actions) {
+        mOutsideView.setVisibility(View.VISIBLE);
         if (mActions == null) {
             stub.setLayoutResource(R.layout.user_actions_layout);
             mActions = stub.inflate();
@@ -284,6 +308,16 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(
+                        mGiftReceiver,
+                        new IntentFilter(PhotoSwitcherActivity.ADD_NEW_GIFT)
+                );
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_user_actions_list:
@@ -325,7 +359,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
                 @Override
                 protected User parseResponse(ApiResponse response) {
-                    return User.parse(profileId, response);
+                    return new User(profileId, response);
                 }
 
                 @Override
@@ -338,7 +372,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
             }).exec();
         } else {
-            onSuccess(User.parse(mProfileId, mSavedResponse), mSavedResponse);
+            onSuccess(new User(mProfileId, mSavedResponse), mSavedResponse);
         }
     }
 
@@ -494,6 +528,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                         loader.setVisibility(View.INVISIBLE);
                                         icon.setVisibility(View.VISIBLE);
                                         disableSympathyDelight();
+                                        closeProfileActions();
                                     }
                                 }
 
@@ -536,6 +571,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                         loader.setVisibility(View.INVISIBLE);
                                         icon.setVisibility(View.VISIBLE);
                                         disableSympathyDelight();
+                                        closeProfileActions();
                                     }
                                 }
 
@@ -556,8 +592,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                                 }
                             }
                     );
-
-
                     //noinspection deprecation
 //                    ((TextView) v).setAlpha(80);
                 }
@@ -603,8 +637,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         ApiRequest request;
                         if (profile.inBlackList) {
                             request = new DeleteBlackListRequest(profile.uid, getActivity());
+                            mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BLACK_LIST, profile.uid, false, request);
                         } else {
                             request = new BlackListAddRequest(profile.uid, getActivity());
+                            mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BLACK_LIST, profile.uid, true, request);
                         }
                         request.exec();
                     }
@@ -615,17 +651,16 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
             case R.id.add_to_bookmark_action:
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
                 final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
-
                 loader.setVisibility(View.VISIBLE);
                 icon.setVisibility(View.GONE);
                 ApiRequest request;
-
                 if (profile instanceof User && ((User) profile).bookmarked) {
                     request = new DeleteBookmarksRequest(profile.uid, getActivity());
+                    mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BOOKMARK, profile.uid, false, request);
                 } else {
                     request = new BookmarkAddRequest(profile.uid, getActivity());
+                    mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BOOKMARK, profile.uid, true, request);
                 }
-
                 request.exec();
                 break;
             case R.id.complain_action:
@@ -644,6 +679,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     private void closeProfileActions() {
         if (mBarActions != null && mBarActions.isChecked()) {
             onOptionsItemSelected(mBarActions);
+            mOutsideView.setVisibility(View.GONE);
         }
     }
 
@@ -673,5 +709,69 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
     @Override
     protected UserGiftsFragment getGiftFragment() {
         return (UserGiftsFragment) super.getGiftFragment();
+    }
+
+    private BroadcastReceiver mGiftReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            addNewFeedGift(getGiftFromIntent(intent));
+        }
+    };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case GiftsActivity.INTENT_REQUEST_GIFT:
+                if (resultCode == Activity.RESULT_OK) {
+                    addNewFeedGift(getGiftFromIntent(data));
+                }
+                break;
+        }
+    }
+
+    public ArrayList<FeedGift> getNewGifts() {
+        if (mNewGifts == null) {
+            return new ArrayList<>();
+        } else {
+            return mNewGifts;
+        }
+    }
+
+    public void clearNewFeedGift() {
+        if (mNewGifts != null) {
+            mNewGifts.clear();
+        }
+    }
+
+    private void addNewFeedGift(FeedGift data) {
+        if (data != null) {
+            Profile profile = getProfile();
+            if (profile != null) {
+                getProfile().gifts.add(0, data.gift);
+            }
+            if (mNewGifts == null) {
+                mNewGifts = new ArrayList<>();
+            }
+            mNewGifts.add(0, data);
+        }
+    }
+
+
+    private FeedGift getGiftFromIntent(Intent data) {
+        FeedGift feedGift = null;
+        if (data.hasExtra(PhotoSwitcherActivity.INTENT_GIFT)) {
+            feedGift = data.getParcelableExtra(PhotoSwitcherActivity.INTENT_GIFT);
+        } else {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
+                if (sendGiftAnswer != null) {
+                    feedGift = new FeedGift();
+                    feedGift.gift = new Gift(Integer.parseInt(sendGiftAnswer.history.id), 0, Gift.PROFILE, sendGiftAnswer.history.link);
+                }
+            }
+        }
+        return feedGift;
     }
 }

@@ -139,6 +139,11 @@
     <string name="buying_header_title">Zakupy</string>
     <string name="buying_default_message">Możesz wysyłać prezenty i podziwy za monety</string>
     <string name="buying_money">Zakup monet</string>
+    <string name="gifts_romantic">Romantyka</string>
+    <string name="gifts_friends">Przyjaźń</string>
+    <string name="gifts_present">Gratulacje</string>
+    <string name="gifts_title">Wybierz prezent</string>
+    <string name="gifts_send_btn">Wyślij prezent</string>
     <string name="profile_header_title">Mój profil</string>
     <string name="profile_add_album">Wybierz z istniejących</string>
     <string name="profile_add_camera">Zrób zdjęcie</string>
