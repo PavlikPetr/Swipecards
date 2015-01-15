@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/loInvitesPopup"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:id="@+id/loInvitesPopup"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/loDialog"
@@ -22,7 +22,7 @@
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:minHeight="50dp" />
+            android:minHeight="50dp"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/sendAllContacts"
                     android:checked="true"
-                    android:layout_alignParentLeft="true" />
+                    android:layout_alignParentLeft="true"/>
 
                 <TextView
                     android:id="@+id/checkBoxTitle"
@@ -52,7 +52,7 @@
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:text="@string/invite_friends_title"
-                    android:layout_toRightOf="@id/sendAllContacts" />
+                    android:layout_toRightOf="@id/sendAllContacts"/>
             </RelativeLayout>
 
             <Button
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:id="@+id/sendContacts"
-                android:layout_below="@id/checkboxContainer" />
+                android:layout_below="@id/checkboxContainer"/>
         </RelativeLayout>
 
         <ImageView
@@ -70,14 +70,12 @@
             android:src="@drawable/ic_close_dialog"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_margin="2dp" />
+            android:layout_margin="2dp"/>
     </RelativeLayout>
 
     <com.topface.topface.ui.views.LockerView
         android:id="@+id/ipLocker"
         android:visibility="gone"
-        style="@style/LoadingLocker"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        style="@style/LoadingLocker"/>
 
 </RelativeLayout>

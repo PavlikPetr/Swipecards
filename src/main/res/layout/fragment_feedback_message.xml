@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:background="@color/bg_main">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:background="@color/bg_main">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -19,7 +19,7 @@
 
             <TextView
                 android:id="@+id/tvTitle"
-                style="@style/BackgroundFormTitleText" />
+                style="@style/BackgroundFormTitleText"/>
 
             <TextView
                 android:id="@+id/tvLocale"
@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/incorrect_locale"
                 android:padding="8dp"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
 
             <EditText
                 android:id="@+id/edText"
@@ -44,14 +44,14 @@
                 android:singleLine="false"
                 android:textSize="14sp"
                 android:focusable="true"
-                android:focusableInTouchMode="true" />
+                android:focusableInTouchMode="true"/>
 
             <TextView
                 android:paddingTop="8dp"
                 android:id="@+id/tvEmailTitle"
                 style="@style/BackgroundFormTitleText"
                 android:text="@string/settings_feedback_email"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
             <EditText
                 android:id="@+id/edEmail"
@@ -69,14 +69,14 @@
                 android:singleLine="true"
                 android:textSize="14sp"
                 android:hint="@string/general_input_email"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
             <TextView
                 android:paddingTop="8dp"
                 android:id="@+id/tvTransactionIdTitle"
                 style="@style/BackgroundFormTitleText"
                 android:text="@string/settings_feedback_transaction_number"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/edTransactionId"
@@ -93,7 +93,7 @@
                 android:paddingBottom="8dp"
                 android:textSize="14sp"
                 android:hint="@string/settings_feedback_transaction_number_hint"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tvTransactionIdInfoLink"
@@ -104,15 +104,13 @@
                 android:layout_gravity="left"
                 android:text="@string/settings_feedback_transaction_link"
                 android:textColor="#697DFF"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 
     <com.topface.topface.ui.views.LockerView
         android:id="@+id/fbLoadingLocker"
-        android:layout_width="fill_parent"
         style="@style/LoadingLocker"
-        android:layout_height="fill_parent"
         android:visibility="gone"/>
 
 </RelativeLayout>

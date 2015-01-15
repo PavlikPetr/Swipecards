@@ -86,7 +86,5 @@
     <com.topface.topface.ui.views.LockerView
         android:id="@+id/fppLocker"
         style="@style/LoadingLocker"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
         android:visibility="gone"/>
 </RelativeLayout>

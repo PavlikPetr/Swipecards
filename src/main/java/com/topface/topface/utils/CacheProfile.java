@@ -20,8 +20,6 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -89,15 +87,11 @@ public class CacheProfile {
     @SuppressWarnings("FieldCanBeLocal")
     private static Products mFortumoProducts;
 
-    private static void setProfileCache(final IApiResponse response) {
+    private static void setProfileCache(final JSONObject response) {
         if (response != null) {
             SessionConfig config = App.getSessionConfig();
-            try {
-                config.setProfileData(response.toJson().toString());
-                config.saveConfig();
-            } catch (JSONException e) {
-                Debug.error("Can't get prfile data from json", e);
-            }
+            config.setProfileData(response.toString());
+            config.saveConfig();
         }
     }
 
@@ -137,11 +131,11 @@ public class CacheProfile {
         return profile;
     }
 
-    public static void setProfile(Profile profile, ApiResponse response) {
+    public static void setProfile(Profile profile, JSONObject response) {
         setProfile(profile, response, ProfileRequest.P_ALL);
     }
 
-    public static void setProfile(Profile profile, IApiResponse response, int part) {
+    public static void setProfile(Profile profile, JSONObject response, int part) {
         switch (part) {
             case ProfileRequest.P_NECESSARY_DATA:
                 gifts = profile.gifts;
@@ -215,9 +209,9 @@ public class CacheProfile {
             if (!TextUtils.isEmpty(profileCache)) {
                 //Получаем опции из кэша
                 try {
-                    ApiResponse response = new ApiResponse(new JSONObject(profileCache));
-                    profile = Profile.parse(response);
-                    setProfile(profile, response);
+                    JSONObject profileJson = new JSONObject(profileCache);
+                    profile = new Profile(profileJson);
+                    setProfile(profile, profileJson);
                     result = true;
                 } catch (JSONException e) {
                     config.resetProfileData();

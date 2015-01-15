@@ -1,17 +1,12 @@
 package com.topface.topface.ui.fragments.gift;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
-import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
@@ -67,35 +62,5 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
                 GiftsActivity.getSendGiftIntent(getActivity(), getProfileId()),
                 GiftsActivity.INTENT_REQUEST_GIFT
         );
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                Bundle extras = data.getExtras();
-                if (extras != null) {
-                    SendGiftAnswer giftAnswer = (SendGiftAnswer) extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
-                    int id = giftAnswer.history.gift;
-                    String url = giftAnswer.history.link;
-                    FeedGift sended = new FeedGift();
-                    sended.gift = new Gift(id, Gift.PROFILE_NEW, url, 0);
-                    addGift(sended);
-                }
-            }
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public void addGift(FeedGift sendedGift) {
-        if (mGridAdapter.getData().size() == getMinItemsCount()) {
-            mTitle.setVisibility(View.GONE);
-        }
-        mGridAdapter.add(getMinItemsCount(), sendedGift);
-        mGridAdapter.notifyDataSetChanged();
-        if (getActivity() != null) {
-            Toast.makeText(getActivity(), R.string.chat_gift_out, Toast.LENGTH_LONG).show();
-        }
     }
 }

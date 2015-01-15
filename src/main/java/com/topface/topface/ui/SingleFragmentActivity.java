@@ -39,7 +39,7 @@ public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFra
                     startActivity(getSupportParentActivityIntent());
                     finish();
                 } else {
-                    onBackPressed();
+                    finish();
                 }
                 return true;
         }

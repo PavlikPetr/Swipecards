@@ -156,7 +156,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     private void checkProfileLoad() {
         if (CacheProfile.isLoaded()) {
-            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+            if (isLoggedIn()) {
                 onLoadProfile();
             } else {
                 registerLoadProfileReceiver();
@@ -165,6 +165,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         } else {
             registerLoadProfileReceiver();
         }
+    }
+
+    protected boolean isLoggedIn() {
+        return !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty();
     }
 
     private void registerLoadProfileReceiver() {

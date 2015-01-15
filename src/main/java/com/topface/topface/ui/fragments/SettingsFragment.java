@@ -341,7 +341,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
                 // Send empty vibro notification to demonstrate
                 if (mSwitchVibration.isChecked()) {
-                    UserNotificationManager.getInstance(getActivity()).showSimpleNotification(
+                    UserNotificationManager.getInstance().showSimpleNotification(
                             new NotificationCompat.Builder(getActivity()).setDefaults(Notification.
                                     DEFAULT_VIBRATE).build()
                     );

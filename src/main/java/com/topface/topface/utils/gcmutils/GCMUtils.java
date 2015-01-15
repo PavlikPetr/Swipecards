@@ -275,15 +275,15 @@ public class GCMUtils {
                 intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
                 intent.putExtra(GCM_TYPE, type);
                 intent.putExtra(GCM_LABEL, getLabel(extra));
-                showNotificationByType(extra, context, data, type, user, title, intent);
+                showNotificationByType(extra, data, type, user, title, intent);
                 return true;
             }
         }
         return false;
     }
 
-    private static void showNotificationByType(Intent extra, Context context, String data, int type, User user, String title, Intent intent) {
-        final UserNotificationManager notificationManager = UserNotificationManager.getInstance(context);
+    private static void showNotificationByType(Intent extra, String data, int type, User user, String title, Intent intent) {
+        final UserNotificationManager notificationManager = UserNotificationManager.getInstance();
         if (!Ssid.isLoaded()) {
             if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_PROMO) {
                 notificationManager.showNotification(
@@ -486,7 +486,7 @@ public class GCMUtils {
                             default:
                                 id = UserNotificationManager.NOTIFICATION_ID;
                         }
-                        UserNotificationManager.getInstance(context).cancelNotification(id);
+                        UserNotificationManager.getInstance().cancelNotification(id);
                     }
                 }
             }

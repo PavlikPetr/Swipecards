@@ -28,8 +28,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.view.ViewHelper;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
@@ -61,6 +59,7 @@ import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
@@ -84,7 +83,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
-    private ProgressBar mBackgroundText;
+    private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     protected DoubleBigButton mDoubleButton;
     protected boolean mIsUpdating;
     private RetryViewCreator mRetryView;
@@ -188,7 +187,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mListView.getRefreshableView().setSelection(saved.getInt(POSITION, 0));
             mRestoredFilterState = saved.getBoolean(IS_FILTER_ON, false);
             if (!mListAdapter.isEmpty()) {
-                mBackgroundText.setVisibility(View.GONE);
+                mBackgroundController.hide();
             }
         }
     }
@@ -298,18 +297,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void initBackground(View view) {
         // ListView background
-        mBackgroundText = (ProgressBar) view.findViewById(R.id.tvBackgroundText);
-
-        if (mBackgroundText != null) {
-            //initialyy set loaders alpha to 0, works on old androids too, instead of xml-attr "alpha"
-            ViewHelper.setAlpha(mBackgroundText, 0f);
-
-            //delayed animation of loader appearing
-            ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(mBackgroundText, "alpha", 0f, 1f);
-            alphaAnimator.setDuration(1000);
-            alphaAnimator.setStartDelay(2000);
-            alphaAnimator.start();
-        }
+        mBackgroundController.setProgressBar((ProgressBar) view.findViewById(R.id.tvBackgroundText));
+        mBackgroundController.startAnimation();
     }
 
     @Override
@@ -646,6 +635,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void always(IApiResponse response) {
                 super.always(response);
+                mBackgroundController.hide();
                 mIsUpdating = false;
             }
 
@@ -813,7 +803,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void onFilledFeed(boolean isPushUpdating) {
-        if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
         ViewStub stub = getEmptyFeedViewStub();
         if (stub != null) stub.setVisibility(View.GONE);
         setFilterEnabled(isPushUpdating ? mListView.getVisibility() == View.VISIBLE :
@@ -843,7 +832,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mInflated.setVisibility(mListAdapter != null && mListAdapter.isEmpty() ? View.VISIBLE : View.GONE);
             initEmptyFeedView(mInflated, errorCode);
         }
-        if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
+        mBackgroundController.hide();
         setFilterEnabled(mListView.getVisibility() == View.VISIBLE);
     }
 
@@ -878,7 +867,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         onFilledFeed(isPushUpdating);
         if (!isPushUpdating) {
             mListView.setVisibility(View.INVISIBLE);
-            mBackgroundText.setVisibility(View.VISIBLE);
+            mBackgroundController.show();
             setFilterSwitcherState(false);
         }
     }

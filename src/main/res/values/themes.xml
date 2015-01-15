@@ -25,6 +25,7 @@
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
         <item name="android:windowBackground">@null</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:progressBarStyle">@style/TopFaceProgressBar</item>
         <!-- Стилизованные кнопки -->
         <item name="blueButtonStyle">@style/Widget.Topface.Button.Big.Blue</item>
         <item name="grayButtonStyle">@style/Widget.Topface.Button.Big.Gray</item>
@@ -53,7 +54,7 @@
         <item name="android:actionModeCloseDrawable" tools:ignore="NewApi">@drawable/ic_check</item>
     </style>
 
-    <style name="Theme.Topface.ActionbarOverlay" parent="Theme.Topface">
+    <style name="Theme.Topface.ActionbarOverlay">
         <item name="windowActionBarOverlay">true</item>
         <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
     </style>
@@ -62,7 +63,7 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="Theme.Topface.NoActionBar" parent="Theme.Topface">
+    <style name="Theme.Topface.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <!--Action Bar-->
         <item name="android:windowActionBar" tools:ignore="NewApi">false</item>
@@ -91,4 +92,9 @@
     <style name="Theme.Topface.Chat">
         <item name="android:windowBackground">@color/bg_holo</item>
     </style>
+
+    <style name="Theme.Topface.Gifts">
+        <item name="android:windowBackground">@color/bg_white</item>
+    </style>
+
 </resources>

@@ -38,6 +38,9 @@ public class ProfileFormFragment extends ProfileInnerFragment {
                     intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, item.titleId);
                     intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, item.dataId);
                     intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, item.value);
+                    if (item.getLimitInterface() != null) {
+                        intent.putExtra(EditContainerActivity.INTENT_FORM_LIMIT_VALUE, item.getLimitInterface().getLimit());
+                    }
                     startActivityForResult(intent,
                             EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM);
                 } else {
