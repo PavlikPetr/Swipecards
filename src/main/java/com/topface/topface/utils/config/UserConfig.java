@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 
-import com.topface.framework.utils.config.AbstractUniqueConfig;
+import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.notifications.MessageStack;
@@ -22,7 +22,7 @@ import java.util.List;
  * <p/>
  * use generateKey(String name) to create keys to put(key) and get(key) data
  */
-public class UserConfig extends AbstractUniqueConfig {
+public class UserConfig extends AbstractConfig {
     public static final int TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY = 2;
     public static final String PROFILE_CONFIG_SETTINGS = "profile_config_settings";
     /**
@@ -50,17 +50,27 @@ public class UserConfig extends AbstractUniqueConfig {
     public static final String PURCHASED_SUBSCRIPTIONS_SEPARATOR = "&";
     public static final String DATING_LOCK_POPUP_TIME = "dating_lock_popup_time";
     public static final String TOPFACE_OFFERWALL_REDIRECT_COUNTER = "topface_offerwall_redirect_counter";
+    private String mUnique;
 
     public UserConfig(Context context) {
         super(context);
+        AuthToken token = AuthToken.getInstance();
+        mUnique = token.getUserTokenUniqueId();
+    }
+
+    public UserConfig(String uniqueKey, Context context) {
+        super(context);
+        mUnique = uniqueKey;
     }
 
     @Override
-    protected String generateUniqueKey(String name) {
-        AuthToken token = AuthToken.getInstance();
-        return token.getSocialNet() +
-                Static.AMPERSAND + token.getUserTokenUniqueId() +
-                Static.AMPERSAND + name;
+    protected void addField(SettingsMap settingsMap, String key, Object defaultValue) {
+        super.addField(settingsMap, key, defaultValue);
+    }
+
+    @Override
+    protected SettingsMap getSettingsMap() {
+        return super.getSettingsMap();
     }
 
     @Override
@@ -103,7 +113,7 @@ public class UserConfig extends AbstractUniqueConfig {
         addField(settingsMap, PURCHASED_SUBSCRIPTIONS, "");
         // время последнего показа попапа блокировки знакомств
         addField(settingsMap, DATING_LOCK_POPUP_TIME, 0L);
-        // счётчит перехода на экран офервола топфейс
+        // счётчик перехода на экран офервола топфейс
         addField(settingsMap, TOPFACE_OFFERWALL_REDIRECT_COUNTER, 0);
     }
 
@@ -114,8 +124,11 @@ public class UserConfig extends AbstractUniqueConfig {
 
     @Override
     protected SharedPreferences getPreferences() {
+        if (mUnique == null) {
+            mUnique = AuthToken.getInstance().getUserTokenUniqueId();
+        }
         return getContext().getSharedPreferences(
-                PROFILE_CONFIG_SETTINGS,
+                PROFILE_CONFIG_SETTINGS + Static.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE
         );
     }

@@ -172,6 +172,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
 
 
     private void changeEmail() {
+        final String oldEmail = AuthToken.getInstance().getLogin();
         final String email = mEdMainField.getText().toString();
         if (Utils.isValidEmail(email)) {
             ChangeLoginRequest request = new ChangeLoginRequest(getActivity(), email);
@@ -182,7 +183,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
                         Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_LONG).show();
                         App.sendProfileAndOptionsRequests();
                         mToken.saveToken(mToken.getUserSocialId(), email, mToken.getPassword());
-                        App.getConfig().rebuildUserConfig();
+                        App.getConfig().rebuildUserConfig(oldEmail);
                         mEdMainField.getText().clear();
                     }
                 }

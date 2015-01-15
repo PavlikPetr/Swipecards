@@ -5,6 +5,7 @@ import android.content.Context;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.ads.BannersConfig;
+import com.topface.topface.utils.social.AuthToken;
 
 /**
  * Created by kirussell on 11.01.14.
@@ -35,13 +36,21 @@ public class Configurations {
 
     public UserConfig getUserConfig() {
         if (mUserConfig == null) {
-            mUserConfig = new UserConfig(mContext);
+            ConfigConverter configConverter = new ConfigConverter(AuthToken.getInstance().getUserTokenUniqueId());
+            if (configConverter.hasOldConfig()) {
+                configConverter.divConfig();
+                configConverter.removeOldConfig();
+                mUserConfig = configConverter.getMainUserConfig();
+            } else {
+                mUserConfig = new UserConfig(mContext);
+            }
         }
         return mUserConfig;
     }
 
-    public UserConfig rebuildUserConfig() {
-        mUserConfig.rebuildConfig();
+    public UserConfig rebuildUserConfig(String oldEmail) {
+        ConfigConverter manager = new ConfigConverter();
+        manager.rebuildConfig(oldEmail, AuthToken.getInstance().getUserTokenUniqueId());
         mUserConfig.saveConfig();
         return mUserConfig;
     }
