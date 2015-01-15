@@ -13,6 +13,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendAdmirationRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.cache.SearchCacheManager;
 
 public class RateController {
@@ -34,8 +35,9 @@ public class RateController {
     }
 
     public boolean onAdmiration(final int userId, final int mutualId, final OnRateRequestListener requestListener) {
-        if (CacheProfile.money < CacheProfile.getOptions().priceAdmiration) {
-            mContext.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration"));
+        int admirationPrice = CacheProfile.getOptions().priceAdmiration;
+        if (CacheProfile.money < admirationPrice) {
+            mContext.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration", PurchasesFragment.TYPE_ADMIRATION, admirationPrice));
             if (mOnRateControllerUiListener != null) {
                 mOnRateControllerUiListener.failRate();
             }

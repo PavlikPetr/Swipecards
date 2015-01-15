@@ -11,12 +11,9 @@ import android.view.animation.AnimationUtils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.ivengo.ads.AdManager;
-import com.ivengo.ads.AdType;
-import com.ivengo.ads.Interstitial;
-import com.ivengo.ads.InterstitialListener;
-import com.ivengo.ads.Request;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -27,6 +24,7 @@ import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.TfStatConsts;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -35,8 +33,6 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
-
-import java.net.URL;
 
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
@@ -48,7 +44,6 @@ import ru.ideast.adwired.events.OnStopListener;
 public class FullscreenController {
 
     private static final String TAG = "FullscreenController";
-    private static final String IVENGO_APP_ID = "aggeas97392g";
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
@@ -159,9 +154,6 @@ public class FullscreenController {
                 case BannerBlock.BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
-                case BannerBlock.BANNER_IVENGO:
-                    requestIvengoFullscreen();
-                    break;
                 default:
                     break;
             }
@@ -213,51 +205,6 @@ public class FullscreenController {
         });
     }
 
-    private void requestIvengoFullscreen() {
-        AdManager.getInstance().initialize(mActivity);
-        Interstitial advViewIvengo = new Interstitial(AdType.BANNER_FULLSCREEN);
-        Request request = new Request();
-        request.setAppId(IVENGO_APP_ID);
-        advViewIvengo.setInterstitialListener(new InterstitialListener() {
-            @Override
-            public void onInterstitialReceiveAd(Interstitial interstitial) {
-                interstitial.showFromActivity(mActivity);
-            }
-
-            @Override
-            public void onInterstitialFailWithError(Interstitial interstitial, com.ivengo.ads.Error error) {
-                requestFallbackFullscreen();
-            }
-
-            @Override
-            public void onInterstitialShowAd(Interstitial interstitial) {
-
-            }
-
-            @Override
-            public void onInterstitialSkipAd(Interstitial interstitial) {
-                requestFallbackFullscreen();
-            }
-
-            @Override
-            public void onInterstitialWillLeaveApplicationWithUrl(Interstitial interstitial, URL url) {
-
-            }
-
-            @Override
-            public void onInterstitialWillReturnToApplication(Interstitial interstitial) {
-
-            }
-
-            @Override
-            public void onInterstitialDidFinishAd(Interstitial interstitial) {
-
-            }
-        });
-
-        advViewIvengo.loadRequest(request);
-    }
-
     private void requestAdwiredFullscreen() {
         try {
             if (!CacheProfile.isEmpty()) {
@@ -299,6 +246,10 @@ public class FullscreenController {
             @Override
             public void success(final Banner data, IApiResponse response) {
                 if (data.action.equals(Banner.ACTION_URL)) {
+                    //Срезы для статистики
+                    final Slices slices = new Slices();
+                    slices.put(TfStatConsts.val, data.name);
+
                     if (showFullscreenBanner(data.parameter)) {
                         isFullScreenBannerVisible = true;
                         addLastFullscreenShowedTime();
@@ -306,11 +257,13 @@ public class FullscreenController {
                         final ViewGroup bannerContainer = getFullscreenBannerContainer();
                         bannerContainer.addView(fullscreenViewGroup);
                         bannerContainer.setVisibility(View.VISIBLE);
+                        StatisticsTracker.getInstance().sendEvent("mobile_tf_fullscreen_show", slices);
                         final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
                         fullscreenImage.setRemoteSrc(data.url);
                         fullscreenImage.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                StatisticsTracker.getInstance().sendEvent("mobile_tf_fullscreen_click", slices);
                                 AppConfig config = App.getAppConfig();
                                 config.addFullscreenUrl(data.parameter);
                                 config.saveConfig();
@@ -324,6 +277,7 @@ public class FullscreenController {
                             @Override
                             public void onClick(View v) {
                                 hideFullscreenBanner(bannerContainer);
+                                StatisticsTracker.getInstance().sendEvent("mobile_tf_fullscreen_close", slices);
                             }
                         });
                     }

@@ -21,6 +21,7 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
     public static final int INTENT_ABOUT = 203;
     public static final int INTENT_SEND_FEEDBACK = 204;
     public static final int INTENT_CHANGE_PASSWORD = 205;
+    public static final int INTENT_CHANGE_EMAIL = 206;
     private String mConfirmCode;
 
     public static Intent getFeedbackMessageIntent(Context context, FeedbackMessageFragment.FeedbackType feedbackType) {
@@ -47,7 +48,10 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
                 break;
             case INTENT_CHANGE_PASSWORD:
                 boolean needExit = intent.getBooleanExtra(SettingsTopfaceAccountFragment.NEED_EXIT, false);
-                fragment = SettingsChangePasswordFragment.newInstance(needExit);
+                fragment = SettingsChangeAuthData.newInstance(needExit, true);
+                break;
+            case INTENT_CHANGE_EMAIL:
+                fragment = SettingsChangeAuthData.newInstance(false, false);
                 break;
             case INTENT_FEEDBACK:
                 fragment = new SettingsFeedbackFragment();
@@ -71,27 +75,6 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
 
     public String getConfirmationCode() {
         return mConfirmCode;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
     }
 
     @Override

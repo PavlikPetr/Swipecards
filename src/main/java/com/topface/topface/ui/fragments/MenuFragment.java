@@ -33,6 +33,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Products;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.INavigationFragmentsListener;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
@@ -41,13 +42,12 @@ import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
-import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.BuyWidgetController;
@@ -62,22 +62,24 @@ import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.io.Serializable;
+import java.util.Arrays;
+
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.ADMIRATIONS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BOOKMARKS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DATING;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DIALOGS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.FANS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.MUTUAL;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PROFILE;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_VISITORS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.UNDEFINED;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VIP_PROFILE;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VISITORS;
 
 /**
  * Created by kirussell on 05.11.13.
@@ -120,7 +122,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     initProfileMenuItem(mHeaderView);
                     initEditor();
                     initBonus();
-                    if (CacheProfile.premium) {
+                    if (mClosingsController.isLeftMenuLocked() && CacheProfile.premium) {
                         mClosingsController.onPremiumObtained();
                     }
                     break;
@@ -134,7 +136,16 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     Bundle extras = intent.getExtras();
                     FragmentId fragmentId = null;
                     if (extras != null) {
-                        fragmentId = (FragmentId) extras.getSerializable(SELECTED_FRAGMENT_ID);
+                        Serializable menuItem = extras.getSerializable(SELECTED_FRAGMENT_ID);
+                        /*
+                        After update user can have outdated fragment id in instance state. Here we check
+                        if it is still presented in BaseFragment.FragmentId enum.
+                         */
+                        if (Arrays.asList(FragmentId.values()).contains(menuItem)) {
+                            fragmentId = (FragmentId) menuItem;
+                        } else {
+                            fragmentId = CacheProfile.getOptions().startPageFragmentId;
+                        }
                     }
                     selectMenu(fragmentId);
                     break;
@@ -230,6 +241,13 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    public void updateAdapter() {
+        initAdapter();
+        if (mClosingsController != null) {
+            mClosingsController.unlockLeftMenu();
+        }
+    }
+
     private void initAdapter() {
         SparseArray<LeftMenuAdapter.ILeftMenuItem> menuItems = new SparseArray<>();
         //- Profile added as part of header
@@ -244,7 +262,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             menuItems.put(BOOKMARKS.getId(), LeftMenuAdapter.newLeftMenuItem(BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_star_selector));
         }
-        menuItems.put(VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.put(TABBED_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
         if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
             menuItems.put(TABBED_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
@@ -257,8 +275,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             menuItems.put(MUTUAL.getId(), LeftMenuAdapter.newLeftMenuItem(MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_mutual_selector));
         }
-        menuItems.put(FANS.getId(), LeftMenuAdapter.newLeftMenuItem(FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_fans_selector));
         menuItems.put(GEO.getId(), LeftMenuAdapter.newLeftMenuItem(GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.icon_people_close));
         if (CacheProfile.getOptions().bonus.enabled) {
@@ -356,6 +372,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             if (savedInstanceState != null) {
                 FragmentId savedId = (FragmentId) savedInstanceState.getSerializable(CURRENT_FRAGMENT_STATE);
                 if (savedId != null) {
+                    Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from saved instance state.");
                     switchFragment(savedId, false);
                     return;
                 }
@@ -364,10 +381,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 Intent intent = getActivity().getIntent();
                 if (intent != null &&
                         intent.getSerializableExtra(GCMUtils.NEXT_INTENT) != null) {
+                    Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from activity intent.");
                     switchFragment((FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT), false);
                     return;
                 }
             }
+            Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
             switchFragment(CacheProfile.getOptions().startPageFragmentId, false);
         }
     }
@@ -415,7 +434,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         }
         // We need to clean state if there was a logout in other Activity
         mClosingsController.onLogoutWasInitiated();
-        if (CacheProfile.premium) {
+        if (mClosingsController.isLeftMenuLocked() && CacheProfile.premium) {
             mClosingsController.onPremiumObtained();
         }
 
@@ -447,6 +466,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
      */
     public void selectMenu(FragmentId fragmentId) {
         if (fragmentId != mSelectedFragment) {
+            Debug.log("MenuFragment: Switch fragment in selectMenu().");
             switchFragment(fragmentId, true);
         } else if (mOnFragmentSelected != null) {
             mOnFragmentSelected.onFragmentSelected(fragmentId);
@@ -539,7 +559,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
     public FragmentId getCurrentFragmentId() {
-        return mSelectedFragment == UNDEFINED ? DATING : mSelectedFragment;
+        return mSelectedFragment == UNDEFINED ? CacheProfile.getOptions().startPageFragmentId : mSelectedFragment;
     }
 
     private BaseFragment getFragmentNewInstanceById(FragmentId id) {
@@ -575,17 +595,14 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             case BOOKMARKS:
                 fragment = new BookmarksFragment();
                 break;
-            case FANS:
-                fragment = new FansFragment();
-                break;
             case GEO:
                 fragment = new PeopleNearbyFragment();
                 break;
             case BONUS:
                 fragment = BonusFragment.newInstance(true);
                 break;
-            case VISITORS:
-                fragment = new VisitorsFragment();
+            case TABBED_VISITORS:
+                fragment = new TabbedVisitorsFragment();
                 break;
             case SETTINGS:
                 fragment = new SettingsFragment();
@@ -684,5 +701,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     public static interface OnFragmentSelectedListener {
         public void onFragmentSelected(FragmentId fragmentId);
+    }
+
+    public boolean isClosingsAvailable() {
+        return !mAdapter.hasTabbdedPages();
     }
 }

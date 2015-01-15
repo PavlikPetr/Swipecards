@@ -58,6 +58,8 @@ public class DatingInstantMessageController {
     private boolean mIsEnabled;
     private boolean mIsSendEnadled;
 
+    private String mLastMsgFromConfig;
+
     public interface SendLikeAction {
 
         void sendLike();
@@ -65,7 +67,7 @@ public class DatingInstantMessageController {
 
     public DatingInstantMessageController(Activity activity, KeyboardListenerLayout root,
                                           View.OnClickListener clickListener,
-                                          IRequestClient requestClient, String text,
+                                          IRequestClient requestClient,
                                           final View datingButtons, final View userInfoStatus,
                                           SendLikeAction sendLikeAction, TextView.OnEditorActionListener mEditorActionListener) {
         mActivity = activity;
@@ -113,11 +115,8 @@ public class DatingInstantMessageController {
         });
         UserConfig userConfig = App.getUserConfig();
         String defaultMessage = userConfig.getDefaultDatingMessage();
-        if (defaultMessage.isEmpty()) {
-            userConfig.setDefaultDatingMessage(text);
-            userConfig.saveConfig();
-        }
-        setInstantMessageText(defaultMessage.isEmpty() ? text : defaultMessage);
+        mLastMsgFromConfig = CacheProfile.getOptions().instantMessageFromSearch.getText();
+        setInstantMessageText(TextUtils.isEmpty(defaultMessage) ? mLastMsgFromConfig : defaultMessage);
         mMessageText.setHint(activity.getString(R.string.dating_message));
         mMessageText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         mMessageSend.setOnClickListener(clickListener);
@@ -237,6 +236,32 @@ public class DatingInstantMessageController {
         mIsSendEnadled = mIsEnabled = isEnabled;
     }
 
+    /**
+     * по возможности обновляет дефолтный текст на новый, в случае если в конфиге что-то изменилось
+     * например при смене локали приложения
+     * если же пользователь менял текст, то обновлять нельзя
+     */
+    public void updateMessageIfNeed() {
+        String textCurrent = mMessageText.getText().toString();
+        String textNewFromConfig = CacheProfile.getOptions().instantMessageFromSearch.getText();
+
+        if (TextUtils.isEmpty(mLastMsgFromConfig)) {
+            // такое бывает при первом запуске приложения после установки
+            // фрагмент уже есть, а текста из Options еще нет
+            if (TextUtils.isEmpty(textCurrent)) {
+                mLastMsgFromConfig = textNewFromConfig;
+                setInstantMessageText(mLastMsgFromConfig);
+            }
+        } else {
+            if (textCurrent.equals(mLastMsgFromConfig)) {
+                if (!textNewFromConfig.equals(mLastMsgFromConfig)) {
+                    mLastMsgFromConfig = textNewFromConfig;
+                    setInstantMessageText(mLastMsgFromConfig);
+                }
+            }
+        }
+    }
+
     private boolean isMessageValid() {
         return !mMessageText.getText().toString().trim().isEmpty();
     }
@@ -269,7 +294,7 @@ public class DatingInstantMessageController {
     }
 
     private void setInstantMessageText(String text) {
-        if (text == null) {
+        if (TextUtils.isEmpty(text)) {
             mMessageText.getText().clear();
         } else {
             mMessageText.setText(text);
@@ -279,7 +304,8 @@ public class DatingInstantMessageController {
 
     public void reset() {
         String defaultMessage = App.getUserConfig().getDefaultDatingMessage();
-        setInstantMessageText(defaultMessage);
+        mLastMsgFromConfig = CacheProfile.getOptions().instantMessageFromSearch.getText();
+        setInstantMessageText(TextUtils.isEmpty(defaultMessage) ? mLastMsgFromConfig : defaultMessage);
     }
 
     public void instantSend(final SearchUser user) {

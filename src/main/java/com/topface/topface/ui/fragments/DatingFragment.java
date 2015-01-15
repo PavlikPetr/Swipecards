@@ -42,7 +42,6 @@ import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.search.CachableSearchList;
 import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
@@ -458,6 +457,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 if (isAdded()) {
                     updateFilterData();
                     setHighRatePrice();
+                    if (mDatingInstantMessageController != null) {
+                        mDatingInstantMessageController.updateMessageIfNeed();
+                    }
                 }
             }
         };
@@ -579,26 +581,23 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initInstantMessageController(KeyboardListenerLayout root) {
-        InstantMessageFromSearch instantMessageFromSearch = CacheProfile.getOptions().instantMessageFromSearch;
-        if (instantMessageFromSearch.isEnabled()) {
-            mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
-                    this, this, instantMessageFromSearch.getText(),
-                    mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
-                @Override
-                public void sendLike() {
-                    sendSympathy();
-                }
-            }, new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_SEND) {
-                        mDatingInstantMessageController.instantSend(mCurrentUser);
-                    }
-                    return false;
-                }
+        mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
+                this, this,
+                mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
+            @Override
+            public void sendLike() {
+                sendSympathy();
             }
-            );
+        }, new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    mDatingInstantMessageController.instantSend(mCurrentUser);
+                }
+                return false;
+            }
         }
+        );
     }
 
     private SearchRequest getSearchRequest() {
@@ -648,16 +647,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                         moneyDecreased.set(false);
                                         CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
                                         updateResources();
-                                        new SendLikeRequest(getActivity(),
-                                                userId,
-                                                mutualId,
-                                                SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler() {
-                                            @Override
-                                            public void fail(int codeError, IApiResponse response) {
-                                                super.fail(codeError, response);
-                                                unlockControls();
-                                            }
-                                        }).exec();
                                     } else {
                                         isAdmirationFailed.set(true);
                                         unlockControls();

@@ -28,7 +28,7 @@
 
         <ProgressBar
             android:id="@+id/delPrBar"
-            style="@android:style/Widget.ProgressBar.Small"
+            style="@style/TopFaceProgressBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -61,7 +61,7 @@
 
         <ProgressBar
             android:id="@+id/likePrBar"
-            style="@android:style/Widget.ProgressBar.Small"
+            style="@style/TopFaceProgressBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -94,7 +94,7 @@
 
         <ProgressBar
             android:id="@+id/chatPrBar"
-            style="@android:style/Widget.ProgressBar.Small"
+            style="@style/TopFaceProgressBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -127,7 +127,7 @@
 
         <ProgressBar
             android:id="@+id/giftPrBar"
-            style="@android:style/Widget.ProgressBar.Small"
+            style="@style/TopFaceProgressBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -160,7 +160,7 @@
 
         <ProgressBar
             android:id="@+id/blockPrBar"
-            style="@android:style/Widget.ProgressBar.Small"
+            style="@style/TopFaceProgressBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -193,7 +193,7 @@
 
         <ProgressBar
             android:id="@+id/favPrBar"
-            style="@android:style/Widget.ProgressBar.Small"
+            style="@style/TopFaceProgressBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -225,7 +225,7 @@
 
         <ProgressBar
             android:id="@+id/comPrBar"
-            style="@android:style/Widget.ProgressBar.Small"
+            style="@style/TopFaceProgressBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

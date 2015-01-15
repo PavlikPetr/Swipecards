@@ -21,10 +21,13 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.SettingsActivity;
+import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.gift.OwnGiftsFragment;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.IPhotoTakerWithDialog;
+import com.topface.topface.utils.PhotoTaker;
 
 import java.util.ArrayList;
 
@@ -33,10 +36,10 @@ import java.util.ArrayList;
  * Profile fragment for current authorized client with ui for customization of user settings
  */
 public class OwnProfileFragment extends AbstractProfileFragment {
-
     private AddPhotoHelper mAddPhotoHelper;
     private BroadcastReceiver mAddPhotoReceiver;
     private BroadcastReceiver mUpdateProfileReceiver;
+    private IPhotoTakerWithDialog mPhotoTaker;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -66,20 +69,16 @@ public class OwnProfileFragment extends AbstractProfileFragment {
 
     public static OwnProfileFragment newInstance() {
         OwnProfileFragment fragment = new OwnProfileFragment();
-
         Bundle args = new Bundle();
         fragment.setArguments(args);
-
         return fragment;
     }
 
     public static OwnProfileFragment newInstance(String startBodyPageClassName) {
         OwnProfileFragment fragment = new OwnProfileFragment();
-
         Bundle args = new Bundle();
         args.putString(ARG_TAG_INIT_BODY_PAGE, startBodyPageClassName);
         fragment.setArguments(args);
-
         return fragment;
     }
 
@@ -87,6 +86,7 @@ public class OwnProfileFragment extends AbstractProfileFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
         initAddPhotoHelper();
+        mPhotoTaker = new PhotoTaker(mAddPhotoHelper, getActivity());
         return root;
     }
 
@@ -101,6 +101,10 @@ public class OwnProfileFragment extends AbstractProfileFragment {
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         setProfile(CacheProfile.getProfile());
+        TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
+        if (CacheProfile.photo == null && mAddPhotoHelper != null && takePhotoDialog == null) {
+            mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
+        }
     }
 
     @Override
@@ -166,6 +170,12 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                         mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
                     }
                     break;
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
+                    if (mAddPhotoHelper != null) {
+                        mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false));
+                    }
+                    break;
             }
         }
     }
@@ -184,7 +194,6 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                 FragmentActivity activity = getActivity();
                 if (activity != null && mAddPhotoHelper != null) {
                     int id = intent.getIntExtra("btn_id", 0);
-
                     View view = new View(activity);
                     view.setId(id);
                     mAddPhotoHelper.getAddPhotoClickListener().onClick(view);

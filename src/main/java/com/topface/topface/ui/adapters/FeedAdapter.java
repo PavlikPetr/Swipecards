@@ -2,22 +2,21 @@ package com.topface.topface.ui.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.ui.views.FeedItemViewConstructor;
+import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
@@ -59,15 +58,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     protected static class FeedViewHolder {
         public ImageViewRemote avatar;
         public TextView name;
-        public TextView city;
-        public TextView time;
-        public ImageView online;
-        public TextView unreadCounter;
         public TextView text;
+        public TextView time;
+        public TextView unreadCounter;
         public ImageView heart;
-        public ViewFlipper flipper;
-        public Button flippedBtn;
-        public View dataLayout;
         public Drawable background;
     }
 
@@ -113,24 +107,14 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
     }
 
-    @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
+    protected TypeAndFlag getViewCreationFlag() {
+        return new TypeAndFlag();
+    }
 
-        int type = getItemViewType(position);
-        View resultView;
-
-        switch (type) {
-            case T_LOADER:
-                resultView = getLoaderView();
-                break;
-            case T_RETRIER:
-                resultView = getRetrierView();
-                break;
-            default:
-                resultView = getContentView(position, view, viewGroup);
+    protected void setItemMessage(T item, TextView messageView) {
+        if (item.user.city != null) {
+            messageView.setText(item.user.city.name);
         }
-
-        return resultView;
     }
 
     @Override
@@ -144,28 +128,32 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
         final T item = getItem(position);
         final int type = getItemViewType(position);
+        int flag = 0;
 
         //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
         if (holder == null) {
-            int layoutId;
-            if (type == T_NEW) {
-                layoutId = getNewItemLayout();
-            } else if (type == T_NEW_VIP) {
-                layoutId = getNewVipItemLayout();
-            } else if (type == T_VIP || type == LikesListAdapter.T_SELECTED_FOR_MUTUAL_VIP) {
-                layoutId = getVipItemLayout();
-            } else {
-                layoutId = getItemLayout();
+            TypeAndFlag typeAndFlag = getViewCreationFlag();
+
+            if (type == T_NEW || type == T_NEW_VIP) {
+                typeAndFlag.flag |= FeedItemViewConstructor.Flag.NEW;
             }
-            convertView = getInflater().inflate(layoutId, null, false);
+            if (type == T_VIP || type == T_NEW_VIP) {
+                typeAndFlag.flag |= FeedItemViewConstructor.Flag.VIP;
+            }
+            flag = typeAndFlag.flag;
+            convertView = FeedItemViewConstructor.construct(mContext, typeAndFlag);
             holder = getEmptyHolder(convertView, item);
         }
 
         if (item != null) {
             // установка аватарки пользователя
+            // какую аватарку использовать по умолчанию для забаненных и во время загрузки нормальной
+            int defaultAvatarResId = (item.user.sex == Static.BOY ?
+                    R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+            holder.avatar.setStubResId(defaultAvatarResId);
+
             if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
-                holder.avatar.setRemoteSrc("drawable://" + (item.user.sex == Static.BOY ?
-                        R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar));
+                holder.avatar.setRemoteSrc("drawable://" + defaultAvatarResId);
                 if (item.user.banned || item.user.deleted) {
                     holder.avatar.setOnClickListener(null);
                 } else {
@@ -178,32 +166,21 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
             // установка имени
             holder.name.setText(item.user.getNameAndAge());
-            if (item.user.deleted || item.user.banned) {
-                holder.name.setTextColor(Color.GRAY);
-            } else {
-                holder.name.setTextColor(Color.WHITE);
+            if ((item.user.deleted || item.user.banned)) {
+                flag |= FeedItemViewConstructor.Flag.BANNED;
             }
-            // установка города
-            if (item.user.city != null) {
-                if (item.user.deleted || item.user.banned) {
-                    holder.city.setTextColor(Color.GRAY);
-                } else {
-                    holder.city.setTextColor(Color.WHITE);
-                }
-                holder.city.setText(item.user.city.name);
-            }
+            FeedItemViewConstructor.setBanned(holder.name, flag);
+
+            // установка сообщения фида
+            setItemMessage(item, holder.text);
 
             // установка иконки онлайн
-            if (item.user.deleted || item.user.banned) {
-                holder.online.setVisibility(View.INVISIBLE);
-            } else {
-                holder.online.setVisibility(item.user.online ? View.VISIBLE : View.INVISIBLE);
-            }
+            FeedItemViewConstructor.setOnline(holder.name, (!(item.user.deleted || item.user.banned) && item.user.online));
         }
 
         convertView.setTag(holder);
         if (mSelectionController.isSelected(position)) {
-            convertView.setBackgroundResource(R.drawable.background_list_selected);
+            convertView.setBackgroundResource(R.drawable.list_item_bg_selected);
         } else {
             setBackground(convertView, holder);
         }
@@ -395,24 +372,13 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     protected FeedViewHolder getEmptyHolder(View convertView, final T item) {
         FeedViewHolder holder = new FeedViewHolder();
 
-        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.ivAvatar);
-        holder.name = (TextView) convertView.findViewById(R.id.tvName);
-        holder.city = (TextView) convertView.findViewById(R.id.tvCity);
-        holder.online = (ImageView) convertView.findViewById(R.id.ivOnline);
-        holder.flipper = (ViewFlipper) convertView.findViewById(R.id.vfFlipper);
-        holder.flippedBtn = (Button) convertView.findViewById(R.id.btnMutual);
+        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.ifp_avatar);
+        holder.name = (TextView) convertView.findViewById(R.id.ifp_name);
+        holder.text = (TextView) convertView.findViewById(R.id.ifp_text);
         holder.background = convertView.getBackground();
 
         return holder;
     }
-
-    abstract protected int getItemLayout();
-
-    abstract protected int getNewItemLayout();
-
-    abstract protected int getVipItemLayout();
-
-    abstract protected int getNewVipItemLayout();
 
     public boolean isNeedUpdate() {
         return isEmpty() || (System.currentTimeMillis() > mLastUpdate + CACHE_TIMEOUT);

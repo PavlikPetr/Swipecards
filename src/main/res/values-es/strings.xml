@@ -15,6 +15,7 @@
     <string name="dating_switch_button">Más…</string>
     <string name="dating_prev_button">Anterior</string>
     <string name="dating_chat_button">Charlar</string>
+    <string name="waiting_a_products">Espera, por favor. Estamos cargando productos disponibles para la compra</string>
     <string name="likes_background_text">No hay simpatías</string>
     <string name="visitors_background_text">No hay visitantes</string>
     <string name="chat_background_text">No hay mensajes entrantes</string>
@@ -148,6 +149,7 @@
     <string name="general_city">Ciudad</string>
     <string name="general_dating">Encuentros</string>
     <string name="general_likes">Gusto a</string>
+    <string name="general_sympathies">Simpatías</string>
     <string name="general_sympathy">Simpatía</string>
     <string name="general_delight">Admiración</string>
     <string name="general_mutual">Simpatías mutuas</string>
@@ -186,6 +188,10 @@
         <item quantity="other">Para enviar regalo, compra %d monedas más</item>
         <item quantity="one">Para enviar regalo, compra %d moneda más</item>
     </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="other">Para enviar la admiración compra %d monedas más</item>
+        <item quantity="one">Para enviar la admiración compra %d moneda más</item>
+    </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="other">Para ver a quiénes les gustas, compra %d monedas más</item>
         <item quantity="one">Para ver a quiénes les gustas, compra %d moneda más</item>
@@ -194,8 +200,17 @@
         <item quantity="other">Para que todos puedan verte, compra %d monedas más</item>
         <item quantity="one">Para que todos puedan verte, compra %d moneda más</item>
     </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="other">Te falta %d monedas</item>
+        <item quantity="one">Te falta %d moneda</item>
+    </plurals>
     <string name="buying_default_message">Puedes enviar regalos y admiraciones pagando monedas</string>
     <string name="buying_money">Comprar monedas</string>
+    <string name="gifts_romantic">Romántica</string>
+    <string name="gifts_friends">Amistad</string>
+    <string name="gifts_present">Felicitaciones</string>
+    <string name="gifts_title">Elige regalo</string>
+    <string name="gifts_send_btn">Enviar regalo</string>
     <string name="profile_header_title">Mi perfil</string>
     <string name="album_add_photo_title">Agregar foto</string>
     <string name="profile_add_album">Elegir de los existentes</string>
@@ -219,11 +234,6 @@
     <string name="edit_set_as_main">Hacer principal</string>
     <string name="edit_delete">Eliminar</string>
     <string name="edit_restore">Recuperar</string>
-    <string name="gifts_romantic">Romántica</string>
-    <string name="gifts_friends">Amistad</string>
-    <string name="gifts_present">Felicitaciones</string>
-    <string name="gifts_title">Elige regalo</string>
-    <string name="gifts_send_btn">Enviar regalo</string>
     <string name="form_not_specified">No especificado</string>
     <string name="form_main">Básico</string>
     <string name="form_physique">Aspecto físico</string>
@@ -243,6 +253,8 @@
     <string name="settings_messages">Mensajes</string>
     <string name="settings_guests">Visitantes</string>
     <string name="settings_help">Ayuda</string>
+    <string name="settings_faq">Preguntas y respuestas</string>
+    <string name="settings_faq_title">Probablemente, tu problema ya fue descrito, echa un vistazo a la sección \"Preguntas y respuestas\"</string>
     <string name="settings_account">Cuenta</string>
     <string name="settings_feedback">Dejar comentario</string>
     <string name="settings_about">Sobre el programa</string>
@@ -585,4 +597,12 @@
     <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Seleccionada la máxima cantidad de usuarios</string>
     <string name="logout_if_email_already_registred">Usuario con este e-mail ya existe. Si es tu e-mail, tienes que salir de esta cuenta y entrar en la %s</string>
+    <string name="recover_password_instructions">A tu e-mail fue enviada una carta con las instrucciones para recuperar la contraseña</string>
+    <string name="email_changing">Cambio de e-mail</string>
+    <string name="hint_faces_filter">Cambia los parametros de busqueda y conoce a la gente interesante</string>
+    <string name="hint_faces_buy_like">Por más simpatías que tengas, más a menudo te evaluan. No te olvides a recargar la cantidad de simpatías.</string>
+    <string name="hint_myprofile_buy_vip">Compra el estado VIP y disfruta de la comunicación sin límites</string>
+    <string name="pull_to_refresh_pull_label">Arrastra para actualizar…</string>
+    <string name="pull_to_refresh_release_label">Bajalo para actualizar…</string>
+    <string name="pull_to_refresh_refreshing_label">Cargando…</string>
 </resources>

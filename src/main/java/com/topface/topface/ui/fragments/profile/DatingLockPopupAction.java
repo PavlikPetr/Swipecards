@@ -12,7 +12,6 @@ import com.topface.topface.utils.controllers.AbstractStartAction;
 
 public class DatingLockPopupAction extends AbstractStartAction {
 
-
     private DatingLockPopup.DatingLockPopupRedirectListener mDatingLockPopupRedirect;
     private FragmentManager mFragmentManager;
     private int mPriority;
@@ -32,7 +31,8 @@ public class DatingLockPopupAction extends AbstractStartAction {
                 return true;
             }
             long currentTime = System.currentTimeMillis();
-            return ((currentTime - lastTime) >= options.notShown.datingLockPopupTimeout);
+            long deltaInSeconds = (currentTime - lastTime) / 1000;
+            return (deltaInSeconds >= options.notShown.datingLockPopupTimeout);
         } else {
             return false;
         }

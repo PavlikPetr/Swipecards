@@ -38,17 +38,12 @@ public class UserNotificationManager {
         mNotificationManager = NotificationManagerCompat.from(mContext);
     }
 
-    public static UserNotificationManager getInstance(Context context) {
+    public static UserNotificationManager getInstance() {
         if (mInstance == null) {
-            mInstance = new UserNotificationManager(context);
+            //Используем контекст приложения, что бы не было утечки
+            mInstance = new UserNotificationManager(App.getContext());
         }
         return mInstance;
-    }
-
-    public UserNotification showNotification(String title, String message, boolean isTextNotification,
-                                             Bitmap icon, int unread, Intent intent, boolean doNeedReplace) {
-        return showNotification(title, message, isTextNotification, icon, unread, intent,
-                doNeedReplace, false, UserNotification.Type.STANDARD, null, null);
     }
 
     /*
@@ -297,7 +292,14 @@ public class UserNotificationManager {
         if (id == MESSAGES_ID) {
             App.getUserConfig().resetNotificationMessagesStack();
         }
-        mNotificationManager.cancel(id);
+        try {
+            mNotificationManager.cancel(id);
+        } catch (IllegalStateException e) {
+            /*
+            In some cases NotificationManager may throw IllegalStateException on notification cancel
+             */
+            Debug.error(e);
+        }
     }
 
     public static interface NotificationImageListener {

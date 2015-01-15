@@ -65,6 +65,7 @@ import com.topface.topface.requests.DeleteMessagesRequest;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
+import com.topface.topface.requests.handlers.ActionMenuHandler;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.ui.ComplainsActivity;
@@ -72,6 +73,7 @@ import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.adapters.ChatListAnimatedAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
@@ -167,6 +169,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
 
+
+    private ActionMenuHandler mActionMenuHandler = new ActionMenuHandler(App.getContext()) {
+        @Override
+        public void closeActionMenu() {
+            animateHideChatAction();
+        }
+    };
 
     private void switchBookmarkEnabled(boolean enabled) {
         if (mActions != null) {
@@ -272,7 +281,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // do not recreate Adapter cause of steRetainInstance(true)
+        // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
         }
@@ -367,7 +376,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void restoreData(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             try {
-                boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
+                boolean wasFailed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 FeedList<History> historyData = new FeedList<>();
                 if (list != null) {
@@ -379,7 +388,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 mAdapter.setData(historyData);
                 mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
-                if (was_failed) {
+                if (wasFailed) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 } else {
                     mLockScreen.setVisibility(View.GONE);
@@ -394,8 +403,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void initChatHistory(View root) {
 
-        // adapter
-        mAdapter.setUser(mUser);
         // list view
         mListView = (PullToRefreshListView) root.findViewById(R.id.lvChatList);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -404,7 +411,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 update(true, "pull to refresh");
             }
         });
-        mListView.setAdapter(mAdapter);
+        ChatListAnimatedAdapter animatedAdapter = new ChatListAnimatedAdapter(mAdapter);
+        animatedAdapter.setAbsListView(mListView.getRefreshableView());
+        mListView.setAdapter(animatedAdapter);
+
         mListView.setOnScrollListener(mAdapter);
         final ListView mListViewFromPullToRefresh = mListView.getRefreshableView();
         mListViewFromPullToRefresh.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
@@ -446,7 +456,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                         EasyTracker.sendEvent("Chat", "DeleteItem", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COPY:
-                                        mAdapter.copyText(((TextView) view).getText().toString());
+                                        mAdapter.copyText(((TextView) view.findViewById(R.id.chat_message)).getText().toString());
                                         EasyTracker.sendEvent("Chat", "CopyItemText", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COMPLAINT:
@@ -583,6 +593,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
+        if (mIsUpdating) {
+            return;
+        }
         mIsUpdating = true;
         final boolean isPopularLockOn;
         isPopularLockOn = mAdapter != null &&
@@ -590,10 +603,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
                 pullToRefresh;
 
-        if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
-            showLoading();
-        }
-        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId);
+        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId) {
+
+            @Override
+            public void exec() {
+                mIsUpdating = true;
+                if (!pullToRefresh && !scrollRefresh && !mPopularUserLockController.isChatLocked()) {
+                    showLoading();
+                }
+                super.exec();
+            }
+        };
+
         registerRequest(historyRequest);
         historyRequest.debug = type;
         if (mAdapter != null) {
@@ -641,6 +662,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     removeOutdatedItems(data);
                 } else if (scrollRefresh) {
                     removeAlreadyLoadedItems(data);
+                } else {
+                    removeFakesNotWaiting(data);
                 }
 
                 refreshActionBarTitles();
@@ -664,7 +687,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
 
                     if (mAdapter.getCount() <= 0) {
-                        mAdapter.setUser(mUser);
                         if (!mIsKeyboardOpened && !mWasNotEmptyHistory) {
                             Utils.showSoftKeyboard(getActivity(), mEditBox);
                             mIsKeyboardOpened = true;
@@ -678,6 +700,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 //show keyboard if display size more then 479dp
                 showKeyboardOnLargeScreen();
                 mIsBeforeFirstChatUpdate = false;
+
+                if (mLockScreen != null && mLockScreen.getVisibility() == View.VISIBLE) {
+                    mLockScreen.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -740,6 +766,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 data.items.removeAll(itemsToDelete);
             }
+        }
+    }
+
+    private void removeFakesNotWaiting(HistoryListData data) {
+        if (!mAdapter.isEmpty()) {
+            ArrayList<History> itemsToDelete = new ArrayList<>();
+            for (History item : mAdapter.getData()) {
+                for (History newItem : data.items) {
+                    if (item.isFake() && ((!item.isWaitingItem() && !item.isRepeatItem()) || TextUtils.equals(item.text, newItem.text))) {
+                        itemsToDelete.add(item);
+                    }
+                }
+            }
+            mAdapter.getData().removeAll(itemsToDelete);
         }
     }
 
@@ -812,8 +852,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         ApiRequest request;
                         if (mUser.blocked) {
                             request = new DeleteBlackListRequest(mUser.id, getActivity());
+                            mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BLACK_LIST, mUser.id, false, request);
                         } else {
                             request = new BlackListAddRequest(mUser.id, getActivity());
+                            mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BLACK_LIST, mUser.id, true, request);
                         }
                         request.exec();
                     }
@@ -832,10 +874,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                 if (mUser.bookmarked) {
                     request = new DeleteBookmarksRequest(mUserId, getActivity());
+                    mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BOOKMARK, mUser.id, false, request);
                 } else {
                     request = new BookmarkAddRequest(mUserId, getActivity());
+                    mActionMenuHandler.setCallback(AttitudeHandler.ActionTypes.BOOKMARK, mUser.id, true, request);
                 }
-
                 request.exec();
                 break;
             case R.id.complain_action:

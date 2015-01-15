@@ -16,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -45,7 +46,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     private Button mTFButton;
     private AutoCompleteTextView mLogin;
     private EditText mPassword;
-    private View mShowPassword;
+    private ImageButton mShowPassword;
     private TextView mBackButton;
     private RelativeLayout mWrongPasswordAlertView;
     private TextView mWrongDataTextView;
@@ -55,6 +56,13 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     private TextView mRecoverPwd;
     private String mEmailForRestorePassword;
     private String mEmailForNewReg;
+
+    private View.OnClickListener mCredentialsEditListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            removeRedAlert();
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -132,7 +140,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
                 return handled;
             }
         });
-        mShowPassword = root.findViewById(R.id.ivShowPassword);
+        mShowPassword = (ImageButton) root.findViewById(R.id.ivShowPassword);
         mShowPassword.setOnClickListener(new View.OnClickListener() {
             boolean toggle = false;
             TransformationMethod passwordMethod = new PasswordTransformationMethod();
@@ -140,6 +148,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             @Override
             public void onClick(View v) {
                 toggle = !toggle;
+                mShowPassword.setImageResource(toggle ? R.drawable.ic_show_password : R.drawable.ic_show_password_pressed);
                 mPassword.setTransformationMethod(toggle ? null : passwordMethod);
                 Editable text = mPassword.getText();
                 if (text != null) {
@@ -158,6 +167,9 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             }
         });
         mRecoverPwd.setVisibility(View.GONE);
+
+        mLogin.setOnClickListener(mCredentialsEditListener);
+        mPassword.setOnClickListener(mCredentialsEditListener);
     }
 
     @Override

@@ -136,6 +136,11 @@
     <string name="buying_header_title">구입</string>
     <string name="buying_default_message">선물을 보낼 수 있으며, 코인 선물에 대한 감탄을 보낼 수 있습니다.</string>
     <string name="buying_money">코인 구입</string>
+    <string name="gifts_romantic">로맨틱</string>
+    <string name="gifts_friends">우정</string>
+    <string name="gifts_present">축하</string>
+    <string name="gifts_title">선물을 선택하기</string>
+    <string name="gifts_send_btn">선물을 보내기</string>
     <string name="profile_header_title">내 프로필</string>
     <string name="profile_add_album">사진 앨범에서 선택하기</string>
     <string name="profile_add_camera">카메라에서 촬영하기</string>
@@ -157,11 +162,6 @@
     <string name="edit_set_as_main">메인으로 설정하기</string>
     <string name="edit_delete">삭제하기</string>
     <string name="edit_restore">저장하기</string>
-    <string name="gifts_romantic">로맨틱</string>
-    <string name="gifts_friends">우정</string>
-    <string name="gifts_present">축하</string>
-    <string name="gifts_title">선물을 선택하기</string>
-    <string name="gifts_send_btn">선물을 보내기</string>
     <string name="form_not_specified">기입되지 않았습니다.</string>
     <string name="form_main">메인</string>
     <string name="form_physique">체격</string>

@@ -152,7 +152,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:visibility="gone"
-                    style="@android:style/Widget.ProgressBar.Small"/>
+                    style="@style/TopFaceProgressBar.Small"/>
 
                 <Button
                     android:id="@+id/btnRegister"
@@ -181,6 +181,7 @@
             android:layout_marginBottom="8dp"/>
 
         <TextView
+            android:id="@+id/tvWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AuthButtonsBigText"

@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/tvText"
-        style="@style/ItemTitleText"
+        style="@style/ListItemEmptyText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

@@ -1,33 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:background="@color/bg_main">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <include
-        android:id="@+id/giftHeader"
-        layout="@layout/bar_triple_btn"/>
 
     <ImageView
         android:id="@+id/giftHeaderDivider"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/chat_divider_bg"
-        android:layout_below="@id/giftHeader"/>
+        android:background="@drawable/chat_divider_bg" />
 
     <FrameLayout
         android:id="@+id/giftGrid"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/giftHeaderDivider"/>
+        android:layout_below="@id/giftHeaderDivider" />
 
     <RelativeLayout
+        android:id="@+id/lockScreen"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@id/giftHeaderDivider"
         android:background="@color/bg_main"
-        android:visibility="gone"
-        android:id="@+id/lockScreen"
-        android:layout_below="@id/giftHeaderDivider"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

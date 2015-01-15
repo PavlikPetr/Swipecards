@@ -406,7 +406,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.loTestNetworkSwitcher:
                 switcherTestNetwork.doSwitch();
-                UserNotificationManager notificationManager = getInstance(getActivity());
+                UserNotificationManager notificationManager = getInstance();
                 if (switcherTestNetwork.isChecked()) {
                     mAppConfig.setTestNetwork(true);
                     UserNotification.NotificationAction[] actions = new UserNotification.NotificationAction[]{

@@ -73,7 +73,7 @@
         <!-- activity -->
         <activity
             android:name=".ui.NavigationActivity"
-            android:configChanges="locale|screenSize|orientation"
+            android:configChanges="locale|screenSize|orientation|layoutDirection"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.ActionbarOverlay"
             android:windowSoftInputMode="stateHidden|adjustResize">
@@ -153,6 +153,10 @@
         </activity>
 
         <activity
+            android:name=".ui.GiftsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Topface.Gifts" />
+        <activity
             android:name=".ui.TopfaceAuthActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.NoActionBar"/>
@@ -169,7 +173,6 @@
         <activity
             android:name=".ui.edit.EditContainerActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.GiftsActivity"/>
         <activity
             android:name=".ui.LeadersActivity"
             android:screenOrientation="portrait"/>
@@ -320,21 +323,12 @@
         <!-- ADS -->
 
         <activity
-            android:name="com.inneractive.api.ads.InneractiveFullScreenView"
-            android:configChanges="orientation|screenSize"/>
-
-        <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <activity
-            android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
+            android:name="com.sponsorpay.publisher.ofw.SPOfferWallActivity"
             android:configChanges="orientation"/>
-
-        <activity
-            android:hardwareAccelerated="true"
-            android:name="com.ivengo.ads.InterstitialActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <activity
             android:name=".utils.offerwalls.supersonicads.SupersonicWallActivity"
@@ -359,7 +353,8 @@
         <!-- Topface offerwall -->
         <activity
             android:name="com.topface.offerwall.publisher.TFOfferwallActivity"
-            android:icon="@drawable/ic_home_topface_white"/>
+            android:icon="@drawable/ic_home_topface_white"
+            android:parentActivityName=".ui.PurchasesActivity"/>
 
         <receiver
             android:name=".receivers.TestNotificationsReceiver"
@@ -375,7 +370,7 @@
         <!-- gcm -->
         <service android:name=".GcmIntentService"/>
         <receiver
-            android:name="com.topface.topface.utils.gcmutils.GcmBroadcastReceiver"
+            android:name=".utils.gcmutils.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
@@ -418,7 +413,7 @@
         </receiver>
 
         <receiver
-            android:name="com.sponsorpay.sdk.android.advertiser.InstallReferrerReceiver"
+            android:name="com.sponsorpay.advertiser.InstallReferrerReceiver"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
@@ -427,7 +422,7 @@
         </receiver>
 
         <receiver
-            android:name="com.topface.topface.receivers.NotificationClosedReceiver"
+            android:name=".receivers.NotificationClosedReceiver"
             tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.topface.topface.NOTIFICATION_CLOSED"/>

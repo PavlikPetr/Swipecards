@@ -134,6 +134,11 @@
     <string name="buying_header_title">Cumparaturi</string>
     <string name="buying_default_message">Puteti trimite cadouri si admirari pentru monete</string>
     <string name="buying_money">Cumpararea monedelor</string>
+    <string name="gifts_romantic">Romantica</string>
+    <string name="gifts_friends">Prietenie</string>
+    <string name="gifts_present">Felicitari</string>
+    <string name="gifts_title">Alege cadou</string>
+    <string name="gifts_send_btn">Trimite cadou</string>
     <string name="profile_header_title">Profilul meu</string>
     <string name="profile_add_album">Alege din prezentele</string>
     <string name="profile_add_camera">Face poza</string>
@@ -155,11 +160,6 @@
     <string name="edit_set_as_main">A face principala</string>
     <string name="edit_delete">Sterge</string>
     <string name="edit_restore">Restabileste</string>
-    <string name="gifts_romantic">Romantica</string>
-    <string name="gifts_friends">Prietenie</string>
-    <string name="gifts_present">Felicitari</string>
-    <string name="gifts_title">Alege cadou</string>
-    <string name="gifts_send_btn">Trimite cadou</string>
     <string name="form_not_specified">Nu e indicat</string>
     <string name="form_main">De baza</string>
     <string name="form_physique">Date corp</string>
@@ -356,7 +356,11 @@
         <item quantity="other">Primeste VIP pe %d zile</item>
         <item quantity="one">Primeste VIP pe %d zile</item>
     </plurals>
-    <plurals name="get_vip_for_invites_plurals"></plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="few">Ia invitatii VIP gratuite %d</item>
+        <item quantity="other">Ia invitatii VIP gratuite %d</item>
+        <item quantity="one">Ia VIP gratuit pentru %d de invitație</item>
+    </plurals>
     <string name="buy_status_and_watch_your_fans">Cumpara VIP - statut si afla, cine te-a adaugat in alese</string>
     <string name="add_bookmarks_to_be_connected">Adaugati prieteni noi in aceasta despartitura, si nu veti pierde cu ei legatura</string>
     <string name="nobody_chat_with_you_sympathies_will_help">Mimeni nu va scris nimic. Simpatiile va vor fi de folos in cautarea prietenilor</string>

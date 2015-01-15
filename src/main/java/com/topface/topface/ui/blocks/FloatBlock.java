@@ -11,10 +11,11 @@ import android.view.ViewGroup;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
-import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
+import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
+import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.HashMap;
@@ -75,23 +76,37 @@ public class FloatBlock {
         if (mBannersMap == null) {
             mBannersMap = new HashMap<>();
             Options mOptions = CacheProfile.getOptions();
-            if (mOptions.pages.containsKey(Options.PAGE_LIKES)) {
-                mBannersMap.put(LikesFragment.class.toString(), mOptions.pages.get(Options.PAGE_LIKES));
+            // for all times
+            if (mOptions.pages.containsKey(Options.PAGE_TABBED_VISITORS)) {
+                mBannersMap.put(TabbedVisitorsFragment.class.toString(), mOptions.pages.get(Options.PAGE_TABBED_VISITORS));
             }
-            if (mOptions.pages.containsKey(Options.PAGE_MUTUAL)) {
-                mBannersMap.put(MutualFragment.class.toString(), mOptions.pages.get(Options.PAGE_MUTUAL));
+
+            // for experiment with tabbed likes
+            if (mOptions.likesWithThreeTabs.isEnabled()) {
+                if (mOptions.pages.containsKey(Options.PAGE_TABBED_LIKES)) {
+                    mBannersMap.put(TabbedLikesFragment.class.toString(), mOptions.pages.get(Options.PAGE_TABBED_LIKES));
+                }
+            } else {
+                //admirations must be placed here, if there will be some banners/leaders
+                if (mOptions.pages.containsKey(Options.PAGE_LIKES)) {
+                    mBannersMap.put(LikesFragment.class.toString(), mOptions.pages.get(Options.PAGE_LIKES));
+                }
+                if (mOptions.pages.containsKey(Options.PAGE_MUTUAL)) {
+                    mBannersMap.put(MutualFragment.class.toString(), mOptions.pages.get(Options.PAGE_MUTUAL));
+                }
             }
-            if (mOptions.pages.containsKey(Options.PAGE_DIALOGS)) {
-                mBannersMap.put(DialogsFragment.class.toString(), mOptions.pages.get(Options.PAGE_DIALOGS));
-            }
-            if (mOptions.pages.containsKey(Options.PAGE_VISITORS)) {
-                mBannersMap.put(VisitorsFragment.class.toString(), mOptions.pages.get(Options.PAGE_VISITORS));
-            }
-            if (mOptions.pages.containsKey(Options.PAGE_BOOKMARKS)) {
-                mBannersMap.put(BookmarksFragment.class.toString(), mOptions.pages.get(Options.PAGE_BOOKMARKS));
-            }
-            if (mOptions.pages.containsKey(Options.PAGE_FANS)) {
-                mBannersMap.put(FansFragment.class.toString(), mOptions.pages.get(Options.PAGE_FANS));
+            // for experiment with tabbed messages
+            if (mOptions.messagesWithTabs.isEnabled()) {
+                if (mOptions.pages.containsKey(Options.PAGE_TABBED_MESSAGES)) {
+                    mBannersMap.put(TabbedDialogsFragment.class.toString(), mOptions.pages.get(Options.PAGE_TABBED_MESSAGES));
+                }
+            } else {
+                if (mOptions.pages.containsKey(Options.PAGE_DIALOGS)) {
+                    mBannersMap.put(DialogsFragment.class.toString(), mOptions.pages.get(Options.PAGE_DIALOGS));
+                }
+                if (mOptions.pages.containsKey(Options.PAGE_BOOKMARKS)) {
+                    mBannersMap.put(BookmarksFragment.class.toString(), mOptions.pages.get(Options.PAGE_BOOKMARKS));
+                }
             }
         }
         return mBannersMap;

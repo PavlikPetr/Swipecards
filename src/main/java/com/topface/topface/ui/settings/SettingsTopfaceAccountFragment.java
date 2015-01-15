@@ -44,6 +44,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private EditText mEditText;
     private TextView mText;
     private Button mBtnChange;
+    private Button mBtnChangeEmail;
     private Button mBtnLogout;
     private Button mBtnDelete;
 
@@ -189,6 +190,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             mText.setVisibility(View.VISIBLE);
         } else {
             mEditText.setVisibility(View.VISIBLE);
+            mEditText.setText(mToken.getLogin());
             mText.setVisibility(View.GONE);
         }
     }
@@ -197,6 +199,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mBtnChange = (Button) root.findViewById(R.id.btnChange);
         mBtnChange.setOnClickListener(this);
         mBtnChange.setVisibility(View.VISIBLE);
+        mBtnChangeEmail = (Button) root.findViewById(R.id.btnChangeEmail);
+        mBtnChangeEmail.setOnClickListener(this);
         mBtnLogout = (Button) root.findViewById(R.id.btnLogout);
         mBtnLogout.setOnClickListener(this);
         mBtnDelete = (Button) root.findViewById(R.id.btnDeleteAccount);
@@ -206,10 +210,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
+            mBtnChangeEmail.setVisibility(View.VISIBLE);
             fieldContainer.setBackgroundResource(R.drawable.edit_big_btn_selector);
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
+            mBtnChangeEmail.setVisibility(View.GONE);
             fieldContainer.setBackgroundResource(android.R.color.transparent);
             if (mChangeEmail) {
                 setChangeBtnAction(ACTION_CHANGE_EMAIL);
@@ -253,9 +259,16 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             case R.id.btnDeleteAccount:
                 deleteAccount();
                 break;
+            case R.id.btnChangeEmail:
+                onChangeEmailButtonClick();
             default:
                 break;
         }
+    }
+
+    private void onChangeEmailButtonClick() {
+        Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
+        startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_EMAIL);
     }
 
     private void deleteAccount() {

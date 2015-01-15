@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.topface.topface.R;
@@ -14,11 +13,6 @@ import java.util.List;
 
 
 public class FansFragment extends BookmarksFragment {
-    @Override
-    protected Drawable getBackIcon() {
-        return getResources().getDrawable(R.drawable.fans);
-    }
-
     @Override
     protected String getTitle() {
         return getString(R.string.general_fans);

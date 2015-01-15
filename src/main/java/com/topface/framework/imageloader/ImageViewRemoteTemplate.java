@@ -49,6 +49,10 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
      */
     private Timer mRepeatTimer;
     /**
+     * resource to show while image is loading
+     */
+    private int mStubResId = 0;
+    /**
      * View, которое используется в качестве индикатора загрузки
      */
     private View mLoader;
@@ -117,7 +121,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
             }
-            getImageLoader(getContext()).displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
+            getImageLoader(getContext()).displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor(), mStubResId);
             if (borderResId != 0 && isFirstTime) {
                 setImageResource(borderResId);
             }
@@ -154,6 +158,10 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
 
     public boolean setRemoteSrc(String remoteSrc) {
         return setRemoteSrc(remoteSrc, null);
+    }
+
+    public void setStubResId(int resId) {
+        mStubResId = resId;
     }
 
     private DefaultImageLoader getImageLoader(Context context) {
@@ -274,6 +282,11 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
                 mHandler.sendEmptyMessage(LOADING_ERROR);
             }
         }
+    }
+
+
+    public String getCurrentSrcLink() {
+        return mCurrentSrc;
     }
 
     public int getImageMaxHeight() {

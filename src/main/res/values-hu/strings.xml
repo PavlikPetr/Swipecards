@@ -110,6 +110,8 @@
     <string name="buying_header_title">Vásárlás</string>
     <string name="buying_default_message">Küldhetsz ajándékokat és csodálatot érmékért</string>
     <string name="buying_money">Érme vásárlás</string>
+    <string name="gifts_title">Válasszon ajándékot</string>
+    <string name="gifts_send_btn">Küldjön ajándékot</string>
     <string name="profile_header_title">Saját profil</string>
     <string name="profile_add_album">Válassz abból, amid van</string>
     <string name="profile_add_camera">Kép készítése</string>
@@ -131,8 +133,6 @@
     <string name="edit_set_as_main">Főoldalnak</string>
     <string name="edit_delete">Eltávolít</string>
     <string name="edit_restore">Helyreállítás</string>
-    <string name="gifts_title">Válasszon ajándékot</string>
-    <string name="gifts_send_btn">Küldjön ajándékot</string>
     <string name="form_not_specified">Nincs megadva</string>
     <string name="form_main">Fő</string>
     <string name="form_physique">Testalkat</string>

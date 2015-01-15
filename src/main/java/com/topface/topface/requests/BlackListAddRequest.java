@@ -30,7 +30,6 @@ public class BlackListAddRequest extends ApiRequest {
         List<Integer> list = new ArrayList<>();
         list.add(userId);
         mUserIds = list;
-        setCallback();
     }
 
     /**
@@ -40,7 +39,6 @@ public class BlackListAddRequest extends ApiRequest {
         super(context);
         mUserIds = userIds;
         setCallback();
-
     }
 
     private void setCallback() {

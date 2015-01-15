@@ -242,13 +242,13 @@ public class App extends Application {
 
                     @Override
                     protected void success(Profile data, IApiResponse response) {
-                        CacheProfile.setProfile(data, response, part);
+                        CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
                     }
 
                     @Override
                     protected Profile parseResponse(ApiResponse response) {
-                        return Profile.parse(response);
+                        return new Profile(response);
                     }
 
                     @Override
@@ -328,6 +328,15 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
+        /**
+         * Баг Admob и Google Play Services, пробуем исправить
+         * @see https://code.google.com/p/android/issues/detail?id=81083
+         */
+        try {
+            Class.forName("android.os.AsyncTask");
+        } catch (Throwable ignore) {
+        }
+
         super.onCreate();
 
         mContext = getApplicationContext();
