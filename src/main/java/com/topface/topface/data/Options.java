@@ -489,8 +489,8 @@ public class Options extends AbstractData {
     }
 
     public static class AboutApp {
-        public String title = App.getContext().getString(R.string.settings_topface_url);
-        public String url = App.getContext().getString(R.string.settings_topface_url_title);
+        public String title;
+        public String url;
 
 
         public AboutApp(String title, String url) {
@@ -499,7 +499,8 @@ public class Options extends AbstractData {
         }
 
         public AboutApp() {
-
+            title = App.getContext().getString(R.string.settings_topface_url);
+            url = App.getContext().getString(R.string.settings_topface_url_title);
         }
     }
 
