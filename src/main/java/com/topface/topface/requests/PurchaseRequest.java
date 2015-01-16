@@ -20,14 +20,12 @@ import org.onepf.oms.appstore.googleUtils.Purchase;
 abstract public class PurchaseRequest extends ApiRequest {
     transient private final Purchase mPurchase;
     transient private DeveloperPayload payload;
-    private JSONObject requestData;
 
     protected PurchaseRequest(Purchase purchase, Context context) {
         super(context);
         doNeedAlert(false);
         mPurchase = purchase;
         this.payload = parseDeveloperPayload(purchase);
-        requestData = new JSONObject();
     }
 
     private DeveloperPayload parseDeveloperPayload(Purchase product) {
@@ -53,6 +51,7 @@ abstract public class PurchaseRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
+        JSONObject requestData = new JSONObject();
         requestData.put("appStartLabel", App.getStartLabel());
         requestData.put("appsflyer", new AppsFlyerData(context).toJson());
         if (getDeveloperPayload() != null) {
