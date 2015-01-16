@@ -9,8 +9,6 @@ import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
-import com.topface.topface.data.experiments.LikesWithThreeTabs;
-import com.topface.topface.data.experiments.MessagesWithTabs;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
@@ -44,26 +42,14 @@ public class Options extends AbstractData {
      * Идентификаторы страниц
      */
     public static final String PAGE_UNKNOWK = "UNKNOWN_PAGE";
-    public final static String PAGE_LIKES = "LIKE";
-    public final static String PAGE_MUTUAL = "MUTUAL";
-    public final static String PAGE_MESSAGES = "MESSAGES";
     public final static String PAGE_TABBED_VISITORS = "VISITORS_TABS";
-    public final static String PAGE_DIALOGS = "DIALOGS";
-    public final static String PAGE_BOOKMARKS = "BOOKMARKS";
-    public final static String PAGE_VIEWS = "VIEWS";
     public final static String PAGE_START = "START";
     public final static String PAGE_GAG = "GAG";
     public final static String PAGE_TABBED_LIKES = "LIKES_TABS";
     public final static String PAGE_TABBED_MESSAGES = "MESSAGES_TABS";
     public final static String[] PAGES = new String[]{
             PAGE_UNKNOWK,
-            PAGE_LIKES,
-            PAGE_MUTUAL,
-            PAGE_MESSAGES,
             PAGE_TABBED_VISITORS,
-            PAGE_DIALOGS,
-            PAGE_BOOKMARKS,
-            PAGE_VIEWS,
             PAGE_START,
             PAGE_TABBED_LIKES,
             PAGE_TABBED_MESSAGES,
@@ -164,11 +150,7 @@ public class Options extends AbstractData {
 
     public NotShown notShown = new NotShown();
 
-    public LikesWithThreeTabs likesWithThreeTabs = new LikesWithThreeTabs();
-
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
-
-    public MessagesWithTabs messagesWithTabs = new MessagesWithTabs();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -347,11 +329,7 @@ public class Options extends AbstractData {
 
             autoOpenGallery.init(response);
 
-            likesWithThreeTabs.init(response);
-
             instantMessagesForNewbies.init(response);
-
-            messagesWithTabs.init(response);
 
             startPageFragmentId = getStartPageFragmentId(response);
 
@@ -399,20 +377,8 @@ public class Options extends AbstractData {
     private static String getPageName(JSONObject page, String key) {
         String name = page.optString(key);
         switch (name) {
-            case PAGE_LIKES:
-                return PAGE_LIKES;
-            case PAGE_MUTUAL:
-                return PAGE_MUTUAL;
-            case PAGE_MESSAGES:
-                return PAGE_MESSAGES;
             case PAGE_TABBED_VISITORS:
                 return PAGE_TABBED_VISITORS;
-            case PAGE_DIALOGS:
-                return PAGE_DIALOGS;
-            case PAGE_BOOKMARKS:
-                return PAGE_BOOKMARKS;
-            case PAGE_VIEWS:
-                return PAGE_VIEWS;
             case PAGE_START:
                 return PAGE_START;
             case PAGE_GAG:
@@ -718,18 +684,16 @@ public class Options extends AbstractData {
         } catch (IllegalArgumentException e) {
             Debug.error("Illegal value of startPage", e);
         }
-        if (messagesWithTabs.isEnabled() || likesWithThreeTabs.isEnabled()) {
-            switch (fragmentId) {
-                case BOOKMARKS:
-                case DIALOGS:
-                    fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
-                    break;
-                case MUTUAL:
-                case ADMIRATIONS:
-                case LIKES:
-                    fragmentId = BaseFragment.FragmentId.TABBED_LIKES;
-                    break;
-            }
+        switch (fragmentId) {
+            case BOOKMARKS:
+            case DIALOGS:
+                fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
+                break;
+            case MUTUAL:
+            case ADMIRATIONS:
+            case LIKES:
+                fragmentId = BaseFragment.FragmentId.TABBED_LIKES;
+                break;
         }
         return fragmentId;
     }

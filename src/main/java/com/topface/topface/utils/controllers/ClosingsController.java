@@ -435,10 +435,7 @@ public class ClosingsController implements View.OnClickListener {
      * @return tru if you can show closings now
      */
     public boolean canShowClosings() {
-        return !(mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) &&
-                CacheProfile.getOptions().closing.isClosingsEnabled() &&
-                !CacheProfile.getOptions().likesWithThreeTabs.isEnabled() &&
-                !CacheProfile.getOptions().messagesWithTabs.isEnabled();
+        return false;
     }
 
     @SuppressWarnings("UnusedDeclaration")
