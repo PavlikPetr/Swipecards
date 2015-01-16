@@ -3,6 +3,7 @@ package com.topface.topface.data;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.experiments.AutoOpenGallery;
@@ -488,8 +489,8 @@ public class Options extends AbstractData {
     }
 
     public static class AboutApp {
-        public String title = "topface.com";
-        public String url = "http://m.topface.com";
+        public String title = App.getContext().getString(R.string.settings_topface_url);
+        public String url = App.getContext().getString(R.string.settings_topface_url_title);
 
 
         public AboutApp(String title, String url) {
