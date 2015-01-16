@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.topface.billing.DeveloperPayload;
 import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
+import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.requests.handlers.ErrorCodes;
 
 import org.json.JSONException;
@@ -53,6 +54,10 @@ abstract public class PurchaseRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         requestData.put("appStartLabel", App.getStartLabel());
+        requestData.put("appsflyer", new AppsFlyerData(context).toJson());
+        if (getDeveloperPayload() != null) {
+            requestData.put("source", getDeveloperPayload().source);
+        }
         return requestData;
     }
 
