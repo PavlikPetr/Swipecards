@@ -31,23 +31,6 @@ public class DebugEmailSender implements ReportSender {
         mContext = ctx;
     }
 
-
-    @Override
-    public void send(CrashReportData errorContent) throws ReportSenderException {
-
-        final String subject = "[Crash Report] [uid: " + CacheProfile.uid + "] Topface";
-
-        final String body = buildBody(errorContent);
-
-        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-        emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
-        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, body);
-        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{ACRA.getConfig().mailTo()});
-        mContext.startActivity(emailIntent);
-    }
-
     private String buildBody(CrashReportData errorContent) {
         errorContent.put(
                 PHONE_MODEL,
@@ -71,5 +54,20 @@ public class DebugEmailSender implements ReportSender {
             builder.append('\n');
         }
         return builder.toString();
+    }
+
+    @Override
+    public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
+        final String subject = "[Crash Report] [uid: " + CacheProfile.uid + "] Topface";
+
+        final String body = buildBody(errorContent);
+
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, body);
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{ACRA.getConfig().mailTo()});
+        mContext.startActivity(emailIntent);
     }
 }

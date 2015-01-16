@@ -159,6 +159,11 @@
     <string name="buying_header_title">Покупки</string>
     <string name="buying_default_message">Ви можете відправляти подарунки та захоплення за монети</string>
     <string name="buying_money">Покупка монет</string>
+    <string name="gifts_romantic">Романтичні</string>
+    <string name="gifts_friends">Дружні</string>
+    <string name="gifts_present">Вітальні</string>
+    <string name="gifts_title">Виберіть подарунок</string>
+    <string name="gifts_send_btn">Відправити подарунок</string>
     <string name="profile_header_title">Мій профіль</string>
     <string name="profile_add_album">Вибрати з наявних</string>
     <string name="profile_add_camera">Зробити знімок</string>

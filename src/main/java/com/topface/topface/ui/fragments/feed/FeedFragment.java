@@ -630,6 +630,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void always(IApiResponse response) {
                 super.always(response);
+                mBackgroundController.hide();
                 mIsUpdating = false;
             }
 
@@ -797,7 +798,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void onFilledFeed(boolean isPushUpdating) {
-        mBackgroundController.hide();
         ViewStub stub = getEmptyFeedViewStub();
         if (stub != null) stub.setVisibility(View.GONE);
         setFilterEnabled(isPushUpdating ? mListView.getVisibility() == View.VISIBLE :

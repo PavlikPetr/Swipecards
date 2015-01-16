@@ -243,13 +243,13 @@ public class App extends Application {
 
                     @Override
                     protected void success(Profile data, IApiResponse response) {
-                        CacheProfile.setProfile(data, response, part);
+                        CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
                     }
 
                     @Override
                     protected Profile parseResponse(ApiResponse response) {
-                        return Profile.parse(response);
+                        return new Profile(response);
                     }
 
                     @Override

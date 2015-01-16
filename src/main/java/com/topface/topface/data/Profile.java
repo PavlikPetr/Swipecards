@@ -64,11 +64,24 @@ public class Profile extends AbstractDataWithPhotos {
     // Флаг того, является ли пользоветль редактором
     private boolean mEditor;
 
-    public static Profile parse(ApiResponse response) {
-        return parse(new Profile(), response.jsonResult);
+    public Profile() {
+        super();
     }
 
-    protected static Profile parse(final Profile profile, final JSONObject resp) {
+    public Profile(ApiResponse response) {
+        this(response.getJsonResult());
+    }
+
+    public Profile(JSONObject jsonObject) {
+        fillData(jsonObject);
+    }
+
+    protected void fillData(final JSONObject resp) {
+        if (resp == null) {
+            Debug.error(new IllegalArgumentException("JSON response for Profile is null"));
+            return;
+        }
+        Profile profile = this;
         try {
             profile.uid = resp.optInt("id");
             profile.age = resp.optInt("age");
@@ -107,7 +120,6 @@ public class Profile extends AbstractDataWithPhotos {
         } catch (Exception e) {
             Debug.error("Profile Wrong response parsing: ", e);
         }
-        return profile;
     }
 
     private static void parseForm(Profile profile, JSONObject resp, Context context) throws JSONException {

@@ -1,7 +1,7 @@
 package com.topface.topface.ui.fragments.buy;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
 import com.topface.topface.data.Products;
 import com.topface.topface.utils.CacheProfile;
@@ -25,10 +25,10 @@ public class VipFortumoBuyFragment extends VipBuyFragment {
     }
 
     @Override
-    protected void addAvailableStores(FragmentActivity activity, OpenIabHelper.Options.Builder optsBuilder) {
-        optsBuilder.setSupportFortumo(true);
+    protected void addAvailableStores(Context context, OpenIabHelper.Options.Builder optsBuilder) {
         //Используем всю ту же логику что в MarketBuyingFragment, но устанавливаем свой тип магазина
-        optsBuilder.addAvailableStores(new FortumoStore(activity));
+        optsBuilder.addAvailableStores(new FortumoStore(context));
+        optsBuilder.addPreferredStoreName(OpenIabHelper.NAME_FORTUMO);
     }
 
     @Override

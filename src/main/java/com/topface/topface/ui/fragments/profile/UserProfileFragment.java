@@ -359,7 +359,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
                 @Override
                 protected User parseResponse(ApiResponse response) {
-                    return User.parse(profileId, response);
+                    return new User(profileId, response);
                 }
 
                 @Override
@@ -372,7 +372,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
             }).exec();
         } else {
-            onSuccess(User.parse(mProfileId, mSavedResponse), mSavedResponse);
+            onSuccess(new User(mProfileId, mSavedResponse), mSavedResponse);
         }
     }
 
@@ -746,7 +746,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     private void addNewFeedGift(FeedGift data) {
         if (data != null) {
-            getProfile().gifts.add(0, data.gift);
+            Profile profile = getProfile();
+            if (profile != null) {
+                getProfile().gifts.add(0, data.gift);
+            }
             if (mNewGifts == null) {
                 mNewGifts = new ArrayList<>();
             }
