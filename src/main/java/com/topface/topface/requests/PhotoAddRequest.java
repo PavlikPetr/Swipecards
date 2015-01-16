@@ -10,6 +10,7 @@ import com.topface.topface.App;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.IProgressListener;
+import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,12 +41,18 @@ public class PhotoAddRequest extends ApiRequest {
     @Override
     protected boolean writeData(HttpURLConnection connection, IConnectionConfigureListener listener) throws IOException {
         //Открываем InputStream к файлу который будем отправлять
+        setSsid(ssid);
         InputStream inputStream = BitmapUtils.getInputStream(getContext(), mUri);
         int contentLength = inputStream.available();
         Debug.log("File size: " + contentLength);
         HttpUtils.setContentLengthAndConnect(connection, listener, contentLength);
         if (contentLength > 0) {
             try {
+                Debug.logJson(
+                        ConnectionManager.TAG,
+                        "REQUEST upload >>> " + getApiUrl() + " rev:" + getRevNum(),
+                        "file: " + mUri.toString() + " with size(bytes): "+contentLength
+                );
                 writeRequest(inputStream, connection);
             } finally {
                 inputStream.close();

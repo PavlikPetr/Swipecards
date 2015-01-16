@@ -172,9 +172,6 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public String toPostData() {
-        //Непосредственно перед отправкой запроса устанавливаем новый SSID
-        setSsid(Ssid.get());
-
         if (mPostData == null) {
             mPostData = getRequest().toString();
         }
@@ -196,7 +193,7 @@ public abstract class ApiRequest implements IApiRequest {
         return mResendCnt;
     }
 
-    private boolean setSsid(String ssid) {
+    protected boolean setSsid(String ssid) {
         if (isNeedAuth()) {
             //Если SSID изменился, то сбрасываем кэш данных запроса
             if (!TextUtils.equals(ssid, this.ssid)) {
@@ -292,6 +289,7 @@ public abstract class ApiRequest implements IApiRequest {
         final IRequestConnectionListener listener = RequestConnectionListenerFactory.create(getServiceName());
         int responseCode = -1;
         IApiResponse response;
+        setSsid(Ssid.get());
         mApiUrl = getApiUrl();
         listener.onConnectionStarted();
         HttpURLConnection connection = openConnection();
