@@ -172,6 +172,10 @@ public class Options extends AbstractData {
 
     public MessagesWithTabs messagesWithTabs = new MessagesWithTabs();
 
+    public int feedAdPosition = 2;
+
+    public int pubnativeShows = 9999;
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }

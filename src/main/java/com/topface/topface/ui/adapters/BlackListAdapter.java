@@ -7,6 +7,9 @@ import android.widget.RelativeLayout;
 
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
+import com.topface.topface.utils.ad.NativeAd;
+
+import org.json.JSONObject;
 
 public class BlackListAdapter extends FeedAdapter<BlackListItem> {
 
@@ -52,8 +55,8 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
     }
 
     @Override
-    protected FeedViewHolder getEmptyHolder(View convertView, BlackListItem item) {
-        FeedViewHolder holder = super.getEmptyHolder(convertView, item);
+    protected FeedViewHolder getEmptyHolder(View convertView) {
+        FeedViewHolder holder = super.getEmptyHolder(convertView);
         holder.dataLayout = convertView.findViewById(R.id.animationLayout);
 
         return holder;
@@ -64,16 +67,26 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
         return new ILoaderRetrierCreator<BlackListItem>() {
             @Override
             public BlackListItem getLoader() {
-                BlackListItem result = new BlackListItem(null);
+                BlackListItem result = new BlackListItem((JSONObject) null);
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
                 return result;
             }
 
             @Override
             public BlackListItem getRetrier() {
-                BlackListItem result = new BlackListItem(null);
+                BlackListItem result = new BlackListItem((JSONObject) null);
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
+            }
+        };
+    }
+
+    @Override
+    protected INativeAdItemCreator<BlackListItem> getNativeAdItemCreator() {
+        return new INativeAdItemCreator<BlackListItem>() {
+            @Override
+            public BlackListItem getAdItem(NativeAd nativeAd) {
+                return new BlackListItem(nativeAd);
             }
         };
     }

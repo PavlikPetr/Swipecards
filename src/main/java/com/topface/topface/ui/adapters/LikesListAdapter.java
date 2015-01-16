@@ -13,13 +13,16 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
+import com.topface.topface.utils.ad.NativeAd;
+
+import org.json.JSONObject;
 
 public class LikesListAdapter extends FeedAdapter<FeedLike> {
     private int mSelectedForMutual = -1;
     private int mPrevSelectedForMutual = -1;
 
-    public static final int T_SELECTED_FOR_MUTUAL = 6;
-    public static final int T_SELECTED_FOR_MUTUAL_VIP = 7;
+    public static final int T_SELECTED_FOR_MUTUAL = 7;
+    public static final int T_SELECTED_FOR_MUTUAL_VIP = 8;
     private int T_COUNT = 2;
 
     private OnMutualListener mMutualListener;
@@ -135,8 +138,8 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     }
 
     @Override
-    protected FeedViewHolder getEmptyHolder(View convertView, FeedLike item) {
-        FeedViewHolder holder = super.getEmptyHolder(convertView, item);
+    protected FeedViewHolder getEmptyHolder(View convertView) {
+        FeedViewHolder holder = super.getEmptyHolder(convertView);
         holder.heart = (ImageView) convertView.findViewById(R.id.ivHeart);
         holder.heart.setVisibility(View.VISIBLE);
         return holder;
@@ -171,16 +174,26 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         return new ILoaderRetrierCreator<FeedLike>() {
             @Override
             public FeedLike getLoader() {
-                FeedLike result = new FeedLike(null);
+                FeedLike result = new FeedLike((JSONObject) null);
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
                 return result;
             }
 
             @Override
             public FeedLike getRetrier() {
-                FeedLike result = new FeedLike(null);
+                FeedLike result = new FeedLike((JSONObject) null);
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
+            }
+        };
+    }
+
+    @Override
+    protected INativeAdItemCreator<FeedLike> getNativeAdItemCreator() {
+        return new INativeAdItemCreator<FeedLike>() {
+            @Override
+            public FeedLike getAdItem(NativeAd nativeAd) {
+                return new FeedLike(nativeAd);
             }
         };
     }

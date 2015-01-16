@@ -10,6 +10,9 @@ import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.ad.NativeAd;
+
+import org.json.JSONObject;
 
 import java.util.Collections;
 
@@ -30,16 +33,18 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
 
         FeedDialog dialog = getItem(position);
-        setDialogText(dialog, holder.text);
-        holder.time.setText(dialog.createdRelative);
+        if (dialog != null) {
+            setDialogText(dialog, holder.text);
+            holder.time.setText(dialog.createdRelative);
 
-        if (getItemViewType(position) == T_NEW) {
-            int unreadCounter = getUnreadCounter(dialog);
-            if (unreadCounter > 1 && !CacheProfile.getOptions().hidePreviewDialog) {
-                holder.unreadCounter.setVisibility(View.VISIBLE);
-                holder.unreadCounter.setText(Integer.toString(unreadCounter));
-            } else {
-                holder.unreadCounter.setVisibility(View.GONE);
+            if (getItemViewType(position) == T_NEW) {
+                int unreadCounter = getUnreadCounter(dialog);
+                if (unreadCounter > 1 && !CacheProfile.getOptions().hidePreviewDialog) {
+                    holder.unreadCounter.setVisibility(View.VISIBLE);
+                    holder.unreadCounter.setText(Integer.toString(unreadCounter));
+                } else {
+                    holder.unreadCounter.setVisibility(View.GONE);
+                }
             }
         }
 
@@ -129,12 +134,10 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     }
 
     @Override
-    protected FeedViewHolder getEmptyHolder(View convertView, FeedDialog item) {
-        FeedViewHolder holder = super.getEmptyHolder(convertView, item);
+    protected FeedViewHolder getEmptyHolder(View convertView) {
+        FeedViewHolder holder = super.getEmptyHolder(convertView);
         holder.text = (TextView) convertView.findViewById(R.id.tvText);
-        if (item.unread) {
-            holder.unreadCounter = (TextView) convertView.findViewById(R.id.tvUnreadCounter);
-        }
+        holder.unreadCounter = (TextView) convertView.findViewById(R.id.tvUnreadCounter);
         holder.time = (TextView) convertView.findViewById(R.id.tvTime);
         return holder;
     }
@@ -159,7 +162,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
     private boolean addItemToStartOfFeed(FeedDialog item) {
         for (FeedDialog dialog : getData()) {
-            if (item.user.id == dialog.user.id) {
+            if (!isFakeAdItem(dialog) && item.user.id == dialog.user.id) {
                 setItemToStartOfFeed(dialog, item);
                 return true;
             }
@@ -197,16 +200,26 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         return new ILoaderRetrierCreator<FeedDialog>() {
             @Override
             public FeedDialog getLoader() {
-                FeedDialog result = new FeedDialog(null);
+                FeedDialog result = new FeedDialog((JSONObject) null);
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
                 return result;
             }
 
             @Override
             public FeedDialog getRetrier() {
-                FeedDialog result = new FeedDialog(null);
+                FeedDialog result = new FeedDialog((JSONObject) null);
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
+            }
+        };
+    }
+
+    @Override
+    protected INativeAdItemCreator<FeedDialog> getNativeAdItemCreator() {
+        return new INativeAdItemCreator<FeedDialog>() {
+            @Override
+            public FeedDialog getAdItem(NativeAd nativeAd) {
+                return new FeedDialog(nativeAd);
             }
         };
     }

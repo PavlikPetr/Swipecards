@@ -3,6 +3,8 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.topface.topface.utils.ad.NativeAd;
+
 import org.json.JSONObject;
 
 public class FeedBookmark extends FeedItem implements Parcelable {
@@ -24,5 +26,9 @@ public class FeedBookmark extends FeedItem implements Parcelable {
 
     protected FeedBookmark(Parcel in) {
         super(in);
+    }
+
+    public FeedBookmark(NativeAd nativeAd) {
+        super(nativeAd);
     }
 }

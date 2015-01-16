@@ -3,6 +3,8 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.topface.topface.utils.ad.NativeAd;
+
 import org.json.JSONObject;
 
 public class Visitor extends FeedItem implements Parcelable {
@@ -24,6 +26,10 @@ public class Visitor extends FeedItem implements Parcelable {
 
     protected Visitor(Parcel in) {
         super(in);
+    }
+
+    public Visitor(NativeAd nativeAd) {
+        super(nativeAd);
     }
 
     @Override
