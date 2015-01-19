@@ -7,5 +7,14 @@ package com.topface.topface.banners;
  */
 public interface IBannerInjector {
 
+    /**
+     * Inject banner to provided container
+     * @param container page for ads
+     */
     void injectBanner(IPageWithAds container);
+
+    /**
+     * Provide methods that can clean all injected stuff
+     */
+    void cleanUp();
 }

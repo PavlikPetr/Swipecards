@@ -8,7 +8,7 @@ import com.topface.topface.banners.ad_providers.AdProvidersFactory;
  */
 public class BannersController {
 
-    private BannerInjector mFeedBannersInjector;
+    private IBannerInjector mFeedBannersInjector;
 
     public BannersController(IPageWithAds page) {
         super();
@@ -19,7 +19,7 @@ public class BannersController {
         if (mFeedBannersInjector != null) mFeedBannersInjector.cleanUp();
     }
 
-    public BannerInjector getFeedBannerController() {
+    public IBannerInjector getFeedBannerController() {
         if (mFeedBannersInjector == null) {
             mFeedBannersInjector = new BannerInjector(new AdProvidersFactory());
         }

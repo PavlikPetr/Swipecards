@@ -77,6 +77,7 @@ public class PageInfo {
             mName = name();
         }
 
+        @SuppressWarnings("unused")
         PageName(String name) {
             mName = name;
         }
