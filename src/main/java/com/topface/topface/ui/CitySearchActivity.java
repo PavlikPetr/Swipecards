@@ -253,9 +253,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
     private void update() {
         mProgressBar.setVisibility(View.VISIBLE);
-        CitiesRequest citiesRequest = new CitiesRequest(this);
+        CitiesRequest citiesRequest = new CitiesRequest(this, true);
         registerRequest(citiesRequest);
-        citiesRequest.type = "top";
         citiesRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -289,10 +288,9 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
 
     private void city(final String prefix) {
-        CitiesRequest searchCitiesRequest = new CitiesRequest(this);
+        CitiesRequest searchCitiesRequest = new CitiesRequest(this, prefix);
         registerRequest(searchCitiesRequest);
         cityListView.setVisibility(View.VISIBLE);
-        searchCitiesRequest.prefix = prefix;
         searchCitiesRequest.callback(new DataApiHandler<LinkedList<City>>() {
 
             @Override

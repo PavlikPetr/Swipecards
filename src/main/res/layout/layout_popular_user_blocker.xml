@@ -18,21 +18,17 @@
 
             <TextView
                 android:id="@+id/popular_user_lock_text"
-                android:drawableTop="@drawable/icon_rocket"
-                android:drawablePadding="@dimen/popular_dialog_text_margin"
                 style="@style/ItemTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/popular_dialog_text_margin"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:paddingTop="@dimen/popular_dialog_text_margin"
+                android:drawablePadding="@dimen/popular_dialog_text_margin"
+                android:drawableTop="@drawable/icon_rocket"
                 android:gravity="center"
                 android:lineSpacingExtra="4sp"
-                android:shadowColor="@null"
-                android:shadowDx="0"
-                android:shadowDy="0"
-                android:shadowRadius="0"
+                android:paddingTop="@dimen/popular_dialog_text_margin"
                 android:textColor="@color/text_color_gray"
                 android:textSize="18sp" />
 

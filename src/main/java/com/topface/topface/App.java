@@ -87,6 +87,7 @@ public class App extends Application {
     private static AppOptions mAppOptions;
 
     private static Boolean mIsGmsSupported;
+    private static String mStartLabel;
 
 
     /**
@@ -242,13 +243,13 @@ public class App extends Application {
 
                     @Override
                     protected void success(Profile data, IApiResponse response) {
-                        CacheProfile.setProfile(data, response, part);
+                        CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
                     }
 
                     @Override
                     protected Profile parseResponse(ApiResponse response) {
-                        return Profile.parse(response);
+                        return new Profile(response);
                     }
 
                     @Override
@@ -324,6 +325,14 @@ public class App extends Application {
             }
         }
         return mAppOptions;
+    }
+
+    public static void setStartLabel(String startLabel) {
+        mStartLabel = startLabel;
+    }
+
+    public static String getStartLabel() {
+        return mStartLabel;
     }
 
     @Override

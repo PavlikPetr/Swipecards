@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
@@ -41,6 +42,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     public static final String AUTH_TAG = "AUTH";
     public static final String IGNORE_NOTIFICATION_INTENT = "IGNORE_NOTIFICATION_INTENT";
+    private static final String APP_START_LABEL_FORM = "gcm_%d_%s";
 
     private boolean mIndeterminateSupported = false;
 
@@ -61,6 +63,12 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
+            App.setStartLabel(String.format(APP_START_LABEL_FORM,
+                    intent.getIntExtra(GCMUtils.GCM_TYPE, -1),
+                    intent.getStringExtra(GCMUtils.GCM_LABEL)));
+        }
         LocaleConfig.updateConfiguration(getBaseContext());
         setWindowOptions();
         initActionBar(getSupportActionBar());

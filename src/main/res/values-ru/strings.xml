@@ -221,6 +221,9 @@
     <string name="filter_extra_parameters">Дополнительные параметры</string>
     <string name="filter_age">Выбор возраста</string>
     <string name="filter_online">Онлайн</string>
+    <string name="filter_age_start_prefix">От %s</string>
+    <string name="filter_age_end_prefix">до %s</string>
+
 
     <string name="filter_cities_all">По всем городам</string>
 
@@ -258,6 +261,13 @@
     </plurals>
     <string name="buying_default_message">Вы можете отправлять подарки и восхищения за монеты</string>
     <string name="buying_money">Покупка монет</string>
+
+    <!-- Gifts -->
+    <string name="gifts_romantic">Романтика</string>
+    <string name="gifts_friends">Дружба</string>
+    <string name="gifts_present">Поздравления</string>
+    <string name="gifts_title">Выберите подарок</string>
+    <string name="gifts_send_btn">Отправить подарок</string>
 
     <!-- Profile  -->
     <string name="profile_header_title">Мой профиль</string>
@@ -386,6 +396,8 @@
     <string name="feedback_popup_title">Вы поставили низкую оценку. Расскажите, что вам не нравится в приложении. Помогите нам стать лучше. Спасибо!</string>
 
     <string name="settings_melody">Мелодия уведомления</string>
+
+    <string name="settings_loading_photo">Предзагрузка фотографий</string>
 
     <string name="edit_refresh_status">Обновить статус</string>
 
@@ -642,6 +654,7 @@
     <string name="likes_can_help_you">Симпатии помогут познакомиться</string>
     <string name="general_get_dating">Знакомиться</string>
     <string name="settings_select_language">Выбор языка приложения</string>
+    <string name="settings_select_preload_photo_type">Выберите когда включена предзагрузка фотографий</string>
     <string name="restart_to_change_locale">Для смены языка приложение будет перезапущено</string>
     <string name="locale_changing">Смена языка</string>
 
@@ -774,5 +787,11 @@
     <string name="hint_myprofile_buy_vip">Купите VIP-статус и наслаждайтесь безграничным общением</string>
     <string name="pull_to_refresh_pull_label">Потяните для обновления…</string>
     <string name="pull_to_refresh_release_label">Отпустите для обновления…</string>
+    <string name="messaging_block_buy_vip">Для продолжения диалога необходим VIP-статус</string>
     <string name="pull_to_refresh_refreshing_label">Загрузка…</string>
+
+    <string name="preload_photo_type_wifi_3g">WiFi и 3G</string>
+    <string name="preload_photo_type_wifi">Только WiFi</string>
+    <string name="preload_photo_type_always_on">Включена всегда</string>
+    <string name="preload_photo_type_preload_off">Выключена</string>
 </resources>

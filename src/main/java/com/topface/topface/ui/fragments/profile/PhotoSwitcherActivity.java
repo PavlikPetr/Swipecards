@@ -50,6 +50,7 @@ import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
@@ -236,7 +237,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         if (preloadPhoto != null) {
             Point size = Utils.getSrceenSize(this);
             String s = preloadPhoto.getSuitableLink(size.x, size.y);
-            DefaultImageLoader.getInstance(this).preloadImage(s, null);
+            if (PreloadManager.isPreloadAllowed()) {
+                DefaultImageLoader.getInstance(this).preloadImage(s, null);
+            }
         }
         extractUserGifts(intent);
         if (intent.getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
@@ -278,7 +281,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             } else {
                 hidePhotoAlbumControlAction();
             }
-            animateHidePhotoAlbumControlAction();
         } else {
             mPhotoAlbumControlVisibility = View.VISIBLE;
             mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
@@ -315,7 +317,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setPhotoAlbumControlVisibility(mPhotoAlbumControlVisibility, true);
+        // show control without animation
+        setPhotoAlbumControlVisibility(mPhotoAlbumControlVisibility, false);
         if (!getIntent().getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
             mUserProfileLoader.loadUserProfile(this);
         }
@@ -505,6 +508,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             if (mPhotoLinks.size() <= 1) mDeleteButton.setVisibility(View.GONE);
             mOwnPhotosControlVisibility = View.VISIBLE;
         } else {
+            mOwnPhotosControlVisibility = View.GONE;
             mPhotoAlbumControl.findViewById(R.id.loBottomPanel).setVisibility(mOwnPhotosControlVisibility);
         }
     }
@@ -775,7 +779,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
                 @Override
                 protected User parseResponse(ApiResponse response) {
-                    return User.parse(mProfileId, response);
+                    return new User(mProfileId, response);
                 }
 
                 @Override

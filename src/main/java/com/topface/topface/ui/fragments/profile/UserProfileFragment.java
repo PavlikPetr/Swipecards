@@ -144,6 +144,11 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         public void closeActionMenu() {
             closeProfileActions();
         }
+
+        @Override
+        public void showPurchasesActivity() {
+            startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
+        }
     };
 
     private int getAnimationTime() {
@@ -359,7 +364,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
                 @Override
                 protected User parseResponse(ApiResponse response) {
-                    return User.parse(profileId, response);
+                    return new User(profileId, response);
                 }
 
                 @Override
@@ -372,7 +377,7 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
             }).exec();
         } else {
-            onSuccess(User.parse(mProfileId, mSavedResponse), mSavedResponse);
+            onSuccess(new User(mProfileId, mSavedResponse), mSavedResponse);
         }
     }
 
@@ -627,7 +632,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
                 break;
             case R.id.add_to_black_list_action:
-                if (CacheProfile.premium) {
                     if (profile.uid > 0) {
                         final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
                         final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
@@ -644,9 +648,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         }
                         request.exec();
                     }
-                } else {
-                    startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
-                }
                 break;
             case R.id.add_to_bookmark_action:
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
@@ -746,7 +747,10 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
 
     private void addNewFeedGift(FeedGift data) {
         if (data != null) {
-            getProfile().gifts.add(0, data.gift);
+            Profile profile = getProfile();
+            if (profile != null) {
+                getProfile().gifts.add(0, data.gift);
+            }
             if (mNewGifts == null) {
                 mNewGifts = new ArrayList<>();
             }

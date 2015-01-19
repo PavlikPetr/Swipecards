@@ -8,6 +8,7 @@ import android.net.Uri;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
+import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -41,6 +42,7 @@ public class UserConfig extends AbstractConfig {
 
     private static final String DEFAULT_DATING_MESSAGE = "default_dating_message";
     public static final String SETTINGS_GCM_RINGTONE = "settings_c2dm_ringtone";
+    public static final String SETTINGS_PRELOAD_PHOTO = "settings_preload_photo";
     public static final String SETTINGS_GCM_VIBRATION = "settings_c2dm_vibration";
     public static final String SETTINGS_GCM = "settings_c2dm";
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
@@ -103,6 +105,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, DEFAULT_DATING_MESSAGE, Static.EMPTY);
         // push notification melody
         addField(settingsMap, SETTINGS_GCM_RINGTONE, DEFAULT_SOUND);
+        // preload photo default type WiFi and 3G
+        addField(settingsMap, SETTINGS_PRELOAD_PHOTO, PreloadPhotoSelectorTypes.WIFI_3G.getId());
         // is vibration for notification enabled
         addField(settingsMap, SETTINGS_GCM_VIBRATION, true);
         // is led blinking for notification enabled
@@ -213,6 +217,16 @@ public class UserConfig extends AbstractConfig {
      */
     public void resetPromoPopupData(int popupType) {
         resetAndSaveConfig(getPromoPopupKey(popupType));
+    }
+
+    // =======================PreloadPhotoType=======================
+
+    public boolean setPreloadPhotoType(int type) {
+        return setField(getSettingsMap(), SETTINGS_PRELOAD_PHOTO, type);
+    }
+
+    public PreloadPhotoSelectorTypes getPreloadPhotoType() {
+        return PreloadPhotoSelectorTypes.values()[getIntegerField(getSettingsMap(), SETTINGS_PRELOAD_PHOTO)];
     }
 
     // =======================Novice=======================
@@ -448,7 +462,6 @@ public class UserConfig extends AbstractConfig {
 
     /**
      * Set new topface offerwall redirection counter value
-     *
      */
     public void incrementTopfaceOfferwallRedirectCounter() {
         int counter = getTopfaceOfferwallRedirectCounter();

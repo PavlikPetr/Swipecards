@@ -43,6 +43,7 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         public static final String CHANGE_GENDER = "SWITCH_SEX";
 
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -54,7 +55,13 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         mResponse = args.getString(PROFILE_RESPONSE);
 
         if (!TextUtils.isEmpty(mResponse)) {
-            mUser = User.parse(mUserId, mResponse);
+            JSONObject jsonResponse = null;
+            try {
+                jsonResponse = new JSONObject(mResponse);
+            } catch (JSONException e) {
+                Debug.error(e);
+            }
+            mUser = new User(mUserId, jsonResponse);
         }
         initViews(root);
 
