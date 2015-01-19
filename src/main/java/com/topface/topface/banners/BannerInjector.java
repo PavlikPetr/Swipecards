@@ -26,8 +26,7 @@ import java.util.Map;
 class BannerInjector implements IBannerInjector {
 
     private final AdProvidersFactory mProvidersFactory;
-    private final WeakReference<List<IPageWithAds>> mUsedPages =
-            new WeakReference<List<IPageWithAds>>(new ArrayList<IPageWithAds>());
+    private final List<WeakReference<IPageWithAds>> mUsedPages = new ArrayList<>();
 
     public BannerInjector(AdProvidersFactory providersFactory) {
         mProvidersFactory = providersFactory;
@@ -67,8 +66,7 @@ class BannerInjector implements IBannerInjector {
                     new IAdsProvider.IAdProviderCallbacks() {
                         @Override
                         public void onAdLoadSuccess(View adView) {
-                            List<IPageWithAds> usedPages = mUsedPages.get();
-                            usedPages.add(page);
+                            mUsedPages.add(new WeakReference<>(page));
                         }
 
                         @Override
@@ -107,9 +105,11 @@ class BannerInjector implements IBannerInjector {
     }
 
     public void cleanUp() {
-        List<IPageWithAds> usedPages = mUsedPages.get();
-        for (IPageWithAds page : usedPages) {
-            cleanUp(page);
+        for (WeakReference<IPageWithAds> page : mUsedPages) {
+            IPageWithAds pageWithAds = page.get();
+            if (pageWithAds != null) {
+                cleanUp(pageWithAds);
+            }
         }
     }
 
