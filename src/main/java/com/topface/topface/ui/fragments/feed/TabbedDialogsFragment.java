@@ -41,6 +41,6 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
 
     @Override
     public PageInfo.PageName getPageName() {
-        return PageInfo.PageName.TABBED_MESSAGES;
+        return PageInfo.PageName.MESSAGES_TABS;
     }
 }

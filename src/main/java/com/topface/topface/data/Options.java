@@ -4,7 +4,7 @@ package com.topface.topface.data;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.google.gson.Gson;
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Ssid;
@@ -146,7 +146,6 @@ public class Options extends AbstractData {
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
 
     public MessagesWithTabs messagesWithTabs = new MessagesWithTabs();
-    private Gson mGson;
     private Map<String, PageInfo> pagesInfo;
 
     public Options(IApiResponse data) {
@@ -171,7 +170,7 @@ public class Options extends AbstractData {
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
-            PageInfo[] pagesArr = fromJson(response.optString("pages"), PageInfo[].class);
+            PageInfo[] pagesArr = JsonUtils.fromJson(response.optString("pages"), PageInfo[].class);
             for(PageInfo pageInfo : pagesArr) {
                 pages.put(pageInfo.name, pageInfo);
             }
@@ -341,13 +340,6 @@ public class Options extends AbstractData {
             Debug.error(cacheToPreferences ? "Options from preferences" : "Options response is null");
         }
 
-    }
-
-    private <T> T fromJson(String json, Class<T> aClass) {
-        if (mGson == null) {
-            mGson = new Gson();
-        }
-        return mGson.fromJson(json, aClass);
     }
 
     private void fillTabs(JSONObject other, LinkedList<Tab> tabs) {

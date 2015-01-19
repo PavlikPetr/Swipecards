@@ -38,6 +38,6 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
     public PageInfo.PageName getPageName() {
-        return PageInfo.PageName.TABBED_LIKES;
+        return PageInfo.PageName.LIKES_TABS;
     }
 }

@@ -57,21 +57,25 @@ public class PageInfo {
      * Pages' identifiers with given String's names from server map
      */
     public static enum PageName {
-        UNKNOWK("UNKNOWN_PAGE"),
-        LIKES("LIKE"),
-        MUTUAL("MUTUAL"),
-        MESSAGES("MESSAGES"),
-        VISITORS("VISITORS"),
-        DIALOGS("DIALOGS"),
-        FANS("FANS"),
-        BOOKMARKS("BOOKMARKS"),
-        VIEWS("VIEWS"),
-        START("START"),
-        GAG("GAG"),
-        TABBED_LIKES("LIKES_TABS"),
-        TABBED_MESSAGES("MESSAGES_TABS");
+        UNKNOWN_PAGE(),
+        LIKE(),
+        MUTUAL(),
+        MESSAGES(),
+        VISITORS(),
+        DIALOGS(),
+        FANS(),
+        BOOKMARKS(),
+        VIEWS(),
+        START(),
+        GAG(),
+        LIKES_TABS(),
+        MESSAGES_TABS();
 
         private final String mName;
+
+        PageName() {
+            mName = name();
+        }
 
         PageName(String name) {
             mName = name;

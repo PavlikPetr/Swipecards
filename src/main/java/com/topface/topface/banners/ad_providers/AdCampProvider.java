@@ -1,6 +1,5 @@
 package com.topface.topface.banners.ad_providers;
 
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -49,7 +48,6 @@ class AdCampProvider extends AbstractAdsProvider {
     }
 
     public boolean isAvailable() {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO
-                || !CredentialsUtils.isAdcampInitialized();
+        return !CredentialsUtils.isAdcampInitialized();
     }
 }

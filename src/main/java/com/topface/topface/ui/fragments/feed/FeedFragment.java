@@ -1038,7 +1038,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     @Override
     public PageInfo.PageName getPageName() {
-        return PageInfo.PageName.UNKNOWK;
+        return PageInfo.PageName.UNKNOWN_PAGE;
     }
 
     @Override

@@ -183,7 +183,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
 
     @Override
     public PageInfo.PageName getPageName() {
-        return PageInfo.PageName.UNKNOWK;
+        return PageInfo.PageName.UNKNOWN_PAGE;
     }
 
     @Override
