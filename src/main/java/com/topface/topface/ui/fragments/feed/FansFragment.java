@@ -76,4 +76,9 @@ public class FansFragment extends BookmarksFragment {
     public PageInfo.PageName getPageName() {
         return PageInfo.PageName.FANS;
     }
+
+    @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_fans;
+    }
 }

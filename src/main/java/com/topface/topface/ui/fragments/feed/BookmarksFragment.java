@@ -132,4 +132,9 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     public PageInfo.PageName getPageName() {
         return PageInfo.PageName.BOOKMARKS;
     }
+
+    @Override
+    protected int getUnreadCounter() {
+        return 0;
+    }
 }

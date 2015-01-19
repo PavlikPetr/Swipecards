@@ -101,6 +101,11 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_visitors;
+    }
+
+    @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_GUESTS_UPDATE;
     }

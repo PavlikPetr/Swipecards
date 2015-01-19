@@ -186,7 +186,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             if (!TextUtils.isEmpty(id) && Integer.parseInt(id) == mUserId) {
                 update(true, "update counters");
                 startTimer();
-                GCMUtils.cancelNotification(getActivity(), GCMUtils.GCM_TYPE_MESSAGE);
+                GCMUtils.cancelNotification(App.getContext(), GCMUtils.GCM_TYPE_MESSAGE);
             }
         }
     };
@@ -914,7 +914,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
 
         IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
-        getActivity().registerReceiver(mNewMessageReceiver, filter);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNewMessageReceiver, filter);
 
         mUpdater = new Handler();
         startTimer();
@@ -935,7 +935,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onPause() {
         super.onPause();
         deleteTimerDelay();
-        getActivity().unregisterReceiver(mNewMessageReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         Utils.hideSoftKeyboard(getActivity(), mEditBox);
         mIsKeyboardOpened = false;
@@ -1130,7 +1130,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private int mActionsHeightHeuristic;
-    private AddToBlackListViewsController mBlackListActionController;
 
     private void initActions(ViewStub actionsStub, FeedUser user, ArrayList<UserActions.ActionItem> actions) {
         if (mActions == null) {
@@ -1147,8 +1146,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add
             ));
             TextView bookmarksTv = (TextView) userActions.getViewById(R.id.add_to_bookmark_action).findViewById(R.id.bookmark_action_text);
-            mBlackListActionController = new AddToBlackListViewsController(mActions);
-            mBlackListActionController.switchAction();
+            new AddToBlackListViewsController(mActions).switchAction();
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
             switchBookmarkEnabled(!mUser.blocked);
             mActionsHeightHeuristic = actions.size() * Utils.getPxFromDp(40);

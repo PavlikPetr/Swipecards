@@ -354,6 +354,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_likes;
+    }
+
+    @Override
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_feed_filtered;
     }
