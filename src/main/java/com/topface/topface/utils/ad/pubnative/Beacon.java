@@ -3,7 +3,7 @@ package com.topface.topface.utils.ad.pubnative;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by saharuk on 15.01.15.
+ * Holds url to let pubnative know that we showed their ad.
  */
 public class Beacon {
 

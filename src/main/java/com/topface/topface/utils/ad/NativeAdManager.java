@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by saharuk on 15.01.15.
+ * Master native ad manager.
  */
 public class NativeAdManager {
 

@@ -1,11 +1,16 @@
 package com.topface.topface.utils.ad.pubnative;
 
+import android.content.Context;
+import android.location.Criteria;
+import android.location.LocationManager;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 
 import com.google.gson.Gson;
 import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.topface.App;
+import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.ad.Advertising;
 import com.topface.topface.utils.ad.NativeAd;
 
@@ -17,7 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by saharuk on 15.01.15.
+ * Managing pubnative ad.
  */
 public class PubnativeAdvertising extends Advertising {
 
@@ -26,7 +31,18 @@ public class PubnativeAdvertising extends Advertising {
     private PubnativeInfo mPubnativeInfo;
 
     public PubnativeAdvertising() {
-        mPubnativeInfo = new PubnativeInfo.Builder().adId(TFCredentials.getAdId(App.getContext())).create();
+        DisplayMetrics metrics = App.getContext().getResources().getDisplayMetrics();
+        LocationManager location = (LocationManager) App.getContext().getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        List<String> locationProviders = location.getProviders(criteria, true);
+        String locale = new LocaleConfig(App.getContext()).getApplicationLocale();
+        PubnativeInfo.Builder pubnativeBuilder = new PubnativeInfo.Builder().displayMetrics(metrics).
+                adId(TFCredentials.getAdId(App.getContext())).locale(locale);
+        if (!locationProviders.isEmpty()) {
+            pubnativeBuilder.location(location.getLastKnownLocation(locationProviders.get(0)));
+        }
+        mPubnativeInfo = pubnativeBuilder.create();
     }
 
     @Override

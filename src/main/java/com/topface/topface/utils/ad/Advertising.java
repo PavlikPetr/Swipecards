@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by saharuk on 15.01.15.
+ * Base class for native ad managing.
  */
 public abstract class Advertising {
 

@@ -1,7 +1,7 @@
 package com.topface.topface.utils.ad;
 
 /**
- * Created by saharuk on 12.01.15.
+ * Abstract class for constructing ad request based on parameters.
  */
 public abstract class RequestInfo {
 

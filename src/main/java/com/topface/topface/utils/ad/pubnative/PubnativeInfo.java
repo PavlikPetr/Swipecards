@@ -1,13 +1,15 @@
 package com.topface.topface.utils.ad.pubnative;
 
+import android.location.Location;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.RequestInfo;
 
 /**
- * Info for requesting mopub ad.
+ * Info for requesting pubnative ad.
  */
 public class PubnativeInfo extends RequestInfo {
 
@@ -18,6 +20,7 @@ public class PubnativeInfo extends RequestInfo {
     private String os = "android";
     private double os_version = Build.VERSION.SDK_INT;
     private String device_model = Build.MODEL;
+    private String locale;
     private String icon_size;
     private String banner_size;
     private String portrait_banner_size;
@@ -31,6 +34,7 @@ public class PubnativeInfo extends RequestInfo {
     private int no_user_id;
 
     private PubnativeInfo() {
+
     }
 
     public static class Builder {
@@ -40,6 +44,7 @@ public class PubnativeInfo extends RequestInfo {
 
         private int mZoneId;
         private int mAdCount;
+        private String mLocale;
         private String mIconSize;
         private String mBannerSize;
         private String mPortraitBannerSize;
@@ -56,6 +61,30 @@ public class PubnativeInfo extends RequestInfo {
 
         public Builder adCount(int adCount) {
             mAdCount = adCount;
+            return this;
+        }
+
+        public Builder locale(String locale) {
+            mLocale = locale;
+            return this;
+        }
+
+        public Builder displayMetrics(DisplayMetrics metrics) {
+            mDeviceResolution = makeSize(metrics.widthPixels, metrics.heightPixels);
+            int dpi = metrics.densityDpi;
+            if (dpi >= DisplayMetrics.DENSITY_XXXHIGH) {
+                mIconSize = makeSize(400, 400);
+            } else if (dpi >= DisplayMetrics.DENSITY_XXHIGH) {
+                mIconSize = makeSize(300, 300);
+            } else if (dpi >= DisplayMetrics.DENSITY_XHIGH) {
+                mIconSize = makeSize(256, 256);
+            } else if (dpi >= DisplayMetrics.DENSITY_HIGH) {
+                mIconSize = makeSize(200, 200);
+            } else if (dpi >= DisplayMetrics.DENSITY_MEDIUM) {
+                mIconSize = makeSize(150, 150);
+            } else {
+                mIconSize = makeSize(100, 100);
+            }
             return this;
         }
 
@@ -107,6 +136,7 @@ public class PubnativeInfo extends RequestInfo {
             PubnativeInfo pubnativeInfo = new PubnativeInfo();
             pubnativeInfo.zone_id = mZoneId;
             pubnativeInfo.ad_count = mAdCount != 0 ? mAdCount : 4;
+            pubnativeInfo.locale = mLocale;
             pubnativeInfo.icon_size = mIconSize;
             pubnativeInfo.banner_size = mBannerSize;
             pubnativeInfo.portrait_banner_size = mPortraitBannerSize;
@@ -121,6 +151,12 @@ public class PubnativeInfo extends RequestInfo {
             }
             return pubnativeInfo;
         }
+
+        public Builder location(Location location) {
+            mLatitude = location.getLatitude();
+            mLongitude = location.getLongitude();
+            return this;
+        }
     }
 
     @Override
@@ -134,6 +170,9 @@ public class PubnativeInfo extends RequestInfo {
         builder.append("&os=").append(os);
         builder.append("&os_version=").append(os_version);
         builder.append("&device_model=").append(device_model);
+        if (locale != null) {
+            builder.append("&locale=").append(locale);
+        }
         if (icon_size != null) {
             builder.append("&icon_size=").append(icon_size);
         }

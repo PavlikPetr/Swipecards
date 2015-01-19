@@ -130,7 +130,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         @Override
         public void onReceive(Context context, Intent intent) {
             if (!CacheProfile.show_ad) {
-                getListAdapter().removeFakeAdItems();
+                getListAdapter().removeAdItems();
             }
         }
     };
@@ -201,7 +201,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             FeedList<T> feedsList = new FeedList<>();
             for (Parcelable p : feeds) {
                 T feed = (T) p;
-                if (getListAdapter().isFakeAdItem(feed) && !CacheProfile.show_ad) {
+                if (feed.isAd() && !CacheProfile.show_ad) {
                     continue;
                 }
                 feedsList.add((T) p);

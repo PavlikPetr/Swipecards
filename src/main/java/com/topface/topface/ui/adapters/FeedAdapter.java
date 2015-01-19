@@ -120,7 +120,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     public int getItemViewType(int position) {
         int superType = super.getItemViewType(position);
         if (superType == T_OTHER) {
-            if (isFakeAdItem(getItem(position))) {
+            if (getItem(position).isAd()) {
                 return T_NATIVE_AD;
             } else if (getItem(position).unread && getItem(position).user.premium) {
                 return T_NEW_VIP;
@@ -313,13 +313,13 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
     }
 
-    public void removeFakeAdItems() {
+    public void removeAdItems() {
         mNeedFeedAd = false;
         mHasFeedAd = false;
         boolean removed = false;
         for (Iterator<T> it = getData().iterator(); it.hasNext(); ) {
             T item = it.next();
-            if (isFakeAdItem(item)) {
+            if (item.isAd()) {
                 it.remove();
                 removed = true;
             }
@@ -327,10 +327,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (removed) {
             notifyDataSetChanged();
         }
-    }
-
-    public boolean isFakeAdItem(T item) {
-        return item.isAd();
     }
 
     protected void setLastUpdate() {
@@ -342,7 +338,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (data != null) {
             if (!data.items.isEmpty()) {
                 getData().addAll(data.items);
-                mHasFeedAd = true;
             }
             addLoaderItem(data.more);
         }
@@ -356,11 +351,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             Collections.reverse(data.items);
             if (!data.items.isEmpty()) {
                 for (T item : data.items) {
-                    if (mHasFeedAd) {
-                        getData().add(1, item);
-                    } else {
-                        getData().addFirst(item);
-                    }
+                    getData().addFirst(item);
                 }
             }
             addLoaderItem(data.more);
@@ -371,7 +362,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public void makeAllItemsRead() {
         for (T item : getData()) {
-            if (!isFakeAdItem(item)) {
+            if (!item.isAd()) {
                 item.unread = false;
             }
         }
@@ -453,7 +444,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         T item = null;
         if (!isEmpty()) {
             FeedList<T> data = getData();
-            item = mHasFeedAd ? data.get(1) : data.getFirst();
+            item = mHasFeedAd && mFeedAdPosition == 0 ? data.get(1) : data.getFirst();
         }
         return item;
     }
