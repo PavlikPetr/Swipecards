@@ -68,6 +68,7 @@ import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.handlers.ActionMenuHandler;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.AttitudeHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
@@ -1039,6 +1040,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, IApiResponse response) {
+                if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
+                    startActivityForResult(PurchasesActivity.createVipBuyIntent(getResources()
+                                    .getString(R.string.messaging_block_buy_vip), "SendMessage"),
+                            PurchasesActivity.INTENT_BUY_VIP);
+                    return;
+                }
                 if (mAdapter != null && cancelable) {
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                     mAdapter.showRetrySendMessage(messageItem, messageRequest);
