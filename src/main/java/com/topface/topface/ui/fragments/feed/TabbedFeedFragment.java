@@ -15,8 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.BannersController;
+import com.topface.topface.banners.IPageWithAds;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
-import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CountersManager;
@@ -28,7 +30,7 @@ import java.util.Locale;
 /**
  * base class for feeds with tabs
  */
-public abstract class TabbedFeedFragment extends BaseFragment {
+public abstract class TabbedFeedFragment extends BaseFragment implements IPageWithAds {
     public static final String EXTRA_OPEN_PAGE = "openTabbedFeedAt";
     private static final String LAST_OPENED_PAGE = "last_opened_page";
     private ViewPager mPager;
@@ -36,7 +38,7 @@ public abstract class TabbedFeedFragment extends BaseFragment {
     private ArrayList<String> mPagesClassNames = new ArrayList<>();
     private ArrayList<String> mPagesTitles = new ArrayList<>();
     private ArrayList<Integer> mPagesCounters = new ArrayList<>();
-    private FloatBlock mFloatBlock;
+    private BannersController mBannersController;
 
     private TabbedFeedPageAdapter mBodyPagerAdapter;
 
@@ -125,26 +127,15 @@ public abstract class TabbedFeedFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_tabbed_feed, null);
-
         initPages(root);
-        initFloatBlock((ViewGroup) root);
-
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-
         return root;
-    }
-
-    protected void initFloatBlock(ViewGroup view) {
-        mFloatBlock = new FloatBlock(this, view);
-        mFloatBlock.onCreate();
     }
 
     private void initPages(View root) {
         addPages();
-
         mPager = (ViewPager) root.findViewById(R.id.pager);
-
         mPager.setSaveEnabled(false);
         mBodyPagerAdapter = new TabbedFeedPageAdapter(getChildFragmentManager(),
                 mPagesClassNames,
@@ -174,10 +165,15 @@ public abstract class TabbedFeedFragment extends BaseFragment {
             }
         }
         mPager.setCurrentItem(lastPage);
+        initFloatBlock();
 
         // for correct init of first opened page
         // we allow update possibility to it
         mBodyPagerAdapter.setUnlockItemUpdateAtStart(lastPage);
+    }
+
+    protected void initFloatBlock() {
+        mBannersController = new BannersController(this);
     }
 
     protected abstract void addPages();
@@ -204,31 +200,14 @@ public abstract class TabbedFeedFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (mFloatBlock != null) {
-            mFloatBlock.onResume();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mFloatBlock != null) {
-            mFloatBlock.onPause();
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mPager != null) {
             setLastOpenedPage(mPager.getCurrentItem());
         }
         mPager = null;
-
-        if (mFloatBlock != null) {
-            mFloatBlock.onDestroy();
+        if (mBannersController != null) {
+            mBannersController.onDestroy();
         }
 
     }
@@ -249,4 +228,17 @@ public abstract class TabbedFeedFragment extends BaseFragment {
 
     protected abstract void setLastOpenedPage(int lastOpenedPage);
 
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.UNKNOWN_PAGE;
+    }
+
+    @Override
+    public ViewGroup getContainerForAd() {
+        View view  = getView();
+        if (view != null) {
+            return (ViewGroup) getView().findViewById(R.id.loBannerContainer);
+        }
+        return null;
+    }
 }

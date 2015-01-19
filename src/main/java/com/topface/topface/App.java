@@ -22,6 +22,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
+import com.topface.topface.banners.ad_providers.CredentialsUtils;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.FortumoProducts;
 import com.topface.topface.data.Options;
@@ -44,7 +45,6 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
@@ -217,7 +217,7 @@ public class App extends Application {
                 .callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {
-                        BannerBlock.init();
+                        CredentialsUtils.init();
                     }
 
                     @Override

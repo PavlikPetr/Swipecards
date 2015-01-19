@@ -39,6 +39,9 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.banners.BannersController;
+import com.topface.topface.banners.IPageWithAds;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiResponse;
@@ -57,7 +60,6 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.MultiselectionController;
 import com.topface.topface.ui.blocks.FilterBlock;
-import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
@@ -75,7 +77,8 @@ import java.util.List;
 
 import static android.widget.AdapterView.OnItemClickListener;
 
-public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
+public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
+        implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
     private static final int FEED_MULTI_SELECTION_LIMIT = 100;
 
     private static final String FEEDS = "FEEDS";
@@ -115,7 +118,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
         }
     };
-
     private BroadcastReceiver mGcmReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -126,6 +128,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     };
 
+    private BannersController mBannersController;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -134,8 +137,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
         }
     };
-
-    private FloatBlock mFloatBlock;
 
     protected boolean isDeletable = true;
     private Drawable mLoader0;
@@ -233,7 +234,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         initBackground(root);
         initFilter(root);
         initListView(root);
-        initFloatBlock((ViewGroup) root);
         initRetryViews();
         initViewStubForEmptyFeed(root);
     }
@@ -251,15 +251,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return mEmptyScreenStub;
     }
 
-    protected void initFloatBlock(ViewGroup view) {
-        mFloatBlock = new FloatBlock(this, view);
-        mFloatBlock.onCreate();
-    }
-
     protected void initNavigationBar() {
         setActionBarTitles(getTitle());
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initFloatBlock((ViewGroup) view);
+    }
+
+    protected void initFloatBlock(ViewGroup view) {
+        mBannersController = new BannersController(this);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -275,18 +279,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             updateData(false, true);
         }
         getListAdapter().loadOlderItems();
-        if (mFloatBlock != null) {
-            mFloatBlock.onResume();
-        }
         registerGcmReceiver();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (mFloatBlock != null) {
-            mFloatBlock.onPause();
-        }
         finishMultiSelection();
         if (mListView.isRefreshing()) {
             mListView.onRefreshComplete();
@@ -299,8 +297,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mFloatBlock != null) {
-            mFloatBlock.onDestroy();
+        if (mBannersController != null) {
+            mBannersController.onDestroy();
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
@@ -1100,5 +1098,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     public void updateOnResume() {
         needUpdate = true;
+    }
+
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.UNKNOWN_PAGE;
+    }
+
+    @Override
+    public ViewGroup getContainerForAd() {
+        View view  = getView();
+        if (view != null) {
+            return (ViewGroup) getView().findViewById(R.id.loBannerContainer);
+        }
+        return null;
     }
 }

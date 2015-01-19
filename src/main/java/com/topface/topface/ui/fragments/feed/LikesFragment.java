@@ -17,6 +17,7 @@ import android.widget.ViewFlipper;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
@@ -365,5 +366,10 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_LIKE_UPDATE;
+    }
+
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.LIKE;
     }
 }
