@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -155,6 +156,12 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
+    protected int getUnreadCounter() {
+        // dialogs are not auto-read
+        return 0;
+    }
+
+    @Override
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_feed_filtered;
     }
@@ -167,5 +174,10 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected boolean considerDublicates(FeedDialog first, FeedDialog second) {
         return first.user == null ? second.user == null : first.user.id == second.user.id;
+    }
+
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.DIALOGS;
     }
 }

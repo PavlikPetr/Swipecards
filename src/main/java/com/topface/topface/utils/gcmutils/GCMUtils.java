@@ -468,24 +468,25 @@ public class GCMUtils {
     }
 
     public static void cancelNotification(final Context context, final int type) {
+        if (context == null) {
+            return;
+        }
         //Отменяем уведомления с небольшой задержкой,
         //что бы на ICS успело доиграть уведомление (длинные не успеют. но не страшно. все стандартные - короткие)
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 if (type == lastNotificationType) {
-                    if (context != null) {
-                        int id;
-                        switch (type) {
-                            case GCM_TYPE_MESSAGE:
-                            case GCM_TYPE_DIALOGS:
-                                id = UserNotificationManager.MESSAGES_ID;
-                                break;
-                            default:
-                                id = UserNotificationManager.NOTIFICATION_ID;
-                        }
-                        UserNotificationManager.getInstance().cancelNotification(id);
+                    int id;
+                    switch (type) {
+                        case GCM_TYPE_MESSAGE:
+                        case GCM_TYPE_DIALOGS:
+                            id = UserNotificationManager.MESSAGES_ID;
+                            break;
+                        default:
+                            id = UserNotificationManager.NOTIFICATION_ID;
                     }
+                    UserNotificationManager.getInstance().cancelNotification(id);
                 }
             }
         }, NOTIFICATION_CANCEL_DELAY);

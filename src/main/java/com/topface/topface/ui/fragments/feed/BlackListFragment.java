@@ -89,6 +89,11 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     }
 
     @Override
+    protected int getUnreadCounter() {
+        return 0;
+    }
+
+    @Override
     protected boolean whetherDeleteIfBlacklisted() {
         return false;
     }

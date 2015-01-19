@@ -39,6 +39,9 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.banners.BannersController;
+import com.topface.topface.banners.IPageWithAds;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiResponse;
@@ -57,7 +60,6 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.MultiselectionController;
 import com.topface.topface.ui.blocks.FilterBlock;
-import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
@@ -74,7 +76,8 @@ import java.util.List;
 
 import static android.widget.AdapterView.OnItemClickListener;
 
-public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
+public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
+        implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
     private static final int FEED_MULTI_SELECTION_LIMIT = 100;
 
     private static final String FEEDS = "FEEDS";
@@ -122,13 +125,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     };
 
-    private FloatBlock mFloatBlock;
+    private BannersController mBannersController;
 
     protected boolean isDeletable = true;
     private Drawable mLoader0;
     private AnimationDrawable mLoader;
     private ViewStub mEmptyScreenStub;
     private boolean needUpdate = false;
+
+    // update possibility locker, by default - update allowed
+    private boolean mIsUpdateAllowed = true;
     private boolean mRestoredFilterState;
 
     private ActionMode mActionMode;
@@ -205,7 +211,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         initBackground(root);
         initFilter(root);
         initListView(root);
-        initFloatBlock((ViewGroup) root);
         initRetryViews();
         initViewStubForEmptyFeed(root);
     }
@@ -223,15 +228,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return mEmptyScreenStub;
     }
 
-    protected void initFloatBlock(ViewGroup view) {
-        mFloatBlock = new FloatBlock(this, view);
-        mFloatBlock.onCreate();
-    }
-
     protected void initNavigationBar() {
         setActionBarTitles(getTitle());
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initFloatBlock((ViewGroup) view);
+    }
+
+    protected void initFloatBlock(ViewGroup view) {
+        mBannersController = new BannersController(this);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -246,18 +255,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             updateData(false, true);
         }
         getListAdapter().loadOlderItems();
-        if (mFloatBlock != null) {
-            mFloatBlock.onResume();
-        }
         registerGcmReceiver();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (mFloatBlock != null) {
-            mFloatBlock.onPause();
-        }
         finishMultiSelection();
         if (mListView.isRefreshing()) {
             mListView.onRefreshComplete();
@@ -270,8 +273,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mFloatBlock != null) {
-            mFloatBlock.onDestroy();
+        if (mBannersController != null) {
+            mBannersController.onDestroy();
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
@@ -599,54 +602,98 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     }
 
+    /**
+     * Lock/unlock update possibility in this feed
+     * used when feed wrapped in tabbed container
+     *
+     * @param updateAllowed true to allow update, false to block
+     */
+    public void setUpdateAllowed(boolean updateAllowed) {
+        mIsUpdateAllowed = updateAllowed;
+    }
+
+    /**
+     * Tries to update feed content, when tab containig this feed is selected
+     * used when feed wrapped in tabbed container
+     */
+    public void startInitialLoadIfNeed() {
+        if (!mIsUpdateAllowed) {
+            setUpdateAllowed(true);
+            if ((getListAdapter().isNeedUpdate() || hasUnread()) && !mIsUpdating) {
+                updateData(false, true);
+            }
+        }
+    }
+
+    /**
+     * @return true if got unread feeds, calculated from counters
+     */
+    private boolean hasUnread() {
+        return (getUnreadCounter() > 0);
+    }
+
+    /**
+     * Returns unread counter, from CacheProfile
+     * if there is no counter for feed - should return 0
+     *
+     * @return unread counter
+     */
+    protected abstract int getUnreadCounter();
+
+    protected void updateData(boolean isPushUpdating, boolean makeItemsRead) {
+        updateData(isPushUpdating, false, makeItemsRead);
+    }
+
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
-        needUpdate = false;
-        mIsUpdating = true;
-        onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
+        if (mIsUpdateAllowed) {
+            needUpdate = false;
+            mIsUpdating = true;
+            onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
 
-        final FeedRequest request = getRequest();
-        registerRequest(request);
+            final FeedRequest request = getRequest();
+            registerRequest(request);
 
-        final FeedAdapter<T> adapter = getListAdapter();
-        FeedItem lastItem = adapter.getLastFeedItem();
-        FeedItem firstItem = adapter.getFirstItem();
+            final FeedAdapter<T> adapter = getListAdapter();
+            FeedItem lastItem = adapter.getLastFeedItem();
+            FeedItem firstItem = adapter.getFirstItem();
 
-        if (isHistoryLoad && lastItem != null) {
-            request.to = lastItem.id;
+            if (isHistoryLoad && lastItem != null) {
+                request.to = lastItem.id;
+            }
+            if (isPullToRefreshUpdating && firstItem != null) {
+                request.from = firstItem.id;
+            }
+
+            request.unread = isShowUnreadItemsSelected();
+            request.callback(new DataApiHandler<FeedListData<T>>() {
+
+                @Override
+                protected FeedListData<T> parseResponse(ApiResponse response) {
+                    return getFeedList(response.jsonResult);
+                }
+
+                @Override
+                protected void success(FeedListData<T> data, IApiResponse response) {
+                    processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
+                }
+
+                @Override
+                public void fail(final int codeError, IApiResponse response) {
+                    processFailUpdate(codeError, isHistoryLoad, adapter, isPullToRefreshUpdating);
+                }
+
+                @Override
+                public void always(IApiResponse response) {
+                    super.always(response);
+                    mIsUpdating = false;
+                }
+
+                @Override
+                protected boolean isShowPremiumError() {
+                    return !isForPremium();
+                }
+            }).exec();
         }
-        if (isPullToRefreshUpdating && firstItem != null) {
-            request.from = firstItem.id;
-        }
-
-        request.unread = isShowUnreadItemsSelected();
-        request.callback(new DataApiHandler<FeedListData<T>>() {
-
-            @Override
-            protected FeedListData<T> parseResponse(ApiResponse response) {
-                return getFeedList(response.jsonResult);
-            }
-
-            @Override
-            protected void success(FeedListData<T> data, IApiResponse response) {
-                processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
-            }
-
-            @Override
-            public void fail(final int codeError, IApiResponse response) {
-                processFailUpdate(codeError, isHistoryLoad, adapter, isPullToRefreshUpdating);
-            }
-
-            @Override
-            public void always(IApiResponse response) {
-                super.always(response);
-                mIsUpdating = false;
-            }
-
-            @Override
-            protected boolean isShowPremiumError() {
-                return !isForPremium();
-            }
-        }).exec();
     }
 
     protected void processFailUpdate(int codeError, boolean isHistoryLoad, FeedAdapter<T> adapter, boolean isPullToRefreshUpdating) {
@@ -761,10 +808,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected abstract FeedRequest.FeedService getFeedService();
-
-    protected void updateData(boolean isPushUpdating, boolean makeItemsRead) {
-        updateData(isPushUpdating, false, makeItemsRead);
-    }
 
     protected void initFilter(View view) {
         mFilterBlock = new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.loToolsBar);
@@ -1029,5 +1072,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     public void updateOnResume() {
         needUpdate = true;
+    }
+
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.UNKNOWN_PAGE;
+    }
+
+    @Override
+    public ViewGroup getContainerForAd() {
+        View view  = getView();
+        if (view != null) {
+            return (ViewGroup) getView().findViewById(R.id.loBannerContainer);
+        }
+        return null;
     }
 }

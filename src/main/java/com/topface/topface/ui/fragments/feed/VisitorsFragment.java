@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -94,7 +95,17 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_visitors;
+    }
+
+    @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_GUESTS_UPDATE;
+    }
+
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.VISITORS;
     }
 }
