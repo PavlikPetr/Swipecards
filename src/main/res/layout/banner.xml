@@ -6,6 +6,4 @@
     android:gravity="center"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#1F1F1F">
-
-</LinearLayout>
+    android:background="#1F1F1F"/>

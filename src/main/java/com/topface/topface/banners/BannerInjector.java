@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.topface.topface.banners.PageInfo.PageName;
+
 /**
  * Created by kirussell on 11/01/15.
  * Controller over ads' sdks
@@ -21,7 +23,6 @@ import java.util.Map;
  * </p>
  * When page with banner is destroyed call {@link #cleanUp()} to remove banner and clean container
  * (for example, in onDestroy method of Activity or Fragment)
- *
  */
 class BannerInjector implements IBannerInjector {
 
@@ -42,14 +43,22 @@ class BannerInjector implements IBannerInjector {
     }
 
     private boolean canInject(IPageWithAds page) {
-        if (!CacheProfile.show_ad || page == null)  {
+        if (!CacheProfile.show_ad || page == null) {
             return false;
         }
-        String pageName = page.getPageName().getName();
-        Map<String, PageInfo> pagesInfo = CacheProfile.getOptions().getPagesInfo();
+        PageInfo.PageName pageId = page.getPageName();
+        String pageName = pageId.getName();
+        Options options = CacheProfile.getOptions();
+        Map<String, PageInfo> pagesInfo = options.getPagesInfo();
         if (pagesInfo.containsKey(pageName)) {
             String floatType = pagesInfo.get(pageName).floatType;
             if (floatType.equals(PageInfo.FLOAT_TYPE_BANNER)) {
+                // use feed banners only if they are not in tabbed layout
+                if (pageId == PageName.LIKE || pageId == PageName.MUTUAL) {
+                    return !options.likesWithThreeTabs.isEnabled();
+                } else if (pageId == PageName.DIALOGS || pageId == PageName.BOOKMARKS) {
+                    return !options.messagesWithTabs.isEnabled();
+                }
                 return true;
             }
         }
