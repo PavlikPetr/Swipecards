@@ -161,6 +161,12 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
+    protected int getUnreadCounter() {
+        // dialogs are not auto-read
+        return 0;
+    }
+
+    @Override
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_feed_filtered;
     }

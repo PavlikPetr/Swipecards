@@ -70,4 +70,9 @@ public class FansFragment extends BookmarksFragment {
         //Данный тип ленты не поддерживает удаление
         return null;
     }
+
+    @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_fans;
+    }
 }
