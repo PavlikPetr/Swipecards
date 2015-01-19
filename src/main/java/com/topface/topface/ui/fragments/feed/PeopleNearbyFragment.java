@@ -24,7 +24,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
@@ -44,11 +43,6 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     @Override
     protected int[] getTypesForGCM() {
         return new int[]{GCMUtils.GCM_TYPE_PEOPLE_NEARBY};
-    }
-
-    @Override
-    protected int getTypeForCounters() {
-        return CountersManager.GEO;
     }
 
     @Override

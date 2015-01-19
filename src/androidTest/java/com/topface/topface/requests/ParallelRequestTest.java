@@ -45,7 +45,7 @@ public class ParallelRequestTest extends AbstractThreadTest {
 
                     @Override
                     protected Profile parseResponse(ApiResponse response) {
-                        return Profile.parse(response);
+                        return new Profile(response);
                     }
 
                     @Override

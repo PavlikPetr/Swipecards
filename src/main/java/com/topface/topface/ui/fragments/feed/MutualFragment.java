@@ -14,7 +14,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.MutualListAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
@@ -75,11 +74,6 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected int[] getTypesForGCM() {
         return new int[]{GCMUtils.GCM_TYPE_MUTUAL};
-    }
-
-    @Override
-    protected int getTypeForCounters() {
-        return CountersManager.SYMPATHY;
     }
 
     @Override

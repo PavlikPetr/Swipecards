@@ -100,11 +100,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return new int[]{GCMUtils.GCM_TYPE_LIKE};
     }
 
-    @Override
-    protected int getTypeForCounters() {
-        return CountersManager.LIKES;
-    }
-
     private void onMutual(FeedItem item) {
         if (!(item.user.deleted || item.user.banned)) {
             if (item instanceof FeedLike) {
