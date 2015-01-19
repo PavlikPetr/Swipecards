@@ -139,6 +139,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     private ActionMode mActionMode;
     private FilterBlock mFilterBlock;
+    private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -161,11 +162,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 if (userId == 0) {
                     if (!TextUtils.isEmpty(itemId)) {
                         makeItemReadWithId(itemId);
-                    } else {
-                        String lastMethod = intent.getStringExtra(CountersManager.METHOD_INTENT_STRING);
-                        if (!TextUtils.isEmpty(lastMethod)) {
-                            updateDataAfterReceivingCounters(lastMethod);
-                        }
                     }
                 } else {
                     makeItemReadUserId(userId);
@@ -329,8 +325,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     protected int[] getTypesForGCM() {
         return new int[]{GCMUtils.GCM_TYPE_UNKNOWN};
     }
-
-    abstract protected int getTypeForCounters();
 
     protected int getLayout() {
         return R.layout.fragment_feed;
@@ -722,6 +716,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected void processSuccessUpdate(FeedListData<T> data, boolean isHistoryLoad, boolean isPullToRefreshUpdating, boolean makeItemsRead, int limit) {
         FeedAdapter<T> adapter = getListAdapter();
+        if (!data.items.isEmpty()) {
+            // store unread-state of first and last items
+            // to use in next requests
+            if (!mLastUnreadState.wasFromInited || isPullToRefreshUpdating) {
+                mLastUnreadState.from = data.items.getFirst().unread;
+                mLastUnreadState.wasFromInited = true;
+            }
+            mLastUnreadState.to = data.items.getLast().unread;
+        }
+
         if (isHistoryLoad) {
             removeOldDublicates(data);
             adapter.addData(data);
@@ -800,7 +804,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     protected abstract FeedListData<T> getFeedList(JSONObject response);
 
     protected FeedRequest getRequest() {
-        return new FeedRequest(getFeedService(), getActivity());
+        return new FeedRequest(getFeedService(), getActivity()).setPreviousUnreadState(mLastUnreadState);
     }
 
     protected abstract FeedRequest.FeedService getFeedService();
@@ -998,15 +1002,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (item.user != null && item.user.id == uid && item.unread) {
                 item.unread = false;
                 adapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-    private void updateDataAfterReceivingCounters(String lastMethod) {
-        if (!lastMethod.equals(CountersManager.NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
-            int counters = CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters());
-            if (counters > 0) {
-                updateData(true, false);
             }
         }
     }

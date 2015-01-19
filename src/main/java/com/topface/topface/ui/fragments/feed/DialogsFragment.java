@@ -22,7 +22,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
@@ -139,11 +138,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected int[] getTypesForGCM() {
         return new int[]{GCMUtils.GCM_TYPE_DIALOGS, GCMUtils.GCM_TYPE_MESSAGE, GCMUtils.GCM_TYPE_GIFT};
-    }
-
-    @Override
-    protected int getTypeForCounters() {
-        return CountersManager.DIALOGS;
     }
 
     @Override

@@ -15,7 +15,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
@@ -78,11 +77,6 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     @Override
     protected int[] getTypesForGCM() {
         return new int[]{GCMUtils.GCM_TYPE_GUESTS};
-    }
-
-    @Override
-    protected int getTypeForCounters() {
-        return CountersManager.VISITORS;
     }
 
     @Override

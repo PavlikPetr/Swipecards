@@ -400,4 +400,5 @@ public class AppConfig extends AbstractConfig {
     public void resetAppOptionsData() {
         resetAndSaveConfig(DATA_APP_OPTIONS);
     }
+
 }
