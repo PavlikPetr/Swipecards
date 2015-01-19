@@ -144,6 +144,11 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
         public void closeActionMenu() {
             closeProfileActions();
         }
+
+        @Override
+        public void showPurchasesActivity() {
+            startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
+        }
     };
 
     private int getAnimationTime() {
@@ -627,7 +632,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
                 break;
             case R.id.add_to_black_list_action:
-                if (CacheProfile.premium) {
                     if (profile.uid > 0) {
                         final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
                         final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
@@ -644,9 +648,6 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                         }
                         request.exec();
                     }
-                } else {
-                    startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
-                }
                 break;
             case R.id.add_to_bookmark_action:
                 final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);

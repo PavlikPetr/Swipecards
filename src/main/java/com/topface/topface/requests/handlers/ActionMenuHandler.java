@@ -26,7 +26,14 @@ abstract public class ActionMenuHandler extends AttitudeHandler {
         closeActionMenu();
     }
 
-    public void setIntentParam(ActionTypes actionTypes, int userId, boolean isAddition) {
+    @Override
+    public void fail(int codeError, IApiResponse response) {
+        if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
+            showPurchasesActivity();
+        }
+    }
+
+    private void setIntentParam(ActionTypes actionTypes, int userId, boolean isAddition) {
         this.mActionType = actionTypes;
         this.mUserId = userId;
         this.mIsAddition = isAddition;
@@ -38,5 +45,7 @@ abstract public class ActionMenuHandler extends AttitudeHandler {
     }
 
     abstract public void closeActionMenu();
+
+    abstract public void showPurchasesActivity();
 
 }
