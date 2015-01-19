@@ -110,6 +110,6 @@ public class PhotoAddRequest extends ApiRequest {
 
     @Override
     protected String getApiUrl() {
-        return App.getAppConfig().getApiDomain() + "v" + API_VERSION + "/photo_upload/?ssid=" + ssid;
+        return App.getAppConfig().getApiDomain() + "v" + API_VERSION + "/photo-upload/profile?ssid=" + ssid;
     }
 }

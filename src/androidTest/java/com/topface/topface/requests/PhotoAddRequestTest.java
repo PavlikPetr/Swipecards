@@ -3,7 +3,7 @@ package com.topface.topface.requests;
 import android.net.Uri;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.data.Photo;
+import com.topface.topface.data.AddedPhoto;
 
 import java.io.File;
 
@@ -25,15 +25,15 @@ public class PhotoAddRequestTest extends PhotoRequestsTestBase {
     }
 
     private void sendPhotoAddRequest(Uri uri) {
-        new PhotoAddRequest(uri, getContext(), new DebugWriterProgress()).callback(new DataApiHandler<Photo>() {
+        new PhotoAddRequest(uri, getContext(), new DebugWriterProgress()).callback(new DataApiHandler<AddedPhoto>() {
             @Override
-            protected void success(Photo data, IApiResponse response) {
+            protected void success(AddedPhoto data, IApiResponse response) {
                 Debug.debug(getTestName(), "request success()");
                 stopTest();
             }
 
             @Override
-            protected Photo parseResponse(ApiResponse response) {
+            protected AddedPhoto parseResponse(ApiResponse response) {
                 return null;
             }
 

@@ -3,7 +3,7 @@ package com.topface.topface.requests;
 import android.net.Uri;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.data.Photo;
+import com.topface.topface.data.AddedPhoto;
 
 import java.io.File;
 
@@ -12,9 +12,9 @@ import java.io.File;
  * Synchronous multiple add-photo requests
  *
  */
-public class MultiplePhotoAddRequestsTest extends PhotoRequestsTestBase {
+public class SequencedPhotoAddRequestsTest extends PhotoRequestsTestBase {
 
-    private static final int MAX_REQUESTS = 100;
+    private static final int MAX_REQUESTS = 10;
     private long mCounter = 1;
     private long mTimeAccumulator = 0L;
 
@@ -30,14 +30,14 @@ public class MultiplePhotoAddRequestsTest extends PhotoRequestsTestBase {
 
     private void sendPhotoAddRequest(final Uri uri) {
         final long timestamp = System.currentTimeMillis();
-        new PhotoAddRequest(uri, getContext(), new DebugWriterProgress()).callback(new DataApiHandler<Photo>() {
+        new PhotoAddRequest(uri, getContext(), new DebugWriterProgress()).callback(new DataApiHandler<AddedPhoto>() {
             @Override
-            protected void success(Photo data, IApiResponse response) {
+            protected void success(AddedPhoto data, IApiResponse response) {
                 Debug.debug(getTestName(), "request " + mCounter + " success()");
             }
 
             @Override
-            protected Photo parseResponse(ApiResponse response) {
+            protected AddedPhoto parseResponse(ApiResponse response) {
                 return null;
             }
 
