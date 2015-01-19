@@ -282,6 +282,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         removeLoaderItem();
         FeedList<T> currentData = getData();
         currentData.clear();
+        mHasFeedAd = false;
         currentData.addAll(data.items);
 
         addFakeItemForAd();
