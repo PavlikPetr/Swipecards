@@ -8,8 +8,6 @@
     <!-- button bar -->
     <include layout="@layout/bar_double_big_button" />
 
-    <include layout="@layout/leaders" />
-
     <RelativeLayout
         android:id="@+id/feedContainer"
         android:layout_width="fill_parent"

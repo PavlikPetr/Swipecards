@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
@@ -69,6 +70,11 @@ public class FansFragment extends BookmarksFragment {
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         //Данный тип ленты не поддерживает удаление
         return null;
+    }
+
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.FANS;
     }
 
     @Override
