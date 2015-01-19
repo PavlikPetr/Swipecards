@@ -37,6 +37,7 @@
             android:fadingEdge="none"
             p2r:ptrOverScroll="false"
             p2r:ptrShowIndicator="false"
+            p2r:ptrDrawable="@drawable/ic_p2r_loading"
             android:listSelector="@android:color/transparent" />
 
         <com.topface.topface.ui.views.LockerView
