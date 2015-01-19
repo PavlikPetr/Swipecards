@@ -281,7 +281,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             } else {
                 hidePhotoAlbumControlAction();
             }
-            animateHidePhotoAlbumControlAction();
         } else {
             mPhotoAlbumControlVisibility = View.VISIBLE;
             mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
@@ -318,7 +317,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setPhotoAlbumControlVisibility(mPhotoAlbumControlVisibility, true);
+        // show control without animation
+        setPhotoAlbumControlVisibility(mPhotoAlbumControlVisibility, false);
         if (!getIntent().getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
             mUserProfileLoader.loadUserProfile(this);
         }
@@ -508,6 +508,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             if (mPhotoLinks.size() <= 1) mDeleteButton.setVisibility(View.GONE);
             mOwnPhotosControlVisibility = View.VISIBLE;
         } else {
+            mOwnPhotosControlVisibility = View.GONE;
             mPhotoAlbumControl.findViewById(R.id.loBottomPanel).setVisibility(mOwnPhotosControlVisibility);
         }
     }
