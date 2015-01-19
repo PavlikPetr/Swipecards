@@ -176,6 +176,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         public void closeActionMenu() {
             animateHideChatAction();
         }
+
+        @Override
+        public void showPurchasesActivity() {
+            startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
+        }
     };
 
     private void switchBookmarkEnabled(boolean enabled) {
@@ -844,7 +849,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 break;
             case R.id.add_to_black_list_action:
-                if (CacheProfile.premium) {
                     if (mUser.id > 0) {
                         final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
                         final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
@@ -860,9 +864,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         }
                         request.exec();
                     }
-                } else {
-                    startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
-                }
                 break;
 
             case R.id.add_to_bookmark_action:
