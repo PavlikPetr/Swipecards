@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedMutual;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -12,7 +13,7 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.MutualListAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
@@ -76,11 +77,6 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
-    protected int getTypeForCounters() {
-        return CountersManager.SYMPATHY;
-    }
-
-    @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu;
     }
@@ -91,6 +87,11 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_mutual;
+    }
+
+    @Override
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_feed_filtered;
     }
@@ -98,5 +99,10 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_MUTUAL_UPDATE;
+    }
+
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.MUTUAL;
     }
 }

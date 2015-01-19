@@ -10,6 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedBookmark;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -18,7 +19,6 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.handlers.AttitudeHandler;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
-import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONObject;
 
@@ -72,11 +72,6 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     }
 
     @Override
-    protected int getTypeForCounters() {
-        return CountersManager.UNKNOWN_TYPE;
-    }
-
-    @Override
     protected FeedAdapter<FeedBookmark> createNewAdapter() {
         return new BookmarksListAdapter(getActivity(), getUpdaterCallback());
     }
@@ -125,5 +120,15 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteBookmarksRequest(ids, getActivity());
+    }
+
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.BOOKMARKS;
+    }
+
+    @Override
+    protected int getUnreadCounter() {
+        return 0;
     }
 }

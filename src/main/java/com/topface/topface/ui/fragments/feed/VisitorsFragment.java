@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -14,7 +15,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
@@ -80,11 +80,6 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    protected int getTypeForCounters() {
-        return CountersManager.VISITORS;
-    }
-
-    @Override
     protected boolean isForPremium() {
         return true;
     }
@@ -100,7 +95,17 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_visitors;
+    }
+
+    @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_GUESTS_UPDATE;
+    }
+
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.VISITORS;
     }
 }

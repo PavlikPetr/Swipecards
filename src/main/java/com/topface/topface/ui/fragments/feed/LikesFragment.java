@@ -17,6 +17,7 @@ import android.widget.ViewFlipper;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
@@ -97,11 +98,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected int[] getTypesForGCM() {
         return new int[]{GCMUtils.GCM_TYPE_LIKE};
-    }
-
-    @Override
-    protected int getTypeForCounters() {
-        return CountersManager.LIKES;
     }
 
     private void onMutual(FeedItem item) {
@@ -353,6 +349,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_likes;
+    }
+
+    @Override
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_feed_filtered;
     }
@@ -360,5 +361,10 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_LIKE_UPDATE;
+    }
+
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.LIKE;
     }
 }
