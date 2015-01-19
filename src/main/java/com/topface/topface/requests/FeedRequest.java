@@ -28,7 +28,8 @@ public class FeedRequest extends LimitedApiRequest {
     }
 
     public static class UnreadStatePair {
-        public boolean from;
+        public boolean wasFromInited = false;
+        public boolean from = false;
         public boolean to;
     }
 

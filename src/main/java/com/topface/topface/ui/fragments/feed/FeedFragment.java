@@ -156,11 +156,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 if (userId == 0) {
                     if (!TextUtils.isEmpty(itemId)) {
                         makeItemReadWithId(itemId);
-                    } else {
-                        String lastMethod = intent.getStringExtra(CountersManager.METHOD_INTENT_STRING);
-                        if (!TextUtils.isEmpty(lastMethod)) {
-                            updateDataAfterReceivingCounters(lastMethod);
-                        }
                     }
                 } else {
                     makeItemReadUserId(userId);
@@ -327,8 +322,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected int[] getTypesForGCM() {
         return new int[]{GCMUtils.GCM_TYPE_UNKNOWN};
     }
-
-    abstract protected int getTypeForCounters();
 
     protected int getLayout() {
         return R.layout.fragment_feed;
@@ -679,10 +672,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (!data.items.isEmpty()) {
             // store unread-state of first and last items
             // to use in next requests
-            FeedItem item = data.items.getFirst();
-            mLastUnreadState.from = item.unread;
-            item = data.items.getLast();
-            mLastUnreadState.to = item.unread;
+            if (!mLastUnreadState.wasFromInited || isPullToRefreshUpdating) {
+                mLastUnreadState.from = data.items.getFirst().unread;
+                mLastUnreadState.wasFromInited = true;
+            }
+            mLastUnreadState.to = data.items.getLast().unread;
         }
 
         if (isHistoryLoad) {
@@ -965,15 +959,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             if (item.user != null && item.user.id == uid && item.unread) {
                 item.unread = false;
                 adapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-    private void updateDataAfterReceivingCounters(String lastMethod) {
-        if (!lastMethod.equals(CountersManager.NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
-            int counters = CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters());
-            if (counters > 0) {
-                updateData(true, false);
             }
         }
     }
