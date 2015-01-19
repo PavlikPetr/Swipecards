@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@drawable/filter_light_edit_form_dialog_background_color_selector"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:textColor="@drawable/filter_light_edit_form_dialog_text_color_selector"
+    android:textSize="16dp" />

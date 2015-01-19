@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CitySearchAttrs">
+        <attr name="request_key" format="integer">
+            <enum name="CITY_SEARCH_ACTIVITY" value="0" />
+            <enum name="CITY_SEARCH_FROM_FILTER_ACTIVITY" value="1" />
+            <enum name="CITY_SEARCH_AFTER_REGISTRATION" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>
