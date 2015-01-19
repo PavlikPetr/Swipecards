@@ -33,6 +33,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
 
     public static final int INTENT_EDIT_FILTER = 201;
     public static final int INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM = 202;
+
     Handler mFinishHandler = new Handler() {
         public void handleMessage(Message msg) {
             EditContainerActivity.super.finish();
@@ -121,4 +122,5 @@ public class EditContainerActivity extends BaseFragmentActivity {
     public boolean isTrackable() {
         return false;
     }
+
 }

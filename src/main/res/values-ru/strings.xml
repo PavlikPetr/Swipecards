@@ -221,6 +221,9 @@
     <string name="filter_extra_parameters">Дополнительные параметры</string>
     <string name="filter_age">Выбор возраста</string>
     <string name="filter_online">Онлайн</string>
+    <string name="filter_age_start_prefix">От %s</string>
+    <string name="filter_age_end_prefix">до %s</string>
+
 
     <string name="filter_cities_all">По всем городам</string>
 

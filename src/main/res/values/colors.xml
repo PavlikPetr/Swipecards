@@ -47,4 +47,20 @@
     <color name="list_time">#A9A9A9</color>
     <color name="list_unread_counter_background">#35AADC</color>
 
+    <!--filter light edit form selector color-->
+    <color name="form_selector_color_release_state">#FFFFFF</color>
+    <color name="form_selector_color_pressed_state">#CCE8FC</color>
+
+    <!--filter light edit form dialog text selector color-->
+    <color name="edit_form_selector_text_color_release_state">#333333</color>
+    <color name="edit_form_selector_text_color_pressed_state">#FFFFFF</color>
+
+    <!--filter light edit form dialog background selector color-->
+    <color name="edit_form_selector_background_color_release_state">#FFFFFF</color>
+    <color name="edit_form_selector_background_color_pressed_state">#33B5E5</color>
+
+    <!--filter fragment dividers color-->
+    <color name="filter_fragment_divider_color">#E2E2E2</color>
+
+
 </resources>
