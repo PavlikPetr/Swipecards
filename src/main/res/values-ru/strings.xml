@@ -781,6 +781,6 @@
     <string name="hint_myprofile_buy_vip">Купите VIP-статус и наслаждайтесь безграничным общением</string>
     <string name="pull_to_refresh_pull_label">Потяните для обновления…</string>
     <string name="pull_to_refresh_release_label">Отпустите для обновления…</string>
-    <string name="messaging_block_buy_vip">Для продолжения диалога необходим VIP-Cтатус</string>
+    <string name="messaging_block_buy_vip">Для продолжения диалога необходим VIP-статус</string>
     <string name="pull_to_refresh_refreshing_label">Загрузка…</string>
 </resources>
