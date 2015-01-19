@@ -9,8 +9,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.Visitor;
 import com.topface.topface.utils.ad.NativeAd;
 
-import org.json.JSONObject;
-
 public class VisitorsListAdapter extends FeedAdapter<Visitor> {
 
     public VisitorsListAdapter(Context context, Updater updateCallback) {
@@ -64,14 +62,14 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
         return new ILoaderRetrierCreator<Visitor>() {
             @Override
             public Visitor getLoader() {
-                Visitor result = new Visitor((JSONObject) null);
+                Visitor result = new Visitor();
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
                 return result;
             }
 
             @Override
             public Visitor getRetrier() {
-                Visitor result = new Visitor((JSONObject) null);
+                Visitor result = new Visitor();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
             }

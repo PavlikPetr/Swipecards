@@ -20,7 +20,7 @@ public class BannersController {
     }
 
     public BannerInjector getFeedBannerController() {
-        if (mFeedBannersInjector != null) {
+        if (mFeedBannersInjector == null) {
             mFeedBannersInjector = new BannerInjector(new AdProvidersFactory());
         }
         return mFeedBannersInjector;

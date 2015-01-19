@@ -57,6 +57,9 @@ public class FeedDialog extends FeedLike implements Parcelable {
         }
     };
 
+    public FeedDialog() {
+    }
+
     public FeedDialog(JSONObject data) {
         super(data);
     }

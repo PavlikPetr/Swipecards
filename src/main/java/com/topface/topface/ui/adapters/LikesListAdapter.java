@@ -15,8 +15,6 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.utils.ad.NativeAd;
 
-import org.json.JSONObject;
-
 public class LikesListAdapter extends FeedAdapter<FeedLike> {
     private int mSelectedForMutual = -1;
     private int mPrevSelectedForMutual = -1;
@@ -174,14 +172,14 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         return new ILoaderRetrierCreator<FeedLike>() {
             @Override
             public FeedLike getLoader() {
-                FeedLike result = new FeedLike((JSONObject) null);
+                FeedLike result = new FeedLike();
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
                 return result;
             }
 
             @Override
             public FeedLike getRetrier() {
-                FeedLike result = new FeedLike((JSONObject) null);
+                FeedLike result = new FeedLike();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
             }

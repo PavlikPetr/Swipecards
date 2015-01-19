@@ -47,7 +47,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
     private OnAvatarClickListener<T> mOnAvatarClickListener;
     private NativeAd mFeedAd;
-    private boolean mNeedFeedAd;
     private boolean mHasFeedAd;
     private View mFeedAdView;
     private int mFeedAdPosition;
@@ -63,9 +62,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         super(context, data, updateCallback);
         mSelectionController = new MultiselectionController(this);
-        if (CacheProfile.show_ad && NativeAdManager.hasAvailableAd()) {
+        if (isNeedFeedAd()) {
             mNativeAdItemCreator = getNativeAdItemCreator();
-            mNeedFeedAd = true;
             mFeedAdView = getAdView();
             mFeedAdPosition = CacheProfile.getOptions().feedAdPosition;
         }
@@ -303,7 +301,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     private void addFakeItemForAd() {
         FeedList<T> data = getData();
-        if (!data.isEmpty() && mNeedFeedAd && !mHasFeedAd && NativeAdManager.hasAvailableAd()) {
+        if (!data.isEmpty() && isNeedFeedAd() && !mHasFeedAd) {
             if (mFeedAd == null) {
                 mFeedAd = NativeAdManager.getNativeAd();
             }
@@ -315,7 +313,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     public void removeAdItems() {
-        mNeedFeedAd = false;
         mHasFeedAd = false;
         boolean removed = false;
         for (Iterator<T> it = getData().iterator(); it.hasNext(); ) {
@@ -430,7 +427,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             FeedList<T> data = getData();
             int dataSize = data.size();
 
-            int feedIndex = data.getLast().isLoader() || data.getLast().isRetrier() ?
+            FeedItem last = data.getLast();
+            int feedIndex = last.isLoader() || last.isRetrier() || last.isAd() ?
                     dataSize - 2 :
                     dataSize - 1;
             if (data.hasItem(feedIndex)) {
@@ -445,7 +443,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         T item = null;
         if (!isEmpty()) {
             FeedList<T> data = getData();
-            item = mHasFeedAd && mFeedAdPosition == 0 ? data.get(1) : data.getFirst();
+            item = data.getFirst();
+            if (item.isAd()) {
+                item = data.get(1);
+            }
         }
         return item;
     }
@@ -579,5 +580,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public void setFeedAd(NativeAd feedAd) {
         mFeedAd = feedAd;
+    }
+
+    public boolean isNeedFeedAd() {
+        return CacheProfile.show_ad && NativeAdManager.hasAvailableAd();
     }
 }

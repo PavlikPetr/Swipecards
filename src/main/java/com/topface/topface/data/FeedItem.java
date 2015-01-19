@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.ad.NativeAd;
 
@@ -54,6 +53,10 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
 
     private NativeAd mNativeAd;
 
+    public FeedItem() {
+        super(ItemType.NONE);
+    }
+
     public FeedItem(JSONObject data) {
         super(ItemType.NONE);
         if (data != null) {
@@ -62,7 +65,7 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
     }
 
     public FeedItem(NativeAd nativeAd) {
-        this((JSONObject) null);
+        this();
         mNativeAd = nativeAd;
     }
 
@@ -116,10 +119,6 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
 
     public boolean isAd() {
         return mNativeAd != null;
-    }
-
-    public NativeAd NativeAdContent() {
-        return mNativeAd;
     }
 
     @Override

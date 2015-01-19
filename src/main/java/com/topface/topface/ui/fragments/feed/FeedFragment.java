@@ -262,7 +262,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void initFloatBlock(ViewGroup view) {
-        mBannersController = new BannersController(this);
+        if (!getListAdapter().isNeedFeedAd()) {
+            mBannersController = new BannersController(this);
+        }
     }
 
     @Override

@@ -20,6 +20,10 @@ public class Visitor extends FeedItem implements Parcelable {
         }
     };
 
+    public Visitor() {
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
     public Visitor(JSONObject data) {
         super(data);
     }

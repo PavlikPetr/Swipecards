@@ -22,6 +22,10 @@ public class FeedGeo extends FeedLike implements Parcelable {
         }
     };
 
+    public FeedGeo() {
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
     public FeedGeo(JSONObject data) {
         super(data);
     }

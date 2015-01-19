@@ -8,8 +8,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedGeo;
 import com.topface.topface.utils.ad.NativeAd;
 
-import org.json.JSONObject;
-
 public class PeopleNearbyAdapter extends FeedAdapter<FeedGeo> {
     public PeopleNearbyAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
@@ -60,14 +58,14 @@ public class PeopleNearbyAdapter extends FeedAdapter<FeedGeo> {
         return new ILoaderRetrierCreator<FeedGeo>() {
             @Override
             public FeedGeo getLoader() {
-                FeedGeo result = new FeedGeo((JSONObject) null);
+                FeedGeo result = new FeedGeo();
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
                 return result;
             }
 
             @Override
             public FeedGeo getRetrier() {
-                FeedGeo result = new FeedGeo((JSONObject) null);
+                FeedGeo result = new FeedGeo();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
             }

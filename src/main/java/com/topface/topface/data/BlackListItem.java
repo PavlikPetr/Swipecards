@@ -20,6 +20,10 @@ public class BlackListItem extends FeedItem implements Parcelable {
         }
     };
 
+    public BlackListItem() {
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
     public BlackListItem(JSONObject data) {
         super(data);
     }

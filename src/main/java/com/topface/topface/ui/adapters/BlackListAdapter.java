@@ -9,8 +9,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.utils.ad.NativeAd;
 
-import org.json.JSONObject;
-
 public class BlackListAdapter extends FeedAdapter<BlackListItem> {
 
     public static final int LIMIT = 100;
@@ -67,14 +65,14 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
         return new ILoaderRetrierCreator<BlackListItem>() {
             @Override
             public BlackListItem getLoader() {
-                BlackListItem result = new BlackListItem((JSONObject) null);
+                BlackListItem result = new BlackListItem();
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
                 return result;
             }
 
             @Override
             public BlackListItem getRetrier() {
-                BlackListItem result = new BlackListItem((JSONObject) null);
+                BlackListItem result = new BlackListItem();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
             }
@@ -94,5 +92,10 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
     @Override
     public int getLimit() {
         return LIMIT;
+    }
+
+    @Override
+    public boolean isNeedFeedAd() {
+        return false;
     }
 }

@@ -6,8 +6,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedBookmark;
 import com.topface.topface.utils.ad.NativeAd;
 
-import org.json.JSONObject;
-
 public class BookmarksListAdapter extends FeedAdapter<FeedBookmark> {
 
     public BookmarksListAdapter(Context context, Updater updateCallback) {
@@ -39,14 +37,14 @@ public class BookmarksListAdapter extends FeedAdapter<FeedBookmark> {
         return new ILoaderRetrierCreator<FeedBookmark>() {
             @Override
             public FeedBookmark getLoader() {
-                FeedBookmark result = new FeedBookmark((JSONObject) null);
+                FeedBookmark result = new FeedBookmark();
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
                 return result;
             }
 
             @Override
             public FeedBookmark getRetrier() {
-                FeedBookmark result = new FeedBookmark((JSONObject) null);
+                FeedBookmark result = new FeedBookmark();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
             }

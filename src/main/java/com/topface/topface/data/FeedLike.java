@@ -22,6 +22,9 @@ public class FeedLike extends FeedItem implements Parcelable {
         }
     };
 
+    public FeedLike() {
+    }
+
     public FeedLike(JSONObject data) {
         super(data);
     }

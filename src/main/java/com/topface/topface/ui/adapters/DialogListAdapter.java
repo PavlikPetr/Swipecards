@@ -12,8 +12,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ad.NativeAd;
 
-import org.json.JSONObject;
-
 import java.util.Collections;
 
 public class DialogListAdapter extends FeedAdapter<FeedDialog> {
@@ -200,14 +198,14 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         return new ILoaderRetrierCreator<FeedDialog>() {
             @Override
             public FeedDialog getLoader() {
-                FeedDialog result = new FeedDialog((JSONObject) null);
+                FeedDialog result = new FeedDialog();
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
                 return result;
             }
 
             @Override
             public FeedDialog getRetrier() {
-                FeedDialog result = new FeedDialog((JSONObject) null);
+                FeedDialog result = new FeedDialog();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
             }

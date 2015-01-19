@@ -68,7 +68,9 @@ class BannerInjector implements IBannerInjector {
                         @Override
                         public void onAdLoadSuccess(View adView) {
                             List<IPageWithAds> usedPages = mUsedPages.get();
-                            usedPages.add(page);
+                            if (usedPages != null) {
+                                usedPages.add(page);
+                            }
                         }
 
                         @Override
@@ -108,8 +110,10 @@ class BannerInjector implements IBannerInjector {
 
     public void cleanUp() {
         List<IPageWithAds> usedPages = mUsedPages.get();
-        for (IPageWithAds page : usedPages) {
-            cleanUp(page);
+        if (usedPages != null) {
+            for (IPageWithAds page : usedPages) {
+                cleanUp(page);
+            }
         }
     }
 
