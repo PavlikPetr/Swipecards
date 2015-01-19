@@ -8,11 +8,11 @@ import com.topface.topface.data.AddedPhoto;
 import java.io.File;
 
 /**
- * Created by kirussell on 16/01/15.
- * Test for PhotoAddRequest - loads test image file through api
- *
+ * Created by kirussell on 19/01/15.
+ * Photo Add to Profile
  */
-public class PhotoAddRequestTest extends PhotoRequestsTestBase {
+public class PhotoAddToProfileRequestTest extends PhotoRequestsTestBase {
+
 
     public void testPhotoAddRequest() throws Throwable {
         final File file = createTestImage();
@@ -25,10 +25,12 @@ public class PhotoAddRequestTest extends PhotoRequestsTestBase {
     }
 
     private void sendPhotoAddRequest(Uri uri) {
-        new PhotoAddRequest(uri, getContext(), new DebugWriterProgress()).callback(new DataApiHandler<AddedPhoto>() {
+        new PhotoAddProfileRequest(uri, getContext(), new DebugWriterProgress()).callback(new DataApiHandler<AddedPhoto>() {
             @Override
             protected void success(AddedPhoto data, IApiResponse response) {
                 Debug.debug(getTestName(), "request success()");
+                assertNotNull(data.getHash());
+                assertNotNull(data.getPhoto());
                 stopTest();
             }
 
@@ -51,6 +53,4 @@ public class PhotoAddRequestTest extends PhotoRequestsTestBase {
             }
         }).exec();
     }
-
-
 }

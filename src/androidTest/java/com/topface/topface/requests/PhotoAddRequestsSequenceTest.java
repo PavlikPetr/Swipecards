@@ -12,7 +12,7 @@ import java.io.File;
  * Synchronous multiple add-photo requests
  *
  */
-public class SequencedPhotoAddRequestsTest extends PhotoRequestsTestBase {
+public class PhotoAddRequestsSequenceTest extends PhotoRequestsTestBase {
 
     private static final int MAX_REQUESTS = 10;
     private long mCounter = 1;
@@ -38,7 +38,7 @@ public class SequencedPhotoAddRequestsTest extends PhotoRequestsTestBase {
 
             @Override
             protected AddedPhoto parseResponse(ApiResponse response) {
-                return null;
+                return new AddedPhoto(response);
             }
 
             @Override

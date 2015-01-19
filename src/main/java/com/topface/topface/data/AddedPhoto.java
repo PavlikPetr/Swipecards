@@ -31,4 +31,11 @@ public class AddedPhoto extends AbstractData {
         }
     }
 
+    public String getHash() {
+        return hash;
+    }
+
+    public Photo getPhoto() {
+        return photo;
+    }
 }

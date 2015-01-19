@@ -102,7 +102,7 @@ public class PhotoAddRequest extends ApiRequest {
     public void exec() {
         if (mUri != null) {
             super.exec();
-            EasyTracker.sendEvent("Profile", "PhotoAdd", "", 1L);
+            EasyTracker.sendEvent(getPlaceForStatistics(), "PhotoAdd", "", 1L);
         } else {
             handleFail(ErrorCodes.MISSING_REQUIRE_PARAMETER, "Need set photo Uri");
         }
@@ -110,6 +110,10 @@ public class PhotoAddRequest extends ApiRequest {
 
     @Override
     protected String getApiUrl() {
-        return App.getAppConfig().getApiDomain() + "v" + API_VERSION + "/photo-upload/profile?ssid=" + ssid;
+            return App.getAppConfig().getApiDomain() + "v" + API_VERSION + "/photo-upload/?ssid=" + ssid;
+    }
+
+    protected String getPlaceForStatistics() {
+        return "Common";
     }
 }
