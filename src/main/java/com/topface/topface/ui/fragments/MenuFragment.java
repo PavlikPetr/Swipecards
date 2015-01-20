@@ -218,13 +218,14 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     TextView btnMenu = (TextView) mEditorItem.findViewById(R.id.btnMenu);
                     //noinspection ResourceType
                     btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.EDITOR));
-                    btnMenu.setTag(FragmentId.EDITOR);
-                    btnMenu.setOnClickListener(this);
+                    mEditorItem.setTag(FragmentId.EDITOR);
+                    mEditorItem.setOnClickListener(this);
                     mFooterView.addView(mEditorItem);
                 }
             } else {
                 if (mEditorItem != null) {
                     mFooterView.removeView(mEditorItem);
+                    mEditorItem.setOnClickListener(null);
                     mEditorItem = null;
                 }
             }

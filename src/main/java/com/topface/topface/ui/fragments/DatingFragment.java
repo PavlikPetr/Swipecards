@@ -138,7 +138,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onReceive(Context context, Intent intent) {
             if (mPreloadManager != null) {
                 int connectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0);
-                mPreloadManager.checkConnectionType(ConnectionChangeReceiver.ConnectionType.valueOf(connectionType));
+                mPreloadManager.checkConnectionType();
             }
         }
     };
@@ -324,10 +324,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
         // User Info
-        mUserInfoStatus = ((TextView) root.findViewById(R.id.tvDatingUserStatus));
+        mUserInfoStatus = (TextView) getActivity().getLayoutInflater().inflate(R.layout.dating_user_info, null, false);
 
         // Counter
-        mDatingCounter = ((TextView) root.findViewById(R.id.tvDatingCounter));
+        mDatingCounter = (TextView) root.findViewById(R.id.tvDatingCounter);
 
         // Progress
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsDatingLoading);

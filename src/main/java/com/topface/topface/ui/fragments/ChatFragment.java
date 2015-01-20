@@ -920,6 +920,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, IApiResponse response) {
+                if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
+                    startActivityForResult(PurchasesActivity.createVipBuyIntent(getResources()
+                                    .getString(R.string.messaging_block_buy_vip), "SendMessage"),
+                            PurchasesActivity.INTENT_BUY_VIP);
+                    return;
+                }
                 if (mAdapter != null && cancelable) {
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                     mAdapter.showRetrySendMessage(messageItem, messageRequest);
