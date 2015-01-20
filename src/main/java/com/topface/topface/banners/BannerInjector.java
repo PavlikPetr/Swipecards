@@ -86,7 +86,7 @@ class BannerInjector implements IBannerInjector {
                             }
                         }
                     });
-            if (!injectInitiated) {
+            if (!injectInitiated && !isFallbackAd) {
                 injectGag(page);
             }
         }

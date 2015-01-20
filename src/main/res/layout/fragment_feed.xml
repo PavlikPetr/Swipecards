@@ -51,5 +51,7 @@
             android:layout_height="fill_parent" />
     </RelativeLayout>
 
-    <include layout="@layout/banner" />
+    <include
+        android:id="@+id/banner_container_for_feeds"
+        layout="@layout/banner" />
 </LinearLayout>
