@@ -7,8 +7,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.gson.annotations.SerializedName;
 import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
@@ -35,26 +35,23 @@ public class PubnativeAd extends NativeAd {
         }
     };
 
-    @SerializedName("title")
-    private String mTitle;
-    @SerializedName("description")
-    private String mDescription;
-    @SerializedName("icon_url")
-    private String mIconUrl;
-    @SerializedName("click_url")
-    private String mClickUrl;
-    @SerializedName("beacons")
-    private Beacon[] mBeacons;
+    private String title;
+    private String description;
+    private String icon_url;
+    private String click_url;
+    private Beacon[] beacons;
     private boolean mIsShown;
 
+    @SuppressWarnings("unused")
     public PubnativeAd() {
     }
 
     protected PubnativeAd(Parcel in) {
-        mTitle = in.readString();
-        mDescription = in.readString();
-        mIconUrl = in.readString();
-        mClickUrl = in.readString();
+        title = in.readString();
+        description = in.readString();
+        icon_url = in.readString();
+        click_url = in.readString();
+        beacons = (Beacon[]) in.readParcelableArray(Beacon.class.getClassLoader());
         mIsShown = in.readByte() == 1;
     }
 
@@ -66,20 +63,20 @@ public class PubnativeAd extends NativeAd {
 
         ImageViewRemote ivr = (ImageViewRemote) view.findViewById(R.id.ivIcon);
         if (ivr != null) {
-            ivr.setRemoteSrc(mIconUrl);
+            ivr.setRemoteSrc(icon_url);
         }
         TextView title = (TextView) view.findViewById(R.id.tvTitle);
         if (title != null) {
-            title.setText(mDescription);
+            title.setText(description);
         }
         TextView description = (TextView) view.findViewById(R.id.tvDescription);
         if (description != null) {
-            description.setText(mDescription);
+            description.setText(this.description);
         }
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mClickUrl));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(click_url));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 App.getContext().startActivity(intent);
             }
@@ -104,11 +101,14 @@ public class PubnativeAd extends NativeAd {
     }
 
     private void sendImpressionBeacon() {
-        for (Beacon beacon : mBeacons) {
+        for (Beacon beacon : beacons) {
             if (TextUtils.equals(beacon.getType(), Beacon.IMPRESSION)) {
                 String response = null;
                 for (int i = 0; i < ApiRequest.MAX_RESEND_CNT && response == null; i++) {
                     response = HttpUtils.httpGetRequest(beacon.getUrl());
+                }
+                if (response != null) {
+                    Debug.log("NativeAd: Impression beacon sent for pubnative ad " + title);
                 }
                 break;
             }
@@ -118,10 +118,15 @@ public class PubnativeAd extends NativeAd {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeString(mTitle);
-        dest.writeString(mDescription);
-        dest.writeString(mIconUrl);
-        dest.writeString(mClickUrl);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(icon_url);
+        dest.writeString(click_url);
+        dest.writeParcelableArray(beacons, flags);
         dest.writeByte((byte) (mIsShown ? 1 : 0));
+    }
+
+    public boolean isValid() {
+        return !TextUtils.isEmpty(title);
     }
 }

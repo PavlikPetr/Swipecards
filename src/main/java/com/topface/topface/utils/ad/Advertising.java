@@ -1,6 +1,7 @@
 package com.topface.topface.utils.ad;
 
 import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.http.HttpUtils;
 
@@ -12,29 +13,42 @@ import java.util.List;
  */
 public abstract class Advertising {
 
+    private boolean mIsLoading;
     protected abstract String requestUrl();
 
     private ArrayList<NativeAd> mNativeAds = new ArrayList<>();
 
     public void requestAd() {
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                String adsResponse = null;
-                for (int i = 0; i < ApiRequest.MAX_RESEND_CNT && adsResponse == null; i++) {
-                    adsResponse = HttpUtils.httpGetRequest(requestUrl());
+        if (needMoreAds()) {
+            mIsLoading = true;
+            new BackgroundThread() {
+                @Override
+                public void execute() {
+                    String adsResponse = null;
+                    for (int i = 0; i < ApiRequest.MAX_RESEND_CNT && adsResponse == null; i++) {
+                        String request = requestUrl();
+                        Debug.log("NativeAd: " + getClass().getSimpleName() + " sent request:\n" + request);
+                        adsResponse = HttpUtils.httpGetRequest(request);
+                        Debug.log("NativeAd: " + getClass().getSimpleName() + " received response:\n" + adsResponse);
+                    }
+                    if (adsResponse != null) {
+                        mNativeAds.addAll(parseResponse(adsResponse));
+                    }
+                    mIsLoading = false;
                 }
-                if (adsResponse != null) {
-                    mNativeAds.addAll(parseResponse(adsResponse));
-                }
-            }
-        };
+            };
+        }
+    }
+
+    public boolean isLoading() {
+        return mIsLoading;
     }
 
     protected abstract List<NativeAd> parseResponse(String response);
 
-    public void addAds(List<NativeAd> ads) {
-        mNativeAds.addAll(ads);
+    public boolean needMoreAds() {
+        int remainedShows = getRemainedShows();
+        return mNativeAds.size() < remainedShows;
     }
 
     public boolean hasAd() {
@@ -50,5 +64,5 @@ public abstract class Advertising {
         return null;
     }
 
-    public abstract boolean hasShowsRemained();
+    public abstract int getRemainedShows();
 }

@@ -22,6 +22,7 @@ import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.ad.NativeAdManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.Locale;
  * base class for feeds with tabs
  */
 public abstract class TabbedFeedFragment extends BaseFragment implements IPageWithAds {
+    public static final String HAS_FEED_AD = "com.topface.topface.has_feed_ad";
     public static final String EXTRA_OPEN_PAGE = "openTabbedFeedAt";
     private static final String LAST_OPENED_PAGE = "last_opened_page";
     private ViewPager mPager;
@@ -84,6 +86,13 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
         }
     };
 
+    private BroadcastReceiver mHasFeedAdReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            getContainerForAd().setVisibility(View.GONE);
+        }
+    };
+
     /**
      * Returns index of fragment, by its className in child fragment manager
      * -1 if no such fragment found
@@ -130,6 +139,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
         initPages(root);
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mHasFeedAdReceiver, new IntentFilter(HAS_FEED_AD));
         return root;
     }
 
@@ -173,7 +183,9 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
     }
 
     protected void initFloatBlock() {
-        mBannersController = new BannersController(this);
+        if (!NativeAdManager.hasAvailableAd()) {
+            mBannersController = new BannersController(this);
+        }
     }
 
     protected abstract void addPages();
@@ -197,6 +209,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity())
                 .unregisterReceiver(mCountersReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mHasFeedAdReceiver);
     }
 
     @Override

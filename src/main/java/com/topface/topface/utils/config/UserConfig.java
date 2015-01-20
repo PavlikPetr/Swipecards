@@ -110,9 +110,10 @@ public class UserConfig extends AbstractUniqueConfig {
         addField(settingsMap, DATING_LOCK_POPUP_TIME, 0L);
         // счётчит перехода на экран офервола топфейс
         addField(settingsMap, TOPFACE_OFFERWALL_REDIRECT_COUNTER, 0);
-        // оставшееся количество показов нативный реклымы для текущих суток
+        // оставшееся количество показов нативный реклымы pubnative для текущих суток
         addField(settingsMap, REMAINED_DAILY_PUBNATIVE_SHOWS, 4);
-        //
+        // Время начала текущих суток для учёта количества показов рекламы pubnative
+        // Обновляется автоматически при попытке получить оставшиеся показы pubnative
         addField(settingsMap, LAST_DAY_PUBNATIVE_SHOWN, 0L);
     }
 

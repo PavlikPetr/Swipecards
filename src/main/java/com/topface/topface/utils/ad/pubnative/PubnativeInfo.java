@@ -5,6 +5,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import com.topface.topface.App;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.RequestInfo;
 
@@ -54,11 +55,13 @@ public class PubnativeInfo extends RequestInfo {
         private double mLongitude;
         private String mAdId;
 
+        @SuppressWarnings("unused")
         public Builder zoneId(int zoneId) {
             mZoneId = zoneId;
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder adCount(int adCount) {
             mAdCount = adCount;
             return this;
@@ -92,36 +95,43 @@ public class PubnativeInfo extends RequestInfo {
             return width + "x" + height;
         }
 
+        @SuppressWarnings("unused")
         public Builder iconSize(int width, int height) {
             mIconSize = makeSize(width, height);
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder bannerSize(int width, int height) {
             mBannerSize = makeSize(width, height);
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder portraitBannerSize(int width, int height) {
             mPortraitBannerSize = makeSize(width, height);
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder deviceResolution(int width, int height) {
             mDeviceResolution = makeSize(width, height);
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder deviceType(String type) {
             mDeviceType = TextUtils.equals(type, TABLET) ? TABLET : PHONE;
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder latitude(double latitude) {
             mLatitude = latitude;
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder longitude(double longitude) {
             mLongitude = longitude;
             return this;
@@ -135,7 +145,7 @@ public class PubnativeInfo extends RequestInfo {
         public PubnativeInfo create() {
             PubnativeInfo pubnativeInfo = new PubnativeInfo();
             pubnativeInfo.zone_id = mZoneId;
-            pubnativeInfo.ad_count = mAdCount != 0 ? mAdCount : 4;
+            pubnativeInfo.ad_count = mAdCount != 0 ? mAdCount : App.getUserConfig().getRemainedPubnativeShows();
             pubnativeInfo.locale = mLocale;
             pubnativeInfo.icon_size = mIconSize;
             pubnativeInfo.banner_size = mBannerSize;
@@ -153,8 +163,10 @@ public class PubnativeInfo extends RequestInfo {
         }
 
         public Builder location(Location location) {
-            mLatitude = location.getLatitude();
-            mLongitude = location.getLongitude();
+            if (location != null) {
+                mLatitude = location.getLatitude();
+                mLongitude = location.getLongitude();
+            }
             return this;
         }
     }

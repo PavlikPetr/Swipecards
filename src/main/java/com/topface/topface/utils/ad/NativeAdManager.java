@@ -14,7 +14,7 @@ public class NativeAdManager {
 
     public static boolean hasAvailableAd() {
         for (Advertising adv : advertisings) {
-            if (adv.hasAd() && adv.hasShowsRemained()) {
+            if (adv.hasAd() && adv.getRemainedShows() > 0) {
                 return true;
             }
         }
@@ -28,7 +28,7 @@ public class NativeAdManager {
 
     public static void loadAd() {
         for (Advertising adv : advertisings) {
-            if (adv.hasShowsRemained()) {
+            if (adv.needMoreAds() && !adv.isLoading()) {
                 adv.requestAd();
             }
         }

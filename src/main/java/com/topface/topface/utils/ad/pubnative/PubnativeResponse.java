@@ -1,7 +1,20 @@
 package com.topface.topface.utils.ad.pubnative;
 
 /**
- * Created by saharuk on 20.01.15.
+ * Response for pubnative ad request
  */
 public class PubnativeResponse {
+
+    @SuppressWarnings("UnusedDeclaration")
+    private String status;
+    @SuppressWarnings("UnusedDeclaration")
+    private PubnativeAd[] ads;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public PubnativeAd[] getAds() {
+        return ads;
+    }
 }

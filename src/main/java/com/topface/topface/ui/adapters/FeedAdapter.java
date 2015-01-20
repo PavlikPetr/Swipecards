@@ -2,9 +2,11 @@ package com.topface.topface.ui.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.NativeAd;
@@ -49,11 +53,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     private NativeAd mFeedAd;
     private boolean mHasFeedAd;
     private View mFeedAdView;
-    private int mFeedAdPosition;
 
     @SuppressWarnings("unchecked")
     private MultiselectionController<T> mSelectionController = new MultiselectionController(this);
-    private INativeAdItemCreator<T> mNativeAdItemCreator;
 
     public interface INativeAdItemCreator<T> {
         T getAdItem(NativeAd nativeAd);
@@ -62,10 +64,12 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         super(context, data, updateCallback);
         mSelectionController = new MultiselectionController(this);
+        initFeedAd();
+    }
+
+    private void initFeedAd() {
         if (isNeedFeedAd()) {
-            mNativeAdItemCreator = getNativeAdItemCreator();
             mFeedAdView = getAdView();
-            mFeedAdPosition = CacheProfile.getOptions().feedAdPosition;
         }
     }
 
@@ -137,6 +141,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     @Override
     protected View getViewByType(int type, int position, View view, ViewGroup viewGroup) {
         if (type == T_NATIVE_AD) {
+            if (mFeedAdView == null) {
+                initFeedAd();
+            }
             mFeedAd.show(mFeedAdView);
             return mFeedAdView;
         } else {
@@ -283,7 +290,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         mHasFeedAd = false;
         currentData.addAll(data.items);
 
-        addFakeItemForAd();
+
+        addItemForAd();
 
         addLoaderItem(data.more);
 
@@ -294,20 +302,22 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public void setData(FeedList<T> data) {
         mData = data;
-        addFakeItemForAd();
+        addItemForAd();
         notifyDataSetChanged();
         setLastUpdate();
     }
 
-    private void addFakeItemForAd() {
+    private void addItemForAd() {
         FeedList<T> data = getData();
         if (!data.isEmpty() && isNeedFeedAd() && !mHasFeedAd) {
             if (mFeedAd == null) {
                 mFeedAd = NativeAdManager.getNativeAd();
             }
             if (mFeedAd != null) {
-                data.add(mFeedAdPosition, mNativeAdItemCreator.getAdItem(mFeedAd));
+                data.add(CacheProfile.getOptions().feedAdPosition, getNativeAdItemCreator().getAdItem(mFeedAd));
                 mHasFeedAd = true;
+                Intent intent = new Intent(TabbedFeedFragment.HAS_FEED_AD);
+                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
             }
         }
     }

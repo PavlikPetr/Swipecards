@@ -47,7 +47,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
         showAsCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CacheProfile.show_ad =showAsCheckBox.isChecked();
+                CacheProfile.show_ad = showAsCheckBox.isChecked();
             }
         });
     }

@@ -150,7 +150,7 @@ public class Options extends AbstractData {
 
     public int feedAdPosition = 2;
 
-    public int pubnativeShows = 9999;
+    public int pubnativeShows = 4;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
