@@ -16,5 +16,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <include layout="@layout/banner"/>
+    <include
+        android:id="@+id/banner_container_for_tabbed_feeds"
+        layout="@layout/banner" />
 </LinearLayout>
