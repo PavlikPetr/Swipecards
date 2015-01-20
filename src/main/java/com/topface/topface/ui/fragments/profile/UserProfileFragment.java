@@ -165,18 +165,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
         if (mProfileOverflowMenu != null) {
             mProfileOverflowMenu.onMenuClicked(item);
         }
-        Profile user = getProfile();
-        switch (item.getItemId()) {
-            case R.id.action_user_actions_list:
-                if (user != null && mBarActions != null) {
-                    if (!mBarActions.getSubMenu().hasVisibleItems()) {
-                        initTopMenu();
-                    }
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -233,6 +222,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             showForDeleted();
         } else {
             setProfile(user);
+            initTopMenu();
             if (mHeaderMainFragment != null) {
                 mHeaderMainFragment.setOnline(user.online);
             }
@@ -299,78 +289,54 @@ public class UserProfileFragment extends AbstractProfileFragment {
 
     private void initTopMenu() {
         if (mProfileOverflowMenu != null) {
-            if (mProfileOverflowMenu.getoverflowMenuFieldsListener() == null) {
+            if (mProfileOverflowMenu.getOverflowMenuFieldsListener() == null) {
                 mProfileOverflowMenu.setOverflowMenuFieldsListener(new OverflowMenuUser() {
                     @Override
                     public void setBlackListValue(Boolean value) {
                         Profile profile = getProfile();
                         if (profile != null) {
-                            if (value != null) {
-                                profile.inBlackList = value;
-                            } else {
-                                profile.inBlackList = !profile.inBlackList;
-                            }
+                            profile.inBlackList = value != null ? value : !profile.inBlackList;
                         }
                     }
 
                     @Override
                     public Boolean getBlackListValue() {
                         Profile profile = getProfile();
-                        if (profile != null) {
-                            return profile.inBlackList;
-                        }
-                        return null;
+                        return profile != null ? profile.inBlackList : null;
                     }
 
                     @Override
                     public void setBookmarkValue(Boolean value) {
                         User user = getUser();
                         if (user != null) {
-                            if (value != null) {
-                                user.bookmarked = value;
-                            } else {
-                                user.bookmarked = !user.bookmarked;
-                            }
+                            user.bookmarked = value != null ? value : !user.bookmarked;
                         }
                     }
 
                     @Override
                     public Boolean getBookmarkValue() {
                         User user = getUser();
-                        if (user != null) {
-                            return user.bookmarked;
-                        }
-                        return null;
+                        return user != null ? user.bookmarked : null;
                     }
 
                     @Override
                     public void setSympathySentValue(Boolean value) {
                         User user = getUser();
                         if (user != null) {
-                            if (value != null) {
-                                user.isSympathySent = value;
-                            } else {
-                                user.isSympathySent = !user.isSympathySent;
-                            }
+                            user.isSympathySent = value != null ? value : !user.isSympathySent;
                         }
                     }
 
                     @Override
                     public Boolean getSympathySentValue() {
                         User user = getUser();
-                        if (user != null) {
-                            return user.isSympathySent;
-                        }
-                        return null;
+                        return user != null ? user.isSympathySent : null;
                     }
 
                     @Override
                     public Integer getUserId() {
                         Profile profile = getProfile();
-                        if (profile != null) {
-                            return profile.uid;
-                        }
-                        return null;
+                        return profile != null ? profile.uid : null;
                     }
 
                     @Override
@@ -390,10 +356,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     @Override
                     public Boolean getMutualValue() {
                         User user = getUser();
-                        if (user != null) {
-                            return user.mutual;
-                        }
-                        return null;
+                        return user != null ? user.mutual : null;
                     }
                 });
             }

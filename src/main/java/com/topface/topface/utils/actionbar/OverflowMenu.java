@@ -65,7 +65,6 @@ public class OverflowMenu {
     private Boolean mIsMutual;
 
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
-        @SuppressWarnings("ConstantConditions")
         @Override
         public void onReceive(Context context, Intent intent) {
             BlackListAndBookmarkHandler.ActionTypes type = (BlackListAndBookmarkHandler.ActionTypes) intent.getSerializableExtra(BlackListAndBookmarkHandler.TYPE);
@@ -189,27 +188,23 @@ public class OverflowMenu {
             ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(CacheProfile.isEditor());
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
                 OverflowMenuItem item = overflowMenuItemArray.get(i);
-                String title = "";
+                Integer resourceId = null;
                 switch (overflowMenuItemArray.get(i)) {
                     case ADD_TO_BLACK_LIST_ACTION:
                         if (mIsInBlackList != null) {
-                            title = mIsInBlackList ?
-                                    mContext.getString(item.getSecondResourceId()) :
-                                    mContext.getString(item.getFirstResourceId());
+                            resourceId = mIsInBlackList ? item.getSecondResourceId() : item.getFirstResourceId();
                         }
                         break;
                     case ADD_TO_BOOKMARK_ACTION:
                         if (mIsBookmarked != null) {
-                            title = mIsBookmarked ?
-                                    mContext.getString(item.getSecondResourceId()) :
-                                    mContext.getString(item.getFirstResourceId());
+                            resourceId = mIsBookmarked ? item.getSecondResourceId() : item.getFirstResourceId();
                         }
                         break;
                     default:
-                        title = mContext.getString(item.getFirstResourceId());
+                        resourceId = item.getFirstResourceId();
                         break;
                 }
-                mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, title);
+                mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mContext.getString(resourceId) : "");
             }
             if (mIsInBlackList != null) {
                 mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!mIsInBlackList);
@@ -228,27 +223,23 @@ public class OverflowMenu {
             ArrayList<OverflowMenuItem> overflowMenuItemArray = getChatOverflowMenu();
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
                 OverflowMenuItem item = overflowMenuItemArray.get(i);
-                String title = "";
+                Integer resourceId = null;
                 switch (overflowMenuItemArray.get(i)) {
                     case ADD_TO_BLACK_LIST_ACTION:
                         if (mIsInBlackList != null) {
-                            title = mIsInBlackList ?
-                                    mContext.getString(item.getSecondResourceId()) :
-                                    mContext.getString(item.getFirstResourceId());
+                            resourceId = mIsInBlackList ? item.getSecondResourceId() : item.getFirstResourceId();
                         }
                         break;
                     case ADD_TO_BOOKMARK_ACTION:
                         if (mIsBookmarked != null) {
-                            title = mIsBookmarked ?
-                                    mContext.getString(item.getSecondResourceId()) :
-                                    mContext.getString(item.getFirstResourceId());
+                            resourceId = mIsBookmarked ? item.getSecondResourceId() : item.getFirstResourceId();
                         }
                         break;
                     default:
-                        title = mContext.getString(item.getFirstResourceId());
+                        resourceId = item.getFirstResourceId();
                         break;
                 }
-                mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, title);
+                mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mContext.getString(resourceId) : "");
             }
             if (mIsInBlackList != null) {
                 mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!mIsInBlackList);
@@ -420,7 +411,7 @@ public class OverflowMenu {
                 request = new DeleteBlackListRequest(mUserId, mContext).
                         callback(new BlackListAndBookmarkHandler(mContext,
                                 BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
-                                new int[]{mUserId},
+                                mUserId,
                                 false) {
                             @Override
                             public void success(IApiResponse response) {
@@ -439,7 +430,7 @@ public class OverflowMenu {
                 request = new BlackListAddRequest(mUserId, mContext).
                         callback(new BlackListAndBookmarkHandler(mContext,
                                 BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
-                                new int[]{mUserId},
+                                mUserId,
                                 true) {
                             @Override
                             public void success(IApiResponse response) {
@@ -473,7 +464,7 @@ public class OverflowMenu {
             request = new DeleteBookmarksRequest(mUserId, mContext).
                     callback(new BlackListAndBookmarkHandler(mContext,
                             BlackListAndBookmarkHandler.ActionTypes.BOOKMARK,
-                            new int[]{mUserId},
+                            mUserId,
                             false) {
                         @Override
                         public void success(IApiResponse response) {
@@ -492,7 +483,7 @@ public class OverflowMenu {
             request = new BookmarkAddRequest(mUserId, mContext).
                     callback(new BlackListAndBookmarkHandler(mContext,
                             BlackListAndBookmarkHandler.ActionTypes.BOOKMARK,
-                            new int[]{mUserId},
+                            mUserId,
                             true) {
                         @Override
                         public void success(IApiResponse response) {
@@ -568,7 +559,7 @@ public class OverflowMenu {
         mOverflowMenuFields = overflowMenuFieldsListener;
     }
 
-    public OverflowMenuUser getoverflowMenuFieldsListener() {
+    public OverflowMenuUser getOverflowMenuFieldsListener() {
         return mOverflowMenuFields;
     }
 

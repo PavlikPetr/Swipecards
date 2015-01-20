@@ -993,44 +993,30 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void initOverflowMenu() {
         if (mChatOverflowMenu != null) {
-            if (mChatOverflowMenu.getoverflowMenuFieldsListener() == null) {
+            if (mChatOverflowMenu.getOverflowMenuFieldsListener() == null) {
                 mChatOverflowMenu.setOverflowMenuFieldsListener(new OverflowMenuUser() {
                     @Override
                     public void setBlackListValue(Boolean value) {
                         if (mUser != null) {
-                            if (value != null) {
-                                mUser.blocked = value;
-                            } else {
-                                mUser.blocked = !mUser.blocked;
-                            }
+                            mUser.blocked = value != null ? value : !mUser.blocked;
                         }
                     }
 
                     @Override
                     public Boolean getBlackListValue() {
-                        if (mUser != null) {
-                            return mUser.blocked;
-                        }
-                        return null;
+                        return mUser != null ? mUser.blocked : null;
                     }
 
                     @Override
                     public void setBookmarkValue(Boolean value) {
                         if (mUser != null) {
-                            if (value != null) {
-                                mUser.bookmarked = value;
-                            } else {
-                                mUser.bookmarked = !mUser.bookmarked;
-                            }
+                            mUser.bookmarked = value != null ? value : !mUser.bookmarked;
                         }
                     }
 
                     @Override
                     public Boolean getBookmarkValue() {
-                        if (mUser != null) {
-                            return mUser.bookmarked;
-                        }
-                        return null;
+                        return mUser != null ? mUser.bookmarked : null;
                     }
 
                     @Override
@@ -1045,10 +1031,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                     @Override
                     public Integer getUserId() {
-                        if (mUser != null) {
-                            return mUser.id;
-                        }
-                        return null;
+                        return mUser != null ? mUser.id : null;
                     }
 
                     @Override
@@ -1092,13 +1075,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
                 }
                 return true;
-            case R.id.action_user_actions_list:
-
-                if (mBarActions != null &&
-                        !mBarActions.getSubMenu().hasVisibleItems()) {
-                    initOverflowMenu();
-                }
-                return true;
+//            case R.id.action_user_actions_list:
+//
+//                if (mBarActions != null &&
+//                        !mBarActions.getSubMenu().hasVisibleItems()) {
+//                    initOverflowMenu();
+//                }
+//                return true;
             case android.R.id.home:
                 Utils.hideSoftKeyboard(getActivity(), mEditBox);
                 return true;

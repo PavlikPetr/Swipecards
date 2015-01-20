@@ -497,11 +497,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void onAddToBlackList(List<Integer> ids) {
-        int[] idsToSend = new int[ids.size()];
-        for (int i = 0; i < idsToSend.length; i++) {
-            idsToSend[i] = ids.get(i);
-        }
-        ApiRequest r = new BlackListAddRequest(ids, getActivity()).callback(new BlackListAndBookmarkHandler(getActivity(), BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST, idsToSend, true));
+        ApiRequest r = new BlackListAddRequest(ids, getActivity()).
+                callback(new BlackListAndBookmarkHandler(getActivity(),
+                        BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
+                        ids,
+                        true));
         r.handler.setOnCompleteAction(new ApiHandler.CompleteAction() {
             @Override
             public void onCompleteAction() {
