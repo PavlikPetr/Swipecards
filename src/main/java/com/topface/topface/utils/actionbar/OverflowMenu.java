@@ -28,7 +28,6 @@ import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.fragments.DatingFragment;
-import com.topface.topface.ui.fragments.gift.UserGiftsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
 
@@ -51,10 +50,9 @@ public class OverflowMenu {
 
     private MenuItem mBarActions;
     private OverflowMenuType mOverflowMenuType;
-    private Context mContext;
+    private Activity mActivity;
     private RateController mRateController;
     private int mProfileId;
-    private UserGiftsFragment mUserGiftFragment;
     private ApiResponse mSavedResponse = null;
     private OverflowMenuUser mOverflowMenuFields = null;
     private Boolean mIsInBlackList;
@@ -87,20 +85,19 @@ public class OverflowMenu {
         }
     };
 
-    public OverflowMenu(Context context, MenuItem barActions) {
+    public OverflowMenu(Activity activity, MenuItem barActions) {
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.CHAT_OVERFLOW_MENU;
-        mContext = context;
+        mActivity = activity;
         registerBroadcastReceiver();
     }
 
-    public OverflowMenu(Context context, MenuItem barActions, RateController rateController, int profileId, UserGiftsFragment userGiftFragment, ApiResponse savedResponse) {
+    public OverflowMenu(Activity activity, MenuItem barActions, RateController rateController, int profileId, ApiResponse savedResponse) {
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.PROFILE_OVERFLOW_MENU;
-        mContext = context;
+        mActivity = activity;
         mRateController = rateController;
         mProfileId = profileId;
-        mUserGiftFragment = userGiftFragment;
         mSavedResponse = savedResponse;
         registerBroadcastReceiver();
     }
@@ -204,7 +201,7 @@ public class OverflowMenu {
                         resourceId = item.getFirstResourceId();
                         break;
                 }
-                mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mContext.getString(resourceId) : "");
+                mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "");
             }
             if (mIsInBlackList != null) {
                 mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!mIsInBlackList);
@@ -239,7 +236,7 @@ public class OverflowMenu {
                         resourceId = item.getFirstResourceId();
                         break;
                 }
-                mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mContext.getString(resourceId) : "");
+                mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "");
             }
             if (mIsInBlackList != null) {
                 mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!mIsInBlackList);
@@ -265,11 +262,11 @@ public class OverflowMenu {
                     onClickSendGiftAction();
                     break;
                 case COMPLAIN_ACTION:
-                    mContext.startActivity(ComplainsActivity.createIntent(mProfileId));
+                    mActivity.startActivity(ComplainsActivity.createIntent(mProfileId));
                     break;
                 case OPEN_PROFILE_FOR_EDITOR_STUB:
                     if (mSavedResponse != null) {
-                        mContext.startActivity(EditorProfileActionsActivity.createIntent(mProfileId, mSavedResponse));
+                        mActivity.startActivity(EditorProfileActionsActivity.createIntent(mProfileId, mSavedResponse));
                     }
                     break;
                 case ADD_TO_BLACK_LIST_ACTION:
@@ -310,7 +307,7 @@ public class OverflowMenu {
                     @Override
                     public void onRateCompleted(int mutualId) {
                         setSympathySentState(true);
-                        if (mContext != null) {
+                        if (mActivity != null) {
                             Toast.makeText(App.getContext(), R.string.sympathy_sended, Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -319,7 +316,7 @@ public class OverflowMenu {
                     @Override
                     public void onRateFailed(int userId, int mutualId) {
                         setSympathySentState(false);
-                        if (mContext != null) {
+                        if (mActivity != null) {
                             Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -342,7 +339,7 @@ public class OverflowMenu {
                     @Override
                     public void onRateCompleted(int mutualId) {
                         setSympathySentState(true);
-                        if (mContext != null) {
+                        if (mActivity != null) {
                             Toast.makeText(App.getContext(), R.string.admiration_sended, Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -369,8 +366,8 @@ public class OverflowMenu {
             if (callingClass != null) {
                 if (callingClass.equals(DatingFragment.class.getName()) || callingClass.equals(LeadersDialog.class.getName())) {
                     if (!mIsMutual) {
-                        ((Activity) mContext).startActivityForResult(
-                                PurchasesActivity.createVipBuyIntent(mContext.getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
+                        mActivity.startActivityForResult(
+                                PurchasesActivity.createVipBuyIntent(mActivity.getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
                                 PurchasesActivity.INTENT_BUY_VIP
                         );
                     }
@@ -390,14 +387,10 @@ public class OverflowMenu {
     }
 
     private void onClickSendGiftAction() {
-        if (mUserGiftFragment != null && mUserGiftFragment.getActivity() != null) {
-            mUserGiftFragment.sendGift();
-        } else {
-            ((Activity) mContext).startActivityForResult(
-                    GiftsActivity.getSendGiftIntent(mContext, mProfileId),
-                    GiftsActivity.INTENT_REQUEST_GIFT
-            );
-        }
+        mActivity.startActivityForResult(
+                GiftsActivity.getSendGiftIntent(mActivity, mProfileId),
+                GiftsActivity.INTENT_REQUEST_GIFT
+        );
     }
 
     private void onClickAddToBlackList() {
@@ -408,8 +401,8 @@ public class OverflowMenu {
         if (CacheProfile.premium) {
             ApiRequest request;
             if (mIsInBlackList) {
-                request = new DeleteBlackListRequest(mUserId, mContext).
-                        callback(new BlackListAndBookmarkHandler(mContext,
+                request = new DeleteBlackListRequest(mUserId, mActivity).
+                        callback(new BlackListAndBookmarkHandler(mActivity,
                                 BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
                                 mUserId,
                                 false) {
@@ -427,8 +420,8 @@ public class OverflowMenu {
                             }
                         });
             } else {
-                request = new BlackListAddRequest(mUserId, mContext).
-                        callback(new BlackListAndBookmarkHandler(mContext,
+                request = new BlackListAddRequest(mUserId, mActivity).
+                        callback(new BlackListAndBookmarkHandler(mActivity,
                                 BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
                                 mUserId,
                                 true) {
@@ -449,7 +442,7 @@ public class OverflowMenu {
             setBlackListState(null);
             request.exec();
         } else {
-            ((Activity) mContext).startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"),
+            mActivity.startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"),
                     PurchasesActivity.INTENT_BUY_VIP);
         }
     }
@@ -461,8 +454,8 @@ public class OverflowMenu {
         }
         ApiRequest request;
         if (mIsBookmarked) {
-            request = new DeleteBookmarksRequest(mUserId, mContext).
-                    callback(new BlackListAndBookmarkHandler(mContext,
+            request = new DeleteBookmarksRequest(mUserId, mActivity).
+                    callback(new BlackListAndBookmarkHandler(mActivity,
                             BlackListAndBookmarkHandler.ActionTypes.BOOKMARK,
                             mUserId,
                             false) {
@@ -480,8 +473,8 @@ public class OverflowMenu {
                         }
                     });
         } else {
-            request = new BookmarkAddRequest(mUserId, mContext).
-                    callback(new BlackListAndBookmarkHandler(mContext,
+            request = new BookmarkAddRequest(mUserId, mActivity).
+                    callback(new BlackListAndBookmarkHandler(mActivity,
                             BlackListAndBookmarkHandler.ActionTypes.BOOKMARK,
                             mUserId,
                             true) {
@@ -504,7 +497,7 @@ public class OverflowMenu {
     }
 
     private void showBlackListToast(boolean value) {
-        Toast.makeText(mContext.getApplicationContext(),
+        Toast.makeText(mActivity.getApplicationContext(),
                 value ?
                         R.string.user_added_to_black_list :
                         R.string.user_deleted_from_black_list,
@@ -512,7 +505,7 @@ public class OverflowMenu {
     }
 
     private void showBookmarkToast(boolean value) {
-        Toast.makeText(mContext.getApplicationContext(),
+        Toast.makeText(mActivity.getApplicationContext(),
                 value ?
                         R.string.user_added_to_bookmark :
                         R.string.user_deleted_from_bookmark,
@@ -541,14 +534,13 @@ public class OverflowMenu {
         if (mOpenChatIntent == null) {
             return;
         }
-        ((Activity) mContext).startActivityForResult(mOpenChatIntent, ChatActivity.INTENT_CHAT);
+        mActivity.startActivityForResult(mOpenChatIntent, ChatActivity.INTENT_CHAT);
     }
 
     private void setSympathySentState(boolean state) {
-        if (mOverflowMenuFields == null) {
-            return;
+        if (mOverflowMenuFields != null) {
+            mOverflowMenuFields.setSympathySentValue(state);
         }
-        mOverflowMenuFields.setSympathySentValue(state);
     }
 
     public void setSavedResponse(ApiResponse apiResponse) {
@@ -575,13 +567,14 @@ public class OverflowMenu {
     }
 
     private void registerBroadcastReceiver() {
-        LocalBroadcastManager.getInstance(mContext).registerReceiver(mUpdateActionsReceiver,
+        LocalBroadcastManager.getInstance(mActivity).registerReceiver(mUpdateActionsReceiver,
                 new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
     }
 
     public void onDestroy() {
-        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUpdateActionsReceiver);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(mUpdateActionsReceiver);
         mOverflowMenuFields = null;
+        mActivity = null;
     }
 
 }
