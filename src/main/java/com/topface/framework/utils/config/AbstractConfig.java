@@ -1,5 +1,6 @@
 package com.topface.framework.utils.config;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -122,6 +123,7 @@ public abstract class AbstractConfig {
         return settingsMap.getLongField(key);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     protected Double getDoubleField(SettingsMap settingsMap, String key) {
         return settingsMap.getDoubleField(key);
     }
@@ -175,28 +177,33 @@ public abstract class AbstractConfig {
         new BackgroundThread() {
             @Override
             public void execute() {
-                SharedPreferences.Editor editor = getPreferences().edit();
-                saveConfigAdditional(editor);
-                for (SettingsField field : getSettingsMap().values()) {
-                    switch (field.getType()) {
-                        case String:
-                            editor.putString(field.key, (String) field.value);
-                            break;
-                        case Integer:
-                            editor.putInt(field.key, (Integer) field.value);
-                            break;
-                        case Boolean:
-                            editor.putBoolean(field.key, (Boolean) field.value);
-                            break;
-                        case Long:
-                            editor.putLong(field.key, (Long) field.value);
-                            break;
-                    }
-                }
-                editor.apply();
-                Debug.log(this.getClass().getName() + toString());
+                commitConfig();
             }
         };
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    public void commitConfig() {
+        SharedPreferences.Editor editor = getPreferences().edit();
+        saveConfigAdditional(editor);
+        for (SettingsField field : getSettingsMap().values()) {
+            switch (field.getType()) {
+                case String:
+                    editor.putString(field.key, (String) field.value);
+                    break;
+                case Integer:
+                    editor.putInt(field.key, (Integer) field.value);
+                    break;
+                case Boolean:
+                    editor.putBoolean(field.key, (Boolean) field.value);
+                    break;
+                case Long:
+                    editor.putLong(field.key, (Long) field.value);
+                    break;
+            }
+        }
+        editor.commit();
+        Debug.log(this.getClass().getName() + toString());
     }
 
     /**

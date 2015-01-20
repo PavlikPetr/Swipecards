@@ -36,10 +36,9 @@ public class Configurations {
 
     public UserConfig getUserConfig() {
         if (mUserConfig == null) {
-            ConfigConverter configConverter = new ConfigConverter(AuthToken.getInstance().getUserTokenUniqueId());
-            if (configConverter.hasOldConfig()) {
-                configConverter.divConfig();
-                configConverter.removeOldConfig();
+            if (UserConfigConverter.hasOldConfig()) {
+                UserConfigConverter configConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId());
+                configConverter.convertConfig();
                 mUserConfig = configConverter.getMainUserConfig();
             } else {
                 mUserConfig = new UserConfig(mContext);
@@ -49,8 +48,8 @@ public class Configurations {
     }
 
     public UserConfig rebuildUserConfig(String oldEmail) {
-        ConfigConverter manager = new ConfigConverter();
-        manager.rebuildConfig(oldEmail, AuthToken.getInstance().getUserTokenUniqueId());
+        UserConfigConverter configConverter = new UserConfigConverter();
+        configConverter.rebuildConfig(oldEmail, AuthToken.getInstance().getUserTokenUniqueId());
         mUserConfig.saveConfig();
         return mUserConfig;
     }

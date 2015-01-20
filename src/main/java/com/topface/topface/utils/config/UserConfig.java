@@ -30,17 +30,17 @@ public class UserConfig extends AbstractConfig {
      * Keys' names to generate user-based keys
      */
     public static final String DATA_PIN_CODE = "data_profile_pin_code";
-    private static final String DATA_PROMO_POPUP = "data_promo_popup_";
+    public static final String DATA_PROMO_POPUP = "data_promo_popup_";
     public static final String DATA_NOVICE_BUY_SYMPATHY = "novice_dating_buy_sympathy";
     public static final String DATA_NOVICE_BUY_SYMPATHY_DATE = "novice_dating_buy_symathy_date_tag";
     public static final String DATA_NOVICE_SYMPATHY = "novice_dating_sympathy";
-    private static final String DATA_LIKE_CLOSING_LAST_TIME = "data_closings_likes_last_date";
-    private static final String DATA_MUTUAL_CLOSING_LAST_TIME = "data_closings_mutual_last_date";
-    private static final String DATA_BONUS_LAST_SHOW_TIME = "data_bonus_last_show_time";
+    public static final String DATA_LIKE_CLOSING_LAST_TIME = "data_closings_likes_last_date";
+    public static final String DATA_MUTUAL_CLOSING_LAST_TIME = "data_closings_mutual_last_date";
+    public static final String DATA_BONUS_LAST_SHOW_TIME = "data_bonus_last_show_time";
     public static final String NOTIFICATIONS_MESSAGES_STACK = "notifications_messages_stack";
     public static final String NOTIFICATION_REST_MESSAGES = "notifications_rest_messages";
 
-    private static final String DEFAULT_DATING_MESSAGE = "default_dating_message";
+    public static final String DEFAULT_DATING_MESSAGE = "default_dating_message";
     public static final String SETTINGS_GCM_RINGTONE = "settings_c2dm_ringtone";
     public static final String SETTINGS_PRELOAD_PHOTO = "settings_preload_photo";
     public static final String SETTINGS_GCM_VIBRATION = "settings_c2dm_vibration";

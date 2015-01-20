@@ -4,31 +4,31 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.test.InstrumentationTestCase;
 
+import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.utils.config.ConfigConverter;
+import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.config.UserConfigConverter;
 
 import java.util.Map;
 
 /**
- * Тест для проверки класса ConfigManager
+ * Тест для проверки класса UserConfigConverter
  * Created by onikitin on 15.01.15.
  */
-public class ConfigConverterTest extends InstrumentationTestCase {
+public class UserConfigConverterTest extends InstrumentationTestCase {
 
     private int currentIteration = 0;
 
-    public void testConfigManagerDivOldConfig() {
-        App.getContext().getSharedPreferences(
-                UserConfig.PROFILE_CONFIG_SETTINGS,
-                Context.MODE_PRIVATE).edit().clear().apply();
+    public void testConfigManagerSeparateOldConfig() {
         OldPreferencesGenerator oldPreferencesGenerator = new OldPreferencesGenerator(App.getContext());
-        oldPreferencesGenerator.waitRecord();
-        ConfigConverter configConverter = new ConfigConverter("test@gmail.com");
-        configConverter.divConfig();
+        oldPreferencesGenerator.commitConfig();
+        UserConfigConverter configConverter = new UserConfigConverter("test@gmail.com");
+        configConverter.getAllLogins();
+        configConverter.separateConfig();
 
         Map<String, ?> oldFields = oldPreferencesGenerator.getFakePreferences().getAll();
         SharedPreferences[] preferenceses = oldPreferencesGenerator.getAllUniclePerfirences();
@@ -41,6 +41,7 @@ public class ConfigConverterTest extends InstrumentationTestCase {
 
                 Object o1 = entry.getValue();
                 Object o2 = oldFields.get(key.toString());
+                Debug.debug(o1, "assert o1=" + o1 + " o2= " + o2);
 
                 assertEquals(o1, o2);
                 key.setLength(0);
@@ -53,81 +54,73 @@ public class ConfigConverterTest extends InstrumentationTestCase {
 
     private static class OldPreferencesGenerator extends AbstractConfig {
 
-        /**
-         * Keys' names to generate user-based keys
-         */
-        private static final String DATA_PROMO_POPUP = "data_promo_popup_";
-        private static final String DATA_LIKE_CLOSING_LAST_TIME = "data_closings_likes_last_date";
-        private static final String DATA_MUTUAL_CLOSING_LAST_TIME = "data_closings_mutual_last_date";
-        private static final String DATA_BONUS_LAST_SHOW_TIME = "data_bonus_last_show_time";
-        private static final String DEFAULT_DATING_MESSAGE = "default_dating_message";
-        public static final String SETTINGS_GCM_RINGTONE = "settings_c2dm_ringtone";
-        private int mCurrentIteration = 0;
+        private String[] mPrefParts;
 
         public String[] getPrefParts() {
             return mPrefParts;
         }
 
-        String[] mPrefParts;
-
         public OldPreferencesGenerator(Context context) {
             super(context);
+
+        }
+
+        private void addField(SettingsMap settingsMap, String key, Object defaultValue, String part) {
+            addField(settingsMap, generateUniqueKey(key, part), defaultValue);
         }
 
         @Override
         protected void addField(SettingsMap settingsMap, String key, Object defaultValue) {
-            super.addField(settingsMap, generateUniqueKey(key), defaultValue);
+            super.addField(settingsMap, key, defaultValue);
         }
 
         @Override
         protected void fillSettingsMap(SettingsMap settingsMap) {
-            String[] prefParts = {"st&test@gmail.com", "vk&5465658", "ok&458756888"};
-            mPrefParts = prefParts;
-            removeFakePreferences();
-            for (int i = 0; i < prefParts.length; i++) {
+            mPrefParts = new String[]{"st&test@gmail.com", "vk&5465658", "ok&458756888"};
+            for (String prefPart : mPrefParts) {
                 // pincode value
-                addField(settingsMap, UserConfig.DATA_PIN_CODE, Static.EMPTY);
+                addField(settingsMap, UserConfig.DATA_PIN_CODE, Static.EMPTY, prefPart);
                 // admirations promo popup last date of show
-                addField(settingsMap, getPromoPopupKey(Options.PromoPopupEntity.AIR_ADMIRATIONS), System.currentTimeMillis());
+                addField(settingsMap, getPromoPopupKey(Options.PromoPopupEntity.AIR_ADMIRATIONS), System.currentTimeMillis(), prefPart);
                 // messages promo popup last date of show
-                addField(settingsMap, getPromoPopupKey(Options.PromoPopupEntity.AIR_MESSAGES), System.currentTimeMillis());
+                addField(settingsMap, getPromoPopupKey(Options.PromoPopupEntity.AIR_MESSAGES), System.currentTimeMillis(), prefPart);
                 // visitors promo popup last date of show
-                addField(settingsMap, getPromoPopupKey(Options.PromoPopupEntity.AIR_VISITORS), System.currentTimeMillis());
+                addField(settingsMap, getPromoPopupKey(Options.PromoPopupEntity.AIR_VISITORS), System.currentTimeMillis(), prefPart);
                 // flag show if "buy sympathies hint" is passed
-                addField(settingsMap, UserConfig.DATA_NOVICE_BUY_SYMPATHY, true);
+                addField(settingsMap, UserConfig.DATA_NOVICE_BUY_SYMPATHY, true, prefPart);
                 // data of first launch to show "buy sympathies hint" with some delay from first launch
-                addField(settingsMap, UserConfig.DATA_NOVICE_BUY_SYMPATHY_DATE, System.currentTimeMillis());
+                addField(settingsMap, UserConfig.DATA_NOVICE_BUY_SYMPATHY_DATE, System.currentTimeMillis(), prefPart);
                 // flag show if "send sympathy hint" is passed
-                addField(settingsMap, UserConfig.DATA_NOVICE_SYMPATHY, true);
+                addField(settingsMap, UserConfig.DATA_NOVICE_SYMPATHY, true, prefPart);
                 // date of last likes closings processing
-                addField(settingsMap, DATA_LIKE_CLOSING_LAST_TIME, System.currentTimeMillis());
+                addField(settingsMap, UserConfig.DATA_LIKE_CLOSING_LAST_TIME, System.currentTimeMillis(), prefPart);
                 // date of last mutual closings processing
-                addField(settingsMap, DATA_MUTUAL_CLOSING_LAST_TIME, System.currentTimeMillis());
+                addField(settingsMap, UserConfig.DATA_MUTUAL_CLOSING_LAST_TIME, System.currentTimeMillis(), prefPart);
                 // список сообщений для сгруппированных нотификаций (сейчас группируются только сообщения)
-                addField(settingsMap, UserConfig.NOTIFICATIONS_MESSAGES_STACK, Static.EMPTY);
+                addField(settingsMap, UserConfig.NOTIFICATIONS_MESSAGES_STACK, Static.EMPTY, prefPart);
                 // количество нотификаций, которые пишем в поле "еще %d сообщений"
-                addField(settingsMap, UserConfig.NOTIFICATION_REST_MESSAGES, 0);
+                addField(settingsMap, UserConfig.NOTIFICATION_REST_MESSAGES, 0, prefPart);
                 // время последнего сброса счетчика вкладки бонусов
-                addField(settingsMap, DATA_BONUS_LAST_SHOW_TIME, System.currentTimeMillis());
+                addField(settingsMap, UserConfig.DATA_BONUS_LAST_SHOW_TIME, System.currentTimeMillis(), prefPart);
                 // default text for instant message on dating screen
-                addField(settingsMap, DEFAULT_DATING_MESSAGE, Static.EMPTY);
+                addField(settingsMap, UserConfig.DEFAULT_DATING_MESSAGE, Static.EMPTY, prefPart);
                 // push notification melody
-                addField(settingsMap, SETTINGS_GCM_RINGTONE, UserConfig.DEFAULT_SOUND);
+                addField(settingsMap, UserConfig.SETTINGS_GCM_RINGTONE, UserConfig.DEFAULT_SOUND, prefPart);
+                // preload photo default type WiFi and 3G
+                addField(settingsMap, UserConfig.SETTINGS_PRELOAD_PHOTO, PreloadPhotoSelectorTypes.WIFI_3G.getId(), prefPart);
                 // is vibration for notification enabled
-                addField(settingsMap, UserConfig.SETTINGS_GCM_VIBRATION, true);
+                addField(settingsMap, UserConfig.SETTINGS_GCM_VIBRATION, true, prefPart);
                 // is led blinking for notification enabled
-                addField(settingsMap, UserConfig.SETTINGS_GCM_LED, true);
+                addField(settingsMap, UserConfig.SETTINGS_GCM_LED, true, prefPart);
                 // is push notification enabled or not
-                addField(settingsMap, UserConfig.SETTINGS_GCM, true);
+                addField(settingsMap, UserConfig.SETTINGS_GCM, true, prefPart);
                 // purchased subscriptions which don't need verification
-                addField(settingsMap, UserConfig.PURCHASED_SUBSCRIPTIONS, mPrefParts[mCurrentIteration]);
+                addField(settingsMap, UserConfig.PURCHASED_SUBSCRIPTIONS, prefPart, prefPart);
                 // время последнего показа попапа блокировки знакомств
-                addField(settingsMap, UserConfig.DATING_LOCK_POPUP_TIME, System.currentTimeMillis());
+                addField(settingsMap, UserConfig.DATING_LOCK_POPUP_TIME, System.currentTimeMillis(), prefPart);
                 // счётчик перехода на экран офервола топфейс
-                addField(settingsMap, UserConfig.TOPFACE_OFFERWALL_REDIRECT_COUNTER, 0);
-                mCurrentIteration++;
+                addField(settingsMap, UserConfig.TOPFACE_OFFERWALL_REDIRECT_COUNTER, 0, prefPart);
             }
-            saveConfig();
         }
 
         @Override
@@ -142,23 +135,18 @@ public class ConfigConverterTest extends InstrumentationTestCase {
             return getPreferences();
         }
 
-        protected String generateUniqueKey(String name) {
-            return mPrefParts[mCurrentIteration] + Static.AMPERSAND + name;
+        protected String generateUniqueKey(String name, String part) {
+            return part + Static.AMPERSAND + name;
         }
 
         private String getPromoPopupKey(int popupType) {
-            return DATA_PROMO_POPUP + popupType;
-        }
-
-        public void removeFakePreferences() {
-            getPreferences().edit().clear().apply();
+            return UserConfig.DATA_PROMO_POPUP + popupType;
         }
 
         /**
          * Возвращает массив разделенных конфигов
          */
         public SharedPreferences[] getAllUniclePerfirences() {
-            waitRecord();
             SharedPreferences[] configs = new SharedPreferences[mPrefParts.length];
             int i = 0;
             for (SharedPreferences preferences : configs) {
@@ -171,17 +159,5 @@ public class ConfigConverterTest extends InstrumentationTestCase {
             }
             return configs;
         }
-
-        /**
-         * Запись конфига идет в отдельном потоку без ожидания рискуем получить NPE при запросе конфига
-         */
-        public void waitRecord() {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
     }
 }

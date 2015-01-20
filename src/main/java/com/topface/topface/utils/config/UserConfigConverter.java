@@ -3,6 +3,7 @@ package com.topface.topface.utils.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 
@@ -18,7 +19,7 @@ import java.util.Set;
  * Класс для работы с UserConfig. Разделяет "старый" конфиг на несколько новых уникальных,
  * перерабатывает текущий конфиг после смены e-mail
  */
-public class ConfigConverter {
+public class UserConfigConverter {
 
     private ArrayList<String> mLoginList = new ArrayList<>();
     private Map<String, ?> mOldConfidFields;
@@ -26,13 +27,23 @@ public class ConfigConverter {
     private UserConfig mMainUserConfig;
     private String mCurrentLogin;
 
-    public ConfigConverter() {
+    public UserConfigConverter() {
     }
 
-    public ConfigConverter(String mCurrentLogin) {
+    public UserConfigConverter(String mCurrentLogin) {
         mOldConfidFields = getOldConfig().getAll();
-        getAllLogins();
         this.mCurrentLogin = mCurrentLogin;
+    }
+
+    public void convertConfig() {
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                getAllLogins();
+                separateConfig();
+                removeOldConfig();
+            }
+        };
     }
 
     private SharedPreferences getOldConfig() {
@@ -41,8 +52,11 @@ public class ConfigConverter {
                 Context.MODE_PRIVATE);
     }
 
-    public boolean hasOldConfig() {
-        return !(mOldConfidFields.size() == 0);
+    public static boolean hasOldConfig() {
+        SharedPreferences preferences = App.getContext().getSharedPreferences(
+                UserConfig.PROFILE_CONFIG_SETTINGS,
+                Context.MODE_PRIVATE);
+        return !(preferences.getAll().size() == 0);
     }
 
     /**
@@ -50,32 +64,33 @@ public class ConfigConverter {
      * Созданный конфиг заполняется соответствующими данными из старого общего конфига.После того,
      * как все поля старого конфига будет пройдены метод вызовет сам себя для следующего логина.
      */
-    public void divConfig() {
-        UserConfig unicleConfig = createUnicleNewConfig(mLoginList.get(mCurrentConfigNumber));
-        Iterator iterator = ((HashMap) unicleConfig.getSettingsMap()).entrySet().iterator();
+    public void separateConfig() {
+        UserConfig uniqueConfig = createUnicleNewConfig(mLoginList.get(mCurrentConfigNumber));
+        Iterator iterator = ((HashMap) uniqueConfig.getSettingsMap()).entrySet().iterator();
         String oldKey = null;
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
             oldKey = generateOldKey(mLoginList.get(mCurrentConfigNumber), (String) entry.getKey());
             if (mOldConfidFields.containsKey(oldKey)) {
-                unicleConfig.addField(unicleConfig.getSettingsMap(), (String) entry.getKey(), mOldConfidFields.get(oldKey));
+                uniqueConfig.addField(uniqueConfig.getSettingsMap(), (String) entry.getKey(), mOldConfidFields.get(oldKey));
                 mOldConfidFields.remove(oldKey);
             }
             if (!iterator.hasNext() && mOldConfidFields.size() != 0) {
                 mCurrentConfigNumber++;
-                divConfig();
+                separateConfig();
             }
         }
         if (oldKey.contains(mCurrentLogin)) {
-            setMainUserConfig(unicleConfig);
+            setMainUserConfig(uniqueConfig);
         }
-        unicleConfig.saveConfig();
+        uniqueConfig.commitConfig();
+
     }
 
     /**
      * Извлекает из старого общего конфига все логины, для которых были созданы поля
      */
-    private void getAllLogins() {
+    public boolean getAllLogins() {
         Set<String> keys = mOldConfidFields.keySet();
         StringBuilder login = new StringBuilder();
         for (String key : keys) {
@@ -89,6 +104,7 @@ public class ConfigConverter {
             }
             login.setLength(0);
         }
+        return true;
     }
 
     private String getConfigPartFromKey(String key) {
