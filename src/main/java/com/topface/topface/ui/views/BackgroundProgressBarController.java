@@ -16,8 +16,8 @@ import com.nineoldandroids.view.ViewHelper;
  */
 public class BackgroundProgressBarController {
     private static final String ANIMATION_TYPE = "alpha";
-    private static final int ANIMATION_DURATION = 1000; // in millis
-    private static final int ANIMATION_START_DELAY = 2000; // in millis
+    private static final int ANIMATION_DURATION = 1500; // in millis
+    private static final int ANIMATION_START_DELAY = 0; // in millis
     private static final float ALPHA_START = 0f;
     private static final float ALPHA_END = 1f;
 
