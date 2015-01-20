@@ -799,11 +799,6 @@
         <item name="android:background">@drawable/input_field</item>
     </style>
 
-    <style name="FilterSpinnerDropDownList" parent="android:Widget.ListView.DropDown">
-        <item name="android:divider">@color/filter_fragment_divider_color</item>
-        <item name="android:dividerHeight">@dimen/filter_fragment_divider_height</item>
-    </style>
-
     <style name="FilterCheckBox" parent="topfaceCheckbox">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
