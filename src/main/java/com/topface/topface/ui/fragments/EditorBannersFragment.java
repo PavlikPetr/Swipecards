@@ -36,8 +36,20 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
         initConfigContainer();
         root.findViewById(R.id.btnSaveSettings).setOnClickListener(this);
         root.findViewById(R.id.btnResetSettings).setOnClickListener(this);
+        initShowAdsCheckbox(root);
         initOnStartLoadingControls(root);
         return root;
+    }
+
+    private void initShowAdsCheckbox(View root) {
+        final CheckBox showAsCheckBox = ((CheckBox) root.findViewById(R.id.show_ad_checkbox));
+        showAsCheckBox.setChecked(CacheProfile.show_ad);
+        showAsCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CacheProfile.show_ad =showAsCheckBox.isChecked();
+            }
+        });
     }
 
     private void initOnStartLoadingControls(View root) {
