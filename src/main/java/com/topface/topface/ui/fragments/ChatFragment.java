@@ -315,6 +315,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        Utils.showSoftKeyboard();
         final KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @SuppressWarnings("ConstantConditions")
@@ -346,7 +347,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         mEditBox.addTextChangedListener(mTextWatcher);
-
         //LockScreen
         initLockScreen(root);
         if (savedInstanceState != null) {

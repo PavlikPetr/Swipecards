@@ -201,6 +201,12 @@ public class Utils {
         keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
     }
 
+    public static void showSoftKeyboard() {
+        InputMethodManager manager = (InputMethodManager) App.getContext().getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        manager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     public static int getPxFromDp(int pixels) {
         return (int) (mDensity * pixels);
