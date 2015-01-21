@@ -13,7 +13,6 @@ import android.support.v7.view.ActionMode;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,12 +53,10 @@ import com.topface.topface.ui.adapters.FeedAnimatedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.MultiselectionController;
-import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
-import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -78,18 +75,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private static final String FEEDS = "FEEDS";
     private static final String POSITION = "POSITION";
-    private static final String IS_FILTER_ON = "IS_FILTER_ON";
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
-    protected DoubleBigButton mDoubleButton;
     protected boolean mIsUpdating;
     private RetryViewCreator mRetryView;
     private RelativeLayout mContainer;
     protected View mLockView;
-    private MenuItem mLens;
-    private View mFilters;
 
     private BroadcastReceiver mReadItemReceiver;
     private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
@@ -126,10 +119,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected boolean isDeletable = true;
     private ViewStub mEmptyScreenStub;
     private boolean needUpdate = false;
-    private boolean mRestoredFilterState;
 
     private ActionMode mActionMode;
-    private FilterBlock mFilterBlock;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -184,7 +175,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
             mListAdapter.setData(feedsList);
             mListView.getRefreshableView().setSelection(saved.getInt(POSITION, 0));
-            mRestoredFilterState = saved.getBoolean(IS_FILTER_ON, false);
             if (!mListAdapter.isEmpty()) {
                 mBackgroundController.hide();
             }
@@ -204,7 +194,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void initViews(View root) {
         initBackground(root);
-        initFilter(root);
         initListView(root);
         initFloatBlock((ViewGroup) root);
         initRetryViews();
@@ -286,9 +275,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             outState.putParcelableArray(FEEDS, data.toArray(new Parcelable[data.size()]));
             outState.putInt(POSITION, mListView.getRefreshableView().getFirstVisiblePosition());
         }
-        if (mLens != null) {
-            outState.putBoolean(IS_FILTER_ON, mLens.isVisible());
-        }
     }
 
     protected void init() {
@@ -298,15 +284,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         // ListView background
         mBackgroundController.setProgressBar((ProgressBar) view.findViewById(R.id.tvBackgroundText));
         mBackgroundController.startAnimation();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        mLens = menu.findItem(R.id.action_filter);
-        if (mLens != null) {
-            mLens.setVisible(mRestoredFilterState);
-        }
     }
 
     protected int[] getTypesForGCM() {
@@ -609,7 +586,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             request.from = firstItem.id;
         }
 
-        request.unread = isShowUnreadItemsSelected();
         request.callback(new DataApiHandler<FeedListData<T>>() {
 
             @Override
@@ -655,7 +631,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
             onUpdateFail(isPullToRefreshUpdating || isHistoryLoad);
             mListView.onRefreshComplete();
-            setFilterEnabled(false);
         }
     }
 
@@ -683,7 +658,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
         mListView.onRefreshComplete();
         mListView.setVisibility(View.VISIBLE);
-        setFilterEnabled(true);
     }
 
     protected void removeOldDublicates(FeedListData<T> data) {
@@ -732,10 +706,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return mListAdapter;
     }
 
-    protected boolean isShowUnreadItemsSelected() {
-        return mDoubleButton != null && mDoubleButton.isRightButtonChecked();
-    }
-
     protected abstract FeedListData<T> getFeedList(JSONObject response);
 
     protected FeedRequest getRequest() {
@@ -748,42 +718,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         updateData(isPushUpdating, false, makeItemsRead);
     }
 
-    protected void initFilter(View view) {
-        mFilterBlock = new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.loToolsBar);
-        initDoubleButton(view);
-        mFilters = view.findViewById(R.id.loToolsBar);
-    }
-
-    protected void initDoubleButton(View view) {
-        if (view == null) {
-            return;
-        }
-        // Double Button
-        mDoubleButton = (DoubleBigButton) view.findViewById(R.id.btnDoubleBig);
-        mDoubleButton.setLeftText(getString(R.string.general_dbl_all));
-        mDoubleButton.setRightText(getString(R.string.general_dbl_new));
-        mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
-        mDoubleButton.setLeftListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateData(false, true);
-            }
-        });
-        mDoubleButton.setRightListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateData(false, true);
-            }
-        });
-    }
-
     @Override
     protected void onUpdateSuccess(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
             mRetryView.setVisibility(View.GONE);
-
-            setFilterSwitcherState(true);
         }
 
         if (getListAdapter().isEmpty()) {
@@ -794,28 +733,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void onFilledFeed() {
-        onFilledFeed(true);
-    }
-
-    protected void onFilledFeed(boolean isPushUpdating) {
         ViewStub stub = getEmptyFeedViewStub();
         if (stub != null) stub.setVisibility(View.GONE);
-        setFilterEnabled(isPushUpdating ? mListView.getVisibility() == View.VISIBLE :
-                mLens != null && mLens.isVisible());
     }
 
     private View mInflated;
-
-    private void setFilterEnabled(boolean enabled) {
-        if (mLens != null) {
-            mLens.setVisible(enabled);
-        }
-        if (!enabled) {
-            if (mFilterBlock != null && mFilters.getVisibility() == View.VISIBLE) {
-                mFilterBlock.openControls();
-            }
-        }
-    }
 
     protected void onEmptyFeed(int errorCode) {
         ViewStub stub = getEmptyFeedViewStub();
@@ -828,7 +750,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             initEmptyFeedView(mInflated, errorCode);
         }
         mBackgroundController.hide();
-        setFilterEnabled(mListView.getVisibility() == View.VISIBLE);
     }
 
     protected void onEmptyFeed() {
@@ -853,23 +774,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void onUpdateFail(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
-            setFilterSwitcherState(true);
         }
     }
 
     @Override
     protected void onUpdateStart(boolean isPushUpdating) {
-        onFilledFeed(isPushUpdating);
+        onFilledFeed();
         if (!isPushUpdating) {
             mListView.setVisibility(View.INVISIBLE);
             mBackgroundController.show();
-            setFilterSwitcherState(false);
-        }
-    }
-
-    protected void setFilterSwitcherState(boolean clickable) {
-        if (mDoubleButton != null) {
-            mDoubleButton.setClickable(clickable);
         }
     }
 
@@ -919,17 +832,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             if (counters > 0) {
                 updateData(true, false);
             }
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_filter:
-                mFilterBlock.openControls();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 

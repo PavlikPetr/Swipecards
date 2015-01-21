@@ -61,10 +61,6 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     }
 
     @Override
-    protected void initDoubleButton(View view) {
-    }
-
-    @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
     }
 

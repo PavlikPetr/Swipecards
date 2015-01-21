@@ -211,7 +211,6 @@ public class ClosingsController implements View.OnClickListener {
 
     protected ApiRequest getUsersListRequest(FeedRequest.FeedService feedType, Context context) {
         FeedRequest request = new FeedRequest(feedType, context);
-        request.unread = true;
         request.leave = true;
         return request;
     }
