@@ -4,10 +4,12 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,9 +58,11 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     protected static class FeedViewHolder {
-        public ImageViewRemote avatar;
+        public ImageViewRemote avatarImage;
+        public FrameLayout avatar;
         public TextView name;
         public TextView text;
+        public TextView age;
         public TextView time;
         public TextView unreadCounter;
         public ImageView heart;
@@ -112,8 +116,16 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     protected void setItemMessage(T item, TextView messageView) {
-        if (item.user.city != null) {
-            messageView.setText(item.user.city.name);
+        String text = null;
+        if (item.user.deleted) {
+            text = getContext().getString(R.string.user_is_deleted);
+        } else if (item.user.banned) {
+            text = getContext().getString(R.string.user_is_banned);
+        } else if (item.user.city != null) {
+            text = item.user.city.name;
+        }
+        if (text != null) {
+            messageView.setText(text);
         }
     }
 
@@ -150,32 +162,43 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             // какую аватарку использовать по умолчанию для забаненных и во время загрузки нормальной
             int defaultAvatarResId = (item.user.sex == Static.BOY ?
                     R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
-            holder.avatar.setStubResId(defaultAvatarResId);
+            holder.avatarImage.setStubResId(defaultAvatarResId);
 
             if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
-                holder.avatar.setRemoteSrc("drawable://" + defaultAvatarResId);
+                holder.avatarImage.setRemoteSrc("drawable://" + defaultAvatarResId);
                 if (item.user.banned || item.user.deleted) {
                     holder.avatar.setOnClickListener(null);
                 } else {
                     setListenerOnAvatar(holder.avatar, item);
                 }
             } else {
-                holder.avatar.setPhoto(item.user.photo);
+                holder.avatarImage.setPhoto(item.user.photo);
                 setListenerOnAvatar(holder.avatar, item);
             }
 
             // установка имени
-            holder.name.setText(item.user.getNameAndAge());
+            holder.name.setText(item.user.first_name);
             if ((item.user.deleted || item.user.banned)) {
                 flag |= FeedItemViewConstructor.Flag.BANNED;
             }
             FeedItemViewConstructor.setBanned(holder.name, flag);
 
+            // установка возраста
+            String age = "";
+            if (item.user.age > 0) {
+                age = String.valueOf(item.user.age);
+                if (!TextUtils.isEmpty(item.user.first_name)) {
+                    age = ", " + age;
+                }
+            }
+            holder.age.setText(age);
+            FeedItemViewConstructor.setBanned(holder.age, flag);
+
             // установка сообщения фида
             setItemMessage(item, holder.text);
 
             // установка иконки онлайн
-            FeedItemViewConstructor.setOnline(holder.name, (!(item.user.deleted || item.user.banned) && item.user.online));
+            FeedItemViewConstructor.setOnline(holder.age, (!(item.user.deleted || item.user.banned) && item.user.online));
         }
 
         convertView.setTag(holder);
@@ -187,7 +210,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return convertView;
     }
 
-    private void setListenerOnAvatar(ImageViewRemote avatar, final T item) {
+    private void setListenerOnAvatar(FrameLayout avatar, final T item) {
         //Слушаем событие клика на автарку
         if (mOnAvatarClickListener != null) {
             avatar.setOnClickListener(new View.OnClickListener() {
@@ -372,8 +395,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     protected FeedViewHolder getEmptyHolder(View convertView, final T item) {
         FeedViewHolder holder = new FeedViewHolder();
 
-        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.ifp_avatar);
+        holder.avatar = (FrameLayout) convertView.findViewById(R.id.ifp_avatar);
+        holder.avatarImage = (ImageViewRemote) convertView.findViewById(R.id.ifp_avatar_image);
         holder.name = (TextView) convertView.findViewById(R.id.ifp_name);
+        holder.age = (TextView) convertView.findViewById(R.id.ifp_age);
         holder.text = (TextView) convertView.findViewById(R.id.ifp_text);
         holder.background = convertView.getBackground();
 

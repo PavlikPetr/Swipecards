@@ -16,10 +16,7 @@
         android:orientation="vertical">
 
         <include
-            android:id="@+id/ifp_name"
-            layout="@layout/item_feed_part_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            layout="@layout/item_feed_part_name"/>
 
         <include
             android:id="@+id/ifp_text"
