@@ -37,6 +37,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -137,6 +138,8 @@ public class Options extends AbstractData {
 
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
 
+    public FeedNativeBanner feedNativeBanner = new FeedNativeBanner();
+
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
 
     public NotShown notShown = new NotShown();
@@ -147,10 +150,6 @@ public class Options extends AbstractData {
 
     public MessagesWithTabs messagesWithTabs = new MessagesWithTabs();
     private Map<String, PageInfo> pagesInfo;
-
-    public int feedAdPosition = 2;
-
-    public int pubnativeShows = 4;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -332,6 +331,8 @@ public class Options extends AbstractData {
             if (jsonNotShown != null) {
                 notShown.parseNotShownJSON(jsonNotShown);
             }
+
+            feedNativeBanner.parseFeedAdJSON(response.optJSONObject("feedNativeBanner"));
 
 
         } catch (Exception e) {
@@ -636,6 +637,29 @@ public class Options extends AbstractData {
                 title = jsonNotShown.optString("title");
                 text = jsonNotShown.optString("text");
             }
+        }
+    }
+
+    public static class FeedNativeBanner {
+        public boolean enabled;
+        public String type;
+        public int dailyShows;
+        public int positionMax;
+        public int positionMin;
+        private Random random = new Random(System.currentTimeMillis());
+
+        public void parseFeedAdJSON(JSONObject jsonFeedAd) {
+            if (jsonFeedAd != null) {
+                enabled = jsonFeedAd.optBoolean("enabled");
+                type = jsonFeedAd.optString("type");
+                dailyShows = jsonFeedAd.optInt("dailyShows");
+                positionMin = jsonFeedAd.optInt("positionMin");
+                positionMax = jsonFeedAd.optInt("positionMax");
+            }
+        }
+
+        public int getPosition() {
+            return random.nextInt(positionMax - positionMin + 1) + positionMin;
         }
     }
 

@@ -469,7 +469,7 @@ public class UserConfig extends AbstractUniqueConfig {
         long now = Calendar.getInstance().getTimeInMillis();
         if (now - lastDay > DAY_IN_MILLIS) {
             setField(getSettingsMap(), LAST_DAY_PUBNATIVE_SHOWN, now - now % (DAY_IN_MILLIS));
-            setField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS, CacheProfile.getOptions().pubnativeShows);
+            setField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS, CacheProfile.getOptions().feedNativeBanner.dailyShows);
         }
         return getIntegerField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS);
     }
