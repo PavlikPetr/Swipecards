@@ -253,7 +253,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return actionId == EditorInfo.IME_ACTION_SEND && sendMessage();
         }
     };
-    private boolean mWasNotEmptyHistory;
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -314,6 +313,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        if (!showKeyboardOnLargeScreen()) {
+            Utils.showSoftKeyboard(getActivity(), null);
+            mIsKeyboardOpened = true;
+        }
         final KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @SuppressWarnings("ConstantConditions")
@@ -348,7 +351,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         mEditBox.addTextChangedListener(mTextWatcher);
-
         //LockScreen
         initLockScreen(root);
         if (savedInstanceState != null) {
@@ -690,20 +692,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     } else {
                         if (!data.more && !pullToRefresh) mAdapter.forceStopLoader();
                     }
-
-                    if (mAdapter.getCount() <= 0) {
-                        if (!mIsKeyboardOpened && !mWasNotEmptyHistory) {
-                            Utils.showSoftKeyboard(getActivity(), mEditBox);
-                            mIsKeyboardOpened = true;
-                            mWasNotEmptyHistory = false;
-                        }
-                    } else {
-                        mWasNotEmptyHistory = true;
-                    }
                 }
                 mIsUpdating = false;
-                //show keyboard if display size more then 479dp
-                showKeyboardOnLargeScreen();
                 mIsBeforeFirstChatUpdate = false;
 
                 if (mLockScreen != null && mLockScreen.getVisibility() == View.VISIBLE) {
@@ -738,11 +728,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }).exec();
     }
 
-    private void showKeyboardOnLargeScreen() {
+    private boolean showKeyboardOnLargeScreen() {
         if (isShowKeyboardInChat() && mIsBeforeFirstChatUpdate) {
-            Utils.showSoftKeyboard(getActivity(), mEditBox);
+            Utils.showSoftKeyboard(getActivity(), null);
             mIsKeyboardOpened = true;
+            return true;
         }
+        return false;
     }
 
     private void removeOutdatedItems(HistoryListData data) {

@@ -196,9 +196,13 @@ public class Utils {
     }
 
     public static void showSoftKeyboard(Context context, EditText editText) {
-        editText.requestFocus();
         InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+        if (editText == null) {
+            keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        } else {
+            editText.requestFocus();
+            keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
