@@ -22,6 +22,7 @@ public class NativeAdManager {
     }
 
     public static void init() {
+        advertisings.clear();
         advertisings.add(new PubnativeAdvertising());
         loadAd();
     }

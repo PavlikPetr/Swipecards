@@ -22,7 +22,6 @@ public class PubnativeAdvertising extends Advertising {
     private static final String REQUEST = "http://api.pubnative.net/api/partner/v2/promotions/native?";
 
     private PubnativeInfo mPubnativeInfo;
-    private LinkedList<NativeAd> mAds;
 
     public PubnativeAdvertising() {
         DisplayMetrics metrics = App.getContext().getResources().getDisplayMetrics();
@@ -40,19 +39,19 @@ public class PubnativeAdvertising extends Advertising {
 
     @Override
     protected List<NativeAd> parseResponse(String response) {
-        mAds = new LinkedList<>();
+        List<NativeAd> nativeAds = new LinkedList<>();
         PubnativeResponse pubnativeResponse = JsonUtils.fromJson(response, PubnativeResponse.class);
         if (TextUtils.equals(pubnativeResponse.getStatus(), "ok")) {
             PubnativeAd[] ads = pubnativeResponse.getAds();
             if (ads != null) {
                 for (PubnativeAd ad : ads) {
                     if (ad.isValid()) {
-                        mAds.add(ad);
+                        nativeAds.add(ad);
                     }
                 }
             }
         }
-        return mAds;
+        return nativeAds;
     }
 
     @Override
