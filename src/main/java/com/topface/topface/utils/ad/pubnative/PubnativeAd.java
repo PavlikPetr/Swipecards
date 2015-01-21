@@ -14,6 +14,7 @@ import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.http.HttpUtils;
@@ -124,6 +125,11 @@ public class PubnativeAd extends NativeAd {
         dest.writeString(click_url);
         dest.writeParcelableArray(beacons, flags);
         dest.writeByte((byte) (mIsShown ? 1 : 0));
+    }
+
+    @Override
+    public int getPosition() {
+        return CacheProfile.getOptions().feedNativeBanner.getPosition();
     }
 
     public boolean isValid() {
