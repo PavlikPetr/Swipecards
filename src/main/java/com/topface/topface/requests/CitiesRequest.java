@@ -8,11 +8,19 @@ import org.json.JSONObject;
 public class CitiesRequest extends ApiRequest {
     // Data
     public static final String SERVICE_NAME = "geo.getCities";
-    public String type; // тип выборки перечня городов. Пока поддерживается только “top”
-    public String prefix;
+    private String type; // тип выборки перечня городов. Пока поддерживается только “top”
+    private String prefix;
 
-    public CitiesRequest(Context context) {
+    public CitiesRequest(Context context, Boolean isTop) {
         super(context);
+        if (isTop) {
+            type = "top";
+        }
+    }
+
+    public CitiesRequest(Context context, String prefix) {
+        super(context);
+        this.prefix = prefix;
     }
 
     @Override

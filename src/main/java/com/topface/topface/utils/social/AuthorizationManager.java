@@ -21,6 +21,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.controllers.StartActionsController;
+import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,8 +40,6 @@ import java.util.Map;
 public class AuthorizationManager {
 
     public static final int RESULT_LOGOUT = 666;
-
-    private Activity mParentActivity;
 
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
 
@@ -63,11 +62,10 @@ public class AuthorizationManager {
     }
 
     public AuthorizationManager(Activity parent) {
-        mParentActivity = parent;
-        mAuthorizers.put(Platform.VKONTAKTE, new VkAuthorizer(mParentActivity));
-        mAuthorizers.put(Platform.FACEBOOK, new FbAuthorizer(mParentActivity));
-        mAuthorizers.put(Platform.ODNOKLASSNIKI, new OkAuthorizer(mParentActivity));
-        mAuthorizers.put(Platform.TOPFACE, new TfAuthorizer(mParentActivity));
+        mAuthorizers.put(Platform.VKONTAKTE, new VkAuthorizer(parent));
+        mAuthorizers.put(Platform.FACEBOOK, new FbAuthorizer(parent));
+        mAuthorizers.put(Platform.ODNOKLASSNIKI, new OkAuthorizer(parent));
+        mAuthorizers.put(Platform.TOPFACE, new TfAuthorizer(parent));
     }
 
     public static void saveAuthInfo(IApiResponse response) {
@@ -110,6 +108,7 @@ public class AuthorizationManager {
 
     public void logout(Activity activity) {
         Ssid.remove();
+        UserNotificationManager.getInstance().removeNotifications();
         AuthToken authToken = AuthToken.getInstance();
         for (Authorizer authorizer : mAuthorizers.values()) {
             authorizer.logout();

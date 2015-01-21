@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.nineoldandroids.view.ViewHelper;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
@@ -45,8 +46,10 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         final FeedLike like = getItem(position);
 
-        holder.heart.setImageResource(like.mutualed ? R.drawable.im_item_dbl_mutual_heart_selector :
-                (like.highrate ? R.drawable.im_item_mutual_heart_top_selector : R.drawable.im_item_mutual_heart_selector));
+        holder.heart.setImageResource(like.mutualed ? R.drawable.im_item_dbl_mutual_heart :
+                (like.highrate ? R.drawable.im_item_mutual_heart_top : R.drawable.im_item_mutual_heart));
+
+        ViewHelper.setAlpha(holder.heart, (like.user.deleted || like.user.banned) ? 0.1f : 1f);
 
         holder.heart.setOnClickListener(new OnClickListener() {
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.topface.billing.DeveloperPayload;
-import com.topface.topface.data.AppsFlyerData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,12 +37,10 @@ public class GooglePlayPurchaseRequest extends PurchaseRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONObject requestData = new JSONObject();
+        JSONObject requestData = super.getRequestData();
         requestData
                 .put("data", data)
-                .put("signature", signature)
-                .put("source", getDeveloperPayload().source)
-                .put("appsflyer", new AppsFlyerData(context).toJson());
+                .put("signature", signature);
 
         //Если включены тестовые платежи, то отправляем еще и id оригинального платежа,
         //что бы нам начислил реальный продукт

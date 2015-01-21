@@ -9,42 +9,39 @@
 
         <RadioButton
             android:id="@+id/trplLeft"
-            style="@style/ShadowItemFont"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_triple_left_selector"
             android:button="@android:color/transparent"
+            android:ellipsize="end"
             android:gravity="center"
-            android:textSize="12sp"
-            android:textScaleX="0.9"
             android:singleLine="true"
-            android:ellipsize="end" />
+            android:textScaleX="0.9"
+            android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/trplMiddle"
-            style="@style/ShadowItemFont"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_triple_middle_selector"
             android:button="@android:color/transparent"
+            android:ellipsize="end"
             android:gravity="center"
-            android:textSize="12sp"
-            android:textScaleX="0.9"
             android:singleLine="true"
-            android:ellipsize="end" />
+            android:textScaleX="0.9"
+            android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/trplRight"
-            style="@style/ShadowItemFont"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_triple_right_selector"
             android:button="@android:color/transparent"
+            android:ellipsize="end"
             android:gravity="center"
-            android:textSize="12sp"
-            android:textScaleX="0.9"
             android:singleLine="true"
-            android:ellipsize="end" />
+            android:textScaleX="0.9"
+            android:textSize="12sp" />
     </RadioGroup>
 
 </merge>

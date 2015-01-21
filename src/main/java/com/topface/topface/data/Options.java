@@ -3,6 +3,7 @@ package com.topface.topface.data;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.experiments.AutoOpenGallery;
@@ -90,6 +91,12 @@ public class Options extends AbstractData {
      * Флаг отображения превью в диалогах
      */
     public boolean hidePreviewDialog;
+
+    /**
+     * title и url для экрана "О программе"
+     * по умолчанию отобрази "topface.com" с переходом на "http://m.topface.com", если сервер не пришлет другое значениеА
+     */
+    public AboutApp aboutApp = new AboutApp();
 
     /**
      * Стоимость вставания в лидеры
@@ -187,6 +194,8 @@ public class Options extends AbstractData {
                         )
                 );
             }
+            JSONObject aboutAppJson = response.optJSONObject("aboutApp");
+            aboutApp = new AboutApp(aboutAppJson.optString("title"), aboutAppJson.optString("url"));
             offerwall = response.optString("offerwall");
             maxVersion = response.optString("maxVersion");
             blockUnconfirmed = response.optBoolean("blockUnconfirmed");
@@ -442,6 +451,22 @@ public class Options extends AbstractData {
             } else {
                 return null;
             }
+        }
+    }
+
+    public static class AboutApp {
+        public String title;
+        public String url;
+
+
+        public AboutApp(String title, String url) {
+            this.title = title;
+            this.url = url;
+        }
+
+        public AboutApp() {
+            title = App.getContext().getString(R.string.settings_topface_url);
+            url = App.getContext().getString(R.string.settings_topface_url_title);
         }
     }
 
