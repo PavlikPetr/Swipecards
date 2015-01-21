@@ -48,7 +48,7 @@ public class AuthRequest extends ApiRequest {
     private AuthRequest(Context context) {
         super(context);
         doNeedAlert(false);
-        clienttype = BuildConfig.BILLING_TYPE.getClientType();
+        clienttype = BuildConfig.MARKET_API_TYPE.getClientType();
         locale = getClientLocale();
         androidApiVersion = Build.VERSION.SDK_INT;
         codeVersion = BuildConfig.VERSION_CODE;

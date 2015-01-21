@@ -154,7 +154,7 @@ public class Utils {
     public static Intent getMarketIntent(Context context) {
         String link;
         //Для амазона делаем специальную ссылку, иначе он ругается, хотя и работает
-        switch (BuildConfig.BILLING_TYPE) {
+        switch (BuildConfig.MARKET_API_TYPE) {
             case AMAZON:
                 link = context.getString(R.string.amazon_market_link);
                 break;

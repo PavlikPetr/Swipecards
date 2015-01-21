@@ -20,7 +20,7 @@ public class RestorePwdRequest extends ApiRequest {
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
                 .put("login", login)
-                .put("clientType", BuildConfig.BILLING_TYPE.getClientType());
+                .put("clientType", BuildConfig.MARKET_API_TYPE.getClientType());
     }
 
     @Override

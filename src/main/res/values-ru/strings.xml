@@ -782,4 +782,21 @@
     <string name="pull_to_refresh_pull_label">Потяните для обновления…</string>
     <string name="pull_to_refresh_release_label">Отпустите для обновления…</string>
     <string name="pull_to_refresh_refreshing_label">Загрузка…</string>
+
+    <!-- ServicesManager-->
+    <!-- Google -->
+    <string name="google_service_disabled_title">GooglePlay сервисы отключены на вашем устройстве</string>
+    <string name="google_service_disabled_button">Включить</string>
+    <string name="google_service_missing_title">GooglePlay сервисы недоступны на вашем устройстве</string>
+    <string name="google_service_missing_button">Установить</string>
+    <string name="google_service_version_update_required_title">GooglePlay сервисы на вашем устройстве требуют обновления версии</string>
+    <string name="google_service_version_update_required_button">Обновить</string>
+    <string name="google_invalid_account_title">Аккаунт Play Market не найден</string>
+    <string name="google_sign_in_account_title">Необходимо авторизоваться в Play Market</string>
+    <string name="google_sign_in_account_button">Авторизоваться</string>
+    <string name="google_unavailable_services_title">Сервисы GooglePlay недоступны</string>
+    <!-- Amazon -->
+    <string name="amazon_unavailable_services_title">Сервисы Amazon недоступны</string>
+    <!-- Nokia -->
+    <string name="nokia_unavailable_services_title">Сервисы Nokia недоступны</string>
 </resources>
