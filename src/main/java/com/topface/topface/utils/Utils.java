@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -300,4 +301,10 @@ public class Utils {
         }
         return ConnectionChangeReceiver.getConnectionType();
     }
+
+    public static String getCarrierName() {
+        TelephonyManager telephonyManager = (TelephonyManager) App.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getSimOperatorName();
+    }
+
 }
