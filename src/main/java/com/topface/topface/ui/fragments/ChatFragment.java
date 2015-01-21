@@ -33,6 +33,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -1055,42 +1056,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
                 }
                 return true;
-//            case R.id.action_user_actions_list:
-//
-//                if (mBarActions != null &&
-//                        !mBarActions.getSubMenu().hasVisibleItems()) {
-//                    initOverflowMenu();
-//                }
-//                return true;
             case android.R.id.home:
                 Utils.hideSoftKeyboard(getActivity(), mEditBox);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void deleteTimerDelay() {
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
-    }
-
-    private void startTimerDelay() {
-        deleteTimerDelay();
-        mTimer = new CountDownTimer(PROGRESS_BAR_DELAY, PROGRESS_BAR_DELAY) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                if (mIsUpdating) {
-                    setSupportProgressBarIndeterminateVisibility(true);
-                }
-            }
-        }.start();
     }
 
     private boolean isShowKeyboardInChat() {
