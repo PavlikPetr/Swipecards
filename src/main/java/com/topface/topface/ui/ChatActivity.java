@@ -7,8 +7,8 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.experiments.MessagesWithTabs;
 import com.topface.topface.ui.fragments.ChatFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 public class ChatActivity extends CheckAuthActivity<ChatFragment> {
@@ -148,7 +148,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
     @Override
     public Intent getSupportParentActivityIntent() {
         Intent intent = super.getSupportParentActivityIntent();
-        CacheProfile.getOptions().messagesWithTabs.equipNavigationActivityIntent(intent);
+        MessagesWithTabs.equipNavigationActivityIntent(intent);
         return intent;
     }
 }
