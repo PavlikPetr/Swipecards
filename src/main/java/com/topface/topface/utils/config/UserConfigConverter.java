@@ -41,6 +41,7 @@ public class UserConfigConverter {
                 getAllLogins();
                 separateConfig();
                 App.getAppConfig().setUserConfigConverted();
+                App.getAppConfig().saveConfig();
                 removeOldConfig();
             }
         };
