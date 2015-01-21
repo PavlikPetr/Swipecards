@@ -2,6 +2,7 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.ads.BannersConfig;
@@ -38,6 +39,7 @@ public class Configurations {
         if (mUserConfig == null) {
             if (UserConfigConverter.hasOldConfig()) {
                 UserConfigConverter configConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId());
+                Debug.debug(configConverter, "Идет конвертация старого конфига");
                 configConverter.convertConfig();
                 mUserConfig = configConverter.getMainUserConfig();
             } else {

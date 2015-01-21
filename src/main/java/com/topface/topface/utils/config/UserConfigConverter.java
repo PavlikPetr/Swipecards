@@ -2,6 +2,7 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
@@ -65,8 +66,18 @@ public class UserConfigConverter {
      * как все поля старого конфига будет пройдены метод вызовет сам себя для следующего логина.
      */
     public void separateConfig() {
-        UserConfig uniqueConfig = createUnicleNewConfig(mLoginList.get(mCurrentConfigNumber));
-        Iterator iterator = ((HashMap) uniqueConfig.getSettingsMap()).entrySet().iterator();
+        String name = mLoginList.get(mCurrentConfigNumber).
+                substring(mLoginList.get(mCurrentConfigNumber).indexOf("&") + 1);
+        Iterator iterator;
+        UserConfig uniqueConfig;
+        if (!TextUtils.isEmpty(name)) {
+            uniqueConfig = createUniqueNewConfig(name);
+            iterator = ((HashMap) uniqueConfig.getSettingsMap()).entrySet().iterator();
+        } else {
+            mCurrentConfigNumber++;
+            separateConfig();
+            return;
+        }
         String oldKey = null;
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
@@ -75,9 +86,11 @@ public class UserConfigConverter {
                 uniqueConfig.addField(uniqueConfig.getSettingsMap(), (String) entry.getKey(), mOldConfidFields.get(oldKey));
                 mOldConfidFields.remove(oldKey);
             }
-            if (!iterator.hasNext() && mOldConfidFields.size() != 0) {
+            if (!iterator.hasNext()) {
                 mCurrentConfigNumber++;
-                separateConfig();
+                if (mCurrentConfigNumber < mLoginList.size()) {
+                    separateConfig();
+                }
             }
         }
         if (oldKey.contains(mCurrentLogin)) {
@@ -111,8 +124,8 @@ public class UserConfigConverter {
         return key.substring(0, key.lastIndexOf("&"));
     }
 
-    private UserConfig createUnicleNewConfig(String login) {
-        return new UserConfig(login.substring(login.indexOf("&") + 1), App.getContext());
+    private UserConfig createUniqueNewConfig(String name) {
+        return new UserConfig(name, App.getContext());
     }
 
     private String generateOldKey(String configPart, String key) {
@@ -123,8 +136,8 @@ public class UserConfigConverter {
      * Сохраняет конфиг для логина под которым была осуществлена авторизация, как главный.
      * С ним будет осуществляться работа приложения.
      */
-    private void setMainUserConfig(UserConfig mMainUserConfig) {
-        this.mMainUserConfig = mMainUserConfig;
+    private void setMainUserConfig(UserConfig mainUserConfig) {
+        this.mMainUserConfig = mainUserConfig;
     }
 
     public UserConfig getMainUserConfig() {
@@ -152,8 +165,8 @@ public class UserConfigConverter {
             newConfig.addField(newConfig.getSettingsMap(),
                     (String) entry.getKey(), configFields.get(entry.getKey()));
         }
-        oldConfigPreferences.edit().clear().apply();
         newConfig.saveConfig();
+        oldConfigPreferences.edit().clear().apply();
     }
 
     private SharedPreferences getConfigPreferencesByLogin(String login) {
