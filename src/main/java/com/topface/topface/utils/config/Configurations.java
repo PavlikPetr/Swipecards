@@ -3,6 +3,7 @@ package com.topface.topface.utils.config;
 import android.content.Context;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.ads.BannersConfig;
@@ -23,7 +24,6 @@ public class Configurations {
     private LocaleConfig mLocaleConfig;
     private Novice mNovice;
 
-
     public Configurations(Context context) {
         mContext = context;
     }
@@ -37,11 +37,16 @@ public class Configurations {
 
     public UserConfig getUserConfig() {
         if (mUserConfig == null) {
-            if (UserConfigConverter.hasOldConfig()) {
-                UserConfigConverter configConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId());
-                Debug.debug(configConverter, "Идет конвертация старого конфига");
-                configConverter.convertConfig();
-                mUserConfig = configConverter.getMainUserConfig();
+            if (App.getAppConfig().isUserConfigConverted()) {
+                boolean mHasOldConfig = UserConfigConverter.hasOldConfig();
+                if (mHasOldConfig) {
+                    //если у пользователя старый конфиг, то конвертируем его в новые
+                    UserConfigConverter configConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId());
+                    Debug.debug(configConverter, "Converting old config");
+                    configConverter.convertConfig();
+                    mUserConfig = configConverter.getMainUserConfig();
+                }
+
             } else {
                 mUserConfig = new UserConfig(mContext);
             }

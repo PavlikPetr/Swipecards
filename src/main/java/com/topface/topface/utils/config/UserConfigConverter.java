@@ -5,14 +5,13 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -24,7 +23,6 @@ public class UserConfigConverter {
 
     private ArrayList<String> mLoginList = new ArrayList<>();
     private Map<String, ?> mOldConfidFields;
-    private int mCurrentConfigNumber = 0;
     private UserConfig mMainUserConfig;
     private String mCurrentLogin;
 
@@ -42,6 +40,7 @@ public class UserConfigConverter {
             public void execute() {
                 getAllLogins();
                 separateConfig();
+                App.getAppConfig().setUserConfigConverted();
                 removeOldConfig();
             }
         };
@@ -61,61 +60,59 @@ public class UserConfigConverter {
     }
 
     /**
-     * Создает новый конфиг логина полученного в методе getAllLogins().
-     * Созданный конфиг заполняется соответствующими данными из старого общего конфига.После того,
-     * как все поля старого конфига будет пройдены метод вызовет сам себя для следующего логина.
+     * Разбить старый конфиг на несколько новых, уникальных
      */
     public void separateConfig() {
-        String name = mLoginList.get(mCurrentConfigNumber).
-                substring(mLoginList.get(mCurrentConfigNumber).indexOf("&") + 1);
-        Iterator iterator;
+        for (String login : mLoginList) {
+            fillUniqueConfig(login);
+        }
+    }
+
+    /**
+     * Создает новый конфиг логина полученного в методе getAllLogins().
+     * Созданный конфиг заполняется соответствующими данными из старого общего конфига.
+     *
+     * @param login платформа и логин пользователя
+     */
+    private void fillUniqueConfig(String login) {
+
         UserConfig uniqueConfig;
-        if (!TextUtils.isEmpty(name)) {
-            uniqueConfig = createUniqueNewConfig(name);
-            iterator = ((HashMap) uniqueConfig.getSettingsMap()).entrySet().iterator();
-        } else {
-            mCurrentConfigNumber++;
-            separateConfig();
+        String name = getUniqueCofigName(login);
+        if (TextUtils.isEmpty(name)) {
             return;
         }
+
+        uniqueConfig = createUniqueNewConfig(name);
         String oldKey = null;
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            oldKey = generateOldKey(mLoginList.get(mCurrentConfigNumber), (String) entry.getKey());
+        AbstractConfig.SettingsMap settingsMap = uniqueConfig.getSettingsMap();
+        for (String key : settingsMap.keySet()) {
+            oldKey = generateOldKey(login, key);
             if (mOldConfidFields.containsKey(oldKey)) {
-                uniqueConfig.addField(uniqueConfig.getSettingsMap(), (String) entry.getKey(), mOldConfidFields.get(oldKey));
+                uniqueConfig.addField(settingsMap, key, mOldConfidFields.get(oldKey));
                 mOldConfidFields.remove(oldKey);
             }
-            if (!iterator.hasNext()) {
-                mCurrentConfigNumber++;
-                if (mCurrentConfigNumber < mLoginList.size()) {
-                    separateConfig();
-                }
-            }
         }
-        if (oldKey.contains(mCurrentLogin)) {
+
+        if (oldKey != null && oldKey.contains(mCurrentLogin)) {
             setMainUserConfig(uniqueConfig);
         }
         uniqueConfig.commitConfig();
-
     }
+
+    private String getUniqueCofigName(String login) {
+        return login.substring(login.indexOf("&") + 1);
+    }
+
 
     /**
      * Извлекает из старого общего конфига все логины, для которых были созданы поля
      */
     public boolean getAllLogins() {
-        Set<String> keys = mOldConfidFields.keySet();
-        StringBuilder login = new StringBuilder();
-        for (String key : keys) {
-            login.append(getConfigPartFromKey(key));
-            if (mLoginList.size() == 0) {
-                mLoginList.add(login.toString());
-            } else {
-                if (!mLoginList.contains(login.toString())) {
-                    mLoginList.add(login.toString());
-                }
+        for (String key : mOldConfidFields.keySet()) {
+            String login = getConfigPartFromKey(key);
+            if (login != null && !mLoginList.contains(login)) {
+                mLoginList.add(login);
             }
-            login.setLength(0);
         }
         return true;
     }

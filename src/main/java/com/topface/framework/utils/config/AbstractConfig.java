@@ -226,7 +226,7 @@ public abstract class AbstractConfig {
     /**
      * Поле настроек конфига. Нужно для того, что бы их было легко добавлять поля настроек
      */
-    private static class SettingsField<T> {
+    public static class SettingsField<T> {
         public SettingsField(String key, T defaultValue) {
             this.key = key;
             this.value = defaultValue;
@@ -265,7 +265,7 @@ public abstract class AbstractConfig {
     /**
      * Класс хранения полей настроек
      */
-    protected static class SettingsMap extends HashMap<String, SettingsField> {
+    public static class SettingsMap extends HashMap<String, SettingsField> {
 
         private SettingsField addField(String fieldName, Object defaultValue) {
             return put(fieldName, new SettingsField<>(fieldName, defaultValue));
