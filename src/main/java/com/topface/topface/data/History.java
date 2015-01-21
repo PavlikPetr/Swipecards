@@ -36,7 +36,6 @@ public class History extends FeedDialog implements Parcelable {
     }
 
     public History(String message, ItemType type) {
-        super((JSONObject) null);
         setLoaderTypeFlags(type);
         text = message;
         created = System.currentTimeMillis();
@@ -45,7 +44,6 @@ public class History extends FeedDialog implements Parcelable {
     }
 
     public History() {
-        super((JSONObject) null);
     }
 
     @Override

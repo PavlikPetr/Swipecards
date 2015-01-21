@@ -25,7 +25,6 @@ public class FeedGift extends FeedItem implements Parcelable {
     }
 
     public FeedGift() {
-        super((JSONObject) null);
     }
 
     @SuppressWarnings("UnusedDeclaration")

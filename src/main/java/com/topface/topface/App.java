@@ -52,6 +52,7 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GMSUtils;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
@@ -87,6 +88,7 @@ public class App extends Application {
     private static AppOptions mAppOptions;
 
     private static Boolean mIsGmsSupported;
+    private static Location mCurLocation;
 
 
     /**
@@ -244,6 +246,7 @@ public class App extends Application {
                     protected void success(Profile data, IApiResponse response) {
                         CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
+                        NativeAdManager.init();
                     }
 
                     @Override
@@ -263,6 +266,10 @@ public class App extends Application {
 
     public static Locale getCurrentLocale() {
         return mContext.getResources().getConfiguration().locale;
+    }
+
+    public static Location getLastKnownLocation() {
+        return mCurLocation;
     }
 
     public static boolean isOnline() {
@@ -449,11 +456,11 @@ public class App extends Application {
         new BackgroundThread(Thread.MIN_PRIORITY) {
             @Override
             public void execute() {
-                Location curLocation = GeoLocationManager.getLastKnownLocation(mContext);
-                if (curLocation != null) {
+                mCurLocation = GeoLocationManager.getLastKnownLocation(mContext);
+                if (mCurLocation != null) {
                     Looper.prepare();
                     SettingsRequest settingsRequest = new SettingsRequest(getContext());
-                    settingsRequest.location = curLocation;
+                    settingsRequest.location = mCurLocation;
                     settingsRequest.exec();
                     Looper.loop();
                 }
@@ -521,7 +528,5 @@ public class App extends Application {
             unregisterReceiver(mConnectionReceiver);
         }
     }
-
-
 }
 

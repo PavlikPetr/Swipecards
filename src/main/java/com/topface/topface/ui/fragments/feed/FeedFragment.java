@@ -67,6 +67,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
@@ -83,6 +84,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private static final String FEEDS = "FEEDS";
     private static final String POSITION = "POSITION";
     private static final String IS_FILTER_ON = "IS_FILTER_ON";
+    private static final String HAS_AD = "HAS_AD";
+    private static final String FEED_AD = "FEED_AD";
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
@@ -126,6 +129,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     };
 
     private BannersController mBannersController;
+    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!CacheProfile.show_ad) {
+                getListAdapter().removeAdItems();
+            }
+        }
+    };
 
     protected boolean isDeletable = true;
     private Drawable mLoader0;
@@ -182,10 +193,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @SuppressWarnings("unchecked")
     protected void restoreInstanceState(Bundle saved) {
         if (saved != null) {
+            if (CacheProfile.show_ad) {
+                mListAdapter.setHasFeedAd(saved.getBoolean(HAS_AD));
+                mListAdapter.setFeedAd(saved.<NativeAd>getParcelable(FEED_AD));
+            }
             Parcelable[] feeds = saved.getParcelableArray(FEEDS);
             FeedList<T> feedsList = new FeedList<>();
-            for (Parcelable feed : feeds) {
-                feedsList.add((T) feed);
+            for (Parcelable p : feeds) {
+                T feed = (T) p;
+                if (feed.isAd() && !CacheProfile.show_ad) {
+                    continue;
+                }
+                feedsList.add((T) p);
             }
             mListAdapter.setData(feedsList);
             mListView.getRefreshableView().setSelection(saved.getInt(POSITION, 0));
@@ -239,13 +258,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void initFloatBlock(ViewGroup view) {
-        mBannersController = new BannersController(this);
+        if (!getListAdapter().isNeedFeedAd()) {
+            mBannersController = new BannersController(this);
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     @Override
@@ -278,6 +300,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
     }
 
     @Override
@@ -287,6 +310,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             FeedList<T> data = mListAdapter.getData();
             outState.putParcelableArray(FEEDS, data.toArray(new Parcelable[data.size()]));
             outState.putInt(POSITION, mListView.getRefreshableView().getFirstVisiblePosition());
+            outState.putBoolean(HAS_AD, mListAdapter.hasFeedAd());
+            outState.putParcelable(FEED_AD, mListAdapter.getFeedAd());
         }
         if (mLens != null) {
             outState.putBoolean(IS_FILTER_ON, mLens.isVisible());
@@ -918,9 +943,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     protected abstract int getEmptyFeedLayout();
 
     protected void makeAllItemsRead() {
-        for (FeedItem item : getListAdapter().getData()) {
-            item.unread = false;
-        }
+        getListAdapter().makeAllItemsRead();
     }
 
     @Override
