@@ -303,8 +303,16 @@ public class Utils {
     }
 
     public static String getCarrierName() {
-        TelephonyManager telephonyManager = (TelephonyManager) App.getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        return telephonyManager.getSimOperatorName();
+        TelephonyManager telephonyManager = (TelephonyManager) App.getContext()
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager == null) {
+            return Static.EMPTY;
+        }
+        String carrier = telephonyManager.getSimOperatorName();
+        if (carrier == null) {
+            return Static.EMPTY;
+        }
+        return carrier;
     }
 
 }
