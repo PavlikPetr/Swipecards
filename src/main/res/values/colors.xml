@@ -40,8 +40,6 @@
     <color name="list_item_divider_new">#CFE9FC</color>
     <color name="list_item_divider_selected">#FFAEDCFC</color>
 
-    <color name="heart_background_color_pressed">#A0D3EF</color>
-    <color name="double_heart_background_color_pressed">#FFD5D5</color>
     <color name="list_text_black">#000000</color>
     <color name="list_text_gray">#898989</color>
     <color name="list_time">#A9A9A9</color>

@@ -19,7 +19,7 @@ public class RoundCornersProcessor implements BitmapProcessor {
     @Override
     public Bitmap process(Bitmap bitmap) {
         if (bitmap != null) {
-            bitmap = BitmapUtils.getScaleAndRoundBitmapIn(bitmap, bitmap.getWidth(), bitmap.getHeight(), mRadius);
+            bitmap = BitmapUtils.getScaleAndRoundBitmapIn(bitmap, mRadius);
         }
         return bitmap;
     }
