@@ -6,8 +6,6 @@
               android:orientation="vertical"
               android:background="@color/bg_white">
 
-    <include layout="@layout/leaders"/>
-
     <RelativeLayout
         android:id="@+id/feedContainer"
         android:layout_width="fill_parent"
@@ -45,5 +43,4 @@
             android:layout_height="fill_parent"/>
     </RelativeLayout>
 
-    <include layout="@layout/banner"/>
 </LinearLayout>

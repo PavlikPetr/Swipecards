@@ -53,7 +53,6 @@ import com.topface.topface.ui.adapters.FeedAnimatedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.MultiselectionController;
-import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
@@ -113,8 +112,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             updateData(true, false);
         }
     };
-
-    private FloatBlock mFloatBlock;
 
     protected boolean isDeletable = true;
     private ViewStub mEmptyScreenStub;
@@ -195,7 +192,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private void initViews(View root) {
         initBackground(root);
         initListView(root);
-        initFloatBlock((ViewGroup) root);
         initRetryViews();
         initViewStubForEmptyFeed(root);
     }
@@ -211,11 +207,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected ViewStub getEmptyFeedViewStub() {
         return mEmptyScreenStub;
-    }
-
-    protected void initFloatBlock(ViewGroup view) {
-        mFloatBlock = new FloatBlock(this, view);
-        mFloatBlock.onCreate();
     }
 
     protected void initNavigationBar() {
@@ -236,18 +227,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             updateData(false, true);
         }
         getListAdapter().loadOlderItems();
-        if (mFloatBlock != null) {
-            mFloatBlock.onResume();
-        }
         registerGcmReceiver();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (mFloatBlock != null) {
-            mFloatBlock.onPause();
-        }
         finishMultiSelection();
         if (mListView.isRefreshing()) {
             mListView.onRefreshComplete();
@@ -260,9 +245,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mFloatBlock != null) {
-            mFloatBlock.onDestroy();
-        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
     }

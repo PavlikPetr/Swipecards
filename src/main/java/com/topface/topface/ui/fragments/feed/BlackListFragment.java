@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
@@ -67,10 +66,6 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     @Override
     protected int getEmptyFeedLayout() {
         return R.layout.layout_empty_blacklist;
-    }
-
-    @Override
-    protected void initFloatBlock(ViewGroup view) {
     }
 
     @Override
