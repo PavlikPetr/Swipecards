@@ -48,7 +48,7 @@ public abstract class Advertising {
 
     public boolean needMoreAds() {
         int remainedShows = getRemainedShows();
-        return mNativeAds.size() < remainedShows;
+        return isEnabled() && mNativeAds.size() < remainedShows;
     }
 
     public boolean hasAd() {
@@ -65,4 +65,6 @@ public abstract class Advertising {
     }
 
     public abstract int getRemainedShows();
+
+    public abstract boolean isEnabled();
 }

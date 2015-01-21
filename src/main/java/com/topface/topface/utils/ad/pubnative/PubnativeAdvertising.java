@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 import com.topface.framework.JsonUtils;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.topface.App;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.ad.Advertising;
 import com.topface.topface.utils.ad.NativeAd;
@@ -57,5 +58,10 @@ public class PubnativeAdvertising extends Advertising {
     @Override
     public int getRemainedShows() {
         return App.getUserConfig().getRemainedPubnativeShows();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return CacheProfile.getOptions().feedNativeBanner.enabled;
     }
 }
