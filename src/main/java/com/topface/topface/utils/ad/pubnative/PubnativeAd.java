@@ -3,6 +3,7 @@ package com.topface.topface.utils.ad.pubnative;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -52,7 +53,11 @@ public class PubnativeAd extends NativeAd {
         description = in.readString();
         icon_url = in.readString();
         click_url = in.readString();
-        beacons = (Beacon[]) in.readParcelableArray(Beacon.class.getClassLoader());
+        Parcelable[] beaconsParcelable = in.readParcelableArray(Beacon.class.getClassLoader());
+        beacons = new Beacon[beaconsParcelable.length];
+        for (int i = 0; i < beaconsParcelable.length; i++) {
+            beacons[i] = (Beacon) beaconsParcelable[i];
+        }
         mIsShown = in.readByte() == 1;
     }
 
