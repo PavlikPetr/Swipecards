@@ -19,4 +19,6 @@ public abstract class NativeAd implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
     }
+
+    public abstract int getPosition();
 }

@@ -14,7 +14,7 @@ public class NativeAdManager {
 
     public static boolean hasAvailableAd() {
         for (Advertising adv : advertisings) {
-            if (adv.hasAd() && adv.getRemainedShows() > 0) {
+            if (adv.isEnabled() && adv.hasAd() && adv.getRemainedShows() > 0) {
                 return true;
             }
         }
@@ -38,7 +38,7 @@ public class NativeAdManager {
         NativeAd ad = null;
         if (hasAvailableAd()) {
             for (Advertising adv : advertisings) {
-                if (adv.hasAd()) {
+                if (adv.isEnabled() && adv.hasAd()) {
                     ad = adv.popAd();
                     break;
                 }
