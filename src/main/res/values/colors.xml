@@ -40,11 +40,25 @@
     <color name="list_item_divider_new">#CFE9FC</color>
     <color name="list_item_divider_selected">#FFAEDCFC</color>
 
-    <color name="heart_background_color_pressed">#A0D3EF</color>
-    <color name="double_heart_background_color_pressed">#FFD5D5</color>
     <color name="list_text_black">#000000</color>
     <color name="list_text_gray">#898989</color>
     <color name="list_time">#A9A9A9</color>
     <color name="list_unread_counter_background">#35AADC</color>
+
+    <!--filter light edit form selector color-->
+    <color name="form_selector_color_release_state">#FFFFFF</color>
+    <color name="form_selector_color_pressed_state">#CCE8FC</color>
+
+    <!--filter light edit form dialog text selector color-->
+    <color name="edit_form_selector_text_color_release_state">#333333</color>
+    <color name="edit_form_selector_text_color_pressed_state">#FFFFFF</color>
+
+    <!--filter light edit form dialog background selector color-->
+    <color name="edit_form_selector_background_color_release_state">#FFFFFF</color>
+    <color name="edit_form_selector_background_color_pressed_state">#33B5E5</color>
+
+    <!--filter fragment dividers color-->
+    <color name="filter_fragment_divider_color">#E2E2E2</color>
+
 
 </resources>

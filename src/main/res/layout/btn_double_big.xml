@@ -9,23 +9,21 @@
 
         <RadioButton
             android:id="@+id/dblLeft"
-            android:background="@drawable/btn_double_big_left_selector"
-            android:button="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/btn_double_big_left_selector"
+            android:button="@android:color/transparent"
             android:gravity="center"
-            android:textSize="12sp"
-            style="@style/ShadowItemFont" />
+            android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/dblRight"
-            android:background="@drawable/btn_double_big_right_selector"
-            android:button="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/btn_double_big_right_selector"
+            android:button="@android:color/transparent"
             android:gravity="center"
-            android:textSize="12sp"
-            style="@style/ShadowItemFont" />
+            android:textSize="12sp" />
 
     </RadioGroup>
 </merge>

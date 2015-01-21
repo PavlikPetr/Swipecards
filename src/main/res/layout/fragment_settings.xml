@@ -73,6 +73,14 @@
             android:layout_marginBottom="20dp" />
 
         <include
+        <include
+            android:id="@+id/loPreloadPhoto"
+            layout="@layout/item_edit_form_select"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
             android:id="@+id/tvNoNotification"
             layout="@layout/services_manager_layout"
             android:layout_width="fill_parent"

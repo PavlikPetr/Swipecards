@@ -3,6 +3,9 @@
 
     <!-- Базовая тема приложения -->
     <style name="Theme.Topface" parent="@style/Theme.AppCompat">
+
+        <item name="android:windowTitleStyle">@style/CenterJustifyDialogTitle</item>
+
         <!-- Тема индикаторов для ViewPager -->
         <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
         <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
@@ -26,6 +29,9 @@
         <item name="blueButtonStyle">@style/Widget.Topface.Button.Big.Blue</item>
         <item name="grayButtonStyle">@style/Widget.Topface.Button.Big.Gray</item>
 
+        <!--Spinner dropdown list style-->
+        <item name="android:dropDownListViewStyle">@style/FilterSpinnerDropDownList</item>
+
         <!-- ActionBar  -->
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
         <item name="actionBarItemBackground">@drawable/bg_semitransparent_black_selector</item>
@@ -48,6 +54,11 @@
         <item name="android:actionModeBackground" tools:ignore="NewApi">@color/bg_action_mode
         </item>
         <item name="android:actionModeCloseDrawable" tools:ignore="NewApi">@drawable/ic_check</item>
+    </style>
+
+    <!-- Светлая тема приложения -->
+    <style name="Theme.Topface.Light" parent="@style/Theme.Topface">
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewStyle</item>
     </style>
 
     <style name="Theme.Topface.ActionbarOverlay">

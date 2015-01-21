@@ -35,6 +35,8 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
+import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
@@ -98,6 +100,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         }
     };
     private TextView melodyName;
+    private TextView preloadPhotoName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -392,6 +395,15 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             case R.id.loLanguage:
                 startLanguageSelection();
                 break;
+            case R.id.loPreloadPhoto:
+                PreloadPhotoSelector preloadPhotoSelector = new PreloadPhotoSelector(getActivity());
+                preloadPhotoSelector.setPreloadPhotoTypeListener(new PreloadPhotoSelector.PreloadPhotoTypeListener() {
+                    @Override
+                    public void onSelected(PreloadPhotoSelectorTypes type) {
+                        preloadPhotoName.setText(type.getName());
+                    }
+                });
+                break;
             default:
                 break;
         }
@@ -527,32 +539,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void setRingtonNameByUri(Uri uri) {
-        String ringtoneName = getActivity().getString(R.string.silent_ringtone);
-        if (uri != null) {
-            Cursor mCursor = null;
-            try {
-                mCursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-
-                if (mCursor != null && mCursor.moveToFirst()) {
-                    if (mCursor.getColumnIndex("title") >= 0) {
-                        ringtoneName = mCursor.getString(mCursor.getColumnIndex("title"));
-                    } else {
-                        uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                        ringtoneName = getString(R.string.default_ringtone);
-                    }
-                }
-            } catch (Exception ex) {
-                Debug.error(ex);
-            } finally {
-                if (mCursor != null) mCursor.close();
-            }
-        }
-        melodyName.setText(ringtoneName);
-        App.getUserConfig().setGCMRingtone(uri == null ? UserConfig.SILENT : uri.toString());
-        App.getUserConfig().saveConfig();
-        Debug.log(App.getUserConfig(), "UserConfig changed");
-    }
 
     /**
      * @return SendMailNotificationRequest depending on a key
@@ -584,6 +570,33 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         }
 
         return request;
+    }
+
+    private void setRingtonNameByUri(Uri uri) {
+        String ringtoneName = getActivity().getString(R.string.silent_ringtone);
+        if (uri != null) {
+            Cursor mCursor = null;
+            try {
+                mCursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+
+                if (mCursor != null && mCursor.moveToFirst()) {
+                    if (mCursor.getColumnIndex("title") >= 0) {
+                        ringtoneName = mCursor.getString(mCursor.getColumnIndex("title"));
+                    } else {
+                        uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        ringtoneName = getString(R.string.default_ringtone);
+                    }
+                }
+            } catch (Exception ex) {
+                Debug.error(ex);
+            } finally {
+                if (mCursor != null) mCursor.close();
+            }
+        }
+        melodyName.setText(ringtoneName);
+        mUserSettings.setGCMRingtone(uri == null ? UserConfig.SILENT : uri.toString());
+        mUserSettings.saveConfig();
+        Debug.log(mUserSettings, "UserConfig changed");
     }
 
     /**
