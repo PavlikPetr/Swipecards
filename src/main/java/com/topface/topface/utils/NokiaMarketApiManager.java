@@ -39,16 +39,28 @@ public class NokiaMarketApiManager extends BaseMarketApiManager {
     }
 
     @Override
-    public String getMessage() {
-        if (getTitle() != null) {
-            return getTitle().getText().toString();
-        }
+    public int getResultCode() {
+        return 0;
+    }
+
+    @Override
+    public void onButtonClick() {
+
+    }
+
+    @Override
+    public String getButtonText() {
         return null;
     }
 
     @Override
-    public int getResultCode() {
-        return 0;
+    public boolean isButtonVisible() {
+        return false;
+    }
+
+    @Override
+    public String getMessage() {
+        return null;
     }
 
 }

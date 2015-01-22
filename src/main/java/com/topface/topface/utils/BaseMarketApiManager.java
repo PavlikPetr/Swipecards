@@ -23,9 +23,15 @@ public abstract class BaseMarketApiManager {
 
     public abstract View getView();
 
-    public abstract String getMessage();
-
     public abstract int getResultCode();
+
+    public abstract void onButtonClick();
+
+    public abstract String getButtonText();
+
+    public abstract boolean isButtonVisible();
+
+    public abstract String getMessage();
 
     public abstract boolean isServicesAvailable();
 
@@ -58,8 +64,6 @@ public abstract class BaseMarketApiManager {
         mView = inflater.inflate(R.layout.services_manager_layout, null);
         mTitle = (TextView) mView.findViewById(R.id.loTitle);
         mButton = (Button) mView.findViewById(R.id.loButton);
-        mTitle.setVisibility(View.VISIBLE);
-        mButton.setVisibility(View.VISIBLE);
         if (mClickListener != null) {
             mButton.setOnClickListener(mClickListener);
         }

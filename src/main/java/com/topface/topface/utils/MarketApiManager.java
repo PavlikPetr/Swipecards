@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.topface.topface.BuildConfig;
 
-public class MarketApiManager extends BaseMarketApiManager {
+public class MarketApiManager {
     BaseMarketApiManager mServicesManager;
 
     public MarketApiManager(Context context) {
@@ -22,27 +22,34 @@ public class MarketApiManager extends BaseMarketApiManager {
         }
     }
 
-    @Override
     public void onResume() {
         mServicesManager.onResume();
     }
 
-    @Override
     public View getView() {
         return mServicesManager.getView();
     }
 
-    @Override
-    public String getMessage() {
-        return mServicesManager.getMessage();
-    }
-
-    @Override
     public int getResultCode() {
         return mServicesManager.getResultCode();
     }
 
-    @Override
+    public void onButtonClick() {
+        mServicesManager.onButtonClick();
+    }
+
+    public String getButtonText() {
+        return mServicesManager.getButtonText();
+    }
+
+    public boolean isButtonVisible() {
+        return mServicesManager.isButtonVisible();
+    }
+
+    public String getMessage() {
+        return mServicesManager.getMessage();
+    }
+
     public boolean isServicesAvailable() {
         return mServicesManager.isServicesAvailable();
     }

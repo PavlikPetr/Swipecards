@@ -70,10 +70,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     private ViewGroup mLoVibration;
     private ViewGroup mLoLED;
     private ViewGroup mLoMelody;
-    private ViewGroup mLoAccount;
-    private ViewGroup mLoHelp;
-    private ViewGroup mLoLanguage;
-    private ViewGroup mLoAbout;
 
     private CountDownTimer mSendTimer = new CountDownTimer(3000, 3000) {
         @Override
@@ -118,10 +114,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         mLoVibration = (ViewGroup) view.findViewById(R.id.loVibration);
         mLoLED = (ViewGroup) view.findViewById(R.id.loLED);
         mLoMelody = (ViewGroup) view.findViewById(R.id.loMelody);
-        mLoAccount = (ViewGroup) view.findViewById(R.id.loAccount);
-        mLoHelp = (ViewGroup) view.findViewById(R.id.loHelp);
-        mLoLanguage = (ViewGroup) view.findViewById(R.id.loLanguage);
-        mLoAbout = (ViewGroup) view.findViewById(R.id.loAbout);
 
         // Edit Profile Button
         view.findViewById(R.id.btnProfileEdit).setOnClickListener(new OnClickListener() {
@@ -134,10 +126,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         mLoVibration.setOnClickListener(this);
         mLoLED.setOnClickListener(this);
         mLoMelody.setOnClickListener(this);
-        mLoHelp.setOnClickListener(this);
-        mLoLanguage.setOnClickListener(this);
-        mLoAbout.setOnClickListener(this);
-        mLoAccount.setOnClickListener(this);
+
 
         mSwitchVibration = new EditSwitcher(mLoVibration);
         mSwitchLED = new EditSwitcher(mLoLED);
@@ -145,7 +134,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         melodyName = (TextView) mLoMelody.findViewWithTag("tvText");
 
         // Account
-        initAccountViews();
+        initAccountViews(view);
 
         // Init settings views
         /*
@@ -154,7 +143,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
          to abort views initialization if activity is finishing.
           */
         if (!getActivity().isFinishing()) {
-            initViews();
+            initViews(view);
         }
         return view;
     }
@@ -206,7 +195,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         }
     }
 
-    private void initViews() {
+    private void initViews(View root) {
+        ViewGroup frame;
         // Notifications header
         setText(R.string.settings_notifications_header, mLoNotificationsHeader);
 
@@ -277,25 +267,42 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         setRingtonNameByUri(App.getUserConfig().getRingtone());
 
         // Help
-        setBackground(R.drawable.edit_big_btn_middle_selector, mLoHelp);
-        setText(R.string.settings_help, mLoHelp);
+        frame = (ViewGroup) root.findViewById(R.id.loHelp);
+        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
+        setText(R.string.settings_help, frame);
+        frame.setOnClickListener(this);
 
         // Language app
-        setBackground(R.drawable.edit_big_btn_middle_selector, mLoLanguage);
-        setText(R.string.settings_select_language, mLoLanguage);
+        frame = (ViewGroup) root.findViewById(R.id.loLanguage);
+        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
+        setText(R.string.settings_select_language, frame);
+        frame.setOnClickListener(this);
 
         // About
-        setBackground(R.drawable.edit_big_btn_bottom_selector, mLoAbout);
-        setText(R.string.settings_about, mLoAbout);
+        frame = (ViewGroup) root.findViewById(R.id.loAbout);
+        setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
+        setText(R.string.settings_about, frame);
+        frame.setOnClickListener(this);
+
+        //Preload photo
+        frame = (ViewGroup) root.findViewById(R.id.loPreloadPhoto);
+        setBackground(R.drawable.edit_big_btn_selector, frame);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_loading_photo);
+        preloadPhotoName = (TextView) frame.findViewWithTag("tvText");
+        preloadPhotoName.setVisibility(View.VISIBLE);
+        preloadPhotoName.setText(App.getUserConfig().getPreloadPhotoType().getName());
+        frame.setOnClickListener(this);
     }
 
-    private void initAccountViews() {
-        setBackground(R.drawable.edit_big_btn_top_selector, mLoAccount);
-        ((TextView) mLoAccount.findViewWithTag("tvTitle")).setText(R.string.settings_account);
-        mSocialNameText = (TextView) mLoAccount.findViewWithTag("tvText");
+    private void initAccountViews(View root) {
+        ViewGroup frame = (ViewGroup) root.findViewById(R.id.loAccount);
+        setBackground(R.drawable.edit_big_btn_top_selector, frame);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_account);
+        mSocialNameText = (TextView) frame.findViewWithTag("tvText");
         getSocialAccountName(mSocialNameText);
         getSocialAccountIcon(mSocialNameText);
         mSocialNameText.setVisibility(View.VISIBLE);
+        frame.setOnClickListener(this);
     }
 
     private void setText(int titleId, ViewGroup frame) {
@@ -594,9 +601,9 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             }
         }
         melodyName.setText(ringtoneName);
-        mUserSettings.setGCMRingtone(uri == null ? UserConfig.SILENT : uri.toString());
-        mUserSettings.saveConfig();
-        Debug.log(mUserSettings, "UserConfig changed");
+        App.getUserConfig().setGCMRingtone(uri == null ? UserConfig.SILENT : uri.toString());
+        App.getUserConfig().saveConfig();
+        Debug.log(App.getUserConfig(), "UserConfig changed");
     }
 
     /**

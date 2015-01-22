@@ -36,6 +36,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
+import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.DatingLockPopupAction;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
@@ -201,6 +202,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onRegisterStartActions(StartActionsController startActionsController) {
         super.onRegisterStartActions(startActionsController);
+        startActionsController.registerAction(new NotificationsDisablePopup(NavigationActivity.this));
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
         // promo popups
