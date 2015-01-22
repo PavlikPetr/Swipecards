@@ -47,7 +47,7 @@
 
     <!--drop down top menu text color in different state-->
     <color name="top_menu_enabled_text_color">#333333</color>
-    <color name="top_menu_disabled_text_color">#19333333</color>
+    <color name="top_menu_disabled_text_color">#BFBFBF</color>
 
     <!--drop down top menu item active background color-->
     <color name="top_menu_item_focused">#CCE8FC</color>
