@@ -39,11 +39,6 @@ import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
-import com.topface.topface.ui.fragments.feed.AdmirationFragment;
-import com.topface.topface.ui.fragments.feed.BookmarksFragment;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.LikesFragment;
-import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
@@ -66,14 +61,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.ADMIRATIONS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BOOKMARKS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DATING;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.LIKES;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.MUTUAL;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PROFILE;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
@@ -254,28 +244,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         //- Profile added as part of header
         menuItems.put(DATING.getId(), LeftMenuAdapter.newLeftMenuItem(DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.drawable.ic_dating_selector));
-        if (CacheProfile.getOptions().messagesWithTabs.isEnabled()) {
-            menuItems.put(TABBED_DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                    R.drawable.ic_dialog_selector));
-        } else {
-            menuItems.put(DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                    R.drawable.ic_dialog_selector));
-            menuItems.put(BOOKMARKS.getId(), LeftMenuAdapter.newLeftMenuItem(BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                    R.drawable.ic_star_selector));
-        }
+        menuItems.put(TABBED_DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                R.drawable.ic_dialog_selector));
         menuItems.put(TABBED_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
-        if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
-            menuItems.put(TABBED_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                    R.drawable.ic_likes_selector));
-        } else {
-            menuItems.put(LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                    R.drawable.ic_likes_selector));
-            menuItems.put(ADMIRATIONS.getId(), LeftMenuAdapter.newLeftMenuItem(ADMIRATIONS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                    R.drawable.ic_admirations_selector));
-            menuItems.put(MUTUAL.getId(), LeftMenuAdapter.newLeftMenuItem(MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                    R.drawable.ic_mutual_selector));
-        }
+        menuItems.put(TABBED_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                R.drawable.ic_likes_selector));
         menuItems.put(GEO.getId(), LeftMenuAdapter.newLeftMenuItem(GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.icon_people_close));
         if (CacheProfile.getOptions().bonus.enabled) {
@@ -575,26 +549,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             case DATING:
                 fragment = new DatingFragment();
                 break;
-            case ADMIRATIONS:
-                fragment = new AdmirationFragment();
-                break;
-            case LIKES:
-                fragment = new LikesFragment();
-                break;
             case LIKES_CLOSINGS:
                 fragment = new LikesClosingFragment();
                 break;
-            case MUTUAL:
-                fragment = new MutualFragment();
-                break;
             case MUTUAL_CLOSINGS:
                 fragment = new MutualClosingFragment();
-                break;
-            case DIALOGS:
-                fragment = new DialogsFragment();
-                break;
-            case BOOKMARKS:
-                fragment = new BookmarksFragment();
                 break;
             case GEO:
                 fragment = new PeopleNearbyFragment();

@@ -34,7 +34,6 @@ public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
             fragment = (Fragment) fragmentClass.newInstance();
             if (fragment instanceof FeedFragment) {
                 ((FeedFragment) fragment).setNeedTitles(false);
-                ((FeedFragment) fragment).setNeedOptionsMenu(false);
             }
 
         } catch (Exception ex) {

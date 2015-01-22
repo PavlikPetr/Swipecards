@@ -26,10 +26,10 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.SerializableToJson;
+import com.topface.topface.data.experiments.MessagesWithTabs;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 public class UserNotification {
@@ -310,7 +310,7 @@ public class UserNotification {
     private void putTopLevelFragment(Intent parentIntent, Intent targetIntent) {
         String componentName = targetIntent.getComponent().getClassName();
         if (TextUtils.equals(componentName, ChatActivity.class.getCanonicalName())) {
-            CacheProfile.getOptions().messagesWithTabs.equipNavigationActivityIntent(parentIntent);
+            MessagesWithTabs.equipNavigationActivityIntent(parentIntent);
         }
     }
 

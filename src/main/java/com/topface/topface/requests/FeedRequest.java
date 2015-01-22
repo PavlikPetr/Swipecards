@@ -14,7 +14,6 @@ public class FeedRequest extends LimitedApiRequest {
     // Data
     public String to;  // идентификатор последнего диалога для отображения. В случае отсутствия параметра диалоги возвращаются от последнего
     public String from;  // идентификатор последнего диалога для запроса новых сообщений после данного идентификатора
-    public boolean unread;  // параметр получения только тех диалогов, в которых есть непрочитанные сообщения
     private FeedService mService;
     public boolean leave; //Оставить сообщения не прочитанными
 
@@ -30,7 +29,6 @@ public class FeedRequest extends LimitedApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject data = super.getRequestData();
-        data.put("unread", unread);
         data.put("leave", leave);
         if (to != null) {
             data.put("to", to);

@@ -16,23 +16,16 @@ public class ResourcesUtils {
                 return R.string.general_profile;
             case DATING:
                 return R.string.general_dating;
-            case LIKES:
             case LIKES_CLOSINGS:
                 return R.string.general_likes;
             case TABBED_LIKES:
                 return R.string.general_sympathies;
-            case ADMIRATIONS:
-                return R.string.general_admirations;
-            case MUTUAL:
             case MUTUAL_CLOSINGS:
                 return R.string.general_mutual;
             case TABBED_DIALOGS:
-            case DIALOGS:
                 return R.string.settings_messages;
             case TABBED_VISITORS:
                 return R.string.general_visitors;
-            case BOOKMARKS:
-                return R.string.general_bookmarks;
             case BONUS:
                 return R.string.general_bonus;
             case GEO:

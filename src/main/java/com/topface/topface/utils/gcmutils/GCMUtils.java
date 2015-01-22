@@ -18,6 +18,7 @@ import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.experiments.MessagesWithTabs;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -39,8 +40,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.LIKES;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.MUTUAL;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_VISITORS;
 
@@ -414,12 +413,8 @@ public class GCMUtils {
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
                     i = new Intent(context, NavigationActivity.class);
-                    if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
-                        i.putExtra(NEXT_INTENT, TABBED_LIKES);
-                        i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
-                    } else {
-                        i.putExtra(NEXT_INTENT, MUTUAL);
-                    }
+                    i.putExtra(NEXT_INTENT, TABBED_LIKES);
+                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
                 }
                 break;
 
@@ -427,12 +422,8 @@ public class GCMUtils {
                 if (showLikes) {
                     lastNotificationType = GCM_TYPE_LIKE;
                     i = new Intent(context, NavigationActivity.class);
-                    if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
-                        i.putExtra(NEXT_INTENT, TABBED_LIKES);
-                        i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
-                    } else {
-                        i.putExtra(NEXT_INTENT, LIKES);
-                    }
+                    i.putExtra(NEXT_INTENT, TABBED_LIKES);
+                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
                 }
                 break;
 
@@ -459,7 +450,7 @@ public class GCMUtils {
             case GCM_TYPE_DIALOGS:
                 lastNotificationType = GCM_TYPE_DIALOGS;
                 i = new Intent(context, NavigationActivity.class);
-                CacheProfile.getOptions().messagesWithTabs.equipNavigationActivityIntent(i);
+                MessagesWithTabs.equipNavigationActivityIntent(i);
                 break;
             case GCM_TYPE_PROMO:
             default:

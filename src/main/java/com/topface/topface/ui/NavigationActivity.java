@@ -382,8 +382,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     protected void onProfileUpdated() {
         initBonusCounterConfig();
         // возможно что содержимое меню поменялось, надо обновить
-        if (mMenuFragment != null && (CacheProfile.getOptions().likesWithThreeTabs.isEnabled() ||
-                CacheProfile.getOptions().messagesWithTabs.isEnabled() || !mMenuFragment.isClosingsAvailable())) {
+        if (mMenuFragment != null && !mMenuFragment.isClosingsAvailable()) {
             mMenuFragment.updateAdapter();
         }
         FloatBlock.resetActivityMap();

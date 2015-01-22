@@ -45,6 +45,13 @@
     <color name="list_time">#A9A9A9</color>
     <color name="list_unread_counter_background">#35AADC</color>
 
+    <!--drop down top menu text color in different state-->
+    <color name="top_menu_enabled_text_color">#333333</color>
+    <color name="top_menu_disabled_text_color">#19333333</color>
+
+    <!--drop down top menu item active background color-->
+    <color name="top_menu_item_focused">#CCE8FC</color>
+
     <!--filter light edit form selector color-->
     <color name="form_selector_color_release_state">#FFFFFF</color>
     <color name="form_selector_color_pressed_state">#CCE8FC</color>
