@@ -319,6 +319,7 @@ public class OverflowMenu {
                         if (mActivity != null) {
                             Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         }
+                        initOverfowMenu();
                     }
                 }
         );
@@ -330,7 +331,7 @@ public class OverflowMenu {
         if (mRateController == null || mUserId == null || mIsMutual == null) {
             return;
         }
-        mRateController.onAdmiration(
+        boolean isSentAdmiration = mRateController.onAdmiration(
                 mUserId,
                 mIsMutual ?
                         SendLikeRequest.DEFAULT_MUTUAL : SendLikeRequest.DEFAULT_NO_MUTUAL,
@@ -348,10 +349,13 @@ public class OverflowMenu {
                     @Override
                     public void onRateFailed(int userId, int mutualId) {
                         setSympathySentState(false);
+                        initOverfowMenu();
                     }
                 }
         );
-        setSympathySentState(true);
+        if (isSentAdmiration) {
+            setSympathySentState(true);
+        }
     }
 
     private void onClickOpenChatAction() {
