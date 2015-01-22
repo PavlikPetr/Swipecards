@@ -33,7 +33,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.cache.UsersListCacheManager;
-import com.topface.topface.utils.loadcontollers.FeedLoadController;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -54,7 +53,6 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     private boolean mControlViewsHidden = false;
     private INavigationFragmentsListener mFragmentSwitchListener;
     private AnimationHelper mAnimationHelper;
-    private FeedLoadController mLoadController = new FeedLoadController();
 
     /**
      * Add items to list of views for hide and show purposes on ImageSwitcher click
@@ -254,7 +252,6 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     @Override
     protected ApiRequest getUsersListRequest() {
         FeedRequest request = new FeedRequest(getFeedType(), getActivity());
-        request.unread = true;
         request.leave = true;
         String lastFeedId = getLastFeedId();
         if (lastFeedId != null)

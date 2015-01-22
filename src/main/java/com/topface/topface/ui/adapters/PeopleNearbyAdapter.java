@@ -13,14 +13,22 @@ public class PeopleNearbyAdapter extends FeedAdapter<FeedGeo> {
 
     @Override
     protected void setItemMessage(FeedGeo item, TextView messageView) {
-        double distance;
-        if (item.distance >= 1000) {
-            distance = item.distance / 1000;
-            messageView.setText(String.format(getContext().getString(R.string.general_distance_km), distance));
+        String text;
+        if (item.user.deleted) {
+            text = getContext().getString(R.string.user_is_deleted);
+        } else if (item.user.banned) {
+            text = getContext().getString(R.string.user_is_banned);
         } else {
-            distance = item.distance >= 1 ? item.distance : 1;
-            messageView.setText(String.format(getContext().getString(R.string.general_distance_m), (int) distance));
+            double distance;
+            if (item.distance >= 1000) {
+                distance = item.distance / 1000;
+                text = String.format(getContext().getString(R.string.general_distance_km), distance);
+            } else {
+                distance = item.distance >= 1 ? item.distance : 1;
+                text = String.format(getContext().getString(R.string.general_distance_m), (int) distance);
+            }
         }
+        messageView.setText(text);
     }
 
     @Override

@@ -293,7 +293,7 @@
     <style name="ListItemContainer">
         <!-- paddings set in drawables -->
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">68dp</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="ListItemEmptyText">
@@ -307,13 +307,12 @@
     </style>
 
     <style name="ListAvatar">
-        <item name="postProcessor">mask</item>
-        <item name="clipMask">@drawable/feed_photo_mask</item>
+        <item name="postProcessor">roundCorners</item>
+        <item name="cornersRadius">@dimen/list_avatar_corners_radius</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_width">48dp</item>
-        <item name="android:layout_height">48dp</item>
-        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_width">@dimen/list_avatar_size</item>
+        <item name="android:layout_height">@dimen/list_avatar_size</item>
     </style>
 
     <style name="ListTime">
@@ -353,12 +352,19 @@
     </style>
 
     <style name="ListName">
-        <item name="android:drawablePadding">6dp</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:ellipsize">end</item>
         <item name="android:singleLine">true</item>
-        <item name="android:maxWidth">190dp</item>
+        <item name="android:maxWidth">140dp</item>
+    </style>
+
+    <style name="ListAge">
+        <item name="android:drawablePadding">6dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="WhiteHeader">
@@ -366,12 +372,14 @@
     </style>
 
     <style name="FeedHeart">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">@dimen/list_avatar_size</item>
+        <item name="android:layout_height">@dimen/list_avatar_size</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentRight">true</item>
+        <item name="android:background">@drawable/bg_solid_holo_selector</item>
         <item name="android:scaleType">center</item>
         <item name="android:src">@drawable/im_item_mutual_heart</item>
+        <item name="android:tint">@null</item>
     </style>
 
     <style name="NavigationBarAvatar">
@@ -698,7 +706,8 @@
     </style>
 
     // наследуются стили Widget
-    <style name="Widget.Topface"></style>
+
+    <style name="Widget.Topface"/>
 
     <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big">
         <item name="android:background">@drawable/btn_gray_selector</item>
@@ -799,11 +808,6 @@
         <item name="android:background">@drawable/input_field</item>
     </style>
 
-    <style name="FilterSpinnerDropDownList" parent="android:Widget.ListView.DropDown">
-        <item name="android:divider">@color/filter_fragment_divider_color</item>
-        <item name="android:dividerHeight">@dimen/filter_fragment_divider_height</item>
-    </style>
-
     <style name="FilterCheckBox" parent="topfaceCheckbox">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
@@ -840,6 +844,21 @@
     <style name="AutoCompleteTextViewStyle" parent="@style/Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable" tools:ignore="NewApi">@null</item>
         <item name="android:cursorVisible">true</item>
+    </style>
+
+    <style name="PopupMenuTextApearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@drawable/top_menu_text_color</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="PopupMenu" parent="@style/Widget.AppCompat.Base.PopupMenu">
+        <!--<item name="android:popupBackground">#F8F8F8</item>-->
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_example</item>
+    </style>
+
+    <style name="PopupMenuListView" parent="@android:style/Widget.Holo.ListView.DropDown" tools:ignore="NewApi">
+        <item name="android:divider">@drawable/chat_date_line</item>
+        <item name="android:listSelector">@drawable/top_menu_list_selector</item>
     </style>
 
 </resources>

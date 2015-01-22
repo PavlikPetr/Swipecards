@@ -2,9 +2,12 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 
+import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.ads.BannersConfig;
+import com.topface.topface.utils.social.AuthToken;
 
 /**
  * Created by kirussell on 11.01.14.
@@ -21,7 +24,6 @@ public class Configurations {
     private LocaleConfig mLocaleConfig;
     private Novice mNovice;
 
-
     public Configurations(Context context) {
         mContext = context;
     }
@@ -35,8 +37,27 @@ public class Configurations {
 
     public UserConfig getUserConfig() {
         if (mUserConfig == null) {
-            mUserConfig = new UserConfig(mContext);
+            if (App.getAppConfig().isUserConfigConverted()) {
+                boolean mHasOldConfig = UserConfigConverter.hasOldConfig();
+                if (mHasOldConfig) {
+                    //если у пользователя старый конфиг, то конвертируем его в новые
+                    UserConfigConverter configConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId());
+                    Debug.debug(configConverter, "Converting old config");
+                    configConverter.convertConfig();
+                    mUserConfig = configConverter.getMainUserConfig();
+                }
+
+            } else {
+                mUserConfig = new UserConfig(mContext);
+            }
         }
+        return mUserConfig;
+    }
+
+    public UserConfig rebuildUserConfig(String oldEmail) {
+        UserConfigConverter configConverter = new UserConfigConverter();
+        configConverter.rebuildConfig(oldEmail, AuthToken.getInstance().getUserTokenUniqueId());
+        mUserConfig.saveConfig();
         return mUserConfig;
     }
 

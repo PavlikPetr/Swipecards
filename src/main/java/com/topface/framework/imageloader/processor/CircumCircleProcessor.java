@@ -15,7 +15,7 @@ public class CircumCircleProcessor implements BitmapProcessor {
     public Bitmap process(Bitmap bitmap) {
         try {
             if (bitmap != null) {
-                bitmap = BitmapUtils.getScaleAndRoundBitmapOut(bitmap, bitmap.getWidth(), bitmap.getWidth(), 1.2f);
+                bitmap = BitmapUtils.getScaleAndRoundBitmapOut(bitmap, 1.2f);
             }
         } catch (OutOfMemoryError e) {
             Debug.error(e);

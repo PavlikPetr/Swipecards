@@ -211,7 +211,6 @@ public class ClosingsController implements View.OnClickListener {
 
     protected ApiRequest getUsersListRequest(FeedRequest.FeedService feedType, Context context) {
         FeedRequest request = new FeedRequest(feedType, context);
-        request.unread = true;
         request.leave = true;
         return request;
     }
@@ -435,10 +434,7 @@ public class ClosingsController implements View.OnClickListener {
      * @return tru if you can show closings now
      */
     public boolean canShowClosings() {
-        return !(mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) &&
-                CacheProfile.getOptions().closing.isClosingsEnabled() &&
-                !CacheProfile.getOptions().likesWithThreeTabs.isEnabled() &&
-                !CacheProfile.getOptions().messagesWithTabs.isEnabled();
+        return false;
     }
 
     @SuppressWarnings("UnusedDeclaration")
