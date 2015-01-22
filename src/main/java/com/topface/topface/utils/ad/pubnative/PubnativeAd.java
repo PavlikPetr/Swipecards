@@ -73,7 +73,7 @@ public class PubnativeAd extends NativeAd {
         }
         TextView title = (TextView) view.findViewById(R.id.tvTitle);
         if (title != null) {
-            title.setText(description);
+            title.setText(this.title);
         }
         TextView description = (TextView) view.findViewById(R.id.tvDescription);
         if (description != null) {
@@ -104,6 +104,8 @@ public class PubnativeAd extends NativeAd {
 
             mIsShown = true;
         }
+
+        Debug.log("NativeAd: ad shown\n" + this);
     }
 
     private void sendImpressionBeacon() {
@@ -139,5 +141,13 @@ public class PubnativeAd extends NativeAd {
 
     public boolean isValid() {
         return !TextUtils.isEmpty(title);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("{\ntitle: ").append(title).append("\ndescription: ").append(description).
+                append("\nicon_url: ").append(icon_url).append("\n}");
+        return stringBuilder.toString();
     }
 }
