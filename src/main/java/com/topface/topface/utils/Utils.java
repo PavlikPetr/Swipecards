@@ -56,6 +56,7 @@ public class Utils {
     );
     private static PluralResources mPluralResources;
     private static float mDensity = App.getContext().getResources().getDisplayMetrics().density;
+    private static String mCarrier;
 
     public static int unixtimeInSeconds() {
         return (int) (System.currentTimeMillis() / 1000L);
@@ -303,16 +304,20 @@ public class Utils {
     }
 
     public static String getCarrierName() {
+        if (!TextUtils.isEmpty(mCarrier)) {
+            return mCarrier;
+        }
         TelephonyManager telephonyManager = (TelephonyManager) App.getContext()
                 .getSystemService(Context.TELEPHONY_SERVICE);
         if (telephonyManager == null) {
-            return Static.EMPTY;
+            return null;
         }
         String carrier = telephonyManager.getSimOperatorName();
-        if (carrier == null) {
-            return Static.EMPTY;
+        if (TextUtils.isEmpty(mCarrier)) {
+            return null;
         }
-        return carrier;
+        mCarrier = carrier;
+        return mCarrier;
     }
 
 }
