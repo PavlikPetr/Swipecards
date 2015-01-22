@@ -11,7 +11,6 @@ public abstract class FeedTest<T extends FeedItem> extends AbstractThreadTest {
 
     private void sendFeedRequest(final String testName) {
         FeedRequest request = new FeedRequest(getFeedType(), getInstrumentation().getTargetContext());
-        request.unread = false;
         request.callback(new ApiHandler() {
 
             @Override

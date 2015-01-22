@@ -91,7 +91,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
-    private boolean mNeedOptionsMenu = true;
     private boolean mNeedTitles = true;
 
     @Override
@@ -110,12 +109,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
-    public void setNeedOptionsMenu(boolean needOptionsMenu) {
-        mNeedOptionsMenu = needOptionsMenu;
-    }
-
     protected boolean needOptionsMenu() {
-        return mNeedOptionsMenu;
+        return true;
     }
 
     @Override
