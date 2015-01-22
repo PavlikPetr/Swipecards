@@ -312,11 +312,7 @@ public class Utils {
         if (telephonyManager == null) {
             return null;
         }
-        String carrier = telephonyManager.getSimOperatorName();
-        if (TextUtils.isEmpty(mCarrier)) {
-            return null;
-        }
-        mCarrier = carrier;
+        mCarrier = telephonyManager.getSimOperatorName();
         return mCarrier;
     }
 
