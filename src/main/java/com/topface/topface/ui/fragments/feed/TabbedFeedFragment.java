@@ -55,9 +55,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
             List<Fragment> fragments = getChildFragmentManager().getFragments();
 
             if (fragments != null) {
-                for (int i = 0; i < fragments.size(); i++) {
-                    Fragment fragment = fragments.get(i);
-
+                for (Fragment fragment : fragments) {
                     if (fragment != null) {
                         if (fragment instanceof FeedFragment) {
                             // update feed content for new selected tab
