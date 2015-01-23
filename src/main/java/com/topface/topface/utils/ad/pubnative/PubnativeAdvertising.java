@@ -61,6 +61,6 @@ public class PubnativeAdvertising extends Advertising {
 
     @Override
     public boolean isEnabled() {
-        return CacheProfile.getOptions().feedNativeBanner.enabled;
+        return CacheProfile.getOptions().feedNativeAd.enabled;
     }
 }

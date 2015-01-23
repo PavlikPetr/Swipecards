@@ -136,7 +136,7 @@ public class PubnativeAd extends NativeAd {
 
     @Override
     public int getPosition() {
-        return CacheProfile.getOptions().feedNativeBanner.getPosition();
+        return CacheProfile.getOptions().feedNativeAd.getPosition();
     }
 
     public boolean isValid() {

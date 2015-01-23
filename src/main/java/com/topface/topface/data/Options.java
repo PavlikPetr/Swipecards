@@ -138,7 +138,7 @@ public class Options extends AbstractData {
 
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
 
-    public FeedNativeBanner feedNativeBanner = new FeedNativeBanner();
+    public FeedNativeAd feedNativeAd = new FeedNativeAd();
 
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
 
@@ -332,7 +332,7 @@ public class Options extends AbstractData {
                 notShown.parseNotShownJSON(jsonNotShown);
             }
 
-            feedNativeBanner.parseFeedAdJSON(response.optJSONObject("feedNativeBanner"));
+            feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
 
 
         } catch (Exception e) {
@@ -640,7 +640,7 @@ public class Options extends AbstractData {
         }
     }
 
-    public static class FeedNativeBanner {
+    public static class FeedNativeAd {
         public boolean enabled;
         public String type;
         public int dailyShows;
