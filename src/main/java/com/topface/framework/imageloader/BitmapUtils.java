@@ -26,9 +26,6 @@ import java.util.Arrays;
 
 public class BitmapUtils {
 
-    public static final int RADIUS_OUT = 0;
-    public static final int RADIUS_IN = 1;
-
     public static Bitmap getBitmap(Context context, Uri uri, int reqWidth, int reqHeight) {
         Bitmap bitmap = null;
         try {
@@ -384,23 +381,14 @@ public class BitmapUtils {
         return output;
     }
 
-    public static Bitmap getScaleAndRoundBitmapOut(Bitmap bitmap, float radiusMult) {
-        return getScaleAndRoundBitmap(RADIUS_OUT, bitmap, radiusMult);
-    }
-
     public static Bitmap getScaleAndRoundBitmapIn(Bitmap bitmap, float radiusMult) {
-        return getScaleAndRoundBitmap(RADIUS_IN, bitmap, radiusMult);
+        return getScaleAndRoundBitmap(bitmap, radiusMult);
     }
 
-    private static Bitmap getScaleAndRoundBitmap(int type, Bitmap bitmap, float radiusMult) {
+    private static Bitmap getScaleAndRoundBitmap(Bitmap bitmap, float radiusMult) {
         final int bitmapWidth = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
-        int resSize;
-        if (type == RADIUS_OUT) {
-            resSize = ((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight);
-        } else {
-            resSize = ((bitmapWidth < bitmapHeight) ? bitmapWidth : bitmapHeight);
-        }
+        int resSize = ((bitmapWidth < bitmapHeight) ? bitmapWidth : bitmapHeight);
 
         Bitmap output = Bitmap.createBitmap(resSize, resSize, Bitmap.Config.ARGB_8888);
 

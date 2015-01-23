@@ -419,7 +419,7 @@
     </style>
 
     <style name="Gift">
-        <item name="postProcessor">circumCircle</item>
+        <item name="postProcessor">rounded</item>
         <item name="android:layout_width">97dp</item>
         <item name="android:layout_height">99dp</item>
         <item name="android:paddingLeft">1dp</item>
