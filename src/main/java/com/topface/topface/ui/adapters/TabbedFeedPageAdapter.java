@@ -6,10 +6,11 @@ import android.support.v4.app.HackyFragmentStatePagerAdapter;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
+import com.topface.topface.ui.fragments.feed.IStampable;
 
 import java.util.ArrayList;
 
-public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
+public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter implements IStampable {
     private ArrayList<Integer> mFragmentsCounters = new ArrayList<>();
     private ArrayList<String> mFragmentsClasses = new ArrayList<>();
     private ArrayList<String> mFragmentsTitles = new ArrayList<>();
@@ -17,6 +18,8 @@ public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
     // used to determine which item update will not be blocked at creation time
     // once used it will be reseted to -1
     private int mUnlockItemUpdateAtStart = -1;
+
+    private long mStamp = 0;
 
     public TabbedFeedPageAdapter(FragmentManager fm,
                                  ArrayList<String> fragmentsClasses,
@@ -26,6 +29,8 @@ public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
         mFragmentsClasses = fragmentsClasses;
         mFragmentsTitles = fragmentTitles;
         mFragmentsCounters = fragmentsCounters;
+        // set the timestamp, to "link" this adapter with fragments created by it
+        setStamp(System.currentTimeMillis());
     }
 
     /**
@@ -39,6 +44,15 @@ public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
         mUnlockItemUpdateAtStart = unlockItemUpdateAtStart;
     }
 
+    public long getStamp() {
+        return mStamp;
+    }
+
+    @Override
+    public void setStamp(long stamp) {
+        mStamp = stamp;
+    }
+
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = null;
@@ -50,6 +64,9 @@ public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
             if (fragment instanceof FeedFragment) {
                 ((FeedFragment) fragment).setNeedTitles(false);
                 ((FeedFragment) fragment).setNeedOptionsMenu(false);
+                // "link" new created fragment with this instance of adapter
+                // to allow receiving some notifications only for "linked" fragments
+                ((FeedFragment) fragment).setStamp(getStamp());
 
                 // by default - all items in tabs will be with blocked update possibility
                 // excepting one - which must load content at creation time, because its visible to user
@@ -58,7 +75,7 @@ public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
                     // we will forget this special position
                     mUnlockItemUpdateAtStart = -1;
                 } else {
-                    ((FeedFragment) fragment).setUpdateAllowed(false);
+                    ((FeedFragment) fragment).receiveUpdateLockAbility(null, getStamp());
                 }
             }
 

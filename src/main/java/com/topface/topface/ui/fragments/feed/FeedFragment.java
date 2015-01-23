@@ -78,7 +78,7 @@ import java.util.List;
 import static android.widget.AdapterView.OnItemClickListener;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
-        implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
+        implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds, IStampable, IUpdateLockReceiver {
     private static final int FEED_MULTI_SELECTION_LIMIT = 100;
 
     private static final String FEEDS = "FEEDS";
@@ -151,6 +151,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private ActionMode mActionMode;
     private FilterBlock mFilterBlock;
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
+
+    private long mStamp = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -627,13 +629,26 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
+    @Override
+    public void receiveUpdateLockAbility(String fragmentClassName, long stamp) {
+        // ignore this event, if stamps are different
+        // because fragment manager may hold many fragments, from different adapters
+        if (getStamp() == stamp) {
+            if (TextUtils.equals(((Object) this).getClass().getName(), fragmentClassName)) {
+                startInitialLoadIfNeed();
+            } else {
+                setUpdateAllowed(false);
+            }
+        }
+    }
+
     /**
      * Lock/unlock update possibility in this feed
      * used when feed wrapped in tabbed container
      *
      * @param updateAllowed true to allow update, false to block
      */
-    public void setUpdateAllowed(boolean updateAllowed) {
+    private void setUpdateAllowed(boolean updateAllowed) {
         mIsUpdateAllowed = updateAllowed;
     }
 
@@ -641,7 +656,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
      * Tries to update feed content, when tab containig this feed is selected
      * used when feed wrapped in tabbed container
      */
-    public void startInitialLoadIfNeed() {
+    private void startInitialLoadIfNeed() {
         if (!mIsUpdateAllowed) {
             setUpdateAllowed(true);
             if ((getListAdapter().isNeedUpdate() || hasUnread()) && !mIsUpdating) {
@@ -1109,5 +1124,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             return (ViewGroup) getView().findViewById(R.id.banner_container_for_feeds);
         }
         return null;
+    }
+
+    @Override
+    public long getStamp() {
+        return mStamp;
+    }
+
+    @Override
+    public void setStamp(long stamp) {
+        mStamp = stamp;
     }
 }
