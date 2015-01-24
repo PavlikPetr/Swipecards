@@ -2,6 +2,7 @@ package com.topface.topface.ui.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -80,7 +81,7 @@ public class CitySearchView extends AutoCompleteTextView {
         }
     }
 
-    private ListPopupWindow getListPopupWindow() {
+    private Object getAutoCompleteTextViewPopup() {
         AutoCompleteTextView autoCompeteTextView = CitySearchView.this;
         Field field = null;
         try {
@@ -97,36 +98,13 @@ public class CitySearchView extends AutoCompleteTextView {
                 e.printStackTrace();
             }
             if (value != null) {
-                return ((ListPopupWindow) value);
+                return value;
             }
         }
         return null;
     }
 
-    @SuppressWarnings("unused")
-    public void setDropDownAlwaysVisible(final boolean visible) {
-        ListPopupWindow listPopupWindow = getListPopupWindow();
-        if (listPopupWindow != null) {
-            Field field = null;
-            try {
-                field = ListPopupWindow.class.getDeclaredField("mDropDownAlwaysVisible");
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-            if (field != null) {
-                field.setAccessible(true);
-                try {
-                    field.setBoolean(listPopupWindow, visible);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    // this is the same method like AutoCompleteTextView.setOnDismissListener but working in all API
-    public void setOnDismissListener(final PopupWindow.OnDismissListener dismissListener) {
-        ListPopupWindow listPopupWindow = getListPopupWindow();
+    private void setOnDismissListenerHigherThanApi14(ListPopupWindow listPopupWindow, PopupWindow.OnDismissListener dismissListener) {
         if (listPopupWindow != null) {
             Field field = null;
             try {
@@ -149,6 +127,21 @@ public class CitySearchView extends AutoCompleteTextView {
         }
     }
 
+    private void setOnDismissListenerLowerThanApi14(PopupWindow popupWindow, PopupWindow.OnDismissListener dismissListener) {
+        if (popupWindow != null) {
+            popupWindow.setOnDismissListener(dismissListener);
+        }
+    }
+
+    // this is the same method like AutoCompleteTextView.setOnDismissListener but working in all API
+    public void setOnDismissListener(PopupWindow.OnDismissListener dismissListener) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            setOnDismissListenerHigherThanApi14((ListPopupWindow) getAutoCompleteTextViewPopup(), dismissListener);
+        } else {
+            setOnDismissListenerLowerThanApi14((PopupWindow) getAutoCompleteTextViewPopup(), dismissListener);
+        }
+    }
+
     private void init() {
         setAdapter(getMyAdapter());
         setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -160,7 +153,7 @@ public class CitySearchView extends AutoCompleteTextView {
                     CitySearchView.this.setFocusable(false);
                     Utils.hideSoftKeyboard(mContext, CitySearchView.this);
                     if (mLastCheckedCity != null) {
-                        CitySearchView.this.setMyText(mLastCheckedCity.getName());
+                        CitySearchView.this.setMyText(mLastCheckedCity.full);
                     }
                 }
             }
@@ -221,7 +214,7 @@ public class CitySearchView extends AutoCompleteTextView {
     public void setDefaultCity(City city) {
         mDefaultCity = city;
         mLastCheckedCity = city;
-        setMyText(city.getName());
+        setMyText(TextUtils.isEmpty(city.full) ? city.getName() : city.full);
         getMyAdapter().setUserCity(city);
     }
 

@@ -546,7 +546,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     @Override
     protected String getTitle() {
-        return getString(R.string.filter_filter);
+        return getString(R.string.filter_search);
     }
 
     @Override

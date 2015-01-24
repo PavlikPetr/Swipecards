@@ -24,7 +24,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.views.CitySearchView;
 
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -55,7 +54,6 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
 
     private enum RequestType {DEFAULT_CITIES_REQUEST, CITIES_BY_PREFF_REQUEST}
 
-
     public CitySearchViewAdapter(Context context, int requestKey) {
         mContext = context;
         mRequestKey = requestKey;
@@ -79,9 +77,9 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     @Override
     public String getItem(int index) {
         if (mDataList.get(index).id == EMPTY_ID) {
-            return getUserCity().getName();
+            return getUserCity().full;
         }
-        return mDataList.get(index).getName();
+        return mDataList.get(index).full;
     }
 
     @Override
@@ -97,7 +95,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
             convertView = inflater.inflate(R.layout.city_search_drop_down_view, parent, false);
 
         }
-        holder.cityName = (TextView) convertView.findViewWithTag("dropDownTextView");
+        holder.cityName = (TextView) convertView.findViewById(R.id.citySearchText);
         holder.progress = (ProgressBar) convertView.findViewById(R.id.citySearchProgress);
         City city = mDataList.get(position);
         if (city.id == EMPTY_ID) {
@@ -106,7 +104,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
         } else {
             holder.progress.setVisibility(View.GONE);
             holder.cityName.setVisibility(View.VISIBLE);
-            holder.cityName.setText(city.getName());
+            holder.cityName.setText(city.full);
         }
         return convertView;
     }
@@ -166,19 +164,21 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
         if (citiesList != null) {
             mDataList.addAll(citiesList);
         }
-        deleteDuplicated(mDataList);
+        deleteDuplicated();
         updateList();
     }
 
     //delete all duplicate from list of cities
-    private void deleteDuplicated(LinkedList<City> list) {
-        Hashtable<City, Boolean> table = new Hashtable<>();
-        for (int i = 0; i < list.size(); i++) {
-            if (table.containsKey(list.get(i))) {
-                list.remove(i);
-                i--;
-            } else {
-                table.put(list.get(i), true);
+    private void deleteDuplicated() {
+        for (int i = mDataList.size() - 1; i > 0; i--) {
+            boolean flag = false;
+            for (int j = 0; j < i; j++) {
+                if (mDataList.get(i).id == mDataList.get(j).id) {
+                    flag = true;
+                }
+            }
+            if (flag) {
+                mDataList.remove(i);
             }
         }
     }

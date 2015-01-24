@@ -698,6 +698,7 @@
     </style>
 
     // наследуются стили Widget
+
     <style name="Widget.Topface"></style>
 
     <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big">
@@ -793,10 +794,11 @@
 
     <style name="FilterSpinner" parent="@android:style/Widget.DropDownItem.Spinner">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">28dp</item>
-        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">16dp</item>
-        <item name="android:background">@drawable/input_field</item>
+        <item name="android:paddingLeft">6dp</item>
+        <item name="android:background">@drawable/input_field_selector</item>
     </style>
 
     <style name="FilterSpinnerDropDownList" parent="android:Widget.ListView.DropDown">
@@ -807,11 +809,11 @@
     <style name="FilterCheckBox" parent="topfaceCheckbox">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:drawablePadding">12dp</item>
+        <item name="android:layout_marginLeft">11dp</item>
+        <item name="android:drawablePadding">4dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">#333333</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:drawableLeft">@drawable/filter_checkbox</item>
     </style>
 
@@ -829,16 +831,24 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="SpinnerDropDownView" parent="SpinnerTextView">
+        <item name="android:background">@drawable/spinner_selector</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingTop">15dp</item>
+    </style>
+
     <style name="CitySearchView" parent="SpinnerTextView">
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginTop">28dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginTop">16dp</item>
         <item name="android:hint">@string/general_city</item>
         <item name="android:textColorHint">#8A8A8A</item>
-        <item name="android:background">@drawable/input_field</item>
+        <item name="android:background">@drawable/input_field_selector</item>
     </style>
 
     <style name="AutoCompleteTextViewStyle" parent="@style/Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable" tools:ignore="NewApi">@null</item>
+        <item name="android:paddingLeft">6dp</item>
         <item name="android:cursorVisible">true</item>
     </style>
 
