@@ -150,11 +150,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_feed_filtered;
-    }
-
-    @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_DIALOGS_UPDATE;
     }

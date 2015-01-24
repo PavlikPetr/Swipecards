@@ -53,6 +53,7 @@ public class AppConfig extends AbstractConfig {
     private static final String GCM_REG_ID = "gcm_reg_id";
     public static final String SAVED_EMAIL_LIST = "tf_saved_email_list";
     public static final String SOCIAL_BUTTONS_SETTINGS = "ButtonSettings";
+    public static final String CONVERT_CONFIG = "convert_config";
 
 
     public AppConfig(Context context) {
@@ -101,6 +102,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, SAVED_EMAIL_LIST, Static.EMPTY);
         // social nets buttons settings. Stores value in form of JSON array. So default value is "[]"
         addField(settingsMap, SOCIAL_BUTTONS_SETTINGS, "[]");
+        // преобразован старый конфиг в новый или нет
+        addField(settingsMap, CONVERT_CONFIG, false);
     }
 
     protected SharedPreferences getPreferences() {
@@ -399,5 +402,13 @@ public class AppConfig extends AbstractConfig {
 
     public void resetAppOptionsData() {
         resetAndSaveConfig(DATA_APP_OPTIONS);
+    }
+
+    public boolean isUserConfigConverted() {
+        return getBooleanField(getSettingsMap(), CONVERT_CONFIG);
+    }
+
+    public boolean setUserConfigConverted() {
+        return setField(getSettingsMap(), CONVERT_CONFIG, true);
     }
 }

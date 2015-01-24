@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -32,6 +33,8 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
@@ -53,6 +56,7 @@ public class Utils {
     );
     private static PluralResources mPluralResources;
     private static float mDensity = App.getContext().getResources().getDisplayMetrics().density;
+    private static String mCarrier;
 
     public static int unixtimeInSeconds() {
         return (int) (System.currentTimeMillis() / 1000L);
@@ -194,9 +198,13 @@ public class Utils {
     }
 
     public static void showSoftKeyboard(Context context, EditText editText) {
-        editText.requestFocus();
         InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+        if (editText == null) {
+            keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        } else {
+            editText.requestFocus();
+            keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -286,4 +294,26 @@ public class Utils {
             imageView.setBackground(background);
         }
     }
+
+    public static ConnectionChangeReceiver.ConnectionType getConnectionType() {
+        AppConfig config = App.getAppConfig();
+        if (config.getDebugConnectionChecked()) {
+            return ConnectionChangeReceiver.ConnectionType.valueOf(config.getDebugConnection());
+        }
+        return ConnectionChangeReceiver.getConnectionType();
+    }
+
+    public static String getCarrierName() {
+        if (!TextUtils.isEmpty(mCarrier)) {
+            return mCarrier;
+        }
+        TelephonyManager telephonyManager = (TelephonyManager) App.getContext()
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager == null) {
+            return null;
+        }
+        mCarrier = telephonyManager.getSimOperatorName();
+        return mCarrier;
+    }
+
 }

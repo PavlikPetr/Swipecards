@@ -64,7 +64,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
@@ -139,7 +138,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onReceive(Context context, Intent intent) {
             if (mPreloadManager != null) {
                 int connectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0);
-                mPreloadManager.checkConnectionType(ConnectionChangeReceiver.ConnectionType.valueOf(connectionType));
+                mPreloadManager.checkConnectionType();
             }
         }
     };
@@ -675,7 +674,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
                     Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, DatingFragment.class, getActivity());
-                    intent.putExtra(UserProfileFragment.USER_RATED_EXTRA, mCurrentUser.rated);
                     startActivityForResult(intent, UserProfileActivity.INTENT_USER_PROFILE);
                     EasyTracker.sendEvent("Dating", "Additional", "Profile", 1L);
                 }

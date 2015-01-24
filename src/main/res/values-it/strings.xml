@@ -155,6 +155,7 @@
     <string name="general_mutual">Reciprocamente</string>
     <string name="general_dialogs">Dialoghi</string>
     <string name="general_visitors">Visite</string>
+    <string name="general_visitors_tab_views">visite</string>
     <string name="general_profile">Profilo</string>
     <string name="general_settings">Impostazioni</string>
     <string name="auth_btn_vk">Accedi tramite VK</string>

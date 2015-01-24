@@ -5,12 +5,13 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -24,9 +25,6 @@ import java.net.URL;
 import java.util.Arrays;
 
 public class BitmapUtils {
-
-    public static final int RADIUS_OUT = 0;
-    public static final int RADIUS_IN = 1;
 
     public static Bitmap getBitmap(Context context, Uri uri, int reqWidth, int reqHeight) {
         Bitmap bitmap = null;
@@ -383,58 +381,32 @@ public class BitmapUtils {
         return output;
     }
 
-    public static Bitmap getScaleAndRoundBitmapOut(Bitmap bitmap, final int width, final int height, float radiusMult) {
-        return getScaleAndRoundBitmap(RADIUS_OUT, bitmap, width, height, radiusMult);
+    public static Bitmap getScaleAndRoundBitmapIn(Bitmap bitmap, float radiusMult) {
+        return getScaleAndRoundBitmap(bitmap, radiusMult);
     }
 
-    public static Bitmap getScaleAndRoundBitmapIn(Bitmap bitmap, final int width, final int height, float radiusMult) {
-        return getScaleAndRoundBitmap(RADIUS_IN, bitmap, width, height, radiusMult);
-    }
-
-    private static Bitmap getScaleAndRoundBitmap(int type, Bitmap bitmap, final int width, final int height, float radiusMult) {
+    private static Bitmap getScaleAndRoundBitmap(Bitmap bitmap, float radiusMult) {
         final int bitmapWidth = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
+        int resSize = ((bitmapWidth < bitmapHeight) ? bitmapWidth : bitmapHeight);
 
-        int multWidth;
-        if (type == RADIUS_OUT)
-            multWidth = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
-        else
-            multWidth = (int) (((bitmapWidth < bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
-
-        @SuppressWarnings("SuspiciousNameCombination")
-        Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Bitmap.Config.ARGB_8888);
+        Bitmap output = Bitmap.createBitmap(resSize, resSize, Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(output);
 
-        final Rect src = new Rect(0, 0, bitmapWidth, bitmapHeight);
-        final Rect dst = new Rect((multWidth - bitmapWidth) / 2, (multWidth - bitmapHeight) / 2, (multWidth + bitmapWidth) / 2, (multWidth - bitmapHeight) / 2 + bitmapHeight);
+        Path clipPath = new Path();
+        RectF rect = new RectF(0, 0, resSize, resSize);
+        clipPath.addRoundRect(rect, radiusMult, radiusMult, Path.Direction.CW);
+        canvas.clipPath(clipPath);
 
-        Paint circlePaint = new Paint();
-        circlePaint.setAntiAlias(true);
-        circlePaint.setColor(Color.WHITE);
-
-        Paint canvasPaint = new Paint();
-        canvasPaint.setAntiAlias(true);
-
-        canvas.drawARGB(0, 0, 0, 0);
-
-        canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint);
-        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
-        canvas.drawBitmap(bitmap, src, dst, canvasPaint);
-
-        Bitmap scaledBitmap;
-
-        if (multWidth != width)
-            scaledBitmap = Bitmap.createScaledBitmap(output, width, height, true);
-        else {
-            scaledBitmap = output;
-        }
+        final Rect src = new Rect(0, 0, resSize, resSize);
+        canvas.drawBitmap(bitmap, src, src, new Paint());
 
         if (!bitmap.isRecycled()) {
             bitmap.recycle();
         } else {
             Debug.error("Bitmap is already recycled");
         }
-        return scaledBitmap;
+        return output;
     }
 }

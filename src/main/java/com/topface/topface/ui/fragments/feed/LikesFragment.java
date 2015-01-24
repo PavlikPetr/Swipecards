@@ -314,12 +314,17 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         ImageViewRemote ivOne = (ImageViewRemote) currentView.findViewById(R.id.ivOne);
         ImageViewRemote ivTwo = (ImageViewRemote) currentView.findViewById(R.id.ivTwo);
         ImageViewRemote ivThree = (ImageViewRemote) currentView.findViewById(R.id.ivThree);
-        ivOne.setResourceSrc(CacheProfile.dating.sex == Static.GIRL ?
-                R.drawable.likes_male_one : R.drawable.likes_female_one);
-        ivTwo.setResourceSrc(CacheProfile.dating.sex == Static.GIRL ?
-                R.drawable.likes_male_two : R.drawable.likes_female_two);
-        ivThree.setResourceSrc(CacheProfile.dating.sex == Static.GIRL ?
-                R.drawable.likes_male_three : R.drawable.likes_female_three);
+
+        // if profile still not cached - show girls by default
+        if (CacheProfile.dating != null && CacheProfile.dating.sex == Static.GIRL) {
+            ivOne.setResourceSrc(R.drawable.likes_male_one);
+            ivTwo.setResourceSrc(R.drawable.likes_male_two);
+            ivThree.setResourceSrc(R.drawable.likes_male_three);
+        } else {
+            ivOne.setResourceSrc(R.drawable.likes_female_one);
+            ivTwo.setResourceSrc(R.drawable.likes_female_two);
+            ivThree.setResourceSrc(R.drawable.likes_female_three);
+        }
         int visibility = visible ? View.VISIBLE : View.GONE;
         ivOne.setVisibility(visibility);
         ivTwo.setVisibility(visibility);
@@ -339,11 +344,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteLikesRequest(ids, getActivity());
-    }
-
-    @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_feed_filtered;
     }
 
     @Override

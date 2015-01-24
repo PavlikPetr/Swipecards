@@ -29,4 +29,10 @@
     <!--filter fragment dividers height-->
     <dimen name="filter_fragment_divider_height">1dp</dimen>
 
+    <!-- corners radius of avatar in feeds -->
+    <dimen name="list_avatar_corners_radius">2dp</dimen>
+
+    <!-- avatar width and height in feeds -->
+    <dimen name="list_avatar_size">70dp</dimen>
+
 </resources>

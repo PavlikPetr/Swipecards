@@ -24,7 +24,6 @@ import com.viewpagerindicator.TabPageIndicator;
 import java.util.ArrayList;
 
 public abstract class AbstractProfileFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
-    public static final String DEFAULT_NON_ACTIVATED = "#FFFFFF";
     public static final String INTENT_UID = "intent_profile_uid";
     public static final String INTENT_ITEM_ID = "intent_profile_item_id";
     public static final String INTENT_CALLING_FRAGMENT = "intent_profile_calling_fragment";

@@ -155,6 +155,7 @@
     <string name="general_mutual">Simpatías mutuas</string>
     <string name="general_dialogs">Diálogos</string>
     <string name="general_visitors">Visitantes</string>
+    <string name="general_visitors_tab_views">visitas</string>
     <string name="general_profile">Perfil</string>
     <string name="general_settings">Ajustes</string>
     <string name="auth_btn_vk">Entrar vía VK</string>

@@ -158,6 +158,7 @@
     <string name="general_mutual">Abipusiai</string>
     <string name="general_dialogs">Dialogai</string>
     <string name="general_visitors">Svečiai</string>
+    <string name="general_visitors_tab_views">peržiūros</string>
     <string name="general_profile">Profilis</string>
     <string name="general_settings">Nustatymai</string>
     <string name="auth_btn_vk">Įeiti per VK</string>

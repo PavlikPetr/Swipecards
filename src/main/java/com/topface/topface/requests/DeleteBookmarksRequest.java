@@ -2,8 +2,9 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.topface.topface.requests.handlers.AttitudeHandler;
+import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DeleteBookmarksRequest extends DeleteAbstractUsersRequest {
@@ -11,11 +12,11 @@ public class DeleteBookmarksRequest extends DeleteAbstractUsersRequest {
 
     public DeleteBookmarksRequest(List<String> userIds, Context context) {
         super(userIds, context);
-        int[] ids = new int[userIds.size()];
-        for (int i = 0; i < ids.length; i++) {
-            ids[i] = Integer.parseInt(userIds.get(i));
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (int i = 0; i < userIds.size(); i++) {
+            ids.add(Integer.parseInt(userIds.get(i)));
         }
-        callback(new AttitudeHandler(getContext(), AttitudeHandler.ActionTypes.BOOKMARK, ids, false));
+        callback(new BlackListAndBookmarkHandler(getContext(), BlackListAndBookmarkHandler.ActionTypes.BOOKMARK, ids, false));
     }
 
     public DeleteBookmarksRequest(int id, Context context) {
