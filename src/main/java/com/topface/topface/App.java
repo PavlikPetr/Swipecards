@@ -22,7 +22,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
-import com.topface.topface.banners.ad_providers.CredentialsUtils;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.FortumoProducts;
 import com.topface.topface.data.Options;
@@ -218,7 +217,6 @@ public class App extends Application {
                 .callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {
-                        CredentialsUtils.init();
                     }
 
                     @Override
