@@ -7,6 +7,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.topface.topface.utils.AnimationUtils;
+
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -46,6 +48,7 @@ public class ZoomImageViewRemote extends ImageViewRemote {
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
         //Если установлено новое изображение, то нужно проинформировать об этом PhotoView
+        AnimationUtils.createAppearingImageAnimator(this).start();
         mPhotoViewAttacher.update();
         mPhotoViewAttacher.setZoomable(true);
     }
