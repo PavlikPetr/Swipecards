@@ -211,7 +211,22 @@ public class App extends Application {
     }
 
     private static ApiRequest getOptionsRequest() {
-        return new UserGetAppOptionsRequest(App.getContext());
+        return new UserGetAppOptionsRequest(App.getContext())
+                .callback(new DataApiHandler<Options>() {
+                    @Override
+                    protected void success(Options data, IApiResponse response) {
+                    }
+
+                    @Override
+                    protected Options parseResponse(ApiResponse response) {
+                        return new Options(response);
+                    }
+
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                        Debug.log("Options::fail");
+                    }
+                });
     }
 
     public static void sendProfileRequest() {
