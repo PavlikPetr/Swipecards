@@ -36,7 +36,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
-import com.topface.topface.ui.dialogs.WrongTimePopup;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.DatingLockPopupAction;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
@@ -79,7 +78,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
 
-    private WrongTimePopup mWrongTimePopup;
     private Intent mPendingNextIntent;
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
@@ -204,8 +202,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onRegisterStartActions(StartActionsController startActionsController) {
         super.onRegisterStartActions(startActionsController);
-        mWrongTimePopup = new WrongTimePopup(NavigationActivity.this);
-        mWrongTimePopup.checkAndShowPopup();
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
         // promo popups
@@ -524,11 +520,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == WrongTimePopup.ACTION_DATE_SETTINGS_INTENT_ID) {
-//            if (mWrongTimePopup != null) {
-//                mWrongTimePopup.checkAndShowPopup();
-//            }
-//        }
         AbstractDialogFragment currentPopup = mPopupManager.getCurrentDialog();
         if (currentPopup != null) {
             currentPopup.onActivityResult(requestCode, resultCode, data);
