@@ -22,7 +22,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
-import com.topface.topface.banners.ad_providers.CredentialsUtils;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.FortumoProducts;
 import com.topface.topface.data.Options;
@@ -212,23 +211,7 @@ public class App extends Application {
     }
 
     private static ApiRequest getOptionsRequest() {
-        return new UserGetAppOptionsRequest(App.getContext())
-                .callback(new DataApiHandler<Options>() {
-                    @Override
-                    protected void success(Options data, IApiResponse response) {
-                        CredentialsUtils.init();
-                    }
-
-                    @Override
-                    protected Options parseResponse(ApiResponse response) {
-                        return new Options(response);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-                        Debug.log("Options::fail");
-                    }
-                });
+        return new UserGetAppOptionsRequest(App.getContext());
     }
 
     public static void sendProfileRequest() {

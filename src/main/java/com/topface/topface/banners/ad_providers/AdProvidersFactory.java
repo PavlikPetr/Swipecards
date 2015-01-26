@@ -13,14 +13,12 @@ public class AdProvidersFactory {
     public static final String BANNER_TOPFACE = "TOPFACE";
     public static final String BANNER_ADMOB = "ADMOB";
     public static final String BANNER_ADWIRED = "ADWIRED";
-    public static final String BANNER_ADCAMP = "ADCAMP";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
     public static final String[] BANNERS = new String[]{
             BANNER_TOPFACE,
             BANNER_ADMOB,
             BANNER_ADWIRED,
-            BANNER_ADCAMP,
             BANNER_GAG,
             BANNER_NONE
     };
@@ -34,8 +32,6 @@ public class AdProvidersFactory {
         switch (banner) {
             case BANNER_ADMOB:
                 return new AdMobProvider();
-            case BANNER_ADCAMP:
-                return new AdCampProvider();
             case BANNER_ADWIRED:
                 return new AdWiredProvider();
             case BANNER_TOPFACE:
