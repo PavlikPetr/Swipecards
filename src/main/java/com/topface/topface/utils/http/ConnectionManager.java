@@ -16,6 +16,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BanActivity;
+import com.topface.topface.ui.SslErrorActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
@@ -169,6 +170,11 @@ public class ConnectionManager {
         if (apiResponse.isCodeEqual(ErrorCodes.BAN)) {
             //Если в результате получили ответ, что забанен, прекращаем обработку, сообщаем об этом
             showBanActivity(apiRequest, apiResponse);
+        } else if (apiResponse.isCodeEqual(ErrorCodes.SSL_ERROR)) {
+            //sad
+            Intent intent = new Intent(App.getContext(), SslErrorActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            App.getContext().startActivity(intent);
         } else if (apiResponse.isCodeEqual(ErrorCodes.DETECT_FLOOD)) {
             //Если пользователь заблокирован за флуд, показываем соответсвующий экран
             showFloodActivity(apiRequest, apiResponse);
@@ -371,7 +377,6 @@ public class ConnectionManager {
 
     private IApiResponse executeRequest(IApiRequest apiRequest) {
         IApiResponse response = null;
-
         try {
             //Отправляем запрос и сразу читаем ответ
             response = apiRequest.sendRequestAndReadResponse();
@@ -384,7 +389,7 @@ public class ConnectionManager {
             //Это ошибка SSL соединения, возможно у юзера не правильно установлено время на устройсте
             //такую ошибку следует обрабатывать отдельно, распарсив сообщение об ошибке и уведомив
             //пользователя
-            response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection SSLException: " + e.toString());
+            response = apiRequest.constructApiResponse(ErrorCodes.SSL_ERROR, "Connection SSLException: " + e.toString());
         } catch (Exception e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос
