@@ -170,8 +170,8 @@ public class ConnectionManager {
         if (apiResponse.isCodeEqual(ErrorCodes.BAN)) {
             //Если в результате получили ответ, что забанен, прекращаем обработку, сообщаем об этом
             showBanActivity(apiRequest, apiResponse);
-        } else if (apiResponse.isCodeEqual(ErrorCodes.SSL_ERROR)) {
-            //sad
+        } else if (apiResponse.isCodeEqual(ErrorCodes.NOT_VALID_SSL)) {
+            //Показываем пользователю попап о необходимости корректировки даты на устройстве
             Intent intent = new Intent(App.getContext(), SslErrorActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             App.getContext().startActivity(intent);
@@ -375,6 +375,18 @@ public class ConnectionManager {
         return needResend;
     }
 
+    private int getSslErrorCode(SSLException e) {
+        int errorCode = ErrorCodes.SSL_ERROR;
+        String[] messages = App.getContext().getResources().getStringArray(R.array.ssl_exception_messages);
+        for (String message : messages) {
+            if (e.getMessage().toLowerCase().contains(message.toLowerCase())) {
+                errorCode = ErrorCodes.NOT_VALID_SSL;
+                break;
+            }
+        }
+        return errorCode;
+    }
+
     private IApiResponse executeRequest(IApiRequest apiRequest) {
         IApiResponse response = null;
         try {
@@ -389,7 +401,7 @@ public class ConnectionManager {
             //Это ошибка SSL соединения, возможно у юзера не правильно установлено время на устройсте
             //такую ошибку следует обрабатывать отдельно, распарсив сообщение об ошибке и уведомив
             //пользователя
-            response = apiRequest.constructApiResponse(ErrorCodes.SSL_ERROR, "Connection SSLException: " + e.toString());
+            response = apiRequest.constructApiResponse(getSslErrorCode(e), "Connection SSLException: " + e.toString());
         } catch (Exception e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос
