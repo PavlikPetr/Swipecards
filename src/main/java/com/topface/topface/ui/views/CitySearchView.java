@@ -186,6 +186,7 @@ public class CitySearchView extends AutoCompleteTextView {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Utils.hideSoftKeyboard(mContext, CitySearchView.this);
+                setMyText(getMyAdapter().getItem(position));
                 CitySearchView.this.setFocusable(false);
                 mLastCheckedCity = getMyAdapter().getCityByPosition(position);
                 getMyAdapter().setUserCity(mLastCheckedCity);
