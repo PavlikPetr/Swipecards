@@ -153,7 +153,7 @@ public class CitySearchView extends AutoCompleteTextView {
                     CitySearchView.this.setFocusable(false);
                     Utils.hideSoftKeyboard(mContext, CitySearchView.this);
                     if (mLastCheckedCity != null) {
-                        CitySearchView.this.setMyText(mLastCheckedCity.full);
+                        CitySearchView.this.setMyText(mLastCheckedCity.getFullName());
                     }
                 }
             }
@@ -215,7 +215,7 @@ public class CitySearchView extends AutoCompleteTextView {
     public void setDefaultCity(City city) {
         mDefaultCity = city;
         mLastCheckedCity = city;
-        setMyText(TextUtils.isEmpty(city.full) ? city.getName() : city.full);
+        setMyText(city.getFullName());
         getMyAdapter().setUserCity(city);
     }
 

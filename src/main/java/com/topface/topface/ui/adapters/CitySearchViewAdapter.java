@@ -77,9 +77,9 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     @Override
     public String getItem(int index) {
         if (mDataList.get(index).id == EMPTY_ID) {
-            return getUserCity().full;
+            return getUserCity().getFullName();
         }
-        return mDataList.get(index).full;
+        return mDataList.get(index).getFullName();
     }
 
     @Override
@@ -104,7 +104,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
         } else {
             holder.progress.setVisibility(View.GONE);
             holder.cityName.setVisibility(View.VISIBLE);
-            holder.cityName.setText(city.full);
+            holder.cityName.setText(city.getFullName());
         }
         return convertView;
     }
@@ -171,14 +171,10 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     //delete all duplicate from list of cities
     private void deleteDuplicated() {
         for (int i = mDataList.size() - 1; i > 0; i--) {
-            boolean flag = false;
             for (int j = 0; j < i; j++) {
                 if (mDataList.get(i).id == mDataList.get(j).id) {
-                    flag = true;
+                    mDataList.remove(i);
                 }
-            }
-            if (flag) {
-                mDataList.remove(i);
             }
         }
     }
