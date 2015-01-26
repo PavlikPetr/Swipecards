@@ -164,16 +164,17 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
         if (citiesList != null) {
             mDataList.addAll(citiesList);
         }
-        deleteDuplicated();
+        deleteDuplicated(mDataList);
         updateList();
     }
 
     //delete all duplicate from list of cities
-    private void deleteDuplicated() {
-        for (int i = mDataList.size() - 1; i > 0; i--) {
+    private void deleteDuplicated(LinkedList<City> citiesList) {
+        for (int i = citiesList.size() - 1; i > 0; i--) {
             for (int j = 0; j < i; j++) {
-                if (mDataList.get(i).id == mDataList.get(j).id) {
-                    mDataList.remove(i);
+                if (citiesList.get(i).id == citiesList.get(j).id) {
+                    citiesList.remove(i);
+                    break;
                 }
             }
         }
