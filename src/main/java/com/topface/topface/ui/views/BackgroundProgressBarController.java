@@ -3,9 +3,9 @@ package com.topface.topface.ui.views;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
+import com.topface.topface.utils.AnimationUtils;
 
 /**
  * Controls visibality/animation of assigned ProgressBar,
@@ -15,12 +15,6 @@ import com.nineoldandroids.view.ViewHelper;
  * need this to stop appearing animation in 2.3 versions
  */
 public class BackgroundProgressBarController {
-    private static final String ANIMATION_TYPE = "alpha";
-    private static final int ANIMATION_DURATION = 1500; // in millis
-    private static final int ANIMATION_START_DELAY = 0; // in millis
-    private static final float ALPHA_START = 0f;
-    private static final float ALPHA_END = 1f;
-
     private ProgressBar mProgressBar;
     private ValueAnimator mAnimator;
 
@@ -56,9 +50,7 @@ public class BackgroundProgressBarController {
     private void initAnimator() {
         releaseAnimator();
         if (isReady()) {
-            mAnimator = ObjectAnimator.ofFloat(mProgressBar, ANIMATION_TYPE, ALPHA_START, ALPHA_END);
-            mAnimator.setDuration(ANIMATION_DURATION);
-            mAnimator.setStartDelay(ANIMATION_START_DELAY);
+            mAnimator = AnimationUtils.createProgressBarAnimator(mProgressBar);
         }
 
     }
