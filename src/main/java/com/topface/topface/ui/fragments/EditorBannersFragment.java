@@ -127,7 +127,6 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
 
         private TextView mTitleText;
         private ViewGroup mSpinnersContainer;
-        private Spinner mFloatTypeSpinner;
         private Spinner mBannerTypeSpinner;
 
         private LayoutParams mCompressedParams = new LayoutParams(
@@ -147,7 +146,6 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             View root = inflater.inflate(R.layout.editor_banner_configurator, this, true);
             initTitleText(root);
             initSpinnersContainer(root);
-            initFloatTypeSpinner(root);
             initBannerTypeSpinner(root);
             Utils.enableLayoutChangingTransition(this);
         }
@@ -192,28 +190,6 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             });
         }
 
-        private void initFloatTypeSpinner(View root) {
-            mFloatTypeSpinner = (Spinner) root.findViewById(R.id.spEditFloatType);
-            ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
-                    getActivity(),
-                    android.R.layout.simple_spinner_item,
-                    PageInfo.FLOAT_TYPES
-            );
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            mFloatTypeSpinner.setAdapter(adapter);
-            mFloatTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    getPage().floatType = PageInfo.FLOAT_TYPES[position];
-                    mBannerTypeSpinner.setVisibility(PageInfo.FLOAT_TYPES[position].equals(PageInfo.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
-        }
-
         private PageInfo getPage() {
             return mPageInfo;
         }
@@ -224,13 +200,8 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             mPageInfo = pageInfo;
             for (int i = 0; i < PageInfo.FLOAT_TYPES.length; i++) {
                 if (PageInfo.FLOAT_TYPES[i].equals(mPageInfo.floatType)) {
-                    mFloatTypeSpinner.setSelection(i);
                     mBannerTypeSpinner.setVisibility(PageInfo.FLOAT_TYPES[i].equals(PageInfo.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
                 }
-            }
-            if (mPageInfo.name.equals(PageInfo.PageName.GAG.getName())
-                    || mPageInfo.name.equals(PageInfo.PageName.START.getName())) {
-                mFloatTypeSpinner.setVisibility(View.GONE);
             }
 
             for (int i = 0; i < AdProvidersFactory.BANNERS.length; i++) {

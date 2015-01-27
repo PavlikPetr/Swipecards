@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.feed;
 import android.view.View;
 
 import com.topface.topface.R;
-import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedMutual;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -91,8 +90,4 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
         return CacheProfile.unread_mutual;
     }
 
-    @Override
-    public PageInfo.PageName getPageName() {
-        return PageInfo.PageName.MUTUAL;
-    }
 }

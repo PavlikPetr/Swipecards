@@ -58,18 +58,11 @@ public class PageInfo {
      */
     public static enum PageName {
         UNKNOWN_PAGE(),
-        LIKE(),
-        MUTUAL(),
-        MESSAGES(),
-        VISITORS(),
-        DIALOGS(),
-        FANS(),
-        BOOKMARKS(),
-        VIEWS(),
         START(),
         GAG(),
         LIKES_TABS(),
-        MESSAGES_TABS();
+        MESSAGES_TABS(),
+        VISITORS_TABS();
 
         private final String mName;
 

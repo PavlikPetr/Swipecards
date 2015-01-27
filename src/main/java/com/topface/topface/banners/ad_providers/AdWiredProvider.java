@@ -22,14 +22,9 @@ class AdWiredProvider extends AbstractAdsProvider {
 
     private static Map<PageInfo.PageName, Character> ADWIRED_MAP = new HashMap<>();
     static {
-        ADWIRED_MAP.put(PageInfo.PageName.LIKE, '1');
-        ADWIRED_MAP.put(PageInfo.PageName.LIKES_TABS, '1');
-        ADWIRED_MAP.put(PageInfo.PageName.MUTUAL, '2');
-        ADWIRED_MAP.put(PageInfo.PageName.DIALOGS, '3');
-        ADWIRED_MAP.put(PageInfo.PageName.MESSAGES_TABS, '3');
-        ADWIRED_MAP.put(PageInfo.PageName.VISITORS, '5');
-        ADWIRED_MAP.put(PageInfo.PageName.BOOKMARKS, '6');
-        ADWIRED_MAP.put(PageInfo.PageName.FANS, '7');
+        ADWIRED_MAP.put(PageInfo.PageName.LIKES_TABS, '8');
+        ADWIRED_MAP.put(PageInfo.PageName.MESSAGES_TABS, '9');
+        ADWIRED_MAP.put(PageInfo.PageName.VISITORS_TABS, '4');
     }
 
     @Override

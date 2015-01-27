@@ -9,7 +9,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
 import com.topface.topface.R;
-import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedBookmark;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -120,11 +119,6 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteBookmarksRequest(ids, getActivity());
-    }
-
-    @Override
-    public PageInfo.PageName getPageName() {
-        return PageInfo.PageName.BOOKMARKS;
     }
 
     @Override
