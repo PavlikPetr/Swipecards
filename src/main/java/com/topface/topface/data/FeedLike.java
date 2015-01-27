@@ -3,6 +3,8 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.topface.topface.utils.ad.NativeAd;
+
 import org.json.JSONObject;
 
 public class FeedLike extends FeedItem implements Parcelable {
@@ -20,6 +22,9 @@ public class FeedLike extends FeedItem implements Parcelable {
         }
     };
 
+    public FeedLike() {
+    }
+
     public FeedLike(JSONObject data) {
         super(data);
     }
@@ -28,6 +33,10 @@ public class FeedLike extends FeedItem implements Parcelable {
         super(in);
         highrate = in.readByte() == 1;
         mutualed = in.readByte() == 1;
+    }
+
+    public FeedLike(NativeAd nativeAd) {
+        super(nativeAd);
     }
 
     @Override

@@ -20,10 +20,12 @@ import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.AddedPhoto;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.PhotoAddProfileRequest;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.NavigationActivity;
@@ -266,7 +268,7 @@ public class AddPhotoHelper {
                 uri.toString(), getIntentForNotification(), notificationListener
         );
 
-        final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext, new Base64.ProgressListener() {
+        final PhotoAddRequest photoAddRequest = new PhotoAddProfileRequest(uri, mContext, new IProgressListener() {
             @Override
             public void onProgress(final int percentage) {
 
@@ -291,13 +293,13 @@ public class AddPhotoHelper {
         });
         //TODO также обрабатывать запросы с id...x, где x-порядковый номер переповтора
         fileNames.put(photoAddRequest.getId(), outputFile);
-        photoAddRequest.callback(new DataApiHandler<Photo>() {
+        photoAddRequest.callback(new DataApiHandler<AddedPhoto>() {
             @Override
-            protected void success(Photo photo, IApiResponse response) {
+            protected void success(AddedPhoto photo, IApiResponse response) {
                 if (mHandler != null) {
                     Message msg = new Message();
                     msg.what = ADD_PHOTO_RESULT_OK;
-                    msg.obj = photo;
+                    msg.obj = photo.getPhoto();
                     mHandler.sendMessage(msg);
                 }
                 mNotificationManager.showNotificationAsync(
@@ -310,8 +312,8 @@ public class AddPhotoHelper {
             }
 
             @Override
-            protected Photo parseResponse(ApiResponse response) {
-                return new Photo(response);
+            protected AddedPhoto parseResponse(ApiResponse response) {
+                return new AddedPhoto(response);
             }
 
             @Override

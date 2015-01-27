@@ -11,6 +11,7 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.MutualListAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -83,4 +84,10 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_MUTUAL_UPDATE;
     }
+
+    @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_mutual;
+    }
+
 }

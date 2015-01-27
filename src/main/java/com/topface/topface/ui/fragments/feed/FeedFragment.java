@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -35,6 +36,9 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.banners.BannersController;
+import com.topface.topface.banners.IPageWithAds;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiRequest;
@@ -61,6 +65,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
@@ -70,11 +75,14 @@ import java.util.List;
 
 import static android.widget.AdapterView.OnItemClickListener;
 
-public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
+public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
+        implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
     private static final int FEED_MULTI_SELECTION_LIMIT = 100;
 
     private static final String FEEDS = "FEEDS";
     private static final String POSITION = "POSITION";
+    private static final String HAS_AD = "HAS_AD";
+    private static final String FEED_AD = "FEED_AD";
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
@@ -114,11 +122,22 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     };
 
+    private BannersController mBannersController;
+    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!CacheProfile.show_ad) {
+                getListAdapter().removeAdItems();
+            }
+        }
+    };
+
     protected boolean isDeletable = true;
     private ViewStub mEmptyScreenStub;
     private boolean needUpdate = false;
 
     private ActionMode mActionMode;
+    private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -140,7 +159,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 int userId = intent.getIntExtra(ChatFragment.INTENT_USER_ID, 0);
                 if (userId == 0) {
                     if (!TextUtils.isEmpty(itemId)) {
-                        makeItemReadWithId(itemId);
+                        makeItemReadWithFeedId(itemId);
                     } else {
                         String lastMethod = intent.getStringExtra(CountersManager.METHOD_INTENT_STRING);
                         if (!TextUtils.isEmpty(lastMethod)) {
@@ -166,10 +185,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @SuppressWarnings("unchecked")
     protected void restoreInstanceState(Bundle saved) {
         if (saved != null) {
+            if (CacheProfile.show_ad) {
+                mListAdapter.setHasFeedAd(saved.getBoolean(HAS_AD));
+                mListAdapter.setFeedAd(saved.<NativeAd>getParcelable(FEED_AD));
+            }
             Parcelable[] feeds = saved.getParcelableArray(FEEDS);
             FeedList<T> feedsList = new FeedList<>();
-            for (Parcelable feed : feeds) {
-                feedsList.add((T) feed);
+            for (Parcelable p : feeds) {
+                T feed = (T) p;
+                if (feed.isAd() && !CacheProfile.show_ad) {
+                    continue;
+                }
+                feedsList.add((T) p);
             }
             mListAdapter.setData(feedsList);
             mListView.getRefreshableView().setSelection(saved.getInt(POSITION, 0));
@@ -214,11 +241,23 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         setActionBarTitles(getTitle());
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initFloatBlock();
+    }
+
+    protected void initFloatBlock() {
+        if (!getListAdapter().isNeedFeedAd()) {
+            mBannersController = new BannersController(this);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     @Override
@@ -246,8 +285,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mBannersController != null) {
+            mBannersController.onDestroy();
+        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
     }
 
     @Override
@@ -257,6 +300,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             FeedList<T> data = mListAdapter.getData();
             outState.putParcelableArray(FEEDS, data.toArray(new Parcelable[data.size()]));
             outState.putInt(POSITION, mListView.getRefreshableView().getFirstVisiblePosition());
+            outState.putBoolean(HAS_AD, mListAdapter.hasFeedAd());
+            outState.putParcelable(FEED_AD, mListAdapter.getFeedAd());
         }
     }
 
@@ -554,54 +599,89 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     }
 
+    /**
+     * Tries to update feed content, when tab containig this feed is selected
+     * used when feed wrapped in tabbed container
+     */
+    public void startInitialLoadIfNeed() {
+        if (getListAdapter() != null) {
+            if ((getListAdapter().isNeedUpdate()
+                    || hasUnread())
+                    && !mIsUpdating) {
+                updateData(false, true);
+            }
+        }
+    }
+
+    /**
+     * @return true if got unread feeds, calculated from counters
+     */
+    private boolean hasUnread() {
+        return (getUnreadCounter() > 0);
+    }
+
+    /**
+     * Returns unread counter, from CacheProfile
+     * if there is no counter for feed - should return 0
+     *
+     * @return unread counter
+     */
+    protected abstract int getUnreadCounter();
+
+    protected void updateData(boolean isPushUpdating, boolean makeItemsRead) {
+        updateData(isPushUpdating, false, makeItemsRead);
+    }
+
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
-        needUpdate = false;
-        mIsUpdating = true;
-        onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
+        if (getUserVisibleHint()) {
+            needUpdate = false;
+            mIsUpdating = true;
+            onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
 
-        final FeedRequest request = getRequest();
-        registerRequest(request);
+            final FeedRequest request = getRequest();
+            registerRequest(request);
 
-        final FeedAdapter<T> adapter = getListAdapter();
-        FeedItem lastItem = adapter.getLastFeedItem();
-        FeedItem firstItem = adapter.getFirstItem();
+            final FeedAdapter<T> adapter = getListAdapter();
+            FeedItem lastItem = adapter.getLastFeedItem();
+            FeedItem firstItem = adapter.getFirstItem();
 
-        if (isHistoryLoad && lastItem != null) {
-            request.to = lastItem.id;
-        }
-        if (isPullToRefreshUpdating && firstItem != null) {
-            request.from = firstItem.id;
-        }
-
-        request.callback(new DataApiHandler<FeedListData<T>>() {
-
-            @Override
-            protected FeedListData<T> parseResponse(ApiResponse response) {
-                return getFeedList(response.jsonResult);
+            if (isHistoryLoad && lastItem != null) {
+                request.to = lastItem.id;
+            }
+            if (isPullToRefreshUpdating && firstItem != null) {
+                request.from = firstItem.id;
             }
 
-            @Override
-            protected void success(FeedListData<T> data, IApiResponse response) {
-                processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
-            }
+            request.callback(new DataApiHandler<FeedListData<T>>() {
 
-            @Override
-            public void fail(final int codeError, IApiResponse response) {
-                processFailUpdate(codeError, isHistoryLoad, adapter, isPullToRefreshUpdating);
-            }
+                @Override
+                protected FeedListData<T> parseResponse(ApiResponse response) {
+                    return getFeedList(response.jsonResult);
+                }
 
-            @Override
-            public void always(IApiResponse response) {
-                super.always(response);
+                @Override
+                protected void success(FeedListData<T> data, IApiResponse response) {
+                    processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
+                }
+
+                @Override
+                public void fail(final int codeError, IApiResponse response) {
+                    processFailUpdate(codeError, isHistoryLoad, adapter, isPullToRefreshUpdating);
+                }
+
+                @Override
+                public void always(IApiResponse response) {
+                    super.always(response);
                 mBackgroundController.hide();
-                mIsUpdating = false;
-            }
+                    mIsUpdating = false;
+                }
 
-            @Override
-            protected boolean isShowPremiumError() {
-                return !isForPremium();
-            }
-        }).exec();
+                @Override
+                protected boolean isShowPremiumError() {
+                    return !isForPremium();
+                }
+            }).exec();
+        }
     }
 
     protected void processFailUpdate(int codeError, boolean isHistoryLoad, FeedAdapter<T> adapter, boolean isPullToRefreshUpdating) {
@@ -623,6 +703,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected void processSuccessUpdate(FeedListData<T> data, boolean isHistoryLoad, boolean isPullToRefreshUpdating, boolean makeItemsRead, int limit) {
         FeedAdapter<T> adapter = getListAdapter();
+        if (!data.items.isEmpty()) {
+            // store unread-state of first and last items
+            // to use in next requests
+            if (!mLastUnreadState.wasFromInited || isPullToRefreshUpdating) {
+                mLastUnreadState.from = data.items.getFirst().unread;
+                mLastUnreadState.wasFromInited = true;
+            }
+            mLastUnreadState.to = data.items.getLast().unread;
+        }
+
         if (isHistoryLoad) {
             removeOldDublicates(data);
             adapter.addData(data);
@@ -696,14 +786,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected abstract FeedListData<T> getFeedList(JSONObject response);
 
     protected FeedRequest getRequest() {
-        return new FeedRequest(getFeedService(), getActivity());
+        return new FeedRequest(getFeedService(), getActivity()).setPreviousUnreadState(mLastUnreadState);
     }
 
     protected abstract FeedRequest.FeedService getFeedService();
-
-    protected void updateData(boolean isPushUpdating, boolean makeItemsRead) {
-        updateData(isPushUpdating, false, makeItemsRead);
-    }
 
     @Override
     protected void onUpdateSuccess(boolean isPushUpdating) {
@@ -711,7 +797,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mListView.setVisibility(View.VISIBLE);
             mRetryView.setVisibility(View.GONE);
         }
-
         if (getListAdapter().isEmpty()) {
             onEmptyFeed();
         } else {
@@ -752,9 +837,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected abstract int getEmptyFeedLayout();
 
     protected void makeAllItemsRead() {
-        for (FeedItem item : getListAdapter().getData()) {
-            item.unread = false;
-        }
+        getListAdapter().makeAllItemsRead();
     }
 
     @Override
@@ -793,7 +876,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     }
 
-    protected void makeItemReadWithId(String id) {
+    protected void makeItemReadWithFeedId(String id) {
         FeedAdapter<T> adapter = getListAdapter();
         for (FeedItem item : adapter.getData()) {
             if (TextUtils.equals(item.id, id) && item.unread) {
@@ -860,4 +943,27 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     public void updateOnResume() {
         needUpdate = true;
     }
+
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.UNKNOWN_PAGE;
+    }
+
+    @Override
+    public ViewGroup getContainerForAd() {
+        View view  = getView();
+        if (view != null) {
+            return (ViewGroup) getView().findViewById(R.id.banner_container_for_feeds);
+        }
+        return null;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            startInitialLoadIfNeed();
+        }
+    }
+
 }
