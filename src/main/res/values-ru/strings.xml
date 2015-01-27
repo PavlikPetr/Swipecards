@@ -215,7 +215,8 @@
     <string name="chat_wink_out">Вы подмигнули.</string>
 
     <!-- Filter -->
-    <string name="filter_filter">Фильтр</string>
+    <string name="filter_search">Поиск</string>
+    <string name="filter_title">Фильтр</string>
     <string name="filter_age_string">От %1$d до %2$d</string>
     <string name="filter_only_beautiful">Только красивые</string>
     <string name="filter_extra_parameters">Дополнительные параметры</string>

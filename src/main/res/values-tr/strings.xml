@@ -157,6 +157,7 @@
     <string name="general_mutual">Karşılıklı</string>
     <string name="general_dialogs">Diyaloglar</string>
     <string name="general_visitors">Misafirler</string>
+    <string name="general_visitors_tab_views">görüntülemeler</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Ayarlar</string>
     <string name="auth_btn_vk">Vkontakte’den giriş yapmak</string>

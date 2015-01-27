@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.topface.topface.BuildConfig;
 import com.topface.topface.utils.ClientUtils;
+import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +44,8 @@ public class RegisterRequest extends ApiRequest {
                 .put("birthday", birthday)
                 .put("sex", sex)
                 .put("clientType", clientType)
-                .put("locale", locale);
+                .put("locale", locale)
+                .put("clientCarrier", Utils.getCarrierName());
     }
 
     @Override

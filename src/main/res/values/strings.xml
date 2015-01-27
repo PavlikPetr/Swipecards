@@ -183,6 +183,8 @@
     <string name="filter_extra_parameters">Advanced search</string>
     <string name="filter_age">Select age</string>
     <string name="filter_online">Online</string>
+    <string name="filter_age_start_prefix">From %s</string>
+    <string name="filter_age_end_prefix">to %s</string>
     <string name="filter_cities_all">All cities</string>
     <string name="buying_header_title">Purchases</string>
     <plurals name="buying_gift_you_need_coins">
@@ -305,6 +307,7 @@
     <string name="rate_popup_error">Please tell us how many stars our app deserves!</string>
     <string name="feedback_popup_title">You gave us a low rating. Tell us what you didn\'t like in the app. Help us become better. Thank you!</string>
     <string name="settings_melody">Notification ringtone</string>
+    <string name="settings_loading_photo">Photos preload</string>
     <string name="edit_refresh_status">Update status</string>
     <string name="ban_title">Congratulations! You are banned.</string>
     <string name="ban_title_forever">Congratulations! You are banned forever.</string>
@@ -495,6 +498,7 @@
     <string name="likes_can_help_you">Likes help you meet people</string>
     <string name="general_get_dating">Meet</string>
     <string name="settings_select_language">Select app language</string>
+    <string name="settings_select_preload_photo_type">Choose when the photos preload is turned on</string>
     <string name="restart_to_change_locale">The app must be restarted to change the language.</string>
     <string name="locale_changing">Change the language</string>
     <plurals name="you_were_liked">
@@ -606,5 +610,14 @@
     <string name="hint_myprofile_buy_vip">Buy VIP-status and enjoy unlimited communication</string>
     <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
     <string name="pull_to_refresh_release_label">Let go to refresh…</string>
+    <string name="messaging_block_buy_vip">To continue the dialogue you need to have a VIP-status</string>
     <string name="pull_to_refresh_refreshing_label">Loading…</string>
+    <string name="user_added_to_black_list">The user has been added to the Blacklist.</string>
+    <string name="user_deleted_from_black_list">The user has been removed from the Blacklist.</string>
+    <string name="user_added_to_bookmark">The user has been added to Favorites.</string>
+    <string name="user_deleted_from_bookmark">The user has been removed from Favorites.</string>
+    <string name="preload_photo_type_wifi_3g">WiFi and 3G</string>
+    <string name="preload_photo_type_wifi">WiFi only</string>
+    <string name="preload_photo_type_always_on">Always on</string>
+    <string name="preload_photo_type_preload_off">Off</string>
 </resources>
