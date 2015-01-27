@@ -15,11 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.BannersController;
+import com.topface.topface.banners.IPageWithAds;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
-import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.ad.NativeAdManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +31,8 @@ import java.util.Locale;
 /**
  * base class for feeds with tabs
  */
-public abstract class TabbedFeedFragment extends BaseFragment {
+public abstract class TabbedFeedFragment extends BaseFragment implements IPageWithAds {
+    public static final String HAS_FEED_AD = "com.topface.topface.has_feed_ad";
     public static final String EXTRA_OPEN_PAGE = "openTabbedFeedAt";
     private static final String LAST_OPENED_PAGE = "last_opened_page";
     private ViewPager mPager;
@@ -36,7 +40,9 @@ public abstract class TabbedFeedFragment extends BaseFragment {
     private ArrayList<String> mPagesClassNames = new ArrayList<>();
     private ArrayList<String> mPagesTitles = new ArrayList<>();
     private ArrayList<Integer> mPagesCounters = new ArrayList<>();
-    private FloatBlock mFloatBlock;
+    private BannersController mBannersController;
+
+    private TabbedFeedPageAdapter mBodyPagerAdapter;
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -47,10 +53,28 @@ public abstract class TabbedFeedFragment extends BaseFragment {
         @Override
         public void onPageSelected(int position) {
             List<Fragment> fragments = getChildFragmentManager().getFragments();
-            if (fragments != null) {
-                for (Fragment fragment : fragments) {
-                    if (fragment instanceof FeedFragment) {
-                        ((FeedFragment) fragment).finishMultiSelection();
+
+            // positions of fragments in viewpager and child fragment manager may be different
+            // so we need to convert viewpager index to child fragment manager index
+            // to operate with correct fragment
+            int index = getFragmentIndexByClassName(mPagesClassNames.get(position));
+            if (fragments != null && index >= 0) {
+                for (int i = 0; i < fragments.size(); i++) {
+                    Fragment fragment = fragments.get(i);
+
+                    if (fragment != null) {
+                        if (fragment instanceof FeedFragment) {
+                            // update feed content for new selected tab
+                            // and block update possibility for all other
+                            if (i == index) {
+                                ((FeedFragment) fragment).startInitialLoadIfNeed();
+                            } else {
+                                ((FeedFragment) fragment).setUpdateAllowed(false);
+                            }
+
+                            // clean multiselection, when switching tabs
+                            ((FeedFragment) fragment).finishMultiSelection();
+                        }
                     }
                 }
             }
@@ -61,6 +85,36 @@ public abstract class TabbedFeedFragment extends BaseFragment {
 
         }
     };
+
+    private BroadcastReceiver mHasFeedAdReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            getContainerForAd().setVisibility(View.GONE);
+        }
+    };
+
+    /**
+     * Returns index of fragment, by its className in child fragment manager
+     * -1 if no such fragment found
+     *
+     * @param className needed fragment class name
+     * @return index of founded fragment in child fragment manager
+     */
+    private int getFragmentIndexByClassName(String className) {
+        List<Fragment> fragments = getChildFragmentManager().getFragments();
+        if (fragments != null) {
+            for (int i = 0; i < fragments.size(); i++) {
+                Fragment fragment = fragments.get(i);
+                if (fragment != null) {
+                    if (fragment.getClass().getName().equals(className)) {
+                        return i;
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
 
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
@@ -82,32 +136,22 @@ public abstract class TabbedFeedFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_tabbed_feed, null);
-
         initPages(root);
-        initFloatBlock((ViewGroup) root);
-
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mHasFeedAdReceiver, new IntentFilter(HAS_FEED_AD));
         return root;
-    }
-
-    protected void initFloatBlock(ViewGroup view) {
-        mFloatBlock = new FloatBlock(this, view);
-        mFloatBlock.onCreate();
     }
 
     private void initPages(View root) {
         addPages();
-
         mPager = (ViewPager) root.findViewById(R.id.pager);
-
         mPager.setSaveEnabled(false);
-        TabbedFeedPageAdapter bodyPagerAdapter = new TabbedFeedPageAdapter(getChildFragmentManager(),
+        mBodyPagerAdapter = new TabbedFeedPageAdapter(getChildFragmentManager(),
                 mPagesClassNames,
                 mPagesTitles,
                 mPagesCounters);
-        mPager.setAdapter(bodyPagerAdapter);
+        mPager.setAdapter(mBodyPagerAdapter);
 
         mSlidingTabLayout = (SlidingTabLayout) root.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setUseWeightProportions(true);
@@ -131,6 +175,17 @@ public abstract class TabbedFeedFragment extends BaseFragment {
             }
         }
         mPager.setCurrentItem(lastPage);
+        initFloatBlock();
+
+        // for correct init of first opened page
+        // we allow update possibility to it
+        mBodyPagerAdapter.setUnlockItemUpdateAtStart(lastPage);
+    }
+
+    protected void initFloatBlock() {
+        if (!NativeAdManager.hasAvailableAd()) {
+            mBannersController = new BannersController(this);
+        }
     }
 
     protected abstract void addPages();
@@ -154,22 +209,7 @@ public abstract class TabbedFeedFragment extends BaseFragment {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity())
                 .unregisterReceiver(mCountersReceiver);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mFloatBlock != null) {
-            mFloatBlock.onResume();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mFloatBlock != null) {
-            mFloatBlock.onPause();
-        }
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mHasFeedAdReceiver);
     }
 
     @Override
@@ -179,9 +219,8 @@ public abstract class TabbedFeedFragment extends BaseFragment {
             setLastOpenedPage(mPager.getCurrentItem());
         }
         mPager = null;
-
-        if (mFloatBlock != null) {
-            mFloatBlock.onDestroy();
+        if (mBannersController != null) {
+            mBannersController.onDestroy();
         }
 
     }
@@ -202,4 +241,17 @@ public abstract class TabbedFeedFragment extends BaseFragment {
 
     protected abstract void setLastOpenedPage(int lastOpenedPage);
 
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.UNKNOWN_PAGE;
+    }
+
+    @Override
+    public ViewGroup getContainerForAd() {
+        View view  = getView();
+        if (view != null) {
+            return (ViewGroup) getView().findViewById(R.id.banner_container_for_tabbed_feeds);
+        }
+        return null;
+    }
 }

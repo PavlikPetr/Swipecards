@@ -26,11 +26,6 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     }
 
     @Override
-    protected int getTypeForCounters() {
-        return -1;
-    }
-
-    @Override
     protected BlackListAdapter createNewAdapter() {
         return new BlackListAdapter(getActivity().getApplicationContext(), getUpdaterCallback());
     }
@@ -76,6 +71,11 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteBlackListRequest(ids, getActivity());
+    }
+
+    @Override
+    protected int getUnreadCounter() {
+        return 0;
     }
 
     @Override

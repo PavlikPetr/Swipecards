@@ -3,6 +3,8 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.topface.topface.utils.ad.NativeAd;
+
 import org.json.JSONObject;
 
 public class FeedGeo extends FeedLike implements Parcelable {
@@ -20,6 +22,10 @@ public class FeedGeo extends FeedLike implements Parcelable {
         }
     };
 
+    public FeedGeo() {
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
     public FeedGeo(JSONObject data) {
         super(data);
     }
@@ -27,6 +33,10 @@ public class FeedGeo extends FeedLike implements Parcelable {
     protected FeedGeo(Parcel in) {
         super(in);
         distance = in.readDouble();
+    }
+
+    public FeedGeo(NativeAd nativeAd) {
+        super(nativeAd);
     }
 
     @Override

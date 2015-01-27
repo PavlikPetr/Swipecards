@@ -9,10 +9,12 @@ import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -25,7 +27,8 @@ import java.util.List;
  */
 public class UserConfig extends AbstractConfig {
     public static final int TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY = 2;
-    public static final String PROFILE_CONFIG_SETTINGS = "profile_config_settings";
+    private static final int DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
+    private static final String PROFILE_CONFIG_SETTINGS = "profile_config_settings";
     /**
      * Keys' names to generate user-based keys
      */
@@ -52,6 +55,8 @@ public class UserConfig extends AbstractConfig {
     public static final String PURCHASED_SUBSCRIPTIONS_SEPARATOR = "&";
     public static final String DATING_LOCK_POPUP_TIME = "dating_lock_popup_time";
     public static final String TOPFACE_OFFERWALL_REDIRECT_COUNTER = "topface_offerwall_redirect_counter";
+    public static final String REMAINED_DAILY_PUBNATIVE_SHOWS = "remained_feed_ad_shows";
+    public static final String LAST_DAY_PUBNATIVE_SHOWN = "current_day_for_showing_feed_ad";
     private String mUnique;
 
     public UserConfig(Context context) {
@@ -119,6 +124,11 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, DATING_LOCK_POPUP_TIME, 0L);
         // счётчик перехода на экран офервола топфейс
         addField(settingsMap, TOPFACE_OFFERWALL_REDIRECT_COUNTER, 0);
+        // оставшееся количество показов нативный реклымы pubnative для текущих суток
+        addField(settingsMap, REMAINED_DAILY_PUBNATIVE_SHOWS, 4);
+        // Время начала текущих суток для учёта количества показов рекламы pubnative
+        // Обновляется автоматически при попытке получить оставшиеся показы pubnative
+        addField(settingsMap, LAST_DAY_PUBNATIVE_SHOWN, 0L);
     }
 
     @Override
@@ -478,6 +488,23 @@ public class UserConfig extends AbstractConfig {
      */
     public int getTopfaceOfferwallRedirectCounter() {
         return getIntegerField(getSettingsMap(), TOPFACE_OFFERWALL_REDIRECT_COUNTER);
+    }
+
+    public int getRemainedPubnativeShows() {
+        long lastDay = getLongField(getSettingsMap(), LAST_DAY_PUBNATIVE_SHOWN);
+        long now = Calendar.getInstance().getTimeInMillis();
+        if (now - lastDay > DAY_IN_MILLIS) {
+            setField(getSettingsMap(), LAST_DAY_PUBNATIVE_SHOWN, now - now % (DAY_IN_MILLIS));
+            setField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS, CacheProfile.getOptions().feedNativeAd.dailyShows);
+        }
+        return getIntegerField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS);
+    }
+
+    public void decreaseRemainedPubnativeShows() {
+        int remainedShows = getIntegerField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS);
+        if (remainedShows > 0) {
+            setField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS, remainedShows - 1);
+        }
     }
 
     // =====================================================

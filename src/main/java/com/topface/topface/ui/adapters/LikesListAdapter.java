@@ -14,6 +14,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
+import com.topface.topface.utils.ad.NativeAd;
 
 public class LikesListAdapter extends FeedAdapter<FeedLike> {
     private static final int T_COUNT = 2;
@@ -80,16 +81,26 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         return new ILoaderRetrierCreator<FeedLike>() {
             @Override
             public FeedLike getLoader() {
-                FeedLike result = new FeedLike(null);
+                FeedLike result = new FeedLike();
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
                 return result;
             }
 
             @Override
             public FeedLike getRetrier() {
-                FeedLike result = new FeedLike(null);
+                FeedLike result = new FeedLike();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
+            }
+        };
+    }
+
+    @Override
+    protected INativeAdItemCreator<FeedLike> getNativeAdItemCreator() {
+        return new INativeAdItemCreator<FeedLike>() {
+            @Override
+            public FeedLike getAdItem(NativeAd nativeAd) {
+                return new FeedLike(nativeAd);
             }
         };
     }

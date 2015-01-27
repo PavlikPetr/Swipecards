@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -54,6 +55,9 @@ public class ActionBarCustomViewTitleSetterDelegate extends ActionBarOnlineSette
                         activity.startActivity(intent);
                         activity.finish();
                     } else {
+                        if (activity instanceof BaseFragmentActivity) {
+                            ((BaseFragmentActivity) activity).doPreFinish();
+                        }
                         activity.finish();
                     }
                 }

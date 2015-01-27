@@ -2,9 +2,12 @@ package com.topface.topface.ui.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +16,24 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
+import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.ad.NativeAd;
+import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -36,22 +45,38 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     protected static final int T_NEW_VIP = 3;
     protected static final int T_VIP = 4;
     protected static final int T_NEW = 5;
-    protected static final int T_COUNT = 6;
+    protected static final int T_NATIVE_AD = 6;
+    protected static final int T_COUNT = 7;
 
     private long mLastUpdate = 0;
     public static final int LIMIT = 40;
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
     private OnAvatarClickListener<T> mOnAvatarClickListener;
+    private NativeAd mFeedAd;
+    private boolean mHasFeedAd;
+    private View mFeedAdView;
 
 
     @SuppressWarnings("unchecked")
     private MultiselectionController<T> mSelectionController = new MultiselectionController(this);
 
-    @SuppressWarnings("unchecked")
+    public interface INativeAdItemCreator<T> {
+        T getAdItem(NativeAd nativeAd);
+    }
+
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         super(context, data, updateCallback);
         mSelectionController = new MultiselectionController(this);
+        initFeedAd();
     }
+
+    private void initFeedAd() {
+        if (isNeedFeedAd()) {
+            mFeedAdView = getAdView();
+        }
+    }
+
+    protected abstract INativeAdItemCreator<T> getNativeAdItemCreator();
 
     public int getLimit() {
         return LIMIT;
@@ -97,7 +122,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     public int getItemViewType(int position) {
         int superType = super.getItemViewType(position);
         if (superType == T_OTHER) {
-            if (getItem(position).unread && getItem(position).user.premium) {
+            if (getItem(position).isAd()) {
+                return T_NATIVE_AD;
+            } else if (getItem(position).unread && getItem(position).user.premium) {
                 return T_NEW_VIP;
             } else if (getItem(position).unread && !getItem(position).user.premium) {
                 return T_NEW;
@@ -127,6 +154,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (text != null) {
             messageView.setText(text);
         }
+    }
+
+    protected View getAdView() {
+        return mInflater.inflate(getAdItemLayout(), null, false);
     }
 
     @Override
@@ -265,10 +296,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         removeLoaderItem();
         FeedList<T> currentData = getData();
         currentData.clear();
+        mHasFeedAd = false;
         currentData.addAll(data.items);
-
+        addItemForAd();
         addLoaderItem(data.more);
-
         notifyDataSetChanged();
         setLastUpdate();
 
@@ -276,8 +307,39 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public void setData(FeedList<T> data) {
         mData = data;
+        addItemForAd();
         notifyDataSetChanged();
         setLastUpdate();
+    }
+
+    private void addItemForAd() {
+        FeedList<T> data = getData();
+        if (!data.isEmpty() && isNeedFeedAd() && !mHasFeedAd) {
+            if (mFeedAd == null) {
+                mFeedAd = NativeAdManager.getNativeAd();
+            }
+            if (mFeedAd != null) {
+                data.add(mFeedAd.getPosition(), getNativeAdItemCreator().getAdItem(mFeedAd));
+                mHasFeedAd = true;
+                Intent intent = new Intent(TabbedFeedFragment.HAS_FEED_AD);
+                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+            }
+        }
+    }
+
+    public void removeAdItems() {
+        mHasFeedAd = false;
+        boolean removed = false;
+        for (Iterator<T> it = getData().iterator(); it.hasNext(); ) {
+            T item = it.next();
+            if (item.isAd()) {
+                it.remove();
+                removed = true;
+            }
+        }
+        if (removed) {
+            notifyDataSetChanged();
+        }
     }
 
     protected void setLastUpdate() {
@@ -309,6 +371,14 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
         notifyDataSetChanged();
         setLastUpdate();
+    }
+
+    public void makeAllItemsRead() {
+        for (T item : getData()) {
+            if (!item.isAd()) {
+                item.unread = false;
+            }
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -372,7 +442,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             FeedList<T> data = getData();
             int dataSize = data.size();
 
-            int feedIndex = data.getLast().isLoader() || data.getLast().isRetrier() ?
+            FeedItem last = data.getLast();
+            int feedIndex = last.isLoader() || last.isRetrier() || last.isAd() ?
                     dataSize - 2 :
                     dataSize - 1;
             if (data.hasItem(feedIndex)) {
@@ -388,6 +459,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (!isEmpty()) {
             FeedList<T> data = getData();
             item = data.getFirst();
+            if (item.isAd()) {
+                item = data.get(1);
+            }
         }
         return item;
     }
@@ -403,6 +477,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         holder.background = convertView.getBackground();
 
         return holder;
+    }
+
+    protected int getAdItemLayout() {
+        return R.layout.item_feed_ad;
     }
 
     public boolean isNeedUpdate() {
@@ -492,5 +570,25 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public boolean isMultiSelectionMode() {
         return mSelectionController.isMultiSelectionMode();
+    }
+
+    public boolean hasFeedAd() {
+        return mHasFeedAd;
+    }
+
+    public void setHasFeedAd(boolean hasFeedAd) {
+        mHasFeedAd = hasFeedAd;
+    }
+
+    public NativeAd getFeedAd() {
+        return mFeedAd;
+    }
+
+    public void setFeedAd(NativeAd feedAd) {
+        mFeedAd = feedAd;
+    }
+
+    public boolean isNeedFeedAd() {
+        return CacheProfile.show_ad && NativeAdManager.hasAvailableAd();
     }
 }
