@@ -16,6 +16,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BanActivity;
+import com.topface.topface.ui.SslErrorActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
@@ -32,6 +33,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLHandshakeException;
 
 public class ConnectionManager {
 
@@ -214,6 +216,12 @@ public class ConnectionManager {
             apiRequest.sendHandlerMessage(apiResponse);
             needResend = false;
         }
+        if (apiResponse.isCodeEqual(ErrorCodes.NOT_VALID_CERTIFICATE)) {
+            //Показываем пользователю попап о необходимости корректировки даты на устройстве
+            Intent intent = new Intent(App.getContext(), SslErrorActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            App.getContext().startActivity(intent);
+        }
         return needResend;
     }
 
@@ -369,9 +377,20 @@ public class ConnectionManager {
         return needResend;
     }
 
+    private int getSslErrorCode(SSLException e) {
+        int errorCode = ErrorCodes.CONNECTION_ERROR;
+        String[] messages = App.getContext().getResources().getStringArray(R.array.ssl_handshake_exception_messages);
+        for (String message : messages) {
+            if (e.getMessage().toLowerCase().contains(message.toLowerCase())) {
+                errorCode = ErrorCodes.NOT_VALID_CERTIFICATE;
+                break;
+            }
+        }
+        return errorCode;
+    }
+
     private IApiResponse executeRequest(IApiRequest apiRequest) {
         IApiResponse response = null;
-
         try {
             //Отправляем запрос и сразу читаем ответ
             response = apiRequest.sendRequestAndReadResponse();
@@ -379,11 +398,15 @@ public class ConnectionManager {
             Debug.error(TAG + "::HostException", e);
             //Это ошибка соединение, такие запросы мы будем переотправлять
             response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection exception: " + e.toString());
-        } catch (SSLException e) {
-            Debug.error(TAG + "::SSLException", e);
+        } catch (SSLHandshakeException e) {
+            Debug.error(TAG + "::SSLHandshakeException", e);
             //Это ошибка SSL соединения, возможно у юзера не правильно установлено время на устройсте
             //такую ошибку следует обрабатывать отдельно, распарсив сообщение об ошибке и уведомив
             //пользователя
+            response = apiRequest.constructApiResponse(getSslErrorCode(e), "Connection SSLHandshakeException: " + e.toString());
+        } catch (SSLException e) {
+            Debug.error(TAG + "::SSLException", e);
+            //Прочие ошибки SSL
             response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection SSLException: " + e.toString());
         } catch (Exception e) {
             Debug.error(TAG + "::Exception", e);
