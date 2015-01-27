@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -78,7 +77,7 @@ import java.util.List;
 import static android.widget.AdapterView.OnItemClickListener;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
-        implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds, IStampable, IUpdateLockReceiver {
+        implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
     private static final int FEED_MULTI_SELECTION_LIMIT = 100;
 
     private static final String FEEDS = "FEEDS";
@@ -139,20 +138,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     };
 
     protected boolean isDeletable = true;
-    private Drawable mLoader0;
-    private AnimationDrawable mLoader;
     private ViewStub mEmptyScreenStub;
     private boolean needUpdate = false;
 
-    // update possibility locker, by default - update allowed
-    private boolean mIsUpdateAllowed = true;
     private boolean mRestoredFilterState;
 
     private ActionMode mActionMode;
     private FilterBlock mFilterBlock;
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
-
-    private long mStamp = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -629,37 +622,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
-    @Override
-    public void receiveUpdateLockAbility(String fragmentClassName, long stamp) {
-        // ignore this event, if stamps are different
-        // because fragment manager may hold many fragments, from different adapters
-        if (getStamp() == stamp) {
-            if (TextUtils.equals(((Object) this).getClass().getName(), fragmentClassName)) {
-                startInitialLoadIfNeed();
-            } else {
-                setUpdateAllowed(false);
-            }
-        }
-    }
-
-    /**
-     * Lock/unlock update possibility in this feed
-     * used when feed wrapped in tabbed container
-     *
-     * @param updateAllowed true to allow update, false to block
-     */
-    private void setUpdateAllowed(boolean updateAllowed) {
-        mIsUpdateAllowed = updateAllowed;
-    }
-
     /**
      * Tries to update feed content, when tab containig this feed is selected
      * used when feed wrapped in tabbed container
      */
-    private void startInitialLoadIfNeed() {
-        if (!mIsUpdateAllowed) {
-            setUpdateAllowed(true);
-            if ((getListAdapter().isNeedUpdate() || hasUnread()) && !mIsUpdating) {
+    public void startInitialLoadIfNeed() {
+        if (getListAdapter() != null) {
+            if ((getListAdapter().isNeedUpdate()
+                    || hasUnread())
+                    && !mIsUpdating) {
                 updateData(false, true);
             }
         }
@@ -685,7 +656,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
-        if (mIsUpdateAllowed) {
+        if (getUserVisibleHint()) {
             needUpdate = false;
             mIsUpdating = true;
             onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
@@ -884,18 +855,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             mListView.setVisibility(View.VISIBLE);
             mRetryView.setVisibility(View.GONE);
 
-            Drawable[] drawables = mBackgroundText.getCompoundDrawables();
-            if (drawables[0] != null) {
-                Drawable drawable = drawables[0];
-                if (drawable instanceof AnimationDrawable) {
-                    ((AnimationDrawable) drawable).stop();
-                }
-            }
-
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
-                    drawables[1],
-                    drawables[2],
-                    drawables[3]);
             setFilterSwitcherState(true);
         }
 
@@ -966,16 +925,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
             mBackgroundText.setText("");
-            Drawable[] drawables = mBackgroundText.getCompoundDrawables();
-            Drawable drawable = drawables[0];
-            if (drawable != null && drawable instanceof AnimationDrawable) {
-                ((AnimationDrawable) drawable).stop();
-            }
-
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
-                    drawables[1],
-                    drawables[2],
-                    drawables[3]);
             setFilterSwitcherState(true);
         }
     }
@@ -987,13 +936,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             mListView.setVisibility(View.INVISIBLE);
             mBackgroundText.setVisibility(View.VISIBLE);
             mBackgroundText.setText(R.string.general_dialog_loading);
-            Drawable[] drawables = mBackgroundText.getCompoundDrawables();
-            AnimationDrawable drawable = getLoader();
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(drawable,
-                    drawables[1],
-                    drawables[2],
-                    drawables[3]);
-            drawable.start();
             setFilterSwitcherState(false);
         }
     }
@@ -1042,24 +984,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 adapter.notifyDataSetChanged();
             }
         }
-    }
-
-    private Drawable getLoader0() {
-        if (mLoader0 == null && isAdded()) {
-            mLoader0 = getResources().getDrawable(R.drawable.loader0);
-        }
-        return mLoader0;
-    }
-
-
-    private AnimationDrawable getLoader() {
-        if (mLoader == null && isAdded()) {
-            Drawable drawable = getResources().getDrawable(R.drawable.loader);
-            if (drawable instanceof AnimationDrawable) {
-                mLoader = (AnimationDrawable) drawable;
-            }
-        }
-        return mLoader;
     }
 
     @Override
@@ -1127,12 +1051,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     @Override
-    public long getStamp() {
-        return mStamp;
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            startInitialLoadIfNeed();
+        }
     }
 
-    @Override
-    public void setStamp(long stamp) {
-        mStamp = stamp;
-    }
 }

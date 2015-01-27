@@ -58,10 +58,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
                 for (Fragment fragment : fragments) {
                     if (fragment != null) {
                         if (fragment instanceof FeedFragment) {
-                            // update feed content for new selected tab
-                            // and block update possibility for all other
-                            // feeds are "linked" with adapter by timestamp
-                            ((FeedFragment) fragment).receiveUpdateLockAbility(mPagesClassNames.get(position), mBodyPagerAdapter.getStamp());
                             // clean multiselection, when switching tabs
                             ((FeedFragment) fragment).finishMultiSelection();
                         }
@@ -143,10 +139,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
         }
         mPager.setCurrentItem(lastPage);
         initFloatBlock();
-
-        // for correct init of first opened page
-        // we allow update possibility to it
-        mBodyPagerAdapter.setUnlockItemUpdateAtStart(lastPage);
     }
 
     protected void initFloatBlock() {
@@ -215,7 +207,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
 
     @Override
     public ViewGroup getContainerForAd() {
-        View view  = getView();
+        View view = getView();
         if (view != null) {
             return (ViewGroup) getView().findViewById(R.id.banner_container_for_tabbed_feeds);
         }
