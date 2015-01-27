@@ -155,7 +155,6 @@
         <activity
             android:name=".ui.SslErrorActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".ui.GiftsActivity"

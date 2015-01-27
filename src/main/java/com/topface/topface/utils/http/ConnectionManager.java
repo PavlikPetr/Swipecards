@@ -171,11 +171,6 @@ public class ConnectionManager {
         if (apiResponse.isCodeEqual(ErrorCodes.BAN)) {
             //Если в результате получили ответ, что забанен, прекращаем обработку, сообщаем об этом
             showBanActivity(apiRequest, apiResponse);
-        } else if (apiResponse.isCodeEqual(ErrorCodes.NOT_VALID_CERTIFICATE)) {
-            //Показываем пользователю попап о необходимости корректировки даты на устройстве
-            Intent intent = new Intent(App.getContext(), SslErrorActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            App.getContext().startActivity(intent);
         } else if (apiResponse.isCodeEqual(ErrorCodes.DETECT_FLOOD)) {
             //Если пользователь заблокирован за флуд, показываем соответсвующий экран
             showFloodActivity(apiRequest, apiResponse);
@@ -220,6 +215,12 @@ public class ConnectionManager {
             //Если запрос не отменен и мы обработали все ошибки, то отправляем callback
             apiRequest.sendHandlerMessage(apiResponse);
             needResend = false;
+        }
+        if (apiResponse.isCodeEqual(ErrorCodes.NOT_VALID_CERTIFICATE)) {
+            //Показываем пользователю попап о необходимости корректировки даты на устройстве
+            Intent intent = new Intent(App.getContext(), SslErrorActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            App.getContext().startActivity(intent);
         }
         return needResend;
     }
