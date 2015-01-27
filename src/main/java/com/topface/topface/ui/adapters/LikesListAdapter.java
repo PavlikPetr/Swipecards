@@ -38,21 +38,22 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         final FeedLike like = getItem(position);
+        if (holder != null) {
+            holder.heart.setImageResource(like.mutualed ? R.drawable.im_item_dbl_mutual_heart :
+                    (like.highrate ? R.drawable.im_item_mutual_heart_top : R.drawable.im_item_mutual_heart));
 
-        holder.heart.setImageResource(like.mutualed ? R.drawable.im_item_dbl_mutual_heart :
-                (like.highrate ? R.drawable.im_item_mutual_heart_top : R.drawable.im_item_mutual_heart));
+            ViewHelper.setAlpha(holder.heart, (like.user.deleted || like.user.banned) ? 0.1f : 1f);
 
-        ViewHelper.setAlpha(holder.heart, (like.user.deleted || like.user.banned) ? 0.1f : 1f);
+            holder.heart.setOnClickListener(new OnClickListener() {
 
-        holder.heart.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (mMutualListener != null) {
-                    mMutualListener.onMutual(like);
+                @Override
+                public void onClick(View v) {
+                    if (mMutualListener != null) {
+                        mMutualListener.onMutual(like);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         return convertView;
     }

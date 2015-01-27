@@ -32,10 +32,11 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
-
         Visitor visitor = getItem(position);
-        holder.time.setText(visitor.createdRelative);
-        holder.time.setVisibility(View.VISIBLE);
+        if (holder != null) {
+            holder.time.setText(visitor.createdRelative);
+            holder.time.setVisibility(View.VISIBLE);
+        }
         return convertView;
     }
 

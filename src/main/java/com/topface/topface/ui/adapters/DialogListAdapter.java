@@ -30,15 +30,15 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
-
         FeedDialog dialog = getItem(position);
-        holder.time.setText(dialog.createdRelative);
-
-        FeedItemViewConstructor.setCounter(holder.unreadCounter,
-                ((getItemViewType(position) == T_NEW) && (!CacheProfile.getOptions().hidePreviewDialog)) ?
-                        getUnreadCounter(dialog) :
-                        0
-        );
+        if (holder != null) {
+            holder.time.setText(dialog.createdRelative);
+            FeedItemViewConstructor.setCounter(holder.unreadCounter,
+                    ((getItemViewType(position) == T_NEW) && (!CacheProfile.getOptions().hidePreviewDialog)) ?
+                            getUnreadCounter(dialog) :
+                            0
+            );
+        }
         return convertView;
     }
 
