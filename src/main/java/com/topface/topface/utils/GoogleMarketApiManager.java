@@ -33,10 +33,6 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
         onResume();
     }
 
-    private int getPlayServicesStatusCode() {
-        return GooglePlayServicesUtil.isGooglePlayServicesAvailable(mContext);
-    }
-
     private void decryptingErrorCode() {
         switch (mResultCode) {
             case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
@@ -65,8 +61,8 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
 
     @Override
     public void onResume() {
-        mResultCode = getPlayServicesStatusCode();
-        mIsServicesAvailable = mResultCode == ConnectionResult.SUCCESS ? true : false;
+        mResultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(mContext);
+        mIsServicesAvailable = mResultCode == ConnectionResult.SUCCESS;
         decryptingErrorCode();
     }
 
