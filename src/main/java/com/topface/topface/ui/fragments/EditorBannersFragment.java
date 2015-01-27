@@ -20,7 +20,6 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.BannersConfig;
 
 public class EditorBannersFragment extends BaseFragment implements View.OnClickListener {
@@ -67,8 +66,8 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
 
     private void initConfigContainer() {
         if (mConfigContainer != null) {
-            for (String pageName : CacheProfile.getOptions().getPagesInfo().keySet()) {
-                PageInfo pageInfo = CacheProfile.getOptions().getPagesInfo().get(pageName);
+            for (PageInfo.PageName pageName : PageInfo.PageName.values()) {
+                PageInfo pageInfo = CacheProfile.getOptions().getPagesInfo().get(pageName.getName());
                 if (pageInfo != null) {
                     PageConfigurator configurator = new PageConfigurator(getActivity());
                     configurator.setPage(pageInfo);
@@ -126,15 +125,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
         private PageInfo mPageInfo;
 
         private TextView mTitleText;
-        private ViewGroup mSpinnersContainer;
         private Spinner mBannerTypeSpinner;
-
-        private LayoutParams mCompressedParams = new LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 0);
-
-        private LayoutParams mExpandedParams = new LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 150);
-        private boolean mExpanded = false;
 
         public PageConfigurator(Context context) {
             this(context, null);
@@ -144,30 +135,10 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             super(context, attrs);
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View root = inflater.inflate(R.layout.editor_banner_configurator, this, true);
-            initTitleText(root);
-            initSpinnersContainer(root);
-            initBannerTypeSpinner(root);
-            Utils.enableLayoutChangingTransition(this);
-        }
-
-        private void initTitleText(View root) {
             mTitleText = (TextView) root.findViewById(R.id.tvTitle);
-            mTitleText.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mSpinnersContainer != null) {
-                        mSpinnersContainer.setLayoutParams(mExpanded ? mCompressedParams : mExpandedParams);
-                        mExpanded = !mExpanded;
-                        requestLayout();
-                    }
-                }
-            });
+            initBannerTypeSpinner(root);
         }
 
-        private void initSpinnersContainer(View root) {
-            mSpinnersContainer = (ViewGroup) root.findViewById(R.id.loSpinners);
-            mSpinnersContainer.setLayoutParams(mCompressedParams);
-        }
 
         private void initBannerTypeSpinner(View root) {
             mBannerTypeSpinner = (Spinner) root.findViewById(R.id.spEditBannerType);

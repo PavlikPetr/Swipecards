@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_marginTop="10dp"
     android:background="@drawable/bg_dialog"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="10dp">
 
     <TextView
@@ -14,16 +14,9 @@
         android:layout_height="wrap_content"
         android:textSize="20sp" />
 
-    <LinearLayout
-        android:id="@+id/loSpinners"
-        android:layout_width="fill_parent"
+    <Spinner
+        android:id="@+id/spEditBannerType"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Spinner
-            android:id="@+id/spEditBannerType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" />
-    </LinearLayout>
+        android:layout_marginLeft="10dp" />
 </LinearLayout>
