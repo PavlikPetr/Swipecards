@@ -18,6 +18,7 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONObject;
 
@@ -63,6 +64,11 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     @Override
     protected String getTitle() {
         return getString(R.string.general_bookmarks);
+    }
+
+    @Override
+    protected int getTypeForCounters() {
+        return CountersManager.UNKNOWN_TYPE;
     }
 
     @Override

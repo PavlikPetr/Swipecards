@@ -375,10 +375,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         return true;
     }
 
-    protected Integer getOptionsMenuRes() {
-        return null;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

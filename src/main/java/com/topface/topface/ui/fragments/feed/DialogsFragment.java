@@ -21,6 +21,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
@@ -88,7 +89,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected void makeItemReadWithId(String id) {
+    protected void makeItemReadWithFeedId(String id) {
         //feed will be marked read in another method
     }
 
@@ -135,6 +136,11 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
+    protected int getTypeForCounters() {
+        return CountersManager.DIALOGS;
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -148,11 +154,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     protected int getUnreadCounter() {
         // dialogs are not auto-read
         return 0;
-    }
-
-    @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_feed_filtered;
     }
 
     @Override

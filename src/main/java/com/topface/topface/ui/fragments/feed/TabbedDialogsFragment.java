@@ -35,11 +35,6 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
     }
 
     @Override
-    protected int getIndicatorLayout() {
-        return R.layout.tab_indicator_dialogs;
-    }
-
-    @Override
     public PageInfo.PageName getPageName() {
         return PageInfo.PageName.MESSAGES_TABS;
     }

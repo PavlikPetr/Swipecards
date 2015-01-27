@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.topface.topface.banners.PageInfo.PageName;
-
 /**
  * Created by kirussell on 11/01/15.
  * Controller over ads' sdks
@@ -53,12 +51,6 @@ class BannerInjector implements IBannerInjector {
         if (pagesInfo.containsKey(pageName)) {
             String floatType = pagesInfo.get(pageName).floatType;
             if (floatType.equals(PageInfo.FLOAT_TYPE_BANNER)) {
-                // use feed banners only if they are not in tabbed layout
-                if (pageId == PageName.LIKE || pageId == PageName.MUTUAL) {
-                    return !options.likesWithThreeTabs.isEnabled();
-                } else if (pageId == PageName.DIALOGS || pageId == PageName.BOOKMARKS) {
-                    return !options.messagesWithTabs.isEnabled();
-                }
                 return true;
             }
         }

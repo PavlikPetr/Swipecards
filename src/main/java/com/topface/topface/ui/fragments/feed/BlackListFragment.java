@@ -10,6 +10,7 @@ import com.topface.topface.requests.DeleteBlackListRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.BlackListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONObject;
 
@@ -23,6 +24,11 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     @Override
     protected String getTitle() {
         return getString(R.string.black_list_title);
+    }
+
+    @Override
+    protected int getTypeForCounters() {
+        return CountersManager.UNKNOWN_TYPE;
     }
 
     @Override

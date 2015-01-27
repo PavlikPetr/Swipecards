@@ -14,10 +14,6 @@ public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
     private ArrayList<String> mFragmentsClasses = new ArrayList<>();
     private ArrayList<String> mFragmentsTitles = new ArrayList<>();
 
-    // used to determine which item update will not be blocked at creation time
-    // once used it will be reseted to -1
-    private int mUnlockItemUpdateAtStart = -1;
-
     public TabbedFeedPageAdapter(FragmentManager fm,
                                  ArrayList<String> fragmentsClasses,
                                  ArrayList<String> fragmentTitles,
@@ -26,17 +22,6 @@ public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
         mFragmentsClasses = fragmentsClasses;
         mFragmentsTitles = fragmentTitles;
         mFragmentsCounters = fragmentsCounters;
-    }
-
-    /**
-     * Unlocks update possibility for item specified by index at creation time.
-     * This must be called before adapter returns first elements
-     * and only one time
-     *
-     * @param unlockItemUpdateAtStart index of item
-     */
-    public void setUnlockItemUpdateAtStart(int unlockItemUpdateAtStart) {
-        mUnlockItemUpdateAtStart = unlockItemUpdateAtStart;
     }
 
     @Override
@@ -49,14 +34,6 @@ public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
             fragment = (Fragment) fragmentClass.newInstance();
             if (fragment instanceof FeedFragment) {
                 ((FeedFragment) fragment).setNeedTitles(false);
-
-                // by default - all items in tabs will be with blocked update possibility
-                // excepting one - which must load content at creation time, because its visible to user
-                if (mUnlockItemUpdateAtStart >= 0 && position == mUnlockItemUpdateAtStart) {
-                    // once we've found item, which must load content
-                    // we will forget this special position
-                    mUnlockItemUpdateAtStart = -1;
-                }
             }
 
         } catch (Exception ex) {

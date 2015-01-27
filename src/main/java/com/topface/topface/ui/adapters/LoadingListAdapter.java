@@ -175,6 +175,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         if (notify) notifyDataSetChanged();
     }
 
+    @SuppressWarnings("unused")
     protected void addFirst(ArrayList<T> data, boolean more, boolean notify) {
         if (data != null) {
             if (!data.isEmpty()) {

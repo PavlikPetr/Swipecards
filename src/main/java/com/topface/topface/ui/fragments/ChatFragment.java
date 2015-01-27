@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -99,7 +98,6 @@ import java.util.TimerTask;
 public class ChatFragment extends BaseFragment implements View.OnClickListener, IUserOnlineListener {
 
     public static final int LIMIT = 50;
-    public static final int PROGRESS_BAR_DELAY = 3000;
 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";

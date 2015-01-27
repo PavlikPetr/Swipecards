@@ -53,28 +53,11 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
         @Override
         public void onPageSelected(int position) {
             List<Fragment> fragments = getChildFragmentManager().getFragments();
-
-            // positions of fragments in viewpager and child fragment manager may be different
-            // so we need to convert viewpager index to child fragment manager index
-            // to operate with correct fragment
-            int index = getFragmentIndexByClassName(mPagesClassNames.get(position));
-            if (fragments != null && index >= 0) {
-                for (int i = 0; i < fragments.size(); i++) {
-                    Fragment fragment = fragments.get(i);
-
-                    if (fragment != null) {
-                        if (fragment instanceof FeedFragment) {
-                            // update feed content for new selected tab
-                            // and block update possibility for all other
-                            if (i == index) {
-                                ((FeedFragment) fragment).startInitialLoadIfNeed();
-                            } else {
-                                ((FeedFragment) fragment).setUpdateAllowed(false);
-                            }
-
-                            // clean multiselection, when switching tabs
-                            ((FeedFragment) fragment).finishMultiSelection();
-                        }
+            if (fragments != null) {
+                for (Fragment fragment : fragments) {
+                    if (fragment instanceof FeedFragment) {
+                        // clean multiselection, when switching tabs
+                        ((FeedFragment) fragment).finishMultiSelection();
                     }
                 }
             }
@@ -92,29 +75,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
             getContainerForAd().setVisibility(View.GONE);
         }
     };
-
-    /**
-     * Returns index of fragment, by its className in child fragment manager
-     * -1 if no such fragment found
-     *
-     * @param className needed fragment class name
-     * @return index of founded fragment in child fragment manager
-     */
-    private int getFragmentIndexByClassName(String className) {
-        List<Fragment> fragments = getChildFragmentManager().getFragments();
-        if (fragments != null) {
-            for (int i = 0; i < fragments.size(); i++) {
-                Fragment fragment = fragments.get(i);
-                if (fragment != null) {
-                    if (fragment.getClass().getName().equals(className)) {
-                        return i;
-                    }
-                }
-            }
-        }
-
-        return -1;
-    }
 
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
@@ -176,10 +136,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
         }
         mPager.setCurrentItem(lastPage);
         initFloatBlock();
-
-        // for correct init of first opened page
-        // we allow update possibility to it
-        mBodyPagerAdapter.setUnlockItemUpdateAtStart(lastPage);
     }
 
     protected void initFloatBlock() {

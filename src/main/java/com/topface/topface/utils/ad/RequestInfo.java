@@ -5,5 +5,6 @@ package com.topface.topface.utils.ad;
  */
 public abstract class RequestInfo {
 
+    @SuppressWarnings("unused")
     public abstract String asRequestParameters();
 }

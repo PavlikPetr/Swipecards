@@ -145,9 +145,6 @@ public class PubnativeAd extends NativeAd {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{\ntitle: ").append(title).append("\ndescription: ").append(description).
-                append("\nicon_url: ").append(icon_url).append("\n}");
-        return stringBuilder.toString();
+        return "{\ntitle: " + title + "\ndescription: " + description + "\nicon_url: " + icon_url + "\n}";
     }
 }

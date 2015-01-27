@@ -28,7 +28,7 @@ import java.util.List;
 public class UserConfig extends AbstractConfig {
     public static final int TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY = 2;
     private static final int DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
-    private static final String PROFILE_CONFIG_SETTINGS = "profile_config_settings";
+    public static final String PROFILE_CONFIG_SETTINGS = "profile_config_settings";
     /**
      * Keys' names to generate user-based keys
      */

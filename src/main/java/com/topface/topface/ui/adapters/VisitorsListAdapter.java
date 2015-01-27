@@ -17,9 +17,8 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     }
 
     @Override
-    protected FeedAdapter.FeedViewHolder getEmptyHolder(View convertView) {
-        FeedViewHolder holder = super.getEmptyHolder(convertView);
-
+    protected FeedAdapter.FeedViewHolder getEmptyHolder(View convertView, Visitor item) {
+        FeedViewHolder holder = super.getEmptyHolder(convertView, item);
         holder.time = (TextView) convertView.findViewById(R.id.ifp_time);
         return holder;
     }

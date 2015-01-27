@@ -3,11 +3,10 @@ package com.topface.topface.ui.adapters;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.text.TextUtils;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,9 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
-import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.NativeAd;
@@ -56,9 +55,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     private boolean mHasFeedAd;
     private View mFeedAdView;
 
-
-    @SuppressWarnings("unchecked")
-    private MultiselectionController<T> mSelectionController = new MultiselectionController(this);
+    private MultiselectionController<T> mSelectionController;
 
     public interface INativeAdItemCreator<T> {
         T getAdItem(NativeAd nativeAd);
@@ -66,7 +63,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         super(context, data, updateCallback);
-        mSelectionController = new MultiselectionController(this);
+        mSelectionController = new MultiselectionController<>(this);
         initFeedAd();
     }
 
@@ -162,83 +159,87 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     @Override
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
-
         FeedViewHolder holder = null;
-
         if (convertView != null) {
             holder = (FeedViewHolder) convertView.getTag();
         }
-
-        final T item = getItem(position);
         final int type = getItemViewType(position);
         int flag = 0;
-
-        //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
-        if (holder == null) {
-            TypeAndFlag typeAndFlag = getViewCreationFlag();
-
-            if (type == T_NEW || type == T_NEW_VIP) {
-                typeAndFlag.flag |= FeedItemViewConstructor.Flag.NEW;
+        // for native ad type return ad view
+        if (type == T_NATIVE_AD) {
+            if (mFeedAdView == null) {
+                initFeedAd();
             }
-            if (type == T_VIP || type == T_NEW_VIP) {
-                typeAndFlag.flag |= FeedItemViewConstructor.Flag.VIP;
+            mFeedAd.show(mFeedAdView);
+            return mFeedAdView;
+        } else {
+            final T item = getItem(position);
+            //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
+            if (holder == null) {
+                TypeAndFlag typeAndFlag = getViewCreationFlag();
+
+                if (type == T_NEW || type == T_NEW_VIP) {
+                    typeAndFlag.flag |= FeedItemViewConstructor.Flag.NEW;
+                }
+                if (type == T_VIP || type == T_NEW_VIP) {
+                    typeAndFlag.flag |= FeedItemViewConstructor.Flag.VIP;
+                }
+                flag = typeAndFlag.flag;
+                convertView = FeedItemViewConstructor.construct(mContext, typeAndFlag);
+                holder = getEmptyHolder(convertView, item);
             }
-            flag = typeAndFlag.flag;
-            convertView = FeedItemViewConstructor.construct(mContext, typeAndFlag);
-            holder = getEmptyHolder(convertView, item);
-        }
+            if (item != null) {
+                // установка аватарки пользователя
+                // какую аватарку использовать по умолчанию для забаненных и во время загрузки нормальной
+                int defaultAvatarResId = (item.user.sex == Static.BOY ?
+                        R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+                holder.avatarImage.setStubResId(defaultAvatarResId);
 
-        if (item != null) {
-            // установка аватарки пользователя
-            // какую аватарку использовать по умолчанию для забаненных и во время загрузки нормальной
-            int defaultAvatarResId = (item.user.sex == Static.BOY ?
-                    R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
-            holder.avatarImage.setStubResId(defaultAvatarResId);
-
-            if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
-                holder.avatarImage.setRemoteSrc("drawable://" + defaultAvatarResId);
-                if (item.user.banned || item.user.deleted) {
-                    holder.avatar.setOnClickListener(null);
+                if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
+                    holder.avatarImage.setRemoteSrc("drawable://" + defaultAvatarResId);
+                    if (item.user.banned || item.user.deleted) {
+                        holder.avatar.setOnClickListener(null);
+                    } else {
+                        setListenerOnAvatar(holder.avatar, item);
+                    }
                 } else {
+                    holder.avatarImage.setPhoto(item.user.photo);
                     setListenerOnAvatar(holder.avatar, item);
                 }
-            } else {
-                holder.avatarImage.setPhoto(item.user.photo);
-                setListenerOnAvatar(holder.avatar, item);
-            }
 
-            // установка имени
-            holder.name.setText(item.user.first_name);
-            if ((item.user.deleted || item.user.banned)) {
-                flag |= FeedItemViewConstructor.Flag.BANNED;
-            }
-            FeedItemViewConstructor.setBanned(holder.name, flag);
-
-            // установка возраста
-            String age = "";
-            if (item.user.age > 0) {
-                age = String.valueOf(item.user.age);
-                if (!TextUtils.isEmpty(item.user.first_name)) {
-                    age = ", " + age;
+                // установка имени
+                holder.name.setText(item.user.first_name);
+                if ((item.user.deleted || item.user.banned)) {
+                    flag |= FeedItemViewConstructor.Flag.BANNED;
                 }
+                FeedItemViewConstructor.setBanned(holder.name, flag);
+
+                // установка возраста
+                String age = "";
+                if (item.user.age > 0) {
+                    age = String.valueOf(item.user.age);
+                    if (!TextUtils.isEmpty(item.user.first_name)) {
+                        age = ", " + age;
+                    }
+                }
+                holder.age.setText(age);
+                FeedItemViewConstructor.setBanned(holder.age, flag);
+
+                // установка сообщения фида
+                setItemMessage(item, holder.text);
+
+                // установка иконки онлайн
+                FeedItemViewConstructor.setOnline(holder.age, (!(item.user.deleted || item.user.banned) && item.user.online));
             }
-            holder.age.setText(age);
-            FeedItemViewConstructor.setBanned(holder.age, flag);
 
-            // установка сообщения фида
-            setItemMessage(item, holder.text);
-
-            // установка иконки онлайн
-            FeedItemViewConstructor.setOnline(holder.age, (!(item.user.deleted || item.user.banned) && item.user.online));
+            convertView.setTag(holder);
+            if (mSelectionController.isSelected(position)) {
+                convertView.setBackgroundResource(R.drawable.list_item_bg_selected);
+            } else {
+                setBackground(convertView, holder);
+            }
+            return convertView;
         }
-
-        convertView.setTag(holder);
-        if (mSelectionController.isSelected(position)) {
-            convertView.setBackgroundResource(R.drawable.list_item_bg_selected);
-        } else {
-            setBackground(convertView, holder);
-        }
-        return convertView;
     }
 
     private void setListenerOnAvatar(FrameLayout avatar, final T item) {

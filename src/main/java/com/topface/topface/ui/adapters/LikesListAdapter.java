@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.nineoldandroids.view.ViewHelper;
-import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
@@ -17,7 +16,6 @@ import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.utils.ad.NativeAd;
 
 public class LikesListAdapter extends FeedAdapter<FeedLike> {
-    private static final int T_COUNT = 2;
 
     private OnMutualListener mMutualListener;
 
@@ -27,12 +25,6 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
     public LikesListAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
-    }
-
-    @Override
-    public int getViewTypeCount() {
-        Debug.log(Integer.toString(super.getViewTypeCount() + T_COUNT));
-        return (super.getViewTypeCount() + T_COUNT);
     }
 
     @Override
