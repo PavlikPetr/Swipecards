@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -796,7 +797,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             mListView.setVisibility(View.VISIBLE);
             mRetryView.setVisibility(View.GONE);
         }
-
         if (getListAdapter().isEmpty()) {
             onEmptyFeed();
         } else {
