@@ -168,7 +168,6 @@
     <string name="chat_sexuality_out">Έχετε αξιολογηθεί τη σεξουαλικότητα.</string>
     <string name="chat_wink_in">\'Εκανε ένα κλείσιμο ματιού για σας.</string>
     <string name="chat_wink_out">Έχετε κλείσει το μάτι.</string>
-    <string name="filter_filter">Φίλτρο</string>
     <string name="filter_age_string">Από %1$d έως %2$d</string>
     <string name="filter_only_beautiful">Μόνο όμορφες</string>
     <string name="filter_extra_parameters">Περισσότερες Επιλογές Αναζήτησης</string>

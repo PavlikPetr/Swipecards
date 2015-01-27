@@ -177,7 +177,6 @@
     <string name="chat_sexuality_out">Has evaluado su sexualidad</string>
     <string name="chat_wink_in">Te han guiñado</string>
     <string name="chat_wink_out">Has guiñado</string>
-    <string name="filter_filter">Filtro</string>
     <string name="filter_age_string">Desde %1$d hasta %2$d</string>
     <string name="filter_only_beautiful">Sólo guapos</string>
     <string name="filter_extra_parameters">Parámetros adicionales</string>
