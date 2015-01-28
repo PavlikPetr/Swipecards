@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,7 +11,7 @@ import org.json.JSONObject;
 public class UserGetAppOptionsRequest extends ApiRequest {
 
     public static final String SERVICE = "user.getAppOptions";
-    public static final String VERSION_INTENT = "com.topface.topface.OPTIONS";
+    public static final String OPTIONS_UPDATE_ACTION = "com.topface.topface.OPTIONS";
 
     public UserGetAppOptionsRequest(Context context) {
         super(context);

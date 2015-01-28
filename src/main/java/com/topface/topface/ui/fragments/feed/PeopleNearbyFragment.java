@@ -208,6 +208,11 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     @Override
+    protected int getUnreadCounter() {
+        return 0;
+    }
+
+    @Override
     protected DeleteAbstractRequest getDeleteRequest(List ids) {
         return null;
     }

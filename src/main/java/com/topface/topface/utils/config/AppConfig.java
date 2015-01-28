@@ -411,4 +411,5 @@ public class AppConfig extends AbstractConfig {
     public boolean setUserConfigConverted() {
         return setField(getSettingsMap(), CONVERT_CONFIG, true);
     }
+
 }

@@ -140,7 +140,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         Context context = App.getContext();
         if (needTFOfferwallOnOpenRedirect(itemPrice)) {
             OfferwallPayload payload = new OfferwallPayload();
-            payload.experimentGroup = TopfaceOfferwallRedirect.KEY_EXP_ON_OPEN;
+            payload.experimentGroup = mTopfaceOfferwallRedirect.getGroup();
             intent = TFOfferwallSDK.getIntent(context, true, context.getString(R.string.general_bonus), payload);
             intent.putExtra(TFOfferwallActivity.RELAUNCH_PARENT_WITH_SAME_INTENT, true);
         } else {
@@ -230,7 +230,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     private boolean showTopfaceOfferwall() {
         if (needTFOfferwallOnCloseRedirect()) {
             OfferwallPayload payload = new OfferwallPayload();
-            payload.experimentGroup = TopfaceOfferwallRedirect.KEY_EXP_ON_CLOSE;
+            payload.experimentGroup = mTopfaceOfferwallRedirect.getGroup();
             OfferwallsManager.startTfOfferwall(this, payload);
             mTopfaceOfferwallRedirect.setComplited(true);
             return true;
