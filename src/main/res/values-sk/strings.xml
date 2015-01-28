@@ -130,7 +130,6 @@
     <string name="chat_sexuality_out">Ocenili ste sexualitu</string>
     <string name="chat_wink_in">Niekto na Vás žmurkol.</string>
     <string name="chat_wink_out">Žmurkli ste.</string>
-    <string name="filter_filter">Filtre</string>
     <string name="filter_age_string">Od %1$d do %2$d</string>
     <string name="filter_only_beautiful">Iba krásne</string>
     <string name="filter_extra_parameters">Ďalšie parametre</string>

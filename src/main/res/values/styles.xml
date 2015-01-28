@@ -301,6 +301,16 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
     </style>
+    
+    <style name="AdIndicator">
+        <item name="android:visibility">visible</item>
+        <item name="android:src">@drawable/ic_ad_flag</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginRight">6dp</item>
+    </style>
 
     <style name="ListItemEmptyText.Bold">
         <item name="android:textStyle">bold</item>
@@ -330,6 +340,11 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="AdDescriptionText" parent="ListMessageText">
+        <item name="android:singleLine">false</item>
+        <item name="android:maxLines">3</item>
+    </style>
+
     <style name="ListUnreadCounter">
         <item name="android:layout_width">16dp</item>
         <item name="android:layout_height">16dp</item>
@@ -356,7 +371,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:ellipsize">end</item>
         <item name="android:singleLine">true</item>
-        <item name="android:maxWidth">140dp</item>
+        <item name="android:maxWidth">104dp</item>
     </style>
 
     <style name="ListAge">

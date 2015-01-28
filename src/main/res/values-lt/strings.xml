@@ -180,12 +180,13 @@
     <string name="chat_sexuality_out">Jūs įvertinote seksualumą.</string>
     <string name="chat_wink_in">Jums mirktelėjo.</string>
     <string name="chat_wink_out">Jūs mirktelėjote.</string>
-    <string name="filter_filter">Filtras</string>
     <string name="filter_age_string">Nuo %1$d iki %2$d</string>
     <string name="filter_only_beautiful">Tiktai gražūs</string>
     <string name="filter_extra_parameters">Papildomi parametrai</string>
     <string name="filter_age">Amžius</string>
     <string name="filter_online">Online</string>
+    <string name="filter_age_start_prefix">Nuo %s</string>
+    <string name="filter_age_end_prefix">iki %s</string>
     <string name="filter_cities_all">Visuose miestuose</string>
     <string name="buying_header_title">Pirkimai</string>
     <plurals name="buying_gift_you_need_coins">
@@ -316,6 +317,7 @@
     <string name="rate_popup_error">Jūs turite nurodyti, kiek žvaigždučių suteikiate mūsų programai</string>
     <string name="feedback_popup_title">Jūs prastai įvertinote. Papasakokite, kas jums nepatinka programoje. Padėkite mums tapti geresniais. Ačiū!</string>
     <string name="settings_melody">Pranešimo melodija</string>
+    <string name="settings_loading_photo">Fotografijų išankstinė įkrova</string>
     <string name="edit_refresh_status">Atnaujinti statusą</string>
     <string name="ban_title">Sveikiname! Jūs užbanintas</string>
     <string name="ban_title_forever">Sveikiname! Jūs užbanintas visam laikui</string>
@@ -511,6 +513,7 @@
     <string name="likes_can_help_you">Simpatijos padės susipažinti</string>
     <string name="general_get_dating">Pažindintis</string>
     <string name="settings_select_language">Programos kalbos pasirinkimas</string>
+    <string name="settings_select_preload_photo_type">Pasirinkite, kada fotografijų išankstinė įkrova įjungta</string>
     <string name="restart_to_change_locale">Kad pasikeistų kalba, programa bus perkrauta</string>
     <string name="locale_changing">Kalbos pakeitimas</string>
     <plurals name="you_were_liked">
@@ -626,5 +629,14 @@
     <string name="hint_myprofile_buy_vip">Pirkite VIP-statusą ir mėgaukitės neapribotu bendravimu</string>
     <string name="pull_to_refresh_pull_label">Patempkite, kad atnaujinti…</string>
     <string name="pull_to_refresh_release_label">Paleiskite, kad atnaujinti…</string>
+    <string name="messaging_block_buy_vip">Dialogo pratęsimui būtinas VIP-statusas</string>
     <string name="pull_to_refresh_refreshing_label">Kraunasi…</string>
+    <string name="user_added_to_black_list">Vartotojas įtrauktas į juodąjį sąrašą</string>
+    <string name="user_deleted_from_black_list">Vartotojas pašalintas iš juodojo sąrašo</string>
+    <string name="user_added_to_bookmark">Vartotojas įtrauktas į išrinktuosius</string>
+    <string name="user_deleted_from_bookmark">Vartotojas pašalintas iš išrinktųjų</string>
+    <string name="preload_photo_type_wifi_3g">WiFi ir 3G</string>
+    <string name="preload_photo_type_wifi">Tik WiFi</string>
+    <string name="preload_photo_type_always_on">Visada įjungta</string>
+    <string name="preload_photo_type_preload_off">Įjungta</string>
 </resources>

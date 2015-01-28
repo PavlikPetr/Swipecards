@@ -11,6 +11,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.ad.NativeAd;
 
 import java.util.Collections;
 
@@ -29,15 +30,15 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
-
         FeedDialog dialog = getItem(position);
-        holder.time.setText(dialog.createdRelative);
-
-        FeedItemViewConstructor.setCounter(holder.unreadCounter,
-                ((getItemViewType(position) == T_NEW) && (!CacheProfile.getOptions().hidePreviewDialog)) ?
-                        getUnreadCounter(dialog) :
-                        0
-        );
+        if (holder != null) {
+            holder.time.setText(dialog.createdRelative);
+            FeedItemViewConstructor.setCounter(holder.unreadCounter,
+                    ((getItemViewType(position) == T_NEW) && (!CacheProfile.getOptions().hidePreviewDialog)) ?
+                            getUnreadCounter(dialog) :
+                            0
+            );
+        }
         return convertView;
     }
 
@@ -156,7 +157,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
     private boolean addItemToStartOfFeed(FeedDialog item) {
         for (FeedDialog dialog : getData()) {
-            if (item.user.id == dialog.user.id) {
+            if ( dialog.user != null && item.user.id == dialog.user.id) {
                 setItemToStartOfFeed(dialog, item);
                 return true;
             }
@@ -174,16 +175,26 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         return new ILoaderRetrierCreator<FeedDialog>() {
             @Override
             public FeedDialog getLoader() {
-                FeedDialog result = new FeedDialog(null);
+                FeedDialog result = new FeedDialog();
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
                 return result;
             }
 
             @Override
             public FeedDialog getRetrier() {
-                FeedDialog result = new FeedDialog(null);
+                FeedDialog result = new FeedDialog();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
+            }
+        };
+    }
+
+    @Override
+    protected INativeAdItemCreator<FeedDialog> getNativeAdItemCreator() {
+        return new INativeAdItemCreator<FeedDialog>() {
+            @Override
+            public FeedDialog getAdItem(NativeAd nativeAd) {
+                return new FeedDialog(nativeAd);
             }
         };
     }

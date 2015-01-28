@@ -1064,6 +1064,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+
     private boolean isShowKeyboardInChat() {
         return Device.getMaxDisplaySize() >= getActivity().
                 getResources().

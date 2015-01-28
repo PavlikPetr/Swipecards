@@ -88,7 +88,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected void makeItemReadWithId(String id) {
+    protected void makeItemReadWithFeedId(String id) {
         //feed will be marked read in another method
     }
 
@@ -150,6 +150,12 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
+    protected int getUnreadCounter() {
+        // dialogs are not auto-read
+        return 0;
+    }
+
+    @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_DIALOGS_UPDATE;
     }
@@ -158,4 +164,5 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     protected boolean considerDublicates(FeedDialog first, FeedDialog second) {
         return first.user == null ? second.user == null : first.user.id == second.user.id;
     }
+
 }

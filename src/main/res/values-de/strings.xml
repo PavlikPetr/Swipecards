@@ -174,7 +174,6 @@
     <string name="chat_sexuality_out">Sie schätzten eine Sexualität.</string>
     <string name="chat_wink_in">Jemand hat Ihnen angestupst.</string>
     <string name="chat_wink_out">Sie haben angestupst.</string>
-    <string name="filter_filter">Filter</string>
     <string name="filter_age_string">Von %1$d bis %2$d</string>
     <string name="filter_only_beautiful">Nur schöne</string>
     <string name="filter_extra_parameters">Ergänzende Parameter</string>

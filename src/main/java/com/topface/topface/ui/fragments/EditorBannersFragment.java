@@ -16,12 +16,10 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
-import com.topface.topface.ui.blocks.BannerBlock;
-import com.topface.topface.ui.blocks.FloatBlock;
+import com.topface.topface.banners.PageInfo;
+import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.BannersConfig;
 
 public class EditorBannersFragment extends BaseFragment implements View.OnClickListener {
@@ -37,8 +35,20 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
         initConfigContainer();
         root.findViewById(R.id.btnSaveSettings).setOnClickListener(this);
         root.findViewById(R.id.btnResetSettings).setOnClickListener(this);
+        initShowAdsCheckbox(root);
         initOnStartLoadingControls(root);
         return root;
+    }
+
+    private void initShowAdsCheckbox(View root) {
+        final CheckBox showAsCheckBox = ((CheckBox) root.findViewById(R.id.show_ad_checkbox));
+        showAsCheckBox.setChecked(CacheProfile.show_ad);
+        showAsCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CacheProfile.show_ad = showAsCheckBox.isChecked();
+            }
+        });
     }
 
     private void initOnStartLoadingControls(View root) {
@@ -56,11 +66,11 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
 
     private void initConfigContainer() {
         if (mConfigContainer != null) {
-            for (String pageName : CacheProfile.getOptions().pages.keySet()) {
-                Options.Page page = CacheProfile.getOptions().pages.get(pageName);
-                if (page != null) {
+            for (PageInfo.PageName pageName : PageInfo.PageName.values()) {
+                PageInfo pageInfo = CacheProfile.getOptions().getPagesInfo().get(pageName.getName());
+                if (pageInfo != null) {
                     PageConfigurator configurator = new PageConfigurator(getActivity());
-                    configurator.setPage(page);
+                    configurator.setPage(pageInfo);
                     mConfigContainer.addView(configurator);
                 }
             }
@@ -112,19 +122,10 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     }
 
     private class PageConfigurator extends LinearLayout {
-        private Options.Page mPage;
+        private PageInfo mPageInfo;
 
         private TextView mTitleText;
-        private ViewGroup mSpinnersContainer;
-        private Spinner mFloatTypeSpinner;
         private Spinner mBannerTypeSpinner;
-
-        private LayoutParams mCompressedParams = new LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 0);
-
-        private LayoutParams mExpandedParams = new LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 150);
-        private boolean mExpanded = false;
 
         public PageConfigurator(Context context) {
             this(context, null);
@@ -134,46 +135,24 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             super(context, attrs);
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View root = inflater.inflate(R.layout.editor_banner_configurator, this, true);
-            initTitleText(root);
-            initSpinnersContainer(root);
-            initFloatTypeSpinner(root);
-            initBannerTypeSpinner(root);
-            Utils.enableLayoutChangingTransition(this);
-        }
-
-        private void initTitleText(View root) {
             mTitleText = (TextView) root.findViewById(R.id.tvTitle);
-            mTitleText.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mSpinnersContainer != null) {
-                        mSpinnersContainer.setLayoutParams(mExpanded ? mCompressedParams : mExpandedParams);
-                        mExpanded = !mExpanded;
-                        requestLayout();
-                    }
-                }
-            });
+            initBannerTypeSpinner(root);
         }
 
-        private void initSpinnersContainer(View root) {
-            mSpinnersContainer = (ViewGroup) root.findViewById(R.id.loSpinners);
-            mSpinnersContainer.setLayoutParams(mCompressedParams);
-            Utils.enableLayoutChangingTransition(mSpinnersContainer);
-        }
 
         private void initBannerTypeSpinner(View root) {
             mBannerTypeSpinner = (Spinner) root.findViewById(R.id.spEditBannerType);
             ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
                     getActivity(),
                     android.R.layout.simple_spinner_item,
-                    BannerBlock.BANNERS
+                    AdProvidersFactory.BANNERS
             );
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mBannerTypeSpinner.setAdapter(adapter);
             mBannerTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    getPage().banner = BannerBlock.BANNERS[position];
+                    getPage().setBanner(AdProvidersFactory.BANNERS[position]);
                 }
 
                 @Override
@@ -182,48 +161,22 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             });
         }
 
-        private void initFloatTypeSpinner(View root) {
-            mFloatTypeSpinner = (Spinner) root.findViewById(R.id.spEditFloatType);
-            ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
-                    getActivity(),
-                    android.R.layout.simple_spinner_item,
-                    FloatBlock.FLOAT_TYPES
-            );
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            mFloatTypeSpinner.setAdapter(adapter);
-            mFloatTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    getPage().floatType = FloatBlock.FLOAT_TYPES[position];
-                    mBannerTypeSpinner.setVisibility(FloatBlock.FLOAT_TYPES[position].equals(FloatBlock.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
+        private PageInfo getPage() {
+            return mPageInfo;
         }
 
-        private Options.Page getPage() {
-            return mPage;
-        }
-
-        public void setPage(Options.Page page) {
-            mPage = page;
-            mTitleText.setText(page.name);
-            mPage = page;
-            for (int i = 0; i < FloatBlock.FLOAT_TYPES.length; i++) {
-                if (FloatBlock.FLOAT_TYPES[i].equals(mPage.floatType)) {
-                    mFloatTypeSpinner.setSelection(i);
-                    mBannerTypeSpinner.setVisibility(FloatBlock.FLOAT_TYPES[i].equals(FloatBlock.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
+        public void setPage(PageInfo pageInfo) {
+            mPageInfo = pageInfo;
+            mTitleText.setText(pageInfo.name);
+            mPageInfo = pageInfo;
+            for (int i = 0; i < PageInfo.FLOAT_TYPES.length; i++) {
+                if (PageInfo.FLOAT_TYPES[i].equals(mPageInfo.floatType)) {
+                    mBannerTypeSpinner.setVisibility(PageInfo.FLOAT_TYPES[i].equals(PageInfo.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
                 }
             }
-            if (mPage.name.equals(Options.PAGE_GAG) || mPage.name.equals(Options.PAGE_START)) {
-                mFloatTypeSpinner.setVisibility(View.GONE);
-            }
 
-            for (int i = 0; i < BannerBlock.BANNERS.length; i++) {
-                if (BannerBlock.BANNERS[i].equals(mPage.banner)) {
+            for (int i = 0; i < AdProvidersFactory.BANNERS.length; i++) {
+                if (AdProvidersFactory.BANNERS[i].equals(mPageInfo.getBanner())) {
                     mBannerTypeSpinner.setSelection(i);
                 }
             }

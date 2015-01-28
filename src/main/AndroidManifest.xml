@@ -151,6 +151,11 @@
             </intent-filter>
         </activity>
 
+
+        <activity
+            android:name=".ui.SslErrorActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".ui.GiftsActivity"
             android:screenOrientation="portrait"

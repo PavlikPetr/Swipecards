@@ -177,12 +177,13 @@
     <string name="chat_sexuality_out">Hai valutato la sessualità.</string>
     <string name="chat_wink_in">Hai ricevuto un occhiolino.</string>
     <string name="chat_wink_out">Hai inviato un occhiolino.</string>
-    <string name="filter_filter">Filtro</string>
     <string name="filter_age_string">Da %1$d a %2$d</string>
     <string name="filter_only_beautiful">Solo belle</string>
     <string name="filter_extra_parameters">Parametri aggiuntivi</string>
     <string name="filter_age">Età</string>
     <string name="filter_online">Online</string>
+    <string name="filter_age_start_prefix">Dai %s</string>
+    <string name="filter_age_end_prefix">ai %s</string>
     <string name="filter_cities_all">In tutte le città</string>
     <string name="buying_header_title">Acquisti</string>
     <plurals name="buying_gift_you_need_coins">
@@ -305,6 +306,7 @@
     <string name="rate_popup_error">Devi indicare quante stelle dai alla nostra applicazione</string>
     <string name="feedback_popup_title">Hai dato un voto basso. Dicci cosa non ti piace di questa applicazione. Aiutaci a migliorare. Grazie!</string>
     <string name="settings_melody">Suoneria di avviso</string>
+    <string name="settings_loading_photo">Anteprima delle foto</string>
     <string name="edit_refresh_status">Aggiornare lo stato</string>
     <string name="ban_title">Congratulazioni! Hai ricevuto ban</string>
     <string name="ban_title_forever">Congratulazioni! Hai ricevuto il ban per sempre</string>
@@ -495,6 +497,7 @@
     <string name="likes_can_help_you">Le simpatie ti aiutano a conoscere gente</string>
     <string name="general_get_dating">Presentarsi</string>
     <string name="settings_select_language">Scelta della lingua dell’applicazione</string>
+    <string name="settings_select_preload_photo_type">Scegli quando l’anteprima delle foto è accesa</string>
     <string name="restart_to_change_locale">L’applicazione sarà riavviata per cambiare lingua</string>
     <string name="locale_changing">Lingua</string>
     <plurals name="you_were_liked">
@@ -602,5 +605,14 @@
     <string name="hint_myprofile_buy_vip">Compra lo stato VIP e sfrutta la possibilità di contattare chi vuoi tu</string>
     <string name="pull_to_refresh_pull_label">Tira per aggiornare…</string>
     <string name="pull_to_refresh_release_label">Lascia per aggiornare…</string>
+    <string name="messaging_block_buy_vip">Devi avere lo stato VIP per continuare il dialogo</string>
     <string name="pull_to_refresh_refreshing_label">Caricamento…</string>
+    <string name="user_added_to_black_list">L’utente è stato aggiunto nella black list</string>
+    <string name="user_deleted_from_black_list">L’utente è stato tolto dalla black list</string>
+    <string name="user_added_to_bookmark">L’utente è stato aggiunto nei preferiti</string>
+    <string name="user_deleted_from_bookmark">L’utente è stato tolto dai preferiti</string>
+    <string name="preload_photo_type_wifi_3g">WiFi e 3G</string>
+    <string name="preload_photo_type_wifi">Solo WiFi</string>
+    <string name="preload_photo_type_always_on">Sempre accesa</string>
+    <string name="preload_photo_type_preload_off">Spenta</string>
 </resources>

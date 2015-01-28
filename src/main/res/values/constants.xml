@@ -34,6 +34,11 @@
     <string name="notification_message_format">%1$s &#160;%2$s</string>
     <string name="app_id">642883445728173</string>
 
+    <!-- messages of ssl exception -->
+    <string-array name="ssl_handshake_exception_messages">
+        <item>"could not validate certificate"</item>
+    </string-array>
+
     <!-- delay for showing popup about problems with notification services -->
     <integer name="notifications_disable_popup_delay">72</integer>
 

@@ -120,4 +120,9 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteBookmarksRequest(ids, getActivity());
     }
+
+    @Override
+    protected int getUnreadCounter() {
+        return 0;
+    }
 }
