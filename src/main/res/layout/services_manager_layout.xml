@@ -2,35 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center_vertical"
     android:orientation="vertical"
-    android:paddingLeft="10dp">
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
 
     <TextView
+        style="@style/ItemTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="6dp"
         android:text="@string/google_service_general_title"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/loTitle"
+        style="@style/ItemtText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingTop="10dp">
+        android:paddingLeft="6dp"
+        android:textSize="12sp"
+        android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/loTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingRight="5dp"
-            android:textSize="16sp"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/loButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/loButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:visibility="gone" />
 </LinearLayout>

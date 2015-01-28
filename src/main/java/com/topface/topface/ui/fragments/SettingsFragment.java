@@ -181,6 +181,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         if (!isServicesAvailable) {
             mTvNoNotification.removeAllViews();
             mTvNoNotification.addView(mMarketApiManager.getView());
+            mTvNoNotification.setBackgroundResource(R.drawable.edit_big_btn_selector);
             mTvNoNotification.setVisibility(View.VISIBLE);
         } else {
             mTvNoNotification.setVisibility(View.GONE);

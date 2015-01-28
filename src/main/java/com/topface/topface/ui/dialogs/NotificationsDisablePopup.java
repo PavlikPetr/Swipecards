@@ -30,7 +30,7 @@ public class NotificationsDisablePopup extends AbstractStartAction {
 
     private AlertDialog getPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setTitle(R.string.google_service_general_title).setMessage(getMarketApiManager().getMessage())
+        builder.setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.google_service_general_title).setMessage(getMarketApiManager().getMessage())
                 .setCancelable(true)
                 .setNegativeButton(mActivity.getResources().getString(R.string.general_cancel),
                         new DialogInterface.OnClickListener() {
