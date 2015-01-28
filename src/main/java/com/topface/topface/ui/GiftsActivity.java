@@ -46,13 +46,26 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
 
+    /**
+     * Intent to start GiftsActivity for sending gift item
+     * If you need to process send gift request yourself set sendGift flag to false
+     *
+     * @param context lauch context
+     * @param userId  profile id to send gift
+     * @return intent
+     */
+    public static Intent getSendGiftIntent(Context context, int userId) {
+        Intent result = new Intent(context, GiftsActivity.class);
+        result.putExtra(INTENT_USER_ID_TO_SEND_GIFT, userId);
+        return result;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_gifts);
-        getTitleSetter().setActionBarTitles(getString(R.string.profile_gifts), null);
-
+        actionBarView.setArrowUpView(getResources().getString(R.string.profile_gifts));
         mUserIdToSendGift = getIntent().getIntExtra(INTENT_USER_ID_TO_SEND_GIFT, 0);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -190,19 +203,5 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 }
             }
         }).exec();
-    }
-
-    /**
-     * Intent to start GiftsActivity for sending gift item
-     * If you need to process send gift request yourself set sendGift flag to false
-     *
-     * @param context lauch context
-     * @param userId  profile id to send gift
-     * @return intent
-     */
-    public static Intent getSendGiftIntent(Context context, int userId) {
-        Intent result = new Intent(context, GiftsActivity.class);
-        result.putExtra(INTENT_USER_ID_TO_SEND_GIFT, userId);
-        return result;
     }
 }

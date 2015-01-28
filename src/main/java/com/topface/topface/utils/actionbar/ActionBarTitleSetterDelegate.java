@@ -1,46 +1,73 @@
 package com.topface.topface.utils.actionbar;
 
+import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
+
+import com.topface.topface.App;
+import com.topface.topface.R;
 
 /**
  * Created by kirussell on 26.09.13.
  * Class
  */
-public class ActionBarTitleSetterDelegate implements IActionBarTitleSetter {
+public class ActionBarTitleSetterDelegate {
 
-    private ActionBar mActionBar;
+    private Activity mActivity;
     private boolean mNoActionBar;
+    private TextView mTitle;
+    private TextView mSubtitle;
 
     public ActionBarTitleSetterDelegate(ActionBar actionBar) {
-        mActionBar = actionBar;
-        mNoActionBar = (mActionBar == null);
+        mNoActionBar = (actionBar == null);
+        if (!mNoActionBar) {
+            mTitle = (TextView) actionBar.getCustomView().findViewById(R.id.title);
+            mSubtitle = (TextView) actionBar.getCustomView().findViewById(R.id.subtitle);
+        }
     }
 
-    @Override
+    public ActionBarTitleSetterDelegate(FragmentActivity activity, ActionBar actionBar) {
+        this(actionBar);
+        mActivity = activity;
+    }
+
     public void setActionBarTitles(String title, String subtitle) {
         if (mNoActionBar) return;
-        mActionBar.setTitle(title);
-        mActionBar.setSubtitle(subtitle);
+        mSubtitle.setVisibility(View.VISIBLE);
+        mTitle.setText(title);
+        if (TextUtils.isEmpty(subtitle)) {
+            mSubtitle.setVisibility(View.GONE);
+            return;
+        }
+        mSubtitle.setText(subtitle);
     }
 
-    @Override
     public void setActionBarTitles(int title, int subtitle) {
         if (mNoActionBar) return;
-        mActionBar.setTitle(title);
-        mActionBar.setSubtitle(subtitle);
+        setActionBarTitles(App.getContext().getResources().getString(title),
+                App.getContext().getResources().getString(subtitle));
     }
 
-    @Override
+    @SuppressWarnings("UnusedDeclaration")
     public void setActionBarTitles(String title, int subtitle) {
         if (mNoActionBar) return;
-        mActionBar.setTitle(title);
-        mActionBar.setSubtitle(subtitle);
+        setActionBarTitles(title, App.getContext().getResources().getString(subtitle));
+
     }
 
-    @Override
     public void setActionBarTitles(int title, String subtitle) {
         if (mNoActionBar) return;
-        mActionBar.setTitle(title);
-        mActionBar.setSubtitle(subtitle);
+        setActionBarTitles(App.getContext().getResources().getString(title), subtitle);
     }
+
+    public void setOnline(boolean online) {
+        if (mTitle != null) {
+            mTitle.setCompoundDrawablePadding((int) mActivity.getResources().getDimension(R.dimen.padding_left_for_online_icon));
+            mTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, online ? R.drawable.ico_online : 0, 0);
+        }
+    }
+
 }

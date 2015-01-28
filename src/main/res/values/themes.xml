@@ -2,7 +2,10 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Базовая тема приложения -->
-    <style name="Theme.Topface" parent="@style/Theme.AppCompat">
+    <style name="Theme.Topface" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#03a9f4</item>
+        <item name="colorPrimaryDark">#0287c3</item>
+        <item name="colorAccent">#ee4493</item>
         <!-- overflow menu settings -->
         <item name="android:itemTextAppearance">@style/PopupMenuTextApearance</item>
         <item name="android:dropDownListViewStyle">@style/PopupMenuListView</item>
@@ -47,7 +50,6 @@
         <item name="android:selectableItemBackground" tools:ignore="NewApi">
             @drawable/bg_semitransparent_black_selector
         </item>
-
         <!-- Action Mode (CAB)-->
         <item name="actionModeBackground">@color/bg_action_mode</item>
         <item name="actionModeCloseDrawable">@drawable/ic_check</item>

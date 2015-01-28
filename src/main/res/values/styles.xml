@@ -7,7 +7,7 @@
         <item name="backgroundSplit">@drawable/bg_actionbar</item>
         <item name="titleTextStyle">@style/Widget.Topface.ActionBar.Title</item>
         <item name="subtitleTextStyle">@style/Widget.Topface.ActionBar.Subtitle</item>
-
+        <item name="contentInsetStart">0dp</item>
         <item name="android:background">@drawable/bg_actionbar</item>
         <item name="android:backgroundStacked" tools:ignore="NewApi">@drawable/bg_actionbar</item>
         <item name="android:backgroundSplit" tools:ignore="NewApi">@drawable/bg_actionbar</item>
@@ -707,7 +707,7 @@
 
     // наследуются стили Widget
 
-    <style name="Widget.Topface"/>
+    <style name="Widget.Topface" />
 
     <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big">
         <item name="android:background">@drawable/btn_gray_selector</item>
@@ -851,7 +851,7 @@
         <item name="android:textSize">16dp</item>
     </style>
 
-    <style name="PopupMenu" parent="@style/Widget.AppCompat.Base.PopupMenu">
+    <style name="PopupMenu" parent="@style/Widget.AppCompat.PopupMenu">
         <!--<item name="android:popupBackground">#F8F8F8</item>-->
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_example</item>
     </style>

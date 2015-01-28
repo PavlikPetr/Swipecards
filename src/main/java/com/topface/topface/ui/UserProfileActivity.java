@@ -75,4 +75,9 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
     protected UserProfileFragment createFragment() {
         return new UserProfileFragment();
     }
+
+    @Override
+    protected void setActionBarView() {
+        super.setActionBarView();
+    }
 }

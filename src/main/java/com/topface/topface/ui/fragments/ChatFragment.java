@@ -7,14 +7,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -79,9 +78,7 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
-import com.topface.topface.utils.actionbar.ActionBarOnlineSetterDelegate;
-import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
+import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
 import com.topface.topface.utils.controllers.PopularUserChatController;
@@ -102,8 +99,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
-    private static final String KEYBOARD_OPENED = "keyboard_opened";
-    private static final String POPULAR_LOCK_STATE = "chat_blocked";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_SEX = "user_sex";
     public static final String INTENT_USER_CITY = "user_city";
@@ -112,7 +107,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
     public static final String MAKE_ITEM_READ_BY_UID = "com.topface.topface.feedfragment.MAKE_READ_BY_UID";
     public static final String INITIAL_MESSAGE = "initial_message";
-
+    private static final String KEYBOARD_OPENED = "keyboard_opened";
+    private static final String POPULAR_LOCK_STATE = "chat_blocked";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
     // Data
@@ -140,9 +136,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private String mItemId;
     private String mInitialMessage;
     private boolean wasFailed = false;
-    private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
-    private boolean mIsBeforeFirstChatUpdate = true;
-    private OverflowMenu mChatOverflowMenu;
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -157,8 +150,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             });
         }
     };
+    private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
+    private boolean mIsBeforeFirstChatUpdate = true;
+    private OverflowMenu mChatOverflowMenu;
     // Managers
-    private ActionBarOnlineSetterDelegate mOnlineSetter;
+    private ActionBarTitleSetterDelegate mSetter;
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
@@ -194,6 +190,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSetter = new ActionBarTitleSetterDelegate(getActivity(), ((ActionBarActivity) getActivity()).getSupportActionBar());
         DateUtils.syncTime();
         setRetainInstance(true);
         String text = UserNotification.getRemoteInputMessageText(getActivity().getIntent());
@@ -594,7 +591,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
 
                 refreshActionBarTitles();
-                mOnlineSetter.setOnline(data.user.online);
+                mSetter.setOnline(data.user.online);
                 wasFailed = false;
                 mUser = data.user;
                 if (!mUser.isEmpty()) {
@@ -712,19 +709,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void setOnline(boolean online) {
-        if (mOnlineSetter != null) {
-            mOnlineSetter.setOnline(online);
+        if (mSetter != null) {
+            mSetter.setOnline(online);
         }
-    }
-
-    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            mOnlineSetter = new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar,
-                    R.id.title_clickable, R.id.title, R.id.subtitle);
-        } else {
-            mOnlineSetter = new ActionBarOnlineSetterDelegate(actionBar, getActivity());
-        }
-        return mOnlineSetter;
     }
 
     private void setActionBarAvatar(FeedUser user) {
