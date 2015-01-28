@@ -361,6 +361,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
+    public void doPreFinish() {
+        onPreFinish();
+    }
     protected void onPreFinish() {
     }
 

@@ -129,7 +129,6 @@
     <string name="chat_sexuality_out">Oceniłeś/-aś seksualność.</string>
     <string name="chat_wink_in">Ktoś puścił oczko do Ciebie</string>
     <string name="chat_wink_out">Puściłeś/-aś oczko</string>
-    <string name="filter_filter">Filtr</string>
     <string name="filter_age_string">Od %1$d do %2$d</string>
     <string name="filter_only_beautiful">Tylko piękni</string>
     <string name="filter_extra_parameters">Dodatkowe kryteria</string>

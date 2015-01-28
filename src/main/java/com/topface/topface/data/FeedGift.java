@@ -25,7 +25,6 @@ public class FeedGift extends FeedItem implements Parcelable {
     }
 
     public FeedGift() {
-        super((JSONObject) null);
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -35,7 +34,7 @@ public class FeedGift extends FeedItem implements Parcelable {
 
     public FeedGift(Parcel in) {
         super(in);
-        gift = (Gift) in.readParcelable(((Object) this).getClass().getClassLoader());
+        gift = in.readParcelable(((Object) this).getClass().getClassLoader());
     }
 
     @Override

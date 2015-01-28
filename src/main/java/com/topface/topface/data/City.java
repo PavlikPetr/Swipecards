@@ -1,5 +1,7 @@
 package com.topface.topface.data;
 
+import android.text.TextUtils;
+
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -49,7 +51,7 @@ public class City extends AbstractData implements SerializableToJson, Cloneable 
     }
 
     public static LinkedList<City> getCitiesList(IApiResponse response) {
-        LinkedList<City> cities = new LinkedList<City>();
+        LinkedList<City> cities = new LinkedList<>();
         try {
             JSONArray arr = response.getJsonResult().getJSONArray("cities");
             if (arr.length() > 0)
@@ -96,5 +98,9 @@ public class City extends AbstractData implements SerializableToJson, Cloneable 
         } else {
             return name;
         }
+    }
+
+    public String getFullName() {
+        return TextUtils.isEmpty(full) ? getName() : full;
     }
 }

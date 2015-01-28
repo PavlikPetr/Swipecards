@@ -34,16 +34,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
      */
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
-    private static TopfaceOfferwallRedirect mTopfaceOfferwallRedirect;
-    private BroadcastReceiver mOfferwallOpenedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mTopfaceOfferwallRedirect != null) {
-                mTopfaceOfferwallRedirect.setCompletedByBroadcast(intent);
-            }
-        }
-    };
+
     private ForceOfferwallRedirect mBonusRedirect;
+    private static TopfaceOfferwallRedirect mTopfaceOfferwallRedirect;
     private boolean mIsOfferwallsReady;
 
     static {
@@ -52,53 +45,14 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         }
     }
 
-    public static Intent createVipBuyIntent(String extraText, String from) {
-        Intent intent = new Intent(App.getContext(), PurchasesActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP);
-        intent.putExtra(PurchasesFragment.ARG_TAG_EXRA_TEXT, extraText);
-        intent.putExtra(OpenIabFragment.ARG_TAG_SOURCE, from);
-        intent.putExtra(PurchasesFragment.IS_VIP_PRODUCTS, true);
-        return intent;
-    }
-
-    public static Intent createBuyingIntent(String from, int itemType, int itemPrice) {
-        Intent intent;
-        Context context = App.getContext();
-        if (needTFOfferwallOnOpenRedirect(itemPrice)) {
-            OfferwallPayload payload = new OfferwallPayload();
-            payload.experimentGroup = TopfaceOfferwallRedirect.KEY_EXP_ON_OPEN;
-            intent = TFOfferwallSDK.getIntent(context, true, context.getString(R.string.general_bonus), payload);
-            intent.putExtra(TFOfferwallActivity.RELAUNCH_PARENT_WITH_SAME_INTENT, true);
-        } else {
-            intent = new Intent(context, PurchasesActivity.class);
+    private BroadcastReceiver mOfferwallOpenedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mTopfaceOfferwallRedirect != null) {
+                mTopfaceOfferwallRedirect.setCompletedByBroadcast(intent);
+            }
         }
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY);
-        intent.putExtra(OpenIabFragment.ARG_TAG_SOURCE, from);
-        if (itemType != -1) {
-            intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, itemType);
-        }
-        if (itemPrice != -1) {
-            intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, itemPrice);
-        }
-        return intent;
-    }
-
-    public static Intent createBuyingIntent(String from, int itemPrice) {
-        return createBuyingIntent(from, -1, itemPrice);
-    }
-
-    public static Intent createBuyingIntent(String from) {
-        return createBuyingIntent(from, -1, -1);
-    }
-
-    private static boolean needTFOfferwallOnOpenRedirect(int itemPrice) {
-        return TFOfferwallSDK.canShowOffers() && isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnOpen() &&
-                CacheProfile.money < itemPrice && mTopfaceOfferwallRedirect.showOrNot();
-    }
-
-    private static boolean isTopfaceOfferwallRedirectEnabled() {
-        return mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled();
-    }
+    };
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -173,6 +127,45 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         getFragment().skipBonus();
     }
 
+    public static Intent createVipBuyIntent(String extraText, String from) {
+        Intent intent = new Intent(App.getContext(), PurchasesActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP);
+        intent.putExtra(PurchasesFragment.ARG_TAG_EXRA_TEXT, extraText);
+        intent.putExtra(OpenIabFragment.ARG_TAG_SOURCE, from);
+        intent.putExtra(PurchasesFragment.IS_VIP_PRODUCTS, true);
+        return intent;
+    }
+
+    public static Intent createBuyingIntent(String from, int itemType, int itemPrice) {
+        Intent intent;
+        Context context = App.getContext();
+        if (needTFOfferwallOnOpenRedirect(itemPrice)) {
+            OfferwallPayload payload = new OfferwallPayload();
+            payload.experimentGroup = mTopfaceOfferwallRedirect.getGroup();
+            intent = TFOfferwallSDK.getIntent(context, true, context.getString(R.string.general_bonus), payload);
+            intent.putExtra(TFOfferwallActivity.RELAUNCH_PARENT_WITH_SAME_INTENT, true);
+        } else {
+            intent = new Intent(context, PurchasesActivity.class);
+        }
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY);
+        intent.putExtra(OpenIabFragment.ARG_TAG_SOURCE, from);
+        if (itemType != -1) {
+            intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, itemType);
+        }
+        if (itemPrice != -1) {
+            intent.putExtra(PurchasesFragment.ARG_ITEM_PRICE, itemPrice);
+        }
+        return intent;
+    }
+
+    public static Intent createBuyingIntent(String from, int itemPrice) {
+        return createBuyingIntent(from, -1, itemPrice);
+    }
+
+    public static Intent createBuyingIntent(String from) {
+        return createBuyingIntent(from, -1, -1);
+    }
+
     @Override
     protected String getFragmentTag() {
         return PurchasesFragment.class.getSimpleName();
@@ -209,6 +202,11 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         actionBar.setLogo(android.R.color.transparent);
     }
 
+    private static boolean needTFOfferwallOnOpenRedirect(int itemPrice) {
+        return TFOfferwallSDK.canShowOffers() && isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnOpen() &&
+                CacheProfile.money < itemPrice && mTopfaceOfferwallRedirect.showOrNot();
+    }
+
     private boolean needTFOfferwallOnCloseRedirect() {
         return isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnClose() &&
                 !mTopfaceOfferwallRedirect.isCompleted() && mIsOfferwallsReady && !getFragment().isVipProducts();
@@ -227,10 +225,14 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
                 getFragment().forceBonusScreen(mBonusRedirect.getText());
     }
 
+    private static boolean isTopfaceOfferwallRedirectEnabled() {
+        return mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled();
+    }
+
     private boolean showTopfaceOfferwall() {
         if (needTFOfferwallOnCloseRedirect()) {
             OfferwallPayload payload = new OfferwallPayload();
-            payload.experimentGroup = TopfaceOfferwallRedirect.KEY_EXP_ON_CLOSE;
+            payload.experimentGroup = mTopfaceOfferwallRedirect.getGroup();
             OfferwallsManager.startTfOfferwall(this, payload);
             mTopfaceOfferwallRedirect.setComplited(true);
             return true;

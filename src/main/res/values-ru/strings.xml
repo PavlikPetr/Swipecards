@@ -215,7 +215,8 @@
     <string name="chat_wink_out">Вы подмигнули.</string>
 
     <!-- Filter -->
-    <string name="filter_filter">Фильтр</string>
+    <string name="filter_search">Поиск</string>
+    <string name="filter_title">Фильтр</string>
     <string name="filter_age_string">От %1$d до %2$d</string>
     <string name="filter_only_beautiful">Только красивые</string>
     <string name="filter_extra_parameters">Дополнительные параметры</string>
@@ -798,4 +799,8 @@
     <string name="preload_photo_type_wifi">Только WiFi</string>
     <string name="preload_photo_type_always_on">Включена всегда</string>
     <string name="preload_photo_type_preload_off">Выключена</string>
+
+    <string name="wrong_time_popup_text">Не удалось установить безопасное соединение с сервером.\nВозможно, на вашем устройстве установлена неправильная дата.</string>
+    <string name="wrong_time_popup_button">Открыть настройки</string>
+
 </resources>

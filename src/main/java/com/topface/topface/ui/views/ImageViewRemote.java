@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
 import com.topface.framework.imageloader.ImageViewRemoteTemplate;
-import com.topface.framework.imageloader.processor.CircumCircleProcessor;
 import com.topface.framework.imageloader.processor.RoundCornersProcessor;
 import com.topface.framework.imageloader.processor.RoundProcessor;
 import com.topface.topface.R;
@@ -18,8 +17,7 @@ public class ImageViewRemote extends ImageViewRemoteTemplate {
     private static final int POST_PROCESSOR_ROUNDED = 1;
     private static final int POST_PROCESSOR_ROUND_CORNERS = 2;
     private static final int POST_PROCESSOR_MASK = 3;
-    private static final int POST_PROCESSOR_CIRCUMCIRCLE = 4;
-    private static final int POST_PROCESSOR_LEFTMENUCLIP = 5;
+    private static final int POST_PROCESSOR_LEFTMENUCLIP = 4;
 
     public ImageViewRemote(Context context) {
         super(context);
@@ -79,9 +77,6 @@ public class ImageViewRemote extends ImageViewRemoteTemplate {
                     break;
                 case POST_PROCESSOR_MASK:
                     mPostProcessor = new MaskClipProcessor(maskId, borderResId);
-                    break;
-                case POST_PROCESSOR_CIRCUMCIRCLE:
-                    mPostProcessor = new CircumCircleProcessor();
                     break;
                 case POST_PROCESSOR_LEFTMENUCLIP:
                     mPostProcessor = new LeftMenuClipProcessor();

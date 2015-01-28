@@ -12,21 +12,17 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.topface.framework.utils.Debug;
-import com.topface.statistics.android.Slices;
-import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.Banner;
-import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.statistics.TfStatConsts;
-import com.topface.topface.ui.blocks.BannerBlock;
-import com.topface.topface.ui.blocks.FloatBlock;
+import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
@@ -39,6 +35,11 @@ import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
 import ru.ideast.adwired.events.OnStopListener;
 
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADWIRED;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
+
 /**
  */
 public class FullscreenController {
@@ -49,27 +50,27 @@ public class FullscreenController {
     private Activity mActivity;
 
     private class FullscreenStartAction extends AbstractStartAction {
-        private Options.Page startPage;
+        private PageInfo startPageInfo;
         private int priority;
 
         public FullscreenStartAction(int priority) {
             this.priority = priority;
             if (!CacheProfile.isEmpty()) {
-                startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
+                startPageInfo = CacheProfile.getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
             }
         }
 
         @Override
         public void callInBackground() {
-            if (startPage != null) {
-                Debug.log(TAG, startPage.banner);
+            if (startPageInfo != null) {
+                Debug.log(TAG, startPageInfo.getBanner());
             }
         }
 
         @Override
         public void callOnUi() {
-            if (startPage != null) {
-                FullscreenController.this.requestFullscreen(startPage.banner);
+            if (startPageInfo != null) {
+                FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
             }
         }
 
@@ -77,8 +78,8 @@ public class FullscreenController {
         public boolean isApplicable() {
             return CacheProfile.show_ad &&
                     FullscreenController.this.isTimePassed() &&
-                    startPage != null &&
-                    startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER);
+                    startPageInfo != null &&
+                    startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
         }
 
         @Override
@@ -143,15 +144,15 @@ public class FullscreenController {
     public void requestFullscreen(String type) {
         try {
             switch (type) {
-                case BannerBlock.BANNER_NONE:
+                case BANNER_NONE:
                     return;
-                case BannerBlock.BANNER_ADMOB:
+                case BANNER_ADMOB:
                     requestAdmobFullscreen();
                     break;
-                case BannerBlock.BANNER_ADWIRED:
+                case BANNER_ADWIRED:
                     requestAdwiredFullscreen();
                     break;
-                case BannerBlock.BANNER_TOPFACE:
+                case BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
                 default:
@@ -241,15 +242,11 @@ public class FullscreenController {
 
     private void requestTopfaceFullscreen() {
         BannerRequest request = new BannerRequest(App.getContext());
-        request.place = Options.PAGE_START;
+        request.place = PageInfo.PageName.START.getName();
         request.callback(new DataApiHandler<Banner>() {
             @Override
             public void success(final Banner data, IApiResponse response) {
                 if (data.action.equals(Banner.ACTION_URL)) {
-                    //Срезы для статистики
-                    final Slices slices = new Slices();
-                    slices.put(TfStatConsts.val, data.name);
-
                     if (showFullscreenBanner(data.parameter)) {
                         isFullScreenBannerVisible = true;
                         addLastFullscreenShowedTime();
@@ -257,13 +254,13 @@ public class FullscreenController {
                         final ViewGroup bannerContainer = getFullscreenBannerContainer();
                         bannerContainer.addView(fullscreenViewGroup);
                         bannerContainer.setVisibility(View.VISIBLE);
-                        StatisticsTracker.getInstance().sendEvent("mobile_tf_fullscreen_show", slices);
+                        TopfaceAdStatistics.sendFullscreenShown(data);
                         final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
                         fullscreenImage.setRemoteSrc(data.url);
                         fullscreenImage.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                StatisticsTracker.getInstance().sendEvent("mobile_tf_fullscreen_click", slices);
+                                TopfaceAdStatistics.sendFullscreenClicked(data);
                                 AppConfig config = App.getAppConfig();
                                 config.addFullscreenUrl(data.parameter);
                                 config.saveConfig();
@@ -277,7 +274,7 @@ public class FullscreenController {
                             @Override
                             public void onClick(View v) {
                                 hideFullscreenBanner(bannerContainer);
-                                StatisticsTracker.getInstance().sendEvent("mobile_tf_fullscreen_close", slices);
+                                TopfaceAdStatistics.sendFullscreenClosed(data);
                             }
                         });
                     }

@@ -114,8 +114,8 @@ public class OwnProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mAddPhotoReceiver);
     }
 

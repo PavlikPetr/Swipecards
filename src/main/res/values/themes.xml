@@ -59,6 +59,16 @@
         <item name="android:actionModeCloseDrawable" tools:ignore="NewApi">@drawable/ic_check</item>
     </style>
 
+    <!-- transparent activity theme -->
+    <style name="Theme.Transparent" parent="Topface.Theme.TransparentActionBarActivity">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
     <!-- Светлая тема приложения -->
     <style name="Theme.Topface.Light" parent="@style/Theme.Topface">
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewStyle</item>

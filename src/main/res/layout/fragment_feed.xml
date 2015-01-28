@@ -30,7 +30,8 @@
                                            p2r:ptrHeaderTextColor="#8A8A8A"
                                            p2r:ptrOverScroll="false"
                                            p2r:ptrShowIndicator="false"
-                                           p2r:ptrDrawable="@drawable/ic_p2r_loading"
+                                           p2r:ptrDrawable="@drawable/spinner_16_inner_holo"
+                                           p2r:ptrHideTextInVerticalMode="true"
                                            android:listSelector="@android:color/transparent"/>
 
         <com.topface.topface.ui.views.LockerView
@@ -43,4 +44,7 @@
             android:layout_height="fill_parent"/>
     </RelativeLayout>
 
+    <include
+        android:id="@+id/banner_container_for_feeds"
+        layout="@layout/banner" />
 </LinearLayout>
