@@ -33,8 +33,13 @@ public class AmazonMarketApiManager extends BaseMarketApiManager {
         return mIsServicesAvailable;
     }
 
+    @Override
+    public boolean isPopupAvailable() {
+        return false;
+    }
+
     private void createViewUnavailableServices() {
-        getTitle().setText(mContext.getString(R.string.amazon_unavailable_services_title));
+        getTitle().setText(mContext.getString(R.string.google_unavailable_services_title));
         getButton().setVisibility(View.GONE);
     }
 

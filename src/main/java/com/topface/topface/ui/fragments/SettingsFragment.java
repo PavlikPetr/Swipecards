@@ -177,21 +177,71 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     private void setNotificationState() {
-        if (!CacheProfile.email && !mMarketApiManager.isServicesAvailable()) {
+        boolean isServicesAvailable = mMarketApiManager.isServicesAvailable();
+        if (!isServicesAvailable) {
             mTvNoNotification.removeAllViews();
             mTvNoNotification.addView(mMarketApiManager.getView());
             mTvNoNotification.setVisibility(View.VISIBLE);
+        } else {
+            mTvNoNotification.setVisibility(View.GONE);
+        }
+        if (!CacheProfile.email && !isServicesAvailable) {
             melodyName.setVisibility(View.GONE);
             setNotificationVisibility(View.GONE);
         } else {
             setNotificationVisibility(View.VISIBLE);
-            mTvNoNotification.setVisibility(View.GONE);
             melodyName.setVisibility(View.VISIBLE);
         }
-        if (mMarketApiManager.isServicesAvailable()) {
+        if (isServicesAvailable) {
             setNotificationSettingsVisibility(View.VISIBLE);
         } else {
             setNotificationSettingsVisibility(View.GONE);
+        }
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_LIKES,
+                mLoLikes,
+                CacheProfile.email,
+                isMailAvailable(CacheProfile.NOTIFICATIONS_LIKES),
+                isApnsAvailable(CacheProfile.NOTIFICATIONS_LIKES));
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY,
+                mLoMutual,
+                CacheProfile.email,
+                isMailAvailable(CacheProfile.NOTIFICATIONS_SYMPATHY),
+                isApnsAvailable(CacheProfile.NOTIFICATIONS_SYMPATHY));
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE,
+                mLoChat,
+                CacheProfile.email,
+                isMailAvailable(CacheProfile.NOTIFICATIONS_MESSAGE),
+                isApnsAvailable(CacheProfile.NOTIFICATIONS_MESSAGE));
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR,
+                mLoGuests,
+                CacheProfile.email,
+                isMailAvailable(CacheProfile.NOTIFICATIONS_VISITOR),
+                isApnsAvailable(CacheProfile.NOTIFICATIONS_VISITOR));
+    }
+
+//    private void setApnsVisibility(ViewGroup view, int key, int visibility) {
+//        CheckBox checkBox = (CheckBox) view.findViewWithTag(Options.generateKey(key, false));
+//        if (checkBox == null) {
+//            checkBox = (CheckBox) view.findViewWithTag("cbPhone");
+//        }
+//        if (checkBox != null) {
+//            checkBox.setVisibility(visibility);
+//        }
+//    }
+
+    private boolean isMailAvailable(int key) {
+        if (CacheProfile.notifications != null && CacheProfile.notifications.get(key) != null) {
+            return CacheProfile.notifications.get(key).mail;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isApnsAvailable(int key) {
+        if (CacheProfile.notifications != null && CacheProfile.notifications.get(key) != null) {
+            return CacheProfile.notifications.get(key).apns;
+        } else {
+            return false;
         }
     }
 
@@ -204,52 +254,17 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         setBackground(R.drawable.edit_big_btn_top_selector, mLoLikes);
         setText(R.string.settings_likes, mLoLikes);
 
-        boolean mail;
-        boolean apns;
-        if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES) != null) {
-            mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
-            apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
-        } else {
-            mail = false;
-            apns = false;
-        }
-        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_LIKES, mLoLikes, CacheProfile.email, mail, apns);
-
         // Mutual
         setBackground(R.drawable.edit_big_btn_middle, mLoMutual);
         setText(R.string.settings_mutual, mLoMutual);
-        if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY) != null) {
-            mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
-            apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
-        } else {
-            mail = false;
-            apns = false;
-        }
-        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY, mLoMutual, CacheProfile.email, mail, apns);
 
         // Chat
         setBackground(R.drawable.edit_big_btn_middle, mLoChat);
         setText(R.string.settings_messages, mLoChat);
-        if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE) != null) {
-            mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
-            apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
-        } else {
-            mail = false;
-            apns = false;
-        }
-        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE, mLoChat, CacheProfile.email, mail, apns);
 
         // Guests
         setBackground(R.drawable.edit_big_btn_bottom, mLoGuests);
         setText(R.string.settings_guests, mLoGuests);
-        if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR) != null) {
-            mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
-            apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
-        } else {
-            mail = false;
-            apns = false;
-        }
-        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR, mLoGuests, CacheProfile.email, mail, apns);
 
         // Vibration
         setBackground(R.drawable.edit_big_btn_top, mLoVibration);
@@ -313,11 +328,15 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         CheckBox checkBox = (CheckBox) frame.findViewWithTag("cbPhone");
         ProgressBar prsPhone = (ProgressBar) frame.findViewWithTag("prsPhone");
         String phoneNotifierKey = Options.generateKey(key, false);
+        if (checkBox == null) {
+            checkBox = (CheckBox) frame.findViewWithTag(phoneNotifierKey);
+        }
         hashNotifiersProgressBars.put(phoneNotifierKey, prsPhone);
         if (mMarketApiManager.isServicesAvailable()) {
             checkBox.setTag(phoneNotifierKey);
             checkBox.setChecked(phoneChecked);
             checkBox.setOnCheckedChangeListener(this);
+            checkBox.setVisibility(View.VISIBLE);
             checkBox.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -328,15 +347,18 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             checkBox.setVisibility(View.GONE);
             prsPhone.setVisibility(View.GONE);
         }
-
-        final CheckBox checkBoxEmail = (CheckBox) frame.findViewWithTag("cbMail");
+        CheckBox checkBoxEmail = (CheckBox) frame.findViewWithTag("cbMail");
         ProgressBar prsMail = (ProgressBar) frame.findViewWithTag("prsMail");
         String mailNotifierKey = Options.generateKey(key, true);
+        if (checkBoxEmail == null) {
+            checkBoxEmail = (CheckBox) frame.findViewWithTag(mailNotifierKey);
+        }
         hashNotifiersProgressBars.put(mailNotifierKey, prsMail);
         if (hasMail) {
             checkBoxEmail.setTag(mailNotifierKey);
             checkBoxEmail.setChecked(mailChecked);
             checkBoxEmail.setEnabled(true);
+            checkBoxEmail.setVisibility(View.VISIBLE);
             checkBoxEmail.setOnCheckedChangeListener(this);
         } else {
             checkBoxEmail.setVisibility(View.GONE);
@@ -692,6 +714,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     @Override
     public void onResume() {
+        super.onResume();
         if (mMarketApiManager != null) {
             mMarketApiManager.onResume();
         }
@@ -700,7 +723,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             mSocialNameText.setText(authToken.getLogin());
         }
-        super.onResume();
     }
 
     @Override

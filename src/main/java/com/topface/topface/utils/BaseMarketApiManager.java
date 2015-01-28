@@ -35,6 +35,8 @@ public abstract class BaseMarketApiManager {
 
     public abstract boolean isServicesAvailable();
 
+    public abstract boolean isPopupAvailable();
+
     public TextView getTitle() {
         if (mTitle == null) {
             initView();

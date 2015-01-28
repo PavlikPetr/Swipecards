@@ -126,6 +126,11 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
     }
 
     @Override
+    public boolean isPopupAvailable() {
+        return mIsServicesAvailable;
+    }
+
+    @Override
     public int getResultCode() {
         return mResultCode;
     }

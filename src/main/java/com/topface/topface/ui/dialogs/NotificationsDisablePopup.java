@@ -30,7 +30,7 @@ public class NotificationsDisablePopup extends AbstractStartAction {
 
     private AlertDialog getPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setMessage(getMarketApiManager().getMessage())
+        builder.setTitle(R.string.google_service_general_title).setMessage(getMarketApiManager().getMessage())
                 .setCancelable(true)
                 .setNegativeButton(mActivity.getResources().getString(R.string.general_cancel),
                         new DialogInterface.OnClickListener() {
@@ -69,7 +69,7 @@ public class NotificationsDisablePopup extends AbstractStartAction {
 
     @Override
     public boolean isApplicable() {
-        if (!getMarketApiManager().isServicesAvailable()) {
+        if (!getMarketApiManager().isPopupAvailable()) {
 
             final SharedPreferences preferences = App.getContext().getSharedPreferences(
                     Static.PREFERENCES_TAG_SHARED,

@@ -802,18 +802,15 @@
 
     <!-- ServicesManager-->
     <!-- Google -->
-    <string name="google_service_disabled_title">GooglePlay сервисы отключены на вашем устройстве</string>
+    <string name="google_service_general_title">Уведомления не доступны</string>
+    <string name="google_service_disabled_title">У вас отключены Сервисы Google Play, которые необходимы для работы уведомлений.</string>
     <string name="google_service_disabled_button">Включить</string>
-    <string name="google_service_missing_title">GooglePlay сервисы недоступны на вашем устройстве</string>
+    <string name="google_service_missing_title">У вас не устанвлены Сервисы Google Play, которые необходимы для работы уведомлений.</string>
     <string name="google_service_missing_button">Установить</string>
-    <string name="google_service_version_update_required_title">GooglePlay сервисы на вашем устройстве требуют обновления версии</string>
+    <string name="google_service_version_update_required_title">У вас установлена старая версия Сервисов Google Play, для корректной работы уведомлений, пожалуйста, обновите.</string>
     <string name="google_service_version_update_required_button">Обновить</string>
-    <string name="google_invalid_account_title">Аккаунт Play Market не найден</string>
-    <string name="google_sign_in_account_title">Необходимо авторизоваться в Play Market</string>
+    <string name="google_invalid_account_title">Проверьте данные вашего аккаунта Google или свяжитесь с технической поддержкой Google.</string>
+    <string name="google_sign_in_account_title">У вас не добавлен Google аккаунт, вы должны авторизоваться, если хотите получать уведомления.</string>
     <string name="google_sign_in_account_button">Авторизоваться</string>
-    <string name="google_unavailable_services_title">Сервисы GooglePlay недоступны</string>
-    <!-- Amazon -->
-    <string name="amazon_unavailable_services_title">Сервисы Amazon недоступны</string>
-    <!-- Nokia -->
-    <string name="nokia_unavailable_services_title">Сервисы Nokia недоступны</string>
+    <string name="google_unavailable_services_title">К сожалению, уведомления не поддерживаются на вашем устройстве.</string>
 </resources>

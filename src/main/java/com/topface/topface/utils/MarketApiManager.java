@@ -53,4 +53,8 @@ public class MarketApiManager {
     public boolean isServicesAvailable() {
         return mServicesManager.isServicesAvailable();
     }
+
+    public boolean isPopupAvailable() {
+        return mServicesManager.isPopupAvailable();
+    }
 }
