@@ -63,7 +63,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         super(context, data, updateCallback);
-        mSelectionController = new MultiselectionController(this);
+        mSelectionController = new MultiselectionController<>(this);
         initFeedAd();
     }
 
@@ -268,11 +268,14 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     @Override
     public final void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        loadOlderItemsIfNeeded(firstVisibleItem, visibleItemCount, totalItemCount);
+    }
+
+    public void loadOlderItemsIfNeeded(int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1 - mLoadController.getItemsOffsetByConnectionType()) {
             loadOlderItems();
         }
     }
-
 
     /**
      * Method tries to load older items (if there is loader item at the end of listView)
