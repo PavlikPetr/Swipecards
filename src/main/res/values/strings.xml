@@ -177,7 +177,6 @@
     <string name="chat_sexuality_out">You have rated a sexuality.</string>
     <string name="chat_wink_in">You have received a wink.</string>
     <string name="chat_wink_out">Wink is sent.</string>
-    <string name="filter_filter">Filter</string>
     <string name="filter_age_string">From %1$d to %2$d</string>
     <string name="filter_only_beautiful">Attractive only</string>
     <string name="filter_extra_parameters">Advanced search</string>

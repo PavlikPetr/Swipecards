@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed;
 
 import com.topface.topface.R;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.utils.CacheProfile;
 
 public class TabbedDialogsFragment extends TabbedFeedFragment {
@@ -33,4 +34,8 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
         mLastOpenedPage = lastOpenedPage;
     }
 
+    @Override
+    public PageInfo.PageName getPageName() {
+        return PageInfo.PageName.MESSAGES_TABS;
+    }
 }

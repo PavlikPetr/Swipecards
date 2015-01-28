@@ -10,6 +10,7 @@ import com.topface.topface.requests.DeleteBlackListRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.BlackListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONObject;
 
@@ -27,7 +28,7 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
 
     @Override
     protected int getTypeForCounters() {
-        return -1;
+        return CountersManager.UNKNOWN_TYPE;
     }
 
     @Override
@@ -76,6 +77,11 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteBlackListRequest(ids, getActivity());
+    }
+
+    @Override
+    protected int getUnreadCounter() {
+        return 0;
     }
 
     @Override

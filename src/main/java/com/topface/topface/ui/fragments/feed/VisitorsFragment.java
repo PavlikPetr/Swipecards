@@ -29,6 +29,11 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
+    protected int getTypeForCounters() {
+        return CountersManager.VISITORS;
+    }
+
+    @Override
     protected FeedAdapter<Visitor> createNewAdapter() {
         return new VisitorsListAdapter(getActivity(), getUpdaterCallback());
     }
@@ -74,11 +79,6 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    protected int getTypeForCounters() {
-        return CountersManager.VISITORS;
-    }
-
-    @Override
     protected boolean isForPremium() {
         return true;
     }
@@ -89,7 +89,13 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_visitors;
+    }
+
+    @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_GUESTS_UPDATE;
     }
+
 }

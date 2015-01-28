@@ -13,6 +13,7 @@ import com.topface.offerwall.common.OfferwallPayload;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.offerwall.publisher.TFOfferwallSDK;
 import com.topface.topface.R;
+import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.offerwalls.supersonicads.SupersonicWallActivity;
 
@@ -81,7 +82,14 @@ public class OfferwallsManager {
                 startSupersonic(activity);
                 break;
             case TFOFFERWALL:
-                startTfOfferwall(activity);
+                TopfaceOfferwallRedirect topfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
+                if (topfaceOfferwallRedirect != null && topfaceOfferwallRedirect.isEnabled()) {
+                    OfferwallPayload offerwallPayload = new OfferwallPayload();
+                    offerwallPayload.experimentGroup = topfaceOfferwallRedirect.getGroup();
+                    startTfOfferwall(activity, offerwallPayload);
+                } else {
+                    startTfOfferwall(activity);
+                }
                 break;
             case RANDOM:
                 startRandomOfferwall(activity);

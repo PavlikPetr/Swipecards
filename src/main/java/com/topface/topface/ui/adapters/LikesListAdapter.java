@@ -9,14 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.nineoldandroids.view.ViewHelper;
-import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
+import com.topface.topface.utils.ad.NativeAd;
 
 public class LikesListAdapter extends FeedAdapter<FeedLike> {
-    private static final int T_COUNT = 2;
 
     private OnMutualListener mMutualListener;
 
@@ -26,12 +25,6 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
     public LikesListAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
-    }
-
-    @Override
-    public int getViewTypeCount() {
-        Debug.log(Integer.toString(super.getViewTypeCount() + T_COUNT));
-        return (super.getViewTypeCount() + T_COUNT);
     }
 
     @Override
@@ -45,21 +38,22 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         final FeedLike like = getItem(position);
+        if (holder != null) {
+            holder.heart.setImageResource(like.mutualed ? R.drawable.im_item_dbl_mutual_heart :
+                    (like.highrate ? R.drawable.im_item_mutual_heart_top : R.drawable.im_item_mutual_heart));
 
-        holder.heart.setImageResource(like.mutualed ? R.drawable.im_item_dbl_mutual_heart :
-                (like.highrate ? R.drawable.im_item_mutual_heart_top : R.drawable.im_item_mutual_heart));
+            ViewHelper.setAlpha(holder.heart, (like.user.deleted || like.user.banned) ? 0.1f : 1f);
 
-        ViewHelper.setAlpha(holder.heart, (like.user.deleted || like.user.banned) ? 0.1f : 1f);
+            holder.heart.setOnClickListener(new OnClickListener() {
 
-        holder.heart.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (mMutualListener != null) {
-                    mMutualListener.onMutual(like);
+                @Override
+                public void onClick(View v) {
+                    if (mMutualListener != null) {
+                        mMutualListener.onMutual(like);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         return convertView;
     }
@@ -80,16 +74,26 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         return new ILoaderRetrierCreator<FeedLike>() {
             @Override
             public FeedLike getLoader() {
-                FeedLike result = new FeedLike(null);
+                FeedLike result = new FeedLike();
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
                 return result;
             }
 
             @Override
             public FeedLike getRetrier() {
-                FeedLike result = new FeedLike(null);
+                FeedLike result = new FeedLike();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
+            }
+        };
+    }
+
+    @Override
+    protected INativeAdItemCreator<FeedLike> getNativeAdItemCreator() {
+        return new INativeAdItemCreator<FeedLike>() {
+            @Override
+            public FeedLike getAdItem(NativeAd nativeAd) {
+                return new FeedLike(nativeAd);
             }
         };
     }

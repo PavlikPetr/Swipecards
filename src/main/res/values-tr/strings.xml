@@ -179,12 +179,13 @@
     <string name="chat_sexuality_out">Seksiliğe not verdiniz.</string>
     <string name="chat_wink_in">Size göz kırpıldı.</string>
     <string name="chat_wink_out">Siz göz kırptınız.</string>
-    <string name="filter_filter">Filtre</string>
     <string name="filter_age_string">%1$d’dan %2$d’a</string>
     <string name="filter_only_beautiful">Sadece güzel</string>
     <string name="filter_extra_parameters">Daha fazla seçenek</string>
     <string name="filter_age">Yaş</string>
     <string name="filter_online">Çevrim içi</string>
+    <string name="filter_age_start_prefix">%s gelen</string>
+    <string name="filter_age_end_prefix">%s kadar</string>
     <string name="filter_cities_all">Bütün şehirlerde</string>
     <string name="buying_header_title">Alış verişler</string>
     <plurals name="buying_gift_you_need_coins">
@@ -312,6 +313,7 @@
     <string name="rate_popup_error">Uygulamamıza kaç tane yıldız verdiğini belirtmelisiniz</string>
     <string name="feedback_popup_title">Siz düşük fiyat koymuşsunuz. Uygulamada neyi beğenip beğenmediğinizi anlatın. Bize daha iyi olmak için yardımcı olun. Teşekkürler!</string>
     <string name="settings_melody">Bildirim sesi</string>
+    <string name="settings_loading_photo">Resim yükleme</string>
     <string name="edit_refresh_status">Durumu yenilemek</string>
     <string name="ban_title">Tebrikler! Siz ban edildiniz</string>
     <string name="ban_title_forever">Tebrikler! Hayat boyu engellendiniz!</string>
@@ -507,6 +509,7 @@
     <string name="likes_can_help_you">Sempatiler tanışabilir</string>
     <string name="general_get_dating">Tanışmak</string>
     <string name="settings_select_language">Uygulamanın dil seçimi</string>
+    <string name="settings_select_preload_photo_type">Önyükleme fotoğrafları dahil olduğunda seçin</string>
     <string name="restart_to_change_locale">Dil değişimi için uygulama yeniden yüklenilecek</string>
     <string name="locale_changing">Dil değişimi</string>
     <plurals name="you_were_liked">
@@ -621,5 +624,14 @@
     <string name="hint_myprofile_buy_vip">VIP-üyelik alın ve sınırsız sohbet etmeyi eğlenin</string>
     <string name="pull_to_refresh_pull_label">Yenilemek için çekin…</string>
     <string name="pull_to_refresh_release_label">Yenilemek için yayın…</string>
+    <string name="messaging_block_buy_vip">Bir diyalog devam etmek için VIP üyelik gerekiyor.</string>
     <string name="pull_to_refresh_refreshing_label">Yükleme…</string>
+    <string name="user_added_to_black_list">Bir kullanıcı kara listeye eklenidi</string>
+    <string name="user_deleted_from_black_list">Bir kullanıcı kara listesinden kaldırındı</string>
+    <string name="user_added_to_bookmark">Bir kullanıcı özel listeye eklendi</string>
+    <string name="user_deleted_from_bookmark">Bir kullanıcı kara listesinden kaldırıldı</string>
+    <string name="preload_photo_type_wifi_3g">WiFi ve 3G</string>
+    <string name="preload_photo_type_wifi">WiFi sadece</string>
+    <string name="preload_photo_type_always_on">Her zaman açık</string>
+    <string name="preload_photo_type_preload_off">Kapalı</string>
 </resources>

@@ -100,7 +100,6 @@
     <string name="chat_sexuality_out">Szexualitást értékelt.</string>
     <string name="chat_wink_in">Valaki Önre kacsintott.</string>
     <string name="chat_wink_out">Ön kacsintott.</string>
-    <string name="filter_filter">Szűrő</string>
     <string name="filter_age_string">%1$d-től %2$d-ig</string>
     <string name="filter_only_beautiful">Csak szép</string>
     <string name="filter_extra_parameters">Kiegészítő feltételek</string>

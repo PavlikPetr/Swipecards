@@ -100,4 +100,9 @@ public class AdmirationFragment extends LikesFragment {
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteAdmirationsRequest(ids, getActivity());
     }
+
+    @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_admirations;
+    }
 }

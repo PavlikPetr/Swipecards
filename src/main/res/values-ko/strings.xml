@@ -126,7 +126,6 @@
     <string name="chat_sexuality_out">당신은 섹시함을 평가하였습니다.</string>
     <string name="chat_wink_in">당신에게 윙크를 보냈습니다.</string>
     <string name="chat_wink_out">당신이 윙크를 보냅니다.</string>
-    <string name="filter_filter">필터</string>
     <string name="filter_age_string">%1$d 에서 %2$d 까지</string>
     <string name="filter_only_beautiful">아름다운 여성들만</string>
     <string name="filter_extra_parameters">추가적인 필터 기준</string>

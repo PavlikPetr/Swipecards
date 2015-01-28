@@ -129,7 +129,6 @@
     <string name="chat_sexuality_out">Vous avez estimé la sexualité</string>
     <string name="chat_wink_in">On vous a envoyé un clin d\'ouil.</string>
     <string name="chat_wink_out">Vous avez envoyé un clin d\'ouil.</string>
-    <string name="filter_filter">Filtre</string>
     <string name="filter_age_string">De %1$d jusqu\'à %2$d</string>
     <string name="filter_only_beautiful">Seulement beaux (belles)</string>
     <string name="filter_extra_parameters">Paramètres complémentaires</string>

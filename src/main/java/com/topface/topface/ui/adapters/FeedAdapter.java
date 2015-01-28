@@ -2,8 +2,10 @@ package com.topface.topface.ui.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,18 +15,24 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.ad.NativeAd;
+import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -36,22 +44,36 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     protected static final int T_NEW_VIP = 3;
     protected static final int T_VIP = 4;
     protected static final int T_NEW = 5;
-    protected static final int T_COUNT = 6;
+    protected static final int T_NATIVE_AD = 6;
+    protected static final int T_COUNT = 7;
 
     private long mLastUpdate = 0;
     public static final int LIMIT = 40;
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
     private OnAvatarClickListener<T> mOnAvatarClickListener;
+    private NativeAd mFeedAd;
+    private boolean mHasFeedAd;
+    private View mFeedAdView;
 
+    private MultiselectionController<T> mSelectionController;
 
-    @SuppressWarnings("unchecked")
-    private MultiselectionController<T> mSelectionController = new MultiselectionController(this);
+    public interface INativeAdItemCreator<T> {
+        T getAdItem(NativeAd nativeAd);
+    }
 
-    @SuppressWarnings("unchecked")
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         super(context, data, updateCallback);
-        mSelectionController = new MultiselectionController(this);
+        mSelectionController = new MultiselectionController<>(this);
+        initFeedAd();
     }
+
+    private void initFeedAd() {
+        if (isNeedFeedAd()) {
+            mFeedAdView = getAdView();
+        }
+    }
+
+    protected abstract INativeAdItemCreator<T> getNativeAdItemCreator();
 
     public int getLimit() {
         return LIMIT;
@@ -97,7 +119,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     public int getItemViewType(int position) {
         int superType = super.getItemViewType(position);
         if (superType == T_OTHER) {
-            if (getItem(position).unread && getItem(position).user.premium) {
+            if (getItem(position).isAd()) {
+                return T_NATIVE_AD;
+            } else if (getItem(position).unread && getItem(position).user.premium) {
                 return T_NEW_VIP;
             } else if (getItem(position).unread && !getItem(position).user.premium) {
                 return T_NEW;
@@ -129,85 +153,93 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
     }
 
+    protected View getAdView() {
+        return mInflater.inflate(getAdItemLayout(), null, false);
+    }
+
     @Override
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
-
         FeedViewHolder holder = null;
-
         if (convertView != null) {
             holder = (FeedViewHolder) convertView.getTag();
         }
-
-        final T item = getItem(position);
         final int type = getItemViewType(position);
         int flag = 0;
-
-        //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
-        if (holder == null) {
-            TypeAndFlag typeAndFlag = getViewCreationFlag();
-
-            if (type == T_NEW || type == T_NEW_VIP) {
-                typeAndFlag.flag |= FeedItemViewConstructor.Flag.NEW;
+        // for native ad type return ad view
+        if (type == T_NATIVE_AD) {
+            if (mFeedAdView == null) {
+                initFeedAd();
             }
-            if (type == T_VIP || type == T_NEW_VIP) {
-                typeAndFlag.flag |= FeedItemViewConstructor.Flag.VIP;
+            mFeedAd.show(mFeedAdView);
+            return mFeedAdView;
+        } else {
+            final T item = getItem(position);
+            //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
+            if (holder == null) {
+                TypeAndFlag typeAndFlag = getViewCreationFlag();
+
+                if (type == T_NEW || type == T_NEW_VIP) {
+                    typeAndFlag.flag |= FeedItemViewConstructor.Flag.NEW;
+                }
+                if (type == T_VIP || type == T_NEW_VIP) {
+                    typeAndFlag.flag |= FeedItemViewConstructor.Flag.VIP;
+                }
+                flag = typeAndFlag.flag;
+                convertView = FeedItemViewConstructor.construct(mContext, typeAndFlag);
+                holder = getEmptyHolder(convertView, item);
             }
-            flag = typeAndFlag.flag;
-            convertView = FeedItemViewConstructor.construct(mContext, typeAndFlag);
-            holder = getEmptyHolder(convertView, item);
-        }
+            if (item != null) {
+                // установка аватарки пользователя
+                // какую аватарку использовать по умолчанию для забаненных и во время загрузки нормальной
+                int defaultAvatarResId = (item.user.sex == Static.BOY ?
+                        R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+                holder.avatarImage.setStubResId(defaultAvatarResId);
 
-        if (item != null) {
-            // установка аватарки пользователя
-            // какую аватарку использовать по умолчанию для забаненных и во время загрузки нормальной
-            int defaultAvatarResId = (item.user.sex == Static.BOY ?
-                    R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
-            holder.avatarImage.setStubResId(defaultAvatarResId);
-
-            if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
-                holder.avatarImage.setRemoteSrc("drawable://" + defaultAvatarResId);
-                if (item.user.banned || item.user.deleted) {
-                    holder.avatar.setOnClickListener(null);
+                if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
+                    holder.avatarImage.setRemoteSrc("drawable://" + defaultAvatarResId);
+                    if (item.user.banned || item.user.deleted) {
+                        holder.avatar.setOnClickListener(null);
+                    } else {
+                        setListenerOnAvatar(holder.avatar, item);
+                    }
                 } else {
+                    holder.avatarImage.setPhoto(item.user.photo);
                     setListenerOnAvatar(holder.avatar, item);
                 }
-            } else {
-                holder.avatarImage.setPhoto(item.user.photo);
-                setListenerOnAvatar(holder.avatar, item);
-            }
 
-            // установка имени
-            holder.name.setText(item.user.first_name);
-            if ((item.user.deleted || item.user.banned)) {
-                flag |= FeedItemViewConstructor.Flag.BANNED;
-            }
-            FeedItemViewConstructor.setBanned(holder.name, flag);
-
-            // установка возраста
-            String age = "";
-            if (item.user.age > 0) {
-                age = String.valueOf(item.user.age);
-                if (!TextUtils.isEmpty(item.user.first_name)) {
-                    age = ", " + age;
+                // установка имени
+                holder.name.setText(item.user.first_name);
+                if ((item.user.deleted || item.user.banned)) {
+                    flag |= FeedItemViewConstructor.Flag.BANNED;
                 }
+                FeedItemViewConstructor.setBanned(holder.name, flag);
+
+                // установка возраста
+                String age = "";
+                if (item.user.age > 0) {
+                    age = String.valueOf(item.user.age);
+                    if (!TextUtils.isEmpty(item.user.first_name)) {
+                        age = ", " + age;
+                    }
+                }
+                holder.age.setText(age);
+                FeedItemViewConstructor.setBanned(holder.age, flag);
+
+                // установка сообщения фида
+                setItemMessage(item, holder.text);
+
+                // установка иконки онлайн
+                FeedItemViewConstructor.setOnline(holder.age, (!(item.user.deleted || item.user.banned) && item.user.online));
             }
-            holder.age.setText(age);
-            FeedItemViewConstructor.setBanned(holder.age, flag);
 
-            // установка сообщения фида
-            setItemMessage(item, holder.text);
-
-            // установка иконки онлайн
-            FeedItemViewConstructor.setOnline(holder.age, (!(item.user.deleted || item.user.banned) && item.user.online));
+            convertView.setTag(holder);
+            if (mSelectionController.isSelected(position)) {
+                convertView.setBackgroundResource(R.drawable.list_item_bg_selected);
+            } else {
+                setBackground(convertView, holder);
+            }
+            return convertView;
         }
-
-        convertView.setTag(holder);
-        if (mSelectionController.isSelected(position)) {
-            convertView.setBackgroundResource(R.drawable.list_item_bg_selected);
-        } else {
-            setBackground(convertView, holder);
-        }
-        return convertView;
     }
 
     private void setListenerOnAvatar(FrameLayout avatar, final T item) {
@@ -265,10 +297,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         removeLoaderItem();
         FeedList<T> currentData = getData();
         currentData.clear();
+        mHasFeedAd = false;
         currentData.addAll(data.items);
-
+        addItemForAd();
         addLoaderItem(data.more);
-
         notifyDataSetChanged();
         setLastUpdate();
 
@@ -276,8 +308,39 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public void setData(FeedList<T> data) {
         mData = data;
+        addItemForAd();
         notifyDataSetChanged();
         setLastUpdate();
+    }
+
+    private void addItemForAd() {
+        FeedList<T> data = getData();
+        if (!data.isEmpty() && isNeedFeedAd() && !mHasFeedAd) {
+            if (mFeedAd == null) {
+                mFeedAd = NativeAdManager.getNativeAd();
+            }
+            if (mFeedAd != null) {
+                data.add(mFeedAd.getPosition(), getNativeAdItemCreator().getAdItem(mFeedAd));
+                mHasFeedAd = true;
+                Intent intent = new Intent(TabbedFeedFragment.HAS_FEED_AD);
+                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+            }
+        }
+    }
+
+    public void removeAdItems() {
+        mHasFeedAd = false;
+        boolean removed = false;
+        for (Iterator<T> it = getData().iterator(); it.hasNext(); ) {
+            T item = it.next();
+            if (item.isAd()) {
+                it.remove();
+                removed = true;
+            }
+        }
+        if (removed) {
+            notifyDataSetChanged();
+        }
     }
 
     protected void setLastUpdate() {
@@ -309,6 +372,14 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
         notifyDataSetChanged();
         setLastUpdate();
+    }
+
+    public void makeAllItemsRead() {
+        for (T item : getData()) {
+            if (!item.isAd()) {
+                item.unread = false;
+            }
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -372,7 +443,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             FeedList<T> data = getData();
             int dataSize = data.size();
 
-            int feedIndex = data.getLast().isLoader() || data.getLast().isRetrier() ?
+            FeedItem last = data.getLast();
+            int feedIndex = last.isLoader() || last.isRetrier() || last.isAd() ?
                     dataSize - 2 :
                     dataSize - 1;
             if (data.hasItem(feedIndex)) {
@@ -388,6 +460,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (!isEmpty()) {
             FeedList<T> data = getData();
             item = data.getFirst();
+            if (item.isAd()) {
+                item = data.get(1);
+            }
         }
         return item;
     }
@@ -403,6 +478,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         holder.background = convertView.getBackground();
 
         return holder;
+    }
+
+    protected int getAdItemLayout() {
+        return R.layout.item_feed_ad;
     }
 
     public boolean isNeedUpdate() {
@@ -492,5 +571,25 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public boolean isMultiSelectionMode() {
         return mSelectionController.isMultiSelectionMode();
+    }
+
+    public boolean hasFeedAd() {
+        return mHasFeedAd;
+    }
+
+    public void setHasFeedAd(boolean hasFeedAd) {
+        mHasFeedAd = hasFeedAd;
+    }
+
+    public NativeAd getFeedAd() {
+        return mFeedAd;
+    }
+
+    public void setFeedAd(NativeAd feedAd) {
+        mFeedAd = feedAd;
+    }
+
+    public boolean isNeedFeedAd() {
+        return CacheProfile.show_ad && NativeAdManager.hasAvailableAd();
     }
 }
