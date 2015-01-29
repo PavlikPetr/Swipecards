@@ -403,6 +403,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             public void onClick(View v) {
                 update(false, "retry");
                 mLockScreen.setVisibility(View.GONE);
+                mBackgroundController.startAnimation();
             }
         }).messageFontColor(R.color.text_color_gray).noShadow().build();
         mLockScreen.addView(retryView.getView());
@@ -629,7 +630,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                mBackgroundController.hide();
                 FeedList<History> data = mAdapter != null ? mAdapter.getData() : null;
                 if (mLockScreen != null && (data == null || data.isEmpty())) {
                     mLockScreen.setVisibility(View.VISIBLE);
