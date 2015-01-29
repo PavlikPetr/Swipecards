@@ -2,25 +2,22 @@ package com.topface.topface.ui.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.utils.MarketApiManager;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.AbstractStartAction;
-import com.topface.topface.utils.controllers.StartActionsController;
 
 public class NotificationsDisablePopup extends AbstractStartAction {
     private Activity mActivity;
+    private int mPriority;
+    private AppConfig mAppConfig;
 
-    public NotificationsDisablePopup(Activity activity) {
+    public NotificationsDisablePopup(Activity activity, int priority) {
         mActivity = activity;
+        mPriority = priority;
     }
-
-    public static final String NOTIFICATION_DISABLE_POPUP_PREF_KEY = "NOTIFICATION_DISABLE_POPUP_PREF_KEY";
 
     private MarketApiManager mMarketApiManager;
 
@@ -30,7 +27,7 @@ public class NotificationsDisablePopup extends AbstractStartAction {
 
     private AlertDialog getPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.google_service_general_title).setMessage(getMarketApiManager().getMessage())
+        builder.setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.google_service_general_title).setMessage(getMarketApiManager().getTitleTextId())
                 .setCancelable(true)
                 .setNegativeButton(mActivity.getResources().getString(R.string.general_cancel),
                         new DialogInterface.OnClickListener() {
@@ -40,9 +37,9 @@ public class NotificationsDisablePopup extends AbstractStartAction {
                             }
                         });
         if (getMarketApiManager().isButtonVisible()) {
-            builder.setPositiveButton(getMarketApiManager().getButtonText(), new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(getMarketApiManager().getButtonTextId(), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    getMarketApiManager().onButtonClick();
+                    getMarketApiManager().onProblemResolve();
                     dialog.cancel();
                     mActivity = null;
                 }
@@ -53,13 +50,7 @@ public class NotificationsDisablePopup extends AbstractStartAction {
 
     @Override
     public void callInBackground() {
-        SharedPreferences preferences = App.getContext().getSharedPreferences(
-                Static.PREFERENCES_TAG_SHARED,
-                Context.MODE_PRIVATE
-        );
-        preferences.edit()
-                .putLong(NOTIFICATION_DISABLE_POPUP_PREF_KEY, System.currentTimeMillis())
-                .apply();
+        getAppConfig().setTimeNotificationsDisabledShowAtLast(System.currentTimeMillis());
     }
 
     @Override
@@ -69,16 +60,10 @@ public class NotificationsDisablePopup extends AbstractStartAction {
 
     @Override
     public boolean isApplicable() {
-        if (!getMarketApiManager().isPopupAvailable()) {
-
-            final SharedPreferences preferences = App.getContext().getSharedPreferences(
-                    Static.PREFERENCES_TAG_SHARED,
-                    Context.MODE_PRIVATE
-            );
-            long date_start = preferences.getLong(NOTIFICATION_DISABLE_POPUP_PREF_KEY, 1);
+        if (!getMarketApiManager().isMarketApiAvailable() && getMarketApiManager().isMarketApiSupportByUs()) {
             long date_now = System.currentTimeMillis();
-            long delay = mActivity.getResources().getInteger(R.integer.notifications_disable_popup_delay) * 1000 * 60 * 60;
-            if ((date_now - date_start) >= delay) {
+            long delay = mActivity.getResources().getInteger(R.integer.notifications_disable_popup_delay) * 1000;
+            if ((date_now - getAppConfig().getTimeNotificationsDisabledShowAtLast()) >= delay) {
                 return true;
             }
         }
@@ -87,18 +72,25 @@ public class NotificationsDisablePopup extends AbstractStartAction {
 
     @Override
     public int getPriority() {
-        return StartActionsController.AC_PRIORITY_HIGH;
+        return mPriority;
     }
 
     @Override
     public String getActionName() {
-        return null;
+        return "NotificationsDisablePopup";
     }
 
     private MarketApiManager getMarketApiManager() {
         if (mMarketApiManager == null) {
-            mMarketApiManager = new MarketApiManager(mActivity);
+            mMarketApiManager = new MarketApiManager();
         }
         return mMarketApiManager;
+    }
+
+    private AppConfig getAppConfig() {
+        if (mAppConfig == null) {
+            mAppConfig = new AppConfig(mActivity.getApplicationContext());
+        }
+        return mAppConfig;
     }
 }

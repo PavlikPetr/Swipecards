@@ -39,7 +39,7 @@
         <item>"could not validate certificate"</item>
     </string-array>
 
-    <!-- delay for showing popup about problems with notification services -->
-    <integer name="notifications_disable_popup_delay">72</integer>
+    <!-- delay for showing popup about problems with notification services (in seconds) -->
+    <integer name="notifications_disable_popup_delay">259200</integer>
 
 </resources>

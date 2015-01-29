@@ -1,23 +1,21 @@
 package com.topface.topface.utils;
 
-import android.content.Context;
-import android.view.View;
-
+import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 
 public class MarketApiManager {
     BaseMarketApiManager mServicesManager;
 
-    public MarketApiManager(Context context) {
+    public MarketApiManager() {
         switch (BuildConfig.MARKET_API_TYPE) {
             case GOOGLE_PLAY:
-                mServicesManager = new GoogleMarketApiManager(context);
+                mServicesManager = new GoogleMarketApiManager();
                 break;
             case AMAZON:
-                mServicesManager = new AmazonMarketApiManager(context);
+                mServicesManager = new AmazonMarketApiManager();
                 break;
             case NOKIA_STORE:
-                mServicesManager = new NokiaMarketApiManager(context);
+                mServicesManager = new NokiaMarketApiManager();
                 break;
         }
     }
@@ -26,35 +24,36 @@ public class MarketApiManager {
         mServicesManager.onResume();
     }
 
-    public View getView() {
-        return mServicesManager.getView();
-    }
 
     public int getResultCode() {
         return mServicesManager.getResultCode();
     }
 
-    public void onButtonClick() {
-        mServicesManager.onButtonClick();
+    public void onProblemResolve() {
+        mServicesManager.onProblemResolve(App.getContext());
     }
 
-    public String getButtonText() {
-        return mServicesManager.getButtonText();
+    public int getButtonTextId() {
+        return mServicesManager.getButtonTextId();
     }
 
     public boolean isButtonVisible() {
         return mServicesManager.isButtonVisible();
     }
 
-    public String getMessage() {
-        return mServicesManager.getMessage();
+    public boolean isTitleVisible() {
+        return mServicesManager.isTitleVisible();
     }
 
-    public boolean isServicesAvailable() {
-        return mServicesManager.isServicesAvailable();
+    public int getTitleTextId() {
+        return mServicesManager.getTitleTextId();
     }
 
-    public boolean isPopupAvailable() {
-        return mServicesManager.isPopupAvailable();
+    public boolean isMarketApiSupportByUs() {
+        return mServicesManager.isMarketApiSupportByUs();
+    }
+
+    public boolean isMarketApiAvailable() {
+        return mServicesManager.isMarketApiAvailable();
     }
 }

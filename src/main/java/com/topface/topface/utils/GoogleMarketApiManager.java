@@ -3,34 +3,26 @@ package com.topface.topface.utils;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.provider.Settings;
-import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 
 public class GoogleMarketApiManager extends BaseMarketApiManager {
 
-    private Context mContext;
     private boolean mIsServicesAvailable;
     private int mResultCode;
-    private String mTitleText = "";
-    private String mButtonText = "";
-    private boolean misButtonVisible = false;
-    private boolean misTitleVisible = false;
+    private int mTitleId;
+    private int mButtonId;
+    private boolean mIsButtonVisible = false;
+    private boolean mIsTitleVisible = false;
 
-    public GoogleMarketApiManager(Context context) {
-        mContext = context;
-        setContext(context);
-        setClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onButtonClick();
-            }
-        });
-        onResume();
+    public GoogleMarketApiManager() {
+        checkServices();
     }
 
     private void decryptingErrorCode() {
@@ -61,73 +53,69 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
 
     @Override
     public void onResume() {
-        mResultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(mContext);
+        checkServices();
+    }
+
+    private void checkServices() {
+        mResultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(App.getContext());
+        mResultCode = ConnectionResult.INVALID_ACCOUNT;
         mIsServicesAvailable = mResultCode == ConnectionResult.SUCCESS;
         decryptingErrorCode();
     }
 
-    @Override
-    public View getView() {
-        getTitle().setText(mTitleText);
-        getButton().setText(mButtonText);
-        getButton().setVisibility(misButtonVisible ? View.VISIBLE : View.GONE);
-        getTitle().setVisibility(misTitleVisible ? View.VISIBLE : View.GONE);
-        return getCurrentView();
-    }
-
     private void setParamServiceDisabled() {
-        mTitleText = mContext.getString(R.string.google_service_disabled_title);
-        mButtonText = mContext.getString(R.string.google_service_disabled_button);
-        misButtonVisible = true;
-        misTitleVisible = true;
+        mTitleId = R.string.google_service_disabled_title;
+        mButtonId = R.string.google_service_disabled_button;
+        mIsButtonVisible = true;
+        mIsTitleVisible = true;
     }
 
     private void setParamServiceMissing() {
-        mTitleText = mContext.getString(R.string.google_service_missing_title);
-        mButtonText = mContext.getString(R.string.google_service_missing_button);
-        misButtonVisible = true;
-        misTitleVisible = true;
+        mTitleId = R.string.google_service_missing_title;
+        mButtonId = R.string.google_service_missing_button;
+        mIsButtonVisible = true;
+        mIsTitleVisible = true;
     }
 
     private void setParamServiceVersionUpdateRequired() {
-        mTitleText = mContext.getString(R.string.google_service_version_update_required_title);
-        mButtonText = mContext.getString(R.string.google_service_version_update_required_button);
-        misButtonVisible = true;
-        misTitleVisible = true;
+        mTitleId = R.string.google_service_version_update_required_title;
+        mButtonId = R.string.google_service_version_update_required_button;
+        mIsButtonVisible = true;
+        mIsTitleVisible = true;
     }
 
     private void setParamServiceSuccess() {
-        misButtonVisible = false;
-        misTitleVisible = false;
+        mIsButtonVisible = false;
+        mIsTitleVisible = false;
     }
 
     private void setParamInvalidAccount() {
-        mTitleText = mContext.getString(R.string.google_invalid_account_title);
-        misButtonVisible = false;
-        misTitleVisible = true;
+        mTitleId = R.string.google_invalid_account_title;
+        mIsButtonVisible = false;
+        mIsTitleVisible = true;
     }
 
     private void setParamSignInAccount() {
-        mTitleText = mContext.getString(R.string.google_sign_in_account_title);
-        mButtonText = mContext.getString(R.string.google_sign_in_account_button);
-        misButtonVisible = true;
-        misTitleVisible = true;
+        mTitleId = R.string.google_sign_in_account_title;
+        mButtonId = R.string.google_sign_in_account_button;
+        mIsButtonVisible = true;
+        mIsTitleVisible = true;
     }
 
     private void setParamUnavailableServices() {
-        mTitleText = mContext.getString(R.string.google_unavailable_services_title);
-        misButtonVisible = false;
-        misTitleVisible = true;
+        mTitleId = R.string.google_unavailable_services_title;
+        mIsButtonVisible = false;
+        mIsTitleVisible = true;
     }
 
     @Override
-    public boolean isServicesAvailable() {
-        return mIsServicesAvailable;
+    public boolean isMarketApiAvailable() {
+        return  mIsServicesAvailable ;
     }
 
     @Override
-    public boolean isPopupAvailable() {
-        return mIsServicesAvailable;
+    public boolean isMarketApiSupportByUs() {
+        return true;
     }
 
     @Override
@@ -136,16 +124,18 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
     }
 
     @Override
-    public void onButtonClick() {
+    public void onProblemResolve(Context context) {
         switch (mResultCode) {
             case ConnectionResult.SIGN_IN_REQUIRED:
                 Intent addAccountIntent = new Intent(android.provider.Settings.ACTION_ADD_ACCOUNT)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                addAccountIntent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, new String[]{"com.google"});
-                mContext.startActivity(addAccountIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    addAccountIntent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, new String[]{"com.google"});
+                }
+                context.startActivity(addAccountIntent);
                 break;
             default:
-                PendingIntent pendingIntent = GooglePlayServicesUtil.getErrorPendingIntent(mResultCode, mContext, 0);
+                PendingIntent pendingIntent = GooglePlayServicesUtil.getErrorPendingIntent(mResultCode, context, 0);
                 if (pendingIntent != null) {
                     try {
                         pendingIntent.send();
@@ -158,18 +148,23 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
     }
 
     @Override
-    public String getButtonText() {
-        return mButtonText;
+    public int getButtonTextId() {
+        return mButtonId;
     }
 
     @Override
     public boolean isButtonVisible() {
-        return misButtonVisible;
+        return mIsButtonVisible;
     }
 
     @Override
-    public String getMessage() {
-        return mTitleText;
+    public boolean isTitleVisible() {
+        return mIsTitleVisible;
+    }
+
+    @Override
+    public int getTitleTextId() {
+        return mTitleId;
     }
 
 }

@@ -1,46 +1,26 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
-import android.view.View;
 
 import com.topface.topface.R;
 
 public class AmazonMarketApiManager extends BaseMarketApiManager {
 
-    private Context mContext;
-    private boolean mIsServicesAvailable;
-
-    public AmazonMarketApiManager(Context context) {
-        mContext = context;
-        setContext(context);
-        mIsServicesAvailable = false;
-        onResume();
+    public AmazonMarketApiManager() {
     }
-
 
     @Override
     public void onResume() {
-        createViewUnavailableServices();
     }
 
     @Override
-    public View getView() {
-        return getCurrentView();
-    }
-
-    @Override
-    public boolean isServicesAvailable() {
-        return mIsServicesAvailable;
-    }
-
-    @Override
-    public boolean isPopupAvailable() {
+    public boolean isMarketApiAvailable() {
         return false;
     }
 
-    private void createViewUnavailableServices() {
-        getTitle().setText(mContext.getString(R.string.google_unavailable_services_title));
-        getButton().setVisibility(View.GONE);
+    @Override
+    public boolean isMarketApiSupportByUs() {
+        return false;
     }
 
     @Override
@@ -49,13 +29,12 @@ public class AmazonMarketApiManager extends BaseMarketApiManager {
     }
 
     @Override
-    public void onButtonClick() {
-
+    public void onProblemResolve(Context context) {
     }
 
     @Override
-    public String getButtonText() {
-        return null;
+    public int getButtonTextId() {
+        return 0;
     }
 
     @Override
@@ -64,9 +43,13 @@ public class AmazonMarketApiManager extends BaseMarketApiManager {
     }
 
     @Override
-    public String getMessage() {
-        return null;
+    public boolean isTitleVisible() {
+        return true;
     }
 
+    @Override
+    public int getTitleTextId() {
+        return R.string.google_unavailable_services_title;
+    }
 }
 

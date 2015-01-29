@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -103,7 +104,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.fragment_settings, null);
 
-        mMarketApiManager = new MarketApiManager(getActivity());
+        mMarketApiManager = new MarketApiManager();
 
         mLoNotificationsHeader = (ViewGroup) view.findViewById(R.id.loNotificationsHeader);
         mLoLikes = (ViewGroup) view.findViewById(R.id.loLikes);
@@ -177,23 +178,38 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     private void setNotificationState() {
-        boolean isServicesAvailable = mMarketApiManager.isServicesAvailable();
-        if (!isServicesAvailable) {
-            mTvNoNotification.removeAllViews();
-            mTvNoNotification.addView(mMarketApiManager.getView());
+        boolean isMarketApiAvailable = mMarketApiManager.isMarketApiAvailable();
+        if ((!isMarketApiAvailable && mMarketApiManager.isMarketApiSupportByUs()) ||
+                (!isMarketApiAvailable && !CacheProfile.email)) {
+            TextView title = (TextView) mTvNoNotification.findViewById(R.id.loTitle);
+            Button button = (Button) mTvNoNotification.findViewById(R.id.loButton);
+            title.setVisibility(mMarketApiManager.isTitleVisible() ? View.VISIBLE : View.GONE);
+            button.setVisibility(mMarketApiManager.isButtonVisible() ? View.VISIBLE : View.GONE);
+            title.setText(mMarketApiManager.getTitleTextId());
+            if (mMarketApiManager.isButtonVisible()) {
+                button.setText(mMarketApiManager.getButtonTextId());
+            }
+            button.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mMarketApiManager != null) {
+                        mMarketApiManager.onProblemResolve();
+                    }
+                }
+            });
             mTvNoNotification.setBackgroundResource(R.drawable.edit_big_btn_selector);
             mTvNoNotification.setVisibility(View.VISIBLE);
         } else {
             mTvNoNotification.setVisibility(View.GONE);
         }
-        if (!CacheProfile.email && !isServicesAvailable) {
+        if (!CacheProfile.email && !isMarketApiAvailable) {
             melodyName.setVisibility(View.GONE);
             setNotificationVisibility(View.GONE);
         } else {
             setNotificationVisibility(View.VISIBLE);
             melodyName.setVisibility(View.VISIBLE);
         }
-        if (isServicesAvailable) {
+        if (isMarketApiAvailable) {
             setNotificationSettingsVisibility(View.VISIBLE);
         } else {
             setNotificationSettingsVisibility(View.GONE);
@@ -202,33 +218,23 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 mLoLikes,
                 CacheProfile.email,
                 isMailAvailable(CacheProfile.NOTIFICATIONS_LIKES),
-                isApnsAvailable(CacheProfile.NOTIFICATIONS_LIKES));
+                isGmsAvailable(CacheProfile.NOTIFICATIONS_LIKES));
         initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY,
                 mLoMutual,
                 CacheProfile.email,
                 isMailAvailable(CacheProfile.NOTIFICATIONS_SYMPATHY),
-                isApnsAvailable(CacheProfile.NOTIFICATIONS_SYMPATHY));
+                isGmsAvailable(CacheProfile.NOTIFICATIONS_SYMPATHY));
         initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE,
                 mLoChat,
                 CacheProfile.email,
                 isMailAvailable(CacheProfile.NOTIFICATIONS_MESSAGE),
-                isApnsAvailable(CacheProfile.NOTIFICATIONS_MESSAGE));
+                isGmsAvailable(CacheProfile.NOTIFICATIONS_MESSAGE));
         initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR,
                 mLoGuests,
                 CacheProfile.email,
                 isMailAvailable(CacheProfile.NOTIFICATIONS_VISITOR),
-                isApnsAvailable(CacheProfile.NOTIFICATIONS_VISITOR));
+                isGmsAvailable(CacheProfile.NOTIFICATIONS_VISITOR));
     }
-
-//    private void setApnsVisibility(ViewGroup view, int key, int visibility) {
-//        CheckBox checkBox = (CheckBox) view.findViewWithTag(Options.generateKey(key, false));
-//        if (checkBox == null) {
-//            checkBox = (CheckBox) view.findViewWithTag("cbPhone");
-//        }
-//        if (checkBox != null) {
-//            checkBox.setVisibility(visibility);
-//        }
-//    }
 
     private boolean isMailAvailable(int key) {
         if (CacheProfile.notifications != null && CacheProfile.notifications.get(key) != null) {
@@ -238,7 +244,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         }
     }
 
-    private boolean isApnsAvailable(int key) {
+    private boolean isGmsAvailable(int key) {
         if (CacheProfile.notifications != null && CacheProfile.notifications.get(key) != null) {
             return CacheProfile.notifications.get(key).apns;
         } else {
@@ -333,7 +339,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             checkBox = (CheckBox) frame.findViewWithTag(phoneNotifierKey);
         }
         hashNotifiersProgressBars.put(phoneNotifierKey, prsPhone);
-        if (mMarketApiManager.isServicesAvailable()) {
+        if (mMarketApiManager.isMarketApiAvailable()) {
             checkBox.setTag(phoneNotifierKey);
             checkBox.setChecked(phoneChecked);
             checkBox.setOnCheckedChangeListener(this);
