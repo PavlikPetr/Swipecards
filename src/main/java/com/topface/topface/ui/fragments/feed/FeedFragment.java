@@ -271,7 +271,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (getListAdapter().isNeedUpdate() || needUpdate) {
             updateData(false, true);
         }
-        getListAdapter().loadOlderItems();
+
+        // try update list if last visible item is loader,
+        // and loading was probably interrupted
+        getListAdapter().loadOlderItemsIfNeeded(
+                mListView.getRefreshableView().getFirstVisiblePosition(),
+                mListView.getRefreshableView().getChildCount(),
+                getListAdapter().getCount());
         registerGcmReceiver();
     }
 
