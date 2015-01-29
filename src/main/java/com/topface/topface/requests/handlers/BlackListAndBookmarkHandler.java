@@ -49,6 +49,13 @@ public class BlackListAndBookmarkHandler extends VipApiHandler {
         return intent;
     }
 
+    public static Intent getIntentForSympathyUpdate(ActionTypes type, boolean value) {
+        Intent intent = new Intent(UPDATE_USER_CATEGORY);
+        intent.putExtra(TYPE, type);
+        intent.putExtra(VALUE, value);
+        return intent;
+    }
+
     public static Intent getValuedActionsUpdateIntent(ActionTypes type, int userId, boolean value) {
         Intent intent = new Intent(UPDATE_USER_CATEGORY);
         intent.putExtra(TYPE, type);
@@ -90,5 +97,5 @@ public class BlackListAndBookmarkHandler extends VipApiHandler {
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
-    public enum ActionTypes {BLACK_LIST, BOOKMARK}
+    public enum ActionTypes {BLACK_LIST, BOOKMARK, SYMPATHY}
 }

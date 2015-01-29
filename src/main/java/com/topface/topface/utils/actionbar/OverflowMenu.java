@@ -80,6 +80,10 @@ public class OverflowMenu {
                             initOverfowMenu();
                         }
                         break;
+                    case SYMPATHY:
+                        setSympathySentState(value, false);
+                        initOverfowMenu();
+                        break;
                 }
             }
         }
@@ -306,7 +310,7 @@ public class OverflowMenu {
                     @SuppressWarnings("ConstantConditions")
                     @Override
                     public void onRateCompleted(int mutualId) {
-                        setSympathySentState(true);
+                        setSympathySentState(true, true);
                         if (mActivity != null) {
                             Toast.makeText(App.getContext(), R.string.sympathy_sended, Toast.LENGTH_SHORT).show();
                         }
@@ -315,7 +319,7 @@ public class OverflowMenu {
                     @SuppressWarnings("ConstantConditions")
                     @Override
                     public void onRateFailed(int userId, int mutualId) {
-                        setSympathySentState(false);
+                        setSympathySentState(false, true);
                         if (mActivity != null) {
                             Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         }
@@ -323,7 +327,7 @@ public class OverflowMenu {
                     }
                 }
         );
-        setSympathySentState(true);
+        setSympathySentState(true, true);
     }
 
     private void onClickSendAdmirationAction() {
@@ -339,7 +343,7 @@ public class OverflowMenu {
                     @SuppressWarnings("ConstantConditions")
                     @Override
                     public void onRateCompleted(int mutualId) {
-                        setSympathySentState(true);
+                        setSympathySentState(true, true);
                         if (mActivity != null) {
                             Toast.makeText(App.getContext(), R.string.admiration_sended, Toast.LENGTH_SHORT).show();
                         }
@@ -348,13 +352,13 @@ public class OverflowMenu {
                     @SuppressWarnings("ConstantConditions")
                     @Override
                     public void onRateFailed(int userId, int mutualId) {
-                        setSympathySentState(false);
+                        setSympathySentState(false, true);
                         initOverfowMenu();
                     }
                 }
         );
         if (isSentAdmiration) {
-            setSympathySentState(true);
+            setSympathySentState(true, true);
         }
     }
 
@@ -541,9 +545,13 @@ public class OverflowMenu {
         mActivity.startActivityForResult(mOpenChatIntent, ChatActivity.INTENT_CHAT);
     }
 
-    private void setSympathySentState(boolean state) {
+    private void setSympathySentState(boolean state, boolean isNeedSentBroadcast) {
         if (mOverflowMenuFields != null) {
             mOverflowMenuFields.setSympathySentValue(state);
+            if (isNeedSentBroadcast) {
+                LocalBroadcastManager.getInstance(mActivity.getApplicationContext()).
+                        sendBroadcast(BlackListAndBookmarkHandler.getIntentForSympathyUpdate(BlackListAndBookmarkHandler.ActionTypes.SYMPATHY, state));
+            }
         }
     }
 
@@ -580,5 +588,4 @@ public class OverflowMenu {
         mOverflowMenuFields = null;
         mActivity = null;
     }
-
 }
