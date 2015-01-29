@@ -774,4 +774,26 @@
     <string name="maximum_number_of_users">Выбрано максимальное количестово пользователей</string>
     <string name="logout_if_email_already_registred">Пользователь с таким e-mail уже существует. Если это ваш e-mail, то вам необходимо выйти из текущего аккаунта и зайти в аккаунт %s</string>
     <string name="recover_password_instructions">На ваш e-mail отправлено письмо с инструкцией по восстановлению пароля</string>
+    <string name="email_changing">Изменение e-mail</string>
+    <string name="hint_faces_filter">Изменяйте параметры поиска и знакомьтесь с интересными людьми</string>
+    <string name="hint_faces_buy_like">Чем больше у вас симпатий, тем чаще вас оценивают. Не забывайте пополнять запас симпатий.</string>
+    <string name="hint_myprofile_buy_vip">Купите VIP-статус и наслаждайтесь безграничным общением</string>
+    <string name="pull_to_refresh_pull_label">Потяните для обновления…</string>
+    <string name="pull_to_refresh_release_label">Отпустите для обновления…</string>
+    <string name="messaging_block_buy_vip">Для продолжения диалога необходим VIP-статус</string>
+    <string name="pull_to_refresh_refreshing_label">Загрузка…</string>
+    <string name="user_added_to_black_list">Пользователь добавлен в черный список</string>
+    <string name="user_deleted_from_black_list">Пользователь удален из черного списка</string>
+    <string name="user_added_to_bookmark">Пользователь добавлен в избранные</string>
+    <string name="user_deleted_from_bookmark">Пользователь удален из избранных</string>
+
+    <string name="preload_photo_type_wifi_3g">WiFi и 3G</string>
+    <string name="preload_photo_type_wifi">Только WiFi</string>
+    <string name="preload_photo_type_always_on">Включена всегда</string>
+    <string name="preload_photo_type_preload_off">Выключена</string>
+
+    <string name="wrong_time_popup_title">Установите текущую дату</string>
+    <string name="wrong_time_popup_text">Дата на устройстве не совпадает с текущей</string>
+    <string name="wrong_time_popup_button">Открыть настройки</string>
+
 </resources>
