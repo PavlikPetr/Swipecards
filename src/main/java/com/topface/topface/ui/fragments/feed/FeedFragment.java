@@ -871,6 +871,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private void retryButtonClick(View view) {
         if (view != null) {
             view.setVisibility(View.GONE);
+            mBackgroundController.startAnimation();
             updateData(false, true);
         }
     }
