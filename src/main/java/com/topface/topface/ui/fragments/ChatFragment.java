@@ -661,6 +661,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             for (History item : mAdapter.getData()) {
                 for (History newItem : data.items) {
                     if (newItem.id.equals(item.id)) {
+
                         itemsToDelete.add(item);
                     }
                 }

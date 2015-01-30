@@ -43,7 +43,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
         }
         ViewGroup container = page.getContainerForAd();
         final ImageViewRemote adView = (ImageViewRemote) View
-                .inflate(container.getContext(),R.layout.banner_topface, container)
+                .inflate(container.getContext(), R.layout.banner_topface, container)
                 .findViewById(R.id.tfBannerView);
         createTopfaceBannerRequest(page, adView, callbacks).exec();
         return true;

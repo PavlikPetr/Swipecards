@@ -13,7 +13,8 @@ public interface IAdsProvider {
 
     /**
      * Starts load ad and returns banner view after loading through callback
-     * @param page to inject banner
+     *
+     * @param page      to inject banner
      * @param callbacks result on ads loading
      * @return true if loading initiated successfully
      */
@@ -21,6 +22,7 @@ public interface IAdsProvider {
 
     public interface IAdProviderCallbacks {
         void onAdLoadSuccess(View adView);
+
         void onFailedToLoadAd();
     }
 }

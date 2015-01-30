@@ -86,7 +86,9 @@
                         android:hint="@string/password"
                         android:inputType="textPassword"
                         android:imeOptions="actionDone"
-                        android:paddingRight="24dp"/>
+                        android:paddingRight="24dp"
+                        android:paddingLeft="24dp" />
+
 
                     <ImageButton
                         android:id="@+id/ivShowPassword"

@@ -43,7 +43,7 @@ public class ActionBarView implements View.OnClickListener {
         mTitle = (TextView) mActionBarView.findViewById(R.id.title);
         mSubtitle = (TextView) mActionBarView.findViewById(R.id.subtitle);
         mIcon = (ImageView) mActionBarView.findViewById(R.id.up_icon);
-        mActionBarView.setOnClickListener(this);
+        mActionBarView.findViewById(R.id.title_clickable).setOnClickListener(this);
     }
 
     public void setLeftMenuView() {

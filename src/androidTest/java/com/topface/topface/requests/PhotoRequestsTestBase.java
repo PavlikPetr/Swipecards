@@ -19,7 +19,7 @@ import java.io.IOException;
  * Created by kirussell on 16/01/15.
  * Base test with util methods for photo upload
  */
-public class PhotoRequestsTestBase  extends AbstractThreadTest {
+public class PhotoRequestsTestBase extends AbstractThreadTest {
 
     private static final String TEST_NAME = "testPhotoRequestExec";
     private String TEST_IMAGE_FILE = Environment.getExternalStorageDirectory()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Базовая тема приложения -->
     <style name="Theme.Topface" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -9,7 +9,7 @@
         <!-- overflow menu settings -->
         <item name="android:itemTextAppearance">@style/PopupMenuTextApearance</item>
         <item name="android:dropDownListViewStyle">@style/PopupMenuListView</item>
-        <item name="android:popupMenuStyle" tools:ignore="NewApi">@style/PopupMenu</item>
+        <item name="popupMenuStyle">@style/PopupMenu</item>
 
         <item name="android:windowTitleStyle">@style/CenterJustifyDialogTitle</item>
 
@@ -30,7 +30,6 @@
         <item name="android:listPreferredItemHeight">32dp</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
         <item name="android:windowBackground">@null</item>
-        <item name="android:windowContentOverlay">@null</item>
         <item name="android:progressBarStyle">@style/TopFaceProgressBar</item>
         <!-- Стилизованные кнопки -->
         <item name="blueButtonStyle">@style/Widget.Topface.Button.Big.Blue</item>
@@ -40,23 +39,12 @@
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
         <item name="actionBarItemBackground">@drawable/bg_semitransparent_black_selector</item>
         <item name="selectableItemBackground">@drawable/bg_semitransparent_black_selector</item>
-
-        <item name="android:actionBarStyle" tools:ignore="NewApi">
-            @style/Widget.Topface.ActionBar
-        </item>
-        <item name="android:actionBarItemBackground" tools:ignore="NewApi">
-            @drawable/bg_semitransparent_black_selector
-        </item>
-        <item name="android:selectableItemBackground" tools:ignore="NewApi">
-            @drawable/bg_semitransparent_black_selector
-        </item>
+        <item name="actionBarSize">@dimen/action_bar_size</item>
         <!-- Action Mode (CAB)-->
         <item name="actionModeBackground">@color/bg_action_mode</item>
         <item name="actionModeCloseDrawable">@drawable/ic_check</item>
 
-        <item name="android:actionModeBackground" tools:ignore="NewApi">@color/bg_action_mode
-        </item>
-        <item name="android:actionModeCloseDrawable" tools:ignore="NewApi">@drawable/ic_check</item>
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:ignore="NewApi">false</item>
     </style>
 
     <!-- transparent activity theme -->
@@ -76,7 +64,6 @@
 
     <style name="Theme.Topface.ActionbarOverlay">
         <item name="windowActionBarOverlay">true</item>
-        <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
     </style>
 
     <style name="Theme.Topface.NoActionBar.Fullscreen" parent="Theme.Topface.NoActionBar">
@@ -86,7 +73,6 @@
     <style name="Theme.Topface.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <!--Action Bar-->
-        <item name="android:windowActionBar" tools:ignore="NewApi">false</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
@@ -102,11 +88,8 @@
 
     <style name="Topface.Theme.TransparentActionBarActivity" parent="@style/Theme.AppCompat">
         <item name="actionBarStyle">@style/Widget.Topface.TransparentActionBar</item>
-        <item name="android:actionBarStyle" tools:ignore="NewApi">
-            @style/Widget.Topface.TransparentActionBar
-        </item>
         <item name="windowActionBarOverlay">true</item>
-        <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="Theme.Topface.Chat">

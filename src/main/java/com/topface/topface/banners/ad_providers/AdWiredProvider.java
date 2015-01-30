@@ -21,6 +21,7 @@ import ru.ideast.adwired.events.OnStartListener;
 class AdWiredProvider extends AbstractAdsProvider {
 
     private static Map<PageInfo.PageName, Character> ADWIRED_MAP = new HashMap<>();
+
     static {
         ADWIRED_MAP.put(PageInfo.PageName.LIKES_TABS, '8');
         ADWIRED_MAP.put(PageInfo.PageName.MESSAGES_TABS, '9');
