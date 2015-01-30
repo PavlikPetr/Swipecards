@@ -14,6 +14,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.TestRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.NotValidCertificateStatistics;
 
 public class SslErrorActivity extends Activity {
     private final static int ACTION_DATE_SETTINGS_INTENT_ID = 111;
@@ -30,6 +31,9 @@ public class SslErrorActivity extends Activity {
         mSettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // send statistic
+                NotValidCertificateStatistics.send();
+                // open date/time settings
                 startActivityForResult(new Intent(android.provider.Settings.ACTION_DATE_SETTINGS), ACTION_DATE_SETTINGS_INTENT_ID);
             }
         });
