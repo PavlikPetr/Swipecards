@@ -23,7 +23,7 @@ class AdMobProvider extends AbstractAdsProvider {
     public final boolean injectBannerInner(IPageWithAds page, final IAdProviderCallbacks callbacks) {
         ViewGroup container = page.getContainerForAd();
         final AdView adView = (AdView) View
-                .inflate(container.getContext(),R.layout.banner_admob, container)
+                .inflate(container.getContext(), R.layout.banner_admob, container)
                 .findViewById(R.id.adMobView);
         adView.setAdListener(new AdListener() {
 

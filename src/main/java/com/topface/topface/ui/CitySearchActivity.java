@@ -37,17 +37,16 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 
 public class CitySearchActivity extends BaseFragmentActivity {
-    private ArrayAdapter<String> mListAdapter;
-    private LinkedList<City> mTopCitiesList;
-    private LinkedList<City> mDataList;
-    private LinkedList<String> mNameList;
-    private ProgressBar mProgressBar;
     // Constants
     public static final int INTENT_CITY_SEARCH_ACTIVITY = 100;
     public static final int INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY = 101;
     public static final int INTENT_CITY_SEARCH_AFTER_REGISTRATION = 102;
     public static final String INTENT_CITY = "city";
-
+    private ArrayAdapter<String> mListAdapter;
+    private LinkedList<City> mTopCitiesList;
+    private LinkedList<City> mDataList;
+    private LinkedList<String> mNameList;
+    private ProgressBar mProgressBar;
     private String mAllCitiesString;
     private int mRequestKey;
     private View mCbMyCity;
@@ -63,7 +62,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_city);
         Debug.log(this, "+onCreate");
-
         mRequestKey = getIntent().getIntExtra(Static.INTENT_REQUEST_KEY, 0);
         try {
             if (getIntent().hasExtra(INTENT_CITY)) {
@@ -146,11 +144,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private void initListView() {
         final LayoutInflater mInflater = LayoutInflater.from(this);
         mListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, mNameList) {
-            class ViewHolder {
-                TextView mTitle;
-                ImageView mBackground;
-            }
-
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 ViewHolder holder;
@@ -186,6 +179,11 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 }
                 return convertView;
             }
+
+            class ViewHolder {
+                TextView mTitle;
+                ImageView mBackground;
+            }
         };
         // ListView
         cityListView = (ListView) findViewById(R.id.lvCityList);
@@ -209,7 +207,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
     private void initHeader() {
-        getTitleSetter().setActionBarTitles(R.string.general_city, null);
+        actionBarView.setActionBarTitle(R.string.general_city);
     }
 
     private void initMyCity() {

@@ -10,7 +10,6 @@ import java.io.File;
 /**
  * Created by kirussell on 16/01/15.
  * Synchronous multiple add-photo requests
- *
  */
 public class PhotoAddRequestsSequenceTest extends PhotoRequestsTestBase {
 
@@ -54,8 +53,8 @@ public class PhotoAddRequestsSequenceTest extends PhotoRequestsTestBase {
                 if (hasMore()) {
                     sendPhotoAddRequest(uri);
                 } else {
-                    Debug.debug(getTestName(), "Total time spent(sec):" + mTimeAccumulator/1000L);
-                    Debug.debug(getTestName(), "Average time for request(sec):" + mTimeAccumulator/MAX_REQUESTS/1000L);
+                    Debug.debug(getTestName(), "Total time spent(sec):" + mTimeAccumulator / 1000L);
+                    Debug.debug(getTestName(), "Average time for request(sec):" + mTimeAccumulator / MAX_REQUESTS / 1000L);
                     stopTest();
                 }
             }

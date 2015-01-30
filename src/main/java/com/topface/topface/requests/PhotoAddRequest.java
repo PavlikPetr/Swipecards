@@ -51,7 +51,7 @@ public class PhotoAddRequest extends ApiRequest {
                 Debug.logJson(
                         ConnectionManager.TAG,
                         "REQUEST upload >>> " + getApiUrl() + " rev:" + getRevNum(),
-                        "file: " + mUri.toString() + " with size(bytes): "+contentLength
+                        "file: " + mUri.toString() + " with size(bytes): " + contentLength
                 );
                 writeRequest(inputStream, connection);
             } finally {
@@ -110,7 +110,7 @@ public class PhotoAddRequest extends ApiRequest {
 
     @Override
     protected String getApiUrl() {
-            return App.getAppConfig().getApiDomain() + "v" + API_VERSION + "/photo-upload/?ssid=" + ssid;
+        return App.getAppConfig().getApiDomain() + "v" + API_VERSION + "/photo-upload/?ssid=" + ssid;
     }
 
     protected String getPlaceForStatistics() {

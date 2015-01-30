@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,50 +78,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static final String OWN_PHOTOS_CONTROL_VISIBILITY = "OWN_PHOTOS_CONTROL_VISIBILITY";
     public static final String DELETED_PHOTOS = "DELETED_PHOTOS";
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (mPhotoAlbumControl != null) {
-                setPhotoAlbumControlVisibility(mPhotoAlbumControl.getVisibility() == View.GONE ||
-                        mPhotoAlbumControl.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.GONE, true);
-            }
-        }
-    };
-
     private static final int ANIMATION_TIME = 200;
-
-    private ViewGroup mPhotoAlbumControl;
-    private ViewGroup mOwnPhotosControl;
-    private ImageViewRemote mGiftImage;
-    private int mPhotoAlbumControlVisibility = View.VISIBLE;
-    private int mOwnPhotosControlVisibility = View.GONE;
-    private Photos mPhotoLinks;
-    private Photos mDeletedPhotos = new Photos();
-    private ImageSwitcherLooped mImageSwitcher;
-    private int mUid;
-    private String mUserGiftLink;
-    private PhotosManager mPhotosManager = new PhotosManager();
-    private TranslateAnimation mCurrentAnimation;
-    private TranslateAnimation mAnimationHide = null;
-    private TranslateAnimation mAnimationShow = null;
-    private Animation.AnimationListener mAnimationListener = new Animation.AnimationListener() {
-        @Override
-        public void onAnimationStart(Animation animation) {
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-            if (mCurrentAnimation == mAnimationShow) {
-                mPhotoAlbumControl.setVisibility(View.VISIBLE);
-            } else if (mCurrentAnimation == mAnimationHide) {
-                mPhotoAlbumControl.setVisibility(View.INVISIBLE);
-            }
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-        }
-    };
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
@@ -142,10 +98,21 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         public void onPageScrollStateChanged(int arg0) {
         }
     };
-    private int mCurrentPosition = 0;
-    private TextView mSetAvatarButton;
-    private ImageButton mDeleteButton;
-    private UserProfileLoader mUserProfileLoader;
+    private ViewGroup mPhotoAlbumControl;
+    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mPhotoAlbumControl != null) {
+                setPhotoAlbumControlVisibility(mPhotoAlbumControl.getVisibility() == View.GONE ||
+                        mPhotoAlbumControl.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.GONE, true);
+            }
+        }
+    };
+    private ViewGroup mOwnPhotosControl;
+    private ImageViewRemote mGiftImage;
+    private int mPhotoAlbumControlVisibility = View.VISIBLE;
+    private int mOwnPhotosControlVisibility = View.GONE;
+    private Photos mPhotoLinks;
     private IUserProfileReceiver mUserProfileReceiver = new IUserProfileReceiver() {
         @Override
         public void onReceiveUserProfile(User user) {
@@ -173,6 +140,36 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             }
         }
     };
+    private Photos mDeletedPhotos = new Photos();
+    private ImageSwitcherLooped mImageSwitcher;
+    private int mUid;
+    private String mUserGiftLink;
+    private PhotosManager mPhotosManager = new PhotosManager();
+    private TranslateAnimation mCurrentAnimation;
+    private TranslateAnimation mAnimationHide = null;
+    private TranslateAnimation mAnimationShow = null;
+    private Animation.AnimationListener mAnimationListener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            if (mCurrentAnimation == mAnimationShow) {
+                mPhotoAlbumControl.setVisibility(View.VISIBLE);
+            } else if (mCurrentAnimation == mAnimationHide) {
+                mPhotoAlbumControl.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+        }
+    };
+    private int mCurrentPosition = 0;
+    private TextView mSetAvatarButton;
+    private ImageButton mDeleteButton;
+    private UserProfileLoader mUserProfileLoader;
 
     public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, ProfileGridAdapter adapter) {
         return getPhotoSwitcherIntent(gifts, position, userId, photosCount, adapter.getPhotos());
@@ -601,7 +598,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         if (mPhotoLinks != null) {
             int photosLinksSize = mPhotoLinks.size();
             mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
-            getTitleSetter().setActionBarTitles((mCurrentPosition + 1) + "/" + photosLinksSize, null);
+            actionBarView.setArrowUpView((mCurrentPosition + 1) + "/" + photosLinksSize);
         }
     }
 
@@ -661,6 +658,104 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }).exec();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case GiftsActivity.INTENT_REQUEST_GIFT:
+                if (resultCode == Activity.RESULT_OK) {
+                    FeedGift feedGift = getFeedGiftFromIntent(data);
+                    if (feedGift != null) {
+                        Intent intent = new Intent(ADD_NEW_GIFT);
+                        intent.putExtra(INTENT_GIFT, feedGift);
+                        LocalBroadcastManager.getInstance(this)
+                                .sendBroadcast(intent);
+                    }
+                }
+                break;
+        }
+    }
+
+    private FeedGift getFeedGiftFromIntent(Intent data) {
+        FeedGift feedGift = null;
+        Bundle extras = data.getExtras();
+        if (extras != null) {
+            SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
+            if (sendGiftAnswer != null) {
+                showGiftImage(sendGiftAnswer.history.link);
+                feedGift = new FeedGift();
+                feedGift.gift = new Gift(
+                        Integer.parseInt(sendGiftAnswer.history.id),
+                        0,
+                        Gift.PROFILE, sendGiftAnswer.history.link);
+            }
+        }
+        return feedGift;
+    }
+
+    private void hidePhotoAlbumControlAction() {
+        if (mPhotoAlbumControl != null) {
+            mPhotoAlbumControl.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void showPhotoAlbumControlAction() {
+        if (mPhotoAlbumControl != null) {
+            mPhotoAlbumControl.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private boolean animateHidePhotoAlbumControlAction() {
+        if (mPhotoAlbumControl != null) {
+            if (mAnimationHide == null && mPhotoAlbumControl.getMeasuredHeight() != 0) {
+                mAnimationHide = new TranslateAnimation(
+                        0,
+                        0,
+                        Utils.getSrceenSize(this).y - mPhotoAlbumControl.getMeasuredHeight(),
+                        Utils.getSrceenSize(this).y);
+            }
+            if (mAnimationHide != null) {
+                mCurrentAnimation = mAnimationHide;
+                startAnimation(mCurrentAnimation);
+            } else {
+                hidePhotoAlbumControlAction();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private boolean animateShowPhotoAlbumControlAction() {
+        if (mPhotoAlbumControl != null) {
+            if (mAnimationShow == null && mPhotoAlbumControl.getMeasuredHeight() != 0) {
+                mAnimationShow = new TranslateAnimation(
+                        0,
+                        0,
+                        Utils.getSrceenSize(this).y,
+                        Utils.getSrceenSize(this).y - mPhotoAlbumControl.getMeasuredHeight());
+            }
+            if (mAnimationShow != null) {
+                mCurrentAnimation = mAnimationShow;
+                startAnimation(mCurrentAnimation);
+            } else {
+                showPhotoAlbumControlAction();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void startAnimation(TranslateAnimation animation) {
+        animation.setDuration(ANIMATION_TIME);
+        animation.setAnimationListener(mAnimationListener);
+        mPhotoAlbumControl.startAnimation(animation);
+    }
+
+
+    public static interface IUserProfileReceiver {
+        public void onReceiveUserProfile(User user);
+    }
+
     private class PhotosManager {
         private int mLimit;
 
@@ -709,19 +804,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             }
             return index;
         }
-    }
-
-    @Override
-    protected void initActionBar(ActionBar actionBar) {
-        super.initActionBar(actionBar);
-        if (actionBar != null) {
-            actionBar.setDisplayUseLogoEnabled(false);
-            actionBar.setIcon(android.R.color.transparent);
-        }
-    }
-
-    public static interface IUserProfileReceiver {
-        public void onReceiveUserProfile(User user);
     }
 
     private class UserProfileLoader {
@@ -832,99 +914,5 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         private void showForNotExisting() {
             showLockWithText(getString(R.string.user_does_not_exist), true);
         }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case GiftsActivity.INTENT_REQUEST_GIFT:
-                if (resultCode == Activity.RESULT_OK) {
-                    FeedGift feedGift = getFeedGiftFromIntent(data);
-                    if (feedGift != null) {
-                        Intent intent = new Intent(ADD_NEW_GIFT);
-                        intent.putExtra(INTENT_GIFT, feedGift);
-                        LocalBroadcastManager.getInstance(this)
-                                .sendBroadcast(intent);
-                    }
-                }
-                break;
-        }
-    }
-
-    private FeedGift getFeedGiftFromIntent(Intent data) {
-        FeedGift feedGift = null;
-        Bundle extras = data.getExtras();
-        if (extras != null) {
-            SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
-            if (sendGiftAnswer != null) {
-                showGiftImage(sendGiftAnswer.history.link);
-                feedGift = new FeedGift();
-                feedGift.gift = new Gift(
-                        Integer.parseInt(sendGiftAnswer.history.id),
-                        0,
-                        Gift.PROFILE, sendGiftAnswer.history.link);
-            }
-        }
-        return feedGift;
-    }
-
-    private void hidePhotoAlbumControlAction() {
-        if (mPhotoAlbumControl != null) {
-            mPhotoAlbumControl.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void showPhotoAlbumControlAction() {
-        if (mPhotoAlbumControl != null) {
-            mPhotoAlbumControl.setVisibility(View.VISIBLE);
-        }
-    }
-
-
-    private boolean animateHidePhotoAlbumControlAction() {
-        if (mPhotoAlbumControl != null) {
-            if (mAnimationHide == null && mPhotoAlbumControl.getMeasuredHeight() != 0) {
-                mAnimationHide = new TranslateAnimation(
-                        0,
-                        0,
-                        Utils.getSrceenSize(this).y - mPhotoAlbumControl.getMeasuredHeight(),
-                        Utils.getSrceenSize(this).y);
-            }
-            if (mAnimationHide != null) {
-                mCurrentAnimation = mAnimationHide;
-                startAnimation(mCurrentAnimation);
-            } else {
-                hidePhotoAlbumControlAction();
-            }
-            return true;
-        }
-        return false;
-    }
-
-    private boolean animateShowPhotoAlbumControlAction() {
-        if (mPhotoAlbumControl != null) {
-            if (mAnimationShow == null && mPhotoAlbumControl.getMeasuredHeight() != 0) {
-                mAnimationShow = new TranslateAnimation(
-                        0,
-                        0,
-                        Utils.getSrceenSize(this).y,
-                        Utils.getSrceenSize(this).y - mPhotoAlbumControl.getMeasuredHeight());
-            }
-            if (mAnimationShow != null) {
-                mCurrentAnimation = mAnimationShow;
-                startAnimation(mCurrentAnimation);
-            } else {
-                showPhotoAlbumControlAction();
-            }
-            return true;
-        }
-        return false;
-    }
-
-    private void startAnimation(TranslateAnimation animation) {
-        animation.setDuration(ANIMATION_TIME);
-        animation.setAnimationListener(mAnimationListener);
-        mPhotoAlbumControl.startAnimation(animation);
     }
 }

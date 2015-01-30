@@ -77,6 +77,7 @@ public class FeedRequest extends LimitedApiRequest {
         previousUnreadState = newPreviousUnreadState;
         return this;
     }
+
     @Override
     public String getServiceName() {
         String service = null;
