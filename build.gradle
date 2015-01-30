@@ -166,7 +166,7 @@ dependencies {
     //Social networks SDK
     compile project(':libs:odnoklassniki')
     //Аннотации вроде @NonNull и @*Res для обозначения переменных
-    compile 'com.android.support:support-annotations:21.0.3'
+    compile 'com.android.support:support-annotations:21.0.2'
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile fileTree(dir: 'libs/amazon/', include: '*.jar')
 
