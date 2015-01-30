@@ -174,7 +174,7 @@ public class Options extends AbstractData {
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
             PageInfo[] pagesArr = JsonUtils.fromJson(response.optString("pages"), PageInfo[].class);
-            for(PageInfo pageInfo : pagesArr) {
+            for (PageInfo pageInfo : pagesArr) {
                 pages.put(pageInfo.name, pageInfo);
             }
             offerwall = response.optString("offerwall");
@@ -655,6 +655,8 @@ public class Options extends AbstractData {
                 dailyShows = jsonFeedAd.optInt("dailyShows");
                 positionMin = jsonFeedAd.optInt("positionMin");
                 positionMax = jsonFeedAd.optInt("positionMax");
+            } else {
+                enabled = false;
             }
         }
 
