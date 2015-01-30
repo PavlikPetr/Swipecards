@@ -450,7 +450,6 @@ public class CacheProfile {
 
     public static int getUnreadCounterByFragmentId(BaseFragment.FragmentId id) {
         switch (id) {
-            case LIKES:
             case LIKES_CLOSINGS:
                 return CacheProfile.unread_likes;
             case MUTUAL:

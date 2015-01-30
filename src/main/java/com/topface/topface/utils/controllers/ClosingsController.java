@@ -119,7 +119,7 @@ public class ClosingsController implements View.OnClickListener {
                     if (initMenuItem(likesMenuItem, R.string.general_likes, R.drawable.ic_likes_selector,
                             needLikesClosings,
                             FragmentId.LIKES_CLOSINGS)) {
-                        mAdapter.hideItem(FragmentId.LIKES);
+                        mAdapter.hideItem(FragmentId.TABBED_LIKES);
                         mLikesClosingsActive = true;
                     }
                     mutualsMenuItem = mClosingsWidget.findViewById(R.id.itemMutualsClosings);
@@ -309,7 +309,7 @@ public class ClosingsController implements View.OnClickListener {
                 if (mLikesClosingsActive && likesMenuItem != null) {
                     likesMenuItem.setVisibility(View.GONE);
                     if (mAdapter != null) {
-                        mAdapter.showItem(FragmentId.LIKES);
+                        mAdapter.showItem(FragmentId.TABBED_LIKES);
                         mAdapter.notifyDataSetChanged();
                     }
                     selectMenuItem(FragmentId.MUTUAL_CLOSINGS);

@@ -42,7 +42,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         VIP_PROFILE(0),
         PROFILE(1),
         DATING(2, true),
-        LIKES(3),
         TABBED_LIKES(4),
         DIALOGS(5),
         TABBED_DIALOGS(6),

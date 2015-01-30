@@ -176,7 +176,7 @@ public class Options extends AbstractData {
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
             PageInfo[] pagesArr = JsonUtils.fromJson(response.optString("pages"), PageInfo[].class);
-            for(PageInfo pageInfo : pagesArr) {
+            for (PageInfo pageInfo : pagesArr) {
                 pages.put(pageInfo.name, pageInfo);
             }
             JSONObject aboutAppJson = response.optJSONObject("aboutApp");
@@ -426,7 +426,7 @@ public class Options extends AbstractData {
             url = App.getContext().getString(R.string.settings_topface_url_title);
         }
     }
-    
+
     public static class PromoPopupEntity {
         public static final int DEFAULT_COUNT = 10;
         private static final int DEFAULT_TIMEOUT = 1000;
@@ -692,9 +692,6 @@ public class Options extends AbstractData {
                 break;
             case MUTUAL:
             case ADMIRATIONS:
-            case LIKES:
-                fragmentId = BaseFragment.FragmentId.TABBED_LIKES;
-                break;
         }
         return fragmentId;
     }
