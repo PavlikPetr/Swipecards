@@ -452,16 +452,12 @@ public class CacheProfile {
         switch (id) {
             case LIKES_CLOSINGS:
                 return CacheProfile.unread_likes;
-            case MUTUAL:
             case MUTUAL_CLOSINGS:
                 return CacheProfile.unread_mutual;
             case TABBED_DIALOGS:
-            case DIALOGS:
                 return CacheProfile.unread_messages;
             case TABBED_VISITORS:
                 return CacheProfile.unread_visitors + CacheProfile.unread_fans;
-            case ADMIRATIONS:
-                return CacheProfile.unread_admirations;
             case GEO:
                 return CacheProfile.unread_geo;
             case BONUS:

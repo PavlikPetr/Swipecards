@@ -685,14 +685,6 @@ public class Options extends AbstractData {
         } catch (IllegalArgumentException e) {
             Debug.error("Illegal value of startPage", e);
         }
-        switch (fragmentId) {
-            case BOOKMARKS:
-            case DIALOGS:
-                fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
-                break;
-            case MUTUAL:
-            case ADMIRATIONS:
-        }
         return fragmentId;
     }
 }

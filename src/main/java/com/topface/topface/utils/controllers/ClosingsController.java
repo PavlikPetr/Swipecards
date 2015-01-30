@@ -126,7 +126,7 @@ public class ClosingsController implements View.OnClickListener {
                     if (initMenuItem(mutualsMenuItem, R.string.general_mutual, R.drawable.ic_mutual_selector,
                             needMutualsClosings,
                             FragmentId.MUTUAL_CLOSINGS)) {
-                        mAdapter.hideItem(FragmentId.MUTUAL);
+                        mAdapter.hideItem(FragmentId.TABBED_LIKES);
                         mMutualClosingsActive = true;
                     }
                     mMenuFragment.hideBuyWidget();
@@ -324,7 +324,7 @@ public class ClosingsController implements View.OnClickListener {
                 if (mMutualClosingsActive && mutualsMenuItem != null) {
                     mutualsMenuItem.setVisibility(View.GONE);
                     if (mAdapter != null) {
-                        mAdapter.showItem(FragmentId.MUTUAL);
+                        mAdapter.showItem(FragmentId.TABBED_LIKES);
                         mAdapter.notifyDataSetChanged();
                     }
                     selectMenuItem(FragmentId.LIKES_CLOSINGS);
