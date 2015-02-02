@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
@@ -17,15 +16,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
-import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.topface.topface.utils.http.IRequestClient;
 
 import java.util.LinkedList;
@@ -36,56 +32,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private ActionBar mSupportActionBar;
     private BroadcastReceiver mProfileLoadReceiver;
-    private IActionBarTitleSetter mTitleSetter;
-
-    public static enum FragmentId {
-        VIP_PROFILE(0),
-        PROFILE(1),
-        DATING(2, true),
-        TABBED_LIKES(4),
-        TABBED_DIALOGS(6),
-        TABBED_VISITORS(7),
-        LIKES_CLOSINGS(10, true),
-        MUTUAL_CLOSINGS(11, true),
-        GEO(13),
-        BONUS(14),
-        EDITOR(1000),
-        SETTINGS(16),
-        UNDEFINED(-1);
-
-        private int mNumber;
-        private boolean mIsOverlayed;
-
-        /**
-         * Constructor for enum type of fragment ids
-         * By default fragment is not overlayed by ActionBar
-         *
-         * @param number integer id
-         */
-        FragmentId(int number) {
-            this(number, false);
-        }
-
-        /**
-         * Constructor for enum type of fragment ids
-         *
-         * @param number      integer id
-         * @param isOverlayed true if fragment will be overlayed by actionbar
-         */
-        FragmentId(int number, boolean isOverlayed) {
-            mNumber = number;
-            mIsOverlayed = isOverlayed;
-        }
-
-        public int getId() {
-            return mNumber;
-        }
-
-        public boolean isOverlayed() {
-            return mIsOverlayed;
-        }
-    }
-
+    private ActionBarTitleSetterDelegate mTitleSetter;
     private boolean mNeedTitles = true;
 
     @Override
@@ -93,15 +40,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         restoreState();
         setHasOptionsMenu(needOptionsMenu());
         super.onCreate(savedInstanceState);
-    }
-
-    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return new ActionBarCustomViewTitleSetterDelegate(getActivity(),
-                    actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
-        } else {
-            return new ActionBarTitleSetterDelegate(actionBar);
-        }
     }
 
     protected boolean needOptionsMenu() {
@@ -112,7 +50,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         clearPreviousState();
-        mTitleSetter = createTitleSetter(getSupportActionBar());
+        mTitleSetter = new ActionBarTitleSetterDelegate(getSupportActionBar());
         refreshActionBarTitles();
     }
 
@@ -319,5 +257,53 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected void setNeedTitles(boolean needTitles) {
         mNeedTitles = needTitles;
+    }
+
+    public static enum FragmentId {
+        VIP_PROFILE(0),
+        PROFILE(1),
+        DATING(2, true),
+        TABBED_LIKES(4),
+        TABBED_DIALOGS(6),
+        TABBED_VISITORS(7),
+        LIKES_CLOSINGS(10, true),
+        MUTUAL_CLOSINGS(11, true),
+        GEO(13),
+        BONUS(14),
+        EDITOR(1000),
+        SETTINGS(16),
+        UNDEFINED(-1);
+
+        private int mNumber;
+        private boolean mIsOverlayed;
+
+        /**
+         * Constructor for enum type of fragment ids
+         * By default fragment is not overlayed by ActionBar
+         *
+         * @param number integer id
+         */
+        FragmentId(int number) {
+            this(number, false);
+        }
+
+        /**
+         * Constructor for enum type of fragment ids
+         *
+         * @param number      integer id
+         * @param isOverlayed true if fragment will be overlayed by actionbar
+         */
+        FragmentId(int number, boolean isOverlayed) {
+            mNumber = number;
+            mIsOverlayed = isOverlayed;
+        }
+
+        public int getId() {
+            return mNumber;
+        }
+
+        public boolean isOverlayed() {
+            return mIsOverlayed;
+        }
     }
 }

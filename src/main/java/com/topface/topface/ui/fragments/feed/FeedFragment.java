@@ -951,7 +951,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     @Override
     public ViewGroup getContainerForAd() {
-        View view  = getView();
+        View view = getView();
         if (view != null) {
             return (ViewGroup) getView().findViewById(R.id.banner_container_for_feeds);
         }

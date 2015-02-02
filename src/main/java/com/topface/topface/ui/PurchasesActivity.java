@@ -23,6 +23,7 @@ import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
@@ -193,7 +194,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     protected void initActionBar(ActionBar actionBar) {
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setCustomView(R.layout.actionbar_container_title_view);
+        actionBarView = new ActionBarView(actionBar, this);
+        actionBarView.setPurchasesView((String) getTitle());
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setIcon(android.R.color.transparent);

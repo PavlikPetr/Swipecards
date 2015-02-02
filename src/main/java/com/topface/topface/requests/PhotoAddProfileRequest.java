@@ -9,7 +9,6 @@ import com.topface.topface.utils.IProgressListener;
 /**
  * Created by kirussell on 19/01/15.
  * Request to add photo to profile
- *
  */
 public class PhotoAddProfileRequest extends PhotoAddRequest {
 

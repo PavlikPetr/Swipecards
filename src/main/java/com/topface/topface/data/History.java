@@ -51,6 +51,7 @@ public class History extends FeedDialog implements Parcelable {
                 TextUtils.equals(this.text, history.text);
 
     }
+
     public History(String message, ItemType type) {
         setLoaderTypeFlags(type);
         text = message;
