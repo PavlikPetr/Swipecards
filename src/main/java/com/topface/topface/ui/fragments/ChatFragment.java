@@ -774,6 +774,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
+        if (mIsKeyboardOpened) {
+            if (!showKeyboardOnLargeScreen()) {
+                Utils.showSoftKeyboard(getActivity(), null);
+                mIsKeyboardOpened = true;
+            }
+        }
 
         if (mUserId == 0) {
             getActivity().setResult(Activity.RESULT_CANCELED);
