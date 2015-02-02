@@ -7,13 +7,11 @@ import android.content.DialogInterface;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.MarketApiManager;
-import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 
 public class NotificationsDisablePopup extends AbstractStartAction {
     private Activity mActivity;
     private int mPriority;
-    private AppConfig mAppConfig;
 
     public NotificationsDisablePopup(Activity activity, int priority) {
         mActivity = activity;
@@ -51,7 +49,7 @@ public class NotificationsDisablePopup extends AbstractStartAction {
 
     @Override
     public void callInBackground() {
-        getAppConfig().setTimeNotificationsDisabledShowAtLast(System.currentTimeMillis());
+        App.getAppConfig().setTimeNotificationsDisabledShowAtLast(System.currentTimeMillis());
     }
 
     @Override
@@ -64,7 +62,7 @@ public class NotificationsDisablePopup extends AbstractStartAction {
         if (!getMarketApiManager().isMarketApiAvailable() && getMarketApiManager().isMarketApiSupportByUs()) {
             long date_now = System.currentTimeMillis();
             long delay = mActivity.getResources().getInteger(R.integer.notifications_disable_popup_delay) * 1000;
-            if ((date_now - getAppConfig().getTimeNotificationsDisabledShowAtLast()) >= delay) {
+            if ((date_now - App.getAppConfig().getTimeNotificationsDisabledShowAtLast()) >= delay) {
                 return true;
             }
         }
@@ -86,12 +84,5 @@ public class NotificationsDisablePopup extends AbstractStartAction {
             mMarketApiManager = new MarketApiManager();
         }
         return mMarketApiManager;
-    }
-
-    private AppConfig getAppConfig() {
-        if (mAppConfig == null) {
-            mAppConfig = App.getAppConfig();
-        }
-        return mAppConfig;
     }
 }
