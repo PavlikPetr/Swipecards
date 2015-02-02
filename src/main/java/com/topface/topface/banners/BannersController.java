@@ -4,7 +4,6 @@ import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 
 /**
  * Controls banners injection for given page
- *
  */
 public class BannersController {
 

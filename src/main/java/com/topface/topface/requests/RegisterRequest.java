@@ -31,7 +31,7 @@ public class RegisterRequest extends ApiRequest {
         this.name = name;
         this.birthday = birthday;
         this.sex = sex;
-        this.clientType = BuildConfig.BILLING_TYPE.getClientType();
+        this.clientType = BuildConfig.MARKET_API_TYPE.getClientType();
         this.locale = ClientUtils.getClientLocale(context);
     }
 

@@ -3,7 +3,6 @@ package com.topface.topface.banners.ad_providers;
 /**
  * Created by kirussell on 12/01/15.
  * Factory through which you can obtain needed ad's provider
- *
  */
 public class AdProvidersFactory {
 
@@ -25,6 +24,7 @@ public class AdProvidersFactory {
 
     /**
      * Creates provider for given banner name
+     *
      * @param banner name of banner system from server
      * @return appropriate provider
      */

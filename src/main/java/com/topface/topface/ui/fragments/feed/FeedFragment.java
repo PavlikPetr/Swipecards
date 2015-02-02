@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -672,7 +671,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 @Override
                 public void always(IApiResponse response) {
                     super.always(response);
-                mBackgroundController.hide();
+                    mBackgroundController.hide();
                     mIsUpdating = false;
                 }
 
@@ -872,6 +871,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private void retryButtonClick(View view) {
         if (view != null) {
             view.setVisibility(View.GONE);
+            mBackgroundController.startAnimation();
             updateData(false, true);
         }
     }
@@ -951,7 +951,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     @Override
     public ViewGroup getContainerForAd() {
-        View view  = getView();
+        View view = getView();
         if (view != null) {
             return (ViewGroup) getView().findViewById(R.id.banner_container_for_feeds);
         }

@@ -67,15 +67,15 @@ public class PubnativeAd extends NativeAd {
             return;
         }
 
-        ImageViewRemote ivr = (ImageViewRemote) view.findViewById(R.id.ivIcon);
+        ImageViewRemote ivr = (ImageViewRemote) view.findViewById(R.id.ifp_avatar_image);
         if (ivr != null) {
             ivr.setRemoteSrc(icon_url);
         }
-        TextView title = (TextView) view.findViewById(R.id.tvTitle);
+        TextView title = (TextView) view.findViewById(R.id.ad_title);
         if (title != null) {
             title.setText(this.title);
         }
-        TextView description = (TextView) view.findViewById(R.id.tvDescription);
+        TextView description = (TextView) view.findViewById(R.id.ad_description);
         if (description != null) {
             description.setText(this.description);
         }

@@ -10,7 +10,6 @@ import java.io.File;
 /**
  * Created by kirussell on 16/01/15.
  * Test for PhotoAddRequest - loads test image file through api
- *
  */
 public class PhotoAddRequestTest extends PhotoRequestsTestBase {
 

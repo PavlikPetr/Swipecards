@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -29,8 +28,6 @@ import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
-import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.Iterator;
@@ -38,14 +35,9 @@ import java.util.LinkedList;
 
 public class PurchasesFragment extends BaseFragment {
 
-    private static final String SKIP_BONUS = "SKIP_BONUS";
     public static final String IS_VIP_PRODUCTS = "is_vip_products";
     public static final String LAST_PAGE = "LAST_PAGE";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
-    private TabPageIndicator mTabIndicator;
-    private ViewPager mPager;
-    private PurchasesFragmentsAdapter mPagerAdapter;
-    private TextView mResourcesInfo;
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_NONE = 0;
     public static final int TYPE_GIFT = 1;
@@ -53,24 +45,26 @@ public class PurchasesFragment extends BaseFragment {
     public static final int TYPE_UNLOCK_SYMPATHIES = 3;
     public static final int TYPE_ADMIRATION = 4;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
-    private TextView mCurCoins;
-    private TextView mCurLikes;
-
-    private boolean mSkipBonus;
-
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateBalanceCounters();
-        }
-    };
-
+    private static final String SKIP_BONUS = "SKIP_BONUS";
+    private TabPageIndicator mTabIndicator;
+    private ViewPager mPager;
+    private PurchasesFragmentsAdapter mPagerAdapter;
+    private TextView mResourcesInfo;
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mResourcesInfo != null) {
                 mResourcesInfo.setVisibility(View.GONE);
             }
+        }
+    };
+    private TextView mCurCoins;
+    private TextView mCurLikes;
+    private boolean mSkipBonus;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateBalanceCounters();
         }
     };
     private boolean mIsVip;
@@ -260,11 +254,6 @@ public class PurchasesFragment extends BaseFragment {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
             mCurLikes.setText(Integer.toString(CacheProfile.likes));
         }
-    }
-
-    @Override
-    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
-        return new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
     }
 
     private void changeInfoText(final String text) {
