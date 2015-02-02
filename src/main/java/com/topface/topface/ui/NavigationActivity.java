@@ -82,6 +82,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
+
     private Intent mPendingNextIntent;
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
@@ -288,7 +289,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onRegisterStartActions(StartActionsController startActionsController) {
         super.onRegisterStartActions(startActionsController);
-
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
         // promo popups
