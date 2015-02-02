@@ -225,6 +225,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoFilterChooseCity.setOnRootViewListener(new CitySearchView.onRootViewListener() {
             @Override
             public int getHeight() {
+                // get fragment height
                 return mScroll.getMeasuredHeight();
             }
         });

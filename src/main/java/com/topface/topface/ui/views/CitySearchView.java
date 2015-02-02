@@ -22,6 +22,9 @@ import com.topface.topface.utils.Utils;
 import java.lang.reflect.Field;
 import java.util.Calendar;
 
+// для того, чтобы по первому backPressed скрывалась клавиатура, а по второму - скрывать выпадающий список,
+// необходимо установить onRootViewListener. Если интерфейс не задан, то backPressed скроет и клавиатуру и список
+
 public class CitySearchView extends AutoCompleteTextView {
 
     public static final int CITY_SEARCH_ACTIVITY = 100;
@@ -153,6 +156,7 @@ public class CitySearchView extends AutoCompleteTextView {
         setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
+                // forcibly show dropdown list for android 2.3
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     getMyAdapter().notifyDataSetChanged();
                 }
@@ -317,6 +321,7 @@ public class CitySearchView extends AutoCompleteTextView {
         setScreenHeight();
     }
 
+    // get root height for determine softKeyboard visibility
     public interface onRootViewListener {
         public int getHeight();
     }
