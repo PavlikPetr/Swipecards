@@ -21,7 +21,6 @@ import android.widget.FrameLayout;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
@@ -29,8 +28,7 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
-import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
+import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.IRequestClient;
@@ -43,16 +41,13 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public static final String AUTH_TAG = "AUTH";
     public static final String IGNORE_NOTIFICATION_INTENT = "IGNORE_NOTIFICATION_INTENT";
     private static final String APP_START_LABEL_FORM = "gcm_%d_%s";
-
+    public ActionBarView actionBarView;
     private boolean mIndeterminateSupported = false;
-
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private BroadcastReceiver mReauthReceiver;
     private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private StartActionsController mStartActionsController;
-    private ActionBarTitleSetterDelegate mTitleSetter;
-
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -72,10 +67,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         LocaleConfig.updateConfiguration(getBaseContext());
         setWindowOptions();
         initActionBar(getSupportActionBar());
-        mTitleSetter = initTitleSetter(getSupportActionBar());
-        if (mTitleSetter != null) {
-            mTitleSetter.setActionBarTitles(String.valueOf(getTitle()), null);
-        }
     }
 
     @Override
@@ -109,35 +100,18 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
      */
     protected void initActionBar(ActionBar actionBar) {
         if (actionBar != null) {
+            actionBarView = new ActionBarView(actionBar, this);
+            setActionBarView();
             actionBar.setIcon(android.R.color.transparent);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                actionBar.setDisplayHomeAsUpEnabled(false);
-                actionBar.setDisplayUseLogoEnabled(true);
-                actionBar.setCustomView(R.layout.actionbar_container_title_view);
-                actionBar.setDisplayShowCustomEnabled(true);
-                actionBar.setDisplayShowTitleEnabled(false);
-                actionBar.setLogo(android.R.color.transparent);
-            } else {
-                actionBar.setDisplayUseLogoEnabled(false);
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                actionBar.setHomeAsUpIndicator(R.drawable.ic_up_arrow);
-            }
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayUseLogoEnabled(true);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
         }
     }
 
-    protected ActionBarTitleSetterDelegate initTitleSetter(ActionBar actionBar) {
-        if (actionBar != null) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                return new ActionBarCustomViewTitleSetterDelegate(this, actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
-            } else {
-                return new ActionBarTitleSetterDelegate(actionBar);
-            }
-        }
-        return null;
-    }
-
-    public ActionBarTitleSetterDelegate getTitleSetter() {
-        return mTitleSetter;
+    protected void setActionBarView() {
+        actionBarView.setArrowUpView((String) getTitle());
     }
 
     /**

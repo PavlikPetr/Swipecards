@@ -19,7 +19,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
@@ -35,6 +34,7 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
+import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.DatingLockPopupAction;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
@@ -46,11 +46,11 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.ExternalLinkExecuter;
 import com.topface.topface.utils.IActionbarNotifier;
-import com.topface.topface.utils.IconNotificationController;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
@@ -71,8 +71,7 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener {
-    public static final String OPEN_MENU = "com.topface.topface.open.menu";
+public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener, ActionBarView.ActionBarClickListener {
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
@@ -119,16 +118,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             if (mNotificationController != null) mNotificationController.refreshNotificator();
         }
     };
-    private BroadcastReceiver mOpenMenuReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mMenuFragment.isLockedByClosings()) {
-                mMenuFragment.showClosingsDialog();
-            } else {
-                toggleDrawerLayout();
-            }
-        }
-    };
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     private AddPhotoHelper mAddPhotoHelper;
     private PopupManager mPopupManager;
@@ -153,22 +142,18 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     protected void initActionBar(ActionBar actionBar) {
         super.initActionBar(actionBar);
         if (actionBar != null) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                View customView = actionBar.getCustomView();
-                if (customView != null) {
-                    View upIcon = customView.findViewById(R.id.up_icon);
-                    if (upIcon instanceof ImageView) {
-                        ((ImageView) upIcon).setImageResource(R.drawable.ic_home);
-                    }
-                }
-                mNotificationController = new CustomViewNotificationController(actionBar);
-            } else {
-                actionBar.setLogo(R.drawable.ic_home);
-                actionBar.setDisplayUseLogoEnabled(true);
-                mNotificationController = new IconNotificationController(actionBar);
-            }
+            actionBarView.setLeftMenuView();
+            actionBarView.setActionBarClickListener(this);
+            actionBar.setDisplayUseLogoEnabled(false);
+            actionBar.setDisplayShowCustomEnabled(true);
+            mNotificationController = new CustomViewNotificationController(actionBar);
             mNotificationController.refreshNotificator();
         }
+    }
+
+    @Override
+    protected void setActionBarView() {
+        actionBarView.setLeftMenuView();
     }
 
     @Override
@@ -203,6 +188,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         super.onRegisterStartActions(startActionsController);
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
+        // show popup when services disable
+        startActionsController.registerAction(new NotificationsDisablePopup(NavigationActivity.this, AC_PRIORITY_NORMAL));
         // promo popups
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
         startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
@@ -211,7 +198,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         startActionsController.registerAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_NORMAL, new DatingLockPopup.DatingLockPopupRedirectListener() {
             @Override
             public void onRedirect() {
-                showFragment(FragmentId.LIKES);
+                showFragment(FragmentId.TABBED_LIKES);
             }
         }));
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
@@ -334,7 +321,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             mFullscreenController.onPause();
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mCountersReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mOpenMenuReceiver);
     }
 
     @Override
@@ -363,8 +349,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(mOpenMenuReceiver, new IntentFilter(OPEN_MENU));
     }
 
     @Override
@@ -634,5 +618,10 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         mIsActionBarHidden = false;
         setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         getSupportActionBar().show();
+    }
+
+    @Override
+    public void onActionBarClick() {
+        toggleDrawerLayout();
     }
 }

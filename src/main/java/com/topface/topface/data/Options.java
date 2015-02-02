@@ -138,20 +138,12 @@ public class Options extends AbstractData {
     public int maxMessageSize;
 
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
-
     public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
-
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
-
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
-
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
-
     public NotShown notShown = new NotShown();
-
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
-
-    private Map<String, PageInfo> pagesInfo;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -176,7 +168,7 @@ public class Options extends AbstractData {
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
             PageInfo[] pagesArr = JsonUtils.fromJson(response.optString("pages"), PageInfo[].class);
-            for(PageInfo pageInfo : pagesArr) {
+            for (PageInfo pageInfo : pagesArr) {
                 pages.put(pageInfo.name, pageInfo);
             }
             JSONObject aboutAppJson = response.optJSONObject("aboutApp");
@@ -389,8 +381,8 @@ public class Options extends AbstractData {
         return pages;
     }
 
-    public void setPagesInfo(Map<String, PageInfo> pagesInfo) {
-        this.pagesInfo = new HashMap<>(pagesInfo);
+    public void setPagesInfo(Map<String, PageInfo> pages) {
+        this.pages = new HashMap<>(pages);
     }
 
     public static void sendUpdateOptionsBroadcast() {
@@ -426,7 +418,7 @@ public class Options extends AbstractData {
             url = App.getContext().getString(R.string.settings_topface_url_title);
         }
     }
-    
+
     public static class PromoPopupEntity {
         public static final int DEFAULT_COUNT = 10;
         private static final int DEFAULT_TIMEOUT = 1000;
@@ -684,17 +676,6 @@ public class Options extends AbstractData {
             fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
         } catch (IllegalArgumentException e) {
             Debug.error("Illegal value of startPage", e);
-        }
-        switch (fragmentId) {
-            case BOOKMARKS:
-            case DIALOGS:
-                fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
-                break;
-            case MUTUAL:
-            case ADMIRATIONS:
-            case LIKES:
-                fragmentId = BaseFragment.FragmentId.TABBED_LIKES;
-                break;
         }
         return fragmentId;
     }

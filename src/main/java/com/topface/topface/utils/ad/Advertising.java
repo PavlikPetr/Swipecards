@@ -14,6 +14,7 @@ import java.util.List;
 public abstract class Advertising {
 
     private boolean mIsLoading;
+
     protected abstract String requestUrl();
 
     private ArrayList<NativeAd> mNativeAds = new ArrayList<>();

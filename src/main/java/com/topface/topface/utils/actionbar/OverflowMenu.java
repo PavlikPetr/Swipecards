@@ -80,6 +80,10 @@ public class OverflowMenu {
                             initOverfowMenu();
                         }
                         break;
+                    case SYMPATHY:
+                        setSympathySentState(value, false);
+                        initOverfowMenu();
+                        break;
                 }
             }
         }
@@ -306,7 +310,7 @@ public class OverflowMenu {
                     @SuppressWarnings("ConstantConditions")
                     @Override
                     public void onRateCompleted(int mutualId) {
-                        setSympathySentState(true);
+                        setSympathySentState(true, true);
                         if (mActivity != null) {
                             Toast.makeText(App.getContext(), R.string.sympathy_sended, Toast.LENGTH_SHORT).show();
                         }
@@ -315,7 +319,7 @@ public class OverflowMenu {
                     @SuppressWarnings("ConstantConditions")
                     @Override
                     public void onRateFailed(int userId, int mutualId) {
-                        setSympathySentState(false);
+                        setSympathySentState(false, true);
                         if (mActivity != null) {
                             Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         }
@@ -323,7 +327,7 @@ public class OverflowMenu {
                     }
                 }
         );
-        setSympathySentState(true);
+        setSympathySentState(true, true);
     }
 
     private void onClickSendAdmirationAction() {
@@ -339,7 +343,7 @@ public class OverflowMenu {
                     @SuppressWarnings("ConstantConditions")
                     @Override
                     public void onRateCompleted(int mutualId) {
-                        setSympathySentState(true);
+                        setSympathySentState(true, true);
                         if (mActivity != null) {
                             Toast.makeText(App.getContext(), R.string.admiration_sended, Toast.LENGTH_SHORT).show();
                         }
@@ -348,13 +352,13 @@ public class OverflowMenu {
                     @SuppressWarnings("ConstantConditions")
                     @Override
                     public void onRateFailed(int userId, int mutualId) {
-                        setSympathySentState(false);
+                        setSympathySentState(false, true);
                         initOverfowMenu();
                     }
                 }
         );
         if (isSentAdmiration) {
-            setSympathySentState(true);
+            setSympathySentState(true, true);
         }
     }
 
@@ -402,53 +406,48 @@ public class OverflowMenu {
         if (mIsInBlackList == null || mUserId == null) {
             return;
         }
-        if (CacheProfile.premium) {
-            ApiRequest request;
-            if (mIsInBlackList) {
-                request = new DeleteBlackListRequest(mUserId, mActivity).
-                        callback(new BlackListAndBookmarkHandler(mActivity,
-                                BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
-                                mUserId,
-                                false) {
-                            @Override
-                            public void success(IApiResponse response) {
-                                super.success(response);
-                                showBlackListToast(false);
-                            }
+        ApiRequest request;
+        if (mIsInBlackList) {
+            request = new DeleteBlackListRequest(mUserId, mActivity).
+                    callback(new BlackListAndBookmarkHandler(mActivity,
+                            BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
+                            mUserId,
+                            false) {
+                        @Override
+                        public void success(IApiResponse response) {
+                            super.success(response);
+                            showBlackListToast(false);
+                        }
 
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                                super.fail(codeError, response);
-                                setBlackListState(null);
-                                initOverfowMenu();
-                            }
-                        });
-            } else {
-                request = new BlackListAddRequest(mUserId, mActivity).
-                        callback(new BlackListAndBookmarkHandler(mActivity,
-                                BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
-                                mUserId,
-                                true) {
-                            @Override
-                            public void success(IApiResponse response) {
-                                super.success(response);
-                                showBlackListToast(true);
-                            }
-
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                                super.fail(codeError, response);
-                                setBlackListState(null);
-                                initOverfowMenu();
-                            }
-                        });
-            }
-            setBlackListState(null);
-            request.exec();
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+                            super.fail(codeError, response);
+                            setBlackListState(null);
+                            initOverfowMenu();
+                        }
+                    });
         } else {
-            mActivity.startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"),
-                    PurchasesActivity.INTENT_BUY_VIP);
+            request = new BlackListAddRequest(mUserId, mActivity).
+                    callback(new BlackListAndBookmarkHandler(mActivity,
+                            BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
+                            mUserId,
+                            true) {
+                        @Override
+                        public void success(IApiResponse response) {
+                            super.success(response);
+                            showBlackListToast(true);
+                        }
+
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+                            super.fail(codeError, response);
+                            setBlackListState(null);
+                            initOverfowMenu();
+                        }
+                    });
         }
+        setBlackListState(null);
+        request.exec();
     }
 
     private void onClickAddToBookmarkAction() {
@@ -541,9 +540,13 @@ public class OverflowMenu {
         mActivity.startActivityForResult(mOpenChatIntent, ChatActivity.INTENT_CHAT);
     }
 
-    private void setSympathySentState(boolean state) {
+    private void setSympathySentState(boolean state, boolean isNeedSentBroadcast) {
         if (mOverflowMenuFields != null) {
             mOverflowMenuFields.setSympathySentValue(state);
+            if (isNeedSentBroadcast) {
+                LocalBroadcastManager.getInstance(mActivity.getApplicationContext()).
+                        sendBroadcast(BlackListAndBookmarkHandler.getIntentForSympathyUpdate(BlackListAndBookmarkHandler.ActionTypes.SYMPATHY, state));
+            }
         }
     }
 
@@ -580,5 +583,4 @@ public class OverflowMenu {
         mOverflowMenuFields = null;
         mActivity = null;
     }
-
 }

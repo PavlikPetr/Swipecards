@@ -62,7 +62,7 @@ public class BannersConfig {
 
     public void restoreBannersSettings() {
         SharedPreferences preferences = getPreferences();
-        Map<String, PageInfo> pagesInfo= new HashMap<>();
+        Map<String, PageInfo> pagesInfo = new HashMap<>();
         for (PageInfo.PageName pageName : PageInfo.PageName.values()) {
             String str = preferences.getString(pageName.getName(), Static.EMPTY);
             if (!TextUtils.isEmpty(str)) {

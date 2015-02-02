@@ -157,7 +157,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
     private boolean addItemToStartOfFeed(FeedDialog item) {
         for (FeedDialog dialog : getData()) {
-            if ( dialog.user != null && item.user.id == dialog.user.id) {
+            if (dialog.user != null && item.user.id == dialog.user.id) {
                 setItemToStartOfFeed(dialog, item);
                 return true;
             }

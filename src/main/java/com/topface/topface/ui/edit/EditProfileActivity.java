@@ -68,7 +68,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         setContentView(R.layout.ac_edit_profile);
         hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
         //Navigation bar
-        getTitleSetter().setActionBarTitles(R.string.edit_title, null);
+        actionBarView.setActionBarTitle(R.string.edit_title);
         // ListView
         mEditItems = new LinkedList<>();
         initEditItems();
@@ -547,7 +547,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, mFormItem.titleId);
             intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, mFormItem.value);
             if (mFormItem.dataId == FormItem.NO_RESOURCE_ID) {
-                if (mFormItem.getLimitInterface()!=null){
+                if (mFormItem.getLimitInterface() != null) {
                     intent.putExtra(EditContainerActivity.INTENT_FORM_LIMIT_VALUE, mFormItem.getLimitInterface().getLimit());
                 }
                 startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM);
