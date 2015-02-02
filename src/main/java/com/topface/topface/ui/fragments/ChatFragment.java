@@ -126,7 +126,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     };
     private Handler mUpdater;
     private boolean mIsUpdating;
-    private boolean mIsKeyboardOpened;
+    private boolean mIsNeedShowKeyboard;
     private int mKeyboardFreeHeight;
     private boolean mJustResumed;
     private PullToRefreshListView mListView;
@@ -151,7 +151,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
-    private boolean mIsBeforeFirstChatUpdate = true;
     private OverflowMenu mChatOverflowMenu;
     // Managers
     private ActionBarTitleSetterDelegate mSetter;
@@ -230,22 +229,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        if (!showKeyboardOnLargeScreen()) {
-            Utils.showSoftKeyboard(getActivity(), null);
-            mIsKeyboardOpened = true;
+        if (!mIsNeedShowKeyboard) {
+            showKeyboardOnLargeScreen();
+            mIsNeedShowKeyboard = true;
         }
         final KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @SuppressWarnings("ConstantConditions")
             @Override
             public void keyboardOpened() {
-                mIsKeyboardOpened = true;
+                mIsNeedShowKeyboard = true;
                 mKeyboardFreeHeight = getView().getHeight();
             }
 
             @Override
             public void keyboardClosed() {
-                mIsKeyboardOpened = false;
+                mIsNeedShowKeyboard = false;
             }
         });
         Debug.log(this, "+onCreate");
@@ -317,7 +316,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     mLockScreen.setVisibility(View.GONE);
                 }
                 mBackgroundController.hide();
-                mIsKeyboardOpened = savedInstanceState.getBoolean(KEYBOARD_OPENED, false);
+                mIsNeedShowKeyboard = savedInstanceState.getBoolean(KEYBOARD_OPENED, false);
             } catch (Exception | OutOfMemoryError e) {
                 Debug.error(e);
             }
@@ -448,7 +447,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(WAS_FAILED, wasFailed);
-        outState.putBoolean(KEYBOARD_OPENED, mIsKeyboardOpened);
+        outState.putBoolean(KEYBOARD_OPENED, mIsNeedShowKeyboard);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
         if (mUser != null) {
             try {
@@ -465,7 +464,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
-            mIsKeyboardOpened = savedInstanceState.getBoolean(KEYBOARD_OPENED);
+            mIsNeedShowKeyboard = savedInstanceState.getBoolean(KEYBOARD_OPENED);
         }
     }
 
@@ -613,7 +612,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
                 }
                 mIsUpdating = false;
-                mIsBeforeFirstChatUpdate = false;
 
                 if (mLockScreen != null && mLockScreen.getVisibility() == View.VISIBLE) {
                     mLockScreen.setVisibility(View.GONE);
@@ -646,13 +644,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }).exec();
     }
 
-    private boolean showKeyboardOnLargeScreen() {
-        if (isShowKeyboardInChat() && mIsBeforeFirstChatUpdate) {
+    private void showKeyboardOnLargeScreen() {
+        if (isShowKeyboardInChat()) {
             Utils.showSoftKeyboard(getActivity(), null);
-            mIsKeyboardOpened = true;
-            return true;
+            mIsNeedShowKeyboard = true;
         }
-        return false;
     }
 
     private void removeOutdatedItems(HistoryListData data) {
@@ -774,11 +770,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-        if (mIsKeyboardOpened) {
-            if (!showKeyboardOnLargeScreen()) {
-                Utils.showSoftKeyboard(getActivity(), null);
-                mIsKeyboardOpened = true;
-            }
+        //показать клавиатуру, если она была показаны до этого
+        if (mIsNeedShowKeyboard) {
+            showKeyboardOnLargeScreen();
         }
 
         if (mUserId == 0) {
@@ -803,9 +797,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         startTimer();
 
         if (getView().getHeight() == mKeyboardFreeHeight) {
-            mIsKeyboardOpened = true;
+            mIsNeedShowKeyboard = true;
         }
-        if (mIsKeyboardOpened && mJustResumed) {
+        if (mIsNeedShowKeyboard && mJustResumed) {
             InputMethodManager inputMethodManager = (InputMethodManager) getActivity().
                     getSystemService(Context.INPUT_METHOD_SERVICE);
             if (inputMethodManager != null) {
@@ -821,7 +815,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         getActivity().unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         Utils.hideSoftKeyboard(getActivity(), mEditBox);
-        mIsKeyboardOpened = false;
+        mIsNeedShowKeyboard = false;
         mJustResumed = true;
     }
 
