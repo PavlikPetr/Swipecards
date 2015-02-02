@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -42,9 +43,9 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
-import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.social.AuthToken;
@@ -54,14 +55,23 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class SettingsFragment extends BaseFragment implements OnClickListener, OnCheckedChangeListener {
-
     public static final int REQUEST_CODE_RINGTONE = 333;
-    private UserConfig mUserSettings;
-    private SessionConfig mSessionSettings;
     private EditSwitcher mSwitchVibration;
     private EditSwitcher mSwitchLED;
     private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<>();
     private TextView mSocialNameText;
+    private MarketApiManager mMarketApiManager;
+
+    private ViewGroup mLoNotificationsHeader;
+    private ViewGroup mLoLikes;
+    private ViewGroup mLoMutual;
+    private ViewGroup mLoChat;
+    private ViewGroup mLoGuests;
+    private ViewGroup mTvNoNotification;
+    private ViewGroup mLoVibration;
+    private ViewGroup mLoLED;
+    private ViewGroup mLoMelody;
+
     private CountDownTimer mSendTimer = new CountDownTimer(3000, 3000) {
         @Override
         public void onTick(long l) {
@@ -93,8 +103,39 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.fragment_settings, null);
-        mSessionSettings = App.getSessionConfig();
-        mUserSettings = App.getUserConfig();
+
+        mMarketApiManager = new MarketApiManager();
+
+        mLoNotificationsHeader = (ViewGroup) view.findViewById(R.id.loNotificationsHeader);
+        mLoLikes = (ViewGroup) view.findViewById(R.id.loLikes);
+        mLoMutual = (ViewGroup) view.findViewById(R.id.loMutual);
+        mLoChat = (ViewGroup) view.findViewById(R.id.loChat);
+        mLoGuests = (ViewGroup) view.findViewById(R.id.loGuests);
+        mTvNoNotification = (ViewGroup) view.findViewById(R.id.tvNoNotification);
+        mLoVibration = (ViewGroup) view.findViewById(R.id.loVibration);
+        mLoLED = (ViewGroup) view.findViewById(R.id.loLED);
+        mLoMelody = (ViewGroup) view.findViewById(R.id.loMelody);
+
+        // Edit Profile Button
+        view.findViewById(R.id.btnProfileEdit).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
+            }
+        });
+
+        mLoVibration.setOnClickListener(this);
+        mLoLED.setOnClickListener(this);
+        mLoMelody.setOnClickListener(this);
+
+
+        mSwitchVibration = new EditSwitcher(mLoVibration);
+        mSwitchLED = new EditSwitcher(mLoLED);
+
+        melodyName = (TextView) mLoMelody.findViewWithTag("tvText");
+
+        // Account
+        initAccountViews(view);
 
         // Init settings views
         /*
@@ -105,7 +146,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         if (!getActivity().isFinishing()) {
             initViews(view);
         }
-
         return view;
     }
 
@@ -123,127 +163,130 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         return getString(R.string.settings_header_title);
     }
 
+    private void setNotificationVisibility(int visibility) {
+        mLoNotificationsHeader.setVisibility(visibility);
+        mLoLikes.setVisibility(visibility);
+        mLoMutual.setVisibility(visibility);
+        mLoChat.setVisibility(visibility);
+        mLoGuests.setVisibility(visibility);
+    }
+
+    private void setNotificationSettingsVisibility(int visibility) {
+        mLoVibration.setVisibility(visibility);
+        mLoLED.setVisibility(visibility);
+        mLoMelody.setVisibility(visibility);
+    }
+
+    private void setNotificationState() {
+        boolean isMarketApiAvailable = mMarketApiManager.isMarketApiAvailable();
+        if ((!isMarketApiAvailable && mMarketApiManager.isMarketApiSupportByUs()) ||
+                (!isMarketApiAvailable && !CacheProfile.email)) {
+            TextView title = (TextView) mTvNoNotification.findViewById(R.id.loTitle);
+            Button button = (Button) mTvNoNotification.findViewById(R.id.loButton);
+            title.setVisibility(mMarketApiManager.isTitleVisible() ? View.VISIBLE : View.GONE);
+            button.setVisibility(mMarketApiManager.isButtonVisible() ? View.VISIBLE : View.GONE);
+            title.setText(mMarketApiManager.getTitleTextId());
+            if (mMarketApiManager.isButtonVisible()) {
+                button.setText(mMarketApiManager.getButtonTextId());
+            }
+            button.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mMarketApiManager != null) {
+                        mMarketApiManager.onProblemResolve();
+                    }
+                }
+            });
+            mTvNoNotification.setBackgroundResource(R.drawable.edit_big_btn_selector);
+            mTvNoNotification.setVisibility(View.VISIBLE);
+        } else {
+            mTvNoNotification.setVisibility(View.GONE);
+        }
+        if (!CacheProfile.email && !isMarketApiAvailable) {
+            melodyName.setVisibility(View.GONE);
+            setNotificationVisibility(View.GONE);
+        } else {
+            setNotificationVisibility(View.VISIBLE);
+            melodyName.setVisibility(View.VISIBLE);
+        }
+        if (isMarketApiAvailable) {
+            setNotificationSettingsVisibility(View.VISIBLE);
+        } else {
+            setNotificationSettingsVisibility(View.GONE);
+        }
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_LIKES,
+                mLoLikes,
+                CacheProfile.email,
+                isMailAvailable(CacheProfile.NOTIFICATIONS_LIKES),
+                isGcmAvailable(CacheProfile.NOTIFICATIONS_LIKES));
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY,
+                mLoMutual,
+                CacheProfile.email,
+                isMailAvailable(CacheProfile.NOTIFICATIONS_SYMPATHY),
+                isGcmAvailable(CacheProfile.NOTIFICATIONS_SYMPATHY));
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE,
+                mLoChat,
+                CacheProfile.email,
+                isMailAvailable(CacheProfile.NOTIFICATIONS_MESSAGE),
+                isGcmAvailable(CacheProfile.NOTIFICATIONS_MESSAGE));
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR,
+                mLoGuests,
+                CacheProfile.email,
+                isMailAvailable(CacheProfile.NOTIFICATIONS_VISITOR),
+                isGcmAvailable(CacheProfile.NOTIFICATIONS_VISITOR));
+    }
+
+    private boolean isMailAvailable(int key) {
+        if (CacheProfile.notifications != null && CacheProfile.notifications.get(key) != null) {
+            return CacheProfile.notifications.get(key).mail;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isGcmAvailable(int key) {
+        if (CacheProfile.notifications != null && CacheProfile.notifications.get(key) != null) {
+            return CacheProfile.notifications.get(key).apns;
+        } else {
+            return false;
+        }
+    }
+
     private void initViews(View root) {
         ViewGroup frame;
-        // Edit Profile Button
-        TextView btnEditProfile = (TextView) root.findViewById(R.id.btnProfileEdit);
-        btnEditProfile.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
-            }
-        });
-
         // Notifications header
-        frame = (ViewGroup) root.findViewById(R.id.loNotificationsHeader);
-        setText(R.string.settings_notifications_header, frame);
+        setText(R.string.settings_notifications_header, mLoNotificationsHeader);
 
         // Likes
-        frame = (ViewGroup) root.findViewById(R.id.loLikes);
-        setBackground(R.drawable.edit_big_btn_top_selector, frame);
-        setText(R.string.settings_likes, frame);
+        setBackground(R.drawable.edit_big_btn_top_selector, mLoLikes);
+        setText(R.string.settings_likes, mLoLikes);
 
-        boolean mail;
-        boolean apns;
-        if (!CacheProfile.email && !App.isGmsEnabled()) {
-            root.findViewById(R.id.tvNoNotification).setVisibility(View.VISIBLE);
-            root.findViewById(R.id.loNotificationsHeader).setVisibility(View.GONE);
-            root.findViewById(R.id.loLikes).setVisibility(View.GONE);
-            root.findViewById(R.id.loMutual).setVisibility(View.GONE);
-            root.findViewById(R.id.loChat).setVisibility(View.GONE);
-            root.findViewById(R.id.loGuests).setVisibility(View.GONE);
-        } else {
-            if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES) != null) {
-                mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
-                apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
-            } else {
-                mail = false;
-                apns = false;
-            }
-            initEditNotificationFrame(CacheProfile.NOTIFICATIONS_LIKES, frame, CacheProfile.email, mail, apns);
+        // Mutual
+        setBackground(R.drawable.edit_big_btn_middle, mLoMutual);
+        setText(R.string.settings_mutual, mLoMutual);
 
-            // Mutual
-            frame = (ViewGroup) root.findViewById(R.id.loMutual);
-            setBackground(R.drawable.edit_big_btn_middle, frame);
-            setText(R.string.settings_mutual, frame);
-            if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY) != null) {
-                mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
-                apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
-            } else {
-                mail = false;
-                apns = false;
-            }
-            initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY, frame, CacheProfile.email, mail, apns);
+        // Chat
+        setBackground(R.drawable.edit_big_btn_middle, mLoChat);
+        setText(R.string.settings_messages, mLoChat);
 
-            // Chat
-            frame = (ViewGroup) root.findViewById(R.id.loChat);
-            setBackground(R.drawable.edit_big_btn_middle, frame);
-            setText(R.string.settings_messages, frame);
-            if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE) != null) {
-                mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
-                apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
-            } else {
-                mail = false;
-                apns = false;
-            }
-            initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE, frame, CacheProfile.email, mail, apns);
+        // Guests
+        setBackground(R.drawable.edit_big_btn_bottom, mLoGuests);
+        setText(R.string.settings_guests, mLoGuests);
 
-            // Guests
-            frame = (ViewGroup) root.findViewById(R.id.loGuests);
-            setBackground(R.drawable.edit_big_btn_bottom, frame);
-            setText(R.string.settings_guests, frame);
-            if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR) != null) {
-                mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
-                apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
-            } else {
-                mail = false;
-                apns = false;
-            }
-            initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR, frame, CacheProfile.email, mail, apns);
+        // Vibration
+        setBackground(R.drawable.edit_big_btn_top, mLoVibration);
+        setText(R.string.settings_vibration, mLoVibration);
+        mSwitchVibration.setChecked(App.getUserConfig().isVibrationEnabled());
 
-            // Vibration
-            frame = (ViewGroup) root.findViewById(R.id.loVibration);
-            setBackground(R.drawable.edit_big_btn_top, frame);
-            setText(R.string.settings_vibration, frame);
-            mSwitchVibration = new EditSwitcher(frame);
-            mSwitchVibration.setChecked(mUserSettings.isVibrationEnabled());
-            frame.setOnClickListener(this);
+        //LED
+        setBackground(R.drawable.edit_big_btn_middle, mLoLED);
+        setText(R.string.settings_led, mLoLED);
+        mSwitchLED.setChecked(App.getUserConfig().isLEDEnabled());
 
-            //LED
-            frame = (ViewGroup) root.findViewById(R.id.loLED);
-            setBackground(R.drawable.edit_big_btn_middle, frame);
-            setText(R.string.settings_led, frame);
-            mSwitchLED = new EditSwitcher(frame);
-            mSwitchLED.setChecked(mUserSettings.isLEDEnabled());
-            frame.setOnClickListener(this);
-
-            //Melody
-            frame = (ViewGroup) root.findViewById(R.id.loMelody);
-            setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
-            ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_melody);
-            melodyName = (TextView) frame.findViewWithTag("tvText");
-            melodyName.setVisibility(View.VISIBLE);
-            setRingtonNameByUri(mUserSettings.getRingtone());
-            frame.setOnClickListener(this);
-
-            //Preload photo
-            frame = (ViewGroup) root.findViewById(R.id.loPreloadPhoto);
-            setBackground(R.drawable.edit_big_btn_selector, frame);
-            ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_loading_photo);
-            preloadPhotoName = (TextView) frame.findViewWithTag("tvText");
-            preloadPhotoName.setVisibility(View.VISIBLE);
-            preloadPhotoName.setText(mUserSettings.getPreloadPhotoType().getName());
-            frame.setOnClickListener(this);
-        }
-
-        if (!App.isGmsEnabled()) {
-            root.findViewById(R.id.loVibration).setVisibility(View.GONE);
-            root.findViewById(R.id.loLED).setVisibility(View.GONE);
-            root.findViewById(R.id.loMelody).setVisibility(View.GONE);
-        }
-
-        // Account
-        initAccountViews(root);
+        //Melody
+        setBackground(R.drawable.edit_big_btn_bottom_selector, mLoMelody);
+        ((TextView) mLoMelody.findViewWithTag("tvTitle")).setText(R.string.settings_melody);
+        setRingtonNameByUri(App.getUserConfig().getRingtone());
 
         // Help
         frame = (ViewGroup) root.findViewById(R.id.loHelp);
@@ -263,12 +306,18 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         setText(R.string.settings_about, frame);
         frame.setOnClickListener(this);
 
-
+        //Preload photo
+        frame = (ViewGroup) root.findViewById(R.id.loPreloadPhoto);
+        setBackground(R.drawable.edit_big_btn_selector, frame);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_loading_photo);
+        preloadPhotoName = (TextView) frame.findViewWithTag("tvText");
+        preloadPhotoName.setVisibility(View.VISIBLE);
+        preloadPhotoName.setText(App.getUserConfig().getPreloadPhotoType().getName());
+        frame.setOnClickListener(this);
     }
 
     private void initAccountViews(View root) {
-        ViewGroup frame;
-        frame = (ViewGroup) root.findViewById(R.id.loAccount);
+        ViewGroup frame = (ViewGroup) root.findViewById(R.id.loAccount);
         setBackground(R.drawable.edit_big_btn_top_selector, frame);
         ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_account);
         mSocialNameText = (TextView) frame.findViewWithTag("tvText");
@@ -286,11 +335,15 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         CheckBox checkBox = (CheckBox) frame.findViewWithTag("cbPhone");
         ProgressBar prsPhone = (ProgressBar) frame.findViewWithTag("prsPhone");
         String phoneNotifierKey = Options.generateKey(key, false);
+        if (checkBox == null) {
+            checkBox = (CheckBox) frame.findViewWithTag(phoneNotifierKey);
+        }
         hashNotifiersProgressBars.put(phoneNotifierKey, prsPhone);
-        if (App.isGmsEnabled()) {
+        if (mMarketApiManager.isMarketApiAvailable()) {
             checkBox.setTag(phoneNotifierKey);
             checkBox.setChecked(phoneChecked);
             checkBox.setOnCheckedChangeListener(this);
+            checkBox.setVisibility(View.VISIBLE);
             checkBox.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -301,15 +354,18 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             checkBox.setVisibility(View.GONE);
             prsPhone.setVisibility(View.GONE);
         }
-
-        final CheckBox checkBoxEmail = (CheckBox) frame.findViewWithTag("cbMail");
+        CheckBox checkBoxEmail = (CheckBox) frame.findViewWithTag("cbMail");
         ProgressBar prsMail = (ProgressBar) frame.findViewWithTag("prsMail");
         String mailNotifierKey = Options.generateKey(key, true);
+        if (checkBoxEmail == null) {
+            checkBoxEmail = (CheckBox) frame.findViewWithTag(mailNotifierKey);
+        }
         hashNotifiersProgressBars.put(mailNotifierKey, prsMail);
         if (hasMail) {
             checkBoxEmail.setTag(mailNotifierKey);
             checkBoxEmail.setChecked(mailChecked);
             checkBoxEmail.setEnabled(true);
+            checkBoxEmail.setVisibility(View.VISIBLE);
             checkBoxEmail.setOnCheckedChangeListener(this);
         } else {
             checkBoxEmail.setVisibility(View.GONE);
@@ -347,9 +403,9 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 break;
             case R.id.loVibration:
                 mSwitchVibration.doSwitch();
-                mUserSettings.setGCMVibrationEnabled(mSwitchVibration.isChecked());
-                mUserSettings.saveConfig();
-                Debug.log(mUserSettings, "UserConfig changed");
+                App.getUserConfig().setGCMVibrationEnabled(mSwitchVibration.isChecked());
+                App.getUserConfig().saveConfig();
+                Debug.log(App.getUserConfig(), "UserConfig changed");
 
                 // Send empty vibro notification to demonstrate
                 if (mSwitchVibration.isChecked()) {
@@ -361,15 +417,15 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 break;
             case R.id.loLED:
                 mSwitchLED.doSwitch();
-                mUserSettings.setLEDEnabled(mSwitchLED.isChecked());
-                mUserSettings.saveConfig();
-                Debug.log(mUserSettings, "UserConfig changed");
+                App.getUserConfig().setLEDEnabled(mSwitchLED.isChecked());
+                App.getUserConfig().saveConfig();
+                Debug.log(App.getUserConfig(), "UserConfig changed");
                 break;
             case R.id.loMelody:
                 intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.settings_melody));
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mUserSettings.getRingtone());
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, App.getUserConfig().getRingtone());
                 startActivityForResult(intent, REQUEST_CODE_RINGTONE);
                 break;
             case R.id.loLanguage:
@@ -574,9 +630,9 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             }
         }
         melodyName.setText(ringtoneName);
-        mUserSettings.setGCMRingtone(uri == null ? UserConfig.SILENT : uri.toString());
-        mUserSettings.saveConfig();
-        Debug.log(mUserSettings, "UserConfig changed");
+        App.getUserConfig().setGCMRingtone(uri == null ? UserConfig.SILENT : uri.toString());
+        App.getUserConfig().saveConfig();
+        Debug.log(App.getUserConfig(), "UserConfig changed");
     }
 
     /**
@@ -615,7 +671,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     public void getSocialAccountName(final TextView textView) {
         AuthToken authToken = AuthToken.getInstance();
         if (!authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            String name = mSessionSettings.getSocialAccountName();
+            String name = App.getSessionConfig().getSocialAccountName();
             if (TextUtils.isEmpty(name)) {
                 getSocialAccountNameAsync(new Handler() {
                     @Override
@@ -628,8 +684,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                                 textView.setText(socialName);
                             }
                         });
-                        mSessionSettings.setSocialAccountName(socialName);
-                        mSessionSettings.saveConfig();
+                        App.getSessionConfig().setSocialAccountName(socialName);
+                        App.getSessionConfig().saveConfig();
                     }
                 });
             } else {
@@ -665,11 +721,15 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     @Override
     public void onResume() {
+        super.onResume();
+        if (mMarketApiManager != null) {
+            mMarketApiManager.onResume();
+        }
+        setNotificationState();
         AuthToken authToken = AuthToken.getInstance();
         if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             mSocialNameText.setText(authToken.getLogin());
         }
-        super.onResume();
     }
 
     @Override

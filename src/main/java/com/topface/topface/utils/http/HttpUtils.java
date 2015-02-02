@@ -195,7 +195,7 @@ public class HttpUtils {
                     BuildConfig.VERSION_NAME,
                     TextUtils.equals(BuildConfig.BUILD_TYPE, "release") ? "" : "-" + BuildConfig.BUILD_TYPE,
                     BuildConfig.VERSION_CODE,
-                    BuildConfig.BILLING_TYPE.getClientType(),
+                    BuildConfig.MARKET_API_TYPE.getClientType(),
                     Utils.getClientOsVersion(),
                     locale.getLanguage(),
                     locale.getCountry()
