@@ -58,7 +58,6 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
 
     private void checkServices() {
         mResultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(App.getContext());
-        mResultCode = ConnectionResult.INVALID_ACCOUNT;
         mIsServicesAvailable = mResultCode == ConnectionResult.SUCCESS;
         decryptingErrorCode();
     }
@@ -110,7 +109,7 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
 
     @Override
     public boolean isMarketApiAvailable() {
-        return  mIsServicesAvailable ;
+        return mIsServicesAvailable;
     }
 
     @Override
