@@ -23,7 +23,6 @@ import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
-import com.topface.topface.data.FortumoProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
@@ -34,7 +33,6 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AppGetOptionsRequest;
 import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.FortumoProductsRequest;
 import com.topface.topface.requests.GooglePlayProductsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
@@ -98,38 +96,10 @@ public class App extends Application {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getOptionsRequest())
                 .addRequest(getProductsRequest())
-                .addRequest(getFortumoProductsRequest())
                 .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .callback(handler)
                 .exec();
-    }
-
-    private static ApiRequest getFortumoProductsRequest() {
-        switch (BuildConfig.BILLING_TYPE) {
-            case GOOGLE_PLAY:
-                return new FortumoProductsRequest(App.getContext()).callback(new DataApiHandler<FortumoProducts>() {
-                    @Override
-                    protected void success(FortumoProducts data, IApiResponse response) {
-
-                    }
-
-                    @Override
-                    protected FortumoProducts parseResponse(ApiResponse response) {
-                        return new FortumoProducts(response);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-
-                    }
-                });
-            //Для амазона и nokia Fortumeo не поддерживается
-            case NOKIA_STORE:
-            case AMAZON:
-            default:
-                return null;
-        }
     }
 
     private static ApiRequest getPaymentwallProductsRequest() {

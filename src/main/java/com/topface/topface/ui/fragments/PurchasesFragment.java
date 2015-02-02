@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +45,6 @@ public class PurchasesFragment extends BaseFragment {
     public static final int TYPE_ADMIRATION = 4;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
     private static final String SKIP_BONUS = "SKIP_BONUS";
-    private TabPageIndicator mTabIndicator;
     private ViewPager mPager;
     private PurchasesFragmentsAdapter mPagerAdapter;
     private TextView mResourcesInfo;
@@ -128,7 +126,7 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void initViews(View root, Bundle savedInstanceState) {
-        mTabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
+        TabPageIndicator tabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
 
         Bundle args = getArguments();
@@ -150,7 +148,7 @@ public class PurchasesFragment extends BaseFragment {
 
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs);
         mPager.setAdapter(mPagerAdapter);
-        mTabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        tabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
 
             @Override
@@ -176,7 +174,7 @@ public class PurchasesFragment extends BaseFragment {
 
             }
         });
-        mTabIndicator.setViewPager(mPager);
+        tabIndicator.setViewPager(mPager);
         initBalanceCounters(getSupportActionBar().getCustomView());
         changeInfoText(getInfoText());
         if (savedInstanceState != null) {
@@ -188,25 +186,17 @@ public class PurchasesFragment extends BaseFragment {
 
     private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
         boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS, false);
-        TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-        int simState = telephonyManager.getSimState();
         Options.Tab pwallMobileTab = null;
         Options.Tab fortimoTab = null;
         for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext(); ) {
             Options.Tab tab = iterator.next();
             switch (tab.type) {
-                case Options.Tab.FORTUMO:
-                    fortimoTab = tab;
-                    break;
                 case Options.Tab.PWALL_MOBILE:
                     pwallMobileTab = tab;
                     break;
             }
             //Удаляем вкладку Google Play, если не доступны Play Services
             if (TextUtils.equals(tab.type, Options.Tab.GPLAY) && !App.isGmsEnabled()) {
-                iterator.remove();
-            } else if (simState != TelephonyManager.SIM_STATE_READY && TextUtils.equals(tab.type, Options.Tab.FORTUMO)) {
-                // Deleting fortumo tab if no sim available
                 iterator.remove();
             } else {
                 Products products = getProductsByTab(tab);
@@ -234,9 +224,6 @@ public class PurchasesFragment extends BaseFragment {
                 break;
             case Options.Tab.PWALL_MOBILE:
                 products = CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.MOBILE);
-                break;
-            case Options.Tab.FORTUMO:
-                products = CacheProfile.getFortumoProducts();
                 break;
         }
         return products;
