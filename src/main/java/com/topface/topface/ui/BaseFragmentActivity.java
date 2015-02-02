@@ -375,18 +375,21 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onPreFinish();
-                finish();
+                if (onPreFinish()) {
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void doPreFinish() {
-        onPreFinish();
+    public boolean doPreFinish() {
+        return onPreFinish();
     }
-    protected void onPreFinish() {
+
+    protected boolean onPreFinish() {
+        return true;
     }
 
     protected void onProfileUpdated() {

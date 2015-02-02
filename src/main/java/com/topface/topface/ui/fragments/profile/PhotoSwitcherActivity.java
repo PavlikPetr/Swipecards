@@ -341,12 +341,12 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     @Override
-    protected void onPreFinish() {
-        super.onPreFinish();
+    protected boolean onPreFinish() {
         Intent intent = getIntent();
         if (intent.getBooleanExtra(INTENT_FILL_PROFILE_ON_BACK, false)) {
             startUserProfileActivity();
         }
+        return super.onPreFinish();
     }
 
     @Override
