@@ -56,12 +56,8 @@
                     style="@style/CitySearchView"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:fadingEdge="none"
-                    android:fadingEdgeLength="0dp"
                     android:lines="1"
                     android:maxLines="1"
-                    android:overScrollMode="never"
-                    android:requiresFadingEdge="none"
                     android:selectAllOnFocus="true"
                     android:singleLine="true"
                     my:request_key="CITY_SEARCH_FROM_FILTER_ACTIVITY" />
