@@ -85,7 +85,7 @@ public class SslErrorActivity extends Activity {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                if (codeError == ErrorCodes.NOT_VALID_CERTIFICATE) {
+                if (codeError == ErrorCodes.HTTPS_CERTIFICATE_EXPIRED) {
                     setInProgressState(false);
                 } else {
                     finish();

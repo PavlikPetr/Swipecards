@@ -216,7 +216,7 @@ public class ConnectionManager {
             apiRequest.sendHandlerMessage(apiResponse);
             needResend = false;
         }
-        if (apiResponse.isCodeEqual(ErrorCodes.NOT_VALID_CERTIFICATE)) {
+        if (apiResponse.isCodeEqual(ErrorCodes.HTTPS_CERTIFICATE_EXPIRED)) {
             //Показываем пользователю попап о необходимости корректировки даты на устройстве
             Intent intent = new Intent(App.getContext(), SslErrorActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -382,7 +382,7 @@ public class ConnectionManager {
         String[] messages = App.getContext().getResources().getStringArray(R.array.ssl_handshake_exception_messages);
         for (String message : messages) {
             if (e.getMessage().toLowerCase().contains(message.toLowerCase())) {
-                errorCode = ErrorCodes.NOT_VALID_CERTIFICATE;
+                errorCode = ErrorCodes.HTTPS_CERTIFICATE_EXPIRED;
                 break;
             }
         }
