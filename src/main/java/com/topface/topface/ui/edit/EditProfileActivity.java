@@ -284,7 +284,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     }
 
     @Override
-    protected void onPreFinish() {
+    protected boolean onPreFinish() {
         if (CacheProfile.city != null) {
             if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
                 Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
@@ -294,6 +294,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 startActivity(intent);
             }
         }
+        return true;
     }
 
     class EditsAdapter extends BaseAdapter {
