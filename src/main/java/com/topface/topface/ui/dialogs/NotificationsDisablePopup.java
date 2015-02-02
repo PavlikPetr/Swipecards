@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.config.AppConfig;
@@ -89,7 +90,7 @@ public class NotificationsDisablePopup extends AbstractStartAction {
 
     private AppConfig getAppConfig() {
         if (mAppConfig == null) {
-            mAppConfig = new AppConfig(mActivity.getApplicationContext());
+            mAppConfig = App.getAppConfig();
         }
         return mAppConfig;
     }

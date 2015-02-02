@@ -218,22 +218,22 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 mLoLikes,
                 CacheProfile.email,
                 isMailAvailable(CacheProfile.NOTIFICATIONS_LIKES),
-                isGmsAvailable(CacheProfile.NOTIFICATIONS_LIKES));
+                isGcmAvailable(CacheProfile.NOTIFICATIONS_LIKES));
         initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY,
                 mLoMutual,
                 CacheProfile.email,
                 isMailAvailable(CacheProfile.NOTIFICATIONS_SYMPATHY),
-                isGmsAvailable(CacheProfile.NOTIFICATIONS_SYMPATHY));
+                isGcmAvailable(CacheProfile.NOTIFICATIONS_SYMPATHY));
         initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE,
                 mLoChat,
                 CacheProfile.email,
                 isMailAvailable(CacheProfile.NOTIFICATIONS_MESSAGE),
-                isGmsAvailable(CacheProfile.NOTIFICATIONS_MESSAGE));
+                isGcmAvailable(CacheProfile.NOTIFICATIONS_MESSAGE));
         initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR,
                 mLoGuests,
                 CacheProfile.email,
                 isMailAvailable(CacheProfile.NOTIFICATIONS_VISITOR),
-                isGmsAvailable(CacheProfile.NOTIFICATIONS_VISITOR));
+                isGcmAvailable(CacheProfile.NOTIFICATIONS_VISITOR));
     }
 
     private boolean isMailAvailable(int key) {
@@ -244,7 +244,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         }
     }
 
-    private boolean isGmsAvailable(int key) {
+    private boolean isGcmAvailable(int key) {
         if (CacheProfile.notifications != null && CacheProfile.notifications.get(key) != null) {
             return CacheProfile.notifications.get(key).apns;
         } else {
