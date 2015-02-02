@@ -27,7 +27,6 @@
                 android:id="@+id/loFewSpinners_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_weight="1"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
@@ -57,8 +56,12 @@
                     style="@style/CitySearchView"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:fadingEdge="none"
+                    android:fadingEdgeLength="0dp"
                     android:lines="1"
                     android:maxLines="1"
+                    android:overScrollMode="never"
+                    android:requiresFadingEdge="none"
                     android:selectAllOnFocus="true"
                     android:singleLine="true"
                     my:request_key="CITY_SEARCH_FROM_FILTER_ACTIVITY" />
@@ -84,7 +87,7 @@
         <CheckBox
             android:id="@+id/loFilterBeautiful"
             style="@style/FilterCheckBox"
-            android:layout_marginBottom="38dp"
+            android:layout_marginBottom="34dp"
             android:layout_marginTop="21dp"
             android:text="@string/filter_only_beautiful" />
 

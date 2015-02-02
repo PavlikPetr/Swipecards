@@ -54,8 +54,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private Spinner mLoFilterAgeStart;
     private Spinner mLoFilterAgeEnd;
 
-    private ScrollView mScroll;
-
     private CheckBox mLoFilterOnline;
     private CheckBox mLoFilterBeautiful;
 
@@ -66,7 +64,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ViewGroup mLoFilterFinance;
     private ViewGroup mLoFilterShowOff;
 
-    CitySearchView mLoFilterChooseCity;
+    private CitySearchView mLoFilterChooseCity;
+    private ScrollView mScroll;
 
     private ImageView mLoFilterButtonHome;
 
@@ -223,6 +222,12 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             }
         });
         mLoFilterChooseCity.setScrollableViewToTop(mScroll);
+        mLoFilterChooseCity.setOnRootViewListener(new CitySearchView.onRootViewListener() {
+            @Override
+            public int getHeight() {
+                return mScroll.getMeasuredHeight();
+            }
+        });
 
         // Online
         mLoFilterOnline = (CheckBox) root.findViewById(R.id.loFilterOnline);
@@ -546,7 +551,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     @Override
     protected String getTitle() {
-        return getString(R.string.filter_filter);
+        return getString(R.string.filter_search);
     }
 
     @Override

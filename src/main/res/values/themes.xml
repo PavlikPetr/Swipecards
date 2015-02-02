@@ -5,7 +5,7 @@
     <style name="Theme.Topface" parent="@style/Theme.AppCompat">
         <!-- overflow menu settings -->
         <item name="android:itemTextAppearance">@style/PopupMenuTextApearance</item>
-        <item name="android:dropDownListViewStyle">@style/PopupMenuListView</item>
+        <item name="android:dropDownListViewStyle">@style/FilterSpinnerDropDownList</item>
         <item name="android:popupMenuStyle" tools:ignore="NewApi">@style/PopupMenu</item>
 
         <item name="android:windowTitleStyle">@style/CenterJustifyDialogTitle</item>
