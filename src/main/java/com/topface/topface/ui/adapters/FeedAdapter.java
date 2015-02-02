@@ -312,7 +312,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     private void addItemForAd() {
         FeedList<T> data = getData();
-        if (!data.isEmpty() && isNeedFeedAd() && !mHasFeedAd) {
+        if (!data.isEmpty() && (mFeedAd != null || isNeedFeedAd()) && !mHasFeedAd) {
             if (mFeedAd == null) {
                 mFeedAd = NativeAdManager.getNativeAd();
             }
@@ -327,6 +327,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public void removeAdItems() {
         mHasFeedAd = false;
+        mFeedAd = null;
         boolean removed = false;
         for (Iterator<T> it = getData().iterator(); it.hasNext(); ) {
             T item = it.next();
