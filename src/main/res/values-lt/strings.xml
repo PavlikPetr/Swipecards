@@ -629,7 +629,7 @@
     <string name="hint_myprofile_buy_vip">Pirkite VIP-statusą ir mėgaukitės neapribotu bendravimu</string>
     <string name="pull_to_refresh_pull_label">Patempkite, kad atnaujinti…</string>
     <string name="pull_to_refresh_release_label">Paleiskite, kad atnaujinti…</string>
-    <string name="messaging_block_buy_vip">Dialogo pratęsimui būtinas VIP-statusas</string>
+    <string name="messaging_block_buy_vip">Dialogo pratęsimui būtinas VIP\u2011statusas</string>
     <string name="pull_to_refresh_refreshing_label">Kraunasi…</string>
     <string name="user_added_to_black_list">Vartotojas įtrauktas į juodąjį sąrašą</string>
     <string name="user_deleted_from_black_list">Vartotojas pašalintas iš juodojo sąrašo</string>

@@ -609,7 +609,7 @@
     <string name="hint_myprofile_buy_vip">Buy VIP-status and enjoy unlimited communication</string>
     <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
     <string name="pull_to_refresh_release_label">Let go to refresh…</string>
-    <string name="messaging_block_buy_vip">To continue the dialogue you need to have a VIP-status</string>
+    <string name="messaging_block_buy_vip">To continue the dialogue you need to have a VIP\u2011status</string>
     <string name="pull_to_refresh_refreshing_label">Loading…</string>
     <string name="user_added_to_black_list">The user has been added to the Blacklist.</string>
     <string name="user_deleted_from_black_list">The user has been removed from the Blacklist.</string>
