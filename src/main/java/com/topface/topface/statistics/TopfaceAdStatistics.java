@@ -10,8 +10,8 @@ import com.topface.topface.data.Banner;
  * Sends ads statistics though util methods
  */
 public class TopfaceAdStatistics {
-    private static final String TF_MOBILE_BANNER_SHOW = "mobile_tf_fullscreen_show";
-    private static final String TF_MOBILE_BANNER_CLICK = "mobile_tf_fullscreen_click";
+    private static final String TF_MOBILE_BANNER_SHOW = "mobile_tf_banner_show";
+    private static final String TF_MOBILE_BANNER_CLICK = "mobile_tf_banner_click";
     private static final String TF_MOBILE_FULLSCREEN_SHOW = "mobile_tf_fullscreen_show";
     private static final String TF_MOBILE_FULLSCREEN_CLICK = "mobile_tf_fullscreen_click";
     private static final String TF_MOBILE_FULLSCREEN_CLOSED = "mobile_tf_fullscreen_close";
