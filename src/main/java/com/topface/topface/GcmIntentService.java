@@ -66,7 +66,7 @@ public class GcmIntentService extends IntentService {
                         break;
                 }
                 if (updateIntent != null) {
-                    context.sendBroadcast(updateIntent);
+                    LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(updateIntent);
                 }
             }
             //

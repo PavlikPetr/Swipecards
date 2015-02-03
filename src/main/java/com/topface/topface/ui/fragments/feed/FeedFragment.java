@@ -213,7 +213,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private void registerGcmReceiver() {
         String action = getGcmUpdateAction();
         if (action != null) {
-            getActivity().registerReceiver(mGcmReceiver, new IntentFilter(action));
+            LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mGcmReceiver, new IntentFilter(action));
         }
     }
 
@@ -283,7 +283,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             mListView.onRefreshComplete();
         }
         if (getGcmUpdateAction() != null) {
-            getActivity().unregisterReceiver(mGcmReceiver);
+            LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mGcmReceiver);
         }
     }
 
