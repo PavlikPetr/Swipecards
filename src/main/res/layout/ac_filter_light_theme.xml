@@ -83,7 +83,7 @@
         <CheckBox
             android:id="@+id/loFilterBeautiful"
             style="@style/FilterCheckBox"
-            android:layout_marginBottom="34dp"
+            android:layout_marginBottom="24dp"
             android:layout_marginTop="21dp"
             android:text="@string/filter_only_beautiful" />
 
