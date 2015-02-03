@@ -191,6 +191,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         }
     };
+    private String mMessage;
     private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mIsKeyboardOpened;
@@ -895,6 +896,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onResume() {
         super.onResume();
 
+        if (!TextUtils.isEmpty(mMessage)) {
+            mEditBox.setText(mMessage);
+            mEditBox.setSelection(mMessage.length());
+        }
+
         if (mUserId == 0) {
             getActivity().setResult(Activity.RESULT_CANCELED);
             getActivity().finish();
@@ -1022,6 +1028,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
+                    mMessage = mAdapter.getData().get(0).text;
+                    mAdapter.removeLastItem();
                     startActivityForResult(PurchasesActivity.createVipBuyIntent(getResources()
                                     .getString(R.string.messaging_block_buy_vip), "SendMessage"),
                             PurchasesActivity.INTENT_BUY_VIP);
