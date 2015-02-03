@@ -1012,6 +1012,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     public Boolean getMutualValue() {
                         return null;
                     }
+
+                    @Override
+                    public void clickSendGift() {
+
+                    }
                 });
             }
             mChatOverflowMenu.initOverfowMenu();
