@@ -129,6 +129,7 @@
     <string name="chat_sexuality_out">Vous avez estimé la sexualité</string>
     <string name="chat_wink_in">On vous a envoyé un clin d\'ouil.</string>
     <string name="chat_wink_out">Vous avez envoyé un clin d\'ouil.</string>
+    <string name="filter_filter">Filtre</string>
     <string name="filter_age_string">De %1$d jusqu\'à %2$d</string>
     <string name="filter_only_beautiful">Seulement beaux (belles)</string>
     <string name="filter_extra_parameters">Paramètres complémentaires</string>
@@ -215,7 +216,6 @@
     </plurals>
     <string name="novice_sympathy">Envoyez les sympathies à ceux qui vous\nplaisent vraiment,\npour commencer une connaissance agréable</string>
     <string name="general_edit_profile_message">Veuillez remplir les champs nécessaires du formulaire</string>
-    <string name="general_premium_access_error">Pour utiliser catte fonction il faut être Prémium</string>
     <string name="general_search_null_response_error">Rien n\'est trouvé. Essayez de changer les filtres</string>
     <string name="change_filters">Changer les filtres</string>
     <string name="general_sex">Sexe</string>

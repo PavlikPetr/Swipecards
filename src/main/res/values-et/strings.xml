@@ -118,6 +118,7 @@
     <string name="chat_wink_in">Sind müksati.</string>
     <string name="chat_wink_out">Sa müksasid.
 Sa oled müksanud.</string>
+    <string name="filter_filter">Filter</string>
     <string name="filter_age_string">alates %1$d kuni %2$d</string>
     <string name="filter_only_beautiful">Ainult/vaid ilusad</string>
     <string name="filter_extra_parameters">Lisaparameetrid</string>
@@ -202,7 +203,6 @@ Sa oled müksanud.</string>
         <item quantity="one">%d fotodest</item>
     </plurals>
     <string name="general_edit_profile_message">Palun, täida ankeedi vajalikud väljad ära</string>
-    <string name="general_premium_access_error">Antud funktsiooni jaoks on VIP vajalik.</string>
     <string name="general_search_null_response_error">Ei ole midagi leitud. Proovi muuta otsingu parameetrid/filtrid</string>
     <string name="change_filters">Filtrid muuta</string>
     <string name="general_sex">Sugu</string>
