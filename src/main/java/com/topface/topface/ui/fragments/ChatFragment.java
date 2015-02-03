@@ -914,7 +914,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
 
         IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNewMessageReceiver, filter);
+        LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mNewMessageReceiver, filter);
 
         mUpdater = new Handler();
         startTimer();
@@ -935,7 +935,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onPause() {
         super.onPause();
         deleteTimerDelay();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mNewMessageReceiver);
+        LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         Utils.hideSoftKeyboard(getActivity(), mEditBox);
         mIsKeyboardOpened = false;

@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.topface.framework.utils.Debug;
@@ -41,7 +42,7 @@ public class GcmIntentService extends IntentService {
             if (user != null) {
                 String userId = getUserId(user);
                 broadcastReceiver.putExtra(GCMUtils.USER_ID_EXTRA, userId);
-                context.sendBroadcast(broadcastReceiver);
+                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(broadcastReceiver);
                 Intent updateIntent = null;
 
                 int itype = GCMUtils.getType(intent);
