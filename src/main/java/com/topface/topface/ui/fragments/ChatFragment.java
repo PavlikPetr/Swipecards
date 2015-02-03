@@ -67,9 +67,11 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.AttitudeHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -831,18 +833,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.add_to_black_list_action:
                 if (mUser.id > 0) {
-                        final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
-                        final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
-                        loader.setVisibility(View.VISIBLE);
-                        icon.setVisibility(View.GONE);
-                        ApiRequest request;
-                        if (mUser.blocked) {
-                            request = new DeleteBlackListRequest(mUser.id, getActivity());
-                        } else {
-                            request = new BlackListAddRequest(mUser.id, getActivity());
-                        }
-                        request.exec();
+                    final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
+                    final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
+                    loader.setVisibility(View.VISIBLE);
+                    icon.setVisibility(View.GONE);
+                    ApiRequest request;
+                    if (mUser.blocked) {
+                        request = new DeleteBlackListRequest(mUser.id, getActivity());
+                    } else {
+                        request = new BlackListAddRequest(mUser.id, getActivity());
                     }
+                    request.exec();
+                }
                 break;
 
             case R.id.add_to_bookmark_action:
@@ -1019,6 +1021,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, IApiResponse response) {
+                if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
+                    startActivityForResult(PurchasesActivity.createVipBuyIntent(getResources()
+                                    .getString(R.string.messaging_block_buy_vip), "SendMessage"),
+                            PurchasesActivity.INTENT_BUY_VIP);
+                    return;
+                }
                 if (mAdapter != null && cancelable) {
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                     mAdapter.showRetrySendMessage(messageItem, messageRequest);

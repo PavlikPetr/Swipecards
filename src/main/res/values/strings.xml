@@ -599,4 +599,5 @@
     <string name="maximum_number_of_users">You have selected the maximum number of users.</string>
     <string name="logout_if_email_already_registred">There is a user with this email already. If this is your email, you have to log out of the current account and log into %s account.</string>
     <string name="recover_password_instructions">An email has been sent to you with the password recovery instruction.</string>
+    <string name="messaging_block_buy_vip">To continue the dialogue you need to have a VIP\u2011status</string>
 </resources>
