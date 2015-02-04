@@ -11,33 +11,45 @@ import com.topface.topface.ui.fragments.BaseFragment;
 public class ResourcesUtils {
 
     public static String getFragmentNameResId(BaseFragment.FragmentId id) {
+        int titleId;
         switch (id) {
             case VIP_PROFILE:
             case PROFILE:
-                return App.getContext().getString(R.string.general_profile);
+                titleId = R.string.general_profile;
+                break;
             case DATING:
-                return App.getContext().getString(R.string.general_dating);
+                titleId = R.string.general_dating;
+                break;
             case LIKES_CLOSINGS:
-                return App.getContext().getString(R.string.general_likes);
+                titleId = R.string.general_likes;
+                break;
             case TABBED_LIKES:
-                return App.getContext().getString(R.string.general_sympathies);
+                titleId = R.string.general_sympathies;
+                break;
             case MUTUAL_CLOSINGS:
-                return App.getContext().getString(R.string.general_mutual);
+                titleId = R.string.general_mutual;
+                break;
             case TABBED_DIALOGS:
-                return App.getContext().getString(R.string.settings_messages);
+                titleId = R.string.settings_messages;
+                break;
             case TABBED_VISITORS:
-                return App.getContext().getString(R.string.general_visitors);
+                titleId = R.string.general_visitors;
+                break;
             case BONUS:
                 return CacheProfile.getOptions().bonus.buttonText;
             case GEO:
-                return App.getContext().getString(R.string.people_nearby);
+                titleId = R.string.people_nearby;
+                break;
             case EDITOR:
-                return App.getContext().getString(R.string.editor_menu_admin);
+                titleId = R.string.editor_menu_admin;
+                break;
             case SETTINGS:
-                return App.getContext().getString(R.string.general_settings);
+                titleId = R.string.general_settings;
+                break;
             case UNDEFINED:
             default:
                 throw new IllegalArgumentException("Illegal fragmentId: do not have resources for this fragment id");
         }
+        return App.getContext().getString(titleId);
     }
 }
