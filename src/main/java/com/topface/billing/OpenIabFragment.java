@@ -129,7 +129,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     protected void addAvailableStores(Context context, OpenIabHelper.Options.Builder optsBuilder) {
         //Нам нужен конкретный AppStore, т.к. у каждого типа сборки свои продукты и поддержка других маркетов все равно не нужна
-        switch (BuildConfig.BILLING_TYPE) {
+        switch (BuildConfig.MARKET_API_TYPE) {
             case GOOGLE_PLAY:
                 optsBuilder.addAvailableStores(new GooglePlay(context, null));
                 optsBuilder.addPreferredStoreName(OpenIabHelper.NAME_GOOGLE);

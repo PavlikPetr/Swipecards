@@ -179,6 +179,8 @@
     <string name="chat_sexuality_out">Seksiliğe not verdiniz.</string>
     <string name="chat_wink_in">Size göz kırpıldı.</string>
     <string name="chat_wink_out">Siz göz kırptınız.</string>
+    <string name="filter_search">Arama</string>
+    <string name="filter_filter">Filtre</string>
     <string name="filter_age_string">%1$d’dan %2$d’a</string>
     <string name="filter_only_beautiful">Sadece güzel</string>
     <string name="filter_extra_parameters">Daha fazla seçenek</string>
@@ -296,7 +298,6 @@
     </plurals>
     <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız kişilere sempati gönderin</string>
     <string name="general_edit_profile_message">Lütfen, anketin gerekli boşlukları doldurun</string>
-    <string name="general_premium_access_error">Bu fonksiyon için Premium gerek</string>
     <string name="general_search_null_response_error">Hiçbir şey bulunamadı. Filtreleri değiştirmeyi deneyin</string>
     <string name="change_filters">Filtreleri değiştirmek</string>
     <string name="reset_filter">Sıfırlamak</string>
@@ -634,4 +635,5 @@
     <string name="preload_photo_type_wifi">WiFi sadece</string>
     <string name="preload_photo_type_always_on">Her zaman açık</string>
     <string name="preload_photo_type_preload_off">Kapalı</string>
+    <string name="wrong_time_popup_button">Ayarları açın</string>
 </resources>

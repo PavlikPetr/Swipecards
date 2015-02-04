@@ -177,6 +177,8 @@
     <string name="chat_sexuality_out">You have rated a sexuality.</string>
     <string name="chat_wink_in">You have received a wink.</string>
     <string name="chat_wink_out">Wink is sent.</string>
+    <string name="filter_search">Search</string>
+    <string name="filter_filter">Filter</string>
     <string name="filter_age_string">From %1$d to %2$d</string>
     <string name="filter_only_beautiful">Attractive only</string>
     <string name="filter_extra_parameters">Advanced search</string>
@@ -289,7 +291,6 @@
     </plurals>
     <string name="novice_sympathy">Send likes only to those\nwho really attract you.\nYou just might find someone special!</string>
     <string name="general_edit_profile_message">Please, fill in all the necessary fields in you profile.</string>
-    <string name="general_premium_access_error">To do this you need a VIP-status.</string>
     <string name="general_search_null_response_error">Not found. Try to change the filters.</string>
     <string name="change_filters">Change filters</string>
     <string name="reset_filter">Reset</string>
@@ -609,7 +610,7 @@
     <string name="hint_myprofile_buy_vip">Buy VIP-status and enjoy unlimited communication</string>
     <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
     <string name="pull_to_refresh_release_label">Let go to refresh…</string>
-    <string name="messaging_block_buy_vip">To continue the dialogue you need to have a VIP-status</string>
+    <string name="messaging_block_buy_vip">To continue the dialogue you need to have a VIP\u2011status</string>
     <string name="pull_to_refresh_refreshing_label">Loading…</string>
     <string name="user_added_to_black_list">The user has been added to the Blacklist.</string>
     <string name="user_deleted_from_black_list">The user has been removed from the Blacklist.</string>
@@ -619,4 +620,5 @@
     <string name="preload_photo_type_wifi">WiFi only</string>
     <string name="preload_photo_type_always_on">Always on</string>
     <string name="preload_photo_type_preload_off">Off</string>
+    <string name="wrong_time_popup_button">View settings</string>
 </resources>

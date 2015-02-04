@@ -168,6 +168,7 @@
     <string name="chat_sexuality_out">Du har rankat sexualitet</string>
     <string name="chat_wink_in">Någon har blinkat på dig</string>
     <string name="chat_wink_out">Du har blinkat</string>
+    <string name="filter_filter">Filter</string>
     <string name="filter_age_string">Från %1$d till %2$d</string>
     <string name="filter_only_beautiful">Bara snygga</string>
     <string name="filter_extra_parameters">Fler kriterier</string>
@@ -267,7 +268,6 @@
     </plurals>
     <string name="novice_sympathy">Skicka sympatier till dem\ndu verkligen gillar,\nför att inleda ett trevligt förhållande</string>
     <string name="general_edit_profile_message">Vänligen fyll i nödvändiga fälten i profilen</string>
-    <string name="general_premium_access_error">För denna funktion behövs Premium</string>
     <string name="general_search_null_response_error">Inget hittats. Försök att ändra sökkriterier</string>
     <string name="change_filters">Ändra filtrar</string>
     <string name="reset_filter">Återställ</string>

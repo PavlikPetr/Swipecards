@@ -103,7 +103,7 @@ public class App extends Application {
     }
 
     private static ApiRequest getPaymentwallProductsRequest() {
-        switch (BuildConfig.BILLING_TYPE) {
+        switch (BuildConfig.MARKET_API_TYPE) {
             case GOOGLE_PLAY:
                 return new PaymentwallProductsRequest(App.getContext()).callback(new DataApiHandler<PaymentWallProducts>() {
                     @Override
@@ -149,7 +149,7 @@ public class App extends Application {
 
     private static ApiRequest getProductsRequest() {
         ApiRequest request;
-        switch (BuildConfig.BILLING_TYPE) {
+        switch (BuildConfig.MARKET_API_TYPE) {
             case AMAZON:
                 request = new AmazonProductsRequest(App.getContext());
                 break;

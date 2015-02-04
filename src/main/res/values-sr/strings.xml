@@ -130,6 +130,7 @@
     <string name="chat_sexuality_out">Ocenili ste seksualnost</string>
     <string name="chat_wink_in">Namignuli su vam</string>
     <string name="chat_wink_out">Vi ste namignuli</string>
+    <string name="filter_filter">Filter</string>
     <string name="filter_age_string">Od %1$d dо %2$d</string>
     <string name="filter_only_beautiful">Samo lepe</string>
     <string name="filter_extra_parameters">Dodatni parametri</string>
@@ -219,7 +220,6 @@
     </plurals>
     <string name="novice_sympathy">Šaljite simpatije onima koji vam se zaista dopadaju, kako bi započeli prijatno poznanstvo</string>
     <string name="general_edit_profile_message">Molimo vas, popunite neophodna polja u anketi</string>
-    <string name="general_premium_access_error">Za ovu funkciju potreban je VIP status</string>
     <string name="general_search_null_response_error">Ništa nije pronađeno. Pokušajte izmeniti filtere</string>
     <string name="change_filters">Zameniti filtere</string>
     <string name="general_sex">Pol</string>

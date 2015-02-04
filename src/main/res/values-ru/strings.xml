@@ -799,7 +799,21 @@
     <string name="preload_photo_type_always_on">Включена всегда</string>
     <string name="preload_photo_type_preload_off">Выключена</string>
 
-    <string name="wrong_time_popup_text">Не удалось установить безопасное соединение с сервером.\nВозможно, на вашем устройстве установлена неправильная дата.</string>
+    <string name="wrong_time_popup_text">Не удалось установить безопасное соединение с сервером.\nВозможно, дата или время на вашем устройстве указаны неверно.</string>
     <string name="wrong_time_popup_button">Открыть настройки</string>
 
+
+    <!-- ServicesManager-->
+    <!-- Google -->
+    <string name="google_service_general_title">Уведомления не доступны</string>
+    <string name="google_service_disabled_title">У вас отключены Сервисы Google Play, которые необходимы для работы уведомлений.</string>
+    <string name="google_service_disabled_button">Включить</string>
+    <string name="google_service_missing_title">У вас не устанвлены Сервисы Google Play, которые необходимы для работы уведомлений.</string>
+    <string name="google_service_missing_button">Установить</string>
+    <string name="google_service_version_update_required_title">У вас установлена старая версия Сервисов Google Play, для корректной работы уведомлений, пожалуйста, обновите.</string>
+    <string name="google_service_version_update_required_button">Обновить</string>
+    <string name="google_invalid_account_title">Проверьте данные вашего аккаунта Google или свяжитесь с технической поддержкой Google.</string>
+    <string name="google_sign_in_account_title">У вас не добавлен Google аккаунт, вы должны авторизоваться, если хотите получать уведомления.</string>
+    <string name="google_sign_in_account_button">Авторизоваться</string>
+    <string name="google_unavailable_services_title">К сожалению, уведомления не поддерживаются на вашем устройстве.</string>
 </resources>

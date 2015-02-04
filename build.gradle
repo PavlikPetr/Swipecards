@@ -37,14 +37,14 @@ android {
         }
         //flavor для версии приложения для Amazon
         amazon {
-            buildConfigField "com.topface.billing.BillingType", "BILLING_TYPE", "com.topface.billing.BillingType.AMAZON";
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.AMAZON";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappamazon\"";
         }
         //flavor для версии приложения для Nokia X
         //Пока не используется, поэтому закоментирован
         /*nokia {
-            buildConfigField "com.topface.billing.BillingType", "BILLING_TYPE",
-                    "com.topface.billing.BillingType.NOKIA_STORE";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.NOKIA_STORE";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroidnokia\"";
         }*/
     }
@@ -71,8 +71,8 @@ android {
 
         buildConfigField "long", "BUILD_TIME", "0L";
         buildConfigField "String", "GIT_HEAD_SHA", "null";
-        buildConfigField "com.topface.billing.BillingType", "BILLING_TYPE",
-                "com.topface.billing.BillingType.GOOGLE_PLAY";
+        buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                "com.topface.billing.MarketApiType.GOOGLE_PLAY";
     }
 
     signingConfigs {

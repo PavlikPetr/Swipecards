@@ -54,6 +54,7 @@ public class AppConfig extends AbstractConfig {
     public static final String SAVED_EMAIL_LIST = "tf_saved_email_list";
     public static final String SOCIAL_BUTTONS_SETTINGS = "ButtonSettings";
     public static final String CONVERT_CONFIG = "convert_config";
+    public static final String POPUP_NOTIFICATION_DISABLE_TIME = "popup_notification_disable_time";
 
 
     public AppConfig(Context context) {
@@ -104,6 +105,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, SOCIAL_BUTTONS_SETTINGS, "[]");
         // преобразован старый конфиг в новый или нет
         addField(settingsMap, CONVERT_CONFIG, false);
+        // time when popup about notification disabled is shown in the last
+        addField(settingsMap, POPUP_NOTIFICATION_DISABLE_TIME, 0L);
     }
 
     protected SharedPreferences getPreferences() {
@@ -341,6 +344,14 @@ public class AppConfig extends AbstractConfig {
 
     public void saveLastAppVersion() {
         setField(getSettingsMap(), LAST_APP_VERSION, BuildConfig.VERSION_CODE);
+    }
+
+    public long getTimeNotificationsDisabledShowAtLast() {
+        return getLongField(getSettingsMap(), POPUP_NOTIFICATION_DISABLE_TIME);
+    }
+
+    public void setTimeNotificationsDisabledShowAtLast(long time) {
+        setField(getSettingsMap(), POPUP_NOTIFICATION_DISABLE_TIME, time);
     }
 
     /**

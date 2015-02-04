@@ -180,6 +180,8 @@
     <string name="chat_sexuality_out">Jūs įvertinote seksualumą.</string>
     <string name="chat_wink_in">Jums mirktelėjo.</string>
     <string name="chat_wink_out">Jūs mirktelėjote.</string>
+    <string name="filter_search">Paieška</string>
+    <string name="filter_filter">Filtras</string>
     <string name="filter_age_string">Nuo %1$d iki %2$d</string>
     <string name="filter_only_beautiful">Tiktai gražūs</string>
     <string name="filter_extra_parameters">Papildomi parametrai</string>
@@ -300,7 +302,6 @@
     </plurals>
     <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad pradėtumėte malonią pažintį</string>
     <string name="general_edit_profile_message">Prašome užpildyti visus būtinus anketos laukelius</string>
-    <string name="general_premium_access_error">Šiai funkcijai būtina turėti Premium</string>
     <string name="general_search_null_response_error">Nieko nerasta. Pabandykite pakeisti filtrus</string>
     <string name="change_filters">Pakeisti filtrus</string>
     <string name="reset_filter">Perkrauti</string>
@@ -629,7 +630,7 @@
     <string name="hint_myprofile_buy_vip">Pirkite VIP-statusą ir mėgaukitės neapribotu bendravimu</string>
     <string name="pull_to_refresh_pull_label">Patempkite, kad atnaujinti…</string>
     <string name="pull_to_refresh_release_label">Paleiskite, kad atnaujinti…</string>
-    <string name="messaging_block_buy_vip">Dialogo pratęsimui būtinas VIP-statusas</string>
+    <string name="messaging_block_buy_vip">Dialogo pratęsimui būtinas VIP\u2011statusas</string>
     <string name="pull_to_refresh_refreshing_label">Kraunasi…</string>
     <string name="user_added_to_black_list">Vartotojas įtrauktas į juodąjį sąrašą</string>
     <string name="user_deleted_from_black_list">Vartotojas pašalintas iš juodojo sąrašo</string>
@@ -639,4 +640,5 @@
     <string name="preload_photo_type_wifi">Tik WiFi</string>
     <string name="preload_photo_type_always_on">Visada įjungta</string>
     <string name="preload_photo_type_preload_off">Įjungta</string>
+    <string name="wrong_time_popup_button">Atverti nustatymus</string>
 </resources>

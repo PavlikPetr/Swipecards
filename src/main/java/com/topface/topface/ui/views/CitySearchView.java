@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,6 +21,9 @@ import com.topface.topface.utils.Utils;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
+
+// для того, чтобы по первому backPressed скрывалась клавиатура, а по второму - скрывать выпадающий список,
+// необходимо установить onRootViewListener. Если интерфейс не задан, то backPressed скроет и клавиатуру и список
 
 public class CitySearchView extends AutoCompleteTextView {
 
@@ -40,6 +44,11 @@ public class CitySearchView extends AutoCompleteTextView {
 
     private City mDefaultCity;
     private City mLastCheckedCity;
+
+    private int mBackPressCounter = 0;
+    private int mScreenHeight = 0;
+
+    private onRootViewListener mOnRootViewListener;
 
     public CitySearchView(Context context) {
         super(context);
@@ -147,6 +156,11 @@ public class CitySearchView extends AutoCompleteTextView {
         setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
+                // forcibly show dropdown list for android 2.3
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    getMyAdapter().notifyDataSetChanged();
+                }
+                mBackPressCounter = 0;
                 if (TextUtils.isEmpty(CitySearchView.this.getText()) &
                         // remove incorect calling onDismiss
                         (Calendar.getInstance().getTimeInMillis() - mGetFocusTime) > DELAY_VALUE) {
@@ -162,6 +176,7 @@ public class CitySearchView extends AutoCompleteTextView {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
+                    setScreenHeight();
                     mGetFocusTime = Calendar.getInstance().getTimeInMillis();
                     scrollToView();
                     clearCurrentCity();
@@ -264,5 +279,50 @@ public class CitySearchView extends AutoCompleteTextView {
         mAdapter = null;
         setText(text);
         mAdapter = adapter;
+    }
+
+    @Override
+    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            mBackPressCounter++;
+            if (mBackPressCounter > 1) {
+                return super.onKeyPreIme(keyCode, event);
+            } else {
+
+                if (mScreenHeight == getCurentScreenHeight()) {
+                    CitySearchView.this.setFocusable(false);
+                    return true;
+                } else {
+                    Utils.hideSoftKeyboard(mContext, this);
+                    return true;
+                }
+
+            }
+        }
+        return super.onKeyPreIme(keyCode, event);
+    }
+
+    private void setScreenHeight() {
+        if (mOnRootViewListener != null) {
+            int screenHeight = mOnRootViewListener.getHeight();
+            mScreenHeight = mScreenHeight < screenHeight ? screenHeight : mScreenHeight;
+        }
+    }
+
+    private int getCurentScreenHeight() {
+        if (mOnRootViewListener != null) {
+            return mOnRootViewListener.getHeight();
+        }
+        return 0;
+    }
+
+    public void setOnRootViewListener(onRootViewListener rootViewListener) {
+        mOnRootViewListener = rootViewListener;
+        setScreenHeight();
+    }
+
+    // get root height for determine softKeyboard visibility
+    public interface onRootViewListener {
+        public int getHeight();
     }
 }
