@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 
@@ -9,31 +10,31 @@ import com.topface.topface.ui.fragments.BaseFragment;
  */
 public class ResourcesUtils {
 
-    public static int getFragmentNameResId(BaseFragment.FragmentId id) {
+    public static String getFragmentNameResId(BaseFragment.FragmentId id) {
         switch (id) {
             case VIP_PROFILE:
             case PROFILE:
-                return R.string.general_profile;
+                return App.getContext().getString(R.string.general_profile);
             case DATING:
-                return R.string.general_dating;
+                return App.getContext().getString(R.string.general_dating);
             case LIKES_CLOSINGS:
-                return R.string.general_likes;
+                return App.getContext().getString(R.string.general_likes);
             case TABBED_LIKES:
-                return R.string.general_sympathies;
+                return App.getContext().getString(R.string.general_sympathies);
             case MUTUAL_CLOSINGS:
-                return R.string.general_mutual;
+                return App.getContext().getString(R.string.general_mutual);
             case TABBED_DIALOGS:
-                return R.string.settings_messages;
+                return App.getContext().getString(R.string.settings_messages);
             case TABBED_VISITORS:
-                return R.string.general_visitors;
+                return App.getContext().getString(R.string.general_visitors);
             case BONUS:
-                return R.string.general_bonus;
+                return CacheProfile.getOptions().bonus.buttonText;
             case GEO:
-                return R.string.people_nearby;
+                return App.getContext().getString(R.string.people_nearby);
             case EDITOR:
-                return R.string.editor_menu_admin;
+                return App.getContext().getString(R.string.editor_menu_admin);
             case SETTINGS:
-                return R.string.general_settings;
+                return App.getContext().getString(R.string.general_settings);
             case UNDEFINED:
             default:
                 throw new IllegalArgumentException("Illegal fragmentId: do not have resources for this fragment id");

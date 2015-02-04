@@ -1,6 +1,8 @@
 package com.topface.topface.ui.adapters;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
@@ -9,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -44,7 +49,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentId menuId, final int menuType,
-                                                final int menuIconResId) {
+                                                final int menuIconResId, final String url) {
         return new ILeftMenuItem() {
 
             @Override
@@ -59,12 +64,17 @@ public class LeftMenuAdapter extends BaseAdapter {
 
             @Override
             public String getMenuText() {
-                return App.getContext().getString(ResourcesUtils.getFragmentNameResId(menuId));
+                return ResourcesUtils.getFragmentNameResId(menuId);
             }
 
             @Override
             public int getMenuIconResId() {
                 return menuIconResId;
+            }
+
+            @Override
+            public String getUrl() {
+                return url;
             }
         };
     }
@@ -187,7 +197,31 @@ public class LeftMenuAdapter extends BaseAdapter {
         }
         holder.item = item;
         // init button state
-        holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(item.getMenuIconResId(), 0, 0, 0);
+        if (item.getUrl() != null) {
+            DefaultImageLoader.getInstance(App.getContext()).preloadImage(item.getUrl(), new ImageLoadingListener() {
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                    holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(item.getMenuIconResId(), 0, 0, 0);
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(App.getContext().getResources(), loadedImage), null, null, null);
+                }
+
+                @Override
+                public void onLoadingCancelled(String imageUri, View view) {
+                    holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(item.getMenuIconResId(), 0, 0, 0);
+                }
+            });
+        } else {
+            holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(item.getMenuIconResId(), 0, 0, 0);
+        }
 
         if (enabled) {
             holder.leftMenuCellLayout.setOnClickListener(mMenuFragment);
@@ -280,5 +314,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         String getMenuText();
 
         int getMenuIconResId();
+
+        String getUrl();
     }
 }
