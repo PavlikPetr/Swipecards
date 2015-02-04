@@ -50,6 +50,7 @@ public class NotificationsDisablePopup extends AbstractStartAction {
     @Override
     public void callInBackground() {
         App.getAppConfig().setTimeNotificationsDisabledShowAtLast(System.currentTimeMillis());
+        App.getAppConfig().saveConfig();
     }
 
     @Override
