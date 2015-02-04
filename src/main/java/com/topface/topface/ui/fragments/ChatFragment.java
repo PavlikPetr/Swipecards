@@ -120,6 +120,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
     public static final String MAKE_ITEM_READ_BY_UID = "com.topface.topface.feedfragment.MAKE_READ_BY_UID";
     public static final String INITIAL_MESSAGE = "initial_message";
+    public static final String MESSAGE = "message";
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
@@ -191,6 +192,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         }
     };
+    private String mMessage;
     private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mIsKeyboardOpened;
@@ -368,6 +370,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void restoreData(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             try {
+                mMessage = savedInstanceState.getString(MESSAGE);
+                setSavedMessage(mMessage);
                 boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 FeedList<History> historyData = new FeedList<>();
@@ -513,6 +517,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (!TextUtils.isEmpty(mMessage)) {
+            outState.putString(MESSAGE, mMessage);
+        }
         outState.putBoolean(WAS_FAILED, wasFailed);
         outState.putBoolean(KEYBOARD_OPENED, mIsKeyboardOpened);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
@@ -894,7 +901,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-
+        setSavedMessage(mMessage);
         if (mUserId == 0) {
             getActivity().setResult(Activity.RESULT_CANCELED);
             getActivity().finish();
@@ -1022,6 +1029,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
+                    mMessage = mAdapter.getData().get(0).text;
+                    mAdapter.removeLastItem();
                     startActivityForResult(PurchasesActivity.createVipBuyIntent(getResources()
                                     .getString(R.string.messaging_block_buy_vip), "SendMessage"),
                             PurchasesActivity.INTENT_BUY_VIP);
@@ -1277,4 +1286,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private boolean isShowKeyboardInChat() {
         return Device.getMaxDisplaySize() >= getActivity().getResources().getDimension(R.dimen.min_screen_height_chat_fragment);
     }
+
+    private void setSavedMessage(String message) {
+        if (!TextUtils.isEmpty(message)) {
+            mEditBox.setText(message);
+            mEditBox.setSelection(message.length());
+        }
+    }
+
 }
