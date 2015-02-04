@@ -371,7 +371,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (savedInstanceState != null) {
             try {
                 mMessage = savedInstanceState.getString(MESSAGE);
-                setSavedMessage();
+                setSavedMessage(mMessage);
                 boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 FeedList<History> historyData = new FeedList<>();
@@ -901,7 +901,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-        setSavedMessage();
+        setSavedMessage(mMessage);
         if (mUserId == 0) {
             getActivity().setResult(Activity.RESULT_CANCELED);
             getActivity().finish();
@@ -1287,10 +1287,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         return Device.getMaxDisplaySize() >= getActivity().getResources().getDimension(R.dimen.min_screen_height_chat_fragment);
     }
 
-    private void setSavedMessage() {
-        if (!TextUtils.isEmpty(mMessage)) {
-            mEditBox.setText(mMessage);
-            mEditBox.setSelection(mMessage.length());
+    private void setSavedMessage(String message) {
+        if (!TextUtils.isEmpty(message)) {
+            mEditBox.setText(message);
+            mEditBox.setSelection(message.length());
         }
     }
 
