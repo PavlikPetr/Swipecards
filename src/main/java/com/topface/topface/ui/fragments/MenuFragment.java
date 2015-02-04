@@ -189,7 +189,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     private void initBonus() {
         if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(BONUS)) {
-            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_1, CacheProfile.getOptions().bonus.buttonPicture));
+            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_1));
             mAdapter.refreshCounterBadges();
         }
     }
@@ -243,18 +243,18 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         SparseArray<LeftMenuAdapter.ILeftMenuItem> menuItems = new SparseArray<>();
         //- Profile added as part of header
         menuItems.put(DATING.getId(), LeftMenuAdapter.newLeftMenuItem(DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
-                R.drawable.ic_dating_selector, null));
+                R.drawable.ic_dating_selector));
         menuItems.put(TABBED_DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_dialog_selector, null));
+                R.drawable.ic_dialog_selector));
         menuItems.put(TABBED_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_guests_selector, null));
+                R.drawable.ic_guests_selector));
         menuItems.put(TABBED_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_likes_selector, null));
+                R.drawable.ic_likes_selector));
         menuItems.put(GEO.getId(), LeftMenuAdapter.newLeftMenuItem(GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.icon_people_close, null));
+                R.drawable.icon_people_close));
         if (CacheProfile.getOptions().bonus.enabled) {
             menuItems.put(BONUS.getId(), LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                    R.drawable.ic_bonus_1, CacheProfile.getOptions().bonus.buttonPicture));
+                    R.drawable.ic_bonus_1));
         }
         mAdapter = new LeftMenuAdapter(this, menuItems);
         mListView.setAdapter(mAdapter);
