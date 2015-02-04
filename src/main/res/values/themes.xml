@@ -49,6 +49,16 @@
         <item name="android:actionModeCloseDrawable" tools:ignore="NewApi">@drawable/ic_check</item>
     </style>
 
+    <!-- transparent activity theme -->
+    <style name="Theme.Transparent" parent="Topface.Theme.TransparentActionBarActivity">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
     <style name="Theme.Topface.ActionbarOverlay" parent="Theme.Topface">
         <item name="windowActionBarOverlay">true</item>
         <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>

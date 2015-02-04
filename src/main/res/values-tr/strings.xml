@@ -190,6 +190,11 @@
         <item quantity="other">Bir hediye yollamak için daha fazla %d para gerek</item>
         <item quantity="one">Bir hediye yollamak için daha fazla %d para gerek</item>
     </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="zero">Bir mesaj atmak için %d para alın</item>
+        <item quantity="other">Bir mesaj atmak için daha %d para alın</item>
+        <item quantity="one">Bir mesaj atmak için %d para alın</item>
+    </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="zero">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
         <item quantity="other">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
@@ -199,6 +204,11 @@
         <item quantity="zero">Görünmek için daha fazla %d para gerekli</item>
         <item quantity="other">Görünmek için daha fazla %d para gerekli</item>
         <item quantity="one">Görünmek için daha fazla %d para gerekli</item>
+    </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="zero">%d para gerekir</item>
+        <item quantity="other">%d para gerekir</item>
+        <item quantity="one">%d para gerekir</item>
     </plurals>
     <string name="buying_default_message">Siz, hediyelerinizi ve hayranlığınızı para karşına gönderebilirsiniz</string>
     <string name="buying_money">Para alış verişi</string>
@@ -604,4 +614,21 @@
     <string name="maximum_number_of_users">Maksimum kullanıcı sayısını seçildi</string>
     <string name="logout_if_email_already_registred">Böyle bir e-posta adresi kullanılıyor.Eğer sizin e-postanız ise şu anki hesabınızdan çıkıp  %s hesaba bağlanın.</string>
     <string name="recover_password_instructions">Şifrenizi kurtarmak ile alakalı talimatları içeren bir mesajı e-postanıza yolladık</string>
+    <string name="email_changing">E-posta değiştermek için</string>
+    <string name="hint_faces_filter">Arama yöntemlerinizi  değiştirin ve ilginç insanlar ile arkadaş olun.</string>
+    <string name="hint_faces_buy_like">Sahip olduğunuz beğeni kadar miktarda insanlar size minnettar olur.Beğenileri satın almayı unutmayın.</string>
+    <string name="hint_myprofile_buy_vip">VIP-üyelik alın ve sınırsız sohbet etmeyi eğlenin</string>
+    <string name="pull_to_refresh_pull_label">Yenilemek için çekin…</string>
+    <string name="pull_to_refresh_release_label">Yenilemek için yayın…</string>
+    <string name="messaging_block_buy_vip">Bir diyalog devam etmek için VIP üyelik gerekiyor.</string>
+    <string name="pull_to_refresh_refreshing_label">Yükleme…</string>
+    <string name="user_added_to_black_list">Bir kullanıcı kara listeye eklenidi</string>
+    <string name="user_deleted_from_black_list">Bir kullanıcı kara listesinden kaldırındı</string>
+    <string name="user_added_to_bookmark">Bir kullanıcı özel listeye eklendi</string>
+    <string name="user_deleted_from_bookmark">Bir kullanıcı kara listesinden kaldırıldı</string>
+    <string name="preload_photo_type_wifi_3g">WiFi ve 3G</string>
+    <string name="preload_photo_type_wifi">WiFi sadece</string>
+    <string name="preload_photo_type_always_on">Her zaman açık</string>
+    <string name="preload_photo_type_preload_off">Kapalı</string>
+    <string name="wrong_time_popup_button">Ayarları açın</string>
 </resources>
