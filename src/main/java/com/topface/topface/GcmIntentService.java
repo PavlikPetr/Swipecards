@@ -33,7 +33,7 @@ public class GcmIntentService extends IntentService {
             Debug.log("GCM: Try show\n" + intent.getExtras());
             // send update broadcast in any case
             //Сообщаем о том что есть новое уведомление и нужно обновить список
-            Intent broadcastReceiver = new Intent(GCMUtils.GCM_NOTIFICATION);
+            Intent broadcastNotificationIntent = new Intent(GCMUtils.GCM_NOTIFICATION);
             String user = intent.getStringExtra("user");
 
             int type = GCMUtils.getType(intent);
@@ -43,8 +43,8 @@ public class GcmIntentService extends IntentService {
 
             if (user != null) {
                 String userId = getUserId(user);
-                broadcastReceiver.putExtra(GCMUtils.USER_ID_EXTRA, userId);
-                localBroadcastManager.sendBroadcast(broadcastReceiver);
+                broadcastNotificationIntent.putExtra(GCMUtils.USER_ID_EXTRA, userId);
+                localBroadcastManager.sendBroadcast(broadcastNotificationIntent);
                 Intent updateIntent = null;
 
                 int itype = GCMUtils.getType(intent);
