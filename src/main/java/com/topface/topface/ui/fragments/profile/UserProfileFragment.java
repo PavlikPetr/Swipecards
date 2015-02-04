@@ -593,23 +593,19 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                 }
                 break;
             case R.id.add_to_black_list_action:
-                if (CacheProfile.premium) {
-                    if (profile.uid > 0) {
-                        final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
-                        final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
+                if (profile.uid > 0) {
+                    final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
+                    final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
 
-                        loader.setVisibility(View.VISIBLE);
-                        icon.setVisibility(View.GONE);
-                        ApiRequest request;
-                        if (profile.inBlackList) {
-                            request = new DeleteBlackListRequest(profile.uid, getActivity());
-                        } else {
-                            request = new BlackListAddRequest(profile.uid, getActivity());
-                        }
-                        request.exec();
+                    loader.setVisibility(View.VISIBLE);
+                    icon.setVisibility(View.GONE);
+                    ApiRequest request;
+                    if (profile.inBlackList) {
+                        request = new DeleteBlackListRequest(profile.uid, getActivity());
+                    } else {
+                        request = new BlackListAddRequest(profile.uid, getActivity());
                     }
-                } else {
-                    startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"), PurchasesActivity.INTENT_BUY_VIP);
+                    request.exec();
                 }
                 break;
             case R.id.add_to_bookmark_action:
