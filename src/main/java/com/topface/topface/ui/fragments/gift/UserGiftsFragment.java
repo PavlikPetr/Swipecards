@@ -70,8 +70,8 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
     }
 
     private UserProfileFragment getUserProfileFragment() {
-            UserProfileFragment fragment = null;
-            try {
+        UserProfileFragment fragment = null;
+        try {
             fragment = (UserProfileFragment) getParentFragment();
         } catch (Exception e) {
             Debug.error("Fragment not equals UserProfileFragment ", e);
