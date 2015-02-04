@@ -299,7 +299,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         startActionsController.registerAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_NORMAL, new DatingLockPopup.DatingLockPopupRedirectListener() {
             @Override
             public void onRedirect() {
-                 if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
+                if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
                     showFragment(FragmentId.TABBED_LIKES);
                 } else {
                     showFragment(FragmentId.LIKES);
