@@ -123,7 +123,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             for (int type : getTypesForGCM()) {
                 GCMUtils.cancelNotification(getActivity(), type);
             }
-            updateData(true, false);
+            if (getUserVisibleHint()) {
+                updateData(true, false);
+            } else {
+                needUpdate = true;
+            }
         }
     };
 
@@ -174,6 +178,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 }
             }
         };
+        registerGcmReceiver();
+
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         IntentFilter filter2 = new IntentFilter(ChatFragment.MAKE_ITEM_READ_BY_UID);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
@@ -272,7 +278,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             updateData(false, true);
         }
         getListAdapter().loadOlderItems();
-        registerGcmReceiver();
     }
 
     @Override
@@ -281,9 +286,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         finishMultiSelection();
         if (mListView.isRefreshing()) {
             mListView.onRefreshComplete();
-        }
-        if (getGcmUpdateAction() != null) {
-            LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mGcmReceiver);
         }
     }
 
@@ -296,6 +298,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
+        if (getGcmUpdateAction() != null) {
+            LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mGcmReceiver);
+        }
     }
 
     @Override
@@ -629,6 +634,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     public void startInitialLoadIfNeed() {
         if (getListAdapter() != null) {
             if ((getListAdapter().isNeedUpdate()
+                    || needUpdate
                     || hasUnread())
                     && !mIsUpdating) {
                 updateData(false, true);

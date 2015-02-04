@@ -39,10 +39,12 @@ public class GcmIntentService extends IntentService {
             int type = GCMUtils.getType(intent);
             NotificationStatistics.sendReceived(type, GCMUtils.getLabel(intent));
 
+            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(App.getContext());
+
             if (user != null) {
                 String userId = getUserId(user);
                 broadcastReceiver.putExtra(GCMUtils.USER_ID_EXTRA, userId);
-                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(broadcastReceiver);
+                localBroadcastManager.sendBroadcast(broadcastReceiver);
                 Intent updateIntent = null;
 
                 int itype = GCMUtils.getType(intent);
@@ -66,16 +68,15 @@ public class GcmIntentService extends IntentService {
                         break;
                 }
                 if (updateIntent != null) {
-                    LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(updateIntent);
+                    localBroadcastManager.sendBroadcast(updateIntent);
                 }
             }
-            //
             // try to show notification
             if (GCMUtils.showNotificationIfNeed(intent, context)) {
                 if (Editor.isEditor()) {
                     Intent test = new Intent("com.topface.testapp.GCMTest");
                     test.putExtras(intent.getExtras());
-                    App.getContext().sendBroadcast(test);
+                    localBroadcastManager.sendBroadcast(test);
                 }
             }
 
