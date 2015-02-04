@@ -358,6 +358,19 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         User user = getUser();
                         return user != null ? user.mutual : null;
                     }
+
+                    @Override
+                    public void clickSendGift() {
+                        UserGiftsFragment giftsFragment = getGiftFragment();
+                        if (giftsFragment != null && giftsFragment.getActivity() != null) {
+                            giftsFragment.sendGift();
+                        } else {
+                            startActivityForResult(
+                                    GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
+                                    GiftsActivity.INTENT_REQUEST_GIFT
+                            );
+                        }
+                    }
                 });
             }
             mProfileOverflowMenu.initOverfowMenu();
