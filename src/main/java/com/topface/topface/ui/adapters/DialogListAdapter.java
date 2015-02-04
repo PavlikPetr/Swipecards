@@ -35,7 +35,8 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
             setDialogText(dialog, holder.text);
             holder.time.setText(dialog.createdRelative);
 
-            if (getItemViewType(position) == T_NEW) {
+            int itemType = getItemViewType(position);
+            if (itemType == T_NEW || itemType == T_NEW_VIP) {
                 int unreadCounter = getUnreadCounter(dialog);
                 if (unreadCounter > 1 && !CacheProfile.getOptions().hidePreviewDialog) {
                     holder.unreadCounter.setVisibility(View.VISIBLE);
