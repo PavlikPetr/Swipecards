@@ -178,8 +178,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 }
             }
         };
-        registerGcmReceiver();
-
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         IntentFilter filter2 = new IntentFilter(ChatFragment.MAKE_ITEM_READ_BY_UID);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
@@ -267,6 +265,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerGcmReceiver();
+
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(AttitudeHandler.UPDATE_USER_CATEGORY));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
