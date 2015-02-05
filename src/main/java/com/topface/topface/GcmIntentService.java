@@ -9,7 +9,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.statistics.NotificationStatistics;
-import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.gcmutils.GcmBroadcastReceiver;
 
@@ -39,10 +38,10 @@ public class GcmIntentService extends IntentService {
             int type = GCMUtils.getType(intent);
             NotificationStatistics.sendReceived(type, GCMUtils.getLabel(intent));
 
-            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(App.getContext());
-
             if (user != null) {
                 String userId = getUserId(user);
+                LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(App.getContext());
+
                 broadcastNotificationIntent.putExtra(GCMUtils.USER_ID_EXTRA, userId);
                 localBroadcastManager.sendBroadcast(broadcastNotificationIntent);
                 Intent updateIntent = null;
@@ -72,14 +71,7 @@ public class GcmIntentService extends IntentService {
                 }
             }
             // try to show notification
-            if (GCMUtils.showNotificationIfNeed(intent, context)) {
-                if (Editor.isEditor()) {
-                    Intent test = new Intent("com.topface.testapp.GCMTest");
-                    test.putExtras(intent.getExtras());
-                    localBroadcastManager.sendBroadcast(test);
-                }
-            }
-
+            GCMUtils.showNotificationIfNeed(intent, context);
         }
     }
 
