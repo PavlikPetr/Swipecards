@@ -64,6 +64,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DATING;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PHOTOBLOG;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PROFILE;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
@@ -246,6 +247,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 R.drawable.ic_dating_selector));
         menuItems.put(TABBED_DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_dialog_selector));
+        menuItems.put(PHOTOBLOG.getId(), LeftMenuAdapter.newLeftMenuItem(PHOTOBLOG, LeftMenuAdapter.TYPE_MENU_BUTTON,
+                R.drawable.ic_photolenta));
         menuItems.put(TABBED_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
         menuItems.put(TABBED_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,

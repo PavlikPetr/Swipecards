@@ -18,6 +18,8 @@ public class ResourcesUtils {
                 return R.string.general_dating;
             case LIKES_CLOSINGS:
                 return R.string.general_likes;
+            case PHOTOBLOG:
+                return R.string.general_photoblog;
             case TABBED_LIKES:
                 return R.string.general_sympathies;
             case MUTUAL_CLOSINGS:
