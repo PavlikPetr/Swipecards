@@ -120,8 +120,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private BroadcastReceiver mGcmReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            for (int type : getTypesForGCM()) {
-                GCMUtils.cancelNotification(getActivity(), type);
+            if (isResumed()) {
+                for (int type : getTypesForGCM()) {
+                    GCMUtils.cancelNotification(getActivity(), type);
+                }
             }
             if (getUserVisibleHint()) {
                 updateData(true, false);
