@@ -196,6 +196,8 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
                 redAlert(R.string.empty_fields);
                 break;
         }
+
+        AuthToken.getInstance().removeToken();
     }
 
     @Override
