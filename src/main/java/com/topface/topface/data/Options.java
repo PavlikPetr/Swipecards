@@ -84,7 +84,7 @@ public class Options extends AbstractData {
 
     /**
      * title и url для экрана "О программе"
-     * по умолчанию отобрази "topface.com" с переходом на "http://m.topface.com", если сервер не пришлет другое значениеА
+     * по умолчанию отобразим "topface.com" с переходом на "http://topface.com", если сервер не пришлет другое значение
      */
     public AboutApp aboutApp = new AboutApp();
 
@@ -283,6 +283,8 @@ public class Options extends AbstractData {
                 bonus.counter = bonusObject.optInt("counter");
                 bonus.timestamp = bonusObject.optLong("counterTimestamp");
                 bonus.integrationUrl = bonusObject.optString("integrationUrl");
+                bonus.buttonText = bonusObject.optString("buttonText",bonus.buttonText);
+                bonus.buttonPicture = bonusObject.optString("buttonPicture",bonus.buttonPicture);
             }
             // offerwalls for
             JSONObject jsonOfferwalls = response.optJSONObject("offerwalls");
@@ -577,6 +579,8 @@ public class Options extends AbstractData {
         public int counter;
         public long timestamp;
         public String integrationUrl;
+        public String buttonText =App.getContext().getString(R.string.general_bonus);// по умолчанию кнопка имеет название "Бонус"
+        public String buttonPicture = null;// по умолчанию кнопка отображается с картинкой ic_bonus_1
     }
 
     public static class Tab {
@@ -676,17 +680,6 @@ public class Options extends AbstractData {
             fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
         } catch (IllegalArgumentException e) {
             Debug.error("Illegal value of startPage", e);
-        }
-        switch (fragmentId) {
-            case BOOKMARKS:
-            case DIALOGS:
-                fragmentId = BaseFragment.FragmentId.TABBED_DIALOGS;
-                break;
-            case MUTUAL:
-            case ADMIRATIONS:
-            case LIKES:
-                fragmentId = BaseFragment.FragmentId.TABBED_LIKES;
-                break;
         }
         return fragmentId;
     }

@@ -177,6 +177,7 @@
     <string name="chat_sexuality_out">Hai valutato la sessualità.</string>
     <string name="chat_wink_in">Hai ricevuto un occhiolino.</string>
     <string name="chat_wink_out">Hai inviato un occhiolino.</string>
+    <string name="filter_filter">Filtro</string>
     <string name="filter_age_string">Da %1$d a %2$d</string>
     <string name="filter_only_beautiful">Solo belle</string>
     <string name="filter_extra_parameters">Parametri aggiuntivi</string>
@@ -289,7 +290,6 @@
     </plurals>
     <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono veramente\nper iniziare una piacevole relazione</string>
     <string name="general_edit_profile_message">Per favore riempi i campi obbligatori del questionario</string>
-    <string name="general_premium_access_error">Devi avere lo stato VIP per questa funzione</string>
     <string name="general_search_null_response_error">La ricerca non ha prodotto risultati. Prova a cambiare i filtri</string>
     <string name="change_filters">Cambiare filtri</string>
     <string name="reset_filter">Azzerare</string>

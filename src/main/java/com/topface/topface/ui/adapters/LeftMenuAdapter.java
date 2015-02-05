@@ -1,6 +1,8 @@
 package com.topface.topface.ui.adapters;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
@@ -9,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -59,7 +63,7 @@ public class LeftMenuAdapter extends BaseAdapter {
 
             @Override
             public String getMenuText() {
-                return App.getContext().getString(ResourcesUtils.getFragmentNameResId(menuId));
+                return ResourcesUtils.getFragmentNameResId(menuId);
             }
 
             @Override
@@ -188,6 +192,18 @@ public class LeftMenuAdapter extends BaseAdapter {
         holder.item = item;
         // init button state
         holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(item.getMenuIconResId(), 0, 0, 0);
+        if (item.getMenuId() == BaseFragment.FragmentId.BONUS) {
+            if (CacheProfile.getOptions().bonus.buttonPicture != null) {
+                // set custom button ico from server
+                DefaultImageLoader.getInstance(App.getContext()).preloadImage(CacheProfile.getOptions().bonus.buttonPicture, new SimpleImageLoadingListener() {
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(App.getContext().getResources(), loadedImage), null, null, null);
+                    }
+                });
+            }
+        }
+
 
         if (enabled) {
             holder.leftMenuCellLayout.setOnClickListener(mMenuFragment);

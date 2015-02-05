@@ -990,6 +990,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     public Boolean getMutualValue() {
                         return null;
                     }
+
+                    @Override
+                    public void clickSendGift() {
+                        // empty processor. Haven't item "Send gift" in current fragment
+                    }
                 });
             }
             mChatOverflowMenu.initOverfowMenu();

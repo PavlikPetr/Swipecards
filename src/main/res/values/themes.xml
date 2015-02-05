@@ -8,8 +8,8 @@
         <item name="colorAccent">#ee4493</item>
         <!-- overflow menu settings -->
         <item name="android:itemTextAppearance">@style/PopupMenuTextApearance</item>
-        <item name="android:dropDownListViewStyle">@style/PopupMenuListView</item>
-        <item name="popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:dropDownListViewStyle">@style/FilterSpinnerDropDownList</item>
+        <item name="android:popupMenuStyle" tools:ignore="NewApi">@style/PopupMenu</item>
 
         <item name="android:windowTitleStyle">@style/CenterJustifyDialogTitle</item>
 
@@ -53,7 +53,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsFloating">false</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
