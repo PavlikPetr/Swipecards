@@ -47,7 +47,7 @@ public class ClosingsBuyVipDialog extends AbstractModalDialog implements View.On
         if (getActivity() != null) {
             BaseFragment.FragmentId fragmentId = (BaseFragment.FragmentId) getArguments().getSerializable(ARG_FRAGMENT);
             if (fragmentId != null) {
-                fragmentName = getString(ResourcesUtils.getFragmentNameResId(fragmentId));
+                fragmentName = ResourcesUtils.getFragmentNameResId(fragmentId);
             }
         }
         root.findViewById(R.id.btnRespondToLikes).setOnClickListener(this);
