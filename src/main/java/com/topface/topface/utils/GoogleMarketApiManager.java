@@ -1,5 +1,7 @@
 package com.topface.topface.utils;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -57,9 +59,16 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
     }
 
     private void checkServices() {
-        mResultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(App.getContext());
+        // check google account, because isGooglePlayServicesAvailable return SUCCESS when user unsigned
+        mResultCode = isGoogleAccountExists() ? GooglePlayServicesUtil.isGooglePlayServicesAvailable(App.getContext()) : ConnectionResult.SIGN_IN_REQUIRED;
         mIsServicesAvailable = mResultCode == ConnectionResult.SUCCESS;
         decryptingErrorCode();
+    }
+
+    private boolean isGoogleAccountExists() {
+        AccountManager manager = AccountManager.get(App.getContext());
+        Account[] accounts = manager.getAccountsByType("com.google");
+        return accounts != null && accounts.length > 0;
     }
 
     private void setParamServiceDisabled() {
