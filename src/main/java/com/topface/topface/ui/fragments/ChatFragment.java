@@ -185,10 +185,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         @Override
         public void onReceive(Context context, Intent intent) {
             String id = intent.getStringExtra(GCMUtils.USER_ID_EXTRA);
+            final int type = intent.getIntExtra(GCMUtils.GCM_TYPE, -1);
             if (!TextUtils.isEmpty(id) && Integer.parseInt(id) == mUserId) {
                 update(true, "update counters");
                 startTimer();
-                GCMUtils.cancelNotification(App.getContext(), GCMUtils.GCM_TYPE_MESSAGE);
+                GCMUtils.cancelNotification(App.getContext(), type);
             }
         }
     };

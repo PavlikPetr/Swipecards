@@ -124,7 +124,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             holder = (ViewHolder) convertView.getTag();
 
         setTypeDifferences(holder, type, item);
-        if (type != T_WAIT || type != T_RETRY) {
+        if (type != T_WAIT && type != T_RETRY) {
             setViewInfo(holder, item);
         }
 
