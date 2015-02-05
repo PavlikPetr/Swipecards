@@ -642,7 +642,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void showKeyboardOnLargeScreen() {
         if (isShowKeyboardInChat() && mIsNeedShowKeyboard) {
             Utils.showSoftKeyboard(getActivity(), null);
-            //mIsNeedShowKeyboard = true;
         }
     }
 
@@ -796,7 +795,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         getActivity().unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         Utils.hideSoftKeyboard(getActivity(), mEditBox);
-        //mIsNeedShowKeyboard = false;
     }
 
     @Override
