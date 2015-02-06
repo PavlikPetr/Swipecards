@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.Ssid;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
@@ -12,6 +13,7 @@ import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.RequestBuilder;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -43,6 +45,10 @@ public class AuthAssistant {
         @Override
         public void fail(int codeError, IApiResponse response) {
             mConnectionManager.sendBroadcastReauth(getContext());
+            if (codeError == ErrorCodes.UNVERIFIED_TOKEN) {
+                AuthToken.getInstance().removeToken();
+                Ssid.remove();
+            }
         }
 
         @Override
