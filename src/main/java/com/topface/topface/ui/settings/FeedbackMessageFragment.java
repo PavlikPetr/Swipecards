@@ -303,7 +303,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     }
 
 
-
     public static class Report {
         String email;
         List<String> userDeviceAccounts;
@@ -347,7 +346,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         public void setBody(String body) {
             this.body = body;
         }
-        
+
         public String getExtra() {
             StringBuilder strBuilder = new StringBuilder();
 
