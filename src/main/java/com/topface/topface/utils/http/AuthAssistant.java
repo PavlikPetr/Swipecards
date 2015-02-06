@@ -44,11 +44,11 @@ public class AuthAssistant {
 
         @Override
         public void fail(int codeError, IApiResponse response) {
-            mConnectionManager.sendBroadcastReauth(getContext());
             if (codeError == ErrorCodes.UNVERIFIED_TOKEN) {
                 AuthToken.getInstance().removeToken();
                 Ssid.remove();
             }
+            mConnectionManager.sendBroadcastReauth(getContext());
         }
 
         @Override
