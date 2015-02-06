@@ -271,7 +271,6 @@ public class AddPhotoHelper {
         final PhotoAddRequest photoAddRequest = new PhotoAddProfileRequest(uri, mContext, new IProgressListener() {
             @Override
             public void onProgress(final int percentage) {
-
                 if (notificationListener.notification != null) {
                     //Видимо из-за ошибок в прошивке на редких девайсах с Android 4.0.4
                     //падает - https://rink.hockeyapp.net/manage/apps/26531/app_versions/62/crash_reasons/12857941?type=overview

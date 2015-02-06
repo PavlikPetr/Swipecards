@@ -44,6 +44,7 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
@@ -525,6 +526,12 @@ public class App extends Application {
         if (mConnectionIntent != null && mConnectionReceiver != null) {
             unregisterReceiver(mConnectionReceiver);
         }
+    }
+
+
+    public static String getApiTransport() {
+        //TODO: Тут будет выбор транспорта по параметрам метода
+        return ScruffyApiTransport.TRANSPORT_NAME;
     }
 }
 

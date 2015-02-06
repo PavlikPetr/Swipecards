@@ -10,7 +10,8 @@ public class Static {
     public static final String API_BETA_URL = "https://api-beta.stage.tf/";
     public static final String API_GAMMA_URL = "https://api-gamma.stage.tf/";
     public static final String API_DELTA_URL = "https://api-delta.stage.tf/";
-    public static final String API_URL = "https://api.core.tf/";
+    //TODO: Тестирую версию без https
+    public static final String API_URL = "http://api.core.tf/";
     public static final String API_500_ERROR_URL = "http://httpstat.us/500";
 
     /**

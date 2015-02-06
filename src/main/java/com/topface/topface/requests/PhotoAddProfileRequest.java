@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.topface.topface.App;
+import com.topface.topface.Ssid;
 import com.topface.topface.utils.IProgressListener;
 
 /**
@@ -18,8 +19,8 @@ public class PhotoAddProfileRequest extends PhotoAddRequest {
     }
 
     @Override
-    protected String getApiUrl() {
-        return App.getAppConfig().getApiDomain() + "v" + API_VERSION + "/photo-upload/profile?ssid=" + ssid;
+    public String getApiUrl() {
+        return App.getAppConfig().getApiDomain() + "v" + API_VERSION + "/photo-upload/profile?ssid=" + Ssid.get();
     }
 
     @Override

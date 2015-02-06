@@ -1,6 +1,8 @@
 package com.topface.topface.utils.http;
 
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
@@ -53,7 +55,6 @@ public class HttpUtils {
             BufferedReader reader = null;
 
             if (stream != null) {
-
                 try {
                     //Создаем BufferReader, что бы упростить себе чтение строк
                     reader = new BufferedReader(
@@ -72,6 +73,7 @@ public class HttpUtils {
                     }
                     result = sb.toString();
                 } finally {
+
                     if (reader != null) {
                         reader.close();
                     }
@@ -111,7 +113,12 @@ public class HttpUtils {
      * @return подключение
      * @throws IOException
      */
-    public static HttpURLConnection openConnection(HttpConnectionType type, String url, String contentType) throws IOException {
+    public static
+    @NonNull
+    HttpURLConnection openConnection(
+            HttpConnectionType type,
+            String url,
+            String contentType) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 
         //Тип запроса
@@ -150,31 +157,47 @@ public class HttpUtils {
     }
 
     public static void setContentLengthAndConnect(HttpURLConnection connection,
-                                                  ApiRequest.IConnectionConfigureListener listener,
+                                                  @Nullable ApiRequest.IConnectionConfigureListener listener,
                                                   int requestDataLength) throws IOException {
         if (requestDataLength > 0) {
             //Устанавливаем длину данных
             connection.setFixedLengthStreamingMode(requestDataLength);
         }
-        listener.onConfigureEnd();
+        if (listener != null) {
+            listener.onConfigureEnd();
+        }
         connection.connect();
-        listener.onConnectionEstablished();
+        if (listener != null) {
+            listener.onConnectionEstablished();
+        }
     }
 
-    public static void sendPostData(byte[] requestData, HttpURLConnection connection) throws IOException {
+    public static void sendPostData(byte[] requestData, HttpURLConnection connection) {
         //Отправляем данные
         if (connection == null) {
             Debug.error("connection is null");
             return;
         }
-
-        OutputStream outputStream = connection.getOutputStream();
-        if (outputStream != null) {
-            outputStream.write(requestData);
-            outputStream.close();
-        } else {
-            Debug.error("Http.getOutputStream() is null");
+        OutputStream outputStream = null;
+        try {
+            outputStream = connection.getOutputStream();
+            if (outputStream != null) {
+                outputStream.write(requestData);
+                outputStream.close();
+            } else {
+                Debug.error("Http.getOutputStream() is null");
+            }
+        } catch (IOException e) {
+            Debug.error(e);
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e1) {
+                    Debug.error(e1);
+                }
+            }
         }
+
     }
 
     /**

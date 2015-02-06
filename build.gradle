@@ -90,14 +90,12 @@ android {
 
     buildTypes {
         release {
-            //noinspection GroovyAssignabilityCheck
             signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources false
         }
         //Специальный тип сборки для тестирования отделом QA,
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
-        //noinspection GroovyAssignabilityCheck
         qa.initWith(buildTypes.debug)
         qa {
             buildConfigField "long", "BUILD_TIME", "${getTimestamp()}L";
@@ -131,8 +129,9 @@ android {
                 "InflateParams", //Проверка того, что  передан view root при inflate. Отключен, т.к. все предупреждения касаются inflate в ListView, где нет root view
                 "UnusedQuantity", //Предупреждение о не используемой форме в переводах. Мы используем zero во всех языках, поэтому нам не актуально
                 "ClickableViewAccessibility", //Предупреждение о том, что нужно определить performClick, если переопределяешь onTouchEvent
-                "MissingQuantity"
-        //Временно отключена проверка из-за того, что нет many формы в польском и украинском в дальнейшем поправим (пока many = other)
+                "MissingQuantity" //Временно отключена проверка из-за того,
+        //что нет many формы в польском и украинском в дальнейшем поправим
+        //(пока many = other)
     }
 }
 
@@ -144,6 +143,9 @@ dependencies {
     compile rootProject.GOOGLE_PLAY_SERVICES_VERSION
     //All jar libs
     compile fileTree(dir: 'libs', exclude: 'amazon/*.jar', include: '*.jar')
+
+    //Library for WebSocket and other network requests
+    compile 'com.koushikdutta.async:androidasync:2.0.5'
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
     compile project(':libs:statistics-android')

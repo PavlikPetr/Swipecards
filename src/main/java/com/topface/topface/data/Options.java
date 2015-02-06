@@ -96,6 +96,7 @@ public class Options extends AbstractData {
     public long popup_timeout;
     public boolean blockUnconfirmed;
     public boolean blockChatNotMutual;
+    public boolean scruffy;
     public Closing closing = new Closing();
     public BlockSympathy blockSympathy = new BlockSympathy();
     public BlockPeopleNearby blockPeople = new BlockPeopleNearby();
@@ -281,6 +282,7 @@ public class Options extends AbstractData {
 
             fallbackTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_ADMOB);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);
+            scruffy = response.optBoolean("scruffy", false);
             JSONObject bonusObject = response.optJSONObject("bonus");
             if (bonusObject != null) {
                 bonus.enabled = bonusObject.optBoolean("enabled");
