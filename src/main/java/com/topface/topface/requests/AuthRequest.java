@@ -119,7 +119,8 @@ public class AuthRequest extends ApiRequest {
                 .put("timezone", timezone)
                 .put("tablet", tablet)
                 .put("androidApiVersion", androidApiVersion)
-                .put("codeVersion", codeVersion);
+                .put("codeVersion", codeVersion)
+                .put("clientCarrier", Utils.getCarrierName());
         if (!TextUtils.isEmpty(adId)) {
             data.put("adId", adId);
         }
