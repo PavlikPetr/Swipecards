@@ -35,14 +35,10 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 
 import org.onepf.oms.OpenIabHelper;
-import org.onepf.oms.appstore.AmazonAppstore;
-import org.onepf.oms.appstore.GooglePlay;
-import org.onepf.oms.appstore.NokiaStore;
 import org.onepf.oms.appstore.googleUtils.IabHelper;
 import org.onepf.oms.appstore.googleUtils.IabResult;
 import org.onepf.oms.appstore.googleUtils.Inventory;
 import org.onepf.oms.appstore.googleUtils.Purchase;
-import org.onepf.oms.util.Logger;
 
 import java.util.List;
 
@@ -53,9 +49,9 @@ import java.util.List;
  * Наследуемся, подписываемся на коллбэки и просто вызываем метод buy для покупки
  * https://github.com/onepf/OpenIAB
  */
-public abstract class OpenIabFragment extends AbstractBillingFragment implements IabHelper.QueryInventoryFinishedListener,
+public abstract class OpenIabFragment extends AbstractBillingFragment implements
         IabHelper.OnIabPurchaseFinishedListener,
-        IabHelper.OnConsumeFinishedListener {
+        IabHelper.OnConsumeFinishedListener, OpenIabHelperManager.IInventoryReceiver {
 
     public static final String ARG_TAG_SOURCE = "from_value";
     public static final int BUYING_REQUEST = 1001;
@@ -75,13 +71,10 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
     public static final int PURCHASE_CANCEL_FORTUMO = 5;
     public static final int PURCHASE_IMPOSSIBLE_FORTUMO = 6;
-    private OpenIabHelper mHelper;
-    private boolean mIabSetupFinished = false;
+
     private boolean mHasDeferredPurchase = false;
     private View mDeferredPurchaseButton;
     private UserConfig mUserConfig;
-    private OpenIabHelper.Options.Builder mOptsBuilder;
-    private IabHelper.OnIabSetupFinishedListener mOnIabSetupFinishedListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,74 +85,17 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        initOpenIabHelper();
-    }
-
-    private void initOpenIabHelper() {
-        if (mOptsBuilder == null) {
-            mOptsBuilder = new OpenIabHelper.Options.Builder();
-            //Проверять локально покупку мы не будем, пускай сервер проверит
-            mOptsBuilder.setVerifyMode(OpenIabHelper.Options.VERIFY_ONLY_KNOWN);
-            //Мы сами выбираем какой маркет у нас используется
-            mOptsBuilder.setStoreSearchStrategy(OpenIabHelper.Options.SEARCH_STRATEGY_BEST_FIT);
-            addAvailableStores(App.getContext(), mOptsBuilder);
-            //Включаем/выключаем логи
-            Logger.setLoggable(Debug.isDebugLogsEnabled());
-        }
-        //Создаем хелпер
-        mHelper = new OpenIabHelper(App.getContext(), mOptsBuilder.build());
-        mOnIabSetupFinishedListener = new IabHelper.OnIabSetupFinishedListener() {
-            @Override
-            public void onIabSetupFinished(IabResult result) {
-                OpenIabFragment.this.onIabSetupFinished(result);
-            }
-        };
-        mHelper.startSetup(mOnIabSetupFinishedListener);
+        checkIabSetupFinished();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        if (mHelper != null) {
-            mHelper.dispose();
-        }
-        mOnIabSetupFinishedListener = null;
-        mHelper = null;
+        App.getOpenIabHelperManager().removeInventoryReceiver(this);
     }
 
-    protected void addAvailableStores(Context context, OpenIabHelper.Options.Builder optsBuilder) {
-        //Нам нужен конкретный AppStore, т.к. у каждого типа сборки свои продукты и поддержка других маркетов все равно не нужна
-        switch (BuildConfig.MARKET_API_TYPE) {
-            case GOOGLE_PLAY:
-                optsBuilder.addAvailableStores(new GooglePlay(context, null));
-                optsBuilder.addPreferredStoreName(OpenIabHelper.NAME_GOOGLE);
-                break;
-            case AMAZON:
-                //Нужно для тестирования покупок в Amazon
-                if (BuildConfig.DEBUG) {
-                    optsBuilder.addAvailableStores(new AmazonAppstore(context) {
-                        public boolean isBillingAvailable(String packageName) {
-                            return true;
-                        }
-                    });
-                } else {
-                    optsBuilder.addAvailableStores(new AmazonAppstore(context));
-                }
-                optsBuilder.addPreferredStoreName(OpenIabHelper.NAME_AMAZON);
-                break;
-            case NOKIA_STORE:
-                optsBuilder.addAvailableStores(new NokiaStore(context));
-                optsBuilder.addPreferredStoreName(OpenIabHelper.NAME_NOKIA);
-                break;
-        }
-    }
-
-    public void onIabSetupFinished(IabResult result) {
-        Debug.log("BillingFragment: onIabSetupFinished");
-
-        if (result.isFailure()) {
-            //При инциализации произошла ошибка!
-            Debug.error("BillingFragment: IAB setup is not success: " + result);
+    public void checkIabSetupFinished() {
+        if (!App.getOpenIabHelperManager().isSetupFinished()) {
             if (isAdded()) {
                 onInAppBillingUnsupported();
                 onSubscriptionUnsupported();
@@ -167,17 +103,13 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             return;
         }
 
-        mIabSetupFinished = true;
-
-        Debug.log("BillingFragment: Setup successful");
-
-        requestInventory();
+        App.getOpenIabHelperManager().addInventoryReceiver(this);
 
         if (isAdded()) {
             //Вызываем колбэки, оповещая, что покупки доступны
             onInAppBillingSupported();
 
-            if (mHelper.subscriptionsSupported()) {
+            if (App.getOpenIabHelperManager().isSubscriptionsSupported()) {
                 onSubscriptionSupported();
             } else {
                 onSubscriptionUnsupported();
@@ -222,15 +154,9 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    requestInventory();
+                    App.getOpenIabHelperManager().updateInventory();
                 }
             }, 2000);
-        }
-    }
-
-    private void requestInventory() {
-        if (mHelper != null) {
-            mHelper.queryInventoryAsync(true, this);
         }
     }
 
@@ -251,7 +177,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     }
                     Debug.error("BillingFragment: " + result + ". Try verify purchase");
                     //Перезапрашиваем покупки и начислеяем при необходимости
-                    requestInventory();
+                    App.getOpenIabHelperManager().updateInventory();
                     break;
                 case PURCHASE_CANCEL:
                 case PURCHASE_CANCEL_GP:
@@ -273,37 +199,29 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     }
 
-    /**
-     * Событие получения списка покупок пользователя
-     */
-    @Override
-    public void onQueryInventoryFinished(IabResult iabResult, Inventory inventory) {
-        if (iabResult.isSuccess()) {
-            if (inventory != null) {
-                //Запрашиваем покупки, что бы их потратить
-                List<String> allOwnedSkus = inventory.getAllOwnedSkus();
-                Debug.log("BillingFragment: inventory " + allOwnedSkus);
-                //И подписки, что бы их проверить
-                Products marketProducts = getProducts();
-                //Покупки юзера на сервере
-                Products.ProductsInventory serverSubs = marketProducts != null ? marketProducts.inventory : null;
-                for (String sku : allOwnedSkus) {
-                    Purchase purchase = inventory.getPurchase(sku);
-                    if (OpenIabHelper.ITEM_TYPE_SUBS.equals(purchase.getItemType())) {
-                        //Если на сервере нет какой то подписки, которая есть в маркете и сервер не является стейджем, то отправляем ее повторно
-                        if (isMainApi() && serverSubs != null && !serverSubs.containsSku(sku)) {
-                            Debug.log("BillingFragment: restore subscription: " + sku);
-                            verifyPurchase(purchase, getActivity());
-                        }
-                    } else {
-                        //Если это не использованный продукт, то валидируем его на сервере
-                        Debug.log("BillingFragment: restore in-app item: " + sku);
+    public void checkInventory(Inventory inventory) {
+        if (inventory != null) {
+            //Запрашиваем покупки, что бы их потратить
+            List<String> allOwnedSkus = inventory.getAllOwnedSkus();
+            Debug.log("BillingFragment: inventory " + allOwnedSkus);
+            //И подписки, что бы их проверить
+            Products marketProducts = getProducts();
+            //Покупки юзера на сервере
+            Products.ProductsInventory serverSubs = marketProducts != null ? marketProducts.inventory : null;
+            for (String sku : allOwnedSkus) {
+                Purchase purchase = inventory.getPurchase(sku);
+                if (OpenIabHelper.ITEM_TYPE_SUBS.equals(purchase.getItemType())) {
+                    //Если на сервере нет какой то подписки, которая есть в маркете и сервер не является стейджем, то отправляем ее повторно
+                    if (isMainApi() && serverSubs != null && !serverSubs.containsSku(sku)) {
+                        Debug.log("BillingFragment: restore subscription: " + sku);
                         verifyPurchase(purchase, getActivity());
                     }
+                } else {
+                    //Если это не использованный продукт, то валидируем его на сервере
+                    Debug.log("BillingFragment: restore in-app item: " + sku);
+                    verifyPurchase(purchase, getActivity());
                 }
             }
-        } else {
-            Debug.error("BillingFragment: onQueryInventoryFinished error: " + iabResult);
         }
     }
 
@@ -361,8 +279,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      * @param btn BuyButton object to determine which type of buy is processing
      */
     public void buy(Products.BuyButton btn) {
-        if (mHelper != null && mHelper.getSetupState() == OpenIabHelper.SETUP_RESULT_SUCCESSFUL ||
-                mHelper.getSetupState() == OpenIabHelper.SETUP_RESULT_FAILED) {
+        if (App.getOpenIabHelperManager().isReadyToBuyNow()) {
             buyNow(btn);
         } else {
             buyDeferred(btn);
@@ -395,9 +312,9 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      */
     public void buyItem(final String id) {
         Debug.log("BillingFragment: buyItem " + id + " test: " + isTestPurchasesEnabled());
-        if (id != null && mHelper != null && mIabSetupFinished) {
+        if (id != null && App.getOpenIabHelperManager().isSetupFinished()) {
             try {
-                mHelper.launchPurchaseFlow(
+                App.getOpenIabHelperManager().launchPurchaseFlow(
                         getActivity(),
                         //Если тестовые покупки, то подменяем id продукта на тестовый
                         isTestPurchasesEnabled() ? TEST_PURCHASED_PRODUCT_ID : id,
@@ -418,8 +335,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      */
     public void buySubscription(final String id) {
         Debug.log("BillingFragment: buySubscription " + id + " test: " + isTestPurchasesEnabled());
-        if (id != null && mHelper != null && mIabSetupFinished) {
-            mHelper.launchSubscriptionPurchaseFlow(
+        if (id != null && App.getOpenIabHelperManager().isSetupFinished()) {
+            App.getOpenIabHelperManager().launchSubscriptionPurchaseFlow(
                     getActivity(),
                     //Если тестовые покупки, то подменяем id продукта на тестовый
                     isTestPurchasesEnabled() ? TEST_PURCHASED_PRODUCT_ID : id,
@@ -474,7 +391,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         Debug.log("BillingFragment(" + ((Object) this).getClass().getSimpleName() + "): onActivityResult requestCode: " + requestCode + " resultCode: " + resultCode + " data: " + data);
 
         // Pass on the activity result to the helper for handling
-        if (mHelper != null && !mHelper.handleActivityResult(requestCode, resultCode, data)) {
+        if (App.getOpenIabHelperManager().handleActivityResult(requestCode, resultCode, data)) {
             // not handled, so handle it ourselves (here's where you'd
             // perform any handling of activity results not related to in-app
             // billing...
@@ -509,8 +426,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             protected void success(Verify verify, IApiResponse response) {
                 //Послу удачной покупки (не подписки), которая была проверена сервером,
                 //нужно "потратить" элемент, что бы можно было купить следующий
-                if (mHelper != null && TextUtils.equals(purchase.getItemType(), OpenIabHelper.ITEM_TYPE_INAPP)) {
-                    mHelper.consumeAsync(purchase, OpenIabFragment.this);
+                if (TextUtils.equals(purchase.getItemType(), OpenIabHelper.ITEM_TYPE_INAPP)) {
+                    App.getOpenIabHelperManager().consumeAsync(purchase, OpenIabFragment.this);
                 }
                 onPurchased(purchase);
                 if (isNeedSendPurchasesStatistics()) {
@@ -565,8 +482,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         // то возникнет ситуация, что сервер не может валидировать покупку.
         // Поэтому мы тратим такую покупку после ошибки, если это тестовая покупка
         DeveloperPayload developerPayload = validateRequest.getDeveloperPayload();
-        if (developerPayload != null && mHelper != null && TextUtils.equals(developerPayload.sku, TEST_PURCHASED_PRODUCT_ID)) {
-            mHelper.consumeAsync(purchase, OpenIabFragment.this);
+        if (developerPayload != null && TextUtils.equals(developerPayload.sku, TEST_PURCHASED_PRODUCT_ID)) {
+            App.getOpenIabHelperManager().consumeAsync(purchase, OpenIabFragment.this);
             return true;
         }
         return false;
@@ -580,8 +497,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 Debug.log("BillingFragment: subscription with order id " + purchase.getOrderId() +
                         " added to purchesed subscription for this google acount.");
                 return false;
-            } else if (mHelper != null) {
-                mHelper.consumeAsync(purchase, OpenIabFragment.this);
+            } else {
+                App.getOpenIabHelperManager().consumeAsync(purchase, OpenIabFragment.this);
                 return true;
             }
         }
@@ -633,6 +550,11 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     protected int getRequestCode() {
         return OpenIabFragment.BUYING_REQUEST;
+    }
+
+    @Override
+    public void receiveInventory(Inventory inventory) {
+        checkInventory(inventory);
     }
 }
 

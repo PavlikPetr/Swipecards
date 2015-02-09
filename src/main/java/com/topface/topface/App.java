@@ -15,6 +15,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
+import com.topface.billing.OpenIabHelperManager;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
@@ -88,6 +89,7 @@ public class App extends Application {
     private static String mStartLabel;
     private static Location mCurLocation;
 
+    private static OpenIabHelperManager mOpenIabHelperManager = new OpenIabHelperManager();
 
     /**
      * Множественный запрос Options и профиля
@@ -257,6 +259,10 @@ public class App extends Application {
             mBaseConfig = new Configurations(App.getContext());
         }
         return mBaseConfig;
+    }
+
+    public static OpenIabHelperManager getOpenIabHelperManager() {
+        return mOpenIabHelperManager;
     }
 
     public static AppConfig getAppConfig() {
@@ -503,6 +509,11 @@ public class App extends Application {
         //Прекращаем слушать подключение к интернету
         if (mConnectionIntent != null && mConnectionReceiver != null) {
             unregisterReceiver(mConnectionReceiver);
+        }
+        // clear openIab helper manager
+        if (mOpenIabHelperManager != null) {
+            mOpenIabHelperManager.dispose();
+            mOpenIabHelperManager = null;
         }
     }
 }

@@ -18,12 +18,14 @@ import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Products;
+import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.config.SessionConfig;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -225,6 +227,7 @@ public class CacheProfile {
      */
     private static Options options;
     private static Products mMarketProducts;
+    private static ProductsDetails mProductsDetails;
     private static PaymentWallProducts mPWProducts;
     private static PaymentWallProducts mPWMobileProducts;
 
@@ -275,6 +278,25 @@ public class CacheProfile {
             }
         }
         return mMarketProducts;
+    }
+
+    public static ProductsDetails getMarketProductsDetails() {
+        if (mProductsDetails == null) {
+            SessionConfig config = App.getSessionConfig();
+            String productsDetailsCache = config.getProductsDetailsData();
+            if (!TextUtils.isEmpty(productsDetailsCache)) {
+                //Получаем опции из кэша
+                try {
+                    mProductsDetails = new ProductsDetails(
+                            new JSONArray(productsDetailsCache)
+                    );
+                } catch (JSONException e) {
+                    config.resetGoogleProductsData();
+                    Debug.error(e);
+                }
+            }
+        }
+        return mProductsDetails;
     }
 
     public static Products getPaymentWallProducts(PaymentWallProducts.TYPE type) {
@@ -344,6 +366,13 @@ public class CacheProfile {
             LocalBroadcastManager.getInstance(App.getContext())
                     .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
 
+        }
+    }
+
+    public static void setMarketProductsDetails(ProductsDetails productsDetails) {
+        mProductsDetails = productsDetails;
+        if (mProductsDetails != null) {
+            App.getSessionConfig().setMarketProductsDetailsData(mProductsDetails.getJson());
         }
     }
 

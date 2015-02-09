@@ -89,6 +89,7 @@ public class Products extends AbstractData {
 
     protected void fillData(JSONObject data) {
         fillProducts(data);
+        App.getOpenIabHelperManager().init();
         updateCache(data);
     }
 
@@ -199,10 +200,19 @@ public class Products extends AbstractData {
             value = buyBtn.hint;
             economy = null;
         } else {
-            value = String.format(
-                    App.getContext().getString(R.string.default_price_format),
-                    ((float) buyBtn.price / 100)
-            );
+            ProductsDetails.ProductDetail detail = CacheProfile.getMarketProductsDetails().getProductDetail(buyBtn.id);
+            if (detail.isReady()) {
+                value = String.format(
+                        App.getContext().getString(R.string.default_price_format_extended),
+                        detail.price / ProductsDetails.MICRO_AMOUNT,
+                        detail.currency
+                );
+            } else {
+                value = String.format(
+                        App.getContext().getString(R.string.default_price_format),
+                        ((float) buyBtn.price / 100)
+                );
+            }
             economy = buyBtn.hint;
         }
         return createBuyButtonLayout(
@@ -417,8 +427,10 @@ public class Products extends AbstractData {
     public static class BuyButton {
         public String id;
         public String title;
+        public String titleTemplate;
         public int price;
         public int showType;
+        public int amount;
         public String hint;
         public ProductType type;
         public int discount;
@@ -428,12 +440,22 @@ public class Products extends AbstractData {
             if (json != null) {
                 id = json.optString("id");
                 title = json.optString("title");
+                titleTemplate = json.optString("titleTemplate");
                 price = json.optInt("price");
+                amount = json.optInt("amount");
                 hint = json.optString("hint");
                 showType = json.optInt("showType");
                 type = getProductTypeByName(json.optString("type"));
                 discount = json.optInt("discount");
                 paymentwallLink = json.optString("url");
+                ProductsDetails.ProductDetail detail = CacheProfile.getMarketProductsDetails().getProductDetail(id);
+                if (detail.isReady()) {
+                    double price = detail.price / ProductsDetails.MICRO_AMOUNT;
+                    double pricePerItem = price / amount;
+                    title = titleTemplate.replace("{{price}}", String.format("%.2f %s", price, detail.currency));
+                    title = title.replace("{{price_per_item}}", String.format("%.2f %s", pricePerItem, detail.currency));
+                }
+
             }
         }
     }

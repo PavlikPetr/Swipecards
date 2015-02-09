@@ -360,6 +360,7 @@
     <string name="popup_version_cancel">Remind me later</string>
     <string name="general_version_not_supported">Your version of the app is outdated and is no longer supported. Please update it.</string>
     <string name="default_price_format">Total: %.2f USD</string>
+    <string name="default_price_format_extended">Total: %1$.2f %2$s</string>
     <string name="dating_online_only">%s, online only</string>
     <string name="leaders_pick_condition">You cannot select a photo with a rating lower than %d%%:</string>
     <string name="general_gift">Gift</string>
