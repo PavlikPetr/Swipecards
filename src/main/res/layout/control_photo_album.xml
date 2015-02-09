@@ -7,7 +7,7 @@
 
     <com.topface.topface.ui.views.ImageViewRemote
         android:id="@+id/loGiftImage"
-        style="@style/Gift"
+        style="@style/AlbumGift"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="7dp"

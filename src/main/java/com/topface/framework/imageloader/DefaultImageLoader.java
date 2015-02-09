@@ -91,18 +91,20 @@ public class DefaultImageLoader {
     }
 
     public void displayImage(String uri, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener, BitmapProcessor processor) {
-        displayImage(uri, imageView, options, listener, processor, 0);
+        displayImage(uri, imageView, options, listener, processor, null, 0);
     }
 
-    public void displayImage(String uri, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener, BitmapProcessor processor, int stubResId) {
+    public void displayImage(String uri, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener,
+                             BitmapProcessor preProcessor, BitmapProcessor postProcessor, int stubResId) {
         try {
             //Если не задан пост-процессор, то используем оптимизированную версию конфига
-            if (options == null && processor == null) {
+            if (options == null && preProcessor == null && postProcessor == null) {
                 options = getOptimizedDisplayImageConfig(stubResId);
             } else if (options == null) {
                 //Если же используется процессор, то собираем новую версию конфига с нужным процессором
                 options = getDisplayImageConfig(stubResId)
-                        .preProcessor(processor)
+                        .preProcessor(preProcessor)
+                        .postProcessor(postProcessor)
                         .build();
             }
 

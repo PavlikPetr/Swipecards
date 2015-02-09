@@ -17,6 +17,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
+import com.topface.topface.R;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -409,4 +411,30 @@ public class BitmapUtils {
         }
         return output;
     }
+
+    public static Bitmap getRoundBitmap(Bitmap bitmap, float radiusMult) {
+        final int bitmapWidth = bitmap.getWidth();
+        final int bitmapHeight = bitmap.getHeight();
+
+        int multWidth = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
+
+        @SuppressWarnings("SuspiciousNameCombination")
+        Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+
+        final Rect src = new Rect(0, 0, bitmapWidth, bitmapHeight);
+        final Rect dst = new Rect((multWidth - bitmapWidth) / 2, (multWidth - bitmapHeight) / 2, (multWidth + bitmapWidth) / 2, (multWidth - bitmapHeight) / 2 + bitmapHeight);
+
+        Paint circlePaint = new Paint();
+        circlePaint.setAntiAlias(true);
+        circlePaint.setColor(App.getContext().getResources().getColor(R.color.bg_white));
+        Paint canvasPaint = new Paint();
+        canvasPaint.setAntiAlias(true);
+        canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint);
+        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        canvas.drawBitmap(bitmap, src, dst, canvasPaint);
+        return Bitmap.createScaledBitmap(output, bitmap.getWidth(), bitmap.getWidth(), true);
+    }
+
 }

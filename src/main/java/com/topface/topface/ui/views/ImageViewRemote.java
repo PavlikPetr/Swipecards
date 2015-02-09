@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.framework.imageloader.ImageViewRemoteTemplate;
 import com.topface.framework.imageloader.processor.RoundCornersProcessor;
 import com.topface.framework.imageloader.processor.RoundProcessor;
+import com.topface.framework.imageloader.processor.SquareProcessor;
 import com.topface.topface.R;
 import com.topface.topface.utils.imageloader.LeftMenuClipProcessor;
 import com.topface.topface.utils.imageloader.MaskClipProcessor;
@@ -18,6 +20,7 @@ public class ImageViewRemote extends ImageViewRemoteTemplate {
     private static final int POST_PROCESSOR_ROUND_CORNERS = 2;
     private static final int POST_PROCESSOR_MASK = 3;
     private static final int POST_PROCESSOR_LEFTMENUCLIP = 4;
+    private static final int POST_PROCESSOR_SQUARED = 5;
 
     public ImageViewRemote(Context context) {
         super(context);
@@ -37,20 +40,23 @@ public class ImageViewRemote extends ImageViewRemoteTemplate {
 
         borderResId = values.getResourceId(R.styleable.ImageViewRemote_border, 0);
 
-        setPostProcessor(
-                values.getInt(
-                        R.styleable.ImageViewRemote_postProcessor,
-                        POST_PROCESSOR_NONE
-                ),
-                values.getDimension(
-                        R.styleable.ImageViewRemote_cornersRadius,
-                        RoundCornersProcessor.DEFAULT_RADIUS
-                ),
-                values.getResourceId(
-                        R.styleable.ImageViewRemote_clipMask,
-                        MaskClipProcessor.DEFAULT_MASK
-                )
-        );
+        float cornerRadius = values.getDimension(
+                R.styleable.ImageViewRemote_cornersRadius,
+                RoundCornersProcessor.DEFAULT_RADIUS);
+        int maskId = values.getResourceId(
+                R.styleable.ImageViewRemote_clipMask,
+                MaskClipProcessor.DEFAULT_MASK);
+        int processorId = values.getInt(
+                R.styleable.ImageViewRemote_preProcessor,
+                POST_PROCESSOR_NONE);
+
+        mPreProcessor = setProcessor(processorId, cornerRadius, maskId);
+
+        processorId = values.getInt(
+                R.styleable.ImageViewRemote_postProcessor,
+                POST_PROCESSOR_NONE);
+
+        mPostProcessor = setProcessor(processorId, cornerRadius, maskId);
 
 
         if (!isInEditMode()) {
@@ -66,25 +72,24 @@ public class ImageViewRemote extends ImageViewRemoteTemplate {
     }
 
     @Override
-    protected void setPostProcessor(int postProcessorId, float cornerRadius, int maskId) {
+    protected BitmapProcessor setProcessor(int processorId, float cornerRadius, int maskId) {
         if (!isInEditMode()) {
-            switch (postProcessorId) {
+            switch (processorId) {
                 case POST_PROCESSOR_ROUNDED:
-                    mPostProcessor = new RoundProcessor();
-                    break;
+                    return new RoundProcessor();
                 case POST_PROCESSOR_ROUND_CORNERS:
-                    mPostProcessor = new RoundCornersProcessor(cornerRadius);
-                    break;
+                    return new RoundCornersProcessor(cornerRadius);
                 case POST_PROCESSOR_MASK:
-                    mPostProcessor = new MaskClipProcessor(maskId, borderResId);
-                    break;
+                    return new MaskClipProcessor(maskId, borderResId);
                 case POST_PROCESSOR_LEFTMENUCLIP:
-                    mPostProcessor = new LeftMenuClipProcessor();
-                    break;
+                    return new LeftMenuClipProcessor();
+                case POST_PROCESSOR_SQUARED:
+                    return new SquareProcessor();
                 default:
-                    mPostProcessor = null;
+                    return null;
             }
         }
+        return null;
     }
 
     @Override
