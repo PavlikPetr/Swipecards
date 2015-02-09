@@ -611,4 +611,6 @@
     <string name="preload_photo_type_wifi">Solo WiFi</string>
     <string name="preload_photo_type_always_on">Sempre accesa</string>
     <string name="preload_photo_type_preload_off">Spenta</string>
+    <string name="wrong_time_popup_text">Non siamo riusciti a stabilire una connessione sicura.\nProbabilmente il tuo dispositivo mostra una data o l’ora scorretta.</string>
+    <string name="wrong_time_popup_button">Aprire i parametri</string>
 </resources>

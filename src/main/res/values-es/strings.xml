@@ -604,6 +604,7 @@
     <string name="hint_myprofile_buy_vip">Compra el estado VIP y disfruta de la comunicación sin límites</string>
     <string name="pull_to_refresh_pull_label">Arrastra para actualizar…</string>
     <string name="pull_to_refresh_release_label">Bajalo para actualizar…</string>
+    <string name="messaging_block_buy_vip">Para continuar hace falta el estado VIP\u2011</string>
     <string name="pull_to_refresh_refreshing_label">Cargando…</string>
     <string name="user_added_to_black_list">Usuario agregado a la lista negra</string>
     <string name="user_deleted_from_black_list">Usuario eliminado de la lista negra</string>
@@ -613,5 +614,6 @@
     <string name="preload_photo_type_wifi">Solo WiFi</string>
     <string name="preload_photo_type_always_on">Siempre conectada</string>
     <string name="preload_photo_type_preload_off">Descpnectada</string>
+    <string name="wrong_time_popup_text">Ha sido imposible establecer conexión segura con el servidor.\nEs posible que en tu dispositivo están puestas mal las fechas o la hora.</string>
     <string name="wrong_time_popup_button">Abrir opciones</string>
 </resources>
