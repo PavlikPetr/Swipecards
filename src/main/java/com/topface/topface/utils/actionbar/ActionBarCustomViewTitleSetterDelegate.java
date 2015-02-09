@@ -56,9 +56,12 @@ public class ActionBarCustomViewTitleSetterDelegate extends ActionBarOnlineSette
                         activity.finish();
                     } else {
                         if (activity instanceof BaseFragmentActivity) {
-                            ((BaseFragmentActivity) activity).doPreFinish();
+                            if (((BaseFragmentActivity) activity).doPreFinish()) {
+                                activity.finish();
+                            }
+                        } else {
+                            activity.finish();
                         }
-                        activity.finish();
                     }
                 }
             });
