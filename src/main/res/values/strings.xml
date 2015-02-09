@@ -615,5 +615,6 @@
     <string name="preload_photo_type_wifi">WiFi only</string>
     <string name="preload_photo_type_always_on">Always on</string>
     <string name="preload_photo_type_preload_off">Off</string>
+    <string name="wrong_time_popup_text">Cannot establish a safe connection.\nMaybe the date or time settings on your device have been set incorrectly.</string>
     <string name="wrong_time_popup_button">View settings</string>
 </resources>
