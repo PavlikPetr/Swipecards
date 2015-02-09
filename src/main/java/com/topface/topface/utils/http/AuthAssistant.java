@@ -13,7 +13,6 @@ import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.RequestBuilder;
-import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -23,8 +22,6 @@ import com.topface.topface.utils.social.AuthorizationManager;
  */
 public class AuthAssistant {
 
-    private ConnectionManager mConnectionManager;
-
     private DataApiHandler mAuthHandler = new DataApiHandler<Auth>() {
 
         @Override
@@ -32,9 +29,9 @@ public class AuthAssistant {
             //Сохраняем новые авторизационные данные
             AuthorizationManager.saveAuthInfo(data);
             //Снимаем блокировку
-            mConnectionManager.getAuthUpdateFlag().set(false);
+            ConnectionManager.getInstance().getAuthUpdateFlag().set(false);
             //После этого выполняем все отложенные запросы
-            mConnectionManager.runPendingRequests();
+            ConnectionManager.getInstance().runPendingRequests();
         }
 
         @Override
@@ -44,29 +41,24 @@ public class AuthAssistant {
 
         @Override
         public void fail(int codeError, IApiResponse response) {
-            if (codeError == ErrorCodes.UNVERIFIED_TOKEN) {
-                AuthToken.getInstance().removeToken();
-                Ssid.remove();
+            if (response.isWrongAuthError()) {
+                startReauth();
             }
-            mConnectionManager.sendBroadcastReauth(getContext());
         }
 
         @Override
         public void always(IApiResponse response) {
             super.always(response);
-            mConnectionManager.getAuthUpdateFlag().set(false);
+            ConnectionManager.getInstance().getAuthUpdateFlag().set(false);
+
         }
 
         @Override
         public void cancel() {
             super.cancel();
-            mConnectionManager.getAuthUpdateFlag().set(false);
+            ConnectionManager.getInstance().getAuthUpdateFlag().set(false);
         }
     };
-
-    public AuthAssistant(ConnectionManager connectionManager) {
-        mConnectionManager = connectionManager;
-    }
 
     IApiRequest precedeRequestWithAuth(IApiRequest request) {
         if (isAuthUnacceptable(request)) {
@@ -86,11 +78,33 @@ public class AuthAssistant {
         return request;
     }
 
-    public IApiRequest explicitAuthRequest() {
+    public IApiRequest createAuthRequest() {
         return new AuthRequest(AuthToken.getInstance().getTokenInfo(), App.getContext()).callback(mAuthHandler);
     }
 
     public static boolean isAuthUnacceptable(IApiRequest request) {
         return request instanceof AuthRequest || request instanceof PhotoAddRequest;
+    }
+
+    public boolean checkAuthError(IApiResponse response) {
+        boolean result = false;
+        //Эти ошибки могут возникать, если это запрос авторизации
+        // или когда наши регистрационные данные устарели (сменился токен, пароль и т.п)
+        if (response.isWrongAuthError()) {
+            startReauth();
+
+            //Изначальный же запрос отменяем, нам не нужно что бы он обрабатывался дальше
+            result = true;
+        } else {
+            Ssid.update();
+        }
+
+        return result;
+    }
+
+    private void startReauth() {
+        Ssid.remove();
+        AuthToken.getInstance().removeToken();
+        ConnectionManager.getInstance().sendBroadcastReauth(App.getContext());
     }
 }
