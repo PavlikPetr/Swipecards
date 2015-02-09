@@ -375,7 +375,8 @@ public class App extends Application {
         }
 
         // Инициализируем общие срезы для статистики
-        StatisticsTracker.getInstance().setContext(mContext)
+        StatisticsTracker.getInstance()
+                .setContext(mContext)
                 .putPredefinedSlice("app", BuildConfig.STATISTICS_APP)
                 .putPredefinedSlice("cvn", BuildConfig.VERSION_NAME);
         if (BuildConfig.DEBUG) {

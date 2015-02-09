@@ -2,7 +2,6 @@ package com.topface.topface.statistics;
 
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
-import com.topface.topface.App;
 import com.topface.topface.data.Banner;
 
 /**
@@ -18,7 +17,6 @@ public class TopfaceAdStatistics {
 
     private static void send(String key, String name) {
         StatisticsTracker.getInstance()
-                .setContext(App.getContext())
                 .sendEvent(key, 1, new Slices().putSlice(TfStatConsts.val, name));
     }
 
