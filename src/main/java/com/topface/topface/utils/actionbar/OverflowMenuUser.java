@@ -21,4 +21,6 @@ public interface OverflowMenuUser {
     Intent getOpenChatIntent();
 
     Boolean getMutualValue();
+
+    void clickSendGift();
 }

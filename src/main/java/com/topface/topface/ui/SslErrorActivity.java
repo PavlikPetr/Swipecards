@@ -10,10 +10,11 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.AppGetOptionsRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.TestRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.NotValidCertificateStatistics;
 
 
 public class SslErrorActivity extends Activity {
@@ -33,6 +34,9 @@ public class SslErrorActivity extends Activity {
         mSettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // send statistic
+                NotValidCertificateStatistics.send();
+                // open date/time settings
                 startActivityForResult(new Intent(android.provider.Settings.ACTION_DATE_SETTINGS), ACTION_DATE_SETTINGS_INTENT_ID);
             }
         });
@@ -73,7 +77,7 @@ public class SslErrorActivity extends Activity {
 
     private void sendRequest() {
         removeRequest();
-        mApiRequest = new TestRequest(this).callback(new ApiHandler() {
+        mApiRequest = new AppGetOptionsRequest(this).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
                 finish();
@@ -81,7 +85,7 @@ public class SslErrorActivity extends Activity {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                if (codeError == ErrorCodes.NOT_VALID_CERTIFICATE) {
+                if (codeError == ErrorCodes.HTTPS_CERTIFICATE_EXPIRED) {
                     setInProgressState(false);
                 } else {
                     finish();

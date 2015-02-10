@@ -147,7 +147,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             barActionsItem.setChecked(mBarActions.isChecked());
         }
         mBarActions = barActionsItem;
-        mProfileOverflowMenu = new OverflowMenu(getActivity(), mBarActions, mRateController, mProfileId, mSavedResponse);
+        mProfileOverflowMenu = new OverflowMenu(getActivity(), mBarActions, mRateController, mProfileId, true, mSavedResponse);
     }
 
     @Override
@@ -357,6 +357,19 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     public Boolean getMutualValue() {
                         User user = getUser();
                         return user != null ? user.mutual : null;
+                    }
+
+                    @Override
+                    public void clickSendGift() {
+                        UserGiftsFragment giftsFragment = getGiftFragment();
+                        if (giftsFragment != null && giftsFragment.getActivity() != null) {
+                            giftsFragment.sendGift();
+                        } else {
+                            startActivityForResult(
+                                    GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
+                                    GiftsActivity.INTENT_REQUEST_GIFT
+                            );
+                        }
                     }
                 });
             }

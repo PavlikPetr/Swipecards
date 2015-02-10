@@ -24,10 +24,7 @@ import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
-import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.dialogs.LeadersDialog;
-import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
 
@@ -61,6 +58,7 @@ public class OverflowMenu {
     private Integer mUserId;
     private Intent mOpenChatIntent;
     private Boolean mIsMutual;
+    private boolean mIsChatDisableForNoVip = true;  // block chat if user not premium and blockChatNotMutual=true
 
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
@@ -96,13 +94,14 @@ public class OverflowMenu {
         registerBroadcastReceiver();
     }
 
-    public OverflowMenu(Activity activity, MenuItem barActions, RateController rateController, int profileId, ApiResponse savedResponse) {
+    public OverflowMenu(Activity activity, MenuItem barActions, RateController rateController, int profileId, boolean isChatAvailable, ApiResponse savedResponse) {
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.PROFILE_OVERFLOW_MENU;
         mActivity = activity;
         mRateController = rateController;
         mProfileId = profileId;
         mSavedResponse = savedResponse;
+        mIsChatDisableForNoVip = isChatAvailable;
         registerBroadcastReceiver();
     }
 
@@ -364,41 +363,22 @@ public class OverflowMenu {
 
     private void onClickOpenChatAction() {
         initAllFields();
-        if (mRateController == null || mIsMutual == null) {
+        if (mIsMutual == null) {
             return;
         }
-        if (CacheProfile.premium || !CacheProfile.getOptions().blockChatNotMutual) {
-            openChat();
+        if (!CacheProfile.premium && CacheProfile.getOptions().blockChatNotMutual && mIsChatDisableForNoVip && !mIsMutual) {
+            mActivity.startActivityForResult(
+                    PurchasesActivity.createVipBuyIntent(mActivity.getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
+                    PurchasesActivity.INTENT_BUY_VIP);
         } else {
-            String callingClass = getCallingClassName();
-            if (callingClass != null) {
-                if (callingClass.equals(DatingFragment.class.getName()) || callingClass.equals(LeadersDialog.class.getName())) {
-                    if (!mIsMutual) {
-                        mActivity.startActivityForResult(
-                                PurchasesActivity.createVipBuyIntent(mActivity.getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
-                                PurchasesActivity.INTENT_BUY_VIP
-                        );
-                    }
-                }
-            }
             openChat();
         }
-    }
-
-    private String getCallingClassName() {
-        Throwable t = new Throwable();
-        StackTraceElement[] elements = t.getStackTrace();
-        if (elements.length > 1) {
-            return elements[1].getClassName();
-        }
-        return null;
     }
 
     private void onClickSendGiftAction() {
-        mActivity.startActivityForResult(
-                GiftsActivity.getSendGiftIntent(mActivity, mProfileId),
-                GiftsActivity.INTENT_REQUEST_GIFT
-        );
+        if (mOverflowMenuFields != null) {
+            mOverflowMenuFields.clickSendGift();
+        }
     }
 
     private void onClickAddToBlackList() {
@@ -406,53 +386,48 @@ public class OverflowMenu {
         if (mIsInBlackList == null || mUserId == null) {
             return;
         }
-        if (CacheProfile.premium) {
-            ApiRequest request;
-            if (mIsInBlackList) {
-                request = new DeleteBlackListRequest(mUserId, mActivity).
-                        callback(new BlackListAndBookmarkHandler(mActivity,
-                                BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
-                                mUserId,
-                                false) {
-                            @Override
-                            public void success(IApiResponse response) {
-                                super.success(response);
-                                showBlackListToast(false);
-                            }
+        ApiRequest request;
+        if (mIsInBlackList) {
+            request = new DeleteBlackListRequest(mUserId, mActivity).
+                    callback(new BlackListAndBookmarkHandler(mActivity,
+                            BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
+                            mUserId,
+                            false) {
+                        @Override
+                        public void success(IApiResponse response) {
+                            super.success(response);
+                            showBlackListToast(false);
+                        }
 
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                                super.fail(codeError, response);
-                                setBlackListState(null);
-                                initOverfowMenu();
-                            }
-                        });
-            } else {
-                request = new BlackListAddRequest(mUserId, mActivity).
-                        callback(new BlackListAndBookmarkHandler(mActivity,
-                                BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
-                                mUserId,
-                                true) {
-                            @Override
-                            public void success(IApiResponse response) {
-                                super.success(response);
-                                showBlackListToast(true);
-                            }
-
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                                super.fail(codeError, response);
-                                setBlackListState(null);
-                                initOverfowMenu();
-                            }
-                        });
-            }
-            setBlackListState(null);
-            request.exec();
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+                            super.fail(codeError, response);
+                            setBlackListState(null);
+                            initOverfowMenu();
+                        }
+                    });
         } else {
-            mActivity.startActivityForResult(PurchasesActivity.createVipBuyIntent(null, "ProfileSuperSkills"),
-                    PurchasesActivity.INTENT_BUY_VIP);
+            request = new BlackListAddRequest(mUserId, mActivity).
+                    callback(new BlackListAndBookmarkHandler(mActivity,
+                            BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
+                            mUserId,
+                            true) {
+                        @Override
+                        public void success(IApiResponse response) {
+                            super.success(response);
+                            showBlackListToast(true);
+                        }
+
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+                            super.fail(codeError, response);
+                            setBlackListState(null);
+                            initOverfowMenu();
+                        }
+                    });
         }
+        setBlackListState(null);
+        request.exec();
     }
 
     private void onClickAddToBookmarkAction() {
@@ -587,5 +562,9 @@ public class OverflowMenu {
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(mUpdateActionsReceiver);
         mOverflowMenuFields = null;
         mActivity = null;
+    }
+
+    public void setChatAvailable(boolean isChatAvailable) {
+        mIsChatDisableForNoVip = isChatAvailable;
     }
 }

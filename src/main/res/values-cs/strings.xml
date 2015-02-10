@@ -130,6 +130,7 @@
     <string name="chat_sexuality_out">Ocenili jste sexualitu.</string>
     <string name="chat_wink_in">Někdo na Vás mrknul</string>
     <string name="chat_wink_out">Mrknul(a) jste</string>
+    <string name="filter_filter">Filtr</string>
     <string name="filter_age_string">Od %1$d do %2$d</string>
     <string name="filter_only_beautiful">Pouzé hezké</string>
     <string name="filter_extra_parameters">Další parametry</string>
@@ -219,7 +220,6 @@
     </plurals>
     <string name="novice_sympathy">Posílejte sympatie pouze lidem, které se Vám\nopravdu líbí\ - a můžete začít příjemnou známost</string>
     <string name="general_edit_profile_message">Prosím vyplňte všechna povinná pole dotazníku</string>
-    <string name="general_premium_access_error">Pro tuto funkci je zapotřebí Premium</string>
     <string name="general_search_null_response_error">Nic nenalezeno. Zkuste  změnit nastavení filtrů.</string>
     <string name="change_filters">Změnit filtry</string>
     <string name="general_sex">Pohlaví</string>

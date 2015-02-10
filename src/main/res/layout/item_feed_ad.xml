@@ -6,30 +6,30 @@
 
     <!-- аватар -->
 
-    <com.topface.topface.ui.views.ImageViewRemote
-        android:id="@+id/ivIcon"
-        style="@style/FeedAvatar" />
+    <include
+        android:id="@+id/icon"
+        layout="@layout/item_feed_part_avatar"/>
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/ivIcon"
+        android:layout_toRightOf="@id/icon"
         android:layout_centerVertical="true">
 
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/ad_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/ListName"
+            style="@style/ListName.Ad"
             android:layout_marginRight="20dp" />
 
         <TextView
-            android:id="@+id/tvDescription"
+            android:id="@+id/ad_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/AdDescriptionText"
             android:gravity="left|center_vertical"
-            android:layout_below="@id/tvTitle"
+            android:layout_below="@id/ad_title"
             android:layout_marginRight="6dp" />
 
     </RelativeLayout>

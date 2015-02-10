@@ -34,6 +34,7 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
+import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.DatingLockPopupAction;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
@@ -187,6 +188,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         super.onRegisterStartActions(startActionsController);
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
+        // show popup when services disable
+        startActionsController.registerAction(new NotificationsDisablePopup(NavigationActivity.this, AC_PRIORITY_NORMAL));
         // promo popups
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
         startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
@@ -195,7 +198,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         startActionsController.registerAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_NORMAL, new DatingLockPopup.DatingLockPopupRedirectListener() {
             @Override
             public void onRedirect() {
-                showFragment(FragmentId.LIKES);
+                showFragment(FragmentId.TABBED_LIKES);
             }
         }));
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
