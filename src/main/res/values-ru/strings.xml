@@ -478,6 +478,7 @@
     <string name="popup_version_cancel">Напомнить позже</string>
     <string name="general_version_not_supported">Ваша версия приложения устарела и больше не поддерживается. Пожалуйста, обновите приложение</string>
     <string name="default_price_format">Итого: %.2f USD</string>
+    <string name="default_price_format_extended">Итого: %1$.2f %2$s</string>
     <string name="dating_online_only">%s, только онлайн</string>
     <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже %d%%:</string>
     <string name="general_gift">Подарок</string>
