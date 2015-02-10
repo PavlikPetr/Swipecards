@@ -127,7 +127,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     };
     private Handler mUpdater;
     private boolean mIsUpdating;
-    private boolean mIsNeedShowKeyboard;
+    private boolean mKeyboardWasShown;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedUser mUser;
@@ -236,12 +236,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @SuppressWarnings("ConstantConditions")
             @Override
             public void keyboardOpened() {
-                mIsNeedShowKeyboard = true;
+                mKeyboardWasShown = true;
             }
 
             @Override
             public void keyboardClosed() {
-                mIsNeedShowKeyboard = false;
+                mKeyboardWasShown = false;
             }
         });
         Debug.log(this, "+onCreate");
@@ -292,10 +292,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void restoreData(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             try {
-                boolean state = savedInstanceState.getBoolean(SOFT_KEYBOARD_LOCK_STATE);
-                if (state) {
-                    mIsNeedShowKeyboard = state;
-                }
+                mKeyboardWasShown = savedInstanceState.getBoolean(SOFT_KEYBOARD_LOCK_STATE);
                 boolean wasFailed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 FeedList<History> historyData = new FeedList<>();
@@ -446,7 +443,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onSaveInstanceState(outState);
         outState.putBoolean(WAS_FAILED, wasFailed);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
-        outState.putBoolean(SOFT_KEYBOARD_LOCK_STATE, mIsNeedShowKeyboard);
+        outState.putBoolean(SOFT_KEYBOARD_LOCK_STATE, mKeyboardWasShown);
         if (mUser != null) {
             try {
                 outState.putString(FRIEND_FEED_USER, mUser.toJson().toString());
@@ -640,7 +637,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void showKeyboardOnLargeScreen() {
-        if (isShowKeyboardInChat() && mIsNeedShowKeyboard) {
+        if (isShowKeyboardInChat() && mKeyboardWasShown) {
             Utils.showSoftKeyboard(getActivity(), null);
         }
     }
