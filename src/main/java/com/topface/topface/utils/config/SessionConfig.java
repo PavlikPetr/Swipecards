@@ -20,7 +20,6 @@ public class SessionConfig extends AbstractConfig {
     private static final String DATA_OPTIONS = "data_options";
     private static final String DATA_MARKET_PRODUCTS = "data_google_products";
     private static final String DATA_MARKET_PRODUCTS_DETAILS = "data_google_products_details";
-    private static final String DATA_FORTUMO_PRODUCTS = "data_fortumo_products";
     private static final String DATA_PAYMENTWALL_PRODUCTS = "data_pw_products";
     private static final String DATA_PAYMENTWALL_MOBILE_PRODUCTS = "data_pw_mobile_products";
 
@@ -37,7 +36,6 @@ public class SessionConfig extends AbstractConfig {
         // use market and paymentwall products
         addField(settingsMap, DATA_MARKET_PRODUCTS, Static.EMPTY);
         addField(settingsMap, DATA_MARKET_PRODUCTS_DETAILS, Static.EMPTY);
-        addField(settingsMap, DATA_FORTUMO_PRODUCTS, Static.EMPTY);
         addField(settingsMap, DATA_PAYMENTWALL_PRODUCTS, Static.EMPTY);
         addField(settingsMap, DATA_PAYMENTWALL_MOBILE_PRODUCTS, Static.EMPTY);
         //Social network account name
@@ -132,16 +130,6 @@ public class SessionConfig extends AbstractConfig {
         return setField(getSettingsMap(), DATA_MARKET_PRODUCTS_DETAILS, googleProductsDetailsJson);
     }
 
-    /**
-     * Sets Fortumo cache from fortumo products request
-     *
-     * @param productsResponseJson google play products json response
-     * @return true on success
-     */
-    public boolean setFortumoProductsData(String productsResponseJson) {
-        return setField(getSettingsMap(), DATA_FORTUMO_PRODUCTS, productsResponseJson);
-    }
-
     public boolean setPaymentWallProductsData(String pwProductsResponseJson, PaymentWallProducts.TYPE type) {
         return setField(getSettingsMap(), type == PaymentWallProducts.TYPE.MOBILE ? DATA_PAYMENTWALL_MOBILE_PRODUCTS :
                 DATA_PAYMENTWALL_PRODUCTS, pwProductsResponseJson);
@@ -165,15 +153,6 @@ public class SessionConfig extends AbstractConfig {
         return getStringField(getSettingsMap(), DATA_MARKET_PRODUCTS_DETAILS);
     }
 
-    /**
-     * Fortumo products cached json response
-     *
-     * @return fortumo products json
-     */
-    public String getFortumoProductsData() {
-        return getStringField(getSettingsMap(), DATA_FORTUMO_PRODUCTS);
-    }
-
     public String getPaymentwallProductsData(PaymentWallProducts.TYPE type) {
         return getStringField(getSettingsMap(), type == PaymentWallProducts.TYPE.MOBILE ? DATA_PAYMENTWALL_MOBILE_PRODUCTS :
                 DATA_PAYMENTWALL_PRODUCTS);
@@ -189,7 +168,7 @@ public class SessionConfig extends AbstractConfig {
     /**
      * Sets social account name
      *
-     * @param name    account name
+     * @param name account name
      */
     public void setSocialAccountName(String name) {
         setField(getSettingsMap(), SETTINGS_SOCIAL_ACCOUNT_NAME, name);
@@ -205,7 +184,7 @@ public class SessionConfig extends AbstractConfig {
     /**
      * Sets social account email
      *
-     * @param email    account email
+     * @param email account email
      */
     public void setSocialAccountEmail(String email) {
         setField(getSettingsMap(), SETTINGS_SOCIAL_ACCOUNT_EMAIL, email);

@@ -69,8 +69,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      * Результат запроса из OpenIAB: Товар уже куплен, но не потрачен
      */
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
-    public static final int PURCHASE_CANCEL_FORTUMO = 5;
-    public static final int PURCHASE_IMPOSSIBLE_FORTUMO = 6;
 
     private boolean mHasDeferredPurchase = false;
     private View mDeferredPurchaseButton;
@@ -166,11 +164,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         if (result.isFailure()) {
             //Если пользователь пытается купить еще не потраченый продукт
             switch (result.getResponse()) {
-                case PURCHASE_IMPOSSIBLE_FORTUMO:
-                    if (!result.getMessage().contains("pending")) {
-                        Debug.log("BillingFragment: Fortumo purchase error");
-                        break;
-                    }
                 case PURCHASE_ERROR_ITEM_ALREADY_OWNED:
                     if (isAdded()) {
                         onError(getActivity().getString(R.string.billing_item_already_owned));
@@ -181,7 +174,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     break;
                 case PURCHASE_CANCEL:
                 case PURCHASE_CANCEL_GP:
-                case PURCHASE_CANCEL_FORTUMO:
                     Debug.log("BillingFragment: User cancel purchase");
                     break;
                 default:

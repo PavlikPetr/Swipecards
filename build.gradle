@@ -70,6 +70,7 @@ android {
 
 
         buildConfigField "long", "BUILD_TIME", "0L";
+        buildConfigField "boolean", "FORTUMO_ENABLE", "false";
         buildConfigField "String", "GIT_HEAD_SHA", "null";
         buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                 "com.topface.billing.MarketApiType.GOOGLE_PLAY";
