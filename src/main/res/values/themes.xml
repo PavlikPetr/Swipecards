@@ -6,6 +6,8 @@
         <item name="colorPrimary">#03a9f4</item>
         <item name="colorPrimaryDark">#0287c3</item>
         <item name="colorAccent">#ee4493</item>
+        <item name="android:windowContentOverlay">@null</item>
+
         <!-- overflow menu settings -->
         <item name="android:itemTextAppearance">@style/PopupMenuTextApearance</item>
         <item name="android:dropDownListViewStyle">@style/PopupMenuListView</item>
@@ -89,7 +91,7 @@
     <style name="Topface.Theme.TransparentActionBarActivity" parent="@style/Theme.AppCompat">
         <item name="actionBarStyle">@style/Widget.Topface.TransparentActionBar</item>
         <item name="windowActionBarOverlay">true</item>
-        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/album_background</item>
     </style>
 
     <style name="Theme.Topface.Chat">
