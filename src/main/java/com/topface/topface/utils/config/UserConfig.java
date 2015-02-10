@@ -172,11 +172,11 @@ public class UserConfig extends AbstractUniqueConfig {
         return getStringField(getSettingsMap(), DATA_PIN_CODE);
     }
 
-    public void setDatingLockPopupShow(long lastTime) {
+    public void setDatingLockPopupRedirect(long lastTime) {
         setField(getSettingsMap(), DATING_LOCK_POPUP_TIME, lastTime);
     }
 
-    public long getDatingLockPopupShow() {
+    public long getDatingLockPopupRedirect() {
         return getLongField(getSettingsMap(), DATING_LOCK_POPUP_TIME);
     }
 
