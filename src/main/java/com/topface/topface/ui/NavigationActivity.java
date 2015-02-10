@@ -296,7 +296,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
         // popups
         mPopupManager = new PopupManager(this);
-        startActionsController.registerAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_NORMAL, new DatingLockPopup.DatingLockPopupRedirectListener() {
+        startActionsController.registerAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH, new DatingLockPopup.DatingLockPopupRedirectListener() {
             @Override
             public void onRedirect() {
                 if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
