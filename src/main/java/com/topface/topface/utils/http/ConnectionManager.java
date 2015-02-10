@@ -49,7 +49,7 @@ public class ConnectionManager {
     public static final String TAG = "ConnectionManager";
     private final HashMap<String, IApiRequest> mPendingRequests;
     private AtomicBoolean mStopRequestsOnBan = new AtomicBoolean(false);
-    private AuthAssistant authAssistant = new AuthAssistant(this);
+    private AuthAssistant mAuthAssistant = new AuthAssistant();
 
     private ConnectionManager() {
         mWorker = getNewExecutorService();
@@ -122,7 +122,7 @@ public class ConnectionManager {
                     response = request.constructApiResponse(ErrorCodes.UNKNOWN_SOCIAL_USER, "AuthToken is empty");
                 } else {
                     //Если SSID пустой, то добавлем к изначальном запросу запрос авторизации
-                    request = authAssistant.precedeRequestWithAuth(request);
+                    request = mAuthAssistant.precedeRequestWithAuth(request);
                     response = sendOrPend(request);
                 }
 
@@ -133,11 +133,11 @@ public class ConnectionManager {
                 if (response.isCodeEqual(ErrorCodes.SESSION_NOT_FOUND)) {
                     //Добавляем запрос авторизации
                     if (!AuthAssistant.isAuthUnacceptable(request)) {
-                        request = authAssistant.precedeRequestWithAuth(request);
+                        request = mAuthAssistant.precedeRequestWithAuth(request);
                         response = sendOrPend(request);
                     } else {
                         addToPendign(request);
-                        runRequest(authAssistant.explicitAuthRequest());
+                        runRequest(mAuthAssistant.createAuthRequest());
                         return;
                     }
 
@@ -148,7 +148,7 @@ public class ConnectionManager {
                     }
                 }
                 //Проверяем, нет ли в конечном запросе ошибок авторизации (т.е. не верного токена, пароля и т.п.)
-                checkAuthError(request, response);
+                mAuthAssistant.checkAuthError(response);
                 //Обрабатываем ответ от сервера
                 needResend = processResponse(request, response);
             }
@@ -235,27 +235,6 @@ public class ConnectionManager {
             Debug.log(String.format(Locale.ENGLISH, "add request %s to pending (canceled: %b)", apiRequest.getId(), apiRequest.isCanceled()));
             mPendingRequests.put(apiRequest.getId(), apiRequest);
         }
-    }
-
-    private boolean checkAuthError(IApiRequest request, IApiResponse response) {
-        boolean result = false;
-        //Эти ошибки могут возникать, если это запрос авторизации
-        // или когда наши регистрационные данные устарели (сменился токен, пароль и т.п)
-        if (response.isWrongAuthError()) {
-            //Если не удалос залогиниться, сбрасываем ssid и токен целиком
-            Ssid.remove();
-            AuthToken.getInstance().removeToken();
-
-            //Отправляем запрос на переавторизацию
-            sendBroadcastReauth(request.getContext());
-
-            //Изначальный же запрос отменяем, нам не нужно что бы он обрабатывался дальше
-            result = true;
-        } else {
-            Ssid.update();
-        }
-
-        return result;
     }
 
     /**
