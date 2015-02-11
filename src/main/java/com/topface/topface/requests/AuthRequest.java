@@ -1,17 +1,13 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import android.os.Build;
-import android.provider.Settings;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONException;
@@ -19,7 +15,7 @@ import org.json.JSONObject;
 
 import java.util.TimeZone;
 
-public class AuthRequest extends ApiRequest {
+public class AuthRequest extends PrimalAuthRequest {
     // Data
     public static final String SERVICE_NAME = "auth.login";
     public static final String FALLBACK_LOCALE = "en_US";
@@ -27,40 +23,20 @@ public class AuthRequest extends ApiRequest {
      * Временная зона девайса по умолчанию, отправляем каждый раз на сервер при авторизации
      */
     public static final String timezone = TimeZone.getDefault().getID();
-    private String sid; // id пользователя в социальной сети
-    private String token; // токен авторизации в соц сети
-    private String platform; // код социальной сети
-    private String locale; // локаль обращающегося клиента
-    private String clienttype; // тип клиента
-    private String clientversion; // версия клиента
-    private String clientosversion; // версия операционной системы
-    private String clientdevice; // тип устройства клиента
-    private String adId; // ad id from google play services
-    private int androidApiVersion; // версия апи
-    private Integer googlePlayServicesVersion; // версия google play services
-    private Integer codeVersion; // версия кода
-    private String login;  // логин для нашей авторизации
-    private String password; // пароль для нашей авторизации
-    private String refresh; // еще один токен для одноклассников
-    private AppsFlyerData appsflyer; //ID пользователя в appsflyer
-    private boolean tablet; // является ли данное устройство планшетом
+    private String mSid; // id пользователя в социальной сети
+    private String mToken; // токен авторизации в соц сети
+    private String mPlatform; // код социальной сети
+    private String mLogin;  // логин для нашей авторизации
+    private String mPassword; // пароль для нашей авторизации
+    private String mRefresh; // еще один токен для одноклассников
+    private AppsFlyerData mAppsflyer; //ID пользователя в appsflyer
 
     private AuthRequest(Context context) {
         super(context);
         doNeedAlert(false);
-        clienttype = BuildConfig.BILLING_TYPE.getClientType();
-        locale = getClientLocale();
-        androidApiVersion = Build.VERSION.SDK_INT;
-        codeVersion = BuildConfig.VERSION_CODE;
-        adId = App.getAppConfig().getAdId();
-        googlePlayServicesVersion = Utils.getGooglePlayServicesVersion();
-        clientversion = BuildConfig.VERSION_NAME;
-        clientosversion = Utils.getClientOsVersion();
-        clientdevice = Utils.getClientDeviceName();
-        tablet = App.getContext().getResources().getBoolean(R.bool.is_tablet);
         if (context != null) {
             try {
-                appsflyer = new AppsFlyerData(context);
+                mAppsflyer = new AppsFlyerData(context);
             } catch (Exception e) {
                 Debug.error("AppsFlyer exception", e);
             }
@@ -71,17 +47,17 @@ public class AuthRequest extends ApiRequest {
 
     public AuthRequest(AuthToken.TokenInfo authTokenInfo, Context context) {
         this(context);
-        platform = authTokenInfo.getSocialNet();
-        if (TextUtils.equals(platform, AuthToken.SN_TOPFACE)) {
-            login = authTokenInfo.getLogin();
-            password = authTokenInfo.getPassword();
-        } else if (TextUtils.equals(platform, AuthToken.SN_ODNOKLASSNIKI)) {
-            sid = authTokenInfo.getUserSocialId();
-            token = authTokenInfo.getTokenKey();
-            refresh = authTokenInfo.getExpiresIn();
+        mPlatform = authTokenInfo.getSocialNet();
+        if (TextUtils.equals(mPlatform, AuthToken.SN_TOPFACE)) {
+            mLogin = authTokenInfo.getLogin();
+            mPassword = authTokenInfo.getPassword();
+        } else if (TextUtils.equals(mPlatform, AuthToken.SN_ODNOKLASSNIKI)) {
+            mSid = authTokenInfo.getUserSocialId();
+            mToken = authTokenInfo.getTokenKey();
+            mRefresh = authTokenInfo.getExpiresIn();
         } else {
-            sid = authTokenInfo.getUserSocialId();
-            token = authTokenInfo.getTokenKey();
+            mSid = authTokenInfo.getUserSocialId();
+            mToken = authTokenInfo.getTokenKey();
         }
     }
 
@@ -90,7 +66,8 @@ public class AuthRequest extends ApiRequest {
         return true;
     }
 
-    private String getClientLocale() {
+    @Override
+    protected String getClientLocale() {
         String locale;
         //На всякий случай проверяем возможность получить локаль
         try {
@@ -104,46 +81,15 @@ public class AuthRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONObject data = new JSONObject()
-                .put("sid", sid)
-                .put("token", token)
-                .put("platform", platform)
-                .put("locale", locale)
-                .put("clientType", clienttype)
-                .put("clientVersion", clientversion)
-                .put("clientOsVersion", clientosversion)
-                .put("clientDevice", clientdevice)
-                .put("login", login)
-                .put("password", password)
-                .put("refresh", refresh)
-                .put("timezone", timezone)
-                .put("tablet", tablet)
-                .put("androidApiVersion", androidApiVersion)
-                .put("codeVersion", codeVersion)
-                .put("clientCarrier", Utils.getCarrierName());
-        if (!TextUtils.isEmpty(adId)) {
-            data.put("adId", adId);
-        }
-        if (googlePlayServicesVersion != null) {
-            data.put("googlePlayServicesVersion", googlePlayServicesVersion);
-        }
-
-        //Устанавливаем clientDeviceId
-        try {
-            String androidId = Settings.Secure.getString(
-                    getContext().getContentResolver(),
-                    Settings.Secure.ANDROID_ID
-            );
-
-            if (!TextUtils.isEmpty(androidId)) {
-                data.put("clientDeviceId", androidId);
-            }
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-
-        if (appsflyer != null) {
-            data.put("appsflyer", appsflyer.toJson());
+        JSONObject data = super.getRequestData();
+        data.put("sid", mSid)
+                .put("platform", mPlatform)
+                .put("login", mLogin)
+                .put("password", mPassword)
+                .put("refresh", mRefresh)
+                .put("timezone", timezone);
+        if (mAppsflyer != null) {
+            data.put("appsflyer", mAppsflyer.toJson());
         }
         return data;
     }
@@ -158,22 +104,18 @@ public class AuthRequest extends ApiRequest {
         return false;
     }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
-    }
-
     @Override
     public void exec() {
-        if (TextUtils.isEmpty(platform)) {
+        if (TextUtils.isEmpty(mPlatform)) {
             handleFail(ErrorCodes.UNVERIFIED_TOKEN, "Key params are empty");
             return;
         } else {
-            if (TextUtils.equals(platform, AuthToken.SN_TOPFACE)) {
-                if (TextUtils.isEmpty(login) || TextUtils.isEmpty(password)) {
+            if (TextUtils.equals(mPlatform, AuthToken.SN_TOPFACE)) {
+                if (TextUtils.isEmpty(mLogin) || TextUtils.isEmpty(mPassword)) {
                     handleFail(ErrorCodes.UNVERIFIED_TOKEN, "Key params are empty");
                     return;
                 }
-            } else if (TextUtils.isEmpty(sid) || TextUtils.isEmpty(token)) {
+            } else if (TextUtils.isEmpty(mSid) || TextUtils.isEmpty(mToken)) {
                 handleFail(ErrorCodes.UNVERIFIED_TOKEN, "Key params are empty");
                 return;
             }
