@@ -21,7 +21,12 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
 
     protected void fillData(JSONObject data) {
         more = data.optBoolean("more");
-        items = getList(data.optJSONArray("items"));
+
+        if (data.has("items")){
+            items = getList(data.optJSONArray("items"));
+        }else{
+            items = getList(data.optJSONArray("users"));
+        }
     }
 
     private <T extends FeedItem> FeedList<T> getList(JSONArray list) {

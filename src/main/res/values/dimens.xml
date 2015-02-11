@@ -39,4 +39,10 @@
 
     <dimen name="action_bar_size">48dp</dimen>
 
+    <!-- users photo size on screen - choose photo for leaders -->
+    <dimen name="photo_height">118dp</dimen>
+    <dimen name="photo_width">118dp</dimen>
+
+    <dimen name="add_to_leader_spacing_value">2dp</dimen>
+
 </resources>

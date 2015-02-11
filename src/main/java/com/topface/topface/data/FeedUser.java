@@ -36,6 +36,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
      * Объект основного фото пользователя
      */
     public Photo photo;
+    public String status;
     public Photos photos;
     public int photosCount;
     /**
@@ -70,6 +71,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         this.id = user.optInt("id");
 
         this.first_name = user.optString("firstName");
+        this.status = user.optString("status");
         this.age = user.optInt("age");
         this.online = user.optBoolean("online");
         this.city = new City(user.optJSONObject("city"));

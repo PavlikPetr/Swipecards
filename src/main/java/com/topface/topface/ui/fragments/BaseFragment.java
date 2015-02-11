@@ -266,7 +266,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         TABBED_DIALOGS(3),
         TABBED_VISITORS(4),
         TABBED_LIKES(5),
-        PHOTOBLOG(6),
+        PHOTO_BLOG(6),
         LIKES_CLOSINGS(7, true),
         MUTUAL_CLOSINGS(8, true),
         GEO(9),

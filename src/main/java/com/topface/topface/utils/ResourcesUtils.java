@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 
@@ -22,8 +23,9 @@ public class ResourcesUtils {
             case LIKES_CLOSINGS:
                 titleId = R.string.general_likes;
                 break;
-            case PHOTOBLOG:
+            case PHOTO_BLOG:
                 titleId = R.string.general_photoblog;
+                break;
             case TABBED_LIKES:
                 titleId = R.string.general_sympathies;
                 break;

@@ -89,6 +89,11 @@ public class Options extends AbstractData {
     public AboutApp aboutApp = new AboutApp();
 
     /**
+     * buttons add to leaders
+     */
+    public List<LeaderButton> buyLeaderButtons = new ArrayList<>();
+
+    /**
      * Стоимость вставания в лидеры
      */
     public int priceLeader = 8;
@@ -171,6 +176,9 @@ public class Options extends AbstractData {
             for (PageInfo pageInfo : pagesArr) {
                 pages.put(pageInfo.name, pageInfo);
             }
+            buyLeaderButtons.add(new LeaderButton("1 фото за 6 монет", 6, 1));
+            buyLeaderButtons.add(new LeaderButton("3 фото за 14 монет", 14, 3));
+            buyLeaderButtons.add(new LeaderButton("5 фото за 20 монет", 20, 5));
             JSONObject aboutAppJson = response.optJSONObject("aboutApp");
             aboutApp = new AboutApp(aboutAppJson.optString("title"), aboutAppJson.optString("url"));
             offerwall = response.optString("offerwall");
@@ -283,8 +291,8 @@ public class Options extends AbstractData {
                 bonus.counter = bonusObject.optInt("counter");
                 bonus.timestamp = bonusObject.optLong("counterTimestamp");
                 bonus.integrationUrl = bonusObject.optString("integrationUrl");
-                bonus.buttonText = bonusObject.optString("buttonText",bonus.buttonText);
-                bonus.buttonPicture = bonusObject.optString("buttonPicture",bonus.buttonPicture);
+                bonus.buttonText = bonusObject.optString("buttonText", bonus.buttonText);
+                bonus.buttonPicture = bonusObject.optString("buttonPicture", bonus.buttonPicture);
             }
             // offerwalls for
             JSONObject jsonOfferwalls = response.optJSONObject("offerwalls");
@@ -418,6 +426,18 @@ public class Options extends AbstractData {
         public AboutApp() {
             title = App.getContext().getString(R.string.settings_topface_url);
             url = App.getContext().getString(R.string.settings_topface_url_title);
+        }
+    }
+
+    public static class LeaderButton {
+        public String title;
+        public int price;
+        public int photoCount;
+
+        public LeaderButton(String title, int price, int photoCount) {
+            this.title = title;
+            this.price = price;
+            this.photoCount = photoCount;
         }
     }
 
@@ -579,7 +599,7 @@ public class Options extends AbstractData {
         public int counter;
         public long timestamp;
         public String integrationUrl;
-        public String buttonText =App.getContext().getString(R.string.general_bonus);// по умолчанию кнопка имеет название "Бонус"
+        public String buttonText = App.getContext().getString(R.string.general_bonus);// по умолчанию кнопка имеет название "Бонус"
         public String buttonPicture = null;// по умолчанию кнопка отображается с картинкой ic_bonus_1
     }
 
