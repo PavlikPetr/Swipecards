@@ -156,6 +156,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             }
         }
     };
+
     private INavigationFragmentsListener mFragmentSwitchListener;
     private ListView mListView;
 

@@ -35,7 +35,7 @@ public class PhotoBlogListAdapter extends FeedAdapter<FeedPhotoBlog> {
 
     @Override
     protected FeedItemViewConstructor.TypeAndFlag getViewCreationFlag() {
-        return new FeedItemViewConstructor.TypeAndFlag(FeedItemViewConstructor.Type.HEART);
+        return new FeedItemViewConstructor.TypeAndFlag(FeedItemViewConstructor.Type.PHOTOBLOG);
     }
 
     @Override

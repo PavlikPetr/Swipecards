@@ -16,6 +16,7 @@
         android:horizontalSpacing="@dimen/add_to_leader_spacing_value"
         android:listSelector="@android:color/transparent"
         android:numColumns="@integer/add_to_leader_column_count"
+        android:paddingBottom="2dp"
         android:paddingLeft="@dimen/add_to_leader_spacing_value"
         android:paddingRight="@dimen/add_to_leader_spacing_value"
         android:verticalSpacing="@dimen/add_to_leader_spacing_value" />

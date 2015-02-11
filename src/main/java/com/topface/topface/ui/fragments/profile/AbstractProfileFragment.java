@@ -90,7 +90,9 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Bundle args = getArguments();
-        mBodyStartPageClassName = args.getString(INTENT_START_BODY_PAGE_NAME);
+        if (args != null && args.containsKey(INTENT_START_BODY_PAGE_NAME)) {
+            mBodyStartPageClassName = args.getString(INTENT_START_BODY_PAGE_NAME);
+        }
     }
 
     @Override
@@ -129,9 +131,12 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
 
     @Override
     protected void restoreState() {
-        mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
-        mHeaderStartPageClassName = getArguments().getString(ARG_TAG_INIT_HEADER_PAGE);
-        mCallingClass = getArguments().getString(ARG_TAG_CALLING_CLASS);
+        Bundle args = getArguments();
+        if (args != null) {
+            mBodyStartPageClassName = args.getString(ARG_TAG_INIT_BODY_PAGE);
+            mHeaderStartPageClassName = args.getString(ARG_TAG_INIT_HEADER_PAGE);
+            mCallingClass = args.getString(ARG_TAG_CALLING_CLASS);
+        }
     }
 
     protected void onProfileUpdated() {

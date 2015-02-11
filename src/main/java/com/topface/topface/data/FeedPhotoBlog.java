@@ -23,6 +23,10 @@ public class FeedPhotoBlog extends FeedItem implements Parcelable {
     public FeedPhotoBlog() {
     }
 
+    public FeedPhotoBlog(JSONObject data) {
+        super(data);
+    }
+
     protected FeedPhotoBlog(Parcel in) {
         super(in);
     }

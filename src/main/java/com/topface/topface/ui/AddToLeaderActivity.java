@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,8 +27,8 @@ import com.topface.topface.ui.adapters.LeadersPhotoGridAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.GridViewWithHeaderAndFooter;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
@@ -36,6 +37,7 @@ import java.util.List;
 public class AddToLeaderActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     public final static int ADD_TO_LEADER_ACTIVITY_ID = 1;
+    private static final int MAX_SYMBOL_COUNT = 120;
 
     private GridViewWithHeaderAndFooter mGridView;
     private LockerView mLoadingLocker;
@@ -60,6 +62,8 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private View getHeaderView() {
         View headerView = getLayoutInflater().inflate(R.layout.add_leader_grid_view_header, null);
         mEditText = (EditText) headerView.findViewById(R.id.yourGreetingEditText);
+        // set max symbol count for input status
+        mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_SYMBOL_COUNT)});
         initButtons(headerView);
         return headerView;
     }
@@ -83,6 +87,14 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         if (v.getTag() != null) {
             pressedAddToLeader((int) v.getTag());
         }
+    }
+
+    @Override
+    protected void onPause() {
+        if (mEditText != null) {
+            Utils.hideSoftKeyboard(this, mEditText);
+        }
+        super.onPause();
     }
 
     private void pressedAddToLeader(int position) {
@@ -127,21 +139,11 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private void updateProfileInfo(Profile profile) {
         mLoadingLocker.setVisibility(View.VISIBLE);
         final AlbumRequest request = new AlbumRequest(this, profile.uid, AlbumRequest.MODE_LEADER, AlbumLoadController.FOR_GALLERY);
-        final RetryViewCreator rv = new RetryViewCreator.Builder(this, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                request.exec();
-            }
-        }).backgroundColor(getResources().getColor(R.color.bg_main)).build();
-        rv.setVisibility(View.GONE);
-//        mLoadingLocker.addView(rv.getView());
-
         request.callback(new DataApiHandler<Photos>() {
 
             @Override
             protected void success(Photos data, IApiResponse response) {
                 fillPhotos(data);
-                rv.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -151,7 +153,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                rv.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -166,10 +167,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     private void fillPhotos(Photos photos) {
         splitPhotos(photos);
-        mGridView.setColumnWidth(mGridView.getGridViewColumnWidth());
-        mGridView.setNumColumns(mGridView.getGridViewNumColumns());
-        mUsePhotosAdapter = new LeadersPhotoGridAdapter(this, usePhotos, mGridView.getGridViewColumnWidth());
-        mGridView.setAdapter(mUsePhotosAdapter);
+        setAdapter();
     }
 
     private void splitPhotos(Photos photos) {
@@ -179,5 +177,12 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                 usePhotos.add(new Photo(photo));
             }
         }
+    }
+
+    private void setAdapter() {
+        mGridView.setColumnWidth(mGridView.getGridViewColumnWidth());
+        mGridView.setNumColumns(mGridView.getGridViewNumColumns());
+        mUsePhotosAdapter = new LeadersPhotoGridAdapter(this, usePhotos, mGridView.getGridViewColumnWidth());
+        mGridView.setAdapter(mUsePhotosAdapter);
     }
 }

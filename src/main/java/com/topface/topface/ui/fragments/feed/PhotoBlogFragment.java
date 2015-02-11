@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.view.Menu;
@@ -20,12 +19,12 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SendLikeRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.OwnProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
-import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
@@ -144,7 +143,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     private void openOwnProfile() {
-        MenuFragment.selectFragment(FragmentId.PROFILE);
+        getActivity().startActivity(new Intent(getActivity(), OwnProfileActivity.class));
     }
 
 
@@ -173,21 +172,14 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
         if (mEmptyFeedView == null) {
             mEmptyFeedView = inflated;
         }
-        ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
-        initEmptyScreenWithoutLikes(viewFlipper);
+        if (errorCode != ErrorCodes.RESULT_OK) {
+            ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
+            initEmptyScreenWithoutLikes(viewFlipper);
+        }
     }
 
     private void initEmptyScreenWithoutLikes(ViewFlipper viewFlipper) {
         viewFlipper.setDisplayedChild(0);
-        View currentView = viewFlipper.getChildAt(0);
-        if (currentView != null) {
-            currentView.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent("EmptyLikes"));
-                }
-            });
-        }
     }
 
     @Override
@@ -217,7 +209,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
 
     @Override
     protected int getEmptyFeedLayout() {
-        return R.layout.layout_empty_likes;
+        return R.layout.layout_empty_photoblog;
     }
 
     @Override
@@ -238,7 +230,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AddToLeaderActivity.ADD_TO_LEADER_ACTIVITY_ID && resultCode == Activity.RESULT_OK) {
+        if (requestCode == AddToLeaderActivity.ADD_TO_LEADER_ACTIVITY_ID) {
             updatePhotoblogList();
         }
     }

@@ -17,6 +17,7 @@
         style="@style/EditTextEnterLeaderText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonsContainer" />
+        android:layout_below="@id/buttonsContainer"
+        android:maxLines="2" />
 
 </RelativeLayout>
