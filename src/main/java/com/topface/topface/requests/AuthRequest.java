@@ -87,7 +87,8 @@ public class AuthRequest extends PrimalAuthRequest {
                 .put("login", mLogin)
                 .put("password", mPassword)
                 .put("refresh", mRefresh)
-                .put("timezone", timezone);
+                .put("timezone", timezone)
+                .put("token", mToken);
         if (mAppsflyer != null) {
             data.put("appsflyer", mAppsflyer.toJson());
         }
