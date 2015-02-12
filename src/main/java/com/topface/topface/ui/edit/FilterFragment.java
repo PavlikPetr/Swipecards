@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -479,7 +480,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 R.layout.filter_edit_form_dialog_cell,
                 mFormInfo.getEntriesByTitleId(titleId),
                 mFormInfo.getEntry(titleId, targetId)));
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        ContextThemeWrapper ctw = new ContextThemeWrapper(getActivity(), R.style.AlertDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctw);
         builder.setView(view);
         final Dialog dialog = builder.create();
         dialog.show();

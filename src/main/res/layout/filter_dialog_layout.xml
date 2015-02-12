@@ -2,6 +2,7 @@
 <ListView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/edit_form_selector_background_color_release_state"
     android:divider="@color/filter_fragment_divider_color"
     android:dividerHeight="@dimen/filter_fragment_divider_height"
     android:tag="loFilterList" />

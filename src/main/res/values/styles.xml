@@ -883,4 +883,11 @@
         <item name="android:background">@color/edit_form_selector_background_color_release_state
         </item>
     </style>
+
+    <style name="AlertDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:background">
+            @color/edit_form_selector_background_color_release_state
+        </item>
+    </style>
+
 </resources>
