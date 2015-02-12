@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 /**
@@ -62,6 +63,9 @@ public class ActionBarCustomViewTitleSetterDelegate extends ActionBarOnlineSette
                         } else {
                             activity.finish();
                         }
+                    }
+                    if (activity instanceof PhotoSwitcherActivity) {
+                        ((PhotoSwitcherActivity) activity).deletePhotoRequest();
                     }
                 }
             });

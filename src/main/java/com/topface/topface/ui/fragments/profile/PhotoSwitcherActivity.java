@@ -405,7 +405,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
     }
 
-    private void deletePhotoRequest() {
+    public void deletePhotoRequest() {
         if (mDeletedPhotos.isEmpty()) return;
 
         PhotoDeleteRequest request = new PhotoDeleteRequest(this);
