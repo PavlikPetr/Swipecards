@@ -342,6 +342,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     @Override
     protected boolean onPreFinish() {
+        deletePhotoRequest();
         Intent intent = getIntent();
         if (intent.getBooleanExtra(INTENT_FILL_PROFILE_ON_BACK, false)) {
             startUserProfileActivity();
