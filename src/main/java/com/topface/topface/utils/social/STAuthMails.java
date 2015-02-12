@@ -53,21 +53,23 @@ public class STAuthMails {
 
         // сортировка всего списка мыл по принципу - более @LIMIT_PER_LETTER на одну букву - нельзя
         for (String email : list) {
-            Character c = email.charAt(0);
-            boolean add = false;
+            if (TextUtils.isEmpty(email)) {
+                Character c = email.charAt(0);
+                boolean add = false;
 
-            if (counter.containsKey(c)) {
-                if (counter.get(c) < LIMIT_PER_LETTER) {
+                if (counter.containsKey(c)) {
+                    if (counter.get(c) < LIMIT_PER_LETTER) {
+                        add = true;
+                        counter.put(c, counter.get(c) + 1);
+                    }
+                } else {
                     add = true;
-                    counter.put(c, counter.get(c) + 1);
+                    counter.put(c, 1);
                 }
-            } else {
-                add = true;
-                counter.put(c, 1);
-            }
 
-            if (add) {
-                converted.add(email);
+                if (add) {
+                    converted.add(email);
+                }
             }
         }
 
