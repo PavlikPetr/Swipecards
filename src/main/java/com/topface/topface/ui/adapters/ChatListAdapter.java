@@ -124,7 +124,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             holder = (ViewHolder) convertView.getTag();
 
         setTypeDifferences(holder, type, item);
-        if (type != T_WAIT || type != T_RETRY) {
+        if (type != T_WAIT && type != T_RETRY) {
             setViewInfo(holder, item);
         }
 
@@ -228,6 +228,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public void showRetrySendMessage(History emptyItem, ApiRequest request) {
         emptyItem.setLoaderTypeFlags(IListLoader.ItemType.REPEAT);
         mHashRequestByWaitingRetryItem.put(emptyItem, request);
+        notifyDataSetChanged();
+    }
+
+    public void removeLastItem() {
+        getData().remove(0);
         notifyDataSetChanged();
     }
 

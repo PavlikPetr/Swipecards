@@ -67,9 +67,11 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.AttitudeHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -118,6 +120,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
     public static final String MAKE_ITEM_READ_BY_UID = "com.topface.topface.feedfragment.MAKE_READ_BY_UID";
     public static final String INITIAL_MESSAGE = "initial_message";
+    public static final String MESSAGE = "message";
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
@@ -182,13 +185,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         @Override
         public void onReceive(Context context, Intent intent) {
             String id = intent.getStringExtra(GCMUtils.USER_ID_EXTRA);
+            final int type = intent.getIntExtra(GCMUtils.GCM_TYPE, -1);
             if (!TextUtils.isEmpty(id) && Integer.parseInt(id) == mUserId) {
                 update(true, "update counters");
                 startTimer();
-                GCMUtils.cancelNotification(App.getContext(), GCMUtils.GCM_TYPE_MESSAGE);
+                GCMUtils.cancelNotification(App.getContext(), type);
             }
         }
     };
+    private String mMessage;
     private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mIsKeyboardOpened;
@@ -366,6 +371,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void restoreData(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             try {
+                mMessage = savedInstanceState.getString(MESSAGE);
+                setSavedMessage(mMessage);
                 boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 FeedList<History> historyData = new FeedList<>();
@@ -511,6 +518,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (!TextUtils.isEmpty(mMessage)) {
+            outState.putString(MESSAGE, mMessage);
+        }
         outState.putBoolean(WAS_FAILED, wasFailed);
         outState.putBoolean(KEYBOARD_OPENED, mIsKeyboardOpened);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
@@ -831,18 +841,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.add_to_black_list_action:
                 if (mUser.id > 0) {
-                        final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
-                        final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
-                        loader.setVisibility(View.VISIBLE);
-                        icon.setVisibility(View.GONE);
-                        ApiRequest request;
-                        if (mUser.blocked) {
-                            request = new DeleteBlackListRequest(mUser.id, getActivity());
-                        } else {
-                            request = new BlackListAddRequest(mUser.id, getActivity());
-                        }
-                        request.exec();
+                    final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
+                    final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
+                    loader.setVisibility(View.VISIBLE);
+                    icon.setVisibility(View.GONE);
+                    ApiRequest request;
+                    if (mUser.blocked) {
+                        request = new DeleteBlackListRequest(mUser.id, getActivity());
+                    } else {
+                        request = new BlackListAddRequest(mUser.id, getActivity());
                     }
+                    request.exec();
+                }
                 break;
 
             case R.id.add_to_bookmark_action:
@@ -892,7 +902,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-
+        setSavedMessage(mMessage);
         if (mUserId == 0) {
             getActivity().setResult(Activity.RESULT_CANCELED);
             getActivity().finish();
@@ -909,7 +919,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
 
         IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mNewMessageReceiver, filter);
+        LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mNewMessageReceiver, filter);
 
         mUpdater = new Handler();
         startTimer();
@@ -930,7 +940,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onPause() {
         super.onPause();
         deleteTimerDelay();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mNewMessageReceiver);
+        LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         Utils.hideSoftKeyboard(getActivity(), mEditBox);
         mIsKeyboardOpened = false;
@@ -1019,6 +1029,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, IApiResponse response) {
+                if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
+                    mMessage = mAdapter.getData().get(0).text;
+                    mAdapter.removeLastItem();
+                    startActivityForResult(PurchasesActivity.createVipBuyIntent(getResources()
+                                    .getString(R.string.messaging_block_buy_vip), "SendMessage"),
+                            PurchasesActivity.INTENT_BUY_VIP);
+                    return;
+                }
                 if (mAdapter != null && cancelable) {
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                     mAdapter.showRetrySendMessage(messageItem, messageRequest);
@@ -1269,4 +1287,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private boolean isShowKeyboardInChat() {
         return Device.getMaxDisplaySize() >= getActivity().getResources().getDimension(R.dimen.min_screen_height_chat_fragment);
     }
+
+    private void setSavedMessage(String message) {
+        if (!TextUtils.isEmpty(message)) {
+            mEditBox.setText(message);
+            mEditBox.setSelection(message.length());
+        }
+    }
+
 }

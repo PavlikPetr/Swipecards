@@ -188,6 +188,10 @@
         <item quantity="other">Per inviare il regalo compra ancora %d monete</item>
         <item quantity="one">Per inviare il regalo compra ancora %d moneta</item>
     </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="other">Compra ancora %d monete per inviare un’ammirazione</item>
+        <item quantity="one">Compra ancora %d moneta per inviare un’ammirazione</item>
+    </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="other">Per vedere a chi piaci compra ancora %d monete</item>
         <item quantity="one">Per vedere a chi piaci compra ancora %d moneta</item>
@@ -195,6 +199,10 @@
     <plurals name="buying_leaders_you_need_coins">
         <item quantity="other">Per farti vedere da tutti compra ancora %d monete</item>
         <item quantity="one">Per farti vedere da tutti compra ancora %d moneta</item>
+    </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="other">Ti mancano %d monete</item>
+        <item quantity="one">Ti mancano %d monete</item>
     </plurals>
     <string name="buying_default_message">Puoi inviare regali e ammirazioni pagando con le monete</string>
     <string name="buying_money">Acquisto monete</string>
@@ -587,4 +595,22 @@
     <string name="maximum_number_of_users">Hai scelto il numero massimo degli utenti</string>
     <string name="logout_if_email_already_registred">L’utente con questo e-mail esiste già. Se questo indirizzo mail è tuo, devi uscire dall’account attuale e accedere all’account %s</string>
     <string name="recover_password_instructions">Al tuo indirizzo e-mail sono state inviate le istruzioni su come ripristinare la password</string>
+    <string name="email_changing">Cambio e-mail</string>
+    <string name="hint_faces_filter">Cambia i parametri della ricerca e conosci la gente interessante</string>
+    <string name="hint_faces_buy_like">Più simpatie hai, più spesso ricevi le valutazioni. Ricordati di rifornire la quantità di simpatie.</string>
+    <string name="hint_myprofile_buy_vip">Compra lo stato VIP e sfrutta la possibilità di contattare chi vuoi tu</string>
+    <string name="pull_to_refresh_pull_label">Tira per aggiornare…</string>
+    <string name="pull_to_refresh_release_label">Lascia per aggiornare…</string>
+    <string name="messaging_block_buy_vip">Devi avere lo stato VIP per continuare il dialogo</string>
+    <string name="pull_to_refresh_refreshing_label">Caricamento…</string>
+    <string name="user_added_to_black_list">L’utente è stato aggiunto nella black list</string>
+    <string name="user_deleted_from_black_list">L’utente è stato tolto dalla black list</string>
+    <string name="user_added_to_bookmark">L’utente è stato aggiunto nei preferiti</string>
+    <string name="user_deleted_from_bookmark">L’utente è stato tolto dai preferiti</string>
+    <string name="preload_photo_type_wifi_3g">WiFi e 3G</string>
+    <string name="preload_photo_type_wifi">Solo WiFi</string>
+    <string name="preload_photo_type_always_on">Sempre accesa</string>
+    <string name="preload_photo_type_preload_off">Spenta</string>
+    <string name="wrong_time_popup_text">Non siamo riusciti a stabilire una connessione sicura.\nProbabilmente il tuo dispositivo mostra una data o l’ora scorretta.</string>
+    <string name="wrong_time_popup_button">Aprire i parametri</string>
 </resources>

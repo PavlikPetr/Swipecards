@@ -22,6 +22,7 @@ import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
@@ -247,6 +248,7 @@ public class FullscreenController {
             public void success(final Banner data, IApiResponse response) {
                 if (data.action.equals(Banner.ACTION_URL)) {
                     if (showFullscreenBanner(data.parameter)) {
+                        TopfaceAdStatistics.sendFullscreenShown(data);
                         isFullScreenBannerVisible = true;
                         addLastFullscreenShowedTime();
                         final View fullscreenViewGroup = mActivity.getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
@@ -264,6 +266,7 @@ public class FullscreenController {
                                 hideFullscreenBanner(bannerContainer);
                                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(data.parameter));
                                 mActivity.startActivity(intent);
+                                TopfaceAdStatistics.sendFullscreenClicked(data);
                             }
                         });
 
@@ -271,6 +274,7 @@ public class FullscreenController {
                             @Override
                             public void onClick(View v) {
                                 hideFullscreenBanner(bannerContainer);
+                                TopfaceAdStatistics.sendFullscreenClosed(data);
                             }
                         });
                     }

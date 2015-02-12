@@ -4,11 +4,11 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.statistics.NotificationStatistics;
-import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.gcmutils.GcmBroadcastReceiver;
 
@@ -30,49 +30,48 @@ public class GcmIntentService extends IntentService {
         isOnMessageReceived.set(true);
         if (intent != null) {
             Debug.log("GCM: Try show\n" + intent.getExtras());
-            if (GCMUtils.showNotificationIfNeed(intent, context)) {
-                //Сообщаем о том что есть новое уведомление и нужно обновить список
-                Intent broadcastReceiver = new Intent(GCMUtils.GCM_NOTIFICATION);
-                String user = intent.getStringExtra("user");
+            // send update broadcast in any case
+            //Сообщаем о том что есть новое уведомление и нужно обновить список
+            Intent broadcastNotificationIntent = new Intent(GCMUtils.GCM_NOTIFICATION);
+            String user = intent.getStringExtra("user");
 
-                int type = GCMUtils.getType(intent);
-                NotificationStatistics.sendReceived(type, GCMUtils.getLabel(intent));
+            int type = GCMUtils.getType(intent);
+            NotificationStatistics.sendReceived(type, GCMUtils.getLabel(intent));
 
-                if (user != null) {
-                    String userId = getUserId(user);
-                    broadcastReceiver.putExtra(GCMUtils.USER_ID_EXTRA, userId);
-                    context.sendBroadcast(broadcastReceiver);
-                    Intent updateIntent = null;
-                    switch (GCMUtils.getType(intent)) {
-                        case GCMUtils.GCM_TYPE_MESSAGE:
-                        case GCMUtils.GCM_TYPE_DIALOGS:
-                        case GCMUtils.GCM_TYPE_GIFT:
-                            updateIntent = new Intent(GCMUtils.GCM_DIALOGS_UPDATE);
-                            break;
-                        case GCMUtils.GCM_TYPE_MUTUAL:
-                            updateIntent = new Intent(GCMUtils.GCM_MUTUAL_UPDATE);
-                            break;
-                        case GCMUtils.GCM_TYPE_LIKE:
-                            updateIntent = new Intent(GCMUtils.GCM_LIKE_UPDATE);
-                            break;
-                        case GCMUtils.GCM_TYPE_GUESTS:
-                            updateIntent = new Intent(GCMUtils.GCM_GUESTS_UPDATE);
-                            break;
-                        case GCMUtils.GCM_TYPE_PEOPLE_NEARBY:
-                            updateIntent = new Intent(GCMUtils.GCM_PEOPLE_NEARBY_UPDATE);
-                            break;
-                    }
-                    if (updateIntent != null) {
-                        context.sendBroadcast(updateIntent);
-                    }
+            if (user != null) {
+                String userId = getUserId(user);
+                LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(App.getContext());
+
+                broadcastNotificationIntent.putExtra(GCMUtils.USER_ID_EXTRA, userId);
+                localBroadcastManager.sendBroadcast(broadcastNotificationIntent);
+                Intent updateIntent = null;
+
+                int itype = GCMUtils.getType(intent);
+                switch (itype) {
+                    case GCMUtils.GCM_TYPE_MESSAGE:
+                    case GCMUtils.GCM_TYPE_DIALOGS:
+                    case GCMUtils.GCM_TYPE_GIFT:
+                        updateIntent = new Intent(GCMUtils.GCM_DIALOGS_UPDATE);
+                        break;
+                    case GCMUtils.GCM_TYPE_MUTUAL:
+                        updateIntent = new Intent(GCMUtils.GCM_MUTUAL_UPDATE);
+                        break;
+                    case GCMUtils.GCM_TYPE_LIKE:
+                        updateIntent = new Intent(GCMUtils.GCM_LIKE_UPDATE);
+                        break;
+                    case GCMUtils.GCM_TYPE_GUESTS:
+                        updateIntent = new Intent(GCMUtils.GCM_GUESTS_UPDATE);
+                        break;
+                    case GCMUtils.GCM_TYPE_PEOPLE_NEARBY:
+                        updateIntent = new Intent(GCMUtils.GCM_PEOPLE_NEARBY_UPDATE);
+                        break;
                 }
-                if (Editor.isEditor()) {
-                    Intent test = new Intent("com.topface.testapp.GCMTest");
-                    test.putExtras(intent.getExtras());
-                    App.getContext().sendBroadcast(test);
+                if (updateIntent != null) {
+                    localBroadcastManager.sendBroadcast(updateIntent);
                 }
             }
-
+            // try to show notification
+            GCMUtils.showNotificationIfNeed(intent, context);
         }
     }
 

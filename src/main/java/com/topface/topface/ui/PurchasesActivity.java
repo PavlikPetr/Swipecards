@@ -235,6 +235,6 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     @Override
     protected boolean onPreFinish() {
-        return (showTopfaceOfferwall() || showBonus()) || super.onPreFinish();
+        return !(showTopfaceOfferwall() || showBonus()) && super.onPreFinish();
     }
 }
