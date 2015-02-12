@@ -13,7 +13,6 @@ import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.RetryDialog;
 import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Editor;
@@ -58,7 +57,7 @@ public abstract class ApiRequest implements IApiRequest {
 
     public ApiRequest(Context context) {
         if (isNeedAuth()) {
-            ssid = Static.EMPTY;
+            ssid = Ssid.get();
         }
         this.context = context;
         doNeedAlert = true;
