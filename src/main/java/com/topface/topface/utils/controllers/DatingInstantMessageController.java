@@ -113,7 +113,7 @@ public class DatingInstantMessageController {
         });
         UserConfig userConfig = App.getUserConfig();
         String defaultMessage = userConfig.getDefaultDatingMessage();
-        if (defaultMessage.isEmpty()) {
+        if (TextUtils.isEmpty(defaultMessage)) {
             userConfig.setDefaultDatingMessage(text);
             userConfig.saveConfig();
         }

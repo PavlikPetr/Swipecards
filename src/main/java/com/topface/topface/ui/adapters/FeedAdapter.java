@@ -142,7 +142,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     protected View getViewByType(int type, int position, View view, ViewGroup viewGroup) {
         if (type == T_NATIVE_AD) {
             if (mFeedAdView == null) {
-                initFeedAd();
+                mFeedAdView = getAdView();
             }
             mFeedAd.show(mFeedAdView);
             return mFeedAdView;
