@@ -672,7 +672,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
-                    Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, DatingFragment.class, getActivity());
+                    Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, getActivity(),isChatAvailable());
                     startActivityForResult(intent, UserProfileActivity.INTENT_USER_PROFILE);
                     EasyTracker.sendEvent("Dating", "Additional", "Profile", 1L);
                 }
@@ -704,6 +704,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             default:
         }
+    }
+
+    private boolean isChatAvailable() {
+        return !(!CacheProfile.premium && CacheProfile.getOptions().blockChatNotMutual && !mCurrentUser.isMutualPossible);
     }
 
     private void sendSympathy() {

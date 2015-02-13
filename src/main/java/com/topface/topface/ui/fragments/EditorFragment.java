@@ -208,7 +208,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                     getActivity().startActivity(
                             UserProfileActivity.createIntent(
                                     Integer.parseInt(profileId.getText().toString()),
-                                    EditorFragment.class,
                                     getActivity()
                             )
                     );
