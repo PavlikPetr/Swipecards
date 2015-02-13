@@ -42,6 +42,7 @@ public class GcmIntentService extends IntentService {
                 String userId = getUserId(user);
                 LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(App.getContext());
 
+                broadcastNotificationIntent.putExtra(GCMUtils.GCM_TYPE, type);
                 broadcastNotificationIntent.putExtra(GCMUtils.USER_ID_EXTRA, userId);
                 localBroadcastManager.sendBroadcast(broadcastNotificationIntent);
                 Intent updateIntent = null;
