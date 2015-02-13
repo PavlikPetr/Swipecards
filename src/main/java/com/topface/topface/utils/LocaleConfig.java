@@ -112,6 +112,7 @@ public class LocaleConfig {
                 @Override
                 public void success(IApiResponse response) {
                     App.sendProfileAndOptionsRequests();
+                    App.getUserConfig().setDefaultDatingMessage("");
                     NavigationActivity.restartNavigationActivity(activity);
                 }
 
