@@ -488,11 +488,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         @Override
         public String getTitle() {
-            return Utils.formatPhotoQuantity(
-                    CacheProfile.photos != null ?
-                            CacheProfile.photos.size() :
-                            0
-            );
+            return Utils.formatPhotoQuantity(CacheProfile.totalPhotos);
         }
 
         @Override

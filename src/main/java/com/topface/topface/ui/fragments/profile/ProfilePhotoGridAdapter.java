@@ -17,10 +17,6 @@ public class ProfilePhotoGridAdapter extends ProfileGridAdapter {
     // Data
     protected LayoutInflater mInflater;
 
-    public ProfilePhotoGridAdapter(Context context, Photos photoLinks) {
-        this(context, photoLinks, photoLinks.size(), null);
-    }
-
     public ProfilePhotoGridAdapter(Context context, Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
         super(photoLinks, totalPhotos, callback);
         mInflater = LayoutInflater.from(context);
