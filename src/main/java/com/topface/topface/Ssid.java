@@ -27,7 +27,7 @@ public class Ssid {
     }
 
     public synchronized static String get() {
-        if (mSsid == null) {
+        if (TextUtils.isEmpty(mSsid)) {
             load();
         }
 
