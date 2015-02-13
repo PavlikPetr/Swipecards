@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tvLoaderText"
         android:layout_width="98dp"
         android:layout_height="98dp"
-        android:textColor="#FFFFFF"
         android:layout_centerInParent="true"
-        android:text="@string/general_dialog_retry"/>
+        android:text="@string/general_dialog_retry"
+        android:textColor="#FFFFFF" />
 
     <ProgressBar
         android:id="@+id/prsLoader"
@@ -17,6 +17,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>
