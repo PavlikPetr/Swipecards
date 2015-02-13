@@ -32,6 +32,9 @@ public class EditContainerActivity extends BaseFragmentActivity {
 
     public static final int INTENT_EDIT_FILTER = 201;
     public static final int INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM = 202;
+
+    private static final String EDIT_PROFILE_PHOTO_FRAGMENT_TAG = "edit_profile_photo_fragment";
+
     Handler mFinishHandler = new Handler() {
         public void handleMessage(Message msg) {
             EditContainerActivity.super.finish();
@@ -47,6 +50,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
         int dataId;
         String data;
         Intent intent = getIntent();
+        String tag = null;
         switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0)) {
             case INTENT_EDIT_NAME_AGE:
                 mFragment = EditMainFormItemsFragment.newInstance(new EditType[]{EditType.NAME, EditType.AGE});
@@ -69,7 +73,12 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 mFragment = EditFormItemInputFragment.newInstance(titleId, data);
                 break;
             case INTENT_EDIT_ALBUM:
-                mFragment = new EditProfilePhotoFragment();
+                tag = EDIT_PROFILE_PHOTO_FRAGMENT_TAG;
+                // сначала ищем фрагмент по тегу, чтобы нормально восстановить его с прогруженными фотографиями
+                mFragment = getSupportFragmentManager().findFragmentByTag(tag);
+                if (mFragment == null) {
+                    mFragment = new EditProfilePhotoFragment();
+                }
                 break;
             case INTENT_EDIT_FILTER:
                 mFragment = new FilterFragment();
@@ -97,7 +106,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
 
         if (mFragment != null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.loFrame, mFragment).commit();
+                    .replace(R.id.loFrame, mFragment, tag).commit();
         }
     }
 
