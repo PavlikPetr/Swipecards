@@ -218,15 +218,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     }
 
     @Override
-    public void onResume() {
-        if (mPhotoGridAdapter.getPhotoLinks() == null || mPhotoGridAdapter.getPhotoLinks().size() == 0) {
-            mPhotoGridAdapter.updateData();
-            mPhotoGridAdapter.notifyDataSetChanged();
-        }
-        super.onResume();
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         try {
