@@ -174,6 +174,7 @@
     <string name="chat_sexuality_out">Sie schätzten eine Sexualität.</string>
     <string name="chat_wink_in">Jemand hat Ihnen angestupst.</string>
     <string name="chat_wink_out">Sie haben angestupst.</string>
+    <string name="filter_filter">Filter</string>
     <string name="filter_age_string">Von %1$d bis %2$d</string>
     <string name="filter_only_beautiful">Nur schöne</string>
     <string name="filter_extra_parameters">Ergänzende Parameter</string>
@@ -274,7 +275,6 @@
     </plurals>
     <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich gefallen,\num eine angenehme Bekanntschaft anzufangen</string>
     <string name="general_edit_profile_message">Bitte, füllen Sie notwendige Felder des Fragebogens</string>
-    <string name="general_premium_access_error">Für diese Funktion brauchen Sie VIP Status</string>
     <string name="general_search_null_response_error">Nichts gefunden. Versuchen Sie die Filter zu ändern</string>
     <string name="change_filters">Filter ändern</string>
     <string name="reset_filter">reset</string>

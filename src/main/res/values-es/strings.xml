@@ -177,11 +177,15 @@
     <string name="chat_sexuality_out">Has evaluado su sexualidad</string>
     <string name="chat_wink_in">Te han guiñado</string>
     <string name="chat_wink_out">Has guiñado</string>
+    <string name="filter_search">Buscar</string>
+    <string name="filter_filter">Filtro</string>
     <string name="filter_age_string">Desde %1$d hasta %2$d</string>
     <string name="filter_only_beautiful">Sólo guapos</string>
     <string name="filter_extra_parameters">Parámetros adicionales</string>
     <string name="filter_age">Elegir edad</string>
     <string name="filter_online">En línea</string>
+    <string name="filter_age_start_prefix">Desde %s</string>
+    <string name="filter_age_end_prefix">hasta %s</string>
     <string name="filter_cities_all">En todas las ciudades</string>
     <string name="buying_header_title">Compras</string>
     <plurals name="buying_gift_you_need_coins">
@@ -287,7 +291,6 @@
     </plurals>
     <string name="novice_sympathy">Envía simpatías a aquellos\nquienes realmente te gustan para\nempezar una relación satisfactoria</string>
     <string name="general_edit_profile_message">Por favor, rellena los campos obligatorios de tu perfil</string>
-    <string name="general_premium_access_error">Para esta función hace falta el estado VIP</string>
     <string name="general_search_null_response_error">Nada fue encontrado. Prueba cambiar los filtros de busqueda</string>
     <string name="change_filters">Cambiar filtros</string>
     <string name="reset_filter">Resetear</string>
@@ -304,6 +307,7 @@
     <string name="rate_popup_error">Tienes que indicar cuántas estrellas pones a nuestra aplicación.</string>
     <string name="feedback_popup_title">Has puesto una nota baja. Cuéntanos qué es lo que no te gusta en la aplicación. Ayúdanos a mejorar. ¡Gracias!</string>
     <string name="settings_melody">Melodía de notificación</string>
+    <string name="settings_loading_photo">Precarga de fotografías</string>
     <string name="edit_refresh_status">Renovar estado</string>
     <string name="ban_title">¡Enhorabuena! Estas baneado/a</string>
     <string name="ban_title_forever">¡Enhorabuena! Estas baneado para siempre</string>
@@ -497,6 +501,7 @@
     <string name="likes_can_help_you">Las simpatías te ayudarán a conocer gente</string>
     <string name="general_get_dating">Conocer gente</string>
     <string name="settings_select_language">Elección del idioma de la aplicación</string>
+    <string name="settings_select_preload_photo_type">Elige cuándo estará conectada la precarga de fotos</string>
     <string name="restart_to_change_locale">Para cambiar el idioma la aplicación se reiniciará</string>
     <string name="locale_changing">Cambiar idioma</string>
     <plurals name="you_were_liked">
@@ -605,4 +610,13 @@
     <string name="pull_to_refresh_pull_label">Arrastra para actualizar…</string>
     <string name="pull_to_refresh_release_label">Bajalo para actualizar…</string>
     <string name="pull_to_refresh_refreshing_label">Cargando…</string>
+    <string name="user_added_to_black_list">Usuario agregado a la lista negra</string>
+    <string name="user_deleted_from_black_list">Usuario eliminado de la lista negra</string>
+    <string name="user_added_to_bookmark">Usuario agregado a los favoritos</string>
+    <string name="user_deleted_from_bookmark">Usuario eliminado de los favoritos</string>
+    <string name="preload_photo_type_wifi_3g">WiFi y 3G</string>
+    <string name="preload_photo_type_wifi">Solo WiFi</string>
+    <string name="preload_photo_type_always_on">Siempre conectada</string>
+    <string name="preload_photo_type_preload_off">Descpnectada</string>
+    <string name="wrong_time_popup_button">Abrir opciones</string>
 </resources>

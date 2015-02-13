@@ -100,6 +100,7 @@
     <string name="chat_sexuality_out">Szexualitást értékelt.</string>
     <string name="chat_wink_in">Valaki Önre kacsintott.</string>
     <string name="chat_wink_out">Ön kacsintott.</string>
+    <string name="filter_filter">Szűrő</string>
     <string name="filter_age_string">%1$d-től %2$d-ig</string>
     <string name="filter_only_beautiful">Csak szép</string>
     <string name="filter_extra_parameters">Kiegészítő feltételek</string>
@@ -183,7 +184,6 @@
     </plurals>
     <string name="novice_sympathy">Küldj szimpátiát azoknak, akik \ntényleg tetszenek,\nígy el tudsz kezdeni egy élvezetes ismerkedést.</string>
     <string name="general_edit_profile_message">Kérjük, töltse ki a profil szükséges mezőit</string>
-    <string name="general_premium_access_error">Prémiumnak kell lennie ennek a funkciónak a használatához</string>
     <string name="general_search_null_response_error">Semmit sem találtam. Próbáld meg módosítani a szűrőket</string>
     <string name="change_filters">Szűrők változtatása</string>
     <string name="general_sex">Nem</string>

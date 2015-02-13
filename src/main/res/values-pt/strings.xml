@@ -169,6 +169,7 @@
     <string name="chat_sexuality_out">Você avaliou a sexualidade.</string>
     <string name="chat_wink_in">Piscaram-lhe o olho</string>
     <string name="chat_wink_out">Você piscou o olho.</string>
+    <string name="filter_filter">filtro</string>
     <string name="filter_age_string">De %1$d até %2$d</string>
     <string name="filter_only_beautiful">Somente bonitos</string>
     <string name="filter_extra_parameters">Parâmetros adicionais</string>
@@ -272,7 +273,6 @@
     </plurals>
     <string name="novice_sympathy">Envie simpatias para aqueles que realmente você gosta, para travar um conhecimento agradável</string>
     <string name="general_edit_profile_message">Por favor, preencha espaços necessários do questonário</string>
-    <string name="general_premium_access_error">É preciso Premium para esta função</string>
     <string name="general_search_null_response_error">Nada foi encontrado. Tente mudar filtros</string>
     <string name="change_filters">Modificar filtros</string>
     <string name="general_sex">Gênero</string>

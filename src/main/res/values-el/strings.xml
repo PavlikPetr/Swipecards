@@ -168,6 +168,7 @@
     <string name="chat_sexuality_out">Έχετε αξιολογηθεί τη σεξουαλικότητα.</string>
     <string name="chat_wink_in">\'Εκανε ένα κλείσιμο ματιού για σας.</string>
     <string name="chat_wink_out">Έχετε κλείσει το μάτι.</string>
+    <string name="filter_filter">Φίλτρο</string>
     <string name="filter_age_string">Από %1$d έως %2$d</string>
     <string name="filter_only_beautiful">Μόνο όμορφες</string>
     <string name="filter_extra_parameters">Περισσότερες Επιλογές Αναζήτησης</string>
@@ -267,7 +268,6 @@
     </plurals>
     <string name="novice_sympathy">Στείλτε συμπάθεια για εκείνους που \nσας αρέσει πραγματικά\ nγια να ξεκινήσετε μια ευχάριστη γνωριμία</string>
     <string name="general_edit_profile_message">Παρακαλούμε συμπληρώστε τα απαιτούμενα πεδία του ερωτηματολόγιο</string>
-    <string name="general_premium_access_error">Για αυτή η λειτουργία χρειάζεται Premium</string>
     <string name="general_search_null_response_error">Τίποτα δεν βρέθηκε. Προσπαθήστε να αλλάξετε τα φίλτρα</string>
     <string name="change_filters">Αλλάξτε τα φίλτρα</string>
     <string name="reset_filter">Επαναφορά</string>

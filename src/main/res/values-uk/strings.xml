@@ -149,6 +149,7 @@
     <string name="chat_sexuality_out">Ви оцінили сексуальність.</string>
     <string name="chat_wink_in">Вам підморгнули.</string>
     <string name="chat_wink_out">Ви підморгнули.</string>
+    <string name="filter_filter">Фільтр</string>
     <string name="filter_age_string">Від %1$d до %2$d</string>
     <string name="filter_only_beautiful">Тільки красиві</string>
     <string name="filter_extra_parameters">Додаткові параметри</string>
@@ -238,7 +239,6 @@
     </plurals>
     <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб почати приємне знайомство</string>
     <string name="general_edit_profile_message">Будь ласка, заповніть необхідні поля анкети</string>
-    <string name="general_premium_access_error">Для даної функції потрібен Преміум</string>
     <string name="general_search_null_response_error">Нічого не знайдено. Спробуйте змінити фільтри</string>
     <string name="change_filters">Змінити фільтри</string>
     <string name="general_sex">Стать</string>
