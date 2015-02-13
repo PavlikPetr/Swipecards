@@ -15,7 +15,7 @@ public class User extends Profile {
     public boolean online;  // флаг наличия пользвоателя в онлайне
     public boolean mutual;  // флаг наличия симпатии к авторизованному пользователю
     public int score;       // средний балл оценок пользователя    
-    public int formMatches = 0;
+    public static int formMatches = 0;
     public boolean banned;
     public boolean deleted;
     public boolean bookmarked;
