@@ -582,4 +582,6 @@
     <string name="measurement_unit_weight">kg.</string>
     <string name="measurement_unit_height">cm.</string>
     <string name="email_changing">E-Mail ändern</string>
+    <string name="preload_photo_type_wifi_3g">WiFi und 3G</string>
+    <string name="preload_photo_type_wifi">Nur WiFi</string>
 </resources>
