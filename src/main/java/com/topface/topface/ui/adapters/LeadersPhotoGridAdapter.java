@@ -37,8 +37,8 @@ public class LeadersPhotoGridAdapter extends ProfileGridAdapter {
         }
     }
 
-    public LeadersPhotoGridAdapter(Context context, Photos photoLinks, int photoWidth) {
-        super(photoLinks, photoLinks.size(), null);
+    public LeadersPhotoGridAdapter(Context context, Photos photoLinks, int photoLinksSize, int photoWidth, LoadingListAdapter.Updater callback) {
+        super(photoLinks, photoLinksSize, callback);
         mInflater = LayoutInflater.from(context);
         mPhotoWidth = photoWidth;
         setSelectedItemOnStart(photoLinks);
@@ -86,6 +86,7 @@ public class LeadersPhotoGridAdapter extends ProfileGridAdapter {
 
     public void setSelectedPhotoId(int id) {
         mSelectedPhotoId = id;
+        notifyDataSetChanged();
     }
 
 

@@ -15,6 +15,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedPhotoBlog;
+import com.topface.topface.data.FeedPhotoBlogListData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -158,8 +159,8 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     @Override
-    protected FeedListData<FeedPhotoBlog> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, FeedPhotoBlog.class);
+    protected FeedPhotoBlogListData getFeedList(JSONObject response) {
+        return new FeedPhotoBlogListData(response, FeedPhotoBlog.class);
     }
 
     @Override
