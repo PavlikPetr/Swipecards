@@ -115,6 +115,7 @@ public class LocaleConfig {
                     UserConfig userConfig = App.getUserConfig();
                     userConfig.setDefaultDatingMessage("");
                     userConfig.saveConfig();
+                    App.sendOptionsRequest();
                     NavigationActivity.restartNavigationActivity(activity);
                 }
 
