@@ -29,7 +29,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
 
     @Override
     protected String getTitle() {
-        return getString(R.string.general_mutual);
+        return getString(R.string.general_sympathies);
     }
 
     @Override
