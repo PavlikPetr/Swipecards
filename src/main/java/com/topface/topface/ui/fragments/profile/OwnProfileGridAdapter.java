@@ -14,7 +14,6 @@ public class OwnProfileGridAdapter extends ProfilePhotoGridAdapter {
 
     @Override
     protected boolean isAddPhotoButtonEnabled() {
-        Photos photoLinks = getPhotoLinks();
-        return !(!photoLinks.isEmpty() && photoLinks.get(0).isFake());
+        return true;
     }
 }
