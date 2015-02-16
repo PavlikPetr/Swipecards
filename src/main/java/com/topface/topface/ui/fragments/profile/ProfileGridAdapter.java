@@ -47,9 +47,13 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     }
 
     public void setData(Photos photoLinks, boolean needMore) {
+        setData(photoLinks, needMore, isAddPhotoButtonEnabled());
+    }
+
+    public void setData(Photos photoLinks, boolean needMore, boolean isAddPhotoButtonEnabled) {
         mPhotoLinks.clear();
         addPhotos(photoLinks, needMore, false);
-        if (isAddPhotoButtonEnabled()) {
+        if (isAddPhotoButtonEnabled) {
             mPhotoLinks.add(0, new Photo());
         }
     }

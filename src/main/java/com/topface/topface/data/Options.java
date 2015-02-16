@@ -48,6 +48,8 @@ import java.util.Set;
 @SuppressWarnings("UnusedDeclaration")
 public class Options extends AbstractData {
 
+    public static final String OPTIONS_RECEIVED_ACTION = "com.topface.topface.options_received_action";
+
     public final static String INNER_MAIL_CONST = "mail";
     public final static String INNER_APNS_CONST = "apns";
     public final static String INNER_SEPARATOR = ":";

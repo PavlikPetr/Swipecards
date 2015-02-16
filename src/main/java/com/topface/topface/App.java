@@ -213,11 +213,16 @@ public class App extends Application {
         return request;
     }
 
+    public static void sendOptionsRequest() {
+        getOptionsRequest().exec();
+    }
+
     private static ApiRequest getOptionsRequest() {
         return new UserGetAppOptionsRequest(App.getContext())
                 .callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {
+                        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Options.OPTIONS_RECEIVED_ACTION));
                     }
 
                     @Override

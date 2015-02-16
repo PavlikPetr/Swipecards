@@ -6,9 +6,11 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 
 import com.topface.framework.utils.config.AbstractUniqueConfig;
+import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -43,6 +45,7 @@ public class UserConfig extends AbstractUniqueConfig {
     public static final String NOTIFICATION_REST_MESSAGES = "notifications_rest_messages";
 
     private static final String DEFAULT_DATING_MESSAGE = "default_dating_message";
+    private static final String DATING_MESSAGE_LOCALE = "default_dating_message_locale";
     public static final String SETTINGS_GCM_RINGTONE = "settings_c2dm_ringtone";
     public static final String SETTINGS_GCM_VIBRATION = "settings_c2dm_vibration";
     public static final String SETTINGS_GCM = "settings_c2dm";
@@ -96,6 +99,8 @@ public class UserConfig extends AbstractUniqueConfig {
         addField(settingsMap, DATA_BONUS_LAST_SHOW_TIME, 0L);
         // default text for instant message on dating screen
         addField(settingsMap, DEFAULT_DATING_MESSAGE, Static.EMPTY);
+        // dating message locale
+        addField(settingsMap, DATING_MESSAGE_LOCALE, Static.EMPTY);
         // push notification melody
         addField(settingsMap, SETTINGS_GCM_RINGTONE, DEFAULT_SOUND);
         // is vibration for notification enabled
@@ -355,10 +360,18 @@ public class UserConfig extends AbstractUniqueConfig {
     }
 
     /**
-     * Sets new default text for dating screen message
+     * Sets new default text for dating screen message and it's locale
      */
     public void setDefaultDatingMessage(String message) {
         setField(getSettingsMap(), DEFAULT_DATING_MESSAGE, message);
+        setField(getSettingsMap(), DATING_MESSAGE_LOCALE, new LocaleConfig(App.getContext()).getApplicationLocale());
+    }
+
+    /**
+     * @return Locale for dating screen message
+     */
+    public String getDefaultDatingMessageLocale() {
+        return getStringField(getSettingsMap(), DATING_MESSAGE_LOCALE);
     }
 
     /**

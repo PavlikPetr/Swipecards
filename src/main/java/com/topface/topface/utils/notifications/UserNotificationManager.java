@@ -302,6 +302,10 @@ public class UserNotificationManager {
         }
     }
 
+    public void removeNotifications() {
+        mNotificationManager.cancelAll();
+    }
+
     public static interface NotificationImageListener {
         public void onSuccess(UserNotification notification);
 
