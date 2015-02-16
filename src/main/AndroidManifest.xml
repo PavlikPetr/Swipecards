@@ -151,7 +151,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.AddToLeaderActivity" />
+        <activity
+            android:name=".ui.AddToLeaderActivity"
+            android:parentActivityName=".ui.NavigationActivity" />
         <activity
             android:name=".ui.SslErrorActivity"
             android:launchMode="singleTask"

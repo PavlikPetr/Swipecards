@@ -191,7 +191,10 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
     private void initAdapter(Photos photos) {
-        mUsePhotosAdapter = new LeadersPhotoGridAdapter(this.getApplicationContext(), photos == null ? getPhotoLinks() : photos, photos == null ? CacheProfile.totalPhotos : photos.size(), mGridView.getGridViewColumnWidth(), new LoadingListAdapter.Updater() {
+        mUsePhotosAdapter = new LeadersPhotoGridAdapter(this.getApplicationContext(),
+                photos == null ? getPhotoLinks() : photos,
+                photos == null ? CacheProfile.totalPhotos : photos.size(),
+                mGridView.getGridViewColumnWidth(), new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
                 sendAlbumRequest();
