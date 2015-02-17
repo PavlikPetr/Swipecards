@@ -112,9 +112,9 @@ public class DatingInstantMessageController {
             }
         });
         UserConfig userConfig = App.getUserConfig();
-        String defaultMessage = userConfig.getDefaultDatingMessage();
-        if (TextUtils.isEmpty(defaultMessage)) {
-            userConfig.setDefaultDatingMessage(text);
+        String defaultMessage = userConfig.getDatingMessage();
+        if (TextUtils.isEmpty(defaultMessage) && !TextUtils.isEmpty(text)) {
+            userConfig.setDatingMessage(text);
             userConfig.saveConfig();
         }
         setInstantMessageText(defaultMessage.isEmpty() ? text : defaultMessage);
@@ -157,8 +157,8 @@ public class DatingInstantMessageController {
                 Utils.hideSoftKeyboard(mActivity, mMessageText);
 
                 UserConfig userConfig = App.getUserConfig();
-                if (!userConfig.getDefaultDatingMessage().equals(editString)) {
-                    userConfig.setDefaultDatingMessage(editString);
+                if (!userConfig.getDatingMessage().equals(editString)) {
+                    userConfig.setDatingMessage(editString);
                     userConfig.saveConfig();
                 }
 
@@ -278,7 +278,7 @@ public class DatingInstantMessageController {
     }
 
     public void reset() {
-        String defaultMessage = App.getUserConfig().getDefaultDatingMessage();
+        String defaultMessage = App.getUserConfig().getDatingMessage();
         setInstantMessageText(defaultMessage);
     }
 
@@ -319,5 +319,11 @@ public class DatingInstantMessageController {
                 }
             }).exec();
         }
+    }
+
+    public static void resetMessage() {
+        UserConfig userConfig = App.getUserConfig();
+        userConfig.setDatingMessage("");
+        CacheProfile.getOptions().instantMessageFromSearch.setText("");
     }
 }
