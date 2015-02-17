@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.nineoldandroids.animation.ValueAnimator;
 import com.topface.topface.utils.AnimationUtils;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -18,6 +19,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class ZoomImageViewRemote extends ImageViewRemote {
 
     private PhotoViewAttacher mPhotoViewAttacher;
+    private ValueAnimator mAnimator;
 
     public ZoomImageViewRemote(Context context) {
         super(context);
@@ -47,8 +49,14 @@ public class ZoomImageViewRemote extends ImageViewRemote {
     @Override
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
+        // try to animate appearing
+        if (isNeedAnimateOnAppear()) {
+            mAnimator = AnimationUtils.createAppearingImageAnimator(this);
+            mAnimator.start();
+        }
+        // reset flag about animation, for image reusing
+        resetNeedAnimateOnAppear();
         //Если установлено новое изображение, то нужно проинформировать об этом PhotoView
-        AnimationUtils.createAppearingImageAnimator(this).start();
         mPhotoViewAttacher.update();
         mPhotoViewAttacher.setZoomable(true);
     }
@@ -108,6 +116,14 @@ public class ZoomImageViewRemote extends ImageViewRemote {
         mPhotoViewAttacher.setZoomable(!isPhotoError);
         if (isPhotoError) {
             mPhotoViewAttacher.setScale(1, 0, 0, true);
+        }
+    }
+
+    @Override
+    public void stopAppearingAnimation() {
+        super.stopAppearingAnimation();
+        if (mAnimator != null) {
+            mAnimator.cancel();
         }
     }
 }
