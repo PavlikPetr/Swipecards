@@ -35,7 +35,6 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.http.IRequestClient;
@@ -114,7 +113,7 @@ public class DatingInstantMessageController {
         });
         UserConfig userConfig = App.getUserConfig();
         String defaultMessage = userConfig.getDatingMessage();
-        if (TextUtils.isEmpty(defaultMessage)) {
+        if (TextUtils.isEmpty(defaultMessage) && !TextUtils.isEmpty(text)) {
             userConfig.setDatingMessage(text);
             userConfig.saveConfig();
         }
@@ -159,7 +158,7 @@ public class DatingInstantMessageController {
 
                 UserConfig userConfig = App.getUserConfig();
                 if (!userConfig.getDatingMessage().equals(editString)) {
-                    if (!TextUtils.equals(userConfig.getDatingMessageLocale(), new LocaleConfig(App.getContext()).getApplicationLocale())) {
+                    if (!TextUtils.equals(userConfig.getDatingMessageLocale(), App.getLocaleConfig().getApplicationLocale())) {
                         userConfig.resetDatingMessageLocale();
                     }
                     userConfig.setDatingMessage(editString);
@@ -323,5 +322,12 @@ public class DatingInstantMessageController {
                 }
             }).exec();
         }
+    }
+
+    public static void resetMessage() {
+        UserConfig userConfig = App.getUserConfig();
+        userConfig.setDatingMessage("");
+        userConfig.resetDatingMessageLocale();
+        CacheProfile.getOptions().instantMessageFromSearch.setText("");
     }
 }

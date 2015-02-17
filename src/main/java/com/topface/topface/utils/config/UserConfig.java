@@ -11,7 +11,6 @@ import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -367,7 +366,7 @@ public class UserConfig extends AbstractUniqueConfig {
         SettingsMap settingsMap = getSettingsMap();
         setField(settingsMap, DEFAULT_DATING_MESSAGE, message);
         if (TextUtils.isEmpty(getStringField(settingsMap, DATING_MESSAGE_LOCALE))) {
-            setField(settingsMap, DATING_MESSAGE_LOCALE, new LocaleConfig(App.getContext()).getApplicationLocale());
+            setField(settingsMap, DATING_MESSAGE_LOCALE, App.getLocaleConfig().getApplicationLocale());
         }
     }
 
