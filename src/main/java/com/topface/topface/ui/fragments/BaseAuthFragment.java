@@ -127,9 +127,6 @@ public abstract class BaseAuthFragment extends BaseFragment {
             }
 
             public void always(IApiResponse response) {
-                if (isAdded() && response.getResultCode() == ErrorCodes.HTTPS_CERTIFICATE_EXPIRED) {
-                    hideBackButton();
-                }
             }
         }).exec();
     }
@@ -259,8 +256,6 @@ public abstract class BaseAuthFragment extends BaseFragment {
     protected abstract void showProgress();
 
     protected abstract void hideProgress();
-
-    protected abstract void hideBackButton();
 
     protected abstract void onSuccessAuthorization(AuthToken token);
 }

@@ -349,11 +349,6 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     @Override
-    protected void hideBackButton() {
-
-    }
-
-    @Override
     protected void showRetrier() {
         super.showRetrier();
         mAuthGroup.setVisibility(View.GONE);
