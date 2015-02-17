@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
@@ -20,6 +20,7 @@ import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.ui.GridViewWithHeaderAndFooter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -40,7 +41,8 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     private TextView mTitle;
     private Photos mPhotoLinks;
     private LoadingListAdapter.Updater mUpdater;
-    private GridView mGridAlbum;
+    private GridViewWithHeaderAndFooter mGridAlbum;
+    private View mGridFooterView;
     private BasePendingInit<User> mPendingUserInit = new BasePendingInit<>();
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
@@ -49,7 +51,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
                     position,
                     mUserId,
                     mPhotosCount,
-                    (ProfileGridAdapter) mGridAlbum.getAdapter()
+                    mUserPhotoGridAdapter
             );
             Fragment parentFrag = getParentFragment();
             if (parentFrag != null) {
@@ -67,20 +69,27 @@ public class UserPhotoFragment extends ProfileInnerFragment {
             @Override
             public void onUpdate() {
                 if (mGridAlbum != null) {
-                    Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getPhotos();
-                    AlbumRequest request = new AlbumRequest(getActivity(), mUserId, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM, AlbumLoadController.FOR_GALLERY);
+                    mGridFooterView.setVisibility(View.VISIBLE);
+                    Photos data = mUserPhotoGridAdapter.getPhotos();
+                    AlbumRequest request = new AlbumRequest(getActivity(), mUserId, data.get(data.size() - 1).getPosition() + 1, AlbumRequest.MODE_ALBUM, AlbumLoadController.FOR_GALLERY);
                     request.callback(new DataApiHandler<AlbumPhotos>() {
 
                         @Override
                         protected void success(AlbumPhotos data, IApiResponse response) {
                             if (mGridAlbum != null) {
-                                ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).addPhotos(data, data.more, false);
+                                mUserPhotoGridAdapter.addPhotos(data, data.more, false);
                             }
                         }
 
                         @Override
                         protected AlbumPhotos parseResponse(ApiResponse response) {
                             return new AlbumPhotos(response);
+                        }
+
+                        @Override
+                        public void always(IApiResponse response) {
+                            super.always(response);
+                            mGridFooterView.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -92,9 +101,14 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         };
     }
 
+    private View createGridViewFooter() {
+        return ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
+        mGridFooterView = createGridViewFooter();
         // title
         mTitle = (TextView) root.findViewById(R.id.usedTitle);
         if (mPhotoLinks == null) {
@@ -102,7 +116,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         }
         mTitle.setVisibility(View.VISIBLE);
         // album
-        mGridAlbum = (GridView) root.findViewById(R.id.usedGrid);
+        mGridAlbum = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
 
         int position = 0;
         if (savedInstanceState != null) {
@@ -115,9 +129,10 @@ public class UserPhotoFragment extends ProfileInnerFragment {
                 Debug.error(e);
             }
             setPhotos(mPhotoLinks);
+//            addFooterView();
             position = savedInstanceState.getInt(POSITION, 0);
         }
-
+        addFooterView();
         mGridAlbum.setAdapter(mUserPhotoGridAdapter);
         mGridAlbum.setSelection(position);
         mGridAlbum.setOnItemClickListener(mOnItemClickListener);
@@ -167,12 +182,23 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         mUserId = user.uid;
         mPhotosCount = user.photosCount;
         mPhotoLinks = user.photos;
-        if (mGridAlbum != null && mGridAlbum.getAdapter() == null) {
+        if (mGridAlbum != null && mGridAlbum.getAdapter1() == null) {
             setPhotos(mPhotoLinks);
+            addFooterView();
             mGridAlbum.setAdapter(mUserPhotoGridAdapter);
             mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
         }
     }
+
+    private void addFooterView() {
+        if (mGridAlbum != null) {
+            if (mGridAlbum.getFooterViewCount() == 0) {
+                mGridAlbum.addFooterView(mGridFooterView);
+            }
+            mGridFooterView.setVisibility(View.GONE);
+        }
+    }
+
 
     private void setPhotos(Photos photos) {
         initTitle(photos);

@@ -217,7 +217,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         }
 
         mPhotoGridView = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
-        mPhotoGridView.addFooterView(mGridFooterView);
+        addFooterView();
         mPhotoGridView.setSelection(position);
         mPhotoGridView.setAdapter(mPhotoGridAdapter);
         mPhotoGridView.setOnItemClickListener(mOnItemClickListener);
@@ -237,6 +237,15 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         });
 
         return root;
+    }
+
+    private void addFooterView() {
+        if (mPhotoGridView != null) {
+            if (mPhotoGridView.getFooterViewCount() == 0) {
+                mPhotoGridView.addFooterView(mGridFooterView);
+            }
+            mGridFooterView.setVisibility(View.GONE);
+        }
     }
 
     @Override

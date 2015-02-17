@@ -196,8 +196,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         }
 
         mGridAlbum = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
-        mGridAlbum.addFooterView(mGridFooterView);
-        mGridFooterView.setVisibility(View.GONE);
+        addFooterView();
         mGridAlbum.setAdapter(mProfilePhotoGridAdapter);
         mGridAlbum.setSelection(position);
         mGridAlbum.setOnItemClickListener(mOnItemClickListener);
@@ -247,6 +246,15 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
 
 
         return root;
+    }
+
+    private void addFooterView() {
+        if (mGridAlbum != null) {
+            if (mGridAlbum.getFooterViewCount() == 0) {
+                mGridAlbum.addFooterView(mGridFooterView);
+            }
+            mGridFooterView.setVisibility(View.GONE);
+        }
     }
 
     @Override
