@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.appsflyer.AppsFlyerLib;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
@@ -23,6 +24,7 @@ import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
+import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.FortumoProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
@@ -88,6 +90,7 @@ public class App extends Application {
 
     private static Boolean mIsGmsSupported;
     private static Location mCurLocation;
+    private static AppsFlyerData.ConversionHolder mAppsFlyerConversionHolder;
 
 
     /**
@@ -398,6 +401,9 @@ public class App extends Application {
 
         sendAppOptionsRequest();
 
+        mAppsFlyerConversionHolder = new AppsFlyerData.ConversionHolder();
+        AppsFlyerLib.registerConversionListener(mContext, new AppsFlyerData.ConversionListener(mAppsFlyerConversionHolder));
+
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new BackgroundThread() {
@@ -522,6 +528,10 @@ public class App extends Application {
             mIsGmsSupported = GMSUtils.checkPlayServices(getContext());
         }
         return mIsGmsSupported;
+    }
+
+    public static AppsFlyerData.ConversionHolder getConversionHolder() {
+        return mAppsFlyerConversionHolder;
     }
 
     @Override
