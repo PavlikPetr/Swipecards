@@ -158,9 +158,6 @@ public class DatingInstantMessageController {
 
                 UserConfig userConfig = App.getUserConfig();
                 if (!userConfig.getDatingMessage().equals(editString)) {
-                    if (!TextUtils.equals(userConfig.getDatingMessageLocale(), App.getLocaleConfig().getApplicationLocale())) {
-                        userConfig.resetDatingMessageLocale();
-                    }
                     userConfig.setDatingMessage(editString);
                     userConfig.saveConfig();
                 }
@@ -327,7 +324,6 @@ public class DatingInstantMessageController {
     public static void resetMessage() {
         UserConfig userConfig = App.getUserConfig();
         userConfig.setDatingMessage("");
-        userConfig.resetDatingMessageLocale();
         CacheProfile.getOptions().instantMessageFromSearch.setText("");
     }
 }

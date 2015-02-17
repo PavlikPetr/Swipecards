@@ -187,7 +187,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     ) {
                 InstantMessageFromSearch message = CacheProfile.getOptions().instantMessageFromSearch;
                 mDatingInstantMessageController.setInstantMessageText(message.getText());
-                userConfig.resetDatingMessageLocale();
                 userConfig.setDatingMessage(message.getText());
                 userConfig.saveConfig();
             }
