@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.text.TextUtils;
 
 import com.topface.framework.utils.config.AbstractUniqueConfig;
 import com.topface.topface.App;
@@ -355,23 +356,33 @@ public class UserConfig extends AbstractUniqueConfig {
     /**
      * @return Default text for dating screen message
      */
-    public String getDefaultDatingMessage() {
+    public String getDatingMessage() {
         return getStringField(getSettingsMap(), DEFAULT_DATING_MESSAGE);
     }
 
     /**
      * Sets new default text for dating screen message and it's locale
      */
-    public void setDefaultDatingMessage(String message) {
-        setField(getSettingsMap(), DEFAULT_DATING_MESSAGE, message);
-        setField(getSettingsMap(), DATING_MESSAGE_LOCALE, new LocaleConfig(App.getContext()).getApplicationLocale());
+    public void setDatingMessage(String message) {
+        SettingsMap settingsMap = getSettingsMap();
+        setField(settingsMap, DEFAULT_DATING_MESSAGE, message);
+        if (TextUtils.isEmpty(getStringField(settingsMap, DATING_MESSAGE_LOCALE))) {
+            setField(settingsMap, DATING_MESSAGE_LOCALE, new LocaleConfig(App.getContext()).getApplicationLocale());
+        }
     }
 
     /**
      * @return Locale for dating screen message
      */
-    public String getDefaultDatingMessageLocale() {
+    public String getDatingMessageLocale() {
         return getStringField(getSettingsMap(), DATING_MESSAGE_LOCALE);
+    }
+
+    /**
+     * Resets dating message locale
+     */
+    public void resetDatingMessageLocale() {
+        setField(getSettingsMap(), DATING_MESSAGE_LOCALE, null);
     }
 
     /**

@@ -35,6 +35,7 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.http.IRequestClient;
@@ -112,9 +113,9 @@ public class DatingInstantMessageController {
             }
         });
         UserConfig userConfig = App.getUserConfig();
-        String defaultMessage = userConfig.getDefaultDatingMessage();
+        String defaultMessage = userConfig.getDatingMessage();
         if (TextUtils.isEmpty(defaultMessage)) {
-            userConfig.setDefaultDatingMessage(text);
+            userConfig.setDatingMessage(text);
             userConfig.saveConfig();
         }
         setInstantMessageText(defaultMessage.isEmpty() ? text : defaultMessage);
@@ -157,8 +158,11 @@ public class DatingInstantMessageController {
                 Utils.hideSoftKeyboard(mActivity, mMessageText);
 
                 UserConfig userConfig = App.getUserConfig();
-                if (!userConfig.getDefaultDatingMessage().equals(editString)) {
-                    userConfig.setDefaultDatingMessage(editString);
+                if (!userConfig.getDatingMessage().equals(editString)) {
+                    if (!TextUtils.equals(userConfig.getDatingMessageLocale(), new LocaleConfig(App.getContext()).getApplicationLocale())) {
+                        userConfig.resetDatingMessageLocale();
+                    }
+                    userConfig.setDatingMessage(editString);
                     userConfig.saveConfig();
                 }
 
@@ -278,7 +282,7 @@ public class DatingInstantMessageController {
     }
 
     public void reset() {
-        String defaultMessage = App.getUserConfig().getDefaultDatingMessage();
+        String defaultMessage = App.getUserConfig().getDatingMessage();
         setInstantMessageText(defaultMessage);
     }
 

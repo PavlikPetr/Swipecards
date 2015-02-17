@@ -113,7 +113,7 @@ public class LocaleConfig {
                 @Override
                 public void success(IApiResponse response) {
                     UserConfig userConfig = App.getUserConfig();
-                    userConfig.setDefaultDatingMessage("");
+                    userConfig.setDatingMessage("");
                     userConfig.saveConfig();
                     App.sendOptionsRequest();
                     NavigationActivity.restartNavigationActivity(activity);
