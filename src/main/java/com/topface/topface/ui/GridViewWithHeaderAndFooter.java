@@ -365,7 +365,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         }
     }
 
-    public ListAdapter getAdapter1() {
+    public ListAdapter getGridViewAdapter() {
         ListAdapter mAdapter = getAdapter();
         if (mAdapter != null && (mAdapter instanceof HeaderViewGridAdapter)) {
             return null;

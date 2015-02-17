@@ -182,7 +182,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         mUserId = user.uid;
         mPhotosCount = user.photosCount;
         mPhotoLinks = user.photos;
-        if (mGridAlbum != null && mGridAlbum.getAdapter1() == null) {
+        if (mGridAlbum != null && mGridAlbum.getGridViewAdapter() == null) {
             setPhotos(mPhotoLinks);
             addFooterView();
             mGridAlbum.setAdapter(mUserPhotoGridAdapter);
