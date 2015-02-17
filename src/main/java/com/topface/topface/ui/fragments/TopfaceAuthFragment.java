@@ -301,6 +301,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     @Override
     protected void showButtons() {
+        mBackButton.setVisibility(View.VISIBLE);
         mLogo.setVisibility(View.VISIBLE);
         mTFButton.setVisibility(View.VISIBLE);
         mLogin.setEnabled(true);
@@ -346,5 +347,10 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     protected void authorizationFailed(int codeError, ApiRequest request) {
         mEmailForRestorePassword = null;
         super.authorizationFailed(codeError, request);
+    }
+
+    @Override
+    protected void hideBackButton() {
+        mBackButton.setVisibility(View.INVISIBLE);
     }
 }
