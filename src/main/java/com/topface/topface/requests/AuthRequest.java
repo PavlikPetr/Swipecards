@@ -90,7 +90,7 @@ public class AuthRequest extends PrimalAuthRequest {
                 .put("timezone", timezone)
                 .put("token", mToken);
         if (mAppsflyer != null) {
-            data.put("appsflyer", mAppsflyer.toJson());
+            data.put("appsflyer", mAppsflyer.toJsonWithConversions(App.getConversionHolder()));
         }
         return data;
     }

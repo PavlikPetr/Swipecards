@@ -67,15 +67,15 @@ public class LocaleConfig {
         return mApplicationLocale;
     }
 
-    public boolean setSystemLocale(String locale) {
+    public void setSystemLocale(String locale) {
         mSystemLocale = locale;
-        return getPreferences().edit().putString(SYSTEM_LOCALE, mSystemLocale).commit();
+        getPreferences().edit().putString(SYSTEM_LOCALE, mSystemLocale).apply();
     }
 
-    public boolean setApplicationLocale(String locale) {
+    public void setApplicationLocale(String locale) {
         mApplicationLocale = locale;
         setSystemLocale(Locale.getDefault().getLanguage());
-        return getPreferences().edit().putString(APPLICATION_LOCALE, mApplicationLocale).commit();
+        getPreferences().edit().putString(APPLICATION_LOCALE, mApplicationLocale).apply();
     }
 
     private SharedPreferences getPreferences() {
