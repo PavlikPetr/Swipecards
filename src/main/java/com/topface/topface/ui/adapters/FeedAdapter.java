@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.topface.topface.App;
@@ -24,6 +23,7 @@ import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.NoParentPressImageView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.ad.NativeAdManager;
@@ -87,7 +87,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         public TextView age;
         public TextView time;
         public TextView unreadCounter;
-        public ImageView heart;
+        public NoParentPressImageView heart;
         public Drawable background;
     }
 
