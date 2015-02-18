@@ -77,6 +77,12 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="Theme.Topface.White">
+        <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/bg_white</item>
+    </style>
+
     <style name="Topface.Theme.TranslucentDialog" parent="@style/Theme.AppCompat.Light">
         <item name="android:windowBackground">@color/semitransparent_black</item>
         <item name="android:colorBackground">@color/semitransparent_black</item>

@@ -18,8 +18,11 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.ui.SslErrorActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.ui.fragments.BanFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
+
+import org.json.JSONObject;
 
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -307,6 +310,11 @@ public class ConnectionManager {
         mStopRequestsOnBan.set(true);
         Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        JSONObject jsonObject = apiResponse.getJsonResult();
+        if (jsonObject != null) {
+            intent.putExtra(BanFragment.USER_MESSAGE, jsonObject.optString("userMessage"));
+            intent.putExtra(BanFragment.BAN_EXPIRE, jsonObject.optLong("banExpire"));
+        }
         intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_BAN);
         intent.putExtra(BanActivity.BANNING_TEXT_INTENT, apiResponse.getErrorMessage());
         apiRequest.getContext().startActivity(intent);

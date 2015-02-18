@@ -186,7 +186,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.BanActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Topface.White" />
         <activity android:name=".ui.BlackListActivity" />
 
         <activity
@@ -194,7 +195,7 @@
             android:parentActivityName=".ui.NavigationActivity"
             android:theme="@style/Theme.Topface.Chat"
             android:windowSoftInputMode="adjustResize">
-        <meta-data
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>

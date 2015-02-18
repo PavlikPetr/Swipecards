@@ -64,6 +64,10 @@ public class ActionBarView implements View.OnClickListener {
         mTitle.setText(title);
     }
 
+    public void setBanActivityView() {
+        prepareView();
+    }
+
 
     @Override
     public void onClick(View v) {
