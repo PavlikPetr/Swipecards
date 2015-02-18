@@ -46,6 +46,9 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.requests.transport.HttpApiTransport;
+import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
+import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
@@ -59,14 +62,10 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
 import org.acra.ACRA;
-import org.acra.ACRAConfiguration;
-import org.acra.ACRAConfigurationException;
-import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,7 +73,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-@ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
+@ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends Application {
 
     public static final String TAG = "Topface";
@@ -479,27 +478,27 @@ public class App extends Application {
     }
 
     private void initAcra() {
-        if (!BuildConfig.DEBUG) {
+//        if (!BuildConfig.DEBUG) {
             ACRA.init(this);
             ACRA.getErrorReporter().setReportSender(new HockeySender());
-        } else {
-            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
-            try {
-                //Что бы такая схема работала, сперва выставляем конфиг
-                ACRAConfiguration acraConfig = ACRA.getConfig();
-                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
-                acraConfig.setResDialogText(R.string.crash_dialog_text);
-                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
-                acraConfig.setMode(ReportingInteractionMode.DIALOG);
-                ACRA.setConfig(acraConfig);
-                //Потом инитим
-                ACRA.init(this);
-                //И потом выставляем ReportSender
-                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
-            } catch (ACRAConfigurationException e) {
-                Debug.error("Acra init error", e);
-            }
-        }
+//        } else {
+//            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
+//            try {
+//                //Что бы такая схема работала, сперва выставляем конфиг
+//                ACRAConfiguration acraConfig = ACRA.getConfig();
+//                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
+//                acraConfig.setResDialogText(R.string.crash_dialog_text);
+//                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
+//                acraConfig.setMode(ReportingInteractionMode.DIALOG);
+//                ACRA.setConfig(acraConfig);
+//                //Потом инитим
+//                ACRA.init(this);
+//                //И потом выставляем ReportSender
+//                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
+//            } catch (ACRAConfigurationException e) {
+//                Debug.error("Acra init error", e);
+//            }
+//        }
     }
 
     private void checkKeepAlive() {
@@ -541,6 +540,18 @@ public class App extends Application {
         if (mConnectionIntent != null && mConnectionReceiver != null) {
             unregisterReceiver(mConnectionReceiver);
         }
+    }
+
+
+    public static String getApiTransport() {
+        Options userOptions = CacheProfile.getOptions();
+        AppOptions appOptions = getAppOptions();
+        if (userOptions.scruffy || appOptions.isScruffyEnabled()) {
+            if (ScruffyRequestManager.getInstance().isAvailable()) {
+                return ScruffyApiTransport.TRANSPORT_NAME;
+            }
+        }
+        return HttpApiTransport.TRANSPORT_NAME;
     }
 }
 

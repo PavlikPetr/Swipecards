@@ -11,6 +11,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryDialog;
 import com.topface.topface.Ssid;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -119,7 +120,7 @@ public class ConnectionManager {
                 //Если у нас нет авторизационного токена, то выкидываем на авторизацию
                 if (AuthToken.getInstance().isEmpty()) {
                     //Если токен пустой, то сразу конструируем ошибку
-                    response = request.constructApiResponse(ErrorCodes.UNKNOWN_SOCIAL_USER, "AuthToken is empty");
+                    response = new ApiResponse(ErrorCodes.UNKNOWN_SOCIAL_USER, "AuthToken is empty");
                 } else {
                     //Если SSID пустой, то добавлем к изначальном запросу запрос авторизации
                     request = mAuthAssistant.precedeRequestWithAuth(request);
@@ -369,36 +370,37 @@ public class ConnectionManager {
     }
 
     private IApiResponse executeRequest(IApiRequest apiRequest) {
-        IApiResponse response = null;
+        IApiResponse response;
         try {
             //Отправляем запрос и сразу читаем ответ
             response = apiRequest.sendRequestAndReadResponse();
         } catch (UnknownHostException | SocketException | SocketTimeoutException e) {
             Debug.error(TAG + "::HostException", e);
             //Это ошибка соединение, такие запросы мы будем переотправлять
-            response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection exception: " + e.toString());
+            response = new ApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection exception: " + e.toString());
         } catch (SSLHandshakeException e) {
             Debug.error(TAG + "::SSLHandshakeException", e);
             //Это ошибка SSL соединения, возможно у юзера не правильно установлено время на устройсте
             //такую ошибку следует обрабатывать отдельно, распарсив сообщение об ошибке и уведомив
             //пользователя
-            response = apiRequest.constructApiResponse(getSslErrorCode(e), "Connection SSLHandshakeException: " + e.toString());
+            response = new ApiResponse(getSslErrorCode(e), "Connection SSLHandshakeException: " + e.toString());
         } catch (SSLException e) {
             Debug.error(TAG + "::SSLException", e);
             //Прочие ошибки SSL
-            response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection SSLException: " + e.toString());
+            response = new ApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection SSLException: " + e.toString());
         } catch (Exception e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос
-            response = apiRequest.constructApiResponse(ErrorCodes.ERRORS_PROCCESED, "Request exception: " + e.toString());
+            response = new ApiResponse(ErrorCodes.ERRORS_PROCCESED, "Request exception: " + e.toString());
         } catch (OutOfMemoryError e) {
             Debug.error(TAG + "::OutOfMemory" + e.toString());
             //Если OutOfMemory, то отменяем запросы, толку от этого все равно нет
-            response = apiRequest.constructApiResponse(ErrorCodes.ERRORS_PROCCESED, "Request OutOfMemory: " + e.toString());
-        } finally {
-            if (response == null) {
-                response = apiRequest.constructApiResponse(ErrorCodes.NULL_RESPONSE, "Null response");
-            }
+            response = new ApiResponse(ErrorCodes.ERRORS_PROCCESED, "Request OutOfMemory: " + e.toString());
+        }
+
+        if (response == null) {
+            Debug.error(new NullPointerException("Null response"));
+            response = new ApiResponse(ErrorCodes.NULL_RESPONSE, "Null response");
         }
 
         //Если наш пришли данные от сервера, то логируем их, если нет, то логируем объект запроса

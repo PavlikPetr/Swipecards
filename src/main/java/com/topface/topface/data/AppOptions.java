@@ -23,6 +23,7 @@ public class AppOptions extends AbstractData {
      */
     private int sessionTimeout;
     private int maxPartialRequestsCount;
+    private boolean scruffy;
 
     public AppOptions(JSONObject data) {
         if (data != null) {
@@ -38,6 +39,7 @@ public class AppOptions extends AbstractData {
             }
             maxPartialRequestsCount = item.optInt("maxPartialRequestsCount", DEFAULT_MAX_PARTIAL_REQUEST_COUNT);
             sessionTimeout = item.optInt("sessionTimeout", DEFAULT_SESSION_TIMEOUT);
+            scruffy = item.optBoolean("scruffy", false);
             JSONObject conditionsJson = item.optJSONObject("conditions");
             if (conditionsJson != null) {
                 conditions = new Conditions(conditionsJson);
@@ -93,6 +95,10 @@ public class AppOptions extends AbstractData {
 
     public int getUserStatusMaxLength() {
         return conditions.userStatusMaxLength;
+    }
+
+    public boolean isScruffyEnabled() {
+        return scruffy;
     }
 
     private class ClientStatisticSettings {

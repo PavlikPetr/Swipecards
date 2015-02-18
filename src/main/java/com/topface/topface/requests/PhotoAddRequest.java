@@ -3,27 +3,24 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.net.Uri;
 
-import com.nostra13.universalimageloader.utils.IoUtils;
-import com.topface.framework.imageloader.BitmapUtils;
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.requests.transport.IApiTransport;
+import com.topface.topface.requests.transport.PhotoUploadApiTransport;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.IProgressListener;
-import com.topface.topface.utils.http.ConnectionManager;
-import com.topface.topface.utils.http.HttpUtils;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-
 public class PhotoAddRequest extends ApiRequest {
     public static final String SERVICE_NAME = "photo.add";
+    /**
+     * По логике надо бы слать application/octet-stream (абстрактные бинарные данные, т.к. мы не знаем
+     * реального типа картинки и знать не хотим, пусть сервер обрабатывает), но сервер так не умеет
+     * поэтому шлем image/jpeg, т.к. его сервер умеет
+     */
+    public static final String CONTENT_TYPE = "image/jpeg";
 
     private Uri mUri = null;
     private IProgressListener mProgressListener;
@@ -38,54 +35,12 @@ public class PhotoAddRequest extends ApiRequest {
         mProgressListener = listener;
     }
 
-    @Override
-    protected boolean writeData(HttpURLConnection connection, IConnectionConfigureListener listener) throws IOException {
-        //Открываем InputStream к файлу который будем отправлять
-        setSsid(ssid);
-        InputStream inputStream = BitmapUtils.getInputStream(getContext(), mUri);
-        int contentLength = inputStream.available();
-        Debug.log("File size: " + contentLength);
-        HttpUtils.setContentLengthAndConnect(connection, listener, contentLength);
-        if (contentLength > 0) {
-            try {
-                Debug.logJson(
-                        ConnectionManager.TAG,
-                        "REQUEST upload >>> " + getApiUrl() + " rev:" + getRevNum(),
-                        "file: " + mUri.toString() + " with size(bytes): "+contentLength
-                );
-                writeRequest(inputStream, connection);
-            } finally {
-                inputStream.close();
-            }
-            return true;
-        } else {
-            return false;
-        }
+    public IProgressListener getNotificationUpdater() {
+        return mProgressListener;
     }
 
-    private void writeRequest(@NotNull InputStream inputStream,
-                              HttpURLConnection connection) throws IOException {
-        OutputStream outputStream = null;
-        try {
-            outputStream = connection.getOutputStream();
-            IoUtils.copyStream(inputStream, outputStream, new IoUtils.CopyListener() {
-                @Override
-                public boolean onBytesCopied(int current, int total) {
-                    if (mProgressListener != null) {
-                        if (current >= total) {
-                            mProgressListener.onSuccess();
-                        } else {
-                            mProgressListener.onProgress(100 * current / total);
-                        }
-                    }
-                    return true;
-                }
-            });
-        } finally {
-            if (outputStream != null) {
-                outputStream.close();
-            }
-        }
+    public Uri getPhotoUri() {
+        return mUri;
     }
 
     @Override
@@ -109,11 +64,22 @@ public class PhotoAddRequest extends ApiRequest {
     }
 
     @Override
-    protected String getApiUrl() {
-            return App.getAppConfig().getApiDomain() + "v" + API_VERSION + "/photo-upload/?ssid=" + ssid;
+    public String getApiUrl() {
+        return App.getAppConfig().getApiDomain() + "v" + API_VERSION + "/photo-upload/?ssid=" + ssid;
     }
 
     protected String getPlaceForStatistics() {
         return "Common";
     }
+
+    @Override
+    protected IApiTransport getTransport() {
+        return new PhotoUploadApiTransport();
+    }
+
+    @Override
+    public String getContentType() {
+        return CONTENT_TYPE;
+    }
+
 }
