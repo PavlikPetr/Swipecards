@@ -79,7 +79,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected String getTitle() {
-        return getString(R.string.general_likes);
+        return getString(R.string.general_sympathies);
     }
 
     @Override

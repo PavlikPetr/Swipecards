@@ -68,7 +68,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
 
     @Override
     protected String getTitle() {
-        return getString(R.string.general_bookmarks);
+        return getString(R.string.settings_messages);
     }
 
     @Override
