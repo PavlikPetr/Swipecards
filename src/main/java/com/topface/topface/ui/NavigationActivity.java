@@ -505,7 +505,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
             @Override
             public boolean isApplicable() {
-                mTakePhotoApplicable = !AuthToken.getInstance().isEmpty() && (CacheProfile.photo == null) && !App.getConfig().getUserConfig().isUserAvatarAvailable();
+                mTakePhotoApplicable = !AuthToken.getInstance().isEmpty() && (CacheProfile.photo == null)
+                        && !App.getConfig().getUserConfig().isUserAvatarAvailable();
                 mSelectCityApplicable = CacheProfile.needToSelectCity(NavigationActivity.this);
                 return mTakePhotoApplicable || mSelectCityApplicable;
             }
