@@ -16,7 +16,7 @@ import com.topface.topface.requests.UserSetLocaleRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Locale;
@@ -67,15 +67,15 @@ public class LocaleConfig {
         return mApplicationLocale;
     }
 
-    public boolean setSystemLocale(String locale) {
+    public void setSystemLocale(String locale) {
         mSystemLocale = locale;
-        return getPreferences().edit().putString(SYSTEM_LOCALE, mSystemLocale).commit();
+        getPreferences().edit().putString(SYSTEM_LOCALE, mSystemLocale).apply();
     }
 
-    public boolean setApplicationLocale(String locale) {
+    public void setApplicationLocale(String locale) {
         mApplicationLocale = locale;
         setSystemLocale(Locale.getDefault().getLanguage());
-        return getPreferences().edit().putString(APPLICATION_LOCALE, mApplicationLocale).commit();
+        getPreferences().edit().putString(APPLICATION_LOCALE, mApplicationLocale).apply();
     }
 
     private SharedPreferences getPreferences() {
@@ -112,9 +112,7 @@ public class LocaleConfig {
             request.callback(new ApiHandler() {
                 @Override
                 public void success(IApiResponse response) {
-                    UserConfig userConfig = App.getUserConfig();
-                    userConfig.setDefaultDatingMessage("");
-                    userConfig.saveConfig();
+                    DatingInstantMessageController.resetMessage();
                     App.sendOptionsRequest();
                     NavigationActivity.restartNavigationActivity(activity);
                 }

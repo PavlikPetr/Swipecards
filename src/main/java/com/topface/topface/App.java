@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.appsflyer.AppsFlyerLib;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
@@ -23,6 +24,7 @@ import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
+import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.FortumoProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
@@ -60,14 +62,10 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
 import org.acra.ACRA;
-import org.acra.ACRAConfiguration;
-import org.acra.ACRAConfigurationException;
-import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,7 +73,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-@ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
+@ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends Application {
 
     public static final String TAG = "Topface";
@@ -91,6 +89,7 @@ public class App extends Application {
 
     private static Boolean mIsGmsSupported;
     private static Location mCurLocation;
+    private static AppsFlyerData.ConversionHolder mAppsFlyerConversionHolder;
 
 
     /**
@@ -401,6 +400,9 @@ public class App extends Application {
 
         sendAppOptionsRequest();
 
+        mAppsFlyerConversionHolder = new AppsFlyerData.ConversionHolder();
+        AppsFlyerLib.registerConversionListener(mContext, new AppsFlyerData.ConversionListener(mAppsFlyerConversionHolder));
+
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new BackgroundThread() {
@@ -476,27 +478,27 @@ public class App extends Application {
     }
 
     private void initAcra() {
-        if (!BuildConfig.DEBUG) {
+//        if (!BuildConfig.DEBUG) {
             ACRA.init(this);
             ACRA.getErrorReporter().setReportSender(new HockeySender());
-        } else {
-            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
-            try {
-                //Что бы такая схема работала, сперва выставляем конфиг
-                ACRAConfiguration acraConfig = ACRA.getConfig();
-                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
-                acraConfig.setResDialogText(R.string.crash_dialog_text);
-                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
-                acraConfig.setMode(ReportingInteractionMode.DIALOG);
-                ACRA.setConfig(acraConfig);
-                //Потом инитим
-                ACRA.init(this);
-                //И потом выставляем ReportSender
-                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
-            } catch (ACRAConfigurationException e) {
-                Debug.error("Acra init error", e);
-            }
-        }
+//        } else {
+//            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
+//            try {
+//                //Что бы такая схема работала, сперва выставляем конфиг
+//                ACRAConfiguration acraConfig = ACRA.getConfig();
+//                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
+//                acraConfig.setResDialogText(R.string.crash_dialog_text);
+//                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
+//                acraConfig.setMode(ReportingInteractionMode.DIALOG);
+//                ACRA.setConfig(acraConfig);
+//                //Потом инитим
+//                ACRA.init(this);
+//                //И потом выставляем ReportSender
+//                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
+//            } catch (ACRAConfigurationException e) {
+//                Debug.error("Acra init error", e);
+//            }
+//        }
     }
 
     private void checkKeepAlive() {
@@ -525,6 +527,10 @@ public class App extends Application {
             mIsGmsSupported = GMSUtils.checkPlayServices(getContext());
         }
         return mIsGmsSupported;
+    }
+
+    public static AppsFlyerData.ConversionHolder getConversionHolder() {
+        return mAppsFlyerConversionHolder;
     }
 
     @Override

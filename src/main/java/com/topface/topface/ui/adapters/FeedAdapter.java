@@ -458,7 +458,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (!isEmpty()) {
             FeedList<T> data = getData();
             item = data.getFirst();
-            if (item.isAd()) {
+            if (item.isAd() && data.size() >= 2) {
                 item = data.get(1);
             }
         }

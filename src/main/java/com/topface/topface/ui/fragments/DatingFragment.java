@@ -84,6 +84,7 @@ import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.ActionBarOnlineSetterDelegate;
 import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.social.AuthToken;
@@ -176,17 +177,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            UserConfig userConfig = App.getUserConfig();
             /*
             Если нет стандартного сообщения в конфиге, устанавливаем из опций
              */
             if (
                     mDatingInstantMessageController != null &&
-                            !TextUtils.equals(App.getUserConfig().getDefaultDatingMessageLocale(),
-                                    new LocaleConfig(App.getContext()).getApplicationLocale())
+                            TextUtils.isEmpty(userConfig.getDatingMessage())
                     ) {
                 InstantMessageFromSearch message = CacheProfile.getOptions().instantMessageFromSearch;
                 mDatingInstantMessageController.setInstantMessageText(message.getText());
-                App.getUserConfig().setDefaultDatingMessage(message.getText());
+                userConfig.setDatingMessage(message.getText());
+                userConfig.saveConfig();
             }
         }
     };
