@@ -250,7 +250,7 @@ public class App extends Application {
 
                     @Override
                     protected void success(Profile data, IApiResponse response) {
-                        if (data.photosCount != 0) {
+                        if (data.photosCount == 0) {
                             App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                             App.getConfig().getUserConfig().saveConfig();
                         }
