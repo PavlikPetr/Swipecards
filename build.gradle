@@ -148,7 +148,7 @@ dependencies {
     compile project(':libs:IllustratedTextView')
     compile project(':libs:statistics-android')
     //Third party libs
-    compile('ch.acra:acra:4.6.0RC1') {
+    compile('ch.acra:acra:4.6.0RC2') {
         //Удаляем предоставляемыю acra зависимость org.json, так как она все рвно не нужна
         //и на нее ругается gradle
         exclude group: 'org.json'
