@@ -279,10 +279,10 @@ public class Utils {
         return mCarrier;
     }
 
-    public static String getNameAndAge(String userName, int UserAge) {
+    public static String getNameAndAge(String userName, int userAge) {
         String name = TextUtils.isEmpty(userName) ? "" : userName;
         String divider = TextUtils.isEmpty(name) ? "" : ", ";
-        String age = UserAge > 0 ? Integer.toString(UserAge) : "";
+        String age = userAge > 0 ? Integer.toString(userAge) : "";
         divider = TextUtils.isEmpty(age) ? "" : divider;
         return name.concat(divider).concat(age);
     }
