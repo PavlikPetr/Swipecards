@@ -46,6 +46,7 @@ public class UserConfig extends AbstractUniqueConfig {
     public static final String SETTINGS_GCM_RINGTONE = "settings_c2dm_ringtone";
     public static final String SETTINGS_GCM_VIBRATION = "settings_c2dm_vibration";
     public static final String SETTINGS_GCM = "settings_c2dm";
+    public static final String IS_AVATAR_AVAILABLE = "is_avatar_available";
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
     public static final String SETTINGS_GCM_LED = "settings_gcm_led";
     public static final String SILENT = "silent";
@@ -115,6 +116,8 @@ public class UserConfig extends AbstractUniqueConfig {
         // Время начала текущих суток для учёта количества показов рекламы pubnative
         // Обновляется автоматически при попытке получить оставшиеся показы pubnative
         addField(settingsMap, LAST_DAY_PUBNATIVE_SHOWN, 0L);
+        // validate user avatar
+        addField(settingsMap, IS_AVATAR_AVAILABLE, false);
     }
 
     @Override
@@ -406,6 +409,20 @@ public class UserConfig extends AbstractUniqueConfig {
      */
     public void setLEDEnabled(boolean enabled) {
         setField(getSettingsMap(), SETTINGS_GCM_LED, enabled);
+    }
+
+    /**
+     * @return true if user set avatar at empty album
+     */
+    public boolean isUserAvatarAvailable() {
+        return getBooleanField(getSettingsMap(), IS_AVATAR_AVAILABLE);
+    }
+
+    /**
+     * Sets avatar available state for popup "Set photo"
+     */
+    public void setUserAvatarAvailable(boolean enabled) {
+        setField(getSettingsMap(), IS_AVATAR_AVAILABLE, enabled);
     }
 
     /**
