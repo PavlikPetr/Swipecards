@@ -26,12 +26,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ScruffyRequestManager {
 
-    public static final String CONNECTION_CHANGED_ACTION = "com.topface.framework.api.fatwood.CONNECTION_CHANGED";
-    public static final String CONNECTION_ESTABLISHED = "com.topface.framework.api.fatwood.CONNECTION_ESTABLISHED";
     public static final String API_URL = "wss://scruffy.core.tf/v7";
     private static final long FATWOOD_TIMEOUT = 10 * 1000;
     private static final int SENT_REQUESTS_LIMIT = 10;
     public static final int MIN_RECONNECT_DELAY_SEC = 2;
+    private static final int RECONNECTION_LIMIT_FOR_HTTP_SWITCH = 3;
 
     private static ScruffyRequestManager mInstance;
     private WebSocket mWebSocket;
@@ -74,6 +73,7 @@ public class ScruffyRequestManager {
     private Timer mTimer;
     private int mLastDecreasedSentRequestsCount;
     private long mLastDecreasedSentRequestTime;
+    private boolean mScruffyAvailable = true;
 
     /**
      * Parses common structure of response
@@ -137,10 +137,10 @@ public class ScruffyRequestManager {
                                 sendPendingRequestWithKey(entry.getKey());
                             }
                         }
-                        /*if (sentQueueIsGrowing()) {
+                        if (sentQueueIsGrowing()) {
                             mSentRequests.clear();
                             reconnect();
-                        }*/
+                        }
                     } else if (!isConnected()) {
                         //Если мы не подключены, то коннектимся
                         connect();
@@ -257,11 +257,14 @@ public class ScruffyRequestManager {
     }
 
     private void reconnect() {
+        int reconnectCounter = mReconnectCounter.incrementAndGet();
+        if (reconnectCounter > RECONNECTION_LIMIT_FOR_HTTP_SWITCH) {
+            makeScruffyUnavailable();
+        }
         if (!mIsAuthInProgress.get()) {
             if (mWebSocket != null) {
                 mWebSocket = null;
             }
-            int reconnectCounter = mReconnectCounter.incrementAndGet();
             int reconnectDelay = (int) Math.pow(MIN_RECONNECT_DELAY_SEC, reconnectCounter);
             Debug.error("Scruffy:: connect error. Try reconnect #" + reconnectCounter
                     + " with delay=" + reconnectDelay + " sec");
@@ -271,6 +274,17 @@ public class ScruffyRequestManager {
             mTimer = new Timer();
             mTimer.schedule(new ReconnectTask(), reconnectDelay * 1000L);
         }
+    }
+
+    private void makeScruffyUnavailable() {
+        mScruffyAvailable = false;
+        for (ScruffyRequestHolder holder : mSentRequests.values()) {
+            holder.getRequest().exec();
+        }
+        for (ScruffyRequestHolder holder : mPendingRequests.values()) {
+            holder.getRequest().exec();
+        }
+        clearState();
     }
 
     public boolean isConnected() {
@@ -341,5 +355,9 @@ public class ScruffyRequestManager {
             msg.obj = error;
             sendMessage(msg);
         }
+    }
+
+    public boolean isAvailable() {
+        return mScruffyAvailable;
     }
 }

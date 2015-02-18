@@ -97,6 +97,10 @@ public class AppOptions extends AbstractData {
         return conditions.userStatusMaxLength;
     }
 
+    public boolean isScruffyEnabled() {
+        return scruffy;
+    }
+
     private class ClientStatisticSettings {
         boolean enabled = false;
         boolean connectionStatisticsEnabled = false;

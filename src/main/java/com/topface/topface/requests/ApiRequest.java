@@ -272,16 +272,13 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     protected IApiTransport getTransport() {
-        IApiTransport transport;
         switch (App.getApiTransport()) {
             case ScruffyApiTransport.TRANSPORT_NAME:
-                transport = new ScruffyApiTransport();
-                break;
+                return new ScruffyApiTransport();
             case HttpApiTransport.TRANSPORT_NAME:
             default:
-                transport = getDefaultTransport();
+                return getDefaultTransport();
         }
-        return transport;
     }
 
     protected IApiTransport getDefaultTransport() {
