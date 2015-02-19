@@ -249,6 +249,10 @@ public class App extends Application {
 
                     @Override
                     protected void success(Profile data, IApiResponse response) {
+                        if (data.photosCount == 0) {
+                            App.getConfig().getUserConfig().setUserAvatarAvailable(false);
+                            App.getConfig().getUserConfig().saveConfig();
+                        }
                         CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
                         NativeAdManager.init();

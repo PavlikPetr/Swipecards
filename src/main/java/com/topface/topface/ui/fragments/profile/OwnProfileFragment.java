@@ -45,6 +45,8 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                 // ставим фото на аватарку только если она едиснтвенная
                 if (CacheProfile.photos.size() == 0) {
                     CacheProfile.photo = photo;
+                    App.getConfig().getUserConfig().setUserAvatarAvailable(true);
+                    App.getConfig().getUserConfig().saveConfig();
                 }
                 // добавляется фото в начало списка
                 CacheProfile.photos.addFirst(photo);
