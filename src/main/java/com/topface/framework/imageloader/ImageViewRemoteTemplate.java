@@ -27,6 +27,8 @@ import java.util.TimerTask;
 public abstract class ImageViewRemoteTemplate extends ImageView {
     public static final int LOADING_COMPLETE = 0;
     private static final int LOADING_ERROR = 1;
+    private static final boolean DEFAULT_NEED_ANIMATE_ON_APPEAR = true;
+
     /**
      * Максимальное количество дополнительных попыток загрузки изображения
      */
@@ -59,6 +61,10 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
     private View mLoader;
     protected int maxHeight;
     protected int maxWidth;
+
+    // needed by some sub-classes to know - if need animate image when new content setted
+    private boolean mNeedAnimateOnAppear = DEFAULT_NEED_ANIMATE_ON_APPEAR;
+
 
     public ImageViewRemoteTemplate(Context context) {
         super(context);
@@ -287,6 +293,13 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
                 mHandler.sendEmptyMessage(LOADING_ERROR);
             }
         }
+
+        @Override
+        public void onLoadedFromMemoryCache() {
+            super.onLoadedFromMemoryCache();
+            setNeedAnimateOnAppear(false);
+            stopAppearingAnimation();
+        }
     }
 
 
@@ -302,5 +315,27 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
     @SuppressWarnings("UnusedDeclaration")
     public int getImageMaxWidth() {
         return maxWidth;
+    }
+
+    public void setNeedAnimateOnAppear(boolean needAnimateOnAppear) {
+        mNeedAnimateOnAppear = needAnimateOnAppear;
+    }
+
+    /**
+     * Stops apperaring animation in some sub-classes
+     */
+    public void stopAppearingAnimation() {
+
+    }
+
+    protected boolean isNeedAnimateOnAppear() {
+        return mNeedAnimateOnAppear;
+    }
+
+    /**
+     * Resets mNeedAnimateOnAppear, use if image view will be reused
+     */
+    protected void resetNeedAnimateOnAppear() {
+        setNeedAnimateOnAppear(DEFAULT_NEED_ANIMATE_ON_APPEAR);
     }
 }

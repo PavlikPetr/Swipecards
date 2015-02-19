@@ -112,7 +112,8 @@ public class DefaultImageLoader {
                     uri,
                     imageView,
                     options,
-                    listener
+                    listener,
+                    null
             );
 
         } catch (Exception e) {
