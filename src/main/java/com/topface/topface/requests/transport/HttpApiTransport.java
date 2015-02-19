@@ -24,7 +24,7 @@ public class HttpApiTransport implements IApiTransport {
     public static final String TRANSPORT_NAME = "http";
 
     @Override
-    public IApiResponse sendRequestAndReadResponse(IApiRequest request) {
+    public IApiResponse sendRequestAndReadResponse(IApiRequest request) throws IOException {
         if (request == null) {
             throw new IllegalArgumentException("Request is null");
         }
@@ -40,15 +40,12 @@ public class HttpApiTransport implements IApiTransport {
 
         final IRequestConnectionListener listener = RequestConnectionListenerFactory.create(request.getServiceName());
         listener.onConnectionStarted();
-        HttpURLConnection connection = null;
+        HttpURLConnection connection;
         try {
             connection = HttpUtils.openPostConnection(apiUrl, request.getContentType());
         } catch (IOException e) {
             Debug.error(e);
-            if (connection != null) {
-                connection.disconnect();
-            }
-            return new ApiResponse(ErrorCodes.NETWORK_CONNECT_ERROR, e.getMessage());
+            throw (e);
         }
 
         ApiRequest.IConnectionConfigureListener connConfListener = createConnectionListener(listener);
@@ -77,7 +74,7 @@ public class HttpApiTransport implements IApiTransport {
                 connection.disconnect();
             }
             Debug.error(e);
-            response = new ApiResponse(ErrorCodes.NETWORK_CONNECT_ERROR, e.getMessage());
+            throw (e);
         }
 
         return response;
