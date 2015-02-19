@@ -73,7 +73,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-@ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
+@ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends Application {
 
     public static final String TAG = "Topface";
