@@ -1,6 +1,5 @@
 package com.topface.billing;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -51,7 +50,7 @@ import java.util.List;
  */
 public abstract class OpenIabFragment extends AbstractBillingFragment implements
         IabHelper.OnIabPurchaseFinishedListener,
-        IabHelper.OnConsumeFinishedListener, OpenIabHelperManager.IInventoryReceiver {
+        IabHelper.OnConsumeFinishedListener, OpenIabHelperManager.IOpenIabEventListener {
 
     public static final String ARG_TAG_SOURCE = "from_value";
     public static final int BUYING_REQUEST = 1001;
@@ -81,46 +80,15 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        checkIabSetupFinished();
+    public void onResume() {
+        super.onResume();
+        App.getOpenIabHelperManager().addOpenIabEventListener(getActivity(), this);
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        App.getOpenIabHelperManager().removeInventoryReceiver(this);
-    }
-
-    public void checkIabSetupFinished() {
-        if (!App.getOpenIabHelperManager().isSetupFinished()) {
-            if (isAdded()) {
-                onInAppBillingUnsupported();
-                onSubscriptionUnsupported();
-            }
-            return;
-        }
-
-        App.getOpenIabHelperManager().addInventoryReceiver(this);
-
-        if (isAdded()) {
-            //Вызываем колбэки, оповещая, что покупки доступны
-            onInAppBillingSupported();
-
-            if (App.getOpenIabHelperManager().isSubscriptionsSupported()) {
-                onSubscriptionSupported();
-            } else {
-                onSubscriptionUnsupported();
-            }
-
-            if (mHasDeferredPurchase) {
-                stopWaiting();
-                buyNow((Products.BuyButton) mDeferredPurchaseButton.getTag());
-                mHasDeferredPurchase = false;
-                mDeferredPurchaseButton = null;
-            }
-        }
-
+    public void onPause() {
+        super.onPause();
+        App.getOpenIabHelperManager().removeOpenIabEventListener(this);
     }
 
     private void startWaiting() {
@@ -304,7 +272,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      */
     public void buyItem(final String id) {
         Debug.log("BillingFragment: buyItem " + id + " test: " + isTestPurchasesEnabled());
-        if (id != null && App.getOpenIabHelperManager().isSetupFinished()) {
+        if (id != null && App.getOpenIabHelperManager().isIabAvailable()) {
             try {
                 App.getOpenIabHelperManager().launchPurchaseFlow(
                         getActivity(),
@@ -327,7 +295,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      */
     public void buySubscription(final String id) {
         Debug.log("BillingFragment: buySubscription " + id + " test: " + isTestPurchasesEnabled());
-        if (id != null && App.getOpenIabHelperManager().isSetupFinished()) {
+        if (id != null && App.getOpenIabHelperManager().isIabAvailable()) {
             App.getOpenIabHelperManager().launchSubscriptionPurchaseFlow(
                     getActivity(),
                     //Если тестовые покупки, то подменяем id продукта на тестовый
@@ -547,6 +515,37 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     @Override
     public void receiveInventory(Inventory inventory) {
         checkInventory(inventory);
+    }
+
+    @Override
+    public void onOpenIabSetupFinished(boolean normaly) {
+        if (normaly) {
+            if (isAdded()) {
+                //Вызываем колбэки, оповещая, что покупки доступны
+                onInAppBillingSupported();
+
+                if (App.getOpenIabHelperManager().isSubscriptionsSupported()) {
+                    onSubscriptionSupported();
+                } else {
+                    onSubscriptionUnsupported();
+                }
+
+                if (mHasDeferredPurchase) {
+                    stopWaiting();
+                    buyNow((Products.BuyButton) mDeferredPurchaseButton.getTag());
+                    mHasDeferredPurchase = false;
+                    mDeferredPurchaseButton = null;
+                }
+            }
+
+        } else {
+            if (!App.getOpenIabHelperManager().isIabAvailable()) {
+                if (isAdded()) {
+                    onInAppBillingUnsupported();
+                    onSubscriptionUnsupported();
+                }
+            }
+        }
     }
 }
 

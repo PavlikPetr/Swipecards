@@ -510,11 +510,6 @@ public class App extends Application {
         if (mConnectionIntent != null && mConnectionReceiver != null) {
             unregisterReceiver(mConnectionReceiver);
         }
-        // clear openIab helper manager
-        if (mOpenIabHelperManager != null) {
-            mOpenIabHelperManager.dispose();
-            mOpenIabHelperManager = null;
-        }
     }
 }
 

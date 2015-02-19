@@ -8,6 +8,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 
+import com.google.gson.JsonSyntaxException;
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
@@ -25,7 +27,6 @@ import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.config.SessionConfig;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -287,10 +288,8 @@ public class CacheProfile {
             if (!TextUtils.isEmpty(productsDetailsCache)) {
                 //Получаем опции из кэша
                 try {
-                    mProductsDetails = new ProductsDetails(
-                            new JSONArray(productsDetailsCache)
-                    );
-                } catch (JSONException e) {
+                    mProductsDetails = JsonUtils.fromJson(productsDetailsCache, ProductsDetails.class);
+                } catch (JsonSyntaxException e) {
                     config.resetGoogleProductsData();
                     Debug.error(e);
                 }
@@ -372,7 +371,7 @@ public class CacheProfile {
     public static void setMarketProductsDetails(ProductsDetails productsDetails) {
         mProductsDetails = productsDetails;
         if (mProductsDetails != null) {
-            App.getSessionConfig().setMarketProductsDetailsData(mProductsDetails.getJson());
+            App.getSessionConfig().setMarketProductsDetailsData(JsonUtils.toJson(mProductsDetails));
         }
     }
 

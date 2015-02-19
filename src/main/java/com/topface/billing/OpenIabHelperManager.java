@@ -28,46 +28,53 @@ import java.util.List;
 public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListener, IabHelper.QueryInventoryFinishedListener {
     private OpenIabHelper mHelper;
     private OpenIabHelper.Options.Builder mOptsBuilder;
-    private boolean mIabSetupFinished = false;
+    private boolean mIabAvailable = false;
     private boolean mIsInventoryReady = false;
-    private boolean mIsStarted = false;
-    private ArrayList<IInventoryReceiver> mInventoryReceivers = new ArrayList<>();
+    private boolean mIsSetupStarted = false;
+    private boolean mIsSetupDone = false;
+    private ArrayList<IOpenIabEventListener> mInventoryReceivers = new ArrayList<>();
     private Inventory mLastInventory;
 
-    public interface IInventoryReceiver {
+    public interface IOpenIabEventListener {
         public void receiveInventory(Inventory inventory);
+
+        public void onOpenIabSetupFinished(boolean normaly);
     }
 
-    public void init() {
-        if (!mIsStarted) {
-            mIsStarted = true;
+    private void init(Context context) {
+        if (!mIsSetupStarted) {
+            mIsSetupStarted = true;
+            mIsSetupDone = false;
             if (mOptsBuilder == null) {
                 mOptsBuilder = new OpenIabHelper.Options.Builder();
                 //Проверять локально покупку мы не будем, пускай сервер проверит
                 mOptsBuilder.setVerifyMode(OpenIabHelper.Options.VERIFY_ONLY_KNOWN);
                 //Мы сами выбираем какой маркет у нас используется
                 mOptsBuilder.setStoreSearchStrategy(OpenIabHelper.Options.SEARCH_STRATEGY_BEST_FIT);
-                addAvailableStores(App.getContext(), mOptsBuilder);
+                addAvailableStores(context, mOptsBuilder);
                 //Включаем/выключаем логи
                 Logger.setLoggable(Debug.isDebugLogsEnabled());
             }
             //Создаем хелпер
-            mHelper = new OpenIabHelper(App.getContext(), mOptsBuilder.build());
+            mHelper = new OpenIabHelper(context, mOptsBuilder.build());
             mHelper.startSetup(this);
         }
     }
 
     /**
-     * this _should_ be called
+     * Clear mHelper, when its not needed to anybody
      */
-    public void dispose() {
+    public void freeHelper() {
         if (mHelper != null) {
             mHelper.dispose();
         }
 
-        mInventoryReceivers.clear();
-
         mHelper = null;
+        mIsSetupStarted = false;
+        mIsSetupDone = false;
+        mIabAvailable = false;
+        mIsInventoryReady = false;
+        mLastInventory = null;
     }
 
     /**
@@ -137,14 +144,19 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
     public void onIabSetupFinished(IabResult result) {
         Debug.log("OpenIabHelperManager: onIabSetupFinished");
 
+        mIsSetupDone = true;
+
         if (result.isFailure()) {
             //При инциализации произошла ошибка!
             Debug.error("OpenIabHelperManager: IAB setup is not success: " + result);
+            notifySetupFinished();
+            freeHelper();
             return;
         }
 
-        mIabSetupFinished = true;
+        mIabAvailable = true;
 
+        notifySetupFinished();
         Debug.log("OpenIabHelperManager: Setup successful");
 
         requestInventory();
@@ -154,8 +166,8 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
         return mLastInventory;
     }
 
-    public boolean isSetupFinished() {
-        return mIabSetupFinished;
+    public boolean isIabAvailable() {
+        return mIabAvailable;
     }
 
     public boolean isSubscriptionsSupported() {
@@ -171,6 +183,8 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
             mIsInventoryReady = false;
             List<String> skuList = getMarketSkuList();
             mHelper.queryInventoryAsync(true, skuList, skuList, this);
+        } else {
+            init(App.getContext());
         }
     }
 
@@ -217,29 +231,64 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
         }
     }
 
-    public void addInventoryReceiver(IInventoryReceiver receiver) {
+    public void addOpenIabEventListener(Context context, IOpenIabEventListener receiver) {
+        // context should be activity
+        // for correct work of OpenIabHelper
+        if (!(context instanceof Activity)) {
+            throw new IllegalStateException("OpenIabHelperManager:: context for helper must be Activity!");
+        }
         if (!mInventoryReceivers.contains(receiver)) {
             mInventoryReceivers.add(receiver);
+            if (mIsSetupDone) {
+                notitySetupFinished(receiver);
+            }
             if (mIsInventoryReady) {
                 notityInventoryReceiver(receiver);
             }
         }
 
-    }
-
-    public void removeInventoryReceiver(IInventoryReceiver receiver) {
-        if (mInventoryReceivers.contains(receiver)) {
-            mInventoryReceivers.remove(receiver);
+        if (mHelper == null) {
+            init(context);
         }
     }
 
-    private void notityInventoryReceiver(IInventoryReceiver receiver) {
+    public void removeOpenIabEventListener(IOpenIabEventListener receiver) {
+        if (mInventoryReceivers.contains(receiver)) {
+            mInventoryReceivers.remove(receiver);
+        }
+        // free helper, when nobody need it
+        if (mInventoryReceivers.isEmpty()) {
+            freeHelper();
+        }
+    }
+
+    private void notityInventoryReceiver(IOpenIabEventListener receiver) {
         receiver.receiveInventory(getInvetory());
     }
 
     private void notifyInventoryReceivers() {
-        for (IInventoryReceiver receiver : mInventoryReceivers) {
-            notityInventoryReceiver(receiver);
+        // if there are no active listeners - free helper
+        // don't do it when notifing about setup finish,
+        // because it will broke inventory update
+        if (mInventoryReceivers.isEmpty()) {
+            freeHelper();
+        } else {
+            for (IOpenIabEventListener receiver : mInventoryReceivers) {
+                notityInventoryReceiver(receiver);
+            }
+        }
+    }
+
+    private void notitySetupFinished(IOpenIabEventListener receiver) {
+        receiver.onOpenIabSetupFinished(isIabAvailable());
+    }
+
+    private void notifySetupFinished() {
+        // we must not check for active listeners here,
+        // because at next step we need to update inventory
+        // and products details in cache
+        for (IOpenIabEventListener receiver : mInventoryReceivers) {
+            notitySetupFinished(receiver);
         }
     }
 }

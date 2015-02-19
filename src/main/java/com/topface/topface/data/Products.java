@@ -89,7 +89,7 @@ public class Products extends AbstractData {
 
     protected void fillData(JSONObject data) {
         fillProducts(data);
-        App.getOpenIabHelperManager().init();
+        App.getOpenIabHelperManager().updateInventory();
         updateCache(data);
     }
 
@@ -201,7 +201,7 @@ public class Products extends AbstractData {
             economy = null;
         } else {
             ProductsDetails.ProductDetail detail = CacheProfile.getMarketProductsDetails().getProductDetail(buyBtn.id);
-            if (detail.isReady()) {
+            if (detail != null) {
                 value = String.format(
                         App.getContext().getString(R.string.default_price_format_extended),
                         detail.price / ProductsDetails.MICRO_AMOUNT,
@@ -449,7 +449,7 @@ public class Products extends AbstractData {
                 discount = json.optInt("discount");
                 paymentwallLink = json.optString("url");
                 ProductsDetails.ProductDetail detail = CacheProfile.getMarketProductsDetails().getProductDetail(id);
-                if (detail.isReady()) {
+                if (detail != null) {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
                     double pricePerItem = price / amount;
                     title = titleTemplate.replace("{{price}}", String.format("%.2f %s", price, detail.currency));

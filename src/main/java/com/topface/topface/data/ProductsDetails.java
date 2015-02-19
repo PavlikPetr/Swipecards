@@ -1,8 +1,8 @@
 package com.topface.topface.data;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.JsonSyntaxException;
+import com.topface.framework.JsonUtils;
+
 import org.onepf.oms.appstore.googleUtils.Inventory;
 import org.onepf.oms.appstore.googleUtils.SkuDetails;
 
@@ -21,21 +21,12 @@ public class ProductsDetails {
     private Map<String, ProductDetail> mDetailsMap = new HashMap<>();
 
     /**
-     * initialize this with cached information about products details
+     * initialize this with prepeared map of details
      *
-     * @param json cached JSONArray of details
+     * @param detailsMap prepeared map of details
      */
-    public ProductsDetails(JSONArray json) {
-        int length = json.length();
-        if (length > 0) {
-            mDetailsMap = new HashMap<>();
-            for (int i = 0; i < length; i++) {
-                ProductDetail detail = new ProductDetail(json.optString(i));
-                if (detail.isReady()) {
-                    mDetailsMap.put(detail.id, detail);
-                }
-            }
-        }
+    private ProductsDetails(HashMap<String, ProductDetail> detailsMap) {
+        mDetailsMap = detailsMap;
     }
 
     /**
@@ -48,20 +39,7 @@ public class ProductsDetails {
         if (mDetailsMap.containsKey(productId)) {
             return mDetailsMap.get(productId);
         }
-        return new ProductDetail();
-    }
-
-    /**
-     * generates JSONArray in String to cache this whole list of details
-     *
-     * @return String containig JSONArray
-     */
-    public String getJson() {
-        JSONArray resultArray = new JSONArray();
-        for (String key : mDetailsMap.keySet()) {
-            resultArray.put(mDetailsMap.get(key));
-        }
-        return resultArray.toString();
+        return null;
     }
 
     /**
@@ -73,13 +51,30 @@ public class ProductsDetails {
     public static ProductsDetails createFromInventory(Inventory inventory) {
 
         Map<String, SkuDetails> skuMap = inventory.getSkuMap();
-        JSONArray json = new JSONArray();
+        HashMap<String, ProductDetail> detailsMap = new HashMap<>();
         if (skuMap != null && !skuMap.isEmpty()) {
             for (String id : skuMap.keySet()) {
-                json.put(ProductDetail.createFromGooglePlayJson(skuMap.get(id).getJson()).toJson().toString());
+                ProductDetail productDetail = ProductDetail.createFromGooglePlayJson(skuMap.get(id).getJson());
+                if (productDetail != null) {
+                    detailsMap.put(productDetail.id, productDetail);
+                }
             }
         }
-        return new ProductsDetails(json);
+        return new ProductsDetails(detailsMap);
+    }
+
+    /**
+     * GooglePlay SKU details structure
+     * need for Gson parsing
+     */
+    private class GPSkuDetail {
+        public String productId;
+        public String type;
+        public String price;
+        public long price_amount_micros;
+        public String price_currency_code;
+        public String title;
+        public String description;
     }
 
     /**
@@ -87,21 +82,6 @@ public class ProductsDetails {
      * and work with it
      */
     public static class ProductDetail {
-        /**
-         * fields in JSON for internal use
-         * and for initialization from GP
-         */
-        public static class Field {
-            // internal fields
-            public static final String PRICE = "price";
-            public static final String CURRENCY = "currency";
-            public static final String ID = "id";
-            // GooglePlay fields
-            public static final String GP_CURRENCY = "price_currency_code";
-            public static final String GP_PRICE = "price_amount_micros";
-            public static final String GP_ID = "productId";
-        }
-
         // Price in micro-units, where 1,000,000 micro-units equal one unit of the currency.
         // For example, if price is "€7.99", price_amount_micros is "7990000".
         public long price;
@@ -110,32 +90,6 @@ public class ProductsDetails {
         public String currency;
         // The product ID for the product.
         public String id;
-        // was this product created normally?
-        private boolean mIsReady = false;
-
-        /**
-         * default constructor - products was not created
-         */
-        public ProductDetail() {
-            mIsReady = false;
-        }
-
-        /**
-         * creates product from internal json format
-         *
-         * @param jsonSource internal JSONOBject to parse
-         */
-        public ProductDetail(String jsonSource) {
-            try {
-                JSONObject json = new JSONObject(jsonSource);
-                this.currency = json.optString(Field.CURRENCY);
-                this.price = json.optLong(Field.PRICE);
-                this.id = json.optString(Field.ID);
-                mIsReady = true;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
 
         /**
          * creates products from direct initial values
@@ -149,30 +103,6 @@ public class ProductsDetails {
             this.price = price;
             this.currency = currency;
             this.id = id;
-            this.mIsReady = true;
-        }
-
-        public boolean isReady() {
-            return mIsReady;
-        }
-
-        /**
-         * generates JSON of internal format
-         *
-         * @return internal formatted JSON, usualy for write to cache
-         */
-        public JSONObject toJson() {
-            JSONObject result = new JSONObject();
-            try {
-                if (this.mIsReady) {
-                    result.put(Field.CURRENCY, this.currency);
-                    result.put(Field.PRICE, this.price);
-                    result.put(Field.ID, this.id);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return result;
         }
 
         /**
@@ -183,15 +113,12 @@ public class ProductsDetails {
          */
         private static ProductDetail createFromGooglePlayJson(String gpDetailSource) {
             try {
-                JSONObject json = new JSONObject(gpDetailSource);
-                String currency = json.optString(Field.GP_CURRENCY);
-                long price = json.optLong(Field.GP_PRICE);
-                String id = json.optString(Field.GP_ID);
-                return new ProductDetail(id, price, currency);
-            } catch (JSONException e) {
-                e.printStackTrace();
+                GPSkuDetail gpSkuDetail = JsonUtils.fromJson(gpDetailSource, GPSkuDetail.class);
+                return new ProductDetail(gpSkuDetail.productId, gpSkuDetail.price_amount_micros, gpSkuDetail.price_currency_code);
+            } catch (JsonSyntaxException ex) {
+                ex.printStackTrace();
             }
-            return new ProductDetail();
+            return null;
         }
     }
 }
