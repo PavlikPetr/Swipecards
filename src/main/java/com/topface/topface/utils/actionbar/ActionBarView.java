@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.ui.BanActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -64,8 +65,8 @@ public class ActionBarView implements View.OnClickListener {
         mTitle.setText(title);
     }
 
-    public void setBanActivityView() {
-        prepareView();
+    public void setArrowUpView() {
+        setArrowUpView(null);
     }
 
 
@@ -92,6 +93,8 @@ public class ActionBarView implements View.OnClickListener {
                 }
                 mActivity.startActivity(intent);
                 mActivity.finish();
+            } else if (mActivity instanceof BanActivity) {
+                mActivity.onBackPressed();
             } else {
                 mActivity.finish();
             }

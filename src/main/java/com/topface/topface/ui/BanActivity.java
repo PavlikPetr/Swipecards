@@ -36,10 +36,10 @@ public class BanActivity extends TrackedFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBarView mActionBarView = new ActionBarView(getSupportActionBar(), this);
-        mActionBarView.setBanActivityView();
+        ActionBarView actionBarView = new ActionBarView(getSupportActionBar(), this);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        actionBarView.setArrowUpView();
         getSupportActionBar().hide();
-
         setContentView(R.layout.ban_activity);
         BaseFragment fragment = getFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.ban_content, fragment, null).commit();
