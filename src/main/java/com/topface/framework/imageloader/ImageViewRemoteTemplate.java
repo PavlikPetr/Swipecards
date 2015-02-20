@@ -90,7 +90,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
     protected abstract void setAttributes(AttributeSet attrs);
 
     @SuppressWarnings("unused")
-    protected abstract BitmapProcessor setProcessor(int postProcessorId, float cornerRadius, int maskId);
+    protected abstract BitmapProcessor createProcessor(int postProcessorId, float cornerRadius, int maskId);
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
@@ -175,11 +175,11 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
         return DefaultImageLoader.getInstance(context);
     }
 
-    private BitmapProcessor getPreProcessor() {
+    private BitmapProcessor getPostProcessor() {
         return mPostProcessor;
     }
 
-    private BitmapProcessor getPostProcessor() {
+    private BitmapProcessor getPreProcessor() {
         return mPreProcessor;
     }
 

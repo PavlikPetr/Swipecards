@@ -264,6 +264,7 @@
 
     <style name="EditAvatar">
         <item name="preProcessor">mask</item>
+        <item name="postProcessor">none</item>
         <item name="clipMask">@drawable/edit_main_avatar_mask</item>
         <item name="android:background">@drawable/edit_main_avatar_background</item>
         <item name="android:layout_centerInParent">true</item>
@@ -273,6 +274,7 @@
 
     <style name="FeedAvatar">
         <item name="preProcessor">mask</item>
+        <item name="postProcessor">none</item>
         <item name="clipMask">@drawable/feed_photo_mask</item>
         <item name="border">@drawable/feed_photo_border</item>
         <item name="android:layout_alignParentLeft">true</item>
@@ -431,8 +433,8 @@
     </style>
 
     <style name="Gift">
-        <item name="postProcessor">squared</item>
-        <item name="preProcessor">none</item>
+        <item name="postProcessor">none</item>
+        <item name="preProcessor">squared</item>
         <item name="android:layout_width">97dp</item>
         <item name="android:layout_height">99dp</item>
         <item name="android:paddingLeft">1dp</item>
@@ -447,8 +449,8 @@
     </style>
 
     <style name="AlbumGift" parent="Gift">
-        <item name="postProcessor">none</item>
-        <item name="preProcessor">rounded</item>
+        <item name="postProcessor">rounded</item>
+        <item name="preProcessor">none</item>
     </style>
 
     <style name="Informer">

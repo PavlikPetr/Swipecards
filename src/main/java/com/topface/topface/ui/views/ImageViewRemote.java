@@ -14,7 +14,7 @@ import com.topface.topface.utils.imageloader.LeftMenuClipProcessor;
 import com.topface.topface.utils.imageloader.MaskClipProcessor;
 
 
-public class ImageViewRemote extends ImageViewRemoteTemplate {
+public class ImageViewRemote extends ImageViewRemoteTemplate implements SquareProcessor.IViewSizeGetter {
     protected static final int POST_PROCESSOR_NONE = 0;
     private static final int POST_PROCESSOR_ROUNDED = 1;
     private static final int POST_PROCESSOR_ROUND_CORNERS = 2;
@@ -50,13 +50,13 @@ public class ImageViewRemote extends ImageViewRemoteTemplate {
                 R.styleable.ImageViewRemote_preProcessor,
                 POST_PROCESSOR_NONE);
 
-        mPreProcessor = setProcessor(processorId, cornerRadius, maskId);
+        mPreProcessor = createProcessor(processorId, cornerRadius, maskId);
 
         processorId = values.getInt(
                 R.styleable.ImageViewRemote_postProcessor,
                 POST_PROCESSOR_NONE);
 
-        mPostProcessor = setProcessor(processorId, cornerRadius, maskId);
+        mPostProcessor = createProcessor(processorId, cornerRadius, maskId);
 
 
         if (!isInEditMode()) {
@@ -72,7 +72,7 @@ public class ImageViewRemote extends ImageViewRemoteTemplate {
     }
 
     @Override
-    protected BitmapProcessor setProcessor(int processorId, float cornerRadius, int maskId) {
+    protected BitmapProcessor createProcessor(int processorId, float cornerRadius, int maskId) {
         if (!isInEditMode()) {
             switch (processorId) {
                 case POST_PROCESSOR_ROUNDED:
@@ -84,7 +84,7 @@ public class ImageViewRemote extends ImageViewRemoteTemplate {
                 case POST_PROCESSOR_LEFTMENUCLIP:
                     return new LeftMenuClipProcessor();
                 case POST_PROCESSOR_SQUARED:
-                    return new SquareProcessor();
+                    return new SquareProcessor(this);
                 default:
                     return null;
             }

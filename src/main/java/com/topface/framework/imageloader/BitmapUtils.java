@@ -333,6 +333,7 @@ public class BitmapUtils {
         return output;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public static Bitmap getRoundedBitmap(Bitmap bitmap, int dstWidth, int dstHeight) {
         if (bitmap == null)
             return null;
@@ -437,4 +438,21 @@ public class BitmapUtils {
         return Bitmap.createScaledBitmap(output, bitmap.getWidth(), bitmap.getWidth(), true);
     }
 
+    public static Bitmap squareBitmap(Bitmap bitmap, int width, int height) {
+        int srcWidth = bitmap.getWidth();
+        int srcHeight = bitmap.getHeight();
+        Bitmap output;
+        if (srcHeight != srcWidth) {
+            int delta = Math.abs(srcHeight - srcWidth);
+            output = Bitmap.createScaledBitmap(bitmap, width, height - delta / 2, true);
+        } else {
+            output = Bitmap.createScaledBitmap(bitmap, width, height, true);
+        }
+        if (!bitmap.isRecycled()) {
+            bitmap.recycle();
+        } else {
+            Debug.error("Bitmap is already recycled");
+        }
+        return output;
+    }
 }

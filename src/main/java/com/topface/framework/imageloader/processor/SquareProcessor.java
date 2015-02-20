@@ -7,11 +7,25 @@ import com.topface.framework.imageloader.BitmapUtils;
 
 public class SquareProcessor implements BitmapProcessor {
 
-    public SquareProcessor() {
+
+    private IViewSizeGetter mSizeGetter;
+
+
+    public SquareProcessor(IViewSizeGetter sizeGetter) {
+        this.mSizeGetter = sizeGetter;
     }
 
     @Override
     public Bitmap process(Bitmap bitmap) {
-        return BitmapUtils.clipAndScaleBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight());
+        int height = mSizeGetter.getHeight() == 0 ? bitmap.getHeight() : mSizeGetter.getHeight();
+        int widght = mSizeGetter.getWidth() == 0 ? bitmap.getWidth() : mSizeGetter.getWidth();
+        return BitmapUtils.squareBitmap(bitmap, widght, height);
+    }
+
+    public interface IViewSizeGetter {
+
+        public int getWidth();
+
+        public int getHeight();
     }
 }
