@@ -32,6 +32,8 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.utils.social.AuthToken;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -285,5 +287,12 @@ public class Utils {
         String age = userAge > 0 ? Integer.toString(userAge) : "";
         divider = TextUtils.isEmpty(age) ? "" : divider;
         return name.concat(divider).concat(age);
+    }
+
+    public static String optString(JSONObject json, String key) {
+        if (json.isNull(key))
+            return null;
+        else
+            return json.optString(key, null);
     }
 }

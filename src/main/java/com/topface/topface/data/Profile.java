@@ -84,7 +84,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.age = resp.optInt("age");
             profile.sex = resp.optInt("sex");
             profile.status = normilizeStatus(resp.optString("status"));
-            profile.firstName = normalizeName(resp.optString("firstName"));
+            profile.firstName = normalizeName(Utils.optString(resp, "firstName"));
             profile.city = new City(resp.optJSONObject("city"));
             profile.premium = resp.optBoolean("premium");
             profile.background = resp.optInt("bg", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
