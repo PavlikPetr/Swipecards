@@ -45,8 +45,6 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                 // ставим фото на аватарку только если она едиснтвенная
                 if (CacheProfile.photos.size() == 0) {
                     CacheProfile.photo = photo;
-                    App.getConfig().getUserConfig().setUserAvatarAvailable(true);
-                    App.getConfig().getUserConfig().saveConfig();
                 }
                 // добавляется фото в начало списка
                 CacheProfile.photos.addFirst(photo);
@@ -61,6 +59,11 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                 CacheProfile.sendUpdateProfileBroadcast();
                 Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+                // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
+                if (CacheProfile.photos.size() == 0) {
+                    App.getConfig().getUserConfig().setUserAvatarAvailable(false);
+                    App.getConfig().getUserConfig().saveConfig();
+                }
                 Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }
         }

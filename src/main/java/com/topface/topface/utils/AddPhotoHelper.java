@@ -257,6 +257,11 @@ public class AddPhotoHelper {
             }
             return;
         }
+        // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
+        if (CacheProfile.photos.size() == 0) {
+            App.getConfig().getUserConfig().setUserAvatarAvailable(true);
+            App.getConfig().getUserConfig().saveConfig();
+        }
         Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
         showProgressDialog();
         mNotificationManager = UserNotificationManager.getInstance();

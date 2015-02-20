@@ -487,8 +487,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
      */
     private IStartAction createAfterRegistrationStartAction(final int priority) {
         return new AbstractStartAction() {
-            private boolean mTakePhotoApplicable = false;
-            private boolean mSelectCityApplicable = false;
 
             @Override
             public void callInBackground() {
@@ -496,19 +494,16 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
             @Override
             public void callOnUi() {
-                if (mTakePhotoApplicable) {
+                if (isTakePhotoApplicable()) {
                     takePhoto();
-                } else if (mSelectCityApplicable) {
+                } else if (isSelectCityApplicable()) {
                     CacheProfile.selectCity(NavigationActivity.this);
                 }
             }
 
             @Override
             public boolean isApplicable() {
-                mTakePhotoApplicable = !AuthToken.getInstance().isEmpty() && (CacheProfile.photo == null)
-                        && !App.getConfig().getUserConfig().isUserAvatarAvailable();
-                mSelectCityApplicable = CacheProfile.needToSelectCity(NavigationActivity.this);
-                return mTakePhotoApplicable || mSelectCityApplicable;
+                return isTakePhotoApplicable() || isSelectCityApplicable();
             }
 
             @Override
@@ -519,6 +514,15 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             @Override
             public String getActionName() {
                 return "TakePhoto-SelectCity";
+            }
+
+            private boolean isTakePhotoApplicable() {
+                return !AuthToken.getInstance().isEmpty() && (CacheProfile.photo == null)
+                        && !App.getConfig().getUserConfig().isUserAvatarAvailable();
+            }
+
+            private boolean isSelectCityApplicable() {
+                return CacheProfile.needToSelectCity(NavigationActivity.this);
             }
         };
     }
