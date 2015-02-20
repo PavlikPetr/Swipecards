@@ -32,14 +32,14 @@ import java.util.HashMap;
 
 public class ChatListAdapter extends LoadingListAdapter<History> implements AbsListView.OnScrollListener {
 
-    private static final int T_RETRY = 4;
-    private static final int T_USER = 5;
-    private static final int T_FRIEND = 6;
-    private static final int T_USER_GIFT = 7;
-    private static final int T_FRIEND_GIFT = 8;
-    private static final int T_USER_POPULAR_1 = 9;
-    private static final int T_USER_POPULAR_2 = 10;
-    private static final int T_COUNT = 11;
+    private static final int T_RETRY = 3;
+    private static final int T_USER = 4;
+    private static final int T_FRIEND = 5;
+    private static final int T_USER_GIFT = 6;
+    private static final int T_FRIEND_GIFT = 7;
+    private static final int T_USER_POPULAR_1 = 8;
+    private static final int T_USER_POPULAR_2 = 9;
+    private static final int T_COUNT = 10;
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
