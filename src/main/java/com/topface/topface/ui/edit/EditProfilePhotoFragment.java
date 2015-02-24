@@ -13,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +33,7 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.ui.GridViewWithHeaderAndFooter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoGridAdapter;
@@ -60,10 +60,12 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     private int mLastSelectedAsMainId;
     private int mSelectedAsMainId;
 
-    private GridView mPhotoGridView;
+    private GridViewWithHeaderAndFooter mPhotoGridView;
     private Photos mPhotoLinks;
 
     private AddPhotoHelper mAddPhotoHelper;
+
+    private View mGridFooterView;
 
     private ViewFlipper mViewFlipper;
     private View mLoadingLocker;
@@ -124,10 +126,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         mSelectedAsMainId = CacheProfile.photo == null ? -1 : CacheProfile.photo.getId();
         mLastSelectedAsMainId = mSelectedAsMainId;
         CacheProfile.sendUpdateProfileBroadcast();
-        mPhotoLinks = new Photos();
-        if (CacheProfile.photos != null) {
-            mPhotoLinks.addAll(CacheProfile.photos);
-        }
+        mPhotoLinks = getPhotoLinks();
         mPhotoGridAdapter = new EditProfileGridAdapter(
                 getActivity().getApplicationContext(), mPhotoLinks, CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
             @Override
@@ -137,11 +136,22 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         });
     }
 
+    private Photos getPhotoLinks() {
+        Photos photoLinks = new Photos();
+        photoLinks.clear();
+        if (CacheProfile.photos != null) {
+            photoLinks.addAll(CacheProfile.photos);
+        }
+        return photoLinks;
+    }
+
     private void sendAlbumRequest() {
-        if (mPhotoLinks == null || mPhotoLinks.size() < 2 || !mPhotoGridAdapter.getLastItem().isFake()) {
+        Photos photoLinks = mPhotoGridAdapter.getAdaprerData();
+        if (photoLinks == null || photoLinks.size() < 2) {
             return;
         }
-        Photo photo = mPhotoGridAdapter.getItem(mPhotoLinks.size() - 2);
+        mGridFooterView.setVisibility(View.VISIBLE);
+        Photo photo = mPhotoGridAdapter.getItem(photoLinks.size() - 1);
         int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
                 getActivity(),
@@ -166,16 +176,27 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             }
 
             @Override
+            public void always(IApiResponse response) {
+                super.always(response);
+                mGridFooterView.setVisibility(View.GONE);
+            }
+
+            @Override
             public void fail(int codeError, IApiResponse response) {
                 Utils.showErrorMessage();
             }
         }).exec();
     }
 
+    private View createGridViewFooter() {
+        return ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
+        mGridFooterView = createGridViewFooter();
 
         mLoadingLocker = root.findViewById(R.id.fppLocker);
         mAddPhotoHelper = new AddPhotoHelper(this, mLoadingLocker);
@@ -195,7 +216,8 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             mViewFlipper.setDisplayedChild(savedInstanceState.getInt(FLIPPER_VISIBLE_CHILD, 0));
         }
 
-        mPhotoGridView = (GridView) root.findViewById(R.id.usedGrid);
+        mPhotoGridView = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
+        addFooterView();
         mPhotoGridView.setSelection(position);
         mPhotoGridView.setAdapter(mPhotoGridAdapter);
         mPhotoGridView.setOnItemClickListener(mOnItemClickListener);
@@ -215,6 +237,15 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         });
 
         return root;
+    }
+
+    private void addFooterView() {
+        if (mPhotoGridView != null) {
+            if (mPhotoGridView.getFooterViewCount() == 0) {
+                mPhotoGridView.addFooterView(mGridFooterView);
+            }
+            mGridFooterView.setVisibility(View.GONE);
+        }
     }
 
     @Override

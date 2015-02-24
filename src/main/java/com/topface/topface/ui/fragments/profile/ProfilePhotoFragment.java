@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -31,6 +30,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.ui.GridViewWithHeaderAndFooter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
@@ -51,14 +51,15 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private OwnProfileGridAdapter mProfilePhotoGridAdapter;
 
     private ViewFlipper mViewFlipper;
-    private GridView mGridAlbum;
+    private GridViewWithHeaderAndFooter mGridAlbum;
     private View mLoadingLocker;
     private TextView mTitle;
+    private View mGridFooterView;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isAdded() && getView() != null && CacheProfile.photos != null) {
-                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(
+            if (isAdded() && getView() != null && CacheProfile.photos != null && mProfilePhotoGridAdapter != null) {
+                mProfilePhotoGridAdapter.setData(
                         CacheProfile.photos,
                         CacheProfile.photos.size() < CacheProfile.totalPhotos
                 );
@@ -76,9 +77,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
             newPhotos.addAll(arrList);
             boolean more = intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false);
             if (clear) {
-                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, more);
+                mProfilePhotoGridAdapter.setData(newPhotos, more);
             } else {
-                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(newPhotos, more);
+                mProfilePhotoGridAdapter.addData(newPhotos, more);
             }
             initTitleText(mTitle);
         }
@@ -111,12 +112,17 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
 
     }
 
+    private View createGridViewFooter() {
+        return ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
+    }
+
     private void sendAlbumRequest() {
         Photos photoLinks = mProfilePhotoGridAdapter.getAdaprerData();
-        if (photoLinks == null || photoLinks.size() < 2 || !mProfilePhotoGridAdapter.getLastItem().isFake()) {
+        if (photoLinks == null || photoLinks.size() < 2) {
             return;
         }
-        Photo photo = mProfilePhotoGridAdapter.getItem(photoLinks.size() - 2);
+        mGridFooterView.setVisibility(View.VISIBLE);
+        Photo photo = mProfilePhotoGridAdapter.getItem(photoLinks.size() - 1);
         int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
                 getActivity(),
@@ -140,6 +146,12 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
             }
 
             @Override
+            public void always(IApiResponse response) {
+                super.always(response);
+                mGridFooterView.setVisibility(View.GONE);
+            }
+
+            @Override
             public void fail(int codeError, IApiResponse response) {
                 Utils.showErrorMessage();
             }
@@ -159,7 +171,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
-
+        mGridFooterView = createGridViewFooter();
         //Navigation bar
 
         if (getActivity() instanceof EditContainerActivity) {
@@ -183,7 +195,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
             mViewFlipper.setDisplayedChild(savedInstanceState.getInt(FLIPPER_VISIBLE_CHILD, 0));
         }
 
-        mGridAlbum = (GridView) root.findViewById(R.id.usedGrid);
+        mGridAlbum = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
+        addFooterView();
         mGridAlbum.setAdapter(mProfilePhotoGridAdapter);
         mGridAlbum.setSelection(position);
         mGridAlbum.setOnItemClickListener(mOnItemClickListener);
@@ -237,6 +250,15 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         return root;
     }
 
+    private void addFooterView() {
+        if (mGridAlbum != null) {
+            if (mGridAlbum.getFooterViewCount() == 0) {
+                mGridAlbum.addFooterView(mGridFooterView);
+            }
+            mGridFooterView.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -259,7 +281,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     }
 
     public void startPhotoDialog(final Photo photo, final int position) {
-
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setItems(new String[]{getString(R.string.edit_set_as_main), getString(R.string.edit_delete)}, new DialogInterface.OnClickListener() {
             @Override
