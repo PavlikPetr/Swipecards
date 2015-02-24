@@ -207,6 +207,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                mViewFlipper.setDisplayedChild(0);
                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
                         new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoAlbum));
             }
@@ -214,6 +215,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                mViewFlipper.setDisplayedChild(0);
                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
                         new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoCamera));
             }
@@ -230,7 +232,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                 mPhotosReceiver,
                 new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT)
         );
-
 
 
         return root;
@@ -353,20 +354,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            mViewFlipper.setDisplayedChild(0);
-        } else if (resultCode == Activity.RESULT_CANCELED) {
-            mViewFlipper.setDisplayedChild(1);
-        }
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPhotosReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
     }
 }
- 
