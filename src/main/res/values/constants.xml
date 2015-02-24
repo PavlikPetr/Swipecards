@@ -37,4 +37,8 @@
     <string-array name="ssl_handshake_exception_messages">
         <item>"could not validate certificate"</item>
     </string-array>
+
+    <!-- intent-filters configuration -->
+    <string name="default_sheme" translatable="false">topface</string>
+    <string name="offerwall_host" translatable="false">offerwall</string>
 </resources>

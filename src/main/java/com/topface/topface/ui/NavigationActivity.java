@@ -88,7 +88,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         @Override
         public void onProfileLink(int profileID) {
             startActivity(UserProfileActivity.createIntent(profileID, NavigationActivity.this));
-            getIntent().setData(null);
         }
 
         @Override
@@ -100,13 +99,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
                 startActivity(intent);
             }
-            getIntent().setData(null);
         }
 
         @Override
         public void onOfferWall() {
             OfferwallsManager.startOfferwall(NavigationActivity.this);
-            getIntent().setData(null);
         }
     };
 
@@ -284,6 +281,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             mPendingNextIntent = intent;
         }
+        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
+        new ExternalLinkExecuter(mListener).execute(this, getIntent());
+
     }
 
     @Override
@@ -433,6 +433,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
+        new ExternalLinkExecuter(mListener).execute(this, intent);
+
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             showFragment(intent);
         }
@@ -448,8 +451,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         } else {
             LocaleConfig.localeChangeInitiated = false;
         }
-        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
-        new ExternalLinkExecuter(mListener).execute(getIntent());
         App.checkProfileUpdate();
         if (mNotificationController != null) {
             mNotificationController.refreshNotificator();
