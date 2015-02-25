@@ -121,6 +121,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String MAKE_ITEM_READ_BY_UID = "com.topface.topface.feedfragment.MAKE_READ_BY_UID";
     public static final String INITIAL_MESSAGE = "initial_message";
     public static final String MESSAGE = "message";
+    public static final String LOADED_MESSAGES = "loaded_messages";
+
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
@@ -261,6 +263,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private ImageButton mSendButton;
+    private int loadedItemsCount;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -278,7 +281,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onAttach(activity);
         // do not recreate Adapter cause of steRetainInstance(true)
         if (mAdapter == null) {
-            mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
+            mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback(), new OnLoadMessagesListener() {
+                @Override
+                public void onLoadMessages(int i) {
+                    loadedItemsCount += i;
+                }
+            });
         }
 
         Bundle args = getArguments();
@@ -365,6 +373,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (isAdded()) {
+            Intent intent = new Intent(CountersManager.UPDATE_COUNTERS);
+            intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
+            intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
 
@@ -1293,6 +1307,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mEditBox.setText(message);
             mEditBox.setSelection(message.length());
         }
+    }
+
+    public interface OnLoadMessagesListener {
+
+        public void onLoadMessages(int i);
+
     }
 
 }
