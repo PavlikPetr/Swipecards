@@ -169,7 +169,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public void addAll(ArrayList<History> dataList, boolean more, ListView parentView) {
         this.addAll(dataList, more);
-        mLoadMessagesListener.onLoadMessages(getUnreadItems(dataList));
+        if (mLoadMessagesListener != null) {
+            mLoadMessagesListener.onLoadMessages(getUnreadItems(dataList));
+        }
         parentView.setSelection(dataList.size() + (more ? 2 : 0));
     }
 
