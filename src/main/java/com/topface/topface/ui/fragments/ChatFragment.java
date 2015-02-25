@@ -1017,7 +1017,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     public boolean sendMessage(String text, final boolean cancelable) {
-        final History messageItem = new History(text, IListLoader.ItemType.WAITING);
+        final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
         if (cancelable) {
             registerRequest(messageRequest);
