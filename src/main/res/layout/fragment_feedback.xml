@@ -11,14 +11,14 @@
         android:id="@+id/loFaqTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        layout="@layout/item_edit_profile_faq_title"/>
+        layout="@layout/item_edit_profile_faq_title" />
 
     <include
         android:id="@+id/loFaq"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="48dp"
-        layout="@layout/item_edit_form_select"/>
+        layout="@layout/item_edit_form_select" />
 
     <include
         android:id="@+id/loErrorMessage"

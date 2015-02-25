@@ -49,14 +49,14 @@ public class BanActivity extends TrackedFragmentActivity {
     private BaseFragment getFragment() {
         BaseFragment fragment;
         int type = getIntent().getIntExtra(INTENT_TYPE, TYPE_UNKNOWN);
-        Long banExpire;
-        String userMassage;
+        long banExpire;
+        String userMessage;
         if (type == TYPE_BAN) {
             banExpire = getIntent().getLongExtra(BanFragment.BAN_EXPIRE, TYPE_UNKNOWN);
-            userMassage = getIntent().getStringExtra(BanFragment.USER_MESSAGE);
+            userMessage = getIntent().getStringExtra(BanFragment.USER_MESSAGE);
         } else {
             banExpire = getIntent().getLongExtra(INTENT_FLOOD_TIME, DEFAULT_FLOOD_WAIT_TIME) * 1000l;
-            userMassage = App.getContext().getResources().getString(R.string.ban_flood_detected);
+            userMessage = App.getContext().getResources().getString(R.string.ban_flood_detected);
         }
 
         Bundle arg = new Bundle();
@@ -65,7 +65,7 @@ public class BanActivity extends TrackedFragmentActivity {
                 arg.putBoolean(FLOOD, true);
             case TYPE_BAN:
                 fragment = new BanFragment();
-                arg.putString(BanFragment.USER_MESSAGE, userMassage);
+                arg.putString(BanFragment.USER_MESSAGE, userMessage);
                 arg.putLong(BanFragment.BAN_EXPIRE, banExpire);
                 fragment.setArguments(arg);
                 return fragment;
