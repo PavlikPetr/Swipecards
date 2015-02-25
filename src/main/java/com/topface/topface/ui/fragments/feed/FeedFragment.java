@@ -176,7 +176,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                         makeItemReadWithId(itemId);
                     }
                 } else {
-                    makeItemReadUserId(userId);
+                    makeItemReadUserId(userId, intent.getIntExtra(ChatFragment.LOADED_MESSAGES, 0));
                 }
             }
         };
@@ -989,11 +989,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
-    protected void makeItemReadUserId(int uid) {
+    protected void makeItemReadUserId(int uid, int readedMessages) {
         FeedAdapter<T> adapter = getListAdapter();
         for (FeedItem item : adapter.getData()) {
             if (item.user != null && item.user.id == uid && item.unread) {
-                item.unread = false;
+                if (item.unreadCounter - readedMessages >= 0) {
+                    item.unreadCounter = item.unreadCounter - readedMessages;
+                } else {
+                    item.unread = false;
+                }
                 adapter.notifyDataSetChanged();
             }
         }

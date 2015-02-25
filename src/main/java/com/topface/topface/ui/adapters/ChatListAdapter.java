@@ -43,8 +43,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
+    private ChatFragment.OnLoadMessagesListener mLoadMessagesListener;
 
-    public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
+    public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback, ChatFragment.OnLoadMessagesListener onLoadMessagesListener) {
         super(context, data, updateCallback);
         if (!data.isEmpty()) {
             prepareDates();
@@ -57,6 +58,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 mUnrealItems.add(item);
             }
         }
+        mLoadMessagesListener = onLoadMessagesListener;
     }
 
     @Override
@@ -167,7 +169,18 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public void addAll(ArrayList<History> dataList, boolean more, ListView parentView) {
         this.addAll(dataList, more);
+        mLoadMessagesListener.onLoadMessages(getUnreadItems(dataList));
         parentView.setSelection(dataList.size() + (more ? 2 : 0));
+    }
+
+    private int getUnreadItems(ArrayList<History> dataList) {
+        int count = 0;
+        for (History history : dataList) {
+            if (history.unread) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public void forceStopLoader() {
