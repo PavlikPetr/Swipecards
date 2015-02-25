@@ -263,7 +263,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private ImageButton mSendButton;
-    private int loadedItemsCount;
+    private int mLoadedItemsCount;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -284,7 +284,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback(), new OnLoadMessagesListener() {
                 @Override
                 public void onLoadMessages(int i) {
-                    loadedItemsCount += i;
+                    mLoadedItemsCount += i;
                 }
             });
         }
@@ -375,7 +375,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onDestroyView();
         if (isAdded()) {
             Intent intent = new Intent(CountersManager.UPDATE_COUNTERS);
-            intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
+            intent.putExtra(LOADED_MESSAGES, mLoadedItemsCount);
             intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
             LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
         }
