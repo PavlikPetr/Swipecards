@@ -16,15 +16,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.SettingsActivity;
+import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.gift.OwnGiftsFragment;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.IPhotoTakerWithDialog;
+import com.topface.topface.utils.PhotoTaker;
 
 import java.util.ArrayList;
 
@@ -36,6 +40,7 @@ public class OwnProfileFragment extends AbstractProfileFragment {
 
     private AddPhotoHelper mAddPhotoHelper;
     private BroadcastReceiver mAddPhotoReceiver;
+    private IPhotoTakerWithDialog mPhotoTaker;
     private BroadcastReceiver mUpdateProfileReceiver;
     private Handler mHandler = new Handler() {
         @Override
@@ -92,6 +97,7 @@ public class OwnProfileFragment extends AbstractProfileFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
         initAddPhotoHelper();
+        mPhotoTaker = new PhotoTaker(mAddPhotoHelper, getActivity());
         return root;
     }
 
@@ -106,6 +112,12 @@ public class OwnProfileFragment extends AbstractProfileFragment {
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         setProfile(CacheProfile.getProfile());
+        TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
+        Debug.error("OwnProfileFragment onResume isUserAvatarAvailable() " + !App.getConfig().getUserConfig().isUserAvatarAvailable());
+        if (CacheProfile.photo == null && mAddPhotoHelper != null && takePhotoDialog == null && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
+            mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
+            Debug.error("OwnProfileFragment onResume showTakePhotoDialog");
+        }
     }
 
     @Override
@@ -169,6 +181,12 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA:
                     if (mAddPhotoHelper != null) {
                         mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+                    }
+                    break;
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
+                    if (mAddPhotoHelper != null) {
+                        mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false));
                     }
                     break;
             }

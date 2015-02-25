@@ -621,8 +621,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         for (Fragment fragment : fragments) {
             if (parentFragmentClass != null && parentFragmentClass.isInstance(fragment)) {
                 //Да, вам не показалось, это рекурсивный вызов, но с пустым последним парметром
-                processRequestCode(fragment.getChildFragmentManager(), requestCode, resultCode, data, null);
-                return true;
+                return processRequestCode(fragment.getChildFragmentManager(), requestCode, resultCode, data, null);
             } else if (fragment instanceof OpenIabFragment && ((OpenIabFragment) fragment).getRequestCode() == requestCode) {
                 fragment.onActivityResult(requestCode, resultCode, data);
                 return true;
