@@ -995,6 +995,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (item.user != null && item.user.id == uid && item.unread) {
                 if (item.unreadCounter - readedMessages >= 0) {
                     item.unreadCounter = item.unreadCounter - readedMessages;
+                    if (item.unreadCounter <= 0) {
+                        item.unread = false;
+                    }
                 } else {
                     item.unread = false;
                 }
