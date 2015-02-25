@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
@@ -113,10 +112,8 @@ public class OwnProfileFragment extends AbstractProfileFragment {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         setProfile(CacheProfile.getProfile());
         TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
-        Debug.error("OwnProfileFragment onResume isUserAvatarAvailable() " + !App.getConfig().getUserConfig().isUserAvatarAvailable());
         if (CacheProfile.photo == null && mAddPhotoHelper != null && takePhotoDialog == null && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
             mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
-            Debug.error("OwnProfileFragment onResume showTakePhotoDialog");
         }
     }
 
