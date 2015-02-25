@@ -387,7 +387,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                             mUid,
                             itemId,
                             callingClassName,
-                            UserFormFragment.class.getName(),
                             this)
             );
         } else {
@@ -395,7 +394,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                             mUid,
                             itemId,
                             callingClassName,
-                            UserFormFragment.class.getName(),
                             this)
             );
         }

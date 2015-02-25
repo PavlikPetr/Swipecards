@@ -1,8 +1,6 @@
 package com.topface.topface.ui.edit;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,8 +24,8 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
-import com.topface.topface.ui.adapters.FilterDialogAdapter;
 import com.topface.topface.ui.adapters.SpinnerAdapter;
+import com.topface.topface.ui.dialogs.FilterListDialog;
 import com.topface.topface.ui.views.CitySearchView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
@@ -71,7 +68,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private boolean mInitFilterOnline;
 
-    private DialogRowCliCkInterface mDialogOnItemClickListener = new DialogRowCliCkInterface() {
+    private FilterListDialog.DialogRowCliCkInterface mDialogOnItemClickListener = new FilterListDialog.DialogRowCliCkInterface() {
         @Override
         public void onRowClickListener(int id, int item) {
             switch (id) {
@@ -471,31 +468,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     // show dialog
-    private void createAndShowDialog(final int titleId, int targetId, final int viewId,
-                                     final DialogRowCliCkInterface listener) {
-        View view = getActivity().getLayoutInflater().inflate(R.layout.filter_dialog_layout, null);
-        ListView myList = (ListView) view.findViewWithTag("loFilterList");
-        myList.setAdapter(new FilterDialogAdapter(getActivity(),
-                R.layout.filter_edit_form_dialog_cell,
-                mFormInfo.getEntriesByTitleId(titleId),
-                mFormInfo.getEntry(titleId, targetId)));
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(view);
-        final Dialog dialog = builder.create();
-        dialog.show();
-        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (listener != null) {
-                    listener.onRowClickListener(viewId, mFormInfo.getIdsByTitleId(titleId)[position]);
-                }
-                dialog.dismiss();
-            }
-        });
-    }
-
-    private interface DialogRowCliCkInterface {
-        void onRowClickListener(int id, int item);
+    private void createAndShowDialog(int titleId, int targetId, int viewId,
+                                     FilterListDialog.DialogRowCliCkInterface listener) {
+        FilterListDialog dialog = FilterListDialog.newInstance();
+        dialog.setData(titleId, targetId, viewId, listener, mFormInfo);
+        dialog.show(getActivity().getSupportFragmentManager(), FilterListDialog.TAG);
     }
 
     @Override

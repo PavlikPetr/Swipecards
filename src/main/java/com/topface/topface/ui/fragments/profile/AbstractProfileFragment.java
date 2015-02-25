@@ -27,11 +27,11 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     public static final String INTENT_UID = "intent_profile_uid";
     public static final String INTENT_ITEM_ID = "intent_profile_item_id";
     public static final String INTENT_CALLING_FRAGMENT = "intent_profile_calling_fragment";
+    public static final String INTENT_IS_CHAT_AVAILABLE = "intent_profile_is_chat_available";
     public static final String INTENT_START_BODY_PAGE_NAME = "intent_start_body_page";
     public static final String ADD_PHOTO_INTENT = "com.topface.topface.ADD_PHOTO_INTENT";
     protected static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
     protected static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
-    protected static final String ARG_TAG_CALLING_CLASS = "intent_profile_calling_fragment";
     private static final String CURRENT_BODY_PAGE = "CURRENT_BODY_PAGE";
     private static final String CURRENT_HEADER_PAGE = "CURRENT_HEADER_PAGE";
     // state
@@ -44,6 +44,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     private HeaderStatusFragment mHeaderStatusFragment;
     private UserPhotoFragment mUserPhotoFragment;
     private UserFormFragment mUserFormFragment;
+    private boolean mIsChatAvailable;
     private Profile mProfile = null;
     ProfileInnerUpdater mProfileUpdater = new ProfileInnerUpdater() {
         @Override
@@ -78,7 +79,6 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     private String mHeaderStartPageClassName;
     private int mStartBodyPage = 0;
     private int mStartHeaderPage = 0;
-    private String mCallingClass;
     // views
     private ViewPager mBodyPager;
     private ProfilePageAdapter mBodyPagerAdapter;
@@ -100,7 +100,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         mBackgroundView = (DarkenImageView) root.findViewById(R.id.profile_background_image);
         initHeaderPages(root);
         initBodyPages(root);
-        // start pages initialization
+// start pages initialization
         int startBodyPage = mBodyPagerAdapter.getFragmentIndexByClassName(mBodyStartPageClassName);
         if (startBodyPage != -1) {
             mStartBodyPage = startBodyPage;
@@ -123,15 +123,10 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         }
     }
 
-    public void setCallingClass(String callingClass) {
-        this.mCallingClass = callingClass;
-    }
-
     @Override
     protected void restoreState() {
         mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
         mHeaderStartPageClassName = getArguments().getString(ARG_TAG_INIT_HEADER_PAGE);
-        mCallingClass = getArguments().getString(ARG_TAG_CALLING_CLASS);
     }
 
     protected void onProfileUpdated() {
@@ -185,21 +180,25 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         }
     }
 
-    protected String getCallingClassName() {
-        return mCallingClass;
+    protected boolean isChatAvailable() {
+        return mIsChatAvailable;
+    }
+
+    public void setIsChatAvailable(boolean isChatAvailable) {
+        mIsChatAvailable = isChatAvailable;
     }
 
     private void initHeaderPages(View root) {
         addHeaderPage(HeaderMainFragment.class.getName());
         addHeaderPage(HeaderStatusFragment.class.getName());
         mHeaderPager = (ViewPager) root.findViewById(R.id.vpHeaderFragments);
-        //Мы отключаем сохранеие state у фрагментов, т.к. мы устанавливаем данные в методе getItem() адаптера,
-        //что приводит к пустым фрагментам. Поэтому мы не пытаемся сохранять и восстанавливать состояние фрагмента
+//Мы отключаем сохранеие state у фрагментов, т.к. мы устанавливаем данные в методе getItem() адаптера,
+//что приводит к пустым фрагментам. Поэтому мы не пытаемся сохранять и восстанавливать состояние фрагмента
         mHeaderPager.setSaveEnabled(false);
         mHeaderPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(),
                 HEADER_PAGES_CLASS_NAMES, mProfileUpdater);
         mHeaderPager.setAdapter(mHeaderPagerAdapter);
-        //Tabs for header
+//Tabs for header
         CirclePageIndicator circleIndicator = (CirclePageIndicator) root.findViewById(R.id.cpiHeaderTabs);
         circleIndicator.setViewPager(mHeaderPager);
         circleIndicator.setSnap(true);
@@ -208,7 +207,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 AbstractProfileFragment.this.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                // when positionOffset is near 1.0f ViewPager changes position and sets positionOffset to 0
+// when positionOffset is near 1.0f ViewPager changes position and sets positionOffset to 0
                 if (position <= 0) {
                     mBackgroundView.setDarkenFrameOpacity(positionOffset);
                 }
@@ -233,7 +232,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
                 BODY_PAGES_TITLES, mProfileUpdater);
         mBodyPager.setAdapter(mBodyPagerAdapter);
-        //Tabs for Body
+//Tabs for Body
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
         mTabIndicator.setViewPager(mBodyPager);
         mBodyPagerAdapter.setPageIndicator(mTabIndicator);

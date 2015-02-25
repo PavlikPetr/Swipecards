@@ -63,8 +63,8 @@
                 layout="@layout/item_edit_profile_name_select"
                 android:id="@+id/loProfileName" />
 
-            <Button
-                android:id="@+id/btnEditCity"
+            <TextView
+                android:id="@+id/tvEditCity"
                 style="@style/ItemTitleText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

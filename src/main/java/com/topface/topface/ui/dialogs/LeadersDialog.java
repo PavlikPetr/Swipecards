@@ -65,7 +65,7 @@ public class LeadersDialog extends AbstractModalDialog {
                         ((NavigationActivity) getActivity()).showFragment(FragmentId.PROFILE);
                         dialog.dismiss();
                     } else {
-                        startActivity(CacheProfile.getOptions().autoOpenGallery.createIntent(user.id, user.photosCount, LeadersDialog.class, user.photo, getActivity()));
+                        startActivity(CacheProfile.getOptions().autoOpenGallery.createIntent(user.id, user.photosCount, user.photo, getActivity()));
                     }
                 }
             });

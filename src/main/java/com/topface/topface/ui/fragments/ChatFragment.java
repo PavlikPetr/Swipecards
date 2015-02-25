@@ -984,13 +984,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
 
                     @Override
-                    public Boolean getMutualValue() {
+                    public Boolean isMutual() {
                         return null;
                     }
 
                     @Override
-                    public void clickSendGift() {
-                        // empty processor. Haven't item "Send gift" in current fragment
+                    public boolean isOpenChatAvailable() {
+                        return true;
                     }
                 });
             }

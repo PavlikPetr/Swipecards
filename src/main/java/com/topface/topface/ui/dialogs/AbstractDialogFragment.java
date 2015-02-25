@@ -77,9 +77,9 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
             if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty() && !mShowingDialogs.contains(tag) &&
                     ((dialog != null && !dialog.isAdded()) || dialog == null)
                     ) {
-                    mTag = tag;
-                    mShowingDialogs.add(tag);
-                    super.show(manager, tag);
+                mTag = tag;
+                mShowingDialogs.add(tag);
+                super.show(manager, tag);
             }
         } catch (Exception e) {
             Debug.error("AbstractDialogFragment " + tag + " show error: " + e.getMessage());
@@ -92,7 +92,7 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         mShowingDialogs.remove(mTag);
     }
 
-    public void setOnDismissListener (DialogInterface.OnDismissListener listener) {
+    public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
         mDismissListener = listener;
     }
 

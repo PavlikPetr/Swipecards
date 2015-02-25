@@ -10,9 +10,6 @@
 # Nokia Store
 -keep class com.nokia.payment.iap.aidl.**
 
-#Fortumo
--keep class mp.** { *; }
-
 #Google Play Services
 -keep class * extends java.util.ListResourceBundle {
     protected Object[][] getContents();

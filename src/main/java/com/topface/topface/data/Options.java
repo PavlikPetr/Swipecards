@@ -589,7 +589,6 @@ public class Options extends AbstractData {
         public static final String PWALL_MOBILE = "paymentwall-mobile";
         public static final String PWALL = "paymentwall-direct";
         public static final String BONUS = "bonus";
-        public static final String FORTUMO = "fortumo";
 
         /**
          * !!! IMPORTANT !!!
@@ -604,7 +603,6 @@ public class Options extends AbstractData {
             markets.add(PWALL_MOBILE);
             markets.add(PWALL);
             markets.add(BONUS);
-            markets.add(FORTUMO);
         }
 
         public String name;

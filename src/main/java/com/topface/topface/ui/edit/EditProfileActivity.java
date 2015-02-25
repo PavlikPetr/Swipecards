@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -55,7 +54,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     private TextView mEditName;
     private TextView mEditAge;
     private ImageView mEditSex;
-    private Button mEditCity;
+    private TextView mEditCity;
     private ImageViewRemote mProfilePhoto;
 
     private boolean hasStartedFromAuthActivity;
@@ -88,7 +87,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 R.drawable.ico_boy :
                 R.drawable.ico_girl);
 
-        mEditCity = (Button) header.findViewById(R.id.btnEditCity);
+        mEditCity = (TextView) header.findViewById(R.id.tvEditCity);
         if (CacheProfile.city == null) {
             mEditCity.setText(getString(R.string.general_choose_city));
         } else {
@@ -195,7 +194,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),
                         EditContainerActivity.INTENT_EDIT_NAME_AGE);
                 break;
-            case R.id.btnEditCity:
+            case R.id.tvEditCity:
                 selectCity();
                 break;
             case R.id.ivProfilePhoto:

@@ -44,6 +44,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:inputType="text"
+        android:gravity="left"
         android:singleLine="true"/>
 
     <TextView

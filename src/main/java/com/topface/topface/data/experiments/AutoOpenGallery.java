@@ -28,16 +28,7 @@ public class AutoOpenGallery extends BaseExperiment {
         if (isEnabled() && photosCount > 0) {
             return PhotoSwitcherActivity.getPhotoSwitcherIntent(itemId, userId, preloadPhoto, context);
         } else {
-            return UserProfileActivity.createIntent(userId, itemId, context);
+            return UserProfileActivity.createIntent(userId, itemId, context, true);
         }
     }
-
-    public Intent createIntent(int userId, int photosCount, Class callingClass, Photo preloadPhoto, Context context) {
-        if (isEnabled() && photosCount > 0) {
-            return PhotoSwitcherActivity.getPhotoSwitcherIntent(userId, callingClass, preloadPhoto, context);
-        } else {
-            return UserProfileActivity.createIntent(userId, callingClass, context);
-        }
-    }
-
 }
