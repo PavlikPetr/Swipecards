@@ -157,7 +157,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
 
     //OpenIAB
-    compile 'org.onepf:openiab:0.9.8.1'
+    compile 'org.onepf:openiab:0.9.8.4'
 
     compile project(':libs:Android-ViewPagerIndicator')
     compile project(':libs:PullToRefresh')
@@ -168,7 +168,7 @@ dependencies {
     //Аннотации вроде @NonNull и @*Res для обозначения переменных
     compile 'com.android.support:support-annotations:21.0.2'
     //Для Амазона нужна библиотека для поддержки in-app покупок
-    amazonCompile fileTree(dir: 'libs/amazon/', include: '*.jar')
+    amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
 
     compile project(':libs:tf-offerwall:sdk')
 

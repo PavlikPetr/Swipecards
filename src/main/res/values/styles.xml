@@ -719,7 +719,7 @@
 
     // наследуются стили Widget
 
-    <style name="Widget.Topface" />
+    <style name="Widget.Topface"/>
 
     <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big">
         <item name="android:background">@drawable/btn_gray_selector</item>
