@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:divider="@color/filter_fragment_divider_color"
-    android:dividerHeight="@dimen/filter_fragment_divider_height"
-    android:tag="loFilterList" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#99000000">
 
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="35dp"
+        android:background="@color/edit_form_selector_background_color_release_state"
+        android:divider="@color/filter_fragment_divider_color"
+        android:dividerHeight="@dimen/filter_fragment_divider_height"
+        android:tag="loFilterList" />
+</RelativeLayout>

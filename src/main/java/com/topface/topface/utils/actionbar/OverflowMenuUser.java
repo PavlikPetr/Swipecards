@@ -3,7 +3,6 @@ package com.topface.topface.utils.actionbar;
 import android.content.Intent;
 
 public interface OverflowMenuUser {
-
     void setBlackListValue(Boolean value);
 
     Boolean getBlackListValue();
@@ -20,7 +19,7 @@ public interface OverflowMenuUser {
 
     Intent getOpenChatIntent();
 
-    Boolean getMutualValue();
+    boolean isOpenChatAvailable();
 
-    void clickSendGift();
+    Boolean isMutual();
 }
