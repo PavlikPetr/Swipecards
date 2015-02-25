@@ -6,13 +6,13 @@ import android.os.Build;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.nineoldandroids.view.ViewHelper;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
+import com.topface.topface.ui.views.NoParentPressImageView;
 import com.topface.topface.utils.ad.NativeAd;
 
 public class LikesListAdapter extends FeedAdapter<FeedLike> {
@@ -61,7 +61,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     @Override
     protected FeedViewHolder getEmptyHolder(View convertView, FeedLike item) {
         FeedViewHolder holder = super.getEmptyHolder(convertView, item);
-        holder.heart = (ImageView) convertView.findViewById(R.id.ifp_heart);
+        holder.heart = (NoParentPressImageView) convertView.findViewById(R.id.ifp_heart);
         return holder;
     }
 
