@@ -993,11 +993,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         FeedAdapter<T> adapter = getListAdapter();
         for (FeedItem item : adapter.getData()) {
             if (item.user != null && item.user.id == uid && item.unread) {
-                if (item.unreadCounter - readedMessages >= 0) {
-                    item.unreadCounter = item.unreadCounter - readedMessages;
-                    if (item.unreadCounter <= 0) {
-                        item.unread = false;
-                    }
+                int unread = item.unreadCounter - readedMessages;
+                if (unread > 0) {
+                    item.unreadCounter = unread;
                 } else {
                     item.unread = false;
                 }
