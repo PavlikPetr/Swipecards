@@ -32,15 +32,14 @@ import java.util.HashMap;
 
 public class ChatListAdapter extends LoadingListAdapter<History> implements AbsListView.OnScrollListener {
 
-    private static final int T_WAIT = 3;
-    private static final int T_RETRY = 4;
-    private static final int T_USER = 5;
-    private static final int T_FRIEND = 6;
-    private static final int T_USER_GIFT = 7;
-    private static final int T_FRIEND_GIFT = 8;
-    private static final int T_USER_POPULAR_1 = 13;
-    private static final int T_USER_POPULAR_2 = 14;
-    private static final int T_COUNT = 15;
+    private static final int T_RETRY = 3;
+    private static final int T_USER = 4;
+    private static final int T_FRIEND = 5;
+    private static final int T_USER_GIFT = 6;
+    private static final int T_FRIEND_GIFT = 7;
+    private static final int T_USER_POPULAR_1 = 8;
+    private static final int T_USER_POPULAR_2 = 9;
+    private static final int T_COUNT = 10;
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
@@ -93,9 +92,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         int superType = super.getItemViewType(position);
         History item = getItem(position);
         if (superType == T_OTHER && item != null) {
-            if (item.isWaitingItem()) {
-                return T_WAIT;
-            } else if (item.isRepeatItem()) {
+            if (item.isRepeatItem()) {
                 return T_RETRY;
             }
             return ChatListAdapter.getItemType(item);
@@ -125,7 +122,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             holder = (ViewHolder) convertView.getTag();
 
         setTypeDifferences(holder, type, item);
-        if (type != T_WAIT || type != T_RETRY) {
+        if (type != T_RETRY) {
             setViewInfo(holder, item);
         }
 
@@ -310,8 +307,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                     });
                 }
                 return;
-            case T_WAIT:
-                break;
             case T_FRIEND_GIFT:
             case T_USER_GIFT:
                 holder.message.setVisibility(View.GONE);
@@ -357,7 +352,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER:
             case T_USER_POPULAR_1:
             case T_USER_POPULAR_2:
-            case T_WAIT:
             default:
                 convertView = mInflater.inflate(output ? R.layout.chat_user : R.layout.chat_friend, null, false);
                 break;
