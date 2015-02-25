@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ad_mob_banner_bottom_unit_id" translatable="false">ca-app-pub-9530442067223936/8256188006</string>
+    <!--<string name="ad_mob_banner_bottom_mediation_unit_id" translatable="false">ca-app-pub-5953340072072407/9867765371</string>-->
+    <string name="ad_mob_banner_bottom_mediation_unit_id" translatable="false">ca-app-pub-9530442067223936/1609366403</string>
+    <string name="adman_pad_id" translatable="false">654516d1b4df6917094de807156adc14</string>
+    <integer name="adman_mediation_slot_id">6392</integer>
+    <integer name="adman_slot_id">5506</integer>
+    <!--<integer name="adman_slot_id">6737</integer>-->
+    <string name="money_tapp_place_id" translatable="false">52c25f11–267e–4b12-9775-afe4a5ec3cff</string>
+</resources>

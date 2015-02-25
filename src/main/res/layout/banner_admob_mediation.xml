@@ -3,7 +3,7 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/adMobView"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="50dp"
     android:visibility="gone"
     ads:adSize="SMART_BANNER"
-    ads:adUnitId="@string/ad_mob_banner_bottom_unit_id" />
+    ads:adUnitId="@string/ad_mob_banner_bottom_mediation_unit_id" />

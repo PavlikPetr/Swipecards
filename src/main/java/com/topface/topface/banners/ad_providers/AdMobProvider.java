@@ -20,11 +20,33 @@ import java.util.Calendar;
 class AdMobProvider extends AbstractAdsProvider {
 
     @Override
-    public final boolean injectBannerInner(IPageWithAds page, final IAdProviderCallbacks callbacks) {
+    public boolean injectBannerInner(IPageWithAds page, IAdProviderCallbacks callbacks) {
+        beforeInjectBannerInner();
+        AdView adView = createView(page);
+        setCallback(callbacks, adView);
+        loadAdMob(adView);
+        return true;
+    }
+
+    private Calendar getUserAge() {
+        Calendar rightNow = Calendar.getInstance();
+        int year = rightNow.get(Calendar.YEAR);
+        rightNow.set(Calendar.YEAR, year - CacheProfile.getProfile().age);
+        return rightNow;
+    }
+
+    protected int getLayout() {
+        return R.layout.banner_admob;
+    }
+
+    protected AdView createView(IPageWithAds page) {
         ViewGroup container = page.getContainerForAd();
-        final AdView adView = (AdView) View
-                .inflate(container.getContext(), R.layout.banner_admob, container)
+        return (AdView) View
+                .inflate(container.getContext(), getLayout(), container)
                 .findViewById(R.id.adMobView);
+    }
+
+    public void setCallback(final IAdProviderCallbacks callbacks, final AdView adView) {
         adView.setAdListener(new AdListener() {
 
             @Override
@@ -39,8 +61,10 @@ class AdMobProvider extends AbstractAdsProvider {
                 super.onAdFailedToLoad(errorCode);
                 callbacks.onFailedToLoadAd();
             }
-
         });
+    }
+
+    public void loadAdMob(AdView adView) {
         AdRequest.Builder adRequest = new AdRequest.Builder()
                 .setGender(
                         CacheProfile.getProfile().sex == Static.BOY ?
@@ -53,13 +77,10 @@ class AdMobProvider extends AbstractAdsProvider {
 //        или id свего девайса
 //        adRequest.addTestDevice("hex id твоего девайса");
         adView.loadAd(adRequest.build());
-        return true;
     }
 
-    private Calendar getUserAge() {
-        Calendar rightNow = Calendar.getInstance();
-        int year = rightNow.get(Calendar.YEAR);
-        rightNow.set(Calendar.YEAR, year - CacheProfile.getProfile().age);
-        return rightNow;
+    protected void beforeInjectBannerInner(){
+
     }
+
 }
