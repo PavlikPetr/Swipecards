@@ -249,7 +249,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSetter = new ActionBarTitleSetterDelegate(getActivity(), ((ActionBarActivity) getActivity()).getSupportActionBar());
+        mSetter = new ActionBarTitleSetterDelegate(((ActionBarActivity) getActivity()).getSupportActionBar());
         mPreloadManager = new PreloadManager<>();
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
@@ -672,7 +672,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
-                    Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, getActivity(),isChatAvailable());
+                    Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, getActivity(), isChatAvailable());
                     startActivityForResult(intent, UserProfileActivity.INTENT_USER_PROFILE);
                     EasyTracker.sendEvent("Dating", "Additional", "Profile", 1L);
                 }

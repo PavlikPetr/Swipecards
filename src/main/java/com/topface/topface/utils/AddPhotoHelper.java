@@ -31,7 +31,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.profile.HeaderMainFragment;
+import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
@@ -305,8 +305,8 @@ public class AddPhotoHelper {
                 mNotificationManager.showNotificationAsync(
                         mContext.getString(R.string.default_photo_upload_complete), "", false,
                         uri.toString(), 1, getIntentForNotification(), true, null, null);
-                Intent intent = new Intent(HeaderMainFragment.UPDATE_AVATAR_POSITION);
-                intent.putExtra(HeaderMainFragment.INCREMENT_AVATAR_POSITION, true);
+                Intent intent = new Intent(OwnAvatarFragment.UPDATE_AVATAR_POSITION);
+                intent.putExtra(OwnAvatarFragment.INCREMENT_AVATAR_POSITION, true);
                 LocalBroadcastManager.getInstance(App.getContext())
                         .sendBroadcast(intent);
             }

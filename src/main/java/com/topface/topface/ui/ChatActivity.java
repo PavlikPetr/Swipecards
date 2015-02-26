@@ -114,7 +114,6 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, user.id);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, user.getNameAndAge());
-        intent.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, user.city.name);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, user.getNameAndAge());
         return intent;
@@ -130,7 +129,6 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, profile.getNameAndAge());
-        intent.putExtra(ChatFragment.INTENT_USER_SEX, profile.sex);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, profile.city == null ? Static.EMPTY : profile.city.name);
         return intent;
     }
@@ -139,7 +137,6 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, user.id);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, user.getNameAndAge());
-        intent.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, user.city);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CHAT);
         return intent;

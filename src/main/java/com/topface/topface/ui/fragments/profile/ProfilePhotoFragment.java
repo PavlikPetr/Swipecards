@@ -33,6 +33,7 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
+import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -233,7 +234,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         );
 
 
-
         return root;
     }
 
@@ -303,9 +303,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                                 intent.putExtra(PhotoSwitcherActivity.INTENT_CLEAR, true);
                                 intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, newPhotos);
                                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
-                                Intent changeAvatarPosIntent = new Intent(HeaderMainFragment.UPDATE_AVATAR_POSITION);
-                                changeAvatarPosIntent.putExtra(HeaderMainFragment.DECREMENT_AVATAR_POSITION, true);
-                                changeAvatarPosIntent.putExtra(HeaderMainFragment.POSITION, position);
+                                Intent changeAvatarPosIntent = new Intent(OwnAvatarFragment.UPDATE_AVATAR_POSITION);
+                                changeAvatarPosIntent.putExtra(OwnAvatarFragment.DECREMENT_AVATAR_POSITION, true);
+                                changeAvatarPosIntent.putExtra(OwnAvatarFragment.POSITION, position);
                                 LocalBroadcastManager.getInstance(App.getContext())
                                         .sendBroadcast(changeAvatarPosIntent);
                             }
@@ -370,4 +370,3 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
     }
 }
- 

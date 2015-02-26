@@ -18,10 +18,13 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.ui.SettingsActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
+import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.gift.OwnGiftsFragment;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -35,7 +38,7 @@ import java.util.ArrayList;
  * Created by kirussell on 18.03.14.
  * Profile fragment for current authorized client with ui for customization of user settings
  */
-public class OwnProfileFragment extends AbstractProfileFragment {
+public class OwnProfileFragment extends OwnAvatarFragment {
     private AddPhotoHelper mAddPhotoHelper;
     private BroadcastReceiver mAddPhotoReceiver;
     private BroadcastReceiver mUpdateProfileReceiver;
@@ -135,11 +138,6 @@ public class OwnProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_my_profile;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
@@ -155,7 +153,7 @@ public class OwnProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
-    protected String getTitle() {
+    protected String getDefaultTitle() {
         return getString(R.string.profile_header_title);
     }
 
@@ -201,5 +199,10 @@ public class OwnProfileFragment extends AbstractProfileFragment {
             }
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mAddPhotoReceiver, new IntentFilter(ADD_PHOTO_INTENT));
+    }
+
+    @Override
+    protected IUniversalUser getUniversalUser() {
+        return UniversalUserFactory.create(getProfile());
     }
 }

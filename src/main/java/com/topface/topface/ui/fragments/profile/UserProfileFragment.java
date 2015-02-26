@@ -19,8 +19,10 @@ import android.widget.RelativeLayout;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
+import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -134,11 +136,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_user_profile;
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem barActionsItem = menu.findItem(R.id.action_user_actions_list);
@@ -168,7 +165,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
-    protected String getTitle() {
+    protected String getDefaultTitle() {
         return getString(R.string.general_profile);
     }
 
@@ -221,16 +218,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
         } else {
             setProfile(user);
             initTopMenu();
-            if (mHeaderMainFragment != null) {
-                mHeaderMainFragment.setOnline(user.online);
-            }
             mLoaderView.setVisibility(View.INVISIBLE);
-            if (getProfileType() == Profile.TYPE_USER_PROFILE) {
-                String status = user.getStatus();
-                if (status == null || TextUtils.isEmpty(status)) {
-                    mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
-                }
-            }
         }
         mLastLoadedProfileId = mProfileId;
     }
@@ -407,6 +395,11 @@ public class UserProfileFragment extends AbstractProfileFragment {
                 }
                 break;
         }
+    }
+
+    @Override
+    protected IUniversalUser getUniversalUser() {
+        return UniversalUserFactory.create(getProfile());
     }
 
     public ArrayList<FeedGift> getNewGifts() {
