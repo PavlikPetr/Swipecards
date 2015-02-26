@@ -9,7 +9,6 @@
 
     <com.topface.topface.ui.views.ImageViewRemote xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
         ivr:preProcessor="mask"
-        ivr:postProcessor="none"
         ivr:clipMask="@drawable/feed_photo_mask"
         android:background="@drawable/feed_photo_selector"
         android:id="@+id/ivAvatar"

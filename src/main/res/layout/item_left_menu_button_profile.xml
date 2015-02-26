@@ -17,8 +17,7 @@
             android:layout_width="fill_parent"
             android:layout_height="@dimen/left_menu_background_height"
             android:scaleType="centerCrop"
-            ivr:preProcessor="leftMenuClip"
-            ivr:postProcessor="none" />
+            ivr:preProcessor="leftMenuClip" />
 
         <ImageView
             android:layout_width="fill_parent"
@@ -43,8 +42,7 @@
                 android:src="@drawable/topface_male_profile_button"
                 android:tag="ivMenuAvatar"
                 ivr:clipMask="@drawable/frame_menu_mask"
-                ivr:preProcessor="mask"
-                ivr:postProcessor="none" />
+                ivr:preProcessor="mask" />
 
             <Button
                 android:id="@+id/btnUserName"
