@@ -42,6 +42,7 @@ public class ScruffyApiTransport implements IApiTransport {
             }
             if (!mHolder.isCompleted() && isTimedOut(requestStart)) {
                 mHolder.setResponse(new ApiResponse(ErrorCodes.CONNECTION_ERROR, "Request timeout"));
+                ScruffyRequestManager.getInstance().reconnect();
             }
             Debug.log("Scruffy:: response " + mHolder.getResponse());
 

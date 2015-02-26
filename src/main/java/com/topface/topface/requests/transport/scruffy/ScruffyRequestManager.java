@@ -256,12 +256,12 @@ public class ScruffyRequestManager {
         mIsAuthInProgress.set(false);
     }
 
-    private void reconnect() {
-        int reconnectCounter = mReconnectCounter.incrementAndGet();
-        if (reconnectCounter > RECONNECTION_LIMIT_FOR_HTTP_SWITCH) {
-            makeScruffyUnavailable();
-        }
+    void reconnect() {
         if (!mIsAuthInProgress.get()) {
+            int reconnectCounter = mReconnectCounter.incrementAndGet();
+            if (reconnectCounter > RECONNECTION_LIMIT_FOR_HTTP_SWITCH) {
+                makeScruffyUnavailable();
+            }
             if (mWebSocket != null) {
                 mWebSocket = null;
             }

@@ -14,6 +14,9 @@ public class TopfaceAdStatistics {
     private static final String TF_MOBILE_FULLSCREEN_SHOW = "mobile_tf_fullscreen_show";
     private static final String TF_MOBILE_FULLSCREEN_CLICK = "mobile_tf_fullscreen_click";
     private static final String TF_MOBILE_FULLSCREEN_CLOSED = "mobile_tf_fullscreen_close";
+    private static final String TF_MOBILE_NATIVE_AD_SHOW = "mobile_tf_native_ad_show";
+    private static final String TF_MOBILE_NATIVE_AD_CLICK = "mobile_tf_native_ad_click";
+    private static final String PUBNATIVE = "pubnative";
 
     private static void send(String key, String name) {
         StatisticsTracker.getInstance()
@@ -41,5 +44,13 @@ public class TopfaceAdStatistics {
     @SuppressWarnings("unused")
     public static void sendFullscreenClosed(Banner banner) {
         send(TF_MOBILE_FULLSCREEN_CLOSED, banner.name);
+    }
+
+    public static void sendPubnativeImpression() {
+        send(TF_MOBILE_NATIVE_AD_SHOW, PUBNATIVE);
+    }
+
+    public static void sendPubnativeClick() {
+        send(TF_MOBILE_NATIVE_AD_CLICK, PUBNATIVE);
     }
 }
