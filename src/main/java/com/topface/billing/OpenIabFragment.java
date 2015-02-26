@@ -517,7 +517,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     try {
                         AppsFlyerLib.sendTrackingWithEvent(
                                 context,
-                                "FirstPay",
+                                App.getContext().getResources().getString(R.string.appsflyer_first_pay),
                                 Double.toString(verify.revenue)
                         );
                     } catch (Exception e) {
@@ -533,7 +533,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                         try {
                             AppsFlyerLib.sendTrackingWithEvent(
                                     context,
-                                    "purchase",
+                                    App.getContext().getResources().getString(R.string.appsflyer_purchase),
                                     Double.toString(verify.revenue)
                             );
                         } catch (Exception e) {
