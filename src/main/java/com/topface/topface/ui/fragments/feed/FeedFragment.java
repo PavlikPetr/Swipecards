@@ -276,15 +276,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        if (getListAdapter().isNeedUpdate() || needUpdate) {
+        FeedAdapter<T> adapter = getListAdapter();
+        if (adapter.isNeedUpdate() || needUpdate) {
             updateData(false, true);
         }
         // try update list if last visible item is loader,
         // and loading was probably interrupted
-        getListAdapter().loadOlderItemsIfNeeded(
+        adapter.loadOlderItemsIfNeeded(
                 mListView.getRefreshableView().getFirstVisiblePosition(),
                 mListView.getRefreshableView().getChildCount(),
-                getListAdapter().getCount());
+                adapter.getCount());
+        if (!adapter.isEmpty()) {
+            adapter.refreshAdItem();
+        }
     }
 
     @Override

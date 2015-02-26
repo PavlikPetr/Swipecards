@@ -292,12 +292,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         currentData.clear();
         mHasFeedAd = false;
         currentData.addAll(data.items);
-
-
         addItemForAd();
-
         addLoaderItem(data.more);
-
         notifyDataSetChanged();
         setLastUpdate();
 
@@ -326,6 +322,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     public void removeAdItems() {
+        removeAdItems(true);
+    }
+
+    private void removeAdItems(boolean notify) {
         mHasFeedAd = false;
         mFeedAd = null;
         boolean removed = false;
@@ -336,9 +336,15 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                 removed = true;
             }
         }
-        if (removed) {
+        if (notify && removed) {
             notifyDataSetChanged();
         }
+    }
+
+    public void refreshAdItem() {
+        removeAdItems(false);
+        addItemForAd();
+        notifyDataSetChanged();
     }
 
     protected void setLastUpdate() {
