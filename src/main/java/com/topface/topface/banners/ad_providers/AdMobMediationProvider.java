@@ -9,9 +9,4 @@ class AdMobMediationProvider extends AdMobProvider {
     protected int getLayout() {
         return R.layout.banner_admob_mediation;
     }
-
-    @Override
-    protected void beforeInjectBannerInner() {
-        super.beforeInjectBannerInner();
-    }
 }

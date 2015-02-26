@@ -1,5 +1,6 @@
 package com.topface.topface.banners.ad_providers;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,14 +19,24 @@ import java.util.Calendar;
  * Admob.com sdk through GP Services
  */
 class AdMobProvider extends AbstractAdsProvider {
+    private AdView adView;
+    private Context mContext;
 
     @Override
     public boolean injectBannerInner(IPageWithAds page, IAdProviderCallbacks callbacks) {
-        beforeInjectBannerInner();
-        AdView adView = createView(page);
-        setCallback(callbacks, adView);
-        loadAdMob(adView);
+        mContext = page.getActivity().getApplicationContext();
+        createView(page);
+        setCallback(callbacks);
+        loadAdMob();
         return true;
+    }
+
+    public AdView getAdView() {
+        return adView;
+    }
+
+    public Context getContext() {
+        return mContext;
     }
 
     private Calendar getUserAge() {
@@ -39,14 +50,14 @@ class AdMobProvider extends AbstractAdsProvider {
         return R.layout.banner_admob;
     }
 
-    protected AdView createView(IPageWithAds page) {
+    protected void createView(IPageWithAds page) {
         ViewGroup container = page.getContainerForAd();
-        return (AdView) View
+        adView = (AdView) View
                 .inflate(container.getContext(), getLayout(), container)
                 .findViewById(R.id.adMobView);
     }
 
-    public void setCallback(final IAdProviderCallbacks callbacks, final AdView adView) {
+    public void setCallback(final IAdProviderCallbacks callbacks) {
         adView.setAdListener(new AdListener() {
 
             @Override
@@ -64,23 +75,21 @@ class AdMobProvider extends AbstractAdsProvider {
         });
     }
 
-    public void loadAdMob(AdView adView) {
-        AdRequest.Builder adRequest = new AdRequest.Builder()
+    protected void loadAdMob() {
+//        Если нужно, то можно указать id девайса (например эмулятор) для запроса тестовой рекламы
+//        adRequest.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+//        или id свего девайса
+//        adRequest.addTestDevice("hex id твоего девайса");
+        adView.loadAd(getAdRequest().build());
+    }
+
+    public AdRequest.Builder getAdRequest() {
+        return new AdRequest.Builder()
                 .setGender(
                         CacheProfile.getProfile().sex == Static.BOY ?
                                 AdRequest.GENDER_MALE :
                                 AdRequest.GENDER_FEMALE
                 )
                 .setBirthday(getUserAge().getTime());
-//        Если нужно, то можно указать id девайса (например эмулятор) для запроса тестовой рекламы
-//        adRequest.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
-//        или id свего девайса
-//        adRequest.addTestDevice("hex id твоего девайса");
-        adView.loadAd(adRequest.build());
     }
-
-    protected void beforeInjectBannerInner(){
-
-    }
-
 }

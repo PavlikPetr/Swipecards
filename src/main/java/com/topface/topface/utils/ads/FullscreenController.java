@@ -16,6 +16,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.Banner;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
@@ -35,17 +36,13 @@ import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
 import ru.ideast.adwired.events.OnStopListener;
 
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADWIRED;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
-
 /**
  */
 public class FullscreenController {
 
     private static final String TAG = "FullscreenController";
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
+    private static final String ADMOB_INTERSTITIAL_MEDIATION_ID = "ca-app-pub-9530442067223936/9498586400";
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
 
@@ -80,6 +77,7 @@ public class FullscreenController {
                     FullscreenController.this.isTimePassed() &&
                     startPageInfo != null &&
                     startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
+//            return true;
         }
 
         @Override
@@ -144,15 +142,18 @@ public class FullscreenController {
     public void requestFullscreen(String type) {
         try {
             switch (type) {
-                case BANNER_NONE:
+                case AdProvidersFactory.BANNER_NONE:
                     return;
-                case BANNER_ADMOB:
-                    requestAdmobFullscreen();
+                case AdProvidersFactory.BANNER_ADMOB:
+                    requestAdmobFullscreen(ADMOB_INTERSTITIAL_ID);
                     break;
-                case BANNER_ADWIRED:
+//                case AdProvidersFactory.BANNER_ADMOB_MEDIATION:
+//                    requestAdmobFullscreen(ADMOB_INTERSTITIAL_MEDIATION_ID);
+//                    break;
+                case AdProvidersFactory.BANNER_ADWIRED:
                     requestAdwiredFullscreen();
                     break;
-                case BANNER_TOPFACE:
+                case AdProvidersFactory.BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
                 default:
@@ -163,10 +164,10 @@ public class FullscreenController {
         }
     }
 
-    public void requestAdmobFullscreen() {
+    public void requestAdmobFullscreen(String id) {
         // Создание межстраничного объявления.
         final InterstitialAd interstitial = new InterstitialAd(mActivity);
-        interstitial.setAdUnitId(ADMOB_INTERSTITIAL_ID);
+        interstitial.setAdUnitId(id);
         // Создание запроса объявления.
         AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
         adRequestBuilder.setGender(

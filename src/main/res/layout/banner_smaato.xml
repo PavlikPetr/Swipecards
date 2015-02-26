@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.smaato.soma.BannerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:BannerView="http://schemas.android.com/apk/lib/com.smaato.soma"
+    android:id="@+id/smaatoView"
+    android:layout_width="320dip"
+    android:layout_height="50dp"
+    android:visibility="gone"
+    BannerView:loadNewBanner="true" />
