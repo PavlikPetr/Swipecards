@@ -37,6 +37,7 @@ import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.DatingLockPopupAction;
+import com.topface.topface.ui.fragments.profile.FacebookRequestWindowAction;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -201,6 +202,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 showFragment(FragmentId.TABBED_LIKES);
             }
         }));
+        startActionsController.registerAction(new FacebookRequestWindowAction(this, AC_PRIORITY_NORMAL));
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createInvitePopupStartAction(AC_PRIORITY_LOW));

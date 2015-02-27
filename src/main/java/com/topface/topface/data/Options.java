@@ -143,6 +143,7 @@ public class Options extends AbstractData {
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
     public NotShown notShown = new NotShown();
+    public FasebookRequests fasebookRequests = new FasebookRequests();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
 
     public Options(IApiResponse data) {
@@ -324,6 +325,11 @@ public class Options extends AbstractData {
             JSONObject jsonNotShown = response.optJSONObject("notShown");
             if (jsonNotShown != null) {
                 notShown.parseNotShownJSON(jsonNotShown);
+            }
+
+            JSONObject jsonFacebookRequest = response.optJSONObject("facebookRequests");
+            if (jsonFacebookRequest != null) {
+                fasebookRequests.parseFasebookRequestsJSON(jsonFacebookRequest);
             }
 
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
@@ -645,6 +651,22 @@ public class Options extends AbstractData {
                 datingLockPopupTimeout = jsonNotShown.optLong("timeout");
                 title = jsonNotShown.optString("title");
                 text = jsonNotShown.optString("text");
+            }
+        }
+    }
+
+    public static class FasebookRequests {
+        public boolean enabledRequestsOnLogin = false;
+        public boolean enabledAttempts = false;
+        public long fasebookRequestsTimeout = DateUtils.DAY_IN_SECONDS * 3;
+        public int maxAttempts;
+
+        public void parseFasebookRequestsJSON(JSONObject jsonFasebookRequests) {
+            if (jsonFasebookRequests != null) {
+                enabledRequestsOnLogin = jsonFasebookRequests.optBoolean("enabledOnLogin");
+                enabledAttempts = jsonFasebookRequests.optBoolean("enabledAttempts");
+                fasebookRequestsTimeout = jsonFasebookRequests.optLong("minDelay");
+                maxAttempts = jsonFasebookRequests.optInt("maxAttempts");
             }
         }
     }

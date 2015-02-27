@@ -5,37 +5,25 @@ import android.support.v4.app.FragmentManager;
 import com.topface.topface.App;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.controllers.AbstractStartAction;
 
 
-public class DatingLockPopupAction extends AbstractStartAction {
+public class DatingLockPopupAction extends DailyPopupAction {
 
     private DatingLockPopup.DatingLockPopupRedirectListener mDatingLockPopupRedirect;
     private FragmentManager mFragmentManager;
-    private int mPriority;
+    private Options.NotShown mNotShown;
 
     public DatingLockPopupAction(FragmentManager fragmentManager, int priority, DatingLockPopup.DatingLockPopupRedirectListener listener) {
-        this.mFragmentManager = fragmentManager;
-        this.mPriority = priority;
-        this.mDatingLockPopupRedirect = listener;
+        super(App.getContext(), priority);
+        mFragmentManager = fragmentManager;
+        mDatingLockPopupRedirect = listener;
+        mNotShown = mOptions.notShown;
     }
 
-    private boolean isTimeoutEnded() {
-        Options options = CacheProfile.getOptions();
-        if (options.notShown.enabledDatingLockPopup) {
-            long lastTime = App.getUserConfig().getDatingLockPopupShow();
-            if (lastTime == 0) {
-                //показываем попап первый раз
-                return true;
-            }
-            long currentTime = System.currentTimeMillis();
-            long deltaInSeconds = (currentTime - lastTime) / 1000;
-            return (deltaInSeconds >= options.notShown.datingLockPopupTimeout);
-        } else {
-            return false;
-        }
+    @Override
+    protected boolean firstStartShow() {
+        return true;
     }
 
     @Override
@@ -43,7 +31,6 @@ public class DatingLockPopupAction extends AbstractStartAction {
         UserConfig userConfig = App.getUserConfig();
         userConfig.setDatingLockPopupShow(System.currentTimeMillis());
         userConfig.saveConfig();
-
     }
 
     @Override
@@ -55,16 +42,7 @@ public class DatingLockPopupAction extends AbstractStartAction {
 
     @Override
     public boolean isApplicable() {
-        return (CacheProfile.getOptions().notShown.enabledDatingLockPopup && isTimeoutEnded());
-    }
-
-    @Override
-    public int getPriority() {
-        return mPriority;
-    }
-
-    @Override
-    public String getActionName() {
-        return "DatingLockPopup";
+        return mOptions.notShown.enabledDatingLockPopup
+                && isTimeoutEnded(mNotShown.datingLockPopupTimeout);
     }
 }
