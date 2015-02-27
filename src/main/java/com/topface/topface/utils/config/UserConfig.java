@@ -37,8 +37,6 @@ public class UserConfig extends AbstractConfig {
     public static final String DATA_NOVICE_BUY_SYMPATHY = "novice_dating_buy_sympathy";
     public static final String DATA_NOVICE_BUY_SYMPATHY_DATE = "novice_dating_buy_symathy_date_tag";
     public static final String DATA_NOVICE_SYMPATHY = "novice_dating_sympathy";
-    public static final String DATA_LIKE_CLOSING_LAST_TIME = "data_closings_likes_last_date";
-    public static final String DATA_MUTUAL_CLOSING_LAST_TIME = "data_closings_mutual_last_date";
     public static final String DATA_BONUS_LAST_SHOW_TIME = "data_bonus_last_show_time";
     public static final String NOTIFICATIONS_MESSAGES_STACK = "notifications_messages_stack";
     public static final String NOTIFICATION_REST_MESSAGES = "notifications_rest_messages";
@@ -96,10 +94,6 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, DATA_NOVICE_BUY_SYMPATHY_DATE, 0L);
         // flag show if "send sympathy hint" is passed
         addField(settingsMap, DATA_NOVICE_SYMPATHY, true);
-        // date of last likes closings processing
-        addField(settingsMap, DATA_LIKE_CLOSING_LAST_TIME, 0L);
-        // date of last mutual closings processing
-        addField(settingsMap, DATA_MUTUAL_CLOSING_LAST_TIME, 0L);
         // список сообщений для сгруппированных нотификаций (сейчас группируются только сообщения)
         addField(settingsMap, NOTIFICATIONS_MESSAGES_STACK, Static.EMPTY);
         // количество нотификаций, которые пишем в поле "еще %d сообщений"
@@ -296,46 +290,6 @@ public class UserConfig extends AbstractConfig {
      */
     public Boolean setNoviceBuySympathyDate(long lastTime) {
         return setField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY_DATE, lastTime);
-    }
-
-    // =======================Closings=======================
-
-    /**
-     * Sets date of last processing of likes closings
-     *
-     * @param lastTime date in unix time
-     * @return true on success
-     */
-    public boolean setLikesClosingsLastTime(long lastTime) {
-        return setField(getSettingsMap(), DATA_LIKE_CLOSING_LAST_TIME, lastTime);
-    }
-
-    /**
-     * Date of last processing of likes closings
-     *
-     * @return date in unix time
-     */
-    public long getLikesClosingsLastTime() {
-        return getLongField(getSettingsMap(), DATA_LIKE_CLOSING_LAST_TIME);
-    }
-
-    /**
-     * Sets date of last processing of mutual closings
-     *
-     * @param lastTime date in unix time
-     * @return true on success
-     */
-    public boolean setMutualClosingsLastTime(long lastTime) {
-        return setField(getSettingsMap(), DATA_MUTUAL_CLOSING_LAST_TIME, lastTime);
-    }
-
-    /**
-     * Date of last processing of mutual closings
-     *
-     * @return date in unix time
-     */
-    public long getMutualClosingsLastTime() {
-        return getLongField(getSettingsMap(), DATA_MUTUAL_CLOSING_LAST_TIME);
     }
 
     /**

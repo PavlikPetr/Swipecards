@@ -129,7 +129,6 @@ public class AuthorizationManager {
                 new SearchCacheManager().clearCache();
             }
         };
-        NavigationActivity.onLogout();
         if (!(activity instanceof NavigationActivity)) {
             activity.setResult(RESULT_LOGOUT);
             activity.finish();

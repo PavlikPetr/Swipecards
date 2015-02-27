@@ -8,7 +8,6 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
@@ -23,7 +22,6 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import org.json.JSONArray;
@@ -101,7 +99,6 @@ public class Options extends AbstractData {
     public long popup_timeout;
     public boolean blockUnconfirmed;
     public boolean blockChatNotMutual;
-    public Closing closing = new Closing();
     public BlockSympathy blockSympathy = new BlockSympathy();
     public BlockPeopleNearby blockPeople = new BlockPeopleNearby();
     public boolean isActivityAllowed = true; //Разрешено ли пользователю ставить лайки и совершать прочую активность
@@ -225,17 +222,6 @@ public class Options extends AbstractData {
                 }
             }
 
-            JSONObject closingsObj = response.optJSONObject("closing");
-            if (closing == null) closing = new Closing();
-            if (closingsObj != null) {
-                closing.enabledMutual = closingsObj.optBoolean("enabledMutual");
-                closing.enabledSympathies = closingsObj.optBoolean("enabledSympathies");
-                closing.limitMutual = closingsObj.optInt("limitMutual");
-                closing.limitSympathies = closingsObj.optInt("limitSympathies");
-                closing.timeoutSympathies = closingsObj.optInt("timeoutSympathies", Closing.DEFAULT_LIKES_TIMEOUT) * DateUtils.MINUTE_IN_MILLISECONDS;
-                closing.timeoutMutual = closingsObj.optInt("timeoutMutual", Closing.DEFAULT_MUTUALS_TIMEOUT) * DateUtils.MINUTE_IN_MILLISECONDS;
-            }
-
             JSONObject ratePopupObject = response.optJSONObject("applicationRatePopup");
             if (ratePopupObject != null) {
                 ratePopupEnabled = ratePopupObject.optBoolean("enabled");
@@ -283,8 +269,8 @@ public class Options extends AbstractData {
                 bonus.counter = bonusObject.optInt("counter");
                 bonus.timestamp = bonusObject.optLong("counterTimestamp");
                 bonus.integrationUrl = bonusObject.optString("integrationUrl");
-                bonus.buttonText = bonusObject.optString("buttonText",bonus.buttonText);
-                bonus.buttonPicture = bonusObject.optString("buttonPicture",bonus.buttonPicture);
+                bonus.buttonText = bonusObject.optString("buttonText", bonus.buttonText);
+                bonus.buttonPicture = bonusObject.optString("buttonPicture", bonus.buttonPicture);
             }
             // offerwalls for
             JSONObject jsonOfferwalls = response.optJSONObject("offerwalls");
@@ -487,49 +473,6 @@ public class Options extends AbstractData {
         }
     }
 
-
-    public static class Closing {
-        private static final int DEFAULT_LIKES_TIMEOUT = 24 * 60;
-        private static final int DEFAULT_MUTUALS_TIMEOUT = 10;
-
-        public static final String DATA_FOR_CLOSING_RECEIVED_ACTION = "closings_received_action";
-        private static Ssid.ISsidUpdateListener listener;
-        public boolean enabledSympathies;
-        public boolean enabledMutual;
-        public int limitSympathies;
-        public int limitMutual;
-        public long timeoutSympathies;
-        public long timeoutMutual;
-
-        public void onStopMutualClosings() {
-            UserConfig config = App.getUserConfig();
-            config.setMutualClosingsLastTime(System.currentTimeMillis());
-            config.saveConfig();
-        }
-
-        public void onStopLikesClosings() {
-            UserConfig config = App.getUserConfig();
-            config.setLikesClosingsLastTime(System.currentTimeMillis());
-            config.saveConfig();
-        }
-
-        public boolean isClosingsEnabled() {
-            return (isLikesAvailable() || isMutualAvailable());
-        }
-
-        public boolean isMutualAvailable() {
-            long diff = Math.abs(System.currentTimeMillis() - App.getUserConfig().getMutualClosingsLastTime());
-            Debug.log(ClosingsController.TAG, "time in sec from last mutuals show = " + diff / 1000);
-            return enabledMutual && diff > timeoutMutual && CacheProfile.unread_mutual > 0;
-        }
-
-        public boolean isLikesAvailable() {
-            long diff = Math.abs(System.currentTimeMillis() - App.getUserConfig().getLikesClosingsLastTime());
-            Debug.log(ClosingsController.TAG, "time in sec from last likes show = " + diff / 1000);
-            return enabledSympathies && diff > timeoutSympathies && CacheProfile.unread_likes > 0;
-        }
-    }
-
     public static class GetJar {
         String id = Static.UNKNOWN;
         String name = "coins";
@@ -579,7 +522,7 @@ public class Options extends AbstractData {
         public int counter;
         public long timestamp;
         public String integrationUrl;
-        public String buttonText =App.getContext().getString(R.string.general_bonus);// по умолчанию кнопка имеет название "Бонус"
+        public String buttonText = App.getContext().getString(R.string.general_bonus);// по умолчанию кнопка имеет название "Бонус"
         public String buttonPicture = null;// по умолчанию кнопка отображается с картинкой ic_bonus_1
     }
 

@@ -139,14 +139,7 @@ public class App extends Application {
      * Множественный запрос Options и профиля
      */
     public static void sendProfileAndOptionsRequests() {
-        sendProfileAndOptionsRequests(new SimpleApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                super.success(response);
-                LocalBroadcastManager.getInstance(getContext())
-                        .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
-            }
-        });
+        sendProfileAndOptionsRequests(new SimpleApiHandler());
     }
 
     private static ApiRequest getProductsRequest() {

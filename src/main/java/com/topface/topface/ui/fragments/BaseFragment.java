@@ -263,15 +263,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         VIP_PROFILE(0),
         PROFILE(1),
         DATING(2, true),
-        TABBED_LIKES(4),
-        TABBED_DIALOGS(6),
-        TABBED_VISITORS(7),
-        LIKES_CLOSINGS(10, true),
-        MUTUAL_CLOSINGS(11, true),
-        GEO(13),
-        BONUS(14),
+        TABBED_LIKES(3),
+        TABBED_DIALOGS(4),
+        TABBED_VISITORS(5),
+        GEO(6),
+        BONUS(7),
         EDITOR(1000),
-        SETTINGS(16),
+        SETTINGS(8),
         UNDEFINED(-1);
 
         private int mNumber;
