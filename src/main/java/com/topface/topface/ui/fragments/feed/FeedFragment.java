@@ -181,10 +181,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             }
         };
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
-        IntentFilter filter2 = new IntentFilter(ChatFragment.MAKE_ITEM_READ_BY_UID);
+        filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter2);
         for (int type : getTypesForGCM()) {
             GCMUtils.cancelNotification(getActivity(), type);
         }
@@ -993,11 +992,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
-    protected void makeItemReadUserId(int uid, int readedMessages) {
+    protected void makeItemReadUserId(int uid, int readMessages) {
         FeedAdapter<T> adapter = getListAdapter();
         for (FeedItem item : adapter.getData()) {
             if (item.user != null && item.user.id == uid && item.unread) {
-                int unread = item.unreadCounter - readedMessages;
+                int unread = item.unreadCounter - readMessages;
                 if (unread > 0) {
                     item.unreadCounter = unread;
                 } else {

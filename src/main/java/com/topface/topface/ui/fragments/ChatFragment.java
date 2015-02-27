@@ -263,7 +263,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private ImageButton mSendButton;
-    private int mLoadedItemsCount;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -281,12 +280,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onAttach(activity);
         // do not recreate Adapter cause of steRetainInstance(true)
         if (mAdapter == null) {
-            mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback(), new OnLoadMessagesListener() {
-                @Override
-                public void onLoadMessages(int i) {
-                    mLoadedItemsCount += i;
-                }
-            });
+            mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
         }
 
         Bundle args = getArguments();
@@ -374,10 +368,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onDestroyView() {
         super.onDestroyView();
         if (isAdded()) {
-            Intent intent = new Intent(CountersManager.UPDATE_COUNTERS);
-            intent.putExtra(LOADED_MESSAGES, mLoadedItemsCount);
-            intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
-            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+            if (mAdapter != null) {
+                int loadedItemsCount = 0;
+                for (History item : mAdapter.getDataCopy()) {
+                    if (item.unread) {
+                        loadedItemsCount++;
+                    }
+                }
+                Intent intent = new Intent(CountersManager.UPDATE_COUNTERS);
+                intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
+                intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+            }
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
@@ -1307,12 +1309,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mEditBox.setText(message);
             mEditBox.setSelection(message.length());
         }
-    }
-
-    public interface OnLoadMessagesListener {
-
-        public void onLoadMessages(int i);
-
     }
 
 }

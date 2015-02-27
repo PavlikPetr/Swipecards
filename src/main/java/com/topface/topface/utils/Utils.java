@@ -132,6 +132,10 @@ public class Utils {
     }
 
     public static void startOldVersionPopup(final Activity activity) {
+        startOldVersionPopup(activity, true);
+    }
+
+    public static void startOldVersionPopup(final Activity activity, boolean cancelable) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
             @Override
@@ -139,12 +143,15 @@ public class Utils {
                 Utils.goToMarket(activity);
             }
         });
-        builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
+        if (cancelable) {
+            builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+        }
         builder.setMessage(R.string.general_version_not_supported);
+        builder.setCancelable(cancelable);
         builder.create().show();
     }
 
