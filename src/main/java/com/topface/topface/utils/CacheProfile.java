@@ -142,7 +142,6 @@ public class CacheProfile {
                 invisible = profile.invisible;
                 premium = profile.premium;
                 show_ad = profile.showAd;
-                show_ad = true;
                 photo = profile.photo;
                 photos = profile.photos;
                 totalPhotos = profile.photosCount;
@@ -175,7 +174,6 @@ public class CacheProfile {
 
                 paid = profile.paid;
                 show_ad = profile.showAd;
-                show_ad = true;
 
                 xstatus = profile.xstatus;
 

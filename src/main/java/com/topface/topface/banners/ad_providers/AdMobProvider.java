@@ -89,7 +89,6 @@ class AdMobProvider extends AbstractAdsProvider {
                         CacheProfile.getProfile().sex == Static.BOY ?
                                 AdRequest.GENDER_MALE :
                                 AdRequest.GENDER_FEMALE
-                )
-                .setBirthday(getUserAge().getTime());
+                ).setBirthday(getUserAge().getTime());
     }
 }

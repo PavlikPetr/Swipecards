@@ -16,7 +16,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.banners.PageInfo;
-import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.Banner;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
@@ -35,6 +34,13 @@ import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
 import ru.ideast.adwired.events.OnStopListener;
+
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADWIRED;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
+
 
 /**
  */
@@ -77,7 +83,6 @@ public class FullscreenController {
                     FullscreenController.this.isTimePassed() &&
                     startPageInfo != null &&
                     startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
-//            return true;
         }
 
         @Override
@@ -142,18 +147,18 @@ public class FullscreenController {
     public void requestFullscreen(String type) {
         try {
             switch (type) {
-                case AdProvidersFactory.BANNER_NONE:
+                case BANNER_NONE:
                     return;
-                case AdProvidersFactory.BANNER_ADMOB:
+                case BANNER_ADMOB:
                     requestAdmobFullscreen(ADMOB_INTERSTITIAL_ID);
                     break;
-                case AdProvidersFactory.BANNER_ADMOB_MEDIATION:
+                case BANNER_ADMOB_MEDIATION:
                     requestAdmobFullscreen(ADMOB_INTERSTITIAL_MEDIATION_ID);
                     break;
-                case AdProvidersFactory.BANNER_ADWIRED:
+                case BANNER_ADWIRED:
                     requestAdwiredFullscreen();
                     break;
-                case AdProvidersFactory.BANNER_TOPFACE:
+                case BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
                 default:
