@@ -1,6 +1,5 @@
 package com.topface.topface.utils;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -9,7 +8,6 @@ import android.text.TextUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
-import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
@@ -38,7 +36,7 @@ public class PopupManager {
 
             @Override
             public void callOnUi() {
-                startOldVersionPopup();
+                Utils.startOldVersionPopup(mActivity);
             }
 
             @Override
@@ -56,24 +54,6 @@ public class PopupManager {
                 return "OldVersionPopup";
             }
         };
-    }
-
-    private void startOldVersionPopup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Utils.goToMarket(mActivity);
-            }
-        });
-        builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.setMessage(R.string.general_version_not_supported);
-        builder.create().show();
     }
 
     private boolean isOldVersion(String version) {

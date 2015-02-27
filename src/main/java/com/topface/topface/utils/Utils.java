@@ -3,7 +3,9 @@ package com.topface.topface.utils;
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -130,6 +132,23 @@ public class Utils {
     @SuppressWarnings("UnusedDeclaration")
     public static void goToUrl(Context context, String url) {
         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+    }
+
+    public static void startOldVersionPopup(final Activity activity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Utils.goToMarket(activity);
+            }
+        });
+        builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setMessage(R.string.general_version_not_supported);
+        builder.create().show();
     }
 
     public static void goToMarket(Activity context) {
