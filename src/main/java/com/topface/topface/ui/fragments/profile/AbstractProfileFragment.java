@@ -14,11 +14,13 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.fragments.UserAvatarFragment;
+import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
+import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.Utils;
-import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractProfileFragment extends UserAvatarFragment implements ViewPager.OnPageChangeListener {
     public static final String INTENT_UID = "intent_profile_uid";
@@ -67,7 +69,32 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
     // views
     private ViewPager mBodyPager;
     private ProfilePageAdapter mBodyPagerAdapter;
-    private TabPageIndicator mTabIndicator;
+    private SlidingTabLayout mTabIndicator;
+
+    private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            List<Fragment> fragments = getChildFragmentManager().getFragments();
+            if (fragments != null) {
+                for (Fragment fragment : fragments) {
+                    if (fragment instanceof FeedFragment) {
+                        // clean multiselection, when switching tabs
+                        ((FeedFragment) fragment).finishMultiSelection();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
     @Override
     public void onAttach(Activity activity) {
@@ -158,9 +185,11 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
                 BODY_PAGES_TITLES, mProfileUpdater);
         mBodyPager.setAdapter(mBodyPagerAdapter);
 //Tabs for Body
-        mTabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
+        mTabIndicator = (SlidingTabLayout) root.findViewById(R.id.tpiTabs);
+        mTabIndicator.setUseWeightProportions(true);
+        mTabIndicator.setCustomTabView(R.layout.tab_indicator, R.id.tab_title);
         mTabIndicator.setViewPager(mBodyPager);
-        mBodyPagerAdapter.setPageIndicator(mTabIndicator);
+        mTabIndicator.setOnPageChangeListener(mPageChangeListener);
         mTabIndicator.setOnPageChangeListener(this);
     }
 
@@ -168,7 +197,7 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
     }
 
     protected void addBodyPage(String className, String pageTitle) {
-        BODY_PAGES_TITLES.add(pageTitle);
+        BODY_PAGES_TITLES.add(pageTitle.toUpperCase());
         BODY_PAGES_CLASS_NAMES.add(className);
     }
 

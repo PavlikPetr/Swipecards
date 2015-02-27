@@ -145,7 +145,6 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         }
     };
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
-    private OverflowMenu mChatOverflowMenu;
     // Managers
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
@@ -298,7 +297,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                 }
                 mAdapter.setData(historyData);
                 mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
-                initOverflowMenu();
+                initOverflowMenuActions(getOverflowMenu());
                 if (wasFailed) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 } else {
@@ -492,9 +491,6 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     @Override
     public void onDestroy() {
         release();
-        if (mChatOverflowMenu != null) {
-            mChatOverflowMenu.onDestroy();
-        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPopularUserLockController);
         Debug.log(this, "-onDestroy");
         super.onDestroy();
@@ -557,7 +553,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                             mUser = data.user;
                             if (!mUser.isEmpty()) {
                                 onUserLoaded(mUser);
-                                initOverflowMenu();
+                                initOverflowMenuActions(getOverflowMenu());
                             }
                             return;
                         } else if (blockStage == PopularUserChatController.SECOND_STAGE) {
@@ -586,7 +582,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                 mUser = data.user;
                 if (!mUser.isEmpty()) {
                     onUserLoaded(mUser);
-                    initOverflowMenu();
+                    initOverflowMenuActions(getOverflowMenu());
                 }
                 if (mAdapter != null) {
                     if (!data.items.isEmpty()) {
@@ -701,6 +697,11 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     @Override
     protected IUniversalUser getUniversalUser() {
         return UniversalUserFactory.create(mUser);
+    }
+
+    @Override
+    protected OverflowMenu createOverflowMenu(MenuItem barActions) {
+        return new OverflowMenu(getActivity(), barActions);
     }
 
     private void release() {
@@ -900,10 +901,11 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         };
     }
 
-    private void initOverflowMenu() {
-        if (mChatOverflowMenu != null) {
-            if (mChatOverflowMenu.getOverflowMenuFieldsListener() == null) {
-                mChatOverflowMenu.setOverflowMenuFieldsListener(new OverflowMenuUser() {
+    @Override
+    protected void initOverflowMenuActions(OverflowMenu overflowMenu) {
+        if (overflowMenu != null) {
+            if (overflowMenu.getOverflowMenuFieldsListener() == null) {
+                overflowMenu.setOverflowMenuFieldsListener(new OverflowMenuUser() {
                     @Override
                     public void setBlackListValue(Boolean value) {
                         if (mUser != null) {
@@ -959,21 +961,8 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     }
                 });
             }
-            mChatOverflowMenu.initOverfowMenu();
+            overflowMenu.initOverfowMenu();
         }
-    }
-
-    @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_chat;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mChatOverflowMenu != null) {
-            mChatOverflowMenu.onMenuClicked(item);
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

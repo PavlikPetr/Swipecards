@@ -16,6 +16,7 @@ import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
+import com.topface.topface.utils.actionbar.OverflowMenu;
 
 /**
  * Fragment with user photo in action bar options
@@ -26,11 +27,20 @@ public abstract class UserAvatarFragment extends BaseFragment
     private MenuItem mBarAvatar;
     private MenuItem mBarActions;
     private ActionBarTitleSetterDelegate mSetter;
+    private OverflowMenu mOverflowMenu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSetter = new ActionBarTitleSetterDelegate(((ActionBarActivity) getActivity()).getSupportActionBar());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mOverflowMenu != null) {
+            mOverflowMenu.onDestroy();
+        }
     }
 
     @Override
@@ -50,11 +60,12 @@ public abstract class UserAvatarFragment extends BaseFragment
             barActionsItem.setChecked(mBarActions.isChecked());
         }
         mBarActions = barActionsItem;
+        mOverflowMenu = createOverflowMenu(mBarActions);
     }
 
     @Override
     protected Integer getOptionsMenuRes() {
-        return R.menu.actions_chat;
+        return R.menu.actions_avatar;
     }
 
     @Override
@@ -96,6 +107,26 @@ public abstract class UserAvatarFragment extends BaseFragment
 
     protected abstract IUniversalUser getUniversalUser();
 
+    protected OverflowMenu getOverflowMenu() {
+        return mOverflowMenu;
+    }
+
+    public boolean hasOverflowMenu() {
+        return mOverflowMenu != null;
+    }
+
+    protected abstract OverflowMenu createOverflowMenu(MenuItem barActions);
+
+    protected abstract void initOverflowMenuActions(OverflowMenu overflowMenu);
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mOverflowMenu != null) {
+            mOverflowMenu.onMenuClicked(item);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -110,6 +141,13 @@ public abstract class UserAvatarFragment extends BaseFragment
         startActivity(PhotoSwitcherActivity.
                 getPhotoSwitcherIntent(user.getGifts(), user.getPhoto().position,
                         user.getId(), user.getPhotosCount(), user.getPhotos()));
+    }
+
+    public void closeOverflowMenu() {
+        if (mBarActions != null && mBarActions.isChecked()) {
+            onOptionsItemSelected(mBarActions);
+//            mOutsideView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -129,4 +167,6 @@ public abstract class UserAvatarFragment extends BaseFragment
             return user.getCity();
         }
     }
+
+
 }

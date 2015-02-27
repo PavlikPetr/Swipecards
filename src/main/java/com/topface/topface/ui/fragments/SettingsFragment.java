@@ -40,6 +40,7 @@ import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.LocaleConfig;
@@ -54,7 +55,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class SettingsFragment extends BaseFragment implements OnClickListener, OnCheckedChangeListener {
+public class SettingsFragment extends ProfileInnerFragment implements OnClickListener, OnCheckedChangeListener {
     public static final int REQUEST_CODE_RINGTONE = 333;
     private EditSwitcher mSwitchVibration;
     private EditSwitcher mSwitchLED;

@@ -25,12 +25,13 @@ import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.ui.SettingsActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
+import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
-import com.topface.topface.ui.fragments.gift.OwnGiftsFragment;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.PhotoTaker;
+import com.topface.topface.utils.actionbar.OverflowMenu;
 
 import java.util.ArrayList;
 
@@ -134,18 +135,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
         addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
         addBodyPage(VipBuyFragment.class.getName(), getResources().getString(R.string.vip_status));
-        addBodyPage(OwnGiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                startSettingsActivity();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        addBodyPage(SettingsFragment.class.getName(), getResources().getString(R.string.settings_header_title));
     }
 
     private void startSettingsActivity() {
@@ -204,5 +194,15 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     protected IUniversalUser getUniversalUser() {
         return UniversalUserFactory.create(getProfile());
+    }
+
+    @Override
+    protected OverflowMenu createOverflowMenu(MenuItem barActions) {
+        return new OverflowMenu(getActivity(), barActions);
+    }
+
+    @Override
+    protected void initOverflowMenuActions(OverflowMenu overflowMenu) {
+        overflowMenu.initOverfowMenu();
     }
 }

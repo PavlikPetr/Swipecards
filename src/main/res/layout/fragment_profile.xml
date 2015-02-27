@@ -10,10 +10,11 @@
         android:layout_height="fill_parent"
         android:orientation="vertical">
 
-        <com.viewpagerindicator.TabPageIndicator
+        <com.topface.topface.ui.views.slidingtab.SlidingTabLayout
             android:id="@+id/tpiTabs"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent" />
+            android:background="@color/tab_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/vpFragments"
