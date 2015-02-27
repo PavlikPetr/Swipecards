@@ -207,7 +207,9 @@ public class PubnativeInfo extends RequestInfo {
             builder.append("&long=").append(longitude);
         }
         builder.append("&gender=").append(gender);
-        builder.append("&age=").append(age);
+        if (age > 0) {
+            builder.append("&age=").append(age);
+        }
         if (TextUtils.isEmpty(android_advertiser_id)) {
             builder.append("&no_user_id=").append(no_user_id);
         } else {

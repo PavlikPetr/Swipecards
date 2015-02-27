@@ -7,6 +7,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MultipartApiRequest;
 import com.topface.topface.requests.MultipartApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.ScruffyStatistics;
 
 import org.apache.http.HttpStatus;
 
@@ -41,7 +42,11 @@ public class ScruffyRequestHolder implements RequestHolder {
                     response.getBody()
             ));
         } else {
-            setResponse(new ApiResponse(response.getBody()));
+            ApiResponse resp = new ApiResponse(response.getBody());
+            if (resp.getResultCode() != ErrorCodes.RESULT_OK) {
+                ScruffyStatistics.sendScruffyRequestFail();
+            }
+            setResponse(resp);
         }
     }
 

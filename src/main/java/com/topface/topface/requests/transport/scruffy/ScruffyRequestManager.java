@@ -12,6 +12,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.ScruffyStatistics;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Map;
@@ -189,6 +190,7 @@ public class ScruffyRequestManager {
                     ).toString();
 
                     Debug.log("Scruffy:: Request " + API_URL + " >>>\n" + requestString);
+                    ScruffyStatistics.sendScruffyRequestSend();
                     mWebSocket.send(requestString);
                     mSentRequests.put(key, request);
                     mPendingRequests.remove(key);
@@ -222,6 +224,7 @@ public class ScruffyRequestManager {
                 public void onCompleted(Exception ex, final WebSocket webSocket) {
                     Debug.log("Scruffy:: try connect");
                     if (ex != null || webSocket == null) {
+                        ScruffyStatistics.sendScruffyConnectFailure();
                         Debug.error("Scruffy::", ex);
                         if (listener != null) {
                             listener.onError(ErrorCodes.ERRORS_PROCCESED, "ConnectedListener is ");
@@ -230,6 +233,7 @@ public class ScruffyRequestManager {
                         reconnect();
                         return;
                     }
+                    ScruffyStatistics.sendScruffyConnectSuccess();
                     //Листенер получения данных от сервера
                     webSocket.setStringCallback(mStringCallback);
                     webSocket.setClosedCallback(mClosedCallback);
@@ -277,6 +281,7 @@ public class ScruffyRequestManager {
     }
 
     private void makeScruffyUnavailable() {
+        ScruffyStatistics.sendScruffyTransportFallback();
         mScruffyAvailable = false;
         for (ScruffyRequestHolder holder : mSentRequests.values()) {
             holder.getRequest().exec();
