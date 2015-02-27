@@ -147,9 +147,9 @@ public class FullscreenController {
                 case AdProvidersFactory.BANNER_ADMOB:
                     requestAdmobFullscreen(ADMOB_INTERSTITIAL_ID);
                     break;
-//                case AdProvidersFactory.BANNER_ADMOB_MEDIATION:
-//                    requestAdmobFullscreen(ADMOB_INTERSTITIAL_MEDIATION_ID);
-//                    break;
+                case AdProvidersFactory.BANNER_ADMOB_MEDIATION:
+                    requestAdmobFullscreen(ADMOB_INTERSTITIAL_MEDIATION_ID);
+                    break;
                 case AdProvidersFactory.BANNER_ADWIRED:
                     requestAdwiredFullscreen();
                     break;
