@@ -992,6 +992,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     public boolean isOpenChatAvailable() {
                         return true;
                     }
+
+                    @Override
+                    public void clickSendGift() {
+                        // empty processor. Haven't item "Send gift" in current fragment
+                    }
                 });
             }
             mChatOverflowMenu.initOverfowMenu();
