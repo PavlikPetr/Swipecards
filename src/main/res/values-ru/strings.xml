@@ -802,7 +802,7 @@
 
     <string name="wrong_time_popup_text">Не удалось установить безопасное соединение с сервером.\nВозможно, дата или время на вашем устройстве указаны неверно.</string>
     <string name="wrong_time_popup_button">Открыть настройки</string>
-    <string name="go_tf">Зайди в Topface</string>
+    <string name="go_tf">Отправляю тебе "Подарок-сюрприз!"</string>
 
 
     <!-- ServicesManager-->
