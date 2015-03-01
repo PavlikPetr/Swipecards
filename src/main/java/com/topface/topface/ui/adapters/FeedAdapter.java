@@ -313,7 +313,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                 mFeedAd = NativeAdManager.getNativeAd();
             }
             if (mFeedAd != null) {
-                data.add(mFeedAd.getPosition(), getNativeAdItemCreator().getAdItem(mFeedAd));
+                int adPosition = mFeedAd.getPosition();
+                data.add(adPosition < data.size() ? adPosition : data.size() - 1,
+                        getNativeAdItemCreator().getAdItem(mFeedAd));
                 mHasFeedAd = true;
                 Intent intent = new Intent(TabbedFeedFragment.HAS_FEED_AD);
                 LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);

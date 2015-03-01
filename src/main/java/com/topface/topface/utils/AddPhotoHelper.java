@@ -258,7 +258,7 @@ public class AddPhotoHelper {
             return;
         }
         // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
-        if (CacheProfile.photos.size() == 0) {
+        if (CacheProfile.photos != null && CacheProfile.photos.size() == 0) {
             App.getConfig().getUserConfig().setUserAvatarAvailable(true);
             App.getConfig().getUserConfig().saveConfig();
         }
