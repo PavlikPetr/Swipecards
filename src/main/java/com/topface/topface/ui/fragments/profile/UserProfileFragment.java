@@ -109,8 +109,14 @@ public class UserProfileFragment extends AbstractProfileFragment implements View
                             }
                             switchBookmarkEnabled(!value);
                         }
-                        root.findViewById(R.id.blockPrBar).setVisibility(View.INVISIBLE);
-                        root.findViewById(R.id.blockIcon).setVisibility(View.VISIBLE);
+                        View blockPrgsBar = root.findViewById(R.id.blockPrBar);
+                        if (blockPrgsBar != null) {
+                            blockPrgsBar.setVisibility(View.INVISIBLE);
+                        }
+                        View blockIcon = root.findViewById(R.id.blockIcon);
+                        if(blockIcon != null) {
+                            blockIcon.setVisibility(View.VISIBLE);
+                        }
                         break;
                     case BOOKMARK:
                         User user = (User) profile;
