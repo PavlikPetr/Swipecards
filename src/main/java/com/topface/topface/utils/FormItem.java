@@ -11,7 +11,6 @@ public class FormItem implements Parcelable {
     public String title;
     public String value;
     public FormItem header;
-    public boolean equal;
 
     public int titleId = NO_RESOURCE_ID;
     public int dataId = NO_RESOURCE_ID;
@@ -25,8 +24,6 @@ public class FormItem implements Parcelable {
     public static final int NO_RESOURCE_ID = -1;
     public static final int NOT_SPECIFIED_ID = 0;
 
-    private static FormItem divider = null;
-
     private LimitInterface mLimitInterface;
 
     //private static final long serialVersionUID = 1883262786634798671L;    
@@ -36,14 +33,12 @@ public class FormItem implements Parcelable {
         this.type = type;
         this.value = Static.EMPTY;
         this.dataId = NO_RESOURCE_ID;
-        this.equal = false;
     }
 
     public FormItem(int titleId, int dataId, int type) {
         this.titleId = titleId;
         this.dataId = dataId;
         this.type = type;
-        this.equal = false;
         this.value = Static.EMPTY;
     }
 
@@ -51,7 +46,6 @@ public class FormItem implements Parcelable {
         this.titleId = titleId;
         this.dataId = dataId;
         this.type = type;
-        this.equal = false;
         this.header = header;
         this.value = Static.EMPTY;
     }
@@ -61,7 +55,6 @@ public class FormItem implements Parcelable {
         this.value = data == null ? Static.EMPTY : data;
         this.dataId = NO_RESOURCE_ID;
         this.type = type;
-        this.equal = false;
     }
 
     public FormItem(int titleId, String data, int type, FormItem header) {
@@ -69,27 +62,19 @@ public class FormItem implements Parcelable {
         this.value = data == null ? Static.EMPTY : data;
         this.dataId = NO_RESOURCE_ID;
         this.type = type;
-        this.equal = false;
         this.header = header;
     }
 
+    @SuppressWarnings("unused")
     private FormItem(int type) {
         this.type = type;
         this.value = Static.EMPTY;
         this.dataId = NO_RESOURCE_ID;
         this.title = Static.EMPTY;
         this.titleId = NO_RESOURCE_ID;
-        this.equal = false;
     }
 
     public FormItem() {
-    }
-
-    public static FormItem getDivider() {
-        if (divider == null) {
-            FormItem.divider = new FormItem(DIVIDER);
-        }
-        return divider;
     }
 
     @Override
@@ -102,7 +87,6 @@ public class FormItem implements Parcelable {
         dest.writeInt(type);
         dest.writeString(title);
         dest.writeString(value);
-        dest.writeInt(equal ? 1 : 0);
         dest.writeInt(titleId);
         dest.writeInt(dataId);
         dest.writeParcelable(header, flags);
@@ -116,7 +100,6 @@ public class FormItem implements Parcelable {
                     (formItem.title == null ? title == null : formItem.title.equals(title)) &&
                     (formItem.value == null ? value == null : formItem.value.equals(value)) &&
                     (formItem.header == null ? header == null : formItem.header.equals(header)) &&
-                    formItem.equal == equal &&
                     formItem.titleId == titleId &&
                     formItem.dataId == dataId;
         } else {
@@ -131,7 +114,6 @@ public class FormItem implements Parcelable {
         hash = hash * 31 + (title == null ? 0 : title.hashCode());
         hash = hash * 31 + (value == null ? 0 : value.hashCode());
         hash = hash * 31 + (header == null ? 0 : header.hashCode());
-        hash = hash * 31 + (equal ? 1 : 0);
         hash = hash * 31 + titleId;
         hash = hash * 31 + dataId;
         return hash;
@@ -145,7 +127,6 @@ public class FormItem implements Parcelable {
                     result.type = in.readInt();
                     result.title = in.readString();
                     result.value = in.readString();
-                    result.equal = in.readInt() == 1;
                     result.titleId = in.readInt();
                     result.dataId = in.readInt();
                     result.header = in.readParcelable(FormItem.class.getClassLoader());

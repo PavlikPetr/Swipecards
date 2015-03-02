@@ -4,44 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/loUserTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/ivState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/user_cell" />
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/ivState"
-            android:singleLine="true"
-            android:textColor="#B8B8B8"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/im_item_arrow" />
-    </RelativeLayout>
-
-    <include
-        android:id="@+id/ivDivider"
-        layout="@layout/item_divider"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-
     <LinearLayout
         android:id="@+id/loEmptyForm"
         android:layout_width="fill_parent"
@@ -103,10 +65,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:cacheColorHint="#00000000"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
+        android:divider="@color/profile_divider_color"
+        android:dividerHeight="1dp"
         android:fadeScrollbars="true"
         android:fadingEdge="none"
-        android:listSelector="@android:color/transparent" />
+        android:listSelector="@android:color/transparent"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp"/>
 
 </LinearLayout>

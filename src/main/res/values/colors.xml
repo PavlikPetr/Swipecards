@@ -66,6 +66,7 @@
 
     <!--filter fragment dividers color-->
     <color name="filter_fragment_divider_color">#E2E2E2</color>
+    <color name="profile_divider_color">#E5E5E5</color>
 
 
 </resources>

@@ -79,10 +79,6 @@ public class ProfileFormFragment extends ProfileInnerFragment {
         mFormListView = (ListView) root.findViewById(R.id.fragmentFormList);
         mFormListView.setAdapter(mProfileFormListAdapter);
 
-        View titleLayout = root.findViewById(R.id.loUserTitle);
-        titleLayout.setVisibility(View.GONE);
-        (root.findViewById(R.id.ivDivider)).setVisibility(View.GONE);
-
         return root;
     }
 
