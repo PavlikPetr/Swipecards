@@ -38,6 +38,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
      */
     private static final long REPEAT_SCHEDULE = 2000;
     protected BitmapProcessor mPostProcessor;
+    protected BitmapProcessor mPreProcessor;
     private String mCurrentSrc;
     private boolean isFirstTime = true;
 
@@ -89,7 +90,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
     protected abstract void setAttributes(AttributeSet attrs);
 
     @SuppressWarnings("unused")
-    protected abstract void setPostProcessor(int postProcessorId, float cornerRadius, int maskId);
+    protected abstract BitmapProcessor createProcessor(int postProcessorId, float cornerRadius, int maskId);
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
@@ -127,7 +128,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
             }
-            getImageLoader(getContext()).displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor(), mStubResId);
+            getImageLoader(getContext()).displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPreProcessor(), getPostProcessor(), mStubResId);
             if (borderResId != 0 && isFirstTime) {
                 setImageResource(borderResId);
             }
@@ -139,7 +140,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
     }
 
     public void setRemoteImageBitmap(Bitmap bitmap) {
-        BitmapProcessor processor = getPostProcessor();
+        BitmapProcessor processor = getPreProcessor();
         if (processor != null) {
             setImageBitmap(processor.process(bitmap));
         } else {
@@ -176,6 +177,10 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
 
     private BitmapProcessor getPostProcessor() {
         return mPostProcessor;
+    }
+
+    private BitmapProcessor getPreProcessor() {
+        return mPreProcessor;
     }
 
     public boolean setPhoto(IPhoto photo) {
