@@ -23,7 +23,7 @@ class AdMobProvider extends AbstractAdsProvider {
     private Context mContext;
 
     @Override
-    public boolean injectBannerInner(IPageWithAds page, IAdProviderCallbacks callbacks) {
+    public final boolean injectBannerInner(IPageWithAds page, IAdProviderCallbacks callbacks) {
         mContext = page.getActivity().getApplicationContext();
         createView(page);
         setCallback(callbacks);

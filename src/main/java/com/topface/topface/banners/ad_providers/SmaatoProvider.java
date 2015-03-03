@@ -1,5 +1,6 @@
 package com.topface.topface.banners.ad_providers;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -26,24 +27,10 @@ class SmaatoProvider extends AbstractAdsProvider {
         final BannerView smaatoBanner = (BannerView) View
                 .inflate(container.getContext(), R.layout.banner_smaato, container)
                 .findViewById(R.id.smaatoView);
-        AdSettings adSettings = new AdSettings();
-        adSettings.setAdType(AdType.RICHMEDIA);
-        adSettings.setAdspaceId(page.getActivity().getApplicationContext().getResources().getInteger(R.integer.smaato_space_id));
-        smaatoBanner.setAdSettings(adSettings);
-        UserSettings userSettings = new UserSettings();
-        userSettings.setAge(CacheProfile.getProfile().age);
-        userSettings.setUserGender(CacheProfile.getProfile().sex == Static.BOY ?
-                UserSettings.Gender.MALE :
-                UserSettings.Gender.FEMALE);
-        if (App.getLastKnownLocation() != null) {
-            userSettings.setLatitude(App.getLastKnownLocation().getLatitude());
-            userSettings.setLongitude(App.getLastKnownLocation().getLongitude());
-        }
-        smaatoBanner.setUserSettings(userSettings);
+        smaatoBanner.setUserSettings(getUserSettings());
         smaatoBanner.setAutoReloadEnabled(true);
         smaatoBanner.setAutoReloadFrequency(page.getActivity().getApplicationContext().getResources().getInteger(R.integer.smaato_autoreload_time));
-        adSettings.setPublisherId(page.getActivity().getApplicationContext().getResources().getInteger(R.integer.smaato_publisher_id));
-        smaatoBanner.setAdSettings(adSettings);
+        smaatoBanner.setAdSettings(getAdSettings(page.getActivity().getApplicationContext()));
         smaatoBanner.addAdListener(new AdListenerInterface() {
             @Override
             public void onReceiveAd(AdDownloaderInterface adDownloaderInterface, ReceivedBannerInterface receivedBannerInterface) throws AdReceiveFailed {
@@ -58,4 +45,26 @@ class SmaatoProvider extends AbstractAdsProvider {
         smaatoBanner.asyncLoadNewBanner();
         return true;
     }
+
+    private UserSettings getUserSettings() {
+        UserSettings userSettings = new UserSettings();
+        userSettings.setAge(CacheProfile.getProfile().age);
+        userSettings.setUserGender(CacheProfile.getProfile().sex == Static.BOY ?
+                UserSettings.Gender.MALE :
+                UserSettings.Gender.FEMALE);
+        if (App.getLastKnownLocation() != null) {
+            userSettings.setLatitude(App.getLastKnownLocation().getLatitude());
+            userSettings.setLongitude(App.getLastKnownLocation().getLongitude());
+        }
+        return userSettings;
+    }
+
+    private AdSettings getAdSettings(Context context) {
+        AdSettings adSettings = new AdSettings();
+        adSettings.setAdType(AdType.RICHMEDIA);
+        adSettings.setAdspaceId(context.getResources().getInteger(R.integer.smaato_space_id));
+        adSettings.setPublisherId(context.getResources().getInteger(R.integer.smaato_publisher_id));
+        return adSettings;
+    }
+
 }
