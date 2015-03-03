@@ -9,9 +9,4 @@
         layout="@layout/item_left_menu_button_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <ViewStub
-        android:id="@+id/vsHeaderStub"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 </LinearLayout>

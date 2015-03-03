@@ -122,10 +122,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private AddPhotoHelper mAddPhotoHelper;
     private PopupManager mPopupManager;
 
-    public static void onLogout() {
-        MenuFragment.onLogout();
-    }
-
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
      *
@@ -288,9 +284,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         } else {
             switch (item.getItemId()) {
                 case android.R.id.home:
-                    if (mMenuFragment.isLockedByClosings()) {
-                        mMenuFragment.showClosingsDialog();
-                    }
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);
@@ -308,10 +301,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
         Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
         showFragment(currentFragment == null ? CacheProfile.getOptions().startPageFragmentId : currentFragment);
-    }
-
-    public void showContent() {
-        mDrawerLayout.openDrawer(GravityCompat.START);
     }
 
     @Override
@@ -364,7 +353,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     protected void onProfileUpdated() {
         initBonusCounterConfig();
         // возможно что содержимое меню поменялось, надо обновить
-        if (mMenuFragment != null && !mMenuFragment.isClosingsAvailable()) {
+        if (mMenuFragment != null) {
             mMenuFragment.updateAdapter();
         }
         mNotificationController.refreshNotificator();
@@ -420,8 +409,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public void onBackPressed() {
         if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
             mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
-        } else if (mMenuFragment.isLockedByClosings()) {
-            mMenuFragment.showClosingsDialog();
         } else if (!mBackPressedOnce.get()) {
             (new Timer()).schedule(new TimerTask() {
                 @Override
@@ -450,7 +437,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
      */
     public void setMenuLockMode(int lockMode, HackyDrawerLayout.IBackPressedListener listener) {
         if (mDrawerLayout != null) {
-            if (lockMode == DrawerLayout.LOCK_MODE_UNLOCKED && mMenuFragment.isLockedByClosings()) {
+            if (lockMode == DrawerLayout.LOCK_MODE_UNLOCKED) {
                 return;
             }
             mDrawerLayout.setDrawerLockMode(lockMode, GravityCompat.START);
@@ -471,7 +458,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             Debug.log("Current User ID:" + CacheProfile.getProfile().uid);
         }
         mDrawerToggle.syncState();
-        mMenuFragment.onLoadProfile();
 
         /*
         Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
@@ -606,11 +592,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
     @Override
     public void onHideActionBar() {
-        if (!mMenuFragment.isLockedByClosings()) {
-            mIsActionBarHidden = true;
-            setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            getSupportActionBar().hide();
-        }
+        mIsActionBarHidden = true;
+        setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        getSupportActionBar().hide();
     }
 
     @Override
