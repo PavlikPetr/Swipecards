@@ -24,7 +24,6 @@ import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
-import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
@@ -370,10 +369,9 @@ public class OverflowMenu {
     }
 
     private void onClickSendGiftAction() {
-        mActivity.startActivityForResult(
-                GiftsActivity.getSendGiftIntent(mActivity, mProfileId),
-                GiftsActivity.INTENT_REQUEST_GIFT
-        );
+        if (mOverflowMenuFields != null) {
+            mOverflowMenuFields.clickSendGift();
+        }
     }
 
     private void onClickAddToBlackList() {
