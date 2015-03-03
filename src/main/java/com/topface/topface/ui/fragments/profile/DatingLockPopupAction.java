@@ -28,9 +28,6 @@ public class DatingLockPopupAction extends DailyPopupAction {
 
     @Override
     public void callInBackground() {
-        UserConfig userConfig = App.getUserConfig();
-        userConfig.setDatingLockPopupShow(System.currentTimeMillis());
-        userConfig.saveConfig();
     }
 
     @Override

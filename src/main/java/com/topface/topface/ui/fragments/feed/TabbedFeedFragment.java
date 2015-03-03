@@ -72,7 +72,10 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
     private BroadcastReceiver mHasFeedAdReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            getContainerForAd().setVisibility(View.GONE);
+            View containerForAd = getContainerForAd();
+            if (containerForAd != null) {
+                containerForAd.setVisibility(View.GONE);
+            }
         }
     };
 

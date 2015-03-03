@@ -283,7 +283,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     }
 
     @Override
-    protected void onPreFinish() {
+    protected boolean onPreFinish() {
         if (CacheProfile.city != null) {
             if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
                 Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
@@ -293,6 +293,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 startActivity(intent);
             }
         }
+        return true;
     }
 
     class EditsAdapter extends BaseAdapter {
@@ -486,11 +487,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         @Override
         public String getTitle() {
-            return Utils.formatPhotoQuantity(
-                    CacheProfile.photos != null ?
-                            CacheProfile.photos.size() :
-                            0
-            );
+            return Utils.formatPhotoQuantity(CacheProfile.totalPhotos);
         }
 
         @Override

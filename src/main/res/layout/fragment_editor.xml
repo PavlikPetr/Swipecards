@@ -67,44 +67,35 @@
             <Spinner
                 android:layout_toRightOf="@id/EditorApiTitle"
                 android:id="@+id/EditorApiUrl"
-                android:layout_alignTop="@id/EditorApiTitle"
+                android:layout_alignTop="@id/EditorApiUrl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-
-            <EditText
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:id="@+id/EditorApiRevision"
-                android:singleLine="true"
-                android:hint="@string/editor_api_rev_hint"
-                android:layout_alignLeft="@id/EditorApiUrl"
-                android:layout_below="@id/EditorApiUrl"/>
 
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:layout_below="@id/EditorApiRevision"
+                android:layout_below="@id/EditorApiUrl"
                 android:id="@+id/EditorApiCheckbox"
                 />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/general_admin_login"
+                android:layout_alignTop="@id/EditorApiCheckbox"
                 android:layout_toRightOf="@id/EditorApiCheckbox"
-                android:layout_below="@id/EditorApiRevision"
                 android:layout_margin="5dp"
                 android:textSize="16sp"
                 android:id="@+id/EditorLoginText"
                 />
+
             <EditText
                 android:inputType="text"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
                 android:layout_toRightOf="@id/EditorLoginText"
-                android:layout_below="@id/EditorApiRevision"
+                android:layout_alignTop="@id/EditorApiCheckbox"
                 android:id="@+id/EditorLogin"
                 />
 
@@ -210,14 +201,17 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/editor_emulate_connection"/>
+
             <Spinner
                 android:id="@+id/spConnection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

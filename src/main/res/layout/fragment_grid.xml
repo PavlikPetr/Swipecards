@@ -6,57 +6,57 @@
 
     <TextView
         android:id="@+id/usedTitle"
+        style="@style/BackgroundTitleText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:layout_marginLeft="6dp"
         android:layout_marginTop="6dp"
-        android:layout_marginBottom="4dp"
-        android:visibility="gone"
-        style="@style/BackgroundTitleText" />
+        android:visibility="gone" />
 
-    <GridView
+    <com.topface.topface.ui.GridViewWithHeaderAndFooter
         android:id="@+id/usedGrid"
-        android:layout_below="@id/usedTitle"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:listSelector="@android:color/transparent"
-        android:background="@android:color/transparent"
-        android:fadingEdge="none"
-        android:horizontalSpacing="0px"
-        android:verticalSpacing="0px"
+        android:layout_below="@id/usedTitle"
         android:layout_margin="0px"
-        android:padding="0px"
-        android:gravity="center"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
+        android:background="@android:color/transparent"
         android:columnWidth="110dp"
-        android:fadeScrollbars="true" />
+        android:fadeScrollbars="true"
+        android:fadingEdge="none"
+        android:gravity="center"
+        android:horizontalSpacing="0px"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="auto_fit"
+        android:padding="0px"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="0px" />
 
     <LinearLayout
         android:id="@+id/loInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tvInfo"
+            style="@style/BackgroundTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/you_dont_have_gifts_yet"
             android:layout_gravity="center_horizontal"
-            style="@style/BackgroundTitleText" />
+            android:text="@string/you_dont_have_gifts_yet" />
 
         <Button
             android:id="@+id/btnInfo"
+            style="@style/Widget.Topface.Button.Big.Blue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/buy_sympathies"
-            style="@style/Widget.Topface.Button.Big.Blue"
-            android:minWidth="210dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" />
+            android:minWidth="210dp"
+            android:text="@string/buy_sympathies" />
     </LinearLayout>
 
 </RelativeLayout>

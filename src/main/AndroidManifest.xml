@@ -136,8 +136,8 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
-                    android:host="offerwall"
-                    android:scheme="topface"/>
+                    android:host="@string/offerwall_host"
+                    android:scheme="@string/default_sheme"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -145,7 +145,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
-                <data android:scheme="topface"
+                <data android:scheme="@string/default_sheme"
 
                     />
             </intent-filter>
@@ -194,7 +194,7 @@
             android:parentActivityName=".ui.NavigationActivity"
             android:theme="@style/Theme.Topface.Chat"
             android:windowSoftInputMode="adjustResize">
-        <meta-data
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>

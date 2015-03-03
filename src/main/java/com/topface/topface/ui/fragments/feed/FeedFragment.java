@@ -114,10 +114,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private BroadcastReceiver mGcmReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            for (int type : getTypesForGCM()) {
-                GCMUtils.cancelNotification(getActivity(), type);
+            if (isResumed()) {
+                for (int type : getTypesForGCM()) {
+                    GCMUtils.cancelNotification(getActivity(), type);
+                }
             }
-            updateData(true, false);
+            if (getUserVisibleHint()) {
+                updateData(true, false);
+            } else {
+                needUpdate = true;
+            }
         }
     };
 
@@ -166,15 +172,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                         }
                     }
                 } else {
-                    makeItemReadUserId(userId);
+                    makeItemReadUserId(userId, intent.getIntExtra(ChatFragment.LOADED_MESSAGES, 0));
                 }
             }
         };
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
-        IntentFilter filter2 = new IntentFilter(ChatFragment.MAKE_ITEM_READ_BY_UID);
+        filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter2);
         for (int type : getTypesForGCM()) {
             GCMUtils.cancelNotification(getActivity(), type);
         }
@@ -208,7 +213,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private void registerGcmReceiver() {
         String action = getGcmUpdateAction();
         if (action != null) {
-            getActivity().registerReceiver(mGcmReceiver, new IntentFilter(action));
+            LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mGcmReceiver, new IntentFilter(action));
         }
     }
 
@@ -255,6 +260,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerGcmReceiver();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
@@ -262,11 +268,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        if (getListAdapter().isNeedUpdate() || needUpdate) {
+        FeedAdapter<T> adapter = getListAdapter();
+        if (adapter.isNeedUpdate() || needUpdate) {
             updateData(false, true);
         }
-        getListAdapter().loadOlderItems();
-        registerGcmReceiver();
+        // try update list if last visible item is loader,
+        // and loading was probably interrupted
+        adapter.loadOlderItemsIfNeeded(
+                mListView.getRefreshableView().getFirstVisiblePosition(),
+                mListView.getRefreshableView().getChildCount(),
+                adapter.getCount());
+        if (!adapter.isEmpty()) {
+            adapter.refreshAdItem();
+        }
     }
 
     @Override
@@ -275,9 +289,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         finishMultiSelection();
         if (mListView.isRefreshing()) {
             mListView.onRefreshComplete();
-        }
-        if (getGcmUpdateAction() != null) {
-            getActivity().unregisterReceiver(mGcmReceiver);
         }
     }
 
@@ -290,6 +301,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
+        if (getGcmUpdateAction() != null) {
+            LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mGcmReceiver);
+        }
     }
 
     @Override
@@ -605,6 +619,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     public void startInitialLoadIfNeed() {
         if (getListAdapter() != null) {
             if ((getListAdapter().isNeedUpdate()
+                    || needUpdate
                     || hasUnread())
                     && !mIsUpdating) {
                 updateData(false, true);
@@ -886,11 +901,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
-    protected void makeItemReadUserId(int uid) {
+    protected void makeItemReadUserId(int uid, int readMessages) {
         FeedAdapter<T> adapter = getListAdapter();
         for (FeedItem item : adapter.getData()) {
             if (item.user != null && item.user.id == uid && item.unread) {
-                item.unread = false;
+                int unread = item.unreadCounter - readMessages;
+                if (unread > 0) {
+                    item.unreadCounter = unread;
+                } else {
+                    item.unread = false;
+                }
                 adapter.notifyDataSetChanged();
             }
         }

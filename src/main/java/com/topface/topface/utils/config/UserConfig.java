@@ -37,8 +37,6 @@ public class UserConfig extends AbstractConfig {
     public static final String DATA_NOVICE_BUY_SYMPATHY = "novice_dating_buy_sympathy";
     public static final String DATA_NOVICE_BUY_SYMPATHY_DATE = "novice_dating_buy_symathy_date_tag";
     public static final String DATA_NOVICE_SYMPATHY = "novice_dating_sympathy";
-    public static final String DATA_LIKE_CLOSING_LAST_TIME = "data_closings_likes_last_date";
-    public static final String DATA_MUTUAL_CLOSING_LAST_TIME = "data_closings_mutual_last_date";
     public static final String DATA_BONUS_LAST_SHOW_TIME = "data_bonus_last_show_time";
     public static final String NOTIFICATIONS_MESSAGES_STACK = "notifications_messages_stack";
     public static final String NOTIFICATION_REST_MESSAGES = "notifications_rest_messages";
@@ -48,6 +46,7 @@ public class UserConfig extends AbstractConfig {
     public static final String SETTINGS_PRELOAD_PHOTO = "settings_preload_photo";
     public static final String SETTINGS_GCM_VIBRATION = "settings_c2dm_vibration";
     public static final String SETTINGS_GCM = "settings_c2dm";
+    public static final String IS_AVATAR_AVAILABLE = "is_avatar_available";
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
     public static final String SETTINGS_GCM_LED = "settings_gcm_led";
     public static final String SILENT = "silent";
@@ -59,6 +58,7 @@ public class UserConfig extends AbstractConfig {
     public static final String LAST_DAY_PUBNATIVE_SHOWN = "current_day_for_showing_feed_ad";
     public static final String FACEBOOK_REQUESTS_DIALOG_SKIPS = "facebook_request_dialog_skip";
     public static final String FACEBOOK_REQUESTS_DIALOG_TIME = "facebook_request_dialog_time";
+    private static final String APPSFLYER_FIRST_PAY = "appsflyer_first_purchase";
     private String mUnique;
 
     public UserConfig(Context context) {
@@ -98,10 +98,6 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, DATA_NOVICE_BUY_SYMPATHY_DATE, 0L);
         // flag show if "send sympathy hint" is passed
         addField(settingsMap, DATA_NOVICE_SYMPATHY, true);
-        // date of last likes closings processing
-        addField(settingsMap, DATA_LIKE_CLOSING_LAST_TIME, 0L);
-        // date of last mutual closings processing
-        addField(settingsMap, DATA_MUTUAL_CLOSING_LAST_TIME, 0L);
         // список сообщений для сгруппированных нотификаций (сейчас группируются только сообщения)
         addField(settingsMap, NOTIFICATIONS_MESSAGES_STACK, Static.EMPTY);
         // количество нотификаций, которые пишем в поле "еще %d сообщений"
@@ -131,6 +127,10 @@ public class UserConfig extends AbstractConfig {
         // Время начала текущих суток для учёта количества показов рекламы pubnative
         // Обновляется автоматически при попытке получить оставшиеся показы pubnative
         addField(settingsMap, LAST_DAY_PUBNATIVE_SHOWN, 0L);
+        // validate user avatar
+        addField(settingsMap, IS_AVATAR_AVAILABLE, false);
+        //Флаг первой покупки
+        addField(settingsMap, APPSFLYER_FIRST_PAY, false);
         // Сохраняем кол-во скипов FacebookRequest диалога
         addField(settingsMap, FACEBOOK_REQUESTS_DIALOG_SKIPS, 0);
         // Сохрфняем время показа FacebookRequest диалога
@@ -193,6 +193,25 @@ public class UserConfig extends AbstractConfig {
 
 
     /**
+     * Return first purchase flag
+     *
+     * @return true if first purchase has already been made
+     */
+    public boolean getFirstPayFlag() {
+        return getBooleanField(getSettingsMap(), APPSFLYER_FIRST_PAY);
+    }
+
+    /**
+     * Set first purchase flag
+     *
+     * @param firstPurchaseMark first purchase flag
+     * @return true on success
+     */
+    public boolean setFirstPayFlag(boolean firstPurchaseMark) {
+        return setField(getSettingsMap(), APPSFLYER_FIRST_PAY, firstPurchaseMark);
+    }
+
+    /**
      * Use this method to create key for promopopup which will be related to current user
      *
      * @param popupType type of promo popup []
@@ -234,11 +253,11 @@ public class UserConfig extends AbstractConfig {
         return getStringField(getSettingsMap(), DATA_PIN_CODE);
     }
 
-    public void setDatingLockPopupShow(long lastTime) {
+    public void setDatingLockPopupRedirect(long lastTime) {
         setField(getSettingsMap(), DATING_LOCK_POPUP_TIME, lastTime);
     }
 
-    public long getDatingLockPopupShow() {
+    public long getDatingLockPopupRedirect() {
         return getLongField(getSettingsMap(), DATING_LOCK_POPUP_TIME);
     }
 
@@ -343,46 +362,6 @@ public class UserConfig extends AbstractConfig {
         return setField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY_DATE, lastTime);
     }
 
-    // =======================Closings=======================
-
-    /**
-     * Sets date of last processing of likes closings
-     *
-     * @param lastTime date in unix time
-     * @return true on success
-     */
-    public boolean setLikesClosingsLastTime(long lastTime) {
-        return setField(getSettingsMap(), DATA_LIKE_CLOSING_LAST_TIME, lastTime);
-    }
-
-    /**
-     * Date of last processing of likes closings
-     *
-     * @return date in unix time
-     */
-    public long getLikesClosingsLastTime() {
-        return getLongField(getSettingsMap(), DATA_LIKE_CLOSING_LAST_TIME);
-    }
-
-    /**
-     * Sets date of last processing of mutual closings
-     *
-     * @param lastTime date in unix time
-     * @return true on success
-     */
-    public boolean setMutualClosingsLastTime(long lastTime) {
-        return setField(getSettingsMap(), DATA_MUTUAL_CLOSING_LAST_TIME, lastTime);
-    }
-
-    /**
-     * Date of last processing of mutual closings
-     *
-     * @return date in unix time
-     */
-    public long getMutualClosingsLastTime() {
-        return getLongField(getSettingsMap(), DATA_MUTUAL_CLOSING_LAST_TIME);
-    }
-
     /**
      * Sets last time of click on bonus menu item
      *
@@ -422,15 +401,16 @@ public class UserConfig extends AbstractConfig {
     /**
      * @return Default text for dating screen message
      */
-    public String getDefaultDatingMessage() {
+    public String getDatingMessage() {
         return getStringField(getSettingsMap(), DEFAULT_DATING_MESSAGE);
     }
 
     /**
-     * Sets new default text for dating screen message
+     * Sets new default text for dating screen message and it's locale
      */
-    public void setDefaultDatingMessage(String message) {
-        setField(getSettingsMap(), DEFAULT_DATING_MESSAGE, message);
+    public void setDatingMessage(String message) {
+        SettingsMap settingsMap = getSettingsMap();
+        setField(settingsMap, DEFAULT_DATING_MESSAGE, message);
     }
 
     /**
@@ -477,6 +457,20 @@ public class UserConfig extends AbstractConfig {
      */
     public void setLEDEnabled(boolean enabled) {
         setField(getSettingsMap(), SETTINGS_GCM_LED, enabled);
+    }
+
+    /**
+     * @return true if user set avatar at empty album
+     */
+    public boolean isUserAvatarAvailable() {
+        return getBooleanField(getSettingsMap(), IS_AVATAR_AVAILABLE);
+    }
+
+    /**
+     * Sets avatar available state for popup "Set photo"
+     */
+    public void setUserAvatarAvailable(boolean enabled) {
+        setField(getSettingsMap(), IS_AVATAR_AVAILABLE, enabled);
     }
 
     /**

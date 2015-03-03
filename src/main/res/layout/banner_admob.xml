@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <com.google.android.gms.ads.AdView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/adMobView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    ads:adUnitId="ca-app-pub-9530442067223936/8256188006"
+    android:visibility="gone"
     ads:adSize="SMART_BANNER"
-    android:visibility="gone" />
+    ads:adUnitId="@string/ad_mob_banner_bottom_unit_id" />

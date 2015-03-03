@@ -43,7 +43,7 @@ public class HockeySender implements ReportSender {
     @Override
     public void send(Context context, CrashReportData report) throws ReportSenderException {
         String log = createCrashLog(report);
-        String url = BASE_URL + ACRA.getConfig().formKey() + CRASHES_PATH;
+        String url = BASE_URL + ACRA.getConfig().formUri() + CRASHES_PATH;
 
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();

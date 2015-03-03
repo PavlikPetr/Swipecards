@@ -3,6 +3,7 @@ package com.topface.topface.requests;
 import android.content.Context;
 
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.transport.Headers;
 
 public interface IApiRequest {
 
@@ -14,23 +15,23 @@ public interface IApiRequest {
 
     void setEmptyHandler();
 
+    public String getApiUrl();
+
     public void cancel();
 
     public boolean isCanResend();
-
-    void resetResendCounter();
 
     public boolean isCanceled();
 
     public void setFinished();
 
-    String toPostData();
+    String getRequestBodyData();
+
+    String getContentType();
 
     public Context getContext();
 
     public ApiHandler getHandler();
-
-    int getResendCounter();
 
     public String getId();
 
@@ -38,9 +39,9 @@ public interface IApiRequest {
 
     public IApiResponse sendRequestAndReadResponse() throws Exception;
 
-    IApiResponse constructApiResponse(int code, String message);
-
     boolean isNeedAuth();
+
+    public Headers getHeaders();
 
     public void sendHandlerMessage(IApiResponse response);
 

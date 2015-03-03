@@ -1,5 +1,6 @@
 package com.topface.topface.banners.ad_providers;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,13 +19,45 @@ import java.util.Calendar;
  * Admob.com sdk through GP Services
  */
 class AdMobProvider extends AbstractAdsProvider {
+    private AdView adView;
+    private Context mContext;
 
     @Override
-    public final boolean injectBannerInner(IPageWithAds page, final IAdProviderCallbacks callbacks) {
+    public final boolean injectBannerInner(IPageWithAds page, IAdProviderCallbacks callbacks) {
+        mContext = page.getActivity().getApplicationContext();
+        createView(page);
+        setCallback(callbacks);
+        loadAdMob();
+        return true;
+    }
+
+    public AdView getAdView() {
+        return adView;
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
+
+    private Calendar getUserAge() {
+        Calendar rightNow = Calendar.getInstance();
+        int year = rightNow.get(Calendar.YEAR);
+        rightNow.set(Calendar.YEAR, year - CacheProfile.getProfile().age);
+        return rightNow;
+    }
+
+    protected int getLayout() {
+        return R.layout.banner_admob;
+    }
+
+    protected void createView(IPageWithAds page) {
         ViewGroup container = page.getContainerForAd();
-        final AdView adView = (AdView) View
-                .inflate(container.getContext(), R.layout.banner_admob, container)
+        adView = (AdView) View
+                .inflate(container.getContext(), getLayout(), container)
                 .findViewById(R.id.adMobView);
+    }
+
+    public void setCallback(final IAdProviderCallbacks callbacks) {
         adView.setAdListener(new AdListener() {
 
             @Override
@@ -39,27 +72,23 @@ class AdMobProvider extends AbstractAdsProvider {
                 super.onAdFailedToLoad(errorCode);
                 callbacks.onFailedToLoadAd();
             }
-
         });
-        AdRequest.Builder adRequest = new AdRequest.Builder()
-                .setGender(
-                        CacheProfile.getProfile().sex == Static.BOY ?
-                                AdRequest.GENDER_MALE :
-                                AdRequest.GENDER_FEMALE
-                )
-                .setBirthday(getUserAge().getTime());
+    }
+
+    protected void loadAdMob() {
 //        Если нужно, то можно указать id девайса (например эмулятор) для запроса тестовой рекламы
 //        adRequest.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
 //        или id свего девайса
 //        adRequest.addTestDevice("hex id твоего девайса");
-        adView.loadAd(adRequest.build());
-        return true;
+        adView.loadAd(getAdRequest().build());
     }
 
-    private Calendar getUserAge() {
-        Calendar rightNow = Calendar.getInstance();
-        int year = rightNow.get(Calendar.YEAR);
-        rightNow.set(Calendar.YEAR, year - CacheProfile.getProfile().age);
-        return rightNow;
+    public AdRequest.Builder getAdRequest() {
+        return new AdRequest.Builder()
+                .setGender(
+                        CacheProfile.getProfile().sex == Static.BOY ?
+                                AdRequest.GENDER_MALE :
+                                AdRequest.GENDER_FEMALE
+                ).setBirthday(getUserAge().getTime());
     }
 }
