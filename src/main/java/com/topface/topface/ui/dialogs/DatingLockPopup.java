@@ -9,6 +9,7 @@ import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.config.UserConfig;
 
 
 public class DatingLockPopup extends AbstractDialogFragment implements View.OnClickListener {
@@ -19,8 +20,6 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
     public static final String DATING_LOCK_POPUP_REDIRECT = "dating_lock_popup_redirect";
 
     private DatingLockPopupRedirectListener mDatingLockPopupRedirectListener;
-    private TextView mTitle;
-    private TextView mMessage;
     private boolean mIsStatisticsSent = false;
 
 
@@ -53,9 +52,9 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
     protected void initViews(View root) {
         root.findViewById(R.id.redirect_into_sympathy).setOnClickListener(this);
         root.findViewById(R.id.iv_close).setOnClickListener(this);
-        mTitle = (TextView) root.findViewById(R.id.title);
+        TextView mTitle = (TextView) root.findViewById(R.id.title);
         mTitle.setText(CacheProfile.getOptions().notShown.title);
-        mMessage = (TextView) root.findViewById(R.id.message);
+        TextView mMessage = (TextView) root.findViewById(R.id.message);
         mMessage.setText(CacheProfile.getOptions().notShown.text);
     }
 
@@ -73,6 +72,7 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.redirect_into_sympathy:
+                saveRedirectTime();
                 mDatingLockPopupRedirectListener.onRedirect();
                 sendDatingPopupRedirect();
                 break;
@@ -82,6 +82,12 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
         }
         mIsStatisticsSent = true;
         dismiss();
+    }
+
+    private void saveRedirectTime() {
+        UserConfig userConfig = App.getUserConfig();
+        userConfig.setDatingLockPopupRedirect(System.currentTimeMillis());
+        userConfig.saveConfig();
     }
 
     @Override

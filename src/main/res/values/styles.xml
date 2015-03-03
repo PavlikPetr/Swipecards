@@ -275,7 +275,7 @@
     </style>
 
     <style name="EditAvatar">
-        <item name="postProcessor">mask</item>
+        <item name="preProcessor">mask</item>
         <item name="clipMask">@drawable/edit_main_avatar_mask</item>
         <item name="android:background">@drawable/edit_main_avatar_background</item>
         <item name="android:layout_centerInParent">true</item>
@@ -284,7 +284,7 @@
     </style>
 
     <style name="FeedAvatar">
-        <item name="postProcessor">mask</item>
+        <item name="preProcessor">mask</item>
         <item name="clipMask">@drawable/feed_photo_mask</item>
         <item name="border">@drawable/feed_photo_border</item>
         <item name="android:layout_alignParentLeft">true</item>
@@ -321,7 +321,7 @@
     </style>
 
     <style name="ListAvatar">
-        <item name="postProcessor">roundCorners</item>
+        <item name="preProcessor">roundCorners</item>
         <item name="cornersRadius">@dimen/list_avatar_corners_radius</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_centerVertical">true</item>
@@ -407,7 +407,7 @@
     </style>
 
     <style name="NavigationBarAvatar">
-        <item name="postProcessor">mask</item>
+        <item name="preProcessor">mask</item>
         <item name="clipMask">@drawable/avatar_chat_mask</item>
         <item name="android:background">@drawable/avatar_chat_mask_selector</item>
         <item name="border">@drawable/feed_photo_border</item>
@@ -417,7 +417,7 @@
     </style>
 
     <style name="ChatAvatar" parent="NavigationBarAvatar">
-        <item name="postProcessor">mask</item>
+        <item name="preProcessor">mask</item>
         <item name="clipMask">@drawable/avatar_chat_mask</item>
         <item name="android:background">@drawable/avatar_chat_frame</item>
         <item name="android:layout_width">37dp</item>
@@ -443,7 +443,8 @@
     </style>
 
     <style name="Gift">
-        <item name="postProcessor">rounded</item>
+        <item name="postProcessor">none</item>
+        <item name="preProcessor">squared</item>
         <item name="android:layout_width">97dp</item>
         <item name="android:layout_height">99dp</item>
         <item name="android:paddingLeft">1dp</item>
@@ -455,6 +456,10 @@
         <item name="android:layout_marginBottom">3dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="AlbumGift" parent="Gift">
+        <item name="postProcessor">rounded</item>
     </style>
 
     <style name="Informer">
@@ -551,7 +556,7 @@
     </style>
 
     <style name="ProfileAvatar">
-        <item name="postProcessor">mask</item>
+        <item name="preProcessor">mask</item>
         <item name="clipMask">@drawable/photo_mask</item>
         <item name="border">@drawable/photo_border</item>
         <item name="android:layout_marginRight">6dp</item>
@@ -626,7 +631,7 @@
     </style>
 
     <style name="GalleryItem">
-        <item name="postProcessor">mask</item>
+        <item name="preProcessor">mask</item>
         <item name="clipMask">@drawable/photo_mask</item>
         <item name="android:scaleType">centerInside</item>
         <item name="android:background">@drawable/photo_frame_selector</item>
@@ -641,7 +646,7 @@
     </style>
 
     <style name="TopItem">
-        <item name="postProcessor">mask</item>
+        <item name="preProcessor">mask</item>
         <item name="clipMask">@drawable/frame_top_mask</item>
         <item name="android:background">@drawable/frame_top</item>
         <item name="android:paddingLeft">1dp</item>

@@ -640,5 +640,6 @@
     <string name="preload_photo_type_wifi">Tik WiFi</string>
     <string name="preload_photo_type_always_on">Visada įjungta</string>
     <string name="preload_photo_type_preload_off">Įjungta</string>
+    <string name="wrong_time_popup_text">Nepavyko užmegzti saugaus ryšio su serveriu.\nGalbūta data arba laikas jūsų įrenginyje nurodyti neteisingai.</string>
     <string name="wrong_time_popup_button">Atverti nustatymus</string>
 </resources>

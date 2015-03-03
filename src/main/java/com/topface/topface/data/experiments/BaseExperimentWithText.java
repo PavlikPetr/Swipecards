@@ -6,7 +6,7 @@ public abstract class BaseExperimentWithText extends BaseExperiment {
     protected static final String KEY_TEXT = "text";
     private String mText;
 
-    protected void setText(String text) {
+    public void setText(String text) {
         mText = text;
     }
 

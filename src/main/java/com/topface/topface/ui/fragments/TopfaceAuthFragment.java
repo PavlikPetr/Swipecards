@@ -198,6 +198,9 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
                 redAlert(R.string.empty_fields);
                 break;
         }
+        if (codeError != ErrorCodes.USER_DELETED) {
+            AuthToken.getInstance().removeToken();
+        }
     }
 
     @Override
@@ -300,22 +303,22 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     @Override
     protected void showButtons() {
+        mBackButton.setVisibility(View.VISIBLE);
         mLogo.setVisibility(View.VISIBLE);
         mTFButton.setVisibility(View.VISIBLE);
         mLogin.setEnabled(true);
         mPassword.setEnabled(true);
         mShowPassword.setEnabled(true);
-        mBackButton.setEnabled(true);
         mRecoverPwd.setEnabled(true);
     }
 
     @Override
     protected void hideButtons() {
+        mBackButton.setVisibility(View.GONE);
         mTFButton.setVisibility(View.INVISIBLE);
         mLogin.setEnabled(false);
         mPassword.setEnabled(false);
         mShowPassword.setEnabled(false);
-        mBackButton.setEnabled(false);
         mRecoverPwd.setEnabled(false);
     }
 
