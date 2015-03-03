@@ -1,9 +1,11 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +28,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.adapters.LeadersPhotoGridAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.views.GridViewWithHeaderAndFooter;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -50,13 +51,16 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private GridViewWithHeaderAndFooter mGridView;
     private LockerView mLoadingLocker;
     private EditText mEditText;
+    private View mGridFooterView;
     private LeadersPhotoGridAdapter mUsePhotosAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_photoblog);
+        mGridFooterView = createGridViewFooter();
         mGridView = (GridViewWithHeaderAndFooter) findViewById(R.id.user_photos_grid);
+        addFooterView();
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
         Photos photos = null;
         int position = 0;
@@ -206,9 +210,10 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     private void sendAlbumRequest() {
         Photos photoLinks = mUsePhotosAdapter.getAdaprerData();
-        if (photoLinks == null || photoLinks.size() < 2 || !mUsePhotosAdapter.getLastItem().isFake()) {
+        if (photoLinks == null || photoLinks.size() < 2) {
             return;
         }
+        mGridFooterView.setVisibility(View.VISIBLE);
         Photo photo = mUsePhotosAdapter.getItem(photoLinks.size() - 2);
         int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
@@ -236,6 +241,25 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
             public void fail(int codeError, IApiResponse response) {
                 Utils.showErrorMessage();
             }
+
+            @Override
+            public void always(IApiResponse response) {
+                super.always(response);
+                mGridFooterView.setVisibility(View.GONE);
+            }
         }).exec();
+    }
+
+    private void addFooterView() {
+        if (mGridView != null) {
+            if (mGridView.getFooterViewCount() == 0) {
+                mGridView.addFooterView(mGridFooterView);
+            }
+            mGridFooterView.setVisibility(View.GONE);
+        }
+    }
+
+    private View createGridViewFooter() {
+        return ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
     }
 }
