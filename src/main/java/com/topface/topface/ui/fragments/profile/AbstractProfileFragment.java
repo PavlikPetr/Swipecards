@@ -194,7 +194,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         return mIsAddToFavoritsAvailable;
     }
 
-    public void setisAddToFavoritsAvailable(boolean isAddToFavoritsAvailable) {
+    public void setIsAddToFavoritsAvailable(boolean isAddToFavoritsAvailable) {
         mIsAddToFavoritsAvailable = isAddToFavoritsAvailable;
     }
 
