@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    style="@style/ListItemContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <include
+        android:id="@+id/ifp_avatar"
+        layout="@layout/item_feed_part_avatar"/>
+
+    <include
+        android:id="@+id/ifp_heart"
+        layout="@layout/item_feed_part_heart"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/ifp_avatar"
+        android:layout_toLeftOf="@+id/ifp_heart"
+        android:paddingBottom="1dp"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/item_feed_part_name"/>
+
+        <include
+            android:id="@+id/ifp_text"
+            layout="@layout/item_feed_part_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</RelativeLayout>

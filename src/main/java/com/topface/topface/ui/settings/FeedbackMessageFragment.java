@@ -303,7 +303,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     }
 
 
-
     public static class Report {
         String email;
         List<String> userDeviceAccounts;
@@ -347,7 +346,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         public void setBody(String body) {
             this.body = body;
         }
-        
+
         public String getExtra() {
             StringBuilder strBuilder = new StringBuilder();
 
@@ -374,7 +373,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
             strBuilder.append(android_RELEASE).append("/").append(android_SDK).append(";</p>\n");
 
             strBuilder.append("<p>Build type: ")
-                    .append(BuildConfig.BILLING_TYPE.getClientType())
+                    .append(BuildConfig.MARKET_API_TYPE.getClientType())
                     .append(android_SDK)
                     .append(";</p>\n");
             if (transactionId != null) {

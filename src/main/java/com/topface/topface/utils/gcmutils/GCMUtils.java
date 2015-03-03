@@ -18,13 +18,14 @@ import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.experiments.MessagesWithTabs;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
@@ -38,13 +39,9 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.LIKES;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.MUTUAL;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VISITORS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_VISITORS;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
@@ -153,6 +150,8 @@ public class GCMUtils {
                     } else {
                         Debug.log("Unable to register in GCM, all attempts have been exhausted");
                     }
+                } catch (SecurityException e) {
+                    Debug.log("Can't register in GCM. No com.google.android.c2dm.permission.RECEIVE permission.");
                 }
                 if (regId != null) {
                     saveGcmToken(regId, serverToken);
@@ -166,7 +165,7 @@ public class GCMUtils {
     }
 
     private boolean isDelayTimeCorrect(int time) {
-        return getTimerDelay(time) <= TIME_GEOMETRIC_PROGRESSION_LAST_VALUE ? true : false;
+        return getTimerDelay(time) <= TIME_GEOMETRIC_PROGRESSION_LAST_VALUE;
     }
 
     @SuppressWarnings("unused")
@@ -275,16 +274,15 @@ public class GCMUtils {
                 intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
                 intent.putExtra(GCM_TYPE, type);
                 intent.putExtra(GCM_LABEL, getLabel(extra));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                showNotificationByType(extra, context, data, type, user, title, intent);
+                showNotificationByType(extra, data, type, user, title, intent);
                 return true;
             }
         }
         return false;
     }
 
-    private static void showNotificationByType(Intent extra, Context context, String data, int type, User user, String title, Intent intent) {
-        final UserNotificationManager notificationManager = UserNotificationManager.getInstance(context);
+    private static void showNotificationByType(Intent extra, String data, int type, User user, String title, Intent intent) {
+        final UserNotificationManager notificationManager = UserNotificationManager.getInstance();
         if (!Ssid.isLoaded()) {
             if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_PROMO) {
                 notificationManager.showNotification(
@@ -415,12 +413,8 @@ public class GCMUtils {
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
                     i = new Intent(context, NavigationActivity.class);
-                    if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
-                        i.putExtra(NEXT_INTENT, TABBED_LIKES);
-                        i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
-                    } else {
-                        i.putExtra(NEXT_INTENT, MUTUAL);
-                    }
+                    i.putExtra(NEXT_INTENT, TABBED_LIKES);
+                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
                 }
                 break;
 
@@ -428,12 +422,8 @@ public class GCMUtils {
                 if (showLikes) {
                     lastNotificationType = GCM_TYPE_LIKE;
                     i = new Intent(context, NavigationActivity.class);
-                    if (CacheProfile.getOptions().likesWithThreeTabs.isEnabled()) {
-                        i.putExtra(NEXT_INTENT, TABBED_LIKES);
-                        i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
-                    } else {
-                        i.putExtra(NEXT_INTENT, LIKES);
-                    }
+                    i.putExtra(NEXT_INTENT, TABBED_LIKES);
+                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
                 }
                 break;
 
@@ -441,7 +431,8 @@ public class GCMUtils {
                 if (showVisitors) {
                     lastNotificationType = GCM_TYPE_GUESTS;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, VISITORS);
+                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, VisitorsFragment.class.getName());
+                    i.putExtra(NEXT_INTENT, TABBED_VISITORS);
                 }
                 break;
             case GCM_TYPE_PEOPLE_NEARBY:
@@ -459,12 +450,7 @@ public class GCMUtils {
             case GCM_TYPE_DIALOGS:
                 lastNotificationType = GCM_TYPE_DIALOGS;
                 i = new Intent(context, NavigationActivity.class);
-                if (CacheProfile.getOptions().messagesWithTabs.isEnabled()) {
-                    i.putExtra(NEXT_INTENT, TABBED_DIALOGS);
-                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, DialogsFragment.class.getName());
-                } else {
-                    i.putExtra(NEXT_INTENT, DIALOGS);
-                }
+                MessagesWithTabs.equipNavigationActivityIntent(i);
                 break;
             case GCM_TYPE_PROMO:
             default:
@@ -475,24 +461,25 @@ public class GCMUtils {
     }
 
     public static void cancelNotification(final Context context, final int type) {
+        if (context == null) {
+            return;
+        }
         //Отменяем уведомления с небольшой задержкой,
         //что бы на ICS успело доиграть уведомление (длинные не успеют. но не страшно. все стандартные - короткие)
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 if (type == lastNotificationType) {
-                    if (context != null) {
-                        int id;
-                        switch (type) {
-                            case GCM_TYPE_MESSAGE:
-                            case GCM_TYPE_DIALOGS:
-                                id = UserNotificationManager.MESSAGES_ID;
-                                break;
-                            default:
-                                id = UserNotificationManager.NOTIFICATION_ID;
-                        }
-                        UserNotificationManager.getInstance(context).cancelNotification(id);
+                    int id;
+                    switch (type) {
+                        case GCM_TYPE_MESSAGE:
+                        case GCM_TYPE_DIALOGS:
+                            id = UserNotificationManager.MESSAGES_ID;
+                            break;
+                        default:
+                            id = UserNotificationManager.NOTIFICATION_ID;
                     }
+                    UserNotificationManager.getInstance().cancelNotification(id);
                 }
             }
         }, NOTIFICATION_CANCEL_DELAY);

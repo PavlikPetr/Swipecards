@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.LoaderData;
-import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 import java.util.ArrayList;
@@ -81,22 +80,20 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-
         int type = getItemViewType(position);
-        View resultView;
 
+        return getViewByType(type, position, view, viewGroup);
+    }
+
+    protected View getViewByType(int type, int position, View view, ViewGroup viewGroup) {
         switch (type) {
             case T_LOADER:
-                resultView = getLoaderView();
-                break;
+                return getLoaderView();
             case T_RETRIER:
-                resultView = getRetrierView();
-                break;
+                return getRetrierView();
             default:
-                resultView = getContentView(position, view, viewGroup);
+                return getContentView(position, view, viewGroup);
         }
-
-        return resultView;
     }
 
     protected abstract View getContentView(int position, View convertView, ViewGroup viewGroup);
@@ -178,6 +175,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         if (notify) notifyDataSetChanged();
     }
 
+    @SuppressWarnings("unused")
     protected void addFirst(ArrayList<T> data, boolean more, boolean notify) {
         if (data != null) {
             if (!data.isEmpty()) {

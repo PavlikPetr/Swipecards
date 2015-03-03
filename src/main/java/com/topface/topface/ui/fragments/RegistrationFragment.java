@@ -54,6 +54,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private TextView mBirthdayText;
     private SexController mSexController;
     private TextView mRedAlertView;
+    private TextView mWelcomeView;
     private ProgressBar mProgressBar;
     private Button mBtnRegister;
 
@@ -100,6 +101,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private void initOtherViews(View root) {
         mRedAlertView = (TextView) root.findViewById(R.id.tvRedAlert);
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsRegistrationSending);
+        mWelcomeView = (TextView) root.findViewById(R.id.tvWelcome);
     }
 
     private void initEditTextViews(View root) {
@@ -249,6 +251,9 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
         mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                 R.anim.slide_down_fade_in));
         mRedAlertView.setVisibility(View.VISIBLE);
+        mWelcomeView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
+                android.R.anim.fade_out));
+        mWelcomeView.setVisibility(View.INVISIBLE);
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -273,6 +278,9 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                     android.R.anim.fade_out));
             mRedAlertView.setVisibility(View.INVISIBLE);
+            mWelcomeView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
+                    android.R.anim.fade_in));
+            mWelcomeView.setVisibility(View.VISIBLE);
         }
     }
 

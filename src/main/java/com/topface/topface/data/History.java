@@ -2,6 +2,7 @@ package com.topface.topface.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.ApiResponse;
@@ -35,8 +36,23 @@ public class History extends FeedDialog implements Parcelable {
         mJsonForParse = response.jsonResult.toString();
     }
 
+    /**
+     * compares this item to other History item
+     * by combination of fields.
+     * this combination makes item unique enough
+     *
+     * @param history other History item to compare
+     * @return true, if items are equal enough
+     */
+    public boolean isEqualsEnough(History history) {
+        return this.created == history.created &&
+                this.target == history.target &&
+                this.type == history.type &&
+                TextUtils.equals(this.text, history.text);
+
+    }
+
     public History(String message, ItemType type) {
-        super((JSONObject) null);
         setLoaderTypeFlags(type);
         text = message;
         created = System.currentTimeMillis();
@@ -45,7 +61,6 @@ public class History extends FeedDialog implements Parcelable {
     }
 
     public History() {
-        super((JSONObject) null);
     }
 
     @Override

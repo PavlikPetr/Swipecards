@@ -190,6 +190,11 @@
     </plurals>
     <string name="buying_default_message">För mynt kan du skicka gåvor och visa beundran</string>
     <string name="buying_money">Köp mynt</string>
+    <string name="gifts_romantic">Romantiska</string>
+    <string name="gifts_friends">Vänliga</string>
+    <string name="gifts_present">Gratulationer</string>
+    <string name="gifts_title">Välj gåva</string>
+    <string name="gifts_send_btn">Skicka gåva</string>
     <string name="profile_header_title">Min profil</string>
     <string name="profile_add_album">Välj av de befintliga</string>
     <string name="profile_add_camera">Ta bild</string>
@@ -212,11 +217,6 @@
     <string name="edit_set_as_main">Välja till profilbild</string>
     <string name="edit_delete">Radera</string>
     <string name="edit_restore">Återställa</string>
-    <string name="gifts_romantic">Romantiska</string>
-    <string name="gifts_friends">Vänliga</string>
-    <string name="gifts_present">Gratulationer</string>
-    <string name="gifts_title">Välj gåva</string>
-    <string name="gifts_send_btn">Skicka gåva</string>
     <string name="form_not_specified">Ej angivet</string>
     <string name="form_main">Grundform</string>
     <string name="form_physique">Kroppsbyggnad</string>
@@ -268,7 +268,6 @@
     </plurals>
     <string name="novice_sympathy">Skicka sympatier till dem\ndu verkligen gillar,\nför att inleda ett trevligt förhållande</string>
     <string name="general_edit_profile_message">Vänligen fyll i nödvändiga fälten i profilen</string>
-    <string name="general_premium_access_error">För denna funktion behövs Premium</string>
     <string name="general_search_null_response_error">Inget hittats. Försök att ändra sökkriterier</string>
     <string name="change_filters">Ändra filtrar</string>
     <string name="reset_filter">Återställ</string>

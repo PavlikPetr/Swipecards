@@ -194,6 +194,11 @@
     </plurals>
     <string name="buying_default_message">Você pode enviar presentes e admirações por moedas</string>
     <string name="buying_money">Compra de moedas</string>
+    <string name="gifts_romantic">Românticos</string>
+    <string name="gifts_friends">Amigáveis</string>
+    <string name="gifts_present">Felicitáveis</string>
+    <string name="gifts_title">Selecione presente</string>
+    <string name="gifts_send_btn">Enviar presente</string>
     <string name="profile_header_title">Meu perfil</string>
     <string name="profile_add_album">Seleccionar dos disponíveis</string>
     <string name="profile_add_camera">Tirar a foto</string>
@@ -216,11 +221,6 @@
     <string name="edit_set_as_main">Definir como</string>
     <string name="edit_delete">Eliminar</string>
     <string name="edit_restore">Reinstalar</string>
-    <string name="gifts_romantic">Românticos</string>
-    <string name="gifts_friends">Amigáveis</string>
-    <string name="gifts_present">Felicitáveis</string>
-    <string name="gifts_title">Selecione presente</string>
-    <string name="gifts_send_btn">Enviar presente</string>
     <string name="form_not_specified">Não está especificado</string>
     <string name="form_main">Principais</string>
     <string name="form_physique">Dados fisicos</string>
@@ -273,7 +273,6 @@
     </plurals>
     <string name="novice_sympathy">Envie simpatias para aqueles que realmente você gosta, para travar um conhecimento agradável</string>
     <string name="general_edit_profile_message">Por favor, preencha espaços necessários do questonário</string>
-    <string name="general_premium_access_error">É preciso Premium para esta função</string>
     <string name="general_search_null_response_error">Nada foi encontrado. Tente mudar filtros</string>
     <string name="change_filters">Modificar filtros</string>
     <string name="general_sex">Gênero</string>

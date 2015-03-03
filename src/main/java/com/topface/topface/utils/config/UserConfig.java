@@ -5,13 +5,16 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 
-import com.topface.framework.utils.config.AbstractUniqueConfig;
+import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
+import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -22,24 +25,27 @@ import java.util.List;
  * <p/>
  * use generateKey(String name) to create keys to put(key) and get(key) data
  */
-public class UserConfig extends AbstractUniqueConfig {
-    private static final String PROFILE_CONFIG_SETTINGS = "profile_config_settings";
+public class UserConfig extends AbstractConfig {
+    public static final int TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY = 2;
+    private static final int DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
+    public static final String PROFILE_CONFIG_SETTINGS = "profile_config_settings";
     /**
      * Keys' names to generate user-based keys
      */
     public static final String DATA_PIN_CODE = "data_profile_pin_code";
-    private static final String DATA_PROMO_POPUP = "data_promo_popup_";
+    public static final String DATA_PROMO_POPUP = "data_promo_popup_";
     public static final String DATA_NOVICE_BUY_SYMPATHY = "novice_dating_buy_sympathy";
     public static final String DATA_NOVICE_BUY_SYMPATHY_DATE = "novice_dating_buy_symathy_date_tag";
     public static final String DATA_NOVICE_SYMPATHY = "novice_dating_sympathy";
-    private static final String DATA_LIKE_CLOSING_LAST_TIME = "data_closings_likes_last_date";
-    private static final String DATA_MUTUAL_CLOSING_LAST_TIME = "data_closings_mutual_last_date";
-    private static final String DATA_BONUS_LAST_SHOW_TIME = "data_bonus_last_show_time";
+    public static final String DATA_LIKE_CLOSING_LAST_TIME = "data_closings_likes_last_date";
+    public static final String DATA_MUTUAL_CLOSING_LAST_TIME = "data_closings_mutual_last_date";
+    public static final String DATA_BONUS_LAST_SHOW_TIME = "data_bonus_last_show_time";
     public static final String NOTIFICATIONS_MESSAGES_STACK = "notifications_messages_stack";
     public static final String NOTIFICATION_REST_MESSAGES = "notifications_rest_messages";
 
-    private static final String DEFAULT_DATING_MESSAGE = "default_dating_message";
+    public static final String DEFAULT_DATING_MESSAGE = "default_dating_message";
     public static final String SETTINGS_GCM_RINGTONE = "settings_c2dm_ringtone";
+    public static final String SETTINGS_PRELOAD_PHOTO = "settings_preload_photo";
     public static final String SETTINGS_GCM_VIBRATION = "settings_c2dm_vibration";
     public static final String SETTINGS_GCM = "settings_c2dm";
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
@@ -48,17 +54,30 @@ public class UserConfig extends AbstractUniqueConfig {
     public static final String PURCHASED_SUBSCRIPTIONS = "purchased_subscriptions";
     public static final String PURCHASED_SUBSCRIPTIONS_SEPARATOR = "&";
     public static final String DATING_LOCK_POPUP_TIME = "dating_lock_popup_time";
+    public static final String TOPFACE_OFFERWALL_REDIRECT_COUNTER = "topface_offerwall_redirect_counter";
+    public static final String REMAINED_DAILY_PUBNATIVE_SHOWS = "remained_feed_ad_shows";
+    public static final String LAST_DAY_PUBNATIVE_SHOWN = "current_day_for_showing_feed_ad";
+    private String mUnique;
 
     public UserConfig(Context context) {
         super(context);
+        AuthToken token = AuthToken.getInstance();
+        mUnique = token.getUserTokenUniqueId();
+    }
+
+    public UserConfig(String uniqueKey, Context context) {
+        super(context);
+        mUnique = uniqueKey;
     }
 
     @Override
-    protected String generateUniqueKey(String name) {
-        AuthToken token = AuthToken.getInstance();
-        return token.getSocialNet() +
-                Static.AMPERSAND + token.getUserTokenUniqueId() +
-                Static.AMPERSAND + name;
+    protected void addField(SettingsMap settingsMap, String key, Object defaultValue) {
+        super.addField(settingsMap, key, defaultValue);
+    }
+
+    @Override
+    protected SettingsMap getSettingsMap() {
+        return super.getSettingsMap();
     }
 
     @Override
@@ -91,6 +110,8 @@ public class UserConfig extends AbstractUniqueConfig {
         addField(settingsMap, DEFAULT_DATING_MESSAGE, Static.EMPTY);
         // push notification melody
         addField(settingsMap, SETTINGS_GCM_RINGTONE, DEFAULT_SOUND);
+        // preload photo default type WiFi and 3G
+        addField(settingsMap, SETTINGS_PRELOAD_PHOTO, PreloadPhotoSelectorTypes.WIFI_3G.getId());
         // is vibration for notification enabled
         addField(settingsMap, SETTINGS_GCM_VIBRATION, true);
         // is led blinking for notification enabled
@@ -101,6 +122,13 @@ public class UserConfig extends AbstractUniqueConfig {
         addField(settingsMap, PURCHASED_SUBSCRIPTIONS, "");
         // время последнего показа попапа блокировки знакомств
         addField(settingsMap, DATING_LOCK_POPUP_TIME, 0L);
+        // счётчик перехода на экран офервола топфейс
+        addField(settingsMap, TOPFACE_OFFERWALL_REDIRECT_COUNTER, 0);
+        // оставшееся количество показов нативный реклымы pubnative для текущих суток
+        addField(settingsMap, REMAINED_DAILY_PUBNATIVE_SHOWS, 4);
+        // Время начала текущих суток для учёта количества показов рекламы pubnative
+        // Обновляется автоматически при попытке получить оставшиеся показы pubnative
+        addField(settingsMap, LAST_DAY_PUBNATIVE_SHOWN, 0L);
     }
 
     @Override
@@ -110,8 +138,11 @@ public class UserConfig extends AbstractUniqueConfig {
 
     @Override
     protected SharedPreferences getPreferences() {
+        if (mUnique == null) {
+            mUnique = AuthToken.getInstance().getUserTokenUniqueId();
+        }
         return getContext().getSharedPreferences(
-                PROFILE_CONFIG_SETTINGS,
+                PROFILE_CONFIG_SETTINGS + Static.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE
         );
     }
@@ -196,6 +227,16 @@ public class UserConfig extends AbstractUniqueConfig {
      */
     public void resetPromoPopupData(int popupType) {
         resetAndSaveConfig(getPromoPopupKey(popupType));
+    }
+
+    // =======================PreloadPhotoType=======================
+
+    public boolean setPreloadPhotoType(int type) {
+        return setField(getSettingsMap(), SETTINGS_PRELOAD_PHOTO, type);
+    }
+
+    public PreloadPhotoSelectorTypes getPreloadPhotoType() {
+        return PreloadPhotoSelectorTypes.values()[getIntegerField(getSettingsMap(), SETTINGS_PRELOAD_PHOTO)];
     }
 
     // =======================Novice=======================
@@ -342,8 +383,6 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Sets new default text for dating screen message
-     *
-     * @param message
      */
     public void setDefaultDatingMessage(String message) {
         setField(getSettingsMap(), DEFAULT_DATING_MESSAGE, message);
@@ -362,8 +401,6 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Sets push notification melody name
-     *
-     * @param ringtoneName
      */
     public void setGCMRingtone(String ringtoneName) {
         setField(getSettingsMap(), SETTINGS_GCM_RINGTONE, ringtoneName);
@@ -378,8 +415,6 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Sets vibration for push notification enabled or not
-     *
-     * @param enabled
      */
     public void setGCMVibrationEnabled(boolean enabled) {
         setField(getSettingsMap(), SETTINGS_GCM_VIBRATION, enabled);
@@ -394,8 +429,6 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Sets led blinking for push notification enabled or not
-     *
-     * @param enabled
      */
     public void setLEDEnabled(boolean enabled) {
         setField(getSettingsMap(), SETTINGS_GCM_LED, enabled);
@@ -410,8 +443,6 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Sets push notification enabled or not
-     *
-     * @param enabled
      */
     @SuppressWarnings("UnusedDeclaration")
     public void setNotificationEnabled(boolean enabled) {
@@ -428,8 +459,6 @@ public class UserConfig extends AbstractUniqueConfig {
 
     /**
      * Add subscription order id to purchased subscriptions
-     *
-     * @param subscriptionId
      */
     public void addPurchasedSubscription(String subscriptionId) {
         String rawSubs = getStringField(getSettingsMap(), PURCHASED_SUBSCRIPTIONS);
@@ -438,6 +467,43 @@ public class UserConfig extends AbstractUniqueConfig {
         } else {
             setField(getSettingsMap(), PURCHASED_SUBSCRIPTIONS, rawSubs.
                     concat(PURCHASED_SUBSCRIPTIONS_SEPARATOR).concat(subscriptionId));
+        }
+    }
+
+    /**
+     * Set new topface offerwall redirection counter value
+     */
+    public void incrementTopfaceOfferwallRedirectCounter() {
+        int counter = getTopfaceOfferwallRedirectCounter();
+        if (counter < TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY) {
+            counter++;
+        } else {
+            counter = 0;
+        }
+        setField(getSettingsMap(), TOPFACE_OFFERWALL_REDIRECT_COUNTER, counter);
+    }
+
+    /**
+     * @return current topface offerwall redirection counter value
+     */
+    public int getTopfaceOfferwallRedirectCounter() {
+        return getIntegerField(getSettingsMap(), TOPFACE_OFFERWALL_REDIRECT_COUNTER);
+    }
+
+    public int getRemainedPubnativeShows() {
+        long lastDay = getLongField(getSettingsMap(), LAST_DAY_PUBNATIVE_SHOWN);
+        long now = Calendar.getInstance().getTimeInMillis();
+        if (now - lastDay > DAY_IN_MILLIS) {
+            setField(getSettingsMap(), LAST_DAY_PUBNATIVE_SHOWN, now - now % (DAY_IN_MILLIS));
+            setField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS, CacheProfile.getOptions().feedNativeAd.dailyShows);
+        }
+        return getIntegerField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS);
+    }
+
+    public void decreaseRemainedPubnativeShows() {
+        int remainedShows = getIntegerField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS);
+        if (remainedShows > 0) {
+            setField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS, remainedShows - 1);
         }
     }
 

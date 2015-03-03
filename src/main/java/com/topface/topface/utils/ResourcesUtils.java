@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 
@@ -9,43 +10,46 @@ import com.topface.topface.ui.fragments.BaseFragment;
  */
 public class ResourcesUtils {
 
-    public static int getFragmentNameResId(BaseFragment.FragmentId id) {
+    public static String getFragmentNameResId(BaseFragment.FragmentId id) {
+        int titleId;
         switch (id) {
             case VIP_PROFILE:
             case PROFILE:
-                return R.string.general_profile;
+                titleId = R.string.general_profile;
+                break;
             case DATING:
-                return R.string.general_dating;
-            case LIKES:
+                titleId = R.string.general_dating;
+                break;
             case LIKES_CLOSINGS:
-                return R.string.general_likes;
+                titleId = R.string.general_likes;
+                break;
             case TABBED_LIKES:
-                return R.string.general_sympathies;
-            case ADMIRATIONS:
-                return R.string.general_admirations;
-            case MUTUAL:
+                titleId = R.string.general_sympathies;
+                break;
             case MUTUAL_CLOSINGS:
-                return R.string.general_mutual;
+                titleId = R.string.general_mutual;
+                break;
             case TABBED_DIALOGS:
-            case DIALOGS:
-                return R.string.settings_messages;
-            case VISITORS:
-                return R.string.general_visitors;
-            case BOOKMARKS:
-                return R.string.general_bookmarks;
+                titleId = R.string.settings_messages;
+                break;
+            case TABBED_VISITORS:
+                titleId = R.string.general_visitors;
+                break;
             case BONUS:
-                return R.string.general_bonus;
-            case FANS:
-                return R.string.general_fans;
+                return CacheProfile.getOptions().bonus.buttonText;
             case GEO:
-                return R.string.people_nearby;
+                titleId = R.string.people_nearby;
+                break;
             case EDITOR:
-                return R.string.editor_menu_admin;
+                titleId = R.string.editor_menu_admin;
+                break;
             case SETTINGS:
-                return R.string.general_settings;
+                titleId = R.string.general_settings;
+                break;
             case UNDEFINED:
             default:
                 throw new IllegalArgumentException("Illegal fragmentId: do not have resources for this fragment id");
         }
+        return App.getContext().getString(titleId);
     }
 }

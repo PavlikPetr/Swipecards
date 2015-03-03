@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.topface.topface.R;
@@ -12,6 +11,7 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.MutualListAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -20,11 +20,6 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class MutualFragment extends FeedFragment<FeedMutual> {
-
-    @Override
-    protected Drawable getBackIcon() {
-        return getResources().getDrawable(R.drawable.mutual_back_icon);
-    }
 
     @Override
     protected String getTitle() {
@@ -81,22 +76,18 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
-    protected int getContextMenuLayoutRes() {
-        return R.menu.feed_context_menu;
-    }
-
-    @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteMutualsRequest(ids, getActivity());
-    }
-
-    @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_feed_filtered;
     }
 
     @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_MUTUAL_UPDATE;
     }
+
+    @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_mutual;
+    }
+
 }

@@ -45,7 +45,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-            Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(
+            Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(mPendingUserInit.getData().gifts,
                     position,
                     mUserId,
                     mPhotosCount,
@@ -63,11 +63,15 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setUpdater();
+    }
+
+    public void setUpdater() {
         mUpdater = new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
                 if (mGridAlbum != null) {
-                    Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData();
+                    Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getPhotos();
                     AlbumRequest request = new AlbumRequest(getActivity(), mUserId, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM, AlbumLoadController.FOR_GALLERY);
                     request.callback(new DataApiHandler<AlbumPhotos>() {
 
@@ -176,7 +180,6 @@ public class UserPhotoFragment extends ProfileInnerFragment {
 
     private void setPhotos(Photos photos) {
         initTitle(photos);
-
         if (mUserPhotoGridAdapter == null) {
             mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext(),
                     photos,

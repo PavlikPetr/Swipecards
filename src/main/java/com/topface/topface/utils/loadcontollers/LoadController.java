@@ -1,8 +1,7 @@
 package com.topface.topface.utils.loadcontollers;
 
-import com.topface.topface.App;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.Utils;
 
 import java.util.HashMap;
 
@@ -47,23 +46,14 @@ public abstract class LoadController {
     }
 
     protected abstract int[] getPreloadLimits();
+
     protected abstract int[] getPreloadOffset();
 
     public int getItemsLimitByConnectionType() {
-        return mPreloadItemsLimit.get(getConnectionType());
+        return mPreloadItemsLimit.get(Utils.getConnectionType());
     }
 
     public int getItemsOffsetByConnectionType() {
-        return mOffsetItemsCount.get(getConnectionType());
+        return mOffsetItemsCount.get(Utils.getConnectionType());
     }
-
-    private ConnectionChangeReceiver.ConnectionType getConnectionType() {
-        AppConfig config = App.getAppConfig();
-        if (config.getDebugConnectionChecked()) {
-            return ConnectionChangeReceiver.ConnectionType.valueOf(config.getDebugConnection());
-        }
-        return ConnectionChangeReceiver.getConnectionType();
-    }
-
-
 }

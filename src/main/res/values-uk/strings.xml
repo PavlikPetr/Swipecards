@@ -159,6 +159,11 @@
     <string name="buying_header_title">Покупки</string>
     <string name="buying_default_message">Ви можете відправляти подарунки та захоплення за монети</string>
     <string name="buying_money">Покупка монет</string>
+    <string name="gifts_romantic">Романтичні</string>
+    <string name="gifts_friends">Дружні</string>
+    <string name="gifts_present">Вітальні</string>
+    <string name="gifts_title">Виберіть подарунок</string>
+    <string name="gifts_send_btn">Відправити подарунок</string>
     <string name="profile_header_title">Мій профіль</string>
     <string name="profile_add_album">Вибрати з наявних</string>
     <string name="profile_add_camera">Зробити знімок</string>
@@ -180,11 +185,6 @@
     <string name="edit_set_as_main">Зробити головною</string>
     <string name="edit_delete">Видалити</string>
     <string name="edit_restore">Відновити</string>
-    <string name="gifts_romantic">Романтичні</string>
-    <string name="gifts_friends">Дружні</string>
-    <string name="gifts_present">Вітальні</string>
-    <string name="gifts_title">Виберіть подарунок</string>
-    <string name="gifts_send_btn">Відправити подарунок</string>
     <string name="form_not_specified">Не вказано</string>
     <string name="form_main">Основне</string>
     <string name="form_physique">Фізичні дані</string>
@@ -239,7 +239,6 @@
     </plurals>
     <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб почати приємне знайомство</string>
     <string name="general_edit_profile_message">Будь ласка, заповніть необхідні поля анкети</string>
-    <string name="general_premium_access_error">Для даної функції потрібен Преміум</string>
     <string name="general_search_null_response_error">Нічого не знайдено. Спробуйте змінити фільтри</string>
     <string name="change_filters">Змінити фільтри</string>
     <string name="general_sex">Стать</string>

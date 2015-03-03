@@ -15,6 +15,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
+import com.topface.billing.OpenIabHelperManager;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
@@ -23,7 +24,6 @@ import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
-import com.topface.topface.data.FortumoProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
@@ -34,7 +34,6 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AppGetOptionsRequest;
 import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.FortumoProductsRequest;
 import com.topface.topface.requests.GooglePlayProductsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
@@ -44,7 +43,6 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
@@ -52,6 +50,7 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GMSUtils;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
@@ -87,7 +86,10 @@ public class App extends Application {
     private static AppOptions mAppOptions;
 
     private static Boolean mIsGmsSupported;
+    private static String mStartLabel;
+    private static Location mCurLocation;
 
+    private static OpenIabHelperManager mOpenIabHelperManager = new OpenIabHelperManager();
 
     /**
      * Множественный запрос Options и профиля
@@ -96,42 +98,14 @@ public class App extends Application {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getOptionsRequest())
                 .addRequest(getProductsRequest())
-                .addRequest(getFortumoProductsRequest())
                 .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .callback(handler)
                 .exec();
     }
 
-    private static ApiRequest getFortumoProductsRequest() {
-        switch (BuildConfig.BILLING_TYPE) {
-            case GOOGLE_PLAY:
-                return new FortumoProductsRequest(App.getContext()).callback(new DataApiHandler<FortumoProducts>() {
-                    @Override
-                    protected void success(FortumoProducts data, IApiResponse response) {
-
-                    }
-
-                    @Override
-                    protected FortumoProducts parseResponse(ApiResponse response) {
-                        return new FortumoProducts(response);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-
-                    }
-                });
-            //Для амазона и nokia Fortumeo не поддерживается
-            case NOKIA_STORE:
-            case AMAZON:
-            default:
-                return null;
-        }
-    }
-
     private static ApiRequest getPaymentwallProductsRequest() {
-        switch (BuildConfig.BILLING_TYPE) {
+        switch (BuildConfig.MARKET_API_TYPE) {
             case GOOGLE_PLAY:
                 return new PaymentwallProductsRequest(App.getContext()).callback(new DataApiHandler<PaymentWallProducts>() {
                     @Override
@@ -177,7 +151,7 @@ public class App extends Application {
 
     private static ApiRequest getProductsRequest() {
         ApiRequest request;
-        switch (BuildConfig.BILLING_TYPE) {
+        switch (BuildConfig.MARKET_API_TYPE) {
             case AMAZON:
                 request = new AmazonProductsRequest(App.getContext());
                 break;
@@ -216,7 +190,6 @@ public class App extends Application {
                 .callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {
-                        BannerBlock.init();
                     }
 
                     @Override
@@ -242,13 +215,14 @@ public class App extends Application {
 
                     @Override
                     protected void success(Profile data, IApiResponse response) {
-                        CacheProfile.setProfile(data, response, part);
+                        CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
+                        NativeAdManager.init();
                     }
 
                     @Override
                     protected Profile parseResponse(ApiResponse response) {
-                        return Profile.parse(response);
+                        return new Profile(response);
                     }
 
                     @Override
@@ -263,6 +237,10 @@ public class App extends Application {
 
     public static Locale getCurrentLocale() {
         return mContext.getResources().getConfiguration().locale;
+    }
+
+    public static Location getLastKnownLocation() {
+        return mCurLocation;
     }
 
     public static boolean isOnline() {
@@ -281,6 +259,10 @@ public class App extends Application {
             mBaseConfig = new Configurations(App.getContext());
         }
         return mBaseConfig;
+    }
+
+    public static OpenIabHelperManager getOpenIabHelperManager() {
+        return mOpenIabHelperManager;
     }
 
     public static AppConfig getAppConfig() {
@@ -326,8 +308,25 @@ public class App extends Application {
         return mAppOptions;
     }
 
+    public static void setStartLabel(String startLabel) {
+        mStartLabel = startLabel;
+    }
+
+    public static String getStartLabel() {
+        return mStartLabel;
+    }
+
     @Override
     public void onCreate() {
+        /**
+         * Баг Admob и Google Play Services, пробуем исправить
+         * @see https://code.google.com/p/android/issues/detail?id=81083
+         */
+        try {
+            Class.forName("android.os.AsyncTask");
+        } catch (Throwable ignore) {
+        }
+
         super.onCreate();
 
         mContext = getApplicationContext();
@@ -440,11 +439,11 @@ public class App extends Application {
         new BackgroundThread(Thread.MIN_PRIORITY) {
             @Override
             public void execute() {
-                Location curLocation = GeoLocationManager.getLastKnownLocation(mContext);
-                if (curLocation != null) {
+                mCurLocation = GeoLocationManager.getLastKnownLocation(mContext);
+                if (mCurLocation != null) {
                     Looper.prepare();
                     SettingsRequest settingsRequest = new SettingsRequest(getContext());
-                    settingsRequest.location = curLocation;
+                    settingsRequest.location = mCurLocation;
                     settingsRequest.exec();
                     Looper.loop();
                 }
@@ -512,7 +511,5 @@ public class App extends Application {
             unregisterReceiver(mConnectionReceiver);
         }
     }
-
-
 }
 

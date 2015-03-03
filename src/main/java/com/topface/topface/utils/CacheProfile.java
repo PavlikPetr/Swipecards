@@ -8,20 +8,20 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 
+import com.google.gson.JsonSyntaxException;
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
-import com.topface.topface.data.FortumoProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Products;
+import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -86,18 +86,12 @@ public class CacheProfile {
     public static boolean wasCityAsked = false;         // был ли показан экран выбора города новичку
     public static boolean needShowBonusCounter = false;
     private static AtomicBoolean mIsLoaded = new AtomicBoolean(false);
-    @SuppressWarnings("FieldCanBeLocal")
-    private static Products mFortumoProducts;
 
-    private static void setProfileCache(final IApiResponse response) {
+    private static void setProfileCache(final JSONObject response) {
         if (response != null) {
             SessionConfig config = App.getSessionConfig();
-            try {
-                config.setProfileData(response.toJson().toString());
-                config.saveConfig();
-            } catch (JSONException e) {
-                Debug.error("Can't get prfile data from json", e);
-            }
+            config.setProfileData(response.toString());
+            config.saveConfig();
         }
     }
 
@@ -137,11 +131,11 @@ public class CacheProfile {
         return profile;
     }
 
-    public static void setProfile(Profile profile, ApiResponse response) {
+    public static void setProfile(Profile profile, JSONObject response) {
         setProfile(profile, response, ProfileRequest.P_ALL);
     }
 
-    public static void setProfile(Profile profile, IApiResponse response, int part) {
+    public static void setProfile(Profile profile, JSONObject response, int part) {
         switch (part) {
             case ProfileRequest.P_NECESSARY_DATA:
                 gifts = profile.gifts;
@@ -150,6 +144,7 @@ public class CacheProfile {
                 show_ad = profile.showAd;
                 photo = profile.photo;
                 photos = profile.photos;
+                totalPhotos = profile.photosCount;
                 break;
             case ProfileRequest.P_ALL:
                 Editor.init(profile);
@@ -214,9 +209,9 @@ public class CacheProfile {
             if (!TextUtils.isEmpty(profileCache)) {
                 //Получаем опции из кэша
                 try {
-                    ApiResponse response = new ApiResponse(new JSONObject(profileCache));
-                    profile = Profile.parse(response);
-                    setProfile(profile, response);
+                    JSONObject profileJson = new JSONObject(profileCache);
+                    profile = new Profile(profileJson);
+                    setProfile(profile, profileJson);
                     result = true;
                 } catch (JSONException e) {
                     config.resetProfileData();
@@ -233,6 +228,7 @@ public class CacheProfile {
      */
     private static Options options;
     private static Products mMarketProducts;
+    private static ProductsDetails mProductsDetails;
     private static PaymentWallProducts mPWProducts;
     private static PaymentWallProducts mPWMobileProducts;
 
@@ -285,6 +281,23 @@ public class CacheProfile {
         return mMarketProducts;
     }
 
+    public static ProductsDetails getMarketProductsDetails() {
+        if (mProductsDetails == null) {
+            SessionConfig config = App.getSessionConfig();
+            String productsDetailsCache = config.getProductsDetailsData();
+            if (!TextUtils.isEmpty(productsDetailsCache)) {
+                //Получаем опции из кэша
+                try {
+                    mProductsDetails = JsonUtils.fromJson(productsDetailsCache, ProductsDetails.class);
+                } catch (JsonSyntaxException e) {
+                    config.resetGoogleProductsData();
+                    Debug.error(e);
+                }
+            }
+        }
+        return mProductsDetails;
+    }
+
     public static Products getPaymentWallProducts(PaymentWallProducts.TYPE type) {
         PaymentWallProducts products = type == PaymentWallProducts.TYPE.MOBILE ? mPWMobileProducts : mPWProducts;
         if (products == null) {
@@ -304,27 +317,6 @@ public class CacheProfile {
         }
         return products;
     }
-
-    public static Products getFortumoProducts() {
-        if (mFortumoProducts == null) {
-            SessionConfig config = App.getSessionConfig();
-            String productsCache = config.getFortumoProductsData();
-            if (!TextUtils.isEmpty(productsCache)) {
-                //Получаем опции из кэша
-                try {
-                    mFortumoProducts = new FortumoProducts(
-                            new JSONObject(productsCache)
-                    );
-                } catch (JSONException e) {
-                    config.resetGoogleProductsData();
-                    Debug.error(e);
-                }
-            }
-
-        }
-        return mFortumoProducts;
-    }
-
 
     public static boolean isDataFilled() {
         return city != null && !city.isEmpty() && age != 0 && first_name != null && photo != null;
@@ -376,14 +368,10 @@ public class CacheProfile {
         }
     }
 
-    public static void setFortumoProducts(Products products, final String response) {
-        mFortumoProducts = products;
-        //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
-        if (response != null) {
-            App.getSessionConfig().setFortumoProductsData(response);
-            LocalBroadcastManager.getInstance(App.getContext())
-                    .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
-
+    public static void setMarketProductsDetails(ProductsDetails productsDetails) {
+        mProductsDetails = productsDetails;
+        if (mProductsDetails != null) {
+            App.getSessionConfig().setMarketProductsDetailsData(JsonUtils.toJson(mProductsDetails));
         }
     }
 
@@ -455,21 +443,14 @@ public class CacheProfile {
 
     public static int getUnreadCounterByFragmentId(BaseFragment.FragmentId id) {
         switch (id) {
-            case LIKES:
             case LIKES_CLOSINGS:
                 return CacheProfile.unread_likes;
-            case MUTUAL:
             case MUTUAL_CLOSINGS:
                 return CacheProfile.unread_mutual;
             case TABBED_DIALOGS:
-            case DIALOGS:
                 return CacheProfile.unread_messages;
-            case VISITORS:
-                return CacheProfile.unread_visitors;
-            case FANS:
-                return CacheProfile.unread_fans;
-            case ADMIRATIONS:
-                return CacheProfile.unread_admirations;
+            case TABBED_VISITORS:
+                return CacheProfile.unread_visitors + CacheProfile.unread_fans;
             case GEO:
                 return CacheProfile.unread_geo;
             case BONUS:

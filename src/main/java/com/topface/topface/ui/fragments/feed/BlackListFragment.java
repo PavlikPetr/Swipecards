@@ -1,8 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
@@ -12,6 +10,7 @@ import com.topface.topface.requests.DeleteBlackListRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.BlackListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONObject;
 
@@ -23,18 +22,13 @@ import java.util.List;
 public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> implements View.OnClickListener {
 
     @Override
-    protected Drawable getBackIcon() {
-        return null;
-    }
-
-    @Override
     protected String getTitle() {
         return getString(R.string.black_list_title);
     }
 
     @Override
     protected int getTypeForCounters() {
-        return -1;
+        return CountersManager.UNKNOWN_TYPE;
     }
 
     @Override
@@ -67,20 +61,12 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     }
 
     @Override
-    protected void initDoubleButton(View view) {
-    }
-
-    @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
     }
 
     @Override
     protected int getEmptyFeedLayout() {
         return R.layout.layout_empty_blacklist;
-    }
-
-    @Override
-    protected void initFloatBlock(ViewGroup view) {
     }
 
     @Override
@@ -91,6 +77,11 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteBlackListRequest(ids, getActivity());
+    }
+
+    @Override
+    protected int getUnreadCounter() {
+        return 0;
     }
 
     @Override

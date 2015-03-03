@@ -8,8 +8,7 @@
         android:id="@+id/tf_auth_root"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/auth_bg"
-        >
+        android:background="@drawable/auth_bg">
 
         <RelativeLayout
             android:id="@+id/redAlert"
@@ -23,7 +22,7 @@
             <TextView
                 android:id="@+id/redAlertTextView"
                 style="@style/RedAlertTextView"
-                android:text="@string/error_login_password" />
+                android:text="@string/error_login_password"/>
 
             <TextView
                 android:id="@+id/redAlertButton"
@@ -34,7 +33,7 @@
                 android:layout_margin="5dp"
                 android:background="@drawable/btn_create_acc_selector"
                 android:padding="5dp"
-                android:text="@string/create_account" />
+                android:text="@string/create_account"/>
 
         </RelativeLayout>
 
@@ -42,10 +41,10 @@
             android:id="@+id/mainContainer"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:layout_centerInParent="true"
             android:layout_below="@id/redAlert"
+            android:layout_centerInParent="true"
             android:gravity="center"
+            android:orientation="vertical"
             android:paddingBottom="40dp">
 
             <ImageView
@@ -53,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="40dp"
-                android:src="@drawable/auth_logo" />
+                android:src="@drawable/auth_logo"/>
 
             <LinearLayout
                 android:id="@+id/loLoginGroup"
@@ -70,7 +69,7 @@
                     android:completionThreshold="1"
                     android:hint="@string/email"
                     android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"/>
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
@@ -84,9 +83,10 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:hint="@string/password"
-                        android:inputType="textPassword"
                         android:imeOptions="actionDone"
+                        android:inputType="textPassword"
                         android:paddingRight="24dp" />
+
 
                     <ImageButton
                         android:id="@+id/ivShowPassword"
@@ -96,7 +96,7 @@
                         android:layout_centerVertical="true"
                         android:background="@android:color/transparent"
                         android:padding="8dp"
-                        android:src="@drawable/ic_show_password_selector" />
+                        android:src="@drawable/ic_show_password_pressed" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -106,7 +106,7 @@
 
                     <ProgressBar
                         android:id="@+id/prsLoginSending"
-                        style="@android:style/Widget.ProgressBar.Small"
+                        style="@style/TopFaceProgressBar.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -146,7 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/auth_bg_bottom_spot" />
+            android:src="@drawable/auth_bg_bottom_spot"/>
 
     </RelativeLayout>
 

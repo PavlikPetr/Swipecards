@@ -48,14 +48,14 @@ public class DefaultImageLoader {
             L.disableLogging();
         }
         builder.discCacheSize(DISC_CACHE_SIZE);
-        builder.defaultDisplayImageOptions(getDisplayImageConfig().build());
+        builder.defaultDisplayImageOptions(getDisplayImageConfig(0).build());
         return builder.build();
     }
 
     /**
      * Этот конфиг испольхуется только для показа фотографий не требующих прозрачности
      */
-    protected DisplayImageOptions getOptimizedDisplayImageConfig() {
+    protected DisplayImageOptions getOptimizedDisplayImageConfig(int stubResId) {
         if (mOptimizedConfig == null) {
             DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
             builder.cacheInMemory(true);
@@ -64,18 +64,20 @@ public class DefaultImageLoader {
             builder.bitmapConfig(Bitmap.Config.RGB_565);
             builder.resetViewBeforeLoading(true);
             builder.showImageForEmptyUri(mErrorResId);
+            builder.showImageOnLoading(stubResId);
             mOptimizedConfig = builder.build();
         }
         return mOptimizedConfig;
     }
 
-    protected DisplayImageOptions.Builder getDisplayImageConfig() {
+    protected DisplayImageOptions.Builder getDisplayImageConfig(int stubResId) {
         DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
         builder.cacheInMemory(true);
         builder.cacheOnDisc(true);
         builder.resetViewBeforeLoading(true);
         builder.considerExifParams(true);
         builder.showImageForEmptyUri(mErrorResId);
+        builder.showImageOnLoading(stubResId);
         return builder;
     }
 
@@ -89,13 +91,17 @@ public class DefaultImageLoader {
     }
 
     public void displayImage(String uri, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener, BitmapProcessor processor) {
+        displayImage(uri, imageView, options, listener, processor, 0);
+    }
+
+    public void displayImage(String uri, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener, BitmapProcessor processor, int stubResId) {
         try {
             //Если не задан пост-процессор, то используем оптимизированную версию конфига
             if (options == null && processor == null) {
-                options = getOptimizedDisplayImageConfig();
+                options = getOptimizedDisplayImageConfig(stubResId);
             } else if (options == null) {
                 //Если же используется процессор, то собираем новую версию конфига с нужным процессором
-                options = getDisplayImageConfig()
+                options = getDisplayImageConfig(stubResId)
                         .preProcessor(processor)
                         .build();
             }
@@ -104,7 +110,8 @@ public class DefaultImageLoader {
                     uri,
                     imageView,
                     options,
-                    listener
+                    listener,
+                    null
             );
 
         } catch (Exception e) {

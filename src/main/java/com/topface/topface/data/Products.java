@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.topface.billing.DeveloperPayload;
+import com.topface.billing.OpenIabFragment;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -20,6 +22,7 @@ import com.topface.topface.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.onepf.oms.appstore.googleUtils.Purchase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,6 +89,7 @@ public class Products extends AbstractData {
 
     protected void fillData(JSONObject data) {
         fillProducts(data);
+        App.getOpenIabHelperManager().updateInventory();
         updateCache(data);
     }
 
@@ -196,10 +200,19 @@ public class Products extends AbstractData {
             value = buyBtn.hint;
             economy = null;
         } else {
-            value = String.format(
-                    App.getContext().getString(R.string.default_price_format),
-                    ((float) buyBtn.price / 100)
-            );
+            ProductsDetails.ProductDetail detail = CacheProfile.getMarketProductsDetails().getProductDetail(buyBtn.id);
+            if (detail != null) {
+                value = String.format(
+                        App.getContext().getString(R.string.default_price_format_extended),
+                        detail.price / ProductsDetails.MICRO_AMOUNT,
+                        detail.currency
+                );
+            } else {
+                value = String.format(
+                        App.getContext().getString(R.string.default_price_format),
+                        ((float) buyBtn.price / 100)
+                );
+            }
             economy = buyBtn.hint;
         }
         return createBuyButtonLayout(
@@ -363,10 +376,14 @@ public class Products extends AbstractData {
     /**
      * Can check if this product id is in on of subscriptions list
      *
-     * @param productId productId for product
+     * @param product product
      * @return true if productId refers to subscriptions
      */
-    public boolean isSubscription(String productId) {
+    public boolean isSubscription(Purchase product) {
+        String productId = product.getSku();
+        if (productId.equals(OpenIabFragment.TEST_PURCHASED_PRODUCT_ID)) {
+            productId = getSkuFromDeveloperPayload(product.getDeveloperPayload());
+        }
         for (BuyButton subscription : coinsSubscriptions) {
             if (subscription.id.equals(productId)) {
                 return true;
@@ -378,6 +395,11 @@ public class Products extends AbstractData {
             }
         }
         return false;
+    }
+
+    private String getSkuFromDeveloperPayload(String developerPayload) {
+        DeveloperPayload payload = JsonUtils.fromJson(developerPayload, DeveloperPayload.class);
+        return payload.sku;
     }
 
     public interface BuyButtonClickListener {
@@ -405,8 +427,10 @@ public class Products extends AbstractData {
     public static class BuyButton {
         public String id;
         public String title;
+        public String titleTemplate;
         public int price;
         public int showType;
+        public int amount;
         public String hint;
         public ProductType type;
         public int discount;
@@ -416,12 +440,22 @@ public class Products extends AbstractData {
             if (json != null) {
                 id = json.optString("id");
                 title = json.optString("title");
+                titleTemplate = json.optString("titleTemplate");
                 price = json.optInt("price");
+                amount = json.optInt("amount");
                 hint = json.optString("hint");
                 showType = json.optInt("showType");
                 type = getProductTypeByName(json.optString("type"));
                 discount = json.optInt("discount");
                 paymentwallLink = json.optString("url");
+                ProductsDetails.ProductDetail detail = CacheProfile.getMarketProductsDetails().getProductDetail(id);
+                if (detail != null) {
+                    double price = detail.price / ProductsDetails.MICRO_AMOUNT;
+                    double pricePerItem = price / amount;
+                    title = titleTemplate.replace("{{price}}", String.format("%.2f %s", price, detail.currency));
+                    title = title.replace("{{price_per_item}}", String.format("%.2f %s", pricePerItem, detail.currency));
+                }
+
             }
         }
     }

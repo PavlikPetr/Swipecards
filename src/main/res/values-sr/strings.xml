@@ -140,6 +140,11 @@
     <string name="buying_header_title">Kupovina</string>
     <string name="buying_default_message">Možete slati poklone i ushićenja za monete</string>
     <string name="buying_money">Kupovina moneta</string>
+    <string name="gifts_romantic">Romantika</string>
+    <string name="gifts_friends">Prijateljstvo</string>
+    <string name="gifts_present">Čestitke</string>
+    <string name="gifts_title">Odaberite poklon</string>
+    <string name="gifts_send_btn">Poslati poklon</string>
     <string name="profile_header_title">Moj profil</string>
     <string name="profile_add_album">Odabrati od postojećih</string>
     <string name="profile_add_camera">Načiniti snimak</string>
@@ -161,11 +166,6 @@
     <string name="edit_set_as_main">Načiniti da bude glavna</string>
     <string name="edit_delete">Ukloniti</string>
     <string name="edit_restore">Obnoviti</string>
-    <string name="gifts_romantic">Romantika</string>
-    <string name="gifts_friends">Prijateljstvo</string>
-    <string name="gifts_present">Čestitke</string>
-    <string name="gifts_title">Odaberite poklon</string>
-    <string name="gifts_send_btn">Poslati poklon</string>
     <string name="form_not_specified">Nije navedeno</string>
     <string name="form_main">Glavno</string>
     <string name="form_physique">Fizički podaci</string>
@@ -220,7 +220,6 @@
     </plurals>
     <string name="novice_sympathy">Šaljite simpatije onima koji vam se zaista dopadaju, kako bi započeli prijatno poznanstvo</string>
     <string name="general_edit_profile_message">Molimo vas, popunite neophodna polja u anketi</string>
-    <string name="general_premium_access_error">Za ovu funkciju potreban je VIP status</string>
     <string name="general_search_null_response_error">Ništa nije pronađeno. Pokušajte izmeniti filtere</string>
     <string name="change_filters">Zameniti filtere</string>
     <string name="general_sex">Pol</string>

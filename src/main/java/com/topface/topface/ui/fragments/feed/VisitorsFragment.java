@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.topface.topface.R;
@@ -25,13 +24,13 @@ import java.util.List;
 public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
 
     @Override
-    protected Drawable getBackIcon() {
-        return getResources().getDrawable(R.drawable.visitors);
+    protected String getTitle() {
+        return getString(R.string.general_visitors);
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.general_visitors);
+    protected int getTypeForCounters() {
+        return CountersManager.VISITORS;
     }
 
     @Override
@@ -80,18 +79,8 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    protected int getTypeForCounters() {
-        return CountersManager.VISITORS;
-    }
-
-    @Override
     protected boolean isForPremium() {
         return true;
-    }
-
-    @Override
-    protected int getContextMenuLayoutRes() {
-        return R.menu.feed_context_menu;
     }
 
     @Override
@@ -100,7 +89,13 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_visitors;
+    }
+
+    @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_GUESTS_UPDATE;
     }
+
 }

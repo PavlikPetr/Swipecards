@@ -1,20 +1,20 @@
 package com.topface.topface.ui.fragments.gift;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
-import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
+
+import java.util.ArrayList;
 
 /**
  * Fragment to display user's gifts
@@ -69,33 +69,77 @@ public class UserGiftsFragment extends UpdatableGiftsFragment {
         );
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                Bundle extras = data.getExtras();
-                if (extras != null) {
-                    SendGiftAnswer giftAnswer = (SendGiftAnswer) extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
-                    int id = giftAnswer.history.gift;
-                    String url = giftAnswer.history.link;
-                    FeedGift sended = new FeedGift();
-                    sended.gift = new Gift(id, Gift.PROFILE_NEW, url, 0);
-                    addGift(sended);
-                }
-            }
+    private UserProfileFragment getUserProfileFragment() {
+        UserProfileFragment fragment = null;
+        try {
+            fragment = (UserProfileFragment) getParentFragment();
+        } catch (Exception e) {
+            Debug.error("Fragment not equals UserProfileFragment ", e);
         }
-
-        super.onActivityResult(requestCode, resultCode, data);
+        return fragment;
     }
 
-    public void addGift(FeedGift sendedGift) {
-        if (mGridAdapter.getData().size() == getMinItemsCount()) {
-            mTitle.setVisibility(View.GONE);
+    private boolean clearNewGiftsArray() {
+        UserProfileFragment fragment = getUserProfileFragment();
+        if (fragment != null) {
+            fragment.clearNewFeedGift();
+            return true;
         }
-        mGridAdapter.add(getMinItemsCount(), sendedGift);
-        mGridAdapter.notifyDataSetChanged();
-        if (getActivity() != null) {
-            Toast.makeText(getActivity(), R.string.chat_gift_out, Toast.LENGTH_LONG).show();
+        return false;
+    }
+
+    @Override
+    protected void restoreInstanceState(Bundle savedState) {
+        UserProfileFragment fragment = getUserProfileFragment();
+        if (fragment != null) {
+            ArrayList<FeedGift> newGifts = fragment.getNewGifts();
+            if (newGifts.size() > 0) {
+                ArrayList<FeedGift> gifts = savedState.getParcelableArrayList(PlainGiftsFragment.DATA);
+                // find button SendGift and add new gifts after it
+                gifts.addAll(getPastePosition(gifts), newGifts);
+                // displace list position
+                int position = savedState.getInt(PlainGiftsFragment.POSITION, 0) + newGifts.size();
+                clearNewGiftsArray();
+                savedState.putParcelableArrayList(DATA, gifts);
+                savedState.putInt(POSITION, position);
+            }
         }
+        super.restoreInstanceState(savedState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        UserProfileFragment fragment = getUserProfileFragment();
+        if (fragment != null) {
+            ArrayList<FeedGift> newGifts = fragment.getNewGifts();
+            if (newGifts != null && newGifts.size() > 0) {
+                ArrayList<FeedGift> adapterGifts = mGridAdapter.getData();
+                if (adapterGifts.size() == getMinItemsCount()) {
+                    mTitle.setVisibility(View.GONE);
+                }
+                int pos = getPastePosition(adapterGifts);
+                for (int i = 0; i < newGifts.size(); i++) {
+                    mGridAdapter.add(pos + i, newGifts.get(i));
+                }
+                mGridAdapter.notifyDataSetChanged();
+                clearNewGiftsArray();
+            }
+        }
+    }
+
+    private int getPastePosition(ArrayList<FeedGift> gifts) {
+        for (int i = 0; i < gifts.size(); i++) {
+            if (gifts.get(i).gift.type == Gift.SEND_BTN) {
+                return i + 1;
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        clearNewGiftsArray();
     }
 }

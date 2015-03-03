@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,11 +38,6 @@ public class AdmirationFragment extends LikesFragment {
         if (mEmptyFeedView != null) {
             initEmptyFeedView(mEmptyFeedView);
         }
-    }
-
-    @Override
-    protected Drawable getBackIcon() {
-        return getActivity().getResources().getDrawable(R.drawable.background_admiration);
     }
 
     @Override
@@ -105,5 +99,10 @@ public class AdmirationFragment extends LikesFragment {
     @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteAdmirationsRequest(ids, getActivity());
+    }
+
+    @Override
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_admirations;
     }
 }

@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.utils.AnimationUtils;
 import com.topface.topface.utils.PreloadManager;
 
 public class ImageSwitcher extends ViewPager {
@@ -247,6 +248,7 @@ public class ImageSwitcher extends ViewPager {
             if (tag == null || !((Boolean) tag)) {
                 View progressBar = baseLayout.findViewById(R.id.pgrsAlbum);
                 progressBar.setVisibility(View.VISIBLE);
+                AnimationUtils.createProgressBarAnimator(progressBar).start();
                 Photo photo = mPhotoLinks.get(realPosition);
                 imageView.setPhoto(photo, mUpdatedHandler, progressBar);
                 imageView.setTag(R.string.photo_is_set_tag, !photo.isFake());
@@ -283,7 +285,7 @@ public class ImageSwitcher extends ViewPager {
             //IllegalArgumentException: pointerIndex out of range
             //Debug.error(e);
             return false;
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             return false;
         }
     }
@@ -292,7 +294,7 @@ public class ImageSwitcher extends ViewPager {
     public boolean onTouchEvent(MotionEvent ev) {
         try {
             return super.onTouchEvent(ev);
-        } catch (ArrayIndexOutOfBoundsException | IllegalStateException | IllegalArgumentException e) {
+        } catch (IndexOutOfBoundsException | IllegalStateException | IllegalArgumentException | NullPointerException e) {
             return false;
         }
     }

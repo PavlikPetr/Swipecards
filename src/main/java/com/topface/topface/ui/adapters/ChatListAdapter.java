@@ -12,11 +12,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
-import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
@@ -32,19 +32,17 @@ import java.util.HashMap;
 
 public class ChatListAdapter extends LoadingListAdapter<History> implements AbsListView.OnScrollListener {
 
-    private static final int T_WAIT = 3;
-    private static final int T_RETRY = 4;
-    private static final int T_USER = 5;
-    private static final int T_FRIEND = 6;
-    private static final int T_USER_GIFT = 7;
-    private static final int T_FRIEND_GIFT = 8;
-    private static final int T_USER_POPULAR_1 = 13;
-    private static final int T_USER_POPULAR_2 = 14;
-    private static final int T_COUNT = 15;
+    private static final int T_RETRY = 3;
+    private static final int T_USER = 4;
+    private static final int T_FRIEND = 5;
+    private static final int T_USER_GIFT = 6;
+    private static final int T_FRIEND_GIFT = 7;
+    private static final int T_USER_POPULAR_1 = 8;
+    private static final int T_USER_POPULAR_2 = 9;
+    private static final int T_COUNT = 10;
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
-    private View mHeaderView;
 
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
         super(context, data, updateCallback);
@@ -94,9 +92,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         int superType = super.getItemViewType(position);
         History item = getItem(position);
         if (superType == T_OTHER && item != null) {
-            if (item.isWaitingItem()) {
-                return T_WAIT;
-            } else if (item.isRepeatItem()) {
+            if (item.isRepeatItem()) {
                 return T_RETRY;
             }
             return ChatListAdapter.getItemType(item);
@@ -126,36 +122,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             holder = (ViewHolder) convertView.getTag();
 
         setTypeDifferences(holder, type, item);
-        if (type != T_WAIT || type != T_RETRY) {
+        if (type != T_RETRY) {
             setViewInfo(holder, item);
         }
 
         return convertView;
-    }
-
-    public void setUser(FeedUser user) {
-        if (mHeaderView != null && user != null) {
-            if (user.deleted || user.banned || user.photo == null || user.photo.isEmpty()) {
-                ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setImageResource(user.sex == Static.BOY ?
-                        R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
-            } else {
-                ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
-            }
-            if (user.deleted || user.banned) {
-                ((TextView) mHeaderView.findViewById(R.id.tvFirstMessageTitle)).setText(R.string.user_deleted_or_banned);
-                mHeaderView.findViewById(R.id.tvFirstMessageText).setVisibility(View.GONE);
-            }
-        }
-    }
-
-    private void removeHeader(ListView parentView) {
-        if (mHeaderView != null && parentView != null) {
-            parentView.removeHeaderView(mHeaderView);
-            parentView.setStackFromBottom(true);
-            mHeaderView = null;
-        } else {
-            if (mHeaderView != null) mHeaderView.setVisibility(View.GONE);
-        }
     }
 
     public void setData(FeedList<History> data) {
@@ -174,7 +145,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
         if (parentView != null) {
             parentView.setSelection(getCount() - 1);
-            updateHeaderState(parentView);
         }
     }
 
@@ -186,14 +156,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         }
     }
 
-    private void updateHeaderState(ListView parentView) {
-        if (getCount() > 0) {
-            removeHeader(parentView);
-        } else {
-            if (mHeaderView != null) mHeaderView.setVisibility(View.VISIBLE);
-        }
-    }
-
     @Override
     public void addAll(ArrayList<History> dataList, boolean more) {
         super.addAll(dataList, more, false);
@@ -202,10 +164,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     }
 
     public void addAll(ArrayList<History> dataList, boolean more, ListView parentView) {
+        boolean wasEmpty = isEmpty();
         this.addAll(dataList, more);
         parentView.setSelection(dataList.size() + (more ? 2 : 0));
-        if (getCount() > 0) {
-            removeHeader(parentView);
+        if (wasEmpty) {
+            ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(parentView, "alpha", 0, 1);
+            alphaAnimator.setDuration(150);
+            alphaAnimator.start();
         }
     }
 
@@ -214,21 +179,43 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
+    /**
+     * compares current data set with new from server
+     * and updates current items.
+     * clears incoming data, to avoid usless notifyDataSetChanged()
+     *
+     * @param data new data from server
+     */
+    private void compareAndUpdateData(ArrayList<History> data) {
+        ArrayList<History> currentData = getData();
+        for (int j = 0; j < currentData.size(); j++) {
+            History item = currentData.get(j);
+            for (int i = 0; i < data.size(); i++) {
+                History newItem = data.get(i);
+                if (item.isEqualsEnough(newItem)) {
+                    currentData.set(j, newItem);
+                    data.remove(i);
+                    break;
+                }
+            }
+        }
+    }
     @Override
     public void addFirst(ArrayList<History> data, boolean more) {
+        compareAndUpdateData(data);
+
         if (!mUnrealItems.isEmpty()) removeUnrealItems();
         super.addFirst(data, more, false);
         prepareDates();
-        notifyDataSetChanged();
+        if (!data.isEmpty()) {
+            notifyDataSetChanged();
+        }
     }
 
     public void addFirst(ArrayList<History> data, boolean more, ListView parentView) {
         int scroll = parentView.getScrollY();
         this.addFirst(data, more);
         parentView.scrollTo(parentView.getScrollX(), scroll);
-        if (getCount() > 0) {
-            removeHeader(parentView);
-        }
     }
 
     private void addSentMessage(History item) {
@@ -244,9 +231,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         mHashRequestByWaitingRetryItem.put(item, request);
         this.addSentMessage(item);
         parentView.setSelection(getCount() - 1);
-        if (getCount() > 0) {
-            removeHeader(parentView);
-        }
     }
 
     public void replaceMessage(History emptyItem, History unrealItem, ListView parentView) {
@@ -260,13 +244,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             }
         }
         if (positionToReplace != -1) {
-            data.remove(positionToReplace);
-            data.add(positionToReplace, unrealItem);
+            data.set(positionToReplace, unrealItem);
             mUnrealItems.add(unrealItem);
         }
 
         prepareDates();
-        notifyDataSetChanged();
         parentView.setSelection(getCount() - 1);
     }
 
@@ -325,8 +307,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                     });
                 }
                 return;
-            case T_WAIT:
-                break;
             case T_FRIEND_GIFT:
             case T_USER_GIFT:
                 holder.message.setVisibility(View.GONE);
@@ -372,7 +352,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER:
             case T_USER_POPULAR_1:
             case T_USER_POPULAR_2:
-            case T_WAIT:
             default:
                 convertView = mInflater.inflate(output ? R.layout.chat_user : R.layout.chat_friend, null, false);
                 break;
@@ -550,12 +529,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 && isNeedMore()) {
             mUpdateCallback.onUpdate();
         }
-    }
-
-    @Override
-    public void notifyDataSetChanged() {
-        updateHeaderState(null);
-        super.notifyDataSetChanged();
     }
 
     static class ViewHolder {

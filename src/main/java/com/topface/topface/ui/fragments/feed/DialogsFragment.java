@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -79,11 +78,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected Drawable getBackIcon() {
-        return getResources().getDrawable(R.drawable.chat);
-    }
-
-    @Override
     protected DialogListAdapter createNewAdapter() {
         return new DialogListAdapter(getActivity().getApplicationContext(), getUpdaterCallback());
     }
@@ -94,7 +88,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected void makeItemReadWithId(String id) {
+    protected void makeItemReadWithFeedId(String id) {
         //feed will be marked read in another method
     }
 
@@ -151,18 +145,14 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected int getContextMenuLayoutRes() {
-        return R.menu.feed_context_menu;
-    }
-
-    @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteDialogsRequest(ids, getActivity());
     }
 
     @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_feed_filtered;
+    protected int getUnreadCounter() {
+        // dialogs are not auto-read
+        return 0;
     }
 
     @Override
@@ -174,4 +164,5 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     protected boolean considerDublicates(FeedDialog first, FeedDialog second) {
         return first.user == null ? second.user == null : first.user.id == second.user.id;
     }
+
 }

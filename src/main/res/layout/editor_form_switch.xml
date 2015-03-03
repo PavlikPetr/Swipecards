@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
 
     <ImageView
         android:id="@+id/ivEditBackground"
@@ -13,7 +13,7 @@
         android:layout_marginLeft="8dp"
         android:scaleType="fitXY"
         android:layout_centerHorizontal="true"
-        android:duplicateParentState="true" />
+        android:duplicateParentState="true"/>
 
     <TextView
         android:tag="tvTitle"
@@ -28,7 +28,7 @@
         android:drawablePadding="5dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <!-- Switch -->
 
@@ -54,7 +54,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="38dp"
-        style="@android:style/Widget.ProgressBar.Small"
+        style="@style/TopFaceProgressBar.Small"
         android:visibility="gone"/>
 
 </RelativeLayout>

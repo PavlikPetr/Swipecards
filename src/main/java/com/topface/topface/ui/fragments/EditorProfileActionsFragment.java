@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.User;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ModerationPunish;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -24,7 +23,7 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
     public static final String USERID = "USERID";
     public static final String PROFILE_RESPONSE = "PROFILE_RESPONSE";
     private int mUserId;
-    private ApiResponse mResponse = null;
+    private String mResponse = null;
     private User mUser = null;
     private View mFullInfo = null;
     private View mLocker = null;
@@ -44,6 +43,7 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         public static final String CHANGE_GENDER = "SWITCH_SEX";
 
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -52,11 +52,16 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
 
         mUserId = args.getInt(USERID, -1);
 
-        String s = args.getString(PROFILE_RESPONSE);
+        mResponse = args.getString(PROFILE_RESPONSE);
 
-        if (!TextUtils.isEmpty(s)) {
-            mResponse = new ApiResponse(s);
-            mUser = User.parse(mUserId, mResponse);
+        if (!TextUtils.isEmpty(mResponse)) {
+            JSONObject jsonResponse = null;
+            try {
+                jsonResponse = new JSONObject(mResponse);
+            } catch (JSONException e) {
+                Debug.error(e);
+            }
+            mUser = new User(mUserId, jsonResponse);
         }
         initViews(root);
 
@@ -105,7 +110,7 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
     private void initFullInfo(View root) {
         boolean ok = false;
         if (mResponse != null) {
-            JSONTokener tokener = new JSONTokener(mResponse.toJson().toString());
+            JSONTokener tokener = new JSONTokener(mResponse);
             try {
                 JSONObject finalResult;
                 finalResult = new JSONObject(tokener);

@@ -127,6 +127,11 @@ Sa oled müksanud.</string>
     <string name="filter_cities_all">Kõikides linnades</string>
     <string name="buying_header_title">Ostud</string>
     <string name="buying_money">Müntide ost</string>
+    <string name="gifts_romantic">Romantika</string>
+    <string name="gifts_friends">Sõprus</string>
+    <string name="gifts_present">Õnnitlused</string>
+    <string name="gifts_title">Vali kingitus</string>
+    <string name="gifts_send_btn">Saada kingitus</string>
     <string name="profile_header_title">Minu konto</string>
     <string name="profile_add_album">Valida olemasolevate seast/hulgast</string>
     <string name="profile_add_camera">Teha pilt/foto</string>
@@ -148,11 +153,6 @@ Sa oled müksanud.</string>
     <string name="edit_set_as_main">Muuta pealeheks</string>
     <string name="edit_delete">Eemaldada</string>
     <string name="edit_restore">Taastada</string>
-    <string name="gifts_romantic">Romantika</string>
-    <string name="gifts_friends">Sõprus</string>
-    <string name="gifts_present">Õnnitlused</string>
-    <string name="gifts_title">Vali kingitus</string>
-    <string name="gifts_send_btn">Saada kingitus</string>
     <string name="form_not_specified">Ei ole toodud/mainitud</string>
     <string name="form_main">Peamine</string>
     <string name="form_physique">Füüsilised andmed, kehaehitus</string>
@@ -203,7 +203,6 @@ Sa oled müksanud.</string>
         <item quantity="one">%d fotodest</item>
     </plurals>
     <string name="general_edit_profile_message">Palun, täida ankeedi vajalikud väljad ära</string>
-    <string name="general_premium_access_error">Antud funktsiooni jaoks on VIP vajalik.</string>
     <string name="general_search_null_response_error">Ei ole midagi leitud. Proovi muuta otsingu parameetrid/filtrid</string>
     <string name="change_filters">Filtrid muuta</string>
     <string name="general_sex">Sugu</string>

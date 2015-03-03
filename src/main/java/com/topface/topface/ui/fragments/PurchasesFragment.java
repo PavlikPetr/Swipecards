@@ -7,8 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,17 +15,18 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
+import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
-import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.Iterator;
@@ -35,38 +34,35 @@ import java.util.LinkedList;
 
 public class PurchasesFragment extends BaseFragment {
 
-    private static final String SKIP_BONUS = "SKIP_BONUS";
     public static final String IS_VIP_PRODUCTS = "is_vip_products";
     public static final String LAST_PAGE = "LAST_PAGE";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
-    private TabPageIndicator mTabIndicator;
-    private ViewPager mPager;
-    private PurchasesFragmentsAdapter mPagerAdapter;
-    private TextView mResourcesInfo;
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_NONE = 0;
     public static final int TYPE_GIFT = 1;
     public static final int TYPE_LEADERS = 2;
     public static final int TYPE_UNLOCK_SYMPATHIES = 3;
+    public static final int TYPE_ADMIRATION = 4;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
-    private TextView mCurCoins;
-    private TextView mCurLikes;
-
-    private boolean mSkipBonus;
-
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateBalanceCounters();
-        }
-    };
-
+    private static final String SKIP_BONUS = "SKIP_BONUS";
+    private ViewPager mPager;
+    private PurchasesFragmentsAdapter mPagerAdapter;
+    private TextView mResourcesInfo;
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mResourcesInfo != null) {
                 mResourcesInfo.setVisibility(View.GONE);
             }
+        }
+    };
+    private TextView mCurCoins;
+    private TextView mCurLikes;
+    private boolean mSkipBonus;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateBalanceCounters();
         }
     };
     private boolean mIsVip;
@@ -130,7 +126,7 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void initViews(View root, Bundle savedInstanceState) {
-        mTabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
+        TabPageIndicator tabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
 
         Bundle args = getArguments();
@@ -152,7 +148,9 @@ public class PurchasesFragment extends BaseFragment {
 
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs);
         mPager.setAdapter(mPagerAdapter);
-        mTabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        tabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -162,6 +160,11 @@ public class PurchasesFragment extends BaseFragment {
             public void onPageSelected(int position) {
                 changeInfoText(getInfoText());
                 if (position == mPagerAdapter.getTabIndex(Options.Tab.BONUS)) {
+                    if (mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled()) {
+                        StatisticsTracker.getInstance().sendEvent("bonuses_opened",
+                                new Slices().putSlice("ref", mTopfaceOfferwallRedirect.getGroup()));
+                        mTopfaceOfferwallRedirect.setComplited(true);
+                    }
                     mSkipBonus = true;
                 }
             }
@@ -171,7 +174,7 @@ public class PurchasesFragment extends BaseFragment {
 
             }
         });
-        mTabIndicator.setViewPager(mPager);
+        tabIndicator.setViewPager(mPager);
         initBalanceCounters(getSupportActionBar().getCustomView());
         changeInfoText(getInfoText());
         if (savedInstanceState != null) {
@@ -183,25 +186,17 @@ public class PurchasesFragment extends BaseFragment {
 
     private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
         boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS, false);
-        TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-        int simState = telephonyManager.getSimState();
         Options.Tab pwallMobileTab = null;
         Options.Tab fortimoTab = null;
         for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext(); ) {
             Options.Tab tab = iterator.next();
             switch (tab.type) {
-                case Options.Tab.FORTUMO:
-                    fortimoTab = tab;
-                    break;
                 case Options.Tab.PWALL_MOBILE:
                     pwallMobileTab = tab;
                     break;
             }
             //Удаляем вкладку Google Play, если не доступны Play Services
             if (TextUtils.equals(tab.type, Options.Tab.GPLAY) && !App.isGmsEnabled()) {
-                iterator.remove();
-            } else if (simState != TelephonyManager.SIM_STATE_READY && TextUtils.equals(tab.type, Options.Tab.FORTUMO)) {
-                // Deleting fortumo tab if no sim available
                 iterator.remove();
             } else {
                 Products products = getProductsByTab(tab);
@@ -230,9 +225,6 @@ public class PurchasesFragment extends BaseFragment {
             case Options.Tab.PWALL_MOBILE:
                 products = CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.MOBILE);
                 break;
-            case Options.Tab.FORTUMO:
-                products = CacheProfile.getFortumoProducts();
-                break;
         }
         return products;
     }
@@ -249,11 +241,6 @@ public class PurchasesFragment extends BaseFragment {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
             mCurLikes.setText(Integer.toString(CacheProfile.likes));
         }
-    }
-
-    @Override
-    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
-        return new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar, R.id.title_clickable, R.id.title, R.id.subtitle);
     }
 
     private void changeInfoText(final String text) {
@@ -304,12 +291,20 @@ public class PurchasesFragment extends BaseFragment {
                 case TYPE_UNLOCK_SYMPATHIES:
                     text = Utils.getQuantityString(R.plurals.buying_unlock_likes_you_need_coins, diff, diff);
                     break;
+                case TYPE_ADMIRATION:
+                    text = Utils.getQuantityString(R.plurals.buying_admiration_you_need_coins, diff, diff);
+                    break;
                 default:
-                    if (extraText != null) {
-                        text = extraText;
+                    if (coins != 0) {
+                        text = Utils.getQuantityString(R.plurals.buying_you_need_coins, diff, diff);
                     } else {
-                        text = getResources().getString(mIsVip ? R.string.vip_state_off : R.string.buying_default_message);
+                        if (extraText != null) {
+                            text = extraText;
+                        } else {
+                            text = getResources().getString(mIsVip ? R.string.vip_state_off : R.string.buying_default_message);
+                        }
                     }
+
                     break;
             }
             if (diff <= 0 && type != TYPE_NONE) {
@@ -324,6 +319,10 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     protected String getTitle() {
         return getString(R.string.buying_header_title);
+    }
+
+    public boolean isVipProducts() {
+        return mIsVip;
     }
 
 }

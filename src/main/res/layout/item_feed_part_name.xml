@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/ifp_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ListName"/>
+
+    <TextView
+        android:id="@+id/ifp_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ListAge"/>
+</LinearLayout>

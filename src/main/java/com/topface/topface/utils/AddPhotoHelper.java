@@ -10,6 +10,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -17,16 +18,20 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.AddedPhoto;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.PhotoAddProfileRequest;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.profile.HeaderMainFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
@@ -164,10 +169,11 @@ public class AddPhotoHelper {
     }
 
     public void startChooseFromGallery(boolean withDialog) {
-        int requestCode = withDialog ? GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG :
-                GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY;
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.album_add_photo_title));
+        boolean noSuitableActivity = intent.resolveActivity(mActivity.getPackageManager()) == null;
+        int requestCode = withDialog || noSuitableActivity ? GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG :
+                GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY;
         if (mFragment != null) {
             if (mFragment instanceof ProfilePhotoFragment) {
                 mFragment.getParentFragment().startActivityForResult(intent, requestCode);
@@ -253,7 +259,7 @@ public class AddPhotoHelper {
         }
         Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
         showProgressDialog();
-        mNotificationManager = UserNotificationManager.getInstance(mContext);
+        mNotificationManager = UserNotificationManager.getInstance();
 
         final PhotoNotificationListener notificationListener = new PhotoNotificationListener();
 
@@ -262,7 +268,7 @@ public class AddPhotoHelper {
                 uri.toString(), getIntentForNotification(), notificationListener
         );
 
-        final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext, new Base64.ProgressListener() {
+        final PhotoAddRequest photoAddRequest = new PhotoAddProfileRequest(uri, mContext, new IProgressListener() {
             @Override
             public void onProgress(final int percentage) {
 
@@ -287,23 +293,27 @@ public class AddPhotoHelper {
         });
         //TODO также обрабатывать запросы с id...x, где x-порядковый номер переповтора
         fileNames.put(photoAddRequest.getId(), outputFile);
-        photoAddRequest.callback(new DataApiHandler<Photo>() {
+        photoAddRequest.callback(new DataApiHandler<AddedPhoto>() {
             @Override
-            protected void success(Photo photo, IApiResponse response) {
+            protected void success(AddedPhoto photo, IApiResponse response) {
                 if (mHandler != null) {
                     Message msg = new Message();
                     msg.what = ADD_PHOTO_RESULT_OK;
-                    msg.obj = photo;
+                    msg.obj = photo.getPhoto();
                     mHandler.sendMessage(msg);
                 }
                 mNotificationManager.showNotificationAsync(
                         mContext.getString(R.string.default_photo_upload_complete), "", false,
                         uri.toString(), 1, getIntentForNotification(), true, null, null);
+                Intent intent = new Intent(HeaderMainFragment.UPDATE_AVATAR_POSITION);
+                intent.putExtra(HeaderMainFragment.INCREMENT_AVATAR_POSITION, true);
+                LocalBroadcastManager.getInstance(App.getContext())
+                        .sendBroadcast(intent);
             }
 
             @Override
-            protected Photo parseResponse(ApiResponse response) {
-                return new Photo(response);
+            protected AddedPhoto parseResponse(ApiResponse response) {
+                return new AddedPhoto(response);
             }
 
             @Override

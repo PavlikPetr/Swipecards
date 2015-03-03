@@ -49,7 +49,9 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_base, container, false);
-        root.setPadding(0, mNeedActionBarIndent ? mActionBarSize : 0, 0, 0);
+        if (isUnderActionBar()) {
+            root.setPadding(0, mNeedActionBarIndent ? mActionBarSize : 0, 0, 0);
+        }
         ViewStub stub = (ViewStub) root.findViewById(R.id.vsContent);
         stub.setLayoutResource(getDialogLayoutRes());
         View view = stub.inflate();
@@ -75,9 +77,9 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
             if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty() && !mShowingDialogs.contains(tag) &&
                     ((dialog != null && !dialog.isAdded()) || dialog == null)
                     ) {
-                    mTag = tag;
-                    mShowingDialogs.add(tag);
-                    super.show(manager, tag);
+                mTag = tag;
+                mShowingDialogs.add(tag);
+                super.show(manager, tag);
             }
         } catch (Exception e) {
             Debug.error("AbstractDialogFragment " + tag + " show error: " + e.getMessage());
@@ -90,7 +92,7 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         mShowingDialogs.remove(mTag);
     }
 
-    public void setOnDismissListener (DialogInterface.OnDismissListener listener) {
+    public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
         mDismissListener = listener;
     }
 
@@ -115,4 +117,9 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     protected final void setNeedActionBarIndent(boolean value) {
         mNeedActionBarIndent = value;
     }
+
+    public boolean isUnderActionBar() {
+        return true;
+    }
+
 }

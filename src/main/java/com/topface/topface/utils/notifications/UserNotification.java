@@ -26,6 +26,8 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.SerializableToJson;
+import com.topface.topface.data.experiments.MessagesWithTabs;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.Utils;
@@ -291,16 +293,25 @@ public class UserNotification {
         intent.putExtra(NOTIFICATION_ID, mId);
         if (!TextUtils.equals(intent.getComponent().getClassName(), NavigationActivity.class.toString())) {
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
-            // Adds the back stack
-            stackBuilder.addParentStack(NavigationActivity.class);
-            // Adds the Intent to the top of the stack
-            stackBuilder.addNextIntent(intent);
+            // Puts intent with it's parent activities in back stack
+            stackBuilder.addNextIntentWithParentStack(intent);
+            // Put extra for NavigationActivity to open parent page of intents's component
+            Intent parentIntent = stackBuilder.editIntentAt(0);
+            putTopLevelFragment(parentIntent, intent);
+            parentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             // Gets a PendingIntent containing the entire back stack
-            resultPendingIntent = stackBuilder.getPendingIntent(requestCode, PendingIntent.FLAG_UPDATE_CURRENT);
+            resultPendingIntent = stackBuilder.getPendingIntent(requestCode, PendingIntent.FLAG_ONE_SHOT);
         } else {
             resultPendingIntent = PendingIntent.getActivity(mContext, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
         return resultPendingIntent;
+    }
+
+    private void putTopLevelFragment(Intent parentIntent, Intent targetIntent) {
+        String componentName = targetIntent.getComponent().getClassName();
+        if (TextUtils.equals(componentName, ChatActivity.class.getCanonicalName())) {
+            MessagesWithTabs.equipNavigationActivityIntent(parentIntent);
+        }
     }
 
     private void setLargeIcon() {

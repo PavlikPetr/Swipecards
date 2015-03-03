@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
 public class PaymentwallActivity extends BaseFragmentActivity {
     public static final String SUCCESS_URL_PATTERN = "success_url=([^&]+)";
     public static final int ACTION_BUY = 100;
-    private static final int RESULT_ERROR = 1;
     public static final String PW_URL = "pw_url";
+    private static final int RESULT_ERROR = 1;
     private String mSuccessUrl;
     private View mProgressBar;
     private String mWidgetUrl;
@@ -49,7 +49,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
             return;
         }
         mSuccessUrl = getSuccessUrl(mWidgetUrl);
-        getTitleSetter().setActionBarTitles(R.string.buying_header_title, null);
+        actionBarView.setActionBarTitle(R.string.buying_header_title);
 
         setContentView(R.layout.ac_web_auth);
 

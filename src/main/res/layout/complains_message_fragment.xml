@@ -18,14 +18,13 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:lines="5"
+        android:gravity="left"
         android:layout_margin="8dp"
         android:hint="@string/complain_description"
         android:layout_below="@id/tvReason" />
 
     <com.topface.topface.ui.views.LockerView
         android:id="@+id/complainLocker"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
         style="@style/LoadingLocker"
         android:visibility="gone" />
 

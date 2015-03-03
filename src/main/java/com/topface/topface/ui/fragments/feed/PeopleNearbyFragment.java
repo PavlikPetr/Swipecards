@@ -1,13 +1,11 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGeo;
 import com.topface.topface.data.FeedListData;
@@ -26,6 +24,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
 import org.json.JSONObject;
@@ -35,11 +34,6 @@ import java.util.List;
 
 public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     protected View mEmptyFeedView;
-
-    @Override
-    protected Drawable getBackIcon() {
-        return getResources().getDrawable(R.drawable.background_people_close);
-    }
 
     @Override
     protected int[] getTypesForGCM() {
@@ -211,6 +205,11 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu_fans;
+    }
+
+    @Override
+    protected int getUnreadCounter() {
+        return 0;
     }
 
     @Override

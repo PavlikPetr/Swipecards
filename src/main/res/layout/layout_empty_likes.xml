@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/vfEmptyViews"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:clickable="true">
+             android:id="@+id/vfEmptyViews"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:clickable="true">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -15,11 +15,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/likes_can_help_you"
-            style="@style/ItemTitleText"
+            style="@style/ListItemEmptyText"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_marginRight="16dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/buy_resources"
                 style="@style/Widget.Topface.Button.Big.Blue"
-                android:minWidth="210dp" />
+                android:minWidth="210dp"/>
         </LinearLayout>
 
         <ImageView
@@ -47,7 +47,7 @@
             android:src="@drawable/likes_back_icon"
             android:layout_above="@id/tvText"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="18dp" />
+            android:layout_marginBottom="18dp"/>
 
     </RelativeLayout>
 
@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            style="@style/TitleWhiteText" />
+            style="@style/ListItemEmptyText.Bold"/>
 
         <LinearLayout
             android:layout_width="300dp"
@@ -76,21 +76,21 @@
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                src="@drawable/likes_male_one" />
+                android:src="@drawable/likes_male_one"/>
 
             <com.topface.topface.ui.views.ImageViewRemote
                 android:id="@+id/ivTwo"
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                src="@drawable/likes_male_two" />
+                android:src="@drawable/likes_male_two"/>
 
             <com.topface.topface.ui.views.ImageViewRemote
                 android:id="@+id/ivThree"
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                src="@drawable/likes_male_three" />
+                android:src="@drawable/likes_male_three"/>
 
         </LinearLayout>
 
@@ -101,8 +101,8 @@
             android:gravity="center"
             android:text="@string/likes_buy_vip"
             android:layout_marginTop="16dp"
-            style="@style/ItemWhiteText"
-            android:maxWidth="300dp" />
+            style="@style/ListItemEmptyText"
+            android:maxWidth="300dp"/>
 
         <Button
             android:id="@+id/btnBuyVip"
@@ -111,10 +111,10 @@
             android:text="@string/buying_vip_status"
             style="@style/Widget.Topface.Button.Big.Blue"
             android:minWidth="210dp"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"/>
 
     </LinearLayout>
 
-    <include layout="@layout/layout_paid_likes_for_vip" />
+    <include layout="@layout/layout_paid_likes_for_vip"/>
 
 </ViewFlipper>

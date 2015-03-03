@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_new_list_selector">
+
+    <!-- аватар -->
+
+    <include
+        android:id="@+id/icon"
+        layout="@layout/item_feed_part_avatar"/>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/icon"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/ad_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ListName.Ad"
+            android:layout_marginRight="20dp" />
+
+        <TextView
+            android:id="@+id/ad_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AdDescriptionText"
+            android:gravity="left|center_vertical"
+            android:layout_below="@id/ad_title"
+            android:layout_marginRight="6dp" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/ivAd"
+        style="@style/AdIndicator" />
+
+</RelativeLayout>

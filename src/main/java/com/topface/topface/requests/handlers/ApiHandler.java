@@ -2,16 +2,14 @@ package com.topface.topface.requests.handlers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ConfirmedApiRequest;
 import com.topface.topface.requests.IApiResponse;
@@ -51,12 +49,6 @@ abstract public class ApiHandler extends Handler {
                     fail(ErrorCodes.ERRORS_PROCCESED, new ApiResponse(ErrorCodes.ERRORS_PROCCESED, "Client exception"));
                 } else if (result == ErrorCodes.PREMIUM_ACCESS_ONLY) {
                     Debug.error("To do this you have to be a VIP");
-
-                    if (isShowPremiumError()) {
-                        //Сообщение о необходимости Премиум-статуса
-                        showToast(R.string.general_premium_access_error);
-                    }
-
                     fail(result, response);
                 } else if (response.isCodeEqual(ErrorCodes.UNCONFIRMED_LOGIN)) {
                     ConfirmedApiRequest.showConfirmDialog(mContext);
@@ -81,6 +73,7 @@ abstract public class ApiHandler extends Handler {
         }
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     protected void showToast(final int stringId) {
         if (mContext != null && mContext instanceof Activity) {
             try {
@@ -145,7 +138,7 @@ abstract public class ApiHandler extends Handler {
         if (methodName.equals(ProfileRequest.SERVICE)) {
             CacheProfile.sendUpdateProfileBroadcast();
         } else if (methodName.equals(UserGetAppOptionsRequest.SERVICE)) {
-            LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(UserGetAppOptionsRequest.VERSION_INTENT));
+            Options.sendUpdateOptionsBroadcast();
         }
     }
 

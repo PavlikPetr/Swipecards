@@ -8,4 +8,7 @@
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">360dp</dimen>
 
+    <dimen name="action_bar_size">40dp</dimen>
+
+
 </resources>

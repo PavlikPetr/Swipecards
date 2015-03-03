@@ -15,23 +15,17 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
     public static final int INTENT_USER_PROFILE = 6;
 
     public static Intent createIntent(int userId, Context context) {
-        return createIntent(userId, null, Static.EMPTY, context);
+        return createIntent(userId, null, context, true);
     }
 
-    public static Intent createIntent(int userId, String itemId, Context context) {
-        return createIntent(userId, itemId, null, context);
+    public static Intent createIntent(int userId, Context context, boolean isChatAvailable) {
+        return createIntent(userId, null, context, isChatAvailable);
     }
 
-    public static Intent createIntent(int userId, Class callingClass, Context context) {
-        return createIntent(userId, null, callingClass.getName(), context);
-    }
-
-    public static Intent createIntent(int userId, String itemId, String className, Context context) {
+    public static Intent createIntent(int userId, String itemId, Context context, boolean isChatAvailable) {
         Intent intent = new Intent(context, UserProfileActivity.class);
         intent.putExtra(AbstractProfileFragment.INTENT_UID, userId);
-        if (!TextUtils.isEmpty(className)) {
-            intent.putExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT, className);
-        }
+        intent.putExtra(AbstractProfileFragment.INTENT_IS_CHAT_AVAILABLE, isChatAvailable);
         if (!TextUtils.isEmpty(itemId)) {
             intent.putExtra(AbstractProfileFragment.INTENT_ITEM_ID, itemId);
         }
@@ -39,29 +33,27 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
         return intent;
     }
 
-    public static Intent createIntent(int userId, String itemId, String className, String bodyStartPageClassName, Context context) {
-        return createIntent(userId, itemId, className, context)
+    public static Intent createIntent(int userId, String itemId, String bodyStartPageClassName, Context context) {
+        return createIntent(userId, itemId, context, true)
                 .putExtra(AbstractProfileFragment.INTENT_START_BODY_PAGE_NAME, bodyStartPageClassName);
     }
 
-    public static Intent createIntent(ApiResponse response, int userId, String itemId, String className, String bodyStartPageClassName, Context context) {
-        Intent intent = createIntent(response, userId, className, bodyStartPageClassName, context);
+    public static Intent createIntent(ApiResponse response, int userId, String itemId, String bodyStartPageClassName, Context context) {
+        Intent intent = createIntent(response, userId, bodyStartPageClassName, context);
         if (!TextUtils.isEmpty(itemId)) {
             intent.putExtra(AbstractProfileFragment.INTENT_ITEM_ID, itemId);
         }
         return intent;
     }
-    public static Intent createIntent(ApiResponse response, int userId, String className, String bodyStartPageClassName, Context context) {
-        return createIntent(response, userId, className, context)
+
+    public static Intent createIntent(ApiResponse response, int userId, String bodyStartPageClassName, Context context) {
+        return createIntent(response, userId, context)
                 .putExtra(AbstractProfileFragment.INTENT_START_BODY_PAGE_NAME, bodyStartPageClassName);
     }
 
-    public static Intent createIntent(ApiResponse response, int userId, String className, Context context) {
+    public static Intent createIntent(ApiResponse response, int userId, Context context) {
         Intent intent = new Intent(context, UserProfileActivity.class);
         intent.putExtra(AbstractProfileFragment.INTENT_UID, userId);
-        if (!TextUtils.isEmpty(className)) {
-            intent.putExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT, className);
-        }
         intent.putExtra(EditorProfileActionsFragment.PROFILE_RESPONSE, response.toJson().toString());
         return intent;
     }
@@ -74,5 +66,10 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
     @Override
     protected UserProfileFragment createFragment() {
         return new UserProfileFragment();
+    }
+
+    @Override
+    protected void setActionBarView() {
+        super.setActionBarView();
     }
 }

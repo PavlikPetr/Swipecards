@@ -15,6 +15,7 @@
     <string name="dating_switch_button">More…</string>
     <string name="dating_prev_button">Previous</string>
     <string name="dating_chat_button">Chat</string>
+    <string name="waiting_a_products">Please hold on. We are loading the available products.</string>
     <string name="likes_background_text">No likes</string>
     <string name="visitors_background_text">No guests</string>
     <string name="chat_background_text">No incoming messages</string>
@@ -148,11 +149,13 @@
     <string name="general_city">City</string>
     <string name="general_dating">Dating</string>
     <string name="general_likes">They like me</string>
+    <string name="general_sympathies">Likes</string>
     <string name="general_sympathy">Like</string>
     <string name="general_delight">Admiration</string>
     <string name="general_mutual">Mutual</string>
     <string name="general_dialogs">Dialogues</string>
     <string name="general_visitors">Guests</string>
+    <string name="general_visitors_tab_views">views</string>
     <string name="general_profile">Profile</string>
     <string name="general_settings">Settings</string>
     <string name="auth_btn_vk">Log in with VK</string>
@@ -174,17 +177,24 @@
     <string name="chat_sexuality_out">You have rated a sexuality.</string>
     <string name="chat_wink_in">You have received a wink.</string>
     <string name="chat_wink_out">Wink is sent.</string>
+    <string name="filter_search">Search</string>
     <string name="filter_filter">Filter</string>
     <string name="filter_age_string">From %1$d to %2$d</string>
     <string name="filter_only_beautiful">Attractive only</string>
     <string name="filter_extra_parameters">Advanced search</string>
     <string name="filter_age">Select age</string>
     <string name="filter_online">Online</string>
+    <string name="filter_age_start_prefix">From %s</string>
+    <string name="filter_age_end_prefix">to %s</string>
     <string name="filter_cities_all">All cities</string>
     <string name="buying_header_title">Purchases</string>
     <plurals name="buying_gift_you_need_coins">
         <item quantity="other">To be able to send a gift, buy %d more coins</item>
         <item quantity="one">To be able to send a gift, buy %d more coin</item>
+    </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="other">To send an admiration, buy %d more coins</item>
+        <item quantity="one">To send an admiration, buy %d more coin</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="other">To be able to see who likes you, buy %d more coins</item>
@@ -194,8 +204,17 @@
         <item quantity="other">To be able to be seen by everyone, buy %d more coins</item>
         <item quantity="one">To be able to be seen by everyone, buy %d more coin</item>
     </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="other">You are short of %d coins</item>
+        <item quantity="one">You are short of %d coin</item>
+    </plurals>
     <string name="buying_default_message">You can send gifts and admirations with coins</string>
     <string name="buying_money">Coins purchase</string>
+    <string name="gifts_romantic">Romance</string>
+    <string name="gifts_friends">Friendship</string>
+    <string name="gifts_present">Congratulations</string>
+    <string name="gifts_title">Choose a gift</string>
+    <string name="gifts_send_btn">Send a gift</string>
     <string name="profile_header_title">My profile</string>
     <string name="album_add_photo_title">Add a photo</string>
     <string name="profile_add_album">Choose from available ones</string>
@@ -219,11 +238,6 @@
     <string name="edit_set_as_main">Set as main</string>
     <string name="edit_delete">Delete</string>
     <string name="edit_restore">Restore</string>
-    <string name="gifts_romantic">Romance</string>
-    <string name="gifts_friends">Friendship</string>
-    <string name="gifts_present">Congratulations</string>
-    <string name="gifts_title">Choose a gift</string>
-    <string name="gifts_send_btn">Send a gift</string>
     <string name="form_not_specified">Not specified</string>
     <string name="form_main">Main</string>
     <string name="form_physique">Physique</string>
@@ -243,6 +257,8 @@
     <string name="settings_messages">Messages</string>
     <string name="settings_guests">Guests</string>
     <string name="settings_help">Help</string>
+    <string name="settings_faq">Questions and answers</string>
+    <string name="settings_faq_title">Perhaps your problem has been solved already, please see the FAQ.</string>
     <string name="settings_account">Account</string>
     <string name="settings_feedback">Leave feedback</string>
     <string name="settings_about">About</string>
@@ -275,7 +291,6 @@
     </plurals>
     <string name="novice_sympathy">Send likes only to those\nwho really attract you.\nYou just might find someone special!</string>
     <string name="general_edit_profile_message">Please, fill in all the necessary fields in you profile.</string>
-    <string name="general_premium_access_error">To do this you need a VIP-status.</string>
     <string name="general_search_null_response_error">Not found. Try to change the filters.</string>
     <string name="change_filters">Change filters</string>
     <string name="reset_filter">Reset</string>
@@ -292,6 +307,7 @@
     <string name="rate_popup_error">Please tell us how many stars our app deserves!</string>
     <string name="feedback_popup_title">You gave us a low rating. Tell us what you didn\'t like in the app. Help us become better. Thank you!</string>
     <string name="settings_melody">Notification ringtone</string>
+    <string name="settings_loading_photo">Photos preload</string>
     <string name="edit_refresh_status">Update status</string>
     <string name="ban_title">Congratulations! You are banned.</string>
     <string name="ban_title_forever">Congratulations! You are banned forever.</string>
@@ -482,6 +498,7 @@
     <string name="likes_can_help_you">Likes help you meet people</string>
     <string name="general_get_dating">Meet</string>
     <string name="settings_select_language">Select app language</string>
+    <string name="settings_select_preload_photo_type">Choose when the photos preload is turned on</string>
     <string name="restart_to_change_locale">The app must be restarted to change the language.</string>
     <string name="locale_changing">Change the language</string>
     <plurals name="you_were_liked">
@@ -586,4 +603,22 @@
     <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">You have selected the maximum number of users.</string>
     <string name="logout_if_email_already_registred">There is a user with this email already. If this is your email, you have to log out of the current account and log into %s account.</string>
+    <string name="recover_password_instructions">An email has been sent to you with the password recovery instruction.</string>
+    <string name="email_changing">Email change</string>
+    <string name="hint_faces_filter">Change search options and meet new interesting people.</string>
+    <string name="hint_faces_buy_like">The more likes you have, the more often you get rated. Don\'t forget to refill the likes balance.</string>
+    <string name="hint_myprofile_buy_vip">Buy VIP-status and enjoy unlimited communication</string>
+    <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
+    <string name="pull_to_refresh_release_label">Let go to refresh…</string>
+    <string name="messaging_block_buy_vip">To continue the dialogue you need to have a VIP\u2011status</string>
+    <string name="pull_to_refresh_refreshing_label">Loading…</string>
+    <string name="user_added_to_black_list">The user has been added to the Blacklist.</string>
+    <string name="user_deleted_from_black_list">The user has been removed from the Blacklist.</string>
+    <string name="user_added_to_bookmark">The user has been added to Favorites.</string>
+    <string name="user_deleted_from_bookmark">The user has been removed from Favorites.</string>
+    <string name="preload_photo_type_wifi_3g">WiFi and 3G</string>
+    <string name="preload_photo_type_wifi">WiFi only</string>
+    <string name="preload_photo_type_always_on">Always on</string>
+    <string name="preload_photo_type_preload_off">Off</string>
+    <string name="wrong_time_popup_button">View settings</string>
 </resources>

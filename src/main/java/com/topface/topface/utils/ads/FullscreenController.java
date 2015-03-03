@@ -11,24 +11,18 @@ import android.view.animation.AnimationUtils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.ivengo.ads.AdManager;
-import com.ivengo.ads.AdType;
-import com.ivengo.ads.Interstitial;
-import com.ivengo.ads.InterstitialListener;
-import com.ivengo.ads.Request;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.Banner;
-import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.blocks.BannerBlock;
-import com.topface.topface.ui.blocks.FloatBlock;
+import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
@@ -36,45 +30,47 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
 
-import java.net.URL;
-
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
 import ru.ideast.adwired.events.OnStopListener;
+
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADWIRED;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
 
 /**
  */
 public class FullscreenController {
 
     private static final String TAG = "FullscreenController";
-    private static final String IVENGO_APP_ID = "aggeas97392g";
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
 
     private class FullscreenStartAction extends AbstractStartAction {
-        private Options.Page startPage;
+        private PageInfo startPageInfo;
         private int priority;
 
         public FullscreenStartAction(int priority) {
             this.priority = priority;
             if (!CacheProfile.isEmpty()) {
-                startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
+                startPageInfo = CacheProfile.getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
             }
         }
 
         @Override
         public void callInBackground() {
-            if (startPage != null) {
-                Debug.log(TAG, startPage.banner);
+            if (startPageInfo != null) {
+                Debug.log(TAG, startPageInfo.getBanner());
             }
         }
 
         @Override
         public void callOnUi() {
-            if (startPage != null) {
-                FullscreenController.this.requestFullscreen(startPage.banner);
+            if (startPageInfo != null) {
+                FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
             }
         }
 
@@ -82,8 +78,8 @@ public class FullscreenController {
         public boolean isApplicable() {
             return CacheProfile.show_ad &&
                     FullscreenController.this.isTimePassed() &&
-                    startPage != null &&
-                    startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER);
+                    startPageInfo != null &&
+                    startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
         }
 
         @Override
@@ -148,19 +144,16 @@ public class FullscreenController {
     public void requestFullscreen(String type) {
         try {
             switch (type) {
-                case BannerBlock.BANNER_NONE:
+                case BANNER_NONE:
                     return;
-                case BannerBlock.BANNER_ADMOB:
+                case BANNER_ADMOB:
                     requestAdmobFullscreen();
                     break;
-                case BannerBlock.BANNER_ADWIRED:
+                case BANNER_ADWIRED:
                     requestAdwiredFullscreen();
                     break;
-                case BannerBlock.BANNER_TOPFACE:
+                case BANNER_TOPFACE:
                     requestTopfaceFullscreen();
-                    break;
-                case BannerBlock.BANNER_IVENGO:
-                    requestIvengoFullscreen();
                     break;
                 default:
                     break;
@@ -213,51 +206,6 @@ public class FullscreenController {
         });
     }
 
-    private void requestIvengoFullscreen() {
-        AdManager.getInstance().initialize(mActivity);
-        Interstitial advViewIvengo = new Interstitial(AdType.BANNER_FULLSCREEN);
-        Request request = new Request();
-        request.setAppId(IVENGO_APP_ID);
-        advViewIvengo.setInterstitialListener(new InterstitialListener() {
-            @Override
-            public void onInterstitialReceiveAd(Interstitial interstitial) {
-                interstitial.showFromActivity(mActivity);
-            }
-
-            @Override
-            public void onInterstitialFailWithError(Interstitial interstitial, com.ivengo.ads.Error error) {
-                requestFallbackFullscreen();
-            }
-
-            @Override
-            public void onInterstitialShowAd(Interstitial interstitial) {
-
-            }
-
-            @Override
-            public void onInterstitialSkipAd(Interstitial interstitial) {
-                requestFallbackFullscreen();
-            }
-
-            @Override
-            public void onInterstitialWillLeaveApplicationWithUrl(Interstitial interstitial, URL url) {
-
-            }
-
-            @Override
-            public void onInterstitialWillReturnToApplication(Interstitial interstitial) {
-
-            }
-
-            @Override
-            public void onInterstitialDidFinishAd(Interstitial interstitial) {
-
-            }
-        });
-
-        advViewIvengo.loadRequest(request);
-    }
-
     private void requestAdwiredFullscreen() {
         try {
             if (!CacheProfile.isEmpty()) {
@@ -294,7 +242,7 @@ public class FullscreenController {
 
     private void requestTopfaceFullscreen() {
         BannerRequest request = new BannerRequest(App.getContext());
-        request.place = Options.PAGE_START;
+        request.place = PageInfo.PageName.START.getName();
         request.callback(new DataApiHandler<Banner>() {
             @Override
             public void success(final Banner data, IApiResponse response) {
@@ -306,11 +254,13 @@ public class FullscreenController {
                         final ViewGroup bannerContainer = getFullscreenBannerContainer();
                         bannerContainer.addView(fullscreenViewGroup);
                         bannerContainer.setVisibility(View.VISIBLE);
+                        TopfaceAdStatistics.sendFullscreenShown(data);
                         final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
                         fullscreenImage.setRemoteSrc(data.url);
                         fullscreenImage.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                TopfaceAdStatistics.sendFullscreenClicked(data);
                                 AppConfig config = App.getAppConfig();
                                 config.addFullscreenUrl(data.parameter);
                                 config.saveConfig();
@@ -324,6 +274,7 @@ public class FullscreenController {
                             @Override
                             public void onClick(View v) {
                                 hideFullscreenBanner(bannerContainer);
+                                TopfaceAdStatistics.sendFullscreenClosed(data);
                             }
                         });
                     }

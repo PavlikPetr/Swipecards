@@ -7,27 +7,33 @@
 
     <dimen name="popular_dialog_text_margin">36dp</dimen>
 
-    <!--show keyboard in chat, when screen height more than this value-->
-    <dimen name="min_screen_height_chat_fragment">479dp</dimen>
-
     <!--set padding left value for icon "online" inside actionBar-->
     <dimen name="padding_left_for_online_icon">4dp</dimen>
 
     <dimen name="action_bar_title_size">18sp</dimen>
     <dimen name="action_bar_subtitle_size">14sp</dimen>
 
-    <!-- defaults for shadows -->
-    <item name="shadow_1px" format="float" type="dimen">1</item>
-    <item name="shadow_n1px" format="float" type="dimen">-1</item>
-    <item name="shadow_2px" format="float" type="dimen">2</item>
-    <item name="shadow_n2px" format="float" type="dimen">-2</item>
-    <item name="shadow_3px" format="float" type="dimen">3</item>
-    <item name="shadow_n3px" format="float" type="dimen">-3</item>
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">260dp</dimen>
 
     <item name="action_animation_time" format="integer" type="integer">75</item>
 
     <dimen name="chat_date_line_size">1px</dimen>
+
+    <!--CustomCitySearchView padding top-->
+    <dimen name="custom_city_search_view_padding_top">10dp</dimen>
+
+    <!--filter fragment dividers height-->
+    <dimen name="filter_fragment_divider_height">1dp</dimen>
+
+    <!-- corners radius of avatar in feeds -->
+    <dimen name="list_avatar_corners_radius">2dp</dimen>
+
+    <!-- avatar width and height in feeds -->
+    <dimen name="list_avatar_size">70dp</dimen>
+
+    <dimen name="edit_text_min_height">30dp</dimen>
+
+    <dimen name="action_bar_size">48dp</dimen>
 
 </resources>

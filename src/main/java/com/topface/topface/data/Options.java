@@ -1,18 +1,24 @@
 package com.topface.topface.data;
 
 
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
+import com.topface.topface.banners.PageInfo;
+import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
-import com.topface.topface.data.experiments.LikesWithThreeTabs;
-import com.topface.topface.data.experiments.MessagesWithTabs;
+import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.ui.blocks.BannerBlock;
+import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
@@ -29,6 +35,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -38,34 +46,6 @@ import java.util.Set;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Options extends AbstractData {
-
-    /**
-     * Идентификаторы страниц
-     */
-    public static final String PAGE_UNKNOWK = "UNKNOWN_PAGE";
-    public final static String PAGE_LIKES = "LIKE";
-    public final static String PAGE_MUTUAL = "MUTUAL";
-    public final static String PAGE_MESSAGES = "MESSAGES";
-    public final static String PAGE_VISITORS = "VISITORS";
-    public final static String PAGE_DIALOGS = "DIALOGS";
-    public final static String PAGE_FANS = "FANS";
-    public final static String PAGE_BOOKMARKS = "BOOKMARKS";
-    public final static String PAGE_VIEWS = "VIEWS";
-    public final static String PAGE_START = "START";
-    public final static String PAGE_GAG = "GAG";
-    public final static String[] PAGES = new String[]{
-            PAGE_UNKNOWK,
-            PAGE_LIKES,
-            PAGE_MUTUAL,
-            PAGE_MESSAGES,
-            PAGE_VISITORS,
-            PAGE_DIALOGS,
-            PAGE_FANS,
-            PAGE_BOOKMARKS,
-            PAGE_VIEWS,
-            PAGE_START,
-            PAGE_GAG
-    };
 
     public final static String INNER_MAIL_CONST = "mail";
     public final static String INNER_APNS_CONST = "apns";
@@ -78,7 +58,7 @@ public class Options extends AbstractData {
     /**
      * Настройки для каждого типа страниц
      */
-    public HashMap<String, Page> pages = new HashMap<>();
+    private HashMap<String, PageInfo> pages = new HashMap<>();
 
     public boolean ratePopupEnabled = false;
     public long ratePopupTimeout = DateUtils.DAY_IN_MILLISECONDS;
@@ -101,6 +81,12 @@ public class Options extends AbstractData {
      * Флаг отображения превью в диалогах
      */
     public boolean hidePreviewDialog;
+
+    /**
+     * title и url для экрана "О программе"
+     * по умолчанию отобразим "topface.com" с переходом на "http://topface.com", если сервер не пришлет другое значение
+     */
+    public AboutApp aboutApp = new AboutApp();
 
     /**
      * Стоимость вставания в лидеры
@@ -132,8 +118,8 @@ public class Options extends AbstractData {
      */
     public PromoPopupEntity premiumAdmirations;
     public GetJar getJar;
-    public String gagTypeBanner = BannerBlock.BANNER_ADMOB;
-    public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
+    public String fallbackTypeBanner = AdProvidersFactory.BANNER_ADMOB;
+    public String gagTypeFullscreen = AdProvidersFactory.BANNER_NONE;
     public String helpUrl;
 
     public LinkedList<Tab> otherTabs = new LinkedList<>();
@@ -152,18 +138,12 @@ public class Options extends AbstractData {
     public int maxMessageSize;
 
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
-
+    public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
-
+    public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
-
     public NotShown notShown = new NotShown();
-
-    public LikesWithThreeTabs likesWithThreeTabs = new LikesWithThreeTabs();
-
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
-
-    public MessagesWithTabs messagesWithTabs = new MessagesWithTabs();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -182,29 +162,17 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
-
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
-            try {
-                startPageFragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
-            } catch (IllegalArgumentException e) {
-                Debug.error("Illegal value of startPage", e);
-            }
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
-            JSONArray pagesJson = response.optJSONArray("pages");
-            for (int i = 0; i < pagesJson.length(); i++) {
-                JSONObject page = pagesJson.getJSONObject(i);
-                String pageName = getPageName(page, "name");
-                pages.put(pageName,
-                        new Page(
-                                pageName,
-                                page.optString("float"),
-                                page.optString("banner")
-                        )
-                );
+            PageInfo[] pagesArr = JsonUtils.fromJson(response.optString("pages"), PageInfo[].class);
+            for (PageInfo pageInfo : pagesArr) {
+                pages.put(pageInfo.name, pageInfo);
             }
+            JSONObject aboutAppJson = response.optJSONObject("aboutApp");
+            aboutApp = new AboutApp(aboutAppJson.optString("title"), aboutAppJson.optString("url"));
             offerwall = response.optString("offerwall");
             maxVersion = response.optString("maxVersion");
             blockUnconfirmed = response.optBoolean("blockUnconfirmed");
@@ -307,14 +275,16 @@ public class Options extends AbstractData {
                 getJar = new GetJar(getJarJson.optString("id"), getJarJson.optString("name"), getJarJson.optLong("price"));
             }
 
-            gagTypeBanner = response.optString("gag_type_banner", BannerBlock.BANNER_ADMOB);
-            gagTypeFullscreen = response.optString("gag_type_fullscreen", BannerBlock.BANNER_NONE);
+            fallbackTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_ADMOB);
+            gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);
             JSONObject bonusObject = response.optJSONObject("bonus");
             if (bonusObject != null) {
                 bonus.enabled = bonusObject.optBoolean("enabled");
                 bonus.counter = bonusObject.optInt("counter");
                 bonus.timestamp = bonusObject.optLong("counterTimestamp");
                 bonus.integrationUrl = bonusObject.optString("integrationUrl");
+                bonus.buttonText = bonusObject.optString("buttonText",bonus.buttonText);
+                bonus.buttonPicture = bonusObject.optString("buttonPicture",bonus.buttonPicture);
             }
             // offerwalls for
             JSONObject jsonOfferwalls = response.optJSONObject("offerwalls");
@@ -341,20 +311,22 @@ public class Options extends AbstractData {
             // experiments init
             forceOfferwallRedirect.init(response);
 
+            topfaceOfferwallRedirect.init(response);
+
             instantMessageFromSearch.init(response);
 
             autoOpenGallery.init(response);
 
-            likesWithThreeTabs.init(response);
-
             instantMessagesForNewbies.init(response);
 
-            messagesWithTabs.init(response);
+            startPageFragmentId = getStartPageFragmentId(response);
 
             JSONObject jsonNotShown = response.optJSONObject("notShown");
             if (jsonNotShown != null) {
                 notShown.parseNotShownJSON(jsonNotShown);
             }
+
+            feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
 
 
         } catch (Exception e) {
@@ -391,35 +363,6 @@ public class Options extends AbstractData {
         }
     }
 
-
-    private static String getPageName(JSONObject page, String key) {
-        String name = page.optString(key);
-        switch (name) {
-            case PAGE_LIKES:
-                return PAGE_LIKES;
-            case PAGE_MUTUAL:
-                return PAGE_MUTUAL;
-            case PAGE_MESSAGES:
-                return PAGE_MESSAGES;
-            case PAGE_VISITORS:
-                return PAGE_VISITORS;
-            case PAGE_DIALOGS:
-                return PAGE_DIALOGS;
-            case PAGE_FANS:
-                return PAGE_FANS;
-            case PAGE_BOOKMARKS:
-                return PAGE_BOOKMARKS;
-            case PAGE_VIEWS:
-                return PAGE_VIEWS;
-            case PAGE_START:
-                return PAGE_START;
-            case PAGE_GAG:
-                return PAGE_GAG;
-            default:
-                return PAGE_UNKNOWK + "(" + name + ")";
-        }
-    }
-
     public PromoPopupEntity getPremiumEntityByType(int type) {
         switch (type) {
             case PromoPopupEntity.AIR_ADMIRATIONS:
@@ -436,45 +379,46 @@ public class Options extends AbstractData {
         return Integer.toString(type) + INNER_SEPARATOR + ((isMail) ? INNER_MAIL_CONST : INNER_APNS_CONST);
     }
 
+    public Map<String, PageInfo> getPagesInfo() {
+        return pages;
+    }
+
+    public void setPagesInfo(Map<String, PageInfo> pages) {
+        this.pages = new HashMap<>(pages);
+    }
+
+    public static void sendUpdateOptionsBroadcast() {
+        LocalBroadcastManager.getInstance(App.getContext())
+                .sendBroadcast(new Intent(UserGetAppOptionsRequest.OPTIONS_UPDATE_ACTION));
+    }
+
+    public String getPaymentwallLink() {
+        return paymentwall;
+    }
+
     public boolean containsBannerType(String bannerType) {
-        for (Page page : pages.values()) {
-            if (page.banner.equals(bannerType)) {
+        for (PageInfo page : pages.values()) {
+            if (page.getBanner().equals(bannerType)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static class Page {
-        public String name;
-        public String floatType;
-        public String banner;
+    public static class AboutApp {
+        public String title;
+        public String url;
 
-        private static final String SEPARATOR = ";";
 
-        public Page(String name, String floatType, String banner) {
-            this.name = name;
-            this.floatType = floatType;
-            this.banner = banner;
+        public AboutApp(String title, String url) {
+            this.title = title;
+            this.url = url;
         }
 
-        @Override
-        public String toString() {
-            return name + SEPARATOR + floatType + SEPARATOR + banner;
+        public AboutApp() {
+            title = App.getContext().getString(R.string.settings_topface_url);
+            url = App.getContext().getString(R.string.settings_topface_url_title);
         }
-
-        public static Page parseFromString(String str) {
-            String[] params = str.split(SEPARATOR);
-            if (params.length == 3) {
-                return new Page(params[0], params[1], params[2]);
-            } else {
-                return null;
-            }
-        }
-    }
-
-    public String getPaymentwallLink() {
-        return paymentwall;
     }
 
     public static class PromoPopupEntity {
@@ -635,6 +579,8 @@ public class Options extends AbstractData {
         public int counter;
         public long timestamp;
         public String integrationUrl;
+        public String buttonText =App.getContext().getString(R.string.general_bonus);// по умолчанию кнопка имеет название "Бонус"
+        public String buttonPicture = null;// по умолчанию кнопка отображается с картинкой ic_bonus_1
     }
 
     public static class Tab {
@@ -643,7 +589,6 @@ public class Options extends AbstractData {
         public static final String PWALL_MOBILE = "paymentwall-mobile";
         public static final String PWALL = "paymentwall-direct";
         public static final String BONUS = "bonus";
-        public static final String FORTUMO = "fortumo";
 
         /**
          * !!! IMPORTANT !!!
@@ -658,7 +603,6 @@ public class Options extends AbstractData {
             markets.add(PWALL_MOBILE);
             markets.add(PWALL);
             markets.add(BONUS);
-            markets.add(FORTUMO);
         }
 
         public String name;
@@ -703,8 +647,38 @@ public class Options extends AbstractData {
                 text = jsonNotShown.optString("text");
             }
         }
-
     }
 
+    public static class FeedNativeAd {
+        public boolean enabled;
+        public String type;
+        public int dailyShows;
+        public int positionMax;
+        public int positionMin;
+        private Random random = new Random(System.currentTimeMillis());
 
+        public void parseFeedAdJSON(JSONObject jsonFeedAd) {
+            if (jsonFeedAd != null) {
+                enabled = jsonFeedAd.optBoolean("enabled");
+                type = jsonFeedAd.optString("type");
+                dailyShows = jsonFeedAd.optInt("dailyShows");
+                positionMin = jsonFeedAd.optInt("positionMin");
+                positionMax = jsonFeedAd.optInt("positionMax");
+            }
+        }
+
+        public int getPosition() {
+            return random.nextInt(positionMax - positionMin + 1) + positionMin;
+        }
+    }
+
+    private BaseFragment.FragmentId getStartPageFragmentId(JSONObject response) {
+        BaseFragment.FragmentId fragmentId = startPageFragmentId;
+        try {
+            fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
+        } catch (IllegalArgumentException e) {
+            Debug.error("Illegal value of startPage", e);
+        }
+        return fragmentId;
+    }
 }

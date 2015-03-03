@@ -3,16 +3,21 @@ package com.topface.topface.utils;
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -21,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
@@ -29,6 +35,8 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
@@ -50,6 +58,7 @@ public class Utils {
     );
     private static PluralResources mPluralResources;
     private static float mDensity = App.getContext().getResources().getDisplayMetrics().density;
+    private static String mCarrier;
 
     public static int unixtimeInSeconds() {
         return (int) (System.currentTimeMillis() / 1000L);
@@ -125,6 +134,23 @@ public class Utils {
         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
+    public static void startOldVersionPopup(final Activity activity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Utils.goToMarket(activity);
+            }
+        });
+        builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setMessage(R.string.general_version_not_supported);
+        builder.create().show();
+    }
+
     public static void goToMarket(Activity context) {
         goToMarket(context, null);
     }
@@ -151,7 +177,7 @@ public class Utils {
     public static Intent getMarketIntent(Context context) {
         String link;
         //Для амазона делаем специальную ссылку, иначе он ругается, хотя и работает
-        switch (BuildConfig.BILLING_TYPE) {
+        switch (BuildConfig.MARKET_API_TYPE) {
             case AMAZON:
                 link = context.getString(R.string.amazon_market_link);
                 break;
@@ -191,9 +217,13 @@ public class Utils {
     }
 
     public static void showSoftKeyboard(Context context, EditText editText) {
-        editText.requestFocus();
         InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+        if (editText == null) {
+            keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        } else {
+            editText.requestFocus();
+            keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -263,4 +293,46 @@ public class Utils {
             transition.enableTransitionType(LayoutTransition.CHANGING);
         }
     }
+
+    /**
+     * Устанавливает фон для ImageView если передать -1 будет установлен null
+     *
+     * @param imageView ImageView в котором нужно поменять фон
+     * @param res       цвет фона
+     */
+    @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public static void setBackground(ImageView imageView, @DrawableRes int res) {
+        Drawable background = null;
+        if (res != -1) {
+            background = App.getContext().getResources().getDrawable(res);
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            imageView.setBackgroundDrawable(background);
+        } else {
+            imageView.setBackground(background);
+        }
+    }
+
+    public static ConnectionChangeReceiver.ConnectionType getConnectionType() {
+        AppConfig config = App.getAppConfig();
+        if (config.getDebugConnectionChecked()) {
+            return ConnectionChangeReceiver.ConnectionType.valueOf(config.getDebugConnection());
+        }
+        return ConnectionChangeReceiver.getConnectionType();
+    }
+
+    public static String getCarrierName() {
+        if (!TextUtils.isEmpty(mCarrier)) {
+            return mCarrier;
+        }
+        TelephonyManager telephonyManager = (TelephonyManager) App.getContext()
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager == null) {
+            return null;
+        }
+        mCarrier = telephonyManager.getSimOperatorName();
+        return mCarrier;
+    }
+
 }

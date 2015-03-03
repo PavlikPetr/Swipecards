@@ -7,13 +7,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -42,12 +41,10 @@ import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.search.CachableSearchList;
 import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
-import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -65,7 +62,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
@@ -79,9 +75,7 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
-import com.topface.topface.utils.actionbar.ActionBarOnlineSetterDelegate;
-import com.topface.topface.utils.actionbar.IActionBarTitleSetter;
+import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.social.AuthToken;
@@ -91,6 +85,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
 
+    AtomicBoolean isAdmirationFailed = new AtomicBoolean(false);
     private KeyboardListenerLayout mRoot;
     private TextView mResourcesLikes;
     private TextView mResourcesMoney;
@@ -103,7 +98,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mDatingLovePrice;
     private View mDatingResources;
     private View mDatingButtons;
-
     private RateController mRateController;
     private ImageSwitcher mImageSwitcher;
     private CachableSearchList<SearchUser> mUserSearchList;
@@ -114,44 +108,23 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RetryViewCreator mRetryView;
     private ImageButton mRetryBtn;
     private PreloadManager<SearchUser> mPreloadManager;
-    private DatingInstantMessageController mDatingInstantMessageController;
-
-    private Drawable singleMutual;
-    private Drawable singleDelight;
-    private Drawable doubleMutual;
-    private Drawable doubleDelight;
-
-    private NoviceLayout mNoviceLayout;
-
-    private boolean hasOneSympathyOrDelight = false;
-    private boolean mCanSendAlbumReq = true;
-    private SearchUser mCurrentUser;
-    /**
-     * Флаг того, что запущено обновление поиска и запускать дополнительные обновления не нужно
-     */
-    private boolean mUpdateInProcess;
-    private BroadcastReceiver mProfileReceiver;
-    private boolean mNeedMore;
-    private int mLoadedCount;
-    private boolean mNewFilter;
-
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mPreloadManager != null) {
-                int connectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0);
-                mPreloadManager.checkConnectionType(ConnectionChangeReceiver.ConnectionType.valueOf(connectionType));
+                mPreloadManager.checkConnectionType();
             }
         }
     };
-
-    private BroadcastReceiver mBalanceReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateResources();
-        }
-    };
-
+    private DatingInstantMessageController mDatingInstantMessageController;
+    private Drawable singleMutual;
+    private Drawable singleDelight;
+    private Drawable doubleMutual;
+    private Drawable doubleDelight;
+    private NoviceLayout mNoviceLayout;
+    private boolean hasOneSympathyOrDelight = false;
+    private boolean mCanSendAlbumReq = true;
+    private SearchUser mCurrentUser;
     private BroadcastReceiver mRateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -170,55 +143,91 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         }
     };
+    /**
+     * Флаг того, что запущено обновление поиска и запускать дополнительные обновления не нужно
+     */
+    private boolean mUpdateInProcess;
+    private BroadcastReceiver mProfileReceiver;
+    private boolean mNeedMore;
+    private int mLoadedCount;
+    private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
 
+        @Override
+        public void onPageSelected(int position) {
+
+            if (position + mController.getItemsOffsetByConnectionType() == (mLoadedCount - 1)) {
+                final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
+
+                if (mNeedMore && mCanSendAlbumReq) {
+                    mCanSendAlbumReq = false;
+                    sendAlbumRequest(data);
+                }
+            }
+
+            setCounter(mImageSwitcher.getSelectedPosition());
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+        }
+    };
+    private boolean mNewFilter;
+    private OnUsersListEventsListener mSearchListener = new OnUsersListEventsListener() {
+        @Override
+        public void onEmptyList(UsersList usersList) {
+            if (!mNewFilter) {
+                lockControls();
+                updateData(false);
+            }
+        }
+
+        @Override
+        public void onPreload(UsersList usersList) {
+            if (!mNewFilter) {
+                updateData(true);
+            }
+        }
+
+    };
+    private BroadcastReceiver mBalanceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateResources();
+        }
+    };
     private INavigationFragmentsListener mFragmentSwitcherListener;
     private AnimationHelper mAnimationHelper;
     private AlbumLoadController mController;
-    private ActionBarOnlineSetterDelegate mOnlineSetter;
-
-    private class FilterHandler extends DataApiHandler<DatingFilter> {
-
+    private ActionBarTitleSetterDelegate mSetter;
+    private AtomicBoolean moneyDecreased = new AtomicBoolean(false);
+    private boolean mIsHide;
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
-        protected void success(DatingFilter filter, IApiResponse response) {
-            CacheProfile.dating = filter;
-            updateFilterData();
-            updateData(false);
-        }
-
-        @Override
-        protected DatingFilter parseResponse(ApiResponse response) {
-            return new DatingFilter(response.getJsonResult());
-        }
-
-        @Override
-        public void fail(int codeError, IApiResponse response) {
-            showEmptySearchDialog();
-            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void always(IApiResponse response) {
-            super.always(response);
-            mNewFilter = false;
-        }
-
-        @Override
-        public void cancel() {
-            super.cancel();
-            mProgressBar.setVisibility(View.GONE);
-            if (mCurrentUser != null) {
-                unlockControls();
+        public void onClick(View v) {
+            if (mIsHide) {
+                showControls();
+            } else {
+                hideControls();
             }
         }
-    }
+    };
+    private Handler mUnlockHandler = new Handler() {
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            unlockControls();
+        }
+    };
 
     private void startDatingFilterActivity() {
         Intent intent = new Intent(getActivity().getApplicationContext(),
                 EditContainerActivity.class);
         startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
     }
-
-    private AtomicBoolean moneyDecreased = new AtomicBoolean(false);
 
     @Override
     public void onAttach(Activity activity) {
@@ -232,14 +241,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onDetach() {
         super.onDetach();
         mFragmentSwitcherListener = null;
-        if (mOnlineSetter != null) {
-            mOnlineSetter.setOnline(false);
+        if (mSetter != null) {
+            mSetter.setOnline(false);
         }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSetter = new ActionBarTitleSetterDelegate(getActivity(), ((ActionBarActivity) getActivity()).getSupportActionBar());
         mPreloadManager = new PreloadManager<>();
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
@@ -278,8 +288,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-        if (mOnlineSetter != null) {
-            mOnlineSetter.setOnline(mCurrentUser != null && mCurrentUser.online);
+        if (mSetter != null) {
+            mSetter.setOnline(mCurrentUser != null && mCurrentUser.online);
         }
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
@@ -326,10 +336,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
         // User Info
-        mUserInfoStatus = ((TextView) root.findViewById(R.id.tvDatingUserStatus));
+        mUserInfoStatus = (TextView) getActivity().getLayoutInflater().inflate(R.layout.dating_user_info, null, false);
 
         // Counter
-        mDatingCounter = ((TextView) root.findViewById(R.id.tvDatingCounter));
+        mDatingCounter = (TextView) root.findViewById(R.id.tvDatingCounter);
 
         // Progress
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsDatingLoading);
@@ -396,17 +406,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProfileBtn.setOnClickListener(this);
     }
 
-    @Override
-    protected IActionBarTitleSetter createTitleSetter(ActionBar actionBar) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            mOnlineSetter = new ActionBarCustomViewTitleSetterDelegate(getActivity(), actionBar,
-                    R.id.title_clickable, R.id.title, R.id.subtitle);
-        } else {
-            mOnlineSetter = new ActionBarOnlineSetterDelegate(actionBar, getActivity());
-        }
-        return mOnlineSetter;
-    }
-
     protected String getTitle() {
         if (mCurrentUser != null) {
             return mCurrentUser.getNameAndAge();
@@ -458,6 +457,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 if (isAdded()) {
                     updateFilterData();
                     setHighRatePrice();
+                    if (mDatingInstantMessageController != null) {
+                        mDatingInstantMessageController.updateMessageIfNeed();
+                    }
                 }
             }
         };
@@ -579,26 +581,23 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initInstantMessageController(KeyboardListenerLayout root) {
-        InstantMessageFromSearch instantMessageFromSearch = CacheProfile.getOptions().instantMessageFromSearch;
-        if (instantMessageFromSearch.isEnabled()) {
-            mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
-                    this, this, instantMessageFromSearch.getText(),
-                    mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
-                @Override
-                public void sendLike() {
-                    sendSympathy();
-                }
-            }, new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_SEND) {
-                        mDatingInstantMessageController.instantSend(mCurrentUser);
-                    }
-                    return false;
-                }
+        mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
+                this, this,
+                mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
+            @Override
+            public void sendLike() {
+                sendSympathy();
             }
-            );
+        }, new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    mDatingInstantMessageController.instantSend(mCurrentUser);
+                }
+                return false;
+            }
         }
+        );
     }
 
     private SearchRequest getSearchRequest() {
@@ -610,8 +609,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private boolean getFilterOnlyOnline() {
         return DatingFilter.getOnlyOnlineField();
     }
-
-    AtomicBoolean isAdmirationFailed = new AtomicBoolean(false);
 
     @Override
     public void onClick(View view) {
@@ -648,16 +645,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                         moneyDecreased.set(false);
                                         CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
                                         updateResources();
-                                        new SendLikeRequest(getActivity(),
-                                                userId,
-                                                mutualId,
-                                                SendLikeRequest.Place.FROM_SEARCH).callback(new SimpleApiHandler() {
-                                            @Override
-                                            public void fail(int codeError, IApiResponse response) {
-                                                super.fail(codeError, response);
-                                                unlockControls();
-                                            }
-                                        }).exec();
                                     } else {
                                         isAdmirationFailed.set(true);
                                         unlockControls();
@@ -685,8 +672,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
-                    Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, DatingFragment.class, getActivity());
-                    intent.putExtra(UserProfileFragment.USER_RATED_EXTRA, mCurrentUser.rated);
+                    Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, getActivity(),isChatAvailable());
                     startActivityForResult(intent, UserProfileActivity.INTENT_USER_PROFILE);
                     EasyTracker.sendEvent("Dating", "Additional", "Profile", 1L);
                 }
@@ -720,6 +706,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    private boolean isChatAvailable() {
+        return !(!CacheProfile.premium && CacheProfile.getOptions().blockChatNotMutual && !mCurrentUser.isMutualPossible);
+    }
+
     private void sendSympathy() {
         if (mCurrentUser != null) {
             if (!mCurrentUser.rated) {
@@ -748,7 +738,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         }
     }
-
 
     private void showUser(SearchUser user) {
         if (user != null) {
@@ -806,7 +795,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setUserOnlineStatus(SearchUser currUser) {
-        mOnlineSetter.setOnline(currUser != null && currUser.online);
+        mSetter.setOnline(currUser != null && currUser.online);
     }
 
     private void setUserSex(SearchUser currUser, Resources res) {
@@ -1055,7 +1044,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mImageSwitcher.setVisibility(View.GONE);
             mCurrentUser = null;
             refreshActionBarTitles();
-            mOnlineSetter.setOnline(false);
+            mSetter.setOnline(false);
             mUserInfoStatus.setText(Static.EMPTY);
         }
     }
@@ -1096,53 +1085,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void hideEmptySearchDialog() {
         mRetryView.setVisibility(View.GONE);
     }
-
-    private boolean mIsHide;
-    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (mIsHide) {
-                showControls();
-            } else {
-                hideControls();
-            }
-        }
-    };
-
-    private Handler mUnlockHandler = new Handler() {
-        @Override
-        public void handleMessage(android.os.Message msg) {
-            unlockControls();
-        }
-    };
-
-
-    private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
-
-        @Override
-        public void onPageSelected(int position) {
-
-            if (position + mController.getItemsOffsetByConnectionType() == (mLoadedCount - 1)) {
-                final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
-
-                if (mNeedMore && mCanSendAlbumReq) {
-                    mCanSendAlbumReq = false;
-                    sendAlbumRequest(data);
-                }
-            }
-
-            setCounter(mImageSwitcher.getSelectedPosition());
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-        }
-    };
 
     private void sendAlbumRequest(final Photos data) {
         if (mUserSearchList == null)
@@ -1201,24 +1143,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mResourcesMoney.setText(Integer.toString(CacheProfile.money));
     }
 
-    private OnUsersListEventsListener mSearchListener = new OnUsersListEventsListener() {
-        @Override
-        public void onEmptyList(UsersList usersList) {
-            if (!mNewFilter) {
-                lockControls();
-                updateData(false);
-            }
-        }
-
-        @Override
-        public void onPreload(UsersList usersList) {
-            if (!mNewFilter) {
-                updateData(true);
-            }
-        }
-
-    };
-
     private void showEmptySearchDialog() {
         Debug.log("Search:: showEmptySearchDialog");
         EasyTracker.sendEvent("EmptySearch", "Show", "", 0L);
@@ -1226,7 +1150,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);
         setActionBarTitles(getString(R.string.general_dating));
-        mOnlineSetter.setOnline(false);
+        mSetter.setOnline(false);
         mFragmentSwitcherListener.onShowActionBar();
     }
 
@@ -1243,6 +1167,42 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private class FilterHandler extends DataApiHandler<DatingFilter> {
+
+        @Override
+        protected void success(DatingFilter filter, IApiResponse response) {
+            CacheProfile.dating = filter;
+            updateFilterData();
+            updateData(false);
+        }
+
+        @Override
+        protected DatingFilter parseResponse(ApiResponse response) {
+            return new DatingFilter(response.getJsonResult());
+        }
+
+        @Override
+        public void fail(int codeError, IApiResponse response) {
+            showEmptySearchDialog();
+            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void always(IApiResponse response) {
+            super.always(response);
+            mNewFilter = false;
+        }
+
+        @Override
+        public void cancel() {
+            super.cancel();
+            mProgressBar.setVisibility(View.GONE);
+            if (mCurrentUser != null) {
+                unlockControls();
+            }
         }
     }
 }

@@ -295,6 +295,15 @@ public class FormInfo {
         }
     }
 
+    public boolean isCounterVisible(int titleId) {
+        switch (titleId) {
+            case R.array.form_main_about_status:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public int getMaxCharacters(int titleId) {
         int result;
         switch (titleId) {
@@ -305,7 +314,7 @@ public class FormInfo {
                 result = 3;
                 break;
             default:
-                result = Integer.MAX_VALUE;
+                result = App.getAppOptions().getUserAboutMeMaxLength();
                 break;
         }
         return result;

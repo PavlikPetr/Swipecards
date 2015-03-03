@@ -3,6 +3,8 @@ package com.topface.billing;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 
+import org.onepf.oms.appstore.googleUtils.Purchase;
+
 /**
  * Абстрактный фрагмент без реализации платежей
  */
@@ -32,7 +34,7 @@ public abstract class AbstractBillingFragment extends BaseFragment {
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    abstract public void onPurchased(final String productId);
+    abstract public void onPurchased(final Purchase product);
 
     abstract public void onSubscriptionSupported();
 

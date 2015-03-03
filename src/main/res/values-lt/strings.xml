@@ -15,6 +15,7 @@
     <string name="dating_switch_button">Daugiau…</string>
     <string name="dating_prev_button">Ankstesnis</string>
     <string name="dating_chat_button">Paplepėti</string>
+    <string name="waiting_a_products">Prašome, palaukite. Mes įkrauname parduodamas prekes</string>
     <string name="likes_background_text">Nėra simpatijų</string>
     <string name="visitors_background_text">Nėra svečių</string>
     <string name="chat_background_text">Įeinančių pranešimų nėra</string>
@@ -151,11 +152,13 @@
     <string name="general_city">Miestas</string>
     <string name="general_dating">Pažintys</string>
     <string name="general_likes">Aš patinku</string>
+    <string name="general_sympathies">Simpatijos</string>
     <string name="general_sympathy">Simpatija</string>
     <string name="general_delight">Susižavėjimas</string>
     <string name="general_mutual">Abipusiai</string>
     <string name="general_dialogs">Dialogai</string>
     <string name="general_visitors">Svečiai</string>
+    <string name="general_visitors_tab_views">peržiūros</string>
     <string name="general_profile">Profilis</string>
     <string name="general_settings">Nustatymai</string>
     <string name="auth_btn_vk">Įeiti per VK</string>
@@ -177,18 +180,26 @@
     <string name="chat_sexuality_out">Jūs įvertinote seksualumą.</string>
     <string name="chat_wink_in">Jums mirktelėjo.</string>
     <string name="chat_wink_out">Jūs mirktelėjote.</string>
+    <string name="filter_search">Paieška</string>
     <string name="filter_filter">Filtras</string>
     <string name="filter_age_string">Nuo %1$d iki %2$d</string>
     <string name="filter_only_beautiful">Tiktai gražūs</string>
     <string name="filter_extra_parameters">Papildomi parametrai</string>
     <string name="filter_age">Amžius</string>
     <string name="filter_online">Online</string>
+    <string name="filter_age_start_prefix">Nuo %s</string>
+    <string name="filter_age_end_prefix">iki %s</string>
     <string name="filter_cities_all">Visuose miestuose</string>
     <string name="buying_header_title">Pirkimai</string>
     <plurals name="buying_gift_you_need_coins">
         <item quantity="few">Tam, kad išsiųsti dovaną, pirkite dar %d monetas</item>
         <item quantity="other">Tam, kad išsiųsti dovaną, pirkite dar %d monetų</item>
         <item quantity="one">Tam, kad išsiųsti dovaną, pirkite dar %d monetą</item>
+    </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="few">Kad išsiųsti susižavjimą, pirkite dar %d monetas</item>
+        <item quantity="other">Kad išsiųsti susižavjimą, pirkite dar %d monetų</item>
+        <item quantity="one">Kad išsiųsti susižavjimą, pirkite dar %d monetą</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="few">Kad pamatyti, kam jūs patikote, pirkite dar %d monetas</item>
@@ -200,8 +211,18 @@
         <item quantity="other">Tam, kad jus visi pamatytų, pirkite dar %d monetų</item>
         <item quantity="one">Tam, kad jus visi pamatytų, pirkite dar %d monetą</item>
     </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="few">Jums nepakanka %d monetų</item>
+        <item quantity="other">Jums nepakanka %d monetų</item>
+        <item quantity="one">Jums nepakanka %d monetos</item>
+    </plurals>
     <string name="buying_default_message">Jūs galite siųsti dovanas ir susižavėjimus už monetas</string>
     <string name="buying_money">Monetų pirkimas</string>
+    <string name="gifts_romantic">Romantiškos</string>
+    <string name="gifts_friends">Draugiškos</string>
+    <string name="gifts_present">Sveikinimų</string>
+    <string name="gifts_title">Pasirinkite dovaną</string>
+    <string name="gifts_send_btn">Išsiųsti dovaną</string>
     <string name="profile_header_title">Mano profilis</string>
     <string name="album_add_photo_title">Pridėti foto</string>
     <string name="profile_add_album">Pasirinkti iš esančių</string>
@@ -225,11 +246,6 @@
     <string name="edit_set_as_main">Padaryti pagrindine</string>
     <string name="edit_delete">Pašalinti</string>
     <string name="edit_restore">Atstatyti</string>
-    <string name="gifts_romantic">Romantiškos</string>
-    <string name="gifts_friends">Draugiškos</string>
-    <string name="gifts_present">Sveikinimų</string>
-    <string name="gifts_title">Pasirinkite dovaną</string>
-    <string name="gifts_send_btn">Išsiųsti dovaną</string>
     <string name="form_not_specified">Nenurodyta</string>
     <string name="form_main">Pagrindinis</string>
     <string name="form_physique">Fiziniai duomenys</string>
@@ -250,6 +266,8 @@
     <string name="settings_messages">Pranešimai</string>
     <string name="settings_guests">Svečiai</string>
     <string name="settings_help">Pagalba</string>
+    <string name="settings_faq">Klausimai ir atsakymai</string>
+    <string name="settings_faq_title">Tikėtina, kad problema jau yra aprašyta, pažiūrėkite skyriuje \"Klausimai ir atsakymai\"</string>
     <string name="settings_account">Paskyra</string>
     <string name="settings_feedback">Palikti atsiliepimą</string>
     <string name="settings_about">Apie programą</string>
@@ -284,7 +302,6 @@
     </plurals>
     <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad pradėtumėte malonią pažintį</string>
     <string name="general_edit_profile_message">Prašome užpildyti visus būtinus anketos laukelius</string>
-    <string name="general_premium_access_error">Šiai funkcijai būtina turėti Premium</string>
     <string name="general_search_null_response_error">Nieko nerasta. Pabandykite pakeisti filtrus</string>
     <string name="change_filters">Pakeisti filtrus</string>
     <string name="reset_filter">Perkrauti</string>
@@ -301,6 +318,7 @@
     <string name="rate_popup_error">Jūs turite nurodyti, kiek žvaigždučių suteikiate mūsų programai</string>
     <string name="feedback_popup_title">Jūs prastai įvertinote. Papasakokite, kas jums nepatinka programoje. Padėkite mums tapti geresniais. Ačiū!</string>
     <string name="settings_melody">Pranešimo melodija</string>
+    <string name="settings_loading_photo">Fotografijų išankstinė įkrova</string>
     <string name="edit_refresh_status">Atnaujinti statusą</string>
     <string name="ban_title">Sveikiname! Jūs užbanintas</string>
     <string name="ban_title_forever">Sveikiname! Jūs užbanintas visam laikui</string>
@@ -496,6 +514,7 @@
     <string name="likes_can_help_you">Simpatijos padės susipažinti</string>
     <string name="general_get_dating">Pažindintis</string>
     <string name="settings_select_language">Programos kalbos pasirinkimas</string>
+    <string name="settings_select_preload_photo_type">Pasirinkite, kada fotografijų išankstinė įkrova įjungta</string>
     <string name="restart_to_change_locale">Kad pasikeistų kalba, programa bus perkrauta</string>
     <string name="locale_changing">Kalbos pakeitimas</string>
     <plurals name="you_were_liked">
@@ -604,4 +623,22 @@
     <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Pasirinktas maksimalus vartotojų kiekis</string>
     <string name="logout_if_email_already_registred">Vartotojas su tokiu el. paštu jau egzistuoja. Jeigu tai jūsų el. paštas, jums būtina išeiti iš dabartinės paskyros ir įeiti į paskyrą %s</string>
+    <string name="recover_password_instructions">Jūsų el. pašto adresu išsiųstas laiškas su slaptažodžio atstatymo instrukcija</string>
+    <string name="email_changing">el. pašto keitimas</string>
+    <string name="hint_faces_filter">Keikite paieškos parametrus ir pažindinkitės su įdomiais žmonėmis</string>
+    <string name="hint_faces_buy_like">Kuo daugiau pas jus simpatijų, tuo dažniau jus įvertina. Nepamirškite papildyti simpatijų atsargos.</string>
+    <string name="hint_myprofile_buy_vip">Pirkite VIP-statusą ir mėgaukitės neapribotu bendravimu</string>
+    <string name="pull_to_refresh_pull_label">Patempkite, kad atnaujinti…</string>
+    <string name="pull_to_refresh_release_label">Paleiskite, kad atnaujinti…</string>
+    <string name="messaging_block_buy_vip">Dialogo pratęsimui būtinas VIP\u2011statusas</string>
+    <string name="pull_to_refresh_refreshing_label">Kraunasi…</string>
+    <string name="user_added_to_black_list">Vartotojas įtrauktas į juodąjį sąrašą</string>
+    <string name="user_deleted_from_black_list">Vartotojas pašalintas iš juodojo sąrašo</string>
+    <string name="user_added_to_bookmark">Vartotojas įtrauktas į išrinktuosius</string>
+    <string name="user_deleted_from_bookmark">Vartotojas pašalintas iš išrinktųjų</string>
+    <string name="preload_photo_type_wifi_3g">WiFi ir 3G</string>
+    <string name="preload_photo_type_wifi">Tik WiFi</string>
+    <string name="preload_photo_type_always_on">Visada įjungta</string>
+    <string name="preload_photo_type_preload_off">Įjungta</string>
+    <string name="wrong_time_popup_button">Atverti nustatymus</string>
 </resources>

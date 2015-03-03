@@ -110,6 +110,8 @@
     <string name="buying_header_title">Vásárlás</string>
     <string name="buying_default_message">Küldhetsz ajándékokat és csodálatot érmékért</string>
     <string name="buying_money">Érme vásárlás</string>
+    <string name="gifts_title">Válasszon ajándékot</string>
+    <string name="gifts_send_btn">Küldjön ajándékot</string>
     <string name="profile_header_title">Saját profil</string>
     <string name="profile_add_album">Válassz abból, amid van</string>
     <string name="profile_add_camera">Kép készítése</string>
@@ -131,8 +133,6 @@
     <string name="edit_set_as_main">Főoldalnak</string>
     <string name="edit_delete">Eltávolít</string>
     <string name="edit_restore">Helyreállítás</string>
-    <string name="gifts_title">Válasszon ajándékot</string>
-    <string name="gifts_send_btn">Küldjön ajándékot</string>
     <string name="form_not_specified">Nincs megadva</string>
     <string name="form_main">Fő</string>
     <string name="form_physique">Testalkat</string>
@@ -184,7 +184,6 @@
     </plurals>
     <string name="novice_sympathy">Küldj szimpátiát azoknak, akik \ntényleg tetszenek,\nígy el tudsz kezdeni egy élvezetes ismerkedést.</string>
     <string name="general_edit_profile_message">Kérjük, töltse ki a profil szükséges mezőit</string>
-    <string name="general_premium_access_error">Prémiumnak kell lennie ennek a funkciónak a használatához</string>
     <string name="general_search_null_response_error">Semmit sem találtam. Próbáld meg módosítani a szűrőket</string>
     <string name="change_filters">Szűrők változtatása</string>
     <string name="general_sex">Nem</string>

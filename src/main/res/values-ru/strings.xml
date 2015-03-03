@@ -188,6 +188,7 @@
     <string name="general_dialogs">Диалоги</string>
 
     <string name="general_visitors">Гости</string>
+    <string name="general_visitors_tab_views">просмотры</string>
     <string name="general_profile">Профиль</string>
     <string name="general_settings">Настройки</string>
 
@@ -217,12 +218,16 @@
     <string name="chat_wink_out">Вы подмигнули.</string>
 
     <!-- Filter -->
+    <string name="filter_search">Поиск</string>
     <string name="filter_filter">Фильтр</string>
     <string name="filter_age_string">От %1$d до %2$d</string>
     <string name="filter_only_beautiful">Только красивые</string>
     <string name="filter_extra_parameters">Дополнительные параметры</string>
     <string name="filter_age">Выбор возраста</string>
     <string name="filter_online">Онлайн</string>
+    <string name="filter_age_start_prefix">От %s</string>
+    <string name="filter_age_end_prefix">до %s</string>
+
 
     <string name="filter_cities_all">По всем городам</string>
 
@@ -233,6 +238,12 @@
         <item quantity="few">Чтобы отправить подарок, купите еще %d монеты</item>
         <item quantity="many">Чтобы отправить подарок, купите еще %d монет</item>
         <item quantity="other">Чтобы отправить подарок, купите еще %d монет</item>
+    </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="one">Чтобы отправить восхищение, купите еще %d монету</item>
+        <item quantity="few">Чтобы отправить восхищение, купите еще %d монеты</item>
+        <item quantity="many">Чтобы отправить восхищение, купите еще %d монет</item>
+        <item quantity="other">Чтобы отправить восхищение, купите еще %d монет</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="one">Чтобы увидеть, кому вы нравитесь, купите еще %d монету</item>
@@ -246,8 +257,21 @@
         <item quantity="many">Чтобы вас все увидели, купите еще %d монет</item>
         <item quantity="other">Чтобы вас все увидели, купите еще %d монет</item>
     </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="one">Вам не хватает %d монеты</item>
+        <item quantity="few">Вам не хватает %d монет</item>
+        <item quantity="many">Вам не хватает %d монет</item>
+        <item quantity="other">Вам не хватает %d монет</item>
+    </plurals>
     <string name="buying_default_message">Вы можете отправлять подарки и восхищения за монеты</string>
     <string name="buying_money">Покупка монет</string>
+
+    <!-- Gifts -->
+    <string name="gifts_romantic">Романтика</string>
+    <string name="gifts_friends">Дружба</string>
+    <string name="gifts_present">Поздравления</string>
+    <string name="gifts_title">Выберите подарок</string>
+    <string name="gifts_send_btn">Отправить подарок</string>
 
     <!-- Profile  -->
     <string name="profile_header_title">Мой профиль</string>
@@ -279,13 +303,6 @@
     <string name="edit_restore">Восстановить</string>
 
     <!-- Albums -->
-    <!-- Gifts -->
-    <string name="gifts_romantic">Романтика</string>
-    <string name="gifts_friends">Дружба</string>
-
-    <string name="gifts_present">Поздравления</string>
-    <string name="gifts_title">Выберите подарок</string>
-    <string name="gifts_send_btn">Отправить подарок</string>
 
     <!-- Map -->
 
@@ -366,7 +383,6 @@
     </string>
 
     <string name="general_edit_profile_message">Пожалуйста, заполните необходимые поля анкеты</string>
-    <string name="general_premium_access_error">Для данной функции необходим VIP-статус</string>
 
     <string name="general_search_null_response_error">Ничего не найдено. Попробуйте изменить фильтры</string>
     <string name="change_filters">Изменить фильтры</string>
@@ -386,6 +402,8 @@
     <string name="feedback_popup_title">Вы поставили низкую оценку. Расскажите, что вам не нравится в приложении. Помогите нам стать лучше. Спасибо!</string>
 
     <string name="settings_melody">Мелодия уведомления</string>
+
+    <string name="settings_loading_photo">Предзагрузка фотографий</string>
 
     <string name="edit_refresh_status">Обновить статус</string>
 
@@ -466,6 +484,7 @@
     <string name="popup_version_cancel">Напомнить позже</string>
     <string name="general_version_not_supported">Ваша версия приложения устарела и больше не поддерживается. Пожалуйста, обновите приложение</string>
     <string name="default_price_format">Итого: %.2f USD</string>
+    <string name="default_price_format_extended">Итого: %1$.2f %2$s</string>
     <string name="dating_online_only">%s, только онлайн</string>
     <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже %d%%:</string>
     <string name="general_gift">Подарок</string>
@@ -642,6 +661,7 @@
     <string name="likes_can_help_you">Симпатии помогут познакомиться</string>
     <string name="general_get_dating">Знакомиться</string>
     <string name="settings_select_language">Выбор языка приложения</string>
+    <string name="settings_select_preload_photo_type">Выберите когда включена предзагрузка фотографий</string>
     <string name="restart_to_change_locale">Для смены языка приложение будет перезапущено</string>
     <string name="locale_changing">Смена языка</string>
 
@@ -763,9 +783,44 @@
     <string name="billing_item_already_owned">Ваша предыдущая покупка в обработке, пожалуйста подождите</string>
     <string name="dialog">Переписка</string>
     <string name="reply">Ответить</string>
-    <string name="measurement_unit_weight">кг.</string>
-    <string name="measurement_unit_height">см.</string>
+    <string name="measurement_unit_weight">кг</string>
+    <string name="measurement_unit_height">см</string>
     <string name="maximum_number_of_users">Выбрано максимальное количестово пользователей</string>
     <string name="logout_if_email_already_registred">Пользователь с таким e-mail уже существует. Если это ваш e-mail, то вам необходимо выйти из текущего аккаунта и зайти в аккаунт %s</string>
     <string name="recover_password_instructions">На ваш e-mail отправлено письмо с инструкцией по восстановлению пароля</string>
+    <string name="email_changing">Изменение e-mail</string>
+    <string name="hint_faces_filter">Изменяйте параметры поиска и знакомьтесь с интересными людьми</string>
+    <string name="hint_faces_buy_like">Чем больше у вас симпатий, тем чаще вас оценивают. Не забывайте пополнять запас симпатий.</string>
+    <string name="hint_myprofile_buy_vip">Купите VIP-статус и наслаждайтесь безграничным общением</string>
+    <string name="pull_to_refresh_pull_label">Потяните для обновления…</string>
+    <string name="pull_to_refresh_release_label">Отпустите для обновления…</string>
+    <string name="messaging_block_buy_vip">Для продолжения диалога необходим VIP\u2011статус</string>
+    <string name="pull_to_refresh_refreshing_label">Загрузка…</string>
+    <string name="user_added_to_black_list">Пользователь добавлен в черный список</string>
+    <string name="user_deleted_from_black_list">Пользователь удален из черного списка</string>
+    <string name="user_added_to_bookmark">Пользователь добавлен в избранные</string>
+    <string name="user_deleted_from_bookmark">Пользователь удален из избранных</string>
+
+    <string name="preload_photo_type_wifi_3g">WiFi и 3G</string>
+    <string name="preload_photo_type_wifi">Только WiFi</string>
+    <string name="preload_photo_type_always_on">Включена всегда</string>
+    <string name="preload_photo_type_preload_off">Выключена</string>
+
+    <string name="wrong_time_popup_text">Не удалось установить безопасное соединение с сервером.\nВозможно, дата или время на вашем устройстве указаны неверно.</string>
+    <string name="wrong_time_popup_button">Открыть настройки</string>
+
+
+    <!-- ServicesManager-->
+    <!-- Google -->
+    <string name="google_service_general_title">Уведомления не доступны</string>
+    <string name="google_service_disabled_title">У вас отключены Сервисы Google Play, которые необходимы для работы уведомлений.</string>
+    <string name="google_service_disabled_button">Включить</string>
+    <string name="google_service_missing_title">У вас не устанвлены Сервисы Google Play, которые необходимы для работы уведомлений.</string>
+    <string name="google_service_missing_button">Установить</string>
+    <string name="google_service_version_update_required_title">У вас установлена старая версия Сервисов Google Play, для корректной работы уведомлений, пожалуйста, обновите.</string>
+    <string name="google_service_version_update_required_button">Обновить</string>
+    <string name="google_invalid_account_title">Проверьте данные вашего аккаунта Google или свяжитесь с технической поддержкой Google.</string>
+    <string name="google_sign_in_account_title">У вас не добавлен Google аккаунт, вы должны авторизоваться, если хотите получать уведомления.</string>
+    <string name="google_sign_in_account_button">Авторизоваться</string>
+    <string name="google_unavailable_services_title">К сожалению, уведомления не поддерживаются на вашем устройстве.</string>
 </resources>

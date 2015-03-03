@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
@@ -120,11 +119,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected FeedListData<FeedLike> getFeedList(JSONObject response) {
         return new FeedListData<>(response, FeedLike.class);
-    }
-
-    @Override
-    protected Drawable getBackIcon() {
-        return getResources().getDrawable(R.drawable.likes_back_icon);
     }
 
     @Override
@@ -320,12 +314,17 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         ImageViewRemote ivOne = (ImageViewRemote) currentView.findViewById(R.id.ivOne);
         ImageViewRemote ivTwo = (ImageViewRemote) currentView.findViewById(R.id.ivTwo);
         ImageViewRemote ivThree = (ImageViewRemote) currentView.findViewById(R.id.ivThree);
-        ivOne.setResourceSrc(CacheProfile.dating.sex == Static.GIRL ?
-                R.drawable.likes_male_one : R.drawable.likes_female_one);
-        ivTwo.setResourceSrc(CacheProfile.dating.sex == Static.GIRL ?
-                R.drawable.likes_male_two : R.drawable.likes_female_two);
-        ivThree.setResourceSrc(CacheProfile.dating.sex == Static.GIRL ?
-                R.drawable.likes_male_three : R.drawable.likes_female_three);
+
+        // if profile still not cached - show girls by default
+        if (CacheProfile.dating != null && CacheProfile.dating.sex == Static.GIRL) {
+            ivOne.setResourceSrc(R.drawable.likes_male_one);
+            ivTwo.setResourceSrc(R.drawable.likes_male_two);
+            ivThree.setResourceSrc(R.drawable.likes_male_three);
+        } else {
+            ivOne.setResourceSrc(R.drawable.likes_female_one);
+            ivTwo.setResourceSrc(R.drawable.likes_female_two);
+            ivThree.setResourceSrc(R.drawable.likes_female_three);
+        }
         int visibility = visible ? View.VISIBLE : View.GONE;
         ivOne.setVisibility(visibility);
         ivTwo.setVisibility(visibility);
@@ -343,22 +342,18 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected int getContextMenuLayoutRes() {
-        return R.menu.feed_context_menu;
-    }
-
-    @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteLikesRequest(ids, getActivity());
     }
 
     @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_feed_filtered;
+    protected int getUnreadCounter() {
+        return CacheProfile.unread_likes;
     }
 
     @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_LIKE_UPDATE;
     }
+
 }
