@@ -7,7 +7,6 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.widget.WebDialog;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.social.AuthToken;
@@ -23,20 +22,21 @@ public class FacebookRequestWindowAction extends DailyPopupAction {
 
     @Override
     protected boolean firstStartShow() {
-        App.getUserConfig().setFacebookRequestWindowShow(System.currentTimeMillis());
+        mUserConfig.setFacebookRequestWindowShow(System.currentTimeMillis());
         return false;
     }
 
     @Override
     public boolean isApplicable() {
         return loginOrNotLogin() && isFacebook() && isValidFacebookRequestWindowSkip()
-                && isTimeoutEnded(mFasebookRequests.fasebookRequestsTimeout);
+                && isTimeoutEnded(mFasebookRequests.fasebookRequestsTimeout,
+                mUserConfig.getFacebookRequestWondowShow());
     }
 
     @Override
     public void callInBackground() {
-        App.getUserConfig().setFacebookRequestWindowShow(System.currentTimeMillis());
-        App.getUserConfig().saveConfig();
+        mUserConfig.setFacebookRequestWindowShow(System.currentTimeMillis());
+        mUserConfig.saveConfig();
     }
 
     @Override
@@ -58,9 +58,9 @@ public class FacebookRequestWindowAction extends DailyPopupAction {
             @Override
             public void onComplete(Bundle bundle, FacebookException e) {
                 if (e instanceof FacebookOperationCanceledException) {
-                    App.getUserConfig().setFacebookRequestSkip(App.getUserConfig().getFacebookRequestSkip() + 1);
+                    mUserConfig.setFacebookRequestSkip(mUserConfig.getFacebookRequestSkip() + 1);
                 } else {
-                    App.getUserConfig().setFacebookRequestSkip(mFasebookRequests.maxAttempts + 1);
+                    mUserConfig.setFacebookRequestSkip(mFasebookRequests.maxAttempts + 1);
                 }
             }
         });
@@ -74,7 +74,7 @@ public class FacebookRequestWindowAction extends DailyPopupAction {
     }
 
     private boolean isValidFacebookRequestWindowSkip() {
-        return App.getUserConfig().getFacebookRequestSkip()
+        return mUserConfig.getFacebookRequestSkip()
                 <= mFasebookRequests.maxAttempts;
     }
 

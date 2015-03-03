@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import com.topface.topface.App;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
-import com.topface.topface.utils.config.UserConfig;
 
 
 public class DatingLockPopupAction extends DailyPopupAction {
@@ -39,7 +38,8 @@ public class DatingLockPopupAction extends DailyPopupAction {
 
     @Override
     public boolean isApplicable() {
-        return mOptions.notShown.enabledDatingLockPopup
-                && isTimeoutEnded(mNotShown.datingLockPopupTimeout);
+        return mNotShown.enabledDatingLockPopup
+                && isTimeoutEnded(mNotShown.datingLockPopupTimeout,
+                mUserConfig.getDatingLockPopupRedirect());
     }
 }

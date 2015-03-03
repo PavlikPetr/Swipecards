@@ -200,6 +200,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             }
         }
     }
+
     @Override
     public void addFirst(ArrayList<History> data, boolean more) {
         compareAndUpdateData(data);

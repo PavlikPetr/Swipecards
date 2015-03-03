@@ -461,8 +461,8 @@ public class App extends Application {
 
     private void initAcra() {
 //        if (!BuildConfig.DEBUG) {
-            ACRA.init(this);
-            ACRA.getErrorReporter().setReportSender(new HockeySender());
+        ACRA.init(this);
+        ACRA.getErrorReporter().setReportSender(new HockeySender());
 //        } else {
 //            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
 //            try {
