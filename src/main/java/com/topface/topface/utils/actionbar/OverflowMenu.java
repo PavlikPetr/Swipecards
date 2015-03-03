@@ -358,12 +358,16 @@ public class OverflowMenu {
         }
     }
 
+    private void showBuyVipActivity(int resourceId) {
+        mActivity.startActivityForResult(
+                PurchasesActivity.createVipBuyIntent(mActivity.getString(resourceId), "UserProfileFragment"),
+                PurchasesActivity.INTENT_BUY_VIP);
+    }
+
     private void onClickOpenChatAction() {
         initAllFields();
         if (!mIsChatAvailable) {
-            mActivity.startActivityForResult(
-                    PurchasesActivity.createVipBuyIntent(mActivity.getString(R.string.chat_block_not_mutual), "UserProfileFragment"),
-                    PurchasesActivity.INTENT_BUY_VIP);
+            showBuyVipActivity(R.string.chat_block_not_mutual);
         } else {
             openChat();
         }
@@ -479,9 +483,7 @@ public class OverflowMenu {
             return;
         }
         if (!mIsAddToFavoritsAvailable) {
-            mActivity.startActivityForResult(
-                    PurchasesActivity.createVipBuyIntent(mActivity.getString(R.string.add_to_favorite_block_not_vip), "UserProfileFragment"),
-                    PurchasesActivity.INTENT_BUY_VIP);
+            showBuyVipActivity(R.string.add_to_favorite_block_not_vip);
         } else {
             addToFavorite();
         }
