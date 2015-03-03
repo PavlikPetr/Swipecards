@@ -58,6 +58,7 @@ public class OverflowMenu {
     private Intent mOpenChatIntent;
     private Boolean mIsMutual;
     private Boolean mIsChatAvailable;
+    private Boolean mIsAddToFavoritsAvailable;
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -361,7 +362,7 @@ public class OverflowMenu {
         initAllFields();
         if (!mIsChatAvailable) {
             mActivity.startActivityForResult(
-                    PurchasesActivity.createVipBuyIntent(mActivity.getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
+                    PurchasesActivity.createVipBuyIntent(mActivity.getString(R.string.chat_block_not_mutual), "UserProfileFragment"),
                     PurchasesActivity.INTENT_BUY_VIP);
         } else {
             openChat();
@@ -423,7 +424,7 @@ public class OverflowMenu {
         request.exec();
     }
 
-    private void onClickAddToBookmarkAction() {
+    private void addToFavorite() {
         initAllFields();
         if (mIsBookmarked == null || mUserId == null) {
             return;
@@ -470,6 +471,20 @@ public class OverflowMenu {
         }
         setBookmarkedState(null);
         request.exec();
+    }
+
+    private void onClickAddToBookmarkAction() {
+        initAllFields();
+        if (mIsAddToFavoritsAvailable == null) {
+            return;
+        }
+        if (!mIsAddToFavoritsAvailable) {
+            mActivity.startActivityForResult(
+                    PurchasesActivity.createVipBuyIntent(mActivity.getString(R.string.add_to_favorite_block_not_vip), "UserProfileFragment"),
+                    PurchasesActivity.INTENT_BUY_VIP);
+        } else {
+            addToFavorite();
+        }
     }
 
     private void showBlackListToast(boolean value) {
@@ -544,6 +559,7 @@ public class OverflowMenu {
             mOpenChatIntent = mOverflowMenuFields.getOpenChatIntent();
             mIsMutual = mOverflowMenuFields.isMutual();
             mIsChatAvailable = mOverflowMenuFields.isOpenChatAvailable();
+            mIsAddToFavoritsAvailable = mOverflowMenuFields.isAddToFavoritsAvailable();
         }
     }
 

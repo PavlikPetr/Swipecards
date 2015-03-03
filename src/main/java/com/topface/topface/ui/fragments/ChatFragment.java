@@ -1020,6 +1020,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
 
                     @Override
+                    public boolean isAddToFavoritsAvailable() {
+                        return true;
+                    }
+
+                    @Override
                     public void clickSendGift() {
                         // empty processor. Haven't item "Send gift" in current fragment
                     }

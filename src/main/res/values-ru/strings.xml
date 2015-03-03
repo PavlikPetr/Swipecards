@@ -669,6 +669,7 @@
     <string name="or">или</string>
     <string name="settings_delete_account">Удалить аккаунт</string>
     <string name="chat_block_not_mutual">Начать общение с пользователем можно, если он отправил вам симпатию или у вас есть VIP-статус</string>
+    <string name="add_to_favorite_block_not_vip">Только VIP пользователи могут добавлять в избранное с экрана знакомств</string>
     <string name="delete_account_are_you_sure">Вы точно уверены?</string>
     <string name="delete">Удалить</string>
     <string name="delete_account_warning">Внимание! Вы пытаетесь удалить свой профиль в Topface.</string>
