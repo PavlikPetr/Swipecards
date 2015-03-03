@@ -44,6 +44,9 @@ import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.
  * broadcast receiver and remove interface OverflowMenuUser
  */
 public class OverflowMenu {
+
+    private final static String INTENT_BUY_VIP_FROM = "UserProfileFragment";
+
     private MenuItem mBarActions;
     private OverflowMenuType mOverflowMenuType;
     private Activity mActivity;
@@ -360,7 +363,7 @@ public class OverflowMenu {
 
     private void showBuyVipActivity(int resourceId) {
         mActivity.startActivityForResult(
-                PurchasesActivity.createVipBuyIntent(mActivity.getString(resourceId), "UserProfileFragment"),
+                PurchasesActivity.createVipBuyIntent(mActivity.getString(resourceId), INTENT_BUY_VIP_FROM),
                 PurchasesActivity.INTENT_BUY_VIP);
     }
 
