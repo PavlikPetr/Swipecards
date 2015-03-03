@@ -37,8 +37,6 @@ public class UserConfig extends AbstractConfig {
     public static final String DATA_NOVICE_BUY_SYMPATHY = "novice_dating_buy_sympathy";
     public static final String DATA_NOVICE_BUY_SYMPATHY_DATE = "novice_dating_buy_symathy_date_tag";
     public static final String DATA_NOVICE_SYMPATHY = "novice_dating_sympathy";
-    public static final String DATA_LIKE_CLOSING_LAST_TIME = "data_closings_likes_last_date";
-    public static final String DATA_MUTUAL_CLOSING_LAST_TIME = "data_closings_mutual_last_date";
     public static final String DATA_BONUS_LAST_SHOW_TIME = "data_bonus_last_show_time";
     public static final String NOTIFICATIONS_MESSAGES_STACK = "notifications_messages_stack";
     public static final String NOTIFICATION_REST_MESSAGES = "notifications_rest_messages";
@@ -58,6 +56,7 @@ public class UserConfig extends AbstractConfig {
     public static final String TOPFACE_OFFERWALL_REDIRECT_COUNTER = "topface_offerwall_redirect_counter";
     public static final String REMAINED_DAILY_PUBNATIVE_SHOWS = "remained_feed_ad_shows";
     public static final String LAST_DAY_PUBNATIVE_SHOWN = "current_day_for_showing_feed_ad";
+    private static final String APPSFLYER_FIRST_PAY = "appsflyer_first_purchase";
     private String mUnique;
 
     public UserConfig(Context context) {
@@ -97,10 +96,6 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, DATA_NOVICE_BUY_SYMPATHY_DATE, 0L);
         // flag show if "send sympathy hint" is passed
         addField(settingsMap, DATA_NOVICE_SYMPATHY, true);
-        // date of last likes closings processing
-        addField(settingsMap, DATA_LIKE_CLOSING_LAST_TIME, 0L);
-        // date of last mutual closings processing
-        addField(settingsMap, DATA_MUTUAL_CLOSING_LAST_TIME, 0L);
         // список сообщений для сгруппированных нотификаций (сейчас группируются только сообщения)
         addField(settingsMap, NOTIFICATIONS_MESSAGES_STACK, Static.EMPTY);
         // количество нотификаций, которые пишем в поле "еще %d сообщений"
@@ -132,6 +127,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, LAST_DAY_PUBNATIVE_SHOWN, 0L);
         // validate user avatar
         addField(settingsMap, IS_AVATAR_AVAILABLE, false);
+        //Флаг первой покупки
+        addField(settingsMap, APPSFLYER_FIRST_PAY, false);
     }
 
     @Override
@@ -148,6 +145,25 @@ public class UserConfig extends AbstractConfig {
                 PROFILE_CONFIG_SETTINGS + Static.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE
         );
+    }
+
+    /**
+     * Return first purchase flag
+     *
+     * @return true if first purchase has already been made
+     */
+    public boolean getFirstPayFlag() {
+        return getBooleanField(getSettingsMap(), APPSFLYER_FIRST_PAY);
+    }
+
+    /**
+     * Set first purchase flag
+     *
+     * @param firstPurchaseMark first purchase flag
+     * @return true on success
+     */
+    public boolean setFirstPayFlag(boolean firstPurchaseMark) {
+        return setField(getSettingsMap(), APPSFLYER_FIRST_PAY, firstPurchaseMark);
     }
 
     /**
@@ -299,46 +315,6 @@ public class UserConfig extends AbstractConfig {
      */
     public Boolean setNoviceBuySympathyDate(long lastTime) {
         return setField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY_DATE, lastTime);
-    }
-
-    // =======================Closings=======================
-
-    /**
-     * Sets date of last processing of likes closings
-     *
-     * @param lastTime date in unix time
-     * @return true on success
-     */
-    public boolean setLikesClosingsLastTime(long lastTime) {
-        return setField(getSettingsMap(), DATA_LIKE_CLOSING_LAST_TIME, lastTime);
-    }
-
-    /**
-     * Date of last processing of likes closings
-     *
-     * @return date in unix time
-     */
-    public long getLikesClosingsLastTime() {
-        return getLongField(getSettingsMap(), DATA_LIKE_CLOSING_LAST_TIME);
-    }
-
-    /**
-     * Sets date of last processing of mutual closings
-     *
-     * @param lastTime date in unix time
-     * @return true on success
-     */
-    public boolean setMutualClosingsLastTime(long lastTime) {
-        return setField(getSettingsMap(), DATA_MUTUAL_CLOSING_LAST_TIME, lastTime);
-    }
-
-    /**
-     * Date of last processing of mutual closings
-     *
-     * @return date in unix time
-     */
-    public long getMutualClosingsLastTime() {
-        return getLongField(getSettingsMap(), DATA_MUTUAL_CLOSING_LAST_TIME);
     }
 
     /**

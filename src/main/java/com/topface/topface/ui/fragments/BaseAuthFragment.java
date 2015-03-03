@@ -115,7 +115,8 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 mHasAuthorized = true;
                 //Отправляем статистику в AppsFlyer
                 try {
-                    AppsFlyerLib.sendTrackingWithEvent(App.getContext(), "registration", "");
+                    AppsFlyerLib.sendTrackingWithEvent(App.getContext(), App.getContext()
+                            .getResources().getString(R.string.appsflyer_registration), "");
                 } catch (Exception e) {
                     Debug.error("AppsFlyer Exception", e);
                 }

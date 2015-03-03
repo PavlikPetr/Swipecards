@@ -389,6 +389,20 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 if (TextUtils.equals(purchase.getItemType(), OpenIabHelper.ITEM_TYPE_INAPP)) {
                     App.getOpenIabHelperManager().consumeAsync(purchase, OpenIabFragment.this);
                 }
+                UserConfig userConfig = App.getUserConfig();
+                if (!userConfig.getFirstPayFlag()) {
+                    try {
+                        AppsFlyerLib.sendTrackingWithEvent(
+                                context,
+                                App.getContext().getResources().getString(R.string.appsflyer_first_pay),
+                                Double.toString(verify.revenue)
+                        );
+                    } catch (Exception e) {
+                        Debug.error("AppsFlyer exception", e);
+                    }
+                    userConfig.setFirstPayFlag(true);
+                    userConfig.saveConfig();
+                }
                 onPurchased(purchase);
                 if (isNeedSendPurchasesStatistics()) {
                     //Статистика AppsFlyer
@@ -396,7 +410,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                         try {
                             AppsFlyerLib.sendTrackingWithEvent(
                                     context,
-                                    "purchase",
+                                    App.getContext().getResources().getString(R.string.appsflyer_purchase),
                                     Double.toString(verify.revenue)
                             );
                         } catch (Exception e) {

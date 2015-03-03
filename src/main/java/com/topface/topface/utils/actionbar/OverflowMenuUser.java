@@ -22,4 +22,6 @@ public interface OverflowMenuUser {
     boolean isOpenChatAvailable();
 
     Boolean isMutual();
+
+    void clickSendGift();
 }
