@@ -38,6 +38,7 @@ import java.util.ArrayList;
 public class OwnProfileFragment extends AbstractProfileFragment {
     private AddPhotoHelper mAddPhotoHelper;
     private BroadcastReceiver mAddPhotoReceiver;
+    private IPhotoTakerWithDialog mPhotoTaker;
     private BroadcastReceiver mUpdateProfileReceiver;
     private IPhotoTakerWithDialog mPhotoTaker;
     private Handler mHandler = new Handler() {
@@ -62,6 +63,11 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                 CacheProfile.sendUpdateProfileBroadcast();
                 Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+                // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
+                if (CacheProfile.photos.size() == 0) {
+                    App.getConfig().getUserConfig().setUserAvatarAvailable(false);
+                    App.getConfig().getUserConfig().saveConfig();
+                }
                 Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }
         }
@@ -102,7 +108,7 @@ public class OwnProfileFragment extends AbstractProfileFragment {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         setProfile(CacheProfile.getProfile());
         TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
-        if (CacheProfile.photo == null && mAddPhotoHelper != null && takePhotoDialog == null) {
+        if (CacheProfile.photo == null && mAddPhotoHelper != null && takePhotoDialog == null && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
             mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
         }
     }
@@ -168,6 +174,12 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA:
                     if (mAddPhotoHelper != null) {
                         mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+                    }
+                    break;
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
+                    if (mAddPhotoHelper != null) {
+                        mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false));
                     }
                     break;
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:

@@ -248,6 +248,7 @@ public class FullscreenController {
             public void success(final Banner data, IApiResponse response) {
                 if (data.action.equals(Banner.ACTION_URL)) {
                     if (showFullscreenBanner(data.parameter)) {
+                        TopfaceAdStatistics.sendFullscreenShown(data);
                         isFullScreenBannerVisible = true;
                         addLastFullscreenShowedTime();
                         final View fullscreenViewGroup = mActivity.getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
@@ -267,6 +268,7 @@ public class FullscreenController {
                                 hideFullscreenBanner(bannerContainer);
                                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(data.parameter));
                                 mActivity.startActivity(intent);
+                                TopfaceAdStatistics.sendFullscreenClicked(data);
                             }
                         });
 

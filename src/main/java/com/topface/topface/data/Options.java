@@ -47,6 +47,8 @@ import java.util.Set;
 @SuppressWarnings("UnusedDeclaration")
 public class Options extends AbstractData {
 
+    public static final String OPTIONS_RECEIVED_ACTION = "com.topface.topface.options_received_action";
+
     public final static String INNER_MAIL_CONST = "mail";
     public final static String INNER_APNS_CONST = "apns";
     public final static String INNER_SEPARATOR = ":";
@@ -101,6 +103,7 @@ public class Options extends AbstractData {
     public long popup_timeout;
     public boolean blockUnconfirmed;
     public boolean blockChatNotMutual;
+    public boolean scruffy;
     public Closing closing = new Closing();
     public BlockSympathy blockSympathy = new BlockSympathy();
     public BlockPeopleNearby blockPeople = new BlockPeopleNearby();
@@ -277,6 +280,7 @@ public class Options extends AbstractData {
 
             fallbackTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_ADMOB);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);
+            scruffy = response.optBoolean("scruffy", false);
             JSONObject bonusObject = response.optJSONObject("bonus");
             if (bonusObject != null) {
                 bonus.enabled = bonusObject.optBoolean("enabled");
@@ -664,6 +668,8 @@ public class Options extends AbstractData {
                 dailyShows = jsonFeedAd.optInt("dailyShows");
                 positionMin = jsonFeedAd.optInt("positionMin");
                 positionMax = jsonFeedAd.optInt("positionMax");
+            } else {
+                enabled = false;
             }
         }
 

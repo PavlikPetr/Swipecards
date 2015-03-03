@@ -4,18 +4,13 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
-import com.topface.topface.utils.http.ConnectionManager;
+import com.topface.topface.requests.transport.IApiTransport;
+import com.topface.topface.requests.transport.MultipartHttpApiTransport;
 import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -26,42 +21,15 @@ abstract public class MultipartApiRequest extends ApiRequest {
     public static final int MAX_SUBREQUESTS_NUMBER = 10;
 
     protected LinkedHashMap<String, IApiRequest> mRequests = new LinkedHashMap<>();
+    private volatile MultipartHttpApiTransport mDefaultTransport;
 
     public MultipartApiRequest(Context context) {
         super(context);
     }
 
     @Override
-    protected boolean writeData(HttpURLConnection connection, IConnectionConfigureListener listener) throws IOException {
-        //Формируем базовую часть запроса (Заголовки, json данные)
-        String requests = getRequestsAsString();
-        //Переводим в байты
-        byte[] requestsBytes = requests.getBytes();
-        //Это просто закрывающие данные запроса с boundary и переносами строк
-        byte[] endBytes = getMultipartEnding().getBytes();
-        //Считаем общую длинну получившегося запроса
-        int contentLength = requestsBytes.length + endBytes.length;
-        //Устанавливаем длину данных и Создаем исходящее подключение к серверу
-        HttpUtils.setContentLengthAndConnect(connection, listener, contentLength);
-        //Открываем поток на запись данных
-        OutputStream outputStream = connection.getOutputStream();
-        //Записываем наши данные
-        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(
-                outputStream
-        ));
-        dos.write(requestsBytes);
-        dos.write(endBytes);
-        dos.flush();
-        dos.close();
-        outputStream.close();
-        Debug.logJson(
-                ConnectionManager.TAG,
-                "MULTIPART REQUEST >>> " +
-                        getApiUrl() +
-                        " rev:" + App.getAppConfig().getApiRevision(),
-                requests
-        );
-        return true;
+    public String getRequestBodyData() {
+        return getRequestsAsString() + getMultipartEnding();
     }
 
     @Override
@@ -131,12 +99,17 @@ abstract public class MultipartApiRequest extends ApiRequest {
 
     @Override
     public String getServiceName() {
+        StringBuilder name = new StringBuilder("multipart:");
+        for (IApiRequest request : mRequests.values()) {
+            name.append(":").append(request.getServiceName());
+        }
         //имя сервиса нам тоже по умолчанию не нужно
-        return null;
+        return name.toString();
     }
 
+
     @Override
-    protected String getContentType() {
+    public String getContentType() {
         return "multipart/" + getRequestType() + "; boundary=" + getBoundary();
     }
 
@@ -155,6 +128,7 @@ abstract public class MultipartApiRequest extends ApiRequest {
         }
     }
 
+
     @Override
     public void exec() {
         // Check number of subrequests. One position is reserved for optional auth request.
@@ -167,6 +141,10 @@ abstract public class MultipartApiRequest extends ApiRequest {
     }
 
     private void sendHandlerMessageToRequests(MultipartApiResponse response, boolean onlyCompleted) {
+        if (response == null) {
+            Debug.error(new IllegalArgumentException("MultipartApiResponse is null"));
+            return;
+        }
         HashMap<String, ApiResponse> responses = response.getResponses();
         for (Map.Entry<String, ApiResponse> entry : responses.entrySet()) {
             String key = entry.getKey();
@@ -180,6 +158,7 @@ abstract public class MultipartApiRequest extends ApiRequest {
             }
         }
     }
+
 
     public MultipartApiRequest addRequest(IApiRequest request) {
         if (request != null) {
@@ -204,7 +183,7 @@ abstract public class MultipartApiRequest extends ApiRequest {
     protected String getRequestsAsString() {
         String requestString = "";
         for (IApiRequest request : mRequests.values()) {
-            requestString += getPartHeaders(CONTENT_TYPE) + request.toPostData();
+            requestString += getPartHeaders(request.getContentType()) + request.getRequestBodyData();
         }
         return requestString;
     }
@@ -214,12 +193,20 @@ abstract public class MultipartApiRequest extends ApiRequest {
     }
 
     @Override
-    public IApiResponse readResponse() throws IOException {
-        //Multipart запрос читает данные из подключения, мы не получаем данные заранее
-        MultipartApiResponse multipartApiResponse = new MultipartApiResponse(mURLConnection);
-        //Отпправляем удачные ответы в подзапросы, что бы в случае ошибки одного из запросов не переотправлять остальные
-        sendHandlerMessageToRequests(multipartApiResponse, true);
-        return multipartApiResponse;
+    public IApiResponse sendRequestAndReadResponse() throws Exception {
+        IApiResponse response = super.sendRequestAndReadResponse();
+        if (response != null && response.isCompleted()) {
+            sendHandlerMessageToRequests((MultipartApiResponse) response, true);
+        }
+        return response;
+    }
+
+    @Override
+    protected IApiTransport getDefaultTransport() {
+        if (mDefaultTransport == null) {
+            mDefaultTransport = new MultipartHttpApiTransport();
+        }
+        return mDefaultTransport;
     }
 
     @Override

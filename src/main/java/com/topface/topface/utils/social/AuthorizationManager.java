@@ -41,6 +41,7 @@ public class AuthorizationManager {
 
     public static final int RESULT_LOGOUT = 666;
 
+
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
 
     public void onCreate(Bundle savedInstanceState) {

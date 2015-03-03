@@ -48,6 +48,7 @@ public class UserConfig extends AbstractConfig {
     public static final String SETTINGS_PRELOAD_PHOTO = "settings_preload_photo";
     public static final String SETTINGS_GCM_VIBRATION = "settings_c2dm_vibration";
     public static final String SETTINGS_GCM = "settings_c2dm";
+    public static final String IS_AVATAR_AVAILABLE = "is_avatar_available";
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
     public static final String SETTINGS_GCM_LED = "settings_gcm_led";
     public static final String SILENT = "silent";
@@ -129,6 +130,8 @@ public class UserConfig extends AbstractConfig {
         // Время начала текущих суток для учёта количества показов рекламы pubnative
         // Обновляется автоматически при попытке получить оставшиеся показы pubnative
         addField(settingsMap, LAST_DAY_PUBNATIVE_SHOWN, 0L);
+        // validate user avatar
+        addField(settingsMap, IS_AVATAR_AVAILABLE, false);
     }
 
     @Override
@@ -189,11 +192,11 @@ public class UserConfig extends AbstractConfig {
         return getStringField(getSettingsMap(), DATA_PIN_CODE);
     }
 
-    public void setDatingLockPopupShow(long lastTime) {
+    public void setDatingLockPopupRedirect(long lastTime) {
         setField(getSettingsMap(), DATING_LOCK_POPUP_TIME, lastTime);
     }
 
-    public long getDatingLockPopupShow() {
+    public long getDatingLockPopupRedirect() {
         return getLongField(getSettingsMap(), DATING_LOCK_POPUP_TIME);
     }
 
@@ -377,15 +380,16 @@ public class UserConfig extends AbstractConfig {
     /**
      * @return Default text for dating screen message
      */
-    public String getDefaultDatingMessage() {
+    public String getDatingMessage() {
         return getStringField(getSettingsMap(), DEFAULT_DATING_MESSAGE);
     }
 
     /**
-     * Sets new default text for dating screen message
+     * Sets new default text for dating screen message and it's locale
      */
-    public void setDefaultDatingMessage(String message) {
-        setField(getSettingsMap(), DEFAULT_DATING_MESSAGE, message);
+    public void setDatingMessage(String message) {
+        SettingsMap settingsMap = getSettingsMap();
+        setField(settingsMap, DEFAULT_DATING_MESSAGE, message);
     }
 
     /**
@@ -432,6 +436,20 @@ public class UserConfig extends AbstractConfig {
      */
     public void setLEDEnabled(boolean enabled) {
         setField(getSettingsMap(), SETTINGS_GCM_LED, enabled);
+    }
+
+    /**
+     * @return true if user set avatar at empty album
+     */
+    public boolean isUserAvatarAvailable() {
+        return getBooleanField(getSettingsMap(), IS_AVATAR_AVAILABLE);
+    }
+
+    /**
+     * Sets avatar available state for popup "Set photo"
+     */
+    public void setUserAvatarAvailable(boolean enabled) {
+        setField(getSettingsMap(), IS_AVATAR_AVAILABLE, enabled);
     }
 
     /**

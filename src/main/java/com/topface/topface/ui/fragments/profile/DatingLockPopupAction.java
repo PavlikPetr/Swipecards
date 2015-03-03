@@ -6,7 +6,6 @@ import com.topface.topface.App;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 
 
@@ -25,7 +24,7 @@ public class DatingLockPopupAction extends AbstractStartAction {
     private boolean isTimeoutEnded() {
         Options options = CacheProfile.getOptions();
         if (options.notShown.enabledDatingLockPopup) {
-            long lastTime = App.getUserConfig().getDatingLockPopupShow();
+            long lastTime = App.getUserConfig().getDatingLockPopupRedirect();
             if (lastTime == 0) {
                 //показываем попап первый раз
                 return true;
@@ -40,10 +39,6 @@ public class DatingLockPopupAction extends AbstractStartAction {
 
     @Override
     public void callInBackground() {
-        UserConfig userConfig = App.getUserConfig();
-        userConfig.setDatingLockPopupShow(System.currentTimeMillis());
-        userConfig.saveConfig();
-
     }
 
     @Override

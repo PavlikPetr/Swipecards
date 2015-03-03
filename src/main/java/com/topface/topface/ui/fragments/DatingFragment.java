@@ -12,7 +12,8 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -39,6 +40,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.NoviceLikes;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.search.CachableSearchList;
@@ -75,6 +77,8 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -152,8 +156,29 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private int mLoadedCount;
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
 
+    private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
         @Override
-        public void onPageSelected(int position) {
+        public void onReceive(Context context, Intent intent) {
+            UserConfig userConfig = App.getUserConfig();
+            /*
+            Если нет стандартного сообщения в конфиге, устанавливаем из опций
+             */
+            if (
+                    mDatingInstantMessageController != null &&
+                            TextUtils.isEmpty(userConfig.getDatingMessage())
+                    ) {
+                InstantMessageFromSearch message = CacheProfile.getOptions().instantMessageFromSearch;
+                mDatingInstantMessageController.setInstantMessageText(message.getText());
+                userConfig.setDatingMessage(message.getText());
+                userConfig.saveConfig();
+            }
+        }
+    };
+
+    private INavigationFragmentsListener mFragmentSwitcherListener;
+    private AnimationHelper mAnimationHelper;
+    private AlbumLoadController mController;
+    private ActionBarOnlineSetterDelegate mOnlineSetter;
 
             if (position + mController.getItemsOffsetByConnectionType() == (mLoadedCount - 1)) {
                 final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
@@ -286,6 +311,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mOptionsReceiver,
+                new IntentFilter(Options.OPTIONS_RECEIVED_ACTION));
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (mSetter != null) {
@@ -299,6 +331,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 .registerReceiver(mProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
 
         updateResources();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mOptionsReceiver);
     }
 
     @Override

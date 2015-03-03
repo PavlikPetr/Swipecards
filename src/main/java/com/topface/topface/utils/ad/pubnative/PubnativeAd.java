@@ -14,6 +14,7 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.NativeAd;
@@ -85,6 +86,7 @@ public class PubnativeAd extends NativeAd {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(click_url));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 App.getContext().startActivity(intent);
+                TopfaceAdStatistics.sendPubnativeClick();
             }
         });
 
@@ -117,6 +119,7 @@ public class PubnativeAd extends NativeAd {
                 }
                 if (response != null) {
                     Debug.log("NativeAd: Impression beacon sent for pubnative ad " + title);
+                    TopfaceAdStatistics.sendPubnativeImpression();
                 }
                 break;
             }

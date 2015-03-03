@@ -29,12 +29,12 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
         if (action == null) return;
         switch (action) {
             case ACTION_TEST_NETWORK_ERRORS_ON:
-                config.setApiUrl(Static.API_500_ERROR_URL, "");
+                config.setApiUrl(Static.API_500_ERROR_URL);
                 config.saveConfig();
                 Toast.makeText(context, "Network errors: ON", Toast.LENGTH_LONG).show();
                 break;
             case ACTION_TEST_NETWORK_ERRORS_OFF:
-                config.setApiUrl(Static.API_URL, null);
+                config.setApiUrl(Static.API_URL);
                 config.saveConfig();
                 Toast.makeText(context, "Network errors: OFF", Toast.LENGTH_LONG).show();
                 break;
@@ -43,7 +43,7 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
                 UserNotificationManager.getInstance()
                         .cancelNotification(notificationId);
                 config.setTestNetwork(false);
-                config.setApiUrl(Static.API_URL, null);
+                config.setApiUrl(Static.API_URL);
                 config.saveConfig();
                 Toast.makeText(context, "All requests will be OK. No more errors.", Toast.LENGTH_LONG).show();
                 break;

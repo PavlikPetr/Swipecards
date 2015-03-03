@@ -21,7 +21,6 @@ public class ApiResponse implements IApiResponse {
     public String method;
     public String id;
 
-
     /**
      * Конструиерует объект ответа от сервера с указаной ошибкой
      *

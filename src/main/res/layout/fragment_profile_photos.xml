@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"/>
 
-            <GridView
+            <com.topface.topface.ui.GridViewWithHeaderAndFooter
                 android:id="@+id/usedGrid"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"

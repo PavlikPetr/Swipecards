@@ -39,6 +39,8 @@ import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -135,6 +137,10 @@ public class Utils {
     }
 
     public static void startOldVersionPopup(final Activity activity) {
+        startOldVersionPopup(activity, true);
+    }
+
+    public static void startOldVersionPopup(final Activity activity, boolean cancelable) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
             @Override
@@ -142,12 +148,15 @@ public class Utils {
                 Utils.goToMarket(activity);
             }
         });
-        builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
+        if (cancelable) {
+            builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+        }
         builder.setMessage(R.string.general_version_not_supported);
+        builder.setCancelable(cancelable);
         builder.create().show();
     }
 
@@ -293,6 +302,35 @@ public class Utils {
             transition.enableTransitionType(LayoutTransition.CHANGING);
         }
     }
+
+    public static String getCarrierName() {
+        if (!TextUtils.isEmpty(mCarrier)) {
+            return mCarrier;
+        }
+        TelephonyManager telephonyManager = (TelephonyManager) App.getContext()
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager == null) {
+            return null;
+        }
+        mCarrier = telephonyManager.getSimOperatorName();
+        return mCarrier;
+    }
+
+    public static String getNameAndAge(String userName, int userAge) {
+        String name = TextUtils.isEmpty(userName) ? "" : userName;
+        String divider = TextUtils.isEmpty(name) ? "" : ", ";
+        String age = userAge > 0 ? Integer.toString(userAge) : "";
+        divider = TextUtils.isEmpty(age) ? "" : divider;
+        return name.concat(divider).concat(age);
+    }
+
+    public static String optString(JSONObject json, String key) {
+        if (json.isNull(key))
+            return null;
+        else
+            return json.optString(key, null);
+    }
+}
 
     /**
      * Устанавливает фон для ImageView если передать -1 будет установлен null
