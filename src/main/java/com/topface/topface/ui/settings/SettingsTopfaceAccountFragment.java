@@ -213,8 +213,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mBtnChangeEmail.setOnClickListener(this);
         mBtnLogout = (Button) root.findViewById(R.id.btnLogout);
         mBtnLogout.setOnClickListener(this);
-        Button mBtnDelete = (Button) root.findViewById(R.id.btnDeleteAccount);
-        mBtnDelete.setOnClickListener(this);
+        root.findViewById(R.id.btnDeleteAccount).setOnClickListener(this);
         mBtnCodeSend = (Button) root.findViewById(R.id.btnCodeSend);
         mBtnCodeSend.setOnClickListener(this);
         mBtnCodeWasSend = (Button) root.findViewById(R.id.btnCodeWasSend);
