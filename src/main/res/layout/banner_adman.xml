@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ru.mail.android.adman.ads.AdmanView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/admanView"
+    android:layout_width="320dp"
+    android:layout_height="50dp"
+    android:visibility="gone" />
