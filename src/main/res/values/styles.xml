@@ -176,7 +176,6 @@
         <item name="android:focusableInTouchMode">true</item>
     </style>
 
-    <style name="DatingButtonsText" parent="ShadowDatingButtons">
     <style name="DatingButtonsText">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">9sp</item>
@@ -732,7 +731,7 @@
 
     // наследуются стили Widget
 
-    <style name="Widget.Topface"/>
+    <style name="Widget.Topface" />
 
     <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big">
         <item name="android:background">@drawable/btn_gray_selector</item>

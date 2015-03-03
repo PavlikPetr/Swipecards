@@ -48,7 +48,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private Button mBtnChange;
     private Button mBtnChangeEmail;
     private Button mBtnLogout;
-    private Button mBtnDelete;
     private Button mBtnCodeSend;
     private Button mBtnCodeWasSend;
 
@@ -214,7 +213,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mBtnChangeEmail.setOnClickListener(this);
         mBtnLogout = (Button) root.findViewById(R.id.btnLogout);
         mBtnLogout.setOnClickListener(this);
-        mBtnDelete = (Button) root.findViewById(R.id.btnDeleteAccount);
+        Button mBtnDelete = (Button) root.findViewById(R.id.btnDeleteAccount);
         mBtnDelete.setOnClickListener(this);
         mBtnCodeSend = (Button) root.findViewById(R.id.btnCodeSend);
         mBtnCodeSend.setOnClickListener(this);
@@ -462,5 +461,13 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     public void onDestroy() {
         super.onDestroy();
         Utils.hideSoftKeyboard(getActivity(), mEditText);
+    }
+
+    private void onProfileUpdated() {
+        if (CacheProfile.emailConfirmed) {
+            Toast.makeText(App.getContext(), R.string.general_email_success_confirmed, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(App.getContext(), R.string.general_email_not_confirmed, Toast.LENGTH_SHORT).show();
+        }
     }
 }
