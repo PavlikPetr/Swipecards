@@ -115,7 +115,8 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 mHasAuthorized = true;
                 //Отправляем статистику в AppsFlyer
                 try {
-                    AppsFlyerLib.sendTrackingWithEvent(App.getContext(), "registration", "");
+                    AppsFlyerLib.sendTrackingWithEvent(App.getContext(), App.getContext()
+                            .getResources().getString(R.string.appsflyer_registration), "");
                 } catch (Exception e) {
                     Debug.error("AppsFlyer Exception", e);
                 }
@@ -183,12 +184,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 showRetryView(getString(R.string.general_maintenance), strBuilder.toString(), request);
                 break;
             case ErrorCodes.CODE_OLD_APPLICATION_VERSION:
-                fillRetryView(getString(R.string.general_version_not_supported), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Utils.goToMarket(getActivity());
-                    }
-                }, getString(R.string.popup_version_update));
+                Utils.startOldVersionPopup(getActivity());
                 break;
             default:
                 showRetryView(getString(R.string.general_data_error), strBuilder.toString(), request);

@@ -3,7 +3,9 @@ package com.topface.topface.utils.ad.pubnative;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import com.google.gson.JsonSyntaxException;
 import com.topface.framework.JsonUtils;
+import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.topface.App;
 import com.topface.topface.utils.CacheProfile;
@@ -40,16 +42,20 @@ public class PubnativeAdvertising extends Advertising {
     @Override
     protected List<NativeAd> parseResponse(String response) {
         List<NativeAd> nativeAds = new LinkedList<>();
-        PubnativeResponse pubnativeResponse = JsonUtils.fromJson(response, PubnativeResponse.class);
-        if (TextUtils.equals(pubnativeResponse.getStatus(), "ok")) {
-            PubnativeAd[] ads = pubnativeResponse.getAds();
-            if (ads != null) {
-                for (PubnativeAd ad : ads) {
-                    if (ad.isValid()) {
-                        nativeAds.add(ad);
+        try {
+            PubnativeResponse pubnativeResponse = JsonUtils.fromJson(response, PubnativeResponse.class);
+            if (TextUtils.equals(pubnativeResponse.getStatus(), "ok")) {
+                PubnativeAd[] ads = pubnativeResponse.getAds();
+                if (ads != null) {
+                    for (PubnativeAd ad : ads) {
+                        if (ad.isValid()) {
+                            nativeAds.add(ad);
+                        }
                     }
                 }
             }
+        } catch (JsonSyntaxException ex) {
+            Debug.error(ex.toString());
         }
         return nativeAds;
     }

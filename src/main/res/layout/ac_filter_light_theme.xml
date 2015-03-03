@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:my="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/filter_scroll"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#FFFFFF"
-    android:fillViewport="true">
+            xmlns:my="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/filter_scroll"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#FFFFFF"
+            android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -16,7 +16,7 @@
         <Spinner
             android:id="@+id/loFilterSex"
             style="@style/FilterSpinner"
-            android:layout_width="fill_parent" />
+            android:layout_width="fill_parent"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -41,14 +41,14 @@
                         android:id="@+id/loFilterAgeStart"
                         style="@style/FilterSpinner"
                         android:layout_width="0dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
 
                     <Spinner
                         android:id="@+id/loFilterAgeEnd"
                         style="@style/FilterSpinner"
                         android:layout_width="0dp"
                         android:layout_marginRight="0dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
                 </LinearLayout>
 
                 <com.topface.topface.ui.views.CitySearchView
@@ -60,7 +60,7 @@
                     android:maxLines="1"
                     android:selectAllOnFocus="true"
                     android:singleLine="true"
-                    my:request_key="CITY_SEARCH_FROM_FILTER_ACTIVITY" />
+                    my:request_key="CITY_SEARCH_FROM_FILTER_ACTIVITY"/>
 
             </LinearLayout>
 
@@ -71,57 +71,57 @@
                 android:layout_gravity="bottom"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:background="@drawable/ic_home_selector" />
+                android:background="@drawable/ic_home_selector"/>
         </LinearLayout>
 
         <CheckBox
             android:id="@+id/loFilterOnline"
             style="@style/FilterCheckBox"
             android:layout_marginTop="40dp"
-            android:text="@string/filter_only_online" />
+            android:text="@string/filter_only_online"/>
 
         <CheckBox
             android:id="@+id/loFilterBeautiful"
             style="@style/FilterCheckBox"
             android:layout_marginBottom="24dp"
             android:layout_marginTop="21dp"
-            android:text="@string/filter_only_beautiful" />
+            android:text="@string/filter_only_beautiful"/>
 
         <include
             android:id="@+id/loFilterDatingStatus"
             layout="@layout/filter_light_edit_form"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <include
             android:id="@+id/loFilterMarriage"
             layout="@layout/filter_light_edit_form"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <include
             android:id="@+id/loFilterCharacter"
             layout="@layout/filter_light_edit_form"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <include
             android:id="@+id/loFilterAlcohol"
             layout="@layout/filter_light_edit_form"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <include
             android:id="@+id/loFilterFinance"
             layout="@layout/filter_light_edit_form"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <include
             android:id="@+id/loFilterShowOff"
             layout="@layout/filter_light_edit_form"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 </ScrollView>

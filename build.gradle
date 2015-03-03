@@ -90,14 +90,12 @@ android {
 
     buildTypes {
         release {
-            //noinspection GroovyAssignabilityCheck
             signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources false
         }
         //Специальный тип сборки для тестирования отделом QA,
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
-        //noinspection GroovyAssignabilityCheck
         qa.initWith(buildTypes.debug)
         qa {
             buildConfigField "long", "BUILD_TIME", "${getTimestamp()}L";
@@ -131,8 +129,9 @@ android {
                 "InflateParams", //Проверка того, что  передан view root при inflate. Отключен, т.к. все предупреждения касаются inflate в ListView, где нет root view
                 "UnusedQuantity", //Предупреждение о не используемой форме в переводах. Мы используем zero во всех языках, поэтому нам не актуально
                 "ClickableViewAccessibility", //Предупреждение о том, что нужно определить performClick, если переопределяешь onTouchEvent
-                "MissingQuantity"
-        //Временно отключена проверка из-за того, что нет many формы в польском и украинском в дальнейшем поправим (пока many = other)
+                "MissingQuantity" //Временно отключена проверка из-за того,
+        //что нет many формы в польском и украинском в дальнейшем поправим
+        //(пока many = other)
     }
 }
 
@@ -145,11 +144,14 @@ dependencies {
     compile "com.google.android.gms:play-services-ads:6.5.87"
     //All jar libs
     compile fileTree(dir: 'libs', exclude: 'amazon/*.jar', include: '*.jar')
+
+    //Library for WebSocket and other network requests
+    compile 'com.koushikdutta.async:androidasync:2.0.5'
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
     compile project(':libs:statistics-android')
     //Third party libs
-    compile('ch.acra:acra:4.6.0RC1') {
+    compile('ch.acra:acra:4.6.0RC2') {
         //Удаляем предоставляемыю acra зависимость org.json, так как она все рвно не нужна
         //и на нее ругается gradle
         exclude group: 'org.json'
@@ -157,7 +159,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
 
     //OpenIAB
-    compile 'org.onepf:openiab:0.9.8.1'
+    compile 'org.onepf:openiab:0.9.8.4'
 
     compile project(':libs:Android-ViewPagerIndicator')
     compile project(':libs:PullToRefresh')
@@ -168,7 +170,7 @@ dependencies {
     //Аннотации вроде @NonNull и @*Res для обозначения переменных
     compile 'com.android.support:support-annotations:21.0.2'
     //Для Амазона нужна библиотека для поддержки in-app покупок
-    amazonCompile fileTree(dir: 'libs/amazon/', include: '*.jar')
+    amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
 
     compile project(':libs:tf-offerwall:sdk')
 

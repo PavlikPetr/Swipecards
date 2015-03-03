@@ -1,8 +1,7 @@
 package com.topface.topface.data;
 
-import android.text.TextUtils;
-
 import com.topface.topface.Static;
+import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,8 +69,8 @@ public class FeedUser extends AbstractData implements SerializableToJson {
     public void fillData(JSONObject user) {
         this.id = user.optInt("id");
 
-        this.first_name = user.optString("firstName");
         this.status = user.optString("status");
+        this.first_name = Utils.optString(user, "firstName");
         this.age = user.optInt("age");
         this.online = user.optBoolean("online");
         this.city = new City(user.optJSONObject("city"));
@@ -93,13 +92,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
     }
 
     public String getNameAndAge() {
-        String result;
-        if (!TextUtils.isEmpty(first_name) && age > 0) {
-            result = first_name + ", " + age;
-        } else {
-            result = first_name;
-        }
-        return result;
+        return Utils.getNameAndAge(first_name, age);
     }
 
     @Override

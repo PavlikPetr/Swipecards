@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -39,8 +40,10 @@ import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.NoviceLikes;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.search.CachableSearchList;
 import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
@@ -76,6 +79,7 @@ import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.social.AuthToken;
@@ -176,6 +180,27 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onPageScrollStateChanged(int arg0) {
         }
     };
+
+
+    private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            UserConfig userConfig = App.getUserConfig();
+            /*
+            Если нет стандартного сообщения в конфиге, устанавливаем из опций
+             */
+            if (
+                    mDatingInstantMessageController != null &&
+                            TextUtils.isEmpty(userConfig.getDatingMessage())
+                    ) {
+                InstantMessageFromSearch message = CacheProfile.getOptions().instantMessageFromSearch;
+                mDatingInstantMessageController.setInstantMessageText(message.getText());
+                userConfig.setDatingMessage(message.getText());
+                userConfig.saveConfig();
+            }
+        }
+    };
+
     private boolean mNewFilter;
     private OnUsersListEventsListener mSearchListener = new OnUsersListEventsListener() {
         @Override
@@ -286,6 +311,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mOptionsReceiver,
+                new IntentFilter(Options.OPTIONS_RECEIVED_ACTION));
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (mSetter != null) {
@@ -299,6 +331,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 .registerReceiver(mProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
 
         updateResources();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mOptionsReceiver);
     }
 
     @Override
@@ -582,7 +620,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initInstantMessageController(KeyboardListenerLayout root) {
         mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
-                this, this,
+                this, this, CacheProfile.getOptions().instantMessageFromSearch.getText(),
                 mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
             @Override
             public void sendLike() {
@@ -672,7 +710,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
-                    Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, DatingFragment.class, getActivity());
+                    Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, getActivity(),isChatAvailable());
                     startActivityForResult(intent, UserProfileActivity.INTENT_USER_PROFILE);
                     EasyTracker.sendEvent("Dating", "Additional", "Profile", 1L);
                 }
@@ -704,6 +742,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             default:
         }
+    }
+
+    private boolean isChatAvailable() {
+        return !(!CacheProfile.premium && CacheProfile.getOptions().blockChatNotMutual && !mCurrentUser.isMutualPossible);
     }
 
     private void sendSympathy() {

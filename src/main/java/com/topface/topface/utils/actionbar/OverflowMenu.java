@@ -44,7 +44,6 @@ import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.
  * broadcast receiver and remove interface OverflowMenuUser
  */
 public class OverflowMenu {
-
     private MenuItem mBarActions;
     private OverflowMenuType mOverflowMenuType;
     private Activity mActivity;
@@ -58,8 +57,7 @@ public class OverflowMenu {
     private Integer mUserId;
     private Intent mOpenChatIntent;
     private Boolean mIsMutual;
-    private boolean mIsChatDisableForNoVip = true;  // block chat if user not premium and blockChatNotMutual=true
-
+    private Boolean mIsChatAvailable;
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -94,14 +92,13 @@ public class OverflowMenu {
         registerBroadcastReceiver();
     }
 
-    public OverflowMenu(Activity activity, MenuItem barActions, RateController rateController, int profileId, boolean isChatAvailable, ApiResponse savedResponse) {
+    public OverflowMenu(Activity activity, MenuItem barActions, RateController rateController, int profileId, ApiResponse savedResponse) {
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.PROFILE_OVERFLOW_MENU;
         mActivity = activity;
         mRateController = rateController;
         mProfileId = profileId;
         mSavedResponse = savedResponse;
-        mIsChatDisableForNoVip = isChatAvailable;
         registerBroadcastReceiver();
     }
 
@@ -116,7 +113,6 @@ public class OverflowMenu {
         COMPLAIN_ACTION(6, R.string.general_complain),
         ADD_TO_BOOKMARK_ACTION(7, R.string.general_bookmarks_add, R.string.general_bookmarks_delete),
         OPEN_PROFILE_FOR_EDITOR_STUB(8, R.string.editor_profile_admin);
-
         private int mId;
         private int mFirstResourceId;
         private int mSecondResourceId;
@@ -178,7 +174,7 @@ public class OverflowMenu {
 
     public boolean isCurrentIdOverflowMenuItem(int itemId) {
         OverflowMenuItem currentOverflowMenuItem = findOverflowMenuItemById(itemId);
-        return currentOverflowMenuItem == null ? false : true;
+        return currentOverflowMenuItem != null;
     }
 
     private void initProfileOverflowMenu() {
@@ -363,10 +359,7 @@ public class OverflowMenu {
 
     private void onClickOpenChatAction() {
         initAllFields();
-        if (mIsMutual == null) {
-            return;
-        }
-        if (!CacheProfile.premium && CacheProfile.getOptions().blockChatNotMutual && mIsChatDisableForNoVip && !mIsMutual) {
+        if (!mIsChatAvailable) {
             mActivity.startActivityForResult(
                     PurchasesActivity.createVipBuyIntent(mActivity.getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
                     PurchasesActivity.INTENT_BUY_VIP);
@@ -549,7 +542,8 @@ public class OverflowMenu {
             mIsSympathySent = mOverflowMenuFields.getSympathySentValue();
             mUserId = mOverflowMenuFields.getUserId();
             mOpenChatIntent = mOverflowMenuFields.getOpenChatIntent();
-            mIsMutual = mOverflowMenuFields.getMutualValue();
+            mIsMutual = mOverflowMenuFields.isMutual();
+            mIsChatAvailable = mOverflowMenuFields.isOpenChatAvailable();
         }
     }
 
@@ -562,9 +556,5 @@ public class OverflowMenu {
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(mUpdateActionsReceiver);
         mOverflowMenuFields = null;
         mActivity = null;
-    }
-
-    public void setChatAvailable(boolean isChatAvailable) {
-        mIsChatDisableForNoVip = isChatAvailable;
     }
 }

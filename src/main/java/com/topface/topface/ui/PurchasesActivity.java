@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
-import android.view.MenuItem;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.offerwall.common.OfferwallPayload;
@@ -71,11 +70,6 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mOfferwallOpenedReceiver);
         mTopfaceOfferwallRedirect.setComplited(false);
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return (showTopfaceOfferwall() || showBonus()) || super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -238,5 +232,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected boolean onPreFinish() {
+        return !(showTopfaceOfferwall() || showBonus()) && super.onPreFinish();
     }
 }

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
@@ -129,7 +130,11 @@ public class ProfileFormListAdapter extends BaseAdapter {
                 holder.title.setText(item.title.toUpperCase(Locale.getDefault()));
                 if (item.value != null && !TextUtils.isEmpty(item.value.trim()) && item.dataId != FormItem.NOT_SPECIFIED_ID) {
                     holder.state.setImageResource(R.drawable.user_cell);
-                    holder.value.setText(item.value);
+                    if (App.getContext().getResources().getString(R.string.form_main_about_status_2).equals(item.title)) {
+                        holder.value.setText(item.value);
+                    } else {
+                        holder.value.setText(item.value.toLowerCase(Locale.getDefault()));
+                    }
                     holder.value.setVisibility(View.VISIBLE);
                     holder.fill.setVisibility(View.GONE);
                 } else {

@@ -14,7 +14,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.appsflyer.AppsFlyerLib;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
+import com.topface.billing.OpenIabHelperManager;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
@@ -23,7 +25,7 @@ import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
-import com.topface.topface.data.FortumoProducts;
+import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
@@ -34,7 +36,6 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AppGetOptionsRequest;
 import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.FortumoProductsRequest;
 import com.topface.topface.requests.GooglePlayProductsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
@@ -44,6 +45,9 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.requests.transport.HttpApiTransport;
+import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
+import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
@@ -57,14 +61,10 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
 import org.acra.ACRA;
-import org.acra.ACRAConfiguration;
-import org.acra.ACRAConfigurationException;
-import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,7 +72,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-@ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
+@ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends Application {
 
     public static final String TAG = "Topface";
@@ -89,7 +89,9 @@ public class App extends Application {
     private static Boolean mIsGmsSupported;
     private static String mStartLabel;
     private static Location mCurLocation;
+    private static AppsFlyerData.ConversionHolder mAppsFlyerConversionHolder;
 
+    private static OpenIabHelperManager mOpenIabHelperManager = new OpenIabHelperManager();
 
     /**
      * Множественный запрос Options и профиля
@@ -98,38 +100,10 @@ public class App extends Application {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getOptionsRequest())
                 .addRequest(getProductsRequest())
-                .addRequest(getFortumoProductsRequest())
                 .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .callback(handler)
                 .exec();
-    }
-
-    private static ApiRequest getFortumoProductsRequest() {
-        switch (BuildConfig.MARKET_API_TYPE) {
-            case GOOGLE_PLAY:
-                return new FortumoProductsRequest(App.getContext()).callback(new DataApiHandler<FortumoProducts>() {
-                    @Override
-                    protected void success(FortumoProducts data, IApiResponse response) {
-
-                    }
-
-                    @Override
-                    protected FortumoProducts parseResponse(ApiResponse response) {
-                        return new FortumoProducts(response);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-
-                    }
-                });
-            //Для амазона и nokia Fortumeo не поддерживается
-            case NOKIA_STORE:
-            case AMAZON:
-            default:
-                return null;
-        }
     }
 
     private static ApiRequest getPaymentwallProductsRequest() {
@@ -167,14 +141,7 @@ public class App extends Application {
      * Множественный запрос Options и профиля
      */
     public static void sendProfileAndOptionsRequests() {
-        sendProfileAndOptionsRequests(new SimpleApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                super.success(response);
-                LocalBroadcastManager.getInstance(getContext())
-                        .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
-            }
-        });
+        sendProfileAndOptionsRequests(new SimpleApiHandler());
     }
 
     private static ApiRequest getProductsRequest() {
@@ -213,11 +180,16 @@ public class App extends Application {
         return request;
     }
 
+    public static void sendOptionsRequest() {
+        getOptionsRequest().exec();
+    }
+
     private static ApiRequest getOptionsRequest() {
         return new UserGetAppOptionsRequest(App.getContext())
                 .callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {
+                        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Options.OPTIONS_RECEIVED_ACTION));
                     }
 
                     @Override
@@ -243,6 +215,10 @@ public class App extends Application {
 
                     @Override
                     protected void success(Profile data, IApiResponse response) {
+                        if (data.photosCount == 0) {
+                            App.getConfig().getUserConfig().setUserAvatarAvailable(false);
+                            App.getConfig().getUserConfig().saveConfig();
+                        }
                         CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
                         NativeAdManager.init();
@@ -287,6 +263,10 @@ public class App extends Application {
             mBaseConfig = new Configurations(App.getContext());
         }
         return mBaseConfig;
+    }
+
+    public static OpenIabHelperManager getOpenIabHelperManager() {
+        return mOpenIabHelperManager;
     }
 
     public static AppConfig getAppConfig() {
@@ -384,7 +364,8 @@ public class App extends Application {
         }
 
         // Инициализируем общие срезы для статистики
-        StatisticsTracker.getInstance().setContext(mContext)
+        StatisticsTracker.getInstance()
+                .setContext(mContext)
                 .putPredefinedSlice("app", BuildConfig.STATISTICS_APP)
                 .putPredefinedSlice("cvn", BuildConfig.VERSION_NAME);
         if (BuildConfig.DEBUG) {
@@ -400,6 +381,9 @@ public class App extends Application {
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
 
         sendAppOptionsRequest();
+
+        mAppsFlyerConversionHolder = new AppsFlyerData.ConversionHolder();
+        AppsFlyerLib.registerConversionListener(mContext, new AppsFlyerData.ConversionListener(mAppsFlyerConversionHolder));
 
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
@@ -476,27 +460,27 @@ public class App extends Application {
     }
 
     private void initAcra() {
-        if (!BuildConfig.DEBUG) {
+//        if (!BuildConfig.DEBUG) {
             ACRA.init(this);
             ACRA.getErrorReporter().setReportSender(new HockeySender());
-        } else {
-            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
-            try {
-                //Что бы такая схема работала, сперва выставляем конфиг
-                ACRAConfiguration acraConfig = ACRA.getConfig();
-                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
-                acraConfig.setResDialogText(R.string.crash_dialog_text);
-                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
-                acraConfig.setMode(ReportingInteractionMode.DIALOG);
-                ACRA.setConfig(acraConfig);
-                //Потом инитим
-                ACRA.init(this);
-                //И потом выставляем ReportSender
-                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
-            } catch (ACRAConfigurationException e) {
-                Debug.error("Acra init error", e);
-            }
-        }
+//        } else {
+//            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
+//            try {
+//                //Что бы такая схема работала, сперва выставляем конфиг
+//                ACRAConfiguration acraConfig = ACRA.getConfig();
+//                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
+//                acraConfig.setResDialogText(R.string.crash_dialog_text);
+//                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
+//                acraConfig.setMode(ReportingInteractionMode.DIALOG);
+//                ACRA.setConfig(acraConfig);
+//                //Потом инитим
+//                ACRA.init(this);
+//                //И потом выставляем ReportSender
+//                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
+//            } catch (ACRAConfigurationException e) {
+//                Debug.error("Acra init error", e);
+//            }
+//        }
     }
 
     private void checkKeepAlive() {
@@ -527,6 +511,10 @@ public class App extends Application {
         return mIsGmsSupported;
     }
 
+    public static AppsFlyerData.ConversionHolder getConversionHolder() {
+        return mAppsFlyerConversionHolder;
+    }
+
     @Override
     public void onTerminate() {
         super.onTerminate();
@@ -534,6 +522,18 @@ public class App extends Application {
         if (mConnectionIntent != null && mConnectionReceiver != null) {
             unregisterReceiver(mConnectionReceiver);
         }
+    }
+
+
+    public static String getApiTransport() {
+        Options userOptions = CacheProfile.getOptions();
+        AppOptions appOptions = getAppOptions();
+        if (userOptions.scruffy || appOptions.isScruffyEnabled()) {
+            if (ScruffyRequestManager.getInstance().isAvailable()) {
+                return ScruffyApiTransport.TRANSPORT_NAME;
+            }
+        }
+        return HttpApiTransport.TRANSPORT_NAME;
     }
 }
 

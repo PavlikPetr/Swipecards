@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical"
+              android:orientation="vertical"
+              android:paddingBottom="8dp"
+              android:paddingTop="8dp">
 
     <TextView
         style="@style/ItemTitleText"
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
         android:text="@string/google_service_general_title"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/loTitle"
@@ -22,12 +22,13 @@
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
         android:textSize="12sp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/loButton"
+        style="@style/Widget.Topface.Button.Big.Gray"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 </LinearLayout>

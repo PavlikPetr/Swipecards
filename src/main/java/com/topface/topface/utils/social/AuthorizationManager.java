@@ -41,6 +41,7 @@ public class AuthorizationManager {
 
     public static final int RESULT_LOGOUT = 666;
 
+
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
 
     public void onCreate(Bundle savedInstanceState) {
@@ -129,7 +130,6 @@ public class AuthorizationManager {
                 new SearchCacheManager().clearCache();
             }
         };
-        NavigationActivity.onLogout();
         if (!(activity instanceof NavigationActivity)) {
             activity.setResult(RESULT_LOGOUT);
             activity.finish();

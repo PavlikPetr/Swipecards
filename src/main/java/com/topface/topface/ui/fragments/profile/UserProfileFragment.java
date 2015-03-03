@@ -46,7 +46,6 @@ import java.util.ArrayList;
  * Profile fragment to view profile with ui for interactions with another profile
  */
 public class UserProfileFragment extends AbstractProfileFragment {
-
     private int mProfileId;
     private int mLastLoadedProfileId;
     private String mItemId;
@@ -73,7 +72,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
         if (!TextUtils.isEmpty(s)) {
             mSavedResponse = new ApiResponse(s);
         }
-        setCallingClass(args.getString(AbstractProfileFragment.INTENT_CALLING_FRAGMENT));
+        setIsChatAvailable(args.getBoolean(AbstractProfileFragment.INTENT_IS_CHAT_AVAILABLE));
     }
 
     @Override
@@ -147,7 +146,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             barActionsItem.setChecked(mBarActions.isChecked());
         }
         mBarActions = barActionsItem;
-        mProfileOverflowMenu = new OverflowMenu(getActivity(), mBarActions, mRateController, mProfileId, true, mSavedResponse);
+        mProfileOverflowMenu = new OverflowMenu(getActivity(), mBarActions, mRateController, mProfileId, mSavedResponse);
     }
 
     @Override
@@ -185,7 +184,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
             UserRequest userRequest = new UserRequest(profileId, getActivity());
             registerRequest(userRequest);
             userRequest.callback(new DataApiHandler<User>() {
-
                 @Override
                 protected void success(User user, IApiResponse response) {
                     onSuccess(user, response);
@@ -354,7 +352,12 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     }
 
                     @Override
-                    public Boolean getMutualValue() {
+                    public boolean isOpenChatAvailable() {
+                        return isChatAvailable();
+                    }
+
+                    @Override
+                    public Boolean isMutual() {
                         User user = getUser();
                         return user != null ? user.mutual : null;
                     }
@@ -445,7 +448,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
             mNewGifts.add(0, data);
         }
     }
-
 
     private FeedGift getGiftFromIntent(Intent data) {
         FeedGift feedGift = null;

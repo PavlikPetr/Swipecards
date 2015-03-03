@@ -59,9 +59,6 @@ public class Static {
     public static final String PREFERENCES_DELETED_ACCOUNTS_TF_IDS = "tf_tokens";
     public static final String PREFERENCES_DELETED_ACCOUNTS_OK_IDS = "ok_tokens";
 
-    public static final String PREFERENCES_MUTUAL_CLOSING_LAST_TIME = "mutual_closing_time";
-    public static final String PREFERENCES_LIKES_CLOSING_LAST_TIME = "likes_closing_time";
-
     public static final String PREFERENCES_PAID_LIKES_COUNT = "paid_likes_count";
 
     public static final String LOGOUT_INTENT = "com.topface.topface.intent.LOGOUT";

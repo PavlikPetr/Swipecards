@@ -20,17 +20,8 @@ public class ResourcesUtils {
             case DATING:
                 titleId = R.string.general_dating;
                 break;
-            case LIKES_CLOSINGS:
-                titleId = R.string.general_likes;
-                break;
-            case PHOTO_BLOG:
-                titleId = R.string.general_photoblog;
-                break;
             case TABBED_LIKES:
                 titleId = R.string.general_sympathies;
-                break;
-            case MUTUAL_CLOSINGS:
-                titleId = R.string.general_mutual;
                 break;
             case TABBED_DIALOGS:
                 titleId = R.string.settings_messages;

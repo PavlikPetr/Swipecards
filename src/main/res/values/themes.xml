@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Базовая тема приложения -->
     <style name="Theme.Topface" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">#03a9f4</item>
         <item name="colorPrimaryDark">#0287c3</item>
         <item name="colorAccent">#ee4493</item>
+        <item name="android:windowContentOverlay">@null</item>
+
         <!-- overflow menu settings -->
         <item name="android:itemTextAppearance">@style/PopupMenuTextApearance</item>
         <item name="android:dropDownListViewStyle">@style/FilterSpinnerDropDownList</item>
         <item name="android:popupMenuStyle" tools:ignore="NewApi">@style/PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowDropDownMenu</item>
 
         <item name="android:windowTitleStyle">@style/CenterJustifyDialogTitle</item>
 
@@ -64,6 +67,7 @@
 
     <style name="Theme.Topface.ActionbarOverlay">
         <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
     </style>
 
     <style name="Theme.Topface.NoActionBar.Fullscreen" parent="Theme.Topface.NoActionBar">
@@ -89,7 +93,7 @@
     <style name="Topface.Theme.TransparentActionBarActivity" parent="@style/Theme.AppCompat">
         <item name="actionBarStyle">@style/Widget.Topface.TransparentActionBar</item>
         <item name="windowActionBarOverlay">true</item>
-        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/album_background</item>
     </style>
 
     <style name="Theme.Topface.Chat">

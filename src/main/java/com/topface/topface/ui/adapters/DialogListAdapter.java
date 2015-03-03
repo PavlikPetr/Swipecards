@@ -33,8 +33,9 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         FeedDialog dialog = getItem(position);
         if (holder != null) {
             holder.time.setText(dialog.createdRelative);
+            int itemType = getItemViewType(position);
             FeedItemViewConstructor.setCounter(holder.unreadCounter,
-                    ((getItemViewType(position) == T_NEW) && (!CacheProfile.getOptions().hidePreviewDialog)) ?
+                    ((itemType == T_NEW || itemType == T_NEW_VIP) && (!CacheProfile.getOptions().hidePreviewDialog)) ?
                             getUnreadCounter(dialog) :
                             0
             );

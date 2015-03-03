@@ -55,7 +55,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     public static final String API_STAGE_TF = "https://api-%s.stage.tf/";
     private Spinner mApiUrl;
     private Spinner mOfferwallTypeChoose;
-    private EditText mApiRevision;
     private AppConfig mAppConfig;
     private Spinner mDebugModeSpinner;
     private Spinner mEditorModeSpinner;
@@ -65,7 +64,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private long standard_timeout;
     private EditSwitcher switcherTestNetwork;
 
-    private static int NETWORK_ERROR_NOTIFICATION_ID = 800;
+    private static final int NETWORK_ERROR_NOTIFICATION_ID = 800;
     private CheckBox mCustomApiCheckBox;
     private EditText mCustomApi;
     private Spinner mConnectionTypeChoose;
@@ -208,7 +207,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                     getActivity().startActivity(
                             UserProfileActivity.createIntent(
                                     Integer.parseInt(profileId.getText().toString()),
-                                    EditorFragment.class,
                                     getActivity()
                             )
                     );
@@ -309,11 +307,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             }
         };
 
-        mApiRevision = (EditText) rootLayout.findViewById(R.id.EditorApiRevision);
-        mApiRevision.addTextChangedListener(watcher);
-
         mCustomApi.addTextChangedListener(watcher);
-
 
         //Создаем стандартный адаптер
         @SuppressWarnings("unchecked") ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
@@ -339,28 +333,21 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
     private void saveApiUrl() {
         try {
-            Editable revision = mApiRevision.getText();
             String customApi = mCustomApi.getText().toString();
             if (!TextUtils.isEmpty(customApi)) {
                 mAppConfig.setStageLogin(customApi, mCustomApiCheckBox.isChecked());
             }
-            if (revision != null) {
-                if (!mCustomApiCheckBox.isChecked()) {
-                    mAppConfig.setApiUrl(
-                            (String) mApiUrl.getSelectedItem(),
-                            revision.toString()
-                    );
-                } else {
-                    if (!TextUtils.isEmpty(customApi)) {
-                        mAppConfig.setApiUrl(String.format(API_STAGE_TF, customApi.trim()),
-                                null);
-                    }
-                }
-                showCompleteMessage();
-                mAppConfig.saveConfig();
+            if (!mCustomApiCheckBox.isChecked()) {
+                mAppConfig.setApiUrl(
+                        (String) mApiUrl.getSelectedItem()
+                );
             } else {
-                showError();
+                if (!TextUtils.isEmpty(customApi)) {
+                    mAppConfig.setApiUrl(String.format(API_STAGE_TF, customApi.trim()));
+                }
             }
+            showCompleteMessage();
+            mAppConfig.saveConfig();
         } catch (Exception e) {
             showError();
         }
@@ -467,7 +454,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setConfigValues() {
-        mApiRevision.setText(mAppConfig.getApiRevision());
         mApiUrl.setSelection(mApiUrlsMap.indexOfValue(mAppConfig.getApiDomain()));
         mEditorModeSpinner.setSelection(mAppConfig.getEditorMode());
         mDebugModeSpinner.setSelection(mAppConfig.getDebugMode());

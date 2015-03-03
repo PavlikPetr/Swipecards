@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#FFFFFF"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="#FFFFFF"
+              android:orientation="vertical">
 
     <ProgressBar
         android:id="@+id/citySearchProgress"
@@ -13,11 +13,11 @@
         android:layout_gravity="center_horizontal"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/citySearchText"
         style="@style/SpinnerDropDownView"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
 </LinearLayout>

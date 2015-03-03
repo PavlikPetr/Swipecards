@@ -479,6 +479,7 @@
     <string name="popup_version_cancel">Напомнить позже</string>
     <string name="general_version_not_supported">Ваша версия приложения устарела и больше не поддерживается. Пожалуйста, обновите приложение</string>
     <string name="default_price_format">Итого: %.2f USD</string>
+    <string name="default_price_format_extended">Итого: %1$.2f %2$s</string>
     <string name="dating_online_only">%s, только онлайн</string>
     <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже %d%%:</string>
     <string name="general_gift">Подарок</string>
@@ -777,8 +778,8 @@
     <string name="billing_item_already_owned">Ваша предыдущая покупка в обработке, пожалуйста подождите</string>
     <string name="dialog">Переписка</string>
     <string name="reply">Ответить</string>
-    <string name="measurement_unit_weight">кг.</string>
-    <string name="measurement_unit_height">см.</string>
+    <string name="measurement_unit_weight">кг</string>
+    <string name="measurement_unit_height">см</string>
     <string name="maximum_number_of_users">Выбрано максимальное количестово пользователей</string>
     <string name="logout_if_email_already_registred">Пользователь с таким e-mail уже существует. Если это ваш e-mail, то вам необходимо выйти из текущего аккаунта и зайти в аккаунт %s</string>
     <string name="recover_password_instructions">На ваш e-mail отправлено письмо с инструкцией по восстановлению пароля</string>
@@ -794,16 +795,12 @@
     <string name="user_deleted_from_black_list">Пользователь удален из черного списка</string>
     <string name="user_added_to_bookmark">Пользователь добавлен в избранные</string>
     <string name="user_deleted_from_bookmark">Пользователь удален из избранных</string>
-
     <string name="preload_photo_type_wifi_3g">WiFi и 3G</string>
     <string name="preload_photo_type_wifi">Только WiFi</string>
     <string name="preload_photo_type_always_on">Включена всегда</string>
     <string name="preload_photo_type_preload_off">Выключена</string>
-
     <string name="wrong_time_popup_text">Не удалось установить безопасное соединение с сервером.\nВозможно, дата или время на вашем устройстве указаны неверно.</string>
     <string name="wrong_time_popup_button">Открыть настройки</string>
-
-
     <!-- ServicesManager-->
     <!-- Google -->
     <string name="google_service_general_title">Уведомления не доступны</string>

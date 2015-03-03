@@ -102,6 +102,11 @@ public class UserNotificationManager {
                     listener.onFail();
                 }
             }
+
+            @Override
+            public void onLoadedFromMemoryCache() {
+
+            }
         });
     }
 
@@ -146,6 +151,11 @@ public class UserNotificationManager {
                 if (listener != null) {
                     listener.onFail();
                 }
+            }
+
+            @Override
+            public void onLoadedFromMemoryCache() {
+
             }
         });
     }
@@ -198,6 +208,11 @@ public class UserNotificationManager {
                 if (listener != null) {
                     listener.onFail();
                 }
+            }
+
+            @Override
+            public void onLoadedFromMemoryCache() {
+
             }
         });
     }

@@ -63,6 +63,11 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                 CacheProfile.sendUpdateProfileBroadcast();
                 Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+                // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
+                if (CacheProfile.photos.size() == 0) {
+                    App.getConfig().getUserConfig().setUserAvatarAvailable(false);
+                    App.getConfig().getUserConfig().saveConfig();
+                }
                 Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }
         }
@@ -103,7 +108,7 @@ public class OwnProfileFragment extends AbstractProfileFragment {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         setProfile(CacheProfile.getProfile());
         TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
-        if (CacheProfile.photo == null && mAddPhotoHelper != null && takePhotoDialog == null) {
+        if (CacheProfile.photo == null && mAddPhotoHelper != null && takePhotoDialog == null && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
             mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
         }
     }

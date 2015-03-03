@@ -27,6 +27,8 @@ import java.util.TimerTask;
 public abstract class ImageViewRemoteTemplate extends ImageView {
     public static final int LOADING_COMPLETE = 0;
     private static final int LOADING_ERROR = 1;
+    private static final boolean DEFAULT_NEED_ANIMATE_ON_APPEAR = true;
+
     /**
      * Максимальное количество дополнительных попыток загрузки изображения
      */
@@ -36,6 +38,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
      */
     private static final long REPEAT_SCHEDULE = 2000;
     protected BitmapProcessor mPostProcessor;
+    protected BitmapProcessor mPreProcessor;
     private String mCurrentSrc;
     private boolean isFirstTime = true;
 
@@ -58,6 +61,10 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
     private View mLoader;
     protected int maxHeight;
     protected int maxWidth;
+
+    // needed by some sub-classes to know - if need animate image when new content setted
+    private boolean mNeedAnimateOnAppear = DEFAULT_NEED_ANIMATE_ON_APPEAR;
+
 
     public ImageViewRemoteTemplate(Context context) {
         super(context);
@@ -83,7 +90,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
     protected abstract void setAttributes(AttributeSet attrs);
 
     @SuppressWarnings("unused")
-    protected abstract void setPostProcessor(int postProcessorId, float cornerRadius, int maskId);
+    protected abstract BitmapProcessor createProcessor(int postProcessorId, float cornerRadius, int maskId);
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
@@ -121,7 +128,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
             }
-            getImageLoader(getContext()).displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor(), mStubResId);
+            getImageLoader(getContext()).displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPreProcessor(), getPostProcessor(), mStubResId);
             if (borderResId != 0 && isFirstTime) {
                 setImageResource(borderResId);
             }
@@ -133,7 +140,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
     }
 
     public void setRemoteImageBitmap(Bitmap bitmap) {
-        BitmapProcessor processor = getPostProcessor();
+        BitmapProcessor processor = getPreProcessor();
         if (processor != null) {
             setImageBitmap(processor.process(bitmap));
         } else {
@@ -170,6 +177,10 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
 
     private BitmapProcessor getPostProcessor() {
         return mPostProcessor;
+    }
+
+    private BitmapProcessor getPreProcessor() {
+        return mPreProcessor;
     }
 
     public boolean setPhoto(IPhoto photo) {
@@ -282,9 +293,17 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
                 mHandler.sendEmptyMessage(LOADING_ERROR);
             }
         }
+
+        @Override
+        public void onLoadedFromMemoryCache() {
+            super.onLoadedFromMemoryCache();
+            setNeedAnimateOnAppear(false);
+            stopAppearingAnimation();
+        }
     }
 
 
+    @SuppressWarnings("UnusedDeclaration")
     public String getCurrentSrcLink() {
         return mCurrentSrc;
     }
@@ -296,5 +315,27 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
     @SuppressWarnings("UnusedDeclaration")
     public int getImageMaxWidth() {
         return maxWidth;
+    }
+
+    public void setNeedAnimateOnAppear(boolean needAnimateOnAppear) {
+        mNeedAnimateOnAppear = needAnimateOnAppear;
+    }
+
+    /**
+     * Stops apperaring animation in some sub-classes
+     */
+    public void stopAppearingAnimation() {
+
+    }
+
+    protected boolean isNeedAnimateOnAppear() {
+        return mNeedAnimateOnAppear;
+    }
+
+    /**
+     * Resets mNeedAnimateOnAppear, use if image view will be reused
+     */
+    protected void resetNeedAnimateOnAppear() {
+        setNeedAnimateOnAppear(DEFAULT_NEED_ANIMATE_ON_APPEAR);
     }
 }
