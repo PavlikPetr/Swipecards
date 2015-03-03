@@ -642,4 +642,15 @@
     <string name="preload_photo_type_preload_off">Įjungta</string>
     <string name="wrong_time_popup_text">Nepavyko užmegzti saugaus ryšio su serveriu.\nGalbūta data arba laikas jūsų įrenginyje nurodyti neteisingai.</string>
     <string name="wrong_time_popup_button">Atverti nustatymus</string>
+    <string name="google_service_general_title">Pranešimai nepasiekiami</string>
+    <string name="google_service_disabled_title">Pas jus yra išjungtos Google Play paslaugos, kurias būtina įjungti, kad veiktų pranešimai.</string>
+    <string name="google_service_disabled_button">Įjungti</string>
+    <string name="google_service_missing_title">Pas jus neįdiegtos Google plays paslaugos, kurios yra būtinos pranešimų veikimui.</string>
+    <string name="google_service_missing_button">Įdiegti</string>
+    <string name="google_service_version_update_required_title">Pas jus įdiegta sena Google Play paslaugų versija, korektiškam pranešimų veikimui, prašome, atnaujinkite.</string>
+    <string name="google_service_version_update_required_button">Atnaujinti</string>
+    <string name="google_invalid_account_title">Pasitikrinte jūsų Google paskyros duomenis arba susisiekite su Google techniniu palaikymu.</string>
+    <string name="google_sign_in_account_title">Pas jus nepridėta Google paskyra, jūs turite autorizuotis, jei norite gauti pranešimus.</string>
+    <string name="google_sign_in_account_button">Autorizuotis</string>
+    <string name="google_unavailable_services_title">Deja, pranešimai nepalaikomi jūsų įrenginyje.</string>
 </resources>

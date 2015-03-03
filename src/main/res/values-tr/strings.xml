@@ -637,4 +637,15 @@
     <string name="preload_photo_type_preload_off">Kapalı</string>
     <string name="wrong_time_popup_text">Sunucunuza güveli bir bağlantı kurulamadı/nMuhtemelen tarih ve saat bilgisayarınızda ayarlanmadı.</string>
     <string name="wrong_time_popup_button">Ayarları açın</string>
+    <string name="google_service_general_title">İkaz mevcut değildir</string>
+    <string name="google_service_disabled_title">Google Play servisleri bildirimleri kapamak için gereklidir.</string>
+    <string name="google_service_disabled_button">Açmak</string>
+    <string name="google_service_missing_title">Google Play servisleri bildirimlerin kurulmaması için gereklidir.</string>
+    <string name="google_service_missing_button">Yüklemek</string>
+    <string name="google_service_version_update_required_title">Google servisinin eski bir versiyonunu kurdunuz, doğru dildirim almak için, lütfen güncelleyin.</string>
+    <string name="google_service_version_update_required_button">Güncelleştirmek</string>
+    <string name="google_invalid_account_title">Google hesabınızda ayrıntılarını kontrol edin, ya da Google için teknik desteğe başvurun.</string>
+    <string name="google_sign_in_account_title">Google hesabı eklemediniz. eğer bildirim almak istiyorsanız, lütfen bağlanın</string>
+    <string name="google_sign_in_account_button">Oturum açın</string>
+    <string name="google_unavailable_services_title">Maalesef,bildirimler telefonunuzda çalışmaz.</string>
 </resources>
