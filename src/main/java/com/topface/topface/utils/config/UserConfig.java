@@ -57,6 +57,7 @@ public class UserConfig extends AbstractConfig {
     public static final String TOPFACE_OFFERWALL_REDIRECT_COUNTER = "topface_offerwall_redirect_counter";
     public static final String REMAINED_DAILY_PUBNATIVE_SHOWS = "remained_feed_ad_shows";
     public static final String LAST_DAY_PUBNATIVE_SHOWN = "current_day_for_showing_feed_ad";
+    private static final String APPSFLYER_FIRST_PAY = "appsflyer_first_purchase";
     private String mUnique;
 
     public UserConfig(Context context) {
@@ -129,6 +130,8 @@ public class UserConfig extends AbstractConfig {
         // Время начала текущих суток для учёта количества показов рекламы pubnative
         // Обновляется автоматически при попытке получить оставшиеся показы pubnative
         addField(settingsMap, LAST_DAY_PUBNATIVE_SHOWN, 0L);
+        //Флаг первой покупки
+        addField(settingsMap, APPSFLYER_FIRST_PAY, false);
     }
 
     @Override
@@ -145,6 +148,25 @@ public class UserConfig extends AbstractConfig {
                 PROFILE_CONFIG_SETTINGS + Static.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE
         );
+    }
+
+    /**
+     * Return first purchase flag
+     *
+     * @return true if first purchase has already been made
+     */
+    public boolean getFirstPayFlag() {
+        return getBooleanField(getSettingsMap(), APPSFLYER_FIRST_PAY);
+    }
+
+    /**
+     * Set first purchase flag
+     *
+     * @param firstPurchaseMark first purchase flag
+     * @return true on success
+     */
+    public boolean setFirstPayFlag(boolean firstPurchaseMark) {
+        return setField(getSettingsMap(), APPSFLYER_FIRST_PAY, firstPurchaseMark);
     }
 
     /**
