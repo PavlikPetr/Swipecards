@@ -12,7 +12,7 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -43,6 +43,7 @@ import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.search.CachableSearchList;
 import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
@@ -77,9 +78,8 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.actionbar.ActionBarCustomViewTitleSetterDelegate;
-import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.social.AuthToken;
@@ -156,29 +156,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private int mLoadedCount;
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
 
-    private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            UserConfig userConfig = App.getUserConfig();
-            /*
-            Если нет стандартного сообщения в конфиге, устанавливаем из опций
-             */
-            if (
-                    mDatingInstantMessageController != null &&
-                            TextUtils.isEmpty(userConfig.getDatingMessage())
-                    ) {
-                InstantMessageFromSearch message = CacheProfile.getOptions().instantMessageFromSearch;
-                mDatingInstantMessageController.setInstantMessageText(message.getText());
-                userConfig.setDatingMessage(message.getText());
-                userConfig.saveConfig();
-            }
-        }
-    };
-
-    private INavigationFragmentsListener mFragmentSwitcherListener;
-    private AnimationHelper mAnimationHelper;
-    private AlbumLoadController mController;
-    private ActionBarOnlineSetterDelegate mOnlineSetter;
+        public void onPageSelected(int position) {
 
             if (position + mController.getItemsOffsetByConnectionType() == (mLoadedCount - 1)) {
                 final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
@@ -201,6 +180,27 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onPageScrollStateChanged(int arg0) {
         }
     };
+
+
+    private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            UserConfig userConfig = App.getUserConfig();
+            /*
+            Если нет стандартного сообщения в конфиге, устанавливаем из опций
+             */
+            if (
+                    mDatingInstantMessageController != null &&
+                            TextUtils.isEmpty(userConfig.getDatingMessage())
+                    ) {
+                InstantMessageFromSearch message = CacheProfile.getOptions().instantMessageFromSearch;
+                mDatingInstantMessageController.setInstantMessageText(message.getText());
+                userConfig.setDatingMessage(message.getText());
+                userConfig.saveConfig();
+            }
+        }
+    };
+
     private boolean mNewFilter;
     private OnUsersListEventsListener mSearchListener = new OnUsersListEventsListener() {
         @Override
@@ -620,7 +620,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initInstantMessageController(KeyboardListenerLayout root) {
         mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
-                this, this,
+                this, this, CacheProfile.getOptions().instantMessageFromSearch.getText(),
                 mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
             @Override
             public void sendLike() {

@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- settings -->
     <string name="settings_topface_url">http://topface.com</string>
+    <string name="settings_topface_url_title">topface.com</string>
 
     <string name="default_resource_value">0</string>
 

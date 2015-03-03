@@ -42,7 +42,7 @@ public abstract class PrimalAuthRequest extends ApiRequest {
         mCodeVersion = BuildConfig.VERSION_CODE;
         mAdId = App.getAppConfig().getAdId();
         mGooglePlayServicesVersion = Utils.getGooglePlayServicesVersion();
-        mClientType = BuildConfig.BILLING_TYPE.getClientType();
+        mClientType = BuildConfig.MARKET_API_TYPE.getClientType();
         mLocale = getClientLocale();
     }
 

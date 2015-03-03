@@ -369,18 +369,6 @@ public class ConnectionManager {
         return needResend;
     }
 
-    private int getSslErrorCode(SSLException e) {
-        int errorCode = ErrorCodes.CONNECTION_ERROR;
-        String[] messages = App.getContext().getResources().getStringArray(R.array.ssl_handshake_exception_messages);
-        for (String message : messages) {
-            if (e.getMessage().toLowerCase().contains(message.toLowerCase())) {
-                errorCode = ErrorCodes.HTTPS_CERTIFICATE_EXPIRED;
-                break;
-            }
-        }
-        return errorCode;
-    }
-
     private IApiResponse executeRequest(IApiRequest apiRequest) {
         IApiResponse response;
         try {

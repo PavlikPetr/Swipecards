@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.topface.billing.DeveloperPayload;
+import com.topface.topface.App;
 import com.topface.topface.data.AppsFlyerData;
 
 import org.json.JSONException;

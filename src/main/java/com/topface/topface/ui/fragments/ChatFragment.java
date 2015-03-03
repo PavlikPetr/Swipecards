@@ -305,7 +305,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
             }
         }
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateActionsReceiver);
     }
 
     private void restoreData(Bundle savedInstanceState) {

@@ -38,7 +38,6 @@ import java.util.ArrayList;
 public class OwnProfileFragment extends AbstractProfileFragment {
     private AddPhotoHelper mAddPhotoHelper;
     private BroadcastReceiver mAddPhotoReceiver;
-    private IPhotoTakerWithDialog mPhotoTaker;
     private BroadcastReceiver mUpdateProfileReceiver;
     private IPhotoTakerWithDialog mPhotoTaker;
     private Handler mHandler = new Handler() {
@@ -174,12 +173,6 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA:
                     if (mAddPhotoHelper != null) {
                         mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
-                    }
-                    break;
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
-                    if (mAddPhotoHelper != null) {
-                        mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false));
                     }
                     break;
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:

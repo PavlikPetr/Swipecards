@@ -330,7 +330,6 @@ public class Utils {
         else
             return json.optString(key, null);
     }
-}
 
     /**
      * Устанавливает фон для ImageView если передать -1 будет установлен null
@@ -358,19 +357,6 @@ public class Utils {
             return ConnectionChangeReceiver.ConnectionType.valueOf(config.getDebugConnection());
         }
         return ConnectionChangeReceiver.getConnectionType();
-    }
-
-    public static String getCarrierName() {
-        if (!TextUtils.isEmpty(mCarrier)) {
-            return mCarrier;
-        }
-        TelephonyManager telephonyManager = (TelephonyManager) App.getContext()
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        if (telephonyManager == null) {
-            return null;
-        }
-        mCarrier = telephonyManager.getSimOperatorName();
-        return mCarrier;
     }
 
 }
