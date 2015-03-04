@@ -9,6 +9,6 @@ public class FeedPhotoBlogListData extends FeedListData<FeedPhotoBlog> {
     }
 
     protected void fillData(JSONObject data) {
-        items = getList(data.optJSONArray("users"));
+        items = getList(data.optJSONArray("items"));
     }
 }

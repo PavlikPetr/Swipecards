@@ -98,7 +98,7 @@ public class FeedRequest extends LimitedApiRequest {
                 service = "blacklist.getList";
                 break;
             case PHOTOBLOG:
-                service = "leader.getList";
+                service = "photofeed.getList";
                 break;
             case FANS:
                 service = "fan.getList";
