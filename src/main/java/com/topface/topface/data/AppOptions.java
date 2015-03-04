@@ -23,7 +23,7 @@ public class AppOptions extends AbstractData {
      */
     private int sessionTimeout;
     private int maxPartialRequestsCount;
-    private boolean scruffy;
+    private Boolean scruffy = null;
 
     public AppOptions(JSONObject data) {
         if (data != null) {
@@ -98,7 +98,7 @@ public class AppOptions extends AbstractData {
     }
 
     public boolean isScruffyEnabled() {
-        return scruffy;
+        return scruffy != null ? scruffy : false;
     }
 
     private class ClientStatisticSettings {

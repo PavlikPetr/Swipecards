@@ -98,7 +98,7 @@ public class Options extends AbstractData {
     public long popup_timeout;
     public boolean blockUnconfirmed;
     public boolean blockChatNotMutual;
-    public boolean scruffy;
+    private Boolean scruffy = null;
     public Closing closing = new Closing();
     public BlockSympathy blockSympathy = new BlockSympathy();
     public BlockPeopleNearby blockPeople = new BlockPeopleNearby();
@@ -690,5 +690,9 @@ public class Options extends AbstractData {
             }
         }
         return fragmentId;
+    }
+
+    public boolean isScruffyEnabled() {
+        return scruffy != null ? scruffy : false;
     }
 }
