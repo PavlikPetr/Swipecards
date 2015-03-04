@@ -630,4 +630,8 @@ public class Options extends AbstractData {
         }
         return fragmentId;
     }
+
+    public boolean isScruffyEnabled() {
+        return scruffy != null ? scruffy : false;
+    }
 }

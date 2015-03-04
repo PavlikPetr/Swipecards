@@ -528,7 +528,7 @@ public class App extends Application {
     public static String getApiTransport() {
         Options userOptions = CacheProfile.getOptions();
         AppOptions appOptions = getAppOptions();
-        if (userOptions.scruffy || appOptions.isScruffyEnabled()) {
+        if (appOptions.isScruffyEnabled() && userOptions.isScruffyEnabled()) {
             if (ScruffyRequestManager.getInstance().isAvailable()) {
                 return ScruffyApiTransport.TRANSPORT_NAME;
             }
