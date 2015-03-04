@@ -2,23 +2,20 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.topface.topface.BuildConfig;
 import com.topface.topface.utils.ClientUtils;
-import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RegisterRequest extends ApiRequest {
+public class RegisterRequest extends PrimalAuthRequest {
     public static final String SERVICE_NAME = "register.createAccount";
 
-    private String login;
-    private String password;
-    private String name;
-    private long birthday;
-    private int sex;
-    private String clientType;
-    private String locale;
+    private String mLogin;
+    private String mPassword;
+    private String mName;
+    private long mBirthday;
+    private int mSex;
+    private String mLocale;
 
     public RegisterRequest(Context context, String login,
                            String password,
@@ -26,26 +23,29 @@ public class RegisterRequest extends ApiRequest {
                            long birthday,
                            int sex) {
         super(context);
-        this.login = login;
-        this.password = password;
-        this.name = name;
-        this.birthday = birthday;
-        this.sex = sex;
-        this.clientType = BuildConfig.MARKET_API_TYPE.getClientType();
-        this.locale = ClientUtils.getClientLocale(context);
+        this.mLogin = login;
+        this.mPassword = password;
+        this.mName = name;
+        this.mBirthday = birthday;
+        this.mSex = sex;
+        this.mLocale = getClientLocale();
+    }
+
+    @Override
+    protected String getClientLocale() {
+        return ClientUtils.getClientLocale(context);
     }
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject()
-                .put("login", login)
-                .put("password", password)
-                .put("name", name)
-                .put("birthday", birthday)
-                .put("sex", sex)
-                .put("clientType", clientType)
-                .put("locale", locale)
-                .put("clientCarrier", Utils.getCarrierName());
+        JSONObject data = super.getRequestData();
+        data.put("login", mLogin)
+                .put("password", mPassword)
+                .put("name", mName)
+                .put("birthday", mBirthday)
+                .put("sex", mSex)
+                .put("locale", mLocale);
+        return data;
     }
 
     @Override

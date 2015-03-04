@@ -71,6 +71,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             mSavedResponse = new ApiResponse(s);
         }
         setIsChatAvailable(args.getBoolean(AbstractProfileFragment.INTENT_IS_CHAT_AVAILABLE));
+        setIsAddToFavoritsAvailable(args.getBoolean(AbstractProfileFragment.INTENT_IS_ADD_TO_FAVORITS_AVAILABLE));
     }
 
     @Override
@@ -324,9 +325,27 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     }
 
                     @Override
+                    public boolean isAddToFavoritsAvailable() {
+                        return isAddToFavoriteAvailable();
+                    }
+
+                    @Override
                     public Boolean isMutual() {
                         User user = getUser();
                         return user != null ? user.mutual : null;
+                    }
+
+                    @Override
+                    public void clickSendGift() {
+                        UserGiftsFragment giftsFragment = getGiftFragment();
+                        if (giftsFragment != null && giftsFragment.getActivity() != null) {
+                            giftsFragment.sendGift();
+                        } else {
+                            startActivityForResult(
+                                    GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
+                                    GiftsActivity.INTENT_REQUEST_GIFT
+                            );
+                        }
                     }
                 });
             }

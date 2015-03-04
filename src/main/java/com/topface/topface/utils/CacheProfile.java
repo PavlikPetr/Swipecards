@@ -443,10 +443,6 @@ public class CacheProfile {
 
     public static int getUnreadCounterByFragmentId(BaseFragment.FragmentId id) {
         switch (id) {
-            case LIKES_CLOSINGS:
-                return CacheProfile.unread_likes;
-            case MUTUAL_CLOSINGS:
-                return CacheProfile.unread_mutual;
             case TABBED_DIALOGS:
                 return CacheProfile.unread_messages;
             case TABBED_VISITORS:

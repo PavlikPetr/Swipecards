@@ -200,18 +200,21 @@ public class Products extends AbstractData {
             value = buyBtn.hint;
             economy = null;
         } else {
-            ProductsDetails.ProductDetail detail = CacheProfile.getMarketProductsDetails().getProductDetail(buyBtn.id);
-            if (detail != null) {
-                value = String.format(
-                        App.getContext().getString(R.string.default_price_format_extended),
-                        detail.price / ProductsDetails.MICRO_AMOUNT,
-                        detail.currency
-                );
-            } else {
-                value = String.format(
-                        App.getContext().getString(R.string.default_price_format),
-                        ((float) buyBtn.price / 100)
-                );
+            value = String.format(
+                    App.getContext().getString(R.string.default_price_format),
+                    ((float) buyBtn.price / 100)
+            );
+            // try fill template
+            ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
+            if (productsDetails != null) {
+                ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
+                if (detail != null) {
+                    value = String.format(
+                            App.getContext().getString(R.string.default_price_format_extended),
+                            detail.price / ProductsDetails.MICRO_AMOUNT,
+                            detail.currency
+                    );
+                }
             }
             economy = buyBtn.hint;
         }
@@ -446,14 +449,16 @@ public class Products extends AbstractData {
                 type = getProductTypeByName(json.optString("type"));
                 discount = json.optInt("discount");
                 paymentwallLink = json.optString("url");
-                ProductsDetails.ProductDetail detail = CacheProfile.getMarketProductsDetails().getProductDetail(id);
-                if (detail != null) {
-                    double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                    double pricePerItem = price / amount;
-                    title = titleTemplate.replace("{{price}}", String.format("%.2f %s", price, detail.currency));
-                    title = title.replace("{{price_per_item}}", String.format("%.2f %s", pricePerItem, detail.currency));
+                ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
+                if (productsDetails != null) {
+                    ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(id);
+                    if (detail != null) {
+                        double price = detail.price / ProductsDetails.MICRO_AMOUNT;
+                        double pricePerItem = price / amount;
+                        title = titleTemplate.replace("{{price}}", String.format("%.2f %s", price, detail.currency));
+                        title = title.replace("{{price_per_item}}", String.format("%.2f %s", pricePerItem, detail.currency));
+                    }
                 }
-
             }
         }
     }

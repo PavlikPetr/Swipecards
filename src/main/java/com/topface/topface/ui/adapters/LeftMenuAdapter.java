@@ -28,19 +28,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     private static final int TYPE_COUNT = 2;
     private MenuFragment mMenuFragment;
     private final SparseArray<ILeftMenuItem> mItems;
-    private SparseArray<ILeftMenuItem> mHiddenItems = new SparseArray<>();
-
     private HashMap<BaseFragment.FragmentId, TextView> mCountersBadgesMap = new HashMap<>();
-    private boolean mIsEnabled = true;
-    private View.OnClickListener mDisabledItemClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (mMenuFragment != null) {
-                BaseFragment.FragmentId id = ((ViewHolder) v.getTag()).getFragmentId();
-                mMenuFragment.showClosingsDialog(id);
-            }
-        }
-    };
 
     public LeftMenuAdapter(MenuFragment menuFragment, SparseArray<ILeftMenuItem> items) {
         this.mMenuFragment = menuFragment;
@@ -88,58 +76,6 @@ public class LeftMenuAdapter extends BaseAdapter {
         return position;
     }
 
-    @Override
-    public boolean isEnabled(int position) {
-        return mIsEnabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        mIsEnabled = enabled;
-    }
-
-    public void hideItem(BaseFragment.FragmentId id) {
-        setItemHidden(id, true);
-    }
-
-    public void showItem(BaseFragment.FragmentId id) {
-        setItemHidden(id, false);
-    }
-
-    public void showAllItems() {
-        setAllItemsHidden(false);
-    }
-
-    private void setItemHidden(BaseFragment.FragmentId fragmentId, boolean hidden) {
-        int id = fragmentId.getId();
-        if (hidden) {
-            ILeftMenuItem item = mItems.get(id);
-            if (item != null) {
-                mHiddenItems.put(id, mItems.get(id));
-                mItems.remove(id);
-            }
-        } else {
-            ILeftMenuItem item = mItems.get(id);
-            if (item != null) {
-                mItems.put(id, mHiddenItems.get(id));
-                mHiddenItems.remove(id);
-            }
-        }
-        notifyDataSetChanged();
-    }
-
-    private void setAllItemsHidden(boolean hidden) {
-        int key;
-
-        SparseArray<ILeftMenuItem> goalStateItems = hidden ? mHiddenItems : mItems;
-        SparseArray<ILeftMenuItem> anotherStateItems = hidden ? mItems : mHiddenItems;
-
-        for (int i = 0; i < anotherStateItems.size(); i++) {
-            key = anotherStateItems.keyAt(i);
-            goalStateItems.put(key, anotherStateItems.get(key));
-        }
-        anotherStateItems.clear();
-    }
-
     public void addItem(ILeftMenuItem item) {
         mItems.put(item.getMenuId().getId(), item);
     }
@@ -155,7 +91,6 @@ public class LeftMenuAdapter extends BaseAdapter {
         final ViewHolder holder;
         // get menu item on current position
         final ILeftMenuItem item = getItem(position);
-        final boolean enabled = isEnabled(position);
         //init convertView
         if (convertView == null) {
             holder = new ViewHolder();
@@ -179,12 +114,7 @@ public class LeftMenuAdapter extends BaseAdapter {
                 break;
             case TYPE_MENU_BUTTON_WITH_BADGE:
                 holder.btnMenu.setText(item.getMenuText());
-                if (enabled) {
-                    registerCounterBadge(item, holder.counterBadge);
-                } else {
-                    unregisterCounterBadge(item);
-                    holder.counterBadge.setVisibility(View.GONE);
-                }
+                registerCounterBadge(item, holder.counterBadge);
                 break;
             default:
                 break;
@@ -203,17 +133,9 @@ public class LeftMenuAdapter extends BaseAdapter {
                 });
             }
         }
-
-
-        if (enabled) {
-            holder.leftMenuCellLayout.setOnClickListener(mMenuFragment);
-            setAlphaToTextAndDrawable(holder.btnMenu, 255);
-            setCheckedBackgroundState(mMenuFragment.getCurrentFragmentId() == item.getMenuId(), holder.leftMenuCellLayout);
-        } else {
-            holder.leftMenuCellLayout.setOnClickListener(mDisabledItemClickListener);
-            setAlphaToTextAndDrawable(holder.btnMenu, 102);
-            setCheckedBackgroundState(mMenuFragment.getCurrentFragmentId() == item.getMenuId(), holder.leftMenuCellLayout);
-        }
+        holder.leftMenuCellLayout.setOnClickListener(mMenuFragment);
+        setAlphaToTextAndDrawable(holder.btnMenu, 255);
+        setCheckedBackgroundState(mMenuFragment.getCurrentFragmentId() == item.getMenuId(), holder.leftMenuCellLayout);
 
         return convertView;
     }
@@ -270,11 +192,6 @@ public class LeftMenuAdapter extends BaseAdapter {
         } else {
             mCounterBadgeView.setVisibility(View.GONE);
         }
-    }
-
-    public boolean hasTabbdedPages() {
-        return mItems.indexOfKey(BaseFragment.FragmentId.TABBED_DIALOGS.getId()) > 0 ||
-                mItems.indexOfKey(BaseFragment.FragmentId.TABBED_DIALOGS.getId()) > 0;
     }
 
     public class ViewHolder {

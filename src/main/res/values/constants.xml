@@ -28,6 +28,9 @@
     <dimen name="left_menu_background_height">124dp</dimen>
 
     <string name="appsflyer_dev_key">mDUXh3zNggkkNCAgvXASna</string>
+    <string name="appsflyer_first_pay">first_pay</string>
+    <string name="appsflyer_purchase">purchase</string>
+    <string name="appsflyer_registration">registration</string>
     <!-- С помощью этого флага определяем, планшет ли данное устройство см. ../values-sw600dp/constants.xml -->
     <bool name="is_tablet">false</bool>
 
@@ -42,9 +45,10 @@
     <!-- delay for showing popup about problems with notification services (in seconds) -->
     <integer name="notifications_disable_popup_delay">259200</integer>
 
-
     <!--show keyboard in chat, when screen height more than this value-->
     <integer name="min_screen_height_chat_fragment">479</integer>
 
-
+    <!-- intent-filters configuration -->
+    <string name="default_sheme" translatable="false">topface</string>
+    <string name="offerwall_host" translatable="false">offerwall</string>
 </resources>

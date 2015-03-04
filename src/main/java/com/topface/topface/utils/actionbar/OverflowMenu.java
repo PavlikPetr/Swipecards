@@ -24,7 +24,6 @@ import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
-import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
@@ -45,6 +44,9 @@ import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.
  * broadcast receiver and remove interface OverflowMenuUser
  */
 public class OverflowMenu {
+
+    private final static String INTENT_BUY_VIP_FROM = "UserProfileFragment";
+
     private MenuItem mBarActions;
     private OverflowMenuType mOverflowMenuType;
     private Activity mActivity;
@@ -59,6 +61,7 @@ public class OverflowMenu {
     private Intent mOpenChatIntent;
     private Boolean mIsMutual;
     private Boolean mIsChatAvailable;
+    private Boolean mIsAddToFavoritsAvailable;
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -358,22 +361,25 @@ public class OverflowMenu {
         }
     }
 
+    private void showBuyVipActivity(int resourceId) {
+        mActivity.startActivityForResult(
+                PurchasesActivity.createVipBuyIntent(mActivity.getString(resourceId), INTENT_BUY_VIP_FROM),
+                PurchasesActivity.INTENT_BUY_VIP);
+    }
+
     private void onClickOpenChatAction() {
         initAllFields();
         if (!mIsChatAvailable) {
-            mActivity.startActivityForResult(
-                    PurchasesActivity.createVipBuyIntent(mActivity.getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
-                    PurchasesActivity.INTENT_BUY_VIP);
+            showBuyVipActivity(R.string.chat_block_not_mutual);
         } else {
             openChat();
         }
     }
 
     private void onClickSendGiftAction() {
-        mActivity.startActivityForResult(
-                GiftsActivity.getSendGiftIntent(mActivity, mProfileId),
-                GiftsActivity.INTENT_REQUEST_GIFT
-        );
+        if (mOverflowMenuFields != null) {
+            mOverflowMenuFields.clickSendGift();
+        }
     }
 
     private void onClickAddToBlackList() {
@@ -425,7 +431,7 @@ public class OverflowMenu {
         request.exec();
     }
 
-    private void onClickAddToBookmarkAction() {
+    private void addToFavorite() {
         initAllFields();
         if (mIsBookmarked == null || mUserId == null) {
             return;
@@ -472,6 +478,18 @@ public class OverflowMenu {
         }
         setBookmarkedState(null);
         request.exec();
+    }
+
+    private void onClickAddToBookmarkAction() {
+        initAllFields();
+        if (mIsAddToFavoritsAvailable == null) {
+            return;
+        }
+        if (!mIsAddToFavoritsAvailable) {
+            showBuyVipActivity(R.string.add_to_favorite_block_not_vip);
+        } else {
+            addToFavorite();
+        }
     }
 
     private void showBlackListToast(boolean value) {
@@ -546,6 +564,7 @@ public class OverflowMenu {
             mOpenChatIntent = mOverflowMenuFields.getOpenChatIntent();
             mIsMutual = mOverflowMenuFields.isMutual();
             mIsChatAvailable = mOverflowMenuFields.isOpenChatAvailable();
+            mIsAddToFavoritsAvailable = mOverflowMenuFields.isAddToFavoritsAvailable();
         }
     }
 

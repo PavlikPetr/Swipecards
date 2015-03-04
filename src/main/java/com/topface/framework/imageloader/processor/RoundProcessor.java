@@ -13,7 +13,7 @@ public class RoundProcessor implements BitmapProcessor {
     @Override
     public Bitmap process(Bitmap bitmap) {
         if (bitmap != null) {
-            bitmap = BitmapUtils.getRoundedBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight());
+            bitmap = BitmapUtils.getRoundBitmap(bitmap, 1.2f);
         }
         return bitmap;
     }

@@ -103,6 +103,8 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
     public static final String MAKE_ITEM_READ_BY_UID = "com.topface.topface.feedfragment.MAKE_READ_BY_UID";
     public static final String INITIAL_MESSAGE = "initial_message";
+    public static final String MESSAGE = "message";
+    public static final String LOADED_MESSAGES = "loaded_messages";
     private static final String POPULAR_LOCK_STATE = "chat_blocked";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
@@ -113,13 +115,15 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         @Override
         public void onReceive(Context context, Intent intent) {
             String id = intent.getStringExtra(GCMUtils.USER_ID_EXTRA);
+            final int type = intent.getIntExtra(GCMUtils.GCM_TYPE, -1);
             if (!TextUtils.isEmpty(id) && Integer.parseInt(id) == mUserId) {
                 update(true, "update counters");
                 startTimer();
-                GCMUtils.cancelNotification(getActivity(), GCMUtils.GCM_TYPE_MESSAGE);
+                GCMUtils.cancelNotification(App.getContext(), type);
             }
         }
     };
+    private String mMessage;
     private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mKeyboardWasShown;
@@ -279,11 +283,27 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (isAdded()) {
+            if (mAdapter != null) {
+                int loadedItemsCount = 0;
+                for (History item : mAdapter.getDataCopy()) {
+                    if (item.unread) {
+                        loadedItemsCount++;
+                    }
+                }
+                Intent intent = new Intent(CountersManager.UPDATE_COUNTERS);
+                intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
+                intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+            }
+        }
     }
 
     private void restoreData(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             try {
+                mMessage = savedInstanceState.getString(MESSAGE);
+                setSavedMessage(mMessage);
                 mKeyboardWasShown = savedInstanceState.getBoolean(SOFT_KEYBOARD_LOCK_STATE);
                 boolean wasFailed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
@@ -438,6 +458,9 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (!TextUtils.isEmpty(mMessage)) {
+            outState.putString(MESSAGE, mMessage);
+        }
         outState.putBoolean(WAS_FAILED, wasFailed);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
         outState.putBoolean(SOFT_KEYBOARD_LOCK_STATE, mKeyboardWasShown);
@@ -746,6 +769,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     @Override
     public void onResume() {
         super.onResume();
+        setSavedMessage(mMessage);
         //показать клавиатуру, если она была показаны до этого(перешли в другой фрагмент, и вернулись обратно)
         showKeyboardOnLargeScreen();
 
@@ -765,7 +789,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         }
 
         IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
-        getActivity().registerReceiver(mNewMessageReceiver, filter);
+        LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mNewMessageReceiver, filter);
 
         mUpdater = new Handler();
         startTimer();
@@ -774,7 +798,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().unregisterReceiver(mNewMessageReceiver);
+        LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mNewMessageReceiver);
         stopTimer();
         Utils.hideSoftKeyboard(getActivity(), mEditBox);
     }
@@ -835,7 +859,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     }
 
     public boolean sendMessage(String text, final boolean cancelable) {
-        final History messageItem = new History(text, IListLoader.ItemType.WAITING);
+        final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
         if (cancelable) {
             registerRequest(messageRequest);
@@ -862,6 +886,8 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
+                    mMessage = mAdapter.getData().get(0).text;
+                    mAdapter.removeLastItem();
                     startActivityForResult(PurchasesActivity.createVipBuyIntent(getResources()
                                     .getString(R.string.messaging_block_buy_vip), "SendMessage"),
                             PurchasesActivity.INTENT_BUY_VIP);
@@ -959,6 +985,16 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     public boolean isOpenChatAvailable() {
                         return true;
                     }
+
+                    @Override
+                    public boolean isAddToFavoritsAvailable() {
+                        return true;
+                    }
+
+                    @Override
+                    public void clickSendGift() {
+                        // empty processor. Haven't item "Send gift" in current fragment
+                    }
                 });
             }
             overflowMenu.initOverfowMenu();
@@ -987,4 +1023,12 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         return dpHeight >= getActivity().getResources().
                 getInteger(R.integer.min_screen_height_chat_fragment);
     }
+
+    private void setSavedMessage(String message) {
+        if (!TextUtils.isEmpty(message)) {
+            mEditBox.setText(message);
+            mEditBox.setSelection(message.length());
+        }
+    }
+
 }

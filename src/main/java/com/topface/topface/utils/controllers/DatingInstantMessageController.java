@@ -67,7 +67,7 @@ public class DatingInstantMessageController {
 
     public DatingInstantMessageController(Activity activity, KeyboardListenerLayout root,
                                           View.OnClickListener clickListener,
-                                          IRequestClient requestClient,
+                                          IRequestClient requestClient, String text,
                                           final View datingButtons, final View userInfoStatus,
                                           SendLikeAction sendLikeAction, TextView.OnEditorActionListener mEditorActionListener) {
         mActivity = activity;
@@ -114,9 +114,12 @@ public class DatingInstantMessageController {
             }
         });
         UserConfig userConfig = App.getUserConfig();
-        String defaultMessage = userConfig.getDefaultDatingMessage();
-        mLastMsgFromConfig = CacheProfile.getOptions().instantMessageFromSearch.getText();
-        setInstantMessageText(TextUtils.isEmpty(defaultMessage) ? mLastMsgFromConfig : defaultMessage);
+        String defaultMessage = userConfig.getDatingMessage();
+        if (TextUtils.isEmpty(defaultMessage) && !TextUtils.isEmpty(text)) {
+            userConfig.setDatingMessage(text);
+            userConfig.saveConfig();
+        }
+        setInstantMessageText(defaultMessage.isEmpty() ? text : defaultMessage);
         mMessageText.setHint(activity.getString(R.string.dating_message));
         mMessageText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         mMessageSend.setOnClickListener(clickListener);
@@ -156,8 +159,8 @@ public class DatingInstantMessageController {
                 Utils.hideSoftKeyboard(mActivity, mMessageText);
 
                 UserConfig userConfig = App.getUserConfig();
-                if (!userConfig.getDefaultDatingMessage().equals(editString)) {
-                    userConfig.setDefaultDatingMessage(editString);
+                if (!userConfig.getDatingMessage().equals(editString)) {
+                    userConfig.setDatingMessage(editString);
                     userConfig.saveConfig();
                 }
 
@@ -293,8 +296,8 @@ public class DatingInstantMessageController {
         mFooterFlipper.setDisplayedChild(1);
     }
 
-    private void setInstantMessageText(String text) {
-        if (TextUtils.isEmpty(text)) {
+    public void setInstantMessageText(String text) {
+        if (text == null) {
             mMessageText.getText().clear();
         } else {
             mMessageText.setText(text);
@@ -303,9 +306,8 @@ public class DatingInstantMessageController {
     }
 
     public void reset() {
-        String defaultMessage = App.getUserConfig().getDefaultDatingMessage();
-        mLastMsgFromConfig = CacheProfile.getOptions().instantMessageFromSearch.getText();
-        setInstantMessageText(TextUtils.isEmpty(defaultMessage) ? mLastMsgFromConfig : defaultMessage);
+        String defaultMessage = App.getUserConfig().getDatingMessage();
+        setInstantMessageText(defaultMessage);
     }
 
     public void instantSend(final SearchUser user) {
@@ -345,5 +347,11 @@ public class DatingInstantMessageController {
                 }
             }).exec();
         }
+    }
+
+    public static void resetMessage() {
+        UserConfig userConfig = App.getUserConfig();
+        userConfig.setDatingMessage("");
+        CacheProfile.getOptions().instantMessageFromSearch.setText("");
     }
 }

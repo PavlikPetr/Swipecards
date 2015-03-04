@@ -39,7 +39,7 @@ public class SearchCacheManager extends UsersListCacheManager {
                 .remove(getExpireDateCacheKey(CACHE_KEY))
                 .remove(getPositionCacheKey(CACHE_KEY))
                 .remove(getSearchSignatureCacheKey(CACHE_KEY))
-                .commit();
+                .apply();
     }
 
     protected String getSearchSignatureCacheKey(String cacheKey) {

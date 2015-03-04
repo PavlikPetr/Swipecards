@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
@@ -69,7 +70,11 @@ public class ProfileFormListAdapter extends BaseAdapter {
         } else {
             holder.value.setText(item.value);
         }
-        holder.title.setText(item.title);
+        if (App.getContext().getResources().getString(R.string.form_main_about_status_2).equals(item.title)) {
+            holder.value.setText(item.value);
+        } else {
+            holder.value.setText(item.value.toLowerCase(Locale.getDefault()));
+        }
         holder.value.setOnClickListener(mOnFillListener);
         holder.value.setTag(item);
         holder.title.setOnClickListener(mOnFillListener);

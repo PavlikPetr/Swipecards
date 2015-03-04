@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,10 +37,27 @@ public class MultipartApiResponse implements IApiResponse {
     public JSONObject jsonResult;
     private HashMap<String, ApiResponse> mResponses = new HashMap<>();
 
+    public MultipartApiResponse(int responseCode, String contentType, String body) {
+        processResponse(responseCode, contentType, new ByteArrayInputStream(body.getBytes()));
+    }
+
     public MultipartApiResponse(HttpURLConnection connection) {
         try {
+            processResponse(connection.getResponseCode(), connection.getContentType(), connection.getInputStream());
+        } catch (IOException e) {
+            Debug.error(e);
+            setError(ErrorCodes.ERRORS_PROCCESED, "Parse response error");
+        }
+    }
+
+    private void processResponse(int responseCode, String contentType, InputStream inputStream) {
+        try {
             //Разбиваем ответ на подответы, в итоге получим массив json объектов
-            LinkedList<String> responses = splitResponses(connection);
+            LinkedList<String> responses = splitResponses(
+                    responseCode,
+                    contentType,
+                    inputStream
+            );
             if (responses == null || responses.isEmpty()) {
                 if (isCodeEqual(ErrorCodes.RESULT_DONT_SET)) {
                     setError(ErrorCodes.NULL_RESPONSE, "Responses is null");
@@ -81,15 +99,14 @@ public class MultipartApiResponse implements IApiResponse {
         }
     }
 
-    private LinkedList<String> splitResponses(HttpURLConnection connection) throws IOException {
+    private LinkedList<String> splitResponses(int responseCode, String contentType, InputStream inputStream) throws IOException {
         LinkedList<String> parts = new LinkedList<>();
         //Если подключение не пустое и код ответа правильный
-        if (connection != null && HttpUtils.isCorrectResponseCode(connection.getResponseCode())) {
+        if (inputStream != null && HttpUtils.isCorrectResponseCode(responseCode)) {
             //Если нужно, разархивируем поток из Gzip
-            InputStream stream = HttpUtils.getGzipInputStream(connection);
-            if (stream != null) {
-                BufferedInputStream is = new BufferedInputStream(new FlushedInputStream(stream), HttpUtils.BUFFER_SIZE);
-                String boundary = getBoundary(connection.getContentType());
+            if (inputStream != null) {
+                BufferedInputStream is = new BufferedInputStream(new FlushedInputStream(inputStream), HttpUtils.BUFFER_SIZE);
+                String boundary = getBoundary(contentType);
                 if (TextUtils.isEmpty(boundary)) {
                     //В дебаг режиме еще читаем ответ сервера, что бы понять в чем проблема и куда делся boundary
                     if (BuildConfig.DEBUG) {
@@ -116,7 +133,7 @@ public class MultipartApiResponse implements IApiResponse {
 
                     nextPart = multipartStream.readBoundary();
                 }
-                stream.close();
+                inputStream.close();
                 is.close();
             }
         }

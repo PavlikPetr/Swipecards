@@ -12,6 +12,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
@@ -86,7 +87,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.age = resp.optInt("age");
             profile.sex = resp.optInt("sex");
             profile.status = normilizeStatus(resp.optString("status"));
-            profile.firstName = normalizeName(resp.optString("firstName"));
+            profile.firstName = normalizeName(Utils.optString(resp, "firstName"));
             profile.city = new City(resp.optJSONObject("city"));
             profile.premium = resp.optBoolean("premium");
             profile.background = resp.optInt("bg", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
@@ -346,13 +347,7 @@ public class Profile extends AbstractDataWithPhotos {
     }
 
     public String getNameAndAge() {
-        String result;
-        if (firstName != null && firstName.length() > 0 && age > 0) {
-            result = firstName + ", " + age;
-        } else {
-            result = firstName;
-        }
-        return result;
+        return Utils.getNameAndAge(firstName, age);
     }
 
     public int getType() {

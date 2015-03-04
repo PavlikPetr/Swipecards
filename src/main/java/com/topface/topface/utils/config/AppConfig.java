@@ -34,11 +34,9 @@ public class AppConfig extends AbstractConfig {
     public static final String DATA_API_URL = "data_api_url";
     public static final String DATA_AUTH_VK_API = "data_auth_vk_api";
     public static final String FLOOD_ENDS_TIME = "flood_ens_time";
-    private static final String DATA_API_REVISION = "data_api_revision";
     private static final String DATA_EDITOR_MODE = "data_editor_mode";
     private static final String DATA_DEBUG_MODE = "data_debug_mode";
     private static final String DATA_APP_CONFIG_VERSION = "data_app_config_version";
-    private static final String DATA_API_VERSION = "data_api_version";
     private static final String DATA_TEST_NETWORK = "data_test_network_mode";
     private static final String DATA_APP_OPTIONS = "data_app_options";
     private static final String LAST_FULLSCREEN_TIME = "fullScreeenBanner_last_time";
@@ -65,10 +63,6 @@ public class AppConfig extends AbstractConfig {
     protected void fillSettingsMap(SettingsMap settingsMap) {
         // api url: https://api.topface.com/
         addField(settingsMap, DATA_API_URL, Static.API_URL);
-        // api version number
-        addField(settingsMap, DATA_API_VERSION, ApiRequest.API_VERSION);
-        // api revision for test platforms
-        addField(settingsMap, DATA_API_REVISION, null);
         // vk api id
         addField(settingsMap, DATA_AUTH_VK_API, Static.AUTH_VK_ID);
         // editor mode from Editor class
@@ -180,31 +174,12 @@ public class AppConfig extends AbstractConfig {
     }
 
     /**
-     * Api version for requests
-     *
-     * @return version number
-     */
-    @SuppressWarnings("UnusedDeclaration")
-    public Integer getApiVersion() {
-        return getIntegerField(getSettingsMap(), DATA_API_VERSION);
-    }
-
-    /**
      * Api url for requests in ConnectionManager
      *
      * @return url for request
      */
     public String getApiDomain() {
         return getStringField(getSettingsMap(), DATA_API_URL);
-    }
-
-    /**
-     * Api revision for test platforms to identify different server code states
-     *
-     * @return revision id
-     */
-    public String getApiRevision() {
-        return getStringField(getSettingsMap(), DATA_API_REVISION);
     }
 
     /**
@@ -228,13 +203,11 @@ public class AppConfig extends AbstractConfig {
     /**
      * Сохраняет все настройки, связаные с доступок к API
      *
-     * @param url      путь к API
-     * @param revision Ревизия (будет работать только для тестовых платформ)
+     * @param url путь к API
      */
-    public void setApiUrl(String url, String revision) {
+    public void setApiUrl(String url) {
         SettingsMap settingsMap = getSettingsMap();
         setField(settingsMap, DATA_API_URL, url);
-        setField(settingsMap, DATA_API_REVISION, revision);
     }
 
     public void setStageLogin(String login, boolean checked) {

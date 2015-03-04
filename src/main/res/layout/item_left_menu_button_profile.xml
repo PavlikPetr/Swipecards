@@ -17,7 +17,7 @@
             android:layout_width="fill_parent"
             android:layout_height="@dimen/left_menu_background_height"
             android:scaleType="centerCrop"
-            ivr:postProcessor="leftMenuClip" />
+            ivr:preProcessor="leftMenuClip" />
 
         <ImageView
             android:layout_width="fill_parent"
@@ -42,7 +42,7 @@
                 android:src="@drawable/topface_male_profile_button"
                 android:tag="ivMenuAvatar"
                 ivr:clipMask="@drawable/frame_menu_mask"
-                ivr:postProcessor="mask" />
+                ivr:preProcessor="mask" />
 
             <Button
                 android:id="@+id/btnUserName"
@@ -92,7 +92,7 @@
             android:src="@drawable/topface_male_profile_button"
             android:tag="ivMenuAvatar"
             ivr:clipMask="@drawable/frame_menu_mask"
-            ivr:postProcessor="mask" />
+            ivr:preProcessor="mask" />
 
         <TextView
             android:id="@+id/profile_button"
