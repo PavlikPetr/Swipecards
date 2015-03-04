@@ -443,9 +443,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
      */
     public void setMenuLockMode(int lockMode, HackyDrawerLayout.IBackPressedListener listener) {
         if (mDrawerLayout != null) {
-            if (lockMode == DrawerLayout.LOCK_MODE_UNLOCKED) {
-                return;
-            }
             mDrawerLayout.setDrawerLockMode(lockMode, GravityCompat.START);
             mDrawerLayout.setBackPressedListener(listener);
         }
@@ -606,6 +603,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     public void onShowActionBar() {
         mIsActionBarHidden = false;
+        setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         getSupportActionBar().show();
     }
 
