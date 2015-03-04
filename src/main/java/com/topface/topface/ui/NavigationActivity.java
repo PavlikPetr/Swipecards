@@ -55,7 +55,9 @@ import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.controllers.AbstractStartAction;
 import com.topface.topface.utils.controllers.IStartAction;
+import com.topface.topface.utils.controllers.StartActionNode;
 import com.topface.topface.utils.controllers.StartActionsController;
+import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
@@ -198,10 +200,12 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 showFragment(FragmentId.TABBED_LIKES);
             }
         }));
-        startActionsController.registerAction(new FacebookRequestWindowAction(this, AC_PRIORITY_NORMAL));
+        StartActionNode node = new StartActionNode(AC_PRIORITY_NORMAL);
+        node.addAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
+        node.addAction(new FacebookRequestWindowAction(this, AC_PRIORITY_NORMAL));
+        startActionsController.registerAction(node);
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
-        startActionsController.registerAction(mPopupManager.createInvitePopupStartAction(AC_PRIORITY_LOW));
         // fullscreen
         if (mFullscreenController != null) {
             startActionsController.registerMandatoryAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));

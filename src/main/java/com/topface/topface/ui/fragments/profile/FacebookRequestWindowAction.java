@@ -9,6 +9,7 @@ import com.facebook.Session;
 import com.facebook.widget.WebDialog;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.statistics.InviteUniqueStatistics;
 import com.topface.topface.utils.social.AuthToken;
 
 public class FacebookRequestWindowAction extends DailyPopupAction {
@@ -58,8 +59,13 @@ public class FacebookRequestWindowAction extends DailyPopupAction {
             @Override
             public void onComplete(Bundle bundle, FacebookException e) {
                 if (e instanceof FacebookOperationCanceledException) {
+                    if (mOnNextPopupStart != null) {
+                        mOnNextPopupStart.onStart();
+                    }
                     mUserConfig.setFacebookRequestSkip(mUserConfig.getFacebookRequestSkip() + 1);
                 } else {
+                    //в bundle id запроса и id пользователей которым были посланы реквесты.
+                    InviteUniqueStatistics.sendFacebookInvites(bundle.keySet().size() - 1);
                     mUserConfig.setFacebookRequestSkip(mFasebookRequests.maxAttempts + 1);
                 }
             }
@@ -68,7 +74,6 @@ public class FacebookRequestWindowAction extends DailyPopupAction {
     }
 
     private boolean isFacebook() {
-        String s = AuthToken.getInstance().getSocialNet();
         return AuthToken.getInstance().getSocialNet()
                 .equals(AuthToken.SN_FACEBOOK);
     }

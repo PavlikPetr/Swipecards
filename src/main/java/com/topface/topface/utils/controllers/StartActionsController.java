@@ -6,6 +6,7 @@ import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -97,6 +98,33 @@ public class StartActionsController {
             Debug.log(TAG, "===>there is no applicable action");
             return false;
         }
+        if (action.hasMoreActions()) {
+            runActionQueue(action.getActions());
+        } else {
+            runAction(action);
+        }
+        return true;
+    }
+
+    private void runActionQueue(final ArrayList<IStartAction> actions) {
+        for (int i = 0; i < actions.size(); i++) {
+            final int finalI = i;
+            actions.get(i).setStartActionCulback(new AbstractStartAction.OnNextPopupStart() {
+                @Override
+                public void onStart() {
+                    if (finalI + 1 >= actions.size()) return;
+                    if (actions.get(finalI + 1).isApplicable()) {
+                        runAction(actions.get(finalI + 1));
+                    }
+                }
+            });
+            if (i == 0) {
+                runAction(actions.get(i));
+            }
+        }
+    }
+
+    private void runAction(final IStartAction action) {
         action.callInBackground();
         mActivity.runOnUiThread(new Runnable() {
             @Override
@@ -106,7 +134,6 @@ public class StartActionsController {
             }
         });
         Debug.log(TAG, "===>process chosen action - " + action.toString());
-        return true;
     }
 
     /**

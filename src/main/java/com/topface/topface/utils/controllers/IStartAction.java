@@ -1,5 +1,7 @@
 package com.topface.topface.utils.controllers;
 
+import java.util.ArrayList;
+
 /**
  * Use AbstractStartAction implementation for common Start Actions.
  * One contains implemented toString() method
@@ -33,4 +35,13 @@ public interface IStartAction {
     int getPriority();
 
     String getActionName();
+
+    boolean hasMoreActions();
+
+    void addAction(IStartAction action);
+
+    ArrayList<IStartAction> getActions();
+
+    void setStartActionCulback(AbstractStartAction.OnNextPopupStart nextPopupStart);
+
 }
