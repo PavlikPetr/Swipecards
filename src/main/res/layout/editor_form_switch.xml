@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
 
     <ImageView
         android:id="@+id/ivEditBackground"
@@ -17,7 +18,7 @@
 
     <TextView
         android:tag="tvTitle"
-        style="@style/ItemTitleText"
+        style="@style/GrayText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/ivEditBackground"
@@ -42,19 +43,17 @@
         android:layout_alignRight="@id/ivEditBackground"
         android:layout_marginRight="5dp"
         android:clickable="false"
-        android:textSize="12sp"
-        android:gravity="center"
-        android:singleLine="true"
         android:minHeight="0dp"/>
 
     <ProgressBar
         android:tag="vsiLoadBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignRight="@id/cbSwitch"
         android:layout_centerVertical="true"
-        android:layout_marginRight="38dp"
+        android:layout_marginRight="40dp"
         style="@style/TopFaceProgressBar.Small"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
 </RelativeLayout>

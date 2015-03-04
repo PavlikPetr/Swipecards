@@ -281,7 +281,7 @@
     <string name="profile_gifts">Подарки</string>
     <string name="profile_actions">Действия</string>
     <string name="profile_empty_form">Пользователь не заполнил анкету</string>
-    <string name="profile_ask_form">Попросить заполнить анкету</string>
+    <string name="profile_ask_form">Попросить заполнить</string>
 
     <!-- Profile editing  -->
     <string name="edit_title">Редактирование</string>
@@ -416,7 +416,7 @@
     <string name="vip_black_list">Черный список</string>
     <string name="vip_profile_bg">Фоновая фотография</string>
 
-    <string name="vip_status">VIP-статус</string>
+    <string name="vip_status">VIP</string>
 
     <string name="black_list_title">Черный список</string>
     <string name="black_list_empty">Ваш черный список пуст</string>

@@ -308,11 +308,9 @@ public class Products extends AbstractData {
         // title text
         TextView tvTitle = (TextView) view.findViewById(R.id.itText);
         tvTitle.setText(title);
-        tvTitle.setTextColor(color);
         // value text
         TextView tvValue = (TextView) view.findViewById(R.id.itValue);
         tvValue.setText(value);
-        tvValue.setTextColor(color);
         // economy text
         TextView tvEconomy = (TextView) view.findViewById(R.id.itEconomy);
         tvEconomy.setTextColor(color);

@@ -116,6 +116,7 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
 
         if (mUserFormListAdapter.isEmpty()) {
             mEmptyFormLayout.setVisibility(View.VISIBLE);
+            mListQuestionnaire.setVisibility(View.GONE);
         }
     }
 
