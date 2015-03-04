@@ -160,6 +160,7 @@
     <string name="general_copy_title">Копировать</string>
     <string name="general_back">Назад</string>
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
+    <string name="general_non_exist_photo_error">Не получилось совершить действие, т.к. фотография удалена</string>
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_internet_off">Пытаемся восстановить соединение с интернетом. Пожалуйста, подождите.</string>
     <string name="general_msg_copied">Текст скопирован</string>
