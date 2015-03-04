@@ -591,8 +591,6 @@
     <string name="billing_item_already_owned">Ihr voriger Kauf ist in der Bearbeitung, bitte warten Sie</string>
     <string name="dialog">Dialog</string>
     <string name="reply">Antworten</string>
-    <string name="measurement_unit_weight">kg.</string>
-    <string name="measurement_unit_height">cm.</string>
     <string name="email_changing">E-Mail ändern</string>
     <string name="pull_to_refresh_refreshing_label">Laden…</string>
     <string name="preload_photo_type_wifi_3g">WiFi und 3G</string>

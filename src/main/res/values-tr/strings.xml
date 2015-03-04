@@ -614,8 +614,6 @@
     <string name="billing_item_already_owned">Önceki satım alınınız uygulanıyor lütfen bekleyiniz</string>
     <string name="dialog">Sohbet</string>
     <string name="reply">Cevap vermek</string>
-    <string name="measurement_unit_weight">Kg.</string>
-    <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Maksimum kullanıcı sayısını seçildi</string>
     <string name="logout_if_email_already_registred">Böyle bir e-posta adresi kullanılıyor.Eğer sizin e-postanız ise şu anki hesabınızdan çıkıp  %s hesaba bağlanın.</string>
     <string name="recover_password_instructions">Şifrenizi kurtarmak ile alakalı talimatları içeren bir mesajı e-postanıza yolladık</string>

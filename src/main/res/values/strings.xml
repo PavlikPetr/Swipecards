@@ -360,6 +360,7 @@
     <string name="popup_version_cancel">Remind me later</string>
     <string name="general_version_not_supported">Your version of the app is outdated and is no longer supported. Please update it.</string>
     <string name="default_price_format">Total: %.2f USD</string>
+    <string name="default_price_format_extended">Total: %1$.2f %2$s</string>
     <string name="dating_online_only">%s, online only</string>
     <string name="leaders_pick_condition">You cannot select a photo with a rating lower than %d%%:</string>
     <string name="general_gift">Gift</string>
@@ -509,6 +510,7 @@
     <string name="or">or</string>
     <string name="settings_delete_account">Delete your account</string>
     <string name="chat_block_not_mutual">You can only start chatting with the user if he sent you a like or if you have VIP-status</string>
+    <string name="add_to_favorite_block_not_vip">Only VIP users can add Favorites from the Dating screen</string>
     <string name="delete_account_are_you_sure">Are you sure?</string>
     <string name="delete">Delete</string>
     <string name="delete_account_warning">Attention! You are trying to delete your profile in Topface.</string>
@@ -599,8 +601,8 @@
     <string name="billing_item_already_owned">Your previous purchase is now processing, please wait.</string>
     <string name="dialog">Conversation</string>
     <string name="reply">Reply</string>
-    <string name="measurement_unit_weight">kg.</string>
-    <string name="measurement_unit_height">cm.</string>
+    <string name="measurement_unit_weight">kg</string>
+    <string name="measurement_unit_height">cm</string>
     <string name="maximum_number_of_users">You have selected the maximum number of users.</string>
     <string name="logout_if_email_already_registred">There is a user with this email already. If this is your email, you have to log out of the current account and log into %s account.</string>
     <string name="recover_password_instructions">An email has been sent to you with the password recovery instruction.</string>

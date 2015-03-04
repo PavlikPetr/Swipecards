@@ -595,8 +595,6 @@
     <string name="billing_item_already_owned">Il tuo ordine precedente è in elaborazione, si prega di attendere</string>
     <string name="dialog">Dialoghi</string>
     <string name="reply">Rispondere</string>
-    <string name="measurement_unit_weight">kg</string>
-    <string name="measurement_unit_height">cm</string>
     <string name="maximum_number_of_users">Hai scelto il numero massimo degli utenti</string>
     <string name="logout_if_email_already_registred">L’utente con questo e-mail esiste già. Se questo indirizzo mail è tuo, devi uscire dall’account attuale e accedere all’account %s</string>
     <string name="recover_password_instructions">Al tuo indirizzo e-mail sono state inviate le istruzioni su come ripristinare la password</string>
