@@ -101,7 +101,7 @@ public class Options extends AbstractData {
     public long popup_timeout;
     public boolean blockUnconfirmed;
     public boolean blockChatNotMutual;
-    public boolean scruffy;
+    public Boolean scruffy = null;
     public BlockSympathy blockSympathy = new BlockSympathy();
     public BlockPeopleNearby blockPeople = new BlockPeopleNearby();
     public boolean isActivityAllowed = true; //Разрешено ли пользователю ставить лайки и совершать прочую активность
