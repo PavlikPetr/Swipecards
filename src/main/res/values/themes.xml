@@ -32,7 +32,7 @@
         <item name="android:dropDownItemStyle">@style/topfaceDropDownItemStyle</item>
         <item name="android:listPreferredItemHeight">32dp</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
-        <item name="android:windowBackground">@null</item>
+        <item name="android:windowBackground">@color/bg_holo</item>
         <item name="android:progressBarStyle">@style/TopFaceProgressBar</item>
         <!-- Стилизованные кнопки -->
         <item name="blueButtonStyle">@style/Widget.Topface.Button.Big.Blue</item>

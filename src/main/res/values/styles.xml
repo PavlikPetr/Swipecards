@@ -920,4 +920,10 @@
         <item name="android:textColor">@color/text_white</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="WhiteButtonWithSeparator" parent="GrayText">
+        <item name="android:background">@drawable/list_like_btn</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">60dp</item>
+    </style>
 </resources>

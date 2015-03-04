@@ -14,6 +14,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 
 import java.util.LinkedList;
+import java.util.Locale;
 
 public class ProfileFormListAdapter extends BaseAdapter {
     // Data
@@ -65,16 +66,15 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
         FormItem item = getItem(position);
 
+        holder.title.setText(item.title);
         if (TextUtils.isEmpty(item.value)) {
             holder.value.setText(R.string.form_not_specified);
-        } else {
-            holder.value.setText(item.value);
-        }
-        if (App.getContext().getResources().getString(R.string.form_main_about_status_2).equals(item.title)) {
+        } else if (App.getContext().getResources().getString(R.string.form_main_about_status_2).equals(item.title)) {
             holder.value.setText(item.value);
         } else {
             holder.value.setText(item.value.toLowerCase(Locale.getDefault()));
         }
+
         holder.value.setOnClickListener(mOnFillListener);
         holder.value.setTag(item);
         holder.title.setOnClickListener(mOnFillListener);
