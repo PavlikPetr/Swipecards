@@ -24,20 +24,20 @@
         <EditText
             android:id="@+id/edMainField"
             style="@style/SettingsAccountEditText"
-            android:layout_marginBottom="18dp"
             android:gravity="left|center_vertical" />
 
         <EditText
             android:id="@+id/edConfirmationField"
+            android:layout_marginTop="14dp"
             style="@style/SettingsAccountEditText"
-            android:layout_marginBottom="18dp"
             android:gravity="left|center_vertical" />
 
         <Button
             android:id="@+id/btnSave"
+            android:layout_marginTop="16dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="#9e9e9e"
+            android:background="#33b5e5"
             android:text="@string/save" />
     </LinearLayout>
 
