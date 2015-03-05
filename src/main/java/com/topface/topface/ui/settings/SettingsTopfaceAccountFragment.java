@@ -50,6 +50,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private Button mBtnLogout;
     private Button mBtnCodeSend;
     private Button mBtnCodeWasSend;
+    private TextView mTxtCodeWasSend;
 
     RelativeLayout fieldContainer;
 
@@ -157,7 +158,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void initTextViews(ViewGroup root) {
-        Drawable icon = getResources().getDrawable(R.drawable.tf_logo_account);
+        Drawable icon = getResources().getDrawable(R.drawable.ic_logo);
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditTextCodeConfirmation = (EditText) root.findViewById(R.id.edCodeConfirmation);
         mEditText.setText(mToken.getLogin());
@@ -195,6 +196,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             mEditTextCodeConfirmation.setVisibility(View.GONE);
             mBtnCodeSend.setVisibility(View.GONE);
             mBtnCodeWasSend.setVisibility(View.GONE);
+            mTxtCodeWasSend.setVisibility(View.GONE);
         } else {
             mEditText.setVisibility(View.VISIBLE);
             mEditText.setText(mToken.getLogin());
@@ -202,6 +204,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             mEditTextCodeConfirmation.setVisibility(View.VISIBLE);
             mBtnCodeSend.setVisibility(View.VISIBLE);
             mBtnCodeWasSend.setVisibility(View.VISIBLE);
+            mTxtCodeWasSend.setVisibility(View.VISIBLE);
         }
     }
 
@@ -218,18 +221,19 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mBtnCodeSend.setOnClickListener(this);
         mBtnCodeWasSend = (Button) root.findViewById(R.id.btnCodeWasSend);
         mBtnCodeWasSend.setOnClickListener(this);
+        mTxtCodeWasSend = (TextView) root.findViewById(R.id.txtCodeWasSend);
     }
 
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
             mBtnChangeEmail.setVisibility(View.VISIBLE);
-            fieldContainer.setBackgroundResource(R.drawable.edit_big_btn_selector);
+//            fieldContainer.setBackgroundResource(R.drawable.edit_big_btn_selector);
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
             mBtnChangeEmail.setVisibility(View.GONE);
-            fieldContainer.setBackgroundResource(android.R.color.transparent);
+//            fieldContainer.setBackgroundResource(android.R.color.transparent);
             if (mChangeEmail) {
                 setChangeBtnAction(ACTION_CHANGE_EMAIL);
             } else {

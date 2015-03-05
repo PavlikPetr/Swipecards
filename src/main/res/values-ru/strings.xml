@@ -344,6 +344,7 @@
     <string name="settings_logout">Выйти из аккаунта</string>
     <string name="settings_code_confirmation">Отправить код подтверждения</string>
     <string name="settings_email_was_confirmed">Уже подтвердил</string>
+    <string name="settings_email_was_confirmed_textview_text">Если вы уже подтвердили почту через компьютер</string>
     <string name="settings_code_confirmation_hint">Код подтверждения</string>
     <string name="settings_logout_msg">Вы действительно хотите выйти?</string>
     <string name="settings_error_message">Сообщение об ошибке</string>
@@ -531,7 +532,7 @@
         использоваться как ваша аватарка.
     </string>
 
-    <string name="change_email">Сменить e-mail</string>
+    <string name="change_email">Изменить e-mail</string>
     <string name="send_confirmation_email">Выслать подтверждение на e-mail</string>
     <string name="change_password">Изменить пароль</string>
     <string name="password_changing">Изменение пароля</string>
