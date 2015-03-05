@@ -177,6 +177,7 @@
     <string name="chat_sexuality_out">Hai valutato la sessualità.</string>
     <string name="chat_wink_in">Hai ricevuto un occhiolino.</string>
     <string name="chat_wink_out">Hai inviato un occhiolino.</string>
+    <string name="filter_search">Ricerca</string>
     <string name="filter_filter">Filtro</string>
     <string name="filter_age_string">Da %1$d a %2$d</string>
     <string name="filter_only_beautiful">Solo belle</string>
@@ -594,8 +595,6 @@
     <string name="billing_item_already_owned">Il tuo ordine precedente è in elaborazione, si prega di attendere</string>
     <string name="dialog">Dialoghi</string>
     <string name="reply">Rispondere</string>
-    <string name="measurement_unit_weight">kg</string>
-    <string name="measurement_unit_height">cm</string>
     <string name="maximum_number_of_users">Hai scelto il numero massimo degli utenti</string>
     <string name="logout_if_email_already_registred">L’utente con questo e-mail esiste già. Se questo indirizzo mail è tuo, devi uscire dall’account attuale e accedere all’account %s</string>
     <string name="recover_password_instructions">Al tuo indirizzo e-mail sono state inviate le istruzioni su come ripristinare la password</string>
@@ -617,4 +616,15 @@
     <string name="preload_photo_type_preload_off">Spenta</string>
     <string name="wrong_time_popup_text">Non siamo riusciti a stabilire una connessione sicura.\nProbabilmente il tuo dispositivo mostra una data o l’ora scorretta.</string>
     <string name="wrong_time_popup_button">Aprire i parametri</string>
+    <string name="google_service_general_title">Notifiche non disponibili</string>
+    <string name="google_service_disabled_title">Hai disabilitato i Servizi Google Play che servono per il corretto funzionamento di notifiche.</string>
+    <string name="google_service_disabled_button">Abilita</string>
+    <string name="google_service_missing_title">Non hai installato i Servizi Google Play che servono per il corretto funzionamento di notifiche.</string>
+    <string name="google_service_missing_button">Installare</string>
+    <string name="google_service_version_update_required_title">Hai una versione vecchia di Servizi Google Play, per il corretto funzionamento di notifiche si prega di aggiornarla.</string>
+    <string name="google_service_version_update_required_button">Aggiornare</string>
+    <string name="google_invalid_account_title">Controlla i dati del tuo account Google oppure scrivi al supporto tecnico di Google.</string>
+    <string name="google_sign_in_account_title">Non hai aggiunto l’account Google, devi accedervi per ricevere le notifiche.</string>
+    <string name="google_sign_in_account_button">Accedere</string>
+    <string name="google_unavailable_services_title">Purtroppo il tuo dispositivo non supporta l’invio di notifiche.</string>
 </resources>

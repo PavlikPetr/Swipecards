@@ -619,8 +619,6 @@
     <string name="billing_item_already_owned">Jūsų praeitas pirkinys apdorojamas, prašome palaukti</string>
     <string name="dialog">Susirašinėjimas</string>
     <string name="reply">Atsakyti</string>
-    <string name="measurement_unit_weight">kg.</string>
-    <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Pasirinktas maksimalus vartotojų kiekis</string>
     <string name="logout_if_email_already_registred">Vartotojas su tokiu el. paštu jau egzistuoja. Jeigu tai jūsų el. paštas, jums būtina išeiti iš dabartinės paskyros ir įeiti į paskyrą %s</string>
     <string name="recover_password_instructions">Jūsų el. pašto adresu išsiųstas laiškas su slaptažodžio atstatymo instrukcija</string>
@@ -642,4 +640,15 @@
     <string name="preload_photo_type_preload_off">Įjungta</string>
     <string name="wrong_time_popup_text">Nepavyko užmegzti saugaus ryšio su serveriu.\nGalbūta data arba laikas jūsų įrenginyje nurodyti neteisingai.</string>
     <string name="wrong_time_popup_button">Atverti nustatymus</string>
+    <string name="google_service_general_title">Pranešimai nepasiekiami</string>
+    <string name="google_service_disabled_title">Pas jus yra išjungtos Google Play paslaugos, kurias būtina įjungti, kad veiktų pranešimai.</string>
+    <string name="google_service_disabled_button">Įjungti</string>
+    <string name="google_service_missing_title">Pas jus neįdiegtos Google plays paslaugos, kurios yra būtinos pranešimų veikimui.</string>
+    <string name="google_service_missing_button">Įdiegti</string>
+    <string name="google_service_version_update_required_title">Pas jus įdiegta sena Google Play paslaugų versija, korektiškam pranešimų veikimui, prašome, atnaujinkite.</string>
+    <string name="google_service_version_update_required_button">Atnaujinti</string>
+    <string name="google_invalid_account_title">Pasitikrinte jūsų Google paskyros duomenis arba susisiekite su Google techniniu palaikymu.</string>
+    <string name="google_sign_in_account_title">Pas jus nepridėta Google paskyra, jūs turite autorizuotis, jei norite gauti pranešimus.</string>
+    <string name="google_sign_in_account_button">Autorizuotis</string>
+    <string name="google_unavailable_services_title">Deja, pranešimai nepalaikomi jūsų įrenginyje.</string>
 </resources>
