@@ -95,12 +95,8 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (CacheProfile.premium && mResourcesInfo != null) {
-            mResourcesInfo.setVisibility(View.GONE);
-        } else {
-            if (mResourcesInfo != null) {
-                mResourcesInfo.setVisibility(View.VISIBLE);
-            }
+        if (mResourcesInfo != null) {
+            mResourcesInfo.setVisibility(CacheProfile.premium ? View.GONE : View.VISIBLE);
         }
         updateBalanceCounters();
     }
