@@ -9,25 +9,21 @@ import android.text.TextUtils;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.RetryDialog;
 import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.IRequestConnectionListener;
-import com.topface.topface.utils.RequestConnectionListenerFactory;
+import com.topface.topface.requests.transport.Headers;
+import com.topface.topface.requests.transport.HttpApiTransport;
+import com.topface.topface.requests.transport.IApiTransport;
+import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.utils.http.ConnectionManager;
-import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.Locale;
 
 public abstract class ApiRequest implements IApiRequest {
     /**
@@ -50,22 +46,18 @@ public abstract class ApiRequest implements IApiRequest {
     public Context context;
     public boolean canceled = false;
     protected HttpURLConnection mURLConnection;
-    protected String mApiUrl;
     private boolean doNeedAlert;
     private int mResendCnt = 0;
     private String mPostData;
     private boolean isNeedCounters = true;
+    private IApiTransport mDefaultTransport;
 
     public ApiRequest(Context context) {
         if (isNeedAuth()) {
-            ssid = Static.EMPTY;
+            ssid = Ssid.get();
         }
         this.context = context;
         doNeedAlert = true;
-    }
-
-    protected static String getRevNum() {
-        return App.getAppConfig().getApiRevision();
     }
 
     @Override
@@ -99,7 +91,6 @@ public abstract class ApiRequest implements IApiRequest {
         }
     }
 
-    @Override
     public void resetResendCounter() {
         mResendCnt = 0;
     }
@@ -149,10 +140,14 @@ public abstract class ApiRequest implements IApiRequest {
     @Override
     public void cancel() {
         setFinished();
-        canceled = true;
+        setCanceled(true);
         if (handler != null) {
             handler.cancel();
         }
+    }
+
+    private void setCanceled(boolean b) {
+        canceled = b;
     }
 
     @Override
@@ -171,7 +166,10 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     @Override
-    public String toPostData() {
+    public String getRequestBodyData() {
+        //Непосредственно перед отправкой запроса устанавливаем новый SSID
+        setSsid(Ssid.get());
+
         if (mPostData == null) {
             mPostData = getRequest().toString();
         }
@@ -188,7 +186,6 @@ public abstract class ApiRequest implements IApiRequest {
         return handler;
     }
 
-    @Override
     public int getResendCounter() {
         return mResendCnt;
     }
@@ -237,23 +234,11 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     final public String toString() {
-        return toPostData();
+        return getRequestBodyData();
     }
 
     protected void handleFail(int errorCode, String errorMessage) {
         handler.response(new ApiResponse(errorCode, errorMessage));
-    }
-
-    protected HttpURLConnection openConnection() throws IOException {
-
-        mURLConnection = HttpUtils.openPostConnection(mApiUrl, getContentType());
-        setRevisionHeader(mURLConnection);
-
-        return mURLConnection;
-    }
-
-    protected String getContentType() {
-        return CONTENT_TYPE;
     }
 
     /**
@@ -280,128 +265,33 @@ public abstract class ApiRequest implements IApiRequest {
         }
     }
 
-    protected String getApiUrl() {
-        return App.getAppConfig().getApiUrl();
+    @Override
+    public IApiResponse sendRequestAndReadResponse() throws Exception {
+        return getTransport().sendRequestAndReadResponse(this);
+
+    }
+
+    protected IApiTransport getTransport() {
+        switch (App.getApiTransport()) {
+            case HttpApiTransport.TRANSPORT_NAME:
+                return getDefaultTransport();
+            case ScruffyApiTransport.TRANSPORT_NAME:
+                return new ScruffyApiTransport();
+            default:
+                return getDefaultTransport();
+        }
+    }
+
+    protected IApiTransport getDefaultTransport() {
+        if (mDefaultTransport == null) {
+            mDefaultTransport = new HttpApiTransport();
+        }
+        return mDefaultTransport;
     }
 
     @Override
-    final public IApiResponse sendRequestAndReadResponse() throws Exception {
-        final IRequestConnectionListener listener = RequestConnectionListenerFactory.create(getServiceName());
-        int responseCode = -1;
-        IApiResponse response;
-        setSsid(Ssid.get());
-        mApiUrl = getApiUrl();
-        listener.onConnectionStarted();
-        HttpURLConnection connection = openConnection();
-        if (connection != null) {
-            IConnectionConfigureListener connConfListener = new IConnectionConfigureListener() {
-                @Override
-                public void onConfigureEnd() {
-                    listener.onConnectInvoked();
-                }
-
-                @Override
-                public void onConnectionEstablished() {
-                    listener.onConnectionEstablished();
-                }
-            };
-            //Непосредственно пишим данные в подключение
-            if (writeData(connection, connConfListener)) {
-                //Возвращаем HTTP статус ответа
-                responseCode = getResponseCode(connection);
-            }
-        } else {
-            Debug.error("ApiResponse: getConnection() return null");
-        }
-        //Проверяем ответ
-        if (HttpUtils.isCorrectResponseCode(responseCode)) {
-            //Если код ответа верный, то читаем данные из потока и создаем IApiResponse
-            response = readResponse();
-            listener.onConnectionClose();
-        } else {
-            //Если не верный, то конструируем соответсвующий ответ
-            response = constructApiResponse(ErrorCodes.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);
-        }
-        return response;
-    }
-
-    protected boolean writeData(HttpURLConnection connection, IConnectionConfigureListener listener) throws IOException {
-        // Check if service name exists and throw runtime exception if doesn't
-        if (TextUtils.isEmpty(getServiceName())) {
-            throw new RuntimeException("Request doesn't have service name!");
-        }
-        // Формируем свои данные для отправки POST запросом
-        String requestJson = toPostData();
-        // Переводим строку запроса в байты
-        byte[] requestData = requestJson.getBytes();
-        HttpUtils.setContentLengthAndConnect(connection, listener, requestData.length);
-        // Отправляем данные
-        if (requestData.length > 0 && !isCanceled()) {
-            Debug.logJson(
-                    ConnectionManager.TAG,
-                    "REQUEST >>> " + mApiUrl + " rev:" + getRevNum(),
-                    requestJson
-            );
-            //Отправляем наш  POST запрос
-            HttpUtils.sendPostData(requestData, connection);
-            return true;
-        } else {
-            Debug.error(
-                    String.format(
-                            Locale.ENGLISH,
-                            isCanceled() ? ConnectionManager.TAG + "::Api request %s is canceled"
-                                    : ConnectionManager.TAG + "::Api request %s is empty",
-                            getServiceName()
-                    )
-            );
-            return false;
-        }
-    }
-
-    protected int getResponseCode(HttpURLConnection connection) {
-        int responseCode = -1;
-        //Мы не хотим что бы при ошибке получения ответа от сервера происходила внутренняя ошибка,
-        //иначе запрос не отправится еще раз
-        try {
-            responseCode = connection.getResponseCode();
-        } catch (IOException e) {
-            Debug.error("Get response code exception: " + e.toString());
-        }
-        return responseCode;
-    }
-
-    public IApiResponse readResponse() throws IOException {
-        String rawResponse = null;
-        IApiResponse response;
-        if (mURLConnection != null) {
-            rawResponse = HttpUtils.readStringFromConnection(mURLConnection);
-        }
-        //Если ответ не пустой, то создаем объект ответа
-        if (!TextUtils.isEmpty(rawResponse)) {
-            response = new ApiResponse(rawResponse);
-        } else {
-            response = constructApiResponse(ErrorCodes.NULL_RESPONSE, "Null response");
-        }
-        return response;
-    }
-
-    /**
-     * Добавляет в http запрос куки с номером ревизии для тестирования беты
-     *
-     * @param connection соединение к которому будет добавлен заголовок
-     */
-    protected void setRevisionHeader(HttpURLConnection connection) {
-        if (BuildConfig.DEBUG || Editor.isEditor()) {
-            String rev = getRevNum();
-            if (rev != null && rev.length() > 0) {
-                connection.setRequestProperty("Cookie", "revnum=" + rev + ";");
-            }
-        }
-    }
-
-    @Override
-    public IApiResponse constructApiResponse(int code, String message) {
-        return new ApiResponse(code, message);
+    public String getContentType() {
+        return CONTENT_TYPE;
     }
 
     @Override
@@ -425,7 +315,7 @@ public abstract class ApiRequest implements IApiRequest {
     public void cancelFromUi() {
         closeConnectionAsync();
         mPostData = null;
-        canceled = true;
+        setCanceled(true);
         if (handler != null) {
             handler.cancel();
         }
@@ -438,7 +328,17 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     @Override
+    public Headers getHeaders() {
+        return new Headers(getId(), getContentType());
+    }
+
+    @Override
     public RequestBuilder intoBuilder(RequestBuilder requestBuilder) {
         return requestBuilder.singleRequest(this);
+    }
+
+    @Override
+    public String getApiUrl() {
+        return App.getAppConfig().getApiUrl();
     }
 }

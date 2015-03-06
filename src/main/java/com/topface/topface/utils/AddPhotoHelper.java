@@ -257,6 +257,11 @@ public class AddPhotoHelper {
             }
             return;
         }
+        // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
+        if (CacheProfile.photos != null && CacheProfile.photos.size() == 0) {
+            App.getConfig().getUserConfig().setUserAvatarAvailable(true);
+            App.getConfig().getUserConfig().saveConfig();
+        }
         Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
         showProgressDialog();
         mNotificationManager = UserNotificationManager.getInstance();
@@ -271,7 +276,6 @@ public class AddPhotoHelper {
         final PhotoAddRequest photoAddRequest = new PhotoAddProfileRequest(uri, mContext, new IProgressListener() {
             @Override
             public void onProgress(final int percentage) {
-
                 if (notificationListener.notification != null) {
                     //Видимо из-за ошибок в прошивке на редких девайсах с Android 4.0.4
                     //падает - https://rink.hockeyapp.net/manage/apps/26531/app_versions/62/crash_reasons/12857941?type=overview

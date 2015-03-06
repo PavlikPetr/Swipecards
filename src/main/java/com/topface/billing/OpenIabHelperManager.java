@@ -180,9 +180,11 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
 
     private void requestInventory() {
         if (mHelper != null) {
-            mIsInventoryReady = false;
-            List<String> skuList = getMarketSkuList();
-            mHelper.queryInventoryAsync(true, skuList, skuList, this);
+            if (mIsSetupDone) {
+                mIsInventoryReady = false;
+                List<String> skuList = getMarketSkuList();
+                mHelper.queryInventoryAsync(true, skuList, skuList, this);
+            }
         } else {
             init(App.getContext());
         }

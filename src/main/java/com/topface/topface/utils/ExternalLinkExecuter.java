@@ -1,14 +1,17 @@
 package com.topface.topface.utils;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
+
+import com.topface.topface.R;
+import com.topface.topface.statistics.RedirectStatistics;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ExternalLinkExecuter {
-
-    private static final String TOPFACE_CHEME = "topface";
 
     private OnExternalLinkListener listener;
 
@@ -16,15 +19,18 @@ public class ExternalLinkExecuter {
         this.listener = listener;
     }
 
-    public void execute(Intent intent) {
+    public void execute(Context context, Intent intent) {
         if (intent != null) {
 
             Uri data = intent.getData();
             if (data != null) {
                 String scheme = data.getScheme();
-                if (scheme != null && scheme.equals(TOPFACE_CHEME)) {
-                    if (data.getHost().equals("offerwall")) {
+                if (TextUtils.equals(context.getString(R.string.default_sheme), scheme)) {
+                    String host = data.getHost();
+                    if (TextUtils.equals(context.getString(R.string.offerwall_host), host)) {
                         listener.onOfferWall();
+                    } else {
+                        RedirectStatistics.send(host);
                     }
                 } else {
                     if (checkHost(data)) {

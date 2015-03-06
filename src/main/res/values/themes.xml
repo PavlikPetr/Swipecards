@@ -12,6 +12,7 @@
         <item name="android:itemTextAppearance">@style/PopupMenuTextApearance</item>
         <item name="android:dropDownListViewStyle">@style/FilterSpinnerDropDownList</item>
         <item name="android:popupMenuStyle" tools:ignore="NewApi">@style/PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowDropDownMenu</item>
 
         <item name="android:windowTitleStyle">@style/CenterJustifyDialogTitle</item>
 
@@ -66,6 +67,7 @@
 
     <style name="Theme.Topface.ActionbarOverlay">
         <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
     </style>
 
     <style name="Theme.Topface.NoActionBar.Fullscreen" parent="Theme.Topface.NoActionBar">

@@ -598,8 +598,6 @@
     <string name="billing_item_already_owned">Tu anterior compra está procesandose, espera por favor</string>
     <string name="dialog">Diálogo</string>
     <string name="reply">Responder</string>
-    <string name="measurement_unit_weight">kg.</string>
-    <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Seleccionada la máxima cantidad de usuarios</string>
     <string name="logout_if_email_already_registred">Usuario con este e-mail ya existe. Si es tu e-mail, tienes que salir de esta cuenta y entrar en la %s</string>
     <string name="recover_password_instructions">A tu e-mail fue enviada una carta con las instrucciones para recuperar la contraseña</string>
@@ -609,6 +607,7 @@
     <string name="hint_myprofile_buy_vip">Compra el estado VIP y disfruta de la comunicación sin límites</string>
     <string name="pull_to_refresh_pull_label">Arrastra para actualizar…</string>
     <string name="pull_to_refresh_release_label">Bajalo para actualizar…</string>
+    <string name="messaging_block_buy_vip">Para continuar hace falta el estado VIP\u2011</string>
     <string name="pull_to_refresh_refreshing_label">Cargando…</string>
     <string name="user_added_to_black_list">Usuario agregado a la lista negra</string>
     <string name="user_deleted_from_black_list">Usuario eliminado de la lista negra</string>
@@ -618,5 +617,17 @@
     <string name="preload_photo_type_wifi">Solo WiFi</string>
     <string name="preload_photo_type_always_on">Siempre conectada</string>
     <string name="preload_photo_type_preload_off">Descpnectada</string>
+    <string name="wrong_time_popup_text">Ha sido imposible establecer conexión segura con el servidor.\nEs posible que en tu dispositivo están puestas mal las fechas o la hora.</string>
     <string name="wrong_time_popup_button">Abrir opciones</string>
+    <string name="google_service_general_title">Avisos no disponibles</string>
+    <string name="google_service_disabled_title">Tienes desconectados algunos servicios Google Play que hacen falta para que los avisos funcionen.</string>
+    <string name="google_service_disabled_button">Habilitar</string>
+    <string name="google_service_missing_title">No tienes instalados algunos servicios Google Play que hacen falta para que los avisos funcionen.</string>
+    <string name="google_service_missing_button">Instalar</string>
+    <string name="google_service_version_update_required_title">Tienes instalada la antígua versión de los servicios Google Play. Para que los avisos funcionen correctamente, por favor, actualízala.</string>
+    <string name="google_service_version_update_required_button">Actualizar</string>
+    <string name="google_invalid_account_title">Comprueba los datos de tu cuenta Google o comunícate con el servicio técnico de Google.</string>
+    <string name="google_sign_in_account_title">No tienes agregada la cuenta Google, tienes que conectar, si quieres recibir avisos.</string>
+    <string name="google_sign_in_account_button">Conectar</string>
+    <string name="google_unavailable_services_title">Lamentablemente, los avisos no se soportan en tu dispositivo.</string>
 </resources>

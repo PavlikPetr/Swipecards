@@ -81,7 +81,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         @Override
         public void onProfileLink(int profileID) {
             startActivity(UserProfileActivity.createIntent(profileID, NavigationActivity.this));
-            getIntent().setData(null);
         }
 
         @Override
@@ -93,13 +92,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
                 startActivity(intent);
             }
-            getIntent().setData(null);
         }
 
         @Override
         public void onOfferWall() {
             OfferwallsManager.startOfferwall(NavigationActivity.this);
-            getIntent().setData(null);
         }
     };
     private boolean mIsActionBarHidden;
@@ -177,6 +174,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             mPendingNextIntent = intent;
         }
+        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
+        new ExternalLinkExecuter(mListener).execute(this, getIntent());
+
     }
 
     @Override
@@ -191,7 +191,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
         // popups
         mPopupManager = new PopupManager(this);
-        startActionsController.registerAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_NORMAL, new DatingLockPopup.DatingLockPopupRedirectListener() {
+        startActionsController.registerAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH, new DatingLockPopup.DatingLockPopupRedirectListener() {
             @Override
             public void onRedirect() {
                 showFragment(FragmentId.TABBED_LIKES);
@@ -224,10 +224,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         mMenuFragment.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
             @Override
             public void onFragmentSelected(FragmentId fragmentId) {
-                if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) ==
-                        DrawerLayout.LOCK_MODE_UNLOCKED) {
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                }
+                mDrawerLayout.closeDrawer(GravityCompat.START);
             }
         });
         if (!mMenuFragment.isAdded()) {
@@ -315,6 +312,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
+        new ExternalLinkExecuter(mListener).execute(this, intent);
+
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             showFragment(intent);
         }
@@ -330,8 +330,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         } else {
             LocaleConfig.localeChangeInitiated = false;
         }
-        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
-        new ExternalLinkExecuter(mListener).execute(getIntent());
         App.checkProfileUpdate();
         if (mNotificationController != null) {
             mNotificationController.refreshNotificator();
@@ -366,8 +364,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
      */
     private IStartAction createAfterRegistrationStartAction(final int priority) {
         return new AbstractStartAction() {
-            private boolean mTakePhotoApplicable = false;
-            private boolean mSelectCityApplicable = false;
 
             @Override
             public void callInBackground() {
@@ -375,18 +371,16 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
             @Override
             public void callOnUi() {
-                if (mTakePhotoApplicable) {
+                if (isTakePhotoApplicable()) {
                     takePhoto();
-                } else if (mSelectCityApplicable) {
+                } else if (isSelectCityApplicable()) {
                     CacheProfile.selectCity(NavigationActivity.this);
                 }
             }
 
             @Override
             public boolean isApplicable() {
-                mTakePhotoApplicable = !AuthToken.getInstance().isEmpty() && (CacheProfile.photo == null);
-                mSelectCityApplicable = CacheProfile.needToSelectCity(NavigationActivity.this);
-                return mTakePhotoApplicable || mSelectCityApplicable;
+                return isTakePhotoApplicable() || isSelectCityApplicable();
             }
 
             @Override
@@ -397,6 +391,15 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             @Override
             public String getActionName() {
                 return "TakePhoto-SelectCity";
+            }
+
+            private boolean isTakePhotoApplicable() {
+                return !AuthToken.getInstance().isEmpty() && (CacheProfile.photo == null)
+                        && !App.getConfig().getUserConfig().isUserAvatarAvailable();
+            }
+
+            private boolean isSelectCityApplicable() {
+                return CacheProfile.needToSelectCity(NavigationActivity.this);
             }
         };
     }
@@ -437,9 +440,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
      */
     public void setMenuLockMode(int lockMode, HackyDrawerLayout.IBackPressedListener listener) {
         if (mDrawerLayout != null) {
-            if (lockMode == DrawerLayout.LOCK_MODE_UNLOCKED) {
-                return;
-            }
             mDrawerLayout.setDrawerLockMode(lockMode, GravityCompat.START);
             mDrawerLayout.setBackPressedListener(listener);
         }

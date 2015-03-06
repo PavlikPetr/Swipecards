@@ -103,9 +103,13 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 break;
         }
 
+        Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(mFragment.getClass().getCanonicalName());
+        if (fragmentByTag != null) {
+            mFragment = fragmentByTag;
+        }
         if (mFragment != null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.loFrame, mFragment).commit();
+                    .replace(R.id.loFrame, mFragment, mFragment.getClass().getCanonicalName()).commit();
         }
     }
 

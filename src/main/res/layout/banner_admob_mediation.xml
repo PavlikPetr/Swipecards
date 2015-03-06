@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.gms.ads.AdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/adMobView"
+    android:layout_width="320dp"
+    android:layout_height="50dp"
+    android:visibility="gone"
+    ads:adSize="BANNER"
+    ads:adUnitId="@string/ad_mob_banner_bottom_mediation_unit_id" />

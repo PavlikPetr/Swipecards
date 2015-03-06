@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -401,23 +400,13 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     @Override
-    protected void onPreFinish() {
-        super.onPreFinish();
+    protected boolean onPreFinish() {
+        deletePhotoRequest();
         Intent intent = getIntent();
         if (intent.getBooleanExtra(INTENT_FILL_PROFILE_ON_BACK, false)) {
             startUserProfileActivity();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.home:
-            case android.R.id.home:
-                deletePhotoRequest();
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onPreFinish();
     }
 
     private int calcRealPosition(int position, int realItemsAmount) {
@@ -508,7 +497,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
     }
 
-    private void deletePhotoRequest() {
+    public void deletePhotoRequest() {
         if (mDeletedPhotos.isEmpty()) return;
 
         PhotoDeleteRequest request = new PhotoDeleteRequest(this);
@@ -549,8 +538,19 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Toast.makeText(PhotoSwitcherActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT)
-                        .show();
+                switch (codeError) {
+                    // если пользователь пытается поставить на аватарку фото, которое было удалено модератором
+                    case ErrorCodes.NON_EXIST_PHOTO_ERROR:
+                        Toast.makeText(PhotoSwitcherActivity.this, R.string.general_non_exist_photo_error, Toast.LENGTH_SHORT)
+                                .show();
+                        CacheProfile.sendUpdateProfileBroadcast();
+                        finish();
+                        break;
+                    default:
+                        Toast.makeText(PhotoSwitcherActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT)
+                                .show();
+                        break;
+                }
             }
         }).exec();
     }

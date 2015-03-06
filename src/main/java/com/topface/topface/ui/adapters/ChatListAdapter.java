@@ -295,6 +295,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
+    public void removeLastItem() {
+        getData().remove(0);
+        notifyDataSetChanged();
+    }
+
     private void removeUnrealItems() {
         removeUnrealItems(getData());
         mUnrealItems.clear();

@@ -45,9 +45,10 @@
     <!-- delay for showing popup about problems with notification services (in seconds) -->
     <integer name="notifications_disable_popup_delay">259200</integer>
 
-
     <!--show keyboard in chat, when screen height more than this value-->
     <integer name="min_screen_height_chat_fragment">479</integer>
 
-
+    <!-- intent-filters configuration -->
+    <string name="default_sheme" translatable="false">topface</string>
+    <string name="offerwall_host" translatable="false">offerwall</string>
 </resources>

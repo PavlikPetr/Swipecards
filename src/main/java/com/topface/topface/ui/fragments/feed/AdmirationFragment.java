@@ -29,7 +29,7 @@ public class AdmirationFragment extends LikesFragment {
 
     @Override
     protected String getTitle() {
-        return getString(R.string.general_admirations);
+        return getString(R.string.general_sympathies);
     }
 
     @Override
