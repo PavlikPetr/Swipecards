@@ -533,6 +533,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         update(false, scrollRefresh, "scroll refresh");
     }
 
+    private void sendBroadcastMakeItemRead() {
+        if (mItemId != null) {
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
+            mItemId = null;
+        }
+    }
+
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
         if (mIsUpdating) {
             return;
@@ -584,17 +591,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 onUserLoaded(mUser);
                                 initOverflowMenu();
                             }
+                            sendBroadcastMakeItemRead();
                             return;
                         } else if (blockStage == PopularUserChatController.SECOND_STAGE) {
+                            sendBroadcastMakeItemRead();
                             break;
                         }
                     }
                     mPopularUserLockController.unlockChat();
                 }
-                if (mItemId != null) {
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
-                    mItemId = null;
-                }
+                sendBroadcastMakeItemRead();
 
                 // delete duplicates
                 if (pullToRefresh) {
