@@ -61,10 +61,14 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
 import org.acra.ACRA;
+import org.acra.ACRAConfiguration;
+import org.acra.ACRAConfigurationException;
+import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -460,27 +464,27 @@ public class App extends Application {
     }
 
     private void initAcra() {
-//        if (!BuildConfig.DEBUG) {
+        if (!BuildConfig.DEBUG) {
             ACRA.init(this);
             ACRA.getErrorReporter().setReportSender(new HockeySender());
-//        } else {
-//            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
-//            try {
-//                //Что бы такая схема работала, сперва выставляем конфиг
-//                ACRAConfiguration acraConfig = ACRA.getConfig();
-//                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
-//                acraConfig.setResDialogText(R.string.crash_dialog_text);
-//                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
-//                acraConfig.setMode(ReportingInteractionMode.DIALOG);
-//                ACRA.setConfig(acraConfig);
-//                //Потом инитим
-//                ACRA.init(this);
-//                //И потом выставляем ReportSender
-//                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
-//            } catch (ACRAConfigurationException e) {
-//                Debug.error("Acra init error", e);
-//            }
-//        }
+        } else {
+            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
+            try {
+                //Что бы такая схема работала, сперва выставляем конфиг
+                ACRAConfiguration acraConfig = ACRA.getConfig();
+                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
+                acraConfig.setResDialogText(R.string.crash_dialog_text);
+                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
+                acraConfig.setMode(ReportingInteractionMode.DIALOG);
+                ACRA.setConfig(acraConfig);
+                //Потом инитим
+                ACRA.init(this);
+                //И потом выставляем ReportSender
+                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
+            } catch (ACRAConfigurationException e) {
+                Debug.error("Acra init error", e);
+            }
+        }
     }
 
     private void checkKeepAlive() {

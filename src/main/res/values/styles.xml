@@ -724,7 +724,7 @@
 
     // наследуются стили Widget
 
-    <style name="Widget.Topface"/>
+    <style name="Widget.Topface" />
 
     <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big">
         <item name="android:background">@drawable/btn_gray_selector</item>
@@ -891,7 +891,7 @@
 
     <style name="OverflowDropDownMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
-        <item name="android:overlapAnchor">false</item>
+        <item name="android:overlapAnchor" tools:ignore="NewApi">false</item>
     </style>
 
 </resources>
