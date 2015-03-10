@@ -62,7 +62,7 @@ public class NotificationsDisablePopup extends AbstractStartAction {
     public boolean isApplicable() {
         if (!getMarketApiManager().isMarketApiAvailable() && getMarketApiManager().isMarketApiSupportByUs()) {
             long date_now = System.currentTimeMillis();
-            long delay = mActivity.getResources().getInteger(R.integer.notifications_disable_popup_delay) * 1000;
+            long delay = App.getContext().getResources().getInteger(R.integer.notifications_disable_popup_delay) * 1000;
             if ((date_now - App.getAppConfig().getTimeNotificationsDisabledShowAtLast()) >= delay) {
                 return true;
             }
