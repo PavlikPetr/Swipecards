@@ -18,7 +18,7 @@ import com.topface.topface.data.History;
  */
 public class HackChatListAdapter extends ChatListAdapter {
 
-    private boolean overPosition = false;
+    private boolean mOverPosition = false;
     private View mGoneView;
     private static final String TRANSLATION_Y = "translationY";
 
@@ -28,7 +28,7 @@ public class HackChatListAdapter extends ChatListAdapter {
 
     @Override
     public History getItem(int position) {
-        if (overPosition) {
+        if (mOverPosition) {
             //уменьшаем на 1 позицию, чтобы соответствовать позиции выданной getCount
             position = position - 1;
             if (position < 0) {
@@ -65,21 +65,21 @@ public class HackChatListAdapter extends ChatListAdapter {
     @Override
     public int getCount() {
         if (getData().size() == 1) {
-            overPosition = true;
+            mOverPosition = true;
             return getData().size() + 1;
 
         } else {
-            overPosition = false;
+            mOverPosition = false;
             return getData().size();
         }
     }
 
     @Override
     protected void addSentMessage(History item) {
-        if (overPosition) {
+        if (mOverPosition) {
             //Отображаем спрятанную в getView вьюху
             mGoneView.setVisibility(View.VISIBLE);
-            overPosition = false;
+            mOverPosition = false;
         }
         super.addSentMessage(item);
     }
