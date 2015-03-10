@@ -24,12 +24,14 @@ import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.data.User;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
+import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.GridViewWithHeaderAndFooter;
@@ -308,6 +310,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                                     // если пользователь пытается поставить на аватарку фото, которое было удалено модератором
                                     case ErrorCodes.NON_EXIST_PHOTO_ERROR:
                                         errorStringResource = R.string.general_non_exist_photo_error;
+                                        // обновляем профиль пользователя
+                                        getUserProfile(CacheProfile.uid);
                                         break;
                                     default:
                                         errorStringResource = R.string.general_server_error;
@@ -398,5 +402,26 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPhotosReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
+    }
+
+    private void getUserProfile(final int profileId) {
+        UserRequest userRequest = new UserRequest(profileId, getActivity());
+        registerRequest(userRequest);
+        userRequest.callback(new DataApiHandler<User>() {
+            @Override
+            protected void success(User user, IApiResponse response) {
+                CacheProfile.setProfile(user, response.getJsonResult());
+                CacheProfile.sendUpdateProfileBroadcast();
+            }
+
+            @Override
+            protected User parseResponse(ApiResponse response) {
+                return new User(profileId, response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+            }
+        }).exec();
     }
 }
