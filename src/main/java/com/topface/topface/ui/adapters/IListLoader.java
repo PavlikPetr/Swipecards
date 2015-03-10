@@ -1,7 +1,7 @@
 package com.topface.topface.ui.adapters;
 
 public interface IListLoader {
-    static enum ItemType {LOADER, RETRY, WAITING, REPEAT, HACK_ITEM, NONE, TEMP_MESSAGE}
+    static enum ItemType {LOADER, RETRY, WAITING, REPEAT, NONE, TEMP_MESSAGE}
 
     public boolean isLoader();
 

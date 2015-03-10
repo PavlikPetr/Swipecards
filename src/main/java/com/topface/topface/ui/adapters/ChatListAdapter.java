@@ -119,32 +119,12 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 convertView.setTag(holder);
             }
         } else {
-            Object o = convertView.getTag();
-            //Если пришла фейковая вьюха, то нужно ее заменить на полноценную, для дальнейшей работы.
-            if (!(o instanceof ViewHolder)) {
-                holder = new ViewHolder();
-                convertView = inflateConvertView(holder, type, item);
-                if (convertView != null) {
-                    convertView.setTag(holder);
-                }
-            } else {
-                holder = (ViewHolder) o;
-            }
+            holder = (ViewHolder) convertView.getTag();
         }
 
         setTypeDifferences(holder, type, item);
         if (type != T_RETRY) {
             setViewInfo(holder, item);
-        }
-        if (item.mHackItem) {
-            /*
-            Если итем фейковый итем необходимый для накрутки позиции, то возвращаем пустую вьюху,
-            чтоб пользователь не видел облачка сообщения.
-            Вьюху не удаляем. При следующем переходе в чат она попросту не создастся.
-             */
-            View view = new View(mContext);
-            view.setTag("fake");
-            return view;
         }
         return convertView;
     }
@@ -192,7 +172,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             alphaAnimator.setDuration(150);
             alphaAnimator.start();
         }
-        addHackItemIfNeed();
     }
 
     public void forceStopLoader() {
@@ -239,29 +218,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         parentView.scrollTo(parentView.getScrollX(), scroll);
     }
 
-    private void addSentMessage(History item) {
+    protected void addSentMessage(History item) {
         getData().addFirst(item);
-        addHackItemIfNeed();
         prepareDates();
         if (!item.isWaitingItem()) {
             mUnrealItems.add(item);
         }
         notifyDataSetChanged();
-    }
-
-    /*
-            Адовый костыль! Если в чате один итем или ни одного, нужно добавить фейковый итем, для того, чтобы
-            при перехде на новую строку в футере чата(input поле) происходит перерисовка листа, и
-            анимация отображения нового сообщения запускается заново.Происходит из за неверного расчета
-            условий анимации в методе animateViewIfNecessary класса AnimationAdapter в библиотеке
-             ListViewAnimation
-             */
-    private void addHackItemIfNeed() {
-        if (getData().size() <= 1) {
-            History history = new History();
-            history.setLoaderTypeFlags(IListLoader.ItemType.HACK_ITEM);
-            getData().add(history);
-        }
     }
 
     public void addSentMessage(History item, ListView parentView, ApiRequest request) {
@@ -331,12 +294,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private void setTypeDifferences(ViewHolder holder, int type, final History item) {
         boolean showDate = mShowDatesList.contains(item);
-
-        if (item.mHackItem) {
-            //пустая вьюха ничего не делаем
-            return;
-        }
-
         switch (type) {
             case T_RETRY:
                 if (item.isRepeatItem()) {

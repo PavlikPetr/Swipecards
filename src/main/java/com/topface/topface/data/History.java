@@ -17,7 +17,6 @@ public class History extends FeedDialog implements Parcelable {
 
     private boolean mEmptyRepeatItem = false;
     private boolean mEmptyWaitingItem = false;
-    public boolean mHackItem = false;
     public String blockText;
     public String dialogTitle;
 
@@ -90,8 +89,6 @@ public class History extends FeedDialog implements Parcelable {
         } else if (type == ItemType.REPEAT) {
             mEmptyWaitingItem = false;
             mEmptyRepeatItem = true;
-        } else if (type == ItemType.HACK_ITEM) {
-            mHackItem = true;
         }
     }
 
