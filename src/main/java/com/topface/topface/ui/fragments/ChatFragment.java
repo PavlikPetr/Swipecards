@@ -307,8 +307,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         int blockStage = mPopularUserLockController.block(message);
                         // проверяем тип сообщения, если адаптер пустой по причине блокировки экрана
                         // "FIRST_STAGE", то считаем непрочитанные сообщения в истории переписки
-                        if (blockStage == PopularUserChatController.FIRST_STAGE && message.unread)
+                        if (blockStage == PopularUserChatController.FIRST_STAGE && message.unread) {
                             loadedItemsCount++;
+                        }
                     }
 
                 }
