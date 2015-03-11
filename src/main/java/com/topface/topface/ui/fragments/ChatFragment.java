@@ -129,6 +129,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private String mMessage;
+    private HistoryListData mHistoryListData;
     private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mKeyboardWasShown;
@@ -298,6 +299,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     if (item.unread) {
                         loadedItemsCount++;
                     }
+                }
+                // если в адаптере нет элементов списка, то возможно на экране отображается блокировка,
+                // к примеру "Популярный пользователь"
+                if (mAdapter.getDataCopy().size() == 0) {
+                    for (History message : mHistoryListData.items) {
+                        int blockStage = mPopularUserLockController.block(message);
+                        // проверяем тип сообщения, если адаптер пустой по причине блокировки экрана
+                        // "FIRST_STAGE", то считаем непрочитанные сообщения в истории переписки
+                        if (blockStage == PopularUserChatController.FIRST_STAGE && message.unread)
+                            loadedItemsCount++;
+                    }
+
                 }
                 Intent intent = new Intent(CountersManager.UPDATE_COUNTERS);
                 intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
@@ -533,13 +546,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         update(false, scrollRefresh, "scroll refresh");
     }
 
-    private void sendBroadcastMakeItemRead() {
-        if (mItemId != null) {
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
-            mItemId = null;
-        }
-    }
-
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
         if (mIsUpdating) {
             return;
@@ -579,6 +585,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
+                mHistoryListData = data;
                 if (!data.items.isEmpty() && !isPopularLockOn) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
@@ -591,16 +598,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 onUserLoaded(mUser);
                                 initOverflowMenu();
                             }
-                            sendBroadcastMakeItemRead();
                             return;
                         } else if (blockStage == PopularUserChatController.SECOND_STAGE) {
-                            sendBroadcastMakeItemRead();
                             break;
                         }
                     }
                     mPopularUserLockController.unlockChat();
                 }
-                sendBroadcastMakeItemRead();
+                if (mItemId != null) {
+                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
+                    mItemId = null;
+                }
 
                 // delete duplicates
                 if (pullToRefresh) {
