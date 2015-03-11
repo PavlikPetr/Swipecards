@@ -302,7 +302,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 // если в адаптере нет элементов списка, то возможно на экране отображается блокировка,
                 // к примеру "Популярный пользователь"
-                if (mAdapter.getDataCopy().size() == 0) {
+                if (mAdapter.getDataCopy().isEmpty()) {
                     for (History message : mHistoryListData.items) {
                         int blockStage = mPopularUserLockController.block(message);
                         // проверяем тип сообщения, если адаптер пустой по причине блокировки экрана
