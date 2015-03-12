@@ -73,13 +73,6 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     @Override
-    public void onBackPressed() {
-        if (!(showTopfaceOfferwall() || showBonus())) {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     protected void onLoadProfile() {
         super.onLoadProfile();
         mBonusRedirect = CacheProfile.getOptions().forceOfferwallRedirect;
@@ -237,5 +230,12 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     @Override
     protected boolean onPreFinish() {
         return !(showTopfaceOfferwall() || showBonus()) && super.onPreFinish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!(showTopfaceOfferwall() || showBonus())) {
+            super.onBackPressed();
+        }
     }
 }
