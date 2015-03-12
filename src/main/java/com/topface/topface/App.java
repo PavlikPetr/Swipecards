@@ -91,13 +91,15 @@ public class App extends Application {
     private static Location mCurLocation;
     private static AppsFlyerData.ConversionHolder mAppsFlyerConversionHolder;
 
+    private static boolean mAppOptionsObtainedFromServer = false;
+    private static boolean mUserOptionsObtainedFromServer = false;
 
     /**
      * Множественный запрос Options и профиля
      */
     public static void sendProfileAndOptionsRequests(ApiHandler handler) {
         new ParallelApiRequest(App.getContext())
-                .addRequest(getOptionsRequest())
+                .addRequest(getUserOptionsRequest())
                 .addRequest(getProductsRequest())
                 .addRequest(getFortumoProductsRequest())
                 .addRequest(getPaymentwallProductsRequest())
@@ -214,16 +216,17 @@ public class App extends Application {
         return request;
     }
 
-    public static void sendOptionsRequest() {
-        getOptionsRequest().exec();
+    public static void sendUserOptionsRequest() {
+        getUserOptionsRequest().exec();
     }
 
-    private static ApiRequest getOptionsRequest() {
+    private static ApiRequest getUserOptionsRequest() {
         return new UserGetAppOptionsRequest(App.getContext())
                 .callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {
                         LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Options.OPTIONS_RECEIVED_ACTION));
+                        mUserOptionsObtainedFromServer = true;
                     }
 
                     @Override
@@ -450,6 +453,7 @@ public class App extends Application {
             @Override
             protected void success(AppOptions data, IApiResponse response) {
                 mAppOptions = data;
+                mAppOptionsObtainedFromServer = true;
                 StatisticsTracker.getInstance()
                         .setConfiguration(data.getStatisticsConfiguration(Connectivity.getConnType(mContext)));
             }
@@ -548,14 +552,18 @@ public class App extends Application {
 
 
     public static String getApiTransport() {
-        Options userOptions = CacheProfile.getOptions();
-        AppOptions appOptions = getAppOptions();
-        if (appOptions.isScruffyEnabled() || userOptions.isScruffyEnabled()) {
-            if (ScruffyRequestManager.getInstance().isAvailable()) {
-                return ScruffyApiTransport.TRANSPORT_NAME;
+        if (!mAppOptionsObtainedFromServer && !mUserOptionsObtainedFromServer) {
+            return HttpApiTransport.TRANSPORT_NAME;
+        } else {
+            boolean userOptions = mAppOptionsObtainedFromServer && CacheProfile.getOptions().isScruffyEnabled();
+            boolean appOptions = mUserOptionsObtainedFromServer && getAppOptions().isScruffyEnabled();
+            if (appOptions || userOptions) {
+                if (ScruffyRequestManager.getInstance().isAvailable()) {
+                    return ScruffyApiTransport.TRANSPORT_NAME;
+                }
             }
+            return HttpApiTransport.TRANSPORT_NAME;
         }
-        return HttpApiTransport.TRANSPORT_NAME;
     }
 }
 
