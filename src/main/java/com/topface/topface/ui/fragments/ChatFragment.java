@@ -111,6 +111,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String MESSAGE = "message";
     public static final String LOADED_MESSAGES = "loaded_messages";
     private static final String POPULAR_LOCK_STATE = "chat_blocked";
+    private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
@@ -129,6 +130,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private String mMessage;
+    private ArrayList<History> mHistoryFeedList;
     private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mKeyboardWasShown;
@@ -294,9 +296,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (isAdded()) {
             if (mAdapter != null) {
                 int loadedItemsCount = 0;
-                for (History item : mAdapter.getDataCopy()) {
-                    if (item.unread) {
-                        loadedItemsCount++;
+                // если в адаптере нет элементов списка, то возможно на экране отображается блокировка,
+                // к примеру "Популярный пользователь"
+                if (mAdapter.getDataCopy().isEmpty()) {
+                    if (mHistoryFeedList != null) {
+                        for (History message : mHistoryFeedList) {
+                            int blockStage = mPopularUserLockController.block(message);
+                            // проверяем тип сообщения, если адаптер пустой по причине блокировки экрана
+                            // "FIRST_STAGE", то считаем непрочитанные сообщения в истории переписки
+                            if (blockStage == PopularUserChatController.FIRST_STAGE && message.unread) {
+                                loadedItemsCount++;
+                            }
+                        }
+                    }
+                } else {
+                    for (History item : mAdapter.getDataCopy()) {
+                        if (item.unread) {
+                            loadedItemsCount++;
+                        }
                     }
                 }
                 Intent intent = new Intent(CountersManager.UPDATE_COUNTERS);
@@ -315,6 +332,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 mKeyboardWasShown = savedInstanceState.getBoolean(SOFT_KEYBOARD_LOCK_STATE);
                 boolean wasFailed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
+                mHistoryFeedList = savedInstanceState.getParcelableArrayList(HISTORY_CHAT);
                 FeedList<History> historyData = new FeedList<>();
                 if (list != null) {
                     for (History item : list) {
@@ -465,6 +483,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             outState.putString(MESSAGE, mMessage);
         }
         outState.putBoolean(WAS_FAILED, wasFailed);
+        outState.putParcelableArrayList(HISTORY_CHAT, mHistoryFeedList);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
         outState.putBoolean(SOFT_KEYBOARD_LOCK_STATE, mKeyboardWasShown);
         if (mUser != null) {
@@ -572,6 +591,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
+                mHistoryFeedList = data.items;
                 if (!data.items.isEmpty() && !isPopularLockOn) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
@@ -1016,6 +1036,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                     @Override
                     public boolean isOpenChatAvailable() {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean isAddToFavoritsAvailable() {
                         return true;
                     }
 

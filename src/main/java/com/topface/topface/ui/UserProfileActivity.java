@@ -15,17 +15,18 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
     public static final int INTENT_USER_PROFILE = 6;
 
     public static Intent createIntent(int userId, Context context) {
-        return createIntent(userId, null, context, true);
+        return createIntent(userId, null, context, true, true);
     }
 
-    public static Intent createIntent(int userId, Context context, boolean isChatAvailable) {
-        return createIntent(userId, null, context, isChatAvailable);
+    public static Intent createIntent(int userId, Context context, boolean isChatAvailable, boolean isAddToFavoritsAvailable) {
+        return createIntent(userId, null, context, isChatAvailable, isAddToFavoritsAvailable);
     }
 
-    public static Intent createIntent(int userId, String itemId, Context context, boolean isChatAvailable) {
+    public static Intent createIntent(int userId, String itemId, Context context, boolean isChatAvailable, boolean isAddToFavoritsAvailable) {
         Intent intent = new Intent(context, UserProfileActivity.class);
         intent.putExtra(AbstractProfileFragment.INTENT_UID, userId);
         intent.putExtra(AbstractProfileFragment.INTENT_IS_CHAT_AVAILABLE, isChatAvailable);
+        intent.putExtra(AbstractProfileFragment.INTENT_IS_ADD_TO_FAVORITS_AVAILABLE, isAddToFavoritsAvailable);
         if (!TextUtils.isEmpty(itemId)) {
             intent.putExtra(AbstractProfileFragment.INTENT_ITEM_ID, itemId);
         }
@@ -34,7 +35,7 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
     }
 
     public static Intent createIntent(int userId, String itemId, String bodyStartPageClassName, Context context) {
-        return createIntent(userId, itemId, context, true)
+        return createIntent(userId, itemId, context, true, true)
                 .putExtra(AbstractProfileFragment.INTENT_START_BODY_PAGE_NAME, bodyStartPageClassName);
     }
 

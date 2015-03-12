@@ -28,6 +28,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     public static final String INTENT_ITEM_ID = "intent_profile_item_id";
     public static final String INTENT_CALLING_FRAGMENT = "intent_profile_calling_fragment";
     public static final String INTENT_IS_CHAT_AVAILABLE = "intent_profile_is_chat_available";
+    public static final String INTENT_IS_ADD_TO_FAVORITS_AVAILABLE = "intent_profile_is_add_to_favorits_available";
     public static final String INTENT_START_BODY_PAGE_NAME = "intent_start_body_page";
     public static final String ADD_PHOTO_INTENT = "com.topface.topface.ADD_PHOTO_INTENT";
     protected static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
@@ -45,6 +46,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     private UserPhotoFragment mUserPhotoFragment;
     private UserFormFragment mUserFormFragment;
     private boolean mIsChatAvailable;
+    private boolean mIsAddToFavoritsAvailable;
     private Profile mProfile = null;
     ProfileInnerUpdater mProfileUpdater = new ProfileInnerUpdater() {
         @Override
@@ -188,6 +190,14 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
 
     public void setIsChatAvailable(boolean isChatAvailable) {
         mIsChatAvailable = isChatAvailable;
+    }
+
+    protected boolean isAddToFavoriteAvailable() {
+        return mIsAddToFavoritsAvailable;
+    }
+
+    public void setIsAddToFavoritsAvailable(boolean isAddToFavoritsAvailable) {
+        mIsAddToFavoritsAvailable = isAddToFavoritsAvailable;
     }
 
     private void initHeaderPages(View root) {
