@@ -7,7 +7,6 @@ import android.widget.BaseAdapter;
 
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
-import com.topface.topface.App;
 
 /**
  * Адовый костыль! Если в чате один итем или ни одного, нужно увелисить количество сообщения на 1,
@@ -19,15 +18,15 @@ import com.topface.topface.App;
 public class HackBaseAdapterDecorator extends BaseAdapter {
 
     private BaseAdapter mBaseAdapter;
-    private static int T_HACK_ITEM = 3;
+    private int type_hack;
     private static final String TRANSLATION_Y = "translationY";
     private boolean mNeedAnimate = true;
-    private final View mTempView = new View(App.getContext());
     private boolean mAnimateFirstMessage = true;
 
 
     public HackBaseAdapterDecorator(BaseAdapter baseAdapter) {
         mBaseAdapter = baseAdapter;
+        type_hack = mBaseAdapter.getViewTypeCount();
         if (mBaseAdapter.getCount() < 2) {
             mBaseAdapter.registerDataSetObserver(new DataSetObserver() {
                 @Override
@@ -77,11 +76,8 @@ public class HackBaseAdapterDecorator extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (needHack() && position == 1) {
-            return T_HACK_ITEM;
-        } else {
-            return mBaseAdapter.getItemViewType(position);
-        }
+        return (needHack() && position == 1) ? type_hack : mBaseAdapter.getItemViewType(position);
+
     }
 
     @Override
@@ -93,12 +89,11 @@ public class HackBaseAdapterDecorator extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);
         View view;
-        if (type == T_HACK_ITEM) {
-            return mTempView;
+        if (type == type_hack) {
+            return new View(parent.getContext());
         } else {
-            view = mBaseAdapter.getView(position, mTempView == convertView ? null : convertView, parent);
+            view = mBaseAdapter.getView(position, convertView, parent);
         }
-
         if (position == 1 && mBaseAdapter.getCount() == 2 && mNeedAnimate || mAnimateFirstMessage) {
             if (!mAnimateFirstMessage) {
                 mNeedAnimate = false;
