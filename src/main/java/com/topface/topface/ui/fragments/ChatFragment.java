@@ -62,11 +62,12 @@ import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.ChatListAnimatedAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.ui.adapters.HackChatListAdapter;
+import com.topface.topface.ui.adapters.HackBaseAdapterDecorator;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
@@ -133,7 +134,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private boolean mIsUpdating;
     private boolean mKeyboardWasShown;
     private PullToRefreshListView mListView;
-    private HackChatListAdapter mAdapter;
+    private ChatListAdapter mAdapter;
     private FeedUser mUser;
     private EditText mEditBox;
     private String mItemId;
@@ -209,7 +210,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onAttach(activity);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
-            mAdapter = new HackChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
+            mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
         }
 
         Bundle args = getArguments();
@@ -348,7 +349,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 update(true, "pull to refresh");
             }
         });
-        ChatListAnimatedAdapter animatedAdapter = new ChatListAnimatedAdapter(mAdapter);
+        ChatListAnimatedAdapter animatedAdapter = new ChatListAnimatedAdapter(new HackBaseAdapterDecorator(mAdapter));
         animatedAdapter.setAbsListView(mListView.getRefreshableView());
         mListView.setAdapter(animatedAdapter);
 
