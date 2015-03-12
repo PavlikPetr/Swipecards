@@ -66,9 +66,4 @@
 
     <!--filter fragment dividers color-->
     <color name="filter_fragment_divider_color">#E2E2E2</color>
-
-    <!--light design background color-->
-    <color name="main_background_color">#FFFFFF</color>
-
-
 </resources>

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/main_background_color">
+    android:background="@color/bg_white">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -33,11 +33,11 @@
             android:gravity="left|center_vertical" />
 
         <Button
+            style="@style/FlatButton.Blue"
             android:id="@+id/btnSave"
             android:layout_marginTop="16dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="#33b5e5"
             android:text="@string/save" />
     </LinearLayout>
 
