@@ -27,5 +27,5 @@ public interface OverflowMenuUser {
 
     void clickSendGift();
 
-    int getProfileId();
+    Integer getProfileId();
 }

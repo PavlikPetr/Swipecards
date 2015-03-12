@@ -382,7 +382,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     }
 
                     @Override
-                    public int getProfileId() {
+                    public Integer getProfileId() {
                         return mProfileId;
                     }
                 });

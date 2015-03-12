@@ -1050,7 +1050,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
 
                     @Override
-                    public int getProfileId() {
+                    public Integer getProfileId() {
                         return mUserId;
                     }
                 });
