@@ -19,34 +19,46 @@ import com.topface.topface.App;
 public class HackBaseAdapterDecorator extends BaseAdapter {
 
     private BaseAdapter mBaseAdapter;
-    private View mGoneView;
-    private boolean mIsRegistred;
+    private static int T_HACK_ITEM = 3;
     private static final String TRANSLATION_Y = "translationY";
     private boolean mNeedAnimate = true;
+    private final View mTempView = new View(App.getContext());
+    private boolean mAnimateFirstMessage = true;
 
 
     public HackBaseAdapterDecorator(BaseAdapter baseAdapter) {
         mBaseAdapter = baseAdapter;
         if (mBaseAdapter.getCount() < 2) {
-            mBaseAdapter.registerDataSetObserver(mDataSetObserver);
-            mIsRegistred = true;
+            mBaseAdapter.registerDataSetObserver(new DataSetObserver() {
+                @Override
+                public void onChanged() {
+                    notifyDataSetChanged();
+                    switch (mBaseAdapter.getCount()) {
+                        case 0:
+                            mAnimateFirstMessage = true;
+                            break;
+                        case 1:
+                            mNeedAnimate = true;
+                    }
+                }
+            });
         }
     }
 
-    //Обсервер для того, чтобы детектить добавление данных в декорируемый адаптер
-    private DataSetObserver mDataSetObserver = new DataSetObserver() {
-        @Override
-        public void onChanged() {
-            notifyDataSetChanged();
-        }
-    };
-
-    //хакаем, только если в чате 1 итем
+    /**
+     * хакаем, только если в чате 1 итем
+     *
+     * @return нужно хакнуть или нет
+     */
     private boolean needHack() {
         return mBaseAdapter.getCount() == 1;
     }
 
-    //накручиваем позицию для исправления бага
+    /**
+     * Накручиваем позицию для исправления бага
+     *
+     * @return если нужно хакнуть, то увеличиваем количество на 1, если нет то сохраняем количество
+     */
     @Override
     public int getCount() {
         return needHack() ? mBaseAdapter.getCount() + 1 : mBaseAdapter.getCount();
@@ -54,31 +66,44 @@ public class HackBaseAdapterDecorator extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return mBaseAdapter.getItem(position);
+        return needHack() ? mBaseAdapter.getItem(0) : mBaseAdapter.getItem(position);
     }
 
 
     @Override
     public long getItemId(int position) {
-        return mBaseAdapter.getItemId(position);
+        return needHack() ? mBaseAdapter.getItemId(0) : mBaseAdapter.getItemId(position);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (needHack() && position == 1) {
+            return T_HACK_ITEM;
+        } else {
+            return mBaseAdapter.getItemViewType(position);
+        }
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return mBaseAdapter.getViewTypeCount() + 1;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (needHack() && position == 1) {
-            mGoneView = new View(App.getContext());
-            return mGoneView;
-        } else if (convertView == mGoneView) {
-            convertView = null;
-            if (mIsRegistred) {
-                //отписываемся от оповещений о добавлении данных
-                mIsRegistred = false;
-                mBaseAdapter.unregisterDataSetObserver(mDataSetObserver);
-            }
+        int type = getItemViewType(position);
+        View view;
+        if (type == T_HACK_ITEM) {
+            return mTempView;
+        } else {
+            view = mBaseAdapter.getView(position, mTempView == convertView ? null : convertView, parent);
         }
-        View view = mBaseAdapter.getView(position, convertView, parent);
-        if (position == 1 && mBaseAdapter.getCount() == 2 || mNeedAnimate) {
-            mNeedAnimate = false;
+
+        if (position == 1 && mBaseAdapter.getCount() == 2 && mNeedAnimate || mAnimateFirstMessage) {
+            if (!mAnimateFirstMessage) {
+                mNeedAnimate = false;
+            }
+            mAnimateFirstMessage = false;
             Animator animator = ObjectAnimator.ofFloat(view, TRANSLATION_Y, parent.getMeasuredHeight() >> 1, 0)
                     .setDuration(100);
             animator.start();
