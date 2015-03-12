@@ -74,7 +74,7 @@ public class OverflowMenu {
                         initOverfowMenu();
                         break;
                     case BOOKMARK:
-                        initAllFields();
+                        initFieldIsInBlackList();
                         if (intent.hasExtra(BlackListAndBookmarkHandler.VALUE) && mIsInBlackList != null && !mIsInBlackList) {
                             setBookmarkedState(value);
                             initOverfowMenu();
@@ -96,19 +96,18 @@ public class OverflowMenu {
         registerBroadcastReceiver();
     }
 
-    public OverflowMenu(Activity activity, MenuItem barActions, RateController rateController, int profileId, ApiResponse savedResponse) {
+    public OverflowMenu(Activity activity, MenuItem barActions, RateController rateController, ApiResponse savedResponse) {
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.PROFILE_OVERFLOW_MENU;
         mActivity = activity;
         mRateController = rateController;
-        mProfileId = profileId;
         mSavedResponse = savedResponse;
         registerBroadcastReceiver();
     }
 
-    private static enum OverflowMenuType {CHAT_OVERFLOW_MENU, PROFILE_OVERFLOW_MENU}
+    private enum OverflowMenuType {CHAT_OVERFLOW_MENU, PROFILE_OVERFLOW_MENU}
 
-    public static enum OverflowMenuItem {
+    public enum OverflowMenuItem {
         SEND_GIFT_ACTION(1, R.string.general_gift),
         SEND_SYMPATHY_ACTION(2, R.string.general_sympathy),
         SEND_ADMIRATION_ACTION(3, R.string.general_delight),
@@ -183,7 +182,9 @@ public class OverflowMenu {
 
     private void initProfileOverflowMenu() {
         if (mBarActions != null && mBarActions.hasSubMenu()) {
-            initAllFields();
+            initFieldIsBookmarked();
+            initFieldIsInBlackList();
+            initFieldIsSympathySent();
             mBarActions.getSubMenu().clear();
             ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(CacheProfile.isEditor());
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
@@ -218,7 +219,8 @@ public class OverflowMenu {
 
     private void initChatOverflowMenu() {
         if (mBarActions != null && mBarActions.hasSubMenu()) {
-            initAllFields();
+            initFieldIsBookmarked();
+            initFieldIsInBlackList();
             mBarActions.getSubMenu().clear();
             ArrayList<OverflowMenuItem> overflowMenuItemArray = getChatOverflowMenu();
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
@@ -265,9 +267,11 @@ public class OverflowMenu {
                     onClickSendGiftAction();
                     break;
                 case COMPLAIN_ACTION:
+                    initFieldProfileId();
                     mActivity.startActivity(ComplainsActivity.createIntent(mProfileId));
                     break;
                 case OPEN_PROFILE_FOR_EDITOR_STUB:
+                    initFieldProfileId();
                     if (mSavedResponse != null) {
                         mActivity.startActivity(EditorProfileActionsActivity.createIntent(mProfileId, mSavedResponse));
                     }
@@ -297,7 +301,8 @@ public class OverflowMenu {
     }
 
     private void onClickSendSymphatyAction() {
-        initAllFields();
+        initFieldUserId();
+        initFieldIsMutual();
         if (mRateController == null || mUserId == null || mIsMutual == null) {
             return;
         }
@@ -330,7 +335,8 @@ public class OverflowMenu {
     }
 
     private void onClickSendAdmirationAction() {
-        initAllFields();
+        initFieldUserId();
+        initFieldIsMutual();
         if (mRateController == null || mUserId == null || mIsMutual == null) {
             return;
         }
@@ -368,7 +374,7 @@ public class OverflowMenu {
     }
 
     private void onClickOpenChatAction() {
-        initAllFields();
+        initFieldIsChatAvailable();
         if (!mIsChatAvailable) {
             showBuyVipActivity(R.string.chat_block_not_mutual);
         } else {
@@ -383,7 +389,8 @@ public class OverflowMenu {
     }
 
     private void onClickAddToBlackList() {
-        initAllFields();
+        initFieldIsInBlackList();
+        initFieldUserId();
         if (mIsInBlackList == null || mUserId == null) {
             return;
         }
@@ -432,7 +439,8 @@ public class OverflowMenu {
     }
 
     private void addToFavorite() {
-        initAllFields();
+        initFieldIsBookmarked();
+        initFieldUserId();
         if (mIsBookmarked == null || mUserId == null) {
             return;
         }
@@ -481,7 +489,7 @@ public class OverflowMenu {
     }
 
     private void onClickAddToBookmarkAction() {
-        initAllFields();
+        initFieldIsAddToFavoritsAvailable();
         if (mIsAddToFavoritsAvailable == null) {
             return;
         }
@@ -526,7 +534,7 @@ public class OverflowMenu {
     }
 
     private void openChat() {
-        initAllFields();
+        initFieldOpenChatIntent();
         if (mOpenChatIntent == null) {
             return;
         }
@@ -555,16 +563,57 @@ public class OverflowMenu {
         return mOverflowMenuFields;
     }
 
-    private void initAllFields() {
+    private void initFieldIsBookmarked() {
         if (mOverflowMenuFields != null) {
             mIsBookmarked = mOverflowMenuFields.getBookmarkValue();
+        }
+    }
+
+    private void initFieldIsInBlackList() {
+        if (mOverflowMenuFields != null) {
             mIsInBlackList = mOverflowMenuFields.getBlackListValue();
+        }
+    }
+
+    private void initFieldIsSympathySent() {
+        if (mOverflowMenuFields != null) {
             mIsSympathySent = mOverflowMenuFields.getSympathySentValue();
+        }
+    }
+
+    private void initFieldUserId() {
+        if (mOverflowMenuFields != null) {
             mUserId = mOverflowMenuFields.getUserId();
+        }
+    }
+
+    private void initFieldOpenChatIntent() {
+        if (mOverflowMenuFields != null) {
             mOpenChatIntent = mOverflowMenuFields.getOpenChatIntent();
+        }
+    }
+
+    private void initFieldIsMutual() {
+        if (mOverflowMenuFields != null) {
             mIsMutual = mOverflowMenuFields.isMutual();
+        }
+    }
+
+    private void initFieldIsChatAvailable() {
+        if (mOverflowMenuFields != null) {
             mIsChatAvailable = mOverflowMenuFields.isOpenChatAvailable();
+        }
+    }
+
+    private void initFieldIsAddToFavoritsAvailable() {
+        if (mOverflowMenuFields != null) {
             mIsAddToFavoritsAvailable = mOverflowMenuFields.isAddToFavoritsAvailable();
+        }
+    }
+
+    private void initFieldProfileId() {
+        if (mOverflowMenuFields != null) {
+            mProfileId = mOverflowMenuFields.getProfileId();
         }
     }
 

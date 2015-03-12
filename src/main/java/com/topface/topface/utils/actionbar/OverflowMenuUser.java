@@ -26,4 +26,6 @@ public interface OverflowMenuUser {
     Boolean isMutual();
 
     void clickSendGift();
+
+    int getProfileId();
 }

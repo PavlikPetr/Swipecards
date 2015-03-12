@@ -147,7 +147,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             barActionsItem.setChecked(mBarActions.isChecked());
         }
         mBarActions = barActionsItem;
-        mProfileOverflowMenu = new OverflowMenu(getActivity(), mBarActions, mRateController, mProfileId, mSavedResponse);
+        mProfileOverflowMenu = new OverflowMenu(getActivity(), mBarActions, mRateController, mSavedResponse);
     }
 
     @Override
@@ -379,6 +379,11 @@ public class UserProfileFragment extends AbstractProfileFragment {
                                     GiftsActivity.INTENT_REQUEST_GIFT
                             );
                         }
+                    }
+
+                    @Override
+                    public int getProfileId() {
+                        return mProfileId;
                     }
                 });
             }

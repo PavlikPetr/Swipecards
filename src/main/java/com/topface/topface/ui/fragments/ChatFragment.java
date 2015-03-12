@@ -1048,6 +1048,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     public void clickSendGift() {
                         // empty processor. Haven't item "Send gift" in current fragment
                     }
+
+                    @Override
+                    public int getProfileId() {
+                        return mUserId;
+                    }
                 });
             }
             mChatOverflowMenu.initOverfowMenu();
