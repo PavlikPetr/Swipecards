@@ -100,7 +100,7 @@ public class RetryViewCreator {
 
             List<InnerButton> btns = new ArrayList<>(mTitles.size());
 
-            btns.add(new InnerButton(InnerButton.Type.GRAY, REFRESH_TEMPLATE + mTitles.get(0), mListeners.isEmpty() ? null : mListeners.get(0)));
+            btns.add(new InnerButton(InnerButton.Type.GRAY, mTitles.get(0), mListeners.isEmpty() ? null : mListeners.get(0)));
             for (int i = 1; i < mTitles.size(); i++) {
                 btns.add(new InnerButton(InnerButton.Type.GRAY, mTitles.get(i), mListeners.size() > i ? mListeners.get(i) : null));
             }

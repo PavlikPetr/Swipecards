@@ -724,7 +724,7 @@
 
     // наследуются стили Widget
 
-    <style name="Widget.Topface"/>
+    <style name="Widget.Topface" />
 
     <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big">
         <item name="android:background">@drawable/btn_gray_selector</item>
@@ -894,4 +894,16 @@
         <item name="android:overlapAnchor">false</item>
     </style>
 
+    <style name="FlatButton">
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="FlatButton.Gray">
+        <item name="android:background">@drawable/flat_gray_btn</item>
+    </style>
+
+    <style name="FlatButton.Blue">
+        <item name="android:background">@drawable/flat_blue_btn</item>
+    </style>
 </resources>
