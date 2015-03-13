@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -21,6 +24,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AddedPhoto;
+import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -257,6 +261,13 @@ public class AddPhotoHelper {
             }
             return;
         }
+
+        if (!isPhotoCorrectSize(uri)) {
+            Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
+                    App.getAppOptions().getMinPhotoSize().width,
+                    App.getAppOptions().getMinPhotoSize().height), Toast.LENGTH_SHORT).show();
+            return;
+        }
         // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
         if (CacheProfile.photos != null && CacheProfile.photos.size() == 0) {
             App.getConfig().getUserConfig().setUserAvatarAvailable(true);
@@ -383,7 +394,9 @@ public class AddPhotoHelper {
                 Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG).show();
                 break;
             case ErrorCodes.INCORRECT_PHOTO_SIZES:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_size), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
+                        App.getAppOptions().getMinPhotoSize().width,
+                        App.getAppOptions().getMinPhotoSize().height), Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -450,6 +463,37 @@ public class AddPhotoHelper {
         }
     }
 
+    private BitmapFactory.Options getPhotoSizeByUri(Uri uri) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(getPath(uri), options);
+        return options;
+    }
 
+    private boolean isPhotoCorrectSize(Uri uri) {
+        BitmapFactory.Options currentPhotoSize = getPhotoSizeByUri(uri);
+        AppOptions.MinPhotoSize minSize = App.getAppOptions().getMinPhotoSize();
+        return currentPhotoSize != null && !(currentPhotoSize.outWidth < minSize.width ||
+                currentPhotoSize.outHeight < minSize.height);
+    }
+
+    public String getPath(Uri uri) {
+        String picturePath;
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = mContext.getContentResolver().query(uri,
+                filePathColumn, null, null, null);
+        if (cursor != null) {
+            // получаем путь к изображению из галлереи
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            picturePath = cursor.getString(columnIndex);
+            cursor.close();
+        } else {
+            // путь к файлу, полученному с камеры
+            picturePath = uri.getEncodedPath();
+        }
+        return picturePath;
+    }
 }
 
