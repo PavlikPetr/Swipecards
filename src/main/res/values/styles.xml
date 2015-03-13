@@ -430,9 +430,7 @@
         <item name="android:layout_alignParentRight">false</item>
     </style>
 
-    <style name="Gift">
-        <item name="postProcessor">none</item>
-        <item name="preProcessor">squared</item>
+    <style name="BaseGift">
         <item name="android:layout_width">97dp</item>
         <item name="android:layout_height">99dp</item>
         <item name="android:paddingLeft">1dp</item>
@@ -446,7 +444,11 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
-    <style name="AlbumGift" parent="Gift">
+    <style name="Gift" parent="BaseGift">
+        <item name="preProcessor">squared</item>
+    </style>
+
+    <style name="AlbumGift" parent="BaseGift">
         <item name="postProcessor">rounded</item>
     </style>
 
