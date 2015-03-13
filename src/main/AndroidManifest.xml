@@ -181,9 +181,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.Light"/>
         <activity
-            android:name=".ui.LeadersActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".ui.settings.SettingsContainerActivity"
             android:screenOrientation="portrait"/>
         <activity

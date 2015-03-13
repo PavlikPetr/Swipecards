@@ -1,30 +1,21 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import android.text.TextUtils;
 
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class LeaderRequest extends ApiRequest {
-    public static final String SERVICE_NAME = "leader.become";
+public class AddPhotoFeedRequest extends ApiRequest {
+    public static final String SERVICE_NAME = "photofeed.add";
     private int mPhotoId;
     private int mIdCount;
     private String mStatus;
     private long mPrice;
 
-    public LeaderRequest(int photoId, Context context) {
-        super(context);
-        setData(photoId, 1, "", (long) CacheProfile.getOptions().priceLeader);
-    }
-
-    public LeaderRequest(int photoId, Context context, int count, String status, long price) {
+    public AddPhotoFeedRequest(int photoId, Context context, int count, String status, long price) {
         super(context);
         setData(photoId, count, status, price);
     }
@@ -39,14 +30,8 @@ public class LeaderRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject result = new JSONObject();
-        if (!TextUtils.isEmpty(mStatus)) {
-            result.put("status", mStatus);
-        }
-        if (mIdCount == 1) {
-            result.put("photo", mPhotoId);
-        } else {
-            result.put("photo", createIdArray());
-        }
+        result.put("status", mStatus);
+        result.put("photos", createIdArray());
         return result;
     }
 
@@ -61,7 +46,11 @@ public class LeaderRequest extends ApiRequest {
         EasyTracker.sendEvent("Leaders", "Buy", "", mPrice);
     }
 
-    private List<Integer> createIdArray() {
-        return new ArrayList<>();
+    private JSONArray createIdArray() {
+        JSONArray photoArray = new JSONArray();
+        for (int i = 0; i < mIdCount; i++) {
+            photoArray.put(mPhotoId);
+        }
+        return photoArray;
     }
 }

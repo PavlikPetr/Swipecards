@@ -19,12 +19,13 @@ import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.requests.AddPhotoFeedRequest;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.LeaderRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.adapters.LeadersPhotoGridAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
@@ -142,14 +143,13 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
     private void pressedAddToLeader(int position) {
-        Options.LeaderButton buttonData = CacheProfile.getOptions().buyLeaderButtons.get(position);
-        int leadersPrice = buttonData.price * buttonData.photoCount;
+        final Options.LeaderButton buttonData = CacheProfile.getOptions().buyLeaderButtons.get(position);
         int selectedPhotoId = mUsePhotosAdapter.getSelectedPhotoId();
-        if (CacheProfile.money < leadersPrice) {
-            startActivity(PurchasesActivity.createBuyingIntent("Leaders", PurchasesFragment.TYPE_LEADERS, leadersPrice));
+        if (CacheProfile.money < buttonData.price) {
+            showPurchasesFragment(buttonData.price);
         } else if (selectedPhotoId != -1) {
             mLoadingLocker.setVisibility(View.VISIBLE);
-            new LeaderRequest(selectedPhotoId, AddToLeaderActivity.this, buttonData.photoCount, mEditText.getText().toString(), (long) leadersPrice)
+            new AddPhotoFeedRequest(selectedPhotoId, AddToLeaderActivity.this, buttonData.photoCount, mEditText.getText().toString(), (long) buttonData.price)
                     .callback(new ApiHandler() {
                         @Override
                         public void success(IApiResponse response) {
@@ -161,7 +161,14 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                         @Override
                         public void fail(int codeError, IApiResponse response) {
                             mLoadingLocker.setVisibility(View.GONE);
-                            Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                            switch (codeError) {
+                                case ErrorCodes.PAYMENT:
+                                    showPurchasesFragment(buttonData.price);
+                                    break;
+                                default:
+                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
                         }
                     }).exec();
 
@@ -169,6 +176,12 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
             Toast.makeText(AddToLeaderActivity.this, R.string.leaders_need_photo, Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void showPurchasesFragment(int price) {
+        Debug.error("money price " + price);
+        startActivity(PurchasesActivity.createBuyingIntent(this.getLocalClassName(), PurchasesFragment.TYPE_LEADERS, price));
+    }
+
 
     private Photos checkPhotos(Photos photos) {
         Photos result = new Photos();

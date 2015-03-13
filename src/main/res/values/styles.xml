@@ -751,7 +751,7 @@
         <item name="android:paddingRight">56dp</item>
     </style>
 
-    <style name="ButtonAddLeader" parent="Widget.Topface.Button.Big.Blue">
+    <style name="ButtonAddLeader" parent="FlatButton.Blue">
         <item name="android:layout_marginLeft">6dp</item>
         <item name="android:layout_marginRight">6dp</item>
         <item name="android:layout_marginTop">8dp</item>
