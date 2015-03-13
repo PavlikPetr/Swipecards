@@ -137,7 +137,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     };
 
-    protected boolean isDeletable = true;
+    private boolean isDeletable = true;
     private ViewStub mEmptyScreenStub;
     private boolean needUpdate = false;
 
@@ -986,4 +986,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
+    public PullToRefreshListView getListView() {
+        return mListView;
+    }
+
+    public void setDeletable(boolean state) {
+        isDeletable = state;
+    }
+
+    public RetryViewCreator getRetryView() {
+        return mRetryView;
+    }
 }

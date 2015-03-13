@@ -31,6 +31,8 @@ import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.WrapperListAdapter;
 
+import com.topface.topface.R;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -780,4 +782,39 @@ public class GridViewWithHeaderAndFooter extends GridView {
         return getNumColumns();
     }
 
+    public int getGridViewColumnWidth() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            return getColumnWidth();
+        } else {
+            int gridWidth = getMeasuredWidth();
+            int columcCount = getGridViewNumColumns();
+            int vertSpacing = getGridViewVerticalSpacing();
+            return ((gridWidth - (vertSpacing * columcCount + vertSpacing)) / (columcCount));
+        }
+    }
+
+    public int getGridViewNumColumns() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            return getNumColumns();
+        } else {
+            return getResources().getInteger(R.integer.add_to_leader_column_count);
+        }
+    }
+
+    public int getGridViewVerticalSpacing() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            return getVerticalSpacing();
+        } else {
+            int spacing = (int) getResources().getDimension(R.dimen.add_to_leader_spacing_value);
+            setStretchMode(GridView.STRETCH_SPACING);
+            return spacing;
+        }
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        setColumnWidth(getGridViewColumnWidth());
+        setNumColumns(getGridViewNumColumns());
+    }
 }

@@ -10,5 +10,8 @@
 
     <dimen name="action_bar_size">40dp</dimen>
 
+    <!--column count for screen "add to leader"-->
+    <integer name="add_to_leader_column_count">4</integer>
+
 
 </resources>

@@ -40,6 +40,7 @@ public class OwnProfileFragment extends AbstractProfileFragment {
     private BroadcastReceiver mAddPhotoReceiver;
     private BroadcastReceiver mUpdateProfileReceiver;
     private IPhotoTakerWithDialog mPhotoTaker;
+    private FragmentId mFromFragmentId;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
