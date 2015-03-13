@@ -35,6 +35,7 @@ import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.LinkedList;
+import java.util.Locale;
 
 public class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
 
@@ -60,7 +61,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
-            App.setStartLabel(String.format(APP_START_LABEL_FORM,
+            App.setStartLabel(String.format(Locale.getDefault(), APP_START_LABEL_FORM,
                     intent.getIntExtra(GCMUtils.GCM_TYPE, -1),
                     intent.getStringExtra(GCMUtils.GCM_LABEL)));
         }

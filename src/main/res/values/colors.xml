@@ -5,7 +5,6 @@
     <!--flat design-->
     <color name="bg_left_menu">#212121</color>
     <color name="bg_main">#4D4D4D</color>
-    <color name="bg_leaders_block">#373737</color>
     <color name="bg_action_mode">#373737</color>
     <color name="bg_left_menu_not_clicked">#2E2E2E</color>
     <!--text colors-->
@@ -15,7 +14,6 @@
     <!-- text color for hidden dialog preview -->
     <color name="hidden_dialog_preview_text_color">#00CDFE</color>>
 
-    <color name="disabled_color">#AAAAAA</color>
     <!-- new redesign colors -->
     <color name="bg_holo">#F1F1F1</color>
     <color name="bg_white">#FFFFFF</color>
