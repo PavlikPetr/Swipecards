@@ -44,14 +44,11 @@
     <string name="edit_my_photos">Minu fotod</string>
     <string name="general_search_empty_title">Kahjuks, ei ole midagi leitud.</string>
     <string name="map_title">Kaart</string>
-    <string name="settings_want_answer">Ma tahaks/sooviks, et mulle vastaksid</string>
     <string name="general_buying">Osta sümpaatiad/meeldimised ja mündid</string>
     <string name="popup_version_title">On saadaval rakenduse uus versioon</string>
     <string name="popup_version_message">Õige aeg versiooni uuendamiseks!</string>
     <string name="leaders_select_photo_info">Vali kõige efektsem foto välja! Madalama reitinguga fotode valimine ei ole lubatud.</string>
     <string name="map_popup_address">Aadress</string>
-    <string name="general_place">Koht</string>
-    <string name="general_soon">Varsti tuleb</string>
     <string name="black_list_activation">Aktiveeri VIP-staatust ja kasuta musta nimekirja</string>
     <string name="buying_total">Kokku</string>
     <string name="confirm_email">Palun, kinnita/kinnitage e-posti aadress</string>
@@ -73,7 +70,6 @@
     <string name="general_cancel">Tühistamine</string>
     <string name="general_delete_title">Eemaldada</string>
     <string name="general_dialog_loading">Laadimine</string>
-    <string name="general_dialog_saving">Salvestamine</string>
     <string name="general_fill_button">Täita</string>
     <string name="general_send_full">Saata</string>
     <string name="general_dialog_retry">Korrata</string>
@@ -86,7 +82,6 @@
     <string name="general_spinner_title">Vali toiming</string>
     <string name="general_profile_error">Konto laadimise viga</string>
     <string name="general_dbl_all">Kõik</string>
-    <string name="general_dbl_unread">Lugemata</string>
     <string name="time_yesterday">Eile</string>
     <string name="time_today">Täna</string>
     <string name="general_send_button">Saata</string>
@@ -123,15 +118,10 @@ Sa oled müksanud.</string>
     <string name="filter_only_beautiful">Ainult/vaid ilusad</string>
     <string name="filter_extra_parameters">Lisaparameetrid</string>
     <string name="filter_age">Vanuse valik</string>
-    <string name="filter_online">On-line</string>
     <string name="filter_cities_all">Kõikides linnades</string>
     <string name="buying_header_title">Ostud</string>
     <string name="buying_money">Müntide ost</string>
-    <string name="gifts_romantic">Romantika</string>
-    <string name="gifts_friends">Sõprus</string>
-    <string name="gifts_present">Õnnitlused</string>
     <string name="gifts_title">Vali kingitus</string>
-    <string name="gifts_send_btn">Saada kingitus</string>
     <string name="profile_header_title">Minu konto</string>
     <string name="profile_add_album">Valida olemasolevate seast/hulgast</string>
     <string name="profile_add_camera">Teha pilt/foto</string>
@@ -216,7 +206,6 @@ Sa oled müksanud.</string>
     <string name="ban_title">Õnnitleme/Palju õnne! Sind keelati ära!</string>
     <string name="general_ready">Valmis/ On valmis</string>
     <string name="buying_store_ok">Ost on edukalt sooritatud</string>
-    <string name="general_close">Sulgeda</string>
     <string name="vip_privileges">VIP-eelised</string>
     <string name="vip_rest">Sa oled VIP\'i ära tellinud.</string>
     <string name="vip_invis">Nähtamatu rezhiim</string>
@@ -230,7 +219,6 @@ Sa oled müksanud.</string>
     <string name="vip_info_guest">Saa teada, kes on sinu vastu huvi tundnud - vaata omad külalised ära!</string>
     <string name="vip_info_blackList">Saa tüütudest isikutest lahti \"musta nimekirja\" abil</string>
     <string name="buying_vip_status">VIP-staatust osta</string>
-    <string name="buy_play_market_not_available">Play Market ei ole saadaval</string>
     <string name="edit_my_city">Minu linn</string>
     <string name="settings_feedback_email">Kontakt e-posti aadress</string>
     <string name="settings_invalid_email">Vale e-posti aadress</string>
@@ -239,15 +227,12 @@ Sa oled müksanud.</string>
     <string name="general_reconnect_social">Sotsiaalvõrgustikuga ühendus ei ole võimalik. Korda katset hiljem.</string>
     <string name="general_block">Blokeerida</string>
     <string name="general_buying_disabled">Käesoleval hetkel/momendil on ostmine võimatu.</string>
-    <string name="virus_chat_likes_request_title">Kinkida meeldimised oma sõpradele</string>
     <string name="virus_chat_btn">Meeldimised saada</string>
-    <string name="virus_request_error">Meeldimiste saatmine sinu sõpradele ei ole õnnestunud!</string>
     <string name="profile_ask_sent">Palve on ära saadetud.</string>
     <string name="popup_version_update">Uuendada</string>
     <string name="popup_version_cancel">Tuletada hiljem meelde</string>
     <string name="general_version_not_supported">Sinu rakenduse versioon on vananenud ja seda enam ei toetata. Palun uuenda oma rakenduse versioon ära.</string>
     <string name="default_price_format">Kokku:</string>
-    <string name="dating_online_only">%s, ainult on-line\'is olevad</string>
     <string name="general_gift">Kingitus</string>
     <string name="user_actions_chat">Jutt</string>
     <string name="sign_in">Siseneda</string>
@@ -278,7 +263,6 @@ Sa oled müksanud.</string>
     <string name="change_password">Muuta salasõna</string>
     <string name="password_changing">Salasõna muutmine</string>
     <string name="save">Salvestada</string>
-    <string name="password_hint">salasõna</string>
     <string name="password_confirmation_hint">salasõna kinnitus</string>
     <string name="enter_new_password">Sisesta uus salasõna</string>
     <string name="enter_password_confirmation">Sisesta salasõna kinnitus</string>
@@ -296,7 +280,6 @@ Sa oled müksanud.</string>
     <string name="you_dont_have_gifts_yet">Sa pole siiamani kingitusi saanud</string>
     <string name="buy_sympathies">Osta meeldimised</string>
     <string name="upload_photos">Laadi/laadige foto(si)d üles/ülesse</string>
-    <string name="chat_no_message_title">Alusta suhtlemist!</string>
     <string name="user_baned">Kasutaja on ära keelatud</string>
     <string name="general_choose_city">Vali linn</string>
     <string name="buy_mobile_payments">Muud tasumise viisid</string>

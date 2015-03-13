@@ -326,7 +326,7 @@ public class ConnectionManager {
         int errorCode = ErrorCodes.CONNECTION_ERROR;
         String[] messages = App.getContext().getResources().getStringArray(R.array.ssl_handshake_exception_messages);
         for (String message : messages) {
-            if (e.getMessage().toLowerCase().contains(message.toLowerCase())) {
+            if (e.getMessage().toLowerCase(Locale.getDefault()).contains(message.toLowerCase(Locale.getDefault()))) {
                 errorCode = ErrorCodes.HTTPS_CERTIFICATE_EXPIRED;
                 break;
             }

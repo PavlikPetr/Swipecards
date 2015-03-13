@@ -138,7 +138,8 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
                 Intent addAccountIntent = new Intent(android.provider.Settings.ACTION_ADD_ACCOUNT)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    addAccountIntent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, new String[]{"com.google"});
+                    addAccountIntent.putExtra(Settings.EXTRA_ACCOUNT_TYPES,
+                            App.getContext().getResources().getStringArray(R.array.extra_account_types));
                 }
                 context.startActivity(addAccountIntent);
                 break;
