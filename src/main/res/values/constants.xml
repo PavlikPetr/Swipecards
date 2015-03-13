@@ -50,4 +50,9 @@
     <!-- intent-filters configuration -->
     <string name="default_sheme" translatable="false">topface</string>
     <string name="offerwall_host" translatable="false">offerwall</string>
+
+    <!-- list of account types -->
+    <array name="extra_account_types">
+        <item>"com.google"</item>
+    </array>
 </resources>

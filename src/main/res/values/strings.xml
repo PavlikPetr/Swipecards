@@ -604,7 +604,4 @@
     <string name="google_sign_in_account_title">Your Google account has not been added. You have to sign in, if you want to receive reminders.</string>
     <string name="google_sign_in_account_button">Sign in</string>
     <string name="google_unavailable_services_title">Unfortunately, the remainders are not available on your device.</string>
-    <array name="extra_account_types">
-        <item>"com.google"</item>
-    </array>
 </resources>
