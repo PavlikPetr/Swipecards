@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <com.topface.topface.ui.GridViewWithHeaderAndFooter
+        android:id="@+id/user_photos_grid"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent"
+        android:fadeScrollbars="true"
+        android:fadingEdge="none"
+        android:gravity="center"
+        android:horizontalSpacing="@dimen/add_to_leader_spacing_value"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="@integer/add_to_leader_column_count"
+        android:paddingBottom="2dp"
+        android:paddingLeft="@dimen/add_to_leader_spacing_value"
+        android:paddingRight="@dimen/add_to_leader_spacing_value"
+        android:verticalSpacing="@dimen/add_to_leader_spacing_value" />
+
+    <com.topface.topface.ui.views.LockerView
+        android:id="@+id/llvLeaderSending"
+        style="@style/LoadingLocker"
+        android:visibility="gone" />
+
+</RelativeLayout>

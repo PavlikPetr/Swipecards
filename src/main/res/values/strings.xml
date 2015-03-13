@@ -68,7 +68,7 @@
     <string name="general_search_empty_text">You can try to run the search again, or change the filter settings.</string>
     <string name="map_title">Map</string>
     <string name="settings_want_answer">I want to get a reply.</string>
-    <string name="general_buying">Buy coins and likes</string>
+    <string name="general_buying">Coins and likes purchase</string>
     <string name="popup_version_title">New app version is available</string>
     <string name="popup_version_message">Time to update your app version!</string>
     <string name="leaders_select_photo_info">Select the most impressive photo! You cannot select a photo with a low rating.</string>
@@ -253,7 +253,7 @@
     <string name="settings_vibration">Vibration alert</string>
     <string name="settings_notifications_header">Notifications</string>
     <string name="settings_likes">Likes</string>
-    <string name="settings_mutual">Mutual likes</string>
+    <string name="settings_mutual">They like me</string>
     <string name="settings_messages">Messages</string>
     <string name="settings_guests">Guests</string>
     <string name="settings_help">Help</string>
@@ -418,7 +418,7 @@
     <string name="user_does_not_have_gifts">This user has no gifts, give the first one and you will be noticed.</string>
     <string name="status_is_empty">You status is empty</string>
     <string name="you_dont_have_gifts_yet">You don\'t have gifts yet.</string>
-    <string name="buy_sympathies">Buy likes</string>
+    <string name="buy_sympathies">Purchase likes</string>
     <string name="upload_photos">Upload photos</string>
     <string name="chat_no_message_title">Start chatting!</string>
     <string name="chat_no_message_text">Write a message or send a gift, and it surely will be answered.</string>

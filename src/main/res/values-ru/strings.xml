@@ -179,6 +179,7 @@
     <string name="general_dating">Знакомства</string>
     <string name="general_likes">Я нравлюсь</string>
 
+    <string name="general_photoblog">Фотолента</string>
     <string name="general_sympathies">Симпатии</string>
     <string name="general_sympathy">Симпатия</string>
     <string name="general_delight">Восхищение</string>
@@ -815,4 +816,6 @@
     <string name="google_sign_in_account_title">У вас не добавлен Google аккаунт, вы должны авторизоваться, если хотите получать уведомления.</string>
     <string name="google_sign_in_account_button">Авторизоваться</string>
     <string name="google_unavailable_services_title">К сожалению, уведомления не поддерживаются на вашем устройстве.</string>
+
+    <string name="add_leader_hint">Ваше приветствие&#8230;</string>
 </resources>
