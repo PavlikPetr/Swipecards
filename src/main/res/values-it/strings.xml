@@ -340,6 +340,8 @@
     <string name="popup_version_cancel">Ricordamelo più tardi</string>
     <string name="general_version_not_supported">La versione che stai usando è obsoleta e non viene più supportata. Per favore aggiorna la versione dell’applicazione</string>
     <string name="default_price_format">Totale: %.2f USD</string>
+    <string name="default_price_format_extended">Totale: %1$.2f %2$s</string>
+    <string name="dating_online_only">%s, solo online</string>
     <string name="leaders_pick_condition">Non puoi scegliere la foto con il voto medio inferiore al %d%%:</string>
     <string name="general_gift">Regalo</string>
     <string name="user_actions_chat">Chat</string>
@@ -484,6 +486,7 @@
     <string name="or">o</string>
     <string name="settings_delete_account">Cancella l’account</string>
     <string name="chat_block_not_mutual">Puoi iniziare la conversazione con l’utente solo se ti ha inviato una simpatia o se sei utente VIP</string>
+    <string name="add_to_favorite_block_not_vip">Solo gli utenti VIP possono aggiungere ai preferiti dalla schermata di incontri</string>
     <string name="delete_account_are_you_sure">Sicuro al 100%?</string>
     <string name="delete">Cancella</string>
     <string name="delete_account_warning">Attenzione! Stai cercando di cancellare il tuo account in Topface.</string>
@@ -563,6 +566,8 @@
     <string name="billing_item_already_owned">Il tuo ordine precedente è in elaborazione, si prega di attendere</string>
     <string name="dialog">Dialoghi</string>
     <string name="reply">Rispondere</string>
+    <string name="measurement_unit_weight">kg</string>
+    <string name="measurement_unit_height">cm</string>
     <string name="maximum_number_of_users">Hai scelto il numero massimo degli utenti</string>
     <string name="logout_if_email_already_registred">L’utente con questo e-mail esiste già. Se questo indirizzo mail è tuo, devi uscire dall’account attuale e accedere all’account %s</string>
     <string name="recover_password_instructions">Al tuo indirizzo e-mail sono state inviate le istruzioni su come ripristinare la password</string>

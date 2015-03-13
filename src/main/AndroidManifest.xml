@@ -151,7 +151,9 @@
             </intent-filter>
         </activity>
 
-
+        <activity
+            android:name=".ui.AddToLeaderActivity"
+            android:parentActivityName=".ui.NavigationActivity" />
         <activity
             android:name=".ui.SslErrorActivity"
             android:launchMode="singleTask"
@@ -180,10 +182,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.Light" />
         <activity
-            android:name=".ui.LeadersActivity"
-            android:theme="@style/Theme.Topface.OldDarkDesign"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.settings.SettingsContainerActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -204,6 +202,15 @@
 
         <activity
             android:name=".ui.UserProfileActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity"/>
+        </activity>
+
+        <activity
+            android:name=".ui.OwnProfileActivity"
             android:parentActivityName=".ui.NavigationActivity"
             android:screenOrientation="portrait">
             <meta-data
