@@ -532,7 +532,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     private void onDeleteFeedItems(List<String> ids, final List<T> items) {
-        DeleteAbstractRequest dr = getDeleteRequest(ids);
+        final DeleteAbstractRequest dr = getDeleteRequest(ids);
         //Если удаление не поддерживается данным потомком,
         //то у нас ошибка с показом меню (есть кнопка там, где удаление не поддерживается)
         //и нужно сообщить пользователю, что удалить не получится
@@ -558,6 +558,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             public void success(IApiResponse response) {
                 if (isAdded()) {
                     getListAdapter().removeItems(items);
+                    if (getListAdapter().getData().size() == 0) {
+                        mListView.setVisibility(View.INVISIBLE);
+                        onEmptyFeed();
+                    }
                 }
             }
 
