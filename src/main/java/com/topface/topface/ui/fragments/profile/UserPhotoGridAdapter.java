@@ -30,7 +30,9 @@ public class UserPhotoGridAdapter extends ProfileGridAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if (holder.photo != null) {
+        // проверка нужна для исключения краша в адаптере при добавлении
+        // GridViewWithHeaderAndFooter header и/или footer
+        if (holder != null && holder.photo != null) {
             holder.photo.setPhoto(getItem(position));
         }
         return convertView;
