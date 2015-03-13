@@ -341,7 +341,6 @@
     <string name="general_version_not_supported">La versione che stai usando è obsoleta e non viene più supportata. Per favore aggiorna la versione dell’applicazione</string>
     <string name="default_price_format">Totale: %.2f USD</string>
     <string name="default_price_format_extended">Totale: %1$.2f %2$s</string>
-    <string name="dating_online_only">%s, solo online</string>
     <string name="leaders_pick_condition">Non puoi scegliere la foto con il voto medio inferiore al %d%%:</string>
     <string name="general_gift">Regalo</string>
     <string name="user_actions_chat">Chat</string>

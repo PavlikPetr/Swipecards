@@ -348,7 +348,6 @@
     <string name="general_version_not_supported">Uygulamanızın versiyonu eskimiş ve artık desteklenmiyor. Lütfen, uygulamayı güncelleyin</string>
     <string name="default_price_format">Toplam: %.2f USD</string>
     <string name="default_price_format_extended">Toplam: %1$.2f %2$s</string>
-    <string name="dating_online_only">%s, sadece çevrimiçi</string>
     <string name="leaders_pick_condition">%d%% reytinginden daha aşağı foto seçemezsiniz:</string>
     <string name="general_gift">Hediye</string>
     <string name="user_actions_chat">Sohbet</string>

@@ -19,7 +19,6 @@
 
     <string name="photo_is_set_tag">photo_is_set_tag</string>
 
-    <string name="default_percent_equation">%d%%</string>
     <string name="default_ban_time">10:00</string>
 
     <dimen name="take_photo_max_width">275dp</dimen>
