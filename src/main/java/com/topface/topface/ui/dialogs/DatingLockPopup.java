@@ -1,13 +1,12 @@
 package com.topface.topface.ui.dialogs;
 
-import android.content.DialogInterface;
-import android.support.v4.app.FragmentManager;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.statistics.DatingLockPopupStatistics;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.config.UserConfig;
 
@@ -15,47 +14,27 @@ import com.topface.topface.utils.config.UserConfig;
 public class DatingLockPopup extends AbstractDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "DatingLockPopup";
-    public static final String DATING_LOCK_POPUP_SHOW = "dating_lock_popup_show";
-    public static final String DATING_LOCK_POPUP_CLOSE = "dating_lock_popup_close";
-    public static final String DATING_LOCK_POPUP_REDIRECT = "dating_lock_popup_redirect";
 
     private DatingLockPopupRedirectListener mDatingLockPopupRedirectListener;
-    private boolean mIsStatisticsSent = false;
-
-
-    public interface DatingLockPopupRedirectListener {
-        public void onRedirect();
-    }
+    private boolean mIsRedirectedToSympathies;
 
     public void setDatingLockPopupRedirectListener(DatingLockPopupRedirectListener listener) {
         this.mDatingLockPopupRedirectListener = listener;
     }
 
-    private void send(String key) {
-        StatisticsTracker.getInstance().setContext(App.getContext()).sendEvent(key, 1);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mIsRedirectedToSympathies = false;
+        DatingLockPopupStatistics.sendDatingPopupShow();
     }
-
-    public void sendDatingPopupClose() {
-        send(DATING_LOCK_POPUP_CLOSE);
-    }
-
-    public void sendDatingPopupRedirect() {
-        send(DATING_LOCK_POPUP_REDIRECT);
-    }
-
-    public void sendDatingPopupShow() {
-        send(DATING_LOCK_POPUP_SHOW);
-    }
-
 
     @Override
     protected void initViews(View root) {
         root.findViewById(R.id.redirect_into_sympathy).setOnClickListener(this);
         root.findViewById(R.id.iv_close).setOnClickListener(this);
-        TextView mTitle = (TextView) root.findViewById(R.id.title);
-        mTitle.setText(CacheProfile.getOptions().notShown.title);
-        TextView mMessage = (TextView) root.findViewById(R.id.message);
-        mMessage.setText(CacheProfile.getOptions().notShown.text);
+        ((TextView) root.findViewById(R.id.title)).setText(CacheProfile.getOptions().notShown.title);
+        ((TextView) root.findViewById(R.id.message)).setText(CacheProfile.getOptions().notShown.text);
     }
 
     @Override
@@ -74,14 +53,13 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
             case R.id.redirect_into_sympathy:
                 saveRedirectTime();
                 mDatingLockPopupRedirectListener.onRedirect();
-                sendDatingPopupRedirect();
+                mIsRedirectedToSympathies = true;
+                dismiss();
                 break;
             case R.id.iv_close:
-                sendDatingPopupClose();
+                dismiss();
                 break;
         }
-        mIsStatisticsSent = true;
-        dismiss();
     }
 
     private void saveRedirectTime() {
@@ -91,17 +69,16 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
     }
 
     @Override
-    public void show(FragmentManager manager, String tag) {
-        sendDatingPopupShow();
-        super.show(manager, tag);
+    public void onDestroy() {
+        super.onDestroy();
+        if (mIsRedirectedToSympathies) {
+            DatingLockPopupStatistics.sendDatingPopupRedirect();
+        } else {
+            DatingLockPopupStatistics.sendDatingPopupClose();
+        }
     }
 
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        if (!mIsStatisticsSent) {
-            sendDatingPopupClose();
-        }
-
+    public interface DatingLockPopupRedirectListener {
+        public void onRedirect();
     }
 }
