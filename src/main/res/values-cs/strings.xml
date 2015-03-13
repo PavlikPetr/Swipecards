@@ -258,7 +258,6 @@
     <string name="popup_version_cancel">Připomenout později</string>
     <string name="general_version_not_supported">Vaše verze aplikace je zastaralá a již není podporována. Prosím, aktualizujte aplikaci</string>
     <string name="default_price_format">Celkem: %.2f USD</string>
-    <string name="dating_online_only">%s, pouze online</string>
     <string name="leaders_pick_condition">Nemůžete zvolit fotku s hodnocením nižším než %d%%:</string>
     <string name="general_gift">Dárek</string>
     <string name="user_actions_chat">Rozhovor</string>
