@@ -18,7 +18,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 public class HackBaseAdapterDecorator extends BaseAdapter {
 
     private BaseAdapter mBaseAdapter;
-    private int type_hack;
+    private int mTypeHack;
     private static final String TRANSLATION_Y = "translationY";
     private boolean mNeedAnimate = true;
     private boolean mAnimateFirstMessage = true;
@@ -26,7 +26,7 @@ public class HackBaseAdapterDecorator extends BaseAdapter {
 
     public HackBaseAdapterDecorator(BaseAdapter baseAdapter) {
         mBaseAdapter = baseAdapter;
-        type_hack = mBaseAdapter.getViewTypeCount();
+        mTypeHack = mBaseAdapter.getViewTypeCount();
         if (mBaseAdapter.getCount() < 2) {
             mBaseAdapter.registerDataSetObserver(new DataSetObserver() {
                 @Override
@@ -76,7 +76,7 @@ public class HackBaseAdapterDecorator extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        return (needHack() && position == 1) ? type_hack : mBaseAdapter.getItemViewType(position);
+        return (needHack() && position == 1) ? mTypeHack : mBaseAdapter.getItemViewType(position);
 
     }
 
@@ -89,8 +89,8 @@ public class HackBaseAdapterDecorator extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);
         View view;
-        if (type == type_hack) {
-            return new View(parent.getContext());
+        if (type == mTypeHack) {
+            return convertView == null ? new View(parent.getContext()) : convertView;
         } else {
             view = mBaseAdapter.getView(position, convertView, parent);
         }
