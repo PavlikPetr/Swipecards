@@ -89,6 +89,11 @@ public class Options extends AbstractData {
     public AboutApp aboutApp = new AboutApp();
 
     /**
+     * buttons add to leaders
+     */
+    public List<LeaderButton> buyLeaderButtons = new ArrayList<>();
+
+    /**
      * Стоимость вставания в лидеры
      */
     public int priceLeader = 8;
@@ -171,6 +176,7 @@ public class Options extends AbstractData {
             for (PageInfo pageInfo : pagesArr) {
                 pages.put(pageInfo.name, pageInfo);
             }
+            fillLeaderButtons(response.optJSONObject("photofeed"));
             JSONObject aboutAppJson = response.optJSONObject("aboutApp");
             aboutApp = new AboutApp(aboutAppJson.optString("title"), aboutAppJson.optString("url"));
             offerwall = response.optString("offerwall");
@@ -408,6 +414,40 @@ public class Options extends AbstractData {
         public AboutApp() {
             title = App.getContext().getString(R.string.settings_topface_url);
             url = App.getContext().getString(R.string.settings_topface_url_title);
+        }
+    }
+
+    private void fillLeaderButtons(JSONObject photofeedObject) throws JSONException {
+        String buttonsArrayKey = "items";
+        if (photofeedObject == null || !photofeedObject.has(buttonsArrayKey)) {
+            return;
+        }
+        JSONArray buttonsArray = photofeedObject.getJSONArray(buttonsArrayKey);
+        if (buyLeaderButtons != null) {
+            buyLeaderButtons.clear();
+        } else {
+            buyLeaderButtons = new ArrayList<>();
+        }
+        for (int i = 0; i < buttonsArray.length(); i++) {
+            JSONObject buttonObj = buttonsArray.getJSONObject(i);
+            if (buttonObj != null) {
+                buyLeaderButtons.add(new LeaderButton(
+                        buttonObj.optString("text"),
+                        buttonObj.optInt("price"),
+                        buttonObj.optInt("count")));
+            }
+        }
+    }
+
+    public static class LeaderButton {
+        public String title;
+        public int price;
+        public int photoCount;
+
+        public LeaderButton(String title, int price, int photoCount) {
+            this.title = title;
+            this.price = price;
+            this.photoCount = photoCount;
         }
     }
 

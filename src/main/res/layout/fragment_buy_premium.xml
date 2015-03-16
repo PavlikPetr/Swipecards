@@ -110,22 +110,6 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/vip_info_blackList"
-                android:layout_marginLeft="5dp"
-                style="@style/VipItemTitleWhiteText"
-                android:textSize="13sp"
-                android:drawableLeft="@drawable/ic_blacklist"
-                android:drawablePadding="5dp"/>
-
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/delimiter_rocket"/>
-
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/vip_info_vip"
                 android:layout_marginLeft="5dp"
                 style="@style/VipItemTitleWhiteText"

@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.topface.framework.utils.Debug;
@@ -29,6 +30,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.GridViewWithHeaderAndFooter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
@@ -297,6 +299,24 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                                 super.success(response);
                                 CacheProfile.photo = photo;
                                 CacheProfile.sendUpdateProfileBroadcast();
+                            }
+
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+                                int errorStringResource;
+                                switch (codeError) {
+                                    // если пользователь пытается поставить на аватарку фото, которое было удалено модератором
+                                    case ErrorCodes.NON_EXIST_PHOTO_ERROR:
+                                        errorStringResource = R.string.general_non_exist_photo_error;
+                                        // обновляем профиль пользователя
+                                        App.sendProfileRequest();
+                                        break;
+                                    default:
+                                        errorStringResource = R.string.general_server_error;
+                                        break;
+                                }
+                                Toast.makeText(getActivity(), errorStringResource, Toast.LENGTH_SHORT)
+                                        .show();
                             }
 
                             @Override

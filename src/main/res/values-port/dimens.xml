@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--column count for screen "add to leader"-->
+    <integer name="add_to_leader_column_count">3</integer>
+</resources>
