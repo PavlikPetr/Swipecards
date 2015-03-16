@@ -66,6 +66,7 @@ public class AddPhotoHelper {
     private Fragment mFragment;
     private Handler mHandler;
     private View mProgressView;
+    private AppOptions.MinPhotoSize minPhotoSize;
     private UserNotificationManager mNotificationManager;
     private File outputFile;
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
@@ -91,6 +92,7 @@ public class AddPhotoHelper {
     }
 
     public AddPhotoHelper(Activity activity) {
+        minPhotoSize = App.getAppOptions().getMinPhotoSize();
         mActivity = activity;
         mContext = activity.getApplicationContext();
         PATH_TO_FILE = StorageUtils.getCacheDirectory(mContext).getPath() + "/topface_profile/";
@@ -262,10 +264,10 @@ public class AddPhotoHelper {
             return;
         }
 
-        if (!isPhotoCorrectSize(uri, App.getAppOptions().getMinPhotoSize())) {
+        if (!isPhotoCorrectSize(uri)) {
             Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
-                    App.getAppOptions().getMinPhotoSize().width,
-                    App.getAppOptions().getMinPhotoSize().height), Toast.LENGTH_SHORT).show();
+                    minPhotoSize.width,
+                    minPhotoSize.height), Toast.LENGTH_SHORT).show();
             return;
         }
         // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
@@ -395,8 +397,8 @@ public class AddPhotoHelper {
                 break;
             case ErrorCodes.INCORRECT_PHOTO_SIZES:
                 Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
-                        App.getAppOptions().getMinPhotoSize().width,
-                        App.getAppOptions().getMinPhotoSize().height), Toast.LENGTH_SHORT).show();
+                        minPhotoSize.width,
+                        minPhotoSize.height), Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -470,10 +472,10 @@ public class AddPhotoHelper {
         return options;
     }
 
-    private boolean isPhotoCorrectSize(Uri uri, AppOptions.MinPhotoSize minSize) {
+    private boolean isPhotoCorrectSize(Uri uri) {
         BitmapFactory.Options currentPhotoSize = getPhotoSizeByUri(uri);
-        return currentPhotoSize != null && !(currentPhotoSize.outWidth < minSize.width ||
-                currentPhotoSize.outHeight < minSize.height);
+        return currentPhotoSize != null && !(currentPhotoSize.outWidth < minPhotoSize.width ||
+                currentPhotoSize.outHeight < minPhotoSize.height);
     }
 
     public String getPath(Uri uri) {
