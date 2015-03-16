@@ -128,6 +128,7 @@
     <string name="general_copy_title">Copiar</string>
     <string name="general_back">Atrás</string>
     <string name="general_server_error">Error. Intenta más tarde</string>
+    <string name="general_non_exist_photo_error">Fue imposible efectuar la acción, debido a que la fotografía fue eliminada</string>
     <string name="general_data_error">Error. Intenta una vez más</string>
     <string name="general_internet_off">Intentando recuperar la conexión a Internet. Por favor, espera.</string>
     <string name="general_msg_copied">Texto copiado</string>
@@ -142,6 +143,7 @@
     <string name="general_city">Ciudad</string>
     <string name="general_dating">Encuentros</string>
     <string name="general_likes">Gusto a</string>
+    <string name="general_photoblog">Fotoblog</string>
     <string name="general_sympathies">Simpatías</string>
     <string name="general_sympathy">Simpatía</string>
     <string name="general_delight">Admiración</string>
@@ -602,4 +604,5 @@
     <string name="google_sign_in_account_title">No tienes agregada la cuenta Google, tienes que conectar, si quieres recibir avisos.</string>
     <string name="google_sign_in_account_button">Conectar</string>
     <string name="google_unavailable_services_title">Lamentablemente, los avisos no se soportan en tu dispositivo.</string>
+    <string name="add_leader_hint">Tu saludo…</string>
 </resources>

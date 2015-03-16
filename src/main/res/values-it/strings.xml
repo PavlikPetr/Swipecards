@@ -128,6 +128,7 @@
     <string name="general_copy_title">Copia</string>
     <string name="general_back">Indietro</string>
     <string name="general_server_error">Errore. Riprova più tardi</string>
+    <string name="general_non_exist_photo_error">Non è possibile effettuare questa azione perché la foto è stata eliminata</string>
     <string name="general_data_error">Errore. Riprova più tardi</string>
     <string name="general_internet_off">Stiamo cercando di ripristinare il collegamento Internet. Attendere, prego.</string>
     <string name="general_msg_copied">Il testo è stato copiato</string>
@@ -142,6 +143,7 @@
     <string name="general_city">Città</string>
     <string name="general_dating">Incontri</string>
     <string name="general_likes">Piaccio</string>
+    <string name="general_photoblog">Slide-show</string>
     <string name="general_sympathies">Simpatie</string>
     <string name="general_sympathy">Simpatia</string>
     <string name="general_delight">Ammirazione</string>
@@ -599,4 +601,5 @@
     <string name="google_sign_in_account_title">Non hai aggiunto l’account Google, devi accedervi per ricevere le notifiche.</string>
     <string name="google_sign_in_account_button">Accedere</string>
     <string name="google_unavailable_services_title">Purtroppo il tuo dispositivo non supporta l’invio di notifiche.</string>
+    <string name="add_leader_hint">Il tuo saluto…</string>
 </resources>
